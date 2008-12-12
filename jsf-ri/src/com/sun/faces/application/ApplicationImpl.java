@@ -75,7 +75,6 @@ import javax.faces.FacesException;
 import javax.faces.render.Renderer;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
-import javax.faces.application.PartialTraversal;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
@@ -167,7 +166,6 @@ public class ApplicationImpl extends Application {
 
     private volatile ActionListener actionListener = null;
     private volatile NavigationHandler navigationHandler = null;
-    private volatile PartialTraversal partialTraversal = null;
     private volatile PropertyResolverImpl propertyResolver = null;
     private volatile VariableResolverImpl variableResolver = null;
     private volatile ViewHandler viewHandler = null;
@@ -211,7 +209,6 @@ public class ApplicationImpl extends Application {
         validatorMap = new ConcurrentHashMap<String, Object>();
         elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
         navigationHandler = new NavigationHandlerImpl(associate);
-        partialTraversal = new PartialTraversalImpl();
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
 
@@ -672,30 +669,6 @@ public class ApplicationImpl extends Application {
                                              navigationHandler.getClass().getName()));
         }
     }
-
-    /**
-     * @see javax.faces.application.Application#getPartialTraversal()
-     */
-    public PartialTraversal getPartialTraversal() {
-        return partialTraversal;
-    }
-
-
-    /**
-     * @see javax.faces.application.Application#setPartialTraversal(javax.faces.application.PartialTraversal)
-     */
-    public synchronized void setPartialTraversal(PartialTraversal partialTraversal) {
-
-        Util.notNull("partialTraversal", partialTraversal);
-
-        this.partialTraversal = partialTraversal;
-
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("set PartialTraversal Instance to ''{0}''",
-                                             partialTraversal.getClass().getName()));
-        }
-    }
-
 
     /**
      * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)

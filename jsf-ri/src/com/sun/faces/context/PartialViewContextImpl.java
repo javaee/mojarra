@@ -40,10 +40,17 @@
 
 package com.sun.faces.context;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitHint;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.Writer;
@@ -51,12 +58,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.OnOffResponseWrapper;
 import com.sun.faces.util.Util;
@@ -77,6 +87,11 @@ public class PartialViewContextImpl extends PartialViewContext {
     private Boolean ajaxRequest;
     private Boolean partialRequest;
     private Boolean renderAll = null; 
+
+    private static final String RENDER_ALL_MARKER = "javax.faces.ViewRoot";
+    private static final String ORIGINAL_WRITER = "javax.faces.originalWriter";
+    private static final String VIEW_STATE_MARKER = "javax.faces.ViewState";
+
 
     // ----------------------------------------------------------- Constructors
 
@@ -213,6 +228,94 @@ public class PartialViewContextImpl extends PartialViewContext {
     }
 
     /**
+     * @see javax.faces.context.PartialViewContext#processPartial(
+     *  javax.faces.context.FacesContext,javax.faces.event.PhaseId))
+     */
+    @Override
+    public void processPartial(FacesContext context, PhaseId phaseId) {
+        Collection <String> executeIds = getExecuteIds();
+        Collection <String> renderIds = getRenderIds();
+        UIViewRoot viewRoot = context.getViewRoot();
+
+        if (phaseId == PhaseId.APPLY_REQUEST_VALUES ||
+            phaseId == PhaseId.PROCESS_VALIDATIONS ||
+            phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+
+            // Skip this processing if "none" is specified in the render list,
+            // or there were no execute phase client ids.
+
+            if (executeIds == null || executeIds.isEmpty()) {
+                // PENDING LOG ERROR OR WARNING
+                return;
+            }
+
+            try {
+                processComponents(viewRoot, phaseId, executeIds, context);
+            } catch (Exception e) {
+                // PENDING LOG EXCEPTION
+            }
+
+            // If we have just finished APPLY_REQUEST_VALUES phase, install the
+            // partial response writer.  We want to make sure that any content
+            // or errors generated in the other phases are written using the
+            // partial response writer.
+            //
+            if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                ResponseWriter writer = getPartialResponseWriter();
+                context.setResponseWriter(writer);
+            }
+
+        } else if (phaseId == PhaseId.RENDER_RESPONSE) {
+
+            try {
+                //
+                // We re-enable response writing.
+                //
+                OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(context);
+                onOffResponse.setEnabled(true);
+                ResponseWriter writer = getPartialResponseWriter();
+                ResponseWriter orig = context.getResponseWriter();
+                context.getAttributes().put(ORIGINAL_WRITER, orig);
+                context.setResponseWriter(writer);
+
+                ExternalContext exContext = context.getExternalContext();
+                if (exContext.getResponse() instanceof HttpServletResponse) {
+                    exContext.setResponseContentType("text/xml");
+                    exContext.setResponseHeader("Cache-Control", "no-cache");
+                    writer.startElement("partial-response", viewRoot);
+                    writer.startElement("changes", viewRoot);
+                }
+
+                if (isRenderAll()) {
+                    renderAll(context, viewRoot);
+                    renderState(context, viewRoot);
+                    writer.endElement("changes");
+                    writer.endElement("partial-response");
+                    return;
+                }
+
+                // Skip this processing if "none" is specified in the render list,
+                // or there were no render phase client ids.
+                if (renderIds == null || renderIds.isEmpty()) {
+                } else {
+                    processComponents(viewRoot, phaseId, renderIds, context);
+                }
+
+                renderState(context, viewRoot);
+
+                writer.endElement("changes");
+                writer.endElement("partial-response");
+            } catch (IOException ex) {
+                this.cleanupAfterView(context);
+            } catch (RuntimeException ex) {
+                this.cleanupAfterView(context);
+                // Throw the exception
+                throw ex;
+            }
+        }
+    }
+
+    /**
      * @see javax.faces.context.PartialViewContext#getPartialResponseWriter()
      */
     @Override
@@ -260,6 +363,55 @@ public class PartialViewContextImpl extends PartialViewContext {
         
     }
 
+    // Process the components specified in the phaseClientIds list
+    private void processComponents(UIComponent component, PhaseId phaseId,
+        Collection<String> phaseClientIds, FacesContext context) throws IOException {
+
+        // We use the tree visitor mechanism to locate the components to
+        // process.  Create our (partial) VisitContext and the
+        // VisitCallback that will be invoked for each component that
+        // is visited.  Note that we use the VISIT_RENDERED hint as we
+        // only want to visit the rendered subtree.
+        EnumSet hints = EnumSet.of(VisitHint.VISIT_RENDERED,
+                                   VisitHint.VISIT_TRANSIENT);
+        PartialVisitContext visitContext =
+            new PartialVisitContext(context, phaseClientIds, hints);
+        PhaseAwareVisitCallback visitCallback =
+            new PhaseAwareVisitCallback(phaseId);
+        component.visitTree(visitContext, visitCallback);
+    }
+
+    private void renderAll(FacesContext context, UIViewRoot viewRoot) throws IOException {
+        // If this is a "render all via ajax" request,
+        // make sure to wrap the entire page in a <render> elemnt
+        // with the special id of VIEW_ROOT_ID.  This is how the client
+        // JavaScript knows how to replace the entire document with
+        // this response.
+        ResponseWriter writer = context.getResponseWriter();
+        writer.startElement("update", viewRoot);
+        writer.writeAttribute("id", RENDER_ALL_MARKER, "id");
+
+        writer.write("<![CDATA[");
+
+        Iterator<UIComponent> itr = viewRoot.getFacetsAndChildren();
+        while (itr.hasNext()) {
+            UIComponent kid = (UIComponent)itr.next();
+            kid.encodeAll(context);
+        }
+
+        writer.write("]]>");
+        writer.endElement("update");
+    }
+
+    private void renderState(FacesContext context, UIViewRoot viewRoot) throws IOException {
+        // Get the view state and write it to the response..
+        ResponseWriter writer = context.getResponseWriter();
+        writer.startElement("update", viewRoot);
+        writer.writeAttribute("id", VIEW_STATE_MARKER, "id");
+        String state = context.getApplication().getStateManager().getViewState(context);
+        writer.write("<![CDATA[" + state + "]]>");
+        writer.endElement("update");
+    }
 
     private ResponseWriter createPartialResponseWriter() {
 
@@ -289,6 +441,15 @@ public class PartialViewContextImpl extends PartialViewContext {
         return responseWriter;
     }
 
+    private void cleanupAfterView(FacesContext context) {
+        ResponseWriter orig = (ResponseWriter) context.getAttributes().
+            get(ORIGINAL_WRITER);
+        assert(null != orig);
+        // move aside the PartialResponseWriter
+        context.setResponseWriter(orig);
+    }
+
+
     @SuppressWarnings({"FinalPrivateMethod"})
     private final void assertNotReleased() {
         if (released) {
@@ -296,5 +457,75 @@ public class PartialViewContextImpl extends PartialViewContext {
         }
     }
 
+    // ----------------------------------------------------------- Inner Classes
+
+    private static class PhaseAwareVisitCallback implements VisitCallback {
+
+        private PhaseId curPhase = null;
+        private PhaseAwareVisitCallback(PhaseId curPhase) {
+            this.curPhase = curPhase;
+        }  
+
+
+        public VisitResult visit(VisitContext context,
+                                 UIComponent comp) {
+            try {
+                FacesContext facesContext = context.getFacesContext();
+
+                if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
+
+                    // RELEASE_PENDING handle immediate request(s)
+                    // If the user requested an immediate request
+                    // Make sure to set the immediate flag here.
+
+                    comp.processDecodes(facesContext);
+                } else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
+                    comp.processValidators(facesContext);
+                } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
+                    comp.processUpdates(facesContext);
+                } else if (curPhase == PhaseId.RENDER_RESPONSE) {
+
+                    ResponseWriter writer = facesContext.getResponseWriter();
+
+                    writer.startElement("update", comp);
+                    writer.writeAttribute("id", comp.getClientId(facesContext), "id");
+                    try {
+                        writer.write("<![CDATA[");
+
+                        // do the default behavior...
+                        comp.encodeAll(facesContext);
+
+                        writer.write("]]>");
+                    }
+                    catch (Exception ce) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.severe(ce.toString());
+                        }
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.log(Level.FINE,
+                            ce.toString(),
+                            ce);
+                        }
+                    }
+                    writer.endElement("update");
+                }
+                else {
+                    throw new IllegalStateException("I18N: Unexpected " +
+                                                    "PhaseId passed to " +
+                                              " PhaseAwareContextCallback: " +
+                                                    curPhase.toString());
+                }
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            // Once we visit a component, there is no need to visit
+            // its children, since processDecodes/Validators/Updates and
+            // encodeAll() already traverse the subtree.  We return
+            // VisitResult.REJECT to supress the subtree visit.
+            return VisitResult.REJECT;
+        }
+    }
 
 } // end of class PartialViewContextImpl
