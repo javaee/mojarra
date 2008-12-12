@@ -43,6 +43,8 @@ package javax.faces.context;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.faces.event.PhaseId;
+
 /**
  * <p><strong class="changed_added_2_0">PartialViewContext</strong>
  * contains methods and properties that pertain to partial request
@@ -252,5 +254,19 @@ public abstract class PartialViewContext {
      *  this instance has been released
      */
     public abstract void release();
+
+    /**
+     * <p class="changed_added_2_0">Perform lifecycle processing on 
+     * components during the indicated <code>phaseId</code>.  Only 
+     * those components with identifiers existing in the 
+     * <code>Collection</code> returned from {@link #getExecuteIds} 
+     * and {@link #getRenderIds} will be processed.</p>  
+     *
+     * @param context the current {@link FacesContext} instance.
+     * @param phaseId the {@link javax.faces.event.PhaseId} that indicates
+     * the lifecycle phase the components will be processed in. 
+     */ 
+    public abstract void processPartial(FacesContext context, PhaseId phaseId);
+
 
 }

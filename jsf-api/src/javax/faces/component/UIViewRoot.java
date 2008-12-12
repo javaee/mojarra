@@ -46,7 +46,6 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.application.PartialTraversal;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
@@ -876,12 +875,11 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isPartialRequest} returns <code>true</code>,
-     * get the {@link javax.faces.application.PartialTraversal} that is defined for the
-     * application.  The {@link javax.faces.application.PartialTraversal} and
-     * {@link javax.faces.context.PartialViewContext} define how partial view processing
-     * will be performed.
-     * If {@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * javax.faces.context.PartialViewContext#isPartialRequest} returns 
+     * <code>true</code>, perform partial processing by calling
+     * {@link javax.faces.context.PartialViewContext#processPartial} with
+     * {@link PhaseId#APPLY_REQUEST_VALUES}.  If 
+     * {@link javax.faces.context.PartialViewContext#isPartialRequest}
      * returned <code>false</code>, perform <code>processDecodes</code> on all
      * components in the view.</p> 
      * </p>
@@ -905,15 +903,7 @@ public class UIViewRoot extends UIComponentBase {
         try {
             if (!skipPhase) {
                 if (context.getPartialViewContext().isPartialRequest()) {
-                    PartialTraversal traversal = context.getApplication().getPartialTraversal();
-                    if (traversal != null) {
-                        traversal.traverse(context, PhaseId.APPLY_REQUEST_VALUES, this);
-                    } else {
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE,
-                                   "severe.processDecodes.traversal_not_defined", "null");
-                        }
-                    }
+                    context.getPartialViewContext().processPartial(context, PhaseId.APPLY_REQUEST_VALUES);
                 } else {
                 super.processDecodes(context);
                 }
@@ -950,10 +940,10 @@ public class UIViewRoot extends UIComponentBase {
 
     /** 
      * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
-     * perform partial view rendering as defined by the installed
-     * {@link javax.faces.application.PartialTraversal} strategy.
-     * If {@link
+     * javax.faces.context.PartialViewContext#isAjaxRequest} returns 
+     * <code>true</code>, perform partial rendering by calling
+     * {@link javax.faces.context.PartialViewContext#processPartial} with 
+     * {@link PhaseId#RENDER_RESPONSE}.  If {@link
      * javax.faces.context.PartialViewContext#isAjaxRequest} returns
      * <code>false</code>, delegate to the parent {@link
      * javax.faces.component.UIComponentBase#encodeChildren} method.</p>
@@ -963,15 +953,7 @@ public class UIViewRoot extends UIComponentBase {
     @Override
     public void encodeChildren(FacesContext context) throws IOException {
         if (context.getPartialViewContext().isAjaxRequest()) {
-            PartialTraversal traversal = context.getApplication().getPartialTraversal();
-            if (traversal != null) {
-                traversal.traverse(context, PhaseId.RENDER_RESPONSE, this);
-            } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                           "severe.encodeChildren.traversal_not_defined", "null");
-                }
-            }
+            context.getPartialViewContext().processPartial(context, PhaseId.RENDER_RESPONSE);
         } else {
             super.encodeChildren(context);
         }
@@ -1003,8 +985,7 @@ public class UIViewRoot extends UIComponentBase {
         boolean value = super.getRendersChildren();
         FacesContext context = FacesContext.getCurrentInstance();
 
-        PartialViewContext partialViewContext = context.getPartialViewContext();
-        if (partialViewContext.isAjaxRequest()) {
+        if (context.getPartialViewContext().isAjaxRequest()) {
             value = true;
         }
         return value;
@@ -1107,15 +1088,13 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isPartialRequest} returns <code>true</code>,
-     * get the {@link javax.faces.application.PartialTraversal} that is defined for the
-     * application.  The {@link javax.faces.application.PartialTraversal} and
-     * {@link javax.faces.context.PartialViewContext} define how partial view processing
-     * will be performed.
-     * If {@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * javax.faces.context.PartialViewContext#isPartialRequest} returns 
+     * <code>true</code>, perform partial processing by calling
+     * {@link javax.faces.context.PartialViewContext#processPartial} with 
+     * {@link PhaseId#PROCESS_VALIDATIONS}.  If 
+     * {@link javax.faces.context.PartialViewContext#isPartialRequest}
      * returned <code>false</code>, perform <code>processValidators</code> on all
-     * components in the view.</p> 
-     * </p>
+     * components in the view.</p>
      * <p class="changed_modified_2_0">Override the default 
      * {@link UIComponentBase#processValidators} behavior to broadcast any 
      * queued events after the default processing or partial processing has been 
@@ -1136,17 +1115,10 @@ public class UIViewRoot extends UIComponentBase {
         try {
             if (!skipPhase) {
                 if (context.getPartialViewContext().isPartialRequest()) {
-                    PartialTraversal traversal = context.getApplication().getPartialTraversal();
-                    if (traversal != null) {
-                        traversal.traverse(context, PhaseId.PROCESS_VALIDATIONS, this);
-                    } else {
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE,
-                                   "severe.processValidators.traversal_not_defined", "null");
-                        }
-                    }
+                    context.getPartialViewContext().processPartial(context, 
+                        PhaseId.PROCESS_VALIDATIONS);
                 } else {
-                super.processValidators(context);
+                    super.processValidators(context);
                 }
                 broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
             }
@@ -1158,12 +1130,11 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isPartialRequest} returns <code>true</code>,
-     * get the {@link javax.faces.application.PartialTraversal} that is defined for the
-     * application.  The {@link javax.faces.application.PartialTraversal} and
-     * {@link javax.faces.context.PartialViewContext} define how partial view processing
-     * will be performed.
-     * If {@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * javax.faces.context.PartialViewContext#isPartialRequest} returns 
+     * <code>true</code>, perform partial processing by calling
+     * {@link javax.faces.context.PartialViewContext#processPartial} with 
+     * {@link PhaseId#UPDATE_MODEL_VALUES}.  If 
+     * {@link javax.faces.context.PartialViewContext#isPartialRequest}
      * returned <code>false</code>, perform <code>processUpdates</code> on all
      * components in the view.</p>
      * </p>
@@ -1187,17 +1158,10 @@ public class UIViewRoot extends UIComponentBase {
         try {
             if (!skipPhase) {
                 if (context.getPartialViewContext().isPartialRequest()) {
-                    PartialTraversal traversal = context.getApplication().getPartialTraversal();
-                    if (traversal != null) {
-                        traversal.traverse(context, PhaseId.UPDATE_MODEL_VALUES, this);
-                    } else {
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE,
-                                   "severe.processValidators.traversal_not_defined", "null");
-                        }
-                    }
+                    context.getPartialViewContext().processPartial(context, 
+                        PhaseId.UPDATE_MODEL_VALUES);
                 } else {
-                super.processUpdates(context);
+                    super.processUpdates(context);
                 }
                 broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
             }
