@@ -68,6 +68,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.OnOffResponseWrapper;
 
 
 /**
@@ -132,7 +133,8 @@ public class PartialTraversalImpl implements PartialTraversal {
         } else if (phaseId == PhaseId.RENDER_RESPONSE) {
 
             try {
-                partialViewContext.enableResponseWriting(true);
+                OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(context);
+                onOffResponse.setEnabled(true);
                 ResponseWriter writer = partialViewContext.getPartialResponseWriter();
                 ResponseWriter orig = context.getResponseWriter();
                 context.getAttributes().put(ORIGINAL_WRITER, orig);

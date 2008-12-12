@@ -237,21 +237,6 @@ public abstract class PartialViewContext {
     public abstract void setRenderAll(boolean renderAll);
 
     /**
-     * <p class="changed_added_2_0">
-     * Allow or prevent content from being written to the underlying response.</p>
-     *
-     * @param enable The value <code>true</code> will allow content to be
-     * written to the response.  The value <code>false</code> will prevent
-     * content from being written to the response.
-     *
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     *
-     * @since 2.0
-     */
-    public abstract void enableResponseWriting(boolean enable);
-
-    /**
      * <p><span class="changed_added_2.0">Release</span> any
      * resources associated with this <code>PartialViewContext</code>
      * instance.</p>

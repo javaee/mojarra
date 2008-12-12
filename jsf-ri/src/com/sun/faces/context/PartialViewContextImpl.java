@@ -88,21 +88,6 @@ public class PartialViewContextImpl extends PartialViewContext {
     // ---------------------------------------------- Methods from PartialViewContext
 
     /**
-     * @see javax.faces.context.PartialViewContext#enableResponseWriting(boolean) 
-     */
-    @Override
-    public void enableResponseWriting(boolean enable) {
-
-        assertNotReleased();
-        if (onOffResponse == null) {
-            onOffResponse = new OnOffResponseWrapper(FacesContext.getCurrentInstance());
-        }
-        onOffResponse.setEnabled(enable);
-        
-    }
-
-
-    /**
      * @see javax.faces.context.PartialViewContext#isAjaxRequest()
      */
     @Override
