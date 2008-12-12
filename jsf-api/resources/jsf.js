@@ -337,7 +337,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 temp.innerHTML = trim(str);
 
                 parent.replaceChild(temp.firstChild, d);
-                document.removeChild(temp);
             }
         };
 
