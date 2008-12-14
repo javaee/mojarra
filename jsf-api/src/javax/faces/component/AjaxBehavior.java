@@ -94,12 +94,15 @@ public class AjaxBehavior implements Serializable {
 
     private String render = null;
 
-    public AjaxBehavior(String events, String onevent, String onerror, String execute, String render) {
+    private Boolean disabled = false;
+
+    public AjaxBehavior(String events, String onevent, String onerror, String execute, String render, Boolean disabled) {
         this.onerror = onerror;
         this.onevent = onevent;
         this.events = events;
         this.execute = execute;
         this.render = render;
+        this.disabled = disabled;
     }
 
     /**
@@ -159,4 +162,14 @@ public class AjaxBehavior implements Serializable {
     public String getRender() {
         return render;
     }
+
+    /**
+     * <p class="changed_added_2_0">Return the disabled status of this component.</p>
+     *
+     * @since 2.0
+     */
+    public Boolean isDisabled() {
+        return disabled;
+    }
+
 }
