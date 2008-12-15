@@ -1,4 +1,4 @@
-package com.sun.faces.systest.model;
+package com.sun.faces.systest.model.ajax;
 
 import javax.faces.model.ManagedBean;
 import javax.faces.model.SessionScoped;
@@ -9,12 +9,12 @@ public class AjaxErrorBean {
 
 
     private int number = 0;
-    
+
     public int getNumber() {
         return number;
     }
 
-    public void setNumber(int number) throws AjaxNumberException{
+    public void setNumber(int number) throws AjaxNumberException {
         if (number > 5) {
             throw new AjaxNumberException();
         }

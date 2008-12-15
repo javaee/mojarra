@@ -1,4 +1,4 @@
-package com.sun.faces.systest.model;
+package com.sun.faces.systest.model.ajax;
 
 import javax.faces.model.ManagedBean;
 import javax.faces.model.SessionScoped;
