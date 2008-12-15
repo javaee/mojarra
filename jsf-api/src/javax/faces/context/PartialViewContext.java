@@ -153,7 +153,7 @@ public abstract class PartialViewContext {
     public abstract Collection<String> getRenderIds();
 
     /**
-     * <p class="changed_added_2_0">Return the {@link ResponseWriter} 
+     * <p class="changed_added_2_0">Return the {@link ResponseWriter}
      * to which components should
      * direct their output for partial view rendering.  Within a given
      * response, components can use either the ResponseStream or the
@@ -164,7 +164,7 @@ public abstract class PartialViewContext {
      *
      * @since 2.0
      */
-    public abstract ResponseWriter getPartialResponseWriter();
+    public abstract PartialResponseWriter getPartialResponseWriter();
 
     /**
      * <p class="changed_added_2_0">

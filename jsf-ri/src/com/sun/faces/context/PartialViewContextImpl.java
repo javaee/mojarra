@@ -48,6 +48,7 @@ import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialResponseWriter;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.PhaseId;
@@ -79,7 +80,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     private boolean released;
 
     // BE SURE TO ADD NEW IVARS TO THE RELEASE METHOD
-    private ResponseWriter partialResponseWriter = null;
+    private PartialResponseWriter partialResponseWriter = null;
     private Map<Object,Object> attributes;
     private Collection<String> executeIds;
     private Collection<String> renderIds;
@@ -88,9 +89,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     private Boolean partialRequest;
     private Boolean renderAll = null; 
 
-    private static final String RENDER_ALL_MARKER = "javax.faces.ViewRoot";
     private static final String ORIGINAL_WRITER = "javax.faces.originalWriter";
-    private static final String VIEW_STATE_MARKER = "javax.faces.ViewState";
 
 
     // ----------------------------------------------------------- Constructors
@@ -261,7 +260,7 @@ public class PartialViewContextImpl extends PartialViewContext {
             // partial response writer.
             //
             if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-                ResponseWriter writer = getPartialResponseWriter();
+                PartialResponseWriter writer = getPartialResponseWriter();
                 context.setResponseWriter(writer);
             }
 
@@ -273,7 +272,7 @@ public class PartialViewContextImpl extends PartialViewContext {
                 //
                 OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(context);
                 onOffResponse.setEnabled(true);
-                ResponseWriter writer = getPartialResponseWriter();
+                PartialResponseWriter writer = getPartialResponseWriter();
                 ResponseWriter orig = context.getResponseWriter();
                 context.getAttributes().put(ORIGINAL_WRITER, orig);
                 context.setResponseWriter(writer);
@@ -282,15 +281,13 @@ public class PartialViewContextImpl extends PartialViewContext {
                 if (exContext.getResponse() instanceof HttpServletResponse) {
                     exContext.setResponseContentType("text/xml");
                     exContext.setResponseHeader("Cache-Control", "no-cache");
-                    writer.startElement("partial-response", viewRoot);
-                    writer.startElement("changes", viewRoot);
+                    writer.startDocument();
                 }
 
                 if (isRenderAll()) {
                     renderAll(context, viewRoot);
                     renderState(context, viewRoot);
-                    writer.endElement("changes");
-                    writer.endElement("partial-response");
+                    writer.endDocument();
                     return;
                 }
 
@@ -303,8 +300,7 @@ public class PartialViewContextImpl extends PartialViewContext {
 
                 renderState(context, viewRoot);
 
-                writer.endElement("changes");
-                writer.endElement("partial-response");
+                writer.endDocument();
             } catch (IOException ex) {
                 this.cleanupAfterView(context);
             } catch (RuntimeException ex) {
@@ -319,7 +315,7 @@ public class PartialViewContextImpl extends PartialViewContext {
      * @see javax.faces.context.PartialViewContext#getPartialResponseWriter()
      */
     @Override
-    public ResponseWriter getPartialResponseWriter() {
+    public PartialResponseWriter getPartialResponseWriter() {
         assertNotReleased();
         if (partialResponseWriter == null) {
             partialResponseWriter = createPartialResponseWriter();
@@ -386,11 +382,8 @@ public class PartialViewContextImpl extends PartialViewContext {
         // with the special id of VIEW_ROOT_ID.  This is how the client
         // JavaScript knows how to replace the entire document with
         // this response.
-        ResponseWriter writer = context.getResponseWriter();
-        writer.startElement("update", viewRoot);
-        writer.writeAttribute("id", RENDER_ALL_MARKER, "id");
-
-        writer.write("<![CDATA[");
+        PartialResponseWriter writer = getPartialResponseWriter();
+        writer.startUpdate(PartialResponseWriter.RENDER_ALL_MARKER);
 
         Iterator<UIComponent> itr = viewRoot.getFacetsAndChildren();
         while (itr.hasNext()) {
@@ -398,21 +391,19 @@ public class PartialViewContextImpl extends PartialViewContext {
             kid.encodeAll(context);
         }
 
-        writer.write("]]>");
-        writer.endElement("update");
+        writer.endUpdate();
     }
 
     private void renderState(FacesContext context, UIViewRoot viewRoot) throws IOException {
         // Get the view state and write it to the response..
-        ResponseWriter writer = context.getResponseWriter();
-        writer.startElement("update", viewRoot);
-        writer.writeAttribute("id", VIEW_STATE_MARKER, "id");
+        PartialResponseWriter writer = getPartialResponseWriter();
+        writer.startUpdate(PartialResponseWriter.VIEW_STATE_MARKER);
         String state = context.getApplication().getStateManager().getViewState(context);
-        writer.write("<![CDATA[" + state + "]]>");
-        writer.endElement("update");
+        writer.write(state);
+        writer.endUpdate();
     }
 
-    private ResponseWriter createPartialResponseWriter() {
+    private PartialResponseWriter createPartialResponseWriter() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
@@ -437,7 +428,13 @@ public class PartialViewContextImpl extends PartialViewContext {
                 ctx.getRenderKit().createResponseWriter(out,
                 "text/xml", encoding);
         }
-        return responseWriter;
+        if (responseWriter instanceof PartialResponseWriter)  {
+            return (PartialResponseWriter) responseWriter;
+        }
+        else {
+            return new PartialResponseWriter(responseWriter);
+        }
+
     }
 
     private void cleanupAfterView(FacesContext context) {
@@ -484,17 +481,12 @@ public class PartialViewContextImpl extends PartialViewContext {
                     comp.processUpdates(facesContext);
                 } else if (curPhase == PhaseId.RENDER_RESPONSE) {
 
-                    ResponseWriter writer = facesContext.getResponseWriter();
+                    PartialResponseWriter writer = facesContext.getPartialViewContext().getPartialResponseWriter();
 
-                    writer.startElement("update", comp);
-                    writer.writeAttribute("id", comp.getClientId(facesContext), "id");
+                    writer.startUpdate(comp.getClientId(facesContext));
                     try {
-                        writer.write("<![CDATA[");
-
                         // do the default behavior...
                         comp.encodeAll(facesContext);
-
-                        writer.write("]]>");
                     }
                     catch (Exception ce) {
                         if (LOGGER.isLoggable(Level.SEVERE)) {
@@ -506,7 +498,7 @@ public class PartialViewContextImpl extends PartialViewContext {
                             ce);
                         }
                     }
-                    writer.endElement("update");
+                    writer.endUpdate();
                 }
                 else {
                     throw new IllegalStateException("I18N: Unexpected " +
