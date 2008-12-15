@@ -36,9 +36,11 @@
 
 package javax.faces.component.visit;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.faces.FactoryFinder;
@@ -79,19 +81,55 @@ abstract public class VisitContext {
 
     /**
      * <p>This unmodifiable Collection is returned by 
-     * VisitContext.getIdsToVisit() in cases where all ids
+     * getIdsToVisit()and getSubtreeIdsToVisit() in cases where all ids
      * should be visited.</p>
+     * <p>To simplify logic for visitTree() implementations, this Collection
+     * always return {@code false} for {@code isEmpty}.  All other methods 
+     * throw {@code UnsupportedOperationException}.</p>
      */
     // Note: We cannot use Collections.emptyList() as that returns
     // a shared instance - we want to unique instance to allow for
     // identity tests.
     static public final Collection<String> ALL_IDS = 
-      Collections.unmodifiableCollection(new ArrayList<String>(0));
+        new AbstractCollection<String>() {
+
+            @Override
+            public Iterator<String> iterator() {
+                throw new UnsupportedOperationException(
+                    "VisitContext.ALL_IDS does not support this operation");
+            }
+
+            @Override
+            public int size() {
+                throw new UnsupportedOperationException(
+                    "VisitContext.ALL_IDS does not support this operation");
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+        };
 
     /**
      * <p>Returns the FacesContext for the current request.</p>
      */
     abstract public FacesContext getFacesContext();
+
+    /**
+     * <p>
+     * Returns the ids of the components to visit.
+     * </p>
+     * <p>
+     * In the case of a full tree visit, this method returns the
+     * ALL_IDS collection.  Otherwise, if a partial visit is beign
+     * performed, returns a modifiable collection containing the
+     * client ids of the components that should be visited.
+     * </p>
+     * @return {@code VisitContext.ALL_IDS}, or a modifiable 
+     * Collection of client ids.
+     */
+    abstract public Collection<String> getIdsToVisit();
 
     /**
      * <p>
@@ -123,7 +161,7 @@ abstract public class VisitContext {
      * @throws IllegalArgumentException if {@code component} is not
      *  an instance of NamingContainer
      */
-    abstract public Collection<String> getIdsToVisit(UIComponent component);
+    abstract public Collection<String> getSubtreeIdsToVisit(UIComponent component);
 
     /**
      * <p>Called by {@link UIComponent#visitTree UIComponent.visitTree()}
@@ -153,11 +191,15 @@ abstract public class VisitContext {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * @param context
-     * @param ids
-     * @param hints
-     * @return
+     * <p>Creates a VisitContext instance for use with 
+     * {@link UIComponent#visitTree UIComponent.visitTree()}.</p>
+     *
+     * @param context the FacesContext for the current request
+     * @param ids the client ids of the components to visit.  If null,
+     *   all components will be visited.
+     * @param hints the VisitHints to apply to the visit
+     * @return a VisitContext instance that is initialized with the 
+     *   specified ids and hints.
      */
     public static VisitContext createVisitContext(FacesContext context,
                                                   Collection<String> ids,
@@ -170,9 +212,13 @@ abstract public class VisitContext {
     }
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * @param context
-     * @return
+     * <p>Creates a VisitContext instance for use with 
+     * {@link UIComponent#visitTree UIComponent.visitTree()}.
+     * This method can be used to obtain a VisitContext instance
+     * when all components should be visited with the default
+     * visit hints.</p>
+     * @param context the FacesContext for the current request
+     * @return a VisitContext instance
      */
     public static VisitContext createVisitContext(FacesContext context) {
 

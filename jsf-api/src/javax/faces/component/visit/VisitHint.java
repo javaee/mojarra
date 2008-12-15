@@ -49,19 +49,19 @@ package javax.faces.component.visit;
 public enum VisitHint {
 
   /** 
-   * Hint that indicates that only the rendered subtree should be visited.
+   * Hint that indicates that only the rendered subtrees should be visited.
    */
-  VISIT_RENDERED,
+  SKIP_UNRENDERED,
 
   /** 
-   * Hint that indicates that components that iterate over their children
-   * (such as {@link javax.faces.component.UIData UIData} should perform 
-   * their normal iteration during the tree visit.
-   */ 
-  VISIT_ITERATED,
-
-  /** 
-   * Hint that indicates that transient components should be visited.
+   * Hint that indicates that only non-transient subtrees should be visited.
    */
-  VISIT_TRANSIENT
+  SKIP_TRANSIENT,
+
+  /**
+   * Hint that indicates that the visit is being performed as part of
+   * lifecycle phase execution and as such phase-specific actions
+   * (initialization) may be taken.
+   */
+  EXECUTE_LIFECYCLE
 }

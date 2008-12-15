@@ -37,12 +37,14 @@
 package com.sun.faces.component.visit;
 
 import javax.faces.component.visit.*;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -91,21 +93,8 @@ public class PartialVisitContext extends VisitContext {
 
         this.facesContext = facesContext;
 
-        // Copy the client ids into a HashSet to allow for quick lookups.
-        this.clientIds = (clientIds == null) ? 
-                           new HashSet<String>() :
-                           new HashSet<String>(clientIds);
-  
-        // Make another copy so we can easily track unvisited ids
-        this.unvisitedClientIds = new HashSet<String>(this.clientIds);
-  
-        // Populate a collection of the ids (not client ids - just plain
-        // old ids) that we want to visit.  This allows us to avoid extra
-        // UIComponent.getClientId() calls in PartialVisitContext.visit().
-        this.ids = populateIds(this.clientIds);
-
-        // Populate nested client ids needed by getIdsToVisit()
-        this.nestedClientIds = populateNestedClientIds(this.clientIds);
+        // Initialize our various collections
+        initializeCollections(clientIds);
 
         // Copy and store hints - ensure unmodifiable and non-empty
         EnumSet<VisitHint> hintsEnumSet = ((hints == null) || (hints.isEmpty()))
@@ -135,7 +124,19 @@ public class PartialVisitContext extends VisitContext {
      * @see VisitContext#getIdsToVisit VisitContext.getIdsToVisit()
      */
     @Override
-    public Collection<String> getIdsToVisit(UIComponent component) {
+    public Collection<String> getIdsToVisit() {
+
+        // We just return our clientIds collection.  This is
+        // the modifiable (but proxied) collection of all of
+        // the client ids to visit.
+        return clientIds;
+    }
+
+    /**
+     * @see VisitContext#getSubtreeIdsToVisit VisitContext.getSubtreeIdsToVisit()
+     */
+    @Override
+    public Collection<String> getSubtreeIdsToVisit(UIComponent component) {
 
         // Make sure component is a NamingContainer
         if (!(component instanceof NamingContainer)) {
@@ -143,7 +144,7 @@ public class PartialVisitContext extends VisitContext {
         }
 
         String clientId = component.getClientId();
-        Collection<String> ids = nestedClientIds.get(clientId);
+        Collection<String> ids = subtreeClientIds.get(clientId);
 
         if (ids == null)
           return Collections.emptyList();
@@ -185,6 +186,79 @@ public class PartialVisitContext extends VisitContext {
         return result;
     }
 
+    // Called by CollectionProxy to notify PartialVisitContext that
+    // an new id has been added.
+    private void idAdded(String clientId) {
+
+        // An id to visit has been added, update our other
+        // collections to reflect this.
+
+        // Update the ids collection
+        ids.add(getIdFromClientId(clientId));
+
+        // Update the unvisited ids collection
+        unvisitedClientIds.add(clientId);
+
+        // Update the subtree ids collection
+        addSubtreeClientId(clientId);
+    }
+
+    // Called by CollectionProxy to notify PartialVisitContext that
+    // an id has been removed
+    private void idRemoved(String clientId) {
+
+        // An id to visit has been removed, update our other
+        // collections to reflect this.  Note that we don't
+        // update the ids collection, since we ids (non-client ids)
+        // may not be unique.
+
+        // Update the unvisited ids collection
+        unvisitedClientIds.remove(clientId);
+
+        // Update the subtree ids collection
+        removeSubtreeClientId(clientId);
+    }
+
+    // Called to initialize our various collections.
+    private void initializeCollections(Collection<String> clientIds) {
+
+        // We maintain 4 collections:
+        //
+        // 1. clientIds: contains all of the client ids to visit
+        // 2. ids: contains just ids (not client ids) to visit.
+        //    We use this to optimize our check to see whether a
+        //    particular component is in the visit set (ie. to
+        //    avoid having to compute the client id).
+        // 3. subtreeClientIds: contains client ids to visit broken
+        //    out by naming container subtree.  (Needed by
+        //    getSubtreeIdsToVisit()).
+        // 4. unvisitedClientIds: contains the client ids to visit that
+        //    have not yet been visited.
+        //
+        // We populate these now.
+        //
+        // Note that we use default HashSet/Map initial capacities, though
+        // perhaps we could pick more intelligent defaults.
+
+        // Initialize unvisitedClientIds collection
+        this.unvisitedClientIds = new HashSet<String>();
+
+        // Initialize ids collection
+        this.ids = new HashSet<String>();
+
+        // Intialize subtreeClientIds collection
+        this.subtreeClientIds = new HashMap<String,Collection<String>>();
+
+        // Initialize the clientIds collection.  Note that we proxy 
+        // this collection so that we can trap adds/removes and sync 
+        // up all of the other collections.
+        this.clientIds = new CollectionProxy<String>(new HashSet<String>());
+
+        // Finally, populate the clientIds collection.  This has the
+        // side effect of populating all of the other collections.       
+        this.clientIds.addAll(clientIds);
+    }
+
     // Tests whether the specified component should be visited.
     // If so, returns its client id.  If not, returns null.
     private String getVisitId(UIComponent component) {
@@ -206,53 +280,32 @@ public class PartialVisitContext extends VisitContext {
         return clientIds.contains(clientId) ? clientId : null;
     }
 
-    // Give a collection of client ids, return a collection of plain
-    // old ids
-    private Collection<String> populateIds(Collection<String> clientIds)
+
+    // Converts an client id into a plain old id by ripping
+    // out the trailing id segmetn.
+    private String getIdFromClientId(String clientId)
     {
         FacesContext facesContext = getFacesContext();
         char separator = UINamingContainer.getSeparatorChar(facesContext);
-        HashSet<String> ids = new HashSet<String>(clientIds.size());
+        int lastIndex = clientId.lastIndexOf(separator);
 
-        for (String clientId : clientIds)
-        {
-            int lastIndex = clientId.lastIndexOf(separator);
+        String id = null;
 
-            String id = null;
-
-            if (lastIndex < 0) {
-                id = clientId;
-            } else if (lastIndex < (clientId.length() - 1)) {
-                id = clientId.substring(lastIndex + 1);              
-            }
- 
-            if (id != null)
-              ids.add(id);
+        if (lastIndex < 0) {
+            id = clientId;
+        } else if (lastIndex < (clientId.length() - 1)) {
+            id = clientId.substring(lastIndex + 1);              
         }
-
-        return ids;
+ 
+        return id;
     }
 
-    // Populates the map that tracks nested ids underneath naming containers
-    private Map<String,Collection<String>> populateNestedClientIds(Collection<String> clientIds) {
+    // Given a single client id, populate the subtree map with all possible
+    // subtree client ids
+    private void addSubtreeClientId(String clientId) {
 
         FacesContext facesContext = getFacesContext();
         char separator = UINamingContainer.getSeparatorChar(facesContext);
-
-        Map<String,Collection<String>> nestedClientIds = 
-            new HashMap<String,Collection<String>>();
-
-        for (String clientId : clientIds)
-            populateNestedClientId(nestedClientIds, clientId, separator);
-
-        return nestedClientIds;
-    }
-
-    // Given a single client id, populate the map with all possible
-    // nested client ids
-    private void populateNestedClientId(Map<String, Collection<String>> nestedClientIds,
-                                        String clientId,
-                                        char separator) {
 
 
         // Loop over the client id and find the substring corresponding to
@@ -274,12 +327,12 @@ public class PartialVisitContext extends VisitContext {
                 // NamingContainer client id.  If not, create the 
                 // Collection for this NamingContainer client id and
                 // stash it away in our map
-                Collection<String> c = nestedClientIds.get(namingContainerClientId);
+                Collection<String> c = subtreeClientIds.get(namingContainerClientId);
 
                 if (c == null) {
                     // TODO: smarter initial size?
                     c = new ArrayList<String>();
-                    nestedClientIds.put(namingContainerClientId, c);
+                    subtreeClientIds.put(namingContainerClientId, c);
                 }
 
                 // Stash away the client id
@@ -288,6 +341,92 @@ public class PartialVisitContext extends VisitContext {
         }
     }
 
+    // Given a single client id, remove any entries corresponding
+    // entries from our subtree collections
+    private void removeSubtreeClientId(String clientId) {
+
+        // Loop through each entry in the map and check to see whether
+        // the client id to remove should be contained in the corresponding
+        // collection - ie. whether the key (the NamingContainer client id)
+        // is present at the start of the client id to remove.
+        for (String key : subtreeClientIds.keySet()) {
+
+            if (clientId.startsWith(key)) {
+
+                // If the clientId starts with the key, we should
+                // have an entry for this clientId in the corresponding
+                // collection.  Remove it.
+                Collection<String> ids = subtreeClientIds.get(key);
+                ids.remove(clientId);
+            }
+        }
+    }
+
+
+    // Little proxy collection implementation.  We proxy the id
+    // collection so that we can detect modifications and update
+    // our internal state when ids to visit are added or removed.
+    private class CollectionProxy<E extends String> extends 
+        AbstractCollection<E> {
+
+        private CollectionProxy(Collection<E> wrapped) {
+            this.wrapped = wrapped;
+        }
+
+        @Override
+        public int size() {
+            return wrapped.size();
+        }
+
+        @Override
+        public Iterator<E> iterator() {
+            return new IteratorProxy<E>(wrapped.iterator());
+        }
+
+        @Override
+        public boolean add(E o) {
+          boolean added = wrapped.add(o);
+
+          if (added) {
+              idAdded(o);
+          }
+
+          return added;
+        }
+
+        private Collection<E> wrapped;
+    }
+
+    // Little proxy iterator implementation used by CollectionProxy
+    // so that we can catch removes.
+    private class IteratorProxy<E extends String> implements Iterator<E> {
+        private IteratorProxy(Iterator<E> wrapped) {
+            this.wrapped = wrapped;
+        }
+
+        public boolean hasNext() {
+            return wrapped.hasNext();
+        }
+
+        public E next() {
+            current = wrapped.next();
+
+            return current;
+        }
+
+        public void remove() {
+
+            if (current != null) {
+                idRemoved(current);
+            }
+
+            wrapped.remove();
+        }
+
+        private Iterator<E> wrapped;
+
+        private E current = null;
+    }
 
     // The client ids to visit
     private Collection<String> clientIds;
@@ -298,11 +437,11 @@ public class PartialVisitContext extends VisitContext {
     // The client ids that have yet to be visited
     private Collection<String> unvisitedClientIds;
 
-    // This map contains the information needed by getIdsToVisit().
+    // This map contains the information needed by getSubtreeIdsToVisit().
     // The keys in this map are NamingContainer client ids.  The values
     // are collections containing all of the client ids to visit within
     // corresponding naming container.
-    private Map<String,Collection<String>> nestedClientIds;
+    private Map<String,Collection<String>> subtreeClientIds;
 
     // The FacesContext for this request
     private FacesContext facesContext;

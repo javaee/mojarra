@@ -40,11 +40,14 @@
 
 package javax.faces.component;
 
-
+import java.util.Collection;
 import java.util.Iterator;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 
 
@@ -308,4 +311,57 @@ public class UIForm extends UIComponentBase implements NamingContainer {
         prependId = (Boolean) values[1];
         
     }
+
+    /**
+     * @see UIComponent#visitTree
+     */
+    @Override
+    public boolean visitTree(VisitContext context, 
+                               VisitCallback callback) {
+
+        // NamingContainers can optimize partial tree visits by taking advantage
+        // of the fact that it is possible to detect whether any ids to visit
+        // exist underneath the NamingContainer.  If no such ids exist, there
+        // is no need to visit the subtree under the NamingContainer.
+
+        // UIForm is a bit different from other NamingContainers.  It only acts
+        // as a NamingContainer when prependId is true.  Note that if it 
+        // weren't for this, we could push this implementation up in to
+        // UIComponent and share it across all NamingContainers.  Instead,
+        // we currently duplicate this implementation in UIForm and 
+        // UINamingContainer, so that we can check isPrependId() here.
+
+        if (!this.isPrependId()) {
+            return super.visitTree(context, callback);
+        }
+
+        Collection<String> idsToVisit = context.getSubtreeIdsToVisit(this);
+        assert(idsToVisit != null);
+
+        // If we have ids to visit, let the superclass implementation
+        // handle the visit
+        if (!idsToVisit.isEmpty()) {
+            return super.visitTree(context, callback);
+        }
+
+        // If we have no child ids to visit, just visit ourselves, if
+        // we are visitable.
+        if (isVisitable(context)) {
+            FacesContext facesContext = context.getFacesContext();
+            pushComponentToEL(facesContext, null);
+
+            try {
+                VisitResult result = context.invokeVisitCallback(this, callback);
+                return (result == VisitResult.COMPLETE);
+            }
+            finally {
+                popComponentFromEL(facesContext);
+            }
+        }
+
+        // Done visiting this subtree.  Return false to allow 
+        // visit to continue.
+        return false;
+    }
 }
+

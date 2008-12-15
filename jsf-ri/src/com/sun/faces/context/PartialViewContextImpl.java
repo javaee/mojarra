@@ -370,10 +370,9 @@ public class PartialViewContextImpl extends PartialViewContext {
         // We use the tree visitor mechanism to locate the components to
         // process.  Create our (partial) VisitContext and the
         // VisitCallback that will be invoked for each component that
-        // is visited.  Note that we use the VISIT_RENDERED hint as we
+        // is visited.  Note that we use the SKIP_UNRENDERED hint as we
         // only want to visit the rendered subtree.
-        EnumSet hints = EnumSet.of(VisitHint.VISIT_RENDERED,
-                                   VisitHint.VISIT_TRANSIENT);
+        EnumSet hints = EnumSet.of(VisitHint.SKIP_UNRENDERED);
         PartialVisitContext visitContext =
             new PartialVisitContext(context, phaseClientIds, hints);
         PhaseAwareVisitCallback visitCallback =

@@ -67,6 +67,7 @@ import javax.faces.FacesWrapper;
 import javax.faces.application.Resource;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -1291,43 +1292,112 @@ private void doFind(FacesContext context, String clientId) {
     public abstract void decode(FacesContext context);
     
     /**
-     * <p class="changed_added_2_0">Perform a tree traversal starting at
-     * this node in the tree.  The default implementation must call
-     * {@link ContextCallback#invokeContextCallback} on the argument
-     * <code>nodeCallback</code> before traversing the children.  The
-     * traversal may be aborted by throwing an {@link
-     * javax.faces.event.AbortProcessingException} from this method.</p>
+     * <p class="changed_added_2_0">Perform a tree visit starting at
+     * this node in the tree.</p>
      *
-     * @param context the <code>FacesContext</code> for this request
-     * @param nodeCallback the <code>ContextCallback</code> instance
-     * whose <code>invokeContextCallback</code> method will be called
-     * for each node encountered.
+     * <p>UIComponent.visitTree() implementations do not invoke the
+     * {@code VisitCallback} directly, but instead cal
+     * {@code VisitContext.invokeVisitCallback()} to invoke the
+     * callback.  This allows {@code VisitContext} implementations
+     * to provide optimized tree traversals, for example by only
+     * calling the {@code VisitCallback} for a subset of components.</p>
+     *
+     * <p>UIComponent.visitTree() implementations must call
+     * UIComponent.pushComponentToEL() before performing the
+     * visit and UIComponent.popComponentFromEL() after the
+     * visit.</p>
+     *
+     * @param context the <code>VisitContext</code> for this visit
+     * @param callback the <code>VisitCallback</code> instance
+     * whose <code>visit</code> method will be called
+     * for each node visited.
+     * @return component implementations may return <code>true</code> 
+     *   to indicate that the tree visit is complete (eg. all components
+     *   that need to be visited have been visited).  This results in
+     *   the tree visit being short-circuited such that no more components
+     *   are visited.
+     *
+     * @see VisitContext#invokeVisitCallback VisitContext.invokeVisitCallback()
+     *
      * @since 2.0
      */
-    public VisitResult visitTree(VisitContext context, 
-            VisitCallback nodeCallback) {
-        VisitResult result = VisitResult.ACCEPT;
-        
-        if (this.isVisitable(context)) {
-            result = context.invokeVisitCallback(this, nodeCallback);
-        }
-        
-        if (VisitResult.COMPLETE != result &&
-            VisitResult.ACCEPT == result) {
-            Iterator<UIComponent> it = this.getFacetsAndChildren();
-	
-            while (it.hasNext()) {
-                result = it.next().visitTree(context, nodeCallback);
+    public boolean visitTree(VisitContext context, 
+                             VisitCallback callback) {
+
+        // First check to see whether we are visitable.  If not
+        // short-circuit out of this subtree, though allow the
+        // visit to proceed through to other subtrees.
+        if (!isVisitable(context))
+            return false;
+
+        // Push ourselves to EL before visiting
+        FacesContext facesContext = context.getFacesContext();
+        pushComponentToEL(facesContext, null);
+
+        try {
+            // Visit ourselves.  Note that we delegate to the 
+            // VisitContext to actually perform the visit.
+            VisitResult result = context.invokeVisitCallback(this, callback);
+
+            // If the visit is complete, short-circuit out and end the visit
+            if (result == VisitResult.COMPLETE)
+              return true;
+
+            // Visit children if necessary
+            if (result == VisitResult.ACCEPT) {
+                Iterator<UIComponent> kids = this.getFacetsAndChildren();
+
+                while(kids.hasNext()) {
+                    boolean done = kids.next().visitTree(context, callback);
+
+                    // If any kid visit returns true, we are done.
+                    if (done)
+                        return true;
+                }
             }
         }
-        return result;
+        finally {
+            // Pop ourselves off the EL stack
+            popComponentFromEL(facesContext);
+        }
+
+        // Return false to allow the visit to continue
+        return false;
     }
-    
-    public boolean isVisitable(VisitContext context) {
+
+    /**
+     * <p class="changed_added_2_0">Called by 
+     * {@link UIComponent#visitTree UIComponent.visitTree()} to determine
+     * whether this component is "visitable" - ie. whether this component
+     * satisfies the hints returned by 
+     * {@link javax.faces.component.visit.VisitContext#getHints 
+     * VisitContext.getHints()}.</p>
+     * <p>If this component is not visitable (ie. if this method returns
+     * false), the tree visited is short-circuited such that neither the
+     * component nor any of its descendents will be visited></p>
+     * <p>Custom {@code visitTree()} implementations may call this method
+     * to determine whether the component is visitable before performing
+     * any visit-related processing.</p>
+     *
+     * @return true if this component should be visited, false otherwise.
+     */
+    protected boolean isVisitable(VisitContext context) {
+
+        // VisitHints currently defines two hints that affect 
+        // visitability: VIIST_RENDERED and VISIT_TRANSIENT.
+        // Check for both of these and if set, verify that 
+        // we comply.
+        Set<VisitHint> hints = context.getHints();
+
+        if ((hints.contains(VisitHint.SKIP_UNRENDERED) && 
+                !this.isRendered())                    ||
+            (hints.contains(VisitHint.SKIP_TRANSIENT)  && 
+                this.isTransient())) {
+            return false;
+        }
+
         return true;
     }
-    
-
 
     /**
      * <p><span class="changed_modified_2_0">If</span> our

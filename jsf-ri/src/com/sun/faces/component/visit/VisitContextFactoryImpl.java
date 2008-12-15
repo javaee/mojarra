@@ -55,8 +55,12 @@ public class VisitContextFactoryImpl extends VisitContextFactory {
             Collection<String> ids, 
             Set<VisitHint> hints) {
         VisitContext result = null;
-        
-        if (null == ids || ids.isEmpty()) {
+
+        // If ids null (not empty), we create a FullVisitContext.
+        // Otherwise, we create a PartialVisitContext.  Note that
+        // an empty collection still means partial - the client
+        // can add ids to visit after they create the VisitContext.
+        if (null == ids) {
             result = new FullVisitContext(context, hints);
         }
         else {
