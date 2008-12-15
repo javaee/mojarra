@@ -51,4 +51,11 @@ public abstract class StateManagementStrategy {
 
     public abstract Object saveView(FacesContext context);
     
+    /**
+     * <p>Value must not change during application lifetime.  Safe to cache.</p>
+     * @param context
+     * @return
+     */
+    public abstract boolean isPdlDeliversInitialStateEvent(FacesContext context);
+    
 }

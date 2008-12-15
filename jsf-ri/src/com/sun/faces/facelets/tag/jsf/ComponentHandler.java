@@ -212,8 +212,10 @@ public class ComponentHandler extends MetaTagHandler {
             	parent.getChildren().remove(c);
             }
         }
-        
-        c.processEvent(getInitialStateEvent(faces, c));
+        String viewId = faces.getViewRoot().getViewId();
+        if (faces.getApplication().getViewHandler().getPageDeclarationLanguage(viewId).getStateManagementStrategy(faces, viewId).isPdlDeliversInitialStateEvent(faces)) {
+            c.processEvent(getInitialStateEvent(faces, c));
+        }
         this.onComponentPopulated(ctx, c, parent);
 
         // add to the tree afterwards

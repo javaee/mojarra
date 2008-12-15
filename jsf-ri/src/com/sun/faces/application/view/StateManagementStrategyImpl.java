@@ -141,6 +141,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     /**
      * @see {@link StateManager#restoreView(javax.faces.context.FacesContext, String, String)}
      */
+    @Override
     public UIViewRoot restoreView(FacesContext context,
                                   String viewId,
                                   String renderKitId) {
@@ -185,6 +186,13 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         return viewRoot;
 
     }
+
+    @Override
+    public boolean isPdlDeliversInitialStateEvent(FacesContext context) {
+        return true;
+    }
+    
+    
 
 
     // ------------------------------------------------------- Protected Methods

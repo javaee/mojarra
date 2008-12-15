@@ -39,11 +39,28 @@ package javax.faces.component;
 import javax.faces.context.FacesContext;
 
 /**
+ * <p class="changed_added_2_0"><strong>UniqueIdVendor</strong> is an
+ * interface implemented by <code>UIComponents</code> that also
+ * implement {@link NamingContainer} so that they can provide unique ids
+ * based on their own clientId.  This will reduce the amount of id
+ * generation variance between different renderings of the same view and
+ * is helpful for improved state saving.</p>
  *
- * @author edburns
+ * @since 2.0
  */
 public interface UniqueIdVendor {
     
+    /**
+     * <p class="changed_added_2_0">The implementation must prepend the
+     * return from this component&#8217;s {@link
+     * UIComponent#getClientId(javax.faces.context.FacesContext)} to a
+     * unique id such that each time this method is called during the
+     * life of this component instance the each call returns a unique
+     * value.</p>
+     * 
+     * @param context the <code>FacesContext</code> for this request
+     * @since 2.0
+     */ 
     public String createUniqueId(FacesContext context);
 
 }
