@@ -395,7 +395,7 @@ public class RenderKitUtils {
         userSpecifiedOnchange = (userOnchange != null && !"".equals(userOnchange));
 
         AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        renderAjax = (null != ajaxBehavior);
+        renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled());
         if (!userSpecifiedOnchange && !renderAjax) { // nothing to do
             return;  // save the effort of creating the StringBuffer
         }
@@ -439,7 +439,7 @@ public class RenderKitUtils {
         // is there a user Onchange?
         boolean userSpecifiedOnclick = false;
         // do we need to render ajax?
-        boolean renderAjax = (null != ajaxBehavior);
+        boolean renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled());
         // are there parameters to render?
         boolean renderParams = (!Arrays.equals(params,EMPTY_PARAMS));
         // String buffer for final output

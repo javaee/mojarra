@@ -105,7 +105,17 @@ public class FullVisitContext extends VisitContext {
      * @see VisitContext#getIdsToVisit VisitContext.getIdsToVisit()
      */
     @Override
-    public Collection<String> getIdsToVisit(UIComponent component) {
+    public Collection<String> getIdsToVisit() {
+
+        // We always visits all ids
+        return ALL_IDS;
+    }
+
+    /**
+     * @see VisitContext#getSubtreeIdsToVisit VisitContext.getSubtreeIdsToVisit()
+     */
+    @Override
+    public Collection<String> getSubtreeIdsToVisit(UIComponent component) {
 
         // Make sure component is a NamingContainer
         if (!(component instanceof NamingContainer)) {

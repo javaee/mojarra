@@ -7,8 +7,6 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import javax.el.ValueExpression;
-import javax.el.ELContext;
 import javax.faces.component.StateHolder;
 
 /**
@@ -19,21 +17,12 @@ import javax.faces.component.StateHolder;
  */
 public class RegexValidator implements Validator, StateHolder {
 
-    private ValueExpression regex;
+    private String regex;
 
     /**
      * <p>The standard converter id for this converter.</p>
      */
     public static final String VALIDATOR_ID = "javax.faces.RegularExpression";
-
-    /**
-     * <p>The message identifier of the {@link
-     * javax.faces.application.FacesMessage} to be created if the
-     * <code>ValueExpression</code> returned from {@link #getPattern}
-     * does not evaluate to a String.</p>
-     */
-    public static final String NOT_STRING_MESSAGE_ID =
-         "javax.faces.validator.RegexValidator.NOT_STRING";
 
     /**
      * <p>The message identifier of the {@link
@@ -66,13 +55,11 @@ public class RegexValidator implements Validator, StateHolder {
 
 
     /**
-     * <p>The Regular Expression property to validate against.  This
-     * property must be a ValueExpression that resolves to a String in
-     * the format of the java.util.regex patterns.</p>
-     * @param pattern a <code>ValueExpression</code> that evaluates to a
-     * String that is the regular expression pattern
+     * <p>The Regular Expression property to validate against.</p>
+     *
+     * @param pattern a regular expression pattern
      */
-    public void setPattern(ValueExpression pattern) {
+    public void setPattern(String pattern) {
         this.regex = pattern;
     }
 
@@ -81,7 +68,7 @@ public class RegexValidator implements Validator, StateHolder {
      * regular expression pattern when evaluated.</p>
      */
 
-    public ValueExpression getPattern() {
+    public String getPattern() {
         return this.regex;
     }
 
@@ -107,34 +94,7 @@ public class RegexValidator implements Validator, StateHolder {
 
         Locale locale = context.getViewRoot().getLocale();
 
-        ELContext elcontext = context.getELContext();
-
-        // if not String, complain
-        String regexStr;
-        if (!regex.getType(elcontext).equals(java.lang.String.class)) {
-            fmsg = MessageFactory.getMessage(locale,
-                    NOT_STRING_MESSAGE_ID,
-                    (Object) null);
-            throw new ValidatorException(fmsg);
-        }
-        // cast safe, since we just tested
-        regexStr = (String) regex.getValue(elcontext);
-
-        if (null == regexStr) {
-            fmsg = MessageFactory.getMessage(locale,
-                    PATTERN_NOT_SET_MESSAGE_ID,
-                    (Object) null);
-            throw new ValidatorException(fmsg);
-        }
-
-        if (!(value instanceof String)) {
-            fmsg = MessageFactory.getMessage(locale,
-                    NOT_STRING_MESSAGE_ID,
-                    (Object) null);
-            throw new ValidatorException(fmsg);
-        }
-
-        if (regexStr.equals("")) {
+        if (regex == null || regex.length() == 0) {
             fmsg = MessageFactory.getMessage(locale,
                     PATTERN_NOT_SET_MESSAGE_ID,
                     (Object) null);
@@ -142,10 +102,10 @@ public class RegexValidator implements Validator, StateHolder {
         }
 
         try {
-            Pattern pattern = Pattern.compile(regexStr);
+            Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher((String) value);
             if (!matcher.matches()) {
-                Object[] params = {regexStr};
+                Object[] params = { regex };
                 fmsg = MessageFactory.getMessage(locale,
                         NOT_MATCHED_MESSAGE_ID,
                         params);
@@ -164,10 +124,9 @@ public class RegexValidator implements Validator, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[2];
-        values[0] = (null != regex) ? regex.getExpressionString() : null;
-        values[1] = String.class;
-        
+        Object values[] = new Object[1];
+        values[0] = regex;
+
         return (values);
 
     }
@@ -176,11 +135,7 @@ public class RegexValidator implements Validator, StateHolder {
     public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
-        if (null != values[0]) {
-            regex = context.getApplication().getExpressionFactory().
-                    createValueExpression(context.getELContext(), 
-                    (String) values[0], (Class) values[1]);
-        }
+        regex = (String) values[0];
 
     }
 

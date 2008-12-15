@@ -92,8 +92,6 @@
     <resource-handler>
       com.sun.faces.application.resource.ResourceHandlerImpl
     </resource-handler>
-      <!-- RELEASE_PENDING see bug # 822 -->
-      <!--   
     <system-event-listener>
         <system-event-listener-class>
          com.sun.faces.config.listeners.ProjectStagePhaseListenerInstallationListener
@@ -105,7 +103,6 @@
             javax.faces.application.Application
         </source-class>
     </system-event-listener>
-    -->
   </application>
 
 

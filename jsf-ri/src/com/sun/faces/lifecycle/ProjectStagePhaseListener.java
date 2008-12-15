@@ -39,29 +39,18 @@ package com.sun.faces.lifecycle;
 
 
 import java.util.Map;
+import java.util.Iterator;
 
 import javax.faces.application.Application;
-import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
 import javax.faces.component.UIMessage;
 import javax.faces.component.UIMessages;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIOutput;
-import javax.faces.component.html.HtmlMessage;
-import javax.faces.component.html.HtmlMessages;
-import javax.faces.component.html.HtmlCommandButton;
-import javax.faces.component.html.HtmlCommandLink;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
-
-import com.sun.faces.util.MessageUtils;
 
 /**
  * <p>
@@ -71,11 +60,6 @@ import com.sun.faces.util.MessageUtils;
  *     If no UIMessage or UIMessages component is present within the view,
  *     a UIMessages component will be added on behalf of the user to display
  *     any unhandled FacesMessages.
- *   </li>
- *   <li>
- *     If a UICommand is present within the view but not nested within a
- *     UIForm, queue a message stating such and that any actions associated
- *     with that command will not be invoked.
  *   </li>
  * </ul>
  * </p>
@@ -91,57 +75,51 @@ public class ProjectStagePhaseListener implements PhaseListener {
 
     private static final long serialVersionUID = 8281381763781233640L;
 
-    private static final String HAS_MESSAGES =
-          ProjectStagePhaseListener.class.getName() + ".HAS_MESSAGES";
-    private static final String HAS_COMMAND_NO_FORM =
-          ProjectStagePhaseListener.class.getName() + ".HAS_COMMAND_NO_FORM";
-
-
-    // ------------------------------------------------------------ Constructors
-
-    
-    public ProjectStagePhaseListener() {
-
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        subscribeSystemEventListener(ctx,
-                                     AfterAddToParentEvent.class,
-                                     new MessageListener(),
-                                     UIMessage.class,
-                                     UIMessages.class,
-                                     HtmlMessage.class,
-                                     HtmlMessages.class);
-        subscribeSystemEventListener(ctx,
-                                     AfterAddToParentEvent.class,
-                                     new CommandListener(),
-                                     UICommand.class,
-                                     HtmlCommandButton.class,
-                                     HtmlCommandLink.class);
-
-    }
-
 
     // ---------------------------------------------- Methods from PhaseListener
 
 
+    /**
+     * <p>
+     * If a <code>UIMessage</code> or <code>UIMessages</code> component is not
+     * found within the view, add a <code>UIMessages</code> to the view
+     * on behalf of the developer.
+     * </p>
+     *
+     * RELEASE_PENDING this is probably only applicable for views containg
+     *  form.  Right now, if a developer has a read-only view (i.e. only
+     *  output components, this would cause the messages component to be
+     *  added.
+     *
+     * @see PhaseListener#afterPhase(javax.faces.event.PhaseEvent)
+     */
     public void afterPhase(PhaseEvent event) {
 
         FacesContext context = event.getFacesContext();
-        Map<Object,Object> attributes = context.getAttributes();
-        if (!attributes.containsKey(HAS_MESSAGES)) {
-            addMessagesComponent(context);
 
-        }
-        if (attributes.containsKey(HAS_COMMAND_NO_FORM)) {
-            context.addMessage(null, MessageUtils.getExceptionMessage(MessageUtils.COMMAND_NOT_NESTED_WITHIN_FORM_ID));
+        if (!isMessageComponentNeeded(context.getViewRoot())) {
+            addMessagesComponent(context);
         }
 
     }
 
 
+    /**
+     * <p>
+     * This is a no-op
+     * </p>
+     *
+     * @see PhaseListener#beforePhase(javax.faces.event.PhaseEvent)
+     */
     public void beforePhase(PhaseEvent event) {
     }
 
 
+    /**
+     * @return {@link PhaseId#RESTORE_VIEW}
+     *
+     * @see javax.faces.event.PhaseListener#getPhaseId()
+     */
     public PhaseId getPhaseId() {
 
         return PhaseId.RESTORE_VIEW;
@@ -152,31 +130,43 @@ public class ProjectStagePhaseListener implements PhaseListener {
     // --------------------------------------------------------- Private Methods
 
 
-    /**
-     * <p>
-     * For source class provided, call {@link Application#subscribeToEvent(Class, Class, javax.faces.event.SystemEventListener)}
-     * passing in the provided {@link SystemEvent} class and {@link SystemEventListener}
-     * implementation.
-     * </p>
-     *
-     * @param ctx the {@link FacesContext} for the current request
-     * @param systemEvent {@link SystemEvent}
-     * @param listener {@link SystemEventListener}
-     * @param sources one or more sources for the event
-     */
-    private void subscribeSystemEventListener(FacesContext ctx,
-                                              Class<? extends SystemEvent> systemEvent,
-                                              SystemEventListener listener,
-                                              Class<?>... sources) {
+    
+    private boolean isMessageComponentNeeded(UIViewRoot root) {
 
-        Application app = ctx.getApplication();
-        for (Class<?> source : sources) {
-            app.subscribeToEvent(systemEvent, source, listener);
+        for (Iterator<UIComponent> i = root.getFacetsAndChildren(); i.hasNext();) {
+            UIComponent c = i.next();
+            UIComponent message = findMessageComponent(c);
+            if (message != null) {
+                return true;
+            }
         }
+        return false;
 
     }
 
-    
+
+    private UIComponent findMessageComponent(UIComponent component) {
+
+        if (component instanceof UIMessage || component instanceof UIMessages) {
+            return component;
+        }
+
+        for (Iterator<UIComponent> i = component.getFacetsAndChildren(); i.hasNext(); ) {
+            UIComponent c = i.next();
+            if (c instanceof UIMessage || c instanceof UIMessages) {
+                return c;
+            }
+            UIComponent nc = findMessageComponent(c);
+            if (nc != null) {
+                return nc;
+            }
+        }
+
+        return null;
+
+    }
+
+
     /**
      * <p>
      * Add a stylized UIMessages component to the current UIViewRoot.
@@ -191,11 +181,15 @@ public class ProjectStagePhaseListener implements PhaseListener {
 
         UIComponent panel = app.createComponent("javax.faces.Panel");
         panel.setRendererType("javax.faces.Grid");
-        UIOutput output = (UIOutput) app.createComponent("javax.faces.Output");
-        output.setValue("ProjectStage[Development]: Messages - Add your own message handling to prevent this from appearing.");
-        output.getAttributes().put("style", "color: red");
+        UIOutput caption = (UIOutput) app.createComponent("javax.faces.Output");
+        caption.setValue("ProjectStage[Development]: Messages");
+        caption.getAttributes().put("style", "color: red");
         panel.getAttributes().put("columns", 1);
-        panel.getFacets().put("caption", output);
+        panel.getFacets().put("caption", caption);
+        UIOutput footer = (UIOutput) app.createComponent("javax.faces.Output");
+        footer.setValue("Add your own message handling to prevent this from appearing.");
+        footer.getAttributes().put("style", "color: red");        
+        panel.getFacets().put("footer", footer);
         // Add a component to hold the messages
         UIComponent messages = app.createComponent("javax.faces.Messages");
         messages.setTransient(true);
@@ -212,78 +206,5 @@ public class ProjectStagePhaseListener implements PhaseListener {
         root.addComponentResource(context, panel, "body");
 
     }
-
-
-    // ---------------------------------------------------------- Nested Classes
-
-
-    /**
-     * Invoked when a UIMessage, UIMessages, HtmlMessage, or HtmlMessages has
-     * been added to the tree. When this occurs, we add a flag to the current
-     * FacesContext to indicate that the ProjectStagePhaseListener does not need
-     * to add a messages component to the view.
-     */
-    private static class MessageListener implements SystemEventListener {
-
-
-        // ------------------------------------ Methods from SystemEventListener
-
-
-        public void processEvent(SystemEvent event)
-        throws AbortProcessingException {
-
-            FacesContext ctx = FacesContext.getCurrentInstance();
-            ctx.getAttributes().put(HAS_MESSAGES, Boolean.TRUE);
-
-        }
-
-        public boolean isListenerForSource(Object source) {
-
-            return (source instanceof UIMessage || source instanceof UIMessages);
-
-        }
-        
-    }
-
-
-    /**
-     * Invoked when a UICommand, HtmlCommandButton, or HtmlCommandLink has
-     * been added to the tree. When this occurs, check to see if the UICommand
-     * instance has a UIForm parent.  If it doesn't, add a flag to the
-     * FacesContext so that the ProjectStatePhaseListener can queue a message
-     * informing the user of their error.
-     */
-    private static class CommandListener implements SystemEventListener {
-
-
-        // ------------------------------------ Methods from SystemEventListener
-
-
-        public void processEvent(SystemEvent event)
-        throws AbortProcessingException {
-
-            UICommand command = (UICommand) event.getSource();
-            UIComponent parent = command.getParent();
-            while (parent != null) {
-                if (parent instanceof UIForm) {
-                    return;
-                }
-                parent = parent.getParent();
-            }
-            
-            // no form parent found
-            FacesContext ctx = FacesContext.getCurrentInstance();
-            ctx.getAttributes().put(HAS_COMMAND_NO_FORM, Boolean.TRUE);
-
-        }
-
-        
-        public boolean isListenerForSource(Object source) {
-
-            return (source instanceof UICommand);
-
-        }
-    }
-
 
 }

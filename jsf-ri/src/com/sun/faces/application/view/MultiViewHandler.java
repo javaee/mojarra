@@ -110,9 +110,6 @@ public class MultiViewHandler extends ViewHandler {
         configuredExtensions = Util.split(defaultSuffixConfig, " ");
         pdlFactory = (PageDeclarationLanguageFactory) 
                 FactoryFinder.getFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY);
-        if (pdlFactory instanceof PageDeclarationLanguageFactoryImpl) {
-            ((PageDeclarationLanguageFactoryImpl)pdlFactory).setMultiViewHandler(this);
-        }
 
     }
 
@@ -139,15 +136,14 @@ public class MultiViewHandler extends ViewHandler {
 
     /**
      * <p>
-     * Call {@link com.sun.faces.application.view.ViewHandlingStrategy#renderView(javax.faces.context.FacesContext, MultiViewHandler, javax.faces.component.UIViewRoot)}
+     * Call {@link PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)}
      * if the view can be rendered.
      * </p>
      *
      * @see ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
-    public void renderView(FacesContext context,
-            UIViewRoot viewToRender) throws IOException,
-            FacesException {
+    public void renderView(FacesContext context, UIViewRoot viewToRender)
+    throws IOException, FacesException {
 
         Util.notNull("context", context);
         Util.notNull("viewToRender", viewToRender);
@@ -160,7 +156,7 @@ public class MultiViewHandler extends ViewHandler {
 
     /**
      * <p>
-     * Call {@link com.sun.faces.application.view.ViewHandlingStrategy#restoreView(javax.faces.context.FacesContext, MultiViewHandler, String)}.
+     * Call {@link PageDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}.
      * </p>
      *
      * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)   
@@ -168,12 +164,16 @@ public class MultiViewHandler extends ViewHandler {
     public UIViewRoot restoreView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
-
-        return pdlFactory.getPageDeclarationLanguage(viewId).restoreView(context,
-                                                                    viewId);
+        String actualViewId = derivePhysicalViewId(context, viewId);
+        return pdlFactory.getPageDeclarationLanguage(actualViewId)
+              .restoreView(context, actualViewId);
 
     }
-    
+
+
+    /**
+     * @see ViewHandler#retargetAttachedObjects(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.util.List)
+     */
     @Override
     public void retargetAttachedObjects(FacesContext context,
             UIComponent topLevelComponent,
@@ -245,6 +245,10 @@ public class MultiViewHandler extends ViewHandler {
         }
     }
 
+
+    /**
+     * @see ViewHandler#retargetMethodExpressions(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
+     */
     @Override
     public void retargetMethodExpressions(FacesContext context,
             UIComponent topLevelComponent) {
@@ -459,7 +463,8 @@ public class MultiViewHandler extends ViewHandler {
     
     /**
      * <p>
-     * Call {@link com.sun.faces.application.view.ViewHandlingStrategy#createView(javax.faces.context.FacesContext, MultiViewHandler, String)}.
+     * Derive the actual view ID (i.e. the physical resource) and call
+     * call {@link PageDeclarationLanguage#createView(javax.faces.context.FacesContext, String)}.
      * </p>
      *
      * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)
@@ -467,9 +472,10 @@ public class MultiViewHandler extends ViewHandler {
     public UIViewRoot createView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
+        String actualViewId = derivePhysicalViewId(context, viewId);
+        return pdlFactory.getPageDeclarationLanguage(actualViewId).createView(context,
+                                                                   actualViewId);
 
-        return pdlFactory.getPageDeclarationLanguage(viewId).createView(context,
-                                                                   viewId);
     }
 
 
@@ -640,176 +646,19 @@ public class MultiViewHandler extends ViewHandler {
         }
 
     }
-    
-    @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage(String viewId) {
-        return pdlFactory.getPageDeclarationLanguage(viewId);
-    }
-    
-    
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-   /**
-     * <p>
-     * Called by {@link com.sun.faces.application.view.ViewHandlingStrategy#createView(javax.faces.context.FacesContext, MultiViewHandler, String)}
-     * if the {@link ViewHandlingStrategy} implementation doesn't require custom
-     * behavior when restoring the view.
-     * </p>
-     *
-     * @param ctx the {@link FacesContext} for the current request
-     * @param viewId the view ID
-     * @return a new {@link UIViewRoot}
-     *
-     * @see ViewHandler#createView(javax.faces.context.FacesContext, String)
-     */
-    UIViewRoot createViewPrivateContract(FacesContext ctx, String viewId) {
-
-        Util.notNull("context", ctx);
-
-        UIViewRoot result = (UIViewRoot)
-              ctx.getApplication()
-                    .createComponent(UIViewRoot.COMPONENT_TYPE);
-
-        if (viewId != null) {
-            String mapping = Util.getFacesMapping(ctx);
-
-            if (mapping != null) {
-                if (!Util.isPrefixMapped(mapping)) {
-                    viewId = convertViewId(ctx, viewId);
-                } else {
-                    viewId = normalizeRequestURI(viewId, mapping);
-                    if (viewId.equals(mapping)) {
-                        // The request was to the FacesServlet only - no
-                        // path info
-                        // on some containers this causes a recursion in the
-                        // RequestDispatcher and the request appears to hang.
-                        // If this is detected, return status 404
-                        send404Error(ctx);
-                    }
-                }
-            }
-
-            result.setViewId(viewId);
-        }
-
-        Locale locale = null;
-        String renderKitId = null;
-
-        // use the locale from the previous view if is was one which will be
-        // the case if this is called from NavigationHandler. There wouldn't be
-        // one for the initial case.
-        if (ctx.getViewRoot() != null) {
-            locale = ctx.getViewRoot().getLocale();
-            renderKitId = ctx.getViewRoot().getRenderKitId();
-        }
-
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Created new view for " + viewId);
-        }
-        // PENDING(): not sure if we should set the RenderKitId here.
-        // The UIViewRoot ctor sets the renderKitId to the default
-        // one.
-        // if there was no locale from the previous view, calculate the locale
-        // for this view.
-        if (locale == null) {
-            locale = ctx.getApplication().getViewHandler().calculateLocale(ctx);
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine(
-                      "Locale for this view as determined by calculateLocale "
-                      + locale.toString());
-            }
-        } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Using locale from previous view "
-                            + locale.toString());
-            }
-        }
-
-        if (renderKitId == null) {
-            renderKitId =
-                  ctx.getApplication().getViewHandler()
-                        .calculateRenderKitId(ctx);
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine(
-                      "RenderKitId for this view as determined by calculateRenderKitId "
-                      + renderKitId);
-            }
-        } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Using renderKitId from previous view "
-                            + renderKitId);
-            }
-        }
-
-        result.setLocale(locale);
-        result.setRenderKitId(renderKitId);
-
-        return result;
-    }
-
 
     /**
-     * <p>
-     * Called by {@link com.sun.faces.application.view.ViewHandlingStrategy#restoreView(javax.faces.context.FacesContext, MultiViewHandler, String)}
-     * if the {@link ViewHandlingStrategy} implementation doesn't require custom
-     * behavior when restoring the view.
-     * </p>
-     *
-     * @param ctx the {@link FacesContext} for the current request
-     * @param viewId the view ID
-     * @return the restored {@link UIViewRoot} or <code>null</code> if the
-     *  view cann't be restored.
-     *
-     * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)
+     * @see ViewHandler#getPageDeclarationLanguage(javax.faces.context.FacesContext, String) 
      */
-    UIViewRoot restoreViewPrivateContract(FacesContext ctx, String viewId) {
+    @Override
+    public PageDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
+                                                              String viewId) {
 
-        ExternalContext extContext = ctx.getExternalContext();
+        String actualViewId = derivePhysicalViewId(context, viewId);
+        return pdlFactory.getPageDeclarationLanguage(actualViewId);
 
-        String mapping = Util.getFacesMapping(ctx);
-        UIViewRoot viewRoot = null;
-
-        if (mapping != null) {
-            if (!Util.isPrefixMapped(mapping)) {
-                viewId = convertViewId(ctx, viewId);
-            } else {
-                viewId = normalizeRequestURI(viewId, mapping);
-            }
-        }
-
-        // maping could be null if a non-faces request triggered
-        // this response.
-        if (extContext.getRequestPathInfo() == null && mapping != null &&
-            Util.isPrefixMapped(mapping)) {
-            // this was probably an initial request
-            // send them off to the root of the web application
-            try {
-                ctx.responseComplete();
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, "Response Complete for" + viewId);
-                }
-                extContext.redirect(extContext.getRequestContextPath());
-            } catch (IOException ioe) {
-                throw new FacesException(ioe);
-            }
-        } else {
-            // this is necessary to allow decorated impls.
-            ViewHandler outerViewHandler =
-                  ctx.getApplication().getViewHandler();
-            String renderKitId =
-                  outerViewHandler.calculateRenderKitId(ctx);
-            viewRoot = Util.getStateManager(ctx).restoreView(ctx,
-                                                             viewId,
-                                                             renderKitId);
-        }
-
-        return viewRoot;
-        
     }
-
+    
 
     // ------------------------------------------------------- Protected Methods
 
@@ -976,6 +825,32 @@ public class MultiViewHandler extends ViewHandler {
         return viewId;
 
     }
+
+
+    protected String derivePhysicalViewId(FacesContext ctx, String viewId) {
+        if (viewId != null) {
+            String mapping = Util.getFacesMapping(ctx);
+
+            if (mapping != null) {
+                if (!Util.isPrefixMapped(mapping)) {
+                    viewId = convertViewId(ctx, viewId);
+                } else {
+                    viewId = normalizeRequestURI(viewId, mapping);
+                    if (viewId.equals(mapping)) {
+                        // The request was to the FacesServlet only - no
+                        // path info
+                        // on some containers this causes a recursion in the
+                        // RequestDispatcher and the request appears to hang.
+                        // If this is detected, return status 404
+                        send404Error(ctx);
+                    }
+                }
+            }
+
+        }
+        return viewId;
+    }
+
 
 
 }

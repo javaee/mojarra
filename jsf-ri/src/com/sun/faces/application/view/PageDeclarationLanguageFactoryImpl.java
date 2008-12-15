@@ -44,35 +44,40 @@ import javax.faces.webapp.pdl.PageDeclarationLanguageFactory;
  */
 public class PageDeclarationLanguageFactoryImpl extends PageDeclarationLanguageFactory {
 
-    /**
-     * The {@link ViewHandlingStrategy} instances used by this {@link ViewHandler}.
-     */
+    
     private ViewHandlingStrategyManager viewHandlingStrategy;
-    private MultiViewHandler multiViewHandler;
 
 
-    public PageDeclarationLanguageFactoryImpl() {
-    }
-    
-    private ViewHandlingStrategyManager getViewHandlingStrategyManager() {
-        if (null == viewHandlingStrategy) {
-            viewHandlingStrategy = new ViewHandlingStrategyManager(multiViewHandler);
-        }
-        return viewHandlingStrategy;
-    }
-    
+    // ------------------------------------ Methods from PageDeclarationLanguage
+
+
+    /**
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguageFactory#getPageDeclarationLanguage(String)
+     */
     @Override
     public PageDeclarationLanguage getPageDeclarationLanguage(String viewId) {
-        PageDeclarationLanguage result = null;
-        
-        result = getViewHandlingStrategyManager().getStrategy(viewId);
-        
-        return result;
+
+        return getViewHandlingStrategyManager().getStrategy(viewId);
+
     }
 
-    void setMultiViewHandler(MultiViewHandler multiViewHandler) {
-        this.multiViewHandler = multiViewHandler;
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private ViewHandlingStrategyManager getViewHandlingStrategyManager() {
+
+        if (viewHandlingStrategy == null) {
+            viewHandlingStrategy =
+                  new ViewHandlingStrategyManager();
+        }
+        return viewHandlingStrategy;
+
     }
+    
+
+
+
     
 
 }

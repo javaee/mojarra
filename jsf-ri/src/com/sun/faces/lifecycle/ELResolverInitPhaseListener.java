@@ -86,7 +86,11 @@ public class ELResolverInitPhaseListener implements PhaseListener {
      */
     public synchronized void afterPhase(PhaseEvent event) {
 
-        if (!postInitCompleted) {
+        if (!postInitCompleted && PhaseId.RENDER_RESPONSE.equals(event.getPhaseId())) {
+            ApplicationAssociate associate =
+                 ApplicationAssociate.getInstance(
+                      event.getFacesContext().getExternalContext());
+            associate.setRequestServiced();
             LifecycleFactory factory = (LifecycleFactory)
                   FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
             // remove ourselves from the list of listeners maintained by
@@ -112,10 +116,7 @@ public class ELResolverInitPhaseListener implements PhaseListener {
     public synchronized void beforePhase(PhaseEvent event) {
 
         if (!preInitCompleted) {
-            ApplicationAssociate associate =
-                 ApplicationAssociate.getInstance(
-                      FacesContext.getCurrentInstance().getExternalContext());
-            associate.setRequestServiced();
+            
             populateFacesELResolverForJsp(event.getFacesContext());
             preInitCompleted = true;
 

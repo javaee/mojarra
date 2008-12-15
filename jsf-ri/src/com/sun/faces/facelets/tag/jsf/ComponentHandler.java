@@ -213,7 +213,7 @@ public class ComponentHandler extends MetaTagHandler {
             }
         }
         String viewId = faces.getViewRoot().getViewId();
-        if (faces.getApplication().getViewHandler().getPageDeclarationLanguage(viewId).getStateManagementStrategy(faces, viewId).isPdlDeliversInitialStateEvent(faces)) {
+        if (faces.getApplication().getViewHandler().getPageDeclarationLanguage(faces, viewId).getStateManagementStrategy(faces, viewId).isPdlDeliversInitialStateEvent(faces)) {
             c.processEvent(getInitialStateEvent(faces, c));
         }
         this.onComponentPopulated(ctx, c, parent);

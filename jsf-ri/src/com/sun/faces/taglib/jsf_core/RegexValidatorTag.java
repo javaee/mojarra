@@ -47,6 +47,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.webapp.ValidatorELTag;
 import javax.el.ValueExpression;
+import javax.servlet.jsp.JspException;
 
 
 /**
@@ -67,12 +68,15 @@ public class RegexValidatorTag extends AbstractValidatorTag {
     }
 
     @Override
-    protected Validator createValidator() {
-        
-        Application app = FacesContext.getCurrentInstance().getApplication();
-        RegexValidator validator =
-                (RegexValidator) app.createValidator("javax.faces.RegularExpression");
-        validator.setPattern(regex);
+    protected Validator createValidator() throws JspException {
+
+        RegexValidator validator = (RegexValidator) super.createValidator();
+        assert (validator != null);
+        if (regex != null) {
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            validator.setPattern((String) regex.getValue(ctx.getELContext()));
+        }
         return validator;
+        
     }
 }

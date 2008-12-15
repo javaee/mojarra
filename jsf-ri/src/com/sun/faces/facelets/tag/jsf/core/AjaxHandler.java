@@ -133,6 +133,7 @@ public final class AjaxHandler extends TagHandlerImpl {
     private final TagAttribute render;
     private final TagAttribute onevent;
     private final TagAttribute onerror;
+    private final TagAttribute disabled;
 
     /**
      * @param config
@@ -144,6 +145,7 @@ public final class AjaxHandler extends TagHandlerImpl {
         this.render = this.getAttribute("render");
         this.onevent = this.getAttribute("onevent");
         this.onerror = this.getAttribute("onerror");
+        this.disabled = this.getAttribute("disabled");
     }
 
     /*
@@ -163,6 +165,7 @@ public final class AjaxHandler extends TagHandlerImpl {
         String render = null;
         String onevent = null;
         String onerror = null;
+        Boolean disabled = false;
 
         if (this.events != null) {
             events = this.events.getValue(ctx);
@@ -180,7 +183,19 @@ public final class AjaxHandler extends TagHandlerImpl {
             onerror = this.onerror.getValue(ctx);
         }
 
-        AjaxBehavior ajaxBehavior = new AjaxBehavior(events, onevent, onerror, execute, render);
+        if (this.disabled != null) {
+            String disabledStr = this.disabled.getValue(ctx);
+            if ("true".equalsIgnoreCase(disabledStr)) {
+                disabled = true;
+            } else if ("false".equalsIgnoreCase(disabledStr)) {
+                disabled = false;
+            } else {
+                // RELEASE_PENDING 118N
+                throw new TagAttributeException(this.events, "'disabled' attribute value must be one of true or false");
+            }
+        }
+
+        AjaxBehavior ajaxBehavior = new AjaxBehavior(events, onevent, onerror, execute, render, disabled);
 
         //
         // If we are nested within an EditableValueHolder or ActionSource component..
@@ -192,6 +207,7 @@ public final class AjaxHandler extends TagHandlerImpl {
                 installAjaxResourceIfNecessary();
                 return;
             } else {
+                // RELEASE_PENDING 118N
                 throw new TagAttributeException(this.events, "'events' attribute value must be 'action' for 'ActionSource' components");
             }
         } else if (parent instanceof EditableValueHolder) {
@@ -201,6 +217,7 @@ public final class AjaxHandler extends TagHandlerImpl {
                 installAjaxResourceIfNecessary();
                 return;
             } else {
+                // RELEASE_PENDING 118N
                 throw new TagAttributeException(this.events, "'events' attribute value must be 'valueChange' for 'EditableValueHolder' components");
             }
         }

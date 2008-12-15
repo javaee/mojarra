@@ -40,6 +40,10 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitHint;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -57,6 +61,7 @@ import javax.servlet.jsp.jstl.sql.Result;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.ResultSet;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -66,12 +71,7 @@ import java.util.Iterator;
 
 
 // ------------------------------------------------------------- Private Classes
-import javax.faces.component.visit.VisitCallback;
-
-
 // Private class to represent saved state information
-import javax.faces.component.visit.VisitContext;
-import javax.faces.component.visit.VisitResult;
 /**
  * <p><strong>UIData</strong> is a {@link UIComponent} that supports data
  * binding to a collection of data objects represented by a {@link DataModel}
@@ -967,80 +967,8 @@ public class UIData extends UIComponentBase
     public String createUniqueId(FacesContext context) {
         return this.getClientId(context) + lastId++;
     }
-    
 
-    @Override
-    public VisitResult visitTree(VisitContext context, VisitCallback contextCallback) {
-        /******* PENDING(edburns) this is disabled until we fix UIData StateSaving
-        processFacets(context, contextCallback);
-        processColumnFacets(context, contextCallback);
-        processColumnChildren(context, contextCallback);
-        ***********/
-        return VisitResult.ACCEPT;
-    }
-
-    private void processFacets(VisitContext context, VisitCallback contextCallback) {
-        Iterator<UIComponent> it = getFacets().values().iterator();
-
-        while (it.hasNext()) {
-            it.next().visitTree(context, contextCallback);
-        }
-    }
-
-    private void processColumnFacets(VisitContext context, 
-            VisitCallback contextCallback) {
-        Iterator<UIComponent> childIter = getChildren().iterator();
-
-        while (childIter.hasNext()) {
-            UIComponent child = childIter.next();
-            if (child instanceof UIColumn) {
-                if (!child.isRendered()) {
-                    continue;
-                }
-
-                Iterator<UIComponent> facetsIter = child.getFacets().values().iterator();
-                while (facetsIter.hasNext()) {
-                    facetsIter.next().visitTree(context, contextCallback);
-                }
-            }
-        }
-    }
-
-    private void processColumnChildren(VisitContext context,
-            VisitCallback contextCallback) {
-        int first = getFirst();
-        int rows = getRows();
-        int last;
-        if (rows == 0) {
-            last = getRowCount();
-        }
-        else {
-            last = first + rows;
-        }
-        for (int rowIndex = first; last==-1 || rowIndex < last; rowIndex++) {
-            setRowIndex(rowIndex);
-
-            if (!isRowAvailable())
-                break;
-
-            Iterator<UIComponent> it = getChildren().iterator();
-
-            while ( it.hasNext()) {
-                UIComponent child = it.next();
-                if (child instanceof UIColumn) {
-                    if (!child.isRendered()) {
-                        continue;
-                    }
-                    Iterator<UIComponent> columnChildIter = child.getChildren().iterator();
-                    while ( columnChildIter.hasNext()) {
-                        columnChildIter.next().visitTree(context, contextCallback);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
+/**
      * <p>In addition to the default behavior, ensure that any saved per-row
      * state for our child input components is discarded unless it is needed to
      * rerender the current page with errors.
@@ -1053,11 +981,7 @@ public class UIData extends UIComponentBase
      */
     public void encodeBegin(FacesContext context) throws IOException {
 
-        setDataModel(null); // re-evaluate even with server-side state saving
-        if (!keepSaved(context)) {
-            //noinspection CollectionWithoutInitialCapacity
-            saved = new HashMap<String, SavedState>();
-        }
+        preEncode(context);
         super.encodeBegin(context);
 
     }
@@ -1099,12 +1023,7 @@ public class UIData extends UIComponentBase
             return;
         }
 
-        setDataModel(null); // Re-evaluate even with server-side state saving
-        if (null == saved || !keepSaved(context)) {
-            //noinspection CollectionWithoutInitialCapacity
-            saved = new HashMap<String, SavedState>(); // We don't need saved state here
-        }
-
+        preDecode(context);
         iterate(context, PhaseId.APPLY_REQUEST_VALUES);
         decode(context);
 
@@ -1143,9 +1062,8 @@ public class UIData extends UIComponentBase
         if (!isRendered()) {
             return;
         }
-        if (isNestedWithinUIData()) {
-            setDataModel(null);
-        }
+
+        preValidate(context);
         iterate(context, PhaseId.PROCESS_VALIDATIONS);
         // This is not a EditableValueHolder, so no further processing is required
 
@@ -1191,13 +1109,71 @@ public class UIData extends UIComponentBase
         if (!isRendered()) {
             return;
         }
-        if (isNestedWithinUIData()) {
-            setDataModel(null);
-        }
+
+        preUpdate(context);
         iterate(context, PhaseId.UPDATE_MODEL_VALUES);
         // This is not a EditableValueHolder, so no further processing is required
 
     }
+
+    /**
+     * @see UIComponent#visitTree
+     */
+    @Override
+    public boolean visitTree(VisitContext context, 
+                             VisitCallback callback) {
+
+        // First check to see whether we are visitable.  If not
+        // short-circuit out of this subtree, though allow the
+        // visit to proceed through to other subtrees.
+        if (!isVisitable(context))
+            return false;
+
+        // Clear out the row index is one is set so that
+        // we start from a clean slate.
+        int oldRowIndex = getRowIndex();
+        setRowIndex(-1);
+
+        // Push ourselves to EL
+        FacesContext facesContext = context.getFacesContext();
+        pushComponentToEL(facesContext, null);
+
+        try {
+
+            // Visit ourselves.  Note that we delegate to the 
+            // VisitContext to actually perform the visit.
+            VisitResult result = context.invokeVisitCallback(this, callback);
+
+            // If the visit is complete, short-circuit out and end the visit
+            if (result == VisitResult.COMPLETE)
+                return true;
+
+            // Visit children, short-circuiting as necessary
+            if ((result == VisitResult.ACCEPT) && doVisitChildren(context)) {
+
+                // First visit facets
+                if (visitFacets(context, callback))
+                    return true;
+
+                // Next column facets
+                if (visitColumnFacets(context, callback))
+                    return true;
+
+                // And finally, visit rows
+                if (visitRows(context, callback))
+                    return true;
+            }
+        }
+        finally {
+            // Clean up - pop EL and restore old row index
+            popComponentFromEL(facesContext);
+            setRowIndex(oldRowIndex);
+        }
+
+        // Return false to allow the visit to continue
+        return false;
+    }
+
 
     // --------------------------------------------------------- Protected Methods
 
@@ -1264,6 +1240,46 @@ public class UIData extends UIComponentBase
 
     // ---------------------------------------------------- Private Methods
 
+
+    // Perform pre-decode initialization work.  Note that this
+    // initialization may be performed either during a normal decode
+    // (ie. processDecodes()) or during a tree visit (ie. visitTree()).
+    private void preDecode(FacesContext context) {
+        setDataModel(null); // Re-evaluate even with server-side state saving
+        if (null == saved || !keepSaved(context)) {
+            //noinspection CollectionWithoutInitialCapacity
+            saved = new HashMap<String, SavedState>(); // We don't need saved state here
+        }
+    }
+
+    // Perform pre-validation initialization work.  Note that this
+    // initialization may be performed either during a normal validation
+    // (ie. processValidators()) or during a tree visit (ie. visitTree()).
+    private void preValidate(FacesContext context) {
+        if (isNestedWithinUIData()) {
+            setDataModel(null);
+        }
+    }
+
+    // Perform pre-update initialization work.  Note that this
+    // initialization may be performed either during normal update
+    // (ie. processUpdates()) or during a tree visit (ie. visitTree()).
+    private void preUpdate(FacesContext context) {
+        if (isNestedWithinUIData()) {
+            setDataModel(null);
+        }
+    }
+
+    // Perform pre-encode initialization work.  Note that this
+    // initialization may be performed either during a normal encode
+    // (ie. encodeBegin()) or during a tree visit (ie. visitTree()).
+    private void preEncode(FacesContext context) {
+        setDataModel(null); // re-evaluate even with server-side state saving
+        if (!keepSaved(context)) {
+            //noinspection CollectionWithoutInitialCapacity
+            saved = new HashMap<String, SavedState>();
+        }
+    }
 
     /**
      * <p>Perform the appropriate phase-specific processing and per-row
@@ -1374,6 +1390,117 @@ public class UIData extends UIComponentBase
         // Clean up after ourselves
         setRowIndex(-1);
 
+    }
+
+    // Tests whether we need to visit our children as part of
+    // a tree visit
+    private boolean doVisitChildren(VisitContext context) {
+
+        // Just need to check whether there are any ids under this
+        // subtree.  Make sure row index is cleared out since 
+        // getSubtreeIdsToVisit() needs our row-less client id.
+        setRowIndex(-1);
+        Collection<String> idsToVisit = context.getSubtreeIdsToVisit(this);
+        assert(idsToVisit != null);
+
+        // All ids or non-empty collection means we need to visit our children.
+        return (!idsToVisit.isEmpty());
+    }
+
+    // Performs pre-phase initialization before visiting children
+    // (if necessary).
+    private void preVisitChildren(VisitContext visitContext) {
+
+        // If EXECUTE_LIFECYCLE hint is set, we need to do
+        // lifecycle-related initialization before visiting children
+        if (visitContext.getHints().contains(VisitHint.EXECUTE_LIFECYCLE)) {
+            FacesContext facesContext = visitContext.getFacesContext();
+            PhaseId phaseId = facesContext.getCurrentPhaseId();
+
+            if (phaseId == PhaseId.APPLY_REQUEST_VALUES)
+                preDecode(facesContext);
+            else if (phaseId == PhaseId.PROCESS_VALIDATIONS)
+                preValidate(facesContext);
+            else if (phaseId == PhaseId.UPDATE_MODEL_VALUES)
+                preUpdate(facesContext);
+            else if (phaseId == PhaseId.RENDER_RESPONSE)
+                preEncode(facesContext);
+        }
+    }
+
+    // Visit each facet of this component exactly once
+    private boolean visitFacets(VisitContext context, VisitCallback callback) {
+
+        setRowIndex(-1);
+        if (getFacetCount() > 0) {
+            for (UIComponent facet : getFacets().values()) {
+                if (facet.visitTree(context, callback))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Visit each facet of our child UIColumn components exactly once
+    private boolean visitColumnFacets(VisitContext context, 
+                                      VisitCallback callback) {
+        setRowIndex(-1);
+        if (getChildCount() > 0) {
+            for (UIComponent column : getChildren()) {
+                if (column.getFacetCount() > 0) {
+                    for (UIComponent columnFacet : column.getFacets().values()) {
+                        if (columnFacet.visitTree(context, callback))
+                            return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Visit each row
+    private boolean visitRows(VisitContext context,  VisitCallback callback) {
+
+        // Iterate over our UIColumn children, once per row
+        int processed = 0;
+        int rowIndex = getFirst() - 1;
+        int rows = getRows();
+
+        while (true) {
+
+            // Have we processed the requested number of rows?
+            if ((rows > 0) && (++processed > rows)) {
+                break;
+            }
+
+            // Expose the current row in the specified request attribute
+            setRowIndex(++rowIndex);
+            if (!isRowAvailable()) {
+                break; // Scrolled past the last row
+            }
+
+            // Visit as required on the *children* of the UIColumn 
+            // (facets have been done a single time with rowIndex=-1 already)
+            if (getChildCount() > 0) {
+                for (UIComponent kid : getChildren()) {
+                    if (!(kid instanceof UIColumn)) {
+                        continue;
+                    }
+                    if (kid.getChildCount() > 0) {
+                        for (UIComponent grandkid : kid.getChildren()) {
+
+                            if (grandkid.visitTree(context, callback))
+                                return true;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return false;
     }
 
 

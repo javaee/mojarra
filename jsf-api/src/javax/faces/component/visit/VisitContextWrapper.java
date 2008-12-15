@@ -67,8 +67,13 @@ public abstract class VisitContextWrapper extends VisitContext implements FacesW
     }
 
     @Override
-    public Collection<String> getIdsToVisit(UIComponent component) {
-        return getWrapped().getIdsToVisit(component);
+    public Collection<String> getIdsToVisit() {
+        return getWrapped().getIdsToVisit();
+    }
+
+    @Override
+    public Collection<String> getSubtreeIdsToVisit(UIComponent component) {
+        return getWrapped().getSubtreeIdsToVisit(component);
     }
 
     @Override

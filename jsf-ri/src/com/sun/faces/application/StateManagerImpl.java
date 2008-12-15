@@ -125,8 +125,10 @@ public class StateManagerImpl extends StateManager {
         }
         
         Object result = null;
+        String viewId = context.getViewRoot().getViewId();
         StateManagementStrategy strategy =
-                context.getApplication().getViewHandler().getPageDeclarationLanguage(viewRoot.getViewId()).getStateManagementStrategy(context, viewRoot.getViewId());
+                context.getApplication().getViewHandler().
+                getPageDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
 
         if (null != strategy) {
             result = strategy.saveView(context);
@@ -171,7 +173,7 @@ public class StateManagerImpl extends StateManager {
                                   String renderKitId) {
         UIViewRoot result = null;
         StateManagementStrategy strategy = 
-                context.getApplication().getViewHandler().getPageDeclarationLanguage(viewId).getStateManagementStrategy(context, viewId);
+                context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
 
         if (null != strategy) {
             result = strategy.restoreView(context, viewId, renderKitId);

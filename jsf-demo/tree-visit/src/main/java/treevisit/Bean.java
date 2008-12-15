@@ -40,12 +40,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
 import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIData;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
@@ -78,6 +80,10 @@ public class Bean {
     // List of ids visited by our partial tree visit.
     private List<String> visitedIds;
 
+    // Just a silly data model that we can use for testing
+    // UIData tree visiting.
+    private List<RowData> testData;
+
     // Flag indicating whether or not we should visit rendered
     // subtrees only.
     private boolean visitRendered;
@@ -87,12 +93,15 @@ public class Bean {
     //
     
     public Bean() {
-        loadItems();
     }
 
     // Returns a list containing a SelectItem corresponding to
     // every component client id in this component tree.
     public List<SelectItem> getItems() {
+
+        if (items == null)
+            items = loadItems();
+
         return items;
     }
 
@@ -109,6 +118,14 @@ public class Bean {
     // Returns the list of ids that were visited
     public List<String> getVisitedIds() {
         return visitedIds;
+    }
+
+    // Returns test data for UIData tree visit testing.
+    public List<RowData> getTestData() {
+        if (testData == null)
+            testData = loadTestData();
+
+        return testData;
     }
 
     // Returns whether we should visit rendered components only
@@ -135,10 +152,16 @@ public class Bean {
         // we only want to visit a subset of the component tree.
         FacesContext facesContext = FacesContext.getCurrentInstance();
         EnumSet<VisitHint> hints = getVisitRendered() ?
-                                       EnumSet.of(VisitHint.VISIT_RENDERED) :
-                                       null;
+            EnumSet.of(VisitHint.SKIP_UNRENDERED) : null;
+
+        // Get ths ids to visit.  Note that this must always be
+        // non-null - otherwise we do a full visit.
+        java.util.Collection<String> idsToVisit = getSelectedIds();
+        if (idsToVisit == null)
+            idsToVisit = Collections.emptyList();
+
         VisitContext visitContext = 
-            VisitContext.createVisitContext(facesContext, getSelectedIds(), hints);
+            VisitContext.createVisitContext(facesContext, idsToVisit, hints);
 
         // Use CollectIdsVisitCallback to collect up visited ids
         CollectIdsVisitCallback visitCallback = new CollectIdsVisitCallback();
@@ -155,7 +178,7 @@ public class Bean {
 
     // Loads the items - ie. the list of client ids for
     // all components in this document.
-    private void loadItems() {
+    private List<SelectItem> loadItems() {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         assert(facesContext != null);
@@ -165,9 +188,13 @@ public class Bean {
         // initiate the visit on.
         VisitContext visitContext = VisitContext.createVisitContext(facesContext);
         CollectIdsVisitCallback visitCallback = new CollectIdsVisitCallback();
-        UIComponent viewRoot = facesContext.getViewRoot();
 
-        viewRoot.visitTree(visitContext, visitCallback);
+        // Visit the subtree under the "mainGrid" component to populate
+        // the visitable items list.
+        UIComponent viewRoot = facesContext.getViewRoot();
+        UIComponent mainGrid = viewRoot.findComponent("form:mainGrid");
+
+        mainGrid.visitTree(visitContext, visitCallback);
 
         List<String> ids = visitCallback.getVisitedIds();
         List<SelectItem> selectItems = new ArrayList<SelectItem>(ids.size());
@@ -176,9 +203,20 @@ public class Bean {
             selectItems.add(new SelectItem(id));
         }
 
-        this.items = selectItems;
+        return selectItems;
     }
 
+    // Load data that we use to test UIData tree visiting.
+    private List<RowData> loadTestData() {
+      List<RowData> data = new ArrayList<RowData>(5);
+
+      for (int i = 0; i < 5; i++) {
+          RowData rowData = new RowData("Row " + i);
+          data.add(rowData);
+      }
+
+      return data;
+    }
 
     // Callback class for collecting all ids
     static private class CollectIdsVisitCallback implements VisitCallback {
@@ -195,9 +233,8 @@ public class Bean {
             // ids.  Facelets generates several UIInstructions components
             // which seem to be removed from the component tree at some point.
             // These might cause some confusion, so excluding this for our list.
-
             if (!clientId.startsWith(UIViewRoot.UNIQUE_ID_PREFIX))
-              ids.add(clientId);
+                ids.add(clientId);
 
             return VisitResult.ACCEPT;
         }
@@ -206,5 +243,33 @@ public class Bean {
         public List<String> getVisitedIds() {
             return ids;
         }
+    }
+
+    // A silly little class that we use to pouplate a DataModel so
+    // that we can test UIData.treeVisit().
+    static public class RowData {
+
+        public RowData(String label) {
+            this.label = label;
+        }
+
+        // Returns the label
+        public String getLabel() {
+            return label;
+        }
+
+        // Returns a count for the number of times this
+        // row has been updated.
+        public int getCount() {
+            return count;
+        }
+
+        // Increments the count
+        public void increment(ActionEvent ae) {
+            count++;
+        }
+
+        private String label;
+        private int count;
     }
 }
