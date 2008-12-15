@@ -41,9 +41,7 @@
 <f:view contentType="text/html"/>
 
 <!--
-  TODO: Add transient components to test VisitHint.VISIT_TRANSIENT.
-  TODO: Add UIData component to test VisitHint.VISIT_ITERATED.
-  
+  TODO: Add transient components to test VisitHint.SKIP_TRANSIENT.
 -->
 <h:head id="head">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -112,17 +110,55 @@
 
             </h:panelGrid>
 
-            <h:dataTable value="#{bean.visitedIds}" var="visitedId" id="visitedTable">
-                <h:column id="visitedColumn">
+            <h:dataTable value="#{bean.testData}" var="row" id="testTable"
+                         border="1">
+                <h:column id="labelColumn">
                     <f:facet name="header">
-                        <h:outputText value="Visited Components" id="visitedColumnHeader"
+                        <h:outputText value="Label" id="labelColumnHeader"
                                       styleClass="subtitle"/>
                     </f:facet>
     
-                    <h:outputText value="#{visitedId}" id="visitedText"/>
+                    <h:outputText value="#{row.label}" id="labelText"/>
                 </h:column>
+
+                <h:column id="countColumn">
+                    <f:facet name="header">
+                        <h:outputText value="Count" 
+                                      id="countColumnHeader"
+                                      styleClass="subtitle"/>
+                    </f:facet>
+    
+                    <h:outputText value="#{row.count}" id="countText"/>
+                </h:column>
+
+                <h:column id="actionsColumn">
+                    <f:facet name="header">
+                        <h:outputText value="Actions" 
+                                      id="actionsColumnHeader"
+                                      styleClass="subtitle"/>
+                    </f:facet>
+    
+                    <h:commandButton value="Increment Count" 
+                                   actionListener="#{row.increment}"
+                                   id="incrementLink">
+                        <f:ajax execute="incrementLink" render="countText"/>
+                    </h:commandButton>
+                </h:column>
+
             </h:dataTable>
+
         </h:panelGrid>
+
+        <h:dataTable value="#{bean.visitedIds}" var="visitedId" id="visitedTable">
+            <h:column id="visitedColumn">
+                <f:facet name="header">
+                    <h:outputText value="Visited Components" id="visitedColumnHeader"
+                                  styleClass="subtitle"/>
+                </f:facet>
+
+                <h:outputText value="#{visitedId}" id="visitedText"/>
+            </h:column>
+        </h:dataTable>
 
         <h:outputStylesheet name="stylesheet.css"/>
     </h:form>
