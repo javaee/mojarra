@@ -43,18 +43,11 @@ package javax.faces.validator;
 
 import javax.faces.component.UIInput;
 
-import javax.faces.validator.ValidatorException;
-import javax.faces.application.FacesMessage;
-import javax.el.ValueExpression;
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
-
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
- * <p>Unit tests for {@link LengthValidator}.</p>
+ * <p>Unit tests for {@link RegexValidator}.</p>
  */
 
 public class RegexValidatorTestCase extends ValidatorTestCase {
@@ -86,11 +79,7 @@ public class RegexValidatorTestCase extends ValidatorTestCase {
     public void testPatternMatch() {
         String patternStr = "t.*";
         RegexValidator validator = new RegexValidator();
-        ELContext elcontext = facesContext.getELContext();
-        ExpressionFactory exfact = application.getExpressionFactory();
-        ValueExpression pattern = exfact.createValueExpression(patternStr, java.lang.String.class);
-        validator.setPattern(pattern);
-        boolean exceptionThrown = false;
+        validator.setPattern(patternStr);
         UIInput component = new UIInput();
         String checkme = "test";
         try {
@@ -104,18 +93,13 @@ public class RegexValidatorTestCase extends ValidatorTestCase {
     public void testPatterMismatch() {
         String patternStr = "t.*";
         RegexValidator validator = new RegexValidator();
-        ELContext elcontext = facesContext.getELContext();
-        ExpressionFactory exfact = application.getExpressionFactory();
-        ValueExpression pattern = exfact.createValueExpression(patternStr, java.lang.String.class);
-        validator.setPattern(pattern);
-        boolean exceptionThrown = false;
+        validator.setPattern(patternStr);
         UIInput component = new UIInput();
         String checkme = "jest";
         try {
             validator.validate(facesContext, component, checkme);
             fail("Exception not thrown when tested "+checkme+" against "+patternStr);
         } catch (ValidatorException ve) {
-            FacesMessage fmsg = ve.getFacesMessage();
             String detail = ve.getFacesMessage().getDetail();
             System.out.println("Detail in test: "+detail);
             assertTrue(detail.equalsIgnoreCase("Regex pattern of 't.*' not matched"));

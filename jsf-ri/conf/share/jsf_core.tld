@@ -777,9 +777,9 @@
                 RELEASE_PENDING (edburns, rogerk) documentation
             </description>
             <name>var</name>
-            <type>java.lang.String</type>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
+            <type>java.lang.String</type>
         </attribute>
 
         <attribute>
@@ -1098,7 +1098,6 @@
     </tag>
 
     <tag>
-        <name>validateRegex</name>
         <description><![CDATA[<p>
 
                 <span class="changed_added_2_0">
@@ -1106,24 +1105,23 @@
             wrapping component.  The entire pattern is matched against
             the String value of the component.  If it matches, it's
             valid.
-  
+
          </p>]]>
         </description>
+        <name>validateRegex</name>
         <tag-class>com.sun.faces.taglib.jsf_core.RegexValidatorTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
-            <name>pattern</name>
-            <description>
+             <description>
                 A regular expression pattern.  Remember that, like in
                 all Java strings, backslash must be escaped with another
-                backslash.  Additionally, to use #{ in a regex, it must
-                also be escaped, since it will otherwise be interpreted
-                as an EL expression.
+                backslash.
             </description>
+            <name>pattern</name>
+            <required>true</required>
             <deferred-value>
                 <type>java.lang.String</type>
             </deferred-value>
-            <required>true</required>
         </attribute>
         <attribute>
             <description>
@@ -1132,7 +1130,7 @@
             </description>
             <name>binding</name>
             <deferred-value>
-                <type>javax.faces.validator.RegexpValidator</type>
+                <type>javax.faces.validator.RegexValidator</type>
             </deferred-value>
         </attribute>
     </tag>

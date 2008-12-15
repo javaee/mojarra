@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='UTF-8'?>
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
@@ -34,44 +33,32 @@
  only if the new code is made subject to such option by the copyright
  holder.
 -->
+<!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
-<!-- =========== FULL CONFIGURATION FILE ================================== -->
-<faces-config version="2.0"
-    xmlns="http://java.sun.com/xml/ns/javaee" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
-    <navigation-rule>
-        <from-view-id>/welcome.jsp</from-view-id>
-        <navigation-case>
-            <from-outcome>landing</from-outcome>
-            <to-view-id>/landing.jsp</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/landing.jsp</from-view-id>
-        <navigation-case>
-            <from-outcome>back</from-outcome>
-            <to-view-id>/welcome.jsp</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/welcome.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>landing</from-outcome>
-            <to-view-id>/landing.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/landing.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>back</from-outcome>
-            <to-view-id>/welcome.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <managed-bean>
-        <managed-bean-name>BackingBean</managed-bean-name>
-        <managed-bean-class>mojarra_ext.BackingBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-</faces-config>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+      xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Test Regex Validator</title>
+    </head>
+    <body>
+        <f:view>
+            <h:form id="regex_form">
+                <h1><h:outputText value="Test Regex Validator" /></h1>
+                <p>Enter Any word starting with t</p>
+                <h:inputText id="sampleRegex" value="#{BackingBean.sample}" required="true" >
+                    <mj:regexValidator pattern="t.*" />
+                </h:inputText>
+                <h:message id="regexError" for="sampleRegex" showDetail="true" showSummary="false"/><br/>
+                <h:commandButton id="submit" action="landing" value="Go" />
+                <mj:focus for="regex_form:sampleRegex"/>
+            </h:form>
+        </f:view>
+    </body>
+</html>

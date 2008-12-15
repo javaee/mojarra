@@ -95,6 +95,7 @@
                 <include name="*.gif"/>
                 <include name="*.jpg"/>
                 <include name="*.jsp"/>
+                <include name="*.xhtml"/>
                 <include name="*.xml"/>
             </fileset>
         </copy>
