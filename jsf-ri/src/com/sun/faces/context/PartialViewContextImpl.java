@@ -109,9 +109,8 @@ public class PartialViewContextImpl extends PartialViewContext {
 
         assertNotReleased();
         if (ajaxRequest == null) {
-            ajaxRequest = FacesContext.getCurrentInstance().
-                getExternalContext().getRequestParameterMap()
-                  .containsKey("javax.faces.partial.ajax");
+            ajaxRequest = "partial/ajax".equals(FacesContext.getCurrentInstance().
+                getExternalContext().getRequestHeaderMap().get("Faces-Request"));
         }
         return ajaxRequest;
 
@@ -126,9 +125,8 @@ public class PartialViewContextImpl extends PartialViewContext {
         assertNotReleased();
         if (partialRequest == null) {
             partialRequest = isAjaxRequest() ||
-                FacesContext.getCurrentInstance().
-                getExternalContext().getRequestParameterMap()
-                .containsKey("javax.faces.partial");
+                    "partial/process".equals(FacesContext.getCurrentInstance().
+                    getExternalContext().getRequestHeaderMap().get("Faces-Request"));
         }
         return partialRequest;
 

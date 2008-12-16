@@ -638,6 +638,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     req.xmlReq.open(req.method, req.url, req.async);
                     if (req.method === "POST") {
                         if (typeof req.xmlReq.setRequestHeader !== 'undefined') {
+                            req.xmlReq.setRequestHeader('Faces-Request', 'partial/ajax');
                             req.xmlReq.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                         }
                         content = req.queryString;
