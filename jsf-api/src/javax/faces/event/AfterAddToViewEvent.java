@@ -86,7 +86,7 @@ public class AfterAddToViewEvent extends ComponentSystemEvent {
      * @param component the <code>UIComponent</code> that has just been
      * added to the view.
      *
-     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
+     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
     public AfterAddToViewEvent(UIComponent component) {
 

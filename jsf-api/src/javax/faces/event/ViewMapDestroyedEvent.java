@@ -36,7 +36,7 @@ public class ViewMapDestroyedEvent extends ComponentSystemEvent {
      * @param root the <code>UIViewRoot</code> for which the view map has
      * just been destroyed.
      *
-     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
+     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
     public ViewMapDestroyedEvent(UIViewRoot root) {
         super(root);
