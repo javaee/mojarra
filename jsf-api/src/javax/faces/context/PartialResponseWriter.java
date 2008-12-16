@@ -130,7 +130,6 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * <p class="changed_added_2_0">Write the start of an insert operation 
      * where the contents will be inserted before the specified target node.</p>
      *
-     * @param fragmentId ID of the node to be inserted
      * @param targetId ID of the node insertion should occur before
      *
      * @throws IOException if an input/output error occurs
@@ -151,7 +150,6 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * <p class="changed_added_2_0">Write the start of an insert operation 
      * where the contents will be inserted after the specified target node.</p>
      *
-     * @param fragmentId ID of the node to be inserted
      * @param targetId ID of the node insertion should occur after
      *
      * @throws IOException if an input/output error occurs

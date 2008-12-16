@@ -243,13 +243,6 @@ public abstract class PartialViewContext {
      * resources associated with this <code>PartialViewContext</code>
      * instance.</p>
      *
-     * <p class="changed_added_2_0">If a call was made to {@link
-     * #getAttributes} during the processing for this request, the
-     * implementation must call <code>clear()</code> on the
-     * <code>Map</code> returned from <code>getAttributes()</code>, and
-     * then de-allocate the data-structure behind that
-     * <code>Map</code>.</p>
-     *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */

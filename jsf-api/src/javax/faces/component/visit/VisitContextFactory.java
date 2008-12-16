@@ -63,7 +63,7 @@ public abstract class VisitContextFactory implements FacesWrapper<VisitContextFa
      * @param context
      * @param ids
      * @param hints
-     * @return
+     * @return {@link VisitContext}
      */
     public abstract VisitContext getVisitContext(FacesContext context, 
             Collection<String> ids, Set<VisitHint> hints);
