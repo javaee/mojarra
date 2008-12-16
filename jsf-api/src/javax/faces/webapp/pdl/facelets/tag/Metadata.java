@@ -49,55 +49,23 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import com.sun.faces.util.Util;
 
 /**
- * A base tag for wiring state to an object instance based on rules populated at
- * the time of creating a MetaRuleset.
+ * External information on how to wire dynamic or literal state to the
+ * passed Object instance.
  * 
  * @author Jacob Hookom
  * @version $Id$
  */
-public abstract class MetaTagHandler extends TagHandlerImpl {
-
-    private Class lastType = Object.class;
-
-    private Metadata mapper;
-
-    public MetaTagHandler(TagConfig config) {
-        super(config);
-    }
+public abstract class Metadata {
 
     /**
-     * Extend this method in order to add your own rules.
-     * 
-     * @param type
-     * @return
-     */
-    protected MetaRuleset createMetaRuleset(Class type) {
-        Util.notNull("type", type);
-        return new MetaRulesetImpl(this.tag, type);
-    }
-
-    /**
-     * Invoking/extending this method will cause the results of the created
-     * MetaRuleset to auto-wire state to the passed instance.
-     * 
      * @param ctx
      * @param instance
      */
-    protected void setAttributes(FaceletContext ctx, Object instance) {
-        if (instance != null) {
-            Class type = instance.getClass();
-            if (mapper == null || !this.lastType.equals(type)) {
-                this.lastType = type;
-                this.mapper = this.createMetaRuleset(type).finish();
-            }
-            this.mapper.applyMetadata(ctx, instance);
-        }
-    }
+    public abstract void applyMetadata(FaceletContext ctx, Object instance);
+
 }

@@ -49,23 +49,49 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag;
-
-import javax.faces.webapp.pdl.facelets.FaceletContext;
+package javax.faces.webapp.pdl.facelets.tag;
 
 /**
- * External information on how to wire dynamic or literal state to the
- * passed Object instance.
+ * A mutable set of rules to be used in auto-wiring state to a particular object
+ * instance. Rules assigned to this object will be composed into a single
+ * Metadata instance.
  * 
  * @author Jacob Hookom
  * @version $Id$
  */
-public abstract class Metadata {
+public abstract class MetaRuleset {
+    /**
+     * @param attribute
+     * @return
+     */
+    public abstract MetaRuleset ignore(String attribute);
 
     /**
-     * @param ctx
-     * @param instance
+     * @return
      */
-    public abstract void applyMetadata(FaceletContext ctx, Object instance);
+    public abstract MetaRuleset ignoreAll();
 
+    /**
+     * @param attribute
+     * @param property
+     * @return
+     */
+    public abstract MetaRuleset alias(String attribute, String property);
+
+    /**
+     * @param mapper
+     * @return
+     */
+    public abstract MetaRuleset add(Metadata mapper);
+
+    /**
+     * @param rule
+     * @return
+     */
+    public abstract MetaRuleset addRule(MetaRule rule);
+
+    /**
+     * @return
+     */
+    public abstract Metadata finish();
 }

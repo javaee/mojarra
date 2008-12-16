@@ -58,7 +58,7 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
      * <p class="changed_added_2_0">Return the {@link NavigationCase}
      * representing the navigation that would be taken had {@link
      * NavigationHandler#handleNavigation} been called with the same
-     * arguments.</p>
+     * arguments or <code>null</code> if there is no such case.</p>
      *
      * @param context The {@link FacesContext} for the current request
      * @param fromAction The action binding expression that was evaluated

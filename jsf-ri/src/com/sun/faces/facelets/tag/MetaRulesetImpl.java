@@ -51,6 +51,10 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.MetaRule;
+import javax.faces.webapp.pdl.facelets.tag.MetadataTarget;
+import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.tag.Metadata;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.Tag;
 import java.beans.IntrospectionException;

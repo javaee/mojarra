@@ -49,48 +49,51 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jsf.core;
-
-import javax.faces.validator.Validator;
+package javax.faces.webapp.pdl.facelets.tag;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import com.sun.faces.facelets.tag.jsf.ValidateHandler;
-import com.sun.faces.facelets.tag.jsf.ValidatorConfig;
+
 
 /**
- * Register a named Validator instance on the UIComponent associated with the
- * closest parent UIComponent custom action.<p/> See <a target="_new"
- * href="http://java.sun.com/j2ee/javaserverfaces/1.1_01/docs/tlddocs/f/validator.html">tag
- * documentation</a>.
+ * A base tag for wiring state to an object instance based on rules populated at
+ * the time of creating a MetaRuleset.
  * 
  * @author Jacob Hookom
- * @version $Id$
+ * @version $Id: MetaTagHandler.java 6068 2008-12-11 17:43:19Z edburns $
  */
-public final class ValidateDelegateHandler extends ValidateHandler {
+public abstract class MetaTagHandler extends TagHandler {
 
-    private final TagAttribute validatorId;
+    private Class lastType = Object.class;
 
-    public ValidateDelegateHandler(ValidatorConfig config) {
+    private Metadata mapper;
+
+    public MetaTagHandler(TagConfig config) {
         super(config);
-        this.validatorId = this.getRequiredAttribute("validatorId");
     }
 
     /**
-     * Uses the specified "validatorId" to get a new Validator instance from the
-     * Application.
+     * Extend this method in order to add your own rules.
      * 
-     * @see javax.faces.application.Application#createValidator(java.lang.String)
-     * @see com.sun.faces.facelets.tag.jsf.ValidateHandler#createValidator(com.sun.faces.facelets.FaceletContext)
+     * @param type
+     * @return
      */
-    protected Validator createValidator(FaceletContext ctx) {
-        return ctx.getFacesContext().getApplication().createValidator(
-                this.validatorId.getValue(ctx));
-    }
+    protected abstract MetaRuleset createMetaRuleset(Class type);
 
-    protected MetaRuleset createMetaRuleset(Class type) {
-        return super.createMetaRuleset(type).ignoreAll();
+    /**
+     * Invoking/extending this method will cause the results of the created
+     * MetaRuleset to auto-wire state to the passed instance.
+     * 
+     * @param ctx
+     * @param instance
+     */
+    protected void setAttributes(FaceletContext ctx, Object instance) {
+        if (instance != null) {
+            Class type = instance.getClass();
+            if (mapper == null || !this.lastType.equals(type)) {
+                this.lastType = type;
+                this.mapper = this.createMetaRuleset(type).finish();
+            }
+            this.mapper.applyMetadata(ctx, instance);
+        }
     }
-
 }

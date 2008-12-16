@@ -69,10 +69,10 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import com.sun.faces.facelets.tag.MetaTagHandler;
+import com.sun.faces.facelets.tag.MetaTagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import java.util.Map;
 import javax.faces.event.InitialStateEvent;
@@ -84,7 +84,7 @@ import javax.faces.event.InitialStateEvent;
  * @author Jacob Hookom
  * @version $Id$
  */
-public class ComponentHandler extends MetaTagHandler {
+public class ComponentHandler extends MetaTagHandlerImpl {
 
     private final static Logger log = Logger
             .getLogger("facelets.tag.component");
@@ -119,7 +119,7 @@ public class ComponentHandler extends MetaTagHandler {
      * {@link #createComponent(FaceletContext) createComponent}.
      * <ol>
      * <li>Only here do we apply
-     * {@link com.sun.faces.facelets.tag.MetaTagHandler#setAttributes(FaceletContext, Object)}</li>
+     * {@link com.sun.faces.facelets.tag.MetaTagHandlerImpl#setAttributes(FaceletContext, Object)}</li>
      * <li>Set the UIComponent's id</li>
      * <li>Set the RendererType of this instance</li>
      * </ol>

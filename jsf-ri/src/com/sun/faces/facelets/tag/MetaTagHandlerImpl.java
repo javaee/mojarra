@@ -51,25 +51,33 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.MetaTagHandler;
+import com.sun.faces.util.Util;
 
 /**
- * A potential rule for Metadata on the passed MetadataTarget
+ * A base tag for wiring state to an object instance based on rules populated at
+ * the time of creating a MetaRuleset.
  * 
- * @see com.sun.faces.facelets.tag.Metadata
- * @see com.sun.faces.facelets.tag.MetadataTarget
  * @author Jacob Hookom
  * @version $Id$
  */
-public abstract class MetaRule {
+public abstract class MetaTagHandlerImpl extends MetaTagHandler {
+
+    public MetaTagHandlerImpl(TagConfig config) {
+        super(config);
+    }
 
     /**
-     * @param name
-     * @param attribute
-     * @param meta
+     * Extend this method in order to add your own rules.
+     * 
+     * @param type
      * @return
      */
-    public abstract Metadata applyRule(String name, TagAttribute attribute,
-            MetadataTarget meta);
+    protected MetaRuleset createMetaRuleset(Class type) {
+        Util.notNull("type", type);
+        return new MetaRulesetImpl(this.tag, type);
+    }
 
 }

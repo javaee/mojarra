@@ -49,49 +49,29 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag;
+package javax.faces.webapp.pdl.facelets.tag;
+
+import javax.faces.webapp.pdl.facelets.tag.MetadataTarget;
+import javax.faces.webapp.pdl.facelets.tag.Metadata;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 
 /**
- * A mutable set of rules to be used in auto-wiring state to a particular object
- * instance. Rules assigned to this object will be composed into a single
- * Metadata instance.
+ * A potential rule for Metadata on the passed MetadataTarget
  * 
+ * @see com.sun.faces.facelets.tag.Metadata
+ * @see com.sun.faces.facelets.tag.MetadataTarget
  * @author Jacob Hookom
  * @version $Id$
  */
-public abstract class MetaRuleset {
+public abstract class MetaRule {
+
     /**
+     * @param name
      * @param attribute
+     * @param meta
      * @return
      */
-    public abstract MetaRuleset ignore(String attribute);
+    public abstract Metadata applyRule(String name, TagAttribute attribute,
+            MetadataTarget meta);
 
-    /**
-     * @return
-     */
-    public abstract MetaRuleset ignoreAll();
-
-    /**
-     * @param attribute
-     * @param property
-     * @return
-     */
-    public abstract MetaRuleset alias(String attribute, String property);
-
-    /**
-     * @param mapper
-     * @return
-     */
-    public abstract MetaRuleset add(Metadata mapper);
-
-    /**
-     * @param rule
-     * @return
-     */
-    public abstract MetaRuleset addRule(MetaRule rule);
-
-    /**
-     * @return
-     */
-    public abstract Metadata finish();
 }

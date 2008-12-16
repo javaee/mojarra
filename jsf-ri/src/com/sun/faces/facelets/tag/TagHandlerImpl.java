@@ -75,5 +75,22 @@ public abstract class TagHandlerImpl extends TagHandler {
         }
         return found.iterator();
     }
+    
+    public final static Iterator findNextByType(FaceletHandler nextHandler,
+            Class type) {
+        List found = new ArrayList();
+        if (type.isAssignableFrom(nextHandler.getClass())) {
+            found.add(nextHandler);
+        } else if (nextHandler instanceof CompositeFaceletHandler) {
+            FaceletHandler[] h = ((CompositeFaceletHandler) nextHandler).getHandlers();
+            for (int i = 0; i < h.length; i++) {
+                if (type.isAssignableFrom(h[i].getClass())) {
+                    found.add(h[i]);
+                }
+            }
+        }
+        return found.iterator();
+        
+    }
 
 }
