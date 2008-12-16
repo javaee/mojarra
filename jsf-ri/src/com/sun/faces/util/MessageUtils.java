@@ -298,6 +298,10 @@ public class MessageUtils {
           "com.sun.faces.CONFIG_RENDERER_REGISTRATION_MISSING_RENDERKIT";
     public static final String COMMAND_NOT_NESTED_WITHIN_FORM_ID =
           "com.sun.faces.COMMAND_NOT_NESTED_WITHIN_FORM";
+    public static final String NAVIGATION_NO_MATCHING_OUTCOME_ID =
+          "com.sun.faces.NAVIGATION_NO_MATCHING_OUTCOME";
+    public static final String NAVIGATION_NO_MATCHING_OUTCOME_ACTION_ID =
+          "com.sun.faces.NAVIGATION_NO_MATCHING_OUTCOME_ACTION";
    
     
     public static final String JS_RESOURCE_WRITING_ERROR_ID =

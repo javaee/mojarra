@@ -59,6 +59,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.application.FacesMessage;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -97,6 +98,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      */
     private boolean navigationConfigured;
 
+
+    /**
+     * Flag indicated the current mode.
+     */
+    private boolean development;
+
     /**
      * This constructor uses the current <code>Application</code>
      * instance to obtain the navigation mappings used to make
@@ -120,6 +127,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             wildCardSet = associate.getNavigationWildCardList();
             navigationConfigured = (wildCardSet != null &&
                                     caseListMap != null);
+            development = associate.isDevModeEnabled();
         }
     }
 
@@ -169,12 +177,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             throw new NullPointerException(message);
         }
         if (outcome == null) {
-           if (logger.isLoggable(Level.FINE)) {
-               logger.fine("No navigation rule found for null outcome "
-                           + "and viewId " +
-                           context.getViewRoot().getViewId() +
-                           " Explicitly remain on the current view ");
-            }
             return; // Explicitly remain on the current view
         }
         CaseStruct caseStruct = getViewId(context, fromAction, outcome);
@@ -251,16 +253,19 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             caseStruct = findDefaultMatch(fromAction, outcome);
         }
 
-        if (caseStruct == null && logger.isLoggable(Level.WARNING)) {
+        if (caseStruct == null && development) {
+            String key;
+            Object[] params;
             if (fromAction == null) {
-                logger.log(Level.FINE,
-                           "jsf.navigation.no_matching_outcome",
-                           new Object[] {viewId, outcome});
+                key = MessageUtils.NAVIGATION_NO_MATCHING_OUTCOME_ID;
+                params = new Object[] { viewId, outcome };
             } else {
-                logger.log(Level.FINE,
-                           "jsf.navigation.no_matching_outcome_action",
-                           new Object[] {viewId, outcome, fromAction});
+                key = MessageUtils.NAVIGATION_NO_MATCHING_OUTCOME_ACTION_ID;
+                params = new Object[] { viewId, fromAction, outcome };
             }
+            FacesMessage m = MessageUtils.getExceptionMessage(key, params);
+            m.setSeverity(FacesMessage.SEVERITY_WARN);
+            context.addMessage(null, m);
         }
         return caseStruct;
     }
