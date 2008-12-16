@@ -8,8 +8,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 
-// RELEASE_PENDING - completely refactor code
-
 public class AjaxTagTestCase extends AbstractTestCase {
 
     public AjaxTagTestCase(String name) {
