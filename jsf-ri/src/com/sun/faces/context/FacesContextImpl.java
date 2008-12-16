@@ -181,12 +181,13 @@ public class FacesContextImpl extends FacesContext {
      * @see javax.faces.context.FacesContext#getPartialViewContext()
      */
     public PartialViewContext getPartialViewContext() {
+
         assertNotReleased();
-        if (null != partialViewContext) {
-            return partialViewContext;
+        if (partialViewContext == null) {
+            partialViewContext = new PartialViewContextImpl(this);
         }
-        partialViewContext = new PartialViewContextImpl();
         return partialViewContext;
+        
     }
 
 

@@ -41,7 +41,6 @@
 package javax.faces.context;
 
 import java.util.Collection;
-import java.util.Map;
 
 import javax.faces.event.PhaseId;
 
@@ -255,11 +254,10 @@ public abstract class PartialViewContext {
      * <code>Collection</code> returned from {@link #getExecuteIds} 
      * and {@link #getRenderIds} will be processed.</p>  
      *
-     * @param context the current {@link FacesContext} instance.
      * @param phaseId the {@link javax.faces.event.PhaseId} that indicates
      * the lifecycle phase the components will be processed in. 
      */ 
-    public abstract void processPartial(FacesContext context, PhaseId phaseId);
+    public abstract void processPartial(PhaseId phaseId);
 
 
 }

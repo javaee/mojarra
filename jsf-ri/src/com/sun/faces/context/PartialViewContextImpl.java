@@ -62,7 +62,6 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,22 +79,25 @@ public class PartialViewContextImpl extends PartialViewContext {
     private boolean released;
 
     // BE SURE TO ADD NEW IVARS TO THE RELEASE METHOD
-    private PartialResponseWriter partialResponseWriter = null;
-    private Map<Object,Object> attributes;
+    private PartialResponseWriter partialResponseWriter;
     private Collection<String> executeIds;
     private Collection<String> renderIds;
-    private OnOffResponseWrapper onOffResponse = null;
     private Boolean ajaxRequest;
     private Boolean partialRequest;
-    private Boolean renderAll = null; 
+    private Boolean renderAll;
+    private FacesContext ctx;
 
+    // RELEASE_PENDING (does the spec require this key?  If so, it should be
+    // in PartialViewContext propery, otherwise, I'd recommend changing
+    // to a com.sun.faces namespace.
     private static final String ORIGINAL_WRITER = "javax.faces.originalWriter";
 
 
     // ----------------------------------------------------------- Constructors
 
 
-    public PartialViewContextImpl() {
+    public PartialViewContextImpl(FacesContext ctx) {
+        this.ctx = ctx;
     }
 
 
@@ -109,7 +111,7 @@ public class PartialViewContextImpl extends PartialViewContext {
 
         assertNotReleased();
         if (ajaxRequest == null) {
-            ajaxRequest = "partial/ajax".equals(FacesContext.getCurrentInstance().
+            ajaxRequest = "partial/ajax".equals(ctx.
                 getExternalContext().getRequestHeaderMap().get("Faces-Request"));
         }
         return ajaxRequest;
@@ -125,7 +127,7 @@ public class PartialViewContextImpl extends PartialViewContext {
         assertNotReleased();
         if (partialRequest == null) {
             partialRequest = isAjaxRequest() ||
-                    "partial/process".equals(FacesContext.getCurrentInstance().
+                    "partial/process".equals(ctx.
                     getExternalContext().getRequestHeaderMap().get("Faces-Request"));
         }
         return partialRequest;
@@ -135,7 +137,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isExecuteNone() {
 
         assertNotReleased();
-        String execute = FacesContext.getCurrentInstance().
+        String execute = ctx.
             getExternalContext().getRequestParameterMap()
               .get(PARTIAL_EXECUTE_PARAM_NAME);
         return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
@@ -149,7 +151,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isExecuteAll() {
 
         assertNotReleased();
-        String execute = FacesContext.getCurrentInstance().
+        String execute = ctx.
             getExternalContext().getRequestParameterMap()
                 .get(PARTIAL_EXECUTE_PARAM_NAME);
         return (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
@@ -163,7 +165,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isRenderAll() {
 
         assertNotReleased();
-        String render = FacesContext.getCurrentInstance().
+        String render = ctx.
             getExternalContext().getRequestParameterMap()
                 .get(PARTIAL_RENDER_PARAM_NAME);
         renderAll = (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(render));
@@ -187,7 +189,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isRenderNone() {
 
         assertNotReleased();
-        String render = FacesContext.getCurrentInstance().
+        String render = ctx.
             getExternalContext().getRequestParameterMap()
             .get(PARTIAL_RENDER_PARAM_NAME);
         return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(render));
@@ -225,14 +227,13 @@ public class PartialViewContextImpl extends PartialViewContext {
     }
 
     /**
-     * @see javax.faces.context.PartialViewContext#processPartial(
-     *  javax.faces.context.FacesContext,javax.faces.event.PhaseId))
+     * @see javax.faces.context.PartialViewContext#processPartial(javax.faces.event.PhaseId))
      */
     @Override
-    public void processPartial(FacesContext context, PhaseId phaseId) {
+    public void processPartial(PhaseId phaseId) {
         Collection <String> executeIds = getExecuteIds();
         Collection <String> renderIds = getRenderIds();
-        UIViewRoot viewRoot = context.getViewRoot();
+        UIViewRoot viewRoot = ctx.getViewRoot();
 
         if (phaseId == PhaseId.APPLY_REQUEST_VALUES ||
             phaseId == PhaseId.PROCESS_VALIDATIONS ||
@@ -242,14 +243,14 @@ public class PartialViewContextImpl extends PartialViewContext {
             // or there were no execute phase client ids.
 
             if (executeIds == null || executeIds.isEmpty()) {
-                // PENDING LOG ERROR OR WARNING
+                // RELEASE_PENDING LOG ERROR OR WARNING
                 return;
             }
 
             try {
-                processComponents(viewRoot, phaseId, executeIds, context);
+                processComponents(viewRoot, phaseId, executeIds, ctx);
             } catch (Exception e) {
-                // PENDING LOG EXCEPTION
+                // RELEASE_PENDING LOG EXCEPTION
             }
 
             // If we have just finished APPLY_REQUEST_VALUES phase, install the
@@ -259,7 +260,7 @@ public class PartialViewContextImpl extends PartialViewContext {
             //
             if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
                 PartialResponseWriter writer = getPartialResponseWriter();
-                context.setResponseWriter(writer);
+                ctx.setResponseWriter(writer);
             }
 
         } else if (phaseId == PhaseId.RENDER_RESPONSE) {
@@ -268,14 +269,14 @@ public class PartialViewContextImpl extends PartialViewContext {
                 //
                 // We re-enable response writing.
                 //
-                OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(context);
+                OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(ctx);
                 onOffResponse.setEnabled(true);
                 PartialResponseWriter writer = getPartialResponseWriter();
-                ResponseWriter orig = context.getResponseWriter();
-                context.getAttributes().put(ORIGINAL_WRITER, orig);
-                context.setResponseWriter(writer);
+                ResponseWriter orig = ctx.getResponseWriter();
+                ctx.getAttributes().put(ORIGINAL_WRITER, orig);
+                ctx.setResponseWriter(writer);
 
-                ExternalContext exContext = context.getExternalContext();
+                ExternalContext exContext = ctx.getExternalContext();
                 if (exContext.getResponse() instanceof HttpServletResponse) {
                     exContext.setResponseContentType("text/xml");
                     exContext.setResponseHeader("Cache-Control", "no-cache");
@@ -283,8 +284,8 @@ public class PartialViewContextImpl extends PartialViewContext {
                 }
 
                 if (isRenderAll()) {
-                    renderAll(context, viewRoot);
-                    renderState(context, viewRoot);
+                    renderAll(ctx, viewRoot);
+                    renderState(ctx);
                     writer.endDocument();
                     return;
                 }
@@ -293,16 +294,16 @@ public class PartialViewContextImpl extends PartialViewContext {
                 // or there were no render phase client ids.
                 if (renderIds == null || renderIds.isEmpty()) {
                 } else {
-                    processComponents(viewRoot, phaseId, renderIds, context);
+                    processComponents(viewRoot, phaseId, renderIds, ctx);
                 }
 
-                renderState(context, viewRoot);
+                renderState(ctx);
 
                 writer.endDocument();
             } catch (IOException ex) {
-                this.cleanupAfterView(context);
+                this.cleanupAfterView();
             } catch (RuntimeException ex) {
-                this.cleanupAfterView(context);
+                this.cleanupAfterView();
                 // Throw the exception
                 throw ex;
             }
@@ -332,7 +333,9 @@ public class PartialViewContextImpl extends PartialViewContext {
         partialResponseWriter = null;
         executeIds = null;
         renderIds = null;
-        onOffResponse = null;
+        ctx = null;
+        partialRequest = null;
+
     }
 
     // -------------------------------------------------------- Private Methods
@@ -366,11 +369,11 @@ public class PartialViewContextImpl extends PartialViewContext {
         // VisitCallback that will be invoked for each component that
         // is visited.  Note that we use the SKIP_UNRENDERED hint as we
         // only want to visit the rendered subtree.
-        EnumSet hints = EnumSet.of(VisitHint.SKIP_UNRENDERED);
+        EnumSet<VisitHint> hints = EnumSet.of(VisitHint.SKIP_UNRENDERED);
         PartialVisitContext visitContext =
             new PartialVisitContext(context, phaseClientIds, hints);
         PhaseAwareVisitCallback visitCallback =
-            new PhaseAwareVisitCallback(phaseId);
+            new PhaseAwareVisitCallback(ctx, phaseId);
         component.visitTree(visitContext, visitCallback);
     }
 
@@ -385,25 +388,26 @@ public class PartialViewContextImpl extends PartialViewContext {
 
         Iterator<UIComponent> itr = viewRoot.getFacetsAndChildren();
         while (itr.hasNext()) {
-            UIComponent kid = (UIComponent)itr.next();
+            UIComponent kid = itr.next();
             kid.encodeAll(context);
         }
 
         writer.endUpdate();
     }
 
-    private void renderState(FacesContext context, UIViewRoot viewRoot) throws IOException {
+    private void renderState(FacesContext context) throws IOException {
+
         // Get the view state and write it to the response..
         PartialResponseWriter writer = getPartialResponseWriter();
         writer.startUpdate(PartialResponseWriter.VIEW_STATE_MARKER);
         String state = context.getApplication().getStateManager().getViewState(context);
         writer.write(state);
         writer.endUpdate();
+
     }
 
     private PartialResponseWriter createPartialResponseWriter() {
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         HttpServletResponse response = (HttpServletResponse)
               extContext.getResponse();
@@ -435,12 +439,12 @@ public class PartialViewContextImpl extends PartialViewContext {
 
     }
 
-    private void cleanupAfterView(FacesContext context) {
-        ResponseWriter orig = (ResponseWriter) context.getAttributes().
+    private void cleanupAfterView() {
+        ResponseWriter orig = (ResponseWriter) ctx.getAttributes().
             get(ORIGINAL_WRITER);
         assert(null != orig);
         // move aside the PartialResponseWriter
-        context.setResponseWriter(orig);
+        ctx.setResponseWriter(orig);
     }
 
 
@@ -455,16 +459,17 @@ public class PartialViewContextImpl extends PartialViewContext {
 
     private static class PhaseAwareVisitCallback implements VisitCallback {
 
-        private PhaseId curPhase = null;
-        private PhaseAwareVisitCallback(PhaseId curPhase) {
+        private PhaseId curPhase;
+        private FacesContext ctx;
+
+        private PhaseAwareVisitCallback(FacesContext ctx, PhaseId curPhase) {
+            this.ctx = ctx;
             this.curPhase = curPhase;
         }  
 
 
-        public VisitResult visit(VisitContext context,
-                                 UIComponent comp) {
+        public VisitResult visit(VisitContext context, UIComponent comp) {
             try {
-                FacesContext facesContext = context.getFacesContext();
 
                 if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
 
@@ -472,19 +477,19 @@ public class PartialViewContextImpl extends PartialViewContext {
                     // If the user requested an immediate request
                     // Make sure to set the immediate flag here.
 
-                    comp.processDecodes(facesContext);
+                    comp.processDecodes(ctx);
                 } else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
-                    comp.processValidators(facesContext);
+                    comp.processValidators(ctx);
                 } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
-                    comp.processUpdates(facesContext);
+                    comp.processUpdates(ctx);
                 } else if (curPhase == PhaseId.RENDER_RESPONSE) {
 
-                    PartialResponseWriter writer = facesContext.getPartialViewContext().getPartialResponseWriter();
+                    PartialResponseWriter writer = ctx.getPartialViewContext().getPartialResponseWriter();
 
-                    writer.startUpdate(comp.getClientId(facesContext));
+                    writer.startUpdate(comp.getClientId(ctx));
                     try {
                         // do the default behavior...
-                        comp.encodeAll(facesContext);
+                        comp.encodeAll(ctx);
                     }
                     catch (Exception ce) {
                         if (LOGGER.isLoggable(Level.SEVERE)) {
