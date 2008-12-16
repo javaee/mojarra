@@ -204,15 +204,7 @@ public final class AjaxHandler extends TagHandlerImpl {
         }
 
         if (this.disabled != null) {
-            String disabledStr = this.disabled.getValue(ctx);
-            if ("true".equalsIgnoreCase(disabledStr)) {
-                disabled = true;
-            } else if ("false".equalsIgnoreCase(disabledStr)) {
-                disabled = false;
-            } else {
-                // RELEASE_PENDING 118N
-                throw new TagAttributeException(this.disabled, "'disabled' attribute value must be one of true or false");
-            }
+            disabled = this.disabled.getBoolean(ctx);
         }
 
         AjaxBehavior ajaxBehavior = new AjaxBehavior(events, onevent, onerror, execute, render, disabled);
