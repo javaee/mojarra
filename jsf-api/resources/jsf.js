@@ -542,9 +542,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * @ignore
              */
             req.onComplete = function onComplete() {
-                req.status = req.xmlReq.status;
-                if ((req.status !== null && typeof req.status !== 'undefined' &&
-                     req.status !== 0) && (req.status >= 200 && req.status < 300)) {
+                if (req.xmlReq.status && (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) {
                     sendEvent(req.xmlReq, req.context, "complete");
                     jsf.ajax.response(req.xmlReq, req.context);
                 } else {
@@ -1216,6 +1214,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var xml = xmlReq.responseXML;
                 if (xml === null) {
                     sendError(request, context, "emptyResponse");
+                    return;
                 }
 
 
@@ -1270,26 +1269,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     }
                 }
                 sendEvent(request, context, "success");
-
-                //////////////////////
-                // Check for updates..
-                //////////////////////
-
-                //////////////////////
-                // Check For Inserts.
-                //////////////////////
-
-                //////////////////////
-                // Check For Deletes.
-                //////////////////////
-
-                //////////////////////
-                // Update Attributes.
-                //////////////////////
-
-                //////////////////////
-                // JavaScript Eval.
-                //////////////////////
 
             }
         };
