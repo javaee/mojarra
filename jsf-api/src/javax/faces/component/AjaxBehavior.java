@@ -41,6 +41,7 @@
 package javax.faces.component;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * <p class="changed_added_2_0">An instance of this class is added
@@ -90,13 +91,13 @@ public class AjaxBehavior implements Serializable {
 
     private String events = null;
 
-    private String execute = null;
+    private Collection<String> execute = null;
 
-    private String render = null;
+    private Collection<String> render = null;
 
     private Boolean disabled = false;
 
-    public AjaxBehavior(String events, String onevent, String onerror, String execute, String render, Boolean disabled) {
+    public AjaxBehavior(String events, String onevent, String onerror, Collection<String> execute, Collection<String> render, Boolean disabled) {
         this.onerror = onerror;
         this.onevent = onevent;
         this.events = events;
@@ -140,26 +141,28 @@ public class AjaxBehavior implements Serializable {
     }
 
     /**
-     * <p class="changed_added_2_0">Return the <code>String</code> of component
+     * <p class="changed_added_2_0">Return a
+     * <code>Collection&lt;String&gt;</code> of component
      * identifiers that will be used to identify components that should be
      * processed during the <code>execute</code> phase of the request
      * processing lifecycle.</p> 
      *
      * @since 2.0
      */
-    public String getExecute() {
+    public Collection<String> getExecute() {
         return execute;
     }
 
     /**
-     * <p class="changed_added_2_0">Return the <code>String</code> of component
+     * <p class="changed_added_2_0">Return a
+     * <code>Collection&lt;String&gt;</code> of component
      * identifiers that will be used to identify components that should be
      * processed during the <code>render</code> phase of the request
      * processing lifecycle.</p> 
      *
      * @since 2.0
      */
-    public String getRender() {
+    public Collection<String> getRender() {
         return render;
     }
 

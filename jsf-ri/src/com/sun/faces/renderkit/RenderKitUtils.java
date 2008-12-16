@@ -315,13 +315,13 @@ public class RenderKitUtils {
         }
     }
 
-    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior) {
+    public static String buildAjaxCommand(UIComponent component, AjaxBehavior ajaxBehavior) {
         final String AJAX_REQUEST = "jsf.ajax.request";
         // Is there already an option written?
         boolean already = false;
         StringBuilder ajaxCommand = new StringBuilder(256);
-        String execute = ajaxBehavior.getExecute();
-        String render = ajaxBehavior.getRender();
+        Collection<String> execute = ajaxBehavior.getExecute();
+        Collection<String> render = ajaxBehavior.getRender();
         String onevent = ajaxBehavior.getOnEvent();
         String onerror = ajaxBehavior.getOnError();
         ajaxCommand.append(AJAX_REQUEST);
@@ -331,8 +331,22 @@ public class RenderKitUtils {
         }
         if (execute != null) {
             already = true;
+            boolean first = true;
             ajaxCommand.append("execute:'");
-            ajaxCommand.append(execute.replace(' ', ','));
+            for (String exe : execute) {
+                if (!first) {
+                    // RELEASE_PENDING - Change to space
+                    ajaxCommand.append(",");
+                } else {
+                    first = false;
+                }
+                UIComponent resolvedComponent = component.findComponent(exe);
+                if (resolvedComponent == null) {
+                    // RELEASE_PENDING  i18n
+                    throw new FacesException("'execute' attribute contains unknown id '"+exe+"'");
+                }
+                ajaxCommand.append(resolvedComponent.getClientId());
+            }
             ajaxCommand.append("'");
         }
         if (render != null) {
@@ -341,8 +355,22 @@ public class RenderKitUtils {
             } else {
                 already = true;
             }
+            boolean first = true;
             ajaxCommand.append("render:'");
-            ajaxCommand.append(render.replace(' ', ','));
+            for (String rend : render) {
+                if (!first) {
+                    // RELEASE_PENDING - Change to space
+                    ajaxCommand.append(",");
+                } else {
+                    first = false;
+                }
+                UIComponent resolvedComponent = component.findComponent(rend);
+                if (resolvedComponent == null) {
+                    // RELEASE_PENDING  i18n
+                    throw new FacesException("'render' attribute contains unknown id '"+rend+"'");
+                }
+                ajaxCommand.append(resolvedComponent.getClientId());
+            }
             ajaxCommand.append("'");
         }
         if (onevent != null) {
@@ -400,7 +428,7 @@ public class RenderKitUtils {
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(component, ajaxBehavior);
 
         sb = new StringBuffer(256);
 
@@ -470,7 +498,7 @@ public class RenderKitUtils {
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(component, ajaxBehavior);
 
         sb = new StringBuffer(256);
 

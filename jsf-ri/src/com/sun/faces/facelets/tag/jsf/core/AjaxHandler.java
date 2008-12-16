@@ -52,7 +52,7 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import java.io.IOException;
-import java.util.ListIterator;
+import java.util.*;
 
 import javax.el.ELException;
 import javax.faces.FacesException;
@@ -154,6 +154,7 @@ public final class AjaxHandler extends TagHandlerImpl {
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
+    @SuppressWarnings("unchecked")
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
         if (null == parent || !(ComponentSupport.isNew(parent))) {
@@ -161,8 +162,8 @@ public final class AjaxHandler extends TagHandlerImpl {
         }
 
         String events = null;
-        String execute = null;
-        String render = null;
+        Collection<String> execute = null;
+        Collection<String> render = null;
         String onevent = null;
         String onerror = null;
         Boolean disabled = false;
@@ -171,11 +172,30 @@ public final class AjaxHandler extends TagHandlerImpl {
             events = this.events.getValue(ctx);
         }
         if (this.execute != null) {
-            execute = this.execute.getValue(ctx).replace(' ',',');
+            Object tempAttr = this.execute.getObject(ctx, Object.class);
+            if (tempAttr instanceof String) {
+                // split into separate strings, add these into a new Collection
+                execute = new LinkedHashSet<String>(Arrays.asList(((String)tempAttr).split(" ")));
+            } else if (tempAttr instanceof Collection) {
+                execute = (Collection<String>)tempAttr;
+            } else {
+                // RELEASE_PENDING  i18n
+                throw new TagAttributeException(this.execute,"'execute' attribute value must be either a String or a Collection");
+            }
         }
         if (this.render != null) {
-            render = this.render.getValue(ctx).replace(' ',',');
+            Object tempAttr = this.render.getObject(ctx, Object.class);
+            if (tempAttr instanceof String) {
+                // split into separate strings, add these into a new Collection
+                render = new LinkedHashSet<String>(Arrays.asList(((String)tempAttr).split(" ")));
+            } else if (tempAttr instanceof Collection) {
+                render = (Collection<String>)tempAttr;
+            } else {
+                // RELEASE_PENDING  i18n
+                throw new TagAttributeException(this.render,"'render' attribute value must be either a String or a Collection");
+            }
         }
+
         if (this.onevent != null) {
             onevent = this.onevent.getValue(ctx);
         }
@@ -191,7 +211,7 @@ public final class AjaxHandler extends TagHandlerImpl {
                 disabled = false;
             } else {
                 // RELEASE_PENDING 118N
-                throw new TagAttributeException(this.events, "'disabled' attribute value must be one of true or false");
+                throw new TagAttributeException(this.disabled, "'disabled' attribute value must be one of true or false");
             }
         }
 
