@@ -52,10 +52,12 @@
 package javax.faces.webapp.pdl.facelets.tag;
 
 /**
- * Representation of a Tag in the Facelet definition
+ * <p class="changed_added_2_0">Representation of a Tag in the Facelet
+ * definition</p>
  * 
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  */
 public final class Tag {
     private final TagAttributes attributes;

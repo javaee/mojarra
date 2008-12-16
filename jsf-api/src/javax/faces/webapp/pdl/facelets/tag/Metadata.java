@@ -54,11 +54,12 @@ package javax.faces.webapp.pdl.facelets.tag;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
- * External information on how to wire dynamic or literal state to the
- * passed Object instance.
- * 
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">External information on how to wire
+ * dynamic or literal state to the passed Object instance.</p>
+ *
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  */
 public abstract class Metadata {
 

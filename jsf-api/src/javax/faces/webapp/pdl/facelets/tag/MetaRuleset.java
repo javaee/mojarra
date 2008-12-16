@@ -52,12 +52,13 @@
 package javax.faces.webapp.pdl.facelets.tag;
 
 /**
- * A mutable set of rules to be used in auto-wiring state to a particular object
- * instance. Rules assigned to this object will be composed into a single
- * Metadata instance.
+ * <p class="changed_added_2_0">A mutable set of rules to be used in
+ * auto-wiring state to a particular object instance. Rules assigned to
+ * this object will be composed into a single Metadata instance.</p>
+ *
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
  * 
- * @author Jacob Hookom
- * @version $Id$
+ * @since 2.0
  */
 public abstract class MetaRuleset {
     /**

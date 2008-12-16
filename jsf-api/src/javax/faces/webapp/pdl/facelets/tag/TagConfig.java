@@ -55,11 +55,13 @@ import javax.faces.webapp.pdl.facelets.tag.Tag;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
- * Passed to the constructor of TagHandler, it defines the document definition
- * of the handler we are instantiating
- * 
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">Passed to the constructor of TagHandler,
+ * it defines the document definition of the handler we are
+ * instantiating</p>
+ *
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  */
 public interface TagConfig {
 

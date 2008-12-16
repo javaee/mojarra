@@ -55,13 +55,12 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 /**
- * Information used with MetaRule for determining how and what Metadata should
- * be wired.
+ * <p class="changed_added_2_0">Information used with MetaRule for
+ * determining how and what Metadata should be wired.</p>
  *
- * @see com.sun.faces.facelets.tag.MetaRule
- * @see com.sun.faces.facelets.tag.Metadata
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  */
 public abstract class MetadataTarget {
 

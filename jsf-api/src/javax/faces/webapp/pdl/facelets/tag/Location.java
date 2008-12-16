@@ -52,13 +52,13 @@
 package javax.faces.webapp.pdl.facelets.tag;
 
 /**
- * An object that represents the Location of a Tag or TagAttribute in a Facelet
- * file.
+ * <p class="changed_added_2_0">An object that represents the Location
+ * of a Tag or TagAttribute in a Facelet file.</p>
+ *
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  * 
- * @see com.sun.faces.facelets.tag.Tag
- * @see com.sun.faces.facelets.tag.TagAttribute
- * @author Jacob Hookom
- * @version $Id$
  */
 public final class Location {
 

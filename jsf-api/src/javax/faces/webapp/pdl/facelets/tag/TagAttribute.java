@@ -58,10 +58,12 @@ import javax.el.ValueExpression;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
- * Representation of a Tag's attribute in a Facelet File
+ * <p class="changed_added_2_0">Representation of a Tag's attribute in a
+ * Facelet File</p>
  * 
- * @author Jacob Hookom
- * @version $Id: TagAttribute.java 5812 2008-11-13 21:37:49Z edburns $
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  */
 public abstract class TagAttribute {
 

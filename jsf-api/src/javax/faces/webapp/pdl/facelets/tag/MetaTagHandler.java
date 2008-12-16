@@ -55,11 +55,12 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 
 /**
- * A base tag for wiring state to an object instance based on rules populated at
- * the time of creating a MetaRuleset.
+ * <p class="changed_added_2_0">A base tag for wiring state to an object
+ * instance based on rules populated at the time of creating a
+ * MetaRuleset.</p>
  * 
- * @author Jacob Hookom
- * @version $Id: MetaTagHandler.java 6068 2008-12-11 17:43:19Z edburns $
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ * @since 2.0
  */
 public abstract class MetaTagHandler extends TagHandler {
 

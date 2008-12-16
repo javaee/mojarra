@@ -52,12 +52,12 @@
 package javax.faces.webapp.pdl.facelets.tag;
 
 /**
- * A set of TagAttributes, usually representing all attributes on a Tag.
- * 
- * @see com.sun.faces.facelets.tag.Tag
- * @see javax.faces.webapp.pdl.facelets.tag.TagAttribute
- * @author Jacob Hookom
- * @version $Id: TagAttributes.java 5369 2008-09-08 19:53:45Z rlubke $
+ * <p class="changed_added_2_0">A set of TagAttributes, usually
+ * representing all attributes on a Tag.</p>
+ *
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  */
 public abstract class TagAttributes {
 

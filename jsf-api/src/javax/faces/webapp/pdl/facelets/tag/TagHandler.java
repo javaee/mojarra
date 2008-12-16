@@ -58,11 +58,12 @@ import java.util.List;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
- * Foundation class for FaceletHandlers associated with markup in a Facelet
- * document.
+ * <p class="changed_added_2_0">Foundation class for FaceletHandlers
+ * associated with markup in a Facelet document.</p>
  * 
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  */
 public abstract class TagHandler implements FaceletHandler {
 

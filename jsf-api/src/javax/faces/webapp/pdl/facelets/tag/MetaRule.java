@@ -56,12 +56,12 @@ import javax.faces.webapp.pdl.facelets.tag.Metadata;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 
 /**
- * A potential rule for Metadata on the passed MetadataTarget
+ * <p class="changed_added_2_0">A potential rule for Metadata on the
+ * passed MetadataTarget.</p>
+ *
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
  * 
- * @see com.sun.faces.facelets.tag.Metadata
- * @see com.sun.faces.facelets.tag.MetadataTarget
- * @author Jacob Hookom
- * @version $Id$
+ * @since 2.0
  */
 public abstract class MetaRule {
 
