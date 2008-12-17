@@ -23,13 +23,16 @@ var statusUpdate = function statusUpdate(data) {
     statusArea.value = text;
 }
 </script>
-    <h1>Simple Counter Test</h1>
+    <h1>Simple Event Test</h1>
     <h:form id="countForm">
         <h:outputText id="out1" value="#{ajaxrequest.count}"/>
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count"
                          onclick="jsf.ajax.request(this, event, {execute: this.id, render: 'countForm:out1', onevent: statusUpdate, onerror: statusUpdate}); return false;"/>
+        <br/>
+        <h:commandButton id="button2" value="Count form"
+                         onclick="jsf.ajax.request(this, event, {execute: this.id, render: 'countForm', onevent: statusUpdate, onerror: statusUpdate}); return false;"/>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset"
