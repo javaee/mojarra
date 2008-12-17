@@ -72,7 +72,6 @@ import com.sun.faces.util.FacesLogger;
  *  <li>javax.faces.render.FacesRenderKit</li>
  *  <li>javax.faces.render.FacesRenderer</li>
  *  <li>javax.faces.model.ManagedBean</li>
- *  <li>javax.faces.model.ManagedBeans</li>
  * </ul>
  */
 public class AnnotationScanner {
@@ -93,7 +92,6 @@ public class AnnotationScanner {
         annotations.add("Ljavax/faces/render/FacesRenderKit;");
         annotations.add("Ljavax/faces/render/FacesRenderer;");
         annotations.add("Ljavax/faces/model/ManagedBean;");
-        annotations.add("Ljavax/faces/model/ManagedBeans;");
         FACES_ANNOTATIONS = Collections.unmodifiableSet(annotations);
     }
 
