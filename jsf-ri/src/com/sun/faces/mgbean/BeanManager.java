@@ -190,21 +190,13 @@ public class BeanManager {
         // check to see if the bean is already in scope
         switch (scope) {
             case REQUEST:
-                if (externalContext.getRequestMap().containsKey(name)) {
-                    return true;
-                }
+                return (externalContext.getRequestMap().containsKey(name));
             case VIEW:
-                if (context.getViewRoot().getViewMap().containsKey(name)) {
-                    return true;
-                }
+                return (context.getViewRoot().getViewMap().containsKey(name));
             case SESSION:
-                if (externalContext.getSessionMap().containsKey(name)) {
-                    return true;
-                }
+                return (externalContext.getSessionMap().containsKey(name));
             case APPLICATION:
-                if (externalContext.getApplicationMap().containsKey(name)) {
-                    return true;
-                }
+                return (externalContext.getApplicationMap().containsKey(name));
         }
         return false;
         

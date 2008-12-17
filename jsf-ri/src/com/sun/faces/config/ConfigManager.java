@@ -621,7 +621,7 @@ public class ConfigManager {
         if (isWebinfFacesConfig(document)) {
             String version = document.getDocumentElement()
                   .getAttributeNS(document.getNamespaceURI(), "version");
-            if (version != null) {
+            if (version != null && version.length() > 0) {
                 Double v = Double.parseDouble(version);
                 Double twoOh = 2.0d;
                 return !(v.compareTo(twoOh) < 0);
