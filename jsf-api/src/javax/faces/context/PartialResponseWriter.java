@@ -143,7 +143,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         writer.startElement("insert", null);
         writer.startElement("before", null);
         writer.writeAttribute("id", targetId, null);
-        writer.write("<![CDATA[");
+        writer.startElement("CDATA",null);
     }
 
     /**
@@ -163,7 +163,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         writer.startElement("insert", null);
         writer.startElement("after", null);
         writer.writeAttribute("id", targetId, null);
-        writer.write("<![CDATA[");
+        writer.startElement("CDATA",null);
     }
    
    
@@ -175,7 +175,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endInsert() throws IOException  {
-        writer.write("]]>");
+        writer.endElement("CDATA");
         if (inInsertBefore) {
             writer.endElement("before");
             inInsertBefore = false;
@@ -199,7 +199,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         startChangesIfNecessary();
         writer.startElement("update", null);
         writer.writeAttribute("id", targetId, null);
-        writer.write("<![CDATA[");
+        writer.startElement("CDATA",null);
     }
 
     /**
@@ -210,7 +210,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endUpdate() throws IOException  {
-        writer.write("]]>");
+        writer.endElement("CDATA");
         writer.endElement("update");
     }
 
@@ -267,7 +267,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         endChangesIfNecessary();
         writer.startElement("redirect", null);
         writer.writeAttribute("url", url, null);
-        writer.endElement("recirect");
+        writer.endElement("redirect");
     }
 
     /**
@@ -281,7 +281,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
     public void startEval() throws IOException  {
         startChangesIfNecessary();
         writer.startElement("eval", null);
-        writer.write("<![CDATA[");
+        writer.startElement("CDATA",null);
     }
 
     /**
@@ -292,7 +292,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endEval() throws IOException  {
-        writer.write("]]>");
+        writer.endElement("CDATA");
         writer.endElement("eval");
     }
 
@@ -342,7 +342,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         writer.write(errorName);
         writer.endElement("error-name");
         writer.startElement("error-message", null);
-        writer.write("<![CDATA[");
+        writer.startElement("CDATA",null);
     }
 
     /**
@@ -353,7 +353,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endError() throws IOException  {
-        writer.write("]]>");
+        writer.endElement("CDATA");
         writer.endElement("error-message");
         writer.endElement("error");
     }
