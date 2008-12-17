@@ -335,8 +335,7 @@ public class RenderKitUtils {
             ajaxCommand.append("execute:'");
             for (String exe : execute) {
                 if (!first) {
-                    // RELEASE_PENDING - Change to space
-                    ajaxCommand.append(",");
+                    ajaxCommand.append(" ");
                 } else {
                     first = false;
                 }
@@ -359,8 +358,7 @@ public class RenderKitUtils {
             ajaxCommand.append("render:'");
             for (String rend : render) {
                 if (!first) {
-                    // RELEASE_PENDING - Change to space
-                    ajaxCommand.append(",");
+                    ajaxCommand.append(" ");
                 } else {
                     first = false;
                 }
