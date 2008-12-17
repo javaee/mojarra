@@ -89,7 +89,7 @@ public class AjaxBehavior implements Serializable {
 
     private String onevent = null;
 
-    private String events = null;
+    private String event = null;
 
     private Collection<String> execute = null;
 
@@ -97,10 +97,10 @@ public class AjaxBehavior implements Serializable {
 
     private Boolean disabled = false;
 
-    public AjaxBehavior(String events, String onevent, String onerror, Collection<String> execute, Collection<String> render, Boolean disabled) {
+    public AjaxBehavior(String event, String onevent, String onerror, Collection<String> execute, Collection<String> render, Boolean disabled) {
         this.onerror = onerror;
         this.onevent = onevent;
-        this.events = events;
+        this.event = event;
         this.execute = execute;
         this.render = render;
         this.disabled = disabled;
@@ -112,8 +112,8 @@ public class AjaxBehavior implements Serializable {
      *
      * @since 2.0
      */
-    public String getEvents() {
-        return events;
+    public String getEvent() {
+        return event;
     }
 
     /**
