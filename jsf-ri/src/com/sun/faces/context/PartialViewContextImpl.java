@@ -432,8 +432,7 @@ public class PartialViewContextImpl extends PartialViewContext {
         }
         if (responseWriter instanceof PartialResponseWriter)  {
             return (PartialResponseWriter) responseWriter;
-        }
-        else {
+        } else {
             return new PartialResponseWriter(responseWriter);
         }
 
