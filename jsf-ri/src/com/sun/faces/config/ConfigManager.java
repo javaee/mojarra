@@ -614,7 +614,7 @@ public class ConfigManager {
      *
      * @param document document representing <code>WEB-INF/faces-config.xml</code>
      * @return <code>true</code> if the faces-config.xml is versioned at 2.0,
-     *  no version can be determined, or there is no <code>WEB-INF/faces-config.xml</code>
+     *  or there is no <code>WEB-INF/faces-config.xml</code>
      */
     private boolean isFacesApp20(Document document) {
 
@@ -625,6 +625,8 @@ public class ConfigManager {
                 Double v = Double.parseDouble(version);
                 Double twoOh = 2.0d;
                 return !(v.compareTo(twoOh) < 0);
+            } else {
+                return false;
             }
         }
 
