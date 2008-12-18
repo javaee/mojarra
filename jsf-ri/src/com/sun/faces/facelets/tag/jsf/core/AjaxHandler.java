@@ -161,7 +161,7 @@ public final class AjaxHandler extends TagHandlerImpl {
             return;
         }
 
-        String event = this.event.getValue();
+        String event = (this.event != null) ? this.event.getValue() : null;
 
         //AjaxBehavior ajaxBehavior = new AjaxBehavior(event, onevent, onerror, execute, render, disabled);
         AjaxBehavior ajaxBehavior = new AjaxBehavior(event,
