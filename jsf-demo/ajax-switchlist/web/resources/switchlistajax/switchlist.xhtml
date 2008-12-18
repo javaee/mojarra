@@ -63,7 +63,6 @@
 
 <cc:implementation>
     <h:outputStylesheet name="switchlist/switchlist.css"/>
-    <h:outputText value="Client ID: #{compositeComponent.clientId}"/>
     <h:selectManyListbox id="list1" value="#{compositeComponent.attrs.controller.list1}" styleClass="switchlist">
        <f:selectItems value="#{compositeComponent.attrs.controller.items1}"/>
     </h:selectManyListbox>
