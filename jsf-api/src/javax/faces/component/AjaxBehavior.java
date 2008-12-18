@@ -92,9 +92,9 @@ public class AjaxBehavior implements Serializable {
      */
     public static final String AJAX_VALUE_CHANGE_ACTION = "all";
 
+    private String event;
     private ValueExpression onerrorExpression;
     private ValueExpression oneventExpression;
-    private ValueExpression eventExpression;
     private ValueExpression executeExpression;
     private ValueExpression renderExpression;
     private ValueExpression disabledExpression;
@@ -103,7 +103,7 @@ public class AjaxBehavior implements Serializable {
     // ------------------------------------------------------------ Constructors
 
 
-    public AjaxBehavior(ValueExpression event,
+    public AjaxBehavior(String event,
                         ValueExpression onevent,
                         ValueExpression onerror,
                         ValueExpression execute,
@@ -112,7 +112,7 @@ public class AjaxBehavior implements Serializable {
 
         this.onerrorExpression = onerror;
         this.oneventExpression = onevent;
-        this.eventExpression = event;
+        this.event = event;
         this.executeExpression = execute;
         this.renderExpression = render;
         this.disabledExpression = disabled;
@@ -127,13 +127,11 @@ public class AjaxBehavior implements Serializable {
      * <p class="changed_added_2_0">Return the Faces event associated with
      * this instance.</p>
      *
-     * @param context the {@link FacesContext} for the current request
-     *
      * @since 2.0
      */
-    public String getEvent(FacesContext context) {
+    public String getEvent() {
 
-        return (String) eval(context, eventExpression);
+        return event;
 
     }
 

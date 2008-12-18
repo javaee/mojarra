@@ -74,11 +74,11 @@ public class AjaxBehaviors implements Serializable {
      *
      * @since 2.0
      */
-    public AjaxBehavior getBehaviorForEvent(FacesContext context, String eventName) {
+    public AjaxBehavior getBehaviorForEvent(String eventName) {
         AjaxBehavior ajaxBehavior = null;
         for (int i=ajaxBehaviors.size()-1; i>=0; i--) {
             AjaxBehavior behavior = ajaxBehaviors.get(i);
-            String event = behavior.getEvent(context);
+            String event = behavior.getEvent();
             if (event == null || event.equals(eventName)) {
                 ajaxBehavior = behavior;
             }

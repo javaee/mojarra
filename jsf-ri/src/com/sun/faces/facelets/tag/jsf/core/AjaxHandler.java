@@ -161,15 +161,16 @@ public final class AjaxHandler extends TagHandlerImpl {
             return;
         }
 
+        String event = this.event.getValue();
+
         //AjaxBehavior ajaxBehavior = new AjaxBehavior(event, onevent, onerror, execute, render, disabled);
-        AjaxBehavior ajaxBehavior = new AjaxBehavior(((this.event != null) ? this.event.getValueExpression(ctx, String.class) : null),
+        AjaxBehavior ajaxBehavior = new AjaxBehavior(event,
                                                      ((this.onevent != null) ? this.onevent.getValueExpression(ctx, String.class) : null),
                                                      ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
                                                      ((this.execute != null) ? this.execute.getValueExpression(ctx, Object.class) : null),
                                                      ((this.render != null) ? this.render.getValueExpression(ctx, Object.class) : null),
                                                      ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null));
 
-        String event = ajaxBehavior.getEvent(ctx.getFacesContext());
         //
         // If we are nested within an EditableValueHolder or ActionSource component..
         //
