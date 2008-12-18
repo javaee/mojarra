@@ -339,13 +339,6 @@ public class FacesContextImpl extends FacesContext {
             return (emptyList.iterator());
         }
 
-        //Clear set of clientIds from pending display messages result.
-        if (RequestStateManager.containsKey(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
-            Set pendingClientIds = (Set)
-                  RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
-            pendingClientIds.clear();
-        }
-
         if (componentMessageLists.size() > 0) {
             return new ComponentMessagesIterator(componentMessageLists);
         } else {
@@ -359,13 +352,6 @@ public class FacesContextImpl extends FacesContext {
      */
     public Iterator<FacesMessage> getMessages(String clientId) {
         assertNotReleased();
-
-        //remove client id from pending display messages result.
-        Set pendingClientIds = (Set)
-              RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
-        if (pendingClientIds != null && !pendingClientIds.isEmpty()) {
-            pendingClientIds.remove(clientId);
-        }
 
         // If no messages have been enqueued at all,
         // return an empty List Iterator
@@ -538,9 +524,6 @@ public class FacesContextImpl extends FacesContext {
      * @see javax.faces.context.FacesContext#release()
      */
     public void release() {
-
-        RequestStateManager
-              .remove(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
 
         released = true;
         externalContext = null;

@@ -157,31 +157,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         };
 
         /**
-         * Remove trailing and leading whitespace
-         * @ignore
-         */
-        var trim = function trim(str) {
-            return str.replace(/^\s+/g, "").replace(/\s+$/g, "");
-        };
-
-        /**
-         * Split a delimited string into an array, trimming whitespace
-         * param s String to split
-         * param e delimiter character - cannot be a space
-         * @ignore
-         */
-        var toArray = function toArray(s, e) {
-            var sarray;
-            if (typeof s === 'string') {
-                sarray = s.split((e) ? e : ' ');
-                for (var i = 0; i < sarray.length; i++) {
-                    sarray[i] = trim(sarray[i]);
-                }
-            }
-            return sarray;
-        };
-
-        /**
          * Check if a value exists in an array
          * @ignore
          */
@@ -334,7 +309,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var parent = d.parentNode;
                 var temp = document.createElement('div');
                 temp.id = d.id;
-                temp.innerHTML = trim(str);
+                // Trim space padding before assigning to innerHTML
+                temp.innerHTML = str.replace(/^\s+/g,'').replace(/\s+$/g,'');
 
                 parent.replaceChild(temp.firstChild, d);
             }
@@ -987,18 +963,18 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 // RELEASE_PENDING Get rid of commas.  It's supposed to be spaces.
                 if (options.execute) {
-                    var temp = toArray(options.execute, ',');
-                    // RELEASE_PENDING remove isInArray function
+                    var temp = options.execute.replace(/\s+/, ' ').split(' ');
+                    // RELEASE_PENDING refactor isInArray function
                     if (!isInArray(temp, element.name)) {
-                        options.execute = element.name + "," + options.execute;
+                        options.execute = element.name + " " + options.execute;
                     }
                 } else {
                     options.execute = element.id;
                 }
 
-                args["javax.faces.partial.execute"] = toArray(options.execute, ',').join(',');
+                args["javax.faces.partial.execute"] = options.execute.replace(/\s+/, ' ');
                 if (options.render) {
-                    args["javax.faces.partial.render"] = toArray(options.render, ',').join(',');
+                    args["javax.faces.partial.render"] = options.render.replace(/\s+/, ' ');
                 }
 
                 // remove non-passthrough options

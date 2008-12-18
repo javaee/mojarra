@@ -352,7 +352,7 @@ public class PartialViewContextImpl extends PartialViewContext {
         if (param == null || NO_PARTIAL_PHASE_CLIENT_IDS.equals(param)) {
             return Collections.emptyList();
         } else {
-            String[] pcs = Util.split(param, ",[ \t]*");
+            String[] pcs = Util.split(param, "[ \t]+");
             return ((pcs != null && pcs.length != 0)
                     ? new ArrayList<String>(Arrays.asList(pcs))
                     : Collections.<String>emptyList());

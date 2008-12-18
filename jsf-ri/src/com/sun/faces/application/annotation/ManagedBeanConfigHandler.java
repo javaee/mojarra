@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.model.ManagedBean;
-import javax.faces.model.ManagedBeans;
 import javax.faces.model.ManagedProperty;
 import javax.faces.model.RequestScoped;
 import javax.faces.model.ViewScoped;
@@ -61,8 +60,8 @@ import com.sun.faces.mgbean.ManagedBeanInfo;
 
 /**
  * <p>
- * <code>ConfigAnnotationHandler</code> for {@link ManagedBeans} and
- * {@link ManagedBean} annotated classes.
+ * <code>ConfigAnnotationHandler</code> for {@link ManagedBean} annotated
+ * classes.
  * </p>
  */
 public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
@@ -80,7 +79,6 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
         Collection<Class<? extends Annotation>> handles =
               new ArrayList<Class<? extends Annotation>>(2);
         handles.add(ManagedBean.class);
-        handles.add(ManagedBeans.class);
         HANDLES = Collections.unmodifiableCollection(handles);
     }
 
@@ -138,27 +136,8 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                          Class<?> annotatedClass,
                          Annotation annotation) {
 
-        if (annotation instanceof ManagedBeans) {
-            ManagedBeans beansAnnotation = (ManagedBeans) annotation;
-            ManagedBean[] beans = beansAnnotation.value();
-            if (beans.length > 0) {
-                ManagedBeanInfo info = getBeanInfo(annotatedClass,
-                                                   beans[0]);
-                manager.register(info);
-                for (int i = 1; i < beans.length; i++) {
-                    ManagedBean managedBean = beans[i];
-
-                    manager.register(info.clone(managedBean.name(),
-                                                info.getScope(),
-                                                managedBean.eager(),
-                                                info));
-                }
-            }
-        } else {
             manager.register(getBeanInfo(annotatedClass,
                                          (ManagedBean) annotation));
-        }
-        
     }
 
 
