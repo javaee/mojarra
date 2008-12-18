@@ -1208,7 +1208,7 @@ public class RenderKitUtils {
                           ctx.getMessages(clientId);
                     while (messages.hasNext()) {
                         FacesMessage message = messages.next();
-                        if (message.isHandled()) {
+                        if (message.isRendered()) {
                             continue;
                         }
                         builder.append("\n");
