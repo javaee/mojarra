@@ -54,6 +54,9 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.ProjectStage;
+import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -61,6 +64,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
+import javax.faces.render.Renderer;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
@@ -71,6 +75,8 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 
 import javax.faces.component.*;
+import javax.faces.component.html.HtmlMessages;
+import javax.faces.component.html.HtmlMessage;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -1167,6 +1173,58 @@ public class RenderKitUtils {
     throws IOException {
         writer.write((char[]) context.getExternalContext().getApplicationMap()
               .get(SUN_JSF_JS));
+    }
+
+
+    public static void renderUnhandledMessages(FacesContext ctx) {
+
+        Application app = ctx.getApplication();
+        if (ProjectStage.Development.equals(app.getProjectStage())) {
+            HtmlMessages messages = (HtmlMessages) app.createComponent(HtmlMessages.COMPONENT_TYPE);
+            Renderer messagesRenderer = ctx.getRenderKit().getRenderer(HtmlMessages.COMPONENT_FAMILY, "javax.faces.Messages");
+            messages.setErrorStyle("Color: red");
+            messages.setWarnStyle("Color: orange");
+            messages.setInfoStyle("Color: blue");
+            messages.setFatalStyle("Color: red");
+            messages.setTooltip(true);
+            messages.setTitle("Project Stage[Development]: Unhandled Messages");
+            messages.setRedisplay(false);
+            try {
+                messagesRenderer.encodeBegin(ctx, messages);
+                messagesRenderer.encodeEnd(ctx, messages);
+            } catch (IOException ioe) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, ioe.toString(), ioe);
+                }
+            }
+        } else {
+            Iterator<String> clientIds = ctx.getClientIdsWithMessages();
+            if (clientIds.hasNext()) {
+                //Display each message possibly not displayed.
+                StringBuilder builder = new StringBuilder();
+                while (clientIds.hasNext()) {
+                    String clientId = clientIds.next();
+                    Iterator<FacesMessage> messages =
+                          ctx.getMessages(clientId);
+                    while (messages.hasNext()) {
+                        FacesMessage message = messages.next();
+                        if (message.isHandled()) {
+                            continue;
+                        }
+                        builder.append("\n");
+                        builder.append("sourceId=").append(clientId);
+                        builder.append("[severity=(")
+                              .append(message.getSeverity());
+                        builder.append("), summary=(")
+                              .append(message.getSummary());
+                        builder.append("), detail=(")
+                              .append(message.getDetail()).append(")]");
+                    }
+                }
+                LOGGER.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
+            }
+        }
+
     }
 
 

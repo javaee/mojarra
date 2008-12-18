@@ -259,6 +259,7 @@ public class FacesMessage implements Serializable {
     private Severity severity = FacesMessage.SEVERITY_INFO;
     private String summary = null;
     private String detail = null;
+    private boolean handled;
 
 
     // ---------------------------------------------------------- Public Methods
@@ -341,6 +342,31 @@ public class FacesMessage implements Serializable {
         this.summary = summary;
 
     }
+
+
+    /**
+     * @return <code>true</code> if {@link #handled()} has been called, otherwise
+     *  <code>false</code>
+     *
+     * @since 2.0
+     */
+    public boolean isHandled() {
+
+        return handled;
+
+    }
+
+    /**
+     * <p>Marks this message as having been rendered to the client.</p>
+     *
+     * @since 2.0
+     */
+    public void handled() {
+
+        this.handled = true;
+
+    }
+    
 
     /**
      * <p>Persist {@link javax.faces.application.FacesMessage} artifacts,

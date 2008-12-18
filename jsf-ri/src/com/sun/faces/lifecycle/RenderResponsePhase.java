@@ -44,22 +44,16 @@ package com.sun.faces.lifecycle;
 
 
 import javax.faces.FacesException;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 import javax.faces.event.PhaseId;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.OnOffResponseWrapper;
-import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.DebugUtil;
 
 
@@ -98,56 +92,11 @@ public class RenderResponsePhase extends Phase {
         }
         
         try {
-            //Setup message display LOGGER.
-            if (LOGGER.isLoggable(Level.INFO)) {
-                Iterator<String> clientIdIter = facesContext.getClientIdsWithMessages();
-
-                //If Messages are queued
-                if (clientIdIter.hasNext()) {
-                    Set<String> clientIds = new HashSet<String>();
-
-                    //Copy client ids to set of clientIds pending display.
-                    while (clientIdIter.hasNext()) {
-                        clientIds.add(clientIdIter.next());
-                    }
-                    RequestStateManager.set(facesContext,
-                                            RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED,
-                                            clientIds);
-                }
-            }
 
             //render the view
             facesContext.getApplication().getViewHandler().
                  renderView(facesContext, facesContext.getViewRoot());
 
-            //display results of message display LOGGER
-            if (LOGGER.isLoggable(Level.INFO) &&
-                 RequestStateManager.containsKey(facesContext,
-                                                 RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
-
-                //remove so Set does not get modified when displaying messages.
-                Set<String> clientIds = TypedCollections.dynamicallyCastSet(
-                     (Set) RequestStateManager.remove(facesContext,
-                                                      RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED),
-                     String.class);
-                if (!clientIds.isEmpty()) {
-
-                    //Display each message possibly not displayed.
-                    StringBuilder builder = new StringBuilder();
-                    for (String clientId : clientIds) {
-                        Iterator<FacesMessage> messages = facesContext.getMessages(clientId);
-                        while (messages.hasNext()) {
-                            FacesMessage message = messages.next();
-                            builder.append("\n");
-                            builder.append("sourceId=").append(clientId);
-                            builder.append("[severity=(").append(message.getSeverity());
-                            builder.append("), summary=(").append(message.getSummary());
-                            builder.append("), detail=(").append(message.getDetail()).append(")]");
-                        }
-                    }
-                    LOGGER.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
-                }
-            }
         } catch (IOException e) {
             throw new FacesException(e.getMessage(), e);
         }

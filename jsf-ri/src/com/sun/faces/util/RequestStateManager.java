@@ -79,14 +79,6 @@ public class RequestStateManager {
           RIConstants.FACES_PREFIX + "renderKitImplForRequest";
 
     /**
-     * Attribute containing a Set of clientIds that have messages
-     * pending display when rendering response.  Any messages that haven't
-     * been displayed will be written to the log.
-     */
-    public static final String CLIENT_ID_MESSAGES_NOT_DISPLAYED =
-          RIConstants.FACES_PREFIX + "clientIdMessagesNotDisplayed";
-
-    /**
      * This attribute is used by the StateMangaer during restore view.
      * The values are stored in the request for later use.
      */
