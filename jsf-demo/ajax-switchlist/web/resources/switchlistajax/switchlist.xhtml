@@ -64,7 +64,7 @@
 <cc:implementation>
     <h:outputStylesheet name="switchlist/switchlist.css"/>
     <h:outputText value="Client ID: #{compositeComponent.clientId}"/>
-    <h:selectManyListbox value="#{compositeComponent.attrs.controller.list1}" styleClass="switchlist">
+    <h:selectManyListbox id="list1" value="#{compositeComponent.attrs.controller.list1}" styleClass="switchlist">
        <f:selectItems value="#{compositeComponent.attrs.controller.items1}"/>
     </h:selectManyListbox>
     <h:panelGroup id="buttonGroup" styleClass="switchlistButtons">    
@@ -75,7 +75,7 @@
         <f:ajax execute="#{compositeComponent.clientId}:move2to1 #{compositeComponent.clientId}:list2" render="#{compositeComponent.clientId}:list1 #{compositeComponent.clientId}:list2"/>        
     </h:commandButton>
     </h:panelGroup>
-    <h:selectManyListbox value="#{compositeComponent.attrs.controller.list2}" styleClass="switchlist">
+    <h:selectManyListbox id="list2" value="#{compositeComponent.attrs.controller.list2}" styleClass="switchlist">
         <f:selectItems value="#{compositeComponent.attrs.controller.items2}"/>
     </h:selectManyListbox>
 </cc:implementation>

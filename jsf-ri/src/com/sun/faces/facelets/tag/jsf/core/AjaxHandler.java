@@ -161,54 +161,15 @@ public final class AjaxHandler extends TagHandlerImpl {
             return;
         }
 
-        String event = null;
-        Collection<String> execute = null;
-        Collection<String> render = null;
-        String onevent = null;
-        String onerror = null;
-        Boolean disabled = false;
+        //AjaxBehavior ajaxBehavior = new AjaxBehavior(event, onevent, onerror, execute, render, disabled);
+        AjaxBehavior ajaxBehavior = new AjaxBehavior(((this.event != null) ? this.event.getValueExpression(ctx, String.class) : null),
+                                                     ((this.onevent != null) ? this.onevent.getValueExpression(ctx, String.class) : null),
+                                                     ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
+                                                     ((this.execute != null) ? this.execute.getValueExpression(ctx, Object.class) : null),
+                                                     ((this.render != null) ? this.render.getValueExpression(ctx, Object.class) : null),
+                                                     ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null));
 
-        if (this.event != null) {
-            event = this.event.getValue();
-        }
-        if (this.execute != null) {
-            Object tempAttr = this.execute.getObject(ctx, Object.class);
-            if (tempAttr instanceof String) {
-                // split into separate strings, add these into a new Collection
-                execute = new LinkedHashSet<String>(Arrays.asList(((String)tempAttr).split(" ")));
-            } else if (tempAttr instanceof Collection) {
-                execute = (Collection<String>)tempAttr;
-            } else {
-                // RELEASE_PENDING  i18n
-                throw new TagAttributeException(this.execute,"'execute' attribute value must be either a String or a Collection");
-            }
-        }
-        if (this.render != null) {
-            Object tempAttr = this.render.getObject(ctx, Object.class);
-            if (tempAttr instanceof String) {
-                // split into separate strings, add these into a new Collection
-                render = new LinkedHashSet<String>(Arrays.asList(((String)tempAttr).split(" ")));
-            } else if (tempAttr instanceof Collection) {
-                render = (Collection<String>)tempAttr;
-            } else {
-                // RELEASE_PENDING  i18n
-                throw new TagAttributeException(this.render,"'render' attribute value must be either a String or a Collection");
-            }
-        }
-
-        if (this.onevent != null) {
-            onevent = this.onevent.getValue(ctx);
-        }
-        if (this.onerror != null) {
-            onerror = this.onerror.getValue(ctx);
-        }
-
-        if (this.disabled != null) {
-            disabled = this.disabled.getBoolean(ctx);
-        }
-
-        AjaxBehavior ajaxBehavior = new AjaxBehavior(event, onevent, onerror, execute, render, disabled);
-
+        String event = ajaxBehavior.getEvent(ctx.getFacesContext());
         //
         // If we are nested within an EditableValueHolder or ActionSource component..
         //
