@@ -348,6 +348,13 @@ public class RenderKitUtils {
                     first = false;
                 }
                 UIComponent resolvedComponent = findComponent(component, exe);
+                if (resolvedComponent == null) {
+                    // RELEASE_PENDING  i18n
+                    throw new FacesException(
+                          "'execute' attribute contains unknown id '"
+                          + exe
+                          + "'");
+                }
                 ajaxCommand.append(resolvedComponent.getClientId());
             }
             ajaxCommand.append('\'');
@@ -698,10 +705,6 @@ public class RenderKitUtils {
         if (resolvedComponent == null) {
             // not found using a relative search, try an absolute search
             resolvedComponent = component.findComponent(':' + exe);
-            if (resolvedComponent == null) {
-                // RELEASE_PENDING  i18n
-                throw new FacesException("'execute' attribute contains unknown id '"+exe+"'");
-            }
         }
         return resolvedComponent;
 
