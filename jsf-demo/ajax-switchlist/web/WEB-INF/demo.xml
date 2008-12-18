@@ -104,5 +104,29 @@
         </sources>
     </demo>
 
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Switchlist Ajax Component</name>
+        <page>switchlistAjaxComponent.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/switchlistAjaxComponent.xhtml</path>
+            </source>
+            <source>
+                <label>Component CSS</label>
+                <path>/resources/switchlistajax/switchlist.css</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/switchlistajax/switchlist.xhtml</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
+            </source>
+        </sources>
+    </demo>
 
 </demo-info>
