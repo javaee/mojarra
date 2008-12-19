@@ -807,8 +807,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * source element identifier.</li>
              * <li>The name and value of the <code>source</code> element that
              * triggered this request;</li>
-             * <li><code>javax.faces.partial.ajax</code> with the value
-             * <code>true</code></li>
              * </ul>
              * </li>
              * </ul>
@@ -854,6 +852,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * in the Chapter 13 "Sending Events" section of the spec prose document <a
              *  href="../../javadocs/overview-summary.html#prose_document">linked in the
              *  overview summary</a></li>
+             * <li>Set the request header with the name: <code>Faces-Request and the
+             * value: <code>partial/ajax</code>.</li>
              * <li>Send the request as an <code>asynchronous POST</code> using the
              * <code>action</code> property of the <code>form</code> element as the
              * <code>url</code>.</li>
