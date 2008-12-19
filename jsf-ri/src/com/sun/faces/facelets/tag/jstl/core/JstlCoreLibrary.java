@@ -59,7 +59,7 @@ import com.sun.faces.facelets.tag.AbstractTagLibrary;
  */
 public final class JstlCoreLibrary extends AbstractTagLibrary {
 
-    public final static String Namespace = "http://java.sun.com/jstl/core";
+    public final static String Namespace = "http://java.sun.com/jsp/jstl/core";
 
     public final static JstlCoreLibrary Instance = new JstlCoreLibrary();
 
