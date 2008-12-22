@@ -215,7 +215,7 @@ public class ApplicationAssociate {
             resourceCache = new ResourceCache();
         }
         resourceManager = new ResourceManager(resourceCache);
-        
+        namedEventManager = new NamedEventManager();
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
@@ -518,10 +518,7 @@ public class ApplicationAssociate {
     
     
 
-    public synchronized NamedEventManager getNamedEventManager() {
-        if (namedEventManager == null) {
-            namedEventManager = new NamedEventManager();
-        }
+    public NamedEventManager getNamedEventManager() {
         return namedEventManager;
     }
 
