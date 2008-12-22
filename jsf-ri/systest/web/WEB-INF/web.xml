@@ -95,6 +95,7 @@
         </jsp-property-group>
     </jsp-config>
 
+
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

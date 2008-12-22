@@ -24,6 +24,7 @@ import javax.faces.validator.Validator;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import javax.faces.event.SystemEvent;
 
 /**
  * This class represents the central point for annotation handling within a
@@ -65,6 +66,10 @@ public class AnnotationManager {
           LISTENER_FOR_SCANNER
     };
 
+    private static final Scanner[] EVENTS_SCANNERS = {
+        RESOURCE_DEPENDENCY_SCANNER
+    };
+
     /**
      * Enum of the different processing targets and their associated
      * {@link Scanner}s
@@ -73,7 +78,8 @@ public class AnnotationManager {
         UIComponent(UICOMPONENT_SCANNERS),
         Validator(VALIDATOR_SCANNERS),
         Converter(CONVERTER_SCANNERS),
-        Renderer(RENDERER_SCANNERS);
+        Renderer(RENDERER_SCANNERS),
+        SystemEvent(EVENTS_SCANNERS);
 
 
         @SuppressWarnings({"NonSerializableFieldInSerializableClass"})
@@ -196,6 +202,10 @@ public class AnnotationManager {
 
     }
 
+    public void applySystemEventAnnotations(FacesContext ctx, SystemEvent e) {
+        applyAnnotations(ctx, e.getClass(), ProcessingTarget.SystemEvent, e);
+    }
+
 
     // --------------------------------------------------------- Private Methods
 
@@ -214,7 +224,8 @@ public class AnnotationManager {
               new ConverterConfigHandler(),
               new ValidatorConfigHandler(),
               new RenderKitConfigHandler(),
-              new ManagedBeanConfigHandler()
+              new ManagedBeanConfigHandler(),
+              new NamedEventConfigHandler()
         };
         Map<Class<? extends Annotation>,ConfigAnnotationHandler> handlerMap =
               new HashMap<Class<? extends Annotation>,ConfigAnnotationHandler>();

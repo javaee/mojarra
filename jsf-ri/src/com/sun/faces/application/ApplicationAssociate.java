@@ -172,6 +172,8 @@ public class ApplicationAssociate {
 
     private PropertyEditorHelper propertyEditorHelper;
 
+    private NamedEventManager namedEventManager;
+
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
 
@@ -515,6 +517,14 @@ public class ApplicationAssociate {
     }
     
     
+
+    public synchronized NamedEventManager getNamedEventManager() {
+        if (namedEventManager == null) {
+            namedEventManager = new NamedEventManager();
+        }
+        return namedEventManager;
+    }
+
 
     /**
      * Return a <code>Map</code> of navigation mappings loaded from
