@@ -52,7 +52,6 @@ import javax.faces.context.PartialResponseWriter;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.PhaseId;
-import javax.servlet.http.HttpServletResponse;
 
 import java.io.Writer;
 import java.io.IOException;
@@ -277,12 +276,9 @@ public class PartialViewContextImpl extends PartialViewContext {
                 ctx.setResponseWriter(writer);
 
                 ExternalContext exContext = ctx.getExternalContext();
-                if (exContext.getResponse() instanceof HttpServletResponse) {
-                    exContext.setResponseContentType("text/xml");
-                    exContext.setResponseHeader("Cache-Control", "no-cache");
-                    writer.startDocument();
-                }
-
+                exContext.setResponseContentType("text/xml");
+                exContext.addResponseHeader("Cache-Control", "no-cache");
+                writer.startDocument();
                 if (isRenderAll()) {
                     renderAll(ctx, viewRoot);
                     renderState(ctx);
@@ -409,14 +405,12 @@ public class PartialViewContextImpl extends PartialViewContext {
     private PartialResponseWriter createPartialResponseWriter() {
 
         ExternalContext extContext = ctx.getExternalContext();
-        HttpServletResponse response = (HttpServletResponse)
-              extContext.getResponse();
         String encoding = extContext.getRequestCharacterEncoding();
-        response.setCharacterEncoding(encoding);
+        extContext.setResponseCharacterEncoding(encoding);
         ResponseWriter responseWriter = null;
         Writer out = null;
         try {
-            out = response.getWriter();
+            out = extContext.getResponseOutputWriter();
         } catch (IOException ioe) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
