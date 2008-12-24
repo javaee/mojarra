@@ -89,7 +89,7 @@ class GroovyHelperImpl extends GroovyHelper {
                 LOGGER.log(Level.INFO,
                         "Groovy support enabled.");
             }
-            extContext.getApplicationMap().put("com.sun.faces.groovyhelper", 
+            extContext.getApplicationMap().put("com.sun.faces.groovyhelper",
                     this);
         }
 
@@ -192,7 +192,9 @@ class GroovyHelperImpl extends GroovyHelper {
     }    
 
     public void setClassLoader() {
-        Thread.currentThread().setContextClassLoader(loader);
+        if (loader != null) {
+            Thread.currentThread().setContextClassLoader(loader);
+        }
     }
 
 
