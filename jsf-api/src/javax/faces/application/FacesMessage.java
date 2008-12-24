@@ -183,7 +183,7 @@ public class FacesMessage implements Serializable {
 	Collections.unmodifiableMap(_MODIFIABLE_MAP);
     
     private static final long serialVersionUID = -1180773928220076822L;
-    
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -259,7 +259,7 @@ public class FacesMessage implements Serializable {
     private Severity severity = FacesMessage.SEVERITY_INFO;
     private String summary = null;
     private String detail = null;
-    private boolean handled;
+    private boolean rendered;
 
 
     // ---------------------------------------------------------- Public Methods
@@ -345,14 +345,14 @@ public class FacesMessage implements Serializable {
 
 
     /**
-     * @return <code>true</code> if {@link #handled()} has been called, otherwise
+     * @return <code>true</code> if {@link #rendered()} has been called, otherwise
      *  <code>false</code>
      *
      * @since 2.0
      */
-    public boolean isHandled() {
+    public boolean isRendered() {
 
-        return handled;
+        return rendered;
 
     }
 
@@ -361,9 +361,9 @@ public class FacesMessage implements Serializable {
      *
      * @since 2.0
      */
-    public void handled() {
+    public void rendered() {
 
-        this.handled = true;
+        this.rendered = true;
 
     }
     
@@ -376,6 +376,7 @@ public class FacesMessage implements Serializable {
         out.writeInt(getSeverity().getOrdinal());
         out.writeObject(getSummary());
         out.writeObject(getDetail());
+        out.writeObject(isRendered());
     }
 
     /**
@@ -399,6 +400,7 @@ public class FacesMessage implements Serializable {
         }
         setSummary((String)in.readObject());
         setDetail((String)in.readObject());
+        this.rendered = (Boolean) in.readObject();
     }
 
     /**

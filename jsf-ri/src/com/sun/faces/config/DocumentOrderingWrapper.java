@@ -92,11 +92,6 @@ public class DocumentOrderingWrapper {
     private static final String AFTER = "after";
 
     /**
-     * Constant for the <code>id</code> element.
-     */
-    private static final String ID = "id";
-
-    /**
      * Constant for the <code>name</code> element.
      */
     private static final String NAME = "name";
@@ -513,10 +508,7 @@ public class DocumentOrderingWrapper {
 
         Element documentElement = document.getDocumentElement();
         String namespace = documentElement.getNamespaceURI();
-        NodeList nameNodes = documentElement.getElementsByTagNameNS(namespace, NAME);
-        id = ((nameNodes != null && nameNodes.getLength() > 0)
-              ? getNodeText(nameNodes.item(0))
-              : "");
+        id = getDocumentName(documentElement);
         NodeList orderingElements =
               documentElement.getElementsByTagNameNS(namespace, ORDERING);
 
@@ -556,6 +548,24 @@ public class DocumentOrderingWrapper {
     }
 
 
+    private String getDocumentName(Element documentElement) {
+
+        NodeList children = documentElement.getChildNodes();
+        String documentName = "";
+        if (children != null && children.getLength() > 0) {
+            for (int i = 0, len = children.getLength(); i < len; i++) {
+                Node n = children.item(i);
+                if (NAME.equals(n.getLocalName())) {
+                    documentName = getNodeText(n);
+                    break;
+                }
+            }
+        }
+        return documentName;
+
+    }
+
+
     /**
      * Ensure the IDs in <code>source</code> aren't present in <code>searchTarget</code>.
      */
@@ -585,7 +595,7 @@ public class DocumentOrderingWrapper {
             NodeList ids = n.getChildNodes();
             for (int k = 0, klen = ids.getLength(); k < klen; k++) {
                 Node idNode = ids.item(k);
-                if (ID.equals(idNode.getLocalName())) {
+                if (NAME.equals(idNode.getLocalName())) {
                     String id = getNodeText(idNode);
                     if (id != null) {
                         idsList.add(id);

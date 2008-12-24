@@ -172,6 +172,8 @@ public class ApplicationAssociate {
 
     private PropertyEditorHelper propertyEditorHelper;
 
+    private NamedEventManager namedEventManager;
+
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
 
@@ -213,7 +215,7 @@ public class ApplicationAssociate {
             resourceCache = new ResourceCache();
         }
         resourceManager = new ResourceManager(resourceCache);
-        
+        namedEventManager = new NamedEventManager();
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
@@ -515,6 +517,11 @@ public class ApplicationAssociate {
     }
     
     
+
+    public NamedEventManager getNamedEventManager() {
+        return namedEventManager;
+    }
+
 
     /**
      * Return a <code>Map</code> of navigation mappings loaded from

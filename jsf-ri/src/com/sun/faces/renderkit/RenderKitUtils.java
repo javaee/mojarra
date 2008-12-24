@@ -321,15 +321,17 @@ public class RenderKitUtils {
         }
     }
 
-    public static String buildAjaxCommand(UIComponent component, AjaxBehavior ajaxBehavior) {
+    public static String buildAjaxCommand(FacesContext context,
+                                          UIComponent component,
+                                          AjaxBehavior ajaxBehavior) {
         final String AJAX_REQUEST = "jsf.ajax.request";
         // Is there already an option written?
         boolean already = false;
         StringBuilder ajaxCommand = new StringBuilder(256);
-        Collection<String> execute = ajaxBehavior.getExecute();
-        Collection<String> render = ajaxBehavior.getRender();
-        String onevent = ajaxBehavior.getOnEvent();
-        String onerror = ajaxBehavior.getOnError();
+        Collection<String> execute = ajaxBehavior.getExecute(context);
+        Collection<String> render = ajaxBehavior.getRender(context);
+        String onevent = ajaxBehavior.getOnEvent(context);
+        String onerror = ajaxBehavior.getOnError(context);
         ajaxCommand.append(AJAX_REQUEST);
         ajaxCommand.append("(this, event");
         if (execute != null || render != null) {
@@ -341,22 +343,25 @@ public class RenderKitUtils {
             ajaxCommand.append("execute:'");
             for (String exe : execute) {
                 if (!first) {
-                    ajaxCommand.append(" ");
+                    ajaxCommand.append(' ');
                 } else {
                     first = false;
                 }
-                UIComponent resolvedComponent = component.findComponent(exe);
+                UIComponent resolvedComponent = findComponent(component, exe);
                 if (resolvedComponent == null) {
                     // RELEASE_PENDING  i18n
-                    throw new FacesException("'execute' attribute contains unknown id '"+exe+"'");
+                    throw new FacesException(
+                          "'execute' attribute contains unknown id '"
+                          + exe
+                          + "'");
                 }
                 ajaxCommand.append(resolvedComponent.getClientId());
             }
-            ajaxCommand.append("'");
+            ajaxCommand.append('\'');
         }
         if (render != null) {
             if (already) {
-                ajaxCommand.append(",");
+                ajaxCommand.append(',');
             } else {
                 already = true;
             }
@@ -364,22 +369,22 @@ public class RenderKitUtils {
             ajaxCommand.append("render:'");
             for (String rend : render) {
                 if (!first) {
-                    ajaxCommand.append(" ");
+                    ajaxCommand.append(' ');
                 } else {
                     first = false;
                 }
-                UIComponent resolvedComponent = component.findComponent(rend);
+                UIComponent resolvedComponent = findComponent(component, rend);
                 if (resolvedComponent == null) {
                     // RELEASE_PENDING  i18n
                     throw new FacesException("'render' attribute contains unknown id '"+rend+"'");
                 }
                 ajaxCommand.append(resolvedComponent.getClientId());
             }
-            ajaxCommand.append("'");
+            ajaxCommand.append('\'');
         }
         if (onevent != null) {
             if (already) {
-                ajaxCommand.append(",");
+                ajaxCommand.append(',');
             } else {
                 already = true;
             }
@@ -388,7 +393,7 @@ public class RenderKitUtils {
         }
         if (onerror != null) {
             if (already) {
-                ajaxCommand.append(",");
+                ajaxCommand.append(',');
             } else {
                 already = true;
             }
@@ -396,7 +401,7 @@ public class RenderKitUtils {
             ajaxCommand.append(onerror);
         }
         if (already) {
-            ajaxCommand.append("}");
+            ajaxCommand.append('}');
         }
 
         ajaxCommand.append(");");
@@ -427,12 +432,12 @@ public class RenderKitUtils {
         userSpecifiedOnchange = (userOnchange != null && !"".equals(userOnchange));
 
         AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled());
+        renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled(context));
         if (!userSpecifiedOnchange && !renderAjax) { // nothing to do
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = buildAjaxCommand(component, ajaxBehavior);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
 
         sb = new StringBuffer(256);
 
@@ -471,7 +476,7 @@ public class RenderKitUtils {
         // is there a user Onchange?
         boolean userSpecifiedOnclick = false;
         // do we need to render ajax?
-        boolean renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled());
+        boolean renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled(context));
         // are there parameters to render?
         boolean renderParams = (!Arrays.equals(params,EMPTY_PARAMS));
         // String buffer for final output
@@ -502,7 +507,7 @@ public class RenderKitUtils {
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = buildAjaxCommand(component, ajaxBehavior);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
 
         sb = new StringBuffer(256);
 
@@ -685,6 +690,27 @@ public class RenderKitUtils {
 
     // --------------------------------------------------------- Private Methods
 
+
+    /**
+     * Attempt to find the component assuming the ID is relative to the
+     * nearest naming container.  If not found, then search for the component
+     * using an absolute component expression.
+     */
+    private static UIComponent findComponent(UIComponent component,
+                                             String exe) {
+
+        // RELEASE_PENDING - perhaps only enable ID validation if ProjectStage
+        // is development
+        UIComponent resolvedComponent = component.findComponent(exe);
+        if (resolvedComponent == null) {
+            // not found using a relative search, try an absolute search
+            resolvedComponent = component.findComponent(':' + exe);
+        }
+        return resolvedComponent;
+
+    }
+
+    
     /**
      * @param component the UIComponent in question
      * @return <code>true</code> if the component is within the
@@ -1208,7 +1234,7 @@ public class RenderKitUtils {
                           ctx.getMessages(clientId);
                     while (messages.hasNext()) {
                         FacesMessage message = messages.next();
-                        if (message.isHandled()) {
+                        if (message.isRendered()) {
                             continue;
                         }
                         builder.append("\n");

@@ -519,7 +519,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
             if ("@others".equals(id)) {
                 append = document.createElementNS(ns, "others");
             } else {
-                append = document.createElementNS(ns, "id");
+                append = document.createElementNS(ns, "name");
                 append.setTextContent(id);
             }
             element.appendChild(append);

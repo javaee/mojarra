@@ -143,10 +143,10 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
         while (messageIter.hasNext()) {
             FacesMessage curMessage = (FacesMessage) messageIter.next();
-            if (curMessage.isHandled() && !messages.isRedisplay()) {
+            if (curMessage.isRendered() && !messages.isRedisplay()) {
                 continue;
             }
-            curMessage.handled();
+            curMessage.rendered();
 
             String severityStyle = null;
             String severityStyleClass = null;

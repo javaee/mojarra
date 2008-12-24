@@ -350,7 +350,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:element name="id" type="javaee:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="name" type="javaee:java-identifierType" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="others" type="javaee:faces-config-ordering-othersType" minOccurs="0" maxOccurs="1" />
         </xsd:sequence>
     </xsd:complexType>

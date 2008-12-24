@@ -53,6 +53,7 @@ import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
@@ -674,6 +675,16 @@ public class ExternalContextImpl extends ExternalContext {
         
     }
 
+
+    /**
+     * @see javax.faces.context.ExternalContext#getResponseOutputWriter()
+     */
+    @Override
+    public Writer getResponseOutputWriter() throws IOException {
+
+        return response.getWriter();
+        
+    }
 
     /**
      * @see javax.faces.context.ExternalContext#getRequestScheme()

@@ -50,6 +50,7 @@ import javax.faces.component.UIComponent;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.NamedEventManager;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
 import com.sun.faces.mgbean.BeanBuilder;
@@ -162,5 +163,10 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertNotNull(r);
         assertTrue(r.getClass().getName().endsWith("AnnotatedRenderer2"));
 
+        // Test default naming logic
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext()).getNamedEventManager().getNamedEvent("com.sun.faces.annotation.annotatedComponentSystem"));
+        // Test short name
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext()).getNamedEventManager().getNamedEvent("com.sun.faces.annotation.anotherAnnotatedComponentSystem"));
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext()).getNamedEventManager().getNamedEvent("explicitEventName"));
     }
 }

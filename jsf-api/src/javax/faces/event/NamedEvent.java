@@ -1,7 +1,11 @@
 /*
+ * $Id: Renderer.java,v 1.39.12.7 2008/04/17 18:51:29 edburns Exp $
+ */
+
+/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -32,53 +36,41 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- *
- * This file incorporates work covered by the following copyright and
- * permission notice:
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jstl.core;
+package javax.faces.event;
 
-import com.sun.faces.facelets.tag.AbstractTagLibrary;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.annotation.Inherited;
+
 
 /**
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">The presence of this annotation on a
+ * class automatically registers the class with the runtime as a {@link
+ * ComponentSystemEvent}.  The value of the {@link #shortName} attribute is taken to
+ * be the shor name for the {@link javax.faces.event.ComponentSystemEvent}.
+ * The implementation must guarantee that for each class annotated with <code>@NamedEvent</code>,
+ * the {@link javax.faces.event.ComponentSystemEvent} must be registered with the runtime.
+ * If the shortName has already been registered, the current class must be added to a
+ * List of of duplicate Events for that name.  If the event name is then reference by an
+ * application, an Exception must thrown listing the shortName and the offending classes.</p>
+ * @since 2.0
  */
-public final class JstlCoreLibrary extends AbstractTagLibrary {
 
-    public final static String Namespace = "http://java.sun.com/jsp/jstl/core";
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Inherited
+public @interface NamedEvent {
 
-    public final static JstlCoreLibrary Instance = new JstlCoreLibrary();
-
-    public JstlCoreLibrary() {
-        super(Namespace);
-
-        this.addTagHandler("if", IfHandler.class);
-
-        this.addTagHandler("forEach", ForEachHandler.class);
-
-        this.addTagHandler("catch", CatchHandler.class);
-        
-        this.addTagHandler("choose", ChooseHandler.class);
-        
-        this.addTagHandler("when", ChooseWhenHandler.class);
-        
-        this.addTagHandler("otherwise", ChooseOtherwiseHandler.class);
-        
-        this.addTagHandler("set", SetHandler.class);
-    }
-
+    /**
+     * <p class="changed_added_2_0">The value of this annotation
+     * attribute is taken to be the short name for the  {@link
+     * javax.faces.event.ComponentSystemEvent}</p>
+     */
+    String shortName() default "";
 }

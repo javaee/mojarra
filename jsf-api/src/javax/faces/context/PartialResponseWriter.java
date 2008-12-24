@@ -229,10 +229,10 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         startChangesIfNecessary();
         writer.startElement("attributes", null);
         writer.writeAttribute("id", targetId, null);
-        for (String name: attributes.keySet())  {
+        for (Map.Entry<String,String> entry : attributes.entrySet()) {
             writer.startElement("attribute", null);
-            writer.writeAttribute("name", name, null);
-            writer.writeAttribute("value", attributes.get(name), null);
+            writer.writeAttribute("name", entry.getKey(), null);
+            writer.writeAttribute("value", entry.getValue(), null);
             writer.endElement("attribute");
         }
         writer.endElement("attributes");
@@ -308,9 +308,9 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
     public void startExtension(Map<String,String> attributes) throws IOException  {
         endChangesIfNecessary();
         writer.startElement("extension", null);
-        if (null != attributes)  {
-            for (String name : attributes.keySet())  {
-                writer.writeAttribute(name, attributes.get(name), null);
+        if (attributes != null && !attributes.isEmpty())  {
+            for (Map.Entry<String,String> entry : attributes.entrySet()) {
+                writer.writeAttribute(entry.getKey(), entry.getValue(), null);
             }
         }
     }

@@ -92,6 +92,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
 
         this.addConverter("converter", null, ConvertDelegateHandler.class);
 
+        this.addTagHandler("event", EventHandler.class);
+
         this.addTagHandler("facet", FacetHandler.class);
 
         this.addTagHandler("loadBundle", LoadBundleHandler.class);
