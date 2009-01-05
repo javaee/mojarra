@@ -12,7 +12,7 @@
 
     <h:form id="form" prependId="false">
         <h:outputText id="beforeRenderTest" >
-            <f:event type="invalidEvent" target="#{eventTagBean.beforeEncode}" />
+            <f:event type="invalidEvent" action="#{eventTagBean.beforeEncode}" />
         </h:outputText>
     </h:form>
   </h:body>

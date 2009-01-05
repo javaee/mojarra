@@ -28,12 +28,12 @@ import javax.faces.webapp.pdl.facelets.tag.TagHandler;
  */
 public class EventHandler extends TagHandler {
     protected final TagAttribute type;
-    protected final TagAttribute target;
+    protected final TagAttribute action;
 
     public EventHandler(TagConfig config) {
         super(config);
         this.type = this.getRequiredAttribute("type");
-        this.target = this.getRequiredAttribute("target");
+        this.action = this.getRequiredAttribute("action");
     }
 
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
@@ -41,7 +41,7 @@ public class EventHandler extends TagHandler {
         if (eventClass != null) {
             parent.subscribeToEvent(eventClass,
                     new DeclarativeSystemEventListener(ctx.getFacesContext().getELContext(),
-                    target.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class })));
+                    action.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class })));
         }
     }
 
@@ -73,14 +73,14 @@ public class EventHandler extends TagHandler {
 class DeclarativeSystemEventListener implements ComponentSystemEventListener {
 
     private ELContext elContext;
-    private MethodExpression target;
+    private MethodExpression action;
 
-    public DeclarativeSystemEventListener(ELContext elContext, MethodExpression target) {
+    public DeclarativeSystemEventListener(ELContext elContext, MethodExpression action) {
         this.elContext = elContext;
-        this.target = target;
+        this.action = action;
     }
 
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-        target.invoke(elContext, new Object[]{event});
+        action.invoke(elContext, new Object[]{event});
     }
 }

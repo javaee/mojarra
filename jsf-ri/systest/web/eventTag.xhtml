@@ -12,19 +12,19 @@
 
     <h:form id="form" prependId="false">
         <h:outputText id="beforeRenderTest1" >
-            <f:event type="beforeRender" target="#{eventTagBean.beforeEncode}" />
+            <f:event type="beforeRender" action="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
         <h:outputText id="beforeRenderTest2" >
-            <f:event type="javax.faces.event.beforeRender" target="#{eventTagBean.beforeEncode}" />
+            <f:event type="javax.faces.event.beforeRender" action="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
         <h:outputText id="afterAddToParentTest1" >
-            <f:event type="afterAddToParent" target="#{eventTagBean.beforeEncode}" />
+            <f:event type="afterAddToParent" action="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
         <h:outputText id="afterAddToParentTest2" >
-            <f:event type="javax.faces.event.afterAddToParent" target="#{eventTagBean.beforeEncode}" />
+            <f:event type="javax.faces.event.afterAddToParent" action="#{eventTagBean.beforeEncode}" />
         </h:outputText>
     </h:form>
   </h:body>
