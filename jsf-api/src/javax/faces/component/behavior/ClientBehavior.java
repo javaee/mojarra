@@ -51,8 +51,8 @@ import javax.faces.context.FacesContext;
  * calling {@code ClientBehaviorHolder.addClientBehavior()}.  
  * Once a <code>ClientBehavior</code> has been attached to a 
  * ClientStateHolder component, the component
- * calls {@link ClientBehavior.getScript()} to obtain the behavior's
- * script and wire this up to the appropriate client-side event handler.
+ * calls {@link #getScript} to obtain the behavior's script and wire 
+ * this up to the appropriate client-side event handler.
  * </p>
  *
  * @since 2.0
@@ -64,11 +64,13 @@ public abstract class ClientBehavior {
      * ClientBehavior's client-side logic.</p>
      *
      * @param context the {@link FacesContext} for the current request
-     * @param eventName name of the client-side event
      * @param component the component instance that generates event.
+     * @param eventName name of the client-side event.  If this argument is
+     * <code>null</code> it is assumed the caller will include the 
+     * client-side event name with the return value from this method.
      * @return script that provides the client-side behavior
      */      
     public abstract String getScript(FacesContext context,
-                                     String eventName,
-                                     UIComponent component);
+                                     UIComponent component,
+                                     String eventName);
 }

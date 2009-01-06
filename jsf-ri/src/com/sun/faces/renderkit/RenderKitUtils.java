@@ -438,7 +438,7 @@ public class RenderKitUtils {
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
+        if (renderAjax) ajaxCommand = ajaxBehavior.getScript(context, component, null);
 
         sb = new StringBuffer(256);
 
@@ -508,7 +508,7 @@ public class RenderKitUtils {
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
+        if (renderAjax) ajaxCommand = ajaxBehavior.getScript(context, component, null);
 
         sb = new StringBuffer(256);
 

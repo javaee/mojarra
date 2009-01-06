@@ -69,7 +69,7 @@ public class AjaxBehavior extends ClientBehavior implements Serializable {
      *
      * @since 2.0
      */
-    public static final String AJAX_BEHAVIOR = "javax.faces.component.AjaxBehavior";
+    public static final String AJAX_BEHAVIOR = "javax.faces.component.behavior.AjaxBehavior";
 
     /**
      * <p class="changed_added_2_0">The identifier for Ajax value change events.</p> 
@@ -218,21 +218,118 @@ public class AjaxBehavior extends ClientBehavior implements Serializable {
     }
 
     /**
-     * RELEASE_PENDING implement AjaxBehavior.getScript()
+     * <p class="changed_added_2_0">Build and return the JavaScript that 
+     * invokes the <code>jsf.ajax.request()</code> function call.</p>
+     *
+     * @param context the {@link FacesContext} for the current request
+     * @param component the component instance that generates event.
+     * @param eventName name of the client-side event.  If this argument is
+     * <code>null</code> it is assumed the caller will include the
+     * client-side event name with the return value from this method.
+     * @return JavaScript that provides the client-side behavior for 
+     * triggering an Ajax request using the <code>jsf.ajax.request</code>
+     * JavaScript API.
      */
     public String getScript(FacesContext context,
-                             String eventName,
-                             UIComponent component) {
+                             UIComponent component,
+                             String eventName) {
 
-        // For the moment, AjaxBehavior.getScript just
-        // returns null.  We need to refactor our code that
-        // generates the jsf.ajax.request() call.  Currently
-        // this lives off in the render kit.  Needs to be
-        // re-hosted here.
-      
-        return null;
+        final String AJAX_REQUEST = "jsf.ajax.request";
+        // Is there already an option written?
+        boolean already = false;
+        StringBuilder ajaxCommand = new StringBuilder(256);
+        Collection<String> execute = getExecute(context);
+        Collection<String> render = getRender(context);
+        String onevent = getOnEvent(context);
+        String onerror = getOnError(context);
+        if (eventName != null) {
+            ajaxCommand.append(eventName);
+            ajaxCommand.append("=");
+        }
+        ajaxCommand.append(AJAX_REQUEST);
+        ajaxCommand.append("(this, event");
+        if (execute != null || render != null) {
+            ajaxCommand.append(", {");
+        }
+        if (execute != null) {
+            already = true;
+            boolean first = true;
+            ajaxCommand.append("execute:'");
+            for (String exe : execute) {
+                if (!first) {
+                    ajaxCommand.append(' ');
+                } else {
+                    first = false;
+                }
+                UIComponent resolvedComponent = component.findComponent(exe);
+                if (resolvedComponent == null) {
+                    // not found using a relative search, try an absolute search
+                    resolvedComponent = component.findComponent(':' + exe);
+                }
+                if (resolvedComponent == null) {
+                    // RELEASE_PENDING  i18n
+                    throw new FacesException(
+                          "'execute' attribute contains unknown id '"
+                          + exe
+                          + "'");
+                }
+                ajaxCommand.append(resolvedComponent.getClientId());
+            }
+            ajaxCommand.append('\'');
+        }
+        if (render != null) {
+            if (already) {
+                ajaxCommand.append(',');
+            } else {
+                already = true;
+            }
+            boolean first = true;
+            ajaxCommand.append("render:'");
+            for (String rend : render) {
+                if (!first) {
+                    ajaxCommand.append(' ');
+                } else {
+                    first = false;
+                }
+                UIComponent resolvedComponent = component.findComponent(rend);
+                if (resolvedComponent == null) {
+                    // not found using a relative search, try an absolute search
+                    resolvedComponent = component.findComponent(':' + rend);
+                }
+                if (resolvedComponent == null) {
+                    // RELEASE_PENDING  i18n
+                    throw new FacesException("'render' attribute contains unknown id '"+rend+"'");
+                }
+                ajaxCommand.append(resolvedComponent.getClientId());
+            }
+            ajaxCommand.append('\'');
+        }
+        if (onevent != null) {
+            if (already) {
+                ajaxCommand.append(',');
+            } else {
+                already = true;
+            }
+            ajaxCommand.append("onevent:");
+            ajaxCommand.append(onevent);
+        }
+        if (onerror != null) {
+            if (already) {
+                ajaxCommand.append(',');
+            } else {
+                already = true;
+            }
+            ajaxCommand.append("onerror:");
+            ajaxCommand.append(onerror);
+        }
+        if (already) {
+            ajaxCommand.append('}');
+        }
+
+        ajaxCommand.append(");");
+
+        return ajaxCommand.toString();
     }
-
 
     // --------------------------------------------------------- Private Methods
 

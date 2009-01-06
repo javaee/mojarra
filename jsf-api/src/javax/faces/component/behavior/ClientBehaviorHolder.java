@@ -75,9 +75,9 @@ public interface ClientBehaviorHolder {
 
     /**
      * <p class="changed_added_2_0">Returns a non-null, unmodifiable
-     * Map that contains the the ClientBehaviors that have been
-     * attached to this component.  The keys in this map are event
-     * names defined by getClientEventNames().</p>
+     * <code>Map</code> that contains the the {@link ClientBehavior}s that 
+     * have been attached to this component.  The keys in this map are event
+     * names defined by {@link #getClientEventNames}.</p>
      */
     public Map<String, ClientBehavior> getClientBehaviors();
 

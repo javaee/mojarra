@@ -157,6 +157,14 @@ public class ConfigManager {
 
 
     /**
+     * Name of the attribute added by {@link ParseTask} to indiciate a
+     * {@link Document} instance as a representation of
+     * <code>/WEB-INF/faces-config.xml</code>.
+     */
+    private static final String WEB_INF_MARKER = "com.sun.faces.webinf";
+
+
+    /**
      * <p>
      *   Contains each <code>ServletContext</code> that we've initialized.
      *   The <code>ServletContext</code> will be removed when the application
@@ -642,8 +650,7 @@ public class ConfigManager {
      */
     private boolean isWebinfFacesConfig(Document document) {
 
-        String url = document.getDocumentURI();
-        return (url != null && url.contains("/WEB-INF/faces-config.xml"));
+        return (document.getDocumentElement().getAttribute(WEB_INF_MARKER) != null);
 
     }
 
@@ -772,6 +779,8 @@ public class ConfigManager {
          *  <code>Document</code>
          */
         private Document getDocument() throws Exception {
+
+            Document returnDoc;
             if (validating) {  // the Schema won't be null if validation is enabled.
                 DocumentBuilder db = getNonValidatingBuilder();
                 DOMSource domSource
@@ -805,7 +814,7 @@ public class ConfigManager {
                         }
                         DocumentBuilder builder = getBuilderForSchema(schema);
                         builder.getSchema().newValidator().validate(domSource);
-                        return ((Document) domSource.getNode());
+                        returnDoc = ((Document) domSource.getNode());
                     } else {
                         // this shouldn't happen, but...
                         throw new ConfigurationException("No document version available.");
@@ -824,15 +833,26 @@ public class ConfigManager {
                     }
                     DocumentBuilder builder = getBuilderForSchema(schemaToApply);
                     builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
-                    return (Document) domResult.getNode();
+                    returnDoc =  (Document) domResult.getNode();
                 }
             } else {
                 // validation isn't required, parse and return
                 DocumentBuilder builder = getNonValidatingBuilder();
                 InputSource is = new InputSource(getInputStream(documentURL));
                 is.setSystemId(documentURL.toExternalForm());
-                return builder.parse(is);
+                returnDoc = builder.parse(is);
             }
+
+            // mark this document as the parsed representation of the
+            // WEB-INF/faces-config.xml.  This is used later in the configuration
+            // processing.
+            if (documentURL.toExternalForm().contains("/WEB-INF/faces-config.xml")) {
+                Attr webInf = returnDoc.createAttribute(WEB_INF_MARKER);
+                webInf.setValue("true");
+                returnDoc.getDocumentElement().getAttributes().setNamedItem(webInf);
+            }
+            return returnDoc;
+
         }
 
 

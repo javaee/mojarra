@@ -137,7 +137,7 @@ public class UserNumberBean implements Serializable {
         }
         if (LOGGER.isLoggable(Level.INFO)) {
             LOGGER.log(Level.INFO,
-                       MessageFormat.format("Duke's number: {0}", randomInt));
+                       MessageFormat.format("Duke''s number: {0}", randomInt));
         }
 
         greeting = "Hi!  My name is Duke.  I'm thinking of a number between "

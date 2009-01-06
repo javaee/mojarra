@@ -41,8 +41,11 @@
 package javax.faces.component;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +54,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
@@ -99,7 +103,8 @@ import javax.faces.validator.ValidatorException;
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIInput extends UIOutput implements EditableValueHolder {
+public class UIInput extends UIOutput implements EditableValueHolder, 
+    ClientBehaviorHolder {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -143,6 +148,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public static final String UPDATE_MESSAGE_ID =
          "javax.faces.component.UIInput.UPDATE";
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
+
+    // The default client event name for UIInput components
+    private static final String DEFAULT_CLIENT_EVENT_NAME = "valueChange";
+
+    // The set of client events for UIInput components.
+    private static final Set<String> CLIENT_EVENT_NAMES;
 
     /**
      * The <code>Logger</code> for this class.
@@ -1288,6 +1299,31 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         emptyStringIsNull = (Boolean) values[9];
 
+    }
+
+    /**
+     * <p class="changed_added_2_0">Returns the set of client event
+     * names supported by <code>UIInput</code> components.  The 
+     * <code>Set</code> contains a single item: <code>"valueChange"</code>.</p>
+     */
+    @Override
+    public Set<String> getClientEventNames() {
+        return CLIENT_EVENT_NAMES;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Returns the default client event name 
+     * for <code>UIInput</code> components: <code>"valueChange"</code>.</p>
+     */
+    @Override
+     public String getDefaultClientEventName() {
+         return DEFAULT_CLIENT_EVENT_NAME;
+     }
+
+    static {
+        Set<String> eventNames = new HashSet<String>(1, 1.0f);
+        eventNames.add(DEFAULT_CLIENT_EVENT_NAME);
+        CLIENT_EVENT_NAMES = Collections.unmodifiableSet(eventNames);
     }
 
     private Converter getConverterWithType(FacesContext context) {
