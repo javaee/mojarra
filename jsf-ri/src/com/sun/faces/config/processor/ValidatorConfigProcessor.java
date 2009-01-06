@@ -49,6 +49,7 @@ import org.w3c.dom.NodeList;
 
 import javax.faces.application.Application;
 import javax.faces.validator.Validator;
+import javax.faces.validator.FacesValidator;
 import javax.xml.xpath.XPathExpressionException;
 import java.text.MessageFormat;
 import java.util.logging.Level;
@@ -88,6 +89,10 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
      */
     public void process(Document[] documents)
     throws Exception {
+
+        // process annotated Validators first as Validators configured
+        // via config files take precedence
+        processAnnotations(FacesValidator.class);
 
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {

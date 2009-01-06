@@ -51,6 +51,8 @@ import org.w3c.dom.NodeList;
 
 import javax.faces.application.Application;
 import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+
 import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,6 +100,10 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
      */
     public void process(Document[] documents)
     throws Exception {
+
+        // process annotated converters first as converters configured
+        // via config files take precedence
+        processAnnotations(FacesConverter.class);
 
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {

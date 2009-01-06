@@ -44,7 +44,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 import javax.faces.context.FacesContext;
-import javax.faces.render.FacesRenderKit;
 import javax.faces.render.FacesRenderer;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
@@ -53,8 +52,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 
 /**
- * <p> <code>ConfigAnnotationHandler</code> for {@link FacesRenderKit} and
- * {@link FacesRenderer} annotated classes. </p>
+ * <p> <code>ConfigAnnotationHandler</code> {@link FacesRenderer} annotated classes.</p>
  */
 public class RenderKitConfigHandler implements ConfigAnnotationHandler {
 
@@ -63,13 +61,11 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
     static {
         Collection<Class<? extends Annotation>> handles =
               new ArrayList<Class<? extends Annotation>>(2);
-        handles.add(FacesRenderKit.class);
         handles.add(FacesRenderer.class);
         HANDLES = Collections.unmodifiableCollection(handles);
     }
 
     Map<Class<?>, FacesRenderer> annotatedRenderers;
-    Map<Class<?>, FacesRenderKit> annotatedRenderKits;
 
     // ------------------------------------- Methods from ComponentConfigHandler
 
@@ -89,19 +85,10 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
      */
     public void collect(Class<?> target, Annotation annotation) {
 
-        if (annotation instanceof FacesRenderer) {
-            if (annotatedRenderers == null) {
-                annotatedRenderers = new HashMap<Class<?>, FacesRenderer>();
-            }
-            annotatedRenderers.put(target, (FacesRenderer) annotation);
-        } else if (annotation instanceof FacesRenderKit) {
-            if (annotatedRenderKits == null) {
-                annotatedRenderKits = new HashMap<Class<?>, FacesRenderKit>();
-            }
-            annotatedRenderKits.put(target, (FacesRenderKit) annotation);
-        } else {
-            throw new IllegalStateException();
+        if (annotatedRenderers == null) {
+            annotatedRenderers = new HashMap<Class<?>, FacesRenderer>();
         }
+        annotatedRenderers.put(target, (FacesRenderer) annotation);
 
     }
 
@@ -114,24 +101,20 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder
               .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 
-        if (annotatedRenderKits != null) {
-            for (Map.Entry<Class<?>,FacesRenderKit> entry : annotatedRenderKits.entrySet()) {
-                Class<?> rkClass = entry.getKey();
-                FacesRenderKit rka = entry.getValue();
-                try {
-                    rkf.addRenderKit(rka.value(), (RenderKit) rkClass.newInstance());
-                } catch (Exception e) {
-                    throw new FacesException(e);
-                }
-            }
-        }
-
         if (annotatedRenderers != null) {
             for (Map.Entry<Class<?>,FacesRenderer> entry : annotatedRenderers.entrySet()) {
                 Class<?> rClass = entry.getKey();
                 FacesRenderer ra = entry.getValue();
                 try {
                     RenderKit rk = rkf.getRenderKit(ctx, ra.renderKitId());
+                    if (rk == null) {
+                        throw new IllegalStateException(
+                              "Error processing annotated Renderer "
+                              + ra.toString()
+                              + " on class "
+                              + rClass.getName()
+                              + ".  Unable to find specified RenderKit.");
+                    }
                     rk.addRenderer(ra.componentFamily(),
                                    ra.rendererType(),
                                    (Renderer) rClass.newInstance());

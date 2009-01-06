@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +24,6 @@ import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import javax.faces.event.SystemEvent;
 
 /**
@@ -123,31 +123,21 @@ public class AnnotationManager {
      * @param annotatedClasses <code>Collection</code> of class names known
      *  to contain one or more Faces configuration annotations
      */
-    public void applyConfigAnntations(FacesContext ctx, Collection<String> annotatedClasses) {
+    public void applyConfigAnntations(FacesContext ctx,
+                                      Class<? extends Annotation> annotationType,
+                                      Set<? extends Class> annotatedClasses) {
 
-        if (!annotatedClasses.isEmpty()) {
-            Map<Class<? extends Annotation>, ConfigAnnotationHandler> handlers =
-                  getConfigAnnotationHandlers();
-            for (String className : annotatedClasses) {
-                try {
-                    Class<?> c = Util.loadClass(className, this);
-                    Annotation[] annotations = c.getAnnotations();
-                    for (Annotation annotation : annotations) {
-                        ConfigAnnotationHandler handler =
-                              handlers.get(annotation.annotationType());
-                        if (handler != null) {
-                            handler.collect(c, annotation);
-                        }
-                    }
-                } catch (ClassNotFoundException cnfe) {
-                    throw new FacesException(cnfe);
-                }
+        if (annotatedClasses != null && !annotatedClasses.isEmpty()) {
+            ConfigAnnotationHandler handler =
+                  getConfigAnnotationHandlers().get(annotationType);
+            if (handler == null) {
+                throw new IllegalStateException("Internal Error: No ConfigAnnotationHandler for type: " + annotationType);
             }
-
+            for (Class<?> clazz : annotatedClasses) {
+                handler.collect(clazz, clazz.getAnnotation(annotationType));
+            }
             // metadata collected, now push the configuration to the system
-            for (ConfigAnnotationHandler handler : handlers.values()) {
-                handler.push(ctx);
-            }
+            handler.push(ctx);
         }
         
     }
