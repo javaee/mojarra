@@ -44,6 +44,8 @@ import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
 public class DataTableTestCase extends AbstractTestCase {
 
@@ -90,5 +92,31 @@ public class DataTableTestCase extends AbstractTestCase {
             assertEquals(expectedValue, expectedValue, anchor.asText().trim());
         }
 
+    }
+
+
+    /**
+     * Test regression https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=902.
+     * @throws Exception
+     */
+    public void testRowClasses() throws Exception {
+
+        HtmlPage page = getPage("/faces/standard/dtablerowclasses.jsp");
+        assertNotNull(page);
+        List<HtmlTable> tableList = new ArrayList<HtmlTable>(1);
+        getAllElementsOfGivenClass(page, tableList, HtmlTable.class);
+        assertTrue(tableList.size() == 1);
+        HtmlTable table = tableList.get(0);
+        List<HtmlTableRow> rows = table.getRows();
+        assertTrue(rows.size() == 6);
+        for (int i = 0, len = rows.size(); i < len; i++) {
+            HtmlTableRow row = rows.get(i);
+            if (i % 2 == 0) {
+                assertTrue(row.getClassAttribute().equals("b1"));
+            } else {
+                assertTrue(row.getClassAttribute().equals("b2"));
+            }
+        }
+        
     }
 }

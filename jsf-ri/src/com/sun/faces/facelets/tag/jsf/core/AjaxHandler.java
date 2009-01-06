@@ -57,8 +57,8 @@ import java.util.*;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.ActionSource;
-import javax.faces.component.AjaxBehavior;
-import javax.faces.component.AjaxBehaviors;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.AjaxBehaviors;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
@@ -77,28 +77,28 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
 /**
  * <p class="changed_added_2_0">Enable one or more components in the view
  * to perform Ajax operations.  This tag handler must create an instance
- * of {@link javax.faces.component.AjaxBehavior} using the tag attribute 
+ * of {@link javax.faces.component.behavior.AjaxBehavior} using the tag attribute 
  * values.  If this tag is nested within a single 
  * {@link javax.faces.component.ActionSource} component, and the
  * <code>events</code> attribute value is not specified or is
  * one of the following: 
  * <ul>
- * <li>{@link javax.faces.component.AjaxBehavior#AJAX_ACTION}</li>
- * <li>{@link javax.faces.component.AjaxBehavior#AJAX_VALUE_CHANGE_ACTION}</li>
+ * <li>{@link javax.faces.component.behavior.AjaxBehavior#AJAX_ACTION}</li>
+ * <li>{@link javax.faces.component.behavior.AjaxBehavior#AJAX_VALUE_CHANGE_ACTION}</li>
  * </ul>
- * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
+ * put the {@link javax.faces.component.behavior.AjaxBehavior} instance in the parent 
  * component's attribute <code>Map</code> under the key 
- * {@link javax.faces.component.AjaxBehavior#AJAX_BEHAVIOR}.  If this tag is nested within
+ * {@link javax.faces.component.behavior.AjaxBehavior#AJAX_BEHAVIOR}.  If this tag is nested within
  * a single {@link javax.faces.component.EditableValueHolder} component,
  * and the <code>events</code> attribute value is not specified or is
  * one of the following:
  * <ul>
- * <li>{@link javax.faces.component.AjaxBehavior#AJAX_VALUE_CHANGE}</li>
- * <li>{@link javax.faces.component.AjaxBehavior#AJAX_VALUE_CHANGE_ACTION}</li>
+ * <li>{@link javax.faces.component.behavior.AjaxBehavior#AJAX_VALUE_CHANGE}</li>
+ * <li>{@link javax.faces.component.behavior.AjaxBehavior#AJAX_VALUE_CHANGE_ACTION}</li>
  * </ul>
- * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
+ * put the {@link javax.faces.component.behavior.AjaxBehavior} instance in the parent 
  * component's attribute <code>Map</code> under the key
- * {@link javax.faces.component.AjaxBehavior#AJAX_BEHAVIOR}.
+ * {@link javax.faces.component.behavior.AjaxBehavior#AJAX_BEHAVIOR}.
  * Throw an <code>exception</code> if the <code>events</code> attribute value
  * does not match the component type.
  * <br/><br/>
@@ -106,12 +106,12 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
  * {@link javax.faces.component.ActionSource} or 
  * {@link javax.faces.component.EditableValueHolder} type, 
  * make this tag's parent component subscribe to {@link javax.faces.event.AfterAddToParentEvent}
- * events.  Retrieve an {@link javax.faces.component.AjaxBehaviors} instance from 
+ * events.  Retrieve an {@link javax.faces.component.behavior.AjaxBehaviors} instance from 
  * the current {@link javax.faces.context.FacesContext} attributes <code>Map</code>
- * using the key {@link javax.faces.component.AjaxBehaviors#AJAX_BEHAVIORS}.  If an instance does not exist,
- * create it.  Call {@link javax.faces.component.AjaxBehaviors#pushBehavior} passing the
- * {@link javax.faces.component.AjaxBehavior} instance and the parent component instance.
- * Put the {@link javax.faces.component.AjaxBehaviors} instance into the 
+ * using the key {@link javax.faces.component.behavior.AjaxBehaviors#AJAX_BEHAVIORS}.  If an instance does not exist,
+ * create it.  Call {@link javax.faces.component.behavior.AjaxBehaviors#pushBehavior} passing the
+ * {@link javax.faces.component.behavior.AjaxBehavior} instance and the parent component instance.
+ * Put the {@link javax.faces.component.behavior.AjaxBehaviors} instance into the 
  * {@link javax.faces.context.FacesContext} attributes <code>Map</code>.
  * <br/><br/>
  * Check for the existence of the Ajax resource by calling 
