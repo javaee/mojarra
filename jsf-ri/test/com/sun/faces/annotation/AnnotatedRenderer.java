@@ -39,7 +39,7 @@ package com.sun.faces.annotation;
 import javax.faces.render.Renderer;
 import javax.faces.render.FacesRenderer;
 
-@FacesRenderer(renderKitId = "AnnotatedRenderKit",
+@FacesRenderer(renderKitId = "HTML_BASIC",
                rendererType = "AnnotatedRenderer",
                componentFamily = "AnnotatedRenderer")
 public class AnnotatedRenderer extends Renderer {

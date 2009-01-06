@@ -99,6 +99,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.annotation.Annotation;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
@@ -298,7 +300,7 @@ public class ConfigManager {
                       isFaceletsDisabled(webConfig, webinfFacesConfig);
                 if (!isMetadataComplete(webinfFacesConfig)) {
                     // execute the Task responsible for finding annotation classes
-                    Future<Set<String>> annotationScan =
+                    Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan =
                           executor.submit(new AnnotationScanTask(sc));
                     pushTaskToContext(sc, annotationScan);
                 }
@@ -328,6 +330,8 @@ public class ConfigManager {
                 Throwable t = unwind(e);
                 throw new ConfigurationException("CONFIGURATION FAILED! " + t.getMessage(),
                                                  t);
+            } finally {
+                sc.removeAttribute(ANNOTATIONS_SCAN_TASK_KEY);
             }
         }
 
@@ -366,17 +370,17 @@ public class ConfigManager {
     /**
      * @return the results of the annotation scan task
      */
-    public static Collection<String> getAnnotatedClasses(FacesContext ctx) {
+    public static Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(FacesContext ctx) {
 
         Map<String, Object> appMap =
               ctx.getExternalContext().getApplicationMap();
         //noinspection unchecked
-        Future<Set<String>> scanTask = (Future<Set<String>>) appMap
-              .remove(ANNOTATIONS_SCAN_TASK_KEY);
+        Future<Map<Class<? extends Annotation>,Set<Class<?>>>> scanTask =
+              (Future<Map<Class<? extends Annotation>,Set<Class<?>>>>) appMap.get(ANNOTATIONS_SCAN_TASK_KEY);
         try {
             return ((scanTask != null)
                     ? scanTask.get()
-                    : Collections.<String>emptySet());
+                    : Collections.<Class<? extends Annotation>,Set<Class<?>>>emptyMap());
         } catch (Exception e) {
             throw new FacesException(e);
         }
@@ -488,7 +492,7 @@ public class ConfigManager {
      * Push the provided <code>Future</code> to the specified <code>ServletContext</code>.
      */
     private void pushTaskToContext(ServletContext sc,
-                                   Future<Set<String>> scanTask) {
+                                   Future<Map<Class<? extends Annotation>,Set<Class<?>>>> scanTask) {
 
         sc.setAttribute(ANNOTATIONS_SCAN_TASK_KEY, scanTask);
 
@@ -662,7 +666,7 @@ public class ConfigManager {
      * Scans the class files within a web application returning a <code>Set</code>
      * of classes that have been annotated with a standard Faces annotation.
      */
-    private static class AnnotationScanTask implements Callable<Set<String>> {
+    private static class AnnotationScanTask implements Callable<Map<Class<? extends Annotation>,Set<Class<?>>>> {
 
         private ServletContext sc;
 
@@ -680,7 +684,7 @@ public class ConfigManager {
         // ----------------------------------------------- Methods from Callable
 
 
-        public Set<String> call() throws Exception {
+        public Map<Class<? extends Annotation>,Set<Class<?>>> call() throws Exception {
 
             Timer t = Timer.getInstance();
             if (t != null) {
@@ -688,11 +692,12 @@ public class ConfigManager {
             }
 
             AnnotationScanner scanner = new AnnotationScanner(sc);
-            Set<String> annotatedClasses = scanner.getAnnotatedClasses();
+            Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =
+                  scanner.getAnnotatedClasses();
 
             if (t != null) {
                 t.stopTiming();
-                t.logResult("Configuration annotation scan found " + annotatedClasses.size() + " classes");
+                t.logResult("Configuration annotation scan complete.");
             }
 
             return annotatedClasses;

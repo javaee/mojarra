@@ -63,6 +63,7 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
+import javax.faces.event.NamedEvent;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationResourceBundle;
@@ -72,7 +73,6 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.ConfigManager;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 
 import org.w3c.dom.Document;
@@ -297,11 +297,12 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             }
         }
 
+        // perform any special processing for ViewHandlers...
         processViewHandlers(app, viewHandlers);
 
-        // process annotated artifacts
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        associate.getAnnotationManager().applyConfigAnntations(ctx, ConfigManager.getAnnotatedClasses(ctx));
+        // process NamedEvent annotations, if any
+        processAnnotations(NamedEvent.class);
+
         // continue processing...
         invokeNext(documents);
 

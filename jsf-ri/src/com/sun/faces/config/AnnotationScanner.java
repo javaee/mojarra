@@ -50,16 +50,25 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.annotation.Annotation;
 
 import javax.faces.FacesException;
+import javax.faces.convert.FacesConverter;
+import javax.faces.validator.FacesValidator;
+import javax.faces.render.FacesRenderer;
+import javax.faces.model.ManagedBean;
+import javax.faces.event.NamedEvent;
+import javax.faces.component.FacesComponent;
 import javax.servlet.ServletContext;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * This class is responsible for scanning the class file bytes of
@@ -69,7 +78,6 @@ import com.sun.faces.util.FacesLogger;
  *  <li>javax.faces.component.FacesComponent</li>
  *  <li>javax.faces.convert.FacesConverter</li>
  *  <li>javax.faces.validator.FacesValidator</li>
- *  <li>javax.faces.render.FacesRenderKit</li>
  *  <li>javax.faces.render.FacesRenderer</li>
  *  <li>javax.faces.model.ManagedBean</li>
  *  <li>javax.faces.event.NamedEvent</li>
@@ -84,17 +92,28 @@ public class AnnotationScanner {
     private static final String FACES_CONFIG_XML = "META-INF/faces-config.xml";
 
     private static final Set<String> FACES_ANNOTATIONS;
+    private static final Set<Class<? extends Annotation>> FACES_ANNOTATION_TYPE;
 
     static {
-        HashSet<String> annotations = new HashSet<String>(11, 1.0f);
-        annotations.add("Ljavax/faces/component/FacesComponent;");
-        annotations.add("Ljavax/faces/convert/FacesConverter;");
-        annotations.add("Ljavax/faces/validator/FacesValidator;");
-        annotations.add("Ljavax/faces/render/FacesRenderKit;");
-        annotations.add("Ljavax/faces/render/FacesRenderer;");
-        annotations.add("Ljavax/faces/model/ManagedBean;");
-        annotations.add("Ljavax/faces/event/NamedEvent;");
+        HashSet<String> annotations = new HashSet<String>(6, 1.0f);
+        Collections.addAll(annotations,
+                           "Ljavax/faces/component/FacesComponent;",
+                           "Ljavax/faces/convert/FacesConverter;",
+                           "Ljavax/faces/validator/FacesValidator;",
+                           "Ljavax/faces/render/FacesRenderer;",
+                           "Ljavax/faces/model/ManagedBean;",
+                           "Ljavax/faces/event/NamedEvent;");
         FACES_ANNOTATIONS = Collections.unmodifiableSet(annotations);
+        HashSet<Class<? extends Annotation>> annotationInstances =
+              new HashSet<Class<? extends Annotation>>(6, 1.0f);
+        Collections.addAll(annotationInstances,
+                           FacesComponent.class,
+                           FacesConverter.class,
+                           FacesValidator.class,
+                           FacesRenderer.class,
+                           ManagedBean.class,
+                           NamedEvent.class);
+        FACES_ANNOTATION_TYPE = Collections.unmodifiableSet(annotationInstances);
     }
 
     private ServletContext sc;
@@ -122,19 +141,50 @@ public class AnnotationScanner {
 
 
     /**
-     * @return a <code>Set</code> of classes that contain at least one of the
-     *  annotations this class is used for.  If no annotations are present,
-     *  or the application is considered <code>metadata-complete</code> an
-     *  empty Set will be returned.
+     * @return a <code>Map</code> of classes mapped to a specific annotation type.
+     *  If no annotations are present, or the application is considered
+     * <code>metadata-complete</code> <code>null</code> will be returned.
      */
-    public Set<String> getAnnotatedClasses() {
+    public Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses() {
 
         Set<String> classList = new HashSet<String>();
 
         processWebInfClasses(sc, classList);
         processWebInfLib(sc, classList);
 
-        return classList;
+        Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses = null;
+        if (classList.size() > 0) {
+            annotatedClasses = new HashMap<Class<? extends Annotation>,Set<Class<?>>>(6, 1.0f);
+            for (String className : classList) {
+                try {
+                    Class<?> clazz = Util.loadClass(className, this);
+                    Annotation[] annotations = clazz.getAnnotations();
+                    for (Annotation annotation : annotations) {
+                        Class<? extends Annotation> annoType =
+                              annotation.annotationType();
+                        if (FACES_ANNOTATION_TYPE.contains(annoType)) {
+                            Set<Class<?>> classes = annotatedClasses.get(annoType);
+                            if (classes == null) {
+                                classes = new HashSet<Class<?>>();
+                                annotatedClasses.put(annoType, classes);
+                            }
+                            classes.add(clazz);
+                        }
+                    }
+                } catch (ClassNotFoundException cnfe) {
+                    // shouldn't happen..
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "Unable to load annotated class: {0}",
+                                   className);
+                    }
+                }
+            }
+        }
+
+        return ((annotatedClasses != null)
+                ? annotatedClasses
+                : Collections.<Class<? extends Annotation>, Set<Class<?>>>emptyMap());
 
     }
 
@@ -190,6 +240,12 @@ public class AnnotationScanner {
      */
     private void processJarEntries(JarFile jarFile, Set<String> classList) {
 
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE,
+                        "Scanning JAR {0} for annotations...",
+                        jarFile.getName());
+        }
+
         for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements(); ) {
             JarEntry entry = entries.nextElement();
             if (entry.isDirectory()) {
@@ -206,17 +262,33 @@ public class AnnotationScanner {
                 try {
                     channel = Channels.newChannel(jarFile.getInputStream(entry));
                     if (classFileScanner.containsAnnotation(channel, entry.getSize())) {
-                        classList.add(convertToClassName(name));
+                        String cname = convertToClassName(name);
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.log(Level.FINE,
+                                       "[JAR] Found annotated Class: {0}",
+                                       cname);
+                        }
+                        classList.add(cname);
                     }
-
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "Unexpected exception scanning JAR {0} for annotations",
+                                   jarFile.getName());
+                        LOGGER.log(Level.SEVERE,
+                                   e.toString(),
+                                   e);
+                    }
                 } finally {
                     if (channel != null) {
                         try {
                             channel.close();
                         } catch (IOException ignored) {
-
+                            if (LOGGER.isLoggable(Level.FINE)) {
+                                LOGGER.log(Level.FINE,
+                                           ignored.toString(),
+                                           ignored);
+                            }
                         }
                     }
                 }
@@ -327,8 +399,14 @@ public class AnnotationScanner {
                 } else {
                     if (pathElement.endsWith(".class")) {
                         if (containsAnnotation(sc, pathElement)) {
-                            classList.add(convertToClassName(WEB_INF_CLASSES,
-                                                             pathElement));
+                            String cname = convertToClassName(WEB_INF_CLASSES,
+                                                              pathElement);
+                            if (LOGGER.isLoggable(Level.FINE)) {
+                                LOGGER.log(Level.FINE,
+                                           "[WEB-INF/classes] Found annotated Class: {0}",
+                                           cname);
+                            }
+                            classList.add(cname);
                         }
                     }
                 }
@@ -356,14 +434,27 @@ public class AnnotationScanner {
             return classFileScanner.containsAnnotation(channel,
                                                        conn.getContentLength());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           e.toString(),
+                           e);
+            }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           ioe.toString(),
+                           ioe);
+            }
         } finally {
             if (channel != null) {
                 try {
                     channel.close();
                 } catch (IOException ignored) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   ignored.toString(),
+                                   ignored);
+                    }
                 }
             }
         }

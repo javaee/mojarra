@@ -97,9 +97,8 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertTrue(v instanceof AnnotatedValidator);
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit rk = rkf.getRenderKit(ctx, "AnnotatedRenderKit");
+        RenderKit rk = rkf.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
         assertNotNull(rk);
-        assertTrue(rk instanceof AnnotatedRenderKit);
 
         Renderer r = rk.getRenderer("AnnotatedRenderer", "AnnotatedRenderer");
         assertNotNull(r);
@@ -155,9 +154,8 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertTrue(v.getClass().getName().endsWith("AnnotatedValidator2"));
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit rk = rkf.getRenderKit(ctx, "AnnotatedRenderKit2");
+        RenderKit rk = rkf.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
         assertNotNull(rk);
-        assertTrue(rk.getClass().getName().endsWith("AnnotatedRenderKit2"));
 
         Renderer r = rk.getRenderer("AnnotatedRenderer2", "AnnotatedRenderer2");
         assertNotNull(r);

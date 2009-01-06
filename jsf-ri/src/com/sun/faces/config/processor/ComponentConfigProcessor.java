@@ -42,6 +42,9 @@ package com.sun.faces.config.processor;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.config.Verifier;
+import com.sun.faces.config.ConfigManager;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.annotation.AnnotationManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -49,6 +52,8 @@ import org.w3c.dom.Element;
 
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
+import javax.faces.component.FacesComponent;
+import javax.faces.context.FacesContext;
 import javax.xml.xpath.XPathExpressionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,6 +95,10 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
     public void process(Document[] documents)
     throws Exception {
 
+        // process annotated components first as components configured
+        // via config files take precedence
+        processAnnotations(FacesComponent.class);
+
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -109,6 +118,7 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
 
     }
 
+    
 
     // --------------------------------------------------------- Private Methods
 
