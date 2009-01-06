@@ -73,7 +73,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.ConfigManager;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -119,12 +119,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String NAVIGATION_HANDLER
          = "navigation-handler";
-
-    /**
-     * <code>/faces-config/application/partial-traversal</code>
-     */
-    private static final String PARTIAL_TRAVERSAL
-         = "partial-traversal";
 
     /**
      * <code>/faces-config/application/view-handler</code>
@@ -748,13 +742,15 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         // FaceletViewHandler.  Make the application behave as 1.2
         // unless they use our ViewHandler
         WebConfiguration webConfig = WebConfiguration.getInstance();
-        if (viewHandlers.containsKey("com.sun.facelets.FaceletViewHandler")) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
-                           "jsf.application.legacy_facelet_viewhandler_detected",
-                           "com.sun.facelets.FaceletViewHandler");
+        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler)) {
+            if (viewHandlers.containsKey("com.sun.facelets.FaceletViewHandler")) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.application.legacy_facelet_viewhandler_detected",
+                               "com.sun.facelets.FaceletViewHandler");
+                }
+                webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, true);
             }
-            webConfig.overrideContextInitParameter(BooleanWebContextInitParameter.DisableFaceletJSFViewHandler, true);
         }
         for (Node n : viewHandlers.values()) {
             setViewHandler(app, n);
