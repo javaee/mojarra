@@ -59,6 +59,8 @@ import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.VariableResolver;
+import javax.faces.component.UIViewRoot;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -409,9 +411,12 @@ public class ELUtils {
             return Scope.REQUEST;
         }
 
-        Map<String,Object> viewMap = context.getViewRoot().getViewMap(false);
-        if (viewMap != null && viewMap.containsKey(identifier)) {
-            return Scope.VIEW;
+        UIViewRoot root = context.getViewRoot();
+        if (root != null) {
+            Map<String, Object> viewMap = root.getViewMap(false);
+            if (viewMap != null && viewMap.containsKey(identifier)) {
+                return Scope.VIEW;
+            }
         }
 
         Map<String,Object> sessionMap = ec.getSessionMap();
