@@ -44,19 +44,19 @@ import java.util.Set;
 import java.util.Map;
 
 /**
-*<p class="changed_added_2_0">Contract for UIComponents
-* that support client-side behaviors as defined
-* by {@link ClientBehavior}.</p>
+*<p class="changed_added_2_0">The <strong>ClientBehaviorHolder</strong> 
+* interface may be implemented by any concrete 
+* {@link javax.faces.component.UIComponent} that wishes to support
+* client-side behaviors as defined by {@link ClientBehavior}.</p>
 *
 * @since 2.0
 */
 public interface ClientBehaviorHolder {
 
     /**
-     * <p class="changed_added_2_0">Attaches a ClientBehavior to this 
-     * component for the specified event.</p>
-     * <p>Note that the valid event names for a particular UIComponent
-     * implementation are defined by 
+     * <p class="changed_added_2_0">Attaches a (@link ClientBehavior} to 
+     * the component implementing this interface for the specified event.
+     * Valid event names for a UIComponent implementation are defined by 
      * {@code ClientBehaviorHolder.getClientEventNames()}.</p>
      *
      * @param eventName the logical name of the client-side event to
@@ -68,24 +68,25 @@ public interface ClientBehaviorHolder {
 
     /**
      * <p class="changed_added_2_0">Returns a non-null, unmodifiable 
-     * Set containing the names of the logical client-side events 
-     * supported by this component.</p>
+     * <code>Set</code> containing the names of the logical client-side 
+     * events supported by the component implementing this interface.</p>
      */
     public Set<String> getClientEventNames();
 
     /**
      * <p class="changed_added_2_0">Returns a non-null, unmodifiable
      * <code>Map</code> that contains the the {@link ClientBehavior}s that 
-     * have been attached to this component.  The keys in this map are event
-     * names defined by {@link #getClientEventNames}.</p>
+     * have been attached to the component implementing this interface.  
+     * The keys in this <code>Map</code> are event names defined by 
+     * {@link #getClientEventNames}.</p>
      */
     public Map<String, ClientBehavior> getClientBehaviors();
 
     /**
      * <p class="changed_added_2_0">Returns the default client event
-     * name for this ClientBehaviorHolder implementation.  This must
-     * be one of the event names defined by returned by
-     * getClientEventNames(), or null if the component does not have
+     * name for this <code>ClientBehaviorHolder</code> implementation.  
+     * This must be one of the event names returned by
+     * {@link #getClientEventNames} or null if the component does not have
      * a default event.
      */
     public String getDefaultClientEventName();
