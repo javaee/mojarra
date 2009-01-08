@@ -46,8 +46,8 @@ import javax.faces.context.FacesContext;
 /**
  * <p class="changed_added_2_0">Contract for objects that add
  * client-side behaviors to UIComponents. Instances of 
- * <code>ClientBehavior</code> * may be attached to components 
- * that implement the * {@link ClientBehaviorHolder} contract by 
+ * <code>ClientBehavior</code> may be attached to components 
+ * that implement the {@link ClientBehaviorHolder} contract by 
  * calling {@code ClientBehaviorHolder.addClientBehavior()}.  
  * Once a <code>ClientBehavior</code> has been attached to a 
  * ClientStateHolder component, the component
