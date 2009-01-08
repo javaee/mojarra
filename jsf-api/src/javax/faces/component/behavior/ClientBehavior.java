@@ -44,15 +44,15 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0">Contract for objects that add
- * client-side behaviors to UIComponents. Instances of 
- * <code>ClientBehavior</code> may be attached to components 
+ * <p class="changed_added_2_0"><strong>ClientBehavior</strong> is the
+ * Contract for objects that add client-side behaviors to UIComponents. 
+ * Instances of <code>ClientBehavior</code> may be attached to components 
  * that implement the {@link ClientBehaviorHolder} contract by 
  * calling {@code ClientBehaviorHolder.addClientBehavior()}.  
  * Once a <code>ClientBehavior</code> has been attached to a 
- * ClientStateHolder component, the component
- * calls {@link #getScript} to obtain the behavior's script and wire 
- * this up to the appropriate client-side event handler.
+ * {@link ClientBehaviorHolder} component, the component
+ * calls {@link #getScript} to obtain the behavior's script and the 
+ * component wires this up to the appropriate client-side event handler.
  * </p>
  *
  * @since 2.0
