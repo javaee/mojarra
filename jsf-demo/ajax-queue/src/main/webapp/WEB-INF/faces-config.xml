@@ -53,13 +53,4 @@
         </resource-bundle>
     </application>
 
-    <managed-bean>
-        <description>
-            The main backing file mean
-        </description>
-        <managed-bean-name>bean</managed-bean-name>
-        <managed-bean-class>ajaxqueue.Bean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-
 </faces-config>
