@@ -103,6 +103,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Timer;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MojarraThreadFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -123,8 +124,7 @@ public class ConfigureListener implements ServletRequestListener,
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
-    private ScheduledThreadPoolExecutor webResourcePool =
-          new ScheduledThreadPoolExecutor(1);
+    private ScheduledThreadPoolExecutor webResourcePool;
 
     protected WebappLifecycleListener webAppListener;
     protected WebConfiguration webConfig;
@@ -136,8 +136,7 @@ public class ConfigureListener implements ServletRequestListener,
 
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
-        webAppListener = new WebappLifecycleListener(context);
-        webAppListener.contextInitialized(sce);
+
         Timer timer = Timer.getInstance();
         if (timer != null) {
             timer.startTiming();
@@ -178,6 +177,9 @@ public class ConfigureListener implements ServletRequestListener,
             }
         }
 
+        // bootstrap of faces required
+        webAppListener = new WebappLifecycleListener(context);
+        webAppListener.contextInitialized(sce);
         InitFacesContext initContext = new InitFacesContext(context);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
 
@@ -274,9 +276,9 @@ public class ConfigureListener implements ServletRequestListener,
         try {
             // Release any allocated application resources
             FactoryFinder.releaseFactories();
-            //monitor.cancel(true);
-            //webResourcePool.purge();
-            webResourcePool.shutdown();
+            if (webResourcePool != null) {
+                webResourcePool.shutdownNow();
+            }
         } finally {
             FacesContext initContext = new InitFacesContext(context);
             ApplicationAssociate
@@ -399,6 +401,7 @@ public class ConfigureListener implements ServletRequestListener,
         Collection<URL> webURLs =
               (Collection<URL>) context.getAttribute("com.sun.faces.webresources");
         if (isDevModeEnabled() && webURLs != null && !webURLs.isEmpty()) {
+            webResourcePool = new ScheduledThreadPoolExecutor(1, new MojarraThreadFactory("WebResourceMonitor"));
             webResourcePool.scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURLs),
                                                2000,
                                                2000,
