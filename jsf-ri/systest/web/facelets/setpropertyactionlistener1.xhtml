@@ -33,22 +33,28 @@
  only if the new code is made subject to such option by the copyright
  holder.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core">
-    <h:head>
-        <title>Test that f:event handles events correctly</title>
-    </h:head>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<head>
+    <title>setpropertyactionlistener1</title>
+</head>
 
-    <h:body>
-    <h1>Test that f:event handles events correctly</h1>
-
-
-    <h:form id="form" prependId="false">
-        <h:outputText id="beforeRenderTest" >
-            <f:event type="invalidEvent" action="#{eventTagBean.beforeEncode}" />
-        </h:outputText>
+<body>
+    <h:form id="form">
+        <span>Current Name: #{sessionScope.name}</span>
+        <br/>
+        <h:commandButton id="s1" value="ClickMe">
+            <f:setPropertyActionListener value="Mojarra" target="#{sessionScope.name}"/>
+        </h:commandButton>
+        <br/>
+        <h:commandLink id="s2" value="DeleteMe">
+            <f:setPropertyActionListener value="#{null}" target="#{sessionScope.name}"/>
+        </h:commandLink>
+        <br/>
     </h:form>
-  </h:body>
+</body>
 </html>
