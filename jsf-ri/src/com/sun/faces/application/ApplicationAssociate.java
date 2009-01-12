@@ -211,10 +211,10 @@ public class ApplicationAssociate {
         if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler)) {
             compiler = createCompiler(webConfig);
             faceletFactory = createFaceletFactory(compiler, webConfig);
-            devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
         }
+        devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
 
-        if ("Production".equals(webConfig.getOptionValue(JavaxFacesProjectStage))) {
+        if (!devModeEnabled) {
             resourceCache = new ResourceCache();
         }
 
