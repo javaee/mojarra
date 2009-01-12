@@ -713,26 +713,27 @@ public class WebConfiguration {
               "facelets.RESOURCE_RESOLVER",
               ""
         ),
-        FaceletsViewMappingsAlias(
-              "facelets.VIEW_MAPPINGS",
-              ""
-        ),
-        FaceletsViewMappings(
+         FaceletsViewMappings(
               "javax.faces.FACELETS_VIEW_MAPPINGS",
-              "",
-              false,
-              FaceletsViewMappingsAlias
-        ),
-        FaceletsLibrariesAlias(
-              "facelets.LIBRARIES",
               ""
+        ),
+        FaceletsViewMappingsDeprecated(
+              "facelets.VIEW_MAPPINGS",
+              "",
+              true,
+              FaceletsViewMappings
         ),
         FaceletsLibraries(
               "javax.faces.FACELETS_LIBRARIES",
-              "",
-              false,
-              FaceletsLibrariesAlias
+              ""
         ),
+        FaceletsLibrariesDeprecated(
+              "facelets.LIBRARIES",
+              "",
+              true,
+              FaceletsLibraries
+        ),
+        // RELESE_PENDING (edburns,rogerk) Need a standard parameter for DECORATORS
         FaceletsDecorators(
               "facelets.DECORATORS",
               ""

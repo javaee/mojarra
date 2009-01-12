@@ -828,6 +828,12 @@ public class ConfigManager {
                     DOMResult domResult = new DOMResult();
                     Transformer transformer = getTransformer(documentNS);
                     transformer.transform(domSource, domResult);
+                    // copy the source document URI to the transformed result
+                    // so that processes that need to build URLs relative to the
+                    // document will work as expected.
+                    ((Document) domResult.getNode())
+                          .setDocumentURI(((Document) domSource
+                                .getNode()).getDocumentURI());
                     DbfFactory.FacesSchema schemaToApply;
                     if (documentNS.equals(FACES_CONFIG_1_X_DEFAULT_NS)) {
                         schemaToApply = DbfFactory.FacesSchema.FACES_11;

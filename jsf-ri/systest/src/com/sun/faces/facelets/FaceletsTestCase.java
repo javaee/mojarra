@@ -94,6 +94,9 @@ public class FaceletsTestCase extends AbstractTestCase {
     // ------------------------------------------------------------ Test Methods
 
 
+    /**
+     * Added for issue 917.
+     */
     public void testSetPropertyActionListener1() throws Exception {
 
         HtmlPage page = getPage("/faces/facelets/setpropertyactionlistener1.xhtml") ;
@@ -127,5 +130,23 @@ public class FaceletsTestCase extends AbstractTestCase {
         span = output.get(0);
         assertTrue("Current Name: ".equals(span.asText()));
         
+    }
+
+
+    /**
+     * Added for issue 909.
+     */
+    public void testTagSourceFromDtdDocument() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/sourcefromdtdconfig.xhtml") ;
+
+        // verify the output is initially null
+        List<HtmlSpan> output = new ArrayList<HtmlSpan>(1);
+        getAllElementsOfGivenClass(page, output, HtmlSpan.class);
+        assertTrue(!output.isEmpty());
+        HtmlSpan span = output.get(0);
+        assertTrue("Hello!".equals(span.asText()));
+        assertTrue("color:red".equals(span.getStyleAttribute()));
+
     }
 }
