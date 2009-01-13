@@ -149,4 +149,24 @@ public class FaceletsTestCase extends AbstractTestCase {
         assertTrue("color:red".equals(span.getStyleAttribute()));
 
     }
+
+
+    /**
+     * Verify #{component} and #{compositeComponent} expressions evaluate
+     * at build time.
+     * @throws Exception
+     */
+    public void testComponentELAtBuildTime() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/componentELAtBuildTime.xhtml") ;
+
+        // verify the output is initially null
+        List<HtmlSpan> output = new ArrayList<HtmlSpan>(4);
+        getAllElementsOfGivenClass(page, output, HtmlSpan.class);
+        assertTrue(output.size() == 3);
+        for (HtmlSpan span : output) {
+            assertTrue("PASSED".equals(span.asText()));
+        }
+
+    }
 }
