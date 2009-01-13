@@ -575,9 +575,7 @@
         <delete file="tmp.bnd"/>
     </target>
 
-    <target name="main" depends="update,jars">
-        <antcall target="push-to-maven-prepare" />
-    </target>
+    <target name="main" depends="update,jars"/>
 
     <target name="create.runtime.config">
 <!--    in="${build.dir}/classes/com/sun/faces/standard-html-renderkit.xml"-->
@@ -622,7 +620,7 @@
          ===================================================================
     -->
 
-<target name="push-to-maven-prepare">
+<target name="push-to-maven-prepare" depends="jars">
 
   <mkdir dir="${target.dir}/classes" />
   <unjar src="${build.dir}/lib/${name}.jar" overwrite="yes" 

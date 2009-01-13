@@ -89,16 +89,16 @@
                    never-unwrap-exceptions,
                    write-attribute-script-disabled,
                    write-attribute-script-enabled,
-                   wcag-datatable,
-                   flash,
-                   jsp-flash"/>
+                   wcag-datatable"/>
     <!-- 
 
        EXCLUDED APPLICATIONS:
           view-expired
           core-tags
           el-performance
-          command-link-redirect
+          command-link-redirect,
+                   flash,
+                   jsp-flash
     -->
 
     <!-- ************ Executable Targets ************************************** -->

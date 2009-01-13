@@ -181,6 +181,7 @@
                 <file name="mojarra.js"/>
             </filelist>
         </concat>
+
     </target>
 
     <target name="check.generation.necessity">
@@ -716,12 +717,7 @@ javax.faces.level=ALL
          ===================================================================
     -->
     <target name="main" depends="update,jars"
-            description="Compile API classes and build JAR file">
-
-        <antcall target="push-to-maven-prepare" />
-
-    </target>
-
+            description="Compile API classes and build JAR file"/>
 
     <!--
          ===================================================================
@@ -774,7 +770,7 @@ javax.faces.level=ALL
 
     </target>
 
-<target name="push-to-maven-prepare">
+<target name="push-to-maven-prepare" depends="jars">
 
   <mkdir dir="${target.dir}/classes" />
   <unjar src="${build.lib.dir}/${name}.jar" overwrite="yes" 
