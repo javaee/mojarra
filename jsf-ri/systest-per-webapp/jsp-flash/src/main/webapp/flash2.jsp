@@ -23,16 +23,20 @@
  Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-<h:head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
     <title>RoR Flash Test Page 2</title>
-</h:head>
-<h:body bgcolor="white">
+    <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+  </head>
+
+  <body>
     <h1>RoR Flash Test Page 2</h1>
+
+<f:view>
 
   <p>As mentioned in the previous page, if I wanted to store something
   in the flash during this request and also access it during this
@@ -40,40 +44,34 @@
   reality, this just puts the value in request scope, but that's what
   "now" is, anyway.</p>
 
-  <h:form prependId="false" id="form1">
+  <h:form id="form1">
 
   <h:panelGrid columns="2" border="1">
 
-  <f:verbatim>
     Value of the previous request's foo
-  </f:verbatim>
 
-    <h:outputText id="flash2FooValueId" value="#{flash.foo}" />
+    <h:outputText value="#{flash.foo}" />
 
-  <f:verbatim>
     Put <code>barValue</code> in the flash.now under key
     <code>bar</code>.
-  </f:verbatim>
 
-    <c:set target="#{flash.now}" property="bar" value="barValue" />
+    <c:set target="${flash.now}" property="bar" value="barValue" />
 
     <f:verbatim>
-      c:set target="\#{flash.now}" property="bar" value="barValue"
+      &lt;c:set target="\${flash.now}" property="bar" value="barValue" /&gt;
     </f:verbatim>
 
-  <f:verbatim>
     Value of <code>\#{flash.now.bar}</code>, should be <code>barValue</code>.
-  </f:verbatim>
 
-    <h:outputText id="flash2BarValueId" value="#{flash.now.bar}" />
+    <h:outputText value="#{flash.now.bar}" />
 
-    <h:commandButton value="reload"  id="reload" />
+    <h:commandButton value="reload" />
 
     <h:commandButton value="back" action="back" />
 
-    <f:verbatim>&nbsp;</f:verbatim>
+    &nbsp;
 
-    <h:commandButton value="next" id="next" action="next" />
+    <h:commandButton value="next" action="next" />
 
    </h:panelGrid>
 
@@ -81,5 +79,6 @@
 
   </h:form>
 
-</h:body>
-</html>  
+</f:view>
+  </body>
+</html>

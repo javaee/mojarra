@@ -351,29 +351,41 @@
 
    <!-- Convenience macro for invoking mvn -->
    <macrodef name="jsf.mvn">        
-        <attribute name="pomFile"/>
-        <attribute name="mvnSpecVersion"/>
+        <attribute name="pomFile" default="pom.xml"/>
+        <attribute name="mvnSpecVersion" default="${impl.version}"/>
         <attribute name="goals"/>
+        <attribute name="dir" default="${basedir}" />
+        <attribute name="skipTests" default="true" />
         <sequential>           
-            <exec os="SunOS" dir="${basedir}" failonerror="yes" 
+            <if>
+              <equals arg1="@{skipTests}" arg2="false" />
+              <then>
+                <property name="testSkipProperty" value="" />
+              </then>
+              <else>
+                <property name="testSkipProperty" 
+                          value="-Dmaven.test.skip=true" />
+              </else>
+            </if>
+            <exec os="SunOS" dir="@{dir}" failonerror="yes" 
                              executable="mvn">
-              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
             </exec>
-            <exec os="Linux" dir="${basedir}" failonerror="yes" 
+            <exec os="Linux" dir="@{dir}" failonerror="yes" 
                              executable="mvn">
-              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
             </exec>
-            <exec os="Windows 2000" dir="${basedir}" executable="mvn.exe" 
+            <exec os="Windows 2000" dir="@{dir}" executable="mvn.exe" 
                              failonerror="yes">
-              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
             </exec>
-            <exec os="Windows XP" dir="${basedir}" executable="mvn.exe" 
+            <exec os="Windows XP" dir="@{dir}" executable="mvn.exe" 
                              failonerror="yes">
-              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
             </exec>
-            <exec os="Mac OS X" dir="${basedir}" executable="mvn" 
+            <exec os="Mac OS X" dir="@{dir}" executable="mvn" 
                              failonerror="yes">
-              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
             </exec>
         </sequential>           
    </macrodef>        

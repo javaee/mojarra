@@ -221,6 +221,23 @@ public abstract class FacesContext {
         throw new UnsupportedOperationException();
 
     }
+    
+    /**
+     * <p class="changed_added_2_0">Return the threadsafe flash for this
+     * application.</p>
+     *
+     * @since 2.0
+     */ 
+
+    public Flash getFlash() {
+
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getFlash();
+        }
+
+        throw new UnsupportedOperationException();
+
+    }    
 
     /**
      * <p class="changed_added_2_0">Return the {@link ExceptionHandler}

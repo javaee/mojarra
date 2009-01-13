@@ -29,57 +29,73 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-    <title>RoR Flash Test Page 2</title>
+    <title>RoR Flash Test Page 3</title>
 </h:head>
+
 <h:body bgcolor="white">
-    <h1>RoR Flash Test Page 2</h1>
+    <h1>RoR Flash Test Page 3</h1>
 
-  <p>As mentioned in the previous page, if I wanted to store something
-  in the flash during this request and also access it during this
-  request, <code>\#{flash.now.bar}</code> is the way to do it.  In
-  reality, this just puts the value in request scope, but that's what
-  "now" is, anyway.</p>
+  <p>If you have something in flash.now that you later, during the same
+  request, decide you want to promote to stick around for the next
+  request, use flash.keep.</p>
 
-  <h:form prependId="false" id="form1">
+  <h:form id="form1">
 
   <h:panelGrid columns="2" border="1">
 
-  <f:verbatim>
-    Value of the previous request's foo
-  </f:verbatim>
-
-    <h:outputText id="flash2FooValueId" value="#{flash.foo}" />
-
-  <f:verbatim>
-    Put <code>barValue</code> in the flash.now under key
-    <code>bar</code>.
-  </f:verbatim>
-
-    <c:set target="#{flash.now}" property="bar" value="barValue" />
-
     <f:verbatim>
-      c:set target="\#{flash.now}" property="bar" value="barValue"
+      Value of the previous request's foo.  Should be null.
     </f:verbatim>
 
-  <f:verbatim>
-    Value of <code>\#{flash.now.bar}</code>, should be <code>barValue</code>.
-  </f:verbatim>
+    <h:outputText value="#{flash.foo}" />
 
-    <h:outputText id="flash2BarValueId" value="#{flash.now.bar}" />
+    <f:verbatim>
+      Value of the this request's bar.  Should be null.
+    </f:verbatim>
 
-    <h:commandButton value="reload"  id="reload" />
+    <h:outputText value="#{flash.bar}" />
+
+    <f:verbatim>
+      Put <code>banzai</code> in the flash.now under key
+      <code>buckaroo</code>.
+    </f:verbatim>
+
+    <c:set target="#{flash.now}" property="buckaroo" value="banzai" />
+
+    <f:verbatim>
+      c:set target="\#{flash.now}" property="buckaroo" value="banzai" 
+    </f:verbatim>
+
+    <f:verbatim>
+      Value of <code>\#{flash.now.buckaroo}</code>, should be
+      <code>banzai</code>.
+    </f:verbatim>
+
+    <h:outputText value="#{flash.now.buckaroo}" />
+
+    <f:verbatim>
+      Promote buckaroo to stick around for the next request.
+    </f:verbatim>
+
+    <c:set target="#{flash.keep}" property="buckaroo" value="#{flash.now.buckaroo}" />
+
+    <f:verbatim>
+      c:set target="\#{flash.now}" property="buckaroo" 
+                     value="\#{flash.keep.buckaroo}"
+    </f:verbatim>
+
+    <h:commandButton value="reload" />
 
     <h:commandButton value="back" action="back" />
 
     <f:verbatim>&nbsp;</f:verbatim>
 
-    <h:commandButton value="next" id="next" action="next" />
+    <h:commandButton value="next" action="next" />
 
    </h:panelGrid>
 
-   <p><h:messages id="messages"/></p>
-
   </h:form>
+
 
 </h:body>
 </html>  

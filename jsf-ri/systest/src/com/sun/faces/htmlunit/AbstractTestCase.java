@@ -114,6 +114,9 @@ public abstract class AbstractTestCase extends TestCase {
         contextPath = System.getProperty("context.path");
         host = System.getProperty("host");
         port = Integer.parseInt(System.getProperty("port"));
+        
+        String proxyHost = System.getProperty("proxyHost");
+        String proxyPort = System.getProperty("proxyPort");
 
         client = new WebClient();
         cmanager = client.getCookieManager();
@@ -121,6 +124,15 @@ public abstract class AbstractTestCase extends TestCase {
         client.setAjaxController(new NicelyResynchronizingAjaxController());
         domainURL = getURL("/");
         WebRequestSettings settings = new WebRequestSettings(domainURL);
+        if (null != proxyHost && null != proxyPort) {
+            settings.setProxyHost(proxyHost);
+            int proxyPortInt = Integer.parseInt(proxyPort);
+            settings.setProxyPort(proxyPortInt);
+            ProxyConfig config = client.getProxyConfig();
+            config.setProxyHost(proxyHost);
+            config.setProxyPort(proxyPortInt);
+            
+        }
         WebResponse response = client.getWebConnection().getResponse(settings);
 
     }

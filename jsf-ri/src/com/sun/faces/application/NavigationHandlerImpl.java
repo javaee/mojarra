@@ -197,6 +197,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     }
                     // encode the redirect to ensure session state
                     // is maintained
+                    context.getFlash().setRedirect(true);
                     extContext.redirect(extContext.encodeActionURL(newPath));
                 } catch (java.io.IOException ioe) {
                     if (logger.isLoggable(Level.SEVERE)) {
