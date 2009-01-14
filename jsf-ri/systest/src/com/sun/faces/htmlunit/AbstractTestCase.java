@@ -399,6 +399,9 @@ public abstract class AbstractTestCase extends TestCase {
         return ((HtmlElement)lastpage.getHtmlElementById(element)).asText();
     }
 
+    /*
+      Check that the text of the element is equal to the supplied string
+     */
     protected boolean check(String element, String expected) {
         return expected.equals(getText(element));
     }
