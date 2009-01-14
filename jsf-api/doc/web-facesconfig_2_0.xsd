@@ -333,6 +333,18 @@
                          type="javaee:faces-config-ordering-orderingType"
                          minOccurs="0"
                          maxOccurs="1"/>
+            <xsd:element name="name" type="javaee:java-identifierType" minOccurs="0" maxOccurs="unbounded">
+              <xsd:annotation>
+		<xsd:documentation>
+
+		  The implementation must insure that the presence of
+		  one or more name elements directly as children of the
+		  ordering element are ignored unless this resource is
+		  the applicationFacesConfig.
+
+		</xsd:documentation>
+	    </xsd:annotation>
+          </xsd:element>
         </xsd:sequence>
     </xsd:complexType>
 
