@@ -5,8 +5,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;
 
-// RELEASE_PENDING - completely refactor code
-
 public class CommandButtonTestCase extends AbstractTestCase {
 
     public CommandButtonTestCase(String name) {
