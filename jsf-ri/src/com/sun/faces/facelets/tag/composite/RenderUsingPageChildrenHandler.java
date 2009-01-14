@@ -32,62 +32,33 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
+ *
+ * This file incorporates work covered by the following copyright and
+ * permission notice:
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
+package com.sun.faces.facelets.tag.composite;
 
-package com.sun.faces.renderkit.html_basic;
+import com.sun.faces.facelets.tag.jsf.ComponentConfig;
+import com.sun.faces.facelets.tag.jsf.ComponentHandler;
 
-import com.sun.faces.util.FacesLogger;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Logger;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.render.Renderer;
 
-/**
- * RELEASE_PENDING (rlubke,driscoll) docs
- */
-public class ConsumingPageCompositeChildrenRenderer extends Renderer {
+public class RenderUsingPageChildrenHandler extends ComponentHandler {
+
+    public RenderUsingPageChildrenHandler(ComponentConfig config) {
+        super(config);
+    }
     
-    // Log instance for this class
-    protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
-
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        
-    }
-
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-       UIComponent currentCompositeComponent = UIComponent.getCurrentCompositeComponent(context);
-       if (null != currentCompositeComponent) {
-
-           // It must be true that each of the children of the composite 
-           // component must come from the consuming page, and therefore
-           // are to be rendered right now.
-           List<UIComponent> children = currentCompositeComponent.getChildren();
-           for (UIComponent cur : children) {
-               cur.encodeAll(context);
-           }
-       }
-       else {
-           throw new IOException("Unable to find composite component parent for component " + 
-                   component.getId());
-       }
-    }
-
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        
-    }
-
-    @Override
-    public boolean getRendersChildren() {
-        return true;
-    }
-
-
-    
-
 }

@@ -2686,9 +2686,9 @@ from the composite component.  For each element in that list, call
 </div>]]></description>
 
             <component-family>javax.faces.Output</component-family>
-            <renderer-type>javax.faces.ConsumingPageCompositeChildren</renderer-type>
+            <renderer-type>javax.faces.UsingPageChildren</renderer-type>
             <renderer-class>
-               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-consuming-page-composite-children-renderer-class/text())"/>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-using-page-children-renderer-class/text())"/>
             </renderer-class>
             <renderer-extension>
                <jsp-ignore>true</jsp-ignore>
