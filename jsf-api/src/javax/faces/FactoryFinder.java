@@ -166,6 +166,13 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
+     * {@link javax.faces.context.ExternalContextFactory} class name.</p>
+     */
+    public final static String EXTERNAL_CONTEXT_FACTORY =
+         "javax.faces.context.ExternalContextFactory";
+
+    /**
+     * <p>The property name for the
      * {@link javax.faces.context.FacesContextFactory} class name.</p>
      */
     public final static String FACES_CONTEXT_FACTORY =
@@ -222,6 +229,7 @@ public final class FactoryFinder {
          APPLICATION_FACTORY,
          VISIT_CONTEXT_FACTORY,
          EXCEPTION_HANDLER_FACTORY,
+         EXTERNAL_CONTEXT_FACTORY,
          FACES_CONTEXT_FACTORY,
          LIFECYCLE_FACTORY,
          RENDER_KIT_FACTORY,
@@ -237,6 +245,13 @@ public final class FactoryFinder {
 
     private static final Logger LOGGER =
          Logger.getLogger("javax.faces", "javax.faces.LogStrings");
+
+    // Ensure the factory names are sorted.
+    //
+    static {
+        Arrays.sort(FACTORY_NAMES);
+    }
+
 
     // --------------------------------------------------------- Public Methods
 
@@ -600,6 +615,8 @@ public final class FactoryFinder {
                  javax.faces.application.ApplicationFactory.class);
             factoryClasses.put(EXCEPTION_HANDLER_FACTORY,
                  javax.faces.context.ExceptionHandlerFactory.class);
+            factoryClasses.put(EXTERNAL_CONTEXT_FACTORY,
+                 javax.faces.context.ExternalContextFactory.class);
             factoryClasses.put(FACES_CONTEXT_FACTORY,
                  javax.faces.context.FacesContextFactory.class);
             factoryClasses.put(VISIT_CONTEXT_FACTORY,
@@ -626,7 +643,6 @@ public final class FactoryFinder {
         if (factoryName == null) {
             throw new NullPointerException();
         }
-        Arrays.sort(FACTORY_NAMES);
         if (Arrays.binarySearch(FACTORY_NAMES, factoryName) < 0) {
             throw new IllegalArgumentException(factoryName);
         }

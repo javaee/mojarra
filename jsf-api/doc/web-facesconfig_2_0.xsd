@@ -691,6 +691,21 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
+            <xsd:element name="external-context-factory"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "external-context-factory" element contains the
+                        fully qualified class name of the concrete
+                        ExternalContextFactory implementation class that will
+                        be called when
+                        FactoryFinder.getFactory(EXTERNAL_CONTEXT_FACTORY)
+                        is called.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
             <xsd:element name="facelets-artifact-factory"
                          type="javaee:fully-qualified-classType">
                 <xsd:annotation>
