@@ -71,6 +71,9 @@
     <page-declaration-language-factory>
       com.sun.faces.application.view.PageDeclarationLanguageFactoryImpl
     </page-declaration-language-factory>
+    <external-context-factory>
+      com.sun.faces.context.ExternalContextFactoryImpl
+    </external-context-factory>
   </factory>
 
 

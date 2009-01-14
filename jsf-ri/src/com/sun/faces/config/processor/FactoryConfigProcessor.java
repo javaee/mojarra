@@ -110,6 +110,10 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String FACELETS_ARTIFACT_FACTORY = "facelets-artifact-factory";
 
+    /**
+     * <code>/faces-config/factory/external-context-factory</code>
+     */
+    private static final String EXTERNAL_CONTEXT_FACTORY = "external-context-factory";
 
     /**
      * <code>Array of Factory names for post-configuration validation.</code>
@@ -122,7 +126,8 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.LIFECYCLE_FACTORY,
           FactoryFinder.RENDER_KIT_FACTORY,
           FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
-          FactoryFinder.FACELETS_ARTIFACT_FACTORY
+          FactoryFinder.FACELETS_ARTIFACT_FACTORY,
+          FactoryFinder.EXTERNAL_CONTEXT_FACTORY
     };
 
 
@@ -223,6 +228,10 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                getNodeText(n));
                 } else if (PAGE_DECLARATION_LANGUAGE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
+                               getNodeText(n));
+                } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
+                    fcCount.incrementAndGet();
+                    setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
                                getNodeText(n));
                 }
             }
