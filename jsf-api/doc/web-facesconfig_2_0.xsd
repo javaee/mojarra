@@ -209,6 +209,8 @@
                          type="javaee:faces-config-applicationType"/>
             <xsd:element name="ordering"
                          type="javaee:faces-config-orderingType"/>
+            <xsd:element name="absolute-ordering"
+                         type="javaee:faces-config-absoluteOrderingType"/>
             <xsd:element name="factory"
                          type="javaee:faces-config-factoryType"/>
             <xsd:element name="component"
@@ -316,6 +318,8 @@
 
 
     <!-- **************************************************** -->
+
+
     <xsd:complexType name="faces-config-orderingType">
         <xsd:annotation>
             <xsd:documentation>
@@ -333,18 +337,6 @@
                          type="javaee:faces-config-ordering-orderingType"
                          minOccurs="0"
                          maxOccurs="1"/>
-            <xsd:element name="name" type="javaee:java-identifierType" minOccurs="0" maxOccurs="unbounded">
-              <xsd:annotation>
-		<xsd:documentation>
-
-		  The implementation must insure that the presence of
-		  one or more name elements directly as children of the
-		  ordering element are ignored unless this resource is
-		  the applicationFacesConfig.
-
-		</xsd:documentation>
-	    </xsd:annotation>
-          </xsd:element>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -381,6 +373,29 @@
         </xsd:annotation>
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
+
+
+    <!-- **************************************************** -->
+
+
+    <xsd:complexType name="faces-config-absoluteOrderingType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+              Only relevant if this is placed within the /WEB-INF/faces-config.xml.
+              Please see section 11.4.6 for the specification for details.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="name" type="javaee:java-identifierType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="others" type="javaee:faces-config-ordering-othersType" minOccurs="0" maxOccurs="1" />
+        </xsd:choice>
+    </xsd:complexType>
+
+
+    <!-- **************************************************** -->
+
 
     <xsd:complexType name="faces-config-applicationType">
         <xsd:annotation>
