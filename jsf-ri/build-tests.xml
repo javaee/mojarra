@@ -319,6 +319,8 @@
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.config.TestFacesConfigOrdering"/>
                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.config.TestFactoryInjection"/>
+                <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.context.TestExceptionHandler"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.context.TestExternalContextFactoryImpl"/>

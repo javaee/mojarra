@@ -53,33 +53,36 @@ import javax.servlet.ServletResponse;
 
 public class ExternalContextFactoryImpl extends ExternalContextFactory {
 
+    public static final String DEFAULT_EXTERNAL_CONTEXT_KEY =
+          ExternalContextFactoryImpl.class.getName() + "_KEY";
+
     
-    // ------------------------------------------------------------ Constructors
-
-
-    public ExternalContextFactoryImpl() {
-    }
-
-
     // ---------------------------------------- Methods from ExternalContextFactory
 
 
     public ExternalContext getExternalContext(Object servletContext,
                                         Object request,
                                         Object response)
-        throws FacesException {
+
+    throws FacesException {
 
         Util.notNull("servletContext", servletContext);
         Util.notNull("request", request);
         Util.notNull("response", response);
 
-        ExternalContext ctx =
-            new ExternalContextImpl((ServletContext) servletContext,
-                (ServletRequest) request,
-                (ServletResponse) response);
-        return ctx;
+        ExternalContext extContext = 
+              new ExternalContextImpl((ServletContext) servletContext,
+                                      (ServletRequest) request,
+                                      (ServletResponse) response);
+
+        if (request instanceof ServletRequest) {
+            ((ServletRequest) request).setAttribute(DEFAULT_EXTERNAL_CONTEXT_KEY, extContext);
+        }
+
+        return extContext;
+
     }
 
     // The testcase for this class is TestExternalContextFactory.java
 
-} // end of class ExternalContextFactoryImpl
+}

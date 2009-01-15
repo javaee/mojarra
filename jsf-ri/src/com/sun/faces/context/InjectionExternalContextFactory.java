@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
- *
+ * 
+ * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- *
+ * 
  * Contributor(s):
- *
+ * 
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -37,80 +37,51 @@
 package com.sun.faces.context;
 
 import java.lang.reflect.Field;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
-import javax.faces.context.FacesContextFactory;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContextFactory;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.ExternalContextFactory;
+import javax.servlet.ServletRequest;
 
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-import javax.faces.FacesWrapper;
 
 /**
- * This {@link FacesContextFactory} is responsible for injecting the
- * default {@link FacesContext} instance into the top-level {@link FacesContext}
+ * This {@link ExternalContextFactory} is responsible for injecting the
+ * default {@link ExternalContext} instance into the top-level {@link ExternalContext}
  * as configured by the runtime.  Doing this allows us to preserve backwards
  * compatibility as the API evolves without having the API rely on implementation
- * specific details.  
+ * specific details.
  */
-public class InjectionFacesContextFactory extends FacesContextFactory implements FacesWrapper<FacesContextFactory> {
+public class InjectionExternalContextFactory extends ExternalContextFactory {
 
     private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
-    private FacesContextFactory delegate;
-    private Field defaultFacesContext;
+    private final ExternalContextFactory delegate;
+    private Field defaultExternalContext;
 
     
     // ------------------------------------------------------------ Constructors
 
 
-    public InjectionFacesContextFactory(FacesContextFactory delegate) {
+    public InjectionExternalContextFactory(ExternalContextFactory delegate) {
 
-        Util.notNull("facesContextFactory", delegate);
         this.delegate = delegate;
-         try {
-            defaultFacesContext = FacesContext.class.getDeclaredField("defaultFacesContext");
-            defaultFacesContext.setAccessible(true);
+
+        try {
+            defaultExternalContext = ExternalContext.class.getDeclaredField("defaultExternalContext");
+            defaultExternalContext.setAccessible(true);
         } catch (NoSuchFieldException nsfe) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Unable to find private field named 'defaultFacesContext' in javax.faces.context.FacesContext.");
+                LOGGER.log(Level.FINE, "Unable to find private field named 'defaultExternalContext' in javax.faces.context.ExternalContext.");
             }
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
             }
-            defaultFacesContext = null;
+            defaultExternalContext = null;
         }
-
-    }
-
-
-    // ---------------------------------------- Methods from FacesContextFactory
-
-
-    public FacesContext getFacesContext(Object context,
-                                        Object request,
-                                        Object response,
-                                        Lifecycle lifecycle)
-    throws FacesException {
-
-        FacesContext ctx = delegate.getFacesContext(context,
-                                                    request,
-                                                    response,
-                                                    lifecycle);
-        if (ctx == null) {
-            // No i18n here
-            String message = MessageFormat
-                  .format("Delegate FacesContextFactory, {0}, returned null when calling getFacesContext().",
-                          delegate.getClass().getName());
-            throw new IllegalStateException(message);
-        }
-        injectDefaults(ctx);
-        return ctx;
 
     }
 
@@ -119,24 +90,54 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
 
 
     @Override
-    public FacesContextFactory getWrapped() {
+    public ExternalContextFactory getWrapped() {
 
         return delegate;
-        
+
+    }
+
+
+    // ------------------------------------- Methods from ExternalContextFactory
+
+
+    public ExternalContext getExternalContext(Object context,
+                                              Object request,
+                                              Object response)
+    throws FacesException {
+
+        ExternalContext ctx = delegate.getExternalContext(context,
+                                                          request,
+                                                          response);
+        if (ctx == null) {
+            // No i18n here
+            String message = MessageFormat
+                  .format("Delegate ExternalContextFactory, {0}, returned null when calling getExternalContext().",
+                          delegate.getClass().getName());
+            throw new IllegalStateException(message);
+        }
+        injectDefaults(ctx, request);
+        return ctx;
+
     }
 
 
     // --------------------------------------------------------- Private Methods
 
 
-    private void injectDefaults(FacesContext target) {
+    private void injectDefaults(ExternalContext target, Object request) {
 
-        if (defaultFacesContext != null) {
-            FacesContext defaultFC =
-                  FacesContextImpl.getDefaultFacesContext();
-            if (defaultFC != null) {
+        if (defaultExternalContext != null) {
+            ExternalContext defaultExtContext = null;
+            if (request instanceof ServletRequest) {
+                ServletRequest reqObj = (ServletRequest) request;
+                defaultExtContext = (ExternalContext) reqObj.getAttribute(ExternalContextFactoryImpl.DEFAULT_EXTERNAL_CONTEXT_KEY);
+                if (defaultExtContext != null) {
+                    reqObj.removeAttribute(ExternalContextFactoryImpl.DEFAULT_EXTERNAL_CONTEXT_KEY);
+                }
+            }
+            if (defaultExtContext != null) {
                 try {
-                    defaultFacesContext.set(target, defaultFC);
+                    defaultExternalContext.set(target, defaultExtContext);
                 } catch (IllegalAccessException e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -146,5 +147,5 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
         }
 
     }
-
+    
 }

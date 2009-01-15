@@ -36,8 +36,11 @@
 
 package javax.faces.application;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.ResourceBundle;
+
 import javax.el.ELContextListener;
 import javax.el.ELException;
 import javax.el.ELResolver;
@@ -45,152 +48,174 @@ import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
-import javax.faces.component.ContextCallback;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.VariableResolver;
+import javax.faces.event.ActionListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.validator.Validator;
 
 public abstract class ApplicationWrapper extends Application implements FacesWrapper<Application> {
 
     public abstract Application getWrapped();
-    
-    @Override
-    public void addELContextListener(ELContextListener listener) {
-        getWrapped().addELContextListener(listener);
+
+    public ActionListener getActionListener() {
+        return getWrapped().getActionListener();
     }
 
-    @Override
-    public void addELResolver(ELResolver resolver) {
-        getWrapped().addELResolver(resolver);
+    public void setActionListener(ActionListener listener) {
+        getWrapped().setActionListener(listener);
     }
 
-    @Override
-    public UIComponent createComponent(ValueExpression componentExpression, FacesContext context, String componentType) throws FacesException {
-        return getWrapped().createComponent(componentExpression, context, componentType);
+    public Locale getDefaultLocale() {
+        return getWrapped().getDefaultLocale();
     }
 
-    @Override
-    public UIComponent createComponent(ValueExpression componentExpression, FacesContext context, String componentType, String rendererType) {
-        return getWrapped().createComponent(componentExpression, context, componentType, rendererType);
+    public void setDefaultLocale(Locale locale) {
+        getWrapped().setDefaultLocale(locale);
     }
 
-    @Override
-    public UIComponent createComponent(FacesContext context, String componentType, String rendererType) {
-        return getWrapped().createComponent(context, componentType, rendererType);
+    public String getDefaultRenderKitId() {
+        return getWrapped().getDefaultRenderKitId();
     }
 
-    @Override
-    public UIComponent createComponent(FacesContext context, Resource componentResource) {
-        return getWrapped().createComponent(context, componentResource);
+    public void setDefaultRenderKitId(String renderKitId) {
+        getWrapped().setDefaultRenderKitId(renderKitId);
     }
-    
-    /**
-     *
-     * @deprecated This has been replaced by {@link
-     * #createComponent(javax.el.ValueExpression,javax.faces.context.FacesContext,java.lang.String)}.
-     */
-    @Override
-    public UIComponent createComponent(ValueBinding componentBinding,
-            FacesContext context,
-            String componentType) {
-        return getWrapped().createComponent(componentBinding, context, componentType);
-    }
-    
-    /**
-     * @deprecated This has been replaced by calling {@link
-     * #getExpressionFactory} then {@link
-     * ExpressionFactory#createMethodExpression}.
-     */
-    public MethodBinding createMethodBinding(String ref,
-                                                      Class<?> params[])
-        throws ReferenceSyntaxException {
-        return getWrapped().createMethodBinding(ref, params);
-    }    
-    
-    /**
-     * <p>Call {@link #getExpressionFactory} then call {@link
-     * ExpressionFactory#createValueExpression}, passing the argument
-     * <code>ref</code>, <code>Object.class</code> for the expectedType,
-     * and <code>null</code>, for the fnMapper.</p>
-     *
-     *
-     * @param ref Value binding expression for which to return a
-     *  {@link ValueBinding} instance
-     *
-     * @throws NullPointerException if <code>ref</code>
-     *  is <code>null</code>
-     * @throws ReferenceSyntaxException if the specified <code>ref</code>
-     *  has invalid syntax
-     *
-     * @deprecated This has been replaced by calling {@link
-     * #getExpressionFactory} then {@link
-     * ExpressionFactory#createValueExpression}.
-     */
-    public abstract ValueBinding createValueBinding(String ref)
-        throws ReferenceSyntaxException;
 
-    /**
-     *
-     * @deprecated This has been replaced by {@link #getELResolver}.  
-     */
+    public String getMessageBundle() {
+        return getWrapped().getMessageBundle();
+    }
+
+    public void setMessageBundle(String bundle) {
+        getWrapped().setMessageBundle(bundle);
+    }
+
+    public NavigationHandler getNavigationHandler() {
+        return getWrapped().getNavigationHandler();
+    }
+
+    public void setNavigationHandler(NavigationHandler handler) {
+        getWrapped().setNavigationHandler(handler);
+    }
+
     public PropertyResolver getPropertyResolver() {
         return getWrapped().getPropertyResolver();
     }
 
-    @Override
-    public <T> T evaluateExpressionGet(FacesContext context, String expression, Class<? extends T> expectedType) throws ELException {
-        return getWrapped().evaluateExpressionGet(context, expression, expectedType);
+    public void setPropertyResolver(PropertyResolver resolver) {
+        getWrapped().setPropertyResolver(resolver);
     }
 
-    @Override
-    public ELContextListener[] getELContextListeners() {
-        return getWrapped().getELContextListeners();
+    public VariableResolver getVariableResolver() {
+        return getWrapped().getVariableResolver();
     }
 
-    @Override
-    public ELResolver getELResolver() {
-        return getWrapped().getELResolver();
+    public void setVariableResolver(VariableResolver resolver) {
+        getWrapped().setVariableResolver(resolver);
     }
 
-    @Override
-    public ExpressionFactory getExpressionFactory() {
-        return getWrapped().getExpressionFactory();
+    public ViewHandler getViewHandler() {
+        return getWrapped().getViewHandler();
     }
 
-    @Override
-    public ProjectStage getProjectStage() {
-        return getWrapped().getProjectStage();
+    public void setViewHandler(ViewHandler handler) {
+        getWrapped().setViewHandler(handler);
     }
 
-    @Override
-    public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
-        return getWrapped().getResourceBundle(ctx, name);
+    public StateManager getStateManager() {
+        return getWrapped().getStateManager();
+    }
+
+    public void setStateManager(StateManager manager) {
+        getWrapped().setStateManager(manager);
+    }
+
+    public void addComponent(String componentType, String componentClass) {
+        getWrapped().addComponent(componentType, componentClass);
+    }
+
+    public UIComponent createComponent(String componentType)
+          throws FacesException {
+        return getWrapped().createComponent(componentType);
+    }
+
+    public UIComponent createComponent(ValueBinding componentBinding,
+                                       FacesContext context,
+                                       String componentType)
+          throws FacesException {
+        return getWrapped().createComponent(componentBinding,
+                                            context,
+                                            componentType);
+    }
+
+    public Iterator<String> getComponentTypes() {
+        return getWrapped().getComponentTypes();
+    }
+
+    public void addConverter(String converterId, String converterClass) {
+        getWrapped().addConverter(converterId, converterClass);
+    }
+
+    public void addConverter(Class<?> targetClass, String converterClass) {
+        getWrapped().addConverter(targetClass, converterClass);
+    }
+
+    public Converter createConverter(String converterId) {
+        return getWrapped().createConverter(converterId);
+    }
+
+    public Converter createConverter(Class<?> targetClass) {
+        return getWrapped().createConverter(targetClass);
+    }
+
+    public Iterator<String> getConverterIds() {
+        return getWrapped().getConverterIds();
+    }
+
+    public Iterator<Class<?>> getConverterTypes() {
+        return getWrapped().getConverterTypes();
+    }
+
+    public MethodBinding createMethodBinding(String ref, Class<?>[] params)
+          throws ReferenceSyntaxException {
+        return getWrapped().createMethodBinding(ref, params);
+    }
+
+    public Iterator<Locale> getSupportedLocales() {
+        return getWrapped().getSupportedLocales();
+    }
+
+    public void setSupportedLocales(Collection<Locale> locales) {
+        getWrapped().setSupportedLocales(locales);
+    }
+
+    public void addValidator(String validatorId, String validatorClass) {
+        getWrapped().addValidator(validatorId, validatorClass);
+    }
+
+    public Validator createValidator(String validatorId) throws FacesException {
+        return getWrapped().createValidator(validatorId);
+    }
+
+    public Iterator<String> getValidatorIds() {
+        return getWrapped().getValidatorIds();
+    }
+
+    public ValueBinding createValueBinding(String ref)
+          throws ReferenceSyntaxException {
+        return getWrapped().createValueBinding(ref);
     }
 
     @Override
     public ResourceHandler getResourceHandler() {
-        return getWrapped().getResourceHandler();
-    }
-
-    @Override
-    public void publishEvent(Class<? extends SystemEvent> systemEventClass, Object source) {
-        getWrapped().publishEvent(systemEventClass, source);
-    }
-
-    @Override
-    public void publishEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceBaseType, Object source) {
-        getWrapped().publishEvent(systemEventClass, sourceBaseType, source);
-    }
-
-    @Override
-    public void removeELContextListener(ELContextListener listener) {
-        getWrapped().removeELContextListener(listener);
+        return super.getResourceHandler();
     }
 
     @Override
@@ -199,24 +224,118 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     }
 
     @Override
-    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass, SystemEventListener listener) {
+    public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
+        return super.getResourceBundle(ctx, name);
+    }
+
+    @Override
+    public ProjectStage getProjectStage() {
+        return super.getProjectStage();
+    }
+
+    @Override
+    public void addELResolver(ELResolver resolver) {
+        getWrapped().addELResolver(resolver);
+    }
+
+    @Override
+    public ELResolver getELResolver() {
+        return super.getELResolver();
+    }
+
+    @Override
+    public UIComponent createComponent(ValueExpression componentExpression,
+                                       FacesContext context,
+                                       String componentType)
+          throws FacesException {
+        return super.createComponent(componentExpression, context, componentType);
+    }
+
+    @Override
+    public UIComponent createComponent(ValueExpression componentExpression,
+                                       FacesContext context,
+                                       String componentType,
+                                       String rendererType) {
+        return super.createComponent(componentExpression, context, componentType, rendererType);
+    }
+
+    @Override
+    public UIComponent createComponent(FacesContext context,
+                                       String componentType,
+                                       String rendererType) {
+        return super.createComponent(context, componentType, rendererType);
+    }
+
+    @Override
+    public UIComponent createComponent(FacesContext context,
+                                       Resource componentResource) {
+        return super.createComponent(context, componentResource);
+    }
+
+    @Override
+    public ExpressionFactory getExpressionFactory() {
+        return super.getExpressionFactory();
+    }
+
+    @Override
+    public <T> T evaluateExpressionGet(FacesContext context,
+                                       String expression,
+                                       Class<? extends T> expectedType)
+          throws ELException {
+        return super.evaluateExpressionGet(context, expression, expectedType);
+    }
+
+    @Override
+    public void addELContextListener(ELContextListener listener) {
+        getWrapped().addELContextListener(listener);
+    }
+
+    @Override
+    public void removeELContextListener(ELContextListener listener) {
+        getWrapped().removeELContextListener(listener);
+    }
+
+    @Override
+    public ELContextListener[] getELContextListeners() {
+        return super.getELContextListeners();
+    }
+
+    @Override
+    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+                             Object source) {
+        getWrapped().publishEvent(systemEventClass, source);
+    }
+
+    @Override
+    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+                             Class<?> sourceBaseType,
+                             Object source) {
+        getWrapped().publishEvent(systemEventClass, sourceBaseType, source);
+    }
+
+    @Override
+    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
+                                 Class<?> sourceClass,
+                                 SystemEventListener listener) {
         getWrapped().subscribeToEvent(systemEventClass, sourceClass, listener);
     }
 
     @Override
-    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass, SystemEventListener listener) {
+    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
+                                 SystemEventListener listener) {
         getWrapped().subscribeToEvent(systemEventClass, listener);
     }
 
     @Override
-    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass, Class<?> sourceClass, SystemEventListener listener) {
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
+                                     Class<?> sourceClass,
+                                     SystemEventListener listener) {
         getWrapped().unsubscribeFromEvent(systemEventClass, sourceClass, listener);
     }
 
     @Override
-    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass, SystemEventListener listener) {
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
+                                     SystemEventListener listener) {
         getWrapped().unsubscribeFromEvent(systemEventClass, listener);
     }
-
-    
 }

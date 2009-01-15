@@ -107,7 +107,7 @@ public class InjectionApplicationFactory extends ApplicationFactory implements F
     }
 
 
-    // ---------------------------------------------------------- Public Methods
+    // ----------------------------------------------- Methods from FacesWrapper
 
 
     @Override
