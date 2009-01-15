@@ -61,6 +61,11 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.validator.Validator;
 
+
+/**
+ * RELEASE_PENDING (edburns,rogerk) docs for class and all methods
+ * @since 2.0
+ */
 public abstract class ApplicationWrapper extends Application implements FacesWrapper<Application> {
 
     public abstract Application getWrapped();
