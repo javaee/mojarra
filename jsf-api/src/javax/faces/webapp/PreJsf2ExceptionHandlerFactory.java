@@ -52,15 +52,38 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ExceptionEventContext;
 import javax.faces.event.PhaseId;
 import javax.el.ELException;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UpdateModelException;
+import javax.faces.context.FacesContext;
 
 
 /**
- * RELEASE_PENDING (edburns, rogerk) Documentation.  Also, is webapp the right
- *  package for this?
- *
- * This {@link ExceptionHandlerFactory} instance produces JSF 1.2 compatible
- * {@link ExceptionHandler} instances.  Specifically, this means that any
- * exceptions thrown before or after phase execution will be logged and swallowed.
+ * <p class="changed_added_2_0">This {@link ExceptionHandlerFactory} instance 
+ * produces JSF 1.2 compatible
+ * {@link ExceptionHandler} instances.  The {@link ExceptionHandler#handle} 
+ * method of the <code>ExceptionHandler</code> produced by this factory must 
+ * meet the following requirements</p>
+ * <div class="changed_added_2_0">
+ * 
+ * <ul>
+ * 
+ * <li><p>Any
+ * exceptions thrown before or after phase execution will be logged and 
+ * swallowed.</p></li>
+ * 
+ * <li><p>The implementation must examine
+ * the <code>Exception</code> within each of the unhandled exception
+ * events.  If the <code>Exception</code> is an instance of
+ * {@link UpdateModelException}, extract the {@link FacesMessage} from
+ * the <code>UpdateModelException</code>.  Log a <code>SEVERE</code>
+ * message to the log and queue the <code>FacesMessage</code> 
+ * on the {@link FacesContext}, using the <code>clientId</code> of
+ * the source component in a call to 
+ * {@link FacesContext#addMessage(java.lang.String, javax.faces.application.FacesMessage)}</p></li>
+ * 
+ * </ul>
+ * 
+ * </div>
  *
  * @since 2.0
  */
@@ -120,7 +143,9 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
 
 
         /**
-         * @see javax.faces.context.ExceptionHandler#handle()
+         * 
+         * 
+         * @since 2.0
          */
         public void handle() throws FacesException {
 
@@ -255,29 +280,39 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
 
         private boolean isRethrown(Throwable t, boolean isBeforeOrAfterPhase) {
 
-            return (!isBeforeOrAfterPhase && !(t instanceof AbortProcessingException));
+            return (!isBeforeOrAfterPhase &&
+                    !(t instanceof AbortProcessingException) &&
+                    !(t instanceof UpdateModelException));
 
         }
 
         
         private void log(ExceptionEventContext exceptionContext) {
 
-            UIComponent c = exceptionContext.getComponent();
-            boolean beforePhase = exceptionContext.inBeforePhase();
-            boolean afterPhase = exceptionContext.inAfterPhase();
-            PhaseId phaseId = exceptionContext.getPhaseId();
             Throwable t = exceptionContext.getException();
-            String key = getLoggingKey(beforePhase, afterPhase);
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                           key,
-                           new Object[]{t.getClass().getName(),
+            UIComponent c = exceptionContext.getComponent();
+            if (t instanceof UpdateModelException) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                FacesMessage message = ((UpdateModelException)t).getFacesMessage();
+                LOGGER.log(Level.SEVERE, message.getSummary(), t.getCause());
+                context.addMessage(c.getClientId(context), message);
+                                
+            } else {
+                boolean beforePhase = exceptionContext.inBeforePhase();
+                boolean afterPhase = exceptionContext.inAfterPhase();
+                PhaseId phaseId = exceptionContext.getPhaseId();
+                String key = getLoggingKey(beforePhase, afterPhase);
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                            key,
+                            new Object[]{t.getClass().getName(),
                                         phaseId.toString(),
                                         ((c != null)
                                          ? c.getClientId(exceptionContext.getContext())
                                          : ""),
                                         t.getMessage()});
-                LOGGER.log(Level.SEVERE, t.getMessage(), t);
+                    LOGGER.log(Level.SEVERE, t.getMessage(), t);
+                }
             }
 
         }

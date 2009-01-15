@@ -193,6 +193,12 @@
         <filter token="test.root.dir" value="${out.test.dir}"/>
         <copy file="${conf.test.dir}/web.xml" todir="${out.test.dir}"
               filtering="on"/>
+
+         <delete dir="${out.test.dir}/classes/META-INF/services" />
+         <mkdir dir="${out.test.dir}/classes/META-INF/services"/>
+         <echo
+              file="${out.test.dir}/classes/META-INF/services/javax.faces.context.ExceptionHandlerFactory">javax.faces.webapp.PreJsf2ExceptionHandlerFactory</echo>
+
         <jsf.war basedir="${basedir}/build"
                  archive-name="test"
                  webxml="${out.test.dir}/web.xml">

@@ -592,6 +592,8 @@ public class UIInputTestCase extends UIOutputTestCase {
     // Check that the number of queued messages equals the expected count
     // and that each of them is of severity ERROR
     protected void checkMessages(int expected) {
+        
+        facesContext.getExceptionHandler().handle();
 
         int n = 0;
         Iterator messages = facesContext.getMessages();
