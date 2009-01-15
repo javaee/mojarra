@@ -39,7 +39,6 @@ package javax.faces.context;
 
 import java.util.Map;
 import java.io.IOException;
-import java.io.Writer;
 
 /**
  * <p class="changed_added_2_0"><strong>PartialResponseWriter</strong> 
