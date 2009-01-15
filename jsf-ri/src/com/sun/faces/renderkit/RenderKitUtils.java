@@ -139,13 +139,6 @@ public class RenderKitUtils {
     private final static String CONTENT_TYPE_SUBTYPE_DELIMITER = "/";
 
     /**
-     * <p>JavaScript to be rendered when a commandLink is used.
-     * This may be expaned to include other uses.</p>
-     */
-    private static final String SUN_JSF_JS = RIConstants.FACES_PREFIX + "sunJsfJs";
-
-
-    /**
      * This represents the base package that can leverage the
      * <code>attributesThatAreSet</code> List for optimized attribute
      * rendering.
@@ -1103,8 +1096,8 @@ public class RenderKitUtils {
      * handler of a command.  This string will add all request parameters
      * as well as the client ID of the activated command to the form as
      * hidden input parameters, update the target of the link if necessary,
-     * and handle the form submission.  The content of {@link #SUN_JSF_JS}
-     * must be rendered prior to using this method.</p>
+     * and handle the form submission.  The jsf.js file will be rendered
+     * as part of this call.</p>
      * @param formClientId the client ID of the form
      * @param commandClientId the client ID of the command
      * @param target the link target
@@ -1153,54 +1146,6 @@ public class RenderKitUtils {
         sb.append("'}");
         return sb.toString();
     }
-
-    /**
-     * <p>This is a utility method for compressing multi-lined javascript.
-     * In the case of {@link #SUN_JSF_JS} it offers about a 47% decrease
-     * in length.</p>
-     *
-     * <p>For our purposes, compression is just trimming each line and
-     * then writing it out.  It's pretty simplistic, but it works.</p>
-     *
-     * @param JSString the string to compress
-     * @return the compressed string
-     */
-    public static char[] compressJS(String JSString) {
-
-        BufferedReader reader = new BufferedReader(new StringReader(JSString));
-        StringWriter writer = new StringWriter(1024);
-        try {
-            for (String line = reader.readLine();
-                 line != null;
-                 line = reader.readLine()) {
-
-                line = line.trim();
-                writer.write(line);
-            }
-            return writer.toString().toCharArray();
-        } catch (IOException ioe) {
-            // won't happen
-        }
-        return null;
-
-    }
-
-
-    /**
-     * <p>Return the implementation JavaScript.  If compression
-     * is enabled, the result will be compressed.</p>
-     *
-     * @param context - the <code>FacesContext</code> for the current request
-     * @param writer - the <code>Writer</code> to write the JS to
-     * @throws IOException if the JavaScript cannot be written
-     *
-     */
-    public static void writeSunJS(FacesContext context, Writer writer)
-    throws IOException {
-        writer.write((char[]) context.getExternalContext().getApplicationMap()
-              .get(SUN_JSF_JS));
-    }
-
 
     public static void renderUnhandledMessages(FacesContext ctx) {
 
@@ -1256,74 +1201,6 @@ public class RenderKitUtils {
 
     // --------------------------------------------------------- Private Methods
 
-
-    /**
-     * <p>Loads the contents of the sunjsf.js file into memory removing any
-     * comments/empty lines it encoutners, and, if enabled, compressing the
-     * result.</p>  This method should only be called when the application is
-     * being initialized.
-     * @param extContext the ExternalContext for this application
-     */
-    public synchronized static void loadSunJsfJs(ExternalContext extContext) {
-        Map<String, Object> appMap =
-             extContext.getApplicationMap();
-        char[] sunJsfJs;
-
-        BufferedReader reader = null;
-        try {
-            // Don't use Util.getCurrentLoader().  This JS resource should
-            // be available from the same classloader that loaded RenderKitUtils.
-            // Doing so allows us to be more OSGi friendly.
-            URL url = RenderKitUtils.class.getClassLoader()
-                  .getResource("com/sun/faces/sunjsf.js");
-            if (url == null) {
-                LOGGER.severe(
-                     "jsf.renderkit.util.cannot_load_js");
-                return;
-            }
-            URLConnection conn = url.openConnection();
-            conn.setUseCaches(false);
-            InputStream input = conn.getInputStream();
-            reader = new BufferedReader(
-                 new InputStreamReader(input));
-            StringBuilder builder = new StringBuilder(128);
-            for (String line = reader.readLine();
-                 line != null;
-                 line = reader.readLine()) {
-
-                String temp = line.trim();
-                if (temp.length() == 0
-                     || temp.startsWith("/*")
-                     || temp.startsWith("*")
-                     || temp.startsWith("*/")
-                     || temp.startsWith("//")) {
-                    continue;
-                }
-                builder.append(line).append('\n');
-            }
-            builder.deleteCharAt(builder.length() - 1);
-            if (WebConfiguration
-                 .getInstance(extContext)
-                 .isOptionEnabled(BooleanWebContextInitParameter.CompressJavaScript)) {
-                sunJsfJs = compressJS(builder.toString());
-            } else {
-                sunJsfJs = builder.toString().toCharArray();
-            }
-            appMap.put(SUN_JSF_JS, sunJsfJs);
-        } catch (IOException ioe) {
-            LOGGER.log(Level.SEVERE,
-                 "jsf.renderkit.util.cannot_load_js",
-                 ioe);
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException ioe) {
-                    // ignore
-                }
-            }
-        }
-    }
 
    /**
      * <p>Utility method to return the client ID of the parent form.</p>

@@ -236,7 +236,6 @@ public class ConfigureListener implements ServletRequestListener,
                     }
                 }
             }
-            RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
             Application app = initContext.getApplication();
             app.subscribeToEvent(ViewMapCreatedEvent.class,
                                  UIViewRoot.class,
@@ -514,7 +513,6 @@ public class ConfigureListener implements ServletRequestListener,
             if (associate != null) {
                 associate.setContextName(getServletContextIdentifier(sc));
             }
-            RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
