@@ -109,10 +109,13 @@ public final class JstlFunction {
         if (a.length == 0) {
             return "";
         }
-        StringBuffer sb = new StringBuffer(a.length
+        StringBuilder sb = new StringBuilder(a.length
                 * (a[0].length() + delim.length()));
         for (int i = 0; i < a.length; i++) {
-            sb.append(a[i]).append(delim);
+            sb.append(a[i]);
+            if (i < (a.length - 1)) {
+                sb.append(delim);
+            }
         }
         return sb.toString();
     }
