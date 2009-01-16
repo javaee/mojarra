@@ -50,22 +50,35 @@ import javax.faces.application.FacesMessage;
  */
 public class UpdateModelException extends FacesException {
 
+    private static final long serialVersionUID = 6081145672680351218L;
+
     private FacesMessage facesMessage;
-    
+
+
+    // ------------------------------------------------------------ Constructors
+
+
     /**
      * {@inheritDoc}
-     * @param message the message for the exception
+     * @param facesMessage the message for the exception
      * @param cause the cause of this exception
      */
     public UpdateModelException(FacesMessage facesMessage,  
-            Throwable cause) {
+                                Throwable cause) {
+
         super(cause);
-        
         this.facesMessage = facesMessage;
+
     }
 
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public FacesMessage getFacesMessage() {
+
         return this.facesMessage;
+
     }
 
 }

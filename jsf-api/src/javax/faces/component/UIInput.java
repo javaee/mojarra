@@ -43,18 +43,13 @@ package javax.faces.component;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExceptionHandler;
-import javax.faces.context.ExceptionHandlerFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
@@ -67,7 +62,6 @@ import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-import javax.faces.webapp.PreJsf2ExceptionHandlerFactory;
 
 /**
  * <p><span class="changed_modified_2_0"><strong>UIInput</strong></span>
@@ -151,12 +145,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public static final String UPDATE_MESSAGE_ID =
          "javax.faces.component.UIInput.UPDATE";
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
-
-    /**
-     * The <code>Logger</code> for this class.
-     */
-    private static final Logger LOGGER =
-          Logger.getLogger("javax.faces.component", "javax.faces.LogStrings");
 
     private Boolean emptyStringIsNull;
 
@@ -811,13 +799,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                                                messageStr);
                 }
                 setValid(false);
-            } catch (IllegalArgumentException e) {
-                caught = e;
-                message =
-                     MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
-                          MessageFactory.getLabel(
-                               context, this));
-                setValid(false);
             } catch (Exception e) {
                 caught = e;
                 message =
@@ -826,14 +807,17 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                                context, this));
                 setValid(false);
             }
-            if (null != caught) {
-                assert(null != message);
-                UpdateModelException toQueue = new UpdateModelException(message,
-                        caught);
+            if (caught != null) {
+                assert(message != null);
+                @SuppressWarnings({"ThrowableInstanceNeverThrown"})
+                UpdateModelException toQueue =
+                      new UpdateModelException(message, caught);
                 ExceptionHandler exHandler = context.getExceptionHandler();
-                ExceptionEventContext eventContext = 
-                        new ExceptionEventContext(context, toQueue, this,
-                        PhaseId.UPDATE_MODEL_VALUES);
+                ExceptionEventContext eventContext =
+                      new ExceptionEventContext(context,
+                                                toQueue,
+                                                this,
+                                                PhaseId.UPDATE_MODEL_VALUES);
                 exHandler.processEvent(new ExceptionEvent(eventContext));
             }
             

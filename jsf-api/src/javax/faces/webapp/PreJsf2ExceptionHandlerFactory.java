@@ -296,7 +296,6 @@ public class PreJsf2ExceptionHandlerFactory extends ExceptionHandlerFactory {
                 FacesMessage message = ((UpdateModelException)t).getFacesMessage();
                 LOGGER.log(Level.SEVERE, message.getSummary(), t.getCause());
                 context.addMessage(c.getClientId(context), message);
-                                
             } else {
                 boolean beforePhase = exceptionContext.inBeforePhase();
                 boolean afterPhase = exceptionContext.inAfterPhase();
