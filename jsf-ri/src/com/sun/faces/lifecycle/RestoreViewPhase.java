@@ -159,42 +159,18 @@ public class RestoreViewPhase extends Phase {
             }
             return;
         }
-
-        // Reconstitute or create the request tree
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
-        String viewId = (String)
-              requestMap.get("javax.servlet.include.path_info");
-        if (viewId == null) {
-            viewId = facesContext.getExternalContext().getRequestPathInfo();
+        ViewHandler viewHandler = Util.getViewHandler(facesContext);
+        String viewId = null;
+        
+        try {
+            viewId = viewHandler.deriveViewId(facesContext, null);
+        } catch (UnsupportedOperationException e) {
+            viewId = Util.deriveViewId(facesContext, null);
         }
-
-        // It could be that this request was mapped using
-        // a prefix mapping in which case there would be no
-        // path_info.  Query the servlet path.
-        if (viewId == null) {
-            viewId = (String)
-                  requestMap.get("javax.servlet.include.servlet_path");
-        }
-
-        if (viewId == null) {
-            Object request = facesContext.getExternalContext().getRequest();
-            if (request instanceof HttpServletRequest) {
-                viewId = ((HttpServletRequest) request).getServletPath();
-            }
-        }
-
-        if (viewId == null) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.warning("viewId is null");
-            }
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
-        }
-
+        
         boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
         if (isPostBack) {
             // try to restore the view
-            ViewHandler viewHandler = Util.getViewHandler(facesContext);
             viewRoot = viewHandler.restoreView(facesContext, viewId);
 
             if (viewRoot == null) {

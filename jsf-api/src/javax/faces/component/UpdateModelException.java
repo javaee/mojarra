@@ -59,9 +59,14 @@ public class UpdateModelException extends FacesException {
 
 
     /**
-     * {@inheritDoc}
+     * <p class="changed_added_2_0">Store the argument
+     * <code>facesMessage</code> so it may be returned from {@link
+     * #getFacesMessage} and pass the argument <code>cause</code> to the
+     * super constructor.</p>
      * @param facesMessage the message for the exception
      * @param cause the cause of this exception
+     *
+     * @since 2.0
      */
     public UpdateModelException(FacesMessage facesMessage,  
                                 Throwable cause) {
@@ -73,7 +78,12 @@ public class UpdateModelException extends FacesException {
 
 
     // ---------------------------------------------------------- Public Methods
-
+    /**
+     * <p class="changed_added_2_0">Return the <code>FacesMessage</code>
+     * passed to the constructor.</p>
+     *
+     * @since 2.0
+     */
 
     public FacesMessage getFacesMessage() {
 

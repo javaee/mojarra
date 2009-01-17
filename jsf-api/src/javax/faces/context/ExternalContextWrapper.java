@@ -125,7 +125,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getApplicationMap()}
+     * call {@link ExternalContext#getApplicationMap}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getApplicationMap()
@@ -136,7 +136,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getAuthType()}
+     * call {@link ExternalContext#getAuthType}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getAuthType()
@@ -147,7 +147,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getContext()}
+     * call {@link ExternalContext#getContext}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getContext()
@@ -169,7 +169,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getInitParameterMap()}
+     * call {@link ExternalContext#getInitParameterMap}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getInitParameterMap()
@@ -180,7 +180,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRemoteUser()}
+     * call {@link ExternalContext#getRemoteUser}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRemoteUser()
@@ -191,7 +191,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequest()}
+     * call {@link ExternalContext#getRequest}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequest()
@@ -202,7 +202,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestContextPath()}
+     * call {@link ExternalContext#getRequestContextPath}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestContextPath() 
@@ -213,7 +213,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestCookieMap()}
+     * call {@link ExternalContext#getRequestCookieMap}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestCookieMap()
@@ -224,7 +224,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestHeaderMap()}
+     * call {@link ExternalContext#getRequestHeaderMap}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestHeaderMap()
@@ -235,7 +235,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestHeaderValuesMap()}
+     * call {@link ExternalContext#getRequestHeaderValuesMap}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestHeaderValuesMap()
@@ -246,7 +246,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestLocale()}
+     * call {@link ExternalContext#getRequestLocale}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestLocale() 
@@ -257,7 +257,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestLocales()}
+     * call {@link ExternalContext#getRequestLocales}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestLocales()
@@ -268,7 +268,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestMap()}
+     * call {@link ExternalContext#getRequestMap}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestMap() 
@@ -279,7 +279,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestParameterMap()}
+     * call {@link ExternalContext#getRequestParameterMap}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestParameterMap()
@@ -290,7 +290,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestParameterNames()}
+     * call {@link ExternalContext#getRequestParameterNames}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestParameterNames()
@@ -301,7 +301,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestParameterValuesMap()}
+     * call {@link ExternalContext#getRequestParameterValuesMap}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestParameterValuesMap()
@@ -312,7 +312,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestPathInfo()}
+     * call {@link ExternalContext#getRequestPathInfo}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestPathInfo()
@@ -323,7 +323,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestServletPath()}
+     * call {@link ExternalContext#getRequestServletPath}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestServletPath()
@@ -367,7 +367,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getResponse()}
+     * call {@link ExternalContext#getResponse}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getResponse()
@@ -389,7 +389,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getAuthType()}
+     * call {@link ExternalContext#getAuthType}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getAuthType()
@@ -400,7 +400,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getUserPrincipal()}
+     * call {@link ExternalContext#getUserPrincipal}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getUserPrincipal()
@@ -481,7 +481,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getContextName()}
+     * call {@link ExternalContext#getContextName}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getContextName()
@@ -505,7 +505,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestScheme()}
+     * call {@link ExternalContext#getRequestScheme}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestScheme()
@@ -517,7 +517,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestServerName()}
+     * call {@link ExternalContext#getRequestServerName}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestServerName()
@@ -529,7 +529,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestServerPort()}
+     * call {@link ExternalContext#getRequestServerPort}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestServerPort()
@@ -566,7 +566,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestCharacterEncoding()}
+     * call {@link ExternalContext#getRequestCharacterEncoding}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestCharacterEncoding()
@@ -578,7 +578,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestContentType()
+     * call {@link ExternalContext#getRequestContentType}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestContentType()
@@ -590,7 +590,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getRequestContentLength()}
+     * call {@link ExternalContext#getRequestContentLength}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getRequestContentLength()
@@ -602,7 +602,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getResponseCharacterEncoding()}
+     * call {@link ExternalContext#getResponseCharacterEncoding}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getResponseCharacterEncoding()
@@ -614,7 +614,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getResponseContentType()}
+     * call {@link ExternalContext#getResponseContentType}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getResponseContentType()
@@ -638,7 +638,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getResponseOutputStream()}
+     * call {@link ExternalContext#getResponseOutputStream}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getResponseOutputStream()
@@ -650,7 +650,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getResponseOutputWriter()}
+     * call {@link ExternalContext#getResponseOutputWriter}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getResponseOutputWriter()
@@ -662,7 +662,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#getResponseCharacterEncoding()}
+     * call {@link ExternalContext#getResponseCharacterEncoding}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#getResponseCharacterEncoding()
@@ -686,7 +686,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExternalContext#invalidateSession()}
+     * call {@link ExternalContext#invalidateSession}
      * on the wrapped {@link ExternalContext} object.</p>
      *
      * @see javax.faces.context.ExternalContext#invalidateSession()

@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- *
+ * 
  * Contributor(s):
- *
+ * 
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -32,48 +32,51 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- *
- * This file incorporates work covered by the following copyright and
- * permission notice:
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package com.sun.faces.systest;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.htmlunit.AbstractTestCase;
 
-/**
- * <p class="changed_added_2_0">Information used with MetaRule for
- * determining how and what Metadata should be wired.</p>
- *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
- *
- * @since 2.0
- */
-public abstract class MetadataTarget {
+public class ImplicitNavigationTestCase extends AbstractTestCase {
 
-    public abstract PropertyDescriptor getProperty(String name);
 
-    public abstract boolean isTargetInstanceOf(Class type);
+    public ImplicitNavigationTestCase(String name) {
+           super(name);
+       }
 
-    public abstract Class getTargetClass();
+       /**
+        * Set up instance variables required by this test case.
+        */
+       public void setUp() throws Exception {
+           super.setUp();
+       }
 
-    public abstract Class getPropertyType(String name);
 
-    public abstract Method getWriteMethod(String name);
+       /**
+        * Return the tests included in this test suite.
+        */
+       public static Test suite() {
+           return (new TestSuite(ImplicitNavigationTestCase.class));
+       }
 
-    public abstract Method getReadMethod(String name);
 
+       /**
+        * Tear down instance variables required by this test case.
+        */
+       public void tearDown() {
+           super.tearDown();
+       }
+
+
+       // ------------------------------------------------------------ Test Methods
+
+       public void testImplicitNavigation() throws Exception {
+
+           HtmlPage page = getPage("/faces/page01.xhtml");
+
+       }
 }

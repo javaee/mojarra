@@ -76,7 +76,6 @@ public abstract class MetaTagHandler extends TagHandler {
      * Extend this method in order to add your own rules.
      * 
      * @param type
-     * @return
      */
     protected abstract MetaRuleset createMetaRuleset(Class type);
 
