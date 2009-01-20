@@ -54,6 +54,10 @@ package com.sun.faces.facelets.tag.jstl.fn;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Enumeration;
+import java.util.Iterator;
+
+import com.sun.faces.util.Util;
 
 /**
  * Implementations of JSTL Functions
@@ -67,53 +71,92 @@ public final class JstlFunction {
     }
 
     public static boolean contains(String name, String searchString) {
-        if (name == null || searchString == null) {
-            return false;
+        if (name == null) {
+            name = "";
         }
-
-        return -1 != name.indexOf(searchString);
+        if (searchString == null) {
+            searchString = "";
+        }
+        return name.contains(searchString);
     }
 
     public static boolean containsIgnoreCase(String name, String searchString) {
-        if (name == null || searchString == null) {
-            return false;
+        if (name == null) {
+            name = "";
         }
-        return -1 != name.toUpperCase().indexOf(searchString.toUpperCase());
+        if (searchString == null) {
+            searchString = "";
+        }
+        return name.toLowerCase().contains(searchString.toLowerCase());
     }
 
     public static boolean endsWith(String name, String searchString) {
-        if (name == null || searchString == null) {
-            return false;
+        if (name == null) {
+            name = "";
+        }
+        if (searchString == null) {
+            searchString = "";
         }
         return name.endsWith(searchString);
     }
 
     public static String escapeXml(String value) {
-        if (value == null) {
-            return null;
+        if (value == null || value.length() == 0) {
+            value = "";
         }
-        return value.replaceAll("<", "&lt;");
+        StringBuilder b = new StringBuilder(value.length());
+        final char[] lookahead = { 'a', 'm', 'p', ';' };
+        for (int i = 0, len = value.length(); i < len; i++) {
+            char c = value.charAt(i);
+            if (c == '<') {
+                b.append("&lt;");
+            } else if (c == '>') {
+                b.append("&gt;");
+            } else if (c == '\'') {
+                b.append("&#039;");
+            } else if (c == '"') {
+                b.append("&#034;");
+            } else if (c == '&') {
+                boolean matched = true;
+                for (int j = 0, jlen = lookahead.length; j < jlen; j++) {
+                    if (lookahead[j] != value.charAt(i + (j + 1))) {
+                        matched = false;
+                        break;
+                    }
+                }
+                if (matched) {
+                    i += 4;
+                } 
+                b.append("&amp;");
+            } else {
+                b.append(c);
+            }
+        }
+        return b.toString();
     }
 
     public static int indexOf(String name, String searchString) {
-        if (name == null || searchString == null) {
-            return -1;
+        if (name == null) {
+            name = "";
+        }
+        if (searchString == null) {
+            searchString = "";
         }
         return name.indexOf(searchString);
     }
 
     public static String join(String[] a, String delim) {
-        if (a == null || delim == null) {
-            return null;
-        }
-        if (a.length == 0) {
+        if (a == null|| a.length == 0) {
             return "";
         }
-        StringBuilder sb = new StringBuilder(a.length
-                * (a[0].length() + delim.length()));
-        for (int i = 0; i < a.length; i++) {
+        boolean skipDelim = false;
+        if (delim == null || delim.length() == 0) {
+            skipDelim = true;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0, len = a.length, delimCount = (len - 1); i < len; i++) {
             sb.append(a[i]);
-            if (i < (a.length - 1)) {
+            if (!skipDelim && (i < delimCount)) {
                 sb.append(delim);
             }
         }
@@ -136,77 +179,144 @@ public final class JstlFunction {
         if (obj instanceof Map) {
             return ((Map) obj).size();
         }
+        if (obj instanceof Enumeration) {
+            Enumeration e = (Enumeration) obj;
+            int count = 0;
+            while (e.hasMoreElements()) {
+                e.nextElement();
+                count++;
+            }
+            return count;
+        }
+        if (obj instanceof Iterator) {
+            Iterator i = (Iterator) obj;
+            int count = 0;
+            while (i.hasNext()) {
+                i.next();
+                count++;
+            }
+            return count;
+        }
         throw new IllegalArgumentException("Object type not supported: "
                 + obj.getClass().getName());
     }
     
-    public static String replace(String value, String a, String b) {
-        if (value == null || a == null || b == null) {
-            return null;
+    public static String replace(String value, String before, String after) {
+        if (value == null) {
+            value = "";
         }
-        return value.replaceAll(a, b);
+        if (before == null) {
+            before = "";
+        }
+        if (before.length() == 0) {
+            return value;
+        }
+        if (value.length() == 0) {
+            return "";
+        }
+        if (after == null) {
+            after = "";
+        }
+
+        return value.replaceAll(before, after);
     }
     
     public static String[] split(String value, String d) {
-        if (value == null || d == null) {
-            return null;
+        if (value == null) {
+            value = "";
         }
-        return value.split(d);
+        if (value.length() == 0) {
+            return new String[]{ "" };
+        }
+        if (d == null) {
+            d = "";
+        }
+        if (d.length() == 0) {
+            return new String[] { value };
+        }
+        return Util.split(value, d);
     }
     
     public static boolean startsWith(String value, String p) {
-        if (value == null || p == null) {
-            return false;
+        if (value == null) {
+            value = "";
+        }
+        if (p == null) {
+            p = "";
         }
         return value.startsWith(p);
     }
     
     public static String substring(String v, int s, int e) {
         if (v == null) {
-            return null;
+            v = "";
+        }
+        if (s >= v.length()) {
+            return "";            
+        }
+        if (s < 0) {
+            s = 0;
+        }
+        if (e < 0 || e >= v.length()) {
+            e = v.length();
+        }
+        if (e < s) {
+            return "";
         }
         return v.substring(s, e);
     }
     
     public static String substringAfter(String v, String p) {
         if (v == null) {
-            return null;
+            v = "";
+        }
+        if (v.length() == 0) {
+            return "";
+        }
+        if (p == null) {
+            p = "";
         }
         int i = v.indexOf(p);
-        if (i >= 0) {
-            return v.substring(i+p.length());
+        if (i == -1) {
+            return "";
         }
-        return null;
+        return v.substring(i+p.length());
     }
     
     public static String substringBefore(String v, String s) {
         if (v == null) {
-            return null;
+            v = "";
+        }
+        if (v.length() == 0) {
+            return "";
+        }
+        if (s == null) {
+            s = "";
         }
         int i = v.indexOf(s);
-        if (i > 0) {
-            return v.substring(0, i);
+        if (i == -1) {
+            return "";
         }
-        return null;
+        return v.substring(0, i);
     }
     
     public static String toLowerCase(String v) {
-        if (v == null) {
-            return null;
+        if (v == null || v.length() == 0) {
+            return "";
         }
         return v.toLowerCase();
     }
     
     public static String toUpperCase(String v) {
-        if (v == null) {
-            return null;
+        if (v == null || v.length() == 0) {
+            return "";
         }
         return v.toUpperCase();
     }
     
     public static String trim(String v) {
-        if (v == null) {
-            return null;
+        if (v == null || v.length() == 0) {
+            return "";
         }
         return v.trim();
     }
