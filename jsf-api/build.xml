@@ -396,6 +396,12 @@
             </fileset>
         </copy>
 
+       <delete dir="${build.test.dir}/META-INF/services" />
+        <mkdir dir="${build.test.dir}/META-INF/services"/>
+        <echo
+              file="${build.test.dir}/META-INF/services/javax.faces.context.ExceptionHandlerFactory">javax.faces.webapp.PreJsf2ExceptionHandlerFactory</echo>
+
+
     </target>
 
 

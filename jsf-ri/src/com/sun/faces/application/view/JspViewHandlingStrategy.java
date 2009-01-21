@@ -85,13 +85,6 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
 
-    @Override
-    public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
-        return null;
-    }
-
-    // --------------------------------------- Methods from ViewHandlingStrategy
-
     /**
      * <p>
      * Not supported in JSP-based views.
@@ -196,6 +189,10 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
+    @Override
+    public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
+        return null;
+    }
 
     // --------------------------------------- Methods from ViewHandlingStrategy
 

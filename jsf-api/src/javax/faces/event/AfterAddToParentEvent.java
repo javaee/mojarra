@@ -5,7 +5,6 @@
 
 package javax.faces.event;
 
-import java.util.Map;
 import javax.faces.component.UIComponent;
 
 /**

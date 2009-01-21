@@ -246,6 +246,7 @@ public final class Classpath {
             String jarFileUrl = urlFile.substring(0, separatorIndex);
             // And trim off any "file:" prefix.
             if (jarFileUrl.startsWith("file:")) {
+                jarFileUrl = jarFileUrl.substring("file:".length());
                 jarFileUrl = URLDecoder.decode(jarFileUrl, "UTF-8");
             }
             return new JarFile(jarFileUrl);

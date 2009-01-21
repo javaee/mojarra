@@ -43,6 +43,8 @@ package javax.faces.component;
 import java.io.Serializable;
 import java.util.LinkedList;
 
+import javax.faces.context.FacesContext;
+
 /**
  * <p class="changed_added_2_0">An instance of the class is used to 
  * manage {@link AjaxBehavior} instances.</p>
@@ -76,8 +78,8 @@ public class AjaxBehaviors implements Serializable {
         AjaxBehavior ajaxBehavior = null;
         for (int i=ajaxBehaviors.size()-1; i>=0; i--) {
             AjaxBehavior behavior = ajaxBehaviors.get(i);
-            if (behavior.getEvents() == null ||
-                behavior.getEvents().equals(eventName)) {
+            String event = behavior.getEvent();
+            if (event == null || event.equals(eventName)) {
                 ajaxBehavior = behavior;
             }
         }

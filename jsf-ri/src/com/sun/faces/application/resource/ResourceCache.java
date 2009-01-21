@@ -60,6 +60,7 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MultiKeyConcurrentHashMap;
+import com.sun.faces.util.MojarraThreadFactory;
 
 /**
  * <p>
@@ -263,7 +264,7 @@ public class ResourceCache {
                            "Created new static ScheduledExecutorService with a pool size of {0}",
                            poolSize);                
             }
-            service = new ScheduledThreadPoolExecutor(poolSize);
+            service = new ScheduledThreadPoolExecutor(poolSize, new MojarraThreadFactory("ResourceCache"));
         }
         monitorTask = service.scheduleWithFixedDelay(new MonitorTask(contextName),
                                        period,

@@ -52,6 +52,8 @@ import javax.faces.FactoryFinder;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
+import javax.faces.render.FacesRenderer;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
@@ -137,6 +139,10 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 addRenderKits(renderkits, document, renderers, rkf);
             }
         }
+
+        // process annotated Renderers first as Renderers configured
+        // via config files take precedence
+        processAnnotations(FacesRenderer.class);
 
         // now add the accumulated renderers to the RenderKits
         for (Map.Entry<String,Map<Document,List<Node>>> entry : renderers.entrySet()) {

@@ -55,8 +55,8 @@ import javax.faces.webapp.pdl.facelets.tag.Tag;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 import com.sun.faces.facelets.tag.TagDecorator;
-import javax.faces.FactoryFinder;
-import javax.faces.webapp.pdl.facelets.FaceletsArtifactFactory;
+import com.sun.faces.facelets.tag.TagAttributesImpl;
+
 
 /**
  * @author Jacob Hookom
@@ -68,16 +68,11 @@ public final class HtmlDecorator implements TagDecorator {
 
     public final static HtmlDecorator Instance = new HtmlDecorator();
     
-    private final FaceletsArtifactFactory factory;
-
     /**
      * 
      */
     public HtmlDecorator() {
         super();
-        this.factory = (FaceletsArtifactFactory) 
-                    FactoryFinder.getFactory(FactoryFinder.FACELETS_ARTIFACT_FACTORY);
-
     }
 
     /*
@@ -136,7 +131,7 @@ public final class HtmlDecorator implements TagDecorator {
                 a[p++] = o[i];
             }
         }
-        return factory.createTagAttributes(a);
+        return new TagAttributesImpl(a);
     }
 
 }

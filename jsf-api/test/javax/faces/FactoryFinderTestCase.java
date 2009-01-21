@@ -72,6 +72,9 @@ public class FactoryFinderTestCase extends TestCase {
 	{ FactoryFinder.APPLICATION_FACTORY, 
 	  "com.sun.faces.mock.MockApplicationFactory"
 	},
+	{ FactoryFinder.EXTERNAL_CONTEXT_FACTORY, 
+	  "com.sun.faces.mock.MockExternalContextFactory"
+	},
 	{ FactoryFinder.FACES_CONTEXT_FACTORY, 
 	  "com.sun.faces.mock.MockFacesContextFactory"
 	},
@@ -151,17 +154,18 @@ public class FactoryFinderTestCase extends TestCase {
 
 	}
 	// verify that the delegation works
-	assertTrue(System.getProperty(FACTORIES[1][0]).equals("javax.faces.mock.MockFacesContextFactoryExtender2"));
+	assertTrue(System.getProperty(FACTORIES[2][0]).equals("javax.faces.mock.MockFacesContextFactoryExtender2"));
 	assertTrue(System.getProperty("oldImpl").equals("javax.faces.mock.MockFacesContextFactoryExtender"));
 
         // Verify IllegalStateException when factory not found 
 	FactoryFinder.releaseFactories();
 	FactoryFinder.setFactory(FACTORIES[0][0], FACTORIES[0][1]);
 	FactoryFinder.setFactory(FACTORIES[1][0], FACTORIES[1][1]);
-	FactoryFinder.setFactory(FACTORIES[3][0], FACTORIES[3][1]);
+	FactoryFinder.setFactory(FACTORIES[2][0], FACTORIES[2][1]);
+	FactoryFinder.setFactory(FACTORIES[4][0], FACTORIES[4][1]);
         boolean exceptionThrown = false;
         try {
-            factory = FactoryFinder.getFactory(FACTORIES[2][0]); 
+            factory = FactoryFinder.getFactory(FACTORIES[3][0]); 
         } catch(IllegalStateException ise) {
             exceptionThrown = true;
         }
@@ -204,7 +208,7 @@ public class FactoryFinderTestCase extends TestCase {
 
 	}
 	// verify that the delegation works
-	assertTrue(System.getProperty(FACTORIES[1][0]).equals("javax.faces.mock.MockFacesContextFactoryExtender"));
+	assertTrue(System.getProperty(FACTORIES[2][0]).equals("javax.faces.mock.MockFacesContextFactoryExtender"));
 	assertTrue(System.getProperty("oldImpl").equals("com.sun.faces.mock.MockFacesContextFactory"));
 
 

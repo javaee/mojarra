@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.MetadataTarget;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;

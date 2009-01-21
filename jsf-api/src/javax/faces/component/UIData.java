@@ -964,11 +964,7 @@ public class UIData extends UIComponentBase
 
     }
 
-    public String createUniqueId(FacesContext context) {
-        return this.getClientId(context) + lastId++;
-    }
-
-/**
+    /**
      * <p>In addition to the default behavior, ensure that any saved per-row
      * state for our child input components is discarded unless it is needed to
      * rerender the current page with errors.
@@ -1115,6 +1111,11 @@ public class UIData extends UIComponentBase
         // This is not a EditableValueHolder, so no further processing is required
 
     }
+
+     public String createUniqueId(FacesContext context) {
+         return this.getClientId(context) + lastId++;
+     }
+
 
     /**
      * @see UIComponent#visitTree

@@ -36,15 +36,7 @@
 
 package com.sun.faces.renderkit;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,23 +46,25 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
-import javax.faces.context.ExternalContext;
+import javax.faces.application.ProjectStage;
+import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
+import javax.faces.render.Renderer;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 
 import javax.faces.component.*;
+import javax.faces.component.html.HtmlMessages;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -131,13 +125,6 @@ public class RenderKitUtils {
      * Example: text/html </p>
      */
     private final static String CONTENT_TYPE_SUBTYPE_DELIMITER = "/";
-
-    /**
-     * <p>JavaScript to be rendered when a commandLink is used.
-     * This may be expaned to include other uses.</p>
-     */
-    private static final String SUN_JSF_JS = RIConstants.FACES_PREFIX + "sunJsfJs";
-
 
     /**
      * This represents the base package that can leverage the
@@ -315,15 +302,17 @@ public class RenderKitUtils {
         }
     }
 
-    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior) {
+    public static String buildAjaxCommand(FacesContext context,
+                                          UIComponent component,
+                                          AjaxBehavior ajaxBehavior) {
         final String AJAX_REQUEST = "jsf.ajax.request";
         // Is there already an option written?
         boolean already = false;
         StringBuilder ajaxCommand = new StringBuilder(256);
-        String execute = ajaxBehavior.getExecute();
-        String render = ajaxBehavior.getRender();
-        String onevent = ajaxBehavior.getOnEvent();
-        String onerror = ajaxBehavior.getOnError();
+        Collection<String> execute = ajaxBehavior.getExecute(context);
+        Collection<String> render = ajaxBehavior.getRender(context);
+        String onevent = ajaxBehavior.getOnEvent(context);
+        String onerror = ajaxBehavior.getOnError(context);
         ajaxCommand.append(AJAX_REQUEST);
         ajaxCommand.append("(this, event");
         if (execute != null || render != null) {
@@ -331,23 +320,52 @@ public class RenderKitUtils {
         }
         if (execute != null) {
             already = true;
+            boolean first = true;
             ajaxCommand.append("execute:'");
-            ajaxCommand.append(execute.replace(' ', ','));
-            ajaxCommand.append("'");
+            for (String exe : execute) {
+                if (!first) {
+                    ajaxCommand.append(' ');
+                } else {
+                    first = false;
+                }
+                UIComponent resolvedComponent = findComponent(component, exe);
+                if (resolvedComponent == null) {
+                    // RELEASE_PENDING  i18n
+                    throw new FacesException(
+                          "'execute' attribute contains unknown id '"
+                          + exe
+                          + "'");
+                }
+                ajaxCommand.append(resolvedComponent.getClientId());
+            }
+            ajaxCommand.append('\'');
         }
         if (render != null) {
             if (already) {
-                ajaxCommand.append(",");
+                ajaxCommand.append(',');
             } else {
                 already = true;
             }
+            boolean first = true;
             ajaxCommand.append("render:'");
-            ajaxCommand.append(render.replace(' ', ','));
-            ajaxCommand.append("'");
+            for (String rend : render) {
+                if (!first) {
+                    ajaxCommand.append(' ');
+                } else {
+                    first = false;
+                }
+                UIComponent resolvedComponent = findComponent(component, rend);
+                if (resolvedComponent == null) {
+                    // RELEASE_PENDING  i18n
+                    throw new FacesException("'render' attribute contains unknown id '"+rend+"'");
+                }
+                ajaxCommand.append(resolvedComponent.getClientId());
+            }
+            ajaxCommand.append('\'');
         }
         if (onevent != null) {
             if (already) {
-                ajaxCommand.append(",");
+                ajaxCommand.append(',');
             } else {
                 already = true;
             }
@@ -356,7 +374,7 @@ public class RenderKitUtils {
         }
         if (onerror != null) {
             if (already) {
-                ajaxCommand.append(",");
+                ajaxCommand.append(',');
             } else {
                 already = true;
             }
@@ -364,7 +382,7 @@ public class RenderKitUtils {
             ajaxCommand.append(onerror);
         }
         if (already) {
-            ajaxCommand.append("}");
+            ajaxCommand.append('}');
         }
 
         ajaxCommand.append(");");
@@ -395,12 +413,12 @@ public class RenderKitUtils {
         userSpecifiedOnchange = (userOnchange != null && !"".equals(userOnchange));
 
         AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled());
+        renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled(context));
         if (!userSpecifiedOnchange && !renderAjax) { // nothing to do
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
 
         sb = new StringBuffer(256);
 
@@ -439,7 +457,7 @@ public class RenderKitUtils {
         // is there a user Onchange?
         boolean userSpecifiedOnclick = false;
         // do we need to render ajax?
-        boolean renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled());
+        boolean renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled(context));
         // are there parameters to render?
         boolean renderParams = (!Arrays.equals(params,EMPTY_PARAMS));
         // String buffer for final output
@@ -470,7 +488,7 @@ public class RenderKitUtils {
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
 
         sb = new StringBuffer(256);
 
@@ -653,6 +671,27 @@ public class RenderKitUtils {
 
     // --------------------------------------------------------- Private Methods
 
+
+    /**
+     * Attempt to find the component assuming the ID is relative to the
+     * nearest naming container.  If not found, then search for the component
+     * using an absolute component expression.
+     */
+    private static UIComponent findComponent(UIComponent component,
+                                             String exe) {
+
+        // RELEASE_PENDING - perhaps only enable ID validation if ProjectStage
+        // is development
+        UIComponent resolvedComponent = component.findComponent(exe);
+        if (resolvedComponent == null) {
+            // not found using a relative search, try an absolute search
+            resolvedComponent = component.findComponent(':' + exe);
+        }
+        return resolvedComponent;
+
+    }
+
+    
     /**
      * @param component the UIComponent in question
      * @return <code>true</code> if the component is within the
@@ -1045,8 +1084,8 @@ public class RenderKitUtils {
      * handler of a command.  This string will add all request parameters
      * as well as the client ID of the activated command to the form as
      * hidden input parameters, update the target of the link if necessary,
-     * and handle the form submission.  The content of {@link #SUN_JSF_JS}
-     * must be rendered prior to using this method.</p>
+     * and handle the form submission.  The jsf.js file will be rendered
+     * as part of this call.</p>
      * @param formClientId the client ID of the form
      * @param commandClientId the client ID of the command
      * @param target the link target
@@ -1096,124 +1135,60 @@ public class RenderKitUtils {
         return sb.toString();
     }
 
-    /**
-     * <p>This is a utility method for compressing multi-lined javascript.
-     * In the case of {@link #SUN_JSF_JS} it offers about a 47% decrease
-     * in length.</p>
-     *
-     * <p>For our purposes, compression is just trimming each line and
-     * then writing it out.  It's pretty simplistic, but it works.</p>
-     *
-     * @param JSString the string to compress
-     * @return the compressed string
-     */
-    public static char[] compressJS(String JSString) {
+    public static void renderUnhandledMessages(FacesContext ctx) {
 
-        BufferedReader reader = new BufferedReader(new StringReader(JSString));
-        StringWriter writer = new StringWriter(1024);
-        try {
-            for (String line = reader.readLine();
-                 line != null;
-                 line = reader.readLine()) {
-
-                line = line.trim();
-                writer.write(line);
+        Application app = ctx.getApplication();
+        if (ProjectStage.Development.equals(app.getProjectStage())) {
+            HtmlMessages messages = (HtmlMessages) app.createComponent(HtmlMessages.COMPONENT_TYPE);
+            Renderer messagesRenderer = ctx.getRenderKit().getRenderer(HtmlMessages.COMPONENT_FAMILY, "javax.faces.Messages");
+            messages.setErrorStyle("Color: red");
+            messages.setWarnStyle("Color: orange");
+            messages.setInfoStyle("Color: blue");
+            messages.setFatalStyle("Color: red");
+            messages.setTooltip(true);
+            messages.setTitle("Project Stage[Development]: Unhandled Messages");
+            messages.setRedisplay(false);
+            try {
+                messagesRenderer.encodeBegin(ctx, messages);
+                messagesRenderer.encodeEnd(ctx, messages);
+            } catch (IOException ioe) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, ioe.toString(), ioe);
+                }
             }
-            return writer.toString().toCharArray();
-        } catch (IOException ioe) {
-            // won't happen
+        } else {
+            Iterator<String> clientIds = ctx.getClientIdsWithMessages();
+            if (clientIds.hasNext()) {
+                //Display each message possibly not displayed.
+                StringBuilder builder = new StringBuilder();
+                while (clientIds.hasNext()) {
+                    String clientId = clientIds.next();
+                    Iterator<FacesMessage> messages =
+                          ctx.getMessages(clientId);
+                    while (messages.hasNext()) {
+                        FacesMessage message = messages.next();
+                        if (message.isRendered()) {
+                            continue;
+                        }
+                        builder.append("\n");
+                        builder.append("sourceId=").append(clientId);
+                        builder.append("[severity=(")
+                              .append(message.getSeverity());
+                        builder.append("), summary=(")
+                              .append(message.getSummary());
+                        builder.append("), detail=(")
+                              .append(message.getDetail()).append(")]");
+                    }
+                }
+                LOGGER.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
+            }
         }
-        return null;
 
-    }
-
-
-    /**
-     * <p>Return the implementation JavaScript.  If compression
-     * is enabled, the result will be compressed.</p>
-     *
-     * @param context - the <code>FacesContext</code> for the current request
-     * @param writer - the <code>Writer</code> to write the JS to
-     * @throws IOException if the JavaScript cannot be written
-     *
-     */
-    public static void writeSunJS(FacesContext context, Writer writer)
-    throws IOException {
-        writer.write((char[]) context.getExternalContext().getApplicationMap()
-              .get(SUN_JSF_JS));
     }
 
 
     // --------------------------------------------------------- Private Methods
 
-
-    /**
-     * <p>Loads the contents of the sunjsf.js file into memory removing any
-     * comments/empty lines it encoutners, and, if enabled, compressing the
-     * result.</p>  This method should only be called when the application is
-     * being initialized.
-     * @param extContext the ExternalContext for this application
-     */
-    public synchronized static void loadSunJsfJs(ExternalContext extContext) {
-        Map<String, Object> appMap =
-             extContext.getApplicationMap();
-        char[] sunJsfJs;
-
-        BufferedReader reader = null;
-        try {
-            // Don't use Util.getCurrentLoader().  This JS resource should
-            // be available from the same classloader that loaded RenderKitUtils.
-            // Doing so allows us to be more OSGi friendly.
-            URL url = RenderKitUtils.class.getClassLoader()
-                  .getResource("com/sun/faces/sunjsf.js");
-            if (url == null) {
-                LOGGER.severe(
-                     "jsf.renderkit.util.cannot_load_js");
-                return;
-            }
-            URLConnection conn = url.openConnection();
-            conn.setUseCaches(false);
-            InputStream input = conn.getInputStream();
-            reader = new BufferedReader(
-                 new InputStreamReader(input));
-            StringBuilder builder = new StringBuilder(128);
-            for (String line = reader.readLine();
-                 line != null;
-                 line = reader.readLine()) {
-
-                String temp = line.trim();
-                if (temp.length() == 0
-                     || temp.startsWith("/*")
-                     || temp.startsWith("*")
-                     || temp.startsWith("*/")
-                     || temp.startsWith("//")) {
-                    continue;
-                }
-                builder.append(line).append('\n');
-            }
-            builder.deleteCharAt(builder.length() - 1);
-            if (WebConfiguration
-                 .getInstance(extContext)
-                 .isOptionEnabled(BooleanWebContextInitParameter.CompressJavaScript)) {
-                sunJsfJs = compressJS(builder.toString());
-            } else {
-                sunJsfJs = builder.toString().toCharArray();
-            }
-            appMap.put(SUN_JSF_JS, sunJsfJs);
-        } catch (IOException ioe) {
-            LOGGER.log(Level.SEVERE,
-                 "jsf.renderkit.util.cannot_load_js",
-                 ioe);
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException ioe) {
-                    // ignore
-                }
-            }
-        }
-    }
 
    /**
      * <p>Utility method to return the client ID of the parent form.</p>

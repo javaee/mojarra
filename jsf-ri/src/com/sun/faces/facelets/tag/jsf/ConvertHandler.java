@@ -63,11 +63,11 @@ import javax.faces.convert.Converter;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import com.sun.faces.facelets.tag.MetaTagHandler;
+import com.sun.faces.facelets.tag.MetaTagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.application.Resource;
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
 
@@ -84,7 +84,7 @@ import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
  * @author Jacob Hookom
  * @version $Id$
  */
-public class ConvertHandler extends MetaTagHandler implements ValueHolderAttachedObjectHandler {
+public class ConvertHandler extends MetaTagHandlerImpl implements ValueHolderAttachedObjectHandler {
 
     private final TagAttribute binding;
     
@@ -114,7 +114,7 @@ public class ConvertHandler extends MetaTagHandler implements ValueHolderAttache
      * <li>Otherwise, call
      * {@link #createConverter(FaceletContext) createConverter}.</li>
      * <li>Call
-     * {@link com.sun.faces.facelets.tag.MetaTagHandler#setAttributes(FaceletContext, Object) setAttributes}
+     * {@link com.sun.faces.facelets.tag.MetaTagHandlerImpl#setAttributes(FaceletContext, Object) setAttributes}
      * on Converter instance.</li>
      * <li>Set the Converter on the ValueHolder</li>
      * <li>If the ValueHolder has a localValue, convert it and set the value</li>

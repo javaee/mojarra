@@ -98,6 +98,7 @@ public class UIMessages extends UIComponentBase {
     private Boolean globalOnly;
     private Boolean showDetail;
     private Boolean showSummary;
+    private Boolean redisplay;
 
     // -------------------------------------------------------------- Properties
 
@@ -222,6 +223,38 @@ public class UIMessages extends UIComponentBase {
     }
 
 
+    /**
+     * @return <code>true</code> if this <code>UIMessage</code> instance should
+     *  redisplay {@link javax.faces.application.FacesMessage}s that have already been handled,
+     *  otherwise returns <code>false</code>.  By default this method will
+     *  always return <code>true</code> if {@link #setRedisplay(boolean)} has
+     *  not been called.
+     *
+     * @since 2.0
+     */
+    public boolean isRedisplay() {
+
+        return ((redisplay == null) ? true : redisplay);
+
+    }
+
+
+    /**
+     * <p>Set the flag indicating whether the <code>detail</code> property
+     * of the associated message(s) should be displayed.</p>
+     *
+     * @param redisplay flag indicating whether previously handled messages
+     *  are redisplayed or not
+     *
+     * @since 2.0
+     */
+    public void setRedisplay(boolean redisplay) {
+
+        this.redisplay = redisplay;
+
+    }
+
+
     // ----------------------------------------------------- StateHolder Methods
 
 
@@ -230,13 +263,14 @@ public class UIMessages extends UIComponentBase {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[4];
+             values = new Object[5];
         }
        
         values[0] = super.saveState(context);
         values[1] = this.globalOnly;
         values[2] = this.showDetail;
         values[3] = this.showSummary;
+        values[4] = this.redisplay;
 
         return (values);
 
@@ -250,6 +284,7 @@ public class UIMessages extends UIComponentBase {
         globalOnly = (Boolean) values[1];
         showDetail = (Boolean) values[2];
         showSummary = (Boolean) values[3];
+        redisplay = (Boolean) values[4];
 
     }
 

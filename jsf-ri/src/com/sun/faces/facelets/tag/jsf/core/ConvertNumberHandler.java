@@ -59,7 +59,7 @@ import javax.faces.convert.NumberConverter;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.tag.jsf.ConvertHandler;
 import com.sun.faces.facelets.tag.jsf.ConverterConfig;

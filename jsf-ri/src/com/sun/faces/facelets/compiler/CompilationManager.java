@@ -61,18 +61,16 @@ import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import javax.faces.webapp.pdl.facelets.tag.Tag;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
-import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 import com.sun.faces.facelets.tag.TagDecorator;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.TagLibrary;
+import com.sun.faces.facelets.tag.TagAttributesImpl;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
 import com.sun.faces.facelets.tag.composite.ImplementationHandler;
 import com.sun.faces.facelets.tag.composite.InterfaceHandler;
 import com.sun.faces.facelets.tag.ui.ComponentRefHandler;
 import com.sun.faces.facelets.tag.ui.CompositionHandler;
 import com.sun.faces.facelets.tag.ui.UILibrary;
-import javax.faces.FactoryFinder;
-import javax.faces.webapp.pdl.facelets.FaceletsArtifactFactory;
 
 /**
  * Compilation unit for managing the creation of a single FaceletHandler based
@@ -103,8 +101,6 @@ final class CompilationManager {
     
     private final String alias;
     
-    private final FaceletsArtifactFactory factory;
-
     public CompilationManager(String alias, Compiler compiler) {
         
         // this is our alias
@@ -128,8 +124,6 @@ final class CompilationManager {
         this.units = new Stack<CompilationUnit>();
         this.units.push(new CompilationUnit());
         
-        this.factory = (FaceletsArtifactFactory) 
-                FactoryFinder.getFactory(FactoryFinder.FACELETS_ARTIFACT_FACTORY);
     }
     
     private InterfaceUnit interfaceUnit;
@@ -448,7 +442,7 @@ final class CompilationManager {
                     na[p++] = oa[i];
                 }
             }
-            return new Tag(tag, factory.createTagAttributes(na));
+            return new Tag(tag, new TagAttributesImpl(na));
         }
         return tag;
     }
@@ -480,7 +474,7 @@ final class CompilationManager {
             attr = (TagAttribute[]) attrList.toArray(new TagAttribute[attrList
                     .size()]);
             return new Tag(tag.getLocation(), tag.getNamespace(), tag
-                    .getLocalName(), tag.getQName(), factory.createTagAttributes(attr));
+                    .getLocalName(), tag.getQName(), new TagAttributesImpl(attr));
         }
     }
 }

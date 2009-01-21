@@ -30,7 +30,7 @@ public class InitialStateEvent extends ComponentSystemEvent {
 
      * @param component the <code>UIComponent</code> whose state was just restored.
 
-     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
+     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
     public InitialStateEvent(UIComponent component) {
         super(component);

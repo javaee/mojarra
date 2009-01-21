@@ -120,10 +120,9 @@ public final class TagAttributeImpl extends TagAttribute {
     @Override
     public boolean getBoolean(FaceletContext ctx) {
         if (this.literal) {
-            return Boolean.valueOf(this.value).booleanValue();
+            return Boolean.valueOf(this.value);
         } else {
-            return ((Boolean) this.getObject(ctx, Boolean.class))
-                    .booleanValue();
+            return ((Boolean) this.getObject(ctx, Boolean.class));
         }
     }
 
@@ -189,7 +188,6 @@ public final class TagAttributeImpl extends TagAttribute {
         MethodExpression result = null;
         final String specialPrefix = "#{compositeComponent.attrs.";
         final int specialPrefixLen = specialPrefix.length();
-        int i;
         try {
             ExpressionFactory f = ctx.getExpressionFactory();
             // Determine if this is a composite component attribute lookup.
@@ -258,14 +256,11 @@ public final class TagAttributeImpl extends TagAttribute {
 
         @Override
         public Object invoke(ELContext elContext, Object[] arg1) {
-            Object result = null;
             FacesContext context = (FacesContext) elContext.getContext(FacesContext.class);
             // NPE is ok here.
             UIComponent composite = UIComponent.getCurrentCompositeComponent(context);
-            MethodExpression me = null;
-            me = (MethodExpression) composite.getAttributes().get(attrName);
-            result = me.invoke(elContext, arg1);
-            return result;
+            MethodExpression me = (MethodExpression) composite.getAttributes().get(attrName);
+            return me.invoke(elContext, arg1);
         }
 
         @Override
@@ -286,11 +281,8 @@ public final class TagAttributeImpl extends TagAttribute {
 
         @Override
         public boolean isLiteralText() {
-            boolean result = false;
-            
-            result = (this.expressionString.startsWith("#{") &&
+            return (this.expressionString.startsWith("#{") &&
                           (this.expressionString.endsWith("}")));
-            return result;
         }
 
         @Override

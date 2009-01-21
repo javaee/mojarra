@@ -41,6 +41,14 @@
 package javax.faces.component;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Arrays;
+
+import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
+import javax.faces.FacesException;
+
 
 /**
  * <p class="changed_added_2_0">An instance of this class is added
@@ -84,35 +92,47 @@ public class AjaxBehavior implements Serializable {
      */
     public static final String AJAX_VALUE_CHANGE_ACTION = "all";
 
-    private String onerror = null;
+    private String event;
+    private ValueExpression onerrorExpression;
+    private ValueExpression oneventExpression;
+    private ValueExpression executeExpression;
+    private ValueExpression renderExpression;
+    private ValueExpression disabledExpression;
 
-    private String onevent = null;
 
-    private String events = null;
+    // ------------------------------------------------------------ Constructors
 
-    private String execute = null;
 
-    private String render = null;
+    public AjaxBehavior(String event,
+                        ValueExpression onevent,
+                        ValueExpression onerror,
+                        ValueExpression execute,
+                        ValueExpression render,
+                        ValueExpression disabled) {
 
-    private Boolean disabled = false;
+        this.onerrorExpression = onerror;
+        this.oneventExpression = onevent;
+        this.event = event;
+        this.executeExpression = execute;
+        this.renderExpression = render;
+        this.disabledExpression = disabled;
 
-    public AjaxBehavior(String events, String onevent, String onerror, String execute, String render, Boolean disabled) {
-        this.onerror = onerror;
-        this.onevent = onevent;
-        this.events = events;
-        this.execute = execute;
-        this.render = render;
-        this.disabled = disabled;
     }
 
+
+    // ---------------------------------------------------------- Public Methods
+
+    
     /**
      * <p class="changed_added_2_0">Return the Faces event associated with
      * this instance.</p>
      *
      * @since 2.0
      */
-    public String getEvents() {
-        return events;
+    public String getEvent() {
+
+        return event;
+
     }
 
     /**
@@ -121,10 +141,14 @@ public class AjaxBehavior implements Serializable {
      * the client callback function that should be run in the event of
      * an error.
      *
+     * @param context the {@link FacesContext} for the current request
+     *
      * @since 2.0
      */
-    public String getOnError() {
-        return onerror;
+    public String getOnError(FacesContext context) {
+
+        return (String) eval(context, onerrorExpression);
+
     }
 
     /**
@@ -133,43 +157,102 @@ public class AjaxBehavior implements Serializable {
      * client callback function that should be run on the occurance
      * of a client-side event.
      *
+     * @param context the {@link FacesContext} for the current request
+     *
      * @since 2.0
      */
-    public String getOnEvent() {
-        return onevent;
+    public String getOnEvent(FacesContext context) {
+
+        return (String) eval(context, oneventExpression);
+
     }
 
     /**
-     * <p class="changed_added_2_0">Return the <code>String</code> of component
+     * <p class="changed_added_2_0">Return a
+     * <code>Collection&lt;String&gt;</code> of component
      * identifiers that will be used to identify components that should be
      * processed during the <code>execute</code> phase of the request
      * processing lifecycle.</p> 
      *
+     * @param context the {@link FacesContext} for the current request
+     *
      * @since 2.0
      */
-    public String getExecute() {
-        return execute;
+    public Collection<String> getExecute(FacesContext context) {
+
+        return getCollectionValue("execute", context, executeExpression);
+
     }
 
     /**
-     * <p class="changed_added_2_0">Return the <code>String</code> of component
+     * <p class="changed_added_2_0">Return a
+     * <code>Collection&lt;String&gt;</code> of component
      * identifiers that will be used to identify components that should be
      * processed during the <code>render</code> phase of the request
      * processing lifecycle.</p> 
      *
+     * @param context the {@link FacesContext} for the current request
+     *
      * @since 2.0
      */
-    public String getRender() {
-        return render;
+    public Collection<String> getRender(FacesContext context) {
+
+        return getCollectionValue("render", context, renderExpression);
+
     }
 
     /**
      * <p class="changed_added_2_0">Return the disabled status of this component.</p>
      *
+     * @param context the {@link FacesContext} for the current request
+     *
      * @since 2.0
      */
-    public Boolean isDisabled() {
-        return disabled;
+    public Boolean isDisabled(FacesContext context) {
+
+        // RELEASE_PENDING why not return boolean instead of Boolean?
+        Boolean result = (Boolean) eval(context, disabledExpression);
+        return ((result != null) ? result : false);
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+    private static Object eval(FacesContext ctx, ValueExpression expression) {
+
+        return ((expression != null)
+                ? expression.getValue(ctx.getELContext())
+                : null);
+
+    }
+
+
+    private static Collection<String> getCollectionValue(String name,
+                                                         FacesContext ctx,
+                                                         ValueExpression expression) {
+
+        Collection<String> result = null;
+        Object tempAttr = eval(ctx, expression);
+        if (tempAttr != null) {
+            if (tempAttr instanceof String) {
+                // split into separate strings, add these into a new Collection
+                // RELEASE_PENDING String.split() isn't cheap.  It recreates the Pattern
+                // each time it's called.
+                result = new LinkedHashSet<String>(Arrays.asList(((String) tempAttr).split(" ")));
+            } else if (tempAttr instanceof Collection) {
+                //noinspection unchecked
+                result = (Collection<String>) tempAttr;
+            } else {
+                // RELEASE_PENDING  i18n ;
+                throw new FacesException(expression.toString()
+                                         + " : '"
+                                         + name
+                                         + "' attribute value must be either a String or a Collection");
+            }
+        }
+        return result;
+
     }
 
 }

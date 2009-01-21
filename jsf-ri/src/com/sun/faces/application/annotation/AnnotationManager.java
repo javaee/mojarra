@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +24,7 @@ import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
+import javax.faces.event.SystemEvent;
 
 /**
  * This class represents the central point for annotation handling within a
@@ -65,6 +66,10 @@ public class AnnotationManager {
           LISTENER_FOR_SCANNER
     };
 
+    private static final Scanner[] EVENTS_SCANNERS = {
+        RESOURCE_DEPENDENCY_SCANNER
+    };
+
     /**
      * Enum of the different processing targets and their associated
      * {@link Scanner}s
@@ -73,7 +78,8 @@ public class AnnotationManager {
         UIComponent(UICOMPONENT_SCANNERS),
         Validator(VALIDATOR_SCANNERS),
         Converter(CONVERTER_SCANNERS),
-        Renderer(RENDERER_SCANNERS);
+        Renderer(RENDERER_SCANNERS),
+        SystemEvent(EVENTS_SCANNERS);
 
 
         @SuppressWarnings({"NonSerializableFieldInSerializableClass"})
@@ -117,31 +123,21 @@ public class AnnotationManager {
      * @param annotatedClasses <code>Collection</code> of class names known
      *  to contain one or more Faces configuration annotations
      */
-    public void applyConfigAnntations(FacesContext ctx, Collection<String> annotatedClasses) {
+    public void applyConfigAnntations(FacesContext ctx,
+                                      Class<? extends Annotation> annotationType,
+                                      Set<? extends Class> annotatedClasses) {
 
-        if (!annotatedClasses.isEmpty()) {
-            Map<Class<? extends Annotation>, ConfigAnnotationHandler> handlers =
-                  getConfigAnnotationHandlers();
-            for (String className : annotatedClasses) {
-                try {
-                    Class<?> c = Util.loadClass(className, this);
-                    Annotation[] annotations = c.getAnnotations();
-                    for (Annotation annotation : annotations) {
-                        ConfigAnnotationHandler handler =
-                              handlers.get(annotation.annotationType());
-                        if (handler != null) {
-                            handler.collect(c, annotation);
-                        }
-                    }
-                } catch (ClassNotFoundException cnfe) {
-                    throw new FacesException(cnfe);
-                }
+        if (annotatedClasses != null && !annotatedClasses.isEmpty()) {
+            ConfigAnnotationHandler handler =
+                  getConfigAnnotationHandlers().get(annotationType);
+            if (handler == null) {
+                throw new IllegalStateException("Internal Error: No ConfigAnnotationHandler for type: " + annotationType);
             }
-
+            for (Class<?> clazz : annotatedClasses) {
+                handler.collect(clazz, clazz.getAnnotation(annotationType));
+            }
             // metadata collected, now push the configuration to the system
-            for (ConfigAnnotationHandler handler : handlers.values()) {
-                handler.push(ctx);
-            }
+            handler.push(ctx);
         }
         
     }
@@ -196,6 +192,10 @@ public class AnnotationManager {
 
     }
 
+    public void applySystemEventAnnotations(FacesContext ctx, SystemEvent e) {
+        applyAnnotations(ctx, e.getClass(), ProcessingTarget.SystemEvent, e);
+    }
+
 
     // --------------------------------------------------------- Private Methods
 
@@ -214,7 +214,8 @@ public class AnnotationManager {
               new ConverterConfigHandler(),
               new ValidatorConfigHandler(),
               new RenderKitConfigHandler(),
-              new ManagedBeanConfigHandler()
+              new ManagedBeanConfigHandler(),
+              new NamedEventConfigHandler()
         };
         Map<Class<? extends Annotation>,ConfigAnnotationHandler> handlerMap =
               new HashMap<Class<? extends Annotation>,ConfigAnnotationHandler>();

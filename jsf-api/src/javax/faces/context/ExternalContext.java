@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
@@ -1183,6 +1184,35 @@ public abstract class ExternalContext {
         throw new UnsupportedOperationException();
 
     }
+
+
+    /**
+     * <p class="changed_added_2_0">Returns a <code>Writer</code>
+     * suitable for writing character data to the user-agent.</p>
+     *
+     * <div class="changed_added_2_0">
+     *
+     * <p><em>Servlet:</em> This must return the value returned by the
+     * {@link javax.servlet.ServletResponse#getWriter}.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * </div>
+     *
+     * @since 2.0
+     */
+    public Writer getResponseOutputWriter() throws IOException {
+
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getResponseOutputWriter();
+        }
+
+        throw new UnsupportedOperationException();
+
+    }
     
     
     /**
@@ -1444,10 +1474,26 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletResponse</code> <code>setHeader</code>
      * method.</p>
      *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
      * @param name The name of the response header.
      * @param value The value of the response header.
+     *
+     * @since 2.0
      */
-    public abstract void setResponseHeader(String name, String value);
+    public void setResponseHeader(String name, String value) {
+
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setResponseHeader(name, value);
+
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
 
     /**
      * <p class="changed_added_2_0">Add the given name and value to the response header.</p>
@@ -1456,9 +1502,24 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletResponse</code> <code>addHeader</code>
      * method.</p>
      *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
      * @param name The name of the response header.
      * @param value The value of the response header.
+     *
+     * @since 2.0
      */
-    public abstract void addResponseHeader(String name, String value);
+    public void addResponseHeader(String name, String value) {
+
+        if (defaultExternalContext != null) {
+            defaultExternalContext.addResponseHeader(name, value);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+        
+    }
 
 }

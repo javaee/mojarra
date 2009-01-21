@@ -8,10 +8,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.AjaxController;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 
-
-// RELEASE_PENDING - remove thread sleeps
-// RELEASE_PENDING - completely refactor code
-
 public class AjaxTagWrappingTestCase extends AbstractTestCase {
 
     public AjaxTagWrappingTestCase(String name) {

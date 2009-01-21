@@ -52,7 +52,7 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import java.io.IOException;
-import java.util.ListIterator;
+import java.util.*;
 
 import javax.el.ELException;
 import javax.faces.FacesException;
@@ -128,7 +128,7 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
  */
 public final class AjaxHandler extends TagHandlerImpl {
 
-    private final TagAttribute events;
+    private final TagAttribute event;
     private final TagAttribute execute;
     private final TagAttribute render;
     private final TagAttribute onevent;
@@ -140,7 +140,7 @@ public final class AjaxHandler extends TagHandlerImpl {
      */
     public AjaxHandler(TagConfig config) {
         super(config);
-        this.events = this.getAttribute("events");
+        this.event = this.getAttribute("event");
         this.execute = this.getAttribute("execute");
         this.render = this.getAttribute("render");
         this.onevent = this.getAttribute("onevent");
@@ -154,71 +154,45 @@ public final class AjaxHandler extends TagHandlerImpl {
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
+    @SuppressWarnings("unchecked")
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
         if (null == parent || !(ComponentSupport.isNew(parent))) {
             return;
         }
 
-        String events = null;
-        String execute = null;
-        String render = null;
-        String onevent = null;
-        String onerror = null;
-        Boolean disabled = false;
+        String event = (this.event != null) ? this.event.getValue() : null;
 
-        if (this.events != null) {
-            events = this.events.getValue(ctx);
-        }
-        if (this.execute != null) {
-            execute = this.execute.getValue(ctx).replace(' ',',');
-        }
-        if (this.render != null) {
-            render = this.render.getValue(ctx).replace(' ',',');
-        }
-        if (this.onevent != null) {
-            onevent = this.onevent.getValue(ctx);
-        }
-        if (this.onerror != null) {
-            onerror = this.onerror.getValue(ctx);
-        }
-
-        if (this.disabled != null) {
-            String disabledStr = this.disabled.getValue(ctx);
-            if ("true".equalsIgnoreCase(disabledStr)) {
-                disabled = true;
-            } else if ("false".equalsIgnoreCase(disabledStr)) {
-                disabled = false;
-            } else {
-                // RELEASE_PENDING 118N
-                throw new TagAttributeException(this.events, "'disabled' attribute value must be one of true or false");
-            }
-        }
-
-        AjaxBehavior ajaxBehavior = new AjaxBehavior(events, onevent, onerror, execute, render, disabled);
+        //AjaxBehavior ajaxBehavior = new AjaxBehavior(event, onevent, onerror, execute, render, disabled);
+        AjaxBehavior ajaxBehavior = new AjaxBehavior(event,
+                                                     ((this.onevent != null) ? this.onevent.getValueExpression(ctx, String.class) : null),
+                                                     ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
+                                                     ((this.execute != null) ? this.execute.getValueExpression(ctx, Object.class) : null),
+                                                     ((this.render != null) ? this.render.getValueExpression(ctx, Object.class) : null),
+                                                     ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null));
 
         //
         // If we are nested within an EditableValueHolder or ActionSource component..
         //
         if (parent instanceof ActionSource) {
-            if (null == events || events.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
-                events.equals(AjaxBehavior.AJAX_ACTION)) {
+            if (null == event || event.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
+                event.equals(AjaxBehavior.AJAX_ACTION)) {
                 parent.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
                 installAjaxResourceIfNecessary();
                 return;
             } else {
                 // RELEASE_PENDING 118N
-                throw new TagAttributeException(this.events, "'events' attribute value must be 'action' for 'ActionSource' components");
+                throw new TagAttributeException(this.event, "'event' attribute value must be 'action' for 'ActionSource' components");
             }
         } else if (parent instanceof EditableValueHolder) {
-            if (null == events || events.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
-                events.equals(AjaxBehavior.AJAX_VALUE_CHANGE)) {
+            if (null == event || event.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
+                event.equals(AjaxBehavior.AJAX_VALUE_CHANGE)) {
                 parent.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
                 installAjaxResourceIfNecessary();
                 return;
             } else {
                 // RELEASE_PENDING 118N
-                throw new TagAttributeException(this.events, "'events' attribute value must be 'valueChange' for 'EditableValueHolder' components");
+                throw new TagAttributeException(this.event, "'event' attribute value must be 'valueChange' for 'EditableValueHolder' components");
             }
         }
             

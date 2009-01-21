@@ -47,10 +47,6 @@ public class Count {
     public Integer getCount() {
         return count++;
     }
-//
-//    public void process(ActionEvent ae) {
-//        count++;
-//    }
 
     public void reset(ActionEvent ae) {
         count = 0;

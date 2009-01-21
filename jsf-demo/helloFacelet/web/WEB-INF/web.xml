@@ -34,7 +34,7 @@
     </context-param>
     <context-param>
         <param-name>com.sun.faces.verifyObjects</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
         <description>
             Set this flag to true if you want the JavaServer Faces
             Reference Implementation to verify that all of the application

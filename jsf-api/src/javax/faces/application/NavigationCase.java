@@ -45,47 +45,58 @@ package javax.faces.application;
  * represents a <code>&lt;navigation-case&gt;</code> in the navigation
  * rule base, as well as the <code>&lt;from-view-id&gt;</code> inside
  * which this <code>&lt;navigation-case&gt;</code> is nested.</p>
-
+ *
  * @since 2.0
  *
  */
+public class NavigationCase {
 
-public class NavigationCase implements Cloneable {
+    private final String fromViewId;
+    private final String fromAction;
+    private final String fromOutcome;
+    private final String toViewId;
+    private final boolean redirect;
 
-    private String fromViewId = null;
-    private String fromAction = null;
-    private String fromOutcome = null;
-    private String toViewId = null;
-    private boolean redirect;
+    private String toString;
+    private int hashCode;
 
 
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs review
+     * <p>
+     * Construct a new <code>NavigationCase<code> based on the provided
+     * arguments.
+     * </p>
+     *
+     * @param fromViewId the view id being navigated from
+     * @param fromAction the expression string of the invoked action that
+     *  triggered the navigation
+     * @param fromOutcome the outcome of action (if any)
+     * @param toViewId the view id to be navigated to
+     * @param redirect <code>true</code> if the new view should be navigated
+     *  to via a {@link javax.faces.context.ExternalContext#redirect(String)}
+     */
     public NavigationCase(String fromViewId,
-                                String fromAction,
-                                String fromOutcome,
-                                String toViewId,
-                                boolean redirect) {
+                          String fromAction,
+                          String fromOutcome,
+                          String toViewId,
+                          boolean redirect) {
+
         this.fromViewId = fromViewId;
         this.fromAction = fromAction;
         this.fromOutcome = fromOutcome;
         this.toViewId = toViewId;
         this.redirect = redirect;
-    }
-    
-    public NavigationCase(NavigationCase other) {
-        this.fromViewId = other.fromViewId;
-        this.fromAction = other.fromAction;
-        this.fromOutcome = other.fromOutcome;
-        this.toViewId = other.toViewId;
-        this.redirect = other.redirect;
-        
+
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        NavigationCase other = new NavigationCase(fromViewId, fromAction, fromOutcome, toViewId, redirect);
-        return other;
-    }
-    
+
+    // ---------------------------------------------------------- Public Methods
+
+
     /**
      * <p class="changed_added_2_0">Return the
      * <code>&lt;from-view-id&gt;</code> of the
@@ -95,7 +106,9 @@ public class NavigationCase implements Cloneable {
      * @since 2.0
      */
     public String getFromViewId() {
-        return (this.fromViewId);
+
+        return fromViewId;
+
     }
 
 
@@ -106,7 +119,9 @@ public class NavigationCase implements Cloneable {
      * @since 2.0
      */
     public String getFromAction() {
-        return (this.fromAction);
+
+        return fromAction;
+
     }
 
 
@@ -117,7 +132,9 @@ public class NavigationCase implements Cloneable {
      * @since 2.0
      */
     public String getFromOutcome() {
-        return (this.fromOutcome);
+
+        return fromOutcome;
+
     }
 
 
@@ -128,7 +145,9 @@ public class NavigationCase implements Cloneable {
      * @since 2.0
      */
     public String getToViewId() {
-        return (this.toViewId);
+
+        return toViewId;
+
     }
 
 
@@ -140,16 +159,77 @@ public class NavigationCase implements Cloneable {
      */
 
     public boolean isRedirect() {
+
         return redirect;
+
     }
 
-    public String toString() {
-        StringBuilder sb = new StringBuilder(64);
-        sb.append("from-view-id=").append(getFromViewId());
-        sb.append(" from-action=").append(getFromAction());
-        sb.append(" from-outcome=").append(getFromOutcome());
-        sb.append(" to-view-id=").append(getToViewId());
-        sb.append(" redirect=").append(isRedirect());
-        return sb.toString();
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        NavigationCase that = (NavigationCase) o;
+
+        return (redirect == that.redirect
+               && !(fromAction != null
+                    ? !fromAction.equals(that.fromAction)
+                    : that.fromAction != null)
+               && !(fromOutcome != null
+                    ? !fromOutcome.equals(that.fromOutcome)
+                    : that.fromOutcome != null)
+               && !(fromViewId != null
+                    ? !fromViewId.equals(that.fromViewId)
+                    : that.fromViewId != null)
+               && !(toViewId != null
+                    ? !toViewId.equals(that.toViewId)
+                    : that.toViewId != null));
+
     }
+
+    
+    @Override
+    public int hashCode() {
+
+        if (hashCode == 0) {
+            int result = fromViewId != null ? fromViewId.hashCode() : 0;
+            result = 31 * result + (fromAction != null
+                                    ? fromAction.hashCode()
+                                    : 0);
+            result = 31 * result + (fromOutcome != null
+                                    ? fromOutcome.hashCode()
+                                    : 0);
+            result = 31 * result + (toViewId != null ? toViewId.hashCode() : 0);
+            result = 31 * result + (redirect ? 1 : 0);
+            hashCode = result;
+        }
+        return hashCode;
+
+    }
+
+
+    @Override
+    public String toString() {
+
+        if (toString == null) {
+            StringBuilder sb = new StringBuilder(64);
+            sb.append("NavigationCase{");
+            sb.append("fromViewId='").append(fromViewId).append('\'');
+            sb.append(", fromAction='").append(fromAction).append('\'');
+            sb.append(", fromOutcome='").append(fromOutcome).append('\'');
+            sb.append(", toViewId='").append(toViewId).append('\'');
+            sb.append(", redirect=").append(redirect);
+            sb.append('}');
+            toString = sb.toString();
+        }
+        return toString;
+
+    }
+    
 }

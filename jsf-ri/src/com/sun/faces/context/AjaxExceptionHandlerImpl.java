@@ -48,6 +48,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialResponseWriter;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.AbortProcessingException;
@@ -183,21 +184,16 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
 
      private void handlePartialResponseError(FacesContext context, Throwable t) {
          try {
-             ResponseWriter writer = context.getPartialViewContext().getPartialResponseWriter();
-             writer.startElement("partial-response", context.getViewRoot());
-             writer.startElement("error", context.getViewRoot());
-             writer.startElement("error-name", context.getViewRoot());
-             writer.write(t.getClass().toString());
-             writer.endElement("error-name");
-             writer.startElement("error-message", context.getViewRoot());
+             PartialResponseWriter writer = context.getPartialViewContext().getPartialResponseWriter();
+             writer.startDocument();
+             writer.startError(t.getClass().toString());
              if (t.getCause() != null) {
                  writer.write(t.getCause().getMessage());
              } else {
                  writer.write(t.getMessage());
              }
-             writer.endElement("error-message");
-             writer.endElement("error");
-             writer.endElement("partial-response");
+             writer.endError();
+             writer.endDocument();
              context.responseComplete();
          } catch (IOException ioe) {
             if (LOGGER.isLoggable(Level.SEVERE)) {

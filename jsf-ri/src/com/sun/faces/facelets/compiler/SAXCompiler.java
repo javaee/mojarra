@@ -78,9 +78,10 @@ import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import javax.faces.webapp.pdl.facelets.tag.Location;
 import javax.faces.webapp.pdl.facelets.tag.Tag;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
-import javax.faces.FactoryFinder;
-import javax.faces.webapp.pdl.facelets.FaceletsArtifactFactory;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+
+import com.sun.faces.facelets.tag.TagAttributeImpl;
+import com.sun.faces.facelets.tag.TagAttributesImpl;
 
 /**
  * Compiler implementation that uses SAX
@@ -105,13 +106,9 @@ public final class SAXCompiler extends Compiler {
 
         private final CompilationManager unit;
         
-        private FaceletsArtifactFactory factory = null;
-
         public CompilationHandler(CompilationManager unit, String alias) {
             this.unit = unit;
             this.alias = alias;
-            factory = (FaceletsArtifactFactory) 
-                    FactoryFinder.getFactory(FactoryFinder.FACELETS_ARTIFACT_FACTORY);
         }
 
         public void characters(char[] ch, int start, int length)
@@ -132,11 +129,11 @@ public final class SAXCompiler extends Compiler {
             int len = attrs.getLength();
             TagAttribute[] ta = new TagAttribute[len];
             for (int i = 0; i < len; i++) {
-                ta[i] = factory.createTagAttribute(this.createLocation(),
+                ta[i] = new TagAttributeImpl(this.createLocation(),
                         attrs.getURI(i), attrs.getLocalName(i), attrs
                                 .getQName(i), attrs.getValue(i));
             }
-            return factory.createTagAttributes(ta);
+            return new TagAttributesImpl(ta);
         }
 
         protected Location createLocation() {

@@ -42,6 +42,9 @@ package com.sun.faces.config.processor;
 
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.application.InjectionApplicationFactory;
+import com.sun.faces.context.InjectionFacesContextFactory;
+import com.sun.faces.context.InjectionExternalContextFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -106,10 +109,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String RENDER_KIT_FACTORY = "render-kit-factory";
 
     /**
-     * <code>/faces-config/factory/facelets-artifact-factory</code>
+     * <code>/faces-config/factory/external-context-factory</code>
      */
-    private static final String FACELETS_ARTIFACT_FACTORY = "facelets-artifact-factory";
-
+    private static final String EXTERNAL_CONTEXT_FACTORY = "external-context-factory";
 
     /**
      * <code>Array of Factory names for post-configuration validation.</code>
@@ -122,8 +124,24 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.LIFECYCLE_FACTORY,
           FactoryFinder.RENDER_KIT_FACTORY,
           FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
-          FactoryFinder.FACELETS_ARTIFACT_FACTORY
+          FactoryFinder.EXTERNAL_CONTEXT_FACTORY
     };
+
+    private boolean validateFactories = true;
+
+
+    // ------------------------------------------------------------ Constructors
+
+    
+    public FactoryConfigProcessor() { }
+
+
+    // Only called by the cactus test code
+    public FactoryConfigProcessor(boolean validateFactories) {
+
+        this.validateFactories = validateFactories;
+
+    }
 
 
     // -------------------------------------------- Methods from ConfigProcessor
@@ -139,9 +157,15 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         // for this application
         AtomicInteger facesContextFactoryCount = new AtomicInteger(0);
 
-        // trace how many ApplicationFactory instances are being added
+        // track how many ExternalContextFactory instances are being added
+        // for this application
+        AtomicInteger externalContextFactoryCount = new AtomicInteger(0);
+
+        // track how many ApplicationFactory instances are being added
         // for this application
         AtomicInteger applicationFactoryCount = new AtomicInteger(0);
+
+
 
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -158,24 +182,24 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 processFactories(factories,
                                  namespace,
                                  facesContextFactoryCount,
+                                 externalContextFactoryCount,
                                  applicationFactoryCount);
             }
         }
 
-        // If there are more than one ApplicationFactory or FacesContextFactory
-        // defined, we will push our Injection factories onto the factory list
-        // so that they are the top-level factory.  This allows us to inject the
-        // default instances into the custom Application or FacesContext
+        // If there are more than one ApplicationFactory, FacesContextFactory,
+        // or ExternalContextFactory defined, we will push our Injection
+        // factories onto the factory list so that they are the top-level
+        // factory.  This allows us to inject the default instances into the
+        // custom Application, FacesContext, or ExternalContext
         // implementations to get around version compatibility issues.
         // This *must* be called *before* verifyFactoriesExist() as once that
         // is called, we can't make any changes to the Factory delegation
         // chain.
         wrapFactories(applicationFactoryCount.get(),
-                      facesContextFactoryCount.get());
+                      facesContextFactoryCount.get(),
+                      externalContextFactoryCount.get());
         
-        // PENDING(rlubke): Not sure if DiscoveryHandlerFactory should get the
-        // wrapFactories treatment.  Currently it does not.
-
         // validate that we actually have factories at this point.
         verifyFactoriesExist();
 
@@ -190,6 +214,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private void processFactories(NodeList factories,
                                   String namespace,
                                   AtomicInteger fcCount,
+                                  AtomicInteger extCount,
                                   AtomicInteger appCount) {
 
         for (int i = 0, size = factories.getLength(); i < size; i++) {
@@ -218,11 +243,12 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 } else if (RENDER_KIT_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.RENDER_KIT_FACTORY,
                                getNodeText(n));
-                } else if (FACELETS_ARTIFACT_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.FACELETS_ARTIFACT_FACTORY,
-                               getNodeText(n));
                 } else if (PAGE_DECLARATION_LANGUAGE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
+                               getNodeText(n));
+                } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
+                    extCount.incrementAndGet();
+                    setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
                                getNodeText(n));
                 }
             }
@@ -249,26 +275,31 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         
     private void verifyFactoriesExist() {
 
-        for (int i = 0, len = FACTORY_NAMES.length; i < len; i++) {
-            try {
-                FactoryFinder.getFactory(FACTORY_NAMES[i]);
-            } catch (Exception e) {
-                throw new ConfigurationException(
-                      MessageFormat.format("Factory ''{0}'' was not configured properly.",
-                                           FACTORY_NAMES[i]), e);
+        if (validateFactories) {
+            for (int i = 0, len = FACTORY_NAMES.length; i < len; i++) {
+                try {
+                    FactoryFinder.getFactory(FACTORY_NAMES[i]);
+                } catch (Exception e) {
+                    throw new ConfigurationException(
+                          MessageFormat.format("Factory ''{0}'' was not configured properly.",
+                                               FACTORY_NAMES[i]), e);
+                }
             }
         }
 
     }
 
 
-    private void wrapFactories(int appCount, int fcCount) {
+    private void wrapFactories(int appCount, int fcCount, int extCount) {
 
         if (appCount > 1) {
             addInjectionApplicationFactory();
         }
         if (fcCount > 1) {
             addInjectionFacesContextFactory();
+        }
+        if (extCount > 1) {
+            addInjectionExternalContextFactory();
         }
 
     }
@@ -283,7 +314,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private void addInjectionApplicationFactory() {
 
         FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-                                 "com.sun.faces.application.InjectionApplicationFactory");
+                                 InjectionApplicationFactory.class.getName());
         
     }
 
@@ -297,7 +328,21 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private void addInjectionFacesContextFactory() {
 
         FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
-                                 "com.sun.faces.context.InjectionFacesContextFactory");
+                                 InjectionFacesContextFactory.class.getName());
+
+    }
+
+
+    /**
+     * Add the InjectionExternalContextFactory as the top-level ExternalContextFactory
+     * so that the default instances, provided by {@link com.sun.faces.context.ExternalContextFactoryImpl}
+     * can be injected into the actual top-level ExternalContext instance (that which
+     * is returned by the InjectionExternalContextFactory's delegate).
+     */
+    private void addInjectionExternalContextFactory() {
+
+        FactoryFinder.setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
+                                 InjectionExternalContextFactory.class.getName());
 
     }
 

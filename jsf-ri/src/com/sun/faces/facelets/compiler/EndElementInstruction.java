@@ -59,6 +59,8 @@ import javax.el.ExpressionFactory;
 
 import javax.faces.context.FacesContext;
 
+import com.sun.faces.renderkit.RenderKitUtils;
+
 final class EndElementInstruction implements Instruction {
     private final String element;
 
@@ -67,6 +69,9 @@ final class EndElementInstruction implements Instruction {
     }
 
     public void write(FacesContext context) throws IOException {
+        if ("body".equalsIgnoreCase(this.element)) {
+            RenderKitUtils.renderUnhandledMessages(context);
+        }
         context.getResponseWriter().endElement(this.element);
     }
 

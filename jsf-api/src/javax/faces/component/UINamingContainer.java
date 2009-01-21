@@ -138,33 +138,6 @@ public class UINamingContainer extends UIComponentBase
 
     }
 
-    public String createUniqueId(FacesContext context) {
-        return this.getClientId(context) + lastId++;
-    }
-
-    @Override
-    public void restoreState(FacesContext context, Object state) {
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        lastId = ((Integer) values[1]).intValue();
-    }
-
-    private Object[] values;
-    
-    @Override
-    public Object saveState(FacesContext context) {
-        if (values == null) {
-            values = new Object[2];
-        }
-
-        values[0] = super.saveState(context);
-        values[1] = lastId;
-        
-        return (values);
-    
-    }
-    
-
     /**
      * @see UIComponent#visitTree
      */
@@ -204,5 +177,32 @@ public class UINamingContainer extends UIComponentBase
         // visit to continue.
         return false;
     }
+
+     public String createUniqueId(FacesContext context) {
+         return this.getClientId(context) + lastId++;
+     }
+ 
+     @Override
+     public void restoreState(FacesContext context, Object state) {
+         values = (Object[]) state;
+         super.restoreState(context, values[0]);
+         lastId = ((Integer) values[1]).intValue();
+     }
+ 
+     private Object[] values;
+     
+     @Override
+     public Object saveState(FacesContext context) {
+         if (values == null) {
+             values = new Object[2];
+         }
+ 
+         values[0] = super.saveState(context);
+         values[1] = lastId;
+         
+         return (values);
+     
+     }
+
 }
 

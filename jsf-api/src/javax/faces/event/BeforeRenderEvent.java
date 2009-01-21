@@ -36,7 +36,7 @@ public class BeforeRenderEvent extends ComponentSystemEvent {
      * @param component the <code>UIComponent</code> that is about to be
      * rendered.
 
-     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
+     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
     public BeforeRenderEvent(UIComponent component) {
         super(component);

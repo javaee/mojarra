@@ -40,9 +40,11 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.context.flash.ELFlash;
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.context.ExceptionHandler;
+import javax.faces.context.Flash;
 import javax.faces.event.PhaseId;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -65,7 +67,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.NoSuchElementException;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -73,7 +74,6 @@ import java.util.logging.Logger;
 
 import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -181,12 +181,13 @@ public class FacesContextImpl extends FacesContext {
      * @see javax.faces.context.FacesContext#getPartialViewContext()
      */
     public PartialViewContext getPartialViewContext() {
+
         assertNotReleased();
-        if (null != partialViewContext) {
-            return partialViewContext;
+        if (partialViewContext == null) {
+            partialViewContext = new PartialViewContextImpl(this);
         }
-        partialViewContext = new PartialViewContextImpl();
         return partialViewContext;
+        
     }
 
 
@@ -248,6 +249,13 @@ public class FacesContextImpl extends FacesContext {
         }
         return elContext;
     }
+
+    @Override
+    public Flash getFlash() {
+        return ELFlash.getFlash(this, true);
+    }
+    
+    
 
 
     /**
@@ -338,13 +346,6 @@ public class FacesContextImpl extends FacesContext {
             return (emptyList.iterator());
         }
 
-        //Clear set of clientIds from pending display messages result.
-        if (RequestStateManager.containsKey(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
-            Set pendingClientIds = (Set)
-                  RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
-            pendingClientIds.clear();
-        }
-
         if (componentMessageLists.size() > 0) {
             return new ComponentMessagesIterator(componentMessageLists);
         } else {
@@ -358,13 +359,6 @@ public class FacesContextImpl extends FacesContext {
      */
     public Iterator<FacesMessage> getMessages(String clientId) {
         assertNotReleased();
-
-        //remove client id from pending display messages result.
-        Set pendingClientIds = (Set)
-              RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
-        if (pendingClientIds != null && !pendingClientIds.isEmpty()) {
-            pendingClientIds.remove(clientId);
-        }
 
         // If no messages have been enqueued at all,
         // return an empty List Iterator
@@ -537,9 +531,6 @@ public class FacesContextImpl extends FacesContext {
      * @see javax.faces.context.FacesContext#release()
      */
     public void release() {
-
-        RequestStateManager
-              .remove(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
 
         released = true;
         externalContext = null;

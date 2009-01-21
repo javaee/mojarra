@@ -307,6 +307,22 @@ public abstract class ViewHandler {
      */
     public abstract UIViewRoot createView(FacesContext context, String viewId);
 
+    /**
+     * <p class="changed_added_2_0">Derive the viewId from the current
+     * request, or the argument input by following the algorithm defined
+     * in the specification.</p>
+     *
+     * @since 2.0
+     * @param context the <code>FacesContext</code> for this request
+
+     * @param input the input candidate <code>viewId</code> to derive,
+     * or <code>null</code> to use the information in the current
+     * request to derive the <code>viewId</code>.
+
+     */
+    public String deriveViewId(FacesContext context, String input) {
+        throw new UnsupportedOperationException("The default implementation must override this method");
+    }
 
     /**
      * <p>Return a URL suitable for rendering (after optional encoding

@@ -41,8 +41,11 @@
 package com.sun.faces.config.processor;
 
 import com.sun.faces.application.ApplicationResourceBundle;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
@@ -57,6 +60,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import javax.faces.FactoryFinder;
+import javax.faces.component.FacesComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseListener;
 import javax.faces.render.Renderer;
@@ -67,6 +72,7 @@ import javax.faces.application.ViewHandler;
 import javax.el.ELResolver;
 
 import java.lang.reflect.Constructor;
+import java.lang.annotation.Annotation;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -287,6 +293,20 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         return clazz;
         
     }
+
+
+    protected void processAnnotations(Class<? extends Annotation> annotationType) {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ApplicationAssociate associate =
+              ApplicationAssociate.getInstance(ctx.getExternalContext());
+        AnnotationManager manager = associate.getAnnotationManager();
+        manager.applyConfigAnntations(ctx,
+                                      annotationType,
+                                      ConfigManager.getAnnotatedClasses(ctx).get(annotationType));
+        
+    }
+
 
 
     // --------------------------------------------------------- Private Methods

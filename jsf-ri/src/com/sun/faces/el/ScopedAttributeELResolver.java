@@ -48,6 +48,7 @@ import java.util.Map;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.component.UIViewRoot;
 
 import javax.el.ELException;
 import javax.el.PropertyNotFoundException;
@@ -77,17 +78,34 @@ public class ScopedAttributeELResolver extends ELResolver {
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
         ExternalContext ec = facesContext.getExternalContext();
-        Map<String,Object> viewMap = facesContext.getViewRoot().getViewMap(false);
-        Object result;
-        if (null == (result = ec.getRequestMap().get(attribute))) {
-            if (null == (result = ((viewMap != null) ? viewMap.get(attribute) : null))) {
-                if (null == (result = ec.getSessionMap().get(attribute))) {
-                    result = ec.getApplicationMap().get(attribute);
-                }
+
+        // check request
+        Object result = ec.getRequestMap().get(attribute);
+        if (result != null) {
+            return result;
+        }
+
+        // check UIViewRoot
+        UIViewRoot root = facesContext.getViewRoot();
+        if (root != null) {
+            Map<String, Object> viewMap = root.getViewMap(false);
+            if (viewMap != null) {
+                result = viewMap.get(attribute);
             }
         }
-        
-        return result;
+        if (result != null) {
+            return result;
+        }
+
+        // check session
+        result = ec.getSessionMap().get(attribute);
+        if (result != null) {
+            return result;
+        }
+
+        // check application
+        return ec.getApplicationMap().get(attribute);
+
     }
 
 
@@ -172,16 +190,18 @@ public class ScopedAttributeELResolver extends ELResolver {
         }
         
        // add attributes in view scope.
-        Map<String, Object> viewMap =
-              facesContext.getViewRoot().getViewMap(false);
-        if (viewMap != null && viewMap.size() != 0) {
-            attrs = facesContext.getViewRoot().getViewMap().entrySet();
-            for (Entry<String, Object> entry : attrs) {
-                String attrName = entry.getKey();
-                Object attrValue = entry.getValue();
-                list.add(Util.getFeatureDescriptor(attrName, attrName,
-                                                   "view scope attribute", false, false, true, attrValue.getClass(),
-                                                   Boolean.TRUE));
+        UIViewRoot root = facesContext.getViewRoot();
+        if (root != null) {
+            Map<String, Object> viewMap = root.getViewMap(false);
+            if (viewMap != null && viewMap.size() != 0) {
+                attrs = viewMap.entrySet();
+                for (Entry<String, Object> entry : attrs) {
+                    String attrName = entry.getKey();
+                    Object attrValue = entry.getValue();
+                    list.add(Util.getFeatureDescriptor(attrName, attrName,
+                                                       "view scope attribute", false, false, true, attrValue.getClass(),
+                                                       Boolean.TRUE));
+                }
             }
         }
         

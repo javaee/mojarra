@@ -122,6 +122,20 @@
 
     <property>
         <description>
+          Javascript code executed when this element loses focus
+          and its value has been modified since gaining focus.
+        </description>
+        <display-name>Input Change Script</display-name>
+        <icon></icon>
+        <property-name>onchange</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
+    </property>
+
+    <property>
+        <description>
           Javascript code executed when a pointer button is
           pressed down over this element.
         </description>

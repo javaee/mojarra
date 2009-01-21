@@ -53,9 +53,11 @@ public class UserNumberBean {
 
     public UserNumberBean() {
         Random randomGR = new Random();
-        do {
-            randomInt = new Integer(randomGR.nextInt(10));
-        } while (randomInt.intValue() == 0);
+        if (maximumSet && minimumSet) {
+            randomInt = new Integer( randomGR.nextInt((maximum - minimum) + 1) + minimum );
+        } else {
+            randomInt = new Integer(randomGR.nextInt(10) + 1);
+        }
         System.out.println("Duke's number: " + randomInt);
     }
 

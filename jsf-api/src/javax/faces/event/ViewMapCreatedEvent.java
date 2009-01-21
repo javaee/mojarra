@@ -34,7 +34,7 @@ public class ViewMapCreatedEvent extends ComponentSystemEvent {
      * @param root the <code>UIViewRoot</code> for which a view map has
      * just been created.
      *
-     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
+     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
     public ViewMapCreatedEvent(UIViewRoot root) {
         super(root);

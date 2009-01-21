@@ -49,7 +49,6 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
-import javax.faces.context.PartialViewContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseEvent;
@@ -181,10 +180,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         LOCATION_IDENTIFIER_MAP.put("body", LOCATION_IDENTIFIER_PREFIX + "BODY");        
     }
 
-    /** <p> Key to hold the original ResponseWriter between
-     *      encodeBegin and encodeEnd during Ajax requests.</p>
-     */
-    private static final String ORIGINAL_WRITER = "javax.faces.originalWriter";
 
     // ------------------------------------------------------------ Constructors
 
@@ -903,7 +898,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         try {
             if (!skipPhase) {
                 if (context.getPartialViewContext().isPartialRequest()) {
-                    context.getPartialViewContext().processPartial(context, PhaseId.APPLY_REQUEST_VALUES);
+                    context.getPartialViewContext().processPartial(PhaseId.APPLY_REQUEST_VALUES);
                 } else {
                 super.processDecodes(context);
                 }
@@ -953,7 +948,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     @Override
     public void encodeChildren(FacesContext context) throws IOException {
         if (context.getPartialViewContext().isAjaxRequest()) {
-            context.getPartialViewContext().processPartial(context, PhaseId.RENDER_RESPONSE);
+            context.getPartialViewContext().processPartial(PhaseId.RENDER_RESPONSE);
         } else {
             super.encodeChildren(context);
         }
@@ -1115,8 +1110,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         try {
             if (!skipPhase) {
                 if (context.getPartialViewContext().isPartialRequest()) {
-                    context.getPartialViewContext().processPartial(context, 
-                        PhaseId.PROCESS_VALIDATIONS);
+                    context.getPartialViewContext().processPartial(PhaseId.PROCESS_VALIDATIONS);
                 } else {
                     super.processValidators(context);
                 }
@@ -1158,8 +1152,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         try {
             if (!skipPhase) {
                 if (context.getPartialViewContext().isPartialRequest()) {
-                    context.getPartialViewContext().processPartial(context, 
-                        PhaseId.UPDATE_MODEL_VALUES);
+                    context.getPartialViewContext().processPartial(PhaseId.UPDATE_MODEL_VALUES);
                 } else {
                     super.processUpdates(context);
                 }

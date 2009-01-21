@@ -99,6 +99,7 @@ public class UIMessage extends UIComponentBase {
     private boolean showDetailSet = false;
     private boolean showSummary = false;
     private boolean showSummarySet = false;
+    private Boolean redisplay = true;
 
 
     // -------------------------------------------------------------- Properties
@@ -227,6 +228,38 @@ public class UIMessage extends UIComponentBase {
     }
 
 
+    /**
+     * @return <code>true</code> if this <code>UIMessage</code> instance should
+     *  redisplay {@link javax.faces.application.FacesMessage}s that have already been handled,
+     *  otherwise returns <code>false</code>.  By default this method will
+     *  always return <code>true</code> if {@link #setRedisplay(boolean)} has
+     *  not been called.
+     *
+     * @since 2.0
+     */
+    public boolean isRedisplay() {
+
+        return ((redisplay == null) ? true : redisplay);
+
+    }
+
+
+    /**
+     * <p>Set the flag indicating whether the <code>detail</code> property
+     * of the associated message(s) should be displayed.</p>
+     *
+     * @param redisplay flag indicating whether previously handled messages
+     *  are redisplayed or not
+     *
+     * @since 2.0
+     */
+    public void setRedisplay(boolean redisplay) {
+
+        this.redisplay = redisplay;
+
+    }
+
+
     // ----------------------------------------------------- StateHolder Methods
 
 
@@ -235,7 +268,7 @@ public class UIMessage extends UIComponentBase {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[6];
+             values = new Object[7];
         }
        
         values[0] = super.saveState(context);
@@ -244,6 +277,7 @@ public class UIMessage extends UIComponentBase {
         values[3] = this.showDetailSet;
         values[4] = this.showSummary;
         values[5] = this.showSummarySet;
+        values[6] = this.redisplay;
         return (values);
 
     }
@@ -258,6 +292,7 @@ public class UIMessage extends UIComponentBase {
         showDetailSet = (Boolean) values[3];
         showSummary = (Boolean) values[4];
         showSummarySet = (Boolean) values[5];
+        redisplay = (Boolean) values[6];
 
     }
 

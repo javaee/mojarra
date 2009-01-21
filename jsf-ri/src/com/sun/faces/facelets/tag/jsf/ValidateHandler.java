@@ -62,11 +62,11 @@ import javax.faces.validator.Validator;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import com.sun.faces.facelets.tag.MetaTagHandler;
+import com.sun.faces.facelets.tag.MetaTagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
@@ -81,7 +81,7 @@ import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
  * @author Jacob Hookom
  * @version $Id$
  */
-public class ValidateHandler extends MetaTagHandler implements EditableValueHolderAttachedObjectHandler {
+public class ValidateHandler extends MetaTagHandlerImpl implements EditableValueHolderAttachedObjectHandler {
 
     private final TagAttribute binding;
     

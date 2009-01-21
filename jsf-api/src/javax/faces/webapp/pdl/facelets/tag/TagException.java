@@ -55,10 +55,11 @@ import javax.faces.webapp.pdl.facelets.tag.Tag;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 
 /**
- * An Exception caused by a Tag
+ * <p class="changed_added_2_0">An Exception caused by a Tag</p>
  * 
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  */
 public final class TagException extends FaceletException {
 

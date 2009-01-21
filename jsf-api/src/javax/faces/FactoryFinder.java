@@ -166,6 +166,13 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
+     * {@link javax.faces.context.ExternalContextFactory} class name.</p>
+     */
+    public final static String EXTERNAL_CONTEXT_FACTORY =
+         "javax.faces.context.ExternalContextFactory";
+
+    /**
+     * <p>The property name for the
      * {@link javax.faces.context.FacesContextFactory} class name.</p>
      */
     public final static String FACES_CONTEXT_FACTORY =
@@ -194,13 +201,6 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
-     * {@link javax.faces.webapp.pdl.facelets.FaceletsImplementationArtifactFactory} class name.</p>
-     */
-    public final static String FACELETS_ARTIFACT_FACTORY =
-         "javax.faces.webapp.pdl.facelets.FaceletsArtifactFactory";
-
-    /**
-     * <p>The property name for the
      * {@link javax.faces.webapp.pdl.PageDeclarationLanguage} class name.</p>
      */
     public final static String PAGE_DECLARATION_LANGUAGE_FACTORY =
@@ -222,12 +222,11 @@ public final class FactoryFinder {
          APPLICATION_FACTORY,
          VISIT_CONTEXT_FACTORY,
          EXCEPTION_HANDLER_FACTORY,
+         EXTERNAL_CONTEXT_FACTORY,
          FACES_CONTEXT_FACTORY,
          LIFECYCLE_FACTORY,
          RENDER_KIT_FACTORY,
          PAGE_DECLARATION_LANGUAGE_FACTORY,
-         FACELETS_ARTIFACT_FACTORY
-         
     };
 
     /**
@@ -237,6 +236,13 @@ public final class FactoryFinder {
 
     private static final Logger LOGGER =
          Logger.getLogger("javax.faces", "javax.faces.LogStrings");
+
+    // Ensure the factory names are sorted.
+    //
+    static {
+        Arrays.sort(FACTORY_NAMES);
+    }
+
 
     // --------------------------------------------------------- Public Methods
 
@@ -600,6 +606,8 @@ public final class FactoryFinder {
                  javax.faces.application.ApplicationFactory.class);
             factoryClasses.put(EXCEPTION_HANDLER_FACTORY,
                  javax.faces.context.ExceptionHandlerFactory.class);
+            factoryClasses.put(EXTERNAL_CONTEXT_FACTORY,
+                 javax.faces.context.ExternalContextFactory.class);
             factoryClasses.put(FACES_CONTEXT_FACTORY,
                  javax.faces.context.FacesContextFactory.class);
             factoryClasses.put(VISIT_CONTEXT_FACTORY,
@@ -608,8 +616,6 @@ public final class FactoryFinder {
                  javax.faces.lifecycle.LifecycleFactory.class);
             factoryClasses.put(RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
-            factoryClasses.put(FACELETS_ARTIFACT_FACTORY,
-                 javax.faces.webapp.pdl.facelets.FaceletsArtifactFactory.class);
             factoryClasses.put(PAGE_DECLARATION_LANGUAGE_FACTORY,
                  javax.faces.webapp.pdl.PageDeclarationLanguageFactory.class);
         }
@@ -626,7 +632,6 @@ public final class FactoryFinder {
         if (factoryName == null) {
             throw new NullPointerException();
         }
-        Arrays.sort(FACTORY_NAMES);
         if (Arrays.binarySearch(FACTORY_NAMES, factoryName) < 0) {
             throw new IllegalArgumentException(factoryName);
         }

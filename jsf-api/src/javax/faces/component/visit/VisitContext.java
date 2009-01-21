@@ -189,10 +189,10 @@ abstract public class VisitContext {
      */
     abstract public Set<VisitHint> getHints();
 
+
     /**
      * <p>Creates a VisitContext instance for use with 
      * {@link UIComponent#visitTree UIComponent.visitTree()}.</p>
-     * RELEASE_PENDING (edburns,rogerk) docs
      *
      * @param context the FacesContext for the current request
      * @param ids the client ids of the components to visit.  If null,
@@ -201,7 +201,6 @@ abstract public class VisitContext {
      * @return a VisitContext instance that is initialized with the 
      *   specified ids and hints.
      */
-
     public static VisitContext createVisitContext(FacesContext context,
                                                   Collection<String> ids,
                                                   Set<VisitHint> hints) {
@@ -218,11 +217,9 @@ abstract public class VisitContext {
      * This method can be used to obtain a VisitContext instance
      * when all components should be visited with the default
      * visit hints.</p>
-     * RELEASE_PENDING (edburns,rogerk) docs
      * @param context the FacesContext for the current request
      * @return a VisitContext instance
      */
-
     public static VisitContext createVisitContext(FacesContext context) {
 
         return createVisitContext(context, null, null);

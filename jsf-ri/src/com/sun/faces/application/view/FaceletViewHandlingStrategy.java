@@ -112,11 +112,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     // ------------------------------------ Methods from PageDeclarationLanguage
+
+     @Override
+     public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
+         return stateManagementStrategy;
+     }
     
-    @Override
-    public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
-        return stateManagementStrategy;
-    }
 
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, 
@@ -272,7 +273,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                   String viewId) {
 
         if (UIDebug.debugRequest(ctx)) {
-            return new UIViewRoot();
+            ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
         }
 
         return super.restoreView(ctx, viewId);
@@ -288,6 +289,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public UIViewRoot createView(FacesContext ctx,
                                  String viewId) {
 
+        if (UIDebug.debugRequest(ctx)) {
+            ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
+        }
         UIViewRoot root = super.createView(ctx, viewId);
         ctx.setViewRoot(root);
         root.getClientId(ctx);
@@ -407,10 +411,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         String viewMappings = webConfig
               .getOptionValue(WebContextInitParameter.FaceletsViewMappings);
-        if (null == viewMappings) {
-            viewMappings = webConfig
-              .getOptionValue(WebContextInitParameter.FaceletsViewMappingsAlias);
-        }
         if ((viewMappings != null) && (viewMappings.length() > 0)) {
             String[] mappingsArray = Util.split(viewMappings, ";");
 

@@ -41,7 +41,6 @@
 package javax.faces.context;
 
 import java.util.Collection;
-import java.util.Map;
 
 import javax.faces.event.PhaseId;
 
@@ -153,7 +152,7 @@ public abstract class PartialViewContext {
     public abstract Collection<String> getRenderIds();
 
     /**
-     * <p class="changed_added_2_0">Return the {@link ResponseWriter} 
+     * <p class="changed_added_2_0">Return the {@link ResponseWriter}
      * to which components should
      * direct their output for partial view rendering.  Within a given
      * response, components can use either the ResponseStream or the
@@ -164,13 +163,14 @@ public abstract class PartialViewContext {
      *
      * @since 2.0
      */
-    public abstract ResponseWriter getPartialResponseWriter();
+    public abstract PartialResponseWriter getPartialResponseWriter();
 
     /**
      * <p class="changed_added_2_0">
-     * Return <code>true</code> if the request parameter
-     * <code>javax.faces.partial.ajax</code> is present in the current
-     * request.  Otherwise, return <code>false</code>.</p>
+     * Return <code>true</code> if the request header 
+     * <code>Faces-Request</code> is present with the value
+     * <code>partial/ajax</code>. 
+     * Otherwise, return <code>false</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
@@ -181,10 +181,11 @@ public abstract class PartialViewContext {
 
     /**
      * <p class="changed_added_2_0">
-     * Return <code>true</code> if the request parameter
-     * <code>javax.faces.partial</code> or
-     * <code>javax.faces.partial.ajax</code> is present in the current
-     * request.  Otherwise, return <code>false</code>.</p>
+     * Return <code>true</code> {@link #isAjaxRequest} returns
+     * <code>true</code> or if the request header
+     * <code>Faces-Request</code> is present with the value
+     * <code>partial/process</code>. 
+     * Otherwise, return <code>false</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
@@ -243,13 +244,6 @@ public abstract class PartialViewContext {
      * resources associated with this <code>PartialViewContext</code>
      * instance.</p>
      *
-     * <p class="changed_added_2_0">If a call was made to {@link
-     * #getAttributes} during the processing for this request, the
-     * implementation must call <code>clear()</code> on the
-     * <code>Map</code> returned from <code>getAttributes()</code>, and
-     * then de-allocate the data-structure behind that
-     * <code>Map</code>.</p>
-     *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
@@ -262,11 +256,10 @@ public abstract class PartialViewContext {
      * <code>Collection</code> returned from {@link #getExecuteIds} 
      * and {@link #getRenderIds} will be processed.</p>  
      *
-     * @param context the current {@link FacesContext} instance.
      * @param phaseId the {@link javax.faces.event.PhaseId} that indicates
      * the lifecycle phase the components will be processed in. 
      */ 
-    public abstract void processPartial(FacesContext context, PhaseId phaseId);
+    public abstract void processPartial(PhaseId phaseId);
 
 
 }

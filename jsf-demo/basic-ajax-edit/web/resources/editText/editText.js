@@ -59,8 +59,8 @@ function submitButton(componentID, event) {
         var link = componentID + ':editLink';
         var input = componentID + ':editInput';
         var subButton = componentID + ':submit';
-        var exec = subButton + ',' + input;
-        var rend = input + ',' + link;
+        var exec = subButton + ' ' + input;
+        var rend = input + ' ' + link;
         jsf.ajax.request(document.getElementById(subButton), event, {execute: exec, render: rend});
         edittextdemo[componentID] = document.getElementById(input).value;
     } catch (ex) {

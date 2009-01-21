@@ -69,10 +69,10 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import com.sun.faces.facelets.tag.MetaTagHandler;
+import com.sun.faces.facelets.tag.MetaTagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import java.util.Map;
 import javax.faces.component.UniqueIdVendor;
@@ -85,7 +85,7 @@ import javax.faces.event.InitialStateEvent;
  * @author Jacob Hookom
  * @version $Id$
  */
-public class ComponentHandler extends MetaTagHandler {
+public class ComponentHandler extends MetaTagHandlerImpl {
 
     private final static Logger log = Logger
             .getLogger("facelets.tag.component");
@@ -120,7 +120,7 @@ public class ComponentHandler extends MetaTagHandler {
      * {@link #createComponent(FaceletContext) createComponent}.
      * <ol>
      * <li>Only here do we apply
-     * {@link com.sun.faces.facelets.tag.MetaTagHandler#setAttributes(FaceletContext, Object)}</li>
+     * {@link com.sun.faces.facelets.tag.MetaTagHandlerImpl#setAttributes(FaceletContext, Object)}</li>
      * <li>Set the UIComponent's id</li>
      * <li>Set the RendererType of this instance</li>
      * </ol>
@@ -200,7 +200,7 @@ public class ComponentHandler extends MetaTagHandler {
             // hook method
             this.onComponentCreated(ctx, c, parent);
         }
-
+        c.pushComponentToEL(ctx.getFacesContext(), c);
         // first allow c to get populated
         this.applyNextHandler(ctx, c);
 
@@ -226,6 +226,8 @@ public class ComponentHandler extends MetaTagHandler {
         } else {
         	parent.getFacets().put(facetName, c);
         }
+        c.popComponentFromEL(ctx.getFacesContext());
+        
     }
     
     private static final String INITIAL_STATE_EVENT_KEY = "facelets.tag.InitialStateEvent";
@@ -351,7 +353,7 @@ public class ComponentHandler extends MetaTagHandler {
         AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
             get(AjaxBehaviors.AJAX_BEHAVIORS);
         if (ajaxBehaviors != null) {
-            AjaxBehavior ajaxBehavior = ajaxBehaviors.getBehaviorForEvent(facesEventType); 
+            AjaxBehavior ajaxBehavior = ajaxBehaviors.getBehaviorForEvent(facesEventType);
             if (ajaxBehavior != null) {
                 c.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
             }
