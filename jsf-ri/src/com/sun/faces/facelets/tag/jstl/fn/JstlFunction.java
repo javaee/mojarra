@@ -60,8 +60,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import com.sun.faces.util.Util;
-
 /**
  * Implementations of JSTL Functions
  * 
