@@ -115,9 +115,4 @@ public class JstlFnLibrary implements TagLibrary {
         return null;
     }
     
-    public static void main(String[] argv) {
-        JstlFnLibrary lib = new JstlFnLibrary();
-        System.out.println(lib.containsFunction(JstlFnLibrary.Namespace, "toUpperCase"));
-    }
-
 }

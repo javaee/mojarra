@@ -95,10 +95,6 @@ public final class DevTools {
         super();
     }
     
-    public static void main(String[] argv) throws Exception {
-        DevTools.init();
-    }
-    
     private static void init() throws IOException {
         if (ERROR_PARTS == null) {
             ERROR_PARTS = splitTemplate(ERROR_TEMPLATE);
