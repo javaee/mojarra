@@ -56,6 +56,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import com.sun.faces.util.Util;
 
@@ -234,7 +237,13 @@ public final class JstlFunction {
         if (d.length() == 0) {
             return new String[] { value };
         }
-        return Util.split(value, d);
+
+        List<String> tokens = new ArrayList<String>();
+        for (StringTokenizer st = new StringTokenizer(value, d); st.hasMoreTokens(); ) {
+            tokens.add(st.nextToken());
+        }
+
+        return tokens.toArray(new String[tokens.size()]);
     }
     
     public static boolean startsWith(String value, String p) {
