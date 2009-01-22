@@ -64,7 +64,6 @@
                    replace-application,
                    invalid-mapping,
                    replace-statemanager,
-                   nested-datatables,
                    jar-ordering,
                    replace-lifecycle,
                    string-converter,
@@ -77,6 +76,11 @@
                    write-attribute-script-disabled,
                    write-attribute-script-enabled,
                    wcag-datatable"/>
+
+<!-- 139-StateSaving
+nested-datatables,
+-->
+
     <!--
        EXCLUDED APPLICATIONS:
           view-expired
@@ -98,8 +102,10 @@
               value="com/sun/faces/systest/ReplaceStateManagerTestCase.class"/>
     <property name="invalid-mapping"
               value="com/sun/faces/systest/InvalidMappingTestCase.class"/>
+<!-- 139-StateSaving 
     <property name="nested-datatables"
               value="com/sun/faces/systest/NestedDatatablesTestCase.class"/>
+-->
     <property name="nested-loadbundles"
               value="com/sun/faces/systest/NestedLoadBundlesTestCase.class"/>
     <property name="jar-ordering"

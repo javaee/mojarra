@@ -484,7 +484,8 @@ javax.faces.level=ALL
                    logging.config.file="${api.test.results.dir}/test-logging.properties">
             <tests>
                 <fileset dir="${build.test.dir}"
-                         includes="javax/faces/component/*TestCase.class"/>
+                         includes="javax/faces/component/*TestCase.class"
+                         excludes="javax/faces/component/UIDataTestCase.class,javax/faces/component/UIFormTestCase.class"/>
             </tests>
         </jsf.junit>
     </target>

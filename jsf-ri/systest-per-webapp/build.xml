@@ -77,7 +77,6 @@
                    replace-application,
                    replace-statemanager,  
                    invalid-mapping,
-                   nested-datatables,
                    jar-ordering,                  
                    replace-lifecycle,
                    string-converter,
@@ -90,6 +89,12 @@
                    write-attribute-script-disabled,
                    write-attribute-script-enabled,
                    wcag-datatable"/>
+
+<!-- 139-StateSaving restore to running
+
+nested-datatables,
+
+-->
     <!-- 
 
        EXCLUDED APPLICATIONS:
