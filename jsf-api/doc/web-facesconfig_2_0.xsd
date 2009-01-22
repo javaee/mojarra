@@ -209,6 +209,8 @@
                          type="javaee:faces-config-applicationType"/>
             <xsd:element name="ordering"
                          type="javaee:faces-config-orderingType"/>
+            <xsd:element name="absolute-ordering"
+                         type="javaee:faces-config-absoluteOrderingType"/>
             <xsd:element name="factory"
                          type="javaee:faces-config-factoryType"/>
             <xsd:element name="component"
@@ -316,6 +318,8 @@
 
 
     <!-- **************************************************** -->
+
+
     <xsd:complexType name="faces-config-orderingType">
         <xsd:annotation>
             <xsd:documentation>
@@ -369,6 +373,29 @@
         </xsd:annotation>
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
+
+
+    <!-- **************************************************** -->
+
+
+    <xsd:complexType name="faces-config-absoluteOrderingType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+              Only relevant if this is placed within the /WEB-INF/faces-config.xml.
+              Please see section 11.4.6 for the specification for details.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="name" type="javaee:java-identifierType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="others" type="javaee:faces-config-ordering-othersType" minOccurs="0" maxOccurs="1" />
+        </xsd:choice>
+    </xsd:complexType>
+
+
+    <!-- **************************************************** -->
+
 
     <xsd:complexType name="faces-config-applicationType">
         <xsd:annotation>
@@ -679,21 +706,22 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="facelets-artifact-factory"
+            <xsd:element name="external-context-factory"
                          type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
-                            
-                        The "facelets-artifact-factory" element contains the
+
+                        The "external-context-factory" element contains the
                         fully qualified class name of the concrete
-                        FaceletsArtifactFactory implementation class that will
-                        be called when 
-                        FactoryFinder.getFactory(FACELETS_ARTIFACT_FACTORY) 
+                        ExternalContextFactory implementation class that will
+                        be called when
+                        FactoryFinder.getFactory(EXTERNAL_CONTEXT_FACTORY)
                         is called.
-                            
+
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
+            
             <xsd:element name="faces-context-factory"
                          type="javaee:fully-qualified-classType">
                 <xsd:annotation>

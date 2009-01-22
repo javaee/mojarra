@@ -201,13 +201,6 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
-     * {@link javax.faces.webapp.pdl.facelets.FaceletsImplementationArtifactFactory} class name.</p>
-     */
-    public final static String FACELETS_ARTIFACT_FACTORY =
-         "javax.faces.webapp.pdl.facelets.FaceletsArtifactFactory";
-
-    /**
-     * <p>The property name for the
      * {@link javax.faces.webapp.pdl.PageDeclarationLanguage} class name.</p>
      */
     public final static String PAGE_DECLARATION_LANGUAGE_FACTORY =
@@ -234,8 +227,6 @@ public final class FactoryFinder {
          LIFECYCLE_FACTORY,
          RENDER_KIT_FACTORY,
          PAGE_DECLARATION_LANGUAGE_FACTORY,
-         FACELETS_ARTIFACT_FACTORY
-         
     };
 
     /**
@@ -625,8 +616,6 @@ public final class FactoryFinder {
                  javax.faces.lifecycle.LifecycleFactory.class);
             factoryClasses.put(RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
-            factoryClasses.put(FACELETS_ARTIFACT_FACTORY,
-                 javax.faces.webapp.pdl.facelets.FaceletsArtifactFactory.class);
             factoryClasses.put(PAGE_DECLARATION_LANGUAGE_FACTORY,
                  javax.faces.webapp.pdl.PageDeclarationLanguageFactory.class);
         }
