@@ -258,9 +258,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         // if the clientId is not yet set
         if (this.clientId == null) {
-            UIComponent namingContainerAncestor = 
-                    this.getNamingContainerAncestor();
-            UIComponent parent = namingContainerAncestor;
+            UIComponent parent = this.getNamingContainer();
             String parentId = null;
 
             // give the parent the opportunity to first
@@ -272,15 +270,7 @@ public abstract class UIComponentBase extends UIComponent {
             // now resolve our own client id
             this.clientId = getId();
             if (this.clientId == null) {
-                String generatedId;
-                if (null != namingContainerAncestor &&
-                    namingContainerAncestor instanceof UniqueIdVendor) {
-                    generatedId = ((UniqueIdVendor)namingContainerAncestor).createUniqueId(context);
-                }
-                else {
-                    generatedId = context.getViewRoot().createUniqueId();
-                }
-                setId(generatedId);
+                setId(context.getViewRoot().createUniqueId());
                 this.clientId = getId();
             }
             if (parentId != null) {
@@ -301,26 +291,6 @@ public abstract class UIComponentBase extends UIComponent {
         }
         return this.clientId;
     }
-
-    /**
-     * <p>Private utilitity method for finding this
-     * <code>UIComponent</code>'s parent <code>NamingContainer</code>.
-     * This method may return <code>null</code> if there is not a
-     * parent <code>NamingContainer</code></p>
-     *
-     * @return the parent <code>NamingContainer</code>
-     */
-    private UIComponent getNamingContainerAncestor() {
-        UIComponent namingContainer = this.getParent();
-        while (namingContainer != null) {
-            if (namingContainer instanceof NamingContainer) {
-                return namingContainer;
-            }
-            namingContainer = namingContainer.getParent();
-        }
-        return null;
-    }
-
 
     /**
      * <p>The component identifier for this component.</p>
@@ -1468,7 +1438,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (stateObj instanceof List) {
             List<StateHolderSaver> stateList = (List<StateHolderSaver>) stateObj;
             Collection<Object> retCollection = null;
-            StateHolderSaver collectionSaver = stateList.remove(0);
+            StateHolderSaver collectionSaver = stateList.get(0);
             Class collectionClass = (Class) collectionSaver.restore(context);
             try {
                 retCollection = (Collection<Object>) collectionClass.newInstance();
@@ -1479,10 +1449,9 @@ public abstract class UIComponentBase extends UIComponent {
                 }
                 throw new IllegalStateException("Unknown object type");
             }
-
-            for (Object item : stateList) {
+            for (int i = 1, len = stateList.size(); i < len; i++) {
                 try {
-                    retCollection.add(((StateHolderSaver) item).restore(context));
+                    retCollection.add(stateList.get(i).restore(context));
                 } catch (ClassCastException cce) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE, cce.toString(), cce);

@@ -16,7 +16,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
 
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
@@ -25,6 +24,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfLogicalViews;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfViews;
@@ -100,17 +100,19 @@ public class ServerSideStateHelper extends StateHelper {
      * @see {@link com.sun.faces.renderkit.StateHelper#writeState(javax.faces.context.FacesContext, Object, StringBuilder)}
      */
     public void writeState(FacesContext ctx,
-                           Object stateToWrite,
+                           Object state,
                            StringBuilder stateCapture)
     throws IOException {
 
         Util.notNull("context", ctx);
-        Util.notNull("state", stateToWrite);
+        Util.notNull("state", state);
 
+        Object[] stateToWrite = (Object[]) state;
         ExternalContext externalContext = ctx.getExternalContext();
         Object sessionObj = externalContext.getSession(true);
         Map<String, Object> sessionMap = externalContext.getSessionMap();
 
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (sessionObj) {
             Map<String, Map> logicalMap = TypedCollections.dynamicallyCastMap(
                   (Map) sessionMap
@@ -119,20 +121,31 @@ public class ServerSideStateHelper extends StateHelper {
                 logicalMap = new LRUMap<String, Map>(numberOfLogicalViews);
                 sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
             }
-
-            String idInLogicalMap = createUniqueRequestId(ctx);
+            String idInLogicalMap = (String)
+                      RequestStateManager.get(ctx, RequestStateManager.LOGICAL_VIEW_MAP);
+            if (idInLogicalMap == null) {
+                idInLogicalMap = createUniqueRequestId(ctx);
+            }
             String idInActualMap = createUniqueRequestId(ctx);
 
-            Map<String, Object> actualMap =
+            Map<String, Object[]> actualMap =
                   TypedCollections.dynamicallyCastMap(
-                        logicalMap.get(idInLogicalMap), String.class, Object.class);
+                        logicalMap.get(idInLogicalMap), String.class, Object[].class);
             if (actualMap == null) {
-                actualMap = new LRUMap<String, Object>(numberOfViews);
+                actualMap = new LRUMap<String, Object[]>(numberOfViews);
                 logicalMap.put(idInLogicalMap, actualMap);
             }
 
             String id = idInLogicalMap + ':' + idInActualMap;
-            actualMap.put(idInActualMap, handleSaveState(stateToWrite));
+            Object[] stateArray = actualMap.get(idInActualMap);
+            // reuse the array if possible
+            if (stateArray != null) {
+                stateArray[0] = stateToWrite[0];
+                stateArray[1] = handleSaveState(stateToWrite[1]);
+            } else {
+                actualMap.put(idInActualMap, new Object[]{stateToWrite[0],
+                                                          handleSaveState(stateToWrite[1])});
+            }
 
             // always call put/setAttribute as we may be in a clustered environment.
             sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
@@ -189,12 +202,18 @@ public class ServerSideStateHelper extends StateHelper {
             return null;
         }
 
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (sessionObj) {
             Map logicalMap = (Map) externalCtx.getSessionMap() .get(LOGICAL_VIEW_MAP);
             if (logicalMap != null) {
                 Map actualMap = (Map) logicalMap.get(idInLogicalMap);
                 if (actualMap != null) {
-                    return actualMap.get(idInActualMap);
+                    RequestStateManager.set(ctx,
+                                            RequestStateManager.LOGICAL_VIEW_MAP,
+                                            idInLogicalMap);
+                    Object[] state = (Object[]) actualMap.get(idInActualMap);
+                    state[1] = handleRestoreState(state[1]);
+                    return state;
                 }
             }
         }
