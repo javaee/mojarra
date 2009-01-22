@@ -16,7 +16,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
 
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
@@ -200,7 +199,11 @@ public class ServerSideStateHelper extends StateHelper {
             if (logicalMap != null) {
                 Map actualMap = (Map) logicalMap.get(idInLogicalMap);
                 if (actualMap != null) {
-                    return actualMap.get(idInActualMap);
+                    RequestStateManager.set(ctx,
+                                            RequestStateManager.LOGICAL_VIEW_MAP,
+                                            idInLogicalMap);
+                    Object state = actualMap.get(idInActualMap);
+                    return state;
                 }
             }
         }

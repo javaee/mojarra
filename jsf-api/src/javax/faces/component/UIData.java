@@ -1112,10 +1112,9 @@ public class UIData extends UIComponentBase
 
     }
 
-     public String createUniqueId(FacesContext context) {
-         return this.getClientId(context) + lastId++;
-     }
-
+    public String createUniqueId(FacesContext context) {
+        return this.getClientId(context) + lastId++;
+    }
 
     /**
      * @see UIComponent#visitTree
@@ -1174,7 +1173,6 @@ public class UIData extends UIComponentBase
         // Return false to allow the visit to continue
         return false;
     }
-
 
     // --------------------------------------------------------- Protected Methods
 

@@ -110,7 +110,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
-
     // ------------------------------------ Methods from PageDeclarationLanguage
 
      @Override
@@ -118,7 +117,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
          return stateManagementStrategy;
      }
     
-
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, 
             Resource compositeComponentResource) {
