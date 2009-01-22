@@ -1,0 +1,101 @@
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the License). You may not use this file except in
+ compliance with the License.
+ 
+ You can obtain a copy of the License at
+ https://javaserverfaces.dev.java.net/CDDL.html or
+ legal/CDDLv1.0.txt. 
+ See the License for the specific language governing
+ permission and limitations under the License.
+ 
+ When distributing Covered Code, include this CDDL
+ Header Notice in each file and include the License file
+ at legal/CDDLv1.0.txt.    
+ If applicable, add the following below the CDDL Header,
+ with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+ 
+ [Name of File] [ver.__] [Date]
+ 
+ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>RoR Flash Test Page 3</title>
+</h:head>
+
+<h:body bgcolor="white">
+    <h1>RoR Flash Test Page 3</h1>
+
+  <p>If you have something in flash.now that you later, during the same
+  request, decide you want to promote to stick around for the next
+  request, use flash.keep.</p>
+
+  <h:form id="form1">
+
+  <h:panelGrid columns="2" border="1">
+
+    <f:verbatim>
+      Value of the previous request's foo.  Should be null.
+    </f:verbatim>
+
+    <h:outputText value="#{flash.foo}" />
+
+    <f:verbatim>
+      Value of the this request's bar.  Should be null.
+    </f:verbatim>
+
+    <h:outputText value="#{flash.bar}" />
+
+    <f:verbatim>
+      Put <code>banzai</code> in the flash.now under key
+      <code>buckaroo</code>.
+    </f:verbatim>
+
+    <c:set target="#{flash.now}" property="buckaroo" value="banzai" />
+
+    <f:verbatim>
+      c:set target="\#{flash.now}" property="buckaroo" value="banzai" 
+    </f:verbatim>
+
+    <f:verbatim>
+      Value of <code>\#{flash.now.buckaroo}</code>, should be
+      <code>banzai</code>.
+    </f:verbatim>
+
+    <h:outputText value="#{flash.now.buckaroo}" />
+
+    <f:verbatim>
+      Promote buckaroo to stick around for the next request.
+    </f:verbatim>
+
+    <c:set target="#{flash.keep}" property="buckaroo" value="#{flash.now.buckaroo}" />
+
+    <f:verbatim>
+      c:set target="\#{flash.now}" property="buckaroo" 
+                     value="\#{flash.keep.buckaroo}"
+    </f:verbatim>
+
+    <h:commandButton value="reload" />
+
+    <h:commandButton value="back" action="back" />
+
+    <f:verbatim>&nbsp;</f:verbatim>
+
+    <h:commandButton value="next" action="next" />
+
+   </h:panelGrid>
+
+  </h:form>
+
+
+</h:body>
+</html>  

@@ -47,6 +47,7 @@ import com.sun.faces.util.MessageUtils;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.ExceptionHandlerFactory;
+import javax.faces.context.ExternalContextFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -91,11 +92,11 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
+        ExternalContextFactory externalContextFactory = 
+            (ExternalContextFactory)FactoryFinder.getFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY);
         FacesContext ctx =
               new FacesContextImpl(
-                  new ExternalContextImpl((ServletContext) sc,
-                                          (ServletRequest) request,
-                                          (ServletResponse) response),
+                  externalContextFactory.getExternalContext(sc, request, response),
                   lifecycle);
 
         ctx.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());

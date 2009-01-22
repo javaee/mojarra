@@ -43,7 +43,9 @@
     <title>Flash test</title>
 </h:head>
 <h:body bgcolor="white">
-  <h:form id="form1">
+  <h:form prependId="false" id="form1">
+
+  <c:set target="#{flash}" property="foo" value="fooValue" />
 
   <h:panelGrid columns="2" border="1" width="600">
       
@@ -52,27 +54,31 @@
     during <b>this</b> request are only retrievable on the <b>next</b>
     request.  If you want to store something on this request and see it
     on this one as well, use either
-    <code>flash.now.foo</code> or
-    <code>requestScope.foo</code>.  The former is simply
+    <code>\#{flash.now.foo}</code> or
+    <code>\#{requestScope.foo}</code>.  The former is simply
     an alias for the latter.
 
-    <c:set var="#{flash.foo}" value="fooValue" />
-
     <f:verbatim>
-      c:set var="flash.foo" value="fooValue"
+      c:set target="\#{flash}" property="foo" value="fooValue" 
     </f:verbatim>
 
     <f:verbatim>
-      Value of <code>&#35;{flash.foo}</code>, should be <code>null</code>.
+      Value of <code>\#{flash.foo}</code>, should be <code>null</code>.
     </f:verbatim>
 
-    <h:outputText value="#{flash.foo}" />
+    <h:outputText id="fooValueId" value="#{flash.foo}" />
 
-    <h:commandButton value="reload" />
+    <h:commandButton value="reload" id="reload" />
 
-    <h:commandButton value="next" action="next" />
+    <h:commandButton value="next" id="next" action="next" />
 
    </h:panelGrid>
+
+   <p>Type "addMessage", without the quotes, to cause a FacesMessage to
+   be added <h:inputText id="inputText"
+   value="#{bean.stringVal}" /></p>
+
+   <p><h:messages id="messages"/></p>
 
   </h:form>
 

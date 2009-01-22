@@ -127,7 +127,8 @@
     <!-- converter06 impl logic deferred to 2.0 -->
     <target name="test"
             description="Execute all tests against installed application"
-            depends="test.init,
+            depends="test.facelets,
+                test.init,
                 test.ajax,
                 test.render,
                 test.html.taglib,
@@ -243,6 +244,17 @@
               request="${context.path}/faces/external03.jsp"
               outContent="/external03.jsp PASSED"/>
 
+    </target>
+
+    <target name="test.facelets">
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/facelets/FaceletsTestCase.class"/> 
+            </tests>
+        </jsf.junit>
     </target>
 
     <target name="test.el">

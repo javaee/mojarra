@@ -27,6 +27,7 @@
 
   <build>
     <sourceDirectory>target/filter/src/main/java</sourceDirectory>
+    <testSourceDirectory>target/filter/src/test/java</testSourceDirectory>
     <defaultGoal>install</defaultGoal>
     <finalName>jsf-flash</finalName>
    <resources>
@@ -48,8 +49,20 @@
          <include>**/CustomerBean.java</include>
        </includes>
      </resource>
-
    </resources>
+   <testResources>
+     <testResource>
+       <targetPath>../filter/src/test/java</targetPath>
+       <directory>src/test/java</directory>
+     </testResource>
+     <testResource>
+       <targetPath>../filter/src/test/java</targetPath>
+       <directory>../../systest/src</directory>
+       <includes>
+         <include>**/htmlunit/AbstractTestCase.java</include>
+       </includes>
+     </testResource>
+   </testResources>
 
    <pluginManagement>
      <plugins>
@@ -79,6 +92,38 @@
               <Implementation-Vendor-Id>com.sun</Implementation-Vendor-Id>
             </manifestEntries>
           </archive>
+        </configuration>
+      </plugin>
+<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.4.3</version>
+        <configuration>
+          <systemProperties>
+            <property>
+              <name>context.path</name>
+              <value>/${name}</value>
+            </property>
+            <property>
+              <name>host</name>
+              <value>localhost</value>
+            </property>
+            <property>
+              <name>port</name>
+              <value>8080</value>
+            </property>
+<!--
+            <property>
+              <name>proxyHost</name>
+              <value>127.0.0.1</value>
+            </property>
+            <property>
+              <name>proxyPort</name>
+              <value>8070</value>
+            </property>
+-->
+
+          </systemProperties>
         </configuration>
       </plugin>
      </plugins>
@@ -154,7 +199,18 @@
         </exclusion>
       </exclusions>
     </dependency>
-
+    <dependency>
+      <groupId>net.sourceforge.htmlunit</groupId>
+      <artifactId>htmlunit</artifactId>
+      <version>2.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <reporting>
     <plugins>

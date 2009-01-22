@@ -37,6 +37,7 @@
 package ajaxqueue;
 
 import javax.faces.event.ActionEvent;
+import javax.faces.model.ManagedBean;
 
 import java.util.Random;
 
@@ -47,11 +48,9 @@ import java.util.Random;
  * <p/>
  *
  */
-public class Bean {
+@ManagedBean(name="queuebean")
+public class QueueBean {
 
-    public Bean() {
-    }
-    
     public void process(ActionEvent ae) {
         Random generator2 = new Random(System.currentTimeMillis());
         int delay = generator2.nextInt(6001) + 1;

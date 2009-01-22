@@ -132,9 +132,8 @@ public class UserNumberBean implements Serializable {
     private void construct() {
 
         Random random = new Random();
-        while (randomInt == 0) {
-            randomInt = random.nextInt(10);
-        }
+        // Pick a number between minimum and maximum, inclusive
+        randomInt = random.nextInt((maximum - minimum) + 1 ) + minimum;
         if (LOGGER.isLoggable(Level.INFO)) {
             LOGGER.log(Level.INFO,
                        MessageFormat.format("Duke''s number: {0}", randomInt));

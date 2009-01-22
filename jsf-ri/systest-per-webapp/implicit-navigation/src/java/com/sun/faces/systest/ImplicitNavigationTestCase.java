@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -34,31 +34,49 @@
  * holder.
  */
 
-package com.sun.faces.facelets;
+package com.sun.faces.systest;
 
-import com.sun.faces.facelets.tag.TagAttributeImpl;
-import com.sun.faces.facelets.tag.TagAttributesImpl;
-import javax.faces.webapp.pdl.facelets.FaceletsArtifactFactory;
-import javax.faces.webapp.pdl.facelets.tag.Location;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.htmlunit.AbstractTestCase;
 
-/**
- *
- */
-public class FaceletsArtifactFactoryImpl extends FaceletsArtifactFactory {
+public class ImplicitNavigationTestCase extends AbstractTestCase {
 
-    @Override
-    public TagAttribute createTagAttribute(Location location, String ns, String localName, String qName, String value) {
-        TagAttribute result = new TagAttributeImpl(location, ns, localName, qName, value);
-        return result;
-    }
 
-    @Override
-    public TagAttributes createTagAttributes(TagAttribute[] attrs) {
-        TagAttributes result = new TagAttributesImpl(attrs);
-        return result;
-    }
+    public ImplicitNavigationTestCase(String name) {
+           super(name);
+       }
 
-    
+       /**
+        * Set up instance variables required by this test case.
+        */
+       public void setUp() throws Exception {
+           super.setUp();
+       }
+
+
+       /**
+        * Return the tests included in this test suite.
+        */
+       public static Test suite() {
+           return (new TestSuite(ImplicitNavigationTestCase.class));
+       }
+
+
+       /**
+        * Tear down instance variables required by this test case.
+        */
+       public void tearDown() {
+           super.tearDown();
+       }
+
+
+       // ------------------------------------------------------------ Test Methods
+
+       public void testImplicitNavigation() throws Exception {
+
+           HtmlPage page = getPage("/faces/page01.xhtml");
+
+       }
 }

@@ -316,8 +316,6 @@
             </fileset>
         </copy>
 
-        <copy file="${source.dir}/com/sun/faces/sunjsf.js"
-              toDir="${build.classes.dir}/META-INF/resources/jsfri/scripts"/>
         <copy file="${build.generate.tld.dir}/html_basic.tld"
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="conf/xslt/jsf1_0-1_1toSchema.xsl"

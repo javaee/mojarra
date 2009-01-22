@@ -480,7 +480,7 @@ public class ResourceImpl extends Resource implements Externalizable {
         maxAge = in.readLong();
 
         ResourceManager manager =
-              ApplicationAssociate.getCurrentInstance().getResourceManager();
+              ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext()).getResourceManager();
         resourceInfo = manager.findResource(getLibraryName(),
                                             getResourceName(),
                                             getContentType(),

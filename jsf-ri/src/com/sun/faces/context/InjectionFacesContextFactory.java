@@ -43,7 +43,7 @@ import java.text.MessageFormat;
 
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
+import javax.faces.context.ExternalContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.FacesException;
 
@@ -53,8 +53,7 @@ import javax.faces.FacesWrapper;
 
 /**
  * This {@link FacesContextFactory} is responsible for injecting the
- * default {@link FacesContext} and {@link ExternalContext} instances into
- * the top-level {@link FacesContext} and {@link ExternalContext} instances
+ * default {@link FacesContext} instance into the top-level {@link FacesContext}
  * as configured by the runtime.  Doing this allows us to preserve backwards
  * compatibility as the API evolves without having the API rely on implementation
  * specific details.  
@@ -64,7 +63,6 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
     private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
     private FacesContextFactory delegate;
     private Field defaultFacesContext;
-    private Field defaultExternalContext;
 
     
     // ------------------------------------------------------------ Constructors
@@ -86,20 +84,6 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
                 LOGGER.log(Level.SEVERE, e.toString(), e);
             }
             defaultFacesContext = null;
-        }
-
-        try {
-            defaultExternalContext = ExternalContext.class.getDeclaredField("defaultExternalContext");
-            defaultExternalContext.setAccessible(true);
-        } catch (NoSuchFieldException nsfe) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Unable to find private field named 'defaultExternalContext' in javax.faces.context.ExternalContext.");
-            }
-        } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, e.toString(), e);
-            }
-            defaultExternalContext = null;
         }
 
     }
@@ -131,7 +115,7 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
     }
 
 
-    // ---------------------------------------------------------- Public Methods
+    // ----------------------------------------------- Methods from FacesWrapper
 
 
     @Override
@@ -147,14 +131,12 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
 
     private void injectDefaults(FacesContext target) {
 
-        if (defaultFacesContext != null && defaultExternalContext != null) {
+        if (defaultFacesContext != null) {
             FacesContext defaultFC =
                   FacesContextImpl.getDefaultFacesContext();
             if (defaultFC != null) {
                 try {
                     defaultFacesContext.set(target, defaultFC);
-                    defaultExternalContext.set(target.getExternalContext(),
-                                               defaultFC.getExternalContext());
                 } catch (IllegalAccessException e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE, e.toString(), e);

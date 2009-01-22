@@ -164,7 +164,7 @@ public class SetPropertyActionListenerHandler extends TagHandlerImpl {
              if (valueObj != null) {
                 ExpressionFactory factory =
                       faces.getApplication().getExpressionFactory();
-                valueObj = factory.coerceToType(value, target.getType(el));
+                valueObj = factory.coerceToType(valueObj, target.getType(el));
             }
             this.target.setValue(el, valueObj);
         }

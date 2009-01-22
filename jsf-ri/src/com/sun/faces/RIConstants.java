@@ -91,7 +91,6 @@ public class RIConstants {
     public static final String TEXT_XML_CONTENT_TYPE = "text/xml";
     public static final String ALL_MEDIA = "*/*";
     public static final String CHAR_ENCODING = "ISO-8859-1";
-    public static final String SUN_JSF_JS_URI = "com_sun_faces_sunjsf.js";
     public static final String DEFAULT_LIFECYCLE = 
           FACES_PREFIX + "DefaultLifecycle";
     public static final String DEFAULT_STATEMANAGER =

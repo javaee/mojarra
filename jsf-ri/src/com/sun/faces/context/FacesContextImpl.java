@@ -40,9 +40,11 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.context.flash.ELFlash;
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.context.ExceptionHandler;
+import javax.faces.context.Flash;
 import javax.faces.event.PhaseId;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -65,7 +67,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.NoSuchElementException;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -73,7 +74,6 @@ import java.util.logging.Logger;
 
 import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -249,6 +249,13 @@ public class FacesContextImpl extends FacesContext {
         }
         return elContext;
     }
+
+    @Override
+    public Flash getFlash() {
+        return ELFlash.getFlash(this, true);
+    }
+    
+    
 
 
     /**
