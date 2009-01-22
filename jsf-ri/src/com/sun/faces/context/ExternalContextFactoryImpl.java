@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.22 2008/01/28 20:55:37 rlubke Exp $
+ * $Id: ExternalContextFactoryImpl.java,v 1.22 2008/01/28 20:55:37 rlubke Exp $
  */
 
 /*
@@ -45,62 +45,41 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.context.ExceptionHandlerFactory;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextFactory;
-import javax.faces.context.FacesContext;
-import javax.faces.context.FacesContextFactory;
-import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-public class FacesContextFactoryImpl extends FacesContextFactory {
+public class ExternalContextFactoryImpl extends ExternalContextFactory {
 
     
-
-    private ExceptionHandlerFactory exceptionHandlerFactory;
-    private ExternalContextFactory externalContextFactory;
-
-
     // ------------------------------------------------------------ Constructors
 
 
-    public FacesContextFactoryImpl() {
-
-        exceptionHandlerFactory = (ExceptionHandlerFactory)
-              FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);
-        externalContextFactory = (ExternalContextFactory)
-              FactoryFinder.getFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY);
-
+    public ExternalContextFactoryImpl() {
     }
 
 
-    // ---------------------------------------- Methods from FacesContextFactory
+    // ---------------------------------------- Methods from ExternalContextFactory
 
 
-    public FacesContext getFacesContext(Object sc,
+    public ExternalContext getExternalContext(Object servletContext,
                                         Object request,
-                                        Object response,
-                                        Lifecycle lifecycle)
-    throws FacesException {
+                                        Object response)
+        throws FacesException {
 
-        Util.notNull("sc", sc);
+        Util.notNull("servletContext", servletContext);
         Util.notNull("request", request);
         Util.notNull("response", response);
-        Util.notNull("lifecycle", lifecycle);
-        
-        FacesContext ctx =
-              new FacesContextImpl(
-                  externalContextFactory.getExternalContext(sc, request, response),
-                  lifecycle);
 
-        ctx.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());
-
+        ExternalContext ctx =
+            new ExternalContextImpl((ServletContext) servletContext,
+                (ServletRequest) request,
+                (ServletResponse) response);
         return ctx;
-        
     }
 
-    // The testcase for this class is TestSerlvetFacesContextFactory.java
+    // The testcase for this class is TestExternalContextFactory.java
 
-} // end of class FacesContextFactoryImpl
+} // end of class ExternalContextFactoryImpl
