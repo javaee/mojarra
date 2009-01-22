@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
 
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
@@ -100,14 +101,13 @@ public class ServerSideStateHelper extends StateHelper {
      * @see {@link com.sun.faces.renderkit.StateHelper#writeState(javax.faces.context.FacesContext, Object, StringBuilder)}
      */
     public void writeState(FacesContext ctx,
-                           Object state,
+                           Object stateToWrite,
                            StringBuilder stateCapture)
     throws IOException {
 
         Util.notNull("context", ctx);
-        Util.notNull("state", state);
+        Util.notNull("state", stateToWrite);
 
-        Object[] stateToWrite = (Object[]) state;
         ExternalContext externalContext = ctx.getExternalContext();
         Object sessionObj = externalContext.getSession(true);
         Map<String, Object> sessionMap = externalContext.getSessionMap();
@@ -128,24 +128,16 @@ public class ServerSideStateHelper extends StateHelper {
             }
             String idInActualMap = createUniqueRequestId(ctx);
 
-            Map<String, Object[]> actualMap =
+            Map<String, Object> actualMap =
                   TypedCollections.dynamicallyCastMap(
-                        logicalMap.get(idInLogicalMap), String.class, Object[].class);
+                        logicalMap.get(idInLogicalMap), String.class, Object.class);
             if (actualMap == null) {
-                actualMap = new LRUMap<String, Object[]>(numberOfViews);
+                actualMap = new LRUMap<String, Object>(numberOfViews);
                 logicalMap.put(idInLogicalMap, actualMap);
             }
 
             String id = idInLogicalMap + ':' + idInActualMap;
-            Object[] stateArray = actualMap.get(idInActualMap);
-            // reuse the array if possible
-            if (stateArray != null) {
-                stateArray[0] = stateToWrite[0];
-                stateArray[1] = handleSaveState(stateToWrite[1]);
-            } else {
-                actualMap.put(idInActualMap, new Object[]{stateToWrite[0],
-                                                          handleSaveState(stateToWrite[1])});
-            }
+            actualMap.put(idInActualMap, handleSaveState(stateToWrite));
 
             // always call put/setAttribute as we may be in a clustered environment.
             sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
@@ -208,12 +200,7 @@ public class ServerSideStateHelper extends StateHelper {
             if (logicalMap != null) {
                 Map actualMap = (Map) logicalMap.get(idInLogicalMap);
                 if (actualMap != null) {
-                    RequestStateManager.set(ctx,
-                                            RequestStateManager.LOGICAL_VIEW_MAP,
-                                            idInLogicalMap);
-                    Object[] state = (Object[]) actualMap.get(idInActualMap);
-                    state[1] = handleRestoreState(state[1]);
-                    return state;
+                    return actualMap.get(idInActualMap);
                 }
             }
         }
