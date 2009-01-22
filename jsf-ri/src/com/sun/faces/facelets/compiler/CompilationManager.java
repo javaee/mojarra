@@ -79,7 +79,7 @@ import com.sun.faces.facelets.tag.ui.UILibrary;
  * @see {@link com.sun.faces.facelets.compiler.Compiler}
  * 
  * @author Jacob Hookom
- * @version $Id$
+ * @version $Id$ 
  */
 final class CompilationManager {
 
