@@ -34,12 +34,9 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
     }
     
     public void setUp() throws Exception {
-
-        // Set up the component under test
         super.setUp();
         component = new UIOutput();
         facesContext = new MockFacesContext();
-
     }
     
     public void testAttachedObjectsSet() throws Exception {
@@ -69,7 +66,27 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
         Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects); 
         returnedAttachedObjects = (Stack<ValueChangeListener>)
                 UIComponentBase.restoreAttachedState(facesContext, result);
-        
+    }
+
+
+    // Regression test for bug #907
+    public void testAttachedObjectsCount() throws Exception {
+        Set<ValueChangeListener> returnedAttachedObjects = null,
+                attachedObjects = new HashSet<ValueChangeListener>();
+        ValueChangeListener toAdd = new TestValueChangeListener();
+        attachedObjects.add(toAdd);
+        toAdd = new TestValueChangeListener();
+        attachedObjects.add(toAdd);
+        toAdd = new TestValueChangeListener();
+        attachedObjects.add(toAdd);
+        Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects);
+        returnedAttachedObjects = (Set<ValueChangeListener>)
+                UIComponentBase.restoreAttachedState(facesContext, result);
+        int firstSize = returnedAttachedObjects.size();
+        returnedAttachedObjects = (Set<ValueChangeListener>)
+                UIComponentBase.restoreAttachedState(facesContext, result);
+        int secondSize = returnedAttachedObjects.size();
+        assertEquals(firstSize,secondSize);
     }
 
 }

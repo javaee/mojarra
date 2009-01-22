@@ -1458,7 +1458,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (stateObj instanceof List) {
             List<StateHolderSaver> stateList = (List<StateHolderSaver>) stateObj;
             Collection<Object> retCollection = null;
-            StateHolderSaver collectionSaver = stateList.remove(0);
+            StateHolderSaver collectionSaver = stateList.get(0);
             Class collectionClass = (Class) collectionSaver.restore(context);
             try {
                 retCollection = (Collection<Object>) collectionClass.newInstance();
@@ -1469,10 +1469,9 @@ public abstract class UIComponentBase extends UIComponent {
                 }
                 throw new IllegalStateException("Unknown object type");
             }
-
-            for (Object item : stateList) {
+            for (int i = 1, len = stateList.size(); i < len; i++) {
                 try {
-                    retCollection.add(((StateHolderSaver) item).restore(context));
+                    retCollection.add(stateList.get(i).restore(context));
                 } catch (ClassCastException cce) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE, cce.toString(), cce);
