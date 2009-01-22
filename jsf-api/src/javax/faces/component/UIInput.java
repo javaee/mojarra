@@ -55,7 +55,7 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.behavior.ClientBehaviorHolder;
-import javax.faces.context.ExceptionHandler
+import javax.faces.context.ExceptionHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
