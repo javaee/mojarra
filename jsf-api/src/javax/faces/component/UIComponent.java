@@ -1554,7 +1554,7 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @since 2.0
      */
-    protected final void pushComponentToEL(FacesContext context, UIComponent component) {
+    public final void pushComponentToEL(FacesContext context, UIComponent component) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (null == component) {
@@ -1584,7 +1584,7 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @since 2.0
      */
-    protected final void popComponentFromEL(FacesContext context) {
+    public final void popComponentFromEL(FacesContext context) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {

@@ -65,12 +65,6 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
  */
 public abstract class MetaRule {
 
-    /**
-     * @param name
-     * @param attribute
-     * @param meta
-     * @return
-     */
     public abstract Metadata applyRule(String name, TagAttribute attribute,
             MetadataTarget meta);
 

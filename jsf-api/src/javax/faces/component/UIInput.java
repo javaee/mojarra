@@ -55,10 +55,14 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.behavior.ClientBehaviorHolder;
+import javax.faces.context.ExceptionHandler
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.el.MethodBinding;
+import javax.faces.event.ExceptionEvent;
+import javax.faces.event.ExceptionEventContext;
+import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
@@ -734,7 +738,8 @@ public class UIInput extends UIOutput implements EditableValueHolder,
     }
 
     /**
-     * <p>Perform the following algorithm to update the model data
+     * <p><span class="changed_modified_2_0">Perform</span>
+     * the following algorithm to update the model data
      * associated with this {@link UIInput}, if any, as appropriate.</p>
      * <ul>
      * <li>If the <code>valid</code> property of this component is
@@ -753,14 +758,23 @@ public class UIInput extends UIOutput implements EditableValueHolder,
      * </ul></li>
      * <li>If the <code>setValue()</code> method throws an Exception:
      * <ul>
-     * <li>Enqueue an error message by calling <code>addMessage()</code>
-     * on the specified {@link FacesContext} instance.</li>
+     * <li class="changed_modified_2_0">Enqueue an error message.  Create a
+     * {@link FacesMessage} with the id {@link #UPDATE_MESSAGE_ID}.  Create a
+     * {@link UpdateModelException}, passing the <code>FacesMessage</code> and
+     * the caught exception to the constructor.  Create an
+     * {@link ExceptionEventContext}, passing the <code>FacesContext</code>,
+     * the <code>UpdateModelException</code>, this component instance, and
+     * {@link PhaseId#UPDATE_MODEL_VALUES} to its constructor.  Call
+     * {@link FacesContext#getExceptionHandler} and then call
+     * {@link ExceptionHandler#processEvent}, passing the
+     * <code>ExceptionEventContext</code>.
+     * </li>
      * <li>Set the <code>valid</code> property of this {@link UIInput}
      * to <code>false</code>.</li>
      * </ul></li>
      * The exception must not be re-thrown.  This enables tree traversal
      * to continue for this lifecycle phase, as in all the other lifecycle
-     * phases. 
+     * phases.
      * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing
@@ -778,11 +792,14 @@ public class UIInput extends UIOutput implements EditableValueHolder,
         }
         ValueExpression ve = getValueExpression("value");
         if (ve != null) {
+            Throwable caught = null;
+            FacesMessage message = null;
             try {
                 ve.setValue(context.getELContext(), getLocalValue());
                 setValue(null);
                 setLocalValueSet(false);
             } catch (ELException e) {
+                caught = e;
                 String messageStr = e.getMessage();
                 Throwable result = e.getCause();
                 while (null != result &&
@@ -790,7 +807,6 @@ public class UIInput extends UIOutput implements EditableValueHolder,
                     messageStr = result.getMessage();
                     result = result.getCause();
                 }
-                FacesMessage message;
                 if (null == messageStr) {
                     message =
                          MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
@@ -801,26 +817,29 @@ public class UIInput extends UIOutput implements EditableValueHolder,
                                                messageStr,
                                                messageStr);
                 }
-                LOGGER.log(Level.SEVERE, message.getSummary(), result);
-                context.addMessage(getClientId(context), message);
-                setValid(false);
-            } catch (IllegalArgumentException e) {
-                FacesMessage message =
-                     MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
-                          MessageFactory.getLabel(
-                               context, this));
-                LOGGER.log(Level.SEVERE, message.getSummary(), e);
-                context.addMessage(getClientId(context), message);
                 setValid(false);
             } catch (Exception e) {
-                FacesMessage message =
+                caught = e;
+                message =
                      MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
                           MessageFactory.getLabel(
                                context, this));
-                LOGGER.log(Level.SEVERE, message.getSummary(), e);
-                context.addMessage(getClientId(context), message);
                 setValid(false);
             }
+            if (caught != null) {
+                assert(message != null);
+                @SuppressWarnings({"ThrowableInstanceNeverThrown"})
+                UpdateModelException toQueue =
+                      new UpdateModelException(message, caught);
+                ExceptionHandler exHandler = context.getExceptionHandler();
+                ExceptionEventContext eventContext =
+                      new ExceptionEventContext(context,
+                                                toQueue,
+                                                this,
+                                                PhaseId.UPDATE_MODEL_VALUES);
+                exHandler.processEvent(new ExceptionEvent(eventContext));
+            }
+
         }
     }
 
