@@ -170,7 +170,7 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
 
     private List<HtmlElement> getChildren(HtmlElement parent) {
         List<HtmlElement> list = new ArrayList<HtmlElement>();
-        for (Iterator i = parent.getChildIterator(); i.hasNext();) {
+        for (Iterator i = parent.getChildElements().iterator(); i.hasNext();) {
             Object o = i.next();
             if (o instanceof HtmlElement) {
                 list.add((HtmlElement) o);

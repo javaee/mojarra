@@ -51,7 +51,7 @@
     <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
     
     <property name="junit.version" value="3.8.1"/>
-    <property name="htmlunit.version" value="2.3"/>
+    <property name="htmlunit.version" value="2.4"/>
     <property name="cactus.version" value="13-1.7.1"/>
     <property name="taglibdoc.version" value="1.3"/>
     <property name="jsdoc.version" value="2.0.2"/>

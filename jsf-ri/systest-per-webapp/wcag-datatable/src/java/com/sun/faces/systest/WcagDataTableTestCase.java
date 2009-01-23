@@ -40,7 +40,6 @@
 
 package com.sun.faces.systest;
 
-
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -67,7 +66,6 @@ import javax.faces.component.NamingContainer;
  * but uses the decorator pattern to allow the existing ApplicationImpl
  * to do the bulk of the requests works.</p>
  */
-
 public class WcagDataTableTestCase extends AbstractTestCase {
 
 
@@ -120,14 +118,14 @@ public class WcagDataTableTestCase extends AbstractTestCase {
 
     // ------------------------------------------------- Individual Test Methods
 
-    /**
+    /*
      *
      * <p>Verify that the bean is successfully resolved</p>
      */
-
     public void testReplaceStateManager() throws Exception {
-	HtmlPage page = getPage("/faces/index.jsp");
+        HtmlPage page = getPage("/faces/index.jsp");
         String pageText = page.asXml();
+        System.out.println(pageText);
         // (?s) is an "embedded flag expression" for the "DOTALL" operator.
         // It says, "let . match any character including line terminators."
         // Because page.asXml() returns a big string with lots of \r\n chars
@@ -142,23 +140,11 @@ public class WcagDataTableTestCase extends AbstractTestCase {
         assertTrue(pageText.matches("(?sm).*<table.*>\\s*<caption>.*CODE-PAGE SUPPORT IN MICROSOFT WINDOWS.*</caption>.*"));
         // the page contains a close caption tag followed immediately by a three colgroup tags as follows.
         assertTrue(pageText.matches("(?sm).*</caption>\\s*" +
-                "<colgroup align=.center.\\s*>\\s*" +
-                "</colgroup>\\s*" +
-                "<colgroup align=.left.\\s*>\\s*" +
-                "</colgroup>\\s*" +
-                "<colgroup.*span=.2.*>\\s*" +
-                "</colgroup>.*"));
-        // the page contains a close caption tag followed immediately by a two colgroup tags as follows.
-        assertTrue(pageText.matches("(?sm).*</caption>\\s*" +
-                "<colgroup align=.center.\\s*>\\s*" +
-                "</colgroup>\\s*" +
-                "<colgroup align=.left.\\s*>\\s*" +
-                "</colgroup>\\s*" +
-                "<colgroup.*align=.center.*>\\s*" +
-                "</colgroup>.*"));
+                "<colgroup align=.center.\\s*/>\\s*" +
+                "<colgroup align=.left.\\s*/>\\s*" +
+                "<colgroup align=.center.*span=.2.*/>\\s*" +
+                "<colgroup align=.center.*span=.3.*/>.*"));
 
-        // The last colgroup in the previous two assertions accounts for the align and span attributes occurring out of order.
-        
         // A table with a thead, with a tr with a th scope=col
         assertTrue(pageText.matches("(?sm).*<table.*>.*<thead>\\s*" +
                 "<tr>\\s*" +
@@ -171,7 +157,7 @@ public class WcagDataTableTestCase extends AbstractTestCase {
         // A table with a tbody, with a tr with a th scope=row
         assertTrue(pageText.matches("(?sm).*<table.*>.*<tbody>.*" +
                 "</tbody>.*<tbody>.*</tbody>.*</table>.*"));
-	
+
     }
 
 }

@@ -94,7 +94,7 @@ public class FaceletsTestCase extends AbstractTestCase {
     // ------------------------------------------------------------ Test Methods
 
 
-    /**
+    /*
      * Added for issue 917.
      */
     public void testSetPropertyActionListener1() throws Exception {
@@ -106,7 +106,7 @@ public class FaceletsTestCase extends AbstractTestCase {
         getAllElementsOfGivenClass(page, output, HtmlSpan.class);
         assertTrue(!output.isEmpty());
         HtmlSpan span = output.get(0);
-        assertTrue("Current Name: ".equals(span.asText()));
+        assertTrue("Expected: 'Current Name: ', Received: '"+span.asText()+"'","Current Name:".equals(span.asText()));
 
         // click the commandLink with a nested setPropertyActionListener
         // to cause the name attribute in the session to be populated.
@@ -128,12 +128,12 @@ public class FaceletsTestCase extends AbstractTestCase {
         getAllElementsOfGivenClass(page, output, HtmlSpan.class);
         assertTrue(!output.isEmpty());
         span = output.get(0);
-        assertTrue("Current Name: ".equals(span.asText()));
+        assertTrue("Current Name:".equals(span.asText()));
         
     }
 
 
-    /**
+    /*
      * Added for issue 909.
      */
     public void testTagSourceFromDtdDocument() throws Exception {
@@ -151,7 +151,7 @@ public class FaceletsTestCase extends AbstractTestCase {
     }
 
 
-    /**
+    /*
      * Verify #{component} and #{compositeComponent} expressions evaluate
      * at build time.
      * @throws Exception
