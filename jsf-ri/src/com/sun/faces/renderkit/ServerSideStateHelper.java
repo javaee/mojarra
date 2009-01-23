@@ -202,7 +202,7 @@ public class ServerSideStateHelper extends StateHelper {
                     RequestStateManager.set(ctx,
                                             RequestStateManager.LOGICAL_VIEW_MAP,
                                             idInLogicalMap);
-                    Object state = actualMap.get(idInActualMap);
+                    Object state = handleRestoreState(actualMap.get(idInActualMap));
                     return state;
                 }
             }
