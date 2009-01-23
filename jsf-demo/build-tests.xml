@@ -172,7 +172,6 @@
                    context-path="${mapping-extension.context.path}"/>
         -->
 
-        <!-- RELEASE_PENDING temp remove of cardemo  - currently fails with 404 error
         <copy todir="${build}/classes">
             <fileset dir="${basedir}/carstore/src/java">
                 <include name="**/*.properties"/>
@@ -183,9 +182,6 @@
                    demo-name="jsf-cardemo"
                    tests="cardemo"
                    context-path="${cardemo.context.path}"/>
-
-        -->
-
 
         <!--  Currently fails with 500 error (NPE)
         <run-tests demo-war="${mojarra_ext.war}"
