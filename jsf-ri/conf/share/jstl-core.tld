@@ -179,16 +179,88 @@ visibility.
 
  <tag>
     <description>
-        Sets the result of an expression evaluation in a 'scope'
+<![CDATA[
+        <p>Sets the result of an expression evaluation based on the value
+        of the attributes.  The handler for this tag must ensure that
+        the action of evaluating the expression happens during the
+        rendering of the tree, not during the build of the tree.</p>
+
+<p>This handler operates in one of two ways.
+
+	<ol>
+
+
+	  <li><p>The user has set "var", "value" and (optionally)
+	  "scope" attributes.</p></li>
+
+	  <li><p>The user has set "target", "property", and "value"
+	  attributes.</p></li>
+
+
+	</ol>
+
+<p>The first case takes precedence over the second.</p>
+
+<p><b>Case 1</b></p>
+
+<p>The presence or absence of a value for the "scope" attribute affects
+how the "var" attribute must be handled.  If no "scope" attribute is
+present, the implementation must get the current <code>ELContext</code>,
+get its <code>VariableMapper</code>, and call
+<code>setVariable()</code>, passing the value of the "var" attribute as
+the first argument and the un-evaluated expression (or literal) from the
+"value" attribute as the second.</p>
+
+<p>If "scope" is present, but has a zero length,
+<code>TagException</code> is thrown with an informative error message,
+ensuring page location information is saved.</p>
+
+<p>If "scope" is present and is a literal, let <em>scopeStr</em> be the
+value of the literal.  If "scope" is present and is an expression, let
+<em>scopeStr</em> be the evaluated value of the expression.  If
+<em>scopeStr</em> is "page", throw <code>TagException</code> as
+described above.  Otherwise, if <em>scopeStr</em> is "request",
+"session", "application", or "view" (without the quotes) append the
+String "Scope" (without the quotes) to <em>scopeStr</em>.  Let
+<em>varStr</em> be the evaluated value of the "var" attribute.  Let
+<em>leftHandSide</em> be <em>ValueExpression</em> created with the
+expression string <code>"#{" + <em>scopeStr</em> + "." + <em>varStr</em>
++ "}"</code>.  Call its <code>setValue()</code> method, passing the
+evaluated value of the "value" attribute.
+</p>
+
+<p><b>Case 2</b></p>
+
+<p>In this case "var" must not be set, and "target", "value" and
+"property" all must be set.</p>
+
+<p>If "target" is a literal string throw <code>TagException</code> as
+described above.  If "property" is a literal string, let
+<em>propertyStr</em> be its literal value, otherwise, let
+<em>propertyStr</em> be its evaluated value.  Let <em>targetValue</em>
+be the result of calling <code>getValue()</code> on the
+<code>ValueExpression</code> from the "target" attribute.  Obtain the
+<code>ELContext</code> from the current <code>FacesContext</code>.
+Obtain the <code>ELResolver</code> from the <code>ELContext</code>.
+Call <code>setValue()</code> on the <code>ELResolver</code>, passing the
+appropriate <code>ELContext</code> as the first argument,
+<em>targetValue</em> as the second argument, <em>propertyStr</em> as the
+third argument, and the evaluated result of the "value" attribute as the
+fourth argument.</p>
+]]>
+
     </description>
     <name>set</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.core.SetTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
         <description>
-Name of the exported scoped variable to hold the value
-specified in the action. The type of the scoped variable is
-whatever type the value expression evaluates to.
+
+<p>Name of the variable to hold the value specified in the action. The
+type of the scoped variable is whatever type the value expression
+evaluates to.</p>
+
+
         </description>
         <name>var</name>
         <required>false</required>
