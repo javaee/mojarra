@@ -789,10 +789,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/ajax/*TestCase.class"
-                         excludes="com/sun/faces/ajax/Ajax*TestCase.class"
-                         />
-<!-- 139-StateSaving edburns remove excludes -->
+                         includes="com/sun/faces/ajax/*TestCase.class"                         />
             </tests>
         </jsf.junit>
     </target>
@@ -806,9 +803,7 @@
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/render/*TestCase.class"
-                         excludes="com/sun/faces/render/CommandButtonTestCase.class"
                          />
-<!-- 139-StateSaving edburns remove excludes -->
             </tests>
         </jsf.junit>
     </target>
@@ -861,7 +856,6 @@
 
     <target name="test.standard"
             description="Test the Standard RenderKit">
-<!-- these work
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/standard/messages01.jsp"
@@ -888,7 +882,6 @@
         <jsf.tester
             request="${context.path}/faces/standard/pgridcolumnclasses.jsp"
             golden="${golden.path}/standard/pgridcolumnclasses.txt"/>
--->        
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">

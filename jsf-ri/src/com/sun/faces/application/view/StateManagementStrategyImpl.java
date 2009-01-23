@@ -116,8 +116,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         
         VisitContext visitContext = VisitContext.createVisitContext(context);
         
-        DebugUtil.printTree(viewRoot, LOGGER, Level.INFO);
-        
         viewRoot.visitTree(visitContext, new VisitCallback() {
 
             public VisitResult visit(VisitContext context, UIComponent target) {
@@ -152,8 +150,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         // Build the tree to initial state
         UIViewRoot viewRoot = context.getApplication().getViewHandler().createView(context, viewId);
 
-        DebugUtil.printTree(viewRoot, LOGGER, Level.INFO);
-        
         final Map<String, Object> state = (Map<String,Object>) rsm.getState(context, viewId);
 
         if (null != state) {
