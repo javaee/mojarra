@@ -3863,6 +3863,7 @@
       <excludeFolder url="file://$MODULE_DIR$/basic-ajax-edit/build" />
       <excludeFolder url="file://$MODULE_DIR$/basic-ajax/build" />
       <excludeFolder url="file://$MODULE_DIR$/guessNumber/build" />
+      <excludeFolder url="file://$MODULE_DIR$/test/build" />
     </content>
     <orderEntry type="library" name="GROOVY" level="application" />
     <orderEntry type="inheritedJdk" />
