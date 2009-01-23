@@ -3867,6 +3867,7 @@
     <orderEntry type="library" name="GROOVY" level="application" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="mojarra-build" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
