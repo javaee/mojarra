@@ -183,7 +183,7 @@
                    tests="cardemo"
                    context-path="${cardemo.context.path}"/>
 
-        <!--  Currently fails with 500 error (NPE)
+        <!--  Currently fails with 500 error (NPE)  Bug # 945
         <run-tests demo-war="${mojarra_ext.war}"
                    demo-name="mojarra_ext"
                    tests="mojarra_ext"
