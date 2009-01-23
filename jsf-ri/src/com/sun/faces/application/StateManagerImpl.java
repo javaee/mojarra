@@ -126,9 +126,13 @@ public class StateManagerImpl extends StateManager {
         
         Object result = null;
         String viewId = context.getViewRoot().getViewId();
-        StateManagementStrategy strategy =
-                context.getApplication().getViewHandler().
+        StateManagementStrategy strategy = null;
+        try {
+             strategy = context.getApplication().getViewHandler().
                 getPageDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
+        } catch (UnsupportedOperationException uoe) {
+        }
+        
 
         if (null != strategy) {
             result = strategy.saveView(context);
@@ -172,8 +176,13 @@ public class StateManagerImpl extends StateManager {
                                   String viewId,
                                   String renderKitId) {
         UIViewRoot result = null;
-        StateManagementStrategy strategy = 
-                context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
+        StateManagementStrategy strategy = null;
+        
+        try {
+             strategy = context.getApplication().getViewHandler().
+                getPageDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
+        } catch (UnsupportedOperationException uoe) {
+        }
 
         if (null != strategy) {
             result = strategy.restoreView(context, viewId, renderKitId);
