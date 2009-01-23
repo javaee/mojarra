@@ -500,7 +500,7 @@ public class Util {
         }
         
         if (!foundMatch) {
-            requestViewId = null;
+            return pathInfoViewId;
         }
 
         return requestViewId;
