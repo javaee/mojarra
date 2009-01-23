@@ -448,10 +448,24 @@ public class Util {
                                 // RELEASE_PENDING (rlubke,driscoll) cache the lookup
                                 requestViewId = candidateViewId;
                                 foundMatch = true;
+                                break;
                             }
                         } catch (MalformedURLException e) {
                         }
                     }
+                }
+            }
+            if (!foundMatch) {
+                // If we didn't find a match in the faceletsViewMappings
+                // look for a physical resource with that name
+                try {
+                    if (extContext.getResource(candidateViewId) != null) {
+                        // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                        requestViewId = candidateViewId;
+                        foundMatch = true;
+                        break;
+                    }
+                } catch (MalformedURLException e) {
                 }
             }
         }

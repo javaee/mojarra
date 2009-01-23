@@ -119,7 +119,7 @@ public class NestedDatatablesTestCase extends AbstractTestCase {
     // ------------------------------------------------- Individual Test Methods
 
     public void testInputFieldUpdate() throws Exception {
-	HtmlPage page = getPage("/faces/test.jsp");
+	HtmlPage page = getPage("/test.faces");
 	List list;
 	int i;
 	char c, max;
@@ -178,7 +178,7 @@ public class NestedDatatablesTestCase extends AbstractTestCase {
     }
 
     public void testInputFieldUpdate2() throws Exception {
-	HtmlPage page = getPage("/faces/nested.jsp");
+	HtmlPage page = getPage("/nested.faces");
 	List list;
 	int i;
 	char c, max;
