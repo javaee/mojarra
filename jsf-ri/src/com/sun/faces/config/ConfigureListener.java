@@ -261,8 +261,10 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     public void contextDestroyed(ServletContextEvent sce) {
-        webAppListener.contextDestroyed(sce);
-        webAppListener = null;
+        if (webAppListener != null) {
+            webAppListener.contextDestroyed(sce);
+            webAppListener = null;
+        }
         ServletContext context = sce.getServletContext();
         GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
         if (helper != null) {
@@ -272,6 +274,7 @@ public class ConfigureListener implements ServletRequestListener,
         LOGGER.log(Level.FINE,
                    "ConfigureListener.contextDestroyed({0})",
                    context.getServletContextName());
+
         FacesContext initContext = new InitFacesContext(context);
         try {
             Application app = initContext.getApplication();
@@ -282,6 +285,12 @@ public class ConfigureListener implements ServletRequestListener,
             FactoryFinder.releaseFactories();
             if (webResourcePool != null) {
                 webResourcePool.shutdownNow();
+            }
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           "Unexpected exception when attempting to tear down the Mojarra runtime",
+                           e);
             }
         } finally {
             ApplicationAssociate
