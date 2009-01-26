@@ -40,11 +40,10 @@
 
 package javax.faces.context;
 
+import javax.faces.FacesWrapper;
 import javax.faces.component.UIComponent;
-
 import java.io.IOException;
 import java.io.Writer;
-import javax.faces.FacesWrapper;
 
 /**
  * <p>Provides a simple implementation of {@link ResponseWriter} that
@@ -52,7 +51,7 @@ import javax.faces.FacesWrapper;
  * behavior to an existing {@link ResponseWriter} instance.  The default
  * implementation of all methods is to call through to the wrapped
  * {@link ResponseWriter}.</p>
- *
+ * <p/>
  * <p>Usage: extend this class and override {@link #getWrapped} to
  * return the instance we are wrapping.</p>
  *
@@ -63,7 +62,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
 
     /**
      * @return the instance that we are wrapping.
-     */ 
+     */
 
     public abstract ResponseWriter getWrapped();
 
@@ -154,7 +153,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @since 1.2
      */
     public void startElement(String name, UIComponent component)
-    throws IOException {
+            throws IOException {
 
         getWrapped().startElement(name, component);
 
@@ -185,7 +184,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @since 1.2
      */
     public void writeAttribute(String name, Object value, String property)
-        throws IOException {
+            throws IOException {
 
         getWrapped().writeAttribute(name, value, property);
 
@@ -201,7 +200,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      * @since 1.2
      */
     public void writeURIAttribute(String name, Object value, String property)
-        throws IOException {
+            throws IOException {
 
         getWrapped().writeURIAttribute(name, value, property);
 
@@ -247,10 +246,9 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      */
 
     public void writeText(Object text, UIComponent component, String property)
-        throws IOException {
-	getWrapped().writeText(text, component, property);
+            throws IOException {
+        getWrapped().writeText(text, component, property);
     }
-
 
 
     /**
