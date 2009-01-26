@@ -269,7 +269,6 @@ public class ConfigureListener implements ServletRequestListener,
             helper.setClassLoader();
         }
 
-
         LOGGER.log(Level.FINE,
                    "ConfigureListener.contextDestroyed({0})",
                    context.getServletContextName());
