@@ -94,7 +94,7 @@ public class FaceletsTestCase extends AbstractTestCase {
     // ------------------------------------------------------------ Test Methods
 
 
-    /**
+    /*
      * Added for issue 917.
      */
     public void testSetPropertyActionListener1() throws Exception {
@@ -106,7 +106,7 @@ public class FaceletsTestCase extends AbstractTestCase {
         getAllElementsOfGivenClass(page, output, HtmlSpan.class);
         assertTrue(!output.isEmpty());
         HtmlSpan span = output.get(0);
-        assertTrue("Current Name: ".equals(span.asText()));
+        assertTrue("Expected: 'Current Name: ', Received: '"+span.asText()+"'","Current Name:".equals(span.asText()));
 
         // click the commandLink with a nested setPropertyActionListener
         // to cause the name attribute in the session to be populated.
@@ -128,12 +128,12 @@ public class FaceletsTestCase extends AbstractTestCase {
         getAllElementsOfGivenClass(page, output, HtmlSpan.class);
         assertTrue(!output.isEmpty());
         span = output.get(0);
-        assertTrue("Current Name: ".equals(span.asText()));
+        assertTrue("Current Name:".equals(span.asText()));
         
     }
 
 
-    /**
+    /*
      * Added for issue 909.
      */
     public void testTagSourceFromDtdDocument() throws Exception {
@@ -151,7 +151,7 @@ public class FaceletsTestCase extends AbstractTestCase {
     }
 
 
-    /**
+    /*
      * Verify #{component} and #{compositeComponent} expressions evaluate
      * at build time.
      * @throws Exception
@@ -167,6 +167,45 @@ public class FaceletsTestCase extends AbstractTestCase {
         for (HtmlSpan span : output) {
             assertTrue("PASSED".equals(span.asText()));
         }
+
+    }
+
+
+    /**
+     * Ensure attributes that evaluate EL expressions only render the attribute
+     * name/value pair when the value is non-null.
+     *
+     * https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=940
+     */ 
+    public void testConditionalAttributeRendering() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/conditionalCCAttributeRendering.xhtml") ;
+
+        // verify the output is initially null
+        List<HtmlSpan> output = new ArrayList<HtmlSpan>(1);
+        getAllElementsOfGivenClass(page, output, HtmlSpan.class);
+        assertTrue(output.size() == 1);
+        HtmlSpan span = output.get(0);
+        assertTrue(span.getStyleAttribute().length() == 0);
+        HtmlSubmitInput add = (HtmlSubmitInput) getInputContainingGivenId(page, "form:add");
+        page = add.click();
+
+        // ensure the span is now styled since there is a non-null value available.
+        output.clear();
+        getAllElementsOfGivenClass(page, output, HtmlSpan.class);
+        assertTrue(output.size() == 1);
+        span = output.get(0);
+        assertEquals("color:red", span.getStyleAttribute());
+
+        // ensure the style is not rendered once again after the attribute value
+        // is set to "".
+        HtmlSubmitInput remove = (HtmlSubmitInput) getInputContainingGivenId(page, "form:remove");
+        page = remove.click();
+        output.clear();
+        getAllElementsOfGivenClass(page, output, HtmlSpan.class);
+        assertTrue(output.size() == 1);
+        span = output.get(0);
+        assertTrue(span.getStyleAttribute().length() == 0);
 
     }
 }

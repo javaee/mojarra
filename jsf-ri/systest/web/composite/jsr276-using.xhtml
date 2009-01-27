@@ -35,31 +35,37 @@
  holder.
 
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite">
-<head>
+      xmlns:ez="http://java.sun.com/jsf/composite/composite">
+<h:head>
+<title>Using jsr276 in a composite component</title>
+<style type="text/css">
+.grayBox { padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9;  }
+</style>
+</h:head>
 
-<title>This will not be present in rendered output</title>
+<h:body>
 
-</head>
+  <ui:debug hotkey="p" rendered="true"/>
 
-<body>
+<h:form>
 
-<composite:interface>
-    <composite:attribute name="value" required="false"/>
-</composite:interface>
+<h1>Correct usage</h1>
 
-<composite:implementation>
+  <p><ez:jsr276Correct01 /></p>
 
-    <h:outputText value="#{compositeComponent.attrs.value}" style="background-color: yellow"/>
-    
-</composite:implementation>
+<h1>Incorrect usage</h1>
 
-</body>
+  <p><ez:jsr276Incorrect01 /></p>
+
+
+
+</h:form>
+
+</h:body>
 
 </html>

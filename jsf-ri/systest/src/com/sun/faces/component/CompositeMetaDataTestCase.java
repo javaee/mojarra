@@ -34,54 +34,66 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jstl.core;
+package com.sun.faces.component;
 
-import java.io.IOException;
-import javax.faces.component.UIComponentBase;
-import javax.faces.context.FacesContext;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
+import com.sun.faces.htmlunit.AbstractTestCase;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-/**
- *
- * @author edburns
- */
-class JstlUIComponent extends UIComponentBase {
-    
-    private FaceletContext ctx;
+public class CompositeMetaDataTestCase extends AbstractTestCase {
 
-    private JstlTagHandler handler;
-
-    public JstlUIComponent(FaceletContext ctx, JstlTagHandler handler) {
-        this.ctx = ctx;
-        this.handler = handler;
-    }
-    
-    @Override
-    public String getFamily() {
-        return "com.sun.faces.facelets.tag.jstl.core.JstlUIComponent";
+    public CompositeMetaDataTestCase(String name) {
+        super(name);
     }
 
-    @Override
-    public boolean isTransient() {
-        return true;
+
+    /**
+     * Set up instance variables required by this test case.
+     */
+    public void setUp() throws Exception {
+        super.setUp();
     }
 
-    @Override
-    public void encodeBegin(FacesContext context) throws IOException {
-        this.handler.deferredApply(ctx, this.getParent());
+
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(CompositeMetaDataTestCase.class));
     }
 
-    @Override
-    public void encodeChildren(FacesContext context) throws IOException {
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
+    public void tearDown() {
+        super.tearDown();
     }
 
-    @Override
-    public void encodeEnd(FacesContext context) throws IOException {
+
+    /**
+     * Added for issue 10
+     *
+     * @throws Exception
+     */
+    public void testPrefixMappedFaceletPage() throws Exception {
+
+        HtmlPage page = getPage("/faces/resources/composite/jsr276Correct01.xhtml");
+        String text = page.asText();
+        assertTrue(-1 != text.indexOf("composite component with correctly specified jsr276 metadata"));
     }
 
-    
-    
-    
+    public void testExtensionMappedFaceletPage() throws Exception {
+
+        HtmlPage page = getPage("/composite/jsr276-using.faces");
+        String text = page.asText();
+        assertTrue(-1 != text.indexOf("composite component with correctly specified jsr276 metadata"));
+        assertTrue(-1 != text.indexOf("composite component with incorrectly specified jsr276 metadata"));
+        assertTrue(-1 == text.indexOf("prefix fmd"));
+        assertTrue(-1 != text.indexOf("prefix metaData"));
+    }
     
 
-}
+} // end of class PathTestCase

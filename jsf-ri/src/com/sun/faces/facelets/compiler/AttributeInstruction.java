@@ -82,8 +82,9 @@ final class AttributeInstruction implements Instruction {
         try {
             ELContext elContext = context.getELContext();
             String val = txt.toString(elContext);
-
-            out.writeAttribute(attr, val, null);
+            if (val != null && val.length() != 0) {
+                out.writeAttribute(attr, val, null);
+            }
         } catch (ELException e) {
             throw new ELException(this.alias + ": " + e.getMessage(), e.getCause());
         } catch (Exception e) {

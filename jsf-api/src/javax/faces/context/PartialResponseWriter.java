@@ -84,6 +84,8 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
     /**
      * <p class="changed_added_2_0">Create a <code>PartialResponseWriter</code>.</p>
      *
+     * @param writer The writer to wrap.
+     *
      * @since 2.0
      */
     public PartialResponseWriter(ResponseWriter writer)  {

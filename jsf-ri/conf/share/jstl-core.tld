@@ -179,7 +179,29 @@ visibility.
 
  <tag>
     <description>
-        Sets the result of an expression evaluation in a 'scope'
+<![CDATA[ <p>Sets the result of an expression evaluation based on the
+value of the attributes.  If "scope" the is present, but has a zero
+length or is equal to the string "page", <code>TagException</code> is
+thrown with an informative error message, ensuring page location
+information is saved.</p>
+
+<p>This handler operates in one of two ways.
+
+	<ol>
+
+	  <li><p>The user has set "var", "value" and (optionally)
+	  "scope" attributes.</p></li>
+
+	  <li><p>The user has set "target", "property", and "value"
+	  attributes.</p></li>
+
+
+	</ol>
+
+<p>The first case takes precedence over the second.</p>
+
+]]>
+
     </description>
     <name>set</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.core.SetTag</tag-class>

@@ -530,7 +530,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * 
      * @see com.sun.facelets.tag.TagLibrary#containsNamespace(java.lang.String)
      */
-    public boolean containsNamespace(String ns) {
+    public boolean containsNamespace(String ns, Tag t) {
         return this.namespace.equals(ns);
     }
 

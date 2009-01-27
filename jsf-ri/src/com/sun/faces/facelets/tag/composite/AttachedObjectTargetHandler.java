@@ -121,6 +121,8 @@ public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
             target.setTargetsList(ve);
         }
         
+        this.nextHandler.apply(ctx, parent);
+        
     }
 
 }

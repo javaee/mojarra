@@ -71,7 +71,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagException;
  * @author Jacob Hookom
  * @version $Id$
  */
-public class SetHandler extends JstlTagHandler {
+public class SetHandler extends TagHandlerImpl {
 
     private final TagAttribute var;
     
@@ -93,7 +93,7 @@ public class SetHandler extends JstlTagHandler {
         
     }
 
-    public void deferredApply(FaceletContext ctx, UIComponent parent)
+    public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
         
         // Apply precedence algorithm for attributes.  The JstlCoreTLV doesn't

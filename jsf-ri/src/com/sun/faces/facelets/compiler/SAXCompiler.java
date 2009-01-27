@@ -280,7 +280,11 @@ public final class SAXCompiler extends Compiler {
                 is.close();
             }
         }
-        return new EncodingHandler(mngr.createFaceletHandler(), encoding);
+        FaceletHandler result = new EncodingHandler(mngr.createFaceletHandler(), encoding,
+                mngr.getCompilationMessageHolder());
+        mngr.setCompilationMessageHolder(null);
+
+        return result;
     }
 
     protected static final String writeXmlDecl(InputStream is, CompilationManager mngr)

@@ -1,8 +1,7 @@
 <!--
-
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -33,33 +32,28 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
-
 -->
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite">
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ez="http://java.sun.com/jsf/composite/composite">
 <head>
-
-<title>This will not be present in rendered output</title>
-
+    <title>conditionalCCAttributeRendering</title>
 </head>
 
 <body>
-
-<composite:interface>
-    <composite:attribute name="value" required="false"/>
-</composite:interface>
-
-<composite:implementation>
-
-    <h:outputText value="#{compositeComponent.attrs.value}" style="background-color: yellow"/>
-    
-</composite:implementation>
-
+    <ez:conditionalAttributeRendering style="#{sessionScope.style}"/>
+    <h:form id="form">
+        <h:commandButton id="add" value="Set Attribute">
+            <f:setPropertyActionListener value="color:red" target="#{sessionScope.style}"/>
+        </h:commandButton>
+        <h:commandButton id="remove" value="Remove Attribute">
+            <f:setPropertyActionListener value="#{''}" target="#{sessionScope.style}"/>
+        </h:commandButton>
+    </h:form>
 </body>
-
 </html>

@@ -119,7 +119,7 @@ public class SessionMap extends BaseContextMap<Object> {
         Util.notNull("key", key);
         HttpSession session = getSession(true);
         Object result = session.getAttribute(key);
-        if (ProjectStage.Development.equals(stage) && !(value instanceof Serializable)) {
+        if (value != null && ProjectStage.Development.equals(stage) && !(value instanceof Serializable)) {
             LOGGER.log(Level.WARNING,
                        "jsf.context.extcontext.sessionmap.nonserializable",
                        new Object[]{key, value.getClass().getName()});

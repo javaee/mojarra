@@ -34,36 +34,59 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jstl.core;
+package com.sun.faces.facelets.compiler;
 
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author edburns
  */
-public abstract class JstlTagHandler extends TagHandlerImpl {
+public class CompilationMessageHolderImpl implements CompilationMessageHolder {
+    
+    private Map<String, List<FacesMessage>> messageListMap;
 
-    public JstlTagHandler(TagConfig config) {
-        super(config);
-    }
 
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
-        // Assume that because the JstlUIComponent is always transient
-        // we can always simply add it as a child of parent whenever
-        // we are executed.
-        JstlUIComponent child = new JstlUIComponent(ctx, this);
-        parent.getChildren().add(child);
+    private Map<String, List<FacesMessage>> getMessageListMap() {
+        if (null == messageListMap) {
+            messageListMap = new HashMap<String, List<FacesMessage>>();
+        }
+        return messageListMap;
     }
     
-    public abstract void deferredApply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException;
+    public List<FacesMessage> getNamespacePrefixMessages(FacesContext context,
+            String prefix) {
+        List<FacesMessage> result = null;
+        Map<String, List<FacesMessage>> map = getMessageListMap();
+        if (null == (result = map.get(prefix))) {
+            result = new ArrayList<FacesMessage>();
+            map.put(prefix, result);
+        }
+        
+        return result;
+    }
+
+    public void processCompilationMessages(FacesContext context) {
+        Map<String, List<FacesMessage>> map = getMessageListMap();
+        Collection<List<FacesMessage>> values = map.values();
+        for (List<FacesMessage> curList : values) {
+            for (FacesMessage curMessage : curList) {
+                context.addMessage(null, curMessage);
+            }
+        }
+    }
+
+    public void removeNamespacePrefixMessages(String prefix) {
+        Map<String, List<FacesMessage>> map = getMessageListMap();
+        map.remove(prefix);
+    }
     
     
+
 }

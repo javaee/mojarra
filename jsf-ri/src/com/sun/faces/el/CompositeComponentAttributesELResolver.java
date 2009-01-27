@@ -261,19 +261,19 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
 
 
         public int size() {
-            return attributesMap.size();
+            throw new UnsupportedOperationException();
         }
 
         public boolean isEmpty() {
-            return attributesMap.isEmpty();
+            throw new UnsupportedOperationException();
         }
 
         public boolean containsKey(Object key) {
-            return attributesMap.containsKey(key);
+            throw new UnsupportedOperationException();
         }
 
         public boolean containsValue(Object value) {
-            return attributesMap.containsValue(value);
+            throw new UnsupportedOperationException();
         }
 
         public Object get(Object key) {
@@ -281,41 +281,39 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             if (v != null && v instanceof ValueExpression) {
                 return (((ValueExpression) v).getValue(ctx.getELContext()));
             }
-            return v;
+            return null;
         }
 
         public Object put(String key, Object value) {
             Object v = attributesMap.get(key);
             if (v != null && v instanceof ValueExpression) {
                 ((ValueExpression) v).setValue(ctx.getELContext(), value);
-                return null;
-            } else {
-                return attributesMap.put(key, value);
             }
+            return null;
         }
 
         public Object remove(Object key) {
-            return attributesMap.remove(key);
+            throw new UnsupportedOperationException();
         }
 
         public void putAll(Map<? extends String,?> t) {
-            attributesMap.putAll(t);
+            throw new UnsupportedOperationException();
         }
 
         public void clear() {
-            attributesMap.clear();
+            throw new UnsupportedOperationException();
         }
 
         public Set<String> keySet() {
-            return attributesMap.keySet();
+            throw new UnsupportedOperationException();
         }
 
         public Collection<Object> values() {
-            return attributesMap.values();
+            throw new UnsupportedOperationException();
         }
 
         public Set<Map.Entry<String,Object>> entrySet() {
-            return attributesMap.entrySet();
+            throw new UnsupportedOperationException();
         }
     }
 }

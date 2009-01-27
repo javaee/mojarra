@@ -53,10 +53,13 @@ package com.sun.faces.facelets.compiler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import javax.faces.webapp.pdl.facelets.tag.Tag;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
@@ -101,6 +104,8 @@ final class CompilationManager {
     
     private final String alias;
     
+    private CompilationMessageHolder messageHolder = null;
+    
     public CompilationManager(String alias, Compiler compiler) {
         
         // this is our alias
@@ -109,7 +114,7 @@ final class CompilationManager {
         // grab compiler state
         this.compiler = compiler;
         this.tagDecorator = compiler.createTagDecorator();
-        this.tagLibrary = compiler.createTagLibrary();
+        this.tagLibrary = compiler.createTagLibrary(this.getCompilationMessageHolder());
 
         // namespace management
         this.namespaceManager = new NamespaceManager();
@@ -130,6 +135,18 @@ final class CompilationManager {
     private InterfaceUnit getInterfaceUnit() {
         return interfaceUnit;
     }
+    
+    public CompilationMessageHolder getCompilationMessageHolder() {
+        if (null == messageHolder) {
+            messageHolder = new CompilationMessageHolderImpl();
+        }
+        return messageHolder;
+    }
+    
+    public void setCompilationMessageHolder(CompilationMessageHolder messageHolder) {
+        this.messageHolder = messageHolder;
+    }
+
     private void setInterfaceUnit(InterfaceUnit interfaceUnit) {
         this.interfaceUnit = interfaceUnit;
     }
@@ -263,7 +280,7 @@ final class CompilationManager {
             } else {
                 this.startUnit(new TagUnit(this.tagLibrary, qname[0], qname[1], t, this.nextTagId()));
             }
-        } else if (this.tagLibrary.containsNamespace(qname[0])) {
+        } else if (this.tagLibrary.containsNamespace(qname[0], t)) {
             throw new TagException(orig, "Tag Library supports namespace: "+qname[0]+", but no tag was defined for name: "+qname[1]);
         } else {
             TextUnit unit;
@@ -313,6 +330,7 @@ final class CompilationManager {
             this.finishUnit();
         }
     }
+
 
     public void pushNamespace(String prefix, String uri) {
 
@@ -452,7 +470,7 @@ final class CompilationManager {
         int remove = 0;
         for (int i = 0; i < attr.length; i++) {
             if (attr[i].getQName().startsWith("xmlns")
-                    && this.tagLibrary.containsNamespace(attr[i].getValue())) {
+                    && this.tagLibrary.containsNamespace(attr[i].getValue(), null)) {
                 remove |= 1 << i;
                 if (log.isLoggable(Level.FINE)) {
                     log.fine(attr[i] + " Namespace Bound to TagLibrary");

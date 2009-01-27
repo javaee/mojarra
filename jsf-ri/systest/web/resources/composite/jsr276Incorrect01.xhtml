@@ -35,29 +35,34 @@
  holder.
 
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:metaData="http://java.sun.com/xml/ns/javaee/faces/design-time-metadata"
       xmlns:composite="http://java.sun.com/jsf/composite">
 <head>
 
-<title>This will not be present in rendered output</title>
+<title>Not present in rendered output</title>
 
 </head>
 
 <body>
 
-<composite:interface>
-    <composite:attribute name="value" required="false"/>
+<composite:interface name="jsr276">
+
+  <composite:attribute name="pinLabel" default="PIN">
+      <metaData:expert>true</metaData:expert>
+  </composite:attribute>
+
 </composite:interface>
 
 <composite:implementation>
 
-    <h:outputText value="#{compositeComponent.attrs.value}" style="background-color: yellow"/>
-    
+  <p class="grayBox">composite component with incorrectly specified jsr276
+  metadata</p>
+
 </composite:implementation>
 
 </body>

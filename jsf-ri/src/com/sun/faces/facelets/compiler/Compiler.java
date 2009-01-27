@@ -171,10 +171,10 @@ public abstract class Compiler {
         return null;
     }
 
-    public final TagLibrary createTagLibrary() {
+    public final TagLibrary createTagLibrary(CompilationMessageHolder unit) {
         if (this.libraries.size() > 0) {
             return new CompositeTagLibrary((TagLibrary[]) this.libraries
-                    .toArray(new TagLibrary[this.libraries.size()]));
+                    .toArray(new TagLibrary[this.libraries.size()]), unit);
         }
         return EMPTY_LIBRARY;
     }

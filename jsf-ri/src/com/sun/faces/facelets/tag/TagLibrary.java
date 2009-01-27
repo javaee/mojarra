@@ -56,6 +56,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import java.lang.reflect.Method;
 
 import javax.faces.FacesException;
+import javax.faces.webapp.pdl.facelets.tag.Tag;
 
 /**
  * A library of Tags associated with one or more namespaces.
@@ -66,22 +67,24 @@ import javax.faces.FacesException;
 public interface TagLibrary {
 
     /**
-     * If this library contains the passed namespace
+     * true if the namespace is used in this library
      * 
      * @param ns
      *            namespace
-     * @return true if the namespace is used in this library
+     * @param t the tag instance currently active at the time
+     * this method is called.  May be null
+
      */
-    public boolean containsNamespace(String ns);
+    public boolean containsNamespace(String ns, Tag t);
 
     /**
-     * If this library contains a TagHandler for the namespace and local name
+     * If this library contains a TagHandler for the namespace and local name true if handled by this library
      * 
      * @param ns
      *            namespace
      * @param localName
      *            local name
-     * @return true if handled by this library
+     * @return 
      */
     public boolean containsTagHandler(String ns, String localName);
 
