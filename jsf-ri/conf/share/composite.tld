@@ -1378,6 +1378,27 @@ precedence.</p></div>]]>
         </attribute>
   </tag>
 
+<tag>
+        <description>
+
+            <![CDATA[
+<div class="changed_added_2_0">
+<p>Used within a <code>&lt;composite:interface&gt;</code> section,
+within any sub-element of that section, to include XML content not
+defined by this specification.  This element can be used to incorporate
+<a target="_" href="http://jcp.org/en/jsr/detail?id=276">JSR-276</a>
+metadata into a composite component.</p>
+
+</div>]]>
+        </description>
+        <name>
+            extension
+        </name>
+        <body-content>
+            JSP
+        </body-content>
+  </tag>
+
 
 
 </taglib>

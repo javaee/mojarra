@@ -168,7 +168,7 @@ public class AttributeHandler extends TagHandlerImpl {
             propertyDescriptor.setValue("targets", ve);
         }
         
-
+        this.nextHandler.apply(ctx, parent);
         
     }
 

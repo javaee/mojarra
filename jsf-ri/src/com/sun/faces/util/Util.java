@@ -437,20 +437,55 @@ public class Util {
             // and search for a match in the faceletsViewMappings
             for (j = 0; j < faceletsViewMappings.length; j++) {
                 if (null != faceletsViewMappings[j]) {
+                    // If this is a prefix mapping, it would have been 
+                    // handled before getting this far.  Therefore, we
+                    // can skip prefix mapped entries.
+                    if (faceletsViewMappings[j].startsWith("/")) {
+                        continue;
+                    }
+                    // Look for an exact match
                     if (true == (foundMatch = 
                             faceletsViewMappings[j].equals(candidateViewId))) {
                         break;
                     } else {
-                        // If we didn't find a match in the faceletsViewMappings
-                        // look for a physical resource with that name
-                        try {
-                            if (extContext.getResource(candidateViewId) != null) {
-                                // RELEASE_PENDING (rlubke,driscoll) cache the lookup
-                                requestViewId = candidateViewId;
-                                foundMatch = true;
-                                break;
+                        // We don't have an exact match.
+                        // PENDING(rlubke): do a more robust wild card
+                        // matching thing here.
+                        if (faceletsViewMappings[j].startsWith("*.")) {
+                            String 
+                                    faceletsViewCopy = faceletsViewMappings[j],
+                                    candidateCopy = candidateViewId;
+                            if (-1 == (i = candidateCopy.lastIndexOf(".")) || 0 == i) {
+                                assert(false);
                             }
-                        } catch (MalformedURLException e) {
+                            candidateCopy = candidateCopy.substring(0, i);
+                            if (-1 == (i = faceletsViewCopy.lastIndexOf(".")) || 0 == i) {
+                                assert(false);
+                            }
+                            faceletsViewCopy = faceletsViewCopy.substring(i);
+                            candidateCopy = candidateCopy + faceletsViewCopy;
+                            // If we didn't find a match in the faceletsViewMappings
+                            // look for a physical resource with that name
+                            try {
+                                if (extContext.getResource(candidateCopy) != null) {
+                                    requestViewId = candidateCopy;
+                                    foundMatch = true;
+                                    break;
+                                }
+                            } catch (MalformedURLException e) {
+                            }
+                        } else {
+                            // If we didn't find a match in the faceletsViewMappings
+                            // look for a physical resource with that name
+                            try {
+                                if (extContext.getResource(candidateViewId) != null) {
+                                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                                    requestViewId = candidateViewId;
+                                    foundMatch = true;
+                                    break;
+                                }
+                            } catch (MalformedURLException e) {
+                            }
                         }
                     }
                 }
