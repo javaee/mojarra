@@ -47,8 +47,8 @@ import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
-import javax.faces.event.AfterAddToParentEvent;
-import javax.faces.event.BeforeRenderEvent;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+
 
 /**
  * Validate new EL features such as the component implicit object
@@ -88,27 +88,21 @@ public class EventTestCase extends AbstractTestCase {
 
     public void testValidEvents() throws Exception {
         HtmlPage page = getPage("/faces/eventTag.xhtml");
-        List<HtmlSpan> outputs = new ArrayList<HtmlSpan>(2);
+        List<HtmlSpan> outputs = new ArrayList<HtmlSpan>(4);
         getAllElementsOfGivenClass(page, outputs, HtmlSpan.class);
-        
-        HtmlSpan s;
+        assertTrue(outputs.size() == 4);
+        validateOutput(outputs);
 
-        // Short name
-        s = outputs.get(0);
-        assertTrue(("The 'javax.faces.event.BeforeRenderEvent' event fired!").equals(s.asText()));
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "click");
+        assertNotNull(submit);
+        page = submit.click();
+        outputs.clear();
+        getAllElementsOfGivenClass(page, outputs, HtmlSpan.class);
+        assertTrue(outputs.size() == 4);
+        validateOutput(outputs);
+    }
 
-        // Long name
-        s = outputs.get(1);
-        assertTrue(("The 'javax.faces.event.BeforeRenderEvent' event fired!").equals(s.asText()));
 
-        // Short Name
-        s = outputs.get(2);
-        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
-
-        // Long name
-        s = outputs.get(3);
-        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
-}
 
     public void testInvalidEvent() throws Exception {
         try {
@@ -129,5 +123,30 @@ public class EventTestCase extends AbstractTestCase {
         } catch (Exception ex) {
             Logger.getLogger(EventTestCase.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void validateOutput(List<HtmlSpan> outputs) {
+
+        HtmlSpan s;
+
+        // Short name
+        s = outputs.get(0);
+        assertTrue(("The 'javax.faces.event.BeforeRenderEvent' event fired!").equals(s.asText()));
+
+        // Long name
+        s = outputs.get(1);
+        assertTrue(("The 'javax.faces.event.BeforeRenderEvent' event fired!").equals(s.asText()));
+
+        // Short Name
+        s = outputs.get(2);
+        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
+
+        // Long name
+        s = outputs.get(3);
+        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
+
     }
 }
