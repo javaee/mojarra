@@ -82,23 +82,21 @@
 	    <xsd:choice>
 		<xsd:element name="library-class"
 			     type="javaee:fully-qualified-classType"/>
-		<xsd:choice>
-		    <xsd:sequence>
-			<xsd:element name="namespace" type="javaee:string"/>
-			<xsd:element minOccurs="0" maxOccurs="1"
-				     name="composite-library-name"
-				     type="javaee:fully-qualified-classType"/>
-			<xsd:choice minOccurs="0" maxOccurs="unbounded">
-			    <xsd:element name="tag"
-					 type="javaee:facelet-taglib-tagType"/>
-			    <xsd:element name="function"
-					 type="javaee:facelet-taglib-functionType"/>
+                <xsd:sequence>
+                    <xsd:element name="namespace" type="javaee:string"/>
+                    <xsd:element minOccurs="0" maxOccurs="1"
+                                 name="composite-library-name"
+                                 type="javaee:fully-qualified-classType"/>
+                    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                        <xsd:element name="tag"
+                                     type="javaee:facelet-taglib-tagType"/>
+                        <xsd:element name="function"
+                                     type="javaee:facelet-taglib-functionType"/>
 
-			</xsd:choice>
-		    </xsd:sequence>
-		</xsd:choice>
+                    </xsd:choice>
+                </xsd:sequence>
 	    </xsd:choice>
-            <xsd:element name="tag-extension"
+            <xsd:element name="taglib-extension"
                          type="javaee:facelet-taglib-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
@@ -138,11 +136,11 @@
                 <xsd:element name="validator"
                              type="javaee:facelet-taglib-tag-validatorType"/>
                 <xsd:element name="source" type="javaee:string"/>
-                <xsd:element name="tag-extension"
-                             type="javaee:facelet-taglib-tag-extensionType"
-                             minOccurs="0"
-                             maxOccurs="unbounded"/>
             </xsd:choice>
+            <xsd:element name="tag-extension"
+                         type="javaee:facelet-taglib-tag-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="facelet-taglib-tag-extensionType">
@@ -281,13 +279,15 @@
          Defines the canonical name of a tag or attribute being
          defined.
 
-         The name must conform to the lexical rules for an NMTOKEN.
+         The name must conform to the lexical rules for an NCName
 
 	</xsd:documentation>
     </xsd:annotation>
 
     <xsd:simpleContent>
-      <xsd:restriction base="javaee:xsdNMTOKENType"/>
+      <xsd:extension base="xsd:NCName">
+        <xsd:attribute name="id" type="xsd:ID"/>
+      </xsd:extension>
     </xsd:simpleContent>
   </xsd:complexType>
 
