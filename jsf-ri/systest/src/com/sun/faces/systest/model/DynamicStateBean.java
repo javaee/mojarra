@@ -36,17 +36,44 @@
 
 package com.sun.faces.systest.model;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.ManagedBean;
 import javax.faces.model.RequestScoped;
+import javax.faces.validator.ValidatorException;
 
 @ManagedBean
 @RequestScoped
 public class DynamicStateBean {
     
+    public void validate(FacesContext context, UIComponent comp, Object val) {
+        // The button should not be here on postback
+        UIComponent button = findButton(context);
+        if (null != button) {
+            throw new ValidatorException(new FacesMessage("cbutton should not be found"));
+        }
+        
+    }
+    
     public void beforeRender(ComponentSystemEvent event) {
-        System.out.println("beforeRender called");
-
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        UIComponent 
+                buttonParent = null, 
+                button = findButton(context);
+        buttonParent = button.getParent();
+        buttonParent.getChildren().remove(button);
+    }
+    
+    private UIComponent findButton(FacesContext context) {
+        char sep = UINamingContainer.getSeparatorChar(context);
+        UIComponent result = null;
+                result = context.getViewRoot().findComponent(sep + "form" + 
+                sep + "cbutton");
+        return result;
     }
 
 }
