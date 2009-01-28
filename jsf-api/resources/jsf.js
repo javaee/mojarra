@@ -1193,6 +1193,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     return;
                 }
 
+                if (xml.firstChild.tagName === "parsererror") {
+                    sendError(request, context, "malformedXML");
+                    return;
+                }
 
                 var responseType = xml.getElementsByTagName("partial-response")[0].firstChild;
 
