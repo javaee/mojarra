@@ -76,7 +76,7 @@ public class DocumentOrderingTestCase extends AbstractTestCase {
 
        public void testDocumentOrdering() throws Exception {
 
-           HtmlPage page = getPage("/faces/test.xhtml");
+           HtmlPage page = getPage("/test.jsf");
            assertTrue(page.asText().contains("Order Correct: true"));
 
        }

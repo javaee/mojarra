@@ -180,8 +180,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             return; // Explicitly remain on the current view
         }
         CaseStruct caseStruct = getViewId(context, fromAction, outcome);
-        ExternalContext extContext = context.getExternalContext();
         if (caseStruct != null) {
+            ExternalContext extContext = context.getExternalContext();
             ViewHandler viewHandler = Util.getViewHandler(context);
             assert (null != viewHandler);
 
@@ -197,6 +197,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     }
                     // encode the redirect to ensure session state
                     // is maintained
+                    context.getFlash().setRedirect(true);
                     extContext.redirect(extContext.encodeActionURL(newPath));
                 } catch (java.io.IOException ioe) {
                     if (logger.isLoggable(Level.SEVERE)) {
@@ -218,7 +219,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                 caseStruct.viewId);
                 }
             }
-        }
+        } 
     }
 
 
@@ -235,9 +236,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                  String outcome) {
         
         UIViewRoot root = context.getViewRoot();
+        ViewHandler viewHandler = Util.getViewHandler(context);
+        
         String viewId = (root != null ? root.getViewId() : null);
         
-        // if viewId is not null, use its value to find
+        // if viewIdToTest is not null, use its value to find
         // a navigation match, otherwise look for a match
         // based soley on the fromAction and outcome
         CaseStruct caseStruct = null;
@@ -251,6 +254,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         if (caseStruct == null) {
             caseStruct = findDefaultMatch(fromAction, outcome);
+        }
+        // If the navigation rules do not have a match...
+        if (null == caseStruct) {
+            caseStruct = findImplicitMatch(context, viewHandler, root, 
+                    fromAction, outcome);
         }
 
         if (caseStruct == null && development) {
@@ -277,7 +285,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * values are evaluated to determine the new <code>view</code> identifier.
      * Refer to section 7.4.2 of the specification for more details.
      *
-     * @param viewId     The current <code>view</code> identifier.
+     * @param viewIdToTest     The current <code>view</code> identifier.
      * @param fromAction The action reference string.
      * @param outcome    The outcome string.
      * @return The <code>view</code> identifier.
@@ -299,7 +307,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             return null;
         }
 
-        // We've found an exact match for the viewId.  Now we need to evaluate
+        // We've found an exact match for the viewIdToTest.  Now we need to evaluate
         // from-action/outcome in the following order:
         // 1) elements specifying both from-action and from-outcome
         // 2) elements specifying only from-outcome
@@ -316,7 +324,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * strings and finds the List of cases for each <code>from-view-id</code> string.
      * Refer to section 7.4.2 of the specification for more details.
      *
-     * @param viewId     The current <code>view</code> identifier.
+     * @param viewIdToTest     The current <code>view</code> identifier.
      * @param fromAction The action reference string.
      * @param outcome    The outcome string.
      * @return The <code>view</code> identifier.
@@ -335,7 +343,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         for (String fromViewId : wildCardSet) {
             // See if the entire wildcard string (without the trailing "*" is
-            // contained in the incoming viewId.  
+            // contained in the incoming viewIdToTest.  
             // Ex: /foobar is contained with /foobarbaz
             // If so, then we have found our largest pattern match..
             // If not, then continue on to the next case;
@@ -401,6 +409,66 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         // 4) elements where both from-action and from-outcome are null
 
         return determineViewFromActionOutcome(caseList, fromAction, outcome);
+    }
+    
+    private CaseStruct findImplicitMatch(FacesContext context, 
+            ViewHandler viewHandler, UIViewRoot root, String fromAction,
+            String outcome) {
+        CaseStruct caseStruct = null;
+        // look for an implicit match.
+        String viewIdToTest = outcome;
+        String currentViewId = root.getViewId();
+        boolean isRedirect = false;
+        final String REDIRECT_EQUALS_TRUE = "redirect=true";
+        int questionMark, redirectEqualsTrueIndex;
+        
+        // Does the outcome have a query string?
+        if (-1 != (questionMark = viewIdToTest.indexOf("?"))) {
+            // If so, does it have "redirect=true"?
+            if (-1 != (redirectEqualsTrueIndex =
+                    viewIdToTest.indexOf(REDIRECT_EQUALS_TRUE, questionMark))) {
+                isRedirect = true;
+            }
+            // Remove the query string from the viewId.
+            viewIdToTest = viewIdToTest.substring(0, questionMark);
+
+        }
+        
+        // If the viewIdToTest If needs an extension, take one from the currentViewId.
+        if (-1 == (redirectEqualsTrueIndex = viewIdToTest.lastIndexOf("."))) {
+            if (-1 != (redirectEqualsTrueIndex = currentViewId.lastIndexOf("."))) {
+                viewIdToTest = viewIdToTest + currentViewId.substring(redirectEqualsTrueIndex);
+            }
+        }
+
+        if (!viewIdToTest.startsWith("/")) {
+            int lastSlash = currentViewId.lastIndexOf("/");
+            if (-1 != lastSlash) {
+                currentViewId = currentViewId.substring(0, lastSlash + 1);
+                viewIdToTest = currentViewId + viewIdToTest;
+            } else {
+                viewIdToTest = "/" + viewIdToTest;
+            }
+        }
+
+        try {
+            viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
+        } catch (UnsupportedOperationException e) {
+            viewIdToTest = Util.deriveViewId(context, viewIdToTest);
+        }
+
+        if (null != viewIdToTest) {
+            caseStruct = new CaseStruct();
+            if (isRedirect) {
+                // Tack back on the query string
+                viewIdToTest = viewIdToTest + outcome.substring(questionMark);
+            }
+            caseStruct.viewId = viewIdToTest;
+            caseStruct.navCase = new NavigationCase(currentViewId,
+                    fromAction, outcome, viewIdToTest, isRedirect);
+        }
+
+        return caseStruct;
     }
 
 

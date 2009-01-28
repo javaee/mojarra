@@ -99,6 +99,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.annotation.Annotation;
+
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
@@ -154,6 +156,14 @@ public class ConfigManager {
      */
     private static final String ANNOTATIONS_SCAN_TASK_KEY =
           ConfigManager.class.getName() + "_ANNOTATION_SCAN_TASK";
+
+
+    /**
+     * Name of the attribute added by {@link ParseTask} to indiciate a
+     * {@link Document} instance as a representation of
+     * <code>/WEB-INF/faces-config.xml</code>.
+     */
+    private static final String WEB_INF_MARKER = "com.sun.faces.webinf";
 
 
     /**
@@ -290,7 +300,7 @@ public class ConfigManager {
                       isFaceletsDisabled(webConfig, webinfFacesConfig);
                 if (!isMetadataComplete(webinfFacesConfig)) {
                     // execute the Task responsible for finding annotation classes
-                    Future<Set<String>> annotationScan =
+                    Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan =
                           executor.submit(new AnnotationScanTask(sc));
                     pushTaskToContext(sc, annotationScan);
                 }
@@ -320,6 +330,8 @@ public class ConfigManager {
                 Throwable t = unwind(e);
                 throw new ConfigurationException("CONFIGURATION FAILED! " + t.getMessage(),
                                                  t);
+            } finally {
+                sc.removeAttribute(ANNOTATIONS_SCAN_TASK_KEY);
             }
         }
 
@@ -358,17 +370,17 @@ public class ConfigManager {
     /**
      * @return the results of the annotation scan task
      */
-    public static Collection<String> getAnnotatedClasses(FacesContext ctx) {
+    public static Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(FacesContext ctx) {
 
         Map<String, Object> appMap =
               ctx.getExternalContext().getApplicationMap();
         //noinspection unchecked
-        Future<Set<String>> scanTask = (Future<Set<String>>) appMap
-              .remove(ANNOTATIONS_SCAN_TASK_KEY);
+        Future<Map<Class<? extends Annotation>,Set<Class<?>>>> scanTask =
+              (Future<Map<Class<? extends Annotation>,Set<Class<?>>>>) appMap.get(ANNOTATIONS_SCAN_TASK_KEY);
         try {
             return ((scanTask != null)
                     ? scanTask.get()
-                    : Collections.<String>emptySet());
+                    : Collections.<Class<? extends Annotation>,Set<Class<?>>>emptyMap());
         } catch (Exception e) {
             throw new FacesException(e);
         }
@@ -480,7 +492,7 @@ public class ConfigManager {
      * Push the provided <code>Future</code> to the specified <code>ServletContext</code>.
      */
     private void pushTaskToContext(ServletContext sc,
-                                   Future<Set<String>> scanTask) {
+                                   Future<Map<Class<? extends Annotation>,Set<Class<?>>>> scanTask) {
 
         sc.setAttribute(ANNOTATIONS_SCAN_TASK_KEY, scanTask);
 
@@ -614,7 +626,7 @@ public class ConfigManager {
      *
      * @param document document representing <code>WEB-INF/faces-config.xml</code>
      * @return <code>true</code> if the faces-config.xml is versioned at 2.0,
-     *  no version can be determined, or there is no <code>WEB-INF/faces-config.xml</code>
+     *  or there is no <code>WEB-INF/faces-config.xml</code>
      */
     private boolean isFacesApp20(Document document) {
 
@@ -625,6 +637,8 @@ public class ConfigManager {
                 Double v = Double.parseDouble(version);
                 Double twoOh = 2.0d;
                 return !(v.compareTo(twoOh) < 0);
+            } else {
+                return false;
             }
         }
 
@@ -640,8 +654,7 @@ public class ConfigManager {
      */
     private boolean isWebinfFacesConfig(Document document) {
 
-        String url = document.getDocumentURI();
-        return (url != null && url.contains("/WEB-INF/faces-config.xml"));
+        return (document.getDocumentElement().getAttribute(WEB_INF_MARKER) != null);
 
     }
 
@@ -653,7 +666,7 @@ public class ConfigManager {
      * Scans the class files within a web application returning a <code>Set</code>
      * of classes that have been annotated with a standard Faces annotation.
      */
-    private static class AnnotationScanTask implements Callable<Set<String>> {
+    private static class AnnotationScanTask implements Callable<Map<Class<? extends Annotation>,Set<Class<?>>>> {
 
         private ServletContext sc;
 
@@ -671,7 +684,7 @@ public class ConfigManager {
         // ----------------------------------------------- Methods from Callable
 
 
-        public Set<String> call() throws Exception {
+        public Map<Class<? extends Annotation>,Set<Class<?>>> call() throws Exception {
 
             Timer t = Timer.getInstance();
             if (t != null) {
@@ -679,11 +692,12 @@ public class ConfigManager {
             }
 
             AnnotationScanner scanner = new AnnotationScanner(sc);
-            Set<String> annotatedClasses = scanner.getAnnotatedClasses();
+            Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =
+                  scanner.getAnnotatedClasses();
 
             if (t != null) {
                 t.stopTiming();
-                t.logResult("Configuration annotation scan found " + annotatedClasses.size() + " classes");
+                t.logResult("Configuration annotation scan complete.");
             }
 
             return annotatedClasses;
@@ -770,6 +784,8 @@ public class ConfigManager {
          *  <code>Document</code>
          */
         private Document getDocument() throws Exception {
+
+            Document returnDoc;
             if (validating) {  // the Schema won't be null if validation is enabled.
                 DocumentBuilder db = getNonValidatingBuilder();
                 DOMSource domSource
@@ -803,7 +819,7 @@ public class ConfigManager {
                         }
                         DocumentBuilder builder = getBuilderForSchema(schema);
                         builder.getSchema().newValidator().validate(domSource);
-                        return ((Document) domSource.getNode());
+                        returnDoc = ((Document) domSource.getNode());
                     } else {
                         // this shouldn't happen, but...
                         throw new ConfigurationException("No document version available.");
@@ -812,6 +828,12 @@ public class ConfigManager {
                     DOMResult domResult = new DOMResult();
                     Transformer transformer = getTransformer(documentNS);
                     transformer.transform(domSource, domResult);
+                    // copy the source document URI to the transformed result
+                    // so that processes that need to build URLs relative to the
+                    // document will work as expected.
+                    ((Document) domResult.getNode())
+                          .setDocumentURI(((Document) domSource
+                                .getNode()).getDocumentURI());
                     DbfFactory.FacesSchema schemaToApply;
                     if (documentNS.equals(FACES_CONFIG_1_X_DEFAULT_NS)) {
                         schemaToApply = DbfFactory.FacesSchema.FACES_11;
@@ -822,15 +844,26 @@ public class ConfigManager {
                     }
                     DocumentBuilder builder = getBuilderForSchema(schemaToApply);
                     builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
-                    return (Document) domResult.getNode();
+                    returnDoc =  (Document) domResult.getNode();
                 }
             } else {
                 // validation isn't required, parse and return
                 DocumentBuilder builder = getNonValidatingBuilder();
                 InputSource is = new InputSource(getInputStream(documentURL));
                 is.setSystemId(documentURL.toExternalForm());
-                return builder.parse(is);
+                returnDoc = builder.parse(is);
             }
+
+            // mark this document as the parsed representation of the
+            // WEB-INF/faces-config.xml.  This is used later in the configuration
+            // processing.
+            if (documentURL.toExternalForm().contains("/WEB-INF/faces-config.xml")) {
+                Attr webInf = returnDoc.createAttribute(WEB_INF_MARKER);
+                webInf.setValue("true");
+                returnDoc.getDocumentElement().getAttributes().setNamedItem(webInf);
+            }
+            return returnDoc;
+
         }
 
 

@@ -44,6 +44,8 @@ package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -58,16 +60,13 @@ import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
 import java.beans.FeatureDescriptor;
 import java.lang.reflect.Method;
-import java.util.Iterator;
+import java.net.MalformedURLException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.ListenerFor;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.ListenersFor;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <B>Util</B> is a class ...
@@ -334,6 +333,248 @@ public class Util {
         return Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled"))) || Boolean.valueOf(String.valueOf(component.getAttributes().get("readonly")));
     }
 
+    public static String deriveViewId(FacesContext facesContext, String input) {
+        String viewId = null;
+        
+        String mapping = Util.getFacesMapping(facesContext);
+        boolean testForPhysicalResource = false;
+
+        if (mapping != null) {
+            if (Util.isPrefixMapped(mapping)) {
+                viewId = (null == input) ?
+                  getViewIdFromExtraPathInfo(facesContext) : input;
+                viewId = normalizeRequestURI(viewId, mapping);
+                testForPhysicalResource = true;
+            } else {
+                if (null == input) {
+                  viewId = findViewIdMatchUsingContextParams(facesContext);
+                } else {
+                    viewId = input;
+                    testForPhysicalResource = true;
+                }
+            }
+            if (testForPhysicalResource) {
+                try {
+                    if (null == facesContext.getExternalContext().getResource(viewId)) {
+                        viewId = null;
+                    }
+                } catch (MalformedURLException e) {
+                    viewId = null;
+                }
+            }
+        }
+        
+        return viewId;
+    }
+    
+    /**
+     * <p>if the specified mapping is a prefix mapping, and the provided
+     * request URI (usually the value from <code>ExternalContext.getRequestServletPath()</code>)
+     * starts with <code>mapping + '/'</code>, prune the mapping from the
+     * URI and return it, otherwise, return the original URI.
+     * @param uri the servlet request path
+     * @param mapping the FacesServlet mapping used for this request
+     * @return the URI without additional FacesServlet mappings
+     * @since 1.2
+     */
+    public static String normalizeRequestURI(String uri, String mapping) {
+
+        if (mapping == null || !Util.isPrefixMapped(mapping)) {
+            return uri;
+        } else {
+            int length = mapping.length() + 1;
+            StringBuilder builder = new StringBuilder(length);
+            builder.append(mapping).append('/');
+            String mappingMod = builder.toString();
+            boolean logged = false;
+            while (uri.startsWith(mappingMod)) {
+                if (!logged && LOGGER.isLoggable(Level.WARNING)) {
+                    logged = true;
+                    LOGGER.log(Level.WARNING,
+                               "jsf.viewhandler.requestpath.recursion",
+                               new Object[] {uri, mapping});
+                }
+                uri = uri.substring(length - 1);
+            }
+            return uri;
+        }
+
+    }
+
+    
+    
+    private static String findViewIdMatchUsingContextParams(FacesContext context) {
+        ExternalContext extContext = context.getExternalContext();
+        WebConfiguration webConfig = WebConfiguration.getInstance(extContext);
+        String pathInfoViewId = null, candidateViewId = null, requestViewId = null;
+        int i,j;
+        boolean foundMatch = false;
+        
+        // Get the viewId from the path info
+        if (null == (pathInfoViewId = requestViewId = 
+                     getViewIdFromExtraPathInfo(context))) {
+            return null;
+        }
+        
+        // Remove the extension, including the '.'.
+        if (-1 == (i = requestViewId.lastIndexOf(".")) || 0 == i) {
+            return null;
+        }
+        requestViewId = requestViewId.substring(0, i);
+        
+        String jspDefaultSuffixes[] = 
+                webConfig.getOptionValue(WebContextInitParameter.
+                                         DefaultSuffix, " ");
+        String faceletsViewMappings[] = 
+                webConfig.getOptionValue(WebContextInitParameter.
+                                         FaceletsViewMappings, ";");
+        foundMatch = false;
+        // For each entry in the jspDefaultSuffixes list...
+        for (i = 0; 
+             (i < jspDefaultSuffixes.length && !foundMatch); i++) {
+            // tack the current suffix onto the requestViewId...
+            candidateViewId = requestViewId + jspDefaultSuffixes[i];
+            // and search for a match in the faceletsViewMappings
+            for (j = 0; j < faceletsViewMappings.length; j++) {
+                if (null != faceletsViewMappings[j]) {
+                    // If this is a prefix mapping, it would have been 
+                    // handled before getting this far.  Therefore, we
+                    // can skip prefix mapped entries.
+                    if (faceletsViewMappings[j].startsWith("/")) {
+                        continue;
+                    }
+                    // Look for an exact match
+                    if (true == (foundMatch = 
+                            faceletsViewMappings[j].equals(candidateViewId))) {
+                        break;
+                    } else {
+                        // We don't have an exact match.
+                        // PENDING(rlubke): do a more robust wild card
+                        // matching thing here.
+                        if (faceletsViewMappings[j].startsWith("*.")) {
+                            String 
+                                    faceletsViewCopy = faceletsViewMappings[j],
+                                    candidateCopy = candidateViewId;
+                            if (-1 == (i = candidateCopy.lastIndexOf(".")) || 0 == i) {
+                                assert(false);
+                            }
+                            candidateCopy = candidateCopy.substring(0, i);
+                            if (-1 == (i = faceletsViewCopy.lastIndexOf(".")) || 0 == i) {
+                                assert(false);
+                            }
+                            faceletsViewCopy = faceletsViewCopy.substring(i);
+                            candidateCopy = candidateCopy + faceletsViewCopy;
+                            // If we didn't find a match in the faceletsViewMappings
+                            // look for a physical resource with that name
+                            try {
+                                if (extContext.getResource(candidateCopy) != null) {
+                                    requestViewId = candidateCopy;
+                                    foundMatch = true;
+                                    break;
+                                }
+                            } catch (MalformedURLException e) {
+                            }
+                        } else {
+                            // If we didn't find a match in the faceletsViewMappings
+                            // look for a physical resource with that name
+                            try {
+                                if (extContext.getResource(candidateViewId) != null) {
+                                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                                    requestViewId = candidateViewId;
+                                    foundMatch = true;
+                                    break;
+                                }
+                            } catch (MalformedURLException e) {
+                            }
+                        }
+                    }
+                }
+            }
+            if (!foundMatch) {
+                // If we didn't find a match in the faceletsViewMappings
+                // look for a physical resource with that name
+                try {
+                    if (extContext.getResource(candidateViewId) != null) {
+                        // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                        requestViewId = candidateViewId;
+                        foundMatch = true;
+                        break;
+                    }
+                } catch (MalformedURLException e) {
+                }
+            }
+        }
+        // If we didn't find a match yet...
+        if (!foundMatch) {
+            // Try the FaceletsSuffix
+            String faceletsDefaultSuffix = 
+               webConfig.getOptionValue(WebContextInitParameter.FaceletsSuffix);
+            candidateViewId = requestViewId + faceletsDefaultSuffix;
+            try {
+                if (extContext.getResource(candidateViewId) != null) {
+                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                    requestViewId = candidateViewId;
+                    foundMatch = true;
+                }
+            } catch (MalformedURLException e) {
+            }
+
+        }
+        
+        // Fall back on the pathInfoViewId
+        if (!foundMatch) {
+            candidateViewId = pathInfoViewId;
+            try {
+                if (extContext.getResource(candidateViewId) != null) {
+                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                    requestViewId = candidateViewId;
+                    foundMatch = true;
+                }
+            } catch (MalformedURLException e) {
+            }
+        }
+        
+        if (!foundMatch) {
+            return pathInfoViewId;
+        }
+
+        return requestViewId;
+    }
+    
+    private static String getViewIdFromExtraPathInfo(FacesContext facesContext) {
+        String viewId = null;
+        Map<String, Object> requestMap =
+                facesContext.getExternalContext().getRequestMap();
+        viewId = (String) requestMap.get("javax.servlet.include.path_info");
+        if (viewId == null) {
+            viewId = facesContext.getExternalContext().getRequestPathInfo();
+        }
+
+        // It could be that this request was mapped using
+        // a prefix mapping in which case there would be no
+        // path_info.  Query the servlet path.
+        if (viewId == null) {
+            viewId = (String) requestMap.get("javax.servlet.include.servlet_path");
+        }
+
+        if (viewId == null) {
+            Object request = facesContext.getExternalContext().getRequest();
+            if (request instanceof HttpServletRequest) {
+                viewId = ((HttpServletRequest) request).getServletPath();
+            }
+        }
+
+        if (viewId == null) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning("viewId is null");
+            }
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+        }
+
+        return viewId;
+    }
+    
 
     
 

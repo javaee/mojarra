@@ -50,16 +50,14 @@
 
 <body>
 
-<composite:interface name="out"
-                     displayName="Very Basic Output Component"
-                     preferred="true"
-                     expert="false"
-                     shortDescription="A basic example of the composite component feature">
+<composite:interface>
     <composite:attribute name="value" required="false"/>
 </composite:interface>
 
 <composite:implementation>
+
     <h:outputText value="#{compositeComponent.attrs.value}" style="background-color: yellow"/>
+    
 </composite:implementation>
 
 </body>

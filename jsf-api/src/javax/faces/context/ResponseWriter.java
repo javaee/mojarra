@@ -41,10 +41,9 @@
 package javax.faces.context;
 
 
+import javax.faces.component.UIComponent;
 import java.io.IOException;
 import java.io.Writer;
-
-import javax.faces.component.UIComponent;
 
 
 /**
@@ -116,16 +115,15 @@ public abstract class ResponseWriter extends Writer {
      * <code>endDocument()</code>, <code>close()</code>,
      * <code>flush()</code>, or <code>write()</code>.</p>
      *
-     * @param name Name of the element to be started
+     * @param name      Name of the element to be started
      * @param component The {@link UIComponent} (if any) to which
-     *  this element corresponds
-     *
-     * @throws IOException if an input/output error occurs
+     *                  this element corresponds
+     * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>name</code>
-     *  is <code>null</code>
+     *                              is <code>null</code>
      */
     public abstract void startElement(String name, UIComponent component)
-        throws IOException;
+            throws IOException;
 
 
     /**
@@ -135,10 +133,9 @@ public abstract class ResponseWriter extends Writer {
      * error to do otherwise.</p>
      *
      * @param name Name of the element to be ended
-     *
-     * @throws IOException if an input/output error occurs
+     * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>name</code>
-     *  is <code>null</code>
+     *                              is <code>null</code>
      */
     public abstract void endElement(String name) throws IOException;
 
@@ -151,21 +148,20 @@ public abstract class ResponseWriter extends Writer {
      * <code>startElement()</code>, and before the opened element has been
      * closed.</p>
      *
-     * @param name Attribute name to be added
-     * @param value Attribute value to be added
+     * @param name     Attribute name to be added
+     * @param value    Attribute value to be added
      * @param property Name of the property or attribute (if any) of the
-     *  {@link UIComponent} associated with the containing element,
-     *  to which this generated attribute corresponds
-     *
+     *                 {@link UIComponent} associated with the containing element,
+     *                 to which this generated attribute corresponds
      * @throws IllegalStateException if this method is called when there
-     *  is no currently open element
-     * @throws IOException if an input/output error occurs
-     * @throws NullPointerException if <code>name</code> is
-     * <code>null</code>
+     *                               is no currently open element
+     * @throws IOException           if an input/output error occurs
+     * @throws NullPointerException  if <code>name</code> is
+     *                               <code>null</code>
      */
-    public abstract void writeAttribute(String name, Object value, 
-					String property)
-        throws IOException;
+    public abstract void writeAttribute(String name, Object value,
+                                        String property)
+            throws IOException;
 
 
     /**
@@ -176,21 +172,20 @@ public abstract class ResponseWriter extends Writer {
      * <code>startElement()</code>, and before the opened element has been
      * closed.</p>
      *
-     * @param name Attribute name to be added
-     * @param value Attribute value to be added
+     * @param name     Attribute name to be added
+     * @param value    Attribute value to be added
      * @param property Name of the property or attribute (if any) of the
-     *  {@link UIComponent} associated with the containing element,
-     *  to which this generated attribute corresponds
-     *
+     *                 {@link UIComponent} associated with the containing element,
+     *                 to which this generated attribute corresponds
      * @throws IllegalStateException if this method is called when there
-     *  is no currently open element
-     * @throws IOException if an input/output error occurs
-     * @throws NullPointerException if <code>name</code> is
-     * <code>null</code>
+     *                               is no currently open element
+     * @throws IOException           if an input/output error occurs
+     * @throws NullPointerException  if <code>name</code> is
+     *                               <code>null</code>
      */
-    public abstract void writeURIAttribute(String name, Object value, 
-					   String property)
-        throws IOException;
+    public abstract void writeURIAttribute(String name, Object value,
+                                           String property)
+            throws IOException;
 
 
     /**
@@ -201,10 +196,9 @@ public abstract class ResponseWriter extends Writer {
      * <code>startElement()</code>, that element will be closed first.</p>
      *
      * @param comment Text content of the comment
-     *
-     * @throws IOException if an input/output error occurs
+     * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>comment</code>
-     *  is <code>null</code>
+     *                              is <code>null</code>
      */
     public abstract void writeComment(Object comment) throws IOException;
 
@@ -216,17 +210,16 @@ public abstract class ResponseWriter extends Writer {
      * by a call to <code>startElement()</code>, that element will be closed
      * first.</p>
      *
-     * @param text Text to be written
+     * @param text     Text to be written
      * @param property Name of the property or attribute (if any) of the
-     *  {@link UIComponent} associated with the containing element,
-     *  to which this generated text corresponds
-     * 
-     * @throws IOException if an input/output error occurs
+     *                 {@link UIComponent} associated with the containing element,
+     *                 to which this generated text corresponds
+     * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>text</code>
-     *  is <code>null</code>
+     *                              is <code>null</code>
      */
     public abstract void writeText(Object text, String property)
-        throws IOException;
+            throws IOException;
 
     /**
      * <p>Write an object, after converting it to a String (if
@@ -236,27 +229,25 @@ public abstract class ResponseWriter extends Writer {
      * <code>component</code> property to allow custom
      * <code>ResponseWriter</code> implementations to associate a
      * component with an arbitrary portion of text.</p>
-     *
+     * <p/>
      * <p>The default implementation simply ignores the
      * <code>component</code> argument and calls through to {@link
      * #writeText(java.lang.Object,java.lang.String)}</p>
      *
-     * @param text Text to be written
+     * @param text      Text to be written
      * @param component The {@link UIComponent} (if any) to which
-     *  this element corresponds
-     * @param property Name of the property or attribute (if any) of the
-     *  {@link UIComponent} associated with the containing element,
-     *  to which this generated text corresponds
-     * 
-     * @throws IOException if an input/output error occurs
+     *                  this element corresponds
+     * @param property  Name of the property or attribute (if any) of the
+     *                  {@link UIComponent} associated with the containing element,
+     *                  to which this generated text corresponds
+     * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>text</code>
-     *  is <code>null</code>
-     *
+     *                              is <code>null</code>
      * @since 1.2
      */
     public void writeText(Object text, UIComponent component, String property)
-        throws IOException {
-	writeText(text, property);
+            throws IOException {
+        writeText(text, property);
     }
 
 
@@ -267,17 +258,16 @@ public abstract class ResponseWriter extends Writer {
      * <code>startElement()</code>, that element will be closed first.</p>
      *
      * @param text Text to be written
-     * @param off Starting offset (zero-relative)
-     * @param len Number of characters to be written
-     *
+     * @param off  Starting offset (zero-relative)
+     * @param len  Number of characters to be written
      * @throws IndexOutOfBoundsException if the calculated starting or
-     *  ending position is outside the bounds of the character array
-     * @throws IOException if an input/output error occurs
-     * @throws NullPointerException if <code>text</code>
-     *  is <code>null</code>
+     *                                   ending position is outside the bounds of the character array
+     * @throws IOException               if an input/output error occurs
+     * @throws NullPointerException      if <code>text</code>
+     *                                   is <code>null</code>
      */
     public abstract void writeText(char text[], int off, int len)
-        throws IOException;
+            throws IOException;
 
 
     /**

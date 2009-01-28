@@ -41,6 +41,7 @@
 package com.sun.faces.el;
 
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.context.flash.FlashELResolver;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.MessageUtils;
 
@@ -59,6 +60,8 @@ import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.VariableResolver;
+import javax.faces.component.UIViewRoot;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -111,6 +114,9 @@ public class ELUtils {
 
     public static final ImplicitObjectELResolver IMPLICIT_RESOLVER =
         new ImplicitObjectELResolver();
+    
+    public static final FlashELResolver FLASH_RESOLVER = 
+        new FlashELResolver();
 
     public static final ListELResolver LIST_RESOLVER = new ListELResolver();
 
@@ -167,6 +173,7 @@ public class ELUtils {
         }
 
         composite.add(IMPLICIT_RESOLVER);
+        composite.add(FLASH_RESOLVER);
         composite.add(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
         addELResolvers(composite, associate.getELResolversFromFacesConfig());
         addVariableResolvers(composite, associate);
@@ -206,6 +213,7 @@ public class ELUtils {
         }
 
         composite.add(IMPLICIT_JSP_RESOLVER);
+        composite.add(FLASH_RESOLVER);
         composite.add(MANAGED_BEAN_RESOLVER);
         composite.add(RESOURCE_RESOLVER);
         composite.add(FACES_BUNDLE_RESOLVER);
@@ -409,9 +417,12 @@ public class ELUtils {
             return Scope.REQUEST;
         }
 
-        Map<String,Object> viewMap = context.getViewRoot().getViewMap(false);
-        if (viewMap != null && viewMap.containsKey(identifier)) {
-            return Scope.VIEW;
+        UIViewRoot root = context.getViewRoot();
+        if (root != null) {
+            Map<String, Object> viewMap = root.getViewMap(false);
+            if (viewMap != null && viewMap.containsKey(identifier)) {
+                return Scope.VIEW;
+            }
         }
 
         Map<String,Object> sessionMap = ec.getSessionMap();

@@ -167,9 +167,10 @@ public abstract class PartialViewContext {
 
     /**
      * <p class="changed_added_2_0">
-     * Return <code>true</code> if the request parameter
-     * <code>javax.faces.partial.ajax</code> is present in the current
-     * request.  Otherwise, return <code>false</code>.</p>
+     * Return <code>true</code> if the request header 
+     * <code>Faces-Request</code> is present with the value
+     * <code>partial/ajax</code>. 
+     * Otherwise, return <code>false</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
@@ -180,10 +181,11 @@ public abstract class PartialViewContext {
 
     /**
      * <p class="changed_added_2_0">
-     * Return <code>true</code> if the request parameter
-     * <code>javax.faces.partial</code> or
-     * <code>javax.faces.partial.ajax</code> is present in the current
-     * request.  Otherwise, return <code>false</code>.</p>
+     * Return <code>true</code> {@link #isAjaxRequest} returns
+     * <code>true</code> or if the request header
+     * <code>Faces-Request</code> is present with the value
+     * <code>partial/process</code>. 
+     * Otherwise, return <code>false</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released

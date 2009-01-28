@@ -1563,7 +1563,7 @@ public class UIViewRoot extends UIComponentBase {
         @Override
         public Object put(String key, Object value) {
 
-            if (ProjectStage.Development.equals(stage) && !(value instanceof Serializable)) {
+            if (value != null && ProjectStage.Development.equals(stage) && !(value instanceof Serializable)) {
                 LOGGER.log(Level.WARNING,
                            "warning.component.uiviewroot_non_serializable_attribute_viewmap",
                            new Object[] { key, value.getClass().getName() });

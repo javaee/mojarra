@@ -45,6 +45,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
+import com.sun.faces.renderkit.RenderKitUtils;
+
 /**
  * <p>This <code>Renderer</code> is responsible for rendering
  * the standard HTML body element as well as rendering any resources
@@ -79,7 +81,8 @@ public class BodyRenderer extends Renderer {
         while (iter.hasNext()) {
             UIComponent resource = (UIComponent)iter.next();
             resource.encodeAll(context);
-        } 
+        }
+        RenderKitUtils.renderUnhandledMessages(context);
         writer.endElement("body");
     }
     

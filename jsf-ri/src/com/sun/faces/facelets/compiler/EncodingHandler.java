@@ -65,16 +65,30 @@ public class EncodingHandler implements FaceletHandler {
 
     private final FaceletHandler next;
     private final String encoding;
+    private final CompilationMessageHolder messageHolder;
     
-    public EncodingHandler(FaceletHandler next, String encoding) {
+    public EncodingHandler(FaceletHandler next, String encoding,
+            CompilationMessageHolder messageHolder) {
         this.next = next;
         this.encoding = encoding;
+        this.messageHolder = messageHolder;
     }
 
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
+        ctx.getFacesContext().getAttributes().put("facelets.compilationMessages", this.messageHolder);
         this.next.apply(ctx, parent);
+        ctx.getFacesContext().getAttributes().remove("facelets.compilationMessages");
+        this.messageHolder.processCompilationMessages(ctx.getFacesContext());
         ctx.getFacesContext().getAttributes().put("facelets.Encoding", this.encoding);
+    }
+    
+    public static CompilationMessageHolder getCompilationMessageHolder(FaceletContext ctx) {
+        CompilationMessageHolder result = null;
+        
+        result = (CompilationMessageHolder) ctx.getFacesContext().getAttributes().get("facelets.compilationMessages");
+
+        return result;
     }
 
 }

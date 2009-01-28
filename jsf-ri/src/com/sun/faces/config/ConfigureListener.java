@@ -84,6 +84,7 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.ApplicationPreDestroyEvent;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.WebappLifecycleListener;
@@ -103,6 +104,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Timer;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MojarraThreadFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -123,8 +125,7 @@ public class ConfigureListener implements ServletRequestListener,
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
-    private ScheduledThreadPoolExecutor webResourcePool =
-          new ScheduledThreadPoolExecutor(1);
+    private ScheduledThreadPoolExecutor webResourcePool;
 
     protected WebappLifecycleListener webAppListener;
     protected WebConfiguration webConfig;
@@ -136,8 +137,7 @@ public class ConfigureListener implements ServletRequestListener,
 
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
-        webAppListener = new WebappLifecycleListener(context);
-        webAppListener.contextInitialized(sce);
+
         Timer timer = Timer.getInstance();
         if (timer != null) {
             timer.startTiming();
@@ -178,6 +178,9 @@ public class ConfigureListener implements ServletRequestListener,
             }
         }
 
+        // bootstrap of faces required
+        webAppListener = new WebappLifecycleListener(context);
+        webAppListener.contextInitialized(sce);
         InitFacesContext initContext = new InitFacesContext(context);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
 
@@ -234,7 +237,6 @@ public class ConfigureListener implements ServletRequestListener,
                     }
                 }
             }
-            RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
             Application app = initContext.getApplication();
             app.subscribeToEvent(ViewMapCreatedEvent.class,
                                  UIViewRoot.class,
@@ -259,8 +261,10 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     public void contextDestroyed(ServletContextEvent sce) {
-        webAppListener.contextDestroyed(sce);
-        webAppListener = null;
+        if (webAppListener != null) {
+            webAppListener.contextDestroyed(sce);
+            webAppListener = null;
+        }
         ServletContext context = sce.getServletContext();
         GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
         if (helper != null) {
@@ -271,14 +275,24 @@ public class ConfigureListener implements ServletRequestListener,
                    "ConfigureListener.contextDestroyed({0})",
                    context.getServletContextName());
 
+        FacesContext initContext = new InitFacesContext(context);
         try {
+            Application app = initContext.getApplication();
+            app.publishEvent(ApplicationPreDestroyEvent.class,
+                             Application.class,
+                             app);
             // Release any allocated application resources
             FactoryFinder.releaseFactories();
-            //monitor.cancel(true);
-            //webResourcePool.purge();
-            webResourcePool.shutdown();
+            if (webResourcePool != null) {
+                webResourcePool.shutdownNow();
+            }
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           "Unexpected exception when attempting to tear down the Mojarra runtime",
+                           e);
+            }
         } finally {
-            FacesContext initContext = new InitFacesContext(context);
             ApplicationAssociate
                   .clearInstance(initContext.getExternalContext());
             ApplicationAssociate.setCurrentInstance(null);
@@ -399,6 +413,7 @@ public class ConfigureListener implements ServletRequestListener,
         Collection<URL> webURLs =
               (Collection<URL>) context.getAttribute("com.sun.faces.webresources");
         if (isDevModeEnabled() && webURLs != null && !webURLs.isEmpty()) {
+            webResourcePool = new ScheduledThreadPoolExecutor(1, new MojarraThreadFactory("WebResourceMonitor"));
             webResourcePool.scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURLs),
                                                2000,
                                                2000,
@@ -511,7 +526,6 @@ public class ConfigureListener implements ServletRequestListener,
             if (associate != null) {
                 associate.setContextName(getServletContextIdentifier(sc));
             }
-            RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

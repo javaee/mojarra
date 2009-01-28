@@ -939,7 +939,7 @@
 
      </div>
 
-     <p>General notes on decoding</p>
+     <p><a name="general_decoding">General</a> notes on decoding</p>
 
      <ul>
 
@@ -963,7 +963,7 @@
 
      </ul>
 
-     <p>General notes on encoding</p>
+     <p><a name="general_encoding">General</a> notes on encoding</p>
 
      <ul>
 
@@ -1455,7 +1455,7 @@
       If the "styleClass" attribute is specified, render its value as the 
       value of the "class" attribute.  Render a "name"
       attribute with a value the same as the "id" attribute as described
-      in "<a href="renderkit-summary.html">General Notes on
+      in "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General Notes on
       Encoding</a>" regarding the "id" attribute for UIInput
       components.  Call <code>ViewHandler.writeState()</code>
       before the the close of the "form" element.  Render all the
@@ -1915,7 +1915,7 @@
       the URL spec.  If the "styleClass" attribute is specified, render
       its value as the value of the "class" attribute.  If the "id" attribute
       is specified, follow the same steps as mentioned in the 
-      "<a href="renderkit-summary.html">General
+      "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
       Notes on Encoding</a>" regarding the "id" attribute for UIInput components.
       If the "disabled" attribute is specified, do not render the HTML "a"
       anchor element or the "href" element.  Instead, render a "span" element. 
@@ -2686,9 +2686,9 @@ from the composite component.  For each element in that list, call
 </div>]]></description>
 
             <component-family>javax.faces.Output</component-family>
-            <renderer-type>javax.faces.ConsumingPageCompositeChildren</renderer-type>
+            <renderer-type>javax.faces.UsingPageChildren</renderer-type>
             <renderer-class>
-               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-consuming-page-composite-children-renderer-class/text())"/>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-using-page-children-renderer-class/text())"/>
             </renderer-class>
             <renderer-extension>
                <jsp-ignore>true</jsp-ignore>

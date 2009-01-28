@@ -50,6 +50,7 @@ import javax.faces.component.UIComponent;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.NamedEventManager;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
 import com.sun.faces.mgbean.BeanBuilder;
@@ -96,9 +97,8 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertTrue(v instanceof AnnotatedValidator);
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit rk = rkf.getRenderKit(ctx, "AnnotatedRenderKit");
+        RenderKit rk = rkf.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
         assertNotNull(rk);
-        assertTrue(rk instanceof AnnotatedRenderKit);
 
         Renderer r = rk.getRenderer("AnnotatedRenderer", "AnnotatedRenderer");
         assertNotNull(r);
@@ -133,57 +133,6 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertNotNull(request.getAttribute("annotatedBean"));
         request.removeAttribute("annotatedBean");
 
-        // validate class annotated with @ManagedBeans
-        BeanBuilder bean2 = manager.getBuilder("annotatedBean2");
-        assertNotNull(bean2);
-        ManagedBeanInfo bean2Info = bean2.getManagedBeanInfo();
-        assertEquals("annotatedBean2", "annotatedBean2", bean2Info.getName());
-        assertEquals("application", "application", bean2Info.getScope());
-        assertFalse(bean2Info.isEager());
-        managedProperties = bean2Info.getManagedProperties();
-        assertNotNull(managedProperties);
-        assertTrue(managedProperties.size() == 2);
-        p1 = managedProperties.get(0);
-        assertEquals("silly", "silly", p1.getPropertyName());
-        assertEquals(String.class.getName(), String.class.getName(), p1.getPropertyClass());
-        assertEquals("#{applicationScope.name}", "#{applicationScope.name}", p1.getPropertyValue());
-        p2 = managedProperties.get(1);
-        assertEquals("age", "age", p2.getPropertyName());
-        assertEquals(Integer.TYPE.getName(), Integer.TYPE.getName(), p2.getPropertyClass());
-        assertEquals("#{applicationScope.age}", "#{applicationScope.age}", p2.getPropertyValue());
-        ctx.getExternalContext().getApplicationMap().put("name", "Bill");
-        ctx.getExternalContext().getApplicationMap().put("age", 33);
-        AnnotatedBeans bean2Instance = (AnnotatedBeans) manager.create("annotatedBean2", ctx);
-        assertEquals("Bill", "Bill", bean2Instance.getSilly());
-        assertEquals(33, 33, bean2Instance.getAge());
-        assertNotNull(ctx.getExternalContext().getApplicationMap().get("annotatedBean2"));
-        ctx.getExternalContext().getApplicationMap().remove("annotatedBean2");
-
-        BeanBuilder bean3 = manager.getBuilder("annotatedBean3");
-        assertNotNull(bean3);
-        ManagedBeanInfo bean3Info = bean3.getManagedBeanInfo();
-        assertEquals("annotatedBean3", "annotatedBean3", bean3Info.getName());
-        assertEquals("application", "application", bean3Info.getScope());
-        assertTrue(bean3Info.isEager());
-        managedProperties = bean3Info.getManagedProperties();
-        assertNotNull(managedProperties);
-        assertTrue(managedProperties.size() == 2);
-        p1 = managedProperties.get(0);
-        assertEquals("silly", "silly", p1.getPropertyName());
-        assertEquals(String.class.getName(), String.class.getName(), p1.getPropertyClass());
-        assertEquals("#{applicationScope.name}", "#{applicationScope.name}", p1.getPropertyValue());
-        p2 = managedProperties.get(1);
-        assertEquals("age", "age", p2.getPropertyName());
-        assertEquals(Integer.TYPE.getName(), Integer.TYPE.getName(), p2.getPropertyClass());
-        assertEquals("#{applicationtScope.age}", "#{applicationScope.age}", p2.getPropertyValue());
-        ctx.getExternalContext().getApplicationMap().put("name", "Bob");
-        ctx.getExternalContext().getApplicationMap().put("age", 35);
-        AnnotatedBeans bean3Instance = (AnnotatedBeans) manager.create("annotatedBean3", ctx);
-        assertEquals("Bob", "Bob", bean3Instance.getSilly());
-        assertEquals(35, 35, bean3Instance.getAge());
-        assertNotNull(ctx.getExternalContext().getApplicationMap().get("annotatedBean3"));
-        ctx.getExternalContext().getApplicationMap().remove("annoatedBean3");
-
     }
 
      public void testAnnotatedComponentsWebInfLib() throws Exception {
@@ -205,13 +154,17 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertTrue(v.getClass().getName().endsWith("AnnotatedValidator2"));
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit rk = rkf.getRenderKit(ctx, "AnnotatedRenderKit2");
+        RenderKit rk = rkf.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
         assertNotNull(rk);
-        assertTrue(rk.getClass().getName().endsWith("AnnotatedRenderKit2"));
 
         Renderer r = rk.getRenderer("AnnotatedRenderer2", "AnnotatedRenderer2");
         assertNotNull(r);
         assertTrue(r.getClass().getName().endsWith("AnnotatedRenderer2"));
 
+        // Test default naming logic
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext()).getNamedEventManager().getNamedEvent("com.sun.faces.annotation.annotatedComponentSystem"));
+        // Test short name
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext()).getNamedEventManager().getNamedEvent("com.sun.faces.annotation.anotherAnnotatedComponentSystem"));
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext()).getNamedEventManager().getNamedEvent("explicitEventName"));
     }
 }

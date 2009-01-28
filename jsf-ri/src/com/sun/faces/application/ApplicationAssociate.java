@@ -67,6 +67,9 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -172,6 +175,8 @@ public class ApplicationAssociate {
 
     private PropertyEditorHelper propertyEditorHelper;
 
+    private NamedEventManager namedEventManager;
+
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
 
@@ -197,23 +202,24 @@ public class ApplicationAssociate {
         WebConfiguration webConfig = WebConfiguration.getInstance(externalContext);
         beanManager = new BeanManager(injectionProvider,
                                       webConfig.isOptionEnabled(
-                                           BooleanWebContextInitParameter.EnableLazyBeanValidation));
+                                           EnableLazyBeanValidation));
         annotationManager = new AnnotationManager();
 
         groovyHelper = GroovyHelper.getCurrentInstance();
 
         // initialize Facelets
-        if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.DisableFaceletJSFViewHandler)) {
+        if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler)) {
             compiler = createCompiler(webConfig);
             faceletFactory = createFaceletFactory(compiler, webConfig);
-            devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
         }
+        devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
 
-        if (devModeEnabled) {
+        if (!devModeEnabled) {
             resourceCache = new ResourceCache();
         }
+
         resourceManager = new ResourceManager(resourceCache);
-        
+        namedEventManager = new NamedEventManager();
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
@@ -515,6 +521,11 @@ public class ApplicationAssociate {
     }
     
     
+
+    public NamedEventManager getNamedEventManager() {
+        return namedEventManager;
+    }
+
 
     /**
      * Return a <code>Map</code> of navigation mappings loaded from

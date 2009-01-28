@@ -145,12 +145,21 @@
 
         <for list="${applications}" param="app" trim="true">
             <sequential>
-                <propertycopy name="test.name"
-                              from="@{app}"
-                              override="true"/>
-                <test-webapp app-name="@{app}"
-                             app-base-dir="${basedir}/@{app}"
-                             test-case="${test.name}"/>
+	      <if>
+		<contains string="${applications-using-maven}"
+			  substring="@{app}" />
+		<then>
+                  <jsf.mvn goals="test" dir="@{app}" skipTests="false"/>
+		</then>
+		<else>
+		  <propertycopy name="test.name"
+				from="@{app}"
+				override="true"/>
+		  <test-webapp app-name="@{app}"
+			       app-base-dir="${basedir}/@{app}"
+			       test-case="${test.name}"/>
+		</else>
+	      </if>
             </sequential>
         </for>
 

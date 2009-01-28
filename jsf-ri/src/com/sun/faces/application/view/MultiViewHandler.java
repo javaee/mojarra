@@ -56,6 +56,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.lifecycle.RestoreViewPhase;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -164,9 +165,8 @@ public class MultiViewHandler extends ViewHandler {
     public UIViewRoot restoreView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
-        String actualViewId = derivePhysicalViewId(context, viewId);
-        return pdlFactory.getPageDeclarationLanguage(actualViewId)
-              .restoreView(context, actualViewId);
+        return pdlFactory.getPageDeclarationLanguage(viewId)
+              .restoreView(context, viewId);
 
     }
 
@@ -472,11 +472,21 @@ public class MultiViewHandler extends ViewHandler {
     public UIViewRoot createView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
-        String actualViewId = derivePhysicalViewId(context, viewId);
-        return pdlFactory.getPageDeclarationLanguage(actualViewId).createView(context,
-                                                                   actualViewId);
+        return pdlFactory.getPageDeclarationLanguage(viewId).createView(context,
+                                                                   viewId);
 
     }
+
+    @Override
+    public String deriveViewId(FacesContext facesContext, String input) {
+        String viewId = null;
+        
+        viewId = Util.deriveViewId(facesContext, input);
+        
+        return viewId;
+    }
+    
+    
 
 
     /**
@@ -654,8 +664,7 @@ public class MultiViewHandler extends ViewHandler {
     public PageDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
                                                               String viewId) {
 
-        String actualViewId = derivePhysicalViewId(context, viewId);
-        return pdlFactory.getPageDeclarationLanguage(actualViewId);
+        return pdlFactory.getPageDeclarationLanguage(viewId);
 
     }
     
@@ -721,40 +730,6 @@ public class MultiViewHandler extends ViewHandler {
     }
 
 
-    /**
-     * <p>if the specified mapping is a prefix mapping, and the provided
-     * request URI (usually the value from <code>ExternalContext.getRequestServletPath()</code>)
-     * starts with <code>mapping + '/'</code>, prune the mapping from the
-     * URI and return it, otherwise, return the original URI.
-     * @param uri the servlet request path
-     * @param mapping the FacesServlet mapping used for this request
-     * @return the URI without additional FacesServlet mappings
-     * @since 1.2
-     */
-    protected String normalizeRequestURI(String uri, String mapping) {
-
-        if (mapping == null || !Util.isPrefixMapped(mapping)) {
-            return uri;
-        } else {
-            int length = mapping.length() + 1;
-            StringBuilder builder = new StringBuilder(length);
-            builder.append(mapping).append('/');
-            String mappingMod = builder.toString();
-            boolean logged = false;
-            while (uri.startsWith(mappingMod)) {
-                if (!logged && logger.isLoggable(Level.WARNING)) {
-                    logged = true;
-                    logger.log(Level.WARNING,
-                               "jsf.viewhandler.requestpath.recursion",
-                               new Object[] {uri, mapping});
-                }
-                uri = uri.substring(length - 1);
-            }
-            return uri;
-        }
-
-    }
-
 
     /**
      * <p>
@@ -775,82 +750,10 @@ public class MultiViewHandler extends ViewHandler {
         }
 
     }
-
-
-    /**
-     * <p>Adjust the viewID per the requirements of {@link #renderView}.</p>
-     *
-     * @param context current {@link javax.faces.context.FacesContext}
-     * @param viewId  incoming view ID
-     * @return the view ID with an altered suffix mapping (if necessary)
-     */
-    protected String convertViewId(FacesContext context, String viewId) {
-
-        // if the viewId doesn't already use the above suffix,
-        // replace or append.
-        StringBuilder buffer = new StringBuilder(viewId);
-        for (String ext : configuredExtensions) {
-            if (viewId.endsWith(ext)) {
-                return viewId;
-            }
-            int extIdx = viewId.lastIndexOf('.');
-            if (extIdx != -1) {
-                buffer.replace(extIdx, viewId.length(), ext);
-            } else {
-                // no extension in the provided viewId, append the suffix
-                buffer.append(ext);
-            }
-            String convertedViewId = buffer.toString();
-            try {
-                if (context.getExternalContext().getResource(convertedViewId) != null) {
-                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
-                    return convertedViewId;
-                } else {
-                    // reset the buffer to check for the next extension
-                    buffer.setLength(0);
-                    buffer.append(viewId);
-                }
-            } catch (MalformedURLException e) {
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,
-                               e.toString(),
-                               e);
-                }
-            }
-        }
-
-        // unable to find any resource match that the default ViewHandler
-        // can deal with.  Return the viewId as it was passed.  There is
-        // probably another ViewHandler in the stack that will handle this.
-        return viewId;
-
+    
+    public void setRestoreViewPhase(RestoreViewPhase restoreViewPhase) {
+        
     }
-
-
-    protected String derivePhysicalViewId(FacesContext ctx, String viewId) {
-        if (viewId != null) {
-            String mapping = Util.getFacesMapping(ctx);
-
-            if (mapping != null) {
-                if (!Util.isPrefixMapped(mapping)) {
-                    viewId = convertViewId(ctx, viewId);
-                } else {
-                    viewId = normalizeRequestURI(viewId, mapping);
-                    if (viewId.equals(mapping)) {
-                        // The request was to the FacesServlet only - no
-                        // path info
-                        // on some containers this causes a recursion in the
-                        // RequestDispatcher and the request appears to hang.
-                        // If this is detected, return status 404
-                        send404Error(ctx);
-                    }
-                }
-            }
-
-        }
-        return viewId;
-    }
-
 
 
 }

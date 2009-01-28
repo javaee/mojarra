@@ -40,8 +40,6 @@
 
 package com.sun.faces.demotest.mappingTest;
 
-import javax.faces.component.NamingContainer;
-
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
@@ -56,6 +54,7 @@ import com.sun.faces.demotest.HtmlUnitTestCase;
 public class TestMapping extends HtmlUnitTestCase {
 
     private boolean isPrefix = false;
+    final private String SEP = ":";
 
 
     /*
@@ -72,14 +71,12 @@ public class TestMapping extends HtmlUnitTestCase {
         for (int i = 0; i < 11; i++) {
 
             assertTrue(greetingPage.getTitleText().equals("Hello"));
-            for (Iterator iter = greetingPage.getAllHtmlChildElements();
+            for (Iterator iter = greetingPage.getAllHtmlChildElements().iterator();
                  iter.hasNext();) {
                 HtmlElement element = (HtmlElement) iter.next();
                 if (element.getTagName().equalsIgnoreCase("img")) {
                     assertTrue(element.getAttributeValue("id").equals(
-                          "helloForm" +
-                          NamingContainer.SEPARATOR_CHAR +
-                          "waveImg"));
+                          "helloForm" + SEP + "waveImg"));
                     assertTrue(stripJsessionInfo(
                           element.getAttributeValue("src"))
                           .equals(context + "/wave.med.gif"));
@@ -102,19 +99,19 @@ public class TestMapping extends HtmlUnitTestCase {
             }
 
             HtmlTextInput input = (HtmlTextInput) form.getInputByName(
-                  "helloForm" + NamingContainer.SEPARATOR_CHAR + "userNo");
+                  "helloForm" + SEP + "userNo");
             assertTrue(input != null);
 
             input.setValueAttribute(Integer.toString(i));
 
             // "click" the submit button to send our guess
-            HtmlPage resultPage = (HtmlPage) form.submit(
-                  "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+            HtmlPage resultPage = (HtmlPage) form.getButtonByName(
+                  "helloForm" + SEP + "submit").click();
             assertTrue(resultPage != null);
 
             assertTrue(resultPage.getTitleText().equals("Guess The Number"));
 
-            for (Iterator iter = resultPage.getAllHtmlChildElements();
+            for (Iterator iter = resultPage.getAllHtmlChildElements().iterator();
                  iter.hasNext();) {
                 HtmlElement element = (HtmlElement) iter.next();
 
@@ -132,9 +129,7 @@ public class TestMapping extends HtmlUnitTestCase {
                     }
                 } else if (element.getTagName().equalsIgnoreCase("img")) {
                     assertTrue(element.getAttributeValue("id").equals(
-                          "responseForm" +
-                          NamingContainer.SEPARATOR_CHAR +
-                          "waveImg"));
+                          "responseForm" + SEP + "waveImg"));
                     assertTrue(stripJsessionInfo(
                           element.getAttributeValue("src"))
                           .equals(context + "/wave.med.gif"));
@@ -158,11 +153,7 @@ public class TestMapping extends HtmlUnitTestCase {
             }
 
             greetingPage =
-                  (HtmlPage) back.submit(
-                        "responseForm"
-                        + NamingContainer
-                              .SEPARATOR_CHAR
-                        + "back");
+                  (HtmlPage) back.getButtonByName("responseForm" + SEP + "back").click();
             assertTrue(greetingPage != null);
         }
         // ensure that there was only one correct guess through the progession 
@@ -181,11 +172,11 @@ public class TestMapping extends HtmlUnitTestCase {
         HtmlForm guessForm = (HtmlForm) greetingPage.getForms().get(0);
         assertTrue(guessForm != null);
 
-        HtmlPage resultPage = (HtmlPage) guessForm.submit(
-              "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        HtmlPage resultPage = (HtmlPage) guessForm.getButtonByName(
+              "helloForm" + SEP + "submit").click();
         assertTrue(resultPage != null);
 
-        for (Iterator iter = resultPage.getAllHtmlChildElements();
+        for (Iterator iter = resultPage.getAllHtmlChildElements().iterator();
              iter.hasNext();) {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.asText().trim().equals("Sorry, null is incorrect.")) {
@@ -209,16 +200,16 @@ public class TestMapping extends HtmlUnitTestCase {
         assertTrue(guessForm != null);
 
         HtmlTextInput input = (HtmlTextInput) guessForm.getInputByName(
-              "helloForm" + NamingContainer.SEPARATOR_CHAR + "userNo");
+              "helloForm" + SEP + "userNo");
         assertTrue(input != null);
 
         input.setValueAttribute(Integer.toString(-1));
 
-        HtmlPage failed = (HtmlPage) guessForm.submit(
-              "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        HtmlPage failed = (HtmlPage) guessForm.getButtonByName(
+              "helloForm" + SEP + "submit").click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();)
+        for (Iterator iter = failed.getAllHtmlChildElements().iterator(); iter.hasNext();)
         {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("span")) {
@@ -230,7 +221,7 @@ public class TestMapping extends HtmlUnitTestCase {
             }
         }
         // make sure validation error occurred
-        assertTrue(testFailed == true);
+        assertTrue(testFailed);
         testFailed = false;
 
         guessForm = (HtmlForm) failed.getForms().get(0);
@@ -238,17 +229,17 @@ public class TestMapping extends HtmlUnitTestCase {
 
         input =
               (HtmlTextInput) guessForm.getInputByName(
-                    "helloForm" + NamingContainer.SEPARATOR_CHAR + "userNo");
+                    "helloForm" + SEP + "userNo");
         assertTrue(input != null);
 
         input.setValueAttribute(Integer.toString(11));
 
         failed =
-              (HtmlPage) guessForm.submit(
-                    "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+              (HtmlPage) guessForm.getButtonByName(
+                    "helloForm" + SEP + "submit").click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();)
+        for (Iterator iter = failed.getAllHtmlChildElements().iterator(); iter.hasNext();)
         {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("span")) {
@@ -260,7 +251,7 @@ public class TestMapping extends HtmlUnitTestCase {
             }
         }
         // make sure validation error occurred
-        assertTrue(testFailed == true);
+        assertTrue(testFailed);
 
     }
 

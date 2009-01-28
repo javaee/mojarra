@@ -144,8 +144,11 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                     context.setPropertyResolved(true);
                     return facesContext.getViewRoot();
                 case VIEW_SCOPE:
-                    context.setPropertyResolved(true);
-                    return facesContext.getViewRoot().getViewMap();
+                    UIViewRoot root = facesContext.getViewRoot();
+                    if (root != null) {
+                        context.setPropertyResolved(true);
+                        return facesContext.getViewRoot().getViewMap();
+                    }
                 default:
                     return null;
             }

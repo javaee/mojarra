@@ -61,6 +61,7 @@ import javax.faces.FacesException;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 import com.sun.faces.facelets.tag.TagLibrary;
+import javax.faces.webapp.pdl.facelets.tag.Tag;
 
 /**
  * Library for JSTL Functions
@@ -72,7 +73,7 @@ public class JstlFnLibrary implements TagLibrary {
 
     public final static String Namespace = "http://java.sun.com/jsp/jstl/functions";
     
-    private final Map fns = new HashMap();
+    private final Map<String, Method> fns = new HashMap<String, Method>();
     
     public JstlFnLibrary() {
         super();
@@ -88,7 +89,7 @@ public class JstlFnLibrary implements TagLibrary {
         }
     }
 
-    public boolean containsNamespace(String ns) {
+    public boolean containsNamespace(String ns, Tag t) {
         return Namespace.equals(ns);
     }
 
@@ -102,22 +103,14 @@ public class JstlFnLibrary implements TagLibrary {
     }
 
     public boolean containsFunction(String ns, String name) {
-        if (Namespace.equals(ns)) {
-            return this.fns.containsKey(name);
-        }
-        return false;
+        return Namespace.equals(ns) && this.fns.containsKey(name);
     }
 
     public Method createFunction(String ns, String name) {
         if (Namespace.equals(ns)) {
-            return (Method) this.fns.get(name);
+            return this.fns.get(name);
         }
         return null;
     }
     
-    public static void main(String[] argv) {
-        JstlFnLibrary lib = new JstlFnLibrary();
-        System.out.println(lib.containsFunction(JstlFnLibrary.Namespace, "toUpperCase"));
-    }
-
 }

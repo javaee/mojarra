@@ -282,7 +282,7 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
     protected TableRenderer.TableMetaInfo getMetaInfo(FacesContext context,
                                                       UIComponent table) {
 
-        String key = createKey(context, table);
+        String key = createKey(table);
         Map<Object,Object> attributes = context.getAttributes();
         TableRenderer.TableMetaInfo info = (TableRenderer.TableMetaInfo)
               attributes.get(key);
@@ -302,7 +302,7 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
      */
     protected void clearMetaInfo(FacesContext context, UIComponent table) {
 
-        context.getAttributes().remove(createKey(context, table));
+        context.getAttributes().remove(createKey(table));
 
     }
 
@@ -311,14 +311,13 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
      * Creates a unique key based on the provided <code>UIComponent</code> with
      *  which the TableMetaInfo can be looked up.
      *
-     * @param context the <code>FacesContext</code> for the current request
      * @param table the table that's being rendered
      * @return a unique key to store the metadata in the request and still have
      *  it associated with a specific component.
      */
-    protected String createKey(FacesContext context, UIComponent table) {
+    protected String createKey(UIComponent table) {
 
-        return TableMetaInfo.KEY + table.getClientId(context);
+        return TableMetaInfo.KEY + '_' + table.hashCode();
 
     }
 

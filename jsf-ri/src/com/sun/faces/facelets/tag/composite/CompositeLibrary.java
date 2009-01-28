@@ -72,6 +72,7 @@ public final class CompositeLibrary extends AbstractTagLibrary {
         // Things that go insead of the interface section
         this.addTagHandler("attribute", AttributeHandler.class);
         this.addTagHandler("deferred-value", DeferredValueHandler.class);
+        this.addTagHandler("extension", ExtensionHandler.class);
         this.addTagHandler("type", TypeHandler.class);
         this.addTagHandler("deferred-method", DeferredMethodHandler.class);
         this.addTagHandler("method-signature", MethodSignatureHandler.class);
@@ -85,9 +86,9 @@ public final class CompositeLibrary extends AbstractTagLibrary {
         this.addTagHandler("implementation", ImplementationHandler.class);
         
         // Things that go inside of the implementation section
-        this.addComponent("insertChildren", "javax.faces.Output",
-                "javax.faces.ConsumingPageCompositeChildren",
-                InsertChildrenHandler.class);
+        this.addComponent("renderUsingPageChildren", "javax.faces.Output",
+                "javax.faces.UsingPageChildren",
+                RenderUsingPageChildrenHandler.class);
         this.addComponent("insertFacet", "javax.faces.Output", 
                 "javax.faces.CompositeFacet", InsertFacetHandler.class);
     }

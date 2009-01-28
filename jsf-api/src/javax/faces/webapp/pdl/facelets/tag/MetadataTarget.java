@@ -64,39 +64,16 @@ import java.lang.reflect.Method;
  */
 public abstract class MetadataTarget {
 
-    /**
-     * @param name
-     * @return
-     */
     public abstract PropertyDescriptor getProperty(String name);
 
-    /**
-     * @param type
-     * @return
-     */
     public abstract boolean isTargetInstanceOf(Class type);
 
-    /**
-     * @return
-     */
     public abstract Class getTargetClass();
 
-    /**
-     * @param name
-     * @return
-     */
     public abstract Class getPropertyType(String name);
 
-    /**
-     * @param name
-     * @return
-     */
     public abstract Method getWriteMethod(String name);
 
-    /**
-     * @param name
-     * @return
-     */
     public abstract Method getReadMethod(String name);
 
 }

@@ -53,9 +53,6 @@
     <exception-handler-factory>
       com.sun.faces.context.ExceptionHandlerFactoryImpl
     </exception-handler-factory>
-    <facelets-artifact-factory>
-      com.sun.faces.facelets.FaceletsArtifactFactoryImpl
-    </facelets-artifact-factory>
     <visit-context-factory>
       com.sun.faces.component.visit.VisitContextFactoryImpl
     </visit-context-factory>
@@ -71,6 +68,9 @@
     <page-declaration-language-factory>
       com.sun.faces.application.view.PageDeclarationLanguageFactoryImpl
     </page-declaration-language-factory>
+    <external-context-factory>
+      com.sun.faces.context.ExternalContextFactoryImpl
+    </external-context-factory>
   </factory>
 
 
@@ -92,17 +92,6 @@
     <resource-handler>
       com.sun.faces.application.resource.ResourceHandlerImpl
     </resource-handler>
-    <system-event-listener>
-        <system-event-listener-class>
-         com.sun.faces.config.listeners.ProjectStagePhaseListenerInstallationListener
-        </system-event-listener-class>
-        <system-event-class>
-            javax.faces.event.ApplicationPostConstructEvent
-        </system-event-class>
-        <source-class>
-            javax.faces.application.Application
-        </source-class>
-    </system-event-listener>
   </application>
 
 
@@ -207,6 +196,7 @@
     <!-- Add our implementation specific PhaseListeners -->
     <lifecycle>
         <phase-listener>com.sun.faces.lifecycle.ELResolverInitPhaseListener</phase-listener>
+        <phase-listener>com.sun.faces.context.flash.FlashPhaseListener</phase-listener>
     </lifecycle>
 
   <!-- Configure Standard Validators -->

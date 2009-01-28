@@ -47,6 +47,7 @@ import com.sun.faces.util.MessageUtils;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.ExceptionHandlerFactory;
+import javax.faces.context.ExternalContextFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -59,6 +60,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
     
 
     private ExceptionHandlerFactory exceptionHandlerFactory;
+    private ExternalContextFactory externalContextFactory;
 
 
     // ------------------------------------------------------------ Constructors
@@ -68,6 +70,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
 
         exceptionHandlerFactory = (ExceptionHandlerFactory)
               FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);
+        externalContextFactory = (ExternalContextFactory)
+              FactoryFinder.getFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY);
 
     }
 
@@ -81,21 +85,14 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                                         Lifecycle lifecycle)
     throws FacesException {
 
-        try {
-            Util.notNull("sc", sc);
-            Util.notNull("request", request);
-            Util.notNull("response", response);
-            Util.notNull("lifecycle", lifecycle);
-        } catch (Exception e) {
-            throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
-        }
+        Util.notNull("sc", sc);
+        Util.notNull("request", request);
+        Util.notNull("response", response);
+        Util.notNull("lifecycle", lifecycle);
+        
         FacesContext ctx =
               new FacesContextImpl(
-                  new ExternalContextImpl((ServletContext) sc,
-                                          (ServletRequest) request,
-                                          (ServletResponse) response),
+                  externalContextFactory.getExternalContext(sc, request, response),
                   lifecycle);
 
         ctx.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());

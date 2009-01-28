@@ -63,6 +63,7 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 
 /**
  * Simplified implementation of c:set
@@ -76,16 +77,98 @@ public class SetHandler extends TagHandlerImpl {
     
     private final TagAttribute value;
     
+    private final TagAttribute target;
+    
+    private final TagAttribute property;
+    
+    private final TagAttribute scope;
+    
     public SetHandler(TagConfig config) {
         super(config);
-        this.value = this.getRequiredAttribute("value");
-        this.var = this.getRequiredAttribute("var");
+        this.value = this.getAttribute("value");
+        this.var = this.getAttribute("var");
+        this.target = this.getAttribute("target");
+        this.property = this.getAttribute("property");
+        this.scope = this.getAttribute("scope");
+        
     }
 
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
-        String varStr = this.var.getValue(ctx);
+        
+        // Apply precedence algorithm for attributes.  The JstlCoreTLV doesn't
+        // seem to enforce much in the way of this, so I edburns needs to check
+        // with an authority on the matter, probabyl Kin-Man Chung
+        
+        // If var is set, value must be set, otherwise an error is thrown
+        if (null != this.var && 
+            (null == this.value || 0 == this.value.getValue().length())) {
+            throw new TagException(tag, "var set with null or empty value");
+        }
         ValueExpression veObj = this.value.getValueExpression(ctx, Object.class);
-        ctx.getVariableMapper().setVariable(varStr, veObj);
+        ValueExpression lhs;
+        String expr;
+        
+        // Otherwise, if var is set, ignore the other attributes
+        if (null != this.var) {
+            String scopeStr, varStr = this.var.getValue(ctx);
+            
+            // If scope is set, check for validity
+            if (null != this.scope) {
+                if (0 == this.scope.getValue().length()) {
+                    throw new TagException(tag, "zero length scope attribute set");
+                }
+                
+                if (this.scope.isLiteral()) {
+                    scopeStr = this.scope.getValue();
+                } else {
+                    scopeStr = this.scope.getValue(ctx);
+                }
+                if (scopeStr.equals("page")) {
+                    throw new TagException(tag, "page scope does not exist in JSF, consider using view scope instead.");
+                }
+                if (scopeStr.equals("request") || scopeStr.equals("session") ||
+                        scopeStr.equals("application") || scopeStr.equals("view")) {
+                    scopeStr = scopeStr + "Scope";
+                }
+                // otherwise, assume it's a valid scope.  With custom scopes,
+                // it may be.
+                // Conjure up an expression
+                expr = "#{" + scopeStr +"." + varStr + "}";
+                lhs = ctx.getExpressionFactory().
+                        createValueExpression(ctx, expr, Object.class);
+                lhs.setValue(ctx, veObj.getValue(ctx));
+            }
+            else {
+                ctx.getVariableMapper().setVariable(varStr, veObj);
+            }
+        } else  {
+            assert(null == this.var);
+            // Otherwise, target, property and value must be set
+            if ((null == this.target || null == this.target.getValue() ||
+                 this.target.getValue().length() <= 0) ||
+                (null == this.property || null == this.property.getValue() ||
+                 this.property.getValue().length() <= 0) ||
+                (null == this.value || null == this.value.getValue() ||
+                 this.value.getValue().length() <= 0)) {
+                throw new TagException(tag, "when using this tag either one of var and value, or (target, property, value) must be set.");
+            }
+            // Ensure that target is an expression
+            if (this.target.isLiteral()) {
+                throw new TagException(tag, "value of target attribute must be an expression");
+            }
+            // Get the value of property
+            String propertyStr = null;
+            if (this.property.isLiteral()) {
+                propertyStr = this.property.getValue();
+            } else {
+                propertyStr = this.property.getValue(ctx);
+            }
+            ValueExpression targetVe = this.target.getValueExpression(ctx, Object.class);
+            Object targetValue = targetVe.getValue(ctx);
+            ctx.getFacesContext().getELContext().getELResolver().setValue(ctx, 
+                    targetValue, propertyStr, veObj.getValue(ctx));
+            
+        }
     }
 }

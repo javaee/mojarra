@@ -161,6 +161,7 @@ public class DeclareFacetHandler extends TagHandlerImpl {
             propertyDescriptor.setValue("default", ve);
         }
         
+        this.nextHandler.apply(ctx, parent);
         
     }
 

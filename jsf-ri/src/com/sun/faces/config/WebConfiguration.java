@@ -55,6 +55,7 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
+import java.util.HashMap;
 
 
 /** Class Documentation */
@@ -102,6 +103,12 @@ public class WebConfiguration {
         processBooleanParameters(servletContext, contextName);
         processInitParameters(servletContext, contextName);
         processJndiEntries(contextName);
+        
+        // build the cache of list type params
+        cachedListParams = new HashMap<WebContextInitParameter, String []>(3);
+        getOptionValue(WebContextInitParameter.ResourceExcludes, " ");
+        getOptionValue(WebContextInitParameter.DefaultSuffix, " ");
+        getOptionValue(WebContextInitParameter.FaceletsViewMappings, ";");
 
     }
 
@@ -206,6 +213,25 @@ public class WebConfiguration {
 
         return result;
 
+    }
+    
+    private Map<WebContextInitParameter, String []> cachedListParams;
+    
+    public String [] getOptionValue(WebContextInitParameter param, String sep) {
+        String [] result = null;
+        
+        assert(null != cachedListParams);
+        if (null == (result = cachedListParams.get(param))) {
+            String value = getOptionValue(param);
+            if (null == value) {
+                result = new String[0];
+            } else {
+                result = value.split(sep);
+            }
+            cachedListParams.put(param, result);
+        }
+        
+        return result;
     }
 
 
@@ -615,8 +641,12 @@ public class WebConfiguration {
               "javax.faces.STATE_SAVING_METHOD",
               "server"
         ),
+        FaceletsSuffix(
+                ViewHandler.FACELETS_SUFFIX_PARAM_NAME,
+                ViewHandler.DEFAULT_FACELETS_SUFFIX
+        ),
         DefaultSuffix(
-              "javax.faces.DEFAULT_SUFFIX",
+              ViewHandler.DEFAULT_SUFFIX_PARAM_NAME,
               ViewHandler.DEFAULT_SUFFIX
         ),
         JavaxFacesConfigFiles(
@@ -713,26 +743,27 @@ public class WebConfiguration {
               "facelets.RESOURCE_RESOLVER",
               ""
         ),
-        FaceletsViewMappingsAlias(
+         FaceletsViewMappings(
+              ViewHandler.FACELETS_VIEW_MAPPINGS_PARAM_NAME,
+              ""
+        ),
+        FaceletsViewMappingsDeprecated(
               "facelets.VIEW_MAPPINGS",
-              ""
-        ),
-        FaceletsViewMappings(
-              "javax.faces.FACELETS_VIEW_MAPPINGS",
               "",
-              false,
-              FaceletsViewMappingsAlias
-        ),
-        FaceletsLibrariesAlias(
-              "facelets.LIBRARIES",
-              ""
+              true,
+              FaceletsViewMappings
         ),
         FaceletsLibraries(
               "javax.faces.FACELETS_LIBRARIES",
-              "",
-              false,
-              FaceletsLibrariesAlias
+              ""
         ),
+        FaceletsLibrariesDeprecated(
+              "facelets.LIBRARIES",
+              "",
+              true,
+              FaceletsLibraries
+        ),
+        // RELESE_PENDING (edburns,rogerk) Need a standard parameter for DECORATORS
         FaceletsDecorators(
               "facelets.DECORATORS",
               ""

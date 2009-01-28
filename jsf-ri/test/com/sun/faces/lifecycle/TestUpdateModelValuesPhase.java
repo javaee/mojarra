@@ -43,6 +43,7 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.context.ExceptionHandlerImpl;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.util.Util;
 
@@ -210,6 +211,7 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
             e.printStackTrace();
             assertTrue(false);
         }
+        getFacesContext().getExceptionHandler().handle();
 
         assertTrue(getFacesContext().getRenderResponse());
 
@@ -228,6 +230,76 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         assertTrue(msg.getSummary().equals(expectedMsg.getSummary()));
     }
 
+    public void testUpdateFailed2() {
+        UIForm form = null;
+        TestUIInput userName = null;
+        TestUIInput userName1 = null;
+        TestUIInput userName2 = null;
+        TestUIInput userName3 = null;
+        String value = null;
+        Phase
+            updateModelValues = new UpdateModelValuesPhase();
+        form = new UIForm();
+        form.setId("form");
+        form.setSubmitted(true);
+        userName = new TestUIInput();
+        userName.setId("userName");
+        userName.setValue("one");
+        userName.testSetValid(true);
+        userName.setValueExpression("value",
+                                 ELUtils.createValueExpression("#{TestBean.two}"));
+        form.getChildren().add(userName);
+        userName1 = new TestUIInput();
+        userName1.setId("userName1");
+        userName1.setValue("one");
+        userName1.testSetValid(true);
+        userName1.setValueExpression("value",
+                                  ELUtils.createValueExpression("#{TestBean.one}"));
+        form.getChildren().add(userName1);
+        userName2 = new TestUIInput();
+        userName2.setId("userName2");
+        userName2.setValue("one");
+        userName2.setValueExpression("value",
+                                  ELUtils.createValueExpression("#{TestBean.one}"));
+        userName2.testSetValid(true);
+        form.getChildren().add(userName2);
+        userName3 = new TestUIInput();
+        userName3.setId("userName3");
+        userName3.setValue("four");
+        userName3.setValueExpression("value",
+                                  ELUtils.createValueExpression("#{TestBean.four}"));
+        userName3.testSetValid(true);
+        form.getChildren().add(userName3);
+
+        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        viewRoot.setLocale(Locale.US);
+        viewRoot.getChildren().add(form);
+        viewRoot.setViewId("updateModel.xul");
+        getFacesContext().setViewRoot(viewRoot);
+
+        getFacesContext().setExceptionHandler(new ExceptionHandlerImpl());
+
+
+        // This stage will go to render, since there was at least one error
+        // during component updates...
+        try {
+            updateModelValues.execute(getFacesContext());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+        
+        boolean exceptionThrown = false;
+        try {
+            getFacesContext().getExceptionHandler().handle();
+        } catch (Throwable t) {
+            exceptionThrown = true;
+        }
+
+        assertTrue(exceptionThrown);
+
+        assertTrue(false == (getFacesContext().getMessages().hasNext()));
+    }    
 
     public static class TestUIInput extends UIInput {
 

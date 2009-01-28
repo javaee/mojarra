@@ -43,8 +43,8 @@ import javax.faces.model.SessionScoped;
 @SessionScoped
 public class MultiNumberHolder {
 
-    private Integer i1 = 0;
-    private Integer i2 = 0;
+    private Integer i1 = 1;
+    private Integer i2 = 2;
 
     public void setNumber1(Integer i) {
         this.i1 = i;

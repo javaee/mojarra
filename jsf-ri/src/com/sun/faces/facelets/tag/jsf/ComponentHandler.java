@@ -189,7 +189,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
             // hook method
             this.onComponentCreated(ctx, c, parent);
         }
-
+        c.pushComponentToEL(ctx.getFacesContext(), c);
         // first allow c to get populated
         this.applyNextHandler(ctx, c);
 
@@ -213,6 +213,8 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         } else {
         	parent.getFacets().put(facetName, c);
         }
+        c.popComponentFromEL(ctx.getFacesContext());
+        
     }
     
     private static final String INITIAL_STATE_EVENT_KEY = "facelets.tag.InitialStateEvent";
@@ -338,7 +340,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
             get(AjaxBehaviors.AJAX_BEHAVIORS);
         if (ajaxBehaviors != null) {
-            AjaxBehavior ajaxBehavior = ajaxBehaviors.getBehaviorForEvent(facesEventType); 
+            AjaxBehavior ajaxBehavior = ajaxBehaviors.getBehaviorForEvent(facesEventType);
             if (ajaxBehavior != null) {
                 c.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
             }

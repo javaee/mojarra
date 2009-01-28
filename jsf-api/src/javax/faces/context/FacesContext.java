@@ -221,6 +221,23 @@ public abstract class FacesContext {
         throw new UnsupportedOperationException();
 
     }
+    
+    /**
+     * <p class="changed_added_2_0">Return the threadsafe flash for this
+     * application.</p>
+     *
+     * @since 2.0
+     */ 
+
+    public Flash getFlash() {
+
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getFlash();
+        }
+
+        throw new UnsupportedOperationException();
+
+    }    
 
     /**
      * <p class="changed_added_2_0">Return the {@link ExceptionHandler}
@@ -248,9 +265,9 @@ public abstract class FacesContext {
 
         if (defaultFacesContext != null) {
             defaultFacesContext.setExceptionHandler(exceptionHandler);
+        } else {
+            throw new UnsupportedOperationException();
         }
-
-        throw new UnsupportedOperationException();
         
     }
 
@@ -318,10 +335,12 @@ public abstract class FacesContext {
      */ 
 
     public List<FacesMessage> getMessageList() {
+
         if (defaultFacesContext != null) {
             return defaultFacesContext.getMessageList();
         }
         throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -346,10 +365,13 @@ public abstract class FacesContext {
      */ 
 
     public List<FacesMessage> getMessageList(String clientId) {
+
         if (defaultFacesContext != null) {
             return defaultFacesContext.getMessageList(clientId);
         }
+        
         throw new UnsupportedOperationException();
+
     }
 
 
@@ -583,7 +605,7 @@ public abstract class FacesContext {
     public boolean isPostback() {
 
         if (defaultFacesContext != null) {
-            defaultFacesContext.isPostback();
+            return defaultFacesContext.isPostback();
         }
 
         throw new UnsupportedOperationException();

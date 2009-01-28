@@ -986,7 +986,7 @@ composite component PDL page. </p>
             <p>The implementation of this tag handler must insert a
             component with <code>component-type</code>
             <code>javax.faces.Output</code> and <code>renderer-type</code>
-            <code>javax.faces.ConsumingPageCompositeChildren</code> as a
+            <code>javax.faces.CompositeFacet</code> as a
             child at this point in the component tree.</p>
 
 <p>The implementation of this tag handler must store an attribute into
@@ -1035,19 +1035,25 @@ component tag</em> in the <em>using page</em>.</p></div>]]>
 <p>This element is used in the
 <code>&lt;composite:implementation&gt;</code> section.  Any child
 components or template text within the composite component tag in the
-using page will be inserted into the rendered output at this point
-in the composite component PDL page.</p>
+using page will be rendered into the output at the point indicated by
+this tag's placement within the
+<code>&lt;composite:implementation&gt;</code> section.  The normal
+use-case for this element is to have only one occurrence within the
+<code>&lt;composite:implementation&gt;</code> section.  Inserting
+multiple occurrences may cause duplicate id errors.  The results are
+undefined if there are multiple occurrences of this element in the
+<code>&lt;composite:implementation&gt;</code> section.</p>
 
             <p>The implementation of this tag handler must insert a
             component with <code>component-type</code>
             <code>javax.faces.Output</code> and <code>renderer-type</code>
-            <code>javax.faces.ConsumingPageCompositeChildren</code> as a
+            <code>javax.faces.UsingPageChildren</code> as a
             child at this point in the component tree.</p>
 
 </div>]]>
         </description>
         <name>
-            insertChildren
+            renderUsingPageChildren
         </name>
         <body-content>
             JSP
@@ -1370,6 +1376,27 @@ precedence.</p></div>]]>
                 </type>
             </deferred-value>
         </attribute>
+  </tag>
+
+<tag>
+        <description>
+
+            <![CDATA[
+<div class="changed_added_2_0">
+<p>Used within a <code>&lt;composite:interface&gt;</code> section,
+within any sub-element of that section, to include XML content not
+defined by this specification.  This element can be used to incorporate
+<a target="_" href="http://jcp.org/en/jsr/detail?id=276">JSR-276</a>
+metadata into a composite component.</p>
+
+</div>]]>
+        </description>
+        <name>
+            extension
+        </name>
+        <body-content>
+            JSP
+        </body-content>
   </tag>
 
 

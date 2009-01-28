@@ -179,16 +179,41 @@ visibility.
 
  <tag>
     <description>
-        Sets the result of an expression evaluation in a 'scope'
+<![CDATA[ <p>Sets the result of an expression evaluation based on the
+value of the attributes.  If "scope" the is present, but has a zero
+length or is equal to the string "page", <code>TagException</code> is
+thrown with an informative error message, ensuring page location
+information is saved.</p>
+
+<p>This handler operates in one of two ways.
+
+	<ol>
+
+	  <li><p>The user has set "var", "value" and (optionally)
+	  "scope" attributes.</p></li>
+
+	  <li><p>The user has set "target", "property", and "value"
+	  attributes.</p></li>
+
+
+	</ol>
+
+<p>The first case takes precedence over the second.</p>
+
+]]>
+
     </description>
     <name>set</name>
     <tag-class>org.apache.taglibs.standard.tag.rt.core.SetTag</tag-class>
     <body-content>JSP</body-content>
     <attribute>
         <description>
-Name of the exported scoped variable to hold the value
-specified in the action. The type of the scoped variable is
-whatever type the value expression evaluates to.
+
+<p>Name of the variable to hold the value specified in the action. The
+type of the scoped variable is whatever type the value expression
+evaluates to.</p>
+
+
         </description>
         <name>var</name>
         <required>false</required>

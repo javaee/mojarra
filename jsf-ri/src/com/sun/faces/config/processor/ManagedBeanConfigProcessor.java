@@ -60,6 +60,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.model.ManagedBean;
+
 /**
  * <p>
  *  This <code>ConfigProcessor</code> handles all elements defined under
@@ -235,6 +237,10 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
     public void process(Document[] documents)
     throws Exception {
 
+        // process annotated managed beans first as managed beans configured
+        // via config files take precedence
+        processAnnotations(ManagedBean.class);
+        
         BeanManager beanManager = null;
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
