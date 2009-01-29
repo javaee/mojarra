@@ -1587,7 +1587,7 @@ public abstract class UIComponentBase extends UIComponent {
     
     private static void doPreRemoveProcessing(FacesContext context, 
             UIComponent toRemove) {
-        context.getApplication().publishEvent(BeforeRemoveFromParentEvent.class,
+        context.getApplication().publishEvent(BeforeRemoveFromViewEvent.class,
                 toRemove);
 
     }

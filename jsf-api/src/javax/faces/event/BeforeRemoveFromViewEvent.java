@@ -47,7 +47,7 @@ import javax.faces.component.UIComponent;
  *
  * @since 2.0
  */
-public class BeforeRemoveFromParentEvent extends ComponentSystemEvent {
+public class BeforeRemoveFromViewEvent extends ComponentSystemEvent {
 
 
     // ------------------------------------------------------------ Constructors
@@ -62,7 +62,7 @@ public class BeforeRemoveFromParentEvent extends ComponentSystemEvent {
      * @throws IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
-    public BeforeRemoveFromParentEvent(UIComponent component) {
+    public BeforeRemoveFromViewEvent(UIComponent component) {
 
         super(component);
 
