@@ -54,7 +54,7 @@ import java.lang.annotation.Inherited;
  * class to which this annotation is attached is taken to be the
  * <em>validator-class</em>.  The implementation must guarantee that for
  * each class annotated with <code>FacesValidator</code>, found with the
- * algorithm in section 11.5,
+ * algorithm in section JSF.11.5,
  * {@link
  * javax.faces.application.Application#addValidator(java.lang.String,java.lang.String)}
  * is called, passing the derived <em>validator-id</em> as the first
