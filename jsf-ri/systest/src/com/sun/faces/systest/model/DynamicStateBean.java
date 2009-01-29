@@ -39,6 +39,7 @@ package com.sun.faces.systest.model;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.ManagedBean;
@@ -49,7 +50,7 @@ import javax.faces.validator.ValidatorException;
 @RequestScoped
 public class DynamicStateBean {
     
-    public void validate(FacesContext context, UIComponent comp, Object val) {
+    public void validateDeletion(FacesContext context, UIComponent comp, Object val) {
         // The button should not be here on postback
         UIComponent button = findButton(context);
         if (null != button) {
@@ -58,7 +59,15 @@ public class DynamicStateBean {
         
     }
     
-    public void beforeRender(ComponentSystemEvent event) {
+    public void validateAddition(FacesContext context, UIComponent comp, Object val) {
+        // The button should not be here on postback
+        UIComponent button = findButton(context);
+        if (null == button) {
+            throw new ValidatorException(new FacesMessage("cbutton should be found"));
+        }
+        
+    }
+    public void beforeRenderDeletion(ComponentSystemEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         
         UIComponent 
@@ -69,6 +78,18 @@ public class DynamicStateBean {
             buttonParent.getChildren().remove(button);
         }
     }
+
+    public void beforeRenderAddition(ComponentSystemEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        UIComponent
+                form = findForm(context);
+        HtmlCommandButton button;
+        button = new HtmlCommandButton();
+        button.setId("cbutton");
+        button.setValue("added button");
+        form.getChildren().add(button);
+    }
     
     private UIComponent findButton(FacesContext context) {
         char sep = UINamingContainer.getSeparatorChar(context);
@@ -78,4 +99,11 @@ public class DynamicStateBean {
         return result;
     }
 
+    private UIComponent findForm(FacesContext context) {
+        char sep = UINamingContainer.getSeparatorChar(context);
+        UIComponent result = null;
+                result = context.getViewRoot().findComponent(sep + "form");
+        return result;
+    }
+    
 }

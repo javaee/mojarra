@@ -41,7 +41,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-<title>Dynamic Component Deletion</title>
+<title>Dynamic Component Addition</title>
 <style type="text/css">
 .grayBox { padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9;  }
 </style>
@@ -56,19 +56,17 @@
   <p>
 
    Type some text <h:inputText id="textField" 
-                               validator="#{dynamicStateBean.validateDeletion}" />
+                               validator="#{dynamicStateBean.validateAddition}" />
 
   </p>
 
   <p>
 
-    <h:outputText value="This text has a listener attached to it that deletes the button with id cbutton">
-      <f:event type="beforeRender" action="#{dynamicStateBean.beforeRenderDeletion}" />
+    <h:outputText value="This text has a listener attached to it that adds the button with id cbutton">
+      <f:event type="beforeRender" action="#{dynamicStateBean.beforeRenderAddition}" />
     </h:outputText>
 
   </p>
-
-  <p><h:commandButton value="delete me" id="cbutton" /> </p>
 
   <p><h:commandButton value="reload" /> </p>
 
