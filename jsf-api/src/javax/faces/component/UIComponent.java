@@ -672,7 +672,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * for the localization of the <code>ResourceBundle</code> due to
      * the localization facility implemented in
      * <code>createResource</code>, which is specified in section
-     * 2.6.1.3 of the spec prose document.  If the resultant {@link
+     * JSF.2.6.1.3 of the spec prose document.  If the resultant {@link
      * Resource} exists and can be found, the <code>InputStream</code>
      * for the resource is used to create a <code>ResourceBundle</code>.
      * If either of the two previous steps for obtaining the
