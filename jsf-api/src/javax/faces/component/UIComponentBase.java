@@ -1584,6 +1584,13 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
     }
+    
+    private static void doPreRemoveProcessing(FacesContext context, 
+            UIComponent toRemove) {
+        context.getApplication().publishEvent(BeforeRemoveFromParentEvent.class,
+                toRemove);
+
+    }
 
     private static void publishAfterViewEvents(Application application,
                                                UIComponent component) {
@@ -2094,6 +2101,8 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             }
 
+            UIComponentBase.doPreRemoveProcessing(FacesContext.getCurrentInstance(),
+                    element);
             if (super.remove(element)) {
                 element.setParent(null);
                 return (true);

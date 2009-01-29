@@ -43,11 +43,12 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.SystemEvent;
 import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.io.FastStringWriter;
@@ -55,9 +56,17 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import javax.faces.application.StateManager;
+import javax.faces.component.ContextCallback;
+import javax.faces.component.UIComponentBase;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
+import javax.faces.event.BeforeRemoveFromParentEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.SystemEventListener;
 import javax.faces.webapp.pdl.StateManagementStrategy;
 
 /**
@@ -76,6 +85,13 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
+    private RemoveListener removeListener;
+    
+    private static final String CLIENTIDS_TO_REMOVE_NAME = 
+            "com.sun.faces.application.view.CLIENTIDS_TO_REMOVE";
+    
+    private static final String IGNORE_REMOVE_EVENT_NAME = 
+            "com.sun.faces.application.view.IGNORE_REMOVE_EVENT";
 
     // ------------------------------------------------------------ Constructors
 
@@ -84,8 +100,46 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
      * Create a new <code>StateManagerImpl</code> instance.
      */
     public StateManagementStrategyImpl() {
+        removeListener = new RemoveListener(this);
+        FacesContext.getCurrentInstance().getApplication().subscribeToEvent(BeforeRemoveFromParentEvent.class, removeListener);
 
     }
+
+    private List<String> getClientIdsToRemove(FacesContext context) {
+        return this.getClientIdsToRemove(context, false);
+    }
+
+    private List<String> getClientIdsToRemove(FacesContext context, boolean create) {
+        List<String> result = null;
+        if ((null == (result = (List<String>) context.getAttributes().get(CLIENTIDS_TO_REMOVE_NAME))) && create) {
+            result = new ArrayList<String>();
+            context.getAttributes().put(CLIENTIDS_TO_REMOVE_NAME, result);
+        }
+        return result;
+    }
+    
+    private void handleRemoveEvent(BeforeRemoveFromParentEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        List<String> idsToRemove = getClientIdsToRemove(context, true);
+        idsToRemove.add(event.getComponent().getClientId(context));
+    }
+    
+    private boolean isIgnoreRemoveEvent(FacesContext context) {
+        boolean result = false;
+        result = context.getAttributes().containsKey(IGNORE_REMOVE_EVENT_NAME);
+
+        return result;
+    }
+
+    private void setIgnoreRemoveEvent(FacesContext context, boolean ignoreRemoveEvent) {
+
+        if (!ignoreRemoveEvent) {
+            context.getAttributes().remove(IGNORE_REMOVE_EVENT_NAME);
+        } else {
+            context.getAttributes().put(IGNORE_REMOVE_EVENT_NAME, Boolean.TRUE);
+        }
+    }
+
 
 
     // ----------------------------------------------- Methods from StateManager
@@ -130,6 +184,10 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             }
             
         });
+        List<String> toRemove = getClientIdsToRemove(context);
+        if (null != toRemove && !toRemove.isEmpty()) {
+            stateMap.put(CLIENTIDS_TO_REMOVE_NAME, toRemove);
+        }
 
         return stateMap;
 
@@ -171,10 +229,27 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     }
 
                     return result;
+                }
+
+            });
+            List<String> toRemove = (List<String>) state.get(CLIENTIDS_TO_REMOVE_NAME);
+            if (null != toRemove && !toRemove.isEmpty()) {
+                for (String cur : toRemove) {
+                    setIgnoreRemoveEvent(context, true);
+                    viewRoot.invokeOnComponent(context, cur, new ContextCallback() {
+
+                        public void invokeContextCallback(FacesContext context, UIComponent target) {
+                            UIComponent parent = target.getParent();
+                            if (null != parent) {
+                                parent.getChildren().remove(target);
+                            }
+                        }
+                        
+                    });
+                    setIgnoreRemoveEvent(context, false);
+                }
             }
-            
-        });
-            
+
         } else {
             viewRoot = null;
         }
@@ -223,6 +298,36 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 throw new IllegalStateException(message);
             }
         }
+
+    }
+    
+    private class RemoveListener extends UIComponentBase implements SystemEventListener, ComponentSystemEventListener {
+
+        private StateManagementStrategyImpl owner;
+        
+        public RemoveListener(StateManagementStrategyImpl owner) {
+            this.owner = owner;
+        }
+
+        @Override
+        public String getFamily() {
+            return "com.sun.faces.application.view.StateManagementStrategyImpl";
+        }
+
+        public boolean isListenerForSource(Object source) {
+            return (source instanceof UIComponent);
+        }
+
+        public void processEvent(SystemEvent event) throws AbortProcessingException {
+            FacesContext context = FacesContext.getCurrentInstance();
+            assert(event instanceof BeforeRemoveFromParentEvent);
+            if (!owner.isIgnoreRemoveEvent(context)) {
+                owner.handleRemoveEvent((BeforeRemoveFromParentEvent) event);
+            }
+        }
+        
+        
+        
 
     }
 

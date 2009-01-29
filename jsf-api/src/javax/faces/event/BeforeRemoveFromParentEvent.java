@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -34,48 +34,56 @@
  * holder.
  */
 
-package com.sun.faces.systest.model;
+package javax.faces.event;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.RequestScoped;
-import javax.faces.validator.ValidatorException;
 
-@ManagedBean
-@RequestScoped
-public class DynamicStateBean {
-    
-    public void validate(FacesContext context, UIComponent comp, Object val) {
-        // The button should not be here on postback
-        UIComponent button = findButton(context);
-        if (null != button) {
-            throw new ValidatorException(new FacesMessage("cbutton should not be found"));
-        }
+/**
+ *
+ * <p class="changed_added_2_0"></p>
+ * <div class="changed_added_2_0">
+ * 
+ * </div>
+ *
+ * @since 2.0
+ */
+public class BeforeRemoveFromParentEvent extends ComponentSystemEvent {
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * <p class="changed_added_2_0"></p>
+
+     * @param component the <code>UIComponent</code> that is about to be
+     * removed from the view.
+     *
+     * @throws IllegalArgumentException if <code>component</code> is
+     *  <code>null</code>
+     */
+    public BeforeRemoveFromParentEvent(UIComponent component) {
+
+        super(component);
+
+    }
+
+
+    // --------------------------------------- Methods from ComponentSystemEvent
+
+
+    /**
+     * <p class="changed_added_2_0">Returns <code>true</code> if and
+     * only if the argument <code>listener</code> is an instance of
+     * {@link SystemEventListener}.</p>
+     * @param listener
+     */
+    @Override
+    public boolean isAppropriateListener(FacesListener listener) {
+
+        return (listener instanceof SystemEventListener);
         
     }
     
-    public void beforeRender(ComponentSystemEvent event) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        
-        UIComponent 
-                buttonParent = null, 
-                button = findButton(context);
-        if (null != button) {
-            buttonParent = button.getParent();
-            buttonParent.getChildren().remove(button);
-        }
-    }
-    
-    private UIComponent findButton(FacesContext context) {
-        char sep = UINamingContainer.getSeparatorChar(context);
-        UIComponent result = null;
-                result = context.getViewRoot().findComponent(sep + "form" + 
-                sep + "cbutton");
-        return result;
-    }
 
 }
