@@ -105,7 +105,8 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               "hintString",
               "hintClass",
               "object",
-              "intList1"
+              "intList1",
+              "integerList1"
         };
         String[][] initialSelections = {
               new String[0],
@@ -118,6 +119,7 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               new String[] { "Frodo" },
               new String[] { "Pippin", "Frodo" },
               new String[] { "Bilbo", "Merry" },
+              new String[0],
               new String[0],
               new String[0],
               new String[0],
@@ -138,7 +140,8 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               new String[] { "Bilbo" },
               new String[] { "Bilbo" },
               new String[] { "Bilbo" },
-              new String[] { "2" }
+              new String[] { "2" },
+              new String[] { "3" }
         };
 
         // =====================================================================
