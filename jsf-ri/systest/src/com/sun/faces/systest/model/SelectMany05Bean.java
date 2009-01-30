@@ -276,6 +276,23 @@ public class SelectMany05Bean {
 
     ////////////////////////////////////////////////////////////////////////////
 
+    private Integer[] selectedIntegerValues;
+    private Integer[] integerOptions = new Integer[] { 1, 2, 3, 4 };
+
+    public Integer[] getSelectedIntegerValues() {
+        return selectedIntegerValues;
+    }
+
+    public void setSelectedIntegerValues(Integer[] selectedIntegerValues) {
+        this.selectedIntegerValues = selectedIntegerValues;
+    }
+
+    public Integer[] getIntegerOptions() {
+        return integerOptions;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+
     public Object getSomeValues() {
         return someValues;
     }

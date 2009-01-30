@@ -1190,4 +1190,15 @@
             recordGolden="${local.golden.path}/regression/InjectUserDefJS.txt"/>
     </target>
 
+    <target name="scratch">
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/SelectManyCollectionTestCase.class"/>
+            </tests>
+        </jsf.junit>  
+    </target>
+
 </project>

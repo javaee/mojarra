@@ -144,9 +144,9 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
         // =====================================================================
         //  Validate initial page state
         //
-        List<HtmlSelect> selects = new ArrayList<HtmlSelect>(14);
+        List<HtmlSelect> selects = new ArrayList<HtmlSelect>(15);
         getAllElementsOfGivenClass(page, selects, HtmlSelect.class);
-        assertTrue(selects.size() == 14);
+        assertTrue(selects.size() == 15);
         for (int i = 0; i < selectIds.length; i++) {
             String id = selectIds[i];
             System.out.println("Validating HtmlSelect with ID: " + id);
@@ -166,7 +166,7 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
 
         selects.clear();
         getAllElementsOfGivenClass(page, selects, HtmlSelect.class);
-        assertTrue(selects.size() == 14);
+        assertTrue(selects.size() == 15);
         for (int i = 0; i < selectIds.length; i++) {
             String id = selectIds[i];
             String[] newSelection = postBackSelections[i];
