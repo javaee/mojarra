@@ -49,6 +49,8 @@ import javax.faces.context.FacesContext;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -89,6 +91,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * Flag indicated the current mode.
      */
     private boolean development;
+    private static final Pattern REDIRECT_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(redirect=true(&|$))");
 
 
     // ------------------------------------------------------------ Constructors
@@ -220,7 +223,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                  String outcome) {
         
         UIViewRoot root = ctx.getViewRoot();
-        ViewHandler viewHandler = Util.getViewHandler(ctx);
+
         
         String viewId = (root != null ? root.getViewId() : null);
         
@@ -239,13 +242,10 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (caseStruct == null) {
             caseStruct = findDefaultMatch(ctx, fromAction, outcome);
         }
+        
         // If the navigation rules do not have a match...
         if (caseStruct == null && outcome != null) {
-            caseStruct = findImplicitMatch(ctx,
-                                           viewHandler,
-                                           root,
-                                           fromAction,
-                                           outcome);
+            caseStruct = findImplicitMatch(ctx, root, fromAction, outcome);
         }
 
         if (caseStruct == null && development) {
@@ -404,43 +404,61 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         return determineViewFromActionOutcome(ctx, caseSet, fromAction, outcome);
     }
-    
-    private CaseStruct findImplicitMatch(FacesContext context, 
-                                         ViewHandler viewHandler,
+
+
+    /**
+     * <p>
+     * Create a navigation case based on content within the outcome.
+     * </p>
+     *
+     * @param context the {@link FacesContext} for the current request
+     * @param root the {@link UIViewRoot} for the current request
+     * @param fromAction the navigation action
+     * @param outcome the navigation outcome
+     * @return a CaseStruct representing the the navigation result based
+     *  on the provided input
+     */
+    private CaseStruct findImplicitMatch(FacesContext context,
                                          UIViewRoot root,
                                          String fromAction,
                                          String outcome) {
 
-        CaseStruct caseStruct = null;
         // look for an implicit match.
         String viewIdToTest = outcome;
         String currentViewId = root.getViewId();
         boolean isRedirect = false;
-        final String REDIRECT_EQUALS_TRUE = "redirect=true";
-        int questionMark, redirectEqualsTrueIndex;
-        
-        // Does the outcome have a query string?
-        if (-1 != (questionMark = viewIdToTest.indexOf("?"))) {
-            // If so, does it have "redirect=true"?
-            if (-1 != (redirectEqualsTrueIndex =
-                    viewIdToTest.indexOf(REDIRECT_EQUALS_TRUE, questionMark))) {
-                isRedirect = true;
-            }
-            // Remove the query string from the viewId.
+
+        int questionMark = viewIdToTest.indexOf('?');
+        String queryString = null;
+        if (-1 != questionMark) {
+            queryString = viewIdToTest.substring(questionMark);
             viewIdToTest = viewIdToTest.substring(0, questionMark);
 
+            Matcher m = REDIRECT_EQUALS_TRUE.matcher(queryString);
+            if (m.find()) {
+                isRedirect = true;
+                queryString = queryString.replace(m.group(1), "");
+            }
+
+            // clean off dust
+            if (queryString.endsWith("&")) {
+                queryString =
+                      queryString.substring(0, queryString.length() - 1);
+            }
+
         }
-        
-        // If the viewIdToTest If needs an extension, take one from the currentViewId.
-        if (-1 == (redirectEqualsTrueIndex = viewIdToTest.lastIndexOf("."))) {
-            if (-1 != (redirectEqualsTrueIndex = currentViewId.lastIndexOf("."))) {
-                viewIdToTest = viewIdToTest + currentViewId.substring(redirectEqualsTrueIndex);
+
+        // If the viewIdToTest needs an extension, take one from the currentViewId.
+        if (viewIdToTest.lastIndexOf('.') == -1) {
+            int idx = currentViewId.lastIndexOf('.');
+            if (idx != -1) {
+                viewIdToTest = viewIdToTest + currentViewId.substring(idx);
             }
         }
 
         if (!viewIdToTest.startsWith("/")) {
             int lastSlash = currentViewId.lastIndexOf("/");
-            if (-1 != lastSlash) {
+            if (lastSlash != -1) {
                 currentViewId = currentViewId.substring(0, lastSlash + 1);
                 viewIdToTest = currentViewId + viewIdToTest;
             } else {
@@ -448,6 +466,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             }
         }
 
+        ViewHandler viewHandler = Util.getViewHandler(context);
         try {
             viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
         } catch (UnsupportedOperationException e) {
@@ -455,21 +474,23 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
 
         if (null != viewIdToTest) {
-            caseStruct = new CaseStruct();
-            if (isRedirect) {
+            CaseStruct caseStruct = new CaseStruct();
+            if (isRedirect && queryString != null) {
                 // Tack back on the query string
-                viewIdToTest = viewIdToTest + outcome.substring(questionMark);
+                viewIdToTest = viewIdToTest + queryString;
             }
             caseStruct.viewId = viewIdToTest;
             caseStruct.navCase = new NavigationCase(currentViewId,
                                                     fromAction,
                                                     outcome,
-                                                    null, // RELEASE_PENDING how to handle implicit navigation + conditions
-                                                    viewIdToTest,
+                                                    null,
+                                                    null,
                                                     isRedirect);
+            return caseStruct;
         }
 
-        return caseStruct;
+        return null;
+
     }
 
 
