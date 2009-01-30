@@ -36,8 +36,9 @@
 
 package javax.faces.application;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.faces.context.FacesContext;
 
 /**
@@ -80,16 +81,16 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
 
     /**
      * <p class="changed_added_2_0">Return a <code>Map&lt;String,
-     * List&lt;NavigationCase&gt;&gt;</code> where the keys are
+     * Set&lt;NavigationCase&gt;&gt;</code> where the keys are
      * <code>&lt;from-view-id&gt;</code> values and the values are
-     * <code>List&lt;NavigationCase&gt;</code> where each element in the
-     * list is a <code>NavigationCase</code> that applies to that
+     * <code>Set&lt;NavigationCase&gt;</code> where each element in the
+     * Set is a <code>NavigationCase</code> that applies to that
      * <code>&lt;from-view-id&gt;</code>.  The implementation must
      * support live modifications to this <code>Map</code>.</p>
      *
      * @since 2.0
      */
-    public abstract Map<String, List<NavigationCase>> getNavigationCases();
+    public abstract Map<String, Set<NavigationCase>> getNavigationCases();
     
 
 }

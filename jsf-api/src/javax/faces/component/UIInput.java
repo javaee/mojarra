@@ -46,8 +46,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -158,12 +156,6 @@ public class UIInput extends UIOutput implements EditableValueHolder,
 
     // The set of client events for UIInput components.
     private static final Set<String> CLIENT_EVENT_NAMES;
-
-    /**
-     * The <code>Logger</code> for this class.
-     */
-    private static final Logger LOGGER =
-          Logger.getLogger("javax.faces.component", "javax.faces.LogStrings");
 
     private Boolean emptyStringIsNull;
 

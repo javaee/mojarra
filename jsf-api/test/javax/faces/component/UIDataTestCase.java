@@ -149,6 +149,20 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
     // ------------------------------------------------- Individual Test Methods
 
+    public void testClearDataModelCache() throws Exception {
+
+        UIData data = (UIData) component;
+        data.setValue(new String[]{"A", "B"});
+        DataModel model = data.getDataModel();
+
+        // setting row index to -1 clears the model cache
+        data.setRowIndex(-1);
+        DataModel model2 = data.getDataModel();
+        System.out.println(model.toString() + ' ' + model2.toString());
+        assertTrue(model != model2);
+
+    }
+
 
     // Test attribute-property transparency
     public void testAttributesTransparency() {

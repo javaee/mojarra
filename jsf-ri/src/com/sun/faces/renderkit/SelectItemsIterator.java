@@ -492,25 +492,42 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                 if (var != null) {
                     oldVarValue = reqMap.put(var, value);
                 }
+
                 try {
                     ELContext elContext = ctx.getELContext();
-                    setValue(((itemValue != null)
-                                  ? itemValue.getValue(elContext)
-                                  : value));
-                    setLabel(((itemLabel != null)
-                                  ? (String) itemLabel.getValue(elContext)
+                    Object itemValueResult = ((itemValue != null)
+                                              ? itemValue.getValue(elContext)
+                                              : null);
+                    Object itemLabelResult = ((itemLabel != null)
+                                              ? itemLabel.getValue(elContext)
+                                              : null);
+                    Object itemDescriptionResult = ((itemDescription != null)
+                                                    ? itemDescription.getValue(elContext)
+                                                    : null);
+                    Object itemEscapedResult = ((itemEscaped != null)
+                                                 ? itemEscaped.getValue(elContext)
+                                                 : null);
+                    Object itemDisabledResult = ((itemDisabled != null)
+                                                 ? itemDisabled.getValue(elContext)
+                                                 : null);
+                    Object noSelectionOptionResult = ((noSelectionOption != null)
+                                                      ? noSelectionOption.getValue(elContext)
+                                                      : null);
+                    setValue(((itemValueResult != null) ? itemValueResult : value));
+                    setLabel(((itemLabelResult != null)
+                                  ? itemLabelResult.toString()
                                   : value.toString()));
-                    setDescription(((itemDescription != null)
-                                        ? (String) itemDescription.getValue(elContext)
+                    setDescription(((itemDescriptionResult != null)
+                                        ? itemDescriptionResult.toString()
                                         : null));
-                    setEscape(((itemEscaped != null)
-                                   ? (Boolean) itemEscaped.getValue(elContext)
+                    setEscape(((itemEscapedResult != null)
+                                   ? Boolean.valueOf(itemEscapedResult.toString())
                                    : false));
-                    setDisabled(((itemDisabled != null)
-                                     ? (Boolean) itemDisabled.getValue(elContext)
+                    setDisabled(((itemDisabledResult != null)
+                                     ? Boolean.valueOf(itemDisabledResult.toString())
                                      : false));
-                    setNoSelectionOption(((noSelectionOption != null)
-                                     ? (Boolean) noSelectionOption.getValue(elContext)
+                    setNoSelectionOption(((noSelectionOptionResult != null)
+                                     ? Boolean.valueOf(noSelectionOptionResult.toString())
                                      : false));
                 } finally {
                     if (var != null) {

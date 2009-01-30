@@ -8,10 +8,13 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.NamedEventManager;
 import com.sun.faces.util.Util;
 import java.io.IOException;
+import java.io.Serializable;
+
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
@@ -40,8 +43,7 @@ public class EventHandler extends TagHandler {
         Class<? extends SystemEvent> eventClass = getEventClass(ctx);
         if (eventClass != null) {
             parent.subscribeToEvent(eventClass,
-                    new DeclarativeSystemEventListener(ctx.getFacesContext().getELContext(),
-                    action.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class })));
+                    new DeclarativeSystemEventListener(action.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class })));
         }
     }
 
@@ -70,17 +72,20 @@ public class EventHandler extends TagHandler {
 }
 
 
-class DeclarativeSystemEventListener implements ComponentSystemEventListener {
+class DeclarativeSystemEventListener implements ComponentSystemEventListener, Serializable {
 
-    private ELContext elContext;
+    private static final long serialVersionUID = 8945415935164238908L;
+
     private MethodExpression action;
 
-    public DeclarativeSystemEventListener(ELContext elContext, MethodExpression action) {
-        this.elContext = elContext;
+    // Necessary for state saving
+    public DeclarativeSystemEventListener() {}
+
+    public DeclarativeSystemEventListener(MethodExpression action) {
         this.action = action;
     }
 
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-        action.invoke(elContext, new Object[]{event});
+        action.invoke(FacesContext.getCurrentInstance().getELContext(), new Object[]{event});
     }
 }

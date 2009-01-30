@@ -730,9 +730,17 @@
 
     <tag>
         <description>
-            Add a child UISelectItems component to the UIComponent
+            <![CDATA[<p>Add a child UISelectItems component to the UIComponent
             associated with the closed parent UIComponent custom
-            action.
+            action.</p>
+
+            <p>RELEASE_PENDING (edburns, rogerk) documentation,
+            including the fact that toString() should be called on the
+            string rendered attribute values when iterating over the
+            select items.
+
+            </p>]]>
+
         </description>
         <name>selectItems</name>
         <tag-class>com.sun.faces.taglib.jsf_core.SelectItemsTag</tag-class>

@@ -1087,7 +1087,7 @@ public class RenderKitUtils {
      * as well as the client ID of the activated command to the form as
      * hidden input parameters, update the target of the link if necessary,
      * and handle the form submission.  The jsf.js file will be rendered
-     * as part of this call.</p> 
+     * as part of this call.</p>
      * @param formClientId the client ID of the form
      * @param commandClientId the client ID of the command
      * @param target the link target

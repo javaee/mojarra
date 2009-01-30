@@ -504,7 +504,7 @@ public abstract class Application {
 
     /**
      * <p>Cause an the argument <code>resolver</code> to be added to the
-     * resolver chain as specified in section 5.5.1 of the JavaServer
+     * resolver chain as specified in section JSF.5.5.1 of the JavaServer
      * Faces Specification.</p>
      *
      * <p>It is not possible to remove an <code>ELResolver</code>
@@ -553,12 +553,12 @@ public abstract class Application {
      *
      *	  <li><p>An <code>implementation</code> that wraps the head of
      *	  the legacy <code>VariableResolver</code> chain, as per section
-     *	  <i>VariableResolver ChainWrapper</i> in Chapter 5 in the spec
+     *	  <i>VariableResolver ChainWrapper</i> in Chapter JSF.5 in the spec
      *	  document.</p></li>
      *
      *	  <li><p>An <code>implementation</code> that wraps the head of
      *	  the legacy <code>PropertyResolver</code> chain, as per section
-     *	  <i>PropertyResolver ChainWrapper</i> in Chapter 5 in the spec
+     *	  <i>PropertyResolver ChainWrapper</i> in Chapter JSF.5 in the spec
      *	  document.</p></li>
      *
      *	  <li><p>Any <code>ELResolver</code> instances added by calls to
@@ -938,7 +938,7 @@ public abstract class Application {
 	  this <code>Resource</code> can be found by calling {@link
 	  PageDeclarationLanguage#getScriptComponentResource}.  If the
 	  result is non-<code>null</code>, and is a script written in
-	  one of the languages listed in 4.3 of the specification prose
+	  one of the languages listed in JSF.4.3 of the specification prose
 	  document, create a <code>UIComponent</code> instance from the
 	  script resource.</p></li>
 

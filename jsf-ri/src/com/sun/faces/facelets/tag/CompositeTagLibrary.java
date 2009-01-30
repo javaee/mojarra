@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import com.sun.faces.facelets.compiler.CompilationMessageHolder;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagLibrary;
@@ -60,11 +61,13 @@ import javax.faces.FacesException;
 
 import com.sun.faces.util.Util;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.facelets.tag.Tag;
 
 /**
  * A TagLibrary that is composed of 1 or more TagLibrary children. Uses the
@@ -77,10 +80,16 @@ import javax.faces.context.FacesContext;
 public final class CompositeTagLibrary implements TagLibrary {
 
     private TagLibrary[] libraries;
+    private CompilationMessageHolder messageHolder;
 
-    public CompositeTagLibrary(TagLibrary[] libraries) {
+    public CompositeTagLibrary(TagLibrary[] libraries, CompilationMessageHolder unit) {
         Util.notNull("libraries", libraries);
         this.libraries = libraries;
+        this.messageHolder = unit;
+    }
+
+    public CompositeTagLibrary(TagLibrary[] libraries) {
+        this(libraries, null);
     }
 
     /*
@@ -88,10 +97,10 @@ public final class CompositeTagLibrary implements TagLibrary {
      * 
      * @see com.sun.facelets.tag.TagLibrary#containsNamespace(java.lang.String)
      */
-    public boolean containsNamespace(String ns) {
+    public boolean containsNamespace(String ns, Tag t) {
         boolean result = true;
         for (int i = 0; i < this.libraries.length; i++) {
-            if (this.libraries[i].containsNamespace(ns)) {
+            if (this.libraries[i].containsNamespace(ns, null)) {
                 return true;
             }
         }
@@ -112,12 +121,20 @@ public final class CompositeTagLibrary implements TagLibrary {
         else {
             FacesContext context = FacesContext.getCurrentInstance();
             if (ProjectStage.Development == context.getApplication().getProjectStage()) {
-                if (!ns.equals("http://www.w3.org/1999/xhtml")) {
-                    if (!getNamespaceMessageMap(context).containsKey(ns)) {
-                        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                if (null != t &&
+                    !ns.equals("http://www.w3.org/1999/xhtml")) {
+                    // messageHolder will only be null in the case of the private
+                    // EMPTY_LIBRARY class variable of the Compiler class.
+                    // This code will never be called on that CompositeTagLibrary
+                    // instance.
+                    assert(null != this.messageHolder);
+                    String prefix = getPrefixFromTag(t);
+                    if (null != prefix) {
+                        List<FacesMessage> prefixMessages = this.messageHolder.getNamespacePrefixMessages(context, prefix);
+                        prefixMessages.add(new FacesMessage(FacesMessage.SEVERITY_WARN,
                                 "Warning: This page calls for XML namespace " + ns +
+                                " declared with prefix " + prefix +
                                 " but no taglibrary exists for that namespace.", ""));
-                        getNamespaceMessageMap(context).put(ns, Boolean.TRUE);
                     }
                 }
             }
@@ -125,15 +142,14 @@ public final class CompositeTagLibrary implements TagLibrary {
         return false;
     }
     
-    private Map<String,Boolean> getNamespaceMessageMap(FacesContext context) {
-        Map<String, Boolean> result = null;
-        
-        if (null == (result = (Map<String,Boolean>)
-            context.getAttributes().get("facelets.namespaceMessageMap"))) {
-            result = new HashMap<String,Boolean>();
-            context.getAttributes().put("facelets.namespaceMessageMap", result);
+    private String getPrefixFromTag(Tag t) {
+        String result = t.getQName();
+        if (null != result) {
+            int i;
+            if (-1 != (i = result.indexOf(":"))) {
+                result = result.substring(0, i);
+            }
         }
-        
         return result;
     }
 

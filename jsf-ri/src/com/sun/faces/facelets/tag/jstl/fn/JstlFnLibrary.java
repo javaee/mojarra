@@ -61,6 +61,7 @@ import javax.faces.FacesException;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 import com.sun.faces.facelets.tag.TagLibrary;
+import javax.faces.webapp.pdl.facelets.tag.Tag;
 
 /**
  * Library for JSTL Functions
@@ -88,7 +89,7 @@ public class JstlFnLibrary implements TagLibrary {
         }
     }
 
-    public boolean containsNamespace(String ns) {
+    public boolean containsNamespace(String ns, Tag t) {
         return Namespace.equals(ns);
     }
 

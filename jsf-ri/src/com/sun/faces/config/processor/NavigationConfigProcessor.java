@@ -54,7 +54,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.MessageFormat;
 
- 
+import com.sun.faces.el.ELUtils;
+
+
 /**
  * <p>
  *  This <code>ConfigProcessor</code> handles all elements defined under
@@ -89,6 +91,11 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
      * <p>/faces-config/navigation-rule/navigation-case/from-outcome</p>
      */
     private static final String FROM_OUTCOME = "from-outcome";
+
+    /**
+     * <p>/faces-config/navigation-rule/navigation-case/if</p>
+     */
+    private static final String IF = "if";
 
     /**
      * <p>/faces-config/navigation-rule/navigation-case/to-view-id</p>
@@ -202,6 +209,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                 NodeList children = navigationCase.getChildNodes();
                 String outcome = null;
                 String action = null;
+                String condition = null;
                 String toViewId = null;
                 boolean redirect = false;
                 for (int i = 0, size = children.getLength(); i < size; i++) {
@@ -211,16 +219,30 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                             outcome = getNodeText(n);
                         } else if (FROM_ACTION.equals(n.getLocalName())) {
                             action = getNodeText(n);
+                        } else if (IF.equals(n.getLocalName())) {
+                            String expression = getNodeText(n);
+                            if (ELUtils.isExpression(expression) && !ELUtils.isMixedExpression(expression)) {
+                                condition = expression;
+                            }
+                            else {
+                                if (LOGGER.isLoggable(Level.WARNING)) {
+                                    LOGGER.log(Level.WARNING,
+                                               "jsf.config.navigation.if_invalid_expression",
+                                               new String[] { expression, fromViewId });
+                                }
+                            }
                         } else if (TO_VIEW_ID.equals(n.getLocalName())) {
-                            toViewId = getNodeText(n);
-                            if (toViewId.charAt(0) != '/') {
+                            String toViewIdString = getNodeText(n);
+                            if (toViewIdString.charAt(0) != '/' && toViewIdString.charAt(0) != '#') {
                                 if (LOGGER.isLoggable(Level.WARNING)) {
                                     LOGGER.log(Level.WARNING,
                                                "jsf.config.navigation.to_view_id_leading_slash",
-                                               new String[] { toViewId,
+                                               new String[] { toViewIdString,
                                                               fromViewId });
                                 }
-                                toViewId = '/' + toViewId;           
+                                toViewId = '/' + toViewIdString;
+                            } else {
+                                toViewId = toViewIdString;
                             }
                         } else if (REDIRECT.equals(n.getLocalName())) {
                             redirect = true;
@@ -232,6 +254,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                      new NavigationCase(fromViewId,
                                               action,
                                               outcome,
+                                              condition,
                                               toViewId,
                                               redirect);
                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -239,6 +262,11 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                                MessageFormat.format("Adding NavigationCase: {0}",
                                                     cnc.toString()));
                 }
+
+                // RELEASE_PENDING need to check to see if he top-level navigation
+                //  handler is a ConfigurableNavigationHandler, and if so,
+                //  add the navigation cases to it.  We may potentially want
+                //  to continue adding the cases to the associate as well
                 associate.addNavigationCase(cnc);
             }
         }

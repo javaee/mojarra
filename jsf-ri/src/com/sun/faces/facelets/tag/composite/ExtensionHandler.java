@@ -34,52 +34,47 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jstl.core;
+package com.sun.faces.facelets.tag.composite;
 
+import com.sun.faces.facelets.compiler.CompilationMessageHolder;
+import com.sun.faces.facelets.compiler.EncodingHandler;
 import java.io.IOException;
-import javax.faces.component.UIComponentBase;
-import javax.faces.context.FacesContext;
+import javax.el.ELException;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 
 /**
  *
  * @author edburns
  */
-class JstlUIComponent extends UIComponentBase {
-    
-    private FaceletContext ctx;
+public class ExtensionHandler extends TagHandler {
 
-    private JstlTagHandler handler;
-
-    public JstlUIComponent(FaceletContext ctx, JstlTagHandler handler) {
-        this.ctx = ctx;
-        this.handler = handler;
-    }
-    
-    @Override
-    public String getFamily() {
-        return "com.sun.faces.facelets.tag.jstl.core.JstlUIComponent";
+    public ExtensionHandler(TagConfig arg0) {
+        super(arg0);
     }
 
-    @Override
-    public boolean isTransient() {
-        return true;
-    }
+    public void apply(FaceletContext ctx, UIComponent arg1) throws IOException, FacesException, FaceletException, ELException {
+        // extract a prefix from the child content
+        if (null != nextHandler) {
+            String content = this.nextHandler.toString().trim();
+            if (content.startsWith("<")) {
+                int i;
+                if (-1 != (i = content.indexOf(":"))) {
+                    content = content.substring(1, i);
+                    CompilationMessageHolder messageHolder = EncodingHandler.getCompilationMessageHolder(ctx);
+                    // remove any compilation messages pertaining to this prefix
+                    if (null != messageHolder) {
+                        messageHolder.removeNamespacePrefixMessages(content);
+                    }
+                }
+            }
+        }
 
-    @Override
-    public void encodeBegin(FacesContext context) throws IOException {
-        this.handler.deferredApply(ctx, this.getParent());
     }
-
-    @Override
-    public void encodeChildren(FacesContext context) throws IOException {
-    }
-
-    @Override
-    public void encodeEnd(FacesContext context) throws IOException {
-    }
-
-    
     
     
     
