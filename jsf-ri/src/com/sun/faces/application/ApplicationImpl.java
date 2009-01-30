@@ -208,7 +208,6 @@ public class ApplicationImpl extends Application {
         converterTypeMap = new ConcurrentHashMap<Class<?>, Object>();
         validatorMap = new ConcurrentHashMap<String, Object>();
         elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
-        navigationHandler = new NavigationHandlerImpl(associate);
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
 

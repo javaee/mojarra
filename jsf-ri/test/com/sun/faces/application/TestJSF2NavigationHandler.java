@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.29 2008/01/31 18:36:00 rlubke Exp $
+ * $Id$
  */
 
 /*
@@ -77,10 +77,10 @@ import org.w3c.dom.NamedNodeMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.29 2008/01/31 18:36:00 rlubke Exp $
+ * @version $Id$
  */
 
-public class TestNavigationHandler extends ServletFacesTestCase {
+public class TestJSF2NavigationHandler extends ServletFacesTestCase {
 
 //
 // Protected Constants
@@ -103,12 +103,12 @@ public class TestNavigationHandler extends ServletFacesTestCase {
 // Constructors and Initializers    
 //
 
-    public TestNavigationHandler() {
-        super("TestNavigationHandler");
+    public TestJSF2NavigationHandler() {
+        super("TestJSF2NavigationHandler");
     }
 
 
-    public TestNavigationHandler(String name) {
+    public TestJSF2NavigationHandler(String name) {
         super(name);
     }
 //
@@ -128,7 +128,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
 // General Methods
 //
     private void loadConfigFile() {
-        loadFromInitParam("/WEB-INF/faces-navigation.xml");
+        loadFromInitParam("/WEB-INF/faces-navigation-2.xml");
     }
 
 
@@ -139,7 +139,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         f.setValidating(false);
         DocumentBuilder builder = f.newDocumentBuilder();
 
-        Document d = builder.parse(config.getServletContext().getResourceAsStream("/WEB-INF/navigation-cases.xml"));
+        Document d = builder.parse(config.getServletContext().getResourceAsStream("/WEB-INF/navigation-cases-2.xml"));
         NodeList navigationRules = d.getDocumentElement()
               .getElementsByTagName("test");
         for (int i = 0; i < navigationRules.getLength(); i++) {
@@ -148,10 +148,12 @@ public class TestNavigationHandler extends ServletFacesTestCase {
             Node fromViewId = attributes.getNamedItem("fromViewId");
             Node fromAction = attributes.getNamedItem("fromAction");
             Node fromOutput = attributes.getNamedItem("fromOutcome");
+            Node condition = attributes.getNamedItem("if");
             Node toViewId = attributes.getNamedItem("toViewId");
             createAndAccrueTestResult(((fromViewId != null) ? fromViewId.getTextContent().trim() : null),
                                       ((fromAction != null) ? fromAction.getTextContent().trim() : null),
                                       ((fromOutput != null) ? fromOutput.getTextContent().trim() : null),
+                                      ((condition != null) ? condition.getTextContent().trim() : null),
                                       ((toViewId != null) ? toViewId.getTextContent().trim() : null));
         }
 
@@ -161,7 +163,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
 
 
     public void createAndAccrueTestResult(String fromViewId, String fromAction,
-                                          String fromOutcome, String toViewId) {
+                                          String fromOutcome, String condition, String toViewId) {
         if (testResultList == null) {
             testResultList = new ArrayList();
         }
@@ -169,6 +171,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         testResult.fromViewId = fromViewId;
         testResult.fromAction = fromAction;
         testResult.fromOutcome = fromOutcome;
+        testResult.condition = condition;
         testResult.toViewId = toViewId;
         testResultList.add(testResult);
     }
@@ -195,10 +198,16 @@ public class TestNavigationHandler extends ServletFacesTestCase {
 
         for (int i = 0; i < testResultList.size(); i++) {
             TestResult testResult = (TestResult) testResultList.get(i);
+            Boolean conditionResult = null;
+            if (testResult.condition != null) {
+                conditionResult = (Boolean) application.getExpressionFactory()
+                    .createValueExpression(context.getELContext(), testResult.condition, Boolean.class).getValue(context.getELContext());
+            }
             System.out.println("Testing from-view-id=" + testResult.fromViewId +
                                " from-action=" + testResult.fromAction +
-                               " from-outcome=" + testResult.fromOutcome);
-            page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+                               " from-outcome=" + testResult.fromOutcome +
+                               " if=" + testResult.condition);
+            page = Util.getViewHandler(context).createView(context, null);
             page.setViewId(testResult.fromViewId);
             page.setLocale(Locale.US);
             page.getViewMap(); // cause the map to be created
@@ -213,8 +222,10 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                 gotException = true;
             }
             if (!gotException) {
+                // test assumption: if the from and to change, it's because the outcome was not-null or a condition was evaluated
                 if (!testResult.fromViewId.equals(testResult.toViewId)
-                    && testResult.fromOutcome != null) {
+                    && (testResult.fromOutcome != null || testResult.condition != null)
+                    && (testResult.condition == null || conditionResult != null)) {
                     assertTrue(listener.getPassedEvent() instanceof ViewMapDestroyedEvent);
                 } else {
                     assertTrue(!listener.wasProcessEventInvoked());
@@ -222,13 +233,22 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                 }
                 listener.reset();
                 newViewId = context.getViewRoot().getViewId();
-                if (testResult.fromOutcome == null) {
+                if (testResult.fromOutcome == null && testResult.condition == null) {
                     listener.reset();
                     System.out.println(
                         "assertTrue(" + newViewId + ".equals(" +
                         testResult.fromViewId +
                         "))");
                     assertTrue(newViewId.equals(testResult.fromViewId));
+                }
+                // test assumption: if condition is false, we advance to some other view
+                else if (testResult.condition != null && conditionResult == false) {
+                    listener.reset();
+                    System.out.println(
+                        "assertTrue(!" + newViewId + ".equals(" +
+                        testResult.toViewId +
+                        "))");
+                    assertTrue(!newViewId.equals(testResult.toViewId));
                 } else {
                     listener.reset();
                     System.out.println(
@@ -244,64 +264,12 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                                          listener);
     }
 
-     public void testSimilarFromViewId() {
-        ApplicationFactory aFactory =
-            (ApplicationFactory) FactoryFinder.getFactory(
-                FactoryFinder.APPLICATION_FACTORY);
-        Application application = aFactory.getApplication();
-        NavigationHandler navHandler = application.getNavigationHandler();
-
-        UIViewRoot root = application.getViewHandler().createView(getFacesContext(), "/dir1/dir2/dir3/test.jsp");
-        root.setLocale(Locale.US);
-        getFacesContext().setViewRoot(root);
-
-        try {
-            navHandler.handleNavigation(getFacesContext(), null, "home");
-        } catch (Exception e) {
-            e.printStackTrace();
-            assert(false);
-        }
-        String newViewId = getFacesContext().getViewRoot().getViewId();
-        assertTrue("newViewId is: " + newViewId, "/dir1/dir2/dir3/home.jsp".equals(newViewId));
-    }
-
-    // This tests that the same <from-view-id> element value existing in a seperate
-    // navigation rule, gets combined with the other rules with the same <from-view-id>.
-    // Specifically, it will to make sure that after loading, there are the correct number of
-    // cases with the common <from-view-id>;
- 
-    public void testSeperateRule() {
-        int cnt = 0;
-        ApplicationFactory aFactory =
-            (ApplicationFactory) FactoryFinder.getFactory(
-                FactoryFinder.APPLICATION_FACTORY);
-        Application application = aFactory.getApplication();
-        assertTrue(application instanceof ApplicationImpl);
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
-	assertNotNull(associate);
-	
-        Map caseListMap = associate.getNavigationCaseListMappings();
-        Iterator iter = caseListMap.keySet().iterator();
-        while (iter.hasNext()) {
-            String fromViewId = (String) iter.next();
-            if (fromViewId.equals("/login.jsp")) {
-                Set<NavigationCase> caseSet = (Set<NavigationCase>) caseListMap.get(fromViewId);
-                for (NavigationCase navCase : caseSet) {
-                    if (navCase.getFromViewId().equals("/login.jsp")) {
-                        cnt++;
-                    }
-                }
-            }
-        }
-        assertTrue(cnt == 6);
-    }
-
-
     class TestResult extends Object {
 
         public String fromViewId = null;
         public String fromAction = null;
         public String fromOutcome = null;
+        public String condition = null;
         public String toViewId = null;
     }
 
