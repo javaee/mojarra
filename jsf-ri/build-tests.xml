@@ -278,6 +278,11 @@
                              value="http://${container.host}:${container.port}/test"/>
             </custom-sysproperties>
             <suite>
+                <!-- Commented out.  This functionality is fully implemented
+                      in systest, without being so fragile.
+                      RELEASE_PENDING see bug #867 -->
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.annotation.TestAnnotatedComponents"/>
                 <test todir="${impl.test.results.dir}"
@@ -376,11 +381,6 @@
                       name="com.sun.faces.lifecycle.TestProcessEvents"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
-                <!-- Commented out.  This functionality is fully implemented
-                      in systest, without being so fragile.
-                      RELEASE_PENDING see bug #867
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>  -->
                 <!-- Commented out.  This test relies heavily on a bug in
                      FacesContext.setViewRoot() that allowed one to pass a null
                      value in.  This test case needs to be revisited.

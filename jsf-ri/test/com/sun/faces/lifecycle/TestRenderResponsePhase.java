@@ -127,10 +127,6 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
 
     public void testHtmlBasicRenderKit() {
 
-
-        boolean result = false;
-        String value = null;
-        LifecycleImpl lifecycle = new LifecycleImpl();
         Phase renderResponse = new RenderResponsePhase();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
