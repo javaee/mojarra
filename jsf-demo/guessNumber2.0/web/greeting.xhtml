@@ -46,16 +46,16 @@
 <h:body bgcolor="white">
     <h:form id="helloForm">
         <h2>
-            #{UserNumberBean.greeting}
+            #{userNumberBean.greeting}
         </h2>
         <img src="#{resource['images/wave.med.gif']}" alt="Hello!"/>
         <h:inputText id="userNo" label="User Number" required="true"
-                     value="#{UserNumberBean.userNumber}">
-            <gn:validator minimum="#{UserNumberBean.minimum}"
-                          maximum="#{UserNumberBean.maximum}"/>
+                     value="#{userNumberBean.userNumber}">
+            <gn:validator minimum="#{userNumberBean.minimum}"
+                          maximum="#{userNumberBean.maximum}"/>
             <f:convertNumber type="number" integerOnly="true"/>
         </h:inputText>
-        <h:commandButton id="submit" action="success" value="Guess!"/>
+        <h:commandButton id="submit" action="response?redirect=true" value="Guess!"/>
         <p/>
         <h:outputStylesheet name="css/styles.css"/>
         <h:message showSummary="true" showDetail="false"
