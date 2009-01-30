@@ -147,7 +147,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
 
     // ------------------------------------------ Methods from NavigationHandler
-
+    
 
     /**
      * @see javax.faces.application.NavigationHandler#handleNavigation(javax.faces.context.FacesContext, String, String)
@@ -224,7 +224,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         
         UIViewRoot root = ctx.getViewRoot();
 
-
+        
         String viewId = (root != null ? root.getViewId() : null);
         
         // if viewIdToTest is not null, use its value to find
@@ -242,7 +242,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         if (caseStruct == null) {
             caseStruct = findDefaultMatch(ctx, fromAction, outcome);
         }
-
+        
         // If the navigation rules do not have a match...
         if (caseStruct == null && outcome != null) {
             caseStruct = findImplicitMatch(ctx, root, fromAction, outcome);
@@ -524,7 +524,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 }
                 cncToViewId = '/' + cncToViewId;
             }
-
+           
             if ((cncFromAction != null) && (cncFromOutcome != null)) {
                 if ((cncFromAction.equals(fromAction)) &&
                     (cncFromOutcome.equals(outcome))) {
