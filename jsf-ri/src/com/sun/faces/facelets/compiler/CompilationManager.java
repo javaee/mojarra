@@ -105,7 +105,7 @@ final class CompilationManager {
     private final String alias;
     
     private CompilationMessageHolder messageHolder = null;
-
+    
     public CompilationManager(String alias, Compiler compiler) {
         
         // this is our alias
@@ -135,14 +135,14 @@ final class CompilationManager {
     private InterfaceUnit getInterfaceUnit() {
         return interfaceUnit;
     }
-
+    
     public CompilationMessageHolder getCompilationMessageHolder() {
         if (null == messageHolder) {
             messageHolder = new CompilationMessageHolderImpl();
         }
         return messageHolder;
     }
-
+    
     public void setCompilationMessageHolder(CompilationMessageHolder messageHolder) {
         this.messageHolder = messageHolder;
     }

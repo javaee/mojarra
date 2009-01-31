@@ -66,7 +66,7 @@ public class EncodingHandler implements FaceletHandler {
     private final FaceletHandler next;
     private final String encoding;
     private final CompilationMessageHolder messageHolder;
-
+    
     public EncodingHandler(FaceletHandler next, String encoding,
             CompilationMessageHolder messageHolder) {
         this.next = next;
@@ -82,10 +82,10 @@ public class EncodingHandler implements FaceletHandler {
         this.messageHolder.processCompilationMessages(ctx.getFacesContext());
         ctx.getFacesContext().getAttributes().put("facelets.Encoding", this.encoding);
     }
-
+    
     public static CompilationMessageHolder getCompilationMessageHolder(FaceletContext ctx) {
         CompilationMessageHolder result = null;
-
+        
         result = (CompilationMessageHolder) ctx.getFacesContext().getAttributes().get("facelets.compilationMessages");
 
         return result;

@@ -44,7 +44,6 @@ package com.sun.faces.lifecycle;
 
 import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.util.Util;
-import org.apache.cactus.JspTestCase;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
@@ -128,10 +127,6 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
 
     public void testHtmlBasicRenderKit() {
 
-
-        boolean result = false;
-        String value = null;
-        LifecycleImpl lifecycle = new LifecycleImpl();
         Phase renderResponse = new RenderResponsePhase();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
@@ -150,7 +145,7 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
             }
         }
         assertTrue(!(getFacesContext().getRenderResponse()) &&
-                   !(getFacesContext().getResponseComplete()));
+                !(getFacesContext().getResponseComplete()));
 
         assertTrue(verifyExpectedOutput());
     }

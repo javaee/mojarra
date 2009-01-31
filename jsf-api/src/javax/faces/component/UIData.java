@@ -458,12 +458,12 @@ public class UIData extends UIComponentBase
         this.rowIndex = rowIndex;
         DataModel localModel = getDataModel();
         localModel.setRowIndex(rowIndex);
-
+        
         // if rowIndex is -1, clear the cache
         if (rowIndex == -1) {
             setDataModel(null);
         }
-
+        
         // Clear or expose the current row data as a request scope attribute
         if (var != null) {
             Map<String, Object> requestMap =
