@@ -1,5 +1,5 @@
 /*
- * $Id: TestJSF2NavigationHandler.java 6314 2009-01-30 19:46:48Z rlubke $
+ * $Id$
  */
 
 /*
@@ -77,7 +77,7 @@ import org.w3c.dom.NamedNodeMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestJSF2NavigationHandler.java 6314 2009-01-30 19:46:48Z rlubke $
+ * @version $Id$
  */
 
 public class TestJSF2NavigationHandler extends ServletFacesTestCase {
