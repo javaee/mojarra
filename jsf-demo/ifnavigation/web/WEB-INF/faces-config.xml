@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
@@ -37,60 +36,46 @@
 -->
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-              version="2.0">
-
-    <navigation-rule>
-        <description>
-            The decision rule used by the NavigationHandler to
-            determine which view must be displayed after the
-            current view, greeting.xhtml is processed.
-        </description>
-        <from-view-id>/greeting.xhtml</from-view-id>
-        <navigation-case>
-            <description>
-                Indicates to the NavigationHandler that the response.xhtml
-                view must be displayed if the Action referenced by a
-                UICommand component on the greeting.xhtml view returns
-                the outcome "success".
-            </description>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/response.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
-        <description>
-            The decision rules used by the NavigationHandler to
-            determine which view must be displayed after the
-            current view, response.xhtml is processed.
-        </description>
-        <from-view-id>/response.xhtml</from-view-id>
-        <navigation-case>
-            <description>
-                Indicates to the NavigationHandler that the greeting.xhtml
-                view must be displayed if the Action referenced by a
-                UICommand component on the response.xhtml view returns
-                the outcome "success".
-            </description>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/greeting.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+        version="2.0">
 
     <managed-bean>
         <description>
-            The "backing file" bean that backs up the guessNumber webapp
+            The "backing file" bean that backs up the "if navigation" version of the number guess application.
         </description>
-        <managed-bean-name>UserNumberBean</managed-bean-name>
-        <managed-bean-class>guessnumber.UserNumberBean</managed-bean-class>
+        <managed-bean-name>numberGuess</managed-bean-name>
+        <managed-bean-class>ifnavigation.NumberGuess</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
-    <validator>
-        <validator-id>ClientSideValidator</validator-id>
-        <validator-class>guessnumber.ClientSideValidator</validator-class>
-    </validator>
+    <navigation-rule>
+        <!--<from-view-id>/home.xhtml</from-view-id>-->
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-action>#{numberGuess.begin}</from-action>
+            <if>#{numberGuess.started}</if>
+            <to-view-id>/guess.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- short-circuit rules allow the conditions to work like if, else if, else if -->
+    <navigation-rule>
+        <from-view-id>/guess.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{numberGuess.guess}</from-action>
+            <if>#{numberGuess.correct}</if>
+            <to-view-id>/gameover.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{numberGuess.guess}</from-action>
+			<if>#{not numberGuess.correct}</if>
+            <to-view-id>#{numberGuess.viewIdForIncorrectGuess}</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{numberGuess.guess}</from-action>
+            <to-view-id>/shouldNotGetHere.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
 </faces-config>

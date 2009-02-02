@@ -44,11 +44,15 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.faces.model.ManagedBean;
+import javax.faces.model.SessionScoped;
 
 
 /**
  * <p>This bean is used to track the user's guesses.</p>
  */
+@ManagedBean
+@SessionScoped
 public class UserNumberBean implements Serializable {
 
     private static final long serialVersionUID = 7288057381787349138L;

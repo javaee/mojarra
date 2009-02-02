@@ -1578,7 +1578,7 @@ public abstract class UIComponentBase extends UIComponent {
             context.getApplication().publishEvent(AfterAddToParentEvent.class,
                     added);
             if (parent.isInView()) {
-                publishAfterViewEvents(context.getApplication(), added);
+                publishAfterViewEvents(context, context.getApplication(), added);
             }
 
         }
@@ -1592,19 +1592,22 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-    private static void publishAfterViewEvents(Application application,
-                                               UIComponent component) {
+    private static void publishAfterViewEvents(FacesContext context,
+            Application application,
+            UIComponent component) {
 
         component.setInView(true);
-        application.publishEvent(AfterAddToViewEvent.class, component);
+        Class eventClass = PhaseId.RESTORE_VIEW == context.getCurrentPhaseId() 
+                ? AfterAddToViewEvent.class : AfterNonPDLAddToViewEvent.class;
+        application.publishEvent(eventClass, component);
         if (component.getChildCount() > 0) {
             for (UIComponent c : component.getChildren()) {
-                publishAfterViewEvents(application, c);
+                publishAfterViewEvents(context, application, c);
             }
         }
         if (component.getFacetCount() > 0) {
             for (UIComponent c : component.getFacets().values()) {
-                publishAfterViewEvents(application, c);
+                publishAfterViewEvents(context, application, c);
             }
         }
 

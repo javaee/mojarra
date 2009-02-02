@@ -127,9 +127,9 @@
     <!-- converter06 impl logic deferred to 2.0 -->
     <target name="test"
             description="Execute all tests against installed application"
-            depends="test.facelets,
+            depends="test.ajax,
+                test.facelets,
                 test.init,
-                test.ajax,
                 test.render,
                 test.html.taglib,
                 test.prefix.security,
@@ -1195,6 +1195,17 @@
             request="${context.path}/faces/regression/InjectUserDefJS.jsp"
             golden="${golden.path}/regression/InjectUserDefJS.txt"
             recordGolden="${local.golden.path}/regression/InjectUserDefJS.txt"/>
+    </target>
+
+    <target name="scratch">
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/SelectManyCollectionTestCase.class"/>
+            </tests>
+        </jsf.junit>  
     </target>
 
 </project>

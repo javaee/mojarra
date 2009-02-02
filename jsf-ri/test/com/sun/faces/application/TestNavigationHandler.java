@@ -285,11 +285,9 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         while (iter.hasNext()) {
             String fromViewId = (String) iter.next();
             if (fromViewId.equals("/login.jsp")) {
-                List caseList = (List) caseListMap.get(fromViewId);
-                for (int i = 0; i < caseList.size(); i++) {
-                    NavigationCase cnc = (NavigationCase) caseList.get(
-                        i);
-                    if (cnc.getFromViewId().equals("/login.jsp")) {
+                Set<NavigationCase> caseSet = (Set<NavigationCase>) caseListMap.get(fromViewId);
+                for (NavigationCase navCase : caseSet) {
+                    if (navCase.getFromViewId().equals("/login.jsp")) {
                         cnt++;
                     }
                 }

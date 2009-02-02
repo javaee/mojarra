@@ -38,9 +38,10 @@
  * holder.
  */
 
-package javax.faces.component;
+package @package@;
 
 import javax.faces.context.FacesContext;
+import javax.faces.component.StateHolder;
 
 import java.io.Serializable;
 
@@ -49,7 +50,7 @@ import java.io.Serializable;
  */
 class StateHolderSaver implements Serializable {
 
-    private static final long serialVersionUID = 6470180891722042701L;
+    private static final long serialVersionUID = @serialVersionUID@;
 
     private String className = null;
     private Serializable savedState = null;

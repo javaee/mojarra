@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+ 
+    <f:view>
+    <body>
+        <h:panelGroup rendered="#{numberGuess.correct}">
+            <h2>You won!</h2>
+            <p>Congratulations! You won. Want to test your luck again?</p>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{not numberGuess.correct}">
+            <h2>Game over!</h2>
+            <p>You exhausted your guess attempts. Want to give it another shot?</p>
+        </h:panelGroup>
+
+        <h:form id="beginForm">
+            <h:commandButton id="begin" action="#{numberGuess.begin}" value="Begin"/>
+        </h:form>
+
+    </body>
+    </f:view>
+</html>

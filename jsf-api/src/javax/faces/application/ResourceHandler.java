@@ -56,7 +56,7 @@ import javax.faces.context.FacesContext;
  *  <p>ResourceHandler defines a path based packaging convention for
  *  resources.  The default implementation of
  *  <code>ResourceHandler</code> must support packaging resources in the
- *  classpath or in the web application root. See section 2.6.1 of the
+ *  classpath or in the web application root. See section JSF.2.6.1 of the
  *  spec prose document <a
  *  href="../../../overview-summary.html#prose_document">linked in the
  *  overview summary</a> for the normative specification of packaging
@@ -179,7 +179,7 @@ public abstract class ResourceHandler {
 
      * <div class="changed_added_2_0">
 
-     * <p>The algorithm specified in section 2.6.1.4 of the spec prose
+     * <p>The algorithm specified in section JSF.2.6.1.4 of the spec prose
      * document <a
      * href="../../../overview-summary.html#prose_document">linked in
      * the overview summary</a> must be executed to create the
@@ -209,7 +209,7 @@ public abstract class ResourceHandler {
      *
      * <div class="changed_added_2_0">
 
-     * <p>The algorithm specified in section 2.6.1.4 of the spec prose
+     * <p>The algorithm specified in section JSF.2.6.1.4 of the spec prose
      * document <a
      * href="../../../overview-summary.html#prose_document">linked in
      * the overview summary</a> must be executed to create the
@@ -242,7 +242,7 @@ public abstract class ResourceHandler {
      *
      * <div class="changed_added_2_0">
 
-     * <p>The algorithm specified in section 2.6.1.4 of the spec prose
+     * <p>The algorithm specified in section JSF.2.6.1.4 of the spec prose
      * document <a
      * href="../../../overview-summary.html#prose_document">linked in
      * the overview summary</a> must be executed to create the

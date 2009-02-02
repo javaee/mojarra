@@ -69,7 +69,6 @@ import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -82,7 +81,7 @@ import javax.faces.el.VariableResolver;
 import javax.faces.application.ProjectStage;
 import javax.faces.FacesException;
 import javax.servlet.ServletContext;
-import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -91,6 +90,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
@@ -115,13 +117,13 @@ public class ApplicationAssociate {
 
     /**
      * Overall Map containing <code>from-view-id</code> key and
-     * <code>ArrayList</code> of <code>NavigationCase</code>
+     * <code>Set</code> of <code>NavigationCase</code>
      * objects for that key; The <code>from-view-id</code> strings in
      * this map will be stored as specified in the configuration file -
      * some of them will have a trailing asterisk "*" signifying wild
      * card, and some may be specified as an asterisk "*".
      */
-    private Map<String, List<NavigationCase>> caseListMap = null;
+    private Map<String, Set<NavigationCase>> navigationMap = null;
 
     /**
      * The List that contains all view identifier strings ending in an
@@ -196,7 +198,7 @@ public class ApplicationAssociate {
         }
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
-        caseListMap = new ConcurrentHashMap<String, List<NavigationCase>>();
+        navigationMap = new ConcurrentHashMap<String, Set<NavigationCase>>();
         wildcardMatchList = new TreeSet<String>(new SortIt());
         injectionProvider = InjectionProviderFactory.createInstance(externalContext);
         WebConfiguration webConfig = WebConfiguration.getInstance(externalContext);
@@ -455,31 +457,13 @@ public class ApplicationAssociate {
         return requestServiced;
     }
 
-    /**
-     * The "key" is defined as the combination of
-     * <code>from-view-id</code><code>from-action</code>
-     * <code>from-outcome</code>.
-     * @return the derived key
-     */
-     private String getNavigationKey(NavigationCase navCase) {
-         String key = null;
-         key = navCase.getFromViewId()
-                   + ((navCase.getFromAction() == null) ? "-" : navCase.getFromAction())
-                   + ((navCase.getFromOutcome() == null) ? "-" : navCase.getFromOutcome());
-         
-         return key;
-     }
-
 
     /**
-     * Add a navigation case to the internal case list.  If a case list
+     * Add a navigation case to the internal case set.  If a case set
      * does not already exist in the case list map containing this case
      * (identified by <code>from-view-id</code>), start a new list,
-     * add the case to it, and store the list in the case list map.
-     * If a case list already exists, see if a case entry exists in the list
-     * with a matching <code>from-view-id</code><code>from-action</code>
-     * <code>from-outcome</code> combination.  If there is suach an entry,
-     * overwrite it with this new case.  Otherwise, add the case to the list.
+     * add the case to it, and store the set in the case set map.
+     * If a case set already exists, overwrite the previous case.
      *
      * @param navigationCase the navigation case containing navigation
      *                       mapping information from the configuration file.
@@ -487,30 +471,17 @@ public class ApplicationAssociate {
     public void addNavigationCase(NavigationCase navigationCase) {
 
         String fromViewId = navigationCase.getFromViewId();
-        List<NavigationCase> caseList = caseListMap.get(fromViewId);
-        if (caseList == null) {
+        Set<NavigationCase> caseSet = navigationMap.get(fromViewId);
+        if (caseSet == null) {
             //noinspection CollectionWithoutInitialCapacity
-            caseList = new ArrayList<NavigationCase>();
-            caseList.add(navigationCase);
-            caseListMap.put(fromViewId, caseList);
+            caseSet = new LinkedHashSet<NavigationCase>();
+            caseSet.add(navigationCase);
+            navigationMap.put(fromViewId, caseSet);
         } else {
-            String key = getNavigationKey(navigationCase);
-            boolean foundIt = false;
-            for (int i = 0; i < caseList.size(); i++) {
-                NavigationCase navCase = caseList.get(i);
-                // if there already is a case existing for the
-                // fromviewid/fromaction.fromoutcome combination,
-                // replace it ...  (last one wins).
-                //
-                if (key.equals(getNavigationKey(navCase))) {
-                    caseList.set(i, navigationCase);
-                    foundIt = true;
-                    break;
-                }
-            }
-            if (!foundIt) {
-                caseList.add(navigationCase);
-            }
+            // if there already is a case existing for the
+            // fromviewid/fromaction.fromoutcome combination,
+            // replace it ...  (last one wins).
+            caseSet.add(navigationCase);
         }
         if (fromViewId.endsWith("*")) {
             fromViewId =
@@ -535,11 +506,11 @@ public class ApplicationAssociate {
      *
      * @return Map the map of navigation mappings.
      */
-    public Map<String, List<NavigationCase>> getNavigationCaseListMappings() {
-        if (caseListMap == null) {
+    public Map<String, Set<NavigationCase>> getNavigationCaseListMappings() {
+        if (navigationMap == null) {
             return Collections.emptyMap();
         }
-        return caseListMap;
+        return navigationMap;
     }
 
 

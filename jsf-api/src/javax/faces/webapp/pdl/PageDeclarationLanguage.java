@@ -65,7 +65,7 @@ public abstract class PageDeclarationLanguage {
      * <p class="changed_added_2_0">Return a reference to the component
      * metadata for the composite component represented by the argument
      * <code>componentResource</code>, or <code>null</code> if the
-     * metadata cannot be found.  See section 7.6.2 for the
+     * metadata cannot be found.  See section JSF.7.6.2 for the
      * specification of the default implementation.</p>
      *
      * @param context The <code>FacesContext</code> for this request.
@@ -84,7 +84,7 @@ public abstract class PageDeclarationLanguage {
     /**
      * <p class="changed_added_2_0">Take implementation specific action
      * to discover a <code>Resource</code> given the argument
-     * <code>componentResource</code>.  See section 7.6.2 for the
+     * <code>componentResource</code>.  See section JSF.7.6.2 for the
      * specification of the default implementation.</p>
      *
      * @param context The <code>FacesContext</code> for this request.
@@ -105,7 +105,7 @@ public abstract class PageDeclarationLanguage {
     /**
      * <p class="changed_added_2_0">Create a <code>UIViewRoot</code>
      * from the PDL contained in the artifact referenced by the argument
-     * <code>viewId</code>.  See section 7.6.2 for the specification of
+     * <code>viewId</code>.  See section JSF.7.6.2 for the specification of
      * the default implementation.</p>
      *
      * @param context the <code>FacesContext</code> for this request.
@@ -123,7 +123,7 @@ public abstract class PageDeclarationLanguage {
     
     /**
      * <p class="changed_added_2_0">Restore a <code>UIViewRoot</code>
-     * from a previously created view.  See section 7.6.2 for the
+     * from a previously created view.  See section JSF.7.6.2 for the
      * specification of the default implementation.</p>
      *
      * @param context the <code>FacesContext</code> for this request.
@@ -140,7 +140,7 @@ public abstract class PageDeclarationLanguage {
     
     /**
      * <p class="changed_added_2_0">Render a view rooted at
-     * argument<code>view</code>. See section 7.6.2 for the
+     * argument<code>view</code>. See section JSF.7.6.2 for the
      * specification of the default implementation.</p>
      *
      * @param context the <code>FacesContext</code> for this request.

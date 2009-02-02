@@ -134,6 +134,8 @@
               file="${basedir}/ajax-request/build/ajax-request.war"/>
         <copy todir="${dist.home}/samples"
               file="${basedir}/ajax-queue/build/ajax-queue.war"/>
+        <copy todir="${dist.home}/samples"
+              file="${basedir}/ajax-queue/build/ifnavigation.war"/>
 
         <!-- RELEASE_PENDING need to clean up this build -->
 
@@ -371,6 +373,7 @@
         <ant dir="${basedir}/helloDuke" inheritAll="false" />
         <ant dir="${basedir}/guessNumber" inheritAll="false" />
         <ant dir="${basedir}/guessNumber2.0" inheritAll="false" />
+        <ant dir="${basedir}/ifnavigation" inheritAll="false" />
         <ant dir="${basedir}/basic-ezcomp" inheritAll="false" />
         <ant dir="${basedir}/basic-ajax" inheritAll="false" />        
         <ant dir="${basedir}/ajax-request" inheritAll="false" />

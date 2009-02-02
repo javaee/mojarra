@@ -11,6 +11,12 @@
 
   <h:form prependId="false">
 
+    <p>Action URL to this page: <h:outputText 
+                         value="#{implicitNavigationBean.currentActionUrl}" /></p>
+
+    <p>Resource URL to this page: <h:outputText 
+                         value="#{implicitNavigationBean.currentResourceUrl}" /></p>
+
     <p>[page01] <h:commandButton value="page02" action="/page02" /></p>
 
   </h:form>
