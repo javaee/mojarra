@@ -29,7 +29,7 @@
 
   <p>The default implementation must support authoring A composite
   component is declared by creating a Facelets2 file inside of a resource
-  library.  (See section 2.6 of the specification prose document for
+  library.  (See section JSF.2.6 of the specification prose document for
   more information about resource libraries.)  A composite component
   must reside within a resource library.  It is not possible to create a
   composite component without putting it inside of a resource
@@ -298,7 +298,7 @@ apply.</p>
 
             </ul>
 
-            <p>For each of the behaviorial interfaces in Section 3.2 of
+            <p>For each of the behaviorial interfaces in Section JSF.3.2 of
             the specification, there is a tag in the
             <code>composite:</code> library to nest inside of the
             <code>&lt;composite:interface&gt;</code> section.

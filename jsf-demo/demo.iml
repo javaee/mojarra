@@ -3849,6 +3849,7 @@
       <sourceFolder url="file://$MODULE_DIR$/head-body/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/helloDuke/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/helloFacelet/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ifnavigation/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/j2meDemo/midlet" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/j2meDemo/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/mojarra_ext/src/java" isTestSource="false" />
@@ -3863,6 +3864,7 @@
       <excludeFolder url="file://$MODULE_DIR$/basic-ajax-edit/build" />
       <excludeFolder url="file://$MODULE_DIR$/basic-ajax/build" />
       <excludeFolder url="file://$MODULE_DIR$/guessNumber/build" />
+      <excludeFolder url="file://$MODULE_DIR$/ifnavigation/build" />
       <excludeFolder url="file://$MODULE_DIR$/test/build" />
     </content>
     <orderEntry type="library" name="GROOVY" level="application" />

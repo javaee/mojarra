@@ -60,7 +60,7 @@ import java.lang.annotation.Inherited;
  * the {@link #componentFamily} attribute is to be taken as the
  * <em>component-family</em>.  The implementation must guarantee that
  * for each class annotated with <code>FacesRenderer</code>, found with
- * the algorithm in section 11.5,
+ * the algorithm in section JSF.11.5,
  * the following actions are taken.</p>
 
  * <div class="changed_added_2_0">

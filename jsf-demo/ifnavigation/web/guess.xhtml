@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+ 
+    <f:view>
+    <body>
+        <h2>Make your guess</h2>
+
+        <p>You have #{numberGuess.remainingGuesses} remaining #{numberGuess.remainingGuesses == 1 ? 'guesses' : 'guess'}.</p>
+
+        <h:form id="guessForm">
+            <h:selectOneMenu value="#{numberGuess.currentGuess}">
+                <f:selectItems value="#{numberGuess.possibleGuesses}" var="number" itemValue="#{number}"/>
+            </h:selectOneMenu>
+            <h:commandButton action="#{numberGuess.guess}" value="Guess"/>
+        </h:form>
+    </body>
+    </f:view>
+</html>

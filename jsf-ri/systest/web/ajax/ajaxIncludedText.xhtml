@@ -1,0 +1,35 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Ajax Included Text Page</title>
+</h:head>
+<h:body>
+    <h:outputScript library="javax.faces" name="jsf.js" target="head"/>
+    <h1>Test included text with ajax</h1>
+    <h:form id="form1" prependId="true">
+        <h:panelGroup layout="block" id="outPanel">
+            <h:outputText id="out" value="outval"/><br/>
+            <span id="finalSpan1">Text should stay</span>
+        </h:panelGroup>
+        <br/>
+        <h:commandButton id="refresh"
+                         onclick="jsf.ajax.request(this,event, {render: 'form1:outPanel'}); return false;" />
+        Explicit parameters:
+    </h:form>
+    <h:form id="form2" prependId="true">
+        <h:panelGroup layout="block" id="outPanel">
+            <h:outputText id="out" value=""/><br/>
+            <span id="finalSpan2">Text should stay</span>
+        </h:panelGroup>
+        <br/>
+        <h:commandButton id="refresh"
+                         onclick="jsf.ajax.request(this,event, {render: 'form2:outPanel'}); return false;" />
+        Explicit parameters:
+    </h:form>
+</h:body>
+</html>

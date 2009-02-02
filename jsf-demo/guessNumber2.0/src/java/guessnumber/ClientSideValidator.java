@@ -48,6 +48,7 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
+import javax.faces.validator.FacesValidator;
 
 /**
  * <p>This validator splits the work between the client and the server.</p>
@@ -62,6 +63,7 @@ import javax.faces.validator.ValidatorException;
  * is triggered and this listener is invoked, the validator will add an
  * <code>onmouseout</code> event to be rendered by the output component.</p>
  */
+@FacesValidator(value="ClientSideValidator")
 @ResourceDependency(name="js/validator.js")
 public class ClientSideValidator implements Validator,
                                             ComponentSystemEventListener,

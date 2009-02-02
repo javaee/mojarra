@@ -324,7 +324,7 @@
         <xsd:annotation>
             <xsd:documentation>
 
-              Please see section 11.4.6 for the specification of this element.
+              Please see section JSF.11.4.6 for the specification of this element.
                 
             </xsd:documentation>
         </xsd:annotation>
@@ -383,7 +383,7 @@
             <xsd:documentation>
 
               Only relevant if this is placed within the /WEB-INF/faces-config.xml.
-              Please see section 11.4.6 for the specification for details.
+              Please see section JSF.11.4.6 for the specification for details.
 
             </xsd:documentation>
         </xsd:annotation>
@@ -1154,6 +1154,33 @@
 
     <!-- **************************************************** -->
 
+    <xsd:complexType name="faces-config-ifType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                The "if" element defines a condition that must resolve
+                to true in order for the navigation case on which it is
+                defined to be matched, with the existing match criteria
+                (action method and outcome) as a prerequiste, if present.
+                The condition is defined declaratively using an value
+                expression in the body of this element. The expression is
+                evaluated at the time the navigation case is being matched.
+                If the "from-outcome" is omitted and this element is
+                present, the navigation handler will match a null outcome
+                and use the condition return value to determine if the
+                case should be considered a match.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="javaee:faces-config-el-expressionType">
+                <xsd:attribute name="id" type="xsd:ID"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <!-- **************************************************** -->
+
     <xsd:complexType name="faces-config-converterType">
         <xsd:annotation>
             <xsd:documentation>
@@ -1703,19 +1730,29 @@
                         of a UICommand component.  If specified, this rule 
                         will be relevant only if the outcome value matches 
                         this element's value.  If not specified, this rule 
-                        will be relevant no matter what the outcome value was.
+                        will be relevant if the outcome value is non-null
+                        or, if the "if" element is present, will be relevant
+                        for any outcome value, with the assumption that the
+                        condition specified in the "if" element ultimately
+                        determines if this rule is a match.
 
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
+            <xsd:element name="if"
+                         type="javaee:faces-config-ifType"
+                         minOccurs="0">
+            </xsd:element>
             <xsd:element name="to-view-id"
-                         type="javaee:string">
+                         type="javaee:faces-config-valueType">
                 <xsd:annotation>
                     <xsd:documentation>
 
                         The "to-view-id" element contains the view identifier 
                         of the next view that should be displayed if this
-                        navigation rule is matched.
+                        navigation rule is matched. If the contents is a
+                        value expression, it should be resolved by the
+                        navigation handler to obtain the view identifier.
 
                     </xsd:documentation>
                 </xsd:annotation>

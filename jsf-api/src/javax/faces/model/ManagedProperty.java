@@ -49,7 +49,7 @@ import java.lang.annotation.Target;
  * <p class="changed_added_2_0">The presence of this annotation on a
  * field of a class annotated with {@link ManagedBean} instructs the
  * system to inject a value into this property as described in section
- * 5.3 of the spec prose document in the
+ * JSF.5.3 of the spec prose document in the
  * <code>&lt;managed-property&gt;</code> subsection. The time of
  * instantiation is dictated by the value of the attributes on the usage
  * of <code>ManagedBean</code> and by the application logic itself.  The
