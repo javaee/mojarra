@@ -481,11 +481,11 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             }
             caseStruct.viewId = viewIdToTest;
             caseStruct.navCase = new NavigationCase(currentViewId,
-                                                    fromAction,
-                                                    outcome,
-                                                    null,
-                                                    null,
-                                                    isRedirect);
+                    fromAction,
+                    outcome,
+                    null,
+                    viewIdToTest,
+                    isRedirect);
             return caseStruct;
         }
 
