@@ -1198,7 +1198,7 @@
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/SelectManyCollectionTestCase.class"/>
             </tests>
-        </jsf.junit>
+        </jsf.junit>  
     </target>
 
 </project>

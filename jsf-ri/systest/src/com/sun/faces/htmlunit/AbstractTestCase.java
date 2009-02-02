@@ -406,4 +406,8 @@ public abstract class AbstractTestCase extends TestCase {
         return expected.equals(getText(element));
     }
 
+    protected void checkTrue(String element, String expected) {
+        assertTrue(element+":- Expected '"+expected+"', but received '"+getText(element)+"'", check(element,expected));
+    }
+
 }
