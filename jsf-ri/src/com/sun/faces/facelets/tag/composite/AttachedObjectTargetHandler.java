@@ -122,7 +122,7 @@ public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
         }
         
         this.nextHandler.apply(ctx, parent);
-
+        
     }
 
 }
