@@ -91,7 +91,7 @@ public final class CompositeTagLibrary implements TagLibrary {
     public CompositeTagLibrary(TagLibrary[] libraries) {
         this(libraries, null);
     }
-
+    
     /*
      * (non-Javadoc)
      * 
@@ -123,7 +123,7 @@ public final class CompositeTagLibrary implements TagLibrary {
             if (ProjectStage.Development == context.getApplication().getProjectStage()) {
                 if (null != t &&
                     !ns.equals("http://www.w3.org/1999/xhtml")) {
-                    // messageHolder will only be null in the case of the private
+                    // messageHolder will only be null in the case of the private 
                     // EMPTY_LIBRARY class variable of the Compiler class.
                     // This code will never be called on that CompositeTagLibrary
                     // instance.
@@ -133,7 +133,7 @@ public final class CompositeTagLibrary implements TagLibrary {
                         List<FacesMessage> prefixMessages = this.messageHolder.getNamespacePrefixMessages(context, prefix);
                         prefixMessages.add(new FacesMessage(FacesMessage.SEVERITY_WARN,
                                 "Warning: This page calls for XML namespace " + ns +
-                                " declared with prefix " + prefix +
+                                " declared with prefix " + prefix + 
                                 " but no taglibrary exists for that namespace.", ""));
                     }
                 }
@@ -152,7 +152,7 @@ public final class CompositeTagLibrary implements TagLibrary {
         }
         return result;
     }
-
+    
     /*
      * (non-Javadoc)
      * 
