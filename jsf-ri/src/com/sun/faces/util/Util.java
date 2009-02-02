@@ -437,14 +437,14 @@ public class Util {
             // and search for a match in the faceletsViewMappings
             for (j = 0; j < faceletsViewMappings.length; j++) {
                 if (null != faceletsViewMappings[j]) {
-                    // If this is a prefix mapping, it would have been
+                    // If this is a prefix mapping, it would have been 
                     // handled before getting this far.  Therefore, we
                     // can skip prefix mapped entries.
                     if (faceletsViewMappings[j].startsWith("/")) {
                         continue;
                     }
                     // Look for an exact match
-                    if (true == (foundMatch =
+                    if (true == (foundMatch = 
                             faceletsViewMappings[j].equals(candidateViewId))) {
                         break;
                     } else {
@@ -452,7 +452,7 @@ public class Util {
                         // PENDING(rlubke): do a more robust wild card
                         // matching thing here.
                         if (faceletsViewMappings[j].startsWith("*.")) {
-                            String
+                            String 
                                     faceletsViewCopy = faceletsViewMappings[j],
                                     candidateCopy = candidateViewId;
                             if (-1 == (i = candidateCopy.lastIndexOf(".")) || 0 == i) {
