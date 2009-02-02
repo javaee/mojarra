@@ -85,10 +85,12 @@ public class DynamicStateBean {
         UIComponent
                 form = findForm(context);
         HtmlCommandButton button;
-        button = new HtmlCommandButton();
-        button.setId("cbutton");
-        button.setValue("added button");
-        form.getChildren().add(button);
+        if (null == (button = (HtmlCommandButton) findButton(context))) {
+            button = new HtmlCommandButton();
+            button.setId("cbutton");
+            button.setValue("added button");
+            form.getChildren().add(button);
+        }
     }
     
     private UIComponent findButton(FacesContext context) {
