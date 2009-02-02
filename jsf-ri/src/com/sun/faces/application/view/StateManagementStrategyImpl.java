@@ -290,10 +290,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         // Build the tree to initial state
         UIViewRoot viewRoot = context.getApplication().getViewHandler().createView(context, viewId);
 
-        LOGGER.log(Level.FINE, "Start: initial state tree");
-        DebugUtil.printTree(viewRoot, LOGGER, Level.FINE);
-        LOGGER.log(Level.FINE, "End: initial state tree");
-        
         final Map<String, Object> state = (Map<String,Object>) rsm.getState(context, viewId);
 
         if (null != state) {
@@ -318,10 +314,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 }
 
             });
-            
-            LOGGER.log(Level.FINE, "Start: Tree with postback state applied, but no dynamic components");
-            DebugUtil.printTree(viewRoot, LOGGER, Level.FINE);
-            LOGGER.log(Level.FINE, "End");
             
             // Handle dynamic add/removes
             
@@ -370,10 +362,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         } else {
             viewRoot = null;
         }
-        LOGGER.log(Level.FINE, "Start: Tree with all postback state applied");
-        DebugUtil.printTree(viewRoot, LOGGER, Level.FINE);
-        LOGGER.log(Level.FINE, "End");
-        
 
         return viewRoot;
 

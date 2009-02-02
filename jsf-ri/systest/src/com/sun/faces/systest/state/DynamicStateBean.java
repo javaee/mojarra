@@ -34,7 +34,7 @@
  * holder.
  */
 
-package com.sun.faces.systest.model;
+package com.sun.faces.systest.state;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;

@@ -161,6 +161,7 @@
                 test.component,
                 test.component01,
                 test.navigation,
+                test.state,
                 test.resourceBundleELResolver,
                 test.tlvalidator,
                 test.standard,
@@ -566,6 +567,20 @@
             </tests>
         </jsf.junit>         
         
+
+    </target>
+
+    <target name="test.state"
+            description="Test new state manager">
+        
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/state/*TestCase.class"/>
+            </tests>
+        </jsf.junit>  
 
     </target>
 
@@ -1203,7 +1218,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/SelectManyCollectionTestCase.class"/>
+                         includes="com/sun/faces/systest/state/*TestCase.class"/>
             </tests>
         </jsf.junit>  
     </target>
