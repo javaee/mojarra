@@ -125,7 +125,7 @@ public class WcagDataTableTestCase extends AbstractTestCase {
     public void testReplaceStateManager() throws Exception {
         HtmlPage page = getPage("/faces/index.jsp");
         String pageText = page.asXml();
-        System.out.println(pageText);
+        //System.out.println(pageText);
         // (?s) is an "embedded flag expression" for the "DOTALL" operator.
         // It says, "let . match any character including line terminators."
         // Because page.asXml() returns a big string with lots of \r\n chars
