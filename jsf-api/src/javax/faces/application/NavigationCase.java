@@ -40,8 +40,11 @@
 
 package javax.faces.application;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 /**
@@ -104,6 +107,58 @@ public class NavigationCase {
 
 
     // ---------------------------------------------------------- Public Methods
+
+    /**
+     * <p class="changed_added_2_0">Construct an absolute URL to this
+     * <code>NavigationCase</code> instance using {@link
+     * javax.faces.application.ViewHandler#getActionURL} on the path
+     * portion of the url.  The default implementation of this method
+     * return <code>null</code>.  Implementations must override this
+     * method to perform the correct action as specified.</p>
+     *
+     * @since 2.0
+     *
+     * @throws MalformedURLException if the process of constructing the
+     * URL causes this exception to be thrown.
+     */
+
+    public URL getActionURL() throws MalformedURLException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        URL result = null;
+        result = new URL(extContext.getRequestScheme(),
+                extContext.getRequestServerName(),
+                extContext.getRequestServerPort(),
+                context.getApplication().getViewHandler().getActionURL(context, getToViewId(context)));
+        return result;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Construct an absolute URL to this
+     * <code>NavigationCase</code> instance using {@link
+     * javax.faces.application.ViewHandler#getResourceURL} on the path
+     * portion of the url.  The default implementation of this method
+     * return <code>null</code>.  Implementations must override this
+     * method to perform the correct action as specified.</p>
+     *
+     * @since 2.0
+     *
+     * @throws MalformedURLException if the process of constructing the
+     * URL causes this exception to be thrown.
+     */
+
+    public URL getResourceURL() throws MalformedURLException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        URL result = null;
+        result = new URL(extContext.getRequestScheme(),
+                extContext.getRequestServerName(),
+                extContext.getRequestServerPort(),
+                context.getApplication().getViewHandler().getResourceURL(context, getToViewId(context)));
+
+        return result;
+    }
+
 
 
     /**
