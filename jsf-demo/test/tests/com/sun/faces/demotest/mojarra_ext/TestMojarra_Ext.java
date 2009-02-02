@@ -39,8 +39,6 @@
  */
 package com.sun.faces.demotest.mojarra_ext;
 
-import javax.faces.component.NamingContainer;
-
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -51,6 +49,7 @@ import com.sun.faces.demotest.HtmlUnitTestCase;
 
 public class TestMojarra_Ext extends HtmlUnitTestCase {
 
+    final private String SEP = ":";
 
     /*
      * Check that we get the validation message for incorrect entry, with RegEx.
@@ -84,7 +83,7 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
 
 
         HtmlTextInput input = (HtmlTextInput) form.getInputByName(
-                formName + NamingContainer.SEPARATOR_CHAR + inputName);
+                formName + ":" + inputName);
         assertTrue(input != null);
 
 
@@ -92,8 +91,8 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
         input.setValueAttribute(incorrectValue);
 
         // "click" the submit button to send the value
-        HtmlPage resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        HtmlPage resultPage = (HtmlPage) form.getButtonByName(
+                formName + SEP + submitButtonName).click();
         assertTrue(resultPage != null);
 
         assertTrue(resultPage.getTitleText().equals(welcomeTitle));
@@ -101,7 +100,7 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
 
         // check for the validation message
         HtmlElement validationElement = resultPage.getHtmlElementById(
-                formName + NamingContainer.SEPARATOR_CHAR + validationMessageName);
+                formName + ":" + validationMessageName);
 
         assertTrue(validationElement != null);
 
@@ -115,8 +114,8 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
         input.setValueAttribute(correctValue);
 
         // "click" the submit button to send the value
-        resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        resultPage = (HtmlPage) form.getButtonByName(
+                formName + SEP + submitButtonName).click();
         assertTrue(resultPage != null);
 
         assertTrue(resultPage.getTitleText().equals(secondTitle));
@@ -154,15 +153,15 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
 
 
         HtmlTextInput input = (HtmlTextInput) form.getInputByName(
-                formName + NamingContainer.SEPARATOR_CHAR + inputName);
+                formName + ":" + inputName);
         assertTrue(input != null);
         
         // Set first incorrect value
         input.setValueAttribute(incorrectValue1);
 
         // "click" the submit button to send the value
-        HtmlPage resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        HtmlPage resultPage = (HtmlPage) form.getButtonByName(
+                formName + SEP + submitButtonName).click();
         assertTrue(resultPage != null);
 
         assertTrue(resultPage.getTitleText().equals(welcomeTitle));
@@ -170,7 +169,7 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
 
         // check for the validation message
         HtmlElement validationElement = resultPage.getHtmlElementById(
-                formName + NamingContainer.SEPARATOR_CHAR + validationMessageName);
+                formName + ":" + validationMessageName);
 
         assertTrue(validationElement != null);
 
@@ -180,15 +179,15 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
         input.setValueAttribute(incorrectValue2);
 
         // "click" the submit button to send the value
-        resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        resultPage = (HtmlPage) form.getButtonByName(
+                formName + SEP + submitButtonName).click();
         assertTrue(resultPage != null);
 
         assertTrue(resultPage.getTitleText().equals(welcomeTitle));
 
         // check for the validation message
         validationElement = resultPage.getHtmlElementById(
-                formName + NamingContainer.SEPARATOR_CHAR + validationMessageName);
+                formName + SEP + validationMessageName);
 
         assertTrue(validationElement != null);
 
@@ -199,8 +198,8 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
         input.setValueAttribute(correctValue);
 
         // "click" the submit button to send the value
-        resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        resultPage = (HtmlPage) form.getButtonByName(
+                formName + SEP + submitButtonName).click();
         assertTrue(resultPage != null);
 
         assertTrue(resultPage.getTitleText().equals(secondTitle));

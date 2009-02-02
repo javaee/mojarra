@@ -196,7 +196,7 @@ public class HtmlUnitTestCase extends TestCase {
         if (null == list) {
             list = new ArrayList();
         }
-        iter = root.getAllHtmlChildElements();
+        iter = root.getAllHtmlChildElements().iterator();
         while (iter.hasNext()) {
             getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
                                        matchClass);
