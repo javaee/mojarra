@@ -159,8 +159,8 @@ public class NavigationCase {
         return result;
     }
 
-
-
+    
+    
     /**
      * <p class="changed_added_2_0">Return the
      * <code>&lt;from-view-id&gt;</code> of the
