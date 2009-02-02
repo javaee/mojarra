@@ -47,6 +47,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -246,6 +247,17 @@ public class NavigationTestCase extends AbstractTestCase {
             assertTrue(false);
         }
         
+    }
+
+
+    public void testNullOutcomeNoMessage() throws Exception {
+        HtmlPage page = getPage("/faces/standard/selectmany05.xhtml");
+
+        HtmlInput input = getInputContainingGivenId(page, "command");
+        page = (HtmlPage) input.click();
+
+        // if there is no outcome, no message should be displayed to the user
+        assertTrue(!page.asText().contains("javax_faces_developmentstage_messages"));
     }
 
 }
