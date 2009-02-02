@@ -80,12 +80,17 @@
 
     <context-param>
         <param-name>facelets.VIEW_MAPPINGS</param-name>
-        <param-value>*.xhtml</param-value>
+        <param-value>/resources/composite/*;*.xhtml</param-value>
     </context-param>
 
     <context-param>
         <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
         <param-value>.jsp</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
     </context-param>
 
     <context-param>
@@ -113,6 +118,12 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.faces</url-pattern>
+    </servlet-mapping>
+
 
     <env-entry>
         <env-entry-name>welcomeMessage</env-entry-name>

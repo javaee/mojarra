@@ -151,6 +151,30 @@
         <f:selectItems value="#{select05.possibleValues}"/>
     </h:selectManyListbox>
 
+    <!-- //////////////////////////////////////////////////////////// -->
+
+    <p>
+        int values
+    </p>
+     <h:selectManyListbox id="intList1" value="#{select05.selectedIntValues}">
+        <f:selectItems value="#{select05.intOptions}"
+                       var="x"
+                       itemLabel="#{x}"
+                       itemDescription="#{x}"/>
+    </h:selectManyListbox>
+
+    <!-- //////////////////////////////////////////////////////////// -->
+
+    <p>
+        Integer values
+    </p>
+     <h:selectManyListbox id="integerList1" value="#{select05.selectedIntegerValues}">
+        <f:selectItems value="#{select05.integerOptions}"
+                       var="n"
+                       itemLabel="#{n}"
+                       itemDescription="#{n}"/>
+    </h:selectManyListbox>
+
     <p>
     <h:commandButton id="command" value="Submit" />
     </p>

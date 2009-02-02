@@ -1,7 +1,8 @@
 <!--
+
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -32,36 +33,39 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
+
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core">
-    <h:head>
-        <title>Test that f:event handles events correctly</title>
-    </h:head>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ez="http://java.sun.com/jsf/composite/composite">
+<h:head>
+<title>Using jsr276 in a composite component</title>
+<style type="text/css">
+.grayBox { padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9;  }
+</style>
+</h:head>
 
-    <h:body>
-    <h1>Test that f:event handles events correctly</h1>
+<h:body>
+
+  <ui:debug hotkey="p" rendered="true"/>
+
+<h:form>
+
+<h1>Correct usage</h1>
+
+  <p><ez:jsr276Correct01 /></p>
+
+<h1>Incorrect usage</h1>
+
+  <p><ez:jsr276Incorrect01 /></p>
 
 
-    <h:form id="form" prependId="false">
-        <h:outputText id="beforeRenderTest1" >
-            <f:event type="beforeRender" action="#{eventTagBean.beforeEncode}" />
-        </h:outputText>
-        <br />
-        <h:outputText id="beforeRenderTest2" >
-            <f:event type="javax.faces.event.beforeRender" action="#{eventTagBean.beforeEncode}" />
-        </h:outputText>
-        <br />
-        <h:outputText id="afterAddToParentTest1" >
-            <f:event type="afterAddToParent" action="#{eventTagBean.beforeEncode}" />
-        </h:outputText>
-        <br />
-        <h:outputText id="afterAddToParentTest2" >
-            <f:event type="javax.faces.event.afterAddToParent" action="#{eventTagBean.beforeEncode}" />
-        </h:outputText>
-        <h:commandButton id="click" value="Click" />
-    </h:form>
-  </h:body>
+
+</h:form>
+
+</h:body>
+
 </html>

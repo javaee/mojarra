@@ -33,35 +33,27 @@
  only if the new code is made subject to such option by the copyright
  holder.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core">
-    <h:head>
-        <title>Test that f:event handles events correctly</title>
-    </h:head>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ez="http://java.sun.com/jsf/composite/composite">
+<head>
+    <title>conditionalCCAttributeRendering</title>
+</head>
 
-    <h:body>
-    <h1>Test that f:event handles events correctly</h1>
-
-
-    <h:form id="form" prependId="false">
-        <h:outputText id="beforeRenderTest1" >
-            <f:event type="beforeRender" action="#{eventTagBean.beforeEncode}" />
-        </h:outputText>
-        <br />
-        <h:outputText id="beforeRenderTest2" >
-            <f:event type="javax.faces.event.beforeRender" action="#{eventTagBean.beforeEncode}" />
-        </h:outputText>
-        <br />
-        <h:outputText id="afterAddToParentTest1" >
-            <f:event type="afterAddToParent" action="#{eventTagBean.beforeEncode}" />
-        </h:outputText>
-        <br />
-        <h:outputText id="afterAddToParentTest2" >
-            <f:event type="javax.faces.event.afterAddToParent" action="#{eventTagBean.beforeEncode}" />
-        </h:outputText>
-        <h:commandButton id="click" value="Click" />
+<body>
+    <ez:conditionalAttributeRendering style="#{sessionScope.style}"/>
+    <h:form id="form">
+        <h:commandButton id="add" value="Set Attribute">
+            <f:setPropertyActionListener value="color:red" target="#{sessionScope.style}"/>
+        </h:commandButton>
+        <h:commandButton id="remove" value="Remove Attribute">
+            <f:setPropertyActionListener value="#{''}" target="#{sessionScope.style}"/>
+        </h:commandButton>
     </h:form>
-  </h:body>
+</body>
 </html>

@@ -13,19 +13,19 @@
     <h1>Test defaults without Prepended Ids</h1>
     <h:form id="form1" prependId="false">
         <h:panelGroup layout="block" id="outPanel">
-        <h:outputText id="out1" value="#{ajaxrequest.echo}"/>
-        <br/>
-        <h:outputText id="echo1Out" value="#{ajaxrequest.echo1}"/>
-        <br/>
-        <h:outputText id="echo2Out" value="#{ajaxrequest.echo2}"/>
-        <br/>
-        <h:outputText id="echo3Out" value="#{ajaxrequest.echo3}"/>
-        <br/>
-        <h:outputText id="echo4Out" value="#{ajaxrequest.echo4}"/>
-        <br/>
+            <h:outputText id="out1" value="#{ajaxrequest.echo}"/>
+            <br/>
+            <h:outputText id="echo1Out" value="#{ajaxrequest.echo1}"/>
+            <br/>
+            <h:outputText id="echo2Out" value="#{ajaxrequest.echo2}"/>
+            <br/>
+            <h:outputText id="echo3Out" value="#{ajaxrequest.echo3}"/>
+            <br/>
+            <h:outputText id="echo4Out" value="#{ajaxrequest.echo4}"/>
+            <br/>
+        </h:panelGroup>
         <h:commandButton id="refresh"
                          onclick="jsf.ajax.request(this,event, {render: 'outPanel'}); return false;" />
-        </h:panelGroup>
         Explicit parameters:
         <h:inputText id="edit1" value="#{ajaxrequest.echo1}"
                             onchange="jsf.ajax.request(this,event, {execute:'edit1', render: 'edit1'});"
