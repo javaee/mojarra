@@ -74,6 +74,7 @@ import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 
 /**
  * @author Jacob Hookom
@@ -149,13 +150,15 @@ public final class CompositionHandler extends TagHandlerImpl implements
             }
 
             ctx.extendClient(this);
+            String path = null;
             try {
-                ctx.includeFacelet(parent, this.template.getValue(ctx));
-            } catch (FileNotFoundException fnfe) {
+                path = this.template.getValue(ctx);                
+                ctx.includeFacelet(parent, path);
+            } catch (IOException e) {
                 if (log.isLoggable(Level.FINE)) {
-                    log.log(Level.FINE, fnfe.toString(), fnfe);
+                    log.log(Level.FINE, e.toString(), e);
                 }
-                throw new FileNotFoundException("template not found: " + template.toString());
+                throw new TagAttributeException(this.tag, this.template, "Invalid path : " + path);
             } finally {
                 ctx.popClient(this);
                 ctx.setVariableMapper(orig);
