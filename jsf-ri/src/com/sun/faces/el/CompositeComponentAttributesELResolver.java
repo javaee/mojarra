@@ -376,7 +376,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
 
         }
 
-
+        
         public Set<Map.Entry<String,Object>> entrySet() {
 
             Set<Map.Entry<String,Object>> entries = new HashSet<Map.Entry<String,Object>>();
