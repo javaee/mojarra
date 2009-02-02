@@ -162,7 +162,7 @@ public class DeclareFacetHandler extends TagHandlerImpl {
         }
         
         this.nextHandler.apply(ctx, parent);
-
+        
     }
 
 }
