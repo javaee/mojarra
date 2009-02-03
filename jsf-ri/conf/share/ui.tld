@@ -734,9 +734,11 @@ means that you can pass objects to either an included file or a template.
             <![CDATA[
 <div class="changed_added_2_0">
 	
-<p>Use this tag as an alternative to <code>h:dataTable</code> or <code>c:forEach</code>, especially when
-you are using the <code>jsfc</code> feature of Facelets. You can specify this component as the
-value of the <code>jsfc</code> attribute, like this: &lt;div... jsfc="ui:repeat" value="#{contacts}" var="contact"&gt;...
+<p>Use this tag as an alternative to <code>h:dataTable</code> or
+<code>c:forEach</code>, especially when you are using the
+<code>jsfc</code> feature of Facelets. You can specify this component as
+the value of the <code>jsfc</code> attribute, like this:
+&lt;div... jsfc="ui:repeat" value="#{contacts}" var="contact"&gt;...
 </p>
 </div>
 ]]>
@@ -747,26 +749,160 @@ value of the <code>jsfc</code> attribute, like this: &lt;div... jsfc="ui:repeat"
         <body-content>
             JSP
         </body-content>
+
         <attribute>
+
             <description>
 
                 <![CDATA[
 <div class="changed_added_2_0">
 
+<p>Read-write property setting the offset from the beginning of the
+collection from which to start the iteration.  If not set, this offset
+is not considered and iteration will start at the beginning of the
+collection.</p>
 
 </div>]]>
 
             </description>
-            <name>
-				The name of a collection of items that this tag iterates over. That collection can also map or an array.
-				If the collection is null, this tag does nothing.
-            </name>
+            <name>offset</name>
             <required>
 				true
             </required>
             <deferred-value>
                 <type>
-                    java.lang.String
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+
+<p>Read-write property setting the size of the collection to iterate.
+If this value is less than the actual size of the collection, a
+<code>FacesException</code> must be thrown.</p>
+
+</div>]]>
+
+            </description>
+            <name>size</name>
+            <required>
+				true
+            </required>
+            <deferred-value>
+                <type>
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+
+                <![CDATA[ <div class="changed_added_2_0"><p>Iteration
+                will only process every step items of the collection,
+                starting with the first one.</p></div>]]>
+
+            </description>
+            <name>step</name>
+            <required>
+				true
+            </required>
+            <deferred-value>
+                <type>
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+
+
+        <attribute>
+
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+
+<p>The name of a collection of items that this tag iterates over.  The
+collection may be a <code>List</code>, <code>array</code>,
+<code>java.sql.ResultSet</code>, or an individual java Object.  If the
+collection is null, this tag does nothing.</p>
+
+</div>]]>
+
+            </description>
+            <name>value</name>
+            <required>
+				true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.Object
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+
+                <![CDATA[ <div class="changed_added_2_0"><p>Name of the
+                exported scoped variable for the current item of the
+                iteration. This scoped variable has nested
+                visibility. Its type depends on the object of the
+                underlying collection</p></div>]]>
+
+            </description>
+            <name>var</name>
+            <required>
+				true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.Object
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+
+                <![CDATA[ <div class="changed_added_2_0"><p>Name of the
+                exported request scoped variable for the status of the
+                iteration. Object is a POJO with the following read-only
+                JavaBeans properties. This scoped variable has nested
+                visibility.</p>
+
+                <p><code>begin</code> of type Integer</p>
+
+                <p><code>end</code> of type Integer</p>
+
+                <p><code>index</code> of type int</p>
+
+                <p><code>step</code> of type Integer</p>
+
+                <p><code>even</code> of type boolean</p>
+
+                <p><code>odd</code> of type boolean</p>
+
+                <p><code>first</code> of type boolean</p>
+
+                <p><code>last</code> of type boolean</p>
+
+                </div>]]>
+
+            </description>
+            <name>varStatus</name>
+            <required>
+				true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.Object
                 </type>
             </deferred-value>
         </attribute>
