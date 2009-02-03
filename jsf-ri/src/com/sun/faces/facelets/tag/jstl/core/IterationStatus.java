@@ -70,6 +70,8 @@ public final class IterationStatus implements Serializable {
     
     private final boolean last;
 
+    private final boolean even;
+
     private final Integer begin;
 
     private final Integer end;
@@ -86,6 +88,7 @@ public final class IterationStatus implements Serializable {
         this.step = step;
         this.first = first;
         this.last = last;
+        this.even = ((index - begin) / step) % 2 == 0;
     }
 
     public boolean isFirst() {
@@ -94,6 +97,14 @@ public final class IterationStatus implements Serializable {
 
     public boolean isLast() {
         return this.last;
+    }
+
+    public boolean isEven() {
+        return even;
+    }
+
+    public boolean isOdd() {
+        return !even;
     }
 
     public Integer getBegin() {
