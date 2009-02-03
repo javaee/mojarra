@@ -1,0 +1,37 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Ajax Request Test Page</title>
+</h:head>
+<h:body>
+<script type="text/javascript">
+    var statusUpdate = function statusUpdate(data) {
+        var statusArea = document.getElementById("statusArea");
+        var text = statusArea.value;
+        text = text + "Name: "+data.source.id;
+        if (data.type === "event") {
+            text = text +" Event: "+data.name+" ";
+        } else {  // otherwise, it's an error
+            text = text + " Error: "+data.name+" ";
+        }
+        statusArea.value = text;
+    }
+</script>
+    <h:outputScript library="javax.faces" name="jsf.js"/>
+    <h1>Simple Error Test</h1>
+    <h:form id="errorForm">
+        <h:inputText id="out1" value="#{ajaxerror.number}"/>
+        <br/>
+        <!-- Increment the counter on the server, and the client -->
+        <h:commandButton id="button1" value="Set" type="button"
+                         onclick="jsf.ajax.request(this, event, {execute: this.id, render: 'countForm:out1'});"/>
+        <br/>
+        <h:commandButton id="button2" value="Submit" type="submit"/>
+    </h:form>
+</h:body>
+</html>

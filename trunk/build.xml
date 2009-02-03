@@ -1,0 +1,365 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+
+<!-- ************ JSF build file ************************************** -->
+
+<project name="mojarra" default="main" basedir=".">
+
+    <!-- ************ Per user local properties ******************************* -->
+
+    <property file="build.properties"/>
+    <property environment="myenv"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+    <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="javaserverfaces-spec-eg.dir" value="${basedir}/../javaserverfaces-spec-eg"/>
+
+
+    <property name="LICENSEFILE"
+              value="${basedir}/legal/jsf-cddl/LICENSE.txt"/>
+
+    <!-- ************ Compiler Defaults *************************************** -->
+
+
+    <!-- ************ Executable Targets ************************************** -->
+    
+    <macrodef name="call.modules">
+        <attribute name="target"/>
+        <sequential>
+            <subant target="@{target}" inheritAll="false">
+                <filelist dir="${api.dir}">
+                    <file name="build.xml"/>
+                </filelist>    
+                <filelist dir="${impl.dir}">
+                    <file name="build.xml"/>
+                </filelist>
+                <filelist dir="${demo.dir}">
+                    <file name="build.xml"/>
+                </filelist>
+            </subant>
+        </sequential>
+    </macrodef>
+
+    <target name="clean"
+            description="Clean build and distribution directories">       
+        <delete file="mojarra-samples.zip"/>
+        <delete dir="${basedir}/build"/>
+        <delete dir="${dist.dir}"/>
+        <call.modules target="clean"/>        
+        <ant dir="jsf-demo" target="clean" />
+        <ant dir="updatecenter" target="updatecenter.clean" />
+        <ant dir="updatecenter2" target="updatecenter2.clean" />
+    </target>  
+
+    <target name="modules.clean">
+      <call.modules target="clean"/>        
+    </target>
+
+    <target name="main" description="Build Mojarra">
+        <call.modules target="main"/>
+    </target>
+
+    <target name="test" description="Run API, Impl, and Demo automated tests">
+        <call.modules target="test"/>
+    </target>
+
+    <target name="test.with.container.refresh"
+            description="Stop the target container, deploy the build artifacts, restart the container and test">
+        <trycatch>
+            <try>
+                <container.stop/>
+                <antcall target="container.deploy"/>
+                <container.start/>
+                <call.modules target="test"/>
+            </try>
+            <finally>
+                <container.stop/>
+            </finally>
+        </trycatch>
+    </target>
+
+    <target name="build.and.deploy" depends="clean, main"
+            description="Clean, build, and deploy, without running tests">
+        <trycatch>
+                <try>
+                    <container.stop/>
+                    <antcall target="container.deploy"/>
+                    <container.start/>
+                </try>
+        </trycatch>
+    </target>
+
+
+    <!-- Create the source distribution -->
+    <target name="jsf.source">                
+        <zip destfile="${dist.dir}/mojarra-${impl.version}-source.zip">
+
+            <zipfileset dir="${basedir}"
+                        excludes="**/*.class,
+                                  **/build.properties/**,
+                                  **/CVS/**,
+                                  **/build/javadocs/**,
+                                  **/build/classes/**,
+                                  **/build/lib/**,
+                                  **/build/generate/facesdoc/**,
+                                  **/build/generate/last-generation,
+                                  **/build/pdldocs/**,
+                                  **/build/generate/last-taglib-generation,
+                                  **/build/generate/conf/**,
+                                  **/build/TAG*txt,
+                                  **/dist/**,
+                                  **/www/**,
+                                  **/jsf-demo/**,
+                                  **/dependencies/**,
+                                  **/test-sqe/**,
+                                  **/contrib/**,
+                                  **/repo/**"
+                        prefix="mojarra-${impl.version}-sources"/>
+             <zipfileset dir="${basedir}"
+                        includes="${basedir}/build.xml" prefix="mojarra-${impl.version}-sources"/>
+
+        </zip>
+        
+        <!-- create a special source bundle for GlassFish Java EE 5 docs -->
+        <mkdir dir="${basedir}/srctemp/jsf-${spec.version}-javadoc-src/jsf-api/src"/>
+            <copy todir="${basedir}/srctemp/jsf-${spec.version}-javadoc-src/jsf-api/src">
+                <fileset dir="${api.dir}/src" excludes="**/CVS/**"/>
+                <fileset dir="${api.dir}/build/generate" includes="**/javax/**"/>
+            </copy>
+            <jar destfile="${dist.dir}/glassfish-jsf-${impl.version}-src.jar"
+                 basedir="${basedir}/srctemp"/>
+        <delete dir="${basedir}/srctemp"/>
+    </target>
+
+   <target name="prepare.build.java.net" description="Build distribution files"
+           depends="main">
+        
+        <mkdir dir="${dist.dir}" />
+
+        <ant dir="${demo.dir}" 
+             antfile="build.xml"
+             target="dist" 
+             inheritAll="false"/>
+
+        <copy file="${demo.dir}/mojarra-${impl.version}.zip"
+              tofile="${dist.dir}/mojarra-${impl.version}-binary.zip"/>
+       
+        <copy file="${demo.dir}/glassfish-jsf-${impl.version}.jar"
+              todir="${dist.dir}"/>
+
+        <delete file="${demo.dir}/glassfish-jsf-${impl.version}.jar"/>
+        <delete file="${demo.dir}/mojarra-${impl.version}.zip"/>
+
+        <ant target="jsf.source"/>
+
+   </target>
+
+   <target name="copy.spec.pdf" if="spec-eg-dir-available">
+
+       <copy todir="${spec.snapshot.dir}" flatten="true">
+
+         <fileset dir="${javaserverfaces-spec-eg.dir}">
+
+           <include name="**/*${build.number}*.pdf" />
+
+         </fileset>
+
+       </copy>
+
+   </target>
+
+   <target name="build.spec.snapshot" depends="prepare.build.java.net">
+
+       <available type="dir" file="${javaserverfaces-spec-eg.dir}"
+                  property="spec-eg-dir-available" />
+
+       <antcall target="copy.spec.pdf" />
+
+       <filter token="build.number" value="${build.number}" />
+       <filter token="spec.version" value="${spec.version}" />
+       <filter token="build.type" value="${build.type}" />
+
+       <copy filtering="true"
+             file="${basedir}/docs/build.javadocs.dist-index.html"
+             tofile="${spec.snapshot.dir}/index.html">
+       </copy>
+
+
+        <!-- Create the jsdocs distribution -->
+        <java fork="true" jar="${jsdoc.home}/jsdoc-toolkit/jsrun.jar">
+                    <arg line="${jsdoc.home}/jsdoc-toolkit/app/run.js"/>
+                    <arg line="-a"/>
+                    <arg line="-d=${spec.snapshot.dir}/jsdocs"/>
+                    <arg line="-t=${jsdoc.home}/jsdoc-toolkit/templates/jsdoc"/>
+                    <arg value="${basedir}/jsf-api/resources/jsf.js"/>
+        </java>
+
+        <!-- Create the javadocs distribution -->
+        <unzip dest="${spec.snapshot.dir}"
+               src="${demo.dir}/dist/docs/javadocs-${impl.version}.zip" />
+        <unzip dest="${spec.snapshot.dir}"
+               src="${demo.dir}/dist/docs/renderkitdocs-${impl.version}.zip" />
+        <unzip dest="${spec.snapshot.dir}"
+               src="${demo.dir}/dist/docs/pdldocs-${impl.version}.zip" />
+
+        <zip destfile="${dist.dir}/jsf-spec-${spec.version}-${build.number}.zip">
+            <zipfileset dir="${spec.snapshot.dir}"
+                        prefix="jsf-spec-${spec.version}-${build.number}"/>
+        </zip>
+
+  </target>
+
+    <target name="build.java.net"
+            depends="prepare.build.java.net">
+
+        <antcall target="build.as.updater.jars" />
+
+    </target>
+
+    <target name="nightly" depends="build.java.net"
+            description="update nightly build">
+        <if>
+            <available
+                  file="${tasks.home}/javanettasks-1.0.8.jar"/>
+            <then>
+                <sequential>
+                    <taskdef
+                          resource="org/kohsuke/javanettasks.properties">
+                        <classpath>
+                            <pathelement
+                                  location="${tasks.home}/javanettasks-1.0.8.jar"/>
+                            <fileset dir="${tasks.home}/lib"
+                                     includes="*.jar"/>
+                        </classpath>
+                    </taskdef>
+
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/2.0 Nightly/mojarra-${impl.version}-binary.zip"
+                                   fromFile="${dist.dir}/mojarra-${impl.version}-binary.zip"
+                                   fileDescription="Mojarra ${impl.version.number} nightly binary bundle."
+                                   overwrite="yes"/>
+
+
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/2.0 Nightly/mojarra-${impl.version}-source.zip"
+                                   fromFile="${dist.dir}/mojarra-${impl.version}-source.zip"
+                                   fileDescription="Mojarra ${impl.version.number} nightly source bundle."
+                                   overwrite="yes"/>
+
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/2.0 Nightly/mojarra-${impl.version}-glassfish-updater.jar"
+                                   fromFile="${dist.dir}/mojarra-${impl.version}-glassfish-updater.jar"
+                                   fileDescription="Installer for updating an existing glassfish binary with a new Mojarra implementation. Run 'java -jar mojarra-${impl.version}-glassfish-updater.jar' and follow the instructions."
+                                   overwrite="yes"/>
+                </sequential>
+            </then>
+            <else>
+                <fail message="Javanettasks version 1.0.8 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+            </else>
+        </if>
+    </target>
+
+
+
+    <target name="build.samples.zip" depends="main" description="Build the demo distribution">
+
+        <ant dir="${demo.dir}"
+             antfile="build.xml"
+             target="main"
+             inheritAll="false"/>
+        <mkdir dir="samples"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/guessNumber/build/jsf-guessNumber.war"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/carstore/build/jsf-cardemo.war"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/components/build/jsf-components.war"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/webtier-sample/build/webtier-sample.war"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/renderkits/build/jsf-renderkits.war"/>
+
+        <copy toFile="${basedir}/samples/jsf-samples/README.html"
+              file="${impl.dir}/docs/samples.html"/>
+
+        <copy toFile="${basedir}/samples/jsf-samples/License.txt"
+              file="${LICENSEFILE}"/>
+        <zip destfile="${basedir}/mojarra-samples.zip"
+             basedir="${basedir}/samples"/>
+        <delete dir="samples"/>
+
+        <installerBuilder
+              classFile="${dist.dir}/mojarra-samples.class"
+              licenseFile="${LICENSEFILE}"
+              zipFile="${basedir}/mojarra-samples.zip"/>
+    </target>
+
+    <target name="build.as.updater.jars">
+     <mkdir dir="${dist.dir}"/>
+     <ant dir="jsf-api" target="tools.javac" inheritAll="false" />
+     <jar destfile="${dist.dir}/mojarra-${impl.version}-glassfish-updater.jar">
+        <fileset dir="${basedir}/jsf-tools/build/classes"
+                 includes="com/sun/faces/tools/GlassfishUpdater*.class" />
+        <fileset dir="${basedir}/jsf-api/build/lib/"
+                 includes="jsf-api.jar" />
+        <fileset dir="${basedir}/jsf-ri/build/lib/"
+                 includes="jsf-impl.jar" />
+        <fileset dir="${basedir}/legal/jsf-cddl"
+                 includes="BINARY_LICENSE.txt" />
+        <manifest>
+          <attribute name="Main-Class"
+                     value="com.sun.faces.tools.GlassfishUpdater" />
+        </manifest>
+      </jar>
+    </target>
+
+    <target name="updatecenter" depends="main">
+      <copy file="jsf-api/build/lib/jsf-api.jar" todir="updatecenter/lib"/>
+      <copy file="jsf-ri/build/lib/jsf-impl.jar" todir="updatecenter/lib"/>
+      <ant dir="updatecenter" target="updatecenter.main"/>
+    </target>
+
+    <target name="updatecenter2" depends="main">
+      <copy file="jsf-api/build/lib/jsf-api.jar" todir="updatecenter2/lib"/>
+      <copy file="jsf-ri/build/lib/jsf-impl.jar" todir="updatecenter2/lib"/>
+    </target>
+
+</project>
+
+

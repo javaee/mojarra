@@ -1,0 +1,5 @@
+In order to generate the release notes, you must have HTMLMacro
+installed as an extension to Ant (i.e. ANT_HOME/lib).
+
+Download HTMLMacro from https://htmlmacro.dev.java.net
+

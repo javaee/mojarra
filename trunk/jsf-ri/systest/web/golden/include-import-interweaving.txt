@@ -1,0 +1,191 @@
+
+
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head> <title>Hello</title> </head>
+    
+    
+        
+    
+    <body bgcolor="white">
+    
+<form id="form" name="form" method="post" action="/jsf-systest/faces/include-import-interweaving.jsp;jsessionid=4bbc0a31bc8e689ae2830143bdb5" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="form" value="form" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id27:j_id28" />
+
+    
+        <p>Outer Template Text followed by 
+        <span id="form:outerComponent">outer component</span></p>
+	
+<table border="1">	
+
+<tr><td>
+<ul><font color="blue">        
+
+ 
+	    <p>Subview on the outside only with jsp:include:</p>
+            
+
+
+
+
+
+
+<p>Subview 1: Inner template text followed by
+
+<span id="form:subview01:innerComponent1">inner component 1</span>
+
+</p>
+
+<p>Subview 1: Inner template 2 text followed by
+
+<span id="form:subview01:innerComponent2">inner component 2</span>
+
+</p>
+
+ 
+        
+</font></ul>        
+
+	    
+</td></tr>
+
+<tr><td>
+<ul><font color="green">        
+
+	    <p>Subview on the inside only with jsp:include:</p>
+            
+
+
+
+
+
+
+
+
+<p>Subview 2: Inner template text followed by
+<span id="form:innerSubView:innerComponent3">inner component 3</span></p>
+
+
+
+
+        
+</font></ul>        
+
+	    
+</td></tr>
+
+<tr><td>
+<ul><font color="purple">        
+
+	    <p>Subview on the outside and inside with jsp:include:</p>
+
+	    <p>Template Text before the include</p>
+            
+
+
+
+
+
+
+
+
+<p>Subview 2: Inner template text followed by
+<span id="form:subview03:innerSubView2:innerComponent4">inner component 4</span></p>
+
+
+
+        
+</font></ul>        
+
+	    
+</td></tr>
+
+<tr><td>
+<ul><font color="red">        
+        
+	    <p>Subview on the outside only with c:import:</p>
+            
+
+
+
+
+
+
+<p>Subview 4: Inner template text followed by
+
+<span id="form:outerSubview3:innerComponent5">inner component 5</span>
+
+</p>
+
+<p>Subview 4: Inner template 2 text followed by
+
+<span id="form:outerSubview3:innerComponent6">inner component 6</span>
+
+</p>
+
+        
+</font></ul>        
+
+	    
+</td></tr>
+
+
+<tr><td>
+<ul><font color="red">        
+	    <p>Subview on the inside only with c:import:</p>
+            
+
+
+
+
+
+
+
+
+<p>Subview 5: Inner template text followed by
+<span id="form:innerSubView4:innerComponent7">inner component 7</span></p>
+
+
+
+
+</font></ul>        
+
+	    
+</td></tr>
+
+<tr><td>
+<ul><font color="orange">        
+	    <p>Subview on the outside and inside with c:import:</p>
+
+	    <p>Template Text on the outside</p>
+            
+
+
+
+
+
+
+
+
+<p>Subview 6: Inner template text followed by
+<span id="form:subview05:innerSubView5:innerComponent8">inner component 8</span></p>
+
+
+
+</font></ul>        
+
+	    
+</td></tr>
+
+
+</table>
+	 
+
+    
+</form>
+    </body>
+</html>  

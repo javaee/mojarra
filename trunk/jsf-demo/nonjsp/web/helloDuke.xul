@@ -1,0 +1,13 @@
+<?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
+
+<page>
+
+<window id="HelloDuke">
+
+<image id="duke" url="/images/wave.med.gif" />
+
+<button id="hello" action="success" value="Submit"/>
+
+</window>
+
+</page>

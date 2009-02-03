@@ -1,0 +1,45 @@
+
+
+
+
+
+
+
+
+
+
+
+
+  <html>
+
+    <head>
+      <title>Test of outputText Escaping</title>
+    </head>
+
+    <body>
+
+      <h1>Test of outputText Escaping</h1>
+
+      <p>
+        [DEFAULT]
+        This text &lt;b&gt;has angle brackets&lt;/b&gt;.
+        The angle brackets MUST be escaped.
+      </p>
+
+      <p>
+        [FALSE]
+        This text <b>has angle brackets</b>.
+        The angle brackets MUST NOT be escaped.
+      </p>
+
+      <p>
+        [TRUE]
+        This text &lt;b&gt;has angle brackets&lt;/b&gt;.
+        The angle brackets MUST be escaped.
+      </p>
+
+    </body>
+
+  </html>
+
+

@@ -1,0 +1,28 @@
+
+
+
+
+<html>
+<head>
+    
+    
+    <title>command_link_test.jsp</title>
+</head>
+<body>
+    
+    
+      <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/command_link_test.jsp;jsessionid=66560F4ABCA57E8DA0E279515F1FC72B">
+
+        <a id="form01:hyperlink01" href="#" onclick="document.getElementById('form01')['form01:hyperlink01'].value='form01:hyperlink01'; document.getElementById('form01').submit()">My Link</a>
+        <a id="form01:hyperlink02" href="#" onclick="document.getElementById('form01')['form01:hyperlink02'].value='form01:hyperlink02'; document.getElementById('form01').submit()">This is a String property</a>
+        <a id="form01:hyperlink03" href="#" onclick="document.getElementById('form01')['form01:hyperlink03'].value='form01:hyperlink03'; document.getElementById('form01').submit()">RES-BUNDLE LINK</a>
+        <a id="form01:hyperlink04" href="#" onclick="document.getElementById('form01')['form01:hyperlink04'].value='form01:hyperlink04'; document.getElementById('form01').submit()"><img src="duke.gif" /></a>
+        <a id="form01:hyperlink05" href="#" onclick="document.getElementById('form01')['form01:hyperlink05'].value='form01:hyperlink05'; document.getElementById('form01').submit()"><img src="resbundle_image.gif" alt="" /></a>
+        
+            
+        <a id="form01:hyperlink06" href="#" onclick="document.getElementById('form01')['form01:hyperlink06'].value='form01:hyperlink06';document.getElementById('form01')['param1'].value='value1'; document.getElementById('form01').submit()">Paramter Link</a>
+      <input type="hidden" name="form01" value="form01" /><input type="hidden" name="form01:hyperlink02" /><input type="hidden" name="form01:hyperlink06" /><input type="hidden" name="form01:hyperlink04" /><input type="hidden" name="form01:hyperlink01" /><input type="hidden" name="form01:hyperlink03" /><input type="hidden" name="param1" /><input type="hidden" name="form01:hyperlink05" /></form>
+    
+</body>
+</html>
+

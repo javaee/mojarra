@@ -1,0 +1,368 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+
+<!-- ************ JSF build file ************************************** -->
+
+<project name="JSF-RI-SANDBOX" default="main" basedir=".">
+
+
+    <!-- ************ Per user local properties ******************************* -->
+
+    <property file="${user.home}/build.properties"/>
+    <property file="../../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+    <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
+
+    <property name="name" value="jsf-ri-sandbox"/>
+    <property name="sb.impl.version" value="0.9"/>
+    <property name="impl.name" value="JSF RI Sandbox"/>
+
+    <!-- ******************* Structural ************************** -->
+
+    <!-- The base directory for compilation targets -->
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.generate.dir" value="${build.dir}/generate"/>
+    <property name="dep.jar.dir" value="${build.classes.dir}/META-INF/static/jars/" />
+
+    <!-- The base directory for distribution targets -->
+    <property name="dist.dir" value="${basedir}/dist"/>
+
+    <!-- The base directory for component sources -->
+    <property name="source.dir" value="${basedir}/src/java"/>
+
+    <!-- The base resource directory -->
+    <property name="resource.dir" value="${basedir}/src/resources"/>
+
+    <!-- Dependencies -->
+    <property name="sandbox.dependency.base.dir" value="${basedir}/dependencies"/>
+    <property name="maven.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
+    <property name="sourceforge.mirror" value="http://superb-east.dl.sourceforge.net/sourceforge"/>
+    
+    <path id="impl.compile.classpath">
+        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${jsf-impl.jar}"/>
+        <path refid="sun.commons.classpath"/>
+        <path refid="compile.classpath"/>
+        <pathelement location="${tools.dir}/build/classes"/>
+    </path>
+
+
+    <!-- ************ Executable Targets ************************************** -->
+
+
+    <target name="init" description="Initialize and evaluate conditionals">
+        <echo message="-------- ${impl.name} ${impl.version} --------"/>
+    </target>
+
+    <target name="prepare" depends="init" description="Prepare build directory">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.generate.dir}"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.classes.dir}/META-INF"/>
+        <mkdir dir="${build.dir}/javadocs"/>
+        <mkdir dir="${build.dir}/tlddocs"/>
+        <mkdir dir="${build.dir}/lib"/>       
+        <mkdir dir="${dep.jar.dir}"/>       
+    </target>
+
+    <target name="update" description="Download project dependencies">
+        <mkdir dir="${sandbox.dependency.base.dir}/downloads/"/>
+        <!-- setup the proxy if necessary -->
+        <if>
+            <and>
+                <length string="${http.proxy.host}" when="greater" length="0"/>
+                <length string="${http.proxy.port}" when="greater" length="0"/>
+            </and>
+            <then>
+                <setproxy proxyhost="${http.proxy.host}" proxyport="${http.proxy.port}"/>
+            </then>
+        </if>
+        <!-- left for information purposes
+        <if>
+            <not>
+                <available file="${logging.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${maven.mirror}/commons-logging/commons-logging/${logging.version}/commons-logging-${logging.version}.jar"
+                     dest="${logging.jar}"
+                     usetimestamp="true"/>
+            </then>
+        </if>
+	-->
+    </target>
+
+    <path id="sandbox.compile.classpath">
+        <fileset dir="${sandbox.dependency.base.dir}" includes="*.jar"/>
+    </path>
+
+    <target name="compile" depends="prepare,update" description="Just compile the classes">
+        <if>
+            <equals arg1="${container.name}" arg2="glassfish"/>
+            <then>
+                <property name="exclude.path" value="com/sun/faces/sandbox/web/**"/>
+            </then>
+            <else>
+                <property name="exclude.path" value="com/sun/faces/vendor/**,com/sun/faces/sandbox/web/**"/>
+            </else>
+        </if>
+
+        <!-- Run javac through everything -->
+        <jsf.javac srcdir="${source.dir}"
+                   destdir="${build.classes.dir}"
+                   excludes="${exclude.path}"
+                   source="1.5"
+                   target="1.5">
+            <classpath>
+                <path refid="sandbox.compile.classpath"/>
+                <path refid="impl.compile.classpath"/>
+            </classpath>
+        </jsf.javac>
+
+        <copy toDir="${build.classes.dir}">
+            <fileset dir="${resource.dir}" />
+        </copy>
+    </target>
+
+    <target name="clean" description="Clean build and distribution directories">
+
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+
+        <delete>
+            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+            <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
+        </delete>
+    </target>
+
+    <target name="all" depends="clean,prepare,compile"
+            description="Clean and compile all components"/>
+
+    <!-- Create the source distribution -->
+    <target name="sandbox.source">
+        <zip destfile="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip">
+            <zipfileset dir="${basedir}"
+                        includes="build.xml"
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}"/>
+            <zipfileset dir="${source.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}/src"/>
+            <zipfileset dir="${basedir}"
+                        includes="conf/** web/** build.xml"
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}"/>
+        </zip>
+    </target>
+
+    <target name="check.generation.necessity">
+        <uptodate property="skip.generation"
+                  targetfile="${build.generate.dir}/last-generation">
+            <srcfiles dir="${resource.dir}/META-INF">
+                <include name="faces-config.xml"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="generate" depends="check.generation.necessity">
+            <!-- unless="skip.generation" -->
+
+        <delete dir="${build.generate.dir}"/>
+        <mkdir dir="${build.generate.dir}"/>
+        <!--
+        <antcall target="tools.javac"/>
+        -->
+        <taskdef name="generateComponents"
+                 classname="com.sun.faces.ant.ComponentGenTask">
+            <classpath>
+                <path refid="sun.commons.classpath"/>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+        </taskdef>
+        <generateComponents
+              generatorConfig="${basedir}/conf/SandboxTaglib12.properties"
+              facesConfig="${resource.dir}/META-INF/faces-config.xml"
+              fork="true">
+            <classpath>
+                <path refid="sun.commons.classpath"/>
+                <path refid="compile.classpath"/>
+                <pathelement location="${jsf-api.jar}"/>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+            <assertions>
+                <enable/>
+            </assertions>
+            <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
+        </generateComponents>
+
+        <!--
+        <copy todir="${build.generate.dir}/javax/faces/component/html"
+            file="${src.dir}/javax/faces/component/html/package.html"/>
+        -->
+
+        <touch file="${build.generate.dir}/last-generation"/>
+    </target>
+
+    <target name="dist" depends="jars" description="Build distribution files">
+
+        <mkdir dir="${dist.dir}"/>
+
+        <antcall target="docs"/>
+        
+        <!-- Create the binary distribution -->
+        <delete file="${dist.dir}/jsf-ri-sandbox-${sb.impl.version}.zip"/>
+        <delete file="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip"/>
+        <zip destfile="${dist.dir}/jsf-ri-sandbox-${sb.impl.version}.zip">
+            <zipfileset dir="${build.dir}"
+                        includes="lib/**,tlddocs/**"
+                        prefix="jsf-ri-sandbox-${sb.impl.version}"/>
+        </zip>
+
+        <!-- Create a buildable source distribution -->
+        <zip destfile="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip">
+            <zipfileset dir="${basedir}"
+                        includes="build.xml build-tests.xml README COPYRIGHT LICENSE*.*"
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}"/>
+            <zipfileset dir="${source.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}/src"/>
+
+        </zip>
+        <antcall target="sandbox.source"/>
+    </target>
+    
+    <target name="docs" description="Generate the tld and javadoc documentation">
+        <antcall target="tlddocs"/>
+        <antcall target="javadoc"/>
+    </target>
+
+    <target name="tlddocs" description="Generate tld docs">
+        <java fork="true" jar="${tlddoc.jar}">
+            <arg line="-d ${build.dir}/tlddocs"/>
+            <arg line="-windowtitle jsf-ri-sandbox-${sb.impl.version}"/>
+            <arg value="${resource.dir}/META-INF/sandbox.tld"/>
+        </java>
+    </target>
+
+    <target name="javadoc" description="Generate javadocs">
+        <mkdir dir="${build.dir}/javadocs" />
+        <javadoc packagenames="com.sun.faces.sandbox."
+                verbose="false"
+                defaultexcludes="yes"
+                classpathref="impl.compile.classpath"
+                destdir="${build.dir}/javadocs"
+                header="${javadoc.headertext}"
+                footer="${javadoc.footertext}"
+                author="true"
+                version="true"
+                access="protected"
+                useexternalfile="yes"
+                use="true">
+            <fileset dir="${source.dir}" defaultexcludes="yes" />
+        </javadoc>
+    </target>
+
+    <target name="getpassword" unless="keystore.pass">
+        <input message="Please enter the keystore password:" addproperty="keystore.pass" />
+    </target>
+
+    <!--
+         ===================================================================
+           Create the jars
+         ===================================================================
+    -->
+
+    <target name="jars" depends="compile,getpassword">
+        <if>
+            <available file="keystore.ks" property="ignored" />
+            <then>
+                <signjar keystore="keystore.ks" alias="mykey" storepass="${keystore.pass}" lazy="yes">
+                    <fileset dir="${dep.jar.dir}">
+                        <include name="*.jar" />
+                    </fileset>
+                </signjar>
+            </then>
+        </if>
+
+        <jsf.manifested.jar jarfile="${build.dir}/lib/${name}-${sb.impl.version}.jar"
+                            basedir="${build.classes.dir}"
+                            extension-name=""/>       
+    </target>
+
+    <target name="nightly" depends="clean,dist" description="Upload nightly build to java.net">
+        <if>
+            <available file="${tasks.home}"/>
+            <then>
+                <sequential>
+                    <taskdef resource="org/kohsuke/javanettasks.properties">
+                        <classpath>
+                            <pathelement location="${tasks.home}/javanettasks-1.0.12.jar"/>
+                            <fileset dir="${tasks.home}/lib" includes="*.jar"/>
+                        </classpath>
+                    </taskdef>
+
+                    <ant dir="demo/" target="dist" inheritAll="false"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/RI Sandbox/${sb.impl.version}/jsf-ri-sandbox-${sb.impl.version}.jar"
+                                   fromFile="${build.dir}/lib/jsf-ri-sandbox-${sb.impl.version}.jar"
+                                   fileDescription="Nightly snapshot of the Sandbox components"
+                                   overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/RI Sandbox/${sb.impl.version}/jsf-ri-sandbox-${sb.impl.version}.zip"
+                                   fromFile="${dist.dir}/jsf-ri-sandbox-${sb.impl.version}.zip"
+                                   fileDescription="Nightly snapshot of the Sandbox components, jar and javadocs"
+                                   overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/RI Sandbox/${sb.impl.version}/jsf-ri-sandbox-src-${sb.impl.version}.zip"
+                                   fromFile="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip"
+                                   fileDescription="Nightly snapshot of the source bundle for the Sandbox components"
+                                   overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/RI Sandbox/${sb.impl.version}/README"
+                                   fromFile="README"
+                                   fileDescription=""
+                                   overwrite="yes"/>
+                </sequential>
+            </then>
+            <else>
+                <fail message="Javanettasks version 1.0.12 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+            </else>
+        </if>
+    </target>
+
+    <target name="main" depends="jars"/>
+</project>

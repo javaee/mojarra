@@ -1,0 +1,25 @@
+Instructions on promoting a build:
+
+Engineering finishes JSF2.0 code.
+
+Engineering verifies QL passes
+checkout v3 workspace.
+cd v3/tests/quicklook
+mvn -Dglassfish.home=/path/to/glassfish/to/test test
+
+Tag build.
+
+RE (Omar) promotes build, pushes to http:eflat.sfbay:40000
+Change variables found in common.xml (build.type, etc) via -D as part of build
+    build.type will be set to a value such as BETA, RC, FCS, etc.
+    build.number will be a monotonically increasing integer, incremented for each build.
+See instructions in updatecenter2/README for the push to eflat.
+    You'll need to set the IPS package number in updatecenter/conf/jsf_proto.conf to match
+    the build number, with the final number segment being numeric only with no leading zeros.
+
+QE runs qualification tests, against eflat (JSF2.0)
+    and epine (current GFv3), comfirms they pass.
+
+QE gives go-ahead.
+
+RE (Terena) pushes eflat and epine to external sites.

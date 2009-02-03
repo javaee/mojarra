@@ -1,0 +1,2 @@
+     <form id="_id0" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=74D1DE85D6D2DD3DC9C8830361B53688" enctype="application/x-www-form-urlencoded">
+

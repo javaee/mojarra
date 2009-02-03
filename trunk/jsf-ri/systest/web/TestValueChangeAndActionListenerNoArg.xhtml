@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <h:head>
+    <title>Test that method expressions pointing to no-arg methods work for valueChangeListener and actionListener</title>
+  </h:head>
+
+  <h:body>
+    <h1>Test that method expressions pointing to no-arg methods work for valueChangeListener and actionListener</h1>
+
+
+<f:view>
+    <h:form id="form" prependId="false">
+
+      <p>
+
+         <h:inputText id="username" value="#{test1.stringProperty}" 
+                required="true"
+             valueChangeListener="#{test1.valueChange0}"/>
+
+      </p>
+
+      <p>
+
+	<h:commandButton id="loginEvent" value="Login" 
+             actionListener="#{test1.actionListener0}">
+
+	</h:commandButton>  
+
+      </p>
+
+<p>valueChange0Called: <h:outputText value="#{valueChange0Called}" /></p>
+
+<p>actionListener0Called: <h:outputText value="#{actionListener0Called}" /></p>
+
+    </h:form>
+</f:view>
+
+  </h:body>
+</html>

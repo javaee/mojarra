@@ -1,0 +1,25 @@
+
+
+
+
+
+<html>
+<head><title>interweaving13</title></head>
+<body>
+
+<form id="j_id_id14" name="j_id_id14" method="post" action="/jsf-systest/faces/interweaving12.jsp;jsessionid=58335911147ca1cee932a98fe519" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id_id14" value="j_id_id14" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id25:j_id26" />
+
+     
+
+
+
+
+
+    this should be before the button
+    <input id="j_id_id14:button" type="submit" name="j_id_id14:button" value="commandButton 1" />
+</form>
+</body>
+</html>
+

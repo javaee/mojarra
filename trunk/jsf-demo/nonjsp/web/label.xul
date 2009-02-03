@@ -1,0 +1,11 @@
+<?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
+
+<page>
+
+<window id="label">
+
+<label id="simpleLabel" value="A simple label" />
+
+</window>
+
+</page>

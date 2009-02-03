@@ -1,0 +1,155 @@
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+
+ Contributor(s):
+
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html"/>
+
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Ajax Request</title>
+</h:head>
+
+<h:body>
+
+<!-- Ajaxify Individual Controls -->
+
+    <h:form id="form1" >
+        <h:panelGrid styleClass="title-panel">
+           <h:outputText value="D e c l a r a t i v e     A j a x " styleClass="title-panel-text"/>
+           <h:outputText value="Powered By JavaServer Faces 2.0 " styleClass="title-panel-subtext"/> 
+        </h:panelGrid>
+        <h:panelGrid border="1">
+           <h:panelGrid columns="3" >
+              <h:outputText value=""/>
+              <h:outputText value="Panel1 : Ajaxify Individual Controls"/>
+              <h:outputText value=""/>
+           </h:panelGrid>
+           <h:panelGrid columns="3">
+              <h:outputText value="Name: "/>
+              <h:inputText id="name" required="true" label="Name" valueChangeListener="#{bean.displayText}">
+                 <f:ajax />
+              </h:inputText>
+              <h:outputText id="nameout"/>
+              <h:outputText value="Address: "/>
+              <h:inputText id="address" required="true" label="Address" valueChangeListener="#{bean.displayText}">
+                 <f:ajax />
+              </h:inputText>
+              <h:outputText id="addressout"/>
+              <h:outputText value="City: "/>
+              <h:inputText id="city" required="true" label="City" valueChangeListener="#{bean.displayText}">
+                 <f:ajax />
+              </h:inputText>
+              <h:outputText id="cityout"/>
+              <h:outputText value="State: "/>
+              <h:selectOneMenu id="state" valueChangeListener="#{bean.displayState}">
+                 <f:selectItems value="#{bean.stateOptions}" />
+                 <f:ajax render="form1:stateout"/>
+              </h:selectOneMenu>
+              <h:outputText id="stateout" />
+              <h:outputText value="Zip: "/>
+              <h:inputText id="zip" required="true" label="Zip" valueChangeListener="#{bean.displayText}">
+                 <f:ajax />
+              </h:inputText>
+              <h:outputText id="zipout"/>
+              <h:panelGrid>
+                 <h:commandButton value="Submit">
+                    <f:ajax />
+                 </h:commandButton>
+              </h:panelGrid>
+           </h:panelGrid>
+           <h:panelGrid id="msgPanel">
+              <h:message for="form1:name"/>
+              <h:message for="form1:address"/>
+              <h:message for="form1:city"/>
+              <h:message for="form1:state"/>
+              <h:message for="form1:zip"/>
+           </h:panelGrid>
+        </h:panelGrid>
+
+<!-- Ajaxify Panel -->
+
+        <h:panelGrid border="1">
+           <f:ajax/>
+           <h:panelGrid columns="3" >
+              <h:outputText value=""/>
+              <h:outputText value="Panel2 : Ajaxify Panel"/>
+              <h:outputText value=""/>
+           </h:panelGrid>
+           <h:panelGrid columns="3">
+              <h:outputText value="Favorite programming language?"/>
+              <h:selectOneRadio layout="lineDirection" valueChangeListener="#{bean.displayRadio}">
+                 <f:selectItem itemValue="Java" itemLabel="Java"/>
+                 <f:selectItem itemValue="C#" itemLabel="C#"/>
+                 <f:selectItem itemValue="C++" itemLabel="C++"/>
+                 <f:selectItem itemValue="C" itemLabel="C"/>
+              </h:selectOneRadio>
+              <h:outputText id="softwareLang" />
+           </h:panelGrid>
+           <h:panelGrid columns="3">
+              <f:ajax/>
+              <h:outputText value="Some months have 30 days.  Some have 31 days. How many months have 28 days?"/>
+              <h:selectOneListbox valueChangeListener="#{bean.displayList}">
+                 <f:selectItem  itemValue="10" itemLabel="10" />
+                 <f:selectItem  itemValue="8" itemLabel="8" />
+                 <f:selectItem  itemValue="all" itemLabel="All of them" />
+              </h:selectOneListbox>
+              <h:outputText id="out1"/>
+           </h:panelGrid>
+        </h:panelGrid>
+     
+        <h:panelGrid border="1">
+           <h:panelGrid columns="3" >
+              <h:outputText value=""/>
+              <h:outputText value="Panel2 : Manipulate Other Components"/>
+              <h:outputText value=""/>
+           </h:panelGrid>
+           <h:panelGrid columns="1">
+              <h:commandButton value="Reset Text Fields" actionListener="#{bean.beanAction}">
+                 <f:ajax execute="form1:name form1:address form1:city form1:zip" 
+                         render="form1:name form1:address form1:city form1:zip form1:msgPanel"/>
+              </h:commandButton>
+           </h:panelGrid>
+        </h:panelGrid>
+
+       <h:outputStylesheet name="stylesheet.css" />
+   </h:form>
+
+</h:body>
+
+</html>

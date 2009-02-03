@@ -1,0 +1,276 @@
+This directory contains demos for JavaServer (tm) Faces.
+This file explains how to set up your environment, create
+a demo from the template, and how to use the new Ant tasks.
+
+Setting up your environment
+===========================
+0. Make sure JWSDP_HOME is in your environment, and points to the root
+   of your JWSDP or tomcat installation.  It must be the case that
+   $JWSDP_HOME/common/lib exists.
+
+1. Locating the JSF repositories.
+
+   In order to build the demos, you must have access to the jsf-api and
+   jsf-ri repositories.  
+
+   If the directory in which this README resides is installed in your
+   hard drive such that ../jsf-api and ../jsf-ri exist and these
+   directories are the correct source repositories for jsf-api and
+   jsf-ri, you are done.
+
+   If not, you must copy build.properties.sample to build.properties and
+   modify the jsf.api.home and jsf.ri.home properties to correctly
+   identify the location of these repositories.
+
+2. Locating the JSTL jars.
+
+   Copy build.properties.sample to build.properties and modify the
+   properties for standard.jar and jstl.jar to correctly locate these
+   jars in your hard drive.
+
+Creating a Demo From the Template
+=================================
+
+A Template demo webapp has been provided to simplify the task of adding
+demos to this repository.  These steps are a guideline, please don't
+follow the steps blindly and expect everything to work.  For example,
+replace helloDuke with your webapp name.
+
+
+1. cp -r templateDemo helloDuke
+
+2. Remove the copied "CVS" directories
+
+   find ./helloDuke -name CVS -exec rm {} \; -print
+
+   Do a manual inspection of helloDuke afterwards to make sure no CVS
+   directories have stuck around.
+
+3. copy any images, jsp files, and html files to the web directory of
+   the webapp.
+
+   cp /Projects/J2EE/jsf1.0ea2/example/helloDuke/*.jsp ./helloDuke/web
+   cp /Projects/J2EE/jsf1.0ea2/example/helloDuke/*.gif ./helloDuke/web
+   cp /Projects/J2EE/jsf1.0ea2/example/helloDuke/*.html ./helloDuke/web
+
+4. remove the reminder file
+
+   rm templateDemo_JSP_HTML_IMAGES_GO_HERE
+
+5. Change all references to templateDemo to helloDuke.  This includes
+   changes in build.xml, as well as some directory names, for example
+   src/templateDemo.
+
+   Once your done with this step, the string "templateDemo" should not
+   appear in any file, filename, or directory name.
+
+   Make sure to remove /src/templateDemo_JAVA_SOURCE_FILES_GO_HERE
+   and src/templateDemo/templateDemo_JAVA_SOURCE_FILES_GO_HERE.
+
+6. Copy any java source files into the webapp.
+
+   copy *.java helloDuke/src/helloDuke
+
+   Make sure the package names are correct in the java source files.
+
+7. Make any changes to web.xml that need to happen.  This may mean
+   changing the servletContextListener to be correct with respect to
+   your package.
+
+8. Modify build.xml in the directory in which this README file lives to
+   add to the list of demos.  This is important, since this is how the
+   dependent jar files get copied to your demo.  "+" means lines are
+   added.
+
+Index: build.xml
+===================================================================
+RCS file: /export/cvs/jsf-demo/build.xml,v
+retrieving revision 1.4
+diff -u -r1.4 build.xml
+--- build.xml	2002/08/30 21:28:42	1.4
++++ build.xml	2002/08/30 21:29:38
+@@ -49,12 +49,21 @@
+       <param name="demoDir" value="templateDemo"/>
+     </antcall>
+ 
++    <ant target="clean" dir="helloDuke"/>
++    <antcall target="deleteJarsFromDemo">
++      <param name="demoDir" value="helloDuke"/>
++    </antcall>
++
+   </target>
+ 
+   <target name="copyJarsToDemos">
+ 
+     <antcall target="copyJarsToDemo">
+       <param name="demoDir" value="templateDemo"/>
++    </antcall>
++
++    <antcall target="copyJarsToDemo">
++      <param name="demoDir" value="helloDuke"/>
+     </antcall>
+ 
+   </target>
+
+   Make sure you add to both the "clean" and "copyJarsToDemos" targets!
+
+9. In the helloDuke directory, copy build.properties.sample to build.properties if
+   you haven't already done so.
+
+10. In the new build.properties file: 
+
+	-Set the jsf.home property to the 
+	location of your JSF workspace, such as:
+	/home/username/ws/beta
+
+	-Set the tomcat.home property to the location of your Java WSDP or
+	Tomcat installation.  It must be the case that
+	$TOMCAT_HOME/common/lib exists.
+
+	-Set the standard.jar property to the location of the JSTL standard.jar.
+	In the Java WSDP, this JAR is located at 
+	$TOMCAT_HOME/tools/jstl/standard/lib
+
+	-Set the jstl.jar property to the location of the jstl.jar.  In the
+	Java WSDP, this JAR is located at $TOMCAT_HOME/tools/jstl
+
+	-Set the username and password properties to the username and password
+	contained in your tomcat-users.xml file, located at $TOMCAT_HOME/conf.
+	If you are using the Java WSDP, you set this username and password when
+	you installed the Java WSDP.  The username and password are required to
+	run the Tomcat Management Tool tasks, like install and reload.
+
+11. Save the build.properties file.
+
+12. Return to the directory containing this README.
+
+13. Run ant copyJarsToDemos in this directory.  This will copy the
+    dependent jars to all webapps known to this build.xml file.
+
+10. build your webapp!
+
+    cd helloDuke
+
+    ant
+
+    This will compile your classes.
+
+11. Start the Tomcat server.
+
+12. Test your demo to make sure it works.  Run the ant tasks: install
+	reload, and remove.  The section, Using the Ant Tasks, explains
+	these tasks.
+    
+13. Keep working till it works.
+
+14. Add this demo to be built by default.  This is the other side of
+    step 8.
+
+@@ -87,6 +96,8 @@
+ 
+ 
+   <target name="build-all" depends="verifyPreconditions,copyJarsToDemos">
++
++    <ant inheritAll="false" dir="${basedir}/helloDuke"/>
+ 
+   </target>
+ 
+15. Either run 
+
+	ant remove 
+	
+    on the helloDuke application, or shutdown the server.
+
+16. Verify that everything works by doing the following, in the directory
+    containing the README:
+
+    ant clean
+
+      Verify that there are no ".class" files anywhere in this tree.
+
+    ant
+
+      Verify that the application is built in the helloDuke/build directory.
+
+      Start the web server and
+      
+    ant install
+    
+      Verify that the application runs.
+      
+    ant remove
+
+    ant clean
+
+      Verify the same conditions as before.
+
+17. Now you're ready to check in your new webapp to the tree!  Make sure
+    your webapp contains only the files you want to check in.  No more,
+    no less.  Make sure there are no CVS directories in your webapp!
+
+    cd to the directory with this README
+
+    cat CVS/Root
+
+      Use this as the value of CVSROOT
+  
+    cd helloDuke
+ 
+    cvs -d CVSROOT import jsf-demo/helloDuke helloDuke helloDuke2_0
+
+18. Verify that your import worked correctly.  
+
+    cd to the directory with this README.
+
+    mv helloDuke helloDuke.orig
+
+    cvs update -d -P
+
+      You should get a new copy of helloDuke.  Re-perform the checks in
+      step 17.
+
+      Once everything works ok, remove your pre-import copy
+
+   rm -rf helloDuke.orig
+
+19. Check in any remaining work
+
+    cd to the directory with this README.
+
+   cvs -n update -d -P 
+
+     This will run the update command without actually modifying
+     anything.  That's what the "-n" is for.  Examine the output and
+     make sure that anything marked with a "?" should *not* be checked
+     in.  
+
+   cvs commit.
+
+You're done
+
+Using the New Ant Tasks
+========================
+
+The new Ant tasks are install, reload, and remove.
+
+install
+
+The ant install task deploys a Web application on a specified context path, 
+from a specified directory or WAR file pathname.
+
+This command does not deploy the Web application permanently:  Once
+the server is stopped, the application is no longer deployed. 
+
+reload
+
+The reload task updates a Web application that is already installed.  The
+reload task allows you to update the Java classes and JSP pages, but
+not the web.xml file, of the application without stopping and restarting
+the server.
+
+remove
+
+The remove task takes an installed Web application out of service.
+To update files other than Java classes or JSP pages, you need to
+first remove the application and then run ant install.
+  
