@@ -135,7 +135,7 @@
         <copy todir="${dist.home}/samples"
               file="${basedir}/ajax-queue/build/ajax-queue.war"/>
         <copy todir="${dist.home}/samples"
-              file="${basedir}/ajax-queue/build/ifnavigation.war"/>
+              file="${basedir}/ifnavigation/build/ifnavigation.war"/>
 
         <!-- RELEASE_PENDING need to clean up this build -->
 
