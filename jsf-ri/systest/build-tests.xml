@@ -247,12 +247,19 @@
     </target>
 
     <target name="test.facelets">
+        <!-- Tests to verify 955, return a 500, rather than a 404 -->
+        <jsf.tester request="${context.path}/faces/facelets/compositionnotfound.xhtml"
+            status="500"/>
+        <jsf.tester request="${context.path}/faces/facelets/decoratenotfound.xhtml"
+            status="500"/>
+        <jsf.tester request="${context.path}/faces/facelets/includenotfound.xhtml"
+            status="500"/>        
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/facelets/FaceletsTestCase.class"/> 
+                         includes="com/sun/faces/facelets/*TestCase.class"/> 
             </tests>
         </jsf.junit>
     </target>
