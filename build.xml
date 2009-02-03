@@ -83,7 +83,6 @@
         <delete dir="${dist.dir}"/>
         <call.modules target="clean"/>        
         <ant dir="jsf-demo" target="clean" />
-        <ant dir="updatecenter" target="updatecenter.clean" />
         <ant dir="updatecenter2" target="updatecenter2.clean" />
     </target>  
 
@@ -347,12 +346,6 @@
                      value="com.sun.faces.tools.GlassfishUpdater" />
         </manifest>
       </jar>
-    </target>
-
-    <target name="updatecenter" depends="main">
-      <copy file="jsf-api/build/lib/jsf-api.jar" todir="updatecenter/lib"/>
-      <copy file="jsf-ri/build/lib/jsf-impl.jar" todir="updatecenter/lib"/>
-      <ant dir="updatecenter" target="updatecenter.main"/>
     </target>
 
     <target name="updatecenter2" depends="main">
