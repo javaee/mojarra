@@ -322,6 +322,8 @@
               toDir="${build.classes.dir}/com/sun/faces"/>
         <copy file="conf/xslt/facelets1_0-2_0toSchema.xsl"
               toDir="${build.classes.dir}/com/sun/faces"/>
+        <unzip src="${jsf.build.home}/lib/injectionproviders.jar"
+               dest="${build.classes.dir}"/>
         <copy toDir="${build.classes.dir}/META-INF/services">
           <fileset dir="${conf.share.dir}/services">
              <include name="*" />
@@ -488,7 +490,7 @@
     </target>
 
     <target name="test"
-            depends="init.test,run.junit.test,run.cactus.test,run.systest,run.systest-per-webapp"
+             depends="init.test,run.junit.test,run.cactus.test,run.systest,run.systest-per-webapp"
             description="Run all unit and system tests"/>
 
     <target name="init.test">
