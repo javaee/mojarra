@@ -324,11 +324,6 @@
               toDir="${build.classes.dir}/com/sun/faces"/>
         <unzip src="${jsf.build.home}/lib/injectionproviders.jar"
                dest="${build.classes.dir}"/>
-        <copy toDir="${build.classes.dir}/META-INF/services">
-          <fileset dir="${conf.share.dir}/services">
-             <include name="*" />
-          </fileset>
-        </copy>
         <copy todir="${build.classes.dir}/META-INF">
             <fileset dir="${conf.share.dir}">
                 <include name="jsf_core.tld"/>
