@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.component;
 
+import com.sun.faces.facelets.tag.jstl.core.IterationStatus;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -98,7 +99,7 @@ public class UIRepeat extends UINamingContainer {
     // variables
     private String var;
 
-    //private String varStatus;
+    private String varStatus;
 
     private int index = -1;
 
@@ -106,6 +107,8 @@ public class UIRepeat extends UINamingContainer {
     private int offset = -1;
 
     private int size = -1;
+
+    private int step = -1;
 
     public UIRepeat() {
         this.setRendererType("facelets.ui.Repeat");
@@ -131,6 +134,22 @@ public class UIRepeat extends UINamingContainer {
         this.offset = offset;
     }
 
+    public int getStep() {
+        if (this.step != -1) {
+            return this.step;
+        }
+        ValueBinding vb = this.getValueBinding("offset");
+        if (vb != null) {
+            return ((Integer) vb.getValue(FacesContext.getCurrentInstance()))
+                    .intValue();
+        }
+        return 1;
+    }
+
+    public void setStep(int step) {
+        this.step = step;
+    }
+
     public int getSize() {
         if (this.size != -1) {
             return this.size;
@@ -153,6 +172,14 @@ public class UIRepeat extends UINamingContainer {
 
     public void setVar(String var) {
         this.var = var;
+    }
+
+    public String getVarStatus() {
+        return varStatus;
+    }
+
+    public void setVarStatus(String varStatus) {
+        this.varStatus = varStatus;
     }
 
     private void resetDataModel() {
@@ -219,24 +246,39 @@ public class UIRepeat extends UINamingContainer {
         return id;
     }
 
-    private transient Object origValue;
+    private transient Object origValueOfVar;
+    private transient Object origValueOfVarStatus;
 
     private void captureOrigValue() {
-        if (this.var != null) {
+        if (this.var != null || this.varStatus != null) {
             FacesContext faces = FacesContext.getCurrentInstance();
             Map attrs = faces.getExternalContext().getRequestMap();
-            this.origValue = attrs.get(this.var);
+            if (this.var != null) {
+                this.origValueOfVar = attrs.get(this.var);
+            }
+            if (this.varStatus != null) {
+                this.origValueOfVarStatus = attrs.get(this.varStatus);
+            }
         }
     }
 
     private void restoreOrigValue() {
-        if (this.var != null) {
+        if (this.var != null || this.varStatus != null) {
             FacesContext faces = FacesContext.getCurrentInstance();
             Map attrs = faces.getExternalContext().getRequestMap();
-            if (this.origValue != null) {
-                attrs.put(this.var, this.origValue);
-            } else {
-                attrs.remove(this.var);
+            if (this.var != null) {
+                if (this.origValueOfVar != null) {
+                    attrs.put(this.var, this.origValueOfVar);
+                } else {
+                    attrs.remove(this.var);
+                }
+            }
+            if (this.varStatus != null) {
+                if (this.origValueOfVarStatus != null) {
+                    attrs.put(this.varStatus, this.origValueOfVarStatus);
+                } else {
+                    attrs.remove(this.varStatus);
+                }
             }
         }
     }
@@ -364,6 +406,14 @@ public class UIRepeat extends UINamingContainer {
         this.restoreChildState();
     }
 
+    private void updateIterationStatus(IterationStatus status) {
+        if (this.varStatus != null) {
+            FacesContext faces = FacesContext.getCurrentInstance();
+            Map attrs = faces.getExternalContext().getRequestMap();
+            attrs.put(varStatus, status);
+        }
+    }
+
     private boolean isIndexAvailable() {
         return this.getDataModel().isRowAvailable();
     }
@@ -387,9 +437,11 @@ public class UIRepeat extends UINamingContainer {
                 Iterator itr;
                 UIComponent c;
 
-                int i = this.getOffset();
-                int end = this.getSize();
-                end = (end >= 0) ? i + end : Integer.MAX_VALUE - 1;
+                int begin = this.getOffset();
+                int num = this.getSize();
+                int step = this.getStep();
+                int rowCount = getDataModel().getRowCount();
+                int end = Math.min(num > 0 ? begin + num - 1 : rowCount, rowCount);
 
                 // grab renderer
                 String rendererType = getRendererType();
@@ -398,7 +450,9 @@ public class UIRepeat extends UINamingContainer {
                     renderer = getRenderer(faces);
                 }
 
+                int i = begin;
                 this.setIndex(i);
+                this.updateIterationStatus(new IterationStatus(true, i + step >= end, i, begin, end, step));
                 while (i <= end && this.isIndexAvailable()) {
 
                     if (PhaseId.RENDER_RESPONSE.equals(phase)
@@ -421,8 +475,9 @@ public class UIRepeat extends UINamingContainer {
                             }
                         }
                     }
-                    i++;
+                    i += step;
                     this.setIndex(i);
+                    this.updateIterationStatus(new IterationStatus(false, i + step >= end, i, begin, end, step));
                 }
             }
         } catch (IOException e) {
@@ -636,18 +691,22 @@ public class UIRepeat extends UINamingContainer {
         this.childState = (Map) state[1];
         this.offset = ((Integer) state[2]).intValue();
         this.size = ((Integer) state[3]).intValue();
-        this.var = (String) state[4];
-        this.value = state[5];
+		this.step = ((Integer) state[4]).intValue();
+        this.var = (String) state[5];
+		this.varStatus = (String) state[6];
+        this.value = state[7];
     }
 
     public Object saveState(FacesContext faces) {
-        Object[] state = new Object[6];
+        Object[] state = new Object[8];
         state[0] = super.saveState(faces);
         state[1] = this.childState;
         state[2] = this.offset;
         state[3] = this.size;
-        state[4] = this.var;
-        state[5] = this.value;
+		state[4] = this.step;
+        state[5] = this.var;
+		state[6] = this.varStatus;
+        state[7] = this.value;
         return state;
     }
 
