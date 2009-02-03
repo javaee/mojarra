@@ -38,7 +38,7 @@
  * holder.
  */
  
-package javax.faces.component.behavior;
+package javax.faces.component;
 
 import java.io.Serializable;
 import java.util.LinkedList;

@@ -49,7 +49,6 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
@@ -126,7 +125,6 @@ public class RenderKitUtils {
      * Example: text/html </p>
      */
     private final static String CONTENT_TYPE_SUBTYPE_DELIMITER = "/";
-
 
     /**
      * This represents the base package that can leverage the
@@ -420,7 +418,7 @@ public class RenderKitUtils {
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = ajaxBehavior.getScript(context, component, null);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
 
         sb = new StringBuffer(256);
 
@@ -490,7 +488,7 @@ public class RenderKitUtils {
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = ajaxBehavior.getScript(context, component, null);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
 
         sb = new StringBuffer(256);
 
@@ -1142,6 +1140,7 @@ public class RenderKitUtils {
         Application app = ctx.getApplication();
         if (ProjectStage.Development.equals(app.getProjectStage())) {
             HtmlMessages messages = (HtmlMessages) app.createComponent(HtmlMessages.COMPONENT_TYPE);
+            messages.setId("javax_faces_developmentstage_messages");
             Renderer messagesRenderer = ctx.getRenderKit().getRenderer(HtmlMessages.COMPONENT_FAMILY, "javax.faces.Messages");
             messages.setErrorStyle("Color: red");
             messages.setWarnStyle("Color: orange");

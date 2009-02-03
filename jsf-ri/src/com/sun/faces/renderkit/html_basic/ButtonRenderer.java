@@ -49,7 +49,7 @@ import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.AjaxBehavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;

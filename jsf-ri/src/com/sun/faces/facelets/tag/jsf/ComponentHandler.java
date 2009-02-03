@@ -60,8 +60,8 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.ActionSource;
-import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.behavior.AjaxBehaviors;
+import javax.faces.component.AjaxBehavior;
+import javax.faces.component.AjaxBehaviors;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -214,7 +214,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         	parent.getFacets().put(facetName, c);
         }
         c.popComponentFromEL(ctx.getFacesContext());
-
+        
     }
     
     private static final String INITIAL_STATE_EVENT_KEY = "facelets.tag.InitialStateEvent";

@@ -40,16 +40,11 @@
 
 package javax.faces.component;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 import javax.faces.event.AbortProcessingException;
@@ -88,7 +83,7 @@ import javax.faces.render.Renderer;
  */
 
 public class UICommand extends UIComponentBase
-    implements ActionSource2, ClientBehaviorHolder  {
+    implements ActionSource2 {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -125,12 +120,6 @@ public class UICommand extends UIComponentBase
 
 
     private Object value = null;
-
-    // The default client event name for UICommand components
-    private static final String DEFAULT_CLIENT_EVENT_NAME = "action";
-
-    // The set of client events for UICommand components.
-    private static final Set<String> CLIENT_EVENT_NAMES;
 
 
     // -------------------------------------------------------------- Properties
@@ -425,30 +414,5 @@ public class UICommand extends UIComponentBase
             }
         }
         super.queueEvent(e);
-    }
-
-    /**
-     * <p class="changed_added_2_0">Returns the <code>Set</code> of client 
-     * event names supported by <code>UICommand</code> components.  The 
-     * <code>Set</code> contains a single item: <code>"action"</code>".</p>
-     */
-    @Override
-    public Set<String> getClientEventNames() {
-        return CLIENT_EVENT_NAMES;
-    }
-
-    /**
-     * <p class="changed_added_2_0">Returns the default client event name 
-     * for UICommand components: "action".</p>
-     */
-    @Override
-    public String getDefaultClientEventName() {
-        return DEFAULT_CLIENT_EVENT_NAME;
-    }
-
-    static {
-        Set<String> eventNames = new HashSet<String>(1, 1.0f);
-        eventNames.add(DEFAULT_CLIENT_EVENT_NAME);
-        CLIENT_EVENT_NAMES = Collections.unmodifiableSet(eventNames);
     }
 }
