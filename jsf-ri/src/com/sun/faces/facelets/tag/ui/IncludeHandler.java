@@ -52,6 +52,8 @@
 package com.sun.faces.facelets.tag.ui;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.ELException;
 import javax.el.VariableMapper;
@@ -64,6 +66,7 @@ import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 
 /**
  * @author Jacob Hookom
@@ -71,7 +74,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagConfig;
  */
 public final class IncludeHandler extends TagHandlerImpl {
 
-    
+    private static final Logger log = Logger.getLogger("facelets.tag.ui.include");
 
     private final TagAttribute src;
 
@@ -100,6 +103,11 @@ public final class IncludeHandler extends TagHandlerImpl {
         try {
             this.nextHandler.apply(ctx, null);
             ctx.includeFacelet(parent, path);
+        } catch (IOException e) {
+            if (log.isLoggable(Level.FINE)) {
+                log.log(Level.FINE, e.toString(), e);
+            }
+            throw new TagAttributeException(this.tag, this.src, "Invalid path : " + path);
         } finally {
             ctx.setVariableMapper(orig);
         }
