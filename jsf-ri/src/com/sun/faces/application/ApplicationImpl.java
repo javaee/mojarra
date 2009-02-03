@@ -95,7 +95,6 @@ import javax.faces.validator.Validator;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
 import com.sun.faces.el.ELUtils;
