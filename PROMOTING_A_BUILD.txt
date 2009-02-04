@@ -7,7 +7,10 @@ checkout v3 workspace.
 cd v3/tests/quicklook
 mvn -Dglassfish.home=/path/to/glassfish/to/test test
 
+Engineering updates updatecenter2/conf/jsf_proto.py to correct version #.
+
 Tag build.
+
 
 RE (Omar) promotes build, pushes to http:eflat.sfbay:40000
 Change variables found in common.xml (build.type, etc) via -D as part of build
