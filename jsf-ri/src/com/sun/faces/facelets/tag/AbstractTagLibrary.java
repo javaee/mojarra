@@ -352,7 +352,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
                 this.constructor = this.type.getConstructor(CONS_SIG);
             } catch (Exception e) {
                 throw new FaceletException(
-                        "Must have a Constructor that takes in a ConverterConfig",
+                        "Must have a Constructor that takes in a ValidatorConfig",
                         e);
             }
         }
