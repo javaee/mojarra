@@ -797,7 +797,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <li>Determine the <code>source</code> element's <code>form</code>
              * element.</li>
              * <li>Get the <code>form</code> view state by calling
-             * {@link jsf.viewState} passing the
+             * {@link jsf.getViewState} passing the
              * <code>form</code> element as the argument.</li>
              * <li>Collect post data arguments for the Ajax request.
              * <ul>
