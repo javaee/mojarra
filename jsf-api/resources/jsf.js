@@ -949,6 +949,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
 
                 var form = getForm(element);
+                if (!form) {
+                    throw new Error("jsf.ajax.request: Method must be called within a form");
+                }
                 var viewState = jsf.getViewState(form);
 
                 // Set up additional arguments to be used in the request..
@@ -1299,6 +1302,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * @function jsf.getViewState
      */
     jsf.getViewState = function(form) {
+        if (!form) {
+            throw new Error("jsf.getViewState:  form must be set");
+        }
         var els = form.elements;
         var len = els.length;
         var qString = "";
