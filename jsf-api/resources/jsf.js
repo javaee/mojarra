@@ -782,6 +782,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <p><b>Implementation Requirements:</b></p>
              * This function must:
              * <ul>
+             * <li>Be used within the context of a <code>form</code>.</li>
              * <li>Capture the element that triggered this Ajax request
              * (from the <code>source</code> argument, also known as the
              * <code>source</code> element.</li>
