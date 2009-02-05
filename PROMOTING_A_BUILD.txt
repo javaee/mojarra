@@ -7,7 +7,10 @@ checkout v3 workspace.
 cd v3/tests/quicklook
 mvn -Dglassfish.home=/path/to/glassfish/to/test test
 
+Engineering updates updatecenter2/conf/jsf_proto.py to correct version #.
+
 Tag build.
+
 
 RE (Omar) promotes build, pushes to http:eflat.sfbay:40000
 Change variables found in common.xml (build.type, etc) via -D as part of build
@@ -23,3 +26,55 @@ QE runs qualification tests, against eflat (JSF2.0)
 QE gives go-ahead.
 
 RE (Terena) pushes eflat and epine to external sites.
+
+
+RELEASING TO JAVA.NET
+=========================================
+NOTE: we currently don't push every promoted build to java.net.  These instructions
+      are for pushing a release to the public.  The steps above are valid in
+      all cases.
+
+ - Copy the downloaded binary and source bundles promoted from RE to a local
+   directory.  These bundles are what will be made available to the public.
+ - Prepare release notes:
+    + check out the website:  cvs -d :pserver:<j.net uid>@cvs.dev.java.net:/cvs co -P -d jsf-web javaserverfaces
+    + if releasing a new patch release:
+       * copy the directory structure of an existing version to the new version
+         (e.g. rsync -r -C 1.2_12/* 1.2_13).  If this is another cut
+       * replace the old version numbers with the new version numbers
+       * update changelog.html with:
+         - outline of new features (if any)
+         - new context init parameters (if any - see older release notes for examples)
+         - issues resolved
+           + To get the list of issues, use the report tool to generate a report
+             and gather a list of all issues resolved for this patch release
+             (this may span several builds).  The table for the resolved
+             issues should be two columns for the issue ID and description.
+             Ensure the ID is a hyperlink.  I use a FireFox addon called
+             Scrapbook to copy a selection of issues into a separate
+             html document and then cut/paste into changelog.html.  Don't forget
+             to update the row styles (again, see older changelogs for examples)
+        * check in the new directory structure and files
+     + if releasing an update to an existing version (i.e. 2.0.0 BETA1 to 2.0.0 BETA2)
+       * update the version in the existing release notes
+       * append the issues resolved between the two versions in changelog.xhtml
+         (Use the 2.0.0 release notes for an example)
+   - Upload the binary and source bundles to java.net.  The new directory
+     should be placed under: Downloads->Release->Version
+   - In the same directory, add a file that refers to the Release Notes (see
+     previous versions for an example)
+   - Update download.html:
+     + If necessary move the version being replaced to Archived Releases
+     + Add the new version using the existing format
+   - Create a new download button for the new version using
+     images/downloadbackground.png.  I use gimp to do the image manipulation.
+     Add the new version to the template using Sans Bold font.  Adjust the
+     font weight to fill the button.  Save the image as download<version>.png
+     (e.g. download1212.png).  Check the image in to CVS.
+   - Update index.html to reference the new download button.  Have the link
+     the image refers to point to the folder containing the new build (should
+     display the source, binary, and release notes).
+   - Add a new announcement using the project's news facility.  Use existing
+     announcements as a template.
+   - Push the bits to maven (INSTRUCTIONS IN PROGRESS)
+

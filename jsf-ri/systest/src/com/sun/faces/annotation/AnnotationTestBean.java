@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,47 +37,45 @@
 package com.sun.faces.annotation;
 
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.context.FacesContext;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.convert.Converter;
+import javax.faces.validator.Validator;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.FactoryFinder;
-import javax.faces.validator.Validator;
-import javax.faces.convert.Converter;
-import javax.faces.component.UIComponent;
+import javax.servlet.http.HttpServletRequest;
 
-import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.NamedEventManager;
 import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.mgbean.ManagedBeanInfo;
 import com.sun.faces.mgbean.BeanBuilder;
+import com.sun.faces.mgbean.ManagedBeanInfo;
 
 
-public class TestAnnotatedComponents extends ServletFacesTestCase {
+public class AnnotationTestBean {
 
+    public String getTestResult() {
 
-    // ------------------------------------------------------------ Constructors
-
-
-    public TestAnnotatedComponents() {
-        super("TestAnnotatedComponents");
+        try {
+            testAnnotatedComponentsWebInfClasses();
+            testAnnotatedComponentsWebInfLib();
+            return Boolean.TRUE.toString();
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE,
+                                            "AnnotationTestBean validation failure!",
+                                            e);
+            return Boolean.FALSE.toString();
+        }
     }
 
+    private void testAnnotatedComponentsWebInfClasses() throws Exception {
 
-    public TestAnnotatedComponents(String name) {
-        super(name);
-    }
-
-
-    // ------------------------------------------------------------ Test Methods
-
-
-    public void testAnnotatedComponentsWebInfClasses() throws Exception {
-
-        FacesContext ctx = getFacesContext();
+        FacesContext ctx = FacesContext.getCurrentInstance();
         Application app = ctx.getApplication();
 
         UIComponent c = app.createComponent("AnnotatedComponent");
@@ -96,8 +94,10 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertNotNull(v);
         assertTrue(v instanceof AnnotatedValidator);
 
-        RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit rk = rkf.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        RenderKitFactory rkf = (RenderKitFactory) FactoryFinder
+              .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit rk =
+              rkf.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
         assertNotNull(rk);
 
         Renderer r = rk.getRenderer("AnnotatedRenderer", "AnnotatedRenderer");
@@ -111,33 +111,36 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         BeanBuilder bean1 = manager.getBuilder("annotatedBean");
         assertNotNull(bean1);
         ManagedBeanInfo bean1Info = bean1.getManagedBeanInfo();
-        assertEquals("annotatedBean", "annotatedBean", bean1Info.getName());
-        assertEquals("request", "request", bean1Info.getScope());
+        assertEquals("annotatedBean", bean1Info.getName());
+        assertEquals("request", bean1Info.getScope());
         assertFalse(bean1Info.isEager());
-        List<ManagedBeanInfo.ManagedProperty> managedProperties = bean1Info.getManagedProperties();
+        List<ManagedBeanInfo.ManagedProperty> managedProperties =
+              bean1Info.getManagedProperties();
         assertNotNull(managedProperties);
         assertTrue(managedProperties.size() == 2);
         ManagedBeanInfo.ManagedProperty p1 = managedProperties.get(0);
-        assertEquals("silly", "silly", p1.getPropertyName());
-        assertEquals(String.class.getName(), String.class.getName(), p1.getPropertyClass());
-        assertEquals("#{requestScope.name}", "#{requestScope.name}", p1.getPropertyValue());
+        assertEquals("silly", p1.getPropertyName());
+        assertEquals(String.class.getName(), p1.getPropertyClass());
+        assertEquals("#{requestScope.name}", p1.getPropertyValue());
         ManagedBeanInfo.ManagedProperty p2 = managedProperties.get(1);
-        assertEquals("age", "age", p2.getPropertyName());
-        assertEquals(Integer.TYPE.getName(), Integer.TYPE.getName(), p2.getPropertyClass());
-        assertEquals("#{requestScope.age}", "#{requestScope.age}", p2.getPropertyValue());
+        assertEquals("age", p2.getPropertyName());
+        assertEquals(Integer.TYPE.getName(), p2.getPropertyClass());
+        assertEquals("#{requestScope.age}", p2.getPropertyValue());
+        HttpServletRequest request = (HttpServletRequest) ctx.getExternalContext().getRequest();
         request.setAttribute("name", "Bill");
         request.setAttribute("age", 33);
-        AnnotatedBean bean1Instance = (AnnotatedBean) manager.create("annotatedBean", ctx);
-        assertEquals("Bill", "Bill", bean1Instance.getSilly());
-        assertEquals(33, 33, bean1Instance.getAge());
+        AnnotatedBean bean1Instance =
+              (AnnotatedBean) manager.create("annotatedBean", ctx);
+        assertEquals("Bill", bean1Instance.getSilly());
+        assertEquals(33, bean1Instance.getAge());
         assertNotNull(request.getAttribute("annotatedBean"));
         request.removeAttribute("annotatedBean");
 
     }
 
-     public void testAnnotatedComponentsWebInfLib() throws Exception {
+    private void testAnnotatedComponentsWebInfLib() throws Exception {
 
-        FacesContext ctx = getFacesContext();
+        FacesContext ctx = FacesContext.getCurrentInstance();
         Application app = ctx.getApplication();
 
         UIComponent c = app.createComponent("AnnotatedComponent2");
@@ -153,8 +156,10 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertNotNull(v);
         assertTrue(v.getClass().getName().endsWith("AnnotatedValidator2"));
 
-        RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit rk = rkf.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        RenderKitFactory rkf = (RenderKitFactory) FactoryFinder
+              .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit rk =
+              rkf.getRenderKit(ctx, RenderKitFactory.HTML_BASIC_RENDER_KIT);
         assertNotNull(rk);
 
         Renderer r = rk.getRenderer("AnnotatedRenderer2", "AnnotatedRenderer2");
@@ -162,9 +167,46 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertTrue(r.getClass().getName().endsWith("AnnotatedRenderer2"));
 
         // Test default naming logic
-        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext()).getNamedEventManager().getNamedEvent("com.sun.faces.annotation.annotatedComponentSystem"));
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext())
+              .getNamedEventManager().getNamedEvent("com.sun.faces.annotation.annotatedComponentSystem"));
         // Test short name
-        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext()).getNamedEventManager().getNamedEvent("com.sun.faces.annotation.anotherAnnotatedComponentSystem"));
-        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext()).getNamedEventManager().getNamedEvent("explicitEventName"));
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext())
+              .getNamedEventManager().getNamedEvent("com.sun.faces.annotation.anotherAnnotatedComponentSystem"));
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext())
+              .getNamedEventManager().getNamedEvent("explicitEventName"));
+    }
+
+    private void assertNotNull(Object v) {
+        if (v == null) {
+            throw new RuntimeException();
+        }
+    }
+
+    private void assertTrue(boolean t) {
+        if (!t) {
+            throw new RuntimeException();
+        }
+    }
+
+    private void assertEquals(Object o1, Object o2) {
+        if (o1 == null && o2 != null) {
+            throw new RuntimeException();
+        }
+        if (o2 == null && o1 != null) {
+            throw new RuntimeException();
+        }
+        if (o1 == null) {
+            return;
+        }
+        if (!o1.equals(o2)) {
+            throw new RuntimeException();
+        }
+
+    }
+
+    private void assertFalse(boolean t) {
+        if (t) {
+            throw new RuntimeException();
+        }
     }
 }

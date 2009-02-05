@@ -248,7 +248,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             caseStruct = findImplicitMatch(ctx, root, fromAction, outcome);
         }
 
-        if (caseStruct == null && development) {
+        // no navigation case fo
+        if (caseStruct == null && outcome != null && development) {
             String key;
             Object[] params;
             if (fromAction == null) {

@@ -127,7 +127,8 @@
     <!-- converter06 impl logic deferred to 2.0 -->
     <target name="test"
             description="Execute all tests against installed application"
-            depends="test.ajax,
+            depends="test.annotations,
+                test.ajax,
                 test.facelets,
                 test.init,
                 test.render,
@@ -248,12 +249,30 @@
     </target>
 
     <target name="test.facelets">
+        <!-- Tests to verify 955, return a 500, rather than a 404 -->
+        <jsf.tester request="${context.path}/faces/facelets/compositionnotfound.xhtml"
+            status="500"/>
+        <jsf.tester request="${context.path}/faces/facelets/decoratenotfound.xhtml"
+            status="500"/>
+        <jsf.tester request="${context.path}/faces/facelets/includenotfound.xhtml"
+            status="500"/>        
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/facelets/FaceletsTestCase.class"/> 
+                         includes="com/sun/faces/facelets/*TestCase.class"/> 
+            </tests>
+        </jsf.junit>
+    </target>
+
+    <target name="test.annotations">
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/annotation/AnnotatedComponentsTestCase.class"/> 
             </tests>
         </jsf.junit>
     </target>

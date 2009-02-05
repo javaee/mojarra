@@ -325,15 +325,21 @@ public abstract class ViewHandler {
     }
 
     /**
-     * <p>Return a URL suitable for rendering (after optional encoding
-     * performed by the <code>encodeActionURL()</code> method of
-     * {@link ExternalContext}) that selects the specified view identifier.</p>
+     * <p class="changed_modified_2_0">If the value returned from this
+     * method is used as the <code>file</code> argument to the
+     * four-argument constructor for <code>java.net.URL</code> (assuming
+     * appropriate values are used for the first three arguments), then
+     * a client making a request to the <code>toExternalForm()</code> of
+     * that <code>URL</code> will select the argument
+     * <code>viewId</code> for traversing the JSF lifecycle.  Please see
+     * section JSF.7.5.2 for the complete specification.</p>
      *
      * @param context {@link FacesContext} for this request
      * @param viewId View identifier of the desired view
      *
      * @throws IllegalArgumentException if <code>viewId</code> is not
-     *  valid for this <code>ViewHandler</code>.
+     * valid for this <code>ViewHandler</code>, or does not start with
+     * "/".
      * @throws NullPointerException if <code>context</code> or
      *  <code>viewId</code> is <code>null</code>.
      */
@@ -341,12 +347,15 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p>Return a URL suitable for rendering (after optional encoding
-     * perfomed by the <code>encodeResourceURL()</code> method of
-     * {@link ExternalContext}) that selects the specifed web application
-     * resource.  If the specified path starts with a slash, it must be
-     * treated as context relative; otherwise, it must be treated as relative
-     * to the action URL of the current view.</p>
+     * <p class="changed_modified_2_0">If the value returned from this
+     * method is used as the <code>file</code> argument to the
+     * four-argument constructor for <code>java.net.URL</code> (assuming
+     * appropriate values are used for the first three arguments), then
+     * a client making a request to the <code>toExternalForm()</code> of
+     * that <code>URL</code> will select the argument <code>path</code>
+     * for direct rendering.  If the specified path starts with a slash,
+     * it must be treated as context relative; otherwise, it must be
+     * treated as relative to the action URL of the current view.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param path Resource path to convert to a URL

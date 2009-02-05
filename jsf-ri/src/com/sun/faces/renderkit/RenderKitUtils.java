@@ -1140,6 +1140,7 @@ public class RenderKitUtils {
         Application app = ctx.getApplication();
         if (ProjectStage.Development.equals(app.getProjectStage())) {
             HtmlMessages messages = (HtmlMessages) app.createComponent(HtmlMessages.COMPONENT_TYPE);
+            messages.setId("javax_faces_developmentstage_messages");
             Renderer messagesRenderer = ctx.getRenderKit().getRenderer(HtmlMessages.COMPONENT_FAMILY, "javax.faces.Messages");
             messages.setErrorStyle("Color: red");
             messages.setWarnStyle("Color: orange");

@@ -68,7 +68,7 @@ container.name=glassfish
 #    Override the default value if testing against
 #    a different version is desirable.
 # --------------------------------------------------
-container.home=${jsf.build.home}/dependencies/glassfish
+container.home=
 container.host=localhost
 container.port=8080
 
@@ -106,7 +106,7 @@ glassfish.domain=domain1
 # http://wiki.updatecenter.java.net/Wiki.jsp?page=Download
 # Used for updatecenter2
 # --------------------------------------------------
-pkg.dir=/home/driscoll/pkg/pkg
+pkg.dir=
 
 # --------------------------------------------------
 #    Compilation flags

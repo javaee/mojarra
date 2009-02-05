@@ -73,6 +73,7 @@ import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 
 /**
  * @author Jacob Hookom
@@ -139,8 +140,15 @@ public final class DecorateHandler extends TagHandlerImpl implements TemplateCli
         }
 
         ctx.pushClient(this);
+        String path = null;
         try {
-            ctx.includeFacelet(parent, this.template.getValue(ctx));
+            path = this.template.getValue(ctx);
+            ctx.includeFacelet(parent, path);
+        } catch (IOException e) {
+            if (log.isLoggable(Level.FINE)) {
+                log.log(Level.FINE, e.toString(), e);
+            }
+            throw new TagAttributeException(this.tag, this.template, "Invalid path : " + path);
         } finally {
             ctx.setVariableMapper(orig);
             ctx.popClient(this);
@@ -151,7 +159,7 @@ public final class DecorateHandler extends TagHandlerImpl implements TemplateCli
         if (name != null) {
             DefineHandler handler = (DefineHandler) this.handlers.get(name);
             if (handler != null) {
-            	handler.applyDefinition(ctx, parent);
+                handler.applyDefinition(ctx, parent);
                 return true;
             } else {
                 return false;
