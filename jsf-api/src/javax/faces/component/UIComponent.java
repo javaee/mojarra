@@ -65,6 +65,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
 import javax.faces.application.Resource;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitHint;
@@ -199,6 +200,19 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * on what has been set.
      */
     List<String> attributesThatAreSet;
+
+    /**
+     * behaviors associated with this component.
+     */
+    private Map<String, Behavior> behaviors;
+
+    /**
+     * Unmodifiable version of the above.  We could avoid storing
+     * this - and instead re-create the unmodifiable wrapper on
+     * each call to getBehaviors(), but creating this wrapper
+     * once seems more efficient.
+     */
+    private Map<String, Behavior> unmodifiableBehaviors;
 
 
     // -------------------------------------------------------------- Attributes
@@ -2050,6 +2064,132 @@ private void doFind(FacesContext context, String clientId) {
      *  is <code>null</code>
      */
     public abstract Object processSaveState(FacesContext context);
+
+
+    // ------------------------------------------- Methods from Behavior
+
+    /**
+     * <p class="changed_added_2_0">This is a default implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#addBehavior}.  
+     * <code>UIComponent</code> does not implement the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+     * but provides default implementations for the methods defined by 
+     * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+     * subclass implementations.   Subclasses that wish to support the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} contract must 
+     * declare that the subclass implements 
+     * {@link javax.faces.component.behavior.BehaviorHolder}, and must provide
+     * an implementation of 
+     * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+     *
+     * @param eventName the logical name of the client-side event to attach
+     *        the behavior to.
+     * param  behavior the {@link javax.faces.component.behavior.Behavior} 
+     * instance to attach for the specified event name.
+     */
+    public void addBehavior(String eventName, Behavior behavior) {
+
+        // First, make sure that the event is supported.  We don't want
+        // to bother attaching behaviors for unsupported events.
+
+        Set<String> eventNames = getEventNames();
+
+        // getClientEventNames() is spec'ed to require a non-null Set.
+        // If getClientEventNames() returns null, throw an exception
+        // to indicate that the API in not being used properly.
+        if (eventNames == null) {
+            throw new IllegalStateException(
+              "Attempting to add a Behavior to a component " +
+              "that does not support any event types. "     +
+              "getEventTypes() must return a non-null Set.");
+        }
+
+        if (eventNames.contains(eventName)) {
+            // We've got an event that we support, create our Map
+            // if necessary
+            if (null == behaviors) {
+
+                // Typically we only have a small number of behaviors for
+                // any component - usually only 1.  (Currently the standard
+                // components only support 1 event name each.)  If in the
+                // future it becomes common for components instances to 
+                // be associated with many client behaviors, we should
+                // revisit the initial capacity here.
+                behaviors = new HashMap<String, Behavior>(2,1.0f);
+
+                // Also, create an unmodifiable wrapper that we can
+                // return from getBehaviors();
+                unmodifiableBehaviors = 
+                    Collections.unmodifiableMap(behaviors);
+            }
+
+            behaviors.put(eventName, behavior);
+        }
+    }
+
+    /**
+     * <p class="changed_added_2_0">This is a default implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.  
+     * <code>UIComponent</code> does not implement the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+     * but provides default implementations for the methods defined by 
+     * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+     * subclass implementations.   Subclasses that wish to support the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} contract 
+     * must declare that the subclass implements 
+     * {@link javax.faces.component.behavior.BehaviorHolder}, and must
+     * override this method to return a non-Empty <code>Seti</code> of the 
+     * client event names that the component supports.</p>
+     */
+    public Set<String> getEventNames() {
+        // Note: we intentionally return null here even though this
+        // is not a valid value.  The result is that addClientBehavior()
+        // will fail with an IllegalStateException if getClientEventNames()
+        // is not overridden.  This should make it obvious to the
+        // component author that something is wrong.
+        return null;
+    }
+
+    /**
+     * <p class="changed_added_2_0">This is a default implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.  
+     * <code>UIComponent</code> does not implement the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+     * but provides default implementations for the methods defined by 
+     * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+     * subclass implementations.   Subclasses that wish to support the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} contract 
+     * must declare that the subclass implements 
+     * {@link javax.faces.component.bhavior.BehaviorHolder}, and must add
+     * an implementation of 
+     * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+     */
+    public Map<String, Behavior> getBehaviors() {
+        return (null == unmodifiableBehaviors) ?
+                   Collections.<String,Behavior>emptyMap() :
+                   unmodifiableBehaviors;
+    }
+
+    /**
+     * <p class="changed_added_2_0">This is a default implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#getDefaultEventName}.  
+     * <code>UIComponent</code> does not implement the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+     * but provides default implementations for the methods defined by 
+     * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+     * subclass implementations.   Subclasses that wish to support the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} contract 
+     * must declare that the subclass implements 
+     * {@link javax.faces.component.behavior.BehaviorHolder}, and must 
+     * provide an implementation of 
+     * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+     */
+    public String getDefaultEventName() {
+
+        // Our default implementation just returns null - no default
+        // event name;
+        return null;
+    }
 
 
     // ----------------------------------------------------- Convenience Methods
