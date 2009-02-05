@@ -278,10 +278,7 @@
                              value="http://${container.host}:${container.port}/test"/>
             </custom-sysproperties>
             <suite>
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
-                <test todir="${impl.test.results.dir}"
-                    name="com.sun.faces.el.TestResourceELResolver"/>                
+
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.resource.TestResourceManager"/>
                 <test todir="${impl.test.results.dir}"
@@ -321,6 +318,8 @@
                       name="com.sun.faces.config.ConfigFileTestCase"/>
                 -->
                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.config.ConfigureListenerTestCase"/>
+                <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.config.TestConfigListener"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.config.TestManagedBeanFactory"/>
@@ -340,6 +339,8 @@
                       name="com.sun.faces.context.TestFacesContextImpl"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.convert.TestConverters"/>
+                <test todir="${impl.test.results.dir}"
+                    name="com.sun.faces.el.TestResourceELResolver"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.el.impl.TestELImpl"/>
                 <test todir="${impl.test.results.dir}"
@@ -361,7 +362,9 @@
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.el.TestMethodRef"/>
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.el.TestMethodExpressionImpl"/>   
+                      name="com.sun.faces.el.TestMethodExpressionImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
                 <test todir="${impl.test.results.dir}"
@@ -455,7 +458,6 @@
 
             </suite>    
         </jsf.junit>
-        <antcall target="test.config"/>
     </target>
     
      <target name="config.compile"            
@@ -464,13 +466,13 @@
         <mkdir dir="${basedir}/build/test"/>
         <jsf.javac srcdir="${basedir}/test"
                    destdir="${basedir}/build/test/classes"
-                   includes="com/sun/faces/config/ConfigureListenerTestCase.java,
-                             com/sun/faces/config/TestComponent.java,
+                   includes="com/sun/faces/config/TestComponent.java,
                              com/sun/faces/config/TestConverter.java,
                              com/sun/faces/config/TestRenderer.java,
                              com/sun/faces/config/TestValidator.java,
                              com/sun/faces/mock/*.java"
-                   excludes="com/sun/faces/config/ConfigFileTestCase.java">
+                   excludes="com/sun/faces/config/ConfigFileTestCase.java,
+                             com/sun/faces/config/ConfigureListenerTestCase.java">
 
             <classpath>
                 <path refid="test.compile.classpath"/>
@@ -482,49 +484,5 @@
                      includes="**/*.properties"/>
         </copy>
     </target>    
-
-    <target name="prepare.config"   
-            description="Prepare pseudo-webapps for configuration testing">
-
-        <!-- Set up webapp "test-config-1" -->
-        <mkdir dir="${build.dir}/test-config-1"/>
-        <copy todir="${build.dir}/test-config-1">
-            <fileset dir="web/test-config-1"/>
-        </copy>
-        <mkdir dir="${build.dir}/test-config-1/WEB-INF/classes"/>
-        <mkdir dir="${build.dir}/test-config-1/WEB-INF/lib"/>
-        <copy todir="${build.dir}/test-config-1/WEB-INF/lib"
-              file="${jsf-api.jar}"/>
-        <copy todir="${build.dir}/test-config-1/WEB-INF/lib"
-              file="${build.dir}/lib/${name}.jar"/>
-
-        <!-- Set up webapp "test-config-2" by copying "test-config-1" ... -->
-        <mkdir dir="${build.dir}/test-config-2"/>
-        <copy todir="${build.dir}/test-config-2">
-            <fileset dir="${build.dir}/test-config-1"/>
-        </copy>
-        <!-- ... and adding a META-INF/faces-config.xml file in /WEB-INF/classes -->
-        <mkdir dir="${build.dir}/test-config-2/WEB-INF/classes/META-INF"/>
-        <copy tofile="${build.dir}/test-config-2/WEB-INF/classes/META-INF/faces-config.xml"
-              file="${build.dir}/test-config-2/WEB-INF/embed-config.xml"/>
-
-    </target>
-
-    <target name="test.config"
-            depends="prepare.config,config.compile"
-            description="Execute standalone JUnit tests on config subsystem">
-
-        <echo message="Running com.sun.faces.config tests ..."/>
-        <jsf.junit classpath-refid="test.runtime.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <custom-sysproperties>
-                <sysproperty   key="base.dir" value="${basedir}/build"/>
-            </custom-sysproperties>
-            <tests>
-                <fileset dir="${basedir}/build/test/classes"
-                         includes="com/sun/faces/config/ConfigureListenerTestCase.class"/>
-            </tests>             
-        </jsf.junit>        
-    </target>
 
 </project>
