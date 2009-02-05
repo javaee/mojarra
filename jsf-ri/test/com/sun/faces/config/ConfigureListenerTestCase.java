@@ -41,18 +41,18 @@
 package com.sun.faces.config;
 
 
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.mock.MockServletContext;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
-
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
-import java.util.logging.Logger;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -118,32 +118,24 @@ import javax.faces.validator.DoubleRangeValidator;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.LongRangeValidator;
 import javax.faces.webapp.FacesServlet;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletException;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
+import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.application.ApplicationAssociate;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 
 /**
  * <p>Unit tests for <code>ConfigureListener</code>.</p>
  */
-public class ConfigureListenerTestCase extends TestCase {
+public class ConfigureListenerTestCase extends ServletFacesTestCase {
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    // The ServletContext for the ConfigureListener to be tested
-    private MockServletContext context = null;
-
-
-    // The ConfigureListener to be tested
-    private ConfigureListener listener = null;
 
 
     // ------------------------------------------------------------ Constructors
@@ -154,37 +146,14 @@ public class ConfigureListenerTestCase extends TestCase {
         super(name);
     }
 
-
-    // ---------------------------------------------------- Overall Test Methods
-
-
-    // Set up instance variables required by this test case.
-    public void setUp() {
-
-        Thread.currentThread().setContextClassLoader
-            (this.getClass().getClassLoader());
-        context = new MockServletContext();
-        context.addInitParameter("javax.faces.PROJECT_STAGE", "UnitTest");
-        context.addInitParameter("com.sun.faces.resourceUpdateCheckPeriod", "-1");
-        listener = new ConfigureListener();
-
+    public ConfigureListenerTestCase() {
+        this("ConfigureListenerTestCase");
     }
 
-
-    // Return the tests included in this test case.
+     // Return the tests included in this test case.
     public static Test suite() {
 
         return (new TestSuite(ConfigureListenerTestCase.class));
-
-    }
-
-
-    // Tear down instance variables required by this test case.
-    public void tearDown() {
-
-        context = null;
-        listener = null;
-        Thread.currentThread().setContextClassLoader(null);
 
     }
 
@@ -196,20 +165,6 @@ public class ConfigureListenerTestCase extends TestCase {
     // Test a basic environment with no application configuration resources
     public void testBasic() throws Exception {
 
-        context.setServletContextName("testBasic");
-        ServletContextEvent sce = new ServletContextEvent(context);
-
-        // Initialize the context
-        try {
-            listener.contextInitialized(sce);
-        } catch (FacesException e) {
-            if (e.getCause() != null) {
-                throw (Exception) e.getCause();
-            } else {
-                throw e;
-            }
-        }
-
         // Perform tests on the environment
         checkComponentsGeneric();
         checkComponentsHtml();
@@ -217,9 +172,6 @@ public class ConfigureListenerTestCase extends TestCase {
         checkConvertersById();
         checkRenderers();
         checkValidators();
-
-        // Destroy the context
-        listener.contextDestroyed(sce);
 
     }
 
@@ -242,20 +194,6 @@ public class ConfigureListenerTestCase extends TestCase {
 
     // Test some boolean attributes that should have been set explicitly
     public void testBoolean() throws Exception {
-
-        context.setServletContextName("testBoolean");
-        ServletContextEvent sce = new ServletContextEvent(context);
-
-        // Initialize the context
-        try {
-            listener.contextInitialized(sce);
-        } catch (FacesException e) {
-            if (e.getCause() != null) {
-                throw (Exception) e.getCause();
-            } else {
-                throw e;
-            }
-        }
 
         RenderKitFactory rkFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
@@ -281,29 +219,11 @@ public class ConfigureListenerTestCase extends TestCase {
                          r.getRendersChildren());
         }
 
-        // Destroy the context
-        listener.contextDestroyed(sce);
-
     }
 
 
     // Test a webapp with a default faces-config.xml resource
     public void testDefault() throws Exception {
-
-        context.setServletContextName("testDefault");
-        ServletContextEvent sce = new ServletContextEvent(context);
-        setUp("test-config-1");
-
-        // Initialize the context
-        try {
-            listener.contextInitialized(sce);
-        } catch (FacesException e) {
-            if (e.getCause() != null) {
-                throw (Exception) e.getCause();
-            } else {
-                throw e;
-            }
-        }
 
         // Validate standard configuration
         checkComponentsGeneric();
@@ -318,8 +238,6 @@ public class ConfigureListenerTestCase extends TestCase {
         checkExtraConfiguration(false);
         checkEmbedConfiguration(false);
 
-        // Destroy the context
-        listener.contextDestroyed(sce);
 
     }
 
@@ -327,12 +245,16 @@ public class ConfigureListenerTestCase extends TestCase {
     // Test a webapp with a default and extra and embedded resources
     public void testEmbed() throws Exception {
 
-        context.setServletContextName("testEmbed");
-        ServletContextEvent sce = new ServletContextEvent(context);
-        setUp("test-config-2");
-        context.addInitParameter(FacesServlet.CONFIG_FILES_ATTR,
-                                 "/WEB-INF/extra-config.xml");
-
+        ServletContext ctx = (ServletContext)
+              getFacesContext().getExternalContext().getContext();
+        ApplicationAssociate.clearInstance(getFacesContext().getExternalContext());
+        ctx.removeAttribute("com.sun.faces.config.WebConfiguration");  
+        ServletContextWrapper w = new ServletContextWrapper(ctx);
+        ServletContextEvent sce = new ServletContextEvent(w);
+        w.addInitParameter(FacesServlet.CONFIG_FILES_ATTR,
+                           "/WEB-INF/embed-config.xml,/WEB-INF/extra-config.xml");
+        FactoryFinder.releaseFactories();
+        ConfigureListener listener = new ConfigureListener();
         // Initialize the context
         try {
             listener.contextInitialized(sce);
@@ -366,11 +288,16 @@ public class ConfigureListenerTestCase extends TestCase {
     // Test a webapp with a default and extra faces-config.xml resources
     public void testExtra() throws Exception {
 
-        context.setServletContextName("testExtra");
-        ServletContextEvent sce = new ServletContextEvent(context);
-        setUp("test-config-1");
-        context.addInitParameter(FacesServlet.CONFIG_FILES_ATTR,
-                                 "/WEB-INF/extra-config.xml");
+        ServletContext ctx = (ServletContext)
+              getFacesContext().getExternalContext().getContext();
+        ApplicationAssociate.clearInstance(getFacesContext().getExternalContext());
+        ctx.removeAttribute("com.sun.faces.config.WebConfiguration");
+        ServletContextWrapper w = new ServletContextWrapper(ctx);
+        ServletContextEvent sce = new ServletContextEvent(w);
+        w.addInitParameter(FacesServlet.CONFIG_FILES_ATTR,
+                           "/WEB-INF/extra-config.xml");
+        FactoryFinder.releaseFactories();
+        ConfigureListener listener = new ConfigureListener();
 
         // Initialize the context
         try {
@@ -401,14 +328,6 @@ public class ConfigureListenerTestCase extends TestCase {
 
     }
 
-
-    // Test a pristine ConfigureListener instance
-    public void testPristine() {
-
-        assertNotNull(listener);
-
-    }
-   
 
     // --------------------------------------------------------- Support Methods
 
@@ -811,40 +730,7 @@ public class ConfigureListenerTestCase extends TestCase {
     }
 
 
-    // Set up a web application environment for the specified
-    // directory (underneath the "basedir" system property)
-    private void setUp(String directory) throws Exception {
 
-        // Configure the directory on our MockServletContext
-        File basedir = new File(System.getProperty("base.dir"));
-        File webapp = new File(basedir, directory);
-        context.setDirectory(webapp);
-
-        // Accumulate the URLs for the web application class loader
-        List list = new ArrayList();
-        File classes = new File(webapp, "WEB-INF/classes/");
-        list.add(classes.toURL());
-        File lib = new File(webapp, "WEB-INF/lib");
-        if (lib.exists() && lib.isDirectory()) {
-            String files[] = lib.list();
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].endsWith(".jar")) {
-                    File file = new File(lib, files[i]);
-                    list.add(file.toURL());
-                }
-            }
-        }
-
-        // Set up a web application class loader for this application
-        URL urls[] = (URL[]) list.toArray(new URL[list.size()]);
-        for (int i = 0; i < urls.length; i++) {
-            System.err.println("URL=" + urls[i].toExternalForm());
-        }
-        URLClassLoader cl = new URLClassLoader
-            (urls, Thread.currentThread().getContextClassLoader());
-        Thread.currentThread().setContextClassLoader(cl);
-
-    }
 
     // Tests if a particular reset message got logged
     // See testLogOverriddenContextConfigValues
@@ -863,6 +749,143 @@ public class ConfigureListenerTestCase extends TestCase {
         
         public boolean gotLogMessage() {
             return gotLogMessage;
+        }
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    private static final class ServletContextWrapper implements ServletContext {
+
+        private ServletContext delegate;
+        private Map<String,String> initParameters;
+
+        ServletContextWrapper(ServletContext delegate) {
+            this.delegate = delegate;
+        }
+
+        void addInitParameter(String name, String value) {
+            if (initParameters == null) {
+                initParameters = new HashMap<String,String>();
+            }
+            initParameters.put(name, value);
+        }
+
+        public String getContextPath() {
+            return delegate.getContextPath();
+        }
+
+        public ServletContext getContext(String s) {
+            return delegate.getContext(s);
+        }
+
+        public int getMajorVersion() {
+            return delegate.getMajorVersion();
+        }
+
+        public int getMinorVersion() {
+            return delegate.getMinorVersion();
+        }
+
+        public String getMimeType(String s) {
+            return delegate.getMimeType(s);
+        }
+
+        public Set getResourcePaths(String s) {
+            return delegate.getResourcePaths(s);
+        }
+
+        public URL getResource(String s) throws MalformedURLException {
+            return delegate.getResource(s);
+        }
+
+        public InputStream getResourceAsStream(String s) {
+            return delegate.getResourceAsStream(s);
+        }
+
+        public RequestDispatcher getRequestDispatcher(String s) {
+            return delegate.getRequestDispatcher(s);
+        }
+
+        public RequestDispatcher getNamedDispatcher(String s) {
+            return delegate.getNamedDispatcher(s);
+        }
+
+        public Servlet getServlet(String s) throws ServletException {
+            return delegate.getServlet(s);
+        }
+
+        public Enumeration getServlets() {
+            return delegate.getServlets();
+        }
+
+        public Enumeration getServletNames() {
+            return getServletNames();
+        }
+
+        public void log(String s) {
+            delegate.log(s);
+        }
+
+        public void log(Exception e, String s) {
+            delegate.log(e, s);
+        }
+
+        public void log(String s, Throwable throwable) {
+            delegate.log(s, throwable);
+        }
+
+        public String getRealPath(String s) {
+            return delegate.getRealPath(s);
+        }
+
+        public String getServerInfo() {
+            return delegate.getServerInfo();
+        }
+
+        public String getInitParameter(String s) {
+            String v = null;
+            if (initParameters != null) {
+                v = initParameters.get(s);
+            }
+            if (v == null) {
+                v = delegate.getInitParameter(s);
+            }
+            return v;
+        }
+
+        public Enumeration getInitParameterNames() {
+            Vector<String> v = new Vector<String>();
+            if (initParameters != null) {
+                for (String key : initParameters.keySet()) {
+                    v.add(key);
+                }
+            }
+            for (Enumeration e = delegate.getInitParameterNames(); e.hasMoreElements(); ) {
+                v.add((String) e.nextElement());
+            }
+            return v.elements();
+        }
+
+        public Object getAttribute(String s) {
+            return delegate.getAttribute(s);
+        }
+
+        public Enumeration getAttributeNames() {
+            return delegate.getAttributeNames();
+        }
+
+        public void setAttribute(String s, Object o) {
+            delegate.setAttribute(s, o);
+        }
+
+        public void removeAttribute(String s) {
+            delegate.removeAttribute(s);
+        }
+
+        public String getServletContextName() {
+            return delegate.getServletContextName();
         }
     }
 
