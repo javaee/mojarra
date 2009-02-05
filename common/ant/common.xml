@@ -141,16 +141,13 @@
     </path>
 
     <path id="compile.classpath">
+        <pathelement location="${el-api.jar}"/>
+        <pathelement location="${el-impl.jar}"/>
         <pathelement location="${servlet.jar}"/>
         <pathelement location="${jsp.jar}"/>
         <pathelement location="${portlet.jar}"/>
         <pathelement location="${jstl.jar}"/>
-        <pathelement location="${glassfish.jar}"/>
-        <pathelement location="${annotation.jar}"/>        
-        <pathelement location="${glassfish.jar}"/>
-        <pathelement location="${tomcat6.jar}"/>
-        <pathelement location="${jetty.annotations.jar}"/>
-        <pathelement location="${jetty.plus.jar}"/>
+        <pathelement location="${annotation.jar}"/>
         <pathelement location="${groovy.jar}"/>
     </path>
     

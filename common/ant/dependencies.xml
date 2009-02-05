@@ -61,6 +61,7 @@
     <property name="annotation.api.version" value="1.0"/>
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.5.5"/>
+    <property name="el.version" value="1.0"/>
     <property name="maven.repository.importer.version" value="1.2"/>
 
     <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
@@ -86,6 +87,8 @@
     <property name="maven.repository.importer.jar" value="${dependency.jar.dir}/maven-repository-importer-${maven.repository.importer.version}.jar"/>
     <property name="servlet.jar"                   value="${dependency.jar.dir}/servlet-api-${servlet.api.version}.jar"/>
     <property name="jsp.jar"                       value="${dependency.jar.dir}/jsp-api-${jsp.api.version}.jar"/>
+    <property name="el-api.jar"                    value="${dependency.jar.dir}/el-api-${el.version}.jar"/>
+    <property name="el-impl.jar"                   value="${dependency.jar.dir}/el-impl-${el.version}.jar"/>
     <property name="jstl.jar"                      value="${dependency.jar.dir}/jstl-${jstl.api.version}.jar"/>
     <property name="annotation.jar"                value="${dependency.jar.dir}/jsr250-api-${annotation.api.version}.jar"/>
     <property name="sun-commons-beanutils.jar"     value="${dependency.jar.dir}/com-sun-commons-beanutils.jar"/>
@@ -229,6 +232,29 @@
             </then>
         </if>
 
+        <!-- EL API and IMPL -->
+        <if>
+            <not>
+                <available file="${el-api.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${java.net.maven}/javax.el/jars/el-api-${el.version}.jar"
+                     dest="${el-api.jar}"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${el-impl.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${java.net.maven}/el-impl/jars/el-impl-${el.version}.jar"
+                     dest="${el-impl.jar}"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
 
         <!-- JSTL API -->
         <if>
