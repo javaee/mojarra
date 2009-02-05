@@ -48,6 +48,7 @@ import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
@@ -640,6 +641,42 @@ public abstract class Application {
 
     // ------------------------------------------------------- Object Factories
 
+    /**
+     * <p><span class="changed_added_2_0">Register</span> a new mapping 
+     * of behavior id to the name of the corresponding
+     * {@link Behavior} class.  This allows subsequent calls
+     * to <code>createBehavior()</code> to serve as a factory for
+     * {@link Behavior} instances.</p>
+     *                                 
+     * @param behaviorId The behavior id to be registered
+     * @param behaviorClass The fully qualified class name of the
+     *  corresponding {@link Behavior} implementation
+     *                                                
+     * @throws NullPointerException if <code>behaviorId</code>
+     *  or <code>behaviorClass</code> is <code>null</code>
+     *  
+     * @since 2.0
+     */
+    public abstract void addBehavior(String behaviorId, 
+        String behaviorClass);
+    
+    /**
+     * <p><span class="changed_added_2_0">Instantiate</span> and
+     * return a new {@link Behavior} instance of the class specified by
+     * a previous call to <code>addBehavior()</code> for the specified
+     * behavior id.  If there is no such registration for this
+     * behavior id, return <code>null</code>.</p>
+     *
+     * @param behaviorId The behavior id for which to create and
+     *  return a new {@link Behavior} instance
+     * 
+     * @throws FacesException if the {@link Behavior} cannot be
+     *  created
+     * @throws NullPointerException if <code>behaviorId</code>
+     *  is <code>null</code> 
+     */
+    public abstract Behavior createBehavior(String behaviorId)
+    	throws FacesException;
 
     /**
      * <p>Register a new mapping of component type to the name of the
@@ -1035,7 +1072,6 @@ public abstract class Application {
      * component types for this <code>Application</code>.</p>
      */
     public abstract Iterator<String> getComponentTypes();
-
 
     /**
      * <p>Register a new mapping of converter id to the name of the

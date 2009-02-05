@@ -80,6 +80,7 @@ import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
@@ -178,9 +179,10 @@ public class ApplicationImpl extends Application {
     //
     
     //
-    // These three maps store store "identifier" | "class name"
+    // These maps store store "identifier" | "class name"
     // mappings.
     //
+    private Map<String,Object> behaviorMap = null;
     private Map<String,Object> componentMap = null;
     private Map<String,Object> converterIdMap = null;
     private Map<Class<?>,Object> converterTypeMap = null;
@@ -803,6 +805,48 @@ public class ApplicationImpl extends Application {
                                              variableResolver.getClass().getName()));
         }
 
+    }
+
+    /**
+     * @see javax.faces.application.Application#addBehavior(String, String)
+     */
+    public void addBehavior(String behaviorId, String behaviorClass) {
+
+        Util.notNull("behaviorId", behaviorId);
+        Util.notNull("behaviorClass", behaviorClass);
+
+        behaviorMap.put(behaviorId, behaviorClass);
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("added behavior of type ''{0}'' class ''{1}''",
+                                             behaviorId,
+                                             behaviorClass));
+        }
+
+    }
+
+    /**
+     * @see javax.faces.application.Application#createBehavior(String)
+     */
+    public Behavior createBehavior(String behaviorId) throws FacesException {
+
+        Util.notNull("behaviorId", behaviorId);
+        Behavior returnVal = (Behavior) newThing(behaviorId, behaviorMap);
+        if (returnVal == null) {
+            Object[] params = {behaviorId};
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                        "jsf.cannot_instantiate_behavior_error", params);
+            }
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+        }
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("created behavior of type ''{0}''",
+                                             behaviorId));
+        }
+        associate.getAnnotationManager().applyBehaviorAnnotations(FacesContext.getCurrentInstance(), returnVal);
+        return returnVal;
     }
 
 

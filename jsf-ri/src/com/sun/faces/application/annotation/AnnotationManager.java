@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.render.Renderer;
@@ -35,6 +36,13 @@ public class AnnotationManager {
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     private static final Scanner RESOURCE_DEPENDENCY_SCANNER = new ResourceDependencyScanner();
     private static final Scanner LISTENER_FOR_SCANNER = new ListenerForScanner();
+
+    /**
+     * {@link Scanner} instances to be used against {@link Behavior} classes.
+     */
+    private static final Scanner[] BEHAVIOR_SCANNERS = {
+          RESOURCE_DEPENDENCY_SCANNER
+    };
 
     /**
      * {@link Scanner} instances to be used against {@link UIComponent} classes.
@@ -75,6 +83,7 @@ public class AnnotationManager {
      * {@link Scanner}s
      */
     private enum ProcessingTarget {
+        Behavior(BEHAVIOR_SCANNERS),
         UIComponent(UICOMPONENT_SCANNERS),
         Validator(VALIDATOR_SCANNERS),
         Converter(CONVERTER_SCANNERS),
@@ -142,6 +151,16 @@ public class AnnotationManager {
         
     }
 
+    /**
+     * Apply annotations relevant to {@link javax.faces.component.behavior.Behavior} instances.
+     * @param ctx the {@link javax.faces.context.FacesContext} for the current request
+     * @param b the target <code>Behavior</code> to process
+     */
+    public void applyBehaviorAnnotations(FacesContext ctx, Behavior b) {
+
+        applyAnnotations(ctx, b.getClass(), ProcessingTarget.Behavior, b);
+
+    }
 
     /**
      * Apply annotations relevant to {@link javax.faces.component.UIComponent} instances.
