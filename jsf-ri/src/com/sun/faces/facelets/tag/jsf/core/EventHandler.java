@@ -31,19 +31,19 @@ import javax.faces.webapp.pdl.facelets.tag.TagHandler;
  */
 public class EventHandler extends TagHandler {
     protected final TagAttribute type;
-    protected final TagAttribute action;
+    protected final TagAttribute listener;
 
     public EventHandler(TagConfig config) {
         super(config);
         this.type = this.getRequiredAttribute("type");
-        this.action = this.getRequiredAttribute("action");
+        this.listener = this.getRequiredAttribute("listener");
     }
 
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
         Class<? extends SystemEvent> eventClass = getEventClass(ctx);
         if (eventClass != null) {
             parent.subscribeToEvent(eventClass,
-                    new DeclarativeSystemEventListener(action.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class })));
+                    new DeclarativeSystemEventListener(listener.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class })));
         }
     }
 

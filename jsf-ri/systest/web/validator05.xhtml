@@ -46,7 +46,7 @@
 </head>
 <body>
 <h:form id="form" prependId="false">
-  <f:event type="afterValidate" action="#{eventTagBean.afterValidate}" />
+  <f:event type="afterValidate" listener="#{eventTagBean.afterValidate}" />
 
   <p>lesser: <h:inputText id="lesser" /></p>
 
