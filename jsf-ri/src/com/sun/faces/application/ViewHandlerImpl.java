@@ -48,7 +48,6 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
@@ -341,7 +340,7 @@ public class ViewHandlerImpl extends ViewHandler {
                    viewId = convertViewId(context, viewId);
                 } else {
                     viewId = normalizeRequestURI(viewId, mapping);
-                    if (viewId.equals(mapping)) {
+                    if (!Util.isPortletRequest(context) && viewId.equals(mapping)) {
                         // The request was to the FacesServlet only - no
                         // path info
                         // on some containers this causes a recursion in the
