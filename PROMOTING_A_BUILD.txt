@@ -41,6 +41,9 @@ NOTE: we currently don't push every promoted build to java.net.  These instructi
 
  - Copy the downloaded binary and source bundles promoted from RE to a local
    directory.  These bundles are what will be made available to the public.
+   (You can download them by ftp from rindge.sfbay.sun.com, cd to the provided directory
+   (currently /net/jws-sparc.sfbay/bld1/BUILD_AREA/jsf2.0/bundles/latest), and then
+   mget *)
  - Prepare release notes:
     + check out the website:  cvs -d :pserver:<j.net uid>@cvs.dev.java.net:/cvs co -P -d jsf-web javaserverfaces
     + if releasing a new patch release:
@@ -66,7 +69,7 @@ NOTE: we currently don't push every promoted build to java.net.  These instructi
          (Use the 2.0.0 release notes for an example)
    - Upload the binary and source bundles to java.net.  The new directory
      should be placed under: Downloads->Release->Version
-   - In the same directory, add a file that refers to the Release Notes (see
+   - In the same directory, add a link that refers to the Release Notes (see
      previous versions for an example)
    - Update download.html:
      + If necessary move the version being replaced to Archived Releases
@@ -82,4 +85,3 @@ NOTE: we currently don't push every promoted build to java.net.  These instructi
    - Add a new announcement using the project's news facility.  Use existing
      announcements as a template.
    - Push the bits to maven (INSTRUCTIONS IN PROGRESS)
-
