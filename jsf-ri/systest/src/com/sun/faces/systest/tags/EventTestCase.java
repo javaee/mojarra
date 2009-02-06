@@ -102,6 +102,10 @@ public class EventTestCase extends AbstractTestCase {
         validateOutput(outputs);
     }
 
+    public void testBeforeViewRender() throws Exception {
+        HtmlPage page = getPage("/faces/eventTag01.xhtml");
+        assertTrue(-1 != page.asText().indexOf("class javax.faces.component.UIViewRoot before render"));
+    }
 
 
     public void testInvalidEvent() throws Exception {

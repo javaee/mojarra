@@ -20,6 +20,15 @@ import javax.faces.event.ComponentSystemEvent;
  *
  */
 public class EventTagBean {
+    
+    
+    public void beforeViewRender(ComponentSystemEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        context.getExternalContext().getRequestMap().put("beforeRenderMessage", 
+                event.getComponent().getClass() + " before render");
+    }
+
 
     public void beforeEncode(ComponentSystemEvent event) {
         UIOutput output = (UIOutput)event.getComponent();
