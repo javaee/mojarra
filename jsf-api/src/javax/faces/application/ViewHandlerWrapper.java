@@ -121,7 +121,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
     @Override
     public String deriveViewId(FacesContext context, String input) {
 
-        return super.deriveViewId(context, input);
+        return getWrapped().deriveViewId(context, input);
 
     }
 
