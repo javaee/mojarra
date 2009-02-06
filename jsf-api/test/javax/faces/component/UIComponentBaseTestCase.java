@@ -58,7 +58,7 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
-import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.AfterAddToViewEvent;
 import javax.faces.event.BeforeRenderEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
@@ -380,13 +380,13 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void testStateHolder2() throws Exception {
 
         UIComponent c = new UIComponentListener();
-        c.subscribeToEvent(AfterAddToParentEvent.class, (ComponentSystemEventListener) c);
+        c.subscribeToEvent(AfterAddToViewEvent.class, (ComponentSystemEventListener) c);
         Object state = c.saveState(facesContext);
         c = new UIComponentListener();
         c.pushComponentToEL(facesContext, c);
         c.restoreState(facesContext, state);
         c.popComponentFromEL(facesContext);
-        assertTrue(c.getListenersForEventClass(AfterAddToParentEvent.class).size() == 1);
+        assertTrue(c.getListenersForEventClass(AfterAddToViewEvent.class).size() == 1);
         
     }
 
@@ -899,8 +899,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     protected void checkComponentListeners(UIComponent control, UIComponent toValidate) {
 
-        List<SystemEventListener> lc = control.getListenersForEventClass(AfterAddToParentEvent.class);
-        List<SystemEventListener> tvl = toValidate.getListenersForEventClass(AfterAddToParentEvent.class);
+        List<SystemEventListener> lc = control.getListenersForEventClass(AfterAddToViewEvent.class);
+        List<SystemEventListener> tvl = toValidate.getListenersForEventClass(AfterAddToViewEvent.class);
         List<SystemEventListener> lc2 = control.getListenersForEventClass(ViewMapCreatedEvent.class);
         List<SystemEventListener> tvl2 = toValidate.getListenersForEventClass(ViewMapCreatedEvent.class);
 
@@ -930,9 +930,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
                                   application.createValueBinding("baz.value"));
         component.setValueBinding("bop",
                                   application.createValueBinding("bop.value"));
-        component.subscribeToEvent(AfterAddToParentEvent.class,
+        component.subscribeToEvent(AfterAddToViewEvent.class,
                                    new ComponentListener());
-        component.subscribeToEvent(AfterAddToParentEvent.class,
+        component.subscribeToEvent(AfterAddToViewEvent.class,
                                    new ComponentListener());
         component.subscribeToEvent(ViewMapCreatedEvent.class,
                                    new ComponentListener());
@@ -1395,11 +1395,14 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void testChildrenListAfterAddPublish() {
 
         Listener listener = new Listener();
-        application.subscribeToEvent(AfterAddToParentEvent.class, listener);
+        application.subscribeToEvent(AfterAddToViewEvent.class, listener);
 
         UIComponent c1 = createComponent();
+        c1.setInView(true);
         UIComponent c2 = createComponent();
+        c2.setInView(true);
         UIComponent c3 = createComponent();
+        c3.setInView(true);
 
         c1.getChildren().add(c2);
         SystemEvent e = listener.getEvent();
@@ -1422,7 +1425,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(e.getSource() == c3);
         assertTrue(((UIComponent) e.getSource()).getParent() == c1);
 
-        application.unsubscribeFromEvent(AfterAddToParentEvent.class, listener);
+        application.unsubscribeFromEvent(AfterAddToViewEvent.class, listener);
 
     }
 

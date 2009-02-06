@@ -102,6 +102,10 @@ public class EventTestCase extends AbstractTestCase {
         validateOutput(outputs);
     }
 
+    public void testBeforeViewRender() throws Exception {
+        HtmlPage page = getPage("/faces/eventTag01.xhtml");
+        assertTrue(-1 != page.asText().indexOf("class javax.faces.component.UIViewRoot before render"));
+    }
 
 
     public void testInvalidEvent() throws Exception {
@@ -142,11 +146,11 @@ public class EventTestCase extends AbstractTestCase {
 
         // Short Name
         s = outputs.get(2);
-        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.AfterAddToViewEvent' event fired!").equals(s.asText()));
 
         // Long name
         s = outputs.get(3);
-        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.AfterAddToViewEvent' event fired!").equals(s.asText()));
 
     }
 }

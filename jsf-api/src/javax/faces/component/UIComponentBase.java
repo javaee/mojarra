@@ -1577,8 +1577,6 @@ public abstract class UIComponentBase extends UIComponent {
     private void doPostAddProcessing(FacesContext context, UIComponent added) {
 
         if (!isPostbackAndRestoreView(context)) {
-            context.getApplication().publishEvent(AfterAddToParentEvent.class,
-                    added);
             if (parent.isInView()) {
                 publishAfterViewEvents(context.getApplication(), added);
             }

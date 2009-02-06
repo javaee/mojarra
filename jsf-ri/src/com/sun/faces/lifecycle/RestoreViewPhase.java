@@ -66,7 +66,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.AfterAddToViewEvent;
 import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ExceptionEvent;
 import javax.faces.event.ExceptionEventContext;
@@ -202,7 +202,7 @@ public class RestoreViewPhase extends Phase {
                   createView(facesContext, viewId);           
             facesContext.setViewRoot(viewRoot);
             facesContext.renderResponse();
-            facesContext.getApplication().publishEvent(AfterAddToParentEvent.class,
+            facesContext.getApplication().publishEvent(AfterAddToViewEvent.class,
                                                        viewRoot);
         }
         assert(null != viewRoot);

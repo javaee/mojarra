@@ -76,7 +76,7 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.ListenerFor;
-import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.AfterAddToViewEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.AbortProcessingException;
@@ -716,8 +716,8 @@ public class TestApplicationImpl extends JspFacesTestCase {
         UIViewRoot root = getFacesContext().getViewRoot();
         root.getChildren().add(c);
         root.getChildren().add(c2);
-        assertTrue(c.getEvent() instanceof AfterAddToParentEvent);
-        assertTrue(c2.getEvent() instanceof AfterAddToParentEvent);
+        assertTrue(c.getEvent() instanceof AfterAddToViewEvent);
+        assertTrue(c2.getEvent() instanceof AfterAddToViewEvent);
         List<UIComponent> headComponents = root.getComponentResources(getFacesContext(), "head");
         System.out.println(headComponents.toString());
         assertTrue(headComponents.size() == 1);
@@ -732,7 +732,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         application.addComponent("CustomInput2", CustomOutput2.class.getName());
         CustomOutput2 c3 = (CustomOutput2) application.createComponent("CustomInput2");
         root.getChildren().add(c3);
-        assertTrue(c3.getEvent() instanceof AfterAddToParentEvent);
+        assertTrue(c3.getEvent() instanceof AfterAddToViewEvent);
         c3.reset();
         c3.encodeAll(getFacesContext());
         assertTrue(c3.getEvent() instanceof BeforeRenderEvent);
@@ -794,7 +794,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         }
     }
 
-    @ListenerFor(systemEventClass=AfterAddToParentEvent.class,
+    @ListenerFor(systemEventClass=AfterAddToViewEvent.class,
                  sourceClass= CustomOutput.class)
     @ResourceDependencies({
         @ResourceDependency(name="#{'test.js'}",library="test",target="#{'body'}"),
@@ -828,7 +828,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
     }
 
     @ListenersFor({
-        @ListenerFor(systemEventClass = AfterAddToParentEvent.class,
+        @ListenerFor(systemEventClass = AfterAddToViewEvent.class,
                      sourceClass = CustomOutput.class),
         @ListenerFor(systemEventClass = BeforeRenderEvent.class,
                      sourceClass = CustomOutput.class)
