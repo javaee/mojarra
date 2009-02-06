@@ -2,17 +2,22 @@ Instructions on promoting a build:
 
 Engineering finishes JSF2.0 code.
 
+Ensure all tests pass via:
+ant clean main test.with.container.refresh
+
 Engineering verifies QL passes
 checkout v3 workspace.
 cd v3/tests/quicklook
-mvn -Dglassfish.home=/path/to/glassfish/to/test test
+mvn -Dglassfish.home=$GLASSFISH test
+(where $GLASSFISH is a recent v3 build with the new jsf jars added in)
 
 Engineering updates updatecenter2/conf/jsf_proto.py to correct version #.
 
 Tag build.
+Currently, we're using a tag format of
+2_0_0_BXX - where "XX" is a monotonically increasing number, incremented with every build.
 
-
-RE (Omar) promotes build, pushes to http:eflat.sfbay:40000
+RE (Terena) promotes build, pushes to http:eflat.sfbay:40000
 Change variables found in common.xml (build.type, etc) via -D as part of build
     build.type will be set to a value such as BETA, RC, FCS, etc.
     build.number will be a monotonically increasing integer, incremented for each build.
