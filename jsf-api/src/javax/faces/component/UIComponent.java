@@ -582,7 +582,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * RELEASE_PENDING (edburns,rogerk) review docus
      * <p class="changed_modified_2_0">Set the parent <code>UIComponent</code> of this
      * <code>UIComponent</code>.  This method, when called will cause
-     * an {@link javax.faces.event.AfterAddToParentEvent} to be published and
+     * an {@link javax.faces.event.AfterAddToViewEvent} to be published and
      * if <code>parent.isInView()</code> returns <code>true</code> an
      * {@link javax.faces.event.AfterAddToViewEvent} will be published as well.
      *  <strong>This method must never be called by developers;  a
@@ -965,7 +965,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
      *     <p>{@link javax.faces.application.Application#publishEvent}
      *     must be called, passing {@link
-     *     javax.faces.event.AfterAddToParentEvent}<code>.class</code>
+     *     javax.faces.event.AfterAddToViewEvent}<code>.class</code>
      *     as the first argument and the newly added component as the
      *     second argument.</p>
 

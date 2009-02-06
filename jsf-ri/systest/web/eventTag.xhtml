@@ -54,12 +54,12 @@
             <f:event type="javax.faces.event.beforeRender" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
-        <h:outputText id="afterAddToParentTest1" >
-            <f:event type="afterAddToParent" listener="#{eventTagBean.beforeEncode}" />
+        <h:outputText id="afterAddToViewTest1" >
+            <f:event type="afterAddToView" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
-        <h:outputText id="afterAddToParentTest2" >
-            <f:event type="javax.faces.event.afterAddToParent" listener="#{eventTagBean.beforeEncode}" />
+        <h:outputText id="afterAddToViewTest2" >
+            <f:event type="javax.faces.event.afterAddToView" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <h:commandButton id="click" value="Click" />
     </h:form>

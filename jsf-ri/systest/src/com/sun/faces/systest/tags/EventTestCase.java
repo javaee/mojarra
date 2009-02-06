@@ -142,11 +142,11 @@ public class EventTestCase extends AbstractTestCase {
 
         // Short Name
         s = outputs.get(2);
-        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.AfterAddToViewEvent' event fired!").equals(s.asText()));
 
         // Long name
         s = outputs.get(3);
-        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.AfterAddToViewEvent' event fired!").equals(s.asText()));
 
     }
 }
