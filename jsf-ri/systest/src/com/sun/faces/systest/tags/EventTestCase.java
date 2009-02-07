@@ -154,7 +154,7 @@ public class EventTestCase extends AbstractTestCase {
 
         // Fully-qualified class name
         s = outputs.get(4);
-        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.BeforeRenderEvent' event fired!").equals(s.asText()));
 
         // No-arg
         s = outputs.get(5);

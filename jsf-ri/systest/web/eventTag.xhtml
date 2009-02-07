@@ -63,7 +63,7 @@
         </h:outputText>
         <br />
         <h:outputText id="fqcnTest" >
-            <f:event type="javax.faces.event.AfterAddToParentEvent" listener="#{eventTagBean.beforeEncode}" />
+            <f:event type="javax.faces.event.BeforeRenderEvent" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
         <h:outputText id="noArgTest" >
