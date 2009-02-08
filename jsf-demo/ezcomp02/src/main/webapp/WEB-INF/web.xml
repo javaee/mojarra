@@ -69,7 +69,7 @@
         <param-value>Development</param-value>
     </context-param>
     <context-param>
-	<param-name>facelets.LIBRARIES</param-name>
+	<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
 	<param-value>/WEB-INF/composite-test.taglib.xml</param-value>
     </context-param>
 
