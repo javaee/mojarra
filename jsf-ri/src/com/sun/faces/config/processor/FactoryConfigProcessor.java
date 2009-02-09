@@ -99,6 +99,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String FACES_CONTEXT_FACTORY = "faces-context-factory";
 
     /**
+     * <code>/faces-config/factory/partial-view-context-factory</code>
+     */
+    private static final String PARTIAL_VIEW_CONTEXT_FACTORY = "partial-view-context-factory";
+
+    /**
      * <code>faces-config/factory/lifecycle-factory</code>
      */
     private static final String LIFECYCLE_FACTORY = "lifecycle-factory";
@@ -118,13 +123,14 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String[] FACTORY_NAMES = {
           FactoryFinder.APPLICATION_FACTORY,
-          FactoryFinder.VISIT_CONTEXT_FACTORY,
           FactoryFinder.EXCEPTION_HANDLER_FACTORY,
+          FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
           FactoryFinder.FACES_CONTEXT_FACTORY,
           FactoryFinder.LIFECYCLE_FACTORY,
-          FactoryFinder.RENDER_KIT_FACTORY,
           FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
-          FactoryFinder.EXTERNAL_CONTEXT_FACTORY
+          FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
+          FactoryFinder.RENDER_KIT_FACTORY,
+          FactoryFinder.VISIT_CONTEXT_FACTORY,
     };
 
     private boolean validateFactories = true;
@@ -249,6 +255,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     extCount.incrementAndGet();
                     setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
+                               getNodeText(n));
+                } else if (PARTIAL_VIEW_CONTEXT_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
                                getNodeText(n));
                 }
             }

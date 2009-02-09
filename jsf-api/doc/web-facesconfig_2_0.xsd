@@ -738,6 +738,21 @@
                 </xsd:annotation>
             </xsd:element>
 
+            <xsd:element name="partial-view-context-factory"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "partial-view-context-factory" element contains the
+                        fully qualified class name of the concrete
+                        PartialViewContextFactory implementation class that will
+                        be called when FactoryFinder.getFactory
+                        (FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY) is called.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+
             <xsd:element name="lifecycle-factory"
                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
