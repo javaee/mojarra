@@ -42,7 +42,7 @@
   request, decide you want to promote to stick around for the next
   request, use flash.keep.</p>
 
-  <h:form id="form1">
+  <h:form prependId="false" id="form1">
 
   <h:panelGrid columns="2" border="1">
 
@@ -66,7 +66,7 @@
     Value of <code>\#{flash.now.buckaroo}</code>, should be
     <code>banzai</code>.
 
-    <h:outputText value="#{flash.now.buckaroo}" />
+    <h:outputText id="flash3NowValueId" value="#{flash.now.buckaroo}" />
 
     Promote buckaroo to stick around for the next request.
 
@@ -78,13 +78,13 @@
                      value="\${flash.now.buckaroo}" /&gt;
     </f:verbatim>
 
-    <h:commandButton value="reload" />
+    <h:commandButton id="reload" value="reload" />
 
-    <h:commandButton value="back" action="back" />
+    <h:commandButton id="back" value="back" action="back" />
 
     &nbsp;
 
-    <h:commandButton value="next" action="next" />
+    <h:commandButton id="next" value="next" action="next" />
 
    </h:panelGrid>
 

@@ -37,13 +37,13 @@
 
 <f:view>
 
-  <h:form id="form1">
+  <h:form prependId="false" id="form1">
 
   <h:panelGrid columns="2" border="1">
 
     Show that buckaroo is still here.
 
-    <h:outputText value="#{flash.buckaroo}" />
+    <h:outputText id="flash4BuckarooValueId" value="#{flash.buckaroo}" />
 
     <h:commandButton value="reload" />
 

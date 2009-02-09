@@ -44,13 +44,13 @@
   reality, this just puts the value in request scope, but that's what
   "now" is, anyway.</p>
 
-  <h:form id="form1">
+  <h:form prependId="false" id="form1">
 
   <h:panelGrid columns="2" border="1">
 
     Value of the previous request's foo
 
-    <h:outputText value="#{flash.foo}" />
+    <h:outputText id="flash2FooValueId" value="#{flash.foo}" />
 
     Put <code>barValue</code> in the flash.now under key
     <code>bar</code>.
@@ -63,15 +63,15 @@
 
     Value of <code>\#{flash.now.bar}</code>, should be <code>barValue</code>.
 
-    <h:outputText value="#{flash.now.bar}" />
+    <h:outputText id="flash2BarValueId" value="#{flash.now.bar}" />
 
-    <h:commandButton value="reload" />
+    <h:commandButton id="reload" value="reload" />
 
-    <h:commandButton value="back" action="back" />
+    <h:commandButton id="back" value="back" action="back" />
 
     &nbsp;
 
-    <h:commandButton value="next" action="next" />
+    <h:commandButton id="next" value="next" action="next" />
 
    </h:panelGrid>
 

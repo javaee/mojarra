@@ -90,7 +90,8 @@
                    write-attribute-script-disabled,
                    write-attribute-script-enabled,
                    wcag-datatable,
-                   flash"/>
+                   flash,
+                   jsp-flash"/>
     <!-- 
 
        EXCLUDED APPLICATIONS:
