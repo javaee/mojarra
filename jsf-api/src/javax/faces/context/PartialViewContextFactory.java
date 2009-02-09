@@ -39,7 +39,18 @@ package javax.faces.context;
 import javax.faces.FacesWrapper;
 
 /**
- * RELEASE_PENDING (docs)
+ /**
+ * <p><strong class="changed_modified_2_0">PartialViewContextFactory</strong>
+ * is a factory object that creates
+ * (if needed) and returns new {@link PartialViewContext} instances.</p>
+ *
+ * <p>There must be one <code>PartialViewContextFactory</code> instance per web
+ * application that is utilizing JavaServer Faces.  This instance can be
+ * acquired, in a portable manner, by calling:</p>
+ * <pre>
+ *   PartialViewContextFactory factory = (PartialViewContextFactory)
+ *    FactoryFinder.getFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY);
+ * </pre>
  *
  * @since 2.0
  */
@@ -63,9 +74,11 @@ public abstract class PartialViewContextFactory implements FacesWrapper<PartialV
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param context
-     * @return
+     * <p><span class="changed_modified_2_0">Create</span> (if needed)
+     * and return a {@link PartialViewContext} instance that is initialized
+     * using the current {@link FacesContext} instance.</p>
+     *
+     * @param context the {@link FacesContext} for the current request. 
      */
     public abstract PartialViewContext getPartialViewContext(FacesContext context);
     
