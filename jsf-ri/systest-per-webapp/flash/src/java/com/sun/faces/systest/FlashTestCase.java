@@ -128,8 +128,8 @@ public class FlashTestCase extends AbstractTestCase {
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"fooValueId\">\\s*</span>.*"));
         
         // Click the reload button
-        HtmlSubmitInput button = page.getHtmlElementById("reload");
-        page = button.click();
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("reload");
+        page = (HtmlPage) button.click();
         pageText = page.asXml();
         // verify that fooValue is there, indicating that it's been stored in the flash
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"fooValueId\">\\s*fooValue\\s*</span>.*"));
@@ -143,17 +143,14 @@ public class FlashTestCase extends AbstractTestCase {
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"fooValueId\">\\s*</span>.*"));
 
 
-	/****************
-
-Comment out the rest due to htmlunit bug <https://sourceforge.net/tracker/index.php?func=detail&aid=2496292&group_id=47038&atid=448266>
         
         // fill in "addMessage" in the textBox
-        HtmlTextInput text = page.getHtmlElementById("inputText");
+        HtmlTextInput text = (HtmlTextInput) page.getHtmlElementById("inputText");
         text.setValueAttribute("addMessage");
         
         // go to the next page
-        button = page.getHtmlElementById("next");
-        page = button.click();
+        button = (HtmlSubmitInput) page.getHtmlElementById("next");
+        page = (HtmlPage) button.click();
         pageText = page.asXml();
         // See that it has fooValue
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash2FooValueId\">\\s*fooValue\\s*</span>.*"));
@@ -163,27 +160,42 @@ Comment out the rest due to htmlunit bug <https://sourceforge.net/tracker/index.
         assertTrue(-1 != pageText.indexOf("test that this persists across the redirect"));
         
         // click the reload button
-        button = page.getHtmlElementById("reload");
-        page = button.click();
+        button = (HtmlSubmitInput) page.getHtmlElementById("reload");
+        page = (HtmlPage) button.click();
         pageText = page.asXml();        
         
         // See that it doesn't have the message
         assertTrue(-1 == pageText.indexOf("test that this persists across the redirect"));
         
         // Click the back button
-        button = page.getHtmlElementById("back");
-        page = button.click();
+        button = (HtmlSubmitInput) page.getHtmlElementById("back");
+        page = (HtmlPage) button.click();
         pageText = page.asXml();
         
         // Click the next button
-        button = page.getHtmlElementById("next");
-        page = button.click();
+        button = (HtmlSubmitInput) page.getHtmlElementById("next");
+        page = (HtmlPage) button.click();
         pageText = page.asXml();
         
         // See that the page does not have the message
         assertTrue(-1 == pageText.indexOf("test that this persists across the redirect"));
         
-	*******/        
+        // Click the next button
+        button = (HtmlSubmitInput) page.getHtmlElementById("next");
+        page = (HtmlPage) button.click();
+        pageText = page.asXml();
+        
+        // See that it has banzai
+        assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash3NowValueId\">\\s*banzai\\s*</span>.*"));
+        
+        // Click the next button
+        button = (HtmlSubmitInput) page.getHtmlElementById("next");
+        page = (HtmlPage) button.click();
+        pageText = page.asXml();
+        
+        // See that it still has banzai
+        assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash4BuckarooValueId\">\\s*banzai\\s*</span>.*"));
+        
     }
 
 }

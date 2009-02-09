@@ -76,7 +76,8 @@
                    never-unwrap-exceptions,
                    write-attribute-script-disabled,
                    write-attribute-script-enabled,
-                   wcag-datatable"/>
+                   wcag-datatable,
+                   flash"/>
     <!--
        EXCLUDED APPLICATIONS:
           view-expired
@@ -90,6 +91,8 @@
               value="com/sun/faces/systest/DocumentOrderingTestCase.class"/>
     <property name="empty-string-as-null"
               value="com/sun/faces/systest/EmptyStringAsNullTestCase.class"/>
+    <property name="flash"
+              value="com/sun/faces/systest/FlashTestCase.class"/>
     <property name="resource-locale-prefix"
               value="com/sun/faces/systest/ResourceLocalePrefixTestCase.class"/>
     <property name="replace-application"
