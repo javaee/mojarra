@@ -1347,20 +1347,18 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
     };
 
     /**
-     * An integer specifying the specification version that this file implements.
+     * <p>An integer specifying the specification version that this file implements.
      * It's format is: rightmost two digits, bug release number, next two digits,
      * minor release number, leftmost digits, major release number.
-     * This number may only be incremented by a new release of the specification.
-     * @ignore
+     * This number may only be incremented by a new release of the specification.</p>
      */
     jsf.specversion = 20000;
 
     /**
-     * An integer specifying the implementation version that this file implements.
+     * <p>An integer specifying the implementation version that this file implements.
      * It's a monotonically increasing number, reset with every increment of
      * <code>jsf.specversion</code>
-     * This number is implementation dependent.
-     * @ignore
+     * This number is implementation dependent.</p>
      */
     jsf.implversion = 1;
 
