@@ -8,12 +8,12 @@ make sure that password.txt is found in container.home
 ant test.with.container.refresh
 -or-
 start glassfish (asadmin start-domain)
-ant main container.deploy # make sure that you'll actually test the changes
+ant build.and.deploy # make sure that you'll actually test the changes
 ant test
 
 For testing the build with v3:
 Quicklook tests:
-ant main container.deploy
+ant build.and.deploy
 checkout v3
 cd tests/quicklook
 mvn -Dglassfish.home=/home/glassfish/dir test
