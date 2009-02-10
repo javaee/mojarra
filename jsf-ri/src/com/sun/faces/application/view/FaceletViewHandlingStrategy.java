@@ -52,9 +52,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
@@ -77,6 +74,7 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -486,11 +484,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                   "No render kit was available for id \"" + id + "\"");
         }
 
-        ServletResponse response = (ServletResponse) extContext.getResponse();
-
         if (responseBufferSizeSet) {
             // set the buffer for content
-            response.setBufferSize(responseBufferSize);
+            extContext.setResponseBufferSize(responseBufferSize);
         }
 
 
@@ -513,11 +509,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         encoding = getResponseEncoding(context, writer.getCharacterEncoding());
 
         // apply them to the response
-        response.setContentType(contentType);
-        response.setCharacterEncoding(encoding);
+        extContext.setResponseContentType(contentType);
+        extContext.setResponseCharacterEncoding(encoding);
 
         // Now, clone with the real writer
-        writer = writer.cloneWithWriter(response.getWriter());
+        writer = writer.cloneWithWriter(extContext.getResponseOutputWriter());
 
         return writer;
 
@@ -534,8 +530,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     protected void handleRenderException(FacesContext context, Exception e)
     throws IOException {
 
-        Object resp = context.getExternalContext().getResponse();
-
         // always log
         if (LOGGER.isLoggable(Level.SEVERE)) {
             UIViewRoot root = context.getViewRoot();
@@ -550,13 +544,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         // handle dev response
-        if (associate.isDevModeEnabled() && !context.getResponseComplete()
-            && resp instanceof HttpServletResponse) {
-            HttpServletResponse httpResp = (HttpServletResponse) resp;
-            if (!httpResp.isCommitted()) {
-                httpResp.reset();
-                httpResp.setContentType("text/html; charset=UTF-8");
-                Writer w = httpResp.getWriter();
+        if (associate.isDevModeEnabled() && !context.getResponseComplete()) {
+            ExternalContext extContext = context.getExternalContext();
+            if (!extContext.isResponseCommitted()) {
+                extContext.responseReset();
+                extContext.setResponseContentType("text/html; charset=UTF-8");
+                Writer w = extContext.getResponseOutputWriter();
                 DevTools.debugHtml(w, context, e);
                 w.flush();
                 context.responseComplete();
@@ -588,14 +581,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     throws IOException {
 
         String actualId = vh.getActionURL(context, viewId);
-        Object respObj = context.getExternalContext().getResponse();
-        if (respObj instanceof HttpServletResponse) {
-            HttpServletResponse respHttp = (HttpServletResponse) respObj;
-            respHttp.sendError(HttpServletResponse.SC_NOT_FOUND, ((message != null)
+        context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND,  ((message != null)
                                                                   ? (actualId + ": " + message)
                                                                   : actualId));
-            context.responseComplete();
-        }
+        context.responseComplete();
 
     }
 
@@ -626,9 +615,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         // 2. get it from request
-        Object request = context.getExternalContext().getRequest();
-        if (encoding == null && request instanceof ServletRequest) {
-            encoding = ((ServletRequest) request).getCharacterEncoding();
+        if (encoding == null) {
+            encoding = context.getExternalContext().getRequestCharacterEncoding();
         }
 
         // 3. get it from the session
