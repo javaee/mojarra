@@ -35,6 +35,13 @@ public class EventTagBean {
         output.setValue("The '" + event.getClass().getName() + "' event fired!");
     }
     
+    public void beforeEncodeNoArg() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        UIOutput output = (UIOutput) context.getViewRoot().findComponent("form:noArgTest");
+//        UIOutput output = (UIOutput)event.getComponent();
+        output.setValue("The no-arg event fired!");
+    }
+
     public void afterValidate(ComponentSystemEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         final UIForm form = (UIForm) event.getComponent();

@@ -26,7 +26,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>RoR Flash Test Page 3</title>
+    <title>RoR Flash Test Page 2</title>
     <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -34,63 +34,51 @@
   </head>
 
   <body>
-    <h1>RoR Flash Test Page 3</h1>
+    <h1>RoR Flash Test Page 2</h1>
 
 <f:view>
 
-  <p>If you have something in flash.now that you later, during the same
-  request, decide you want to promote to stick around for the next
-  request, use flash.keep.</p>
+  <p>As mentioned in the previous page, if I wanted to store something
+  in the flash during this request and also access it during this
+  request, <code>\#{flash.now.bar}</code> is the way to do it.  In
+  reality, this just puts the value in request scope, but that's what
+  "now" is, anyway.</p>
 
-  <h:form id="form1">
+  <h:form prependId="false" id="form1">
 
   <h:panelGrid columns="2" border="1">
 
     Value of the previous request's foo
 
-    <h:outputText value="#{flash.foo}" />
+    <h:outputText id="flash2FooValueId" value="#{flash.foo}" />
 
-    Value of the this request's bar.  Should be null.
+    Put <code>barValue</code> in the flash.now under key
+    <code>bar</code>.
 
-    <h:outputText value="#{flash.bar}" />
-
-    Put <code>banzai</code> in the flash.now under key
-    <code>buckaroo</code>.
-
-    <c:set target="${flash.now}" property="buckaroo" value="banzai" />
+    <c:set target="${flash.now}" property="bar" value="barValue" />
 
     <f:verbatim>
-      &lt;c:set target="\${flash.now}" property="buckaroo" value="banzai" /&gt;
+      &lt;c:set target="\${flash.now}" property="bar" value="barValue" /&gt;
     </f:verbatim>
 
-    Value of <code>\#{flash.now.buckaroo}</code>, should be
-    <code>banzai</code>.
+    Value of <code>\#{flash.now.bar}</code>, should be <code>barValue</code>.
 
-    <h:outputText value="#{flash.now.buckaroo}" />
+    <h:outputText id="flash2BarValueId" value="#{flash.now.bar}" />
 
-    Promote buckaroo to stick around for the next request.
+    <h:commandButton id="reload" value="reload" />
 
-    <c:set target="${flash.keep}" property="buckaroo" 
-           value="${flash.now.buckaroo}" />
-
-    <f:verbatim>
-      &lt;c:set target="\${flash.keep}" property="buckaroo" 
-                     value="\${flash.now.buckaroo}" /&gt;
-    </f:verbatim>
-
-    <h:commandButton value="reload" />
-
-    <h:commandButton value="back" action="back" />
+    <h:commandButton id="back" value="back" action="back" />
 
     &nbsp;
 
-    <h:commandButton value="next" action="next" />
+    <h:commandButton id="next" value="next" action="next" />
 
    </h:panelGrid>
+
+   <p><h:messages id="messages"/></p>
 
   </h:form>
 
 </f:view>
-
   </body>
 </html>

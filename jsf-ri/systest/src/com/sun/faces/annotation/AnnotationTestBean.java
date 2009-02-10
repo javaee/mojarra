@@ -172,8 +172,12 @@ public class AnnotationTestBean {
         // Test short name
         assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext())
               .getNamedEventManager().getNamedEvent("com.sun.faces.annotation.anotherAnnotatedComponentSystem"));
+        // Test FQCN
+        assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext())
+              .getNamedEventManager().getNamedEvent(AnnotatedComponentSystemEvent.class.getName()));
         assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext())
               .getNamedEventManager().getNamedEvent("explicitEventName"));
+
     }
 
     private void assertNotNull(Object v) {

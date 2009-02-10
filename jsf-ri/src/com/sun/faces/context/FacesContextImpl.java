@@ -57,6 +57,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.PartialViewContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -184,7 +185,9 @@ public class FacesContextImpl extends FacesContext {
 
         assertNotReleased();
         if (partialViewContext == null) {
-            partialViewContext = new PartialViewContextImpl(this);
+            PartialViewContextFactory f = (PartialViewContextFactory)
+                  FactoryFinder.getFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY);
+            partialViewContext = f.getPartialViewContext(this);
         }
         return partialViewContext;
         

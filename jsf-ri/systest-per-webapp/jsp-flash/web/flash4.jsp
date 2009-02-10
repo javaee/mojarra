@@ -23,27 +23,27 @@
  Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-<h:head>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
     <title>RoR Flash Test Page 4</title>
-</h:head>
+    <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+  </head>
 
-<h:body bgcolor="white">
+  <body>
     <h1>RoR Flash Test Page 4</h1>
 
-  <h:form id="form1">
+<f:view>
+
+  <h:form prependId="false" id="form1">
 
   <h:panelGrid columns="2" border="1">
 
-<f:verbatim>
     Show that buckaroo is still here.
-</f:verbatim>
 
-    <h:outputText value="#{flash.buckaroo}" />
+    <h:outputText id="flash4BuckarooValueId" value="#{flash.buckaroo}" />
 
     <h:commandButton value="reload" />
 
@@ -53,5 +53,6 @@
 
   </h:form>
 
-</h:body>
-</html>  
+</f:view>
+  </body>
+</html>

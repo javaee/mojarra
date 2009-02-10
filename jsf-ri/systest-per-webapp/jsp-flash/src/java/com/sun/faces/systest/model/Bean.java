@@ -28,15 +28,15 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-package com.sun.faces.model;
+package com.sun.faces.systest.model;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ManagedBean;
-import javax.faces.model.SessionScoped;
+import javax.faces.model.RequestScoped;
 
-@SessionScoped
 @ManagedBean(name="bean")
+@RequestScoped
 public class Bean {
     
         protected String stringVal;

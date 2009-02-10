@@ -61,6 +61,14 @@
         <h:outputText id="afterAddToViewTest2" >
             <f:event type="javax.faces.event.afterAddToView" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
+        <br />
+        <h:outputText id="fqcnTest" >
+            <f:event type="javax.faces.event.BeforeRenderEvent" listener="#{eventTagBean.beforeEncode}" />
+        </h:outputText>
+        <br />
+        <h:outputText id="noArgTest" >
+            <f:event type="beforeRender" listener="#{eventTagBean.beforeEncodeNoArg}" />
+        </h:outputText>
         <h:commandButton id="click" value="Click" />
     </h:form>
   </h:body>

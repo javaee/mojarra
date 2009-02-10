@@ -59,6 +59,9 @@
     <faces-context-factory>
       com.sun.faces.context.FacesContextFactoryImpl
     </faces-context-factory>
+    <partial-view-context-factory>
+      com.sun.faces.context.PartialViewContextFactoryImpl
+    </partial-view-context-factory>
     <lifecycle-factory>
       com.sun.faces.lifecycle.LifecycleFactoryImpl
     </lifecycle-factory>

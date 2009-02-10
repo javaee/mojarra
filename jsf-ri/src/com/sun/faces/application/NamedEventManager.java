@@ -4,14 +4,17 @@
  */
 package com.sun.faces.application;
 
+import com.sun.faces.util.Util;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.faces.FacesException;
 import javax.faces.event.AfterAddToViewEvent;
 import javax.faces.event.AfterValidateEvent;
 import javax.faces.event.BeforeRenderEvent;
 import javax.faces.event.BeforeValidateEvent;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.SystemEvent;
 
 /**
@@ -42,6 +45,17 @@ public class NamedEventManager {
     public Class<? extends SystemEvent> getNamedEvent(String name) {
         String foo = namedEvents.toString();
         Class<? extends SystemEvent> namedEvent = namedEvents.get(name);
+        if (namedEvent == null) {
+            try {
+                namedEvent = Util.loadClass(name, this);
+            } catch (ClassNotFoundException ex) {
+                throw new FacesException ("An unknown event type was specified:  " + name, ex);
+            }
+        }
+        if (!ComponentSystemEvent.class.isAssignableFrom(namedEvent)) {
+                throw new ClassCastException();
+        }
+
         return namedEvent;
     }
 

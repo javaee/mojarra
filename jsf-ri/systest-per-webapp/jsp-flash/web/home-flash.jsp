@@ -68,7 +68,7 @@ JavaServer Faces Extensions Flash
 
 <!-- BEGIN MAIN COLUMN -->
 
-  <h:form id="form1">
+  <h:form prependId="false" id="form1">
 
   <h:panelGrid columns="2" border="1" width="600">
       
@@ -88,11 +88,11 @@ JavaServer Faces Extensions Flash
 
     Value of <code>&#35;{flash.foo}</code>, should be <code>null</code>.
 
-    <h:outputText value="#{flash.foo}" />
+    <h:outputText id="fooValueId" value="#{flash.foo}" />
 
-    <h:commandButton value="reload" />
+    <h:commandButton id="reload" value="reload" />
 
-    <h:commandButton value="next" action="next" />
+    <h:commandButton id="next" value="next" action="next" />
 
    </h:panelGrid>
 

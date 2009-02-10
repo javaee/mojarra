@@ -13,6 +13,7 @@ import java.io.Serializable;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.MethodExpression;
+import javax.el.MethodNotFoundException;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -43,30 +44,20 @@ public class EventHandler extends TagHandler {
         Class<? extends SystemEvent> eventClass = getEventClass(ctx);
         if (eventClass != null) {
             parent.subscribeToEvent(eventClass,
-                    new DeclarativeSystemEventListener(listener.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class })));
+                    new DeclarativeSystemEventListener(
+                        listener.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class }),
+                        listener.getMethodExpression(ctx, Object.class, new Class[] { })));
         }
     }
 
     protected Class<? extends SystemEvent> getEventClass(FaceletContext ctx) {
-        Class<? extends SystemEvent> clazz = null;
         String eventType = (String) this.type.getValueExpression(ctx, String.class).getValue(ctx);
         if (eventType == null) {
             throw new FacesException("Attribute 'type' can not be null");
         }
-        ApplicationAssociate associate =
-                  ApplicationAssociate.getInstance(ctx.getFacesContext().getExternalContext());
-        NamedEventManager nem = associate.getNamedEventManager();
 
-        clazz = nem.getNamedEvent(eventType);
-        if (clazz == null) {
-            try {
-                clazz = Util.loadClass(eventType, this);
-            } catch (ClassNotFoundException ex) {
-                throw new FacesException ("An unknown event type was specified:  " + eventType);
-            }
-        }
-
-        return clazz;
+        return ApplicationAssociate.getInstance(ctx.getFacesContext().getExternalContext())
+                .getNamedEventManager().getNamedEvent(eventType);
     }
 
 }
@@ -76,16 +67,24 @@ class DeclarativeSystemEventListener implements ComponentSystemEventListener, Se
 
     private static final long serialVersionUID = 8945415935164238908L;
 
-    private MethodExpression action;
+    private MethodExpression oneArgListener;
+    private MethodExpression noArgListener;
 
     // Necessary for state saving
     public DeclarativeSystemEventListener() {}
 
-    public DeclarativeSystemEventListener(MethodExpression action) {
-        this.action = action;
+    public DeclarativeSystemEventListener(MethodExpression oneArg, MethodExpression noArg) {
+        this.oneArgListener = oneArg;
+        this.noArgListener = noArg;
     }
 
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-        action.invoke(FacesContext.getCurrentInstance().getELContext(), new Object[]{event});
+        final ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        try{
+            noArgListener.invoke(elContext, new Object[]{});
+        } catch (MethodNotFoundException mnfe) {
+            // Attempt to call public void method(ComponentSystemEvent event)
+            oneArgListener.invoke(elContext, new Object[]{event});
+        }
     }
 }
