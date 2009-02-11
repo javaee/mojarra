@@ -48,16 +48,16 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">This helper class provides context to
- * the {@link ExceptionEvent} regarding the state of the system at the
- * point in time when the <code>ExceptionEvent</code> occurs and links
- * the <code>ExceptionEvent</code> to the {@link
+ * the {@link ExceptionQueuedEvent} regarding the state of the system at the
+ * point in time when the <code>ExceptionQueuedEvent</code> occurs and links
+ * the <code>ExceptionQueuedEvent</code> to the {@link
  * javax.faces.context.ExceptionHandler} by virtue of implementing
  * {@link SystemEventListener}.</p>
  *
  * @since 2.0
  */
 
-public class ExceptionEventContext implements SystemEventListenerHolder {
+public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
 
     /**
      * <p class="changed_added_2_0">The presence of an entry under this
@@ -66,7 +66,7 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
      * phase&#8221; part of the current lifecycle phase.</p>
      */
     public static final String IN_BEFORE_PHASE_KEY =
-          ExceptionEventContext.class.getName() + ".IN_BEFORE_PHASE";
+          ExceptionQueuedEventContext.class.getName() + ".IN_BEFORE_PHASE";
     
     /**
      * <p class="changed_added_2_0">The presence of an entry under this
@@ -75,7 +75,7 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
      * phase&#8221; part of the current lifecycle phase.</p>
      */
     public static final String IN_AFTER_PHASE_KEY =
-          ExceptionEventContext.class.getName() + ".IN_AFTER_PHASE";
+          ExceptionQueuedEventContext.class.getName() + ".IN_AFTER_PHASE";
 
     private FacesContext context;
     private Throwable thrown;
@@ -90,13 +90,13 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
 
     /**
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>ExceptionEventContext</code> that indicates the argument
+     * <code>ExceptionQueuedEventContext</code> that indicates the argument
      * <code>Throwable</code> just occurred.</p>
      *
      * @param thrown the <code>Throwable</code> that is the context for
-     * this <code>ExceptionEventContext</code> instance.
+     * this <code>ExceptionQueuedEventContext</code> instance.
      */
-    public ExceptionEventContext(FacesContext context, Throwable thrown) {
+    public ExceptionQueuedEventContext(FacesContext context, Throwable thrown) {
 
         this(context, thrown, null, null);
 
@@ -105,7 +105,7 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
 
     /**
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>ExceptionEventContext</code> that indicates the argument
+     * <code>ExceptionQueuedEventContext</code> that indicates the argument
      * <code>Throwable</code> just occurred, relevant to the argument
      * <code>component</code>.
      *
@@ -113,7 +113,7 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
      * @param thrown
      * @param component
      */
-    public ExceptionEventContext(FacesContext context,
+    public ExceptionQueuedEventContext(FacesContext context,
                                  Throwable thrown,
                                  UIComponent component) {
 
@@ -123,13 +123,13 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
             
     /**
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>ExceptionEventContext</code> that indicates the argument
+     * <code>ExceptionQueuedEventContext</code> that indicates the argument
      * <code>Throwable</code> just occurred, relevant to the argument
      * <code>component</code>, during the lifecycle phase
      * <code>phaseId</code>.</p>
      *
      * @param thrown the <code>Throwable</code> that is the context for
-     * this <code>ExceptionEventContext</code> instance.
+     * this <code>ExceptionQueuedEventContext</code> instance.
      *
      * @param component the <code>UIComponent</code> that is relevant to
      * the context.
@@ -137,7 +137,7 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
      * @param phaseId the <code>PhaseId</code> at the time this
      * <code>ExeceptionEventContext</code> is created.
      */
-    public ExceptionEventContext(FacesContext context,
+    public ExceptionQueuedEventContext(FacesContext context,
                                  Throwable thrown,
                                  UIComponent component,
                                  PhaseId phaseId) {
@@ -158,7 +158,7 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
     /**
      * <p class="changed_added_2_0"></p>
      * @return the {@link FacesContext} used to create this
-     *  <code>ExceptionEventContext</code> instance.
+     *  <code>ExceptionQueuedEventContext</code> instance.
      */
     public FacesContext getContext() {
 
@@ -227,7 +227,7 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
 
     /**
      * <p class="changed_added_2_0">A <code>Map</code> of attributes
-     * relevant to the context of this <code>ExceptionEvent</code>.</p>
+     * relevant to the context of this <code>ExceptionQueuedEvent</code>.</p>
      */
     public Map<Object, Object> getAttributes() {
 

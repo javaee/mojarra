@@ -41,8 +41,8 @@ package javax.faces.event;
  * <p class="changed_added_2_0">The system event facility will create an
  * instance of this class whenever {@link
  * javax.faces.application.Application#publishEvent} is called with
- * <code>ExceptionEvent.class</code> as <code>systemEventClass</code>
- * argument.  In this case, an instance of {@link ExceptionEventContext}
+ * <code>ExceptionQueuedEvent.class</code> as <code>systemEventClass</code>
+ * argument.  In this case, an instance of {@link ExceptionQueuedEventContext}
  * is be passed as the <code>source</code> argument.  The specification
  * for <code>publishEvent()</code>, requires the instantiation of the
  * <code>systemEventClass</code> argument, passing the
@@ -50,32 +50,32 @@ package javax.faces.event;
  *
  * @since 2.0
  */
-public class ExceptionEvent extends SystemEvent {
+public class ExceptionQueuedEvent extends SystemEvent {
     
     /**
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>ExceptionEvent</code> that indicates the argument
-     * <code>ExceptionEventContext</code> occurred.</p>
+     * <code>ExceptionQueuedEvent</code> that indicates the argument
+     * <code>ExceptionQueuedEventContext</code> occurred.</p>
      *
-     * @param eventContext the <code>ExceptionEventContext</code> that
-     * contextualizes this <code>ExceptionEvent</code>.
+     * @param eventContext the <code>ExceptionQueuedEventContext</code> that
+     * contextualizes this <code>ExceptionQueuedEvent</code>.
      *
      * @since 2.0
      */
 
-    public ExceptionEvent(ExceptionEventContext eventContext) {
+    public ExceptionQueuedEvent(ExceptionQueuedEventContext eventContext) {
         super(eventContext);
     }
 
     /**
      * <p class="changed_added_2_0">Return the
-     * <code>ExceptionEventContext</code> for this event instance.</p>
+     * <code>ExceptionQueuedEventContext</code> for this event instance.</p>
      *
      * @since 2.0
      */
 
-    public ExceptionEventContext getContext() {
-	return (ExceptionEventContext) getSource();
+    public ExceptionQueuedEventContext getContext() {
+	return (ExceptionQueuedEventContext) getSource();
     }
 
 }
