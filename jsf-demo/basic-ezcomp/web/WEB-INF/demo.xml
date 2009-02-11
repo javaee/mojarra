@@ -44,7 +44,7 @@
         <page>out.jsf</page>
         <sources>
             <source>
-                <label>Consuming Page</label>
+                <label>Using Page</label>
                 <path>/out.xhtml</path>
             </source>
             <source>
@@ -61,7 +61,7 @@
         <page>inout.jsf</page>
         <sources>
             <source>
-                <label>Consuming Page</label>
+                <label>Using Page</label>
                 <path>/inout.xhtml</path>
             </source>
             <source>
@@ -82,7 +82,7 @@
         <page>controller.jsf</page>
         <sources>
             <source>
-                <label>Consuming Page</label>
+                <label>Using Page</label>
                 <path>/controller.xhtml</path>
             </source>
             <source>
@@ -103,7 +103,7 @@
         <page>spinner.jsf</page>
         <sources>
             <source>
-                <label>Consuming Page</label>
+                <label>Using Page</label>
                 <path>/spinner.xhtml</path>
             </source>
             <source>
@@ -123,7 +123,7 @@
     <page>spinnerStyled.jsf</page>
     <sources>
         <source>
-            <label>Consuming Page</label>
+            <label>Using Page</label>
             <path>/spinnerStyled.xhtml</path>
         </source>
         <source>
@@ -148,7 +148,7 @@
     <page>spinnerFinal.jsf</page>
     <sources>
         <source>
-            <label>Consuming Page</label>
+            <label>Using Page</label>
             <path>/spinnerFinal.xhtml</path>
         </source>
         <source>

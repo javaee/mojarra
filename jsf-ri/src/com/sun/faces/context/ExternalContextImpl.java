@@ -721,7 +721,6 @@ public class ExternalContextImpl extends ExternalContext {
 
     /**
      * @see ExternalContext#setResponseContentType(String)
-     * @param contentType
      */
     @Override
     public void setResponseContentType(String contentType) {
@@ -730,10 +729,9 @@ public class ExternalContextImpl extends ExternalContext {
         
     }
 
+
     /**
      * @see ExternalContext#setResponseHeader(String, String)
-     * @param name
-     * @param value 
      */
     @Override
     public void setResponseHeader(String name, String value) {
@@ -742,10 +740,9 @@ public class ExternalContextImpl extends ExternalContext {
         
     }
 
+
     /**
      * @see ExternalContext#addResponseHeader(String, String)
-     * @param name
-     * @param value 
      */
     @Override
     public void addResponseHeader(String name, String value) {
@@ -753,6 +750,98 @@ public class ExternalContextImpl extends ExternalContext {
         ((HttpServletResponse) response).addHeader(name, value);
         
     }
+
+
+    /**
+     * @see javax.faces.context.ExternalContext#setResponseBufferSize(int)
+     */
+    @Override
+    public void setResponseBufferSize(int size) {
+
+        response.setBufferSize(size);
+
+    }
+
+
+    /**
+     * @see javax.faces.context.ExternalContext#isResponseCommitted()
+     */
+    @Override
+    public boolean isResponseCommitted() {
+
+        return response.isCommitted();
+
+    }
+
+
+    /**
+     * @see javax.faces.context.ExternalContext#responseReset()
+     */
+    @Override
+    public void responseReset() {
+
+        response.reset();
+
+    }
+
+
+    /**
+     * @see javax.faces.context.ExternalContext#responseSendError(int, String)
+     */
+    @Override
+    public void responseSendError(int statusCode, String message) throws IOException {
+
+        if (message == null) {
+            ((HttpServletResponse) response).sendError(statusCode);
+        } else {
+            ((HttpServletResponse) response).sendError(statusCode, message);
+        }
+        
+    }
+
+
+    /**
+     * @see javax.faces.context.ExternalContext#setResponseStatus(int)
+     */
+    @Override
+    public void setResponseStatus(int statusCode) {
+
+        ((HttpServletResponse) response).setStatus(statusCode);
+
+    }
+
+    
+    /**
+     * @see javax.faces.context.ExternalContext#responseFlushBuffer()
+     */
+    @Override
+    public void responseFlushBuffer() throws IOException {
+
+        response.flushBuffer();
+
+    }
+
+    /**
+     * @see javax.faces.context.ExternalContext#setResponseContentLength(int)
+     */
+    @Override
+    public void setResponseContentLength(int length) {
+
+        response.setContentLength(length);
+
+    }
+
+    /**
+     * @see javax.faces.context.ExternalContext#getResponseBufferSize()
+     * @return
+     */
+    @Override
+    public int getResponseBufferSize() {
+
+        return response.getBufferSize();
+
+    }
+
 
     // ----------------------------------------------------------- Inner Classes
 

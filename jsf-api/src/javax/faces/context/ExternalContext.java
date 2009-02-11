@@ -1522,4 +1522,212 @@ public abstract class ExternalContext {
         
     }
 
+
+    /**
+     * <p class="changed_added_2_0">Set the buffer size for the current response.</p>
+     *
+     * <p><em>Servlet:</em> This must be performed by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>setBufferSize</code>
+     * method.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * @param size the new buffer size
+     *
+     * @since 2.0
+     */
+    public void setResponseBufferSize(int size) {
+
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setResponseBufferSize(size);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Return the buffer size for the current response.</p>
+     *
+     * <p><em>Servlet:</em> This must be performed by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>getBufferSize</code>
+     * method.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * @since 2.0
+     */
+    public int getResponseBufferSize() {
+
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getResponseBufferSize();
+        }
+
+        throw new UnsupportedOperationException();
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Check if the current response has been committed.</p>
+     *
+     * <p><em>Servlet:</em> This must be performed by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>isCommitted</code>
+     * method.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * @since 2.0
+     */
+    public boolean isResponseCommitted() {
+
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.isResponseCommitted();
+        }
+        throw new UnsupportedOperationException();
+        
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Resets the current response.</p>
+     *
+     * <p><em>Servlet:</em> This must be performed by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>reset</code>
+     * method.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * @since 2.0
+     */
+    public void responseReset() {
+
+        if (defaultExternalContext != null) {
+            defaultExternalContext.responseReset();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Sends an HTTP status code with message.</p>
+     *
+     * <p><em>Servlet:</em> This must be performed by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>sendError</code>
+     * method.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * @param statusCode an HTTP status code
+     * @param message an option message to detail the cause of the code
+     *
+     * @since 2.0
+     */
+    public void responseSendError(int statusCode, String message) throws IOException {
+
+        if (defaultExternalContext != null) {
+            defaultExternalContext.responseSendError(statusCode, message);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+        
+    }
+
+
+     /**
+     * <p class="changed_added_2_0">Sets the HTTP status code for the response.</p>
+     *
+     * <p><em>Servlet:</em> This must be performed by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>setStatus</code>
+     * method.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * @param statusCode an HTTP status code
+     *
+     * @since 2.0
+     */
+    public void setResponseStatus(int statusCode) {
+
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setResponseStatus(statusCode);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Flushes the buffered response content to the
+     * client.</p>
+     *
+     * <p><em>Servlet:</em> This must be performed by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>flushBuffer</code>
+     * method.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * @since 2.0
+     */
+    public void responseFlushBuffer() throws IOException {
+
+        if (defaultExternalContext != null) {
+            defaultExternalContext.responseFlushBuffer();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Set the content length of the response.</p>
+     *
+     * <p><em>Servlet:</em> This must be performed by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>setContentLength</code>
+     * method.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * @since 2.0
+     */
+    public void setResponseContentLength(int length) {
+
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setResponseContentLength(length);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+
 }

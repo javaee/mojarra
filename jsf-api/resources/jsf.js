@@ -821,6 +821,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <code>options.render</code> exists, create the post data argument with the name
              * <code>javax.faces.partial.render</code> and the value as a space delimited
              * <code>string</code> of client identifiers.</li>
+             * If <code>options.behavior</code> exists, create the post data argument with the
+             * name <code>javax.faces.behavior.event</code> and the value as the 
+             * <code>options.behavior</code> value. 
              * <li>Determine additional arguments (if any) from the <code>event</code>
              * argument.  The following name/value pairs may be used from the
              * <code>event</code> object:
@@ -979,6 +982,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 args["javax.faces.partial.execute"] = options.execute.replace(/\s+/, ' ');
                 if (options.render) {
                     args["javax.faces.partial.render"] = options.render.replace(/\s+/, ' ');
+                }
+
+                if (options.behavior) {
+                    args["javax.faces.behavior.event"] = options.behavior;
                 }
 
                 // remove non-passthrough options
