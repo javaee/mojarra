@@ -42,7 +42,7 @@ public class EventTagBean {
         output.setValue("The no-arg event fired!");
     }
 
-    public void afterValidate(ComponentSystemEvent event) {
+    public void postValidate(ComponentSystemEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         final UIForm form = (UIForm) event.getComponent();
         final String [] clientIds = { "lesser", "greater" };

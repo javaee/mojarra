@@ -13,7 +13,7 @@ import javax.faces.component.UIComponent;
  *
  * @since 2.0
  */
-public class BeforeValidateEvent extends ComponentSystemEvent {
+public class PostValidateEvent extends ComponentSystemEvent {
 
 
     // ------------------------------------------------------------ Constructors
@@ -28,7 +28,7 @@ public class BeforeValidateEvent extends ComponentSystemEvent {
 
      * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
-    public BeforeValidateEvent(UIComponent component) {
+    public PostValidateEvent(UIComponent component) {
         super(component);
     }
 

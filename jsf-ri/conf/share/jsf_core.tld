@@ -519,20 +519,20 @@
 
 <tr>
 
-<td>beforeValidate
+<td>preValidate
 </td>
 
-<td>javax.faces.event.BeforeValidateEvent
+<td>javax.faces.event.PreValidateEvent
 </td>
 
 </tr>
 
 <tr>
 
-<td>afterValidate
+<td>postValidate
 </td>
 
-<td>javax.faces.event.AfterValidateEvent
+<td>javax.faces.event.PostValidateEvent
 </td>
 
 </tr>
