@@ -58,8 +58,8 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ViewMapCreatedEvent;
-import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.PostConstructViewMapEvent;
+import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.PostAddToViewEvent;
 
 import junit.framework.Test;
@@ -857,10 +857,10 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
         ViewMapListener listener = new ViewMapListener();
         Application app = facesContext.getApplication();
-        app.subscribeToEvent(ViewMapCreatedEvent.class,
+        app.subscribeToEvent(PostConstructViewMapEvent.class,
                              UIViewRoot.class,
                              listener);
-        app.subscribeToEvent(ViewMapDestroyedEvent.class,
+        app.subscribeToEvent(PreDestroyViewMapEvent.class,
                              UIViewRoot.class,
                              listener);
         UIViewRoot root = new UIViewRoot();
@@ -882,32 +882,32 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         root.getViewMap(false);
         assertTrue(!listener.wasProcessEventInvoked());
 
-        app.unsubscribeFromEvent(ViewMapCreatedEvent.class,
+        app.unsubscribeFromEvent(PostConstructViewMapEvent.class,
                                  UIViewRoot.class,
                                  listener);
-        app.unsubscribeFromEvent(ViewMapDestroyedEvent.class,
+        app.unsubscribeFromEvent(PreDestroyViewMapEvent.class,
                                  UIViewRoot.class,
                                  listener);
 
-        app.subscribeToEvent(ViewMapCreatedEvent.class,
+        app.subscribeToEvent(PostConstructViewMapEvent.class,
                              listener);
-        app.subscribeToEvent(ViewMapDestroyedEvent.class,
+        app.subscribeToEvent(PreDestroyViewMapEvent.class,
                              listener);
         listener.reset();
         root = new UIViewRoot();
         assertTrue(!listener.wasProcessEventInvoked());
         root.getViewMap();
         assertTrue(listener.wasProcessEventInvoked());
-        assertTrue(listener.getPassedEvent() instanceof ViewMapCreatedEvent);
+        assertTrue(listener.getPassedEvent() instanceof PostConstructViewMapEvent);
         listener.reset();
         root.getViewMap();
         assertTrue(!listener.wasProcessEventInvoked());
         root.getViewMap().clear();
         assertTrue(listener.wasProcessEventInvoked());
-        assertTrue(listener.getPassedEvent() instanceof ViewMapDestroyedEvent);
+        assertTrue(listener.getPassedEvent() instanceof PreDestroyViewMapEvent);
         listener.reset();
         root.getViewMap().clear();
-        assertTrue(listener.getPassedEvent() instanceof ViewMapDestroyedEvent);
+        assertTrue(listener.getPassedEvent() instanceof PreDestroyViewMapEvent);
         assertTrue(listener.wasProcessEventInvoked());
 
     }

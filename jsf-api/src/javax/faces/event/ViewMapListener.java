@@ -8,8 +8,8 @@ package javax.faces.event;
 /**
  * <p class="changed_added_2_0">Marker interface for {@link
  * SystemEvent}s that indicate the view map has been created ({@link
- * ViewMapCreatedEvent}, or destroyed ({@link
- * ViewMapDestroyedEvent}).</p>
+ * PostConstructViewMap}, or destroyed ({@link
+ * PreDestroyViewMapEvent}).</p>
  *
  * @since 2.0
  */

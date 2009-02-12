@@ -66,9 +66,9 @@ import com.sun.faces.application.resource.ResourceCache;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.SystemEvent;
-import javax.faces.event.ViewMapCreatedEvent;
-import javax.faces.event.ViewMapCreatedEvent;
-import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.PostConstructViewMapEvent;
+import javax.faces.event.PostConstructViewMapEvent;
+import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ViewMapListener;
 
 /**
@@ -133,7 +133,7 @@ public class WebappLifecycleListener implements ViewMapListener {
 
     public void processEvent(SystemEvent event)
     throws AbortProcessingException {
-        if (event instanceof ViewMapDestroyedEvent) {
+        if (event instanceof PreDestroyViewMapEvent) {
             Map<String, Object> viewMap =
                   ((UIViewRoot) event.getSource()).getViewMap(false);
             if (viewMap != null && viewMap.size() != 0) {

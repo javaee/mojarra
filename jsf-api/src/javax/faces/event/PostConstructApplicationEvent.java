@@ -52,7 +52,7 @@ import javax.faces.application.Application;
  *
  * @since 2.0
  */
-public class ApplicationPostConstructEvent extends SystemEvent {
+public class PostConstructApplicationEvent extends SystemEvent {
 
     private static final long serialVersionUID = -3918703770970591309L;
 
@@ -64,7 +64,7 @@ public class ApplicationPostConstructEvent extends SystemEvent {
      * @since 2.0
      */
 
-    public ApplicationPostConstructEvent(Application application) {
+    public PostConstructApplicationEvent(Application application) {
         super(application);
     }
 
