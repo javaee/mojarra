@@ -82,8 +82,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import javax.faces.component.UIViewRoot;
-import javax.faces.event.ViewMapCreatedEvent;
-import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.PostConstructViewMapEvent;
+import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.PreDestroyApplicationEvent;
 
 import com.sun.faces.application.ApplicationAssociate;
@@ -238,10 +238,10 @@ public class ConfigureListener implements ServletRequestListener,
                 }
             }
             Application app = initContext.getApplication();
-            app.subscribeToEvent(ViewMapCreatedEvent.class,
+            app.subscribeToEvent(PostConstructViewMapEvent.class,
                                  UIViewRoot.class,
                                  webAppListener);
-            app.subscribeToEvent(ViewMapDestroyedEvent.class,
+            app.subscribeToEvent(PreDestroyViewMapEvent.class,
                                  UIViewRoot.class,
                                  webAppListener);
             

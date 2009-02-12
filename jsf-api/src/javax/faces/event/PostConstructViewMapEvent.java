@@ -18,7 +18,7 @@ import javax.faces.component.UIViewRoot;
  *
  * @since 2.0
  */
-public class ViewMapCreatedEvent extends ComponentSystemEvent {
+public class PostConstructViewMapEvent extends ComponentSystemEvent {
 
     private static final long serialVersionUID = 8684338297976265379L;
 
@@ -28,7 +28,7 @@ public class ViewMapCreatedEvent extends ComponentSystemEvent {
 
     /**
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>ViewMapCreatedEvent</code> that indicates the argument
+     * <code>PostConstructViewMapEvent</code> that indicates the argument
      * <code>root</code> was just associated with its view map.</p>
 
      * @param root the <code>UIViewRoot</code> for which a view map has
@@ -36,7 +36,7 @@ public class ViewMapCreatedEvent extends ComponentSystemEvent {
      *
      * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
-    public ViewMapCreatedEvent(UIViewRoot root) {
+    public PostConstructViewMapEvent(UIViewRoot root) {
         super(root);
     }
 

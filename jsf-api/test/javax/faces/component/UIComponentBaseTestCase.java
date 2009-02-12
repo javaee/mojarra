@@ -62,7 +62,7 @@ import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.BeforeRenderEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.ViewMapCreatedEvent;
+import javax.faces.event.PostConstructViewMapEvent;
 import javax.faces.event.PostAddToViewEvent;
 
 import junit.framework.Test;
@@ -901,8 +901,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         List<SystemEventListener> lc = control.getListenersForEventClass(PostAddToViewEvent.class);
         List<SystemEventListener> tvl = toValidate.getListenersForEventClass(PostAddToViewEvent.class);
-        List<SystemEventListener> lc2 = control.getListenersForEventClass(ViewMapCreatedEvent.class);
-        List<SystemEventListener> tvl2 = toValidate.getListenersForEventClass(ViewMapCreatedEvent.class);
+        List<SystemEventListener> lc2 = control.getListenersForEventClass(PostConstructViewMapEvent.class);
+        List<SystemEventListener> tvl2 = toValidate.getListenersForEventClass(PostConstructViewMapEvent.class);
 
         assertTrue(Arrays.equals(lc.toArray(), tvl.toArray()));
         assertTrue(Arrays.equals(lc2.toArray(), tvl2.toArray()));
@@ -934,7 +934,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
                                    new ComponentListener());
         component.subscribeToEvent(PostAddToViewEvent.class,
                                    new ComponentListener());
-        component.subscribeToEvent(ViewMapCreatedEvent.class,
+        component.subscribeToEvent(PostConstructViewMapEvent.class,
                                    new ComponentListener());
 
     }

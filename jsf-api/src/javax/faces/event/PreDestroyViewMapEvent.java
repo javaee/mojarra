@@ -20,7 +20,7 @@ import javax.faces.component.UIViewRoot;
  *
  * @since 2.0
  */
-public class ViewMapDestroyedEvent extends ComponentSystemEvent {
+public class PreDestroyViewMapEvent extends ComponentSystemEvent {
 
     private static final long serialVersionUID = 4470489935758914483L;
 
@@ -38,7 +38,7 @@ public class ViewMapDestroyedEvent extends ComponentSystemEvent {
      *
      * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
-    public ViewMapDestroyedEvent(UIViewRoot root) {
+    public PreDestroyViewMapEvent(UIViewRoot root) {
         super(root);
     }
 
