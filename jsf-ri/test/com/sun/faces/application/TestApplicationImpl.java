@@ -712,7 +712,9 @@ public class TestApplicationImpl extends JspFacesTestCase {
         Application application = getFacesContext().getApplication();
         application.addComponent("CustomInput", CustomOutput.class.getName());
         CustomOutput c = (CustomOutput) application.createComponent("CustomInput");
+	c.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         CustomOutput c2 = (CustomOutput) application.createComponent("CustomInput");
+	c2.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         UIViewRoot root = getFacesContext().getViewRoot();
         root.getChildren().add(c);
         root.getChildren().add(c2);
@@ -731,6 +733,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
         application.addComponent("CustomInput2", CustomOutput2.class.getName());
         CustomOutput2 c3 = (CustomOutput2) application.createComponent("CustomInput2");
+	c3.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         root.getChildren().add(c3);
         assertTrue(c3.getEvent() instanceof PostAddToViewEvent);
         c3.reset();

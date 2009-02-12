@@ -336,6 +336,7 @@ public class UISelectItemTestCase extends UIComponentBaseTestCase {
     protected UIComponent createComponent() {
         UIComponent component = new UISelectItem();
         component.setRendererType(null);
+        component.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         return (component);
     }
 

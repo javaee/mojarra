@@ -221,6 +221,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         // add to the tree afterwards
         // this allows children to determine if it's
         // been part of the tree or not yet
+        c.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         if (facetName == null) {
         	parent.getChildren().add(c);
         } else {

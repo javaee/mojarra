@@ -65,6 +65,7 @@ public abstract class AbstractUIHandler implements FaceletHandler, TextHandler {
                              UIComponent c) {
         // possible facet scoped
         String facetName = this.getFacetName(ctx, parent);
+        c.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         if (facetName == null) {
             parent.getChildren().add(c);
         } else {

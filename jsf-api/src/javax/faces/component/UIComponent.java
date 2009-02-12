@@ -145,6 +145,18 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     public static final String BEANINFO_KEY = "javax.faces.component.BEANINFO_KEY";
 
     /**
+     * <p class="changed_added_2_0">The value of this constant is used as the key in the
+     * component attribute map, the value for which is a
+     * <code>Boolean</code> indicating that this component instance
+     * was added into the tree by the a PDL, rather than programmatically.
+     * The absense of an entry for this key indicates that the component
+     * was not added by a PDL.</p>
+     *
+     * @since 2.0
+     */
+    public static final String ADDED_BY_PDL_KEY = "javax.faces.component.ADDED_BY_PDL_KEY";
+
+    /**
      * <p class="changed_added_2_0">The value of this constant is used as the key
      * in the <em>composite component BeanDescriptor</em> for the 
      * <code>Map&lt;PropertyDescriptor&gt;</code> that contains meta-information

@@ -1598,8 +1598,10 @@ public abstract class UIComponentBase extends UIComponent {
             UIComponent component) {
 
         component.setInView(true);
-        Class eventClass = PhaseId.RESTORE_VIEW == context.getCurrentPhaseId() 
-                ? PostAddToViewEvent.class : AfterNonRestoreViewAddToViewEvent.class;
+        // If the component was added by PDL, use the normal PostAddtoViewEvent.  
+        // If the component was added by something other than PDL, use the PostAddToViewNonPDLEvent
+        Class eventClass = component.getAttributes().containsKey(UIComponent.ADDED_BY_PDL_KEY) 
+                ? PostAddToViewEvent.class : PostAddToViewNonPDLEvent.class;
         application.publishEvent(eventClass, component);
         if (component.getChildCount() > 0) {
             for (UIComponent c : component.getChildren()) {

@@ -55,6 +55,7 @@ public class TestComponent extends UIComponentBase {
 
     public TestComponent() {
         this("test");
+        this.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
     }
 
     public TestComponent(String componentId) {

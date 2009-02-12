@@ -128,8 +128,6 @@
     <target name="test"
             description="Execute all tests against installed application"
             depends="test.annotations,
-                test.ajax,
-                test.facelets,
                 test.init,
                 test.render,
                 test.html.taglib,
@@ -176,6 +174,10 @@
                 test.misc,
                 test.regressions"
             />
+<!-- 139-StateSaving 
+                test.ajax,
+                test.facelets,
+-->
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
@@ -847,7 +849,9 @@
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/render/*TestCase.class"
+excludes="com/sun/faces/render/CommandButtonTestCase.class"
                          />
+<!-- 139-StateSaving -->
             </tests>
         </jsf.junit>
     </target>

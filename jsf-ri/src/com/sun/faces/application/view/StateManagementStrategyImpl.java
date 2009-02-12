@@ -66,7 +66,7 @@ import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
-import javax.faces.event.AfterNonRestoreViewAddToViewEvent;
+import javax.faces.event.PostAddToViewNonPDLEvent;
 import javax.faces.event.BeforeRemoveFromViewEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.SystemEventListener;
@@ -96,8 +96,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             "com.sun.faces.application.view.CLIENTIDS_TO_ADD";
     private static final String IGNORE_REMOVE_EVENT_NAME = 
             "com.sun.faces.application.view.IGNORE_REMOVE_EVENT";
-    private static final String COMPONENT_IS_NONPDL_ADDED_NAME = 
-            "com.sun.faces.application.view.COMPONENT_IS_NONPDL_ADDED";
 
     // ------------------------------------------------------------ Constructors
 
@@ -108,7 +106,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     public StateManagementStrategyImpl() {
         removeListener = new AddRemoveListener(this);
         Application app = FacesContext.getCurrentInstance().getApplication();
-        app.subscribeToEvent(AfterNonRestoreViewAddToViewEvent.class, removeListener);
+        app.subscribeToEvent(PostAddToViewNonPDLEvent.class, removeListener);
         app.subscribeToEvent(BeforeRemoveFromViewEvent.class, removeListener);
 
     }
@@ -176,19 +174,18 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         idsToRemove.add(event.getComponent().getClientId(context));
     }
     
-    private void handleAddEvent(AfterNonRestoreViewAddToViewEvent event) {
+    private void handleAddEvent(PostAddToViewNonPDLEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         List<ComponentStruct> idsToAdd = getClientIdsToAdd(context, true);
         ComponentStruct toAdd = new ComponentStruct();
         UIComponent 
                 parent,
                 added = event.getComponent();
-        added.getAttributes().put(COMPONENT_IS_NONPDL_ADDED_NAME, Boolean.TRUE);
         toAdd.clientId = added.getClientId(context);
         toAdd.parentClientId = (parent = added.getParent()).getClientId(context);
         toAdd.indexOfChildInParent = parent.getChildren().indexOf(added);
         idsToAdd.add(toAdd);
-        
+    
     }
     
     private boolean isIgnoreRemoveEvent(FacesContext context) {
@@ -242,7 +239,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             public VisitResult visit(VisitContext context, UIComponent target) {
                 VisitResult result = VisitResult.ACCEPT;
                 Object stateObj = null;
-                if (target.getAttributes().containsKey(COMPONENT_IS_NONPDL_ADDED_NAME)) {
+                if (!target.getAttributes().containsKey(UIComponent.ADDED_BY_PDL_KEY)) {
                     stateObj = new StateHolderSaver(finalContext, target);
                 } else {
                     stateObj = target.saveState(context.getFacesContext());
@@ -434,7 +431,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     owner.handleRemoveEvent((BeforeRemoveFromViewEvent) event);
                 }
             } else {
-                owner.handleAddEvent((AfterNonRestoreViewAddToViewEvent) event);
+                owner.handleAddEvent((PostAddToViewNonPDLEvent) event);
             }
         }
         
