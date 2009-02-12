@@ -71,7 +71,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
-import javax.faces.event.AfterRestoreStateEvent;
+import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.PostConstructViewMapEvent;
 import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ExceptionQueuedEvent;
@@ -829,7 +829,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * ContextCallback} that takes the following action: call the {@link
      * UIComponent#processEvent} method of the current component. The
      * argument <code>event</code> must be an instance of {@link
-     * javax.faces.event.AfterRestoreStateEvent} whose
+     * javax.faces.event.PostRestoreStateEvent} whose
      * <code>component</code> property is the current component in the
      * traversal.</code></p>
      * @param context the <code>FacesContext</code> for this requets
@@ -845,7 +845,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         } finally {
             clearFacesEvents(context);
             notifyAfter(context, PhaseId.RESTORE_VIEW);
-            final AfterRestoreStateEvent event = new AfterRestoreStateEvent(this);
+            final PostRestoreStateEvent event = new PostRestoreStateEvent(this);
             try {
                 this.visitTree(VisitContext.createVisitContext(context), 
                         new VisitCallback() {
