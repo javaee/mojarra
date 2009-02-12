@@ -16,7 +16,7 @@ import javax.faces.event.FacesListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
-import javax.faces.event.ApplicationPostConstructEvent;
+import javax.faces.event.PostConstructApplicationEvent;
 
 import com.sun.faces.CustomSystemEvent;
 import com.sun.faces.cactus.ServletFacesTestCase;
@@ -216,27 +216,27 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         // verify subscription for source that is an Abstract type works or
         // doesn't work depending on how the event is published.
         TestListener abstractListener = new TestListener(Application.class);
-        application.subscribeToEvent(ApplicationPostConstructEvent.class,
+        application.subscribeToEvent(PostConstructApplicationEvent.class,
                                      Application.class,
                                      abstractListener);
         abstractListener.reset();
-        application.publishEvent(ApplicationPostConstructEvent.class,
+        application.publishEvent(PostConstructApplicationEvent.class,
                                  Application.class,
                                  application);
         assertTrue(abstractListener.getPassedSource() == application);
-        assertTrue(abstractListener.getPassedSystemEvent() instanceof ApplicationPostConstructEvent);
+        assertTrue(abstractListener.getPassedSystemEvent() instanceof PostConstructApplicationEvent);
         assertTrue(abstractListener.getPassedSystemEvent().getSource() == application);
 
         // verify that the event isn't published when the base type isn't
         // provided with publish
         abstractListener.reset();
-        application.publishEvent(ApplicationPostConstructEvent.class,
+        application.publishEvent(PostConstructApplicationEvent.class,
                                  application);
         assertTrue(abstractListener.getPassedSource() == null);
         assertTrue(abstractListener.getPassedSystemEvent() == null);
 
         // cleanup
-        application.unsubscribeFromEvent(ApplicationPostConstructEvent.class,
+        application.unsubscribeFromEvent(PostConstructApplicationEvent.class,
                                          Application.class,
                                          abstractListener);
 

@@ -84,7 +84,7 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
-import javax.faces.event.ApplicationPreDestroyEvent;
+import javax.faces.event.PreDestroyApplicationEvent;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.WebappLifecycleListener;
@@ -278,7 +278,7 @@ public class ConfigureListener implements ServletRequestListener,
         FacesContext initContext = new InitFacesContext(context);
         try {
             Application app = initContext.getApplication();
-            app.publishEvent(ApplicationPreDestroyEvent.class,
+            app.publishEvent(PreDestroyApplicationEvent.class,
                              Application.class,
                              app);
             // Release any allocated application resources

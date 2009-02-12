@@ -14,19 +14,19 @@ import javax.faces.application.Application;
  *
  * @since 2.0
  */
-public class ApplicationPreDestroyEvent extends SystemEvent {
+public class PreDestroyApplicationEvent extends SystemEvent {
 
     private static final long serialVersionUID = 8105212785161493162L;
 
     /**
      * <p class="changed_added_2_0">Constructs a new
-     * <code>ApplicationPreDestroyEvent</code> for this application.</p>
+     * <code>PreDestroyApplicationEvent</code> for this application.</p>
      *
      * @param application the application that has been configured
      *
      * @since 2.0
      */
-    public ApplicationPreDestroyEvent(Application application) {
+    public PreDestroyApplicationEvent(Application application) {
         super(application); 
     }
     
