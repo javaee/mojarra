@@ -1077,7 +1077,10 @@ public abstract class UIComponentBase extends UIComponent {
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
+            Application app = context.getApplication();
+            app.publishEvent(BeforeValidateEvent.class, kid);
             kid.processValidators(context);
+            app.publishEvent(AfterValidateEvent.class, kid);
             popComponentFromEL(context);
         }
     }
@@ -1575,8 +1578,6 @@ public abstract class UIComponentBase extends UIComponent {
     private void doPostAddProcessing(FacesContext context, UIComponent added) {
 
         if (!isPostbackAndRestoreView(context)) {
-            context.getApplication().publishEvent(AfterAddToParentEvent.class,
-                    added);
             if (parent.isInView()) {
                 publishAfterViewEvents(context, context.getApplication(), added);
             }
@@ -1598,7 +1599,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         component.setInView(true);
         Class eventClass = PhaseId.RESTORE_VIEW == context.getCurrentPhaseId() 
-                ? AfterAddToViewEvent.class : AfterNonPDLAddToViewEvent.class;
+                ? PostAddToViewEvent.class : AfterNonRestoreViewAddToViewEvent.class;
         application.publishEvent(eventClass, component);
         if (component.getChildCount() > 0) {
             for (UIComponent c : component.getChildren()) {

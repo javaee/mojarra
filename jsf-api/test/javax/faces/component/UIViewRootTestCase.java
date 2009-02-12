@@ -60,7 +60,7 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
-import javax.faces.event.AfterAddToViewEvent;
+import javax.faces.event.PostAddToViewEvent;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

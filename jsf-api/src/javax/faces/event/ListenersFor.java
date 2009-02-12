@@ -51,7 +51,7 @@ import java.lang.annotation.Inherited;
  * <pre><code>
 
     &#0064;ListenersFor({
-        &#0064;ListenerFor(systemEventClass=AfterAddToParentEvent.class),
+        &#0064;ListenerFor(systemEventClass=PostAddToViewEvent.class),
         &#0064;ListenerFor(systemEventClass=BeforeRenderEvent.class,
                      sourceClass=CustomOutput.class)
     })

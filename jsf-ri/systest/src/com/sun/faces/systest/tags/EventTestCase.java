@@ -90,7 +90,7 @@ public class EventTestCase extends AbstractTestCase {
         HtmlPage page = getPage("/faces/eventTag.xhtml");
         List<HtmlSpan> outputs = new ArrayList<HtmlSpan>(4);
         getAllElementsOfGivenClass(page, outputs, HtmlSpan.class);
-        assertTrue(outputs.size() == 4);
+        assertTrue(outputs.size() == 6);
         validateOutput(outputs);
 
         HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "click");
@@ -98,10 +98,14 @@ public class EventTestCase extends AbstractTestCase {
         page = submit.click();
         outputs.clear();
         getAllElementsOfGivenClass(page, outputs, HtmlSpan.class);
-        assertTrue(outputs.size() == 4);
+        assertTrue(outputs.size() == 6);
         validateOutput(outputs);
     }
 
+    public void testBeforeViewRender() throws Exception {
+        HtmlPage page = getPage("/faces/eventTag01.xhtml");
+        assertTrue(-1 != page.asText().indexOf("class javax.faces.component.UIViewRoot before render"));
+    }
 
 
     public void testInvalidEvent() throws Exception {
@@ -142,11 +146,19 @@ public class EventTestCase extends AbstractTestCase {
 
         // Short Name
         s = outputs.get(2);
-        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.PostAddToViewEvent' event fired!").equals(s.asText()));
 
         // Long name
         s = outputs.get(3);
-        assertTrue(("The 'javax.faces.event.AfterAddToParentEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.PostAddToViewEvent' event fired!").equals(s.asText()));
+
+        // Fully-qualified class name
+        s = outputs.get(4);
+        assertTrue(("The 'javax.faces.event.BeforeRenderEvent' event fired!").equals(s.asText()));
+
+        // No-arg
+        s = outputs.get(5);
+        assertTrue(("The no-arg event fired!").equals(s.asText()));
 
     }
 }
