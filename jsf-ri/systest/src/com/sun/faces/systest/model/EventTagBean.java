@@ -25,8 +25,8 @@ public class EventTagBean {
     public void beforeViewRender(ComponentSystemEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         
-        context.getExternalContext().getRequestMap().put("beforeRenderMessage", 
-                event.getComponent().getClass() + " before render");
+        context.getExternalContext().getRequestMap().put("preRenderComponentMessage", 
+                event.getComponent().getClass() + " pre-render");
     }
 
 

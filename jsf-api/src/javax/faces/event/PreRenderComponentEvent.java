@@ -21,7 +21,7 @@ import javax.faces.component.UIComponent;
  *
  * @since 2.0
  */
-public class BeforeRenderEvent extends ComponentSystemEvent {
+public class PreRenderComponentEvent extends ComponentSystemEvent {
 
 
     // ------------------------------------------------------------ Constructors
@@ -30,7 +30,7 @@ public class BeforeRenderEvent extends ComponentSystemEvent {
     /**
 
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>BeforeRenderEvent</code> that indicates the argument
+     * <code>PreRenderComponentEvent</code> that indicates the argument
      * <code>component</code> is about to be rendered.</p>
 
      * @param component the <code>UIComponent</code> that is about to be
@@ -38,7 +38,7 @@ public class BeforeRenderEvent extends ComponentSystemEvent {
 
      * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
-    public BeforeRenderEvent(UIComponent component) {
+    public PreRenderComponentEvent(UIComponent component) {
         super(component);
     }
 

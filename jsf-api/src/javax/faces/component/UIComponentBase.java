@@ -815,7 +815,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        context.getApplication().publishEvent(BeforeRenderEvent.class, this);
+        context.getApplication().publishEvent(PreRenderComponentEvent.class, this);
 
         String rendererType = getRendererType();
         if (rendererType != null) {

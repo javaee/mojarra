@@ -1406,7 +1406,7 @@ private void doFind(FacesContext context, String clientId) {
      * response contained in the specified {@link FacesContext}. 
      * Call {@link #pushComponentToEL(javax.faces.context.FacesContext,javax.faces.component.UIComponent)}.
      * Call {@link javax.faces.application.Application#publishEvent}, passing
-     * {@link javax.faces.event.BeforeRenderEvent}<code>.class</code> as the
+     * {@link javax.faces.event.PreRenderComponentEvent}<code>.class</code> as the
      * first argument and the component instance to be rendered as the
      * second argument.</p></li>
 

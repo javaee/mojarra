@@ -42,7 +42,7 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
-import javax.faces.event.BeforeRenderEvent;
+import javax.faces.event.PreRenderComponentEvent;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.facelets.tag.jsf.ValidateHandler;
@@ -53,7 +53,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagException;
 
 /**
  * <p>A custom ValidateHandler that registers the created Validator as
- * a listener for the <code>BeforeRenderEvent</code> so that the Validator
+ * a listener for the <code>PreRenderComponentEvent</code> so that the Validator
  * can take custom action upon the rendering of the parent component.</p>
  *
  * NOTE:  These APIs <em>WILL</em> be changing so if you write similar code,
@@ -84,7 +84,7 @@ public class ClientSideValidatorHandler extends ValidateHandler {
             // cast to a ValueHolder
             EditableValueHolder evh = (EditableValueHolder) parent;
             Validator v = this.createValidator(ctx);
-            parent.subscribeToEvent(BeforeRenderEvent.class,
+            parent.subscribeToEvent(PreRenderComponentEvent.class,
                                     ((ClientSideValidator) v));
             if (v == null) {
                 throw new TagException(this.tag, "No Validator was created");

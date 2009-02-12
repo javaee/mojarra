@@ -499,20 +499,20 @@
 
 <tr>
 
-<td>beforeRender
+<td>preRenderComponent
 </td>
 
-<td>javax.faces.event.BeforeRenderEvent
+<td>javax.faces.event.PreRenderComponentEvent
 </td>
 
 </tr>
 
 <tr>
 
-<td>afterAddToView
+<td>PostAddToView
 </td>
 
-<td>javax.faces.event.AfterRenderEvent
+<td>javax.faces.event.PostAddToViewEvent
 </td>
 
 </tr>
