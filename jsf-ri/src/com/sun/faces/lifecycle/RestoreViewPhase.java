@@ -67,7 +67,7 @@ import com.sun.faces.util.Util;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostAddToViewEvent;
-import javax.faces.event.AfterRestoreStateEvent;
+import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
@@ -136,7 +136,7 @@ public class RestoreViewPhase extends Phase {
             
             // do per-component actions
             UIViewRoot root = facesContext.getViewRoot();
-            final AfterRestoreStateEvent event = new AfterRestoreStateEvent(root);
+            final PostRestoreStateEvent event = new PostRestoreStateEvent(root);
             try {
                 root.visitTree(VisitContext.createVisitContext(facesContext),
                         new VisitCallback() {

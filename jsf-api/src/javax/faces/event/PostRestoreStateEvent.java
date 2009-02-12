@@ -17,7 +17,7 @@ import javax.faces.component.UIComponent;
  *
  * @since 2.0
  */
-public class AfterRestoreStateEvent extends ComponentSystemEvent {
+public class PostRestoreStateEvent extends ComponentSystemEvent {
     
     static final long serialVersionUID = -1007196479122154347L;
 
@@ -27,14 +27,14 @@ public class AfterRestoreStateEvent extends ComponentSystemEvent {
     /**
 
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>AfterRestoreStateEvent</code> that indicates the argument
+     * <code>PostRestoreStateEvent</code> that indicates the argument
      * <code>component</code> just had its state restored.</p>
 
      * @param component the <code>UIComponent</code> whose state was just restored.
 
      * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
-    public AfterRestoreStateEvent(UIComponent component) {
+    public PostRestoreStateEvent(UIComponent component) {
         super(component);
     }
     

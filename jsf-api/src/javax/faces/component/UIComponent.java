@@ -72,7 +72,7 @@ import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.AfterRestoreStateEvent;
+import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.FacesEvent;
@@ -1932,7 +1932,7 @@ private void doFind(FacesContext context, String clientId) {
     /**
      * <p class="changed_added_2_0">The default implementation performs
      * the following action.  If the argument <code>event</code> is an
-     * instance of {@link AfterRestoreStateEvent}, call
+     * instance of {@link PostRestoreStateEvent}, call
      * <code>this.</code>{@link #getValueExpression} passing the literal
      * string &#8220;binding&#8221;, without the quotes, as the
      * argument.  If the result is non-<code>null</code>, set the value
@@ -1940,7 +1940,7 @@ private void doFind(FacesContext context, String clientId) {
      */ 
 
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-        if (event instanceof AfterRestoreStateEvent) {
+        if (event instanceof PostRestoreStateEvent) {
 	    assert(this == event.getComponent());
             // if this component has a component value reference expression,
             // make sure to populate the ValueExpression for it.
