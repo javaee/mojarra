@@ -40,21 +40,135 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 /**
+ * <p class="changed_added_2_0">Encapsulate the saving and restoring of
+ * the view to enable the PDL to take over the responsibility for
+ * handling this feature.</p>
  *
- * @author edburns
+ * @since 2.0
  */
 public abstract class StateManagementStrategy {
 
     
-    public abstract UIViewRoot restoreView(FacesContext context, String viewId,
-                                           String renderKitId);
+    // PENDING(edburns): move into pdf document.
+    /**
+     * <p class="changed_added_2_0">Return the state of the current view
+     * in an <code>Object</code> that implements
+     * <code>Serializable</code>.  The default implementation must
+     * perform the following algorithm or its semantic equivalent.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * 	<ol>
+
+	  <li><p>If the <code>UIViewRoot</code> of the current view is
+	  marked <code>transient</code>, return <code>null</code>
+	  immediately.  </p></li>
+
+	<li><p>Traverse the view and verify that each of the client ids
+	are unique.  Throw <code>IllegalStateException</code> if more
+	than one client id are the same.</p></li>
+
+	  <li><p>Visit the tree using {@link
+	  javax.faces.component.UIComponent#visitTree}.  For each node,
+	  call {@link javax.faces.component.UIComponent#saveState},
+	  saving the returned <code>Object</code> in a way such that it
+	  can be restored given only its client id.  Special care must
+	  be taken to handle the case of components that were added
+	  programmatically during this lifecycle traversal, rather than
+	  by the PDL.  The {@link
+	  javax.faces.event.AfterNonRestoreViewAddToViewEvent} is sent so that
+	  implementations may be aware of such additions and take
+	  appropriate action.</p></li>
+
+	  <li><p>Care must be taken to handle the case of components
+	  that were programmatically deleted during this lifecycle
+	  traversal.  The {@link
+	  javax.faces.event.BeforeRemoveFromViewEvent} is sent so that
+	  implementations may be aware of such additions and take
+	  appropriate action.</p></li>
+
+	</ol>
+
+     * <p>The implementation must ensure that the {@link
+     * javax.faces.component.UIComponent#saveState} method is called for
+     * each node in the tree.</p>
+
+     * <p>The data structure used to save the state obtained by
+     * executing the above algorithm must be <code>Serializable</code>,
+     * and all of the elements within the data structure must also be
+     * <code>Serializable</code>.</p>
+
+     * </div>
+
+     * context the <code>FacesContext</code> for this request.
+     *
+     * @since 2.0
+     */
 
     public abstract Object saveView(FacesContext context);
     
+    // PENDING(edburns): move into pdf document.
     /**
-     * <p>Value must not change during application lifetime.  Safe to cache.</p>
-     * @param context
-     * @return
+     * <p class="changed_added_2_0">Restore the state of the view with
+     * information in the request.  The default implementation must
+     * perform the following algorithm or its semantic equivalent.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * 	<ol>
+
+	  <li><p>Call {@link
+	  javax.faces.application.ViewHandler#createView}.  This will
+	  cause the view to be built from the PDL.  This view will not
+	  contain any components programmatically added during the
+	  previous lifecycle run, and it <b>will</b> contain components
+	  that were programmatically deleted on the previous lifecycle
+	  run.  Both of these cases must be handled.</p></li>
+
+	  <li><p>Call {@link
+	  javax.faces.render.ResponseStateManager#getState} to obtain
+	  the data structure returned from the previous call to {@link
+	  #saveView}.</p></li>
+
+	  <li><p>Visit the tree using {@link
+	  javax.faces.component.UIComponent#visitTree}.  For each node,
+	  call {@link javax.faces.component.UIComponent#restoreState},
+	  passing the state saved corresponding to the current client
+	  id.</p></li>
+
+	  <li><p>Ensure that any programmatically deleted components are
+	  removed.</p></li>
+
+	  <li><p>Ensure any programmatically added components are added.
+	  </p></li>
+
+	</ol>
+
+     * <p>The implementation must ensure that the {@link
+     * javax.faces.component.UIComponent#restoreState} method is called
+     * for each node in the tree, except for those that were
+     * programmatically deleted on the previous run through the
+     * lifecycle.</p>
+
+     * </div>
+     *
+     * @param context the <code>FacesContext</code> for this request
+
+     * @param viewId the view identifier for which the state should be restored
+
+     * @param renderKitId the render kit id for this state.
+
+     * @since 2.0
+     */
+
+    public abstract UIViewRoot restoreView(FacesContext context, String viewId,
+                                           String renderKitId);
+
+    /**
+     * <p class="changed_added_2_0">Return <code>true</code> if this PDL
+     * implementation takes responsibility for delivering the initial
+     * state event.  Value must not change during application lifetime.
+     * Safe to cache.</p>
      */
     public abstract boolean isPdlDeliversInitialStateEvent(FacesContext context);
     

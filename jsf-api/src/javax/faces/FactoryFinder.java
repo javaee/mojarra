@@ -180,6 +180,13 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
+     * {@link javax.faces.context.PartialViewContextFactory} class name.</p>
+     */
+    public final static String PARTIAL_VIEW_CONTEXT_FACTORY =
+          "javax.faces.context.PartialViewContextFactory";
+
+    /**
+     * <p>The property name for the
      * {@link javax.faces.component.visit.VisitContextFactory} class name.</p>
      */
     public final static String VISIT_CONTEXT_FACTORY =
@@ -225,8 +232,9 @@ public final class FactoryFinder {
          EXTERNAL_CONTEXT_FACTORY,
          FACES_CONTEXT_FACTORY,
          LIFECYCLE_FACTORY,
-         RENDER_KIT_FACTORY,
          PAGE_DECLARATION_LANGUAGE_FACTORY,
+         PARTIAL_VIEW_CONTEXT_FACTORY,
+         RENDER_KIT_FACTORY
     };
 
     /**
@@ -614,6 +622,8 @@ public final class FactoryFinder {
                  javax.faces.component.visit.VisitContextFactory.class);
             factoryClasses.put(LIFECYCLE_FACTORY,
                  javax.faces.lifecycle.LifecycleFactory.class);
+            factoryClasses.put(PARTIAL_VIEW_CONTEXT_FACTORY,
+                 javax.faces.context.PartialViewContextFactory.class);
             factoryClasses.put(RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
             factoryClasses.put(PAGE_DECLARATION_LANGUAGE_FACTORY,

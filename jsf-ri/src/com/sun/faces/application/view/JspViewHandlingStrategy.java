@@ -51,7 +51,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
@@ -112,12 +111,10 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         ExternalContext extContext = ctx.getExternalContext();
-        ServletRequest request = (ServletRequest) extContext.getRequest();
-        ServletResponse response = (ServletResponse) extContext.getResponse();
 
         try {
             if (executePageToBuildView(ctx, viewToRender)) {
-                response.flushBuffer();
+                extContext.responseFlushBuffer();
                 if (associate != null) {
                     associate.responseRendered();
                 }
@@ -142,7 +139,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         ResponseWriter oldWriter = ctx.getResponseWriter();
 
         WriteBehindStateWriter stateWriter =
-              new WriteBehindStateWriter(response.getWriter(),
+              new WriteBehindStateWriter(extContext.getResponseOutputWriter(),
                                          ctx,
                                          responseBufferSize);
         ResponseWriter newWriter;
@@ -151,7 +148,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         } else {
             newWriter = renderKit.createResponseWriter(stateWriter,
                                                        null,
-                                                       request.getCharacterEncoding());
+                                                       extContext.getRequestCharacterEncoding());
         }
         ctx.setResponseWriter(newWriter);
 
@@ -178,14 +175,13 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
         ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper)
-              RequestStateManager
-                    .remove(ctx, RequestStateManager.AFTER_VIEW_CONTENT);
+              RequestStateManager.remove(ctx, RequestStateManager.AFTER_VIEW_CONTENT);
         if (null != wrapper) {
-            wrapper.flushToWriter(response.getWriter(),
-                                  response.getCharacterEncoding());
+            wrapper.flushToWriter(extContext.getResponseOutputWriter(),
+                                  extContext.getResponseCharacterEncoding());
         }
 
-        response.flushBuffer();
+        extContext.responseFlushBuffer();
 
     }
 

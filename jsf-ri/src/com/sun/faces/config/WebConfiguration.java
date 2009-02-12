@@ -963,7 +963,8 @@ public class WebConfiguration {
         DateTimeConverterUsesSystemTimezone(
               "javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE",
               false
-        ),   
+        ),
+        // RELEASE_PENDING (edburns, rogerk) do we need a standard ?  Bug 981
         FaceletsSkipComments(
               "facelets.SKIP_COMMENTS",
               false

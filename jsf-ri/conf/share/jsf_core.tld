@@ -459,6 +459,128 @@
 
     </tag>
 
+    <tag>
+        <description><![CDATA[
+
+            <p class="changed_added_2_0">Allow JSF page authors to
+            install <code>ComponentSystemEventListener</code> instances
+            on a component in a page. <i>Facelets only: This tag will
+            not be present in the JSP f: library, just the facelets f:
+            library.<i></p>
+
+            <div class="changed_added_2_0">
+
+            <p></p>
+
+            </div>
+
+        ]]></description>
+        <name>event</name>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_0">Name of the event for which
+                to install a listener.  The following table lists the
+                valid values for this attribute, and the corresponding
+                event type for which the listener action is
+                registered.</p>
+
+<table border="1">
+<tr>
+
+<th>value for "<code>name</code>" tag attribute</th>
+
+<th>Type of event sent to listener method
+</th>
+
+</tr>
+
+<tr>
+
+<td>beforeRender
+</td>
+
+<td>javax.faces.event.BeforeRenderEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>afterAddToView
+</td>
+
+<td>javax.faces.event.AfterRenderEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>beforeValidate
+</td>
+
+<td>javax.faces.event.BeforeValidateEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>afterValidate
+</td>
+
+<td>javax.faces.event.AfterValidateEvent
+</td>
+
+</tr>
+
+</table>
+
+<div class="changed_added_2_0">
+
+<p>In addition to these values, the fully qualified class name of any
+java class that extends
+<code>javax.faces.event.ComponentSystemEvent</code> may be used as the
+value of the "type" attribute.</p>
+
+<p>Also, the <code>@javax.faces.event.NamedEvent</code> annotation may
+be attached to any java class that extends
+<code>javax.faces.event.ComponentSystemEvent</code>.  This enables that
+event to be referenced from this attribute, as descibed in the javadocs
+for <code>@NamedEvent</code>.</p>
+
+</div>
+
+
+            ]]></description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <deferred-value>
+              <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Method expression pointing to a method expression of
+                that will be called when the listener's processEvent
+                method would have been called.
+            </description>
+            <name>listener</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <deferred-method>
+              <method-signature>public void listener(javax.faces.event.ComponentSystemEvent event) throws javax.faces.event.AbortProcessingException</method-signature>
+            </deferred-method>
+
+        </attribute>
+
+    </tag>
+
 
     <tag>
         <description>

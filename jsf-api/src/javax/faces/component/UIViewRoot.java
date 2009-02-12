@@ -74,8 +74,8 @@ import javax.faces.component.visit.VisitContext;
 import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
-import javax.faces.event.ExceptionEvent;
-import javax.faces.event.ExceptionEventContext;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
 
 
 /**
@@ -739,8 +739,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                         this.pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
-                        context.getApplication().publishEvent(ExceptionEvent.class,
-                                                              new ExceptionEventContext(context,
+                        context.getApplication().publishEvent(ExceptionQueuedEvent.class,
+                                                              new ExceptionQueuedEventContext(context,
                                                                                         e,
                                                                                         source,
                                                                                         phaseId));
@@ -764,8 +764,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                         source.broadcast(event);
                     } catch (AbortProcessingException ape) {
                         // A "return" here would abort remaining events too
-                        context.getApplication().publishEvent(ExceptionEvent.class,
-                                                              new ExceptionEventContext(context,
+                        context.getApplication().publishEvent(ExceptionQueuedEvent.class,
+                                                              new ExceptionQueuedEventContext(context,
                                                                                         ape,
                                                                                         source,
                                                                                         phaseId));
@@ -857,8 +857,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                     }
                 });
             } catch (AbortProcessingException e) {
-                context.getApplication().publishEvent(ExceptionEvent.class,
-                                                      new ExceptionEventContext(context,
+                context.getApplication().publishEvent(ExceptionQueuedEvent.class,
+                                                      new ExceptionQueuedEventContext(context,
                                                                                 e,
                                                                                 null,
                                                                                 PhaseId.RESTORE_VIEW));

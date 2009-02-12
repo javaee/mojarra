@@ -40,11 +40,16 @@ import javax.faces.component.UIComponent;
 
 /**
  *
- * <p class="changed_added_2_0"></p>
- * <div class="changed_added_2_0">
- * 
- * </div>
- *
+ * <p class="changed_added_2_0">When an instance of this event is passed
+ * to {@link SystemEventListener#processEvent} or {@link
+ * ComponentSystemEventListener#processEvent}, the listener
+ * implementation may assume that the <code>source</code> of this event
+ * instance is a {@link UIComponent} instance that is about to be
+ * removed from the view.  Therefore, the implementation may assume it
+ * is safe to call {@link UIComponent#getParent}, {@link
+ * UIComponent#getClientId}, and other methods that depend upon the
+ * component instance being added into the view.</p> 
+
  * @since 2.0
  */
 public class BeforeRemoveFromViewEvent extends ComponentSystemEvent {
@@ -54,7 +59,9 @@ public class BeforeRemoveFromViewEvent extends ComponentSystemEvent {
 
 
     /**
-     * <p class="changed_added_2_0"></p>
+     * <p class="changed_added_2_0">Instantiate a new
+     * <code>BeforeRemoveFromView</code> that indicates the argument
+     * <code>component</code> is about to be removed from the view.</p>
 
      * @param component the <code>UIComponent</code> that is about to be
      * removed from the view.

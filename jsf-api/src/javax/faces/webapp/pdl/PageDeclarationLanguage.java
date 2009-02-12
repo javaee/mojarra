@@ -157,6 +157,19 @@ public abstract class PageDeclarationLanguage {
                                     UIViewRoot view)
     throws IOException;
     
+    /**
+     * <p class="changed_added_2_0">For implementations that want to
+     * control the implementation of state saving and restoring, the
+     * {@link StateManagementStrategy} allows them to do so.  Returning
+     * <code>null</code> indicates that the implementation wishes the
+     * runtime to handle the state saving and restoring.
+     * Implementations that provide the PDL for Facelets for JSF 2.0 and
+     * later must return non-<code>null</code> from this method.</p>
+     *
+     *
+     * @since 2.0
+     */ 
+
     public abstract StateManagementStrategy getStateManagementStrategy(FacesContext context,
             String viewId);
     

@@ -7,6 +7,7 @@
       <antReference projectDefault="true" />
       <customJdkName value="" />
       <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
       <properties />
     </buildFile>
     <buildFile url="file://$PROJECT_DIR$/jsf-api/build.xml">
@@ -14,6 +15,7 @@
       <antReference projectDefault="true" />
       <customJdkName value="" />
       <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
       <properties />
     </buildFile>
     <buildFile url="file://$PROJECT_DIR$/jsf-ri/build.xml">
@@ -21,6 +23,7 @@
       <antReference projectDefault="true" />
       <customJdkName value="" />
       <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
       <properties />
     </buildFile>
     <buildFile url="file://$PROJECT_DIR$/jsf-demo/build.xml">
@@ -28,6 +31,7 @@
       <antReference projectDefault="true" />
       <customJdkName value="" />
       <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
       <properties />
     </buildFile>
   </component>
@@ -566,7 +570,7 @@
     </option>
     <option name="lastEditedConfigurable" value="Project 'Default (Template) Project'" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ProjectStructureConfigurable.UI">
@@ -894,9 +898,6 @@
   <component name="libraryTable">
     <library name="mojarra-build">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dependencies/apache-tomcat-6.0.13/lib/catalina.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/glassfish/lib/appserv-rt.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jetty-6.1.4rc0/lib/annotations/jetty-annotations-6.1.4rc0.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/jsf-extensions-test-time.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/cactus-1.7.1-javaee5.jar!/" />
         <root url="jar://$PROJECT_DIR$/common/lib/ant-contrib.jar!/" />
@@ -910,7 +911,8 @@
         <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-logging-api.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-digester.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/groovy-all-1.5.5.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/htmlunit-1.10/lib/htmlunit-1.10.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/htmlunit-2.4/lib/htmlunit-core-js-2.4.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/htmlunit-2.4/lib/htmlunit-2.4.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

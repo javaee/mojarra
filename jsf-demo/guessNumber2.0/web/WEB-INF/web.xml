@@ -56,7 +56,7 @@
     </context-param>
 
     <context-param>
-           <param-name>facelets.LIBRARIES</param-name>
+           <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
            <param-value>/WEB-INF/guessnumber.taglib.xml</param-value>
     </context-param>
 

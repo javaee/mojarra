@@ -39,7 +39,7 @@ package javax.faces.context;
 import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ExceptionEvent;
+import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.SystemEvent;
 
 /**
@@ -72,13 +72,13 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExceptionHandler#getHandledExceptionEvent()}
+     * call {@link ExceptionHandler#getHandledExceptionQueuedEvent()}
      * on the wrapped {@link ExceptionHandler} object.</p>
      *
-     * @see ExceptionHandler#getHandledExceptionEvent()
+     * @see ExceptionHandler#getHandledExceptionQueuedEvent()
      */
-    public ExceptionEvent getHandledExceptionEvent() {
-        return getWrapped().getHandledExceptionEvent();
+    public ExceptionQueuedEvent getHandledExceptionQueuedEvent() {
+        return getWrapped().getHandledExceptionQueuedEvent();
     }
 
 
@@ -132,25 +132,25 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
 
     /**
      * <p>The default behavior of this method is to call
-     * {@link ExceptionHandler#getHandledExceptionEvents()} on the wrapped
+     * {@link ExceptionHandler#getHandledExceptionQueuedEvents()} on the wrapped
      * {@link ExceptionHandler} object.</p>
      *
-     * @see ExceptionHandler#getHandledExceptionEvents()
+     * @see ExceptionHandler#getHandledExceptionQueuedEvents()
      */
-    public Iterable<ExceptionEvent> getHandledExceptionEvents() {
-        return getWrapped().getHandledExceptionEvents();
+    public Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents() {
+        return getWrapped().getHandledExceptionQueuedEvents();
     }
 
     
     /**
      * <p>The default behavior of this method is to
-     * call {@link ExceptionHandler#getUnhandledExceptionEvents()}
+     * call {@link ExceptionHandler#getUnhandledExceptionQueuedEvents()}
      * on the wrapped {@link ExceptionHandler} object.</p>
      *
-     * @see ExceptionHandler#getUnhandledExceptionEvents()
+     * @see ExceptionHandler#getUnhandledExceptionQueuedEvents()
      */
-    public Iterable<ExceptionEvent> getUnhandledExceptionEvents() {
-        return getWrapped().getUnhandledExceptionEvents();
+    public Iterable<ExceptionQueuedEvent> getUnhandledExceptionQueuedEvents() {
+        return getWrapped().getUnhandledExceptionQueuedEvents();
     }
 
 }

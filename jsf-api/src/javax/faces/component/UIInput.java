@@ -54,8 +54,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.el.MethodBinding;
-import javax.faces.event.ExceptionEvent;
-import javax.faces.event.ExceptionEventContext;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
@@ -743,12 +743,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * {@link FacesMessage} with the id {@link #UPDATE_MESSAGE_ID}.  Create a
      * {@link UpdateModelException}, passing the <code>FacesMessage</code> and 
      * the caught exception to the constructor.  Create an 
-     * {@link ExceptionEventContext}, passing the <code>FacesContext</code>, 
+     * {@link ExceptionQueuedEventContext}, passing the <code>FacesContext</code>, 
      * the <code>UpdateModelException</code>, this component instance, and
      * {@link PhaseId#UPDATE_MODEL_VALUES} to its constructor.  Call 
      * {@link FacesContext#getExceptionHandler} and then call 
      * {@link ExceptionHandler#processEvent}, passing the 
-     * <code>ExceptionEventContext</code>.
+     * <code>ExceptionQueuedEventContext</code>.
      * </li>
      * <li>Set the <code>valid</code> property of this {@link UIInput}
      * to <code>false</code>.</li>
@@ -813,12 +813,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 UpdateModelException toQueue =
                       new UpdateModelException(message, caught);
                 ExceptionHandler exHandler = context.getExceptionHandler();
-                ExceptionEventContext eventContext =
-                      new ExceptionEventContext(context,
+                ExceptionQueuedEventContext eventContext =
+                      new ExceptionQueuedEventContext(context,
                                                 toQueue,
                                                 this,
                                                 PhaseId.UPDATE_MODEL_VALUES);
-                exHandler.processEvent(new ExceptionEvent(eventContext));
+                exHandler.processEvent(new ExceptionQueuedEvent(eventContext));
             }
             
         }

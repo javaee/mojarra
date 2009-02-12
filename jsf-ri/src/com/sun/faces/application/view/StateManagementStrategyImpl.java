@@ -66,7 +66,7 @@ import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
-import javax.faces.event.AfterNonPDLAddToViewEvent;
+import javax.faces.event.AfterNonRestoreViewAddToViewEvent;
 import javax.faces.event.BeforeRemoveFromViewEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.SystemEventListener;
@@ -108,7 +108,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     public StateManagementStrategyImpl() {
         removeListener = new AddRemoveListener(this);
         Application app = FacesContext.getCurrentInstance().getApplication();
-        app.subscribeToEvent(AfterNonPDLAddToViewEvent.class, removeListener);
+        app.subscribeToEvent(AfterNonRestoreViewAddToViewEvent.class, removeListener);
         app.subscribeToEvent(BeforeRemoveFromViewEvent.class, removeListener);
 
     }
@@ -176,7 +176,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         idsToRemove.add(event.getComponent().getClientId(context));
     }
     
-    private void handleAddEvent(AfterNonPDLAddToViewEvent event) {
+    private void handleAddEvent(AfterNonRestoreViewAddToViewEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         List<ComponentStruct> idsToAdd = getClientIdsToAdd(context, true);
         ComponentStruct toAdd = new ComponentStruct();
@@ -434,7 +434,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     owner.handleRemoveEvent((BeforeRemoveFromViewEvent) event);
                 }
             } else {
-                owner.handleAddEvent((AfterNonPDLAddToViewEvent) event);
+                owner.handleAddEvent((AfterNonRestoreViewAddToViewEvent) event);
             }
         }
         

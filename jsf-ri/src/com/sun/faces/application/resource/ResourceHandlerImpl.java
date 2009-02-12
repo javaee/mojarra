@@ -211,13 +211,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
         }
         
         ExternalContext extContext = context.getExternalContext();
-        // this case should be safe in both the standard Servlet
-        // and portlet environments
-        HttpServletResponse response =
-                  (HttpServletResponse) extContext.getResponse();
 
         if (isExcluded(resourceId)) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            extContext.setResponseStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
@@ -243,18 +239,18 @@ public class ResourceHandlerImpl extends ResourceHandler {
                 try {
                     InputStream in = resource.getInputStream();
                     if (in == null) {
-                        send404(context, response, resourceName, libraryName);
+                        send404(context, resourceName, libraryName);
                         return;
                     }
                     resourceChannel =
                           Channels.newChannel(resource.getInputStream());
-                    out = Channels.newChannel(response.getOutputStream());
-                    response.setBufferSize(buf.capacity());
+                    out = Channels.newChannel(extContext.getResponseOutputStream());
+                    extContext.setResponseBufferSize(buf.capacity());
                     String contentType = resource.getContentType();
                     if (contentType != null) {
-                        response.setContentType(resource.getContentType());
+                        extContext.setResponseContentType(resource.getContentType());
                     }
-                    handleHeaders(resource, response);
+                    handleHeaders(context, resource);
 
                     int size = 0;
                     for (int thisRead = resourceChannel.read(buf), totalWritten = 0;
@@ -271,10 +267,10 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
                     }
 
-                    response.setContentLength(size);
+                    extContext.setResponseContentLength(size);
 
                 } catch (IOException ioe) {
-                    send404(context, response, resourceName, libraryName, ioe);
+                    send404(context, resourceName, libraryName, ioe);
                 } finally {
                     if (out != null) {
                         out.close();
@@ -284,31 +280,29 @@ public class ResourceHandlerImpl extends ResourceHandler {
                     }
                 }
             } else {
-                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                extContext.setResponseStatus(HttpServletResponse.SC_NOT_MODIFIED);
             }
 
         } else {
-            send404(context, response, resourceName, libraryName);
+            send404(context, resourceName, libraryName);
         }
 
     }
 
     private void send404(FacesContext ctx,
-                         HttpServletResponse response,
                          String resourceName,
                          String libraryName) {
 
-        send404(ctx, response, resourceName, libraryName, null);
+        send404(ctx, resourceName, libraryName, null);
 
     }
 
     private void send404(FacesContext ctx,
-                         HttpServletResponse response,
                          String resourceName,
                          String libraryName,
                          Throwable t) {
 
-        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        ctx.getExternalContext().setResponseStatus(HttpServletResponse.SC_NOT_FOUND);
         Level level;
         
         if (ctx.getApplication().getProjectStage() != ProjectStage.Production) {
@@ -471,12 +465,13 @@ public class ResourceHandlerImpl extends ResourceHandler {
     }
 
 
-    private void handleHeaders(Resource resource,
-                               HttpServletResponse response) {
+    private void handleHeaders(FacesContext ctx,
+                               Resource resource) {
 
+        ExternalContext extContext = ctx.getExternalContext();
         for (Map.Entry<String, String> cur :
              resource.getResponseHeaders().entrySet()) {
-                response.setHeader(cur.getKey(), cur.getValue());
+                extContext.setResponseHeader(cur.getKey(), cur.getValue());
         }
 
     }

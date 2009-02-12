@@ -66,7 +66,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <B>Util</B> is a class ...
@@ -100,25 +99,24 @@ public class Util {
     private static final Map<String,Pattern> patternCache = 
           new LRUMap<String,Pattern>(15);
 
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     private Util() {
         throw new IllegalStateException();
     }
 
-//
-// Class methods
-//
+    /**
+     * <p>
+     * Convenience method for determining if the request associated
+     * with the specified <code>FacesContext</code> is a PortletRequest
+     * submitted by the JSR-301 bridge.
+     * </p>
+     * @param context the <code>FacesContext</code> associated with
+     *  the request.
+     */
+    public static boolean isPortletRequest (FacesContext context) {
+        return (context.getExternalContext().getRequestMap().get("javax.portlet.faces.phase") != null);
+    }
+    
 
     /**
      * <p>Factory method for creating the varius JSF listener
@@ -527,36 +525,42 @@ public class Util {
 
         return requestViewId;
     }
-    
+
     private static String getViewIdFromExtraPathInfo(FacesContext facesContext) {
         String viewId = null;
-        Map<String, Object> requestMap =
-                facesContext.getExternalContext().getRequestMap();
-        viewId = (String) requestMap.get("javax.servlet.include.path_info");
-        if (viewId == null) {
+        if (Util.isPortletRequest(facesContext)) {
             viewId = facesContext.getExternalContext().getRequestPathInfo();
-        }
-
-        // It could be that this request was mapped using
-        // a prefix mapping in which case there would be no
-        // path_info.  Query the servlet path.
-        if (viewId == null) {
-            viewId = (String) requestMap.get("javax.servlet.include.servlet_path");
-        }
-
-        if (viewId == null) {
-            Object request = facesContext.getExternalContext().getRequest();
-            if (request instanceof HttpServletRequest) {
-                viewId = ((HttpServletRequest) request).getServletPath();
+            if (viewId == null) {
+                viewId =
+                      facesContext.getExternalContext().getRequestServletPath();
             }
-        }
-
-        if (viewId == null) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.warning("viewId is null");
+        } else {
+            Map<String, Object> requestMap =
+                  facesContext.getExternalContext().getRequestMap();
+            viewId = (String) requestMap.get("javax.servlet.include.path_info");
+            if (viewId == null) {
+                viewId = facesContext.getExternalContext().getRequestPathInfo();
             }
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+
+            // It could be that this request was mapped using
+            // a prefix mapping in which case there would be no
+            // path_info.  Query the servlet path.
+            if (viewId == null) {
+                viewId = (String) requestMap
+                      .get("javax.servlet.include.servlet_path");
+            }
+
+            if (viewId == null) {
+                viewId = facesContext.getExternalContext().getRequestServletPath();
+            }
+
+            if (viewId == null) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.warning("viewId is null");
+                }
+                throw new FacesException(MessageUtils.getExceptionMessageString(
+                      MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+            }
         }
 
         return viewId;

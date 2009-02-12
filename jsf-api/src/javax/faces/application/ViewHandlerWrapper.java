@@ -110,6 +110,23 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
 
     /**
+     *
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#deriveViewId(javax.faces.context.FacesContext, String)}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#deriveViewId(javax.faces.context.FacesContext, String)
+     * @since 2.0
+     */
+    @Override
+    public String deriveViewId(FacesContext context, String input) {
+
+        return getWrapped().deriveViewId(context, input);
+
+    }
+
+    
+    /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#calculateRenderKitId(javax.faces.context.FacesContext)}
      * on the wrapped {@link ViewHandler} object.</p>

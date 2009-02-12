@@ -740,11 +740,9 @@ public class MultiViewHandler extends ViewHandler {
      */
     protected void send404Error(FacesContext context) {
 
-        HttpServletResponse response = (HttpServletResponse)
-             context.getExternalContext().getResponse();
         try {
             context.responseComplete();
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "");
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         }

@@ -782,6 +782,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <p><b>Implementation Requirements:</b></p>
              * This function must:
              * <ul>
+             * <li>Be used within the context of a <code>form</code>.</li>
              * <li>Capture the element that triggered this Ajax request
              * (from the <code>source</code> argument, also known as the
              * <code>source</code> element.</li>
@@ -797,7 +798,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <li>Determine the <code>source</code> element's <code>form</code>
              * element.</li>
              * <li>Get the <code>form</code> view state by calling
-             * {@link jsf.viewState} passing the
+             * {@link jsf.getViewState} passing the
              * <code>form</code> element as the argument.</li>
              * <li>Collect post data arguments for the Ajax request.
              * <ul>
@@ -948,6 +949,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
 
                 var form = getForm(element);
+                if (!form) {
+                    throw new Error("jsf.ajax.request: Method must be called within a form");
+                }
                 var viewState = jsf.getViewState(form);
 
                 // Set up additional arguments to be used in the request..
@@ -1298,6 +1302,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * @function jsf.getViewState
      */
     jsf.getViewState = function(form) {
+        if (!form) {
+            throw new Error("jsf.getViewState:  form must be set");
+        }
         var els = form.elements;
         var len = els.length;
         var qString = "";
@@ -1340,20 +1347,18 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
     };
 
     /**
-     * An integer specifying the specification version that this file implements.
+     * <p>An integer specifying the specification version that this file implements.
      * It's format is: rightmost two digits, bug release number, next two digits,
      * minor release number, leftmost digits, major release number.
-     * This number may only be incremented by a new release of the specification.
-     * @ignore
+     * This number may only be incremented by a new release of the specification.</p>
      */
     jsf.specversion = 20000;
 
     /**
-     * An integer specifying the implementation version that this file implements.
+     * <p>An integer specifying the implementation version that this file implements.
      * It's a monotonically increasing number, reset with every increment of
      * <code>jsf.specversion</code>
-     * This number is implementation dependent.
-     * @ignore
+     * This number is implementation dependent.</p>
      */
     jsf.implversion = 1;
 

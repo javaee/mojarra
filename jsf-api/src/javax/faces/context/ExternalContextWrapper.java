@@ -719,4 +719,102 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     public void addResponseHeader(String name, String value) {
         getWrapped().addResponseHeader(name, value);
     }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#setResponseBufferSize(int)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#setResponseBufferSize(int)
+     */
+    @Override
+    public void setResponseBufferSize(int size) {
+        getWrapped().setResponseBufferSize(size);   
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#getResponseBufferSize()}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#getResponseBufferSize()
+     */
+    @Override
+    public int getResponseBufferSize() {
+        return getWrapped().getResponseBufferSize();
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#isResponseCommitted()}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#isResponseCommitted()
+     */
+    @Override
+    public boolean isResponseCommitted() {
+        return getWrapped().isResponseCommitted();
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#responseReset()}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#responseReset()
+     */
+    @Override
+    public void responseReset() {
+        getWrapped().responseReset();
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#responseSendError(int,String)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#responseSendError(int,String)
+     */
+    @Override
+    public void responseSendError(int statusCode, String message) throws IOException {
+        getWrapped().responseSendError(statusCode, message);
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#setResponseStatus(int)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#setResponseStatus(int)
+     */
+    @Override
+    public void setResponseStatus(int statusCode) {
+        super.setResponseStatus(statusCode);    
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.ExternalContext#responseFlushBuffer()}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#responseFlushBuffer()
+     */
+    @Override
+    public void responseFlushBuffer() throws IOException {
+        getWrapped().responseFlushBuffer();
+    }
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.ExternalContext#setResponseContentLength(int)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#setResponseContentLength(int)
+     */
+    @Override
+    public void setResponseContentLength(int length) {
+        getWrapped().setResponseContentLength(length);
+    }
+    
 }

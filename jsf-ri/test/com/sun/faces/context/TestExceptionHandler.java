@@ -41,8 +41,8 @@ import java.util.ArrayList;
 
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;
-import javax.faces.event.ExceptionEvent;
-import javax.faces.event.ExceptionEventContext;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.webapp.PreJsf2ExceptionHandlerFactory;
 import javax.faces.FacesException;
@@ -116,9 +116,9 @@ public class TestExceptionHandler extends ServletFacesTestCase {
     private void testIsListenerForSource(ExceptionHandler handler) {
 
         assertFalse(handler.isListenerForSource(null));
-        ExceptionEventContext ectx =
-              new ExceptionEventContext(getFacesContext(), new RuntimeException());
-        assertFalse(handler.isListenerForSource(new ExceptionEvent(ectx)));
+        ExceptionQueuedEventContext ectx =
+              new ExceptionQueuedEventContext(getFacesContext(), new RuntimeException());
+        assertFalse(handler.isListenerForSource(new ExceptionQueuedEvent(ectx)));
         assertTrue(handler.isListenerForSource(ectx));
 
     }
@@ -127,24 +127,24 @@ public class TestExceptionHandler extends ServletFacesTestCase {
     private void testProcessEvent(ExceptionHandler handler) {
 
         // if event is null, no action is taken, which means an empty Iterator
-        // for the getUnhandledExceptionEvents
+        // for the getUnhandledExceptionQueuedEvents
         handler.processEvent(null);
-        List<ExceptionEvent> events = copyToList(handler.getUnhandledExceptionEvents());
+        List<ExceptionQueuedEvent> events = copyToList(handler.getUnhandledExceptionQueuedEvents());
         assertTrue(events.isEmpty());
 
         // queue an exception event...
-        ExceptionEventContext ectx =
-              new ExceptionEventContext(getFacesContext(), new RuntimeException());
-        handler.processEvent(new ExceptionEvent(ectx));
-        events = copyToList(handler.getUnhandledExceptionEvents());
+        ExceptionQueuedEventContext ectx =
+              new ExceptionQueuedEventContext(getFacesContext(), new RuntimeException());
+        handler.processEvent(new ExceptionQueuedEvent(ectx));
+        events = copyToList(handler.getUnhandledExceptionQueuedEvents());
         assertTrue(events.size() == 1);
         assertTrue(events.get(0).getSource() == ectx);
-        ExceptionEventContext ectx2 =
-              new ExceptionEventContext(getFacesContext(), new RuntimeException());
+        ExceptionQueuedEventContext ectx2 =
+              new ExceptionQueuedEventContext(getFacesContext(), new RuntimeException());
 
         // queue an additionl event to ensure order is maintained
-        handler.processEvent(new ExceptionEvent(ectx2));
-        events = copyToList(handler.getUnhandledExceptionEvents());
+        handler.processEvent(new ExceptionQueuedEvent(ectx2));
+        events = copyToList(handler.getUnhandledExceptionQueuedEvents());
         assertTrue(events.size() == 2);
         assertTrue(events.get(0).getSource() == ectx);
         assertTrue(events.get(1).getSource() == ectx2);
@@ -158,7 +158,7 @@ public class TestExceptionHandler extends ServletFacesTestCase {
         try {
             handler.handle();
         } catch (Throwable t) {
-            assertTrue("Unexpected exception thrown with no ExceptionEvents queued", false);
+            assertTrue("Unexpected exception thrown with no ExceptionQueuedEvents queued", false);
         }
 
     }
@@ -166,19 +166,19 @@ public class TestExceptionHandler extends ServletFacesTestCase {
     private void testHandleAbortProcessingExceptionQueued(ExceptionHandler handler) {
 
         getFacesContext().setExceptionHandler(handler);
-        ExceptionEventContext ctx =
-              new ExceptionEventContext(getFacesContext(), new AbortProcessingException());
+        ExceptionQueuedEventContext ctx =
+              new ExceptionQueuedEventContext(getFacesContext(), new AbortProcessingException());
 
         // queue the abort processing exception.  When calling handle(), no
-        // exception should be thrown, but the ExceptionEvent should be returned
-        // by getHandledExceptionEvents() while getUnhandledExceptionEvents()
-        // should be null, and getHandledExceptionEvent() should return null
+        // exception should be thrown, but the ExceptionQueuedEvent should be returned
+        // by getHandledExceptionQueuedEvents() while getUnhandledExceptionQueuedEvents()
+        // should be null, and getHandledExceptionQueuedEvent() should return null
         // as nothing was thrown by the handle() method.
         // Side note, validate the exception is properly queued by publishing
         // and event.
         queueException(ctx);
-        List<ExceptionEvent> unhandled = copyToList(handler.getUnhandledExceptionEvents());
-        List<ExceptionEvent> handled = copyToList(handler.getHandledExceptionEvents());
+        List<ExceptionQueuedEvent> unhandled = copyToList(handler.getUnhandledExceptionQueuedEvents());
+        List<ExceptionQueuedEvent> handled = copyToList(handler.getHandledExceptionQueuedEvents());
         assertTrue(unhandled.size() == 1);
         assertTrue(handled.isEmpty());
 
@@ -188,16 +188,16 @@ public class TestExceptionHandler extends ServletFacesTestCase {
             assertTrue("Exception thrown by handle() when only an AbortProcessingException was queued.  These should be ignored.", false);
         }
 
-        unhandled = copyToList(handler.getUnhandledExceptionEvents());
-        handled = copyToList(handler.getHandledExceptionEvents());
-        assertNull(handler.getHandledExceptionEvent());
+        unhandled = copyToList(handler.getUnhandledExceptionQueuedEvents());
+        handled = copyToList(handler.getHandledExceptionQueuedEvents());
+        assertNull(handler.getHandledExceptionQueuedEvent());
         assertTrue(unhandled.isEmpty());
         assertTrue(handled.size() == 1);
 
         // queue another and call handled() again
         queueException(ctx);
-        unhandled = copyToList(handler.getUnhandledExceptionEvents());
-        handled = copyToList(handler.getHandledExceptionEvents());
+        unhandled = copyToList(handler.getUnhandledExceptionQueuedEvents());
+        handled = copyToList(handler.getHandledExceptionQueuedEvents());
         assertTrue(unhandled.size() == 1);
         assertTrue(handled.size() == 1);
 
@@ -207,8 +207,8 @@ public class TestExceptionHandler extends ServletFacesTestCase {
             assertTrue("Exception thrown by handle() when only an AbortProcessingException was queued.  These should be ignored.", false);
         }
 
-        unhandled = copyToList(handler.getUnhandledExceptionEvents());
-        handled = copyToList(handler.getHandledExceptionEvents());
+        unhandled = copyToList(handler.getUnhandledExceptionQueuedEvents());
+        handled = copyToList(handler.getHandledExceptionQueuedEvents());
         assertTrue(unhandled.size() == 0);
         assertTrue(handled.size() == 2);
 
@@ -218,10 +218,10 @@ public class TestExceptionHandler extends ServletFacesTestCase {
     public void testHandleExceptionThrow(ExceptionHandler handler) {
 
         getFacesContext().setExceptionHandler(handler);
-        ExceptionEventContext abortProcessing =
-              new ExceptionEventContext(getFacesContext(), new AbortProcessingException());
-        ExceptionEventContext abortProcessing2 =
-              new ExceptionEventContext(getFacesContext(), new AbortProcessingException());
+        ExceptionQueuedEventContext abortProcessing =
+              new ExceptionQueuedEventContext(getFacesContext(), new AbortProcessingException());
+        ExceptionQueuedEventContext abortProcessing2 =
+              new ExceptionQueuedEventContext(getFacesContext(), new AbortProcessingException());
 
         // wrap this up in a chain of exceptions to unsure that when
         // getRootCause() we get what we expect
@@ -231,12 +231,12 @@ public class TestExceptionHandler extends ServletFacesTestCase {
                                   new IllegalStateException(
                                       new FacesException(
                                           new IllegalArgumentException())))));
-        ExceptionEventContext runtimeException =
-              new ExceptionEventContext(getFacesContext(), e);
-        ExceptionEventContext runtimeException2 =
-              new ExceptionEventContext(getFacesContext(), e);
-        ExceptionEventContext abortProcessing3 =
-              new ExceptionEventContext(getFacesContext(), new AbortProcessingException());
+        ExceptionQueuedEventContext runtimeException =
+              new ExceptionQueuedEventContext(getFacesContext(), e);
+        ExceptionQueuedEventContext runtimeException2 =
+              new ExceptionQueuedEventContext(getFacesContext(), e);
+        ExceptionQueuedEventContext abortProcessing3 =
+              new ExceptionQueuedEventContext(getFacesContext(), new AbortProcessingException());
 
         queueException(abortProcessing);
         queueException(abortProcessing2);
@@ -244,8 +244,8 @@ public class TestExceptionHandler extends ServletFacesTestCase {
         queueException(runtimeException2);
         queueException(abortProcessing3);
 
-        List<ExceptionEvent> unhandled = copyToList(handler.getUnhandledExceptionEvents());
-        List<ExceptionEvent> handled = copyToList(handler.getHandledExceptionEvents());
+        List<ExceptionQueuedEvent> unhandled = copyToList(handler.getUnhandledExceptionQueuedEvents());
+        List<ExceptionQueuedEvent> handled = copyToList(handler.getHandledExceptionQueuedEvents());
         assertTrue(unhandled.size() == 5);
         assertTrue(handled.isEmpty());
 
@@ -264,9 +264,9 @@ public class TestExceptionHandler extends ServletFacesTestCase {
             assertNull(root);
         }
 
-        assertTrue(handler.getHandledExceptionEvent().getSource() == runtimeException);
-        unhandled = copyToList(handler.getUnhandledExceptionEvents());
-        handled = copyToList(handler.getHandledExceptionEvents());
+        assertTrue(handler.getHandledExceptionQueuedEvent().getSource() == runtimeException);
+        unhandled = copyToList(handler.getUnhandledExceptionQueuedEvents());
+        handled = copyToList(handler.getHandledExceptionQueuedEvents());
 
         assertTrue(handled.size() == 3);
         assertTrue(unhandled.size() == 2);
@@ -284,9 +284,9 @@ public class TestExceptionHandler extends ServletFacesTestCase {
             // expected
         }
 
-        assertTrue(handler.getHandledExceptionEvent().getSource() == runtimeException2);
-        unhandled = copyToList(handler.getUnhandledExceptionEvents());
-        handled = copyToList(handler.getHandledExceptionEvents());
+        assertTrue(handler.getHandledExceptionQueuedEvent().getSource() == runtimeException2);
+        unhandled = copyToList(handler.getUnhandledExceptionQueuedEvents());
+        handled = copyToList(handler.getHandledExceptionQueuedEvents());
 
         assertTrue(handled.size() == 4);
         assertTrue(unhandled.size() == 1);
@@ -304,9 +304,9 @@ public class TestExceptionHandler extends ServletFacesTestCase {
             assertTrue("Exception thrown by handle() when only an AbortProcessingException was queued.  These should be ignored.", false);
         }
 
-        assertTrue(handler.getHandledExceptionEvent().getSource() == runtimeException2);
-        unhandled = copyToList(handler.getUnhandledExceptionEvents());
-        handled = copyToList(handler.getHandledExceptionEvents());
+        assertTrue(handler.getHandledExceptionQueuedEvent().getSource() == runtimeException2);
+        unhandled = copyToList(handler.getUnhandledExceptionQueuedEvents());
+        handled = copyToList(handler.getHandledExceptionQueuedEvents());
 
         assertTrue(handled.size() == 5);
         assertTrue(unhandled.isEmpty());
@@ -326,8 +326,8 @@ public class TestExceptionHandler extends ServletFacesTestCase {
         // Make sure this is the case.
         getFacesContext().setExceptionHandler(handler);
 
-        ExceptionEventContext ctx = new ExceptionEventContext(getFacesContext(), new RuntimeException());
-        ctx.getAttributes().put(ExceptionEventContext.IN_BEFORE_PHASE_KEY, Boolean.TRUE);
+        ExceptionQueuedEventContext ctx = new ExceptionQueuedEventContext(getFacesContext(), new RuntimeException());
+        ctx.getAttributes().put(ExceptionQueuedEventContext.IN_BEFORE_PHASE_KEY, Boolean.TRUE);
         queueException(ctx);
 
         try {
@@ -341,8 +341,8 @@ public class TestExceptionHandler extends ServletFacesTestCase {
             }
         }
 
-        ctx.getAttributes().remove(ExceptionEventContext.IN_BEFORE_PHASE_KEY);
-        ctx.getAttributes().put(ExceptionEventContext.IN_AFTER_PHASE_KEY, Boolean.TRUE);
+        ctx.getAttributes().remove(ExceptionQueuedEventContext.IN_BEFORE_PHASE_KEY);
+        ctx.getAttributes().put(ExceptionQueuedEventContext.IN_AFTER_PHASE_KEY, Boolean.TRUE);
 
         try {
             handler.handle();
@@ -364,10 +364,10 @@ public class TestExceptionHandler extends ServletFacesTestCase {
     }
 
 
-    private List<ExceptionEvent> copyToList(Iterable<ExceptionEvent> events) {
+    private List<ExceptionQueuedEvent> copyToList(Iterable<ExceptionQueuedEvent> events) {
 
-        List<ExceptionEvent> list = new ArrayList<ExceptionEvent>();
-        for (ExceptionEvent event : events) {
+        List<ExceptionQueuedEvent> list = new ArrayList<ExceptionQueuedEvent>();
+        for (ExceptionQueuedEvent event : events) {
             list.add(event);
         }
         return list;
@@ -375,9 +375,9 @@ public class TestExceptionHandler extends ServletFacesTestCase {
     }
 
 
-    private void queueException(ExceptionEventContext source) {
+    private void queueException(ExceptionQueuedEventContext source) {
 
-        getFacesContext().getApplication().publishEvent(ExceptionEvent.class, source);
+        getFacesContext().getApplication().publishEvent(ExceptionQueuedEvent.class, source);
 
     }
 }

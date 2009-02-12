@@ -45,6 +45,7 @@ import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextFactory;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
 
@@ -115,7 +116,9 @@ public class InjectionExternalContextFactory extends ExternalContextFactory {
                           delegate.getClass().getName());
             throw new IllegalStateException(message);
         }
-        injectDefaults(ctx, request);
+        if (context instanceof ServletContext) {
+            injectDefaults(ctx, request);
+        }
         return ctx;
 
     }
