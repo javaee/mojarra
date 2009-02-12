@@ -112,7 +112,7 @@ import java.beans.BeanInfo;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
-import javax.faces.event.ExceptionEventContext;
+import javax.faces.event.ExceptionQueuedEventContext;
 
 import java.util.List;
 import java.util.TimeZone;
@@ -287,7 +287,7 @@ public class ApplicationImpl extends Application {
         } catch (AbortProcessingException ape) {
             FacesContext ctx = FacesContext.getCurrentInstance();
             ctx.getApplication().publishEvent(SystemEvent.class,
-                                              new ExceptionEventContext(ctx, ape));
+                                              new ExceptionQueuedEventContext(ctx, ape));
         }
 
     }

@@ -38,7 +38,7 @@ package javax.faces.context;
 
 import javax.faces.FacesException;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ExceptionEvent;
+import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 
@@ -69,10 +69,10 @@ import javax.faces.event.SystemEventListener;
  *         </li>
  *
  * <li><p>By using the system event facility to publish an {@link
- * ExceptionEvent} that wraps the <code>Exception</code>.</p>
+ * ExceptionQueuedEvent} that wraps the <code>Exception</code>.</p>
  *
  *         <p>This approach requires manually publishing the {@link
- *         ExceptionEvent}, but allows more information about the
+ *         ExceptionQueuedEvent}, but allows more information about the
  *         <code>Exception</code>to be stored in the event.  The
  *         following code is an example of how to do this.</p>
  *
@@ -81,9 +81,9 @@ import javax.faces.event.SystemEventListener;
  * //...
  * } catch (Exception e) {
  *   FacesContext ctx = FacesContext.getCurrentInstance();
- *   ExceptionEventContext eventContext = new ExceptionEventContext(ctx, e);
+ *   ExceptionQueuedEventContext eventContext = new ExceptionQueuedEventContext(ctx, e);
  *   eventContext.getAttributes().put("key", "value");
- *   ctx.getApplication().publishEvent(ExceptionEvent.class, eventContext);
+ *   ctx.getApplication().publishEvent(ExceptionQueuedEvent.class, eventContext);
  * }
  *
  * </code></pre>
@@ -96,7 +96,7 @@ import javax.faces.event.SystemEventListener;
  *         </li>
  * </ul>
  *
- * <p>With either approach, any <code>ExceptionEvent</code> instances
+ * <p>With either approach, any <code>ExceptionQueuedEvent</code> instances
  * that are published in this way are accessible to the {@link #handle}
  * method, which is called at the end of each lifecycle phase, as
  * specified in section JSF.12.3.</p>
@@ -114,8 +114,8 @@ public abstract class ExceptionHandler implements SystemEventListener {
    /**
     * <p class="changed_added_2_0">Take action to handle the
     * <code>Exception</code> instances residing inside the {@link
-    * ExceptionEvent} instances that have been queued by calls to
-    * <code>Application().publishEvent(ExceptionEvent.class,
+    * ExceptionQueuedEvent} instances that have been queued by calls to
+    * <code>Application().publishEvent(ExceptionQueuedEvent.class,
     * <em>eventContext</em>)</code>.  The requirements of the default
     * implementation are detailed in section JSF.6.2.1.</p>
 
@@ -130,32 +130,32 @@ public abstract class ExceptionHandler implements SystemEventListener {
 
     /**
      * <p class="changed_added_2_0">Return the first
-     * <code>ExceptionEvent</code> handled by this handler.</p>
+     * <code>ExceptionQueuedEvent</code> handled by this handler.</p>
      */
-    public abstract ExceptionEvent getHandledExceptionEvent();
+    public abstract ExceptionQueuedEvent getHandledExceptionQueuedEvent();
 
 
     /**
      * <p class="changed_added_2_0">Return an <code>Iterable</code> over
-     * all <code>ExceptionEvent</code>s that have not yet been handled
+     * all <code>ExceptionQueuedEvent</code>s that have not yet been handled
      * by the {@link #handle} method.</p>
      */
-    public abstract Iterable<ExceptionEvent> getUnhandledExceptionEvents();
+    public abstract Iterable<ExceptionQueuedEvent> getUnhandledExceptionQueuedEvents();
 
 
     /**
      * <p class="changed_added_2_0">The default implementation must
      * return an <code>Iterable</code> over all
-     * <code>ExceptionEvent</code>s that have been handled by the {@link
+     * <code>ExceptionQueuedEvent</code>s that have been handled by the {@link
      * #handle} method.</p>
      */
-    public abstract Iterable<ExceptionEvent> getHandledExceptionEvents();
+    public abstract Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents();
 
 
     /**
      * {@inheritDoc}
      */
-    public abstract void processEvent(SystemEvent exceptionEvent) throws AbortProcessingException;
+    public abstract void processEvent(SystemEvent exceptionQueuedEvent) throws AbortProcessingException;
 
 
     /**

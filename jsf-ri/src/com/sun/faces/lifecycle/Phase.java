@@ -49,8 +49,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.faces.event.ExceptionEventContext;
-import javax.faces.event.ExceptionEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.lifecycle.Lifecycle;
 
 import com.sun.faces.util.FacesLogger;
@@ -150,11 +150,11 @@ public abstract class Phase {
 
     protected void queueException(FacesContext ctx, Throwable t, String booleanKey) {
 
-        ExceptionEventContext extx = new ExceptionEventContext(ctx, t);
+        ExceptionQueuedEventContext extx = new ExceptionQueuedEventContext(ctx, t);
         if (booleanKey != null) {
             extx.getAttributes().put(booleanKey, Boolean.TRUE);
         }
-        ctx.getApplication().publishEvent(ExceptionEvent.class, extx);
+        ctx.getApplication().publishEvent(ExceptionQueuedEvent.class, extx);
 
     }
 
@@ -179,7 +179,7 @@ public abstract class Phase {
                 } catch (Exception e) {
                     queueException(context,
                                    e,
-                                   ExceptionEventContext.IN_AFTER_PHASE_KEY);
+                                   ExceptionQueuedEventContext.IN_AFTER_PHASE_KEY);
                     return;
                 }
             }
@@ -208,7 +208,7 @@ public abstract class Phase {
                  } catch (Exception e) {
                      queueException(context,
                                     e,
-                                    ExceptionEventContext.IN_BEFORE_PHASE_KEY);
+                                    ExceptionQueuedEventContext.IN_BEFORE_PHASE_KEY);
                      // move the iterator pointer back one
                      if (listenersIterator.hasPrevious()) {
                          listenersIterator.previous();

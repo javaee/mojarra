@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
- *
+ * 
+ * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- *
+ * 
  * Contributor(s):
- *
+ * 
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -34,45 +34,48 @@
  * holder.
  */
 
-
 package javax.faces.event;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
 
 
 /**
- * <p class="changed_added_2_0">Container annotation to specify multiple
- * {@link ListenerFor} annotations on a single class.  Example:</p>
-
- * <pre><code>
-
-    &#0064;ListenersFor({
-        &#0064;ListenerFor(systemEventClass=PostAddToViewEvent.class),
-        &#0064;ListenerFor(systemEventClass=BeforeRenderEvent.class,
-                     sourceClass=CustomOutput.class)
-    })
-
- * </code></pre>
-
- * <div class="changed_added_2_0">
-
- * <p>The action described in {@link ListenerFor} must be taken for each
- * <code>&#0064;ListenerFor</code> present in the container
- * annotation. </p>
-
- * </div>
-
+ * <p class="changed_added_2_0">The system event facility will create an
+ * instance of this class whenever {@link
+ * javax.faces.application.Application#publishEvent} is called with
+ * <code>ExceptionQueuedEvent.class</code> as <code>systemEventClass</code>
+ * argument.  In this case, an instance of {@link ExceptionQueuedEventContext}
+ * is be passed as the <code>source</code> argument.  The specification
+ * for <code>publishEvent()</code>, requires the instantiation of the
+ * <code>systemEventClass</code> argument, passing the
+ * <code>source</code> argument to the constructor.</p>
+ *
  * @since 2.0
  */
-@Retention(value= RetentionPolicy.RUNTIME)
-@Target(value= ElementType.TYPE)
-@Inherited
-public @interface ListenersFor {
-
-    ListenerFor[] value();
+public class ExceptionQueuedEvent extends SystemEvent {
     
+    /**
+     * <p class="changed_added_2_0">Instantiate a new
+     * <code>ExceptionQueuedEvent</code> that indicates the argument
+     * <code>ExceptionQueuedEventContext</code> occurred.</p>
+     *
+     * @param eventContext the <code>ExceptionQueuedEventContext</code> that
+     * contextualizes this <code>ExceptionQueuedEvent</code>.
+     *
+     * @since 2.0
+     */
+
+    public ExceptionQueuedEvent(ExceptionQueuedEventContext eventContext) {
+        super(eventContext);
+    }
+
+    /**
+     * <p class="changed_added_2_0">Return the
+     * <code>ExceptionQueuedEventContext</code> for this event instance.</p>
+     *
+     * @since 2.0
+     */
+
+    public ExceptionQueuedEventContext getContext() {
+	return (ExceptionQueuedEventContext) getSource();
+    }
+
 }

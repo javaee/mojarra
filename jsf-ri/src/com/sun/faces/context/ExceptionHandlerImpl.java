@@ -46,9 +46,9 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ExceptionEvent;
+import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.SystemEvent;
-import javax.faces.event.ExceptionEventContext;
+import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.PhaseId;
 import javax.el.ELException;
 
@@ -79,18 +79,18 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
           "jsf.context.exception.handler.log";
 
     
-    private LinkedList<ExceptionEvent> unhandledExceptions;
-    private LinkedList<ExceptionEvent> handledExceptions;
-    private ExceptionEvent handled;
+    private LinkedList<ExceptionQueuedEvent> unhandledExceptions;
+    private LinkedList<ExceptionQueuedEvent> handledExceptions;
+    private ExceptionQueuedEvent handled;
 
 
     // ------------------------------------------- Methods from ExceptionHandler
 
 
     /**
-     * @see ExceptionHandler@getHandledExceptionEvent()
+     * @see ExceptionHandler@getHandledExceptionQueuedEvent()
      */
-    public ExceptionEvent getHandledExceptionEvent() {
+    public ExceptionQueuedEvent getHandledExceptionQueuedEvent() {
 
         return handled;
 
@@ -102,9 +102,9 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      */
     public void handle() throws FacesException {
 
-        for (Iterator<ExceptionEvent> i = getUnhandledExceptionEvents().iterator(); i.hasNext(); ) {
-            ExceptionEvent event = i.next();
-            ExceptionEventContext context = (ExceptionEventContext) event.getSource();
+        for (Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents().iterator(); i.hasNext(); ) {
+            ExceptionQueuedEvent event = i.next();
+            ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event.getSource();
             try {
                 Throwable t = context.getException();
                 if (isRethrown(t)) {
@@ -125,7 +125,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
             } finally {
                 if (handledExceptions == null) {
-                    handledExceptions = new LinkedList<ExceptionEvent>();
+                    handledExceptions = new LinkedList<ExceptionQueuedEvent>();
                 }
                 handledExceptions.add(event);
                 i.remove();               
@@ -140,7 +140,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      */
     public boolean isListenerForSource(Object source) {
 
-        return (source instanceof ExceptionEventContext);
+        return (source instanceof ExceptionQueuedEventContext);
 
     }
 
@@ -152,9 +152,9 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
         if (event != null) {
             if (unhandledExceptions == null) {
-                unhandledExceptions = new LinkedList<ExceptionEvent>();
+                unhandledExceptions = new LinkedList<ExceptionQueuedEvent>();
             }
-            unhandledExceptions.add((ExceptionEvent) event);
+            unhandledExceptions.add((ExceptionQueuedEvent) event);
         }
 
     }
@@ -187,26 +187,26 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
 
     /**
-     * @see javax.faces.context.ExceptionHandler#getUnhandledExceptionEvents()
+     * @see javax.faces.context.ExceptionHandler#getUnhandledExceptionQueuedEvents()
      */
-    public Iterable<ExceptionEvent> getUnhandledExceptionEvents() {
+    public Iterable<ExceptionQueuedEvent> getUnhandledExceptionQueuedEvents() {
 
         return ((unhandledExceptions != null)
                     ? unhandledExceptions
-                    : Collections.<ExceptionEvent>emptyList());
+                    : Collections.<ExceptionQueuedEvent>emptyList());
 
     }
 
 
     /**
-     * @see javax.faces.context.ExceptionHandler#getHandledExceptionEvents()
+     * @see javax.faces.context.ExceptionHandler#getHandledExceptionQueuedEvents()
      * @return
      */
-    public Iterable<ExceptionEvent> getHandledExceptionEvents() {
+    public Iterable<ExceptionQueuedEvent> getHandledExceptionQueuedEvents() {
 
         return ((handledExceptions != null)
                     ? handledExceptions
-                    : Collections.<ExceptionEvent>emptyList());
+                    : Collections.<ExceptionQueuedEvent>emptyList());
         
     }
 
@@ -232,7 +232,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
     }
 
-    private void log(ExceptionEventContext exceptionContext) {
+    private void log(ExceptionQueuedEventContext exceptionContext) {
 
         UIComponent c = exceptionContext.getComponent();
         boolean beforePhase = exceptionContext.inBeforePhase();

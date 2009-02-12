@@ -66,10 +66,10 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.AfterAddToViewEvent;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.AfterRestoreStateEvent;
-import javax.faces.event.ExceptionEvent;
-import javax.faces.event.ExceptionEventContext;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
@@ -149,7 +149,7 @@ public class RestoreViewPhase extends Phase {
 
                 });
             } catch (AbortProcessingException e) {
-                facesContext.getApplication().publishEvent(ExceptionEvent.class, new ExceptionEventContext(facesContext, e));    
+                facesContext.getApplication().publishEvent(ExceptionQueuedEvent.class, new ExceptionQueuedEventContext(facesContext, e));    
             }
             
             
@@ -202,7 +202,7 @@ public class RestoreViewPhase extends Phase {
                   createView(facesContext, viewId);           
             facesContext.setViewRoot(viewRoot);
             facesContext.renderResponse();
-            facesContext.getApplication().publishEvent(AfterAddToViewEvent.class,
+            facesContext.getApplication().publishEvent(PostAddToViewEvent.class,
                                                        viewRoot);
         }
         assert(null != viewRoot);

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -34,48 +34,74 @@
  * holder.
  */
 
-package javax.faces.event;
+package com.sun.faces.facelets;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.sun.faces.htmlunit.AbstractTestCase;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
- * <p class="changed_added_2_0">The system event facility will create an
- * instance of this class whenever {@link
- * javax.faces.application.Application#publishEvent} is called with
- * <code>ExceptionEvent.class</code> as <code>systemEventClass</code>
- * argument.  In this case, an instance of {@link ExceptionEventContext}
- * is be passed as the <code>source</code> argument.  The specification
- * for <code>publishEvent()</code>, requires the instantiation of the
- * <code>systemEventClass</code> argument, passing the
- * <code>source</code> argument to the constructor.</p>
- *
- * @since 2.0
+ * Test cases for Facelets functionality
  */
-public class ExceptionEvent extends SystemEvent {
-    
-    /**
-     * <p class="changed_added_2_0">Instantiate a new
-     * <code>ExceptionEvent</code> that indicates the argument
-     * <code>ExceptionEventContext</code> occurred.</p>
-     *
-     * @param eventContext the <code>ExceptionEventContext</code> that
-     * contextualizes this <code>ExceptionEvent</code>.
-     *
-     * @since 2.0
-     */
+public class csetTestCase extends AbstractTestCase {
 
-    public ExceptionEvent(ExceptionEventContext eventContext) {
-        super(eventContext);
+
+    // --------------------------------------------------------------- Test Init
+
+
+    public csetTestCase() {
+        this("csetTestCase");
     }
 
-    /**
-     * <p class="changed_added_2_0">Return the
-     * <code>ExceptionEventContext</code> for this event instance.</p>
-     *
-     * @since 2.0
-     */
 
-    public ExceptionEventContext getContext() {
-	return (ExceptionEventContext) getSource();
+    public csetTestCase(String name) {
+        super(name);
+    }
+
+
+    /**
+     * Set up instance variables required by this test case.
+     */
+    public void setUp() throws Exception {
+        super.setUp();
+    }
+
+
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(csetTestCase.class));
+    }
+
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
+    public void tearDown() {
+        super.tearDown();
+    }
+
+
+    // ------------------------------------------------------------ Test Methods
+
+
+    /*
+     * Added for issue 917.
+     */
+    public void testSetPropertyActionListener1() throws Exception {
+
+        lastpage = getPage("/faces/facelets/csetTagBody.xhtml") ;
+
+        checkTrue("output", "y bop alice bop yes");
     }
 
 }
