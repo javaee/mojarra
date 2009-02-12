@@ -25,7 +25,7 @@ public class InitialStateEvent extends ComponentSystemEvent {
     /**
 
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>AfterRestoreStateEvent</code> that indicates the argument
+     * <code>InitialStateEvent</code> that indicates the argument
      * <code>component</code> is in its initial state.</p>
 
      * @param component the <code>UIComponent</code> whose state was just restored.

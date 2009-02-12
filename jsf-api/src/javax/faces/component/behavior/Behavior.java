@@ -40,8 +40,14 @@
 
 package javax.faces.component.behavior;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.render.BehaviorRenderer;
+import javax.faces.render.RenderKit;
+import javax.faces.render.Renderer;
 
 /**
  * <p class="changed_added_2_0"><strong>Behavior</strong> is the
@@ -60,6 +66,10 @@ import javax.faces.context.FacesContext;
  * @since 2.0
  */
 public abstract class Behavior {
+	
+
+    private static final Logger logger = Logger.getLogger("javax.faces.component.behavior",
+    "javax.faces.LogStrings");
 
     /**
      * <p class="changed_added_2_0">Return the script that implements this
@@ -71,17 +81,21 @@ public abstract class Behavior {
      * @param eventName name of the client-side event.  If this argument is
      * <code>null</code> it is assumed the caller will include the 
      * client-side event name with the return value from this method.
-     *
+     * Default implementation delegates that call to {@link BehaviorRenderer#getScript(FacesContext, UIComponent, Behavior, String)} method.
      * @return script that provides the client-side behavior
      *
-     * PENDING: flesh out functionality 
      */      
     public String getScript(FacesContext context,
                                      UIComponent component,
                                      Behavior behavior,
                                      String eventName) {
-
-        return null;
+    	// TODO - check null parameters.
+    	BehaviorRenderer renderer = getRenderer(context);
+		String script = null;
+    	if(null != renderer){
+			script = renderer.getScript(context, component, this, eventName);
+    	}
+        return script;
     }
 
     /**
@@ -90,7 +104,7 @@ public abstract class Behavior {
      *
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners who have registered an interest),  by calling
-     * <code>queueEvent()</code>.</p>
+     * <code>queueEvent()</code>. Default implementation delegates decoding to {@link BehaviorRenderer#decode(FacesContext, UIComponent, String)}</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      * @param context {@link UIComponent} the component associated with this {@link Behavior} 
@@ -99,11 +113,55 @@ public abstract class Behavior {
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      *
-     * PENDING: Flesh out functionality 
      */
     public void decode(FacesContext context,
                        UIComponent component,
                        String eventName) {
+    	// TODO - check null parameters.
+    	BehaviorRenderer renderer = getRenderer(context);
+    	if(null != renderer){
+    		renderer.decode(context, component, eventName);
+    	}
     }
+    
+    /**
+     * <p class="changed_added_2_0">Get type of the {@link BehaviorRenderer} if instance uses
+     * bridge patterns for a render-kit depended functionality.
+     * </p>
+     * @return the {@link BehaviorRenderer} type for this {@link Behavior}, if any.
+     */
+    public abstract String getRendererType();
+    
+    /**
+     * <p class="changed_added_2_0">Convenience method to return the {@link BehaviorRenderer} instance
+     * associated with this {@link Behavior}, if any; otherwise, return
+     * <code>null</code>.
+     * </p>
+     * @param context {@link FacesContext} for the request we are processing
+     * @return {@link BehaviorRenderer} instance from the current {@link RenderKit} or null.
+     */
+    protected BehaviorRenderer getRenderer(FacesContext context) {
+    	if(null == context){
+    		throw new NullPointerException();
+    	}
+    	BehaviorRenderer renderer = null;
+		String rendererType = getRendererType();
+		if(null != rendererType){
+			RenderKit renderKit = context.getRenderKit();
+			if(null != renderKit){
+				renderer = renderKit.getBehaviorRenderer(rendererType);
+			}
+			if(null == renderer){
+				if(logger.isLoggable(Level.FINE)){
+					logger.fine("Can't get  behavior renderer for type " + rendererType);
+				}				
+			}
+		} else {
+			if(logger.isLoggable(Level.FINE)){
+				logger.fine("No renderer-type for behavior " + this.getClass().getName());
+			}
+		}
+		return renderer;
+	}
 
 }

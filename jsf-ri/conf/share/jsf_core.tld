@@ -499,40 +499,40 @@
 
 <tr>
 
-<td>beforeRender
+<td>preRenderComponent
 </td>
 
-<td>javax.faces.event.BeforeRenderEvent
-</td>
-
-</tr>
-
-<tr>
-
-<td>afterAddToView
-</td>
-
-<td>javax.faces.event.AfterRenderEvent
+<td>javax.faces.event.PreRenderComponentEvent
 </td>
 
 </tr>
 
 <tr>
 
-<td>beforeValidate
+<td>PostAddToView
 </td>
 
-<td>javax.faces.event.BeforeValidateEvent
+<td>javax.faces.event.PostAddToViewEvent
 </td>
 
 </tr>
 
 <tr>
 
-<td>afterValidate
+<td>preValidate
 </td>
 
-<td>javax.faces.event.AfterValidateEvent
+<td>javax.faces.event.PreValidateEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>postValidate
+</td>
+
+<td>javax.faces.event.PostValidateEvent
 </td>
 
 </tr>

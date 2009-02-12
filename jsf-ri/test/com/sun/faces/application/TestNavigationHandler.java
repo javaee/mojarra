@@ -51,7 +51,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
@@ -178,7 +178,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
 
         Application application = getFacesContext().getApplication();
         ViewMapDestroyedListener listener = new ViewMapDestroyedListener();
-        application.subscribeToEvent(ViewMapDestroyedEvent.class,
+        application.subscribeToEvent(PreDestroyViewMapEvent.class,
                                      UIViewRoot.class,
                                      listener);
         try {
@@ -215,7 +215,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
             if (!gotException) {
                 if (!testResult.fromViewId.equals(testResult.toViewId)
                     && testResult.fromOutcome != null) {
-                    assertTrue(listener.getPassedEvent() instanceof ViewMapDestroyedEvent);
+                    assertTrue(listener.getPassedEvent() instanceof PreDestroyViewMapEvent);
                 } else {
                     assertTrue(!listener.wasProcessEventInvoked());
                     assertTrue(listener.getPassedEvent() == null);
@@ -239,7 +239,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                 }
             }
         }
-        application.unsubscribeFromEvent(ViewMapDestroyedEvent.class,
+        application.unsubscribeFromEvent(PreDestroyViewMapEvent.class,
                                          UIViewRoot.class,
                                          listener);
     }

@@ -230,5 +230,28 @@ public abstract class RenderKit {
         return empty.iterator();
 
     }
+    
+    /**
+     * @param type
+     * @param renderer
+     */
+    public void addBehaviorRenderer(String type, BehaviorRenderer renderer) {
+        throw new UnsupportedOperationException("The default implementation must override this method");
+    }
+    
+    /**
+     * @param type
+     * @return
+     */
+    public BehaviorRenderer getBehaviorRenderer(String type) {
+        throw new UnsupportedOperationException("The default implementation must override this method");
+	}
+    
+    /**
+     * @return
+     */
+    public Iterator<String> getBehaviorRendererTypes() {
+        throw new UnsupportedOperationException("The default implementation must override this method");		
+	}
 
 }

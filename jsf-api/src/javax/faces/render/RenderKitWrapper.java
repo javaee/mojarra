@@ -95,7 +95,19 @@ public abstract class RenderKitWrapper extends RenderKit implements FacesWrapper
         return getWrapped().getRendererTypes(componentFamily);
     }
 
+    @Override
+    public void addBehaviorRenderer(String type, BehaviorRenderer renderer) {
+    	getWrapped().addBehaviorRenderer(type, renderer);
+    }
+    
 
+    @Override
+    public BehaviorRenderer getBehaviorRenderer(String type) {
+    	return getWrapped().getBehaviorRenderer(type);
+    }
     
-    
+    @Override
+    public Iterator<String> getBehaviorRendererTypes() {
+    	return getWrapped().getBehaviorRendererTypes();
+    }
 }

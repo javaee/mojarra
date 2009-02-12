@@ -80,7 +80,7 @@
         Notice a JS Alert is present stating the input is not correct.
         The inputText definition in the Facelet page has no onmouseout definiton,
         but the generated source does.  This is accomplished by the custom Validator
-        listening for a BeforeRenderEvent being triggered by the inputText component.
+        listening for a PreRenderComponentEvent being triggered by the inputText component.
         When the Validator listener method is invoked, it adds the necessary javascript
         information to the input component.
     </p>

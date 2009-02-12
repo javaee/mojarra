@@ -41,14 +41,8 @@
 package javax.faces.component.behavior;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Arrays;
 
 import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
 
 
 /**
@@ -59,6 +53,7 @@ import javax.faces.FacesException;
  *
  * @since 2.0
  */
+@SuppressWarnings("serial")
 public class AjaxBehavior extends Behavior implements Serializable {
 
     /**
@@ -68,7 +63,7 @@ public class AjaxBehavior extends Behavior implements Serializable {
      *
      * @since 2.0
      */
-    public static final String AJAX_BEHAVIOR = "javax.faces.component.behavior.AjaxBehavior";
+    public static final String AJAX_BEHAVIOR = "javax.faces.behavior.AjaxBehavior";
 
     /**
      * <p class="changed_added_2_0">The identifier for Ajax value change events.</p> 
@@ -120,6 +115,10 @@ public class AjaxBehavior extends Behavior implements Serializable {
     }
 
 
+    @Override
+    public String getRendererType() {
+       return AJAX_BEHAVIOR;
+    }
     // ---------------------------------------------------------- Public Methods
 
     

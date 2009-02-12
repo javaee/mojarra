@@ -11,9 +11,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FacesException;
 import javax.faces.event.PostAddToViewEvent;
-import javax.faces.event.AfterValidateEvent;
-import javax.faces.event.BeforeRenderEvent;
-import javax.faces.event.BeforeValidateEvent;
+import javax.faces.event.PostValidateEvent;
+import javax.faces.event.PreRenderComponentEvent;
+import javax.faces.event.PreValidateEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.SystemEvent;
 
@@ -28,14 +28,14 @@ public class NamedEventManager {
              new ConcurrentHashMap<String, Set<Class<? extends SystemEvent>>>();
 
     public NamedEventManager() {
-        namedEvents.put("javax.faces.event.beforeRender", BeforeRenderEvent.class);
-        namedEvents.put("javax.faces.event.afterAddToView", PostAddToViewEvent.class);
-        namedEvents.put("javax.faces.event.BeforeValidate", BeforeValidateEvent.class);
-        namedEvents.put("javax.faces.event.AfterValidate", AfterValidateEvent.class);
-        namedEvents.put("beforeRender", BeforeRenderEvent.class);
-        namedEvents.put("afterAddToView", PostAddToViewEvent.class);
-        namedEvents.put("beforeValidate", BeforeValidateEvent.class);
-        namedEvents.put("afterValidate", AfterValidateEvent.class);
+        namedEvents.put("javax.faces.event.PreRenderComponent", PreRenderComponentEvent.class);
+        namedEvents.put("javax.faces.event.PostAddToView", PostAddToViewEvent.class);
+        namedEvents.put("javax.faces.event.PreValidate", PreValidateEvent.class);
+        namedEvents.put("javax.faces.event.PostValidate", PostValidateEvent.class);
+        namedEvents.put("preRenderComponent", PreRenderComponentEvent.class);
+        namedEvents.put("postAddToView", PostAddToViewEvent.class);
+        namedEvents.put("preValidate", PreValidateEvent.class);
+        namedEvents.put("postValidate", PostValidateEvent.class);
     }
 
     public void addNamedEvent(String name, Class<? extends SystemEvent> event) {

@@ -38,7 +38,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core">
 <f:view>
-  <f:event type="beforeRender" listener="#{eventTagBean.beforeViewRender}" />
+  <f:event type="preRenderComponent" listener="#{eventTagBean.beforeViewRender}" />
   
     <h:head>
         <title>Ensure that an f:event just inside of f:view gets called before the page is rendered.</title>
@@ -47,7 +47,7 @@
     <h:body>
 
     <h:form id="form" prependId="false">
-      <p><h:outputText value="#{beforeRenderMessage}" /></p>
+      <p><h:outputText value="#{preRenderComponentMessage}" /></p>
     </h:form>
   </h:body>
 </f:view>

@@ -71,9 +71,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
-import javax.faces.event.AfterRestoreStateEvent;
-import javax.faces.event.ViewMapCreatedEvent;
-import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.PostRestoreStateEvent;
+import javax.faces.event.PostConstructViewMapEvent;
+import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
@@ -829,7 +829,7 @@ public class UIViewRoot extends UIComponentBase {
      * ContextCallback} that takes the following action: call the {@link
      * UIComponent#processEvent} method of the current component. The
      * argument <code>event</code> must be an instance of {@link
-     * javax.faces.event.AfterRestoreStateEvent} whose
+     * javax.faces.event.PostRestoreStateEvent} whose
      * <code>component</code> property is the current component in the
      * traversal.</code></p>
      * @param context the <code>FacesContext</code> for this requets
@@ -845,7 +845,7 @@ public class UIViewRoot extends UIComponentBase {
         } finally {
             clearFacesEvents(context);
             notifyAfter(context, PhaseId.RESTORE_VIEW);
-            final AfterRestoreStateEvent event = new AfterRestoreStateEvent(this);
+            final PostRestoreStateEvent event = new PostRestoreStateEvent(this);
             try {
                 this.visitTree(VisitContext.createVisitContext(context), 
                         new VisitCallback() {
@@ -1415,13 +1415,13 @@ public class UIViewRoot extends UIComponentBase {
      * returns it.  This map must be instantiated lazily and cached for return
      * from subsequent calls to this method on this <code>UIViewRoot</code>
      * instance. {@link javax.faces.application.Application#publishEvent} must
-     * be called, passing {@link ViewMapCreatedEvent}<code>.class</code> as the
+     * be called, passing {@link PostConstructViewMapEvent}<code>.class</code> as the
      * first argument and this <code>UIViewRoot</code> instance as the second
      * argument.</p>
      *
      * <p>The returned <code>Map</code> must be implemented such that calling
      * <code>clear()</code> on the <code>Map</code> causes {@link javax.faces.application.Application#publishEvent} to be
-     * called, passing {@link ViewMapDestroyedEvent}<code>.class</code>
+     * called, passing {@link PreDestroyViewMapEvent}<code>.class</code>
      * as the first argument and this <code>UIViewRoot</code> instance
      * as the second argument.</p>
      * 
@@ -1441,7 +1441,7 @@ public class UIViewRoot extends UIComponentBase {
         if (create && viewScope == null) {
             viewScope = new ViewMap(getFacesContext().getApplication().getProjectStage());
             getFacesContext().getApplication()
-                  .publishEvent(ViewMapCreatedEvent.class, this);
+                  .publishEvent(PostConstructViewMapEvent.class, this);
         }
         return viewScope;
         
@@ -1554,7 +1554,7 @@ public class UIViewRoot extends UIComponentBase {
 
             FacesContext context = FacesContext.getCurrentInstance();
             context.getApplication()
-                  .publishEvent(ViewMapDestroyedEvent.class, context.getViewRoot());
+                  .publishEvent(PreDestroyViewMapEvent.class, context.getViewRoot());
             super.clear();
 
         }

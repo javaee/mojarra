@@ -25,8 +25,8 @@ public class EventTagBean {
     public void beforeViewRender(ComponentSystemEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         
-        context.getExternalContext().getRequestMap().put("beforeRenderMessage", 
-                event.getComponent().getClass() + " before render");
+        context.getExternalContext().getRequestMap().put("preRenderComponentMessage", 
+                event.getComponent().getClass() + " pre-render");
     }
 
 
@@ -42,7 +42,7 @@ public class EventTagBean {
         output.setValue("The no-arg event fired!");
     }
 
-    public void afterValidate(ComponentSystemEvent event) {
+    public void postValidate(ComponentSystemEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         final UIForm form = (UIForm) event.getComponent();
         final String [] clientIds = { "lesser", "greater" };
