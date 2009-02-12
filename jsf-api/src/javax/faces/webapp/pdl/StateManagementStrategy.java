@@ -83,7 +83,7 @@ public abstract class StateManagementStrategy {
 	  <li><p>Care must be taken to handle the case of components
 	  that were programmatically deleted during this lifecycle
 	  traversal.  The {@link
-	  javax.faces.event.BeforeRemoveFromViewEvent} is sent so that
+	  javax.faces.event.PreRemoveFromViewEvent} is sent so that
 	  implementations may be aware of such additions and take
 	  appropriate action.</p></li>
 

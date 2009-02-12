@@ -52,7 +52,7 @@ import javax.faces.component.UIComponent;
 
  * @since 2.0
  */
-public class BeforeRemoveFromViewEvent extends ComponentSystemEvent {
+public class PreRemoveFromViewEvent extends ComponentSystemEvent {
 
 
     // ------------------------------------------------------------ Constructors
@@ -69,7 +69,7 @@ public class BeforeRemoveFromViewEvent extends ComponentSystemEvent {
      * @throws IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
-    public BeforeRemoveFromViewEvent(UIComponent component) {
+    public PreRemoveFromViewEvent(UIComponent component) {
 
         super(component);
 

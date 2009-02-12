@@ -67,7 +67,7 @@ import javax.faces.component.UIComponentBase;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.event.PostAddToViewNonPDLEvent;
-import javax.faces.event.BeforeRemoveFromViewEvent;
+import javax.faces.event.PreRemoveFromViewEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.SystemEventListener;
 import javax.faces.webapp.pdl.StateManagementStrategy;
@@ -107,7 +107,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         removeListener = new AddRemoveListener(this);
         Application app = FacesContext.getCurrentInstance().getApplication();
         app.subscribeToEvent(PostAddToViewNonPDLEvent.class, removeListener);
-        app.subscribeToEvent(BeforeRemoveFromViewEvent.class, removeListener);
+        app.subscribeToEvent(PreRemoveFromViewEvent.class, removeListener);
 
     }
 
@@ -168,7 +168,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         return result;
     }
     
-    private void handleRemoveEvent(BeforeRemoveFromViewEvent event) {
+    private void handleRemoveEvent(PreRemoveFromViewEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         List<String> idsToRemove = getClientIdsToRemove(context, true);
         idsToRemove.add(event.getComponent().getClientId(context));
@@ -426,9 +426,9 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             FacesContext context = FacesContext.getCurrentInstance();
-            if (event instanceof BeforeRemoveFromViewEvent) {
+            if (event instanceof PreRemoveFromViewEvent) {
                 if (!owner.isIgnoreRemoveEvent(context)) {
-                    owner.handleRemoveEvent((BeforeRemoveFromViewEvent) event);
+                    owner.handleRemoveEvent((PreRemoveFromViewEvent) event);
                 }
             } else {
                 owner.handleAddEvent((PostAddToViewNonPDLEvent) event);
