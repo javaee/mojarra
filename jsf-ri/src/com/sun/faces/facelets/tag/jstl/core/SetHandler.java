@@ -52,7 +52,10 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.tag.TextHandler;
+
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -76,6 +79,8 @@ public class SetHandler extends TagHandlerImpl {
     private final TagAttribute var;
     
     private final TagAttribute value;
+
+
     
     private final TagAttribute target;
     
@@ -95,22 +100,42 @@ public class SetHandler extends TagHandlerImpl {
 
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
-        
+
+        StringBuilder bodyValue = new StringBuilder();
+
+        Iterator iter = TagHandlerImpl.findNextByType(this.nextHandler,
+                TextHandler.class);
+        while (iter.hasNext()) {
+            TextHandler text = (TextHandler) iter.next();
+            bodyValue.append(text.getText(ctx));
+        }
+
+        // true if either a value in body or value attr
+        boolean valSet = bodyValue.length() > 0 || (value != null && value.getValue().length() >0);
+
         // Apply precedence algorithm for attributes.  The JstlCoreTLV doesn't
         // seem to enforce much in the way of this, so I edburns needs to check
         // with an authority on the matter, probabyl Kin-Man Chung
         
         // If var is set, value must be set, otherwise an error is thrown
-        if (null != this.var && 
-            (null == this.value || 0 == this.value.getValue().length())) {
+        if (this.var != null && !valSet) {
             throw new TagException(tag, "var set with null or empty value");
         }
-        ValueExpression veObj = this.value.getValueExpression(ctx, Object.class);
+
+        ValueExpression veObj;
         ValueExpression lhs;
         String expr;
-        
+
+        if (this.value != null) {
+            veObj = this.value.getValueExpression(ctx, Object.class);
+        } else {
+
+            veObj = ctx.getExpressionFactory().createValueExpression(
+                    ctx.getFacesContext().getELContext(),bodyValue.toString(),Object.class);
+        }
+
         // Otherwise, if var is set, ignore the other attributes
-        if (null != this.var) {
+        if (this.var != null) {
             String scopeStr, varStr = this.var.getValue(ctx);
             
             // If scope is set, check for validity
@@ -148,9 +173,8 @@ public class SetHandler extends TagHandlerImpl {
             if ((null == this.target || null == this.target.getValue() ||
                  this.target.getValue().length() <= 0) ||
                 (null == this.property || null == this.property.getValue() ||
-                 this.property.getValue().length() <= 0) ||
-                (null == this.value || null == this.value.getValue() ||
-                 this.value.getValue().length() <= 0)) {
+                 this.property.getValue().length() <= 0) || !valSet) {
+
                 throw new TagException(tag, "when using this tag either one of var and value, or (target, property, value) must be set.");
             }
             // Ensure that target is an expression
@@ -170,5 +194,9 @@ public class SetHandler extends TagHandlerImpl {
                     targetValue, propertyStr, veObj.getValue(ctx));
             
         }
+    }
+
+    // Swallow children - if they're text, we've already handled them.
+    protected void applyNextHandler(FaceletContext ctx, UIComponent c) {
     }
 }
