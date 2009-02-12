@@ -1589,7 +1589,7 @@ public abstract class UIComponentBase extends UIComponent {
                                                UIComponent component) {
 
         component.setInView(true);
-        application.publishEvent(AfterAddToViewEvent.class, component);
+        application.publishEvent(PostAddToViewEvent.class, component);
         if (component.getChildCount() > 0) {
             for (UIComponent c : component.getChildren()) {
                 publishAfterViewEvents(application, c);

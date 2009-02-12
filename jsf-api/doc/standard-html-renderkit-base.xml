@@ -2751,7 +2751,7 @@ renders the script <code>Resource</code> specified by the optional
 <p>The implementation of this renderer must have a <a target="_"
 href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
 annotation attached to it, at the class level, declaring <a target="_"
-href="../../javadocs/javax/faces/event/AfterAddToViewEvent.html"><code>AfterAddToViewEvent.class</code></a>
+href="../../javadocs/javax/faces/event/PostAddToViewEvent.html"><code>PostAddToViewEvent.class</code></a>
 as the value of the <code>systemEventClass</code> attribute.  The presence of
 this annotation on a renderer implies the renderer implements <a
 target="_"
@@ -2931,7 +2931,7 @@ attribute.</p>
 <p>The implementation of this renderer must have a <a target="_"
 href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
 annotation attached to it, at the class level, declaring <a target="_"
-href="../../javadocs/javax/faces/event/AfterAddToViewEvent.html"><code>AfterAddToViewEvent.class</code></a>
+href="../../javadocs/javax/faces/event/PostAddToViewEvent.html"><code>PostAddToViewEvent.class</code></a>
 as the value of the <code>systemEventClass</code> attribute.  The presence of
 this annotation on a renderer implies the renderer implements <a target="_"
 href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,

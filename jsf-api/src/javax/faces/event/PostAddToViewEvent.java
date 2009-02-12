@@ -68,7 +68,7 @@ import javax.faces.component.UIComponent;
  *
  * @since 2.0
  */
-public class AfterAddToViewEvent extends ComponentSystemEvent {
+public class PostAddToViewEvent extends ComponentSystemEvent {
 
     
     private static final long serialVersionUID = -1113592223476173895L;
@@ -79,7 +79,7 @@ public class AfterAddToViewEvent extends ComponentSystemEvent {
 
     /**
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>AfterAddToViewEvent</code> that indicates the argument
+     * <code>PostAddToViewEvent</code> that indicates the argument
      * <code>component</code> was just added to the view.</p>
 
      * @param component the <code>UIComponent</code> that has just been
@@ -87,7 +87,7 @@ public class AfterAddToViewEvent extends ComponentSystemEvent {
      *
      * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
      */
-    public AfterAddToViewEvent(UIComponent component) {
+    public PostAddToViewEvent(UIComponent component) {
 
         super(component);
 

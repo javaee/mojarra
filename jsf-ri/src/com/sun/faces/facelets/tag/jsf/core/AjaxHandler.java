@@ -105,7 +105,7 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
  * If this tag is nested within a component other than an 
  * {@link javax.faces.component.ActionSource} or 
  * {@link javax.faces.component.EditableValueHolder} type, 
- * make this tag's parent component subscribe to {@link javax.faces.event.AfterAddToViewEvent}
+ * make this tag's parent component subscribe to {@link javax.faces.event.PostAddToViewEvent}
  * events.  Retrieve an {@link javax.faces.component.AjaxBehaviors} instance from 
  * the current {@link javax.faces.context.FacesContext} attributes <code>Map</code>
  * using the key {@link javax.faces.component.AjaxBehaviors#AJAX_BEHAVIORS}.  If an instance does not exist,

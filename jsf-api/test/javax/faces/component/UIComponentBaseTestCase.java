@@ -58,12 +58,12 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
-import javax.faces.event.AfterAddToViewEvent;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.BeforeRenderEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ViewMapCreatedEvent;
-import javax.faces.event.AfterAddToViewEvent;
+import javax.faces.event.PostAddToViewEvent;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -380,13 +380,13 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void testStateHolder2() throws Exception {
 
         UIComponent c = new UIComponentListener();
-        c.subscribeToEvent(AfterAddToViewEvent.class, (ComponentSystemEventListener) c);
+        c.subscribeToEvent(PostAddToViewEvent.class, (ComponentSystemEventListener) c);
         Object state = c.saveState(facesContext);
         c = new UIComponentListener();
         c.pushComponentToEL(facesContext, c);
         c.restoreState(facesContext, state);
         c.popComponentFromEL(facesContext);
-        assertTrue(c.getListenersForEventClass(AfterAddToViewEvent.class).size() == 1);
+        assertTrue(c.getListenersForEventClass(PostAddToViewEvent.class).size() == 1);
         
     }
 
@@ -899,8 +899,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     protected void checkComponentListeners(UIComponent control, UIComponent toValidate) {
 
-        List<SystemEventListener> lc = control.getListenersForEventClass(AfterAddToViewEvent.class);
-        List<SystemEventListener> tvl = toValidate.getListenersForEventClass(AfterAddToViewEvent.class);
+        List<SystemEventListener> lc = control.getListenersForEventClass(PostAddToViewEvent.class);
+        List<SystemEventListener> tvl = toValidate.getListenersForEventClass(PostAddToViewEvent.class);
         List<SystemEventListener> lc2 = control.getListenersForEventClass(ViewMapCreatedEvent.class);
         List<SystemEventListener> tvl2 = toValidate.getListenersForEventClass(ViewMapCreatedEvent.class);
 
@@ -930,9 +930,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
                                   application.createValueBinding("baz.value"));
         component.setValueBinding("bop",
                                   application.createValueBinding("bop.value"));
-        component.subscribeToEvent(AfterAddToViewEvent.class,
+        component.subscribeToEvent(PostAddToViewEvent.class,
                                    new ComponentListener());
-        component.subscribeToEvent(AfterAddToViewEvent.class,
+        component.subscribeToEvent(PostAddToViewEvent.class,
                                    new ComponentListener());
         component.subscribeToEvent(ViewMapCreatedEvent.class,
                                    new ComponentListener());
@@ -1395,7 +1395,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void testChildrenListAfterAddPublish() {
 
         Listener listener = new Listener();
-        application.subscribeToEvent(AfterAddToViewEvent.class, listener);
+        application.subscribeToEvent(PostAddToViewEvent.class, listener);
 
         UIComponent c1 = createComponent();
         c1.setInView(true);
@@ -1425,14 +1425,14 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(e.getSource() == c3);
         assertTrue(((UIComponent) e.getSource()).getParent() == c1);
 
-        application.unsubscribeFromEvent(AfterAddToViewEvent.class, listener);
+        application.unsubscribeFromEvent(PostAddToViewEvent.class, listener);
 
     }
 
     public void testFacetMapAfterAddViewPublish() {
 
         QueueingListener listener = new QueueingListener();
-        application.subscribeToEvent(AfterAddToViewEvent.class, listener);
+        application.subscribeToEvent(PostAddToViewEvent.class, listener);
 
         UIComponent c1 = createComponent();
         UIComponent c2 = createComponent();
@@ -1473,14 +1473,14 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         c2.getFacets().put("c3", c3);
         assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);
 
-        application.unsubscribeFromEvent(AfterAddToViewEvent.class, listener);
+        application.unsubscribeFromEvent(PostAddToViewEvent.class, listener);
 
     }
 
     public void testChildrenListAfterAddViewPublish() {
 
         QueueingListener listener = new QueueingListener();
-        application.subscribeToEvent(AfterAddToViewEvent.class, listener);
+        application.subscribeToEvent(PostAddToViewEvent.class, listener);
 
         UIComponent c1 = createComponent();
         UIComponent c2 = createComponent();
@@ -1495,7 +1495,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         root.getChildren().add(c1);
 
         // sub-tree has been added to the view.  Ensure that subsequent additions
-        // to that sub-tree cause the AfterAddToViewEvent to fire.
+        // to that sub-tree cause the PostAddToViewEvent to fire.
         c2.getChildren().add(c4);
         assertTrue("Expected Event queue size of 4, found: " + e.size(), e.size() == 4);
 
@@ -1631,7 +1631,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         c2.getChildren().add(t3);
         assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);        
 
-        application.unsubscribeFromEvent(AfterAddToViewEvent.class, listener);
+        application.unsubscribeFromEvent(PostAddToViewEvent.class, listener);
 
         // validate Iterator.remove() over c1's children correctly disconnects
         // the children from the view

@@ -48,7 +48,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.AfterAddToViewEvent;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ListenerFor;
@@ -57,7 +57,7 @@ import javax.faces.event.ListenerFor;
  * <p>Base class for shared behavior between Script and Stylesheet renderers.
  * Maybe composition would be better, but inheritance is easier</p>
  */
-@ListenerFor(systemEventClass=AfterAddToViewEvent.class)
+@ListenerFor(systemEventClass=PostAddToViewEvent.class)
 public abstract class ScriptStyleBaseRenderer extends Renderer implements ComponentSystemEventListener {
     
     
