@@ -170,5 +170,30 @@
     </sources>
 </demo>
 
+    <!-- =================================================================== -->
+
+<demo>
+    <name>Navigation Component</name>
+    <page>nav1.jsf</page>
+    <sources>
+        <source>
+            <label>Initial Using Page</label>
+            <path>/nav1.xhtml</path>
+        </source>
+        <source>
+            <label>Second Using Page</label>
+            <path>/nav2.xhtml</path>
+        </source>
+        <source>
+            <label>Composite Component</label>
+            <path>/resources/navbutton/nav.xhtml</path>
+        </source>
+        <source>
+            <label>Navigation Handler</label>
+            <path>/WEB-INF/classes/ezcomp/NavigationHandler.java</path>
+        </source>
+    </sources>
+</demo>
+
 
 </demo-info>
