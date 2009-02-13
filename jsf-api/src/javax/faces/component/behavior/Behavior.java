@@ -45,18 +45,18 @@ import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.BehaviorEvent;
 import javax.faces.render.BehaviorRenderer;
 import javax.faces.render.RenderKit;
-import javax.faces.render.Renderer;
 
 /**
  * <p class="changed_added_2_0"><strong>Behavior</strong> is the
- * Contract for objects that add behavior to UIComponents. 
+ * contract for generating component behavior. 
  * A behavior could be client side behavior such as Ajax and 
  * client side validation, or it could be server side behavior. 
  * Instances of <code>Behavior</code> may be attached to components 
  * that implement the {@link BehaviorHolder} contract by 
- * calling {@code BehaviorHolder.addBehavior()}.  
+ * calling {@link BehaviorHolder#addBehavior}.  
  * Once a <code>Behavior</code> has been attached to a 
  * {@link BehaviorHolder} component, the component
  * calls {@link #getScript} to obtain the behavior's script and the 
@@ -81,7 +81,9 @@ public abstract class Behavior {
      * @param eventName name of the client-side event.  If this argument is
      * <code>null</code> it is assumed the caller will include the 
      * client-side event name with the return value from this method.
-     * Default implementation delegates that call to {@link BehaviorRenderer#getScript(FacesContext, UIComponent, Behavior, String)} method.
+     * Default implementation delegates that call to 
+     * {@link BehaviorRenderer#getScript(FacesContext, UIComponent, Behavior, String)} 
+     * method.
      * @return script that provides the client-side behavior
      *
      */      
@@ -104,7 +106,8 @@ public abstract class Behavior {
      *
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners who have registered an interest),  by calling
-     * <code>queueEvent()</code>. Default implementation delegates decoding to {@link BehaviorRenderer#decode(FacesContext, UIComponent, String)}</p>
+     * <code>queueEvent()</code>. Default implementation delegates decoding 
+     * to {@link BehaviorRenderer#decode(FacesContext, UIComponent, String)}</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      * @param context {@link UIComponent} the component associated with this {@link Behavior} 
@@ -163,5 +166,9 @@ public abstract class Behavior {
 		}
 		return renderer;
 	}
+    
+    public void processEvent(BehaviorEvent event) {
+		
+    }
 
 }

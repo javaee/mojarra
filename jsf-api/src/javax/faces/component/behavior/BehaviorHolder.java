@@ -77,11 +77,12 @@ public interface BehaviorHolder {
 
     /**
      * <p class="changed_added_2_0">Returns a non-null, unmodifiable
-     * <code>List</code> that contains the the {@link Behavior}s that
-     * have been attached to the component implementing this interface
-     * to process specified event name.</p>
+     * <code>Map</code> that contains the the {@link Behavior}s that
+     * have been attached to the component implementing this interface.
+     * The keys in this <code>Map</code> are event names defined by
+     * {@link #getEventNames}.</p>
      */
-    public List<Behavior> getBehaviors(String eventName);
+    public Map<String, List<Behavior>> getBehaviors();
 
     /**
      * <p class="changed_added_2_0">Returns the default event
