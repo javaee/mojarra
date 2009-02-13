@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -59,6 +60,7 @@ import java.util.Locale;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
@@ -333,5 +335,39 @@ public final class ComponentSupport {
      */
     public final static boolean isNew(UIComponent component) {
         return component != null && component.getParent() == null;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Add the child component to the parent. If the parent is a facet,
+     * check to see whether the facet is already defined. If it is, wrap the existing component
+     * in a panel group, if it's not already, then add the child to the panel group. If the facet
+     * does not yet exist, make the child the facet.</p>
+     */
+    public final static void addComponent(FaceletContext ctx, UIComponent parent, UIComponent child) {
+        String facetName = getFacetName(parent);
+        if (facetName == null) {
+            parent.getChildren().add(child);
+        } else {
+            UIComponent existing = parent.getFacets().get(facetName);
+            if (existing != null) {
+                if (!(existing instanceof UIPanel)) {
+                    // move existing component under a panel group
+                    UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
+                    panelGroup.setId(ctx.getFacesContext().getViewRoot().createUniqueId());
+                    panelGroup.getChildren().add(existing);
+                    // the panel group becomes the facet
+                    parent.getFacets().put(facetName, panelGroup);
+                    existing = panelGroup;
+                }
+                // we have a panel group, so add the new component to it
+                existing.getChildren().add(child);
+            } else {
+                parent.getFacets().put(facetName, child);
+            }
+        }
+    }
+
+    public final static String getFacetName(UIComponent parent) {
+        return (String) parent.getAttributes().get(FacetHandler.KEY);
     }
 }
