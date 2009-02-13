@@ -40,6 +40,8 @@
 
 package javax.faces.component.behavior;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.Map;
 
@@ -68,19 +70,18 @@ public interface BehaviorHolder {
 
     /**
      * <p class="changed_added_2_0">Returns a non-null, unmodifiable 
-     * <code>Set</code> containing the names of the logical 
+     * <code>Collection</code> containing the names of the logical 
      * events supported by the component implementing this interface.</p>
      */
-    public Set<String> getEventNames();
+    public Collection<String> getEventNames();
 
     /**
      * <p class="changed_added_2_0">Returns a non-null, unmodifiable
-     * <code>Map</code> that contains the the {@link Behavior}s that 
-     * have been attached to the component implementing this interface.  
-     * The keys in this <code>Map</code> are event names defined by 
-     * {@link #getEventNames}.</p>
+     * <code>List</code> that contains the the {@link Behavior}s that
+     * have been attached to the component implementing this interface
+     * to process specified event name.</p>
      */
-    public Map<String, Behavior> getBehaviors();
+    public List<Behavior> getBehaviors(String eventName);
 
     /**
      * <p class="changed_added_2_0">Returns the default event

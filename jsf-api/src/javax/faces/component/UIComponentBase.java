@@ -40,6 +40,8 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.*;
@@ -1042,6 +1044,14 @@ public abstract class UIComponentBase extends UIComponent {
             UIComponent kid = (UIComponent) kids.next();
             kid.processDecodes(context);
         }
+        // Process behaviors, if supported by the component.
+        if(isBehaviurHolder()){
+        	for (String event : getEventsWhatAreSet()) {
+				for(Behavior behavior : getBehaviors(event)){
+					behavior.decode(context, this, event);
+				}
+			}
+        }
 
         // Process this component itself
         try {
@@ -1287,7 +1297,7 @@ public abstract class UIComponentBase extends UIComponent {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[10];
+            values = new Object[11];
         }
 
         if (attributes != null) {
@@ -1305,6 +1315,7 @@ public abstract class UIComponentBase extends UIComponent {
         values[7] = saveAttachedState(context, listeners);
         values[8] = attributesThatAreSet;
         values[9] = saveSystemEventListeners(context);
+        values[10] = saveBehaviorsState(context);
         assert (!transientFlag);
 
         return (values);
@@ -1348,6 +1359,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
         //noinspection unchecked
         attributesThatAreSet = (List<String>) values[8];
+        behaviors = restoreBehavioursState(context, values[10]);
     }
 
 
@@ -1356,8 +1368,7 @@ public abstract class UIComponentBase extends UIComponent {
      */
     private boolean transientFlag = false;
 
-
-    public boolean isTransient() {
+	public boolean isTransient() {
 
         return (this.transientFlag);
 
@@ -1584,8 +1595,239 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
     }
+    
+    //------------------------------------------------------------- BehaviourHolder stub methods.
 
-    private static void publishAfterViewEvents(Application application,
+    /**
+	 * behaviors associated with this component.
+	 */
+	private Map<String, List<Behavior>> behaviors;
+
+	/**
+	 * Unmodifiable version of the above.  We could avoid storing
+	 * this - and instead re-create the unmodifiable wrapper on
+	 * each call to getBehaviors(), but creating this wrapper
+	 * once seems more efficient.
+	 */
+	private Map<String, List<Behavior>> unmodifiableBehaviors;
+
+	/**
+	 * <p class="changed_added_2_0">This is a default implementation of
+	 * {@link javax.faces.component.behavior.BehaviorHolder#addBehavior}.  
+	 * <code>UIComponent</code> does not implement the 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+	 * but provides default implementations for the methods defined by 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+	 * subclass implementations.   Subclasses that wish to support the 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} contract must 
+	 * declare that the subclass implements 
+	 * {@link javax.faces.component.behavior.BehaviorHolder}, and must provide
+	 * an implementation of 
+	 * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+	 *
+	 * @param eventName the logical name of the client-side event to attach
+	 *        the behavior to.
+	 * param  behavior the {@link javax.faces.component.behavior.Behavior} 
+	 * instance to attach for the specified event name.
+	 */
+	public void addBehavior(String eventName, Behavior behavior) {
+		assertBehaviorHolder();
+	    // First, make sure that the event is supported.  We don't want
+	    // to bother attaching behaviors for unsupported events.
+	
+	    Collection<String> eventNames = getEventNames();
+	
+	    // getClientEventNames() is spec'ed to require a non-null Set.
+	    // If getClientEventNames() returns null, throw an exception
+	    // to indicate that the API in not being used properly.
+	    if (eventNames == null) {
+	        throw new IllegalStateException(
+	          "Attempting to add a Behavior to a component " +
+	          "that does not support any event types. "     +
+	          "getEventTypes() must return a non-null Set.");
+	    }
+	
+	    if (eventNames.contains(eventName)) {
+	        // We've got an event that we support, create our Map
+	        // if necessary
+	        if (null == behaviors) {
+	
+	            // Typically we only have a small number of behaviors for
+	            // any component - usually only 1.  (Currently the standard
+	            // components only support 1 event name each.)  If in the
+	            // future it becomes common for components instances to 
+	            // be associated with many client behaviors, we should
+	            // revisit the initial capacity here.
+	            behaviors = new HashMap<String, List<Behavior>>(eventNames.size(),1.0f);
+	
+	        }
+	        List<Behavior> eventBehaviours = behaviors.get(eventName);
+	        if (null == eventBehaviours) {
+				eventBehaviours = new ArrayList<Behavior>();
+		        behaviors.put(eventName, eventBehaviours);
+			}
+	        eventBehaviours.add(behavior);
+	    }
+	}
+
+	/**
+	 * <p class="changed_added_2_0">This is a default implementation of
+	 * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.  
+	 * <code>UIComponent</code> does not implement the 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+	 * but provides default implementations for the methods defined by 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+	 * subclass implementations.   Subclasses that wish to support the 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} contract 
+	 * must declare that the subclass implements 
+	 * {@link javax.faces.component.behavior.BehaviorHolder}, and must
+	 * override this method to return a non-Empty <code>Seti</code> of the 
+	 * client event names that the component supports.</p>
+	 */
+	public Collection<String> getEventNames() {
+		assertBehaviorHolder();
+	    // Note: we intentionally return null here even though this
+	    // is not a valid value.  The result is that addClientBehavior()
+	    // will fail with an IllegalStateException if getClientEventNames()
+	    // is not overridden.  This should make it obvious to the
+	    // component author that something is wrong.
+	    return null;
+	}
+
+	/**
+	 * <p class="changed_added_2_0">This is a default implementation of
+	 * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.  
+	 * <code>UIComponent</code> does not implement the 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+	 * but provides default implementations for the methods defined by 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+	 * subclass implementations.   Subclasses that wish to support the 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} contract 
+	 * must declare that the subclass implements 
+	 * {@link javax.faces.component.bhavior.BehaviorHolder}, and must add
+	 * an implementation of 
+	 * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+	 */
+	public List<Behavior> getBehaviors(String eventName) {
+		assertBehaviorHolder();
+		List<Behavior> eventBehaviors;
+		if(null == behaviors || !behaviors.containsKey(eventName)){
+			eventBehaviors = Collections.<Behavior>emptyList();
+		} else {
+			if (null == unmodifiableBehaviors) {
+	            // Also, create an unmodifiable wrapper that we can
+	            // return from getBehaviors();
+	            unmodifiableBehaviors = new HashMap<String, List<Behavior>>(behaviors.size(),1.0f);
+				eventBehaviors = Collections.unmodifiableList(behaviors.get(eventName));
+				unmodifiableBehaviors.put(eventName, eventBehaviors);
+			} else {
+				eventBehaviors = unmodifiableBehaviors.get(eventName);
+				if(null == eventBehaviors){
+					eventBehaviors = Collections.unmodifiableList(behaviors.get(eventName));
+					unmodifiableBehaviors.put(eventName, eventBehaviors);
+				}
+			}
+		}
+	    return eventBehaviors;
+	}
+
+	/**
+	 * <p class="changed_added_2_0">This is a default implementation of
+	 * {@link javax.faces.component.behavior.BehaviorHolder#getDefaultEventName}.  
+	 * <code>UIComponent</code> does not implement the 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+	 * but provides default implementations for the methods defined by 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+	 * subclass implementations.   Subclasses that wish to support the 
+	 * {@link javax.faces.component.behavior.BehaviorHolder} contract 
+	 * must declare that the subclass implements 
+	 * {@link javax.faces.component.behavior.BehaviorHolder}, and must 
+	 * provide an implementation of 
+	 * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+	 */
+	public String getDefaultEventName() {
+		assertBehaviorHolder();
+	    // Our default implementation just returns null - no default
+	    // event name;
+	    return null;
+	}
+	
+	public Collection<String> getEventsWhatAreSet() {
+		assertBehaviorHolder();
+		return Collections.unmodifiableCollection(behaviors.keySet());
+	}
+	
+	
+	/**
+	 * {@link UIComponentBase} has stub methods from the {@link BehaviorHolder} interface,
+	 * but these method should be used only with componets that really implement holder interface.
+	 * For an any other classes this method throws {@link IllegalStateException}
+	 * @throws IllegalStateException 
+	 */
+	private void assertBehaviorHolder() {
+		if (!isBehaviurHolder()) {
+			throw new IllegalStateException(
+			          "Attempting to use a Behavior feature with a component " +
+			          "that does not support any event types. "     +
+			          "Component must implement BehaviourHolder interface.");
+		}
+	}
+
+	/**
+	 * @return true if component implements {@link BehaviorHolder} interface.
+	 */
+	private boolean isBehaviurHolder() {
+		return BehaviorHolder.class.isInstance(this);
+	}
+	
+	/**
+	 * Save state of the behaviors map.
+	 * @param context the {@link FacesContext} for this request.
+	 * @return map converted to the array of <code>Object</code> or null if no behaviors have been set. 
+	 */
+	private Object saveBehaviorsState(FacesContext context){
+		Object state = null;
+		if(null != behaviors && behaviors.size() >0){
+			behaviors.keySet().toArray(new String[behaviors.size()]);
+			Object[] attachedBehaviors = new Object[behaviors.size()];
+			int i=0;
+			for (List<Behavior> eventBehaviors : behaviors.values()) {
+				Object[] attachedEventBehaviors = new Object[eventBehaviors.size()];
+				for (int j = 0; j < attachedEventBehaviors.length; j++) {
+					attachedEventBehaviors[j]= saveAttachedState(context, eventBehaviors.get(j));
+				}
+				attachedBehaviors[i++]=attachedEventBehaviors;
+			}
+			state = new Object[]{behaviors.keySet().toArray(new String[behaviors.size()]),attachedBehaviors};
+		}
+		return state;
+	}
+	
+	/**
+	 * @param context the {@link FacesContext} for this request.
+	 * @param state saved state of the {@link Behavior}'s attached to the component.
+	 * @return restored <code>Map</code> of the behaviors.
+	 */
+	private Map<String, List<Behavior>> restoreBehavioursState(FacesContext context, Object state) {
+		Map<String, List<Behavior>> behaviors = null;
+		if (null != state) {
+			Object[] values = (Object[]) state;
+			String[] names = (String[])values[0];
+			Object[][] attachedBehaviors = (Object[][]) values[1];
+			behaviors = new HashMap<String, List<Behavior>>(names.length,1.0f);
+			for (int i = 0; i < attachedBehaviors.length; i++) {
+				Object[] attachedEventBehaviors = attachedBehaviors[i];
+				ArrayList<Behavior> eventBehaviors = new ArrayList<Behavior>(attachedBehaviors.length);
+				for (int j = 0; j < attachedEventBehaviors.length; j++) {
+					eventBehaviors.add((Behavior) restoreAttachedState(context, attachedEventBehaviors[j]));					
+				}
+				behaviors.put(names[i], eventBehaviors);
+			}
+		}
+		return behaviors;
+	}
+
+	private static void publishAfterViewEvents(Application application,
                                                UIComponent component) {
 
         component.setInView(true);
