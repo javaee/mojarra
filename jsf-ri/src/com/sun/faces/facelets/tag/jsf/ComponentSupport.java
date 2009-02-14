@@ -77,6 +77,7 @@ public final class ComponentSupport {
 
     private final static String MARK_DELETED = "com.sun.faces.facelets.MARK_DELETED";
     public final static String MARK_CREATED = "com.sun.faces.facelets.MARK_ID";
+    private final static String IMPLICIT_PANEL = "com.sun.faces.facelets.IMPLICIT_PANEL";
     
     /**
      * Used in conjunction with markForDeletion where any UIComponent marked
@@ -155,6 +156,14 @@ public final class ComponentSupport {
             cid = (String) c.getAttributes().get(MARK_CREATED);
             if (id.equals(cid)) {
                 return c;
+            }
+            if (c instanceof UIPanel && c.getAttributes().containsKey(IMPLICIT_PANEL)) {
+                for (UIComponent c2 : c.getChildren()) {
+                    cid = (String) c2.getAttributes().get(MARK_CREATED);
+                    if (id.equals(cid)) {
+                        return c2;
+                    }
+                }
             }
         }
 //        int sz = parent.getChildCount();
@@ -354,6 +363,7 @@ public final class ComponentSupport {
                     // move existing component under a panel group
                     UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
                     panelGroup.setId(ctx.getFacesContext().getViewRoot().createUniqueId());
+                    panelGroup.getAttributes().put(ComponentSupport.IMPLICIT_PANEL, true);
                     panelGroup.getChildren().add(existing);
                     // the panel group becomes the facet
                     parent.getFacets().put(facetName, panelGroup);
