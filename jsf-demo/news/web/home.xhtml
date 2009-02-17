@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <f:view contentType="text/html">
+        <f:facet name="metadata">
+            <f:pageParam name="id"/>
+        </f:facet>
+    <body>
+        <h:messages style="color: red; list-style: none; border: 0 solid red; border-left-width: 2px; padding: 0 5px;"/>
+        <h1>The big news stories of the day</h1>
+        <ul>
+        <ui:repeat var="_story" value="#{newsReader.stories}">
+            <li><h:outputLink value="story.jsf"><f:param name="id" value="#{_story.id}"/>#{_story.headline}</h:outputLink></li> 
+        </ui:repeat>
+        </ul>
+        <h:panelGroup rendered="#{not empty id}">
+            <p style="color: green;">You just looked at story ##{id}.</p>
+        </h:panelGroup>
+    </body>
+    </f:view>
+</html>

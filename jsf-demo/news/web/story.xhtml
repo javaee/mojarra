@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <f:view contentType="text/html">
+        <f:facet name="metadata">
+            <f:pageParam id="id" name="id" value="#{newsReader.selectedStoryId}" required="true"
+                requiredMessage="You did not specify a headline. (The id parameter is missing)"
+                converterMessage="Invalid headline. (The id parameter is not a number)"
+                validatorMessage="Invalid headline. (The id parameter is not a positive number)">
+                <f:validateLongRange minimum="1"/>
+            </f:pageParam>
+            <f:event type="beforeRender" listener="#{newsReader.loadStory}"/>
+        </f:facet>
+    <body>
+        <h:messages style="color: red; list-style: none; border: 0 solid red; border-left-width: 2px; padding: 0 5px;"/>
+        <h1>#{newsReader.selectedStory.headline}</h1>
+        <p>#{newsReader.selectedStory.content}</p>
+        <h:form>
+            <p>
+                <h:commandButton id="refresh" value="Refresh"/>
+                #{' '}
+                <h:commandButton id="refreshClearParam" value="Refresh (clear param)">
+                    <f:param name="id" value="#{null}"/>
+                </h:commandButton>
+                #{' '}
+                <h:commandButton id="refreshWithRedirectParams" action="/story.xhtml?redirect=true&amp;includePageParams=true" value="Refresh (Redirect After POST w/ params)"/>
+                #{' '}
+                <h:commandButton id="refreshWithRedirect" action="/story.xhtml?redirect=true" value="Refresh (Redirect After POST w/o params)"/>
+            </p>
+            <p>
+                <h:commandButton id="home" action="/home.xhtml?redirect=true&amp;from=story" value="Home"/>
+                #{' '}
+                <h:commandButton id="homeRememberSelection" action="/home.xhtml?redirect=true&amp;includePageParams=true&amp;from=story" value="Home (Keep selection)"/>
+                #{' '}
+                <h:commandButton id="homeRememberSelectionNavCase" action="homeWithParams" value="Home (Keep selection nav case)"/>
+            </p>
+        </h:form>
+    </body>
+    </f:view>
+</html>
