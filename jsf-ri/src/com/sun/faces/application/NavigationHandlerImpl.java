@@ -92,6 +92,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      */
     private boolean development;
     private static final Pattern REDIRECT_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(redirect=true(&|$))");
+    private static final Pattern INCLUDE_PAGE_PARAMS_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(includePageParams=true(&|$))");
 
 
     // ------------------------------------------------------------ Constructors
@@ -170,22 +171,25 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
             if (caseStruct.navCase.isRedirect()) {
                 // perform a 302 redirect.
-                String newPath =
-                    viewHandler.getActionURL(context, caseStruct.viewId);
+                String redirectUrl =
+                      viewHandler.getRedirectURL(context,
+                                                 caseStruct.viewId,
+                                                 null,
+                                                 caseStruct.navCase.isIncludePageParams());
                 try {
                     if (logger.isLoggable(Level.FINE)) {
-                        logger.fine("Redirecting to path " + newPath
+                        logger.fine("Redirecting to path " + redirectUrl
                                     + " for outcome " + outcome +
                                     "and viewId " + caseStruct.viewId);
                     }
                     // encode the redirect to ensure session state
                     // is maintained
                     context.getFlash().setRedirect(true);
-                    extContext.redirect(extContext.encodeActionURL(newPath));
+                    extContext.redirect(redirectUrl);
                 } catch (java.io.IOException ioe) {
                     if (logger.isLoggable(Level.SEVERE)) {
                         logger.log(Level.SEVERE,"jsf.redirect_failed_error",
-                                   newPath);
+                                   redirectUrl);
                     }
                     throw new FacesException(ioe.getMessage(), ioe);
                 }
@@ -428,6 +432,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         String viewIdToTest = outcome;
         String currentViewId = root.getViewId();
         boolean isRedirect = false;
+        boolean isIncludePageParams = false;
 
         int questionMark = viewIdToTest.indexOf('?');
         String queryString = null;
@@ -439,6 +444,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             if (m.find()) {
                 isRedirect = true;
                 queryString = queryString.replace(m.group(1), "");
+
+                m = INCLUDE_PAGE_PARAMS_EQUALS_TRUE.matcher(queryString);
+                if (m.find()) {
+                    isIncludePageParams = true;
+                    queryString = queryString.replace(m.group(1), "");
+                }
             }
 
             // clean off dust
@@ -476,7 +487,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         if (null != viewIdToTest) {
             CaseStruct caseStruct = new CaseStruct();
-            if (isRedirect && queryString != null) {
+            // bookmarkable links need query string even when not isRedirect()
+            if (queryString != null) {
                 // Tack back on the query string
                 viewIdToTest = viewIdToTest + queryString;
             }
@@ -486,7 +498,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     outcome,
                     null,
                     viewIdToTest,
-                    isRedirect);
+                    isRedirect,
+                    isIncludePageParams);
             return caseStruct;
         }
 

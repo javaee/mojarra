@@ -45,6 +45,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.view.JsfViewUrlBuilder;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.io.FastStringWriter;
@@ -78,6 +79,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.net.MalformedURLException;
+import java.util.List;
 
 /**
  * <p>
@@ -704,6 +706,19 @@ public class ViewHandlerImpl extends ViewHandler {
 
     }
 
+    @Override
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includePageParams) {
+        // QUESTION should encodeParams dually be a flag?
+		String encoding = null;
+		if (context.getResponseWriter() != null) {
+			encoding = Util.isPortletRequest(context) ? null : context.getResponseWriter().getCharacterEncoding();
+		}
+		else {
+			encoding = context.getExternalContext().getResponseCharacterEncoding();
+		}
+		
+        return new JsfViewUrlBuilder(context, viewId, includePageParams, encoding).addParameters(parameters).createUrl();
+    }
 
     /**
      * <p>if the specified mapping is a prefix mapping, and the provided

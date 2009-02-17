@@ -171,13 +171,16 @@ public class RestoreViewPhase extends Phase {
         if (isPostBack) {
             // try to restore the view
             viewRoot = viewHandler.restoreView(facesContext, viewId);
-
+            boolean renderResponse = false;
             if (viewRoot == null) {
                 if (is11CompatEnabled(facesContext)) {
                     // 1.1 -> create a new view and flag that the response should
                     //        be immediately rendered
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("Postback: recreating a view for " + viewId);
+                    }
                     viewRoot = viewHandler.createView(facesContext, viewId);
-                    facesContext.renderResponse();
+                    renderResponse = true;
                 } else {
                     Object[] params = {viewId};
                     throw new ViewExpiredException(
@@ -187,26 +190,34 @@ public class RestoreViewPhase extends Phase {
                           viewId);
                 }
             }
-
+            
             facesContext.setViewRoot(viewRoot);
+            assert(null != viewRoot);
+            if (renderResponse) {
+                // FIXME: instead of an explicit call, we should instead do a partial tree traversal
+                viewRoot.decodePageParameters(facesContext);
+                facesContext.renderResponse();
+            }
 
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Postback: Restored view for " + viewId);
+                LOGGER.fine("Postback: restored view for " + viewId);
             }
         } else {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("New request: creating a view for " + viewId);
             }
-            // if that fails, create one
             viewRoot = (Util.getViewHandler(facesContext)).
                   createView(facesContext, viewId);           
             facesContext.setViewRoot(viewRoot);
+            assert(null != viewRoot);
+            // FIXME: instead of an explicit call, we should instead do a partial tree traversal
+            viewRoot.decodePageParameters(facesContext);
             facesContext.renderResponse();
             facesContext.getApplication().publishEvent(PostAddToViewEvent.class,
                                                        viewRoot);
         }
-        assert(null != viewRoot);
         
+
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting RestoreViewPhase");
         }

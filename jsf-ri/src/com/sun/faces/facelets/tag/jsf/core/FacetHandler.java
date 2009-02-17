@@ -58,6 +58,7 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
+import javax.faces.component.UIViewRoot;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
@@ -77,6 +78,14 @@ public final class FacetHandler extends TagHandlerImpl {
 
     public static final String KEY = "facelets.FACET_NAME";
 
+	public static final String METADATA_FACET_NAME = "metadata";
+
+    /**
+     * <p class="changed_added_2_0">The name of the attribute whose presence hints to the next handler that
+     * the facet contains multiple children. The handler then knows to implicitly wrap the children in a UIPanel.</p>
+     */
+    public static final String FACET_IS_COMPOSITE = "facelets.FACET_IS_COMPOSITE";
+
     protected final TagAttribute name;
 
     public FacetHandler(TagConfig config) {
@@ -95,11 +104,19 @@ public final class FacetHandler extends TagHandlerImpl {
         if (parent == null) {
             throw new TagException(this.tag, "Parent UIComponent was null");
         }
-        parent.getAttributes().put(KEY, this.name.getValue(ctx));
+        String facetName = this.name.getValue(ctx);
+        parent.getAttributes().put(KEY, facetName);
         try {
             this.nextHandler.apply(ctx, parent);
         } finally {
             parent.getAttributes().remove(KEY);
         }
+        
+        if (parent instanceof UIViewRoot &&
+            METADATA_FACET_NAME.equals(facetName) &&
+            ctx.getFacesContext().getAttributes().get(javax.faces.application.ViewHandler.ONLY_BUILD_METADATA_FACET_KEY) != null) {
+            ctx.setAttribute(ABORT_PROCESSING_KEY, true);
+        }
+
     }
 }

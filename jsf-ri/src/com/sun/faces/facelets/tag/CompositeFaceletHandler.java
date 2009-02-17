@@ -81,7 +81,13 @@ public final class CompositeFaceletHandler implements FaceletHandler {
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
         for (int i = 0; i < len; i++) {
-            this.children[i].apply(ctx, parent);
+            if (ctx.getAttribute(ABORT_PROCESSING_KEY) != null) {
+                ctx.setAttribute(ABORT_PROCESSING_KEY, null);
+                break;
+            }
+            else {
+                this.children[i].apply(ctx, parent);
+            }
         }
     }
     

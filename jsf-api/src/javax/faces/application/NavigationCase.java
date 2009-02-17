@@ -63,6 +63,7 @@ public class NavigationCase {
     private final String condition;
     private final String toViewId;
     private final boolean redirect;
+    private final boolean includePageParams;
 
     private ValueExpression toViewIdExpr;
     private ValueExpression conditionExpr;
@@ -88,13 +89,16 @@ public class NavigationCase {
      * @param toViewId the view id to be navigated to
      * @param redirect <code>true</code> if the new view should be navigated
      *  to via a {@link javax.faces.context.ExternalContext#redirect(String)}
+     * @param includePageParams  <code>true</code> if the page parametets should
+     *  be encoded into the redirect URL (only applies to redirect case)
      */
     public NavigationCase(String fromViewId,
                           String fromAction,
                           String fromOutcome,
                           String condition,
                           String toViewId,
-                          boolean redirect) {
+                          boolean redirect,
+                          boolean includePageParams) {
 
         this.fromViewId = fromViewId;
         this.fromAction = fromAction;
@@ -102,6 +106,7 @@ public class NavigationCase {
         this.condition = condition;
         this.toViewId = toViewId;
         this.redirect = redirect;
+        this.includePageParams = includePageParams;
 
     }
 
@@ -271,6 +276,16 @@ public class NavigationCase {
 
     }
 
+    /**
+     * <p class="changed_added_2_0">Return the <code>&lt;redirect&gt;</code>
+     * value for this <code>&lt;navigation-case&gt;</code></p>
+     */
+    public boolean isIncludePageParams() {
+
+        return includePageParams;
+
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -339,6 +354,7 @@ public class NavigationCase {
             sb.append(", if='").append(condition).append('\'');
             sb.append(", toViewId='").append(toViewId).append('\'');
             sb.append(", redirect=").append(redirect);
+            sb.append(", includePageParams=").append(includePageParams).append('\'');
             sb.append('}');
             toString = sb.toString();
         }

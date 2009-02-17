@@ -430,6 +430,14 @@ public abstract class FacesContext {
      */
     public abstract boolean getResponseComplete();
 
+    /**
+     * <p class="changed_added_2_0">Return <code>true</code> if the <code>validationFailed()</code>
+     * method has been called for the current request.</p>
+     * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     */
+    public abstract boolean getValidationFailed();
 
     /**
      * <p>Return the {@link ResponseStream} to which components should
@@ -624,6 +632,28 @@ public abstract class FacesContext {
      */
     public abstract void responseComplete();
     
+    /**
+     * <p class="changed_added_2_0">Sets a flag which indicates that a conversion or
+     * validation error occurred while processing the inputs. Inputs consist of
+     * either page parameters or form bindings. This flag can be read using
+     * the getValidationFailed() method.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     */
+    public abstract void validationFailed();
+
+    /**
+     * <p class="changed_added_2_0">A convenience method to signal the
+     * JavaServer Faces implementation to invoke the NavigationHandler
+     * with the provided outcome. When the NavigationHandler is invoked,
+     * the current viewId is treated as the "from viewId" and the "from action"
+     * is null.</p>
+     * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     */
+    public abstract void fireNavigation(String outcome);
 
     /**
      * <p class="changed_added_2_0">Return the value last set on this

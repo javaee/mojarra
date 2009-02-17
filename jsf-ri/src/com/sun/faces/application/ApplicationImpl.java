@@ -117,7 +117,9 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.el.ValueExpression;
+import javax.faces.application.PageMetadata;
 import javax.faces.application.Resource;
+import javax.faces.component.UIPageParameter;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 
@@ -1434,7 +1436,25 @@ public class ApplicationImpl extends Application {
     public String getMessageBundle() {
         return messageBundle;
     }
-    
+
+    private Map<String, PageMetadata> pages = new HashMap<String, PageMetadata>();
+
+    public PageMetadata getPage(String viewId) {
+        return pages.get(viewId);
+    }
+
+    public void addPage(PageMetadata page) {
+        pages.put(page.getViewId(), page);
+    }
+
+    public List<UIPageParameter> restorePageParameters(FacesContext context, String viewId) {
+        if (pages.containsKey(viewId)) {
+            return pages.get(viewId).restorePageParameters(context, viewId);
+        }
+        else {
+            return null;
+        }
+    }
     
     /**
      * <p>PRECONDITIONS: the values in the Map are either Strings

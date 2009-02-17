@@ -69,6 +69,7 @@ import java.util.Map;
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.PageMetadata;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.event.PostRestoreStateEvent;
@@ -788,7 +789,7 @@ public class UIViewRoot extends UIComponentBase {
                   !events.get(phaseId.getOrdinal()).isEmpty();
 
         } while (hasMoreAnyPhaseEvents || hasMoreCurrentPhaseEvents);
-	
+    
     }
 
     // ------------------------------------------------ Lifecycle Phase Handlers
@@ -965,6 +966,7 @@ public class UIViewRoot extends UIComponentBase {
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
+        encodePageParameters(context);
         notifyAfter(context, PhaseId.RENDER_RESPONSE);
     }
 
@@ -1447,6 +1449,80 @@ public class UIViewRoot extends UIComponentBase {
         
     }
 
+    // BEGIN TENATIVE
+    public void decodePageParameters(FacesContext context) {
+        
+        List<UIPageParameter> params = getPageParameters();
+
+        // END TENATIVE is this where we want this logic?
+        String viewId = context.getViewRoot().getViewId();
+        if (context.getApplication().getPage(viewId) == null) {
+            context.getApplication().addPage(new PageMetadata(context, viewId, params));
+        }
+        // END TENATIVE
+
+        if (params.isEmpty()) {
+            return;
+        }
+
+        for (UIPageParameter param : params) {
+            param.processDecodes(context);
+        }
+
+        for (UIPageParameter param : params) {
+            param.processValidators(context);
+        }
+
+        if (context.getRenderResponse()) {
+            return;
+        }
+
+        for (UIPageParameter param : params) {
+            param.processUpdates(context);
+        }
+
+    }
+
+    // QUESTION: should this be made protected or private instead?
+    public void encodePageParameters(FacesContext context) {
+        List<UIPageParameter> params = getPageParameters();
+        if (params.isEmpty()) {
+            return;
+        }
+
+        try {
+            for (UIPageParameter param : params) {
+                param.encodeAll(context);
+            }
+        } catch (IOException e) {
+            // IOException is forced by contract and is not expected to be thrown in this case
+            throw new RuntimeException("Unexpected IOException", e);
+        }
+    }
+
+    public List<UIPageParameter> getPageParameters() {
+        UIComponent metadataFacet = getFacet("metadata");
+
+        if (metadataFacet == null) {
+            return Collections.<UIPageParameter>emptyList();
+        }
+
+        if (metadataFacet instanceof UIPageParameter) {
+            List<UIPageParameter> params = new ArrayList<UIPageParameter>();
+            params.add((UIPageParameter) metadataFacet);
+            return params;
+        }
+
+        List<UIPageParameter> params = new ArrayList<UIPageParameter>();
+        for (UIComponent c : metadataFacet.getChildren()) {
+            if (c instanceof UIPageParameter) {
+                params.add((UIPageParameter) c);
+            }
+        }
+
+        return params;
+    }
+    // END TENATIVE
 
     // ----------------------------------------------------- StateHolder Methods
 

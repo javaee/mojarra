@@ -815,7 +815,10 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        context.getApplication().publishEvent(PreRenderComponentEvent.class, this);
+        // the before render event for UIViewRoot is treated as a special case and is fired before renderView()
+        if (!(this instanceof UIViewRoot)) {
+            context.getApplication().publishEvent(PreRenderComponentEvent.class, this);
+        }
 
         String rendererType = getRendererType();
         if (rendererType != null) {
