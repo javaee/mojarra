@@ -142,9 +142,6 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         if (parent == null) {
             throw new TagException(this.tag, "Parent UIComponent was null");
         }
-        
-        // possible facet scoped
-        String facetName = this.getFacetName(ctx, parent);
 
         // our id
         String id = ctx.generateUniqueId(this.tagId);
@@ -197,8 +194,8 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         if (componentFound) {
             ComponentSupport.finalizeForDeletion(c);
             
-            if (facetName == null) {
-            	parent.getChildren().remove(c);
+            if (getFacetName(ctx, parent) == null) {
+                parent.getChildren().remove(c);
             }
         }
         
@@ -208,11 +205,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         // add to the tree afterwards
         // this allows children to determine if it's
         // been part of the tree or not yet
-        if (facetName == null) {
-        	parent.getChildren().add(c);
-        } else {
-        	parent.getFacets().put(facetName, c);
-        }
+		ComponentSupport.addComponent(ctx, parent, c);
         c.popComponentFromEL(ctx.getFacesContext());
         
     }
@@ -240,7 +233,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
      * @return
      */
     protected final String getFacetName(FaceletContext ctx, UIComponent parent) {
-    	return (String) parent.getAttributes().get(FacetHandler.KEY);
+        return (String) parent.getAttributes().get(FacetHandler.KEY);
     }
 
     /**
@@ -366,4 +359,4 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         // first allow c to get populated
         this.nextHandler.apply(ctx, c);
     }
-}
+    }

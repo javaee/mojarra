@@ -159,7 +159,9 @@ public final class AjaxHandler extends TagHandlerImpl {
           throws IOException, FacesException, FaceletException, ELException {
         if (null == parent || !(ComponentSupport.isNew(parent))) {
             return;
-        }
+        } 
+
+        if (
 
         String event = (this.event != null) ? this.event.getValue() : null;
 

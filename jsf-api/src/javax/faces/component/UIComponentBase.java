@@ -1742,8 +1742,8 @@ public abstract class UIComponentBase extends UIComponent {
      * {@link javax.faces.component.behavior.BehaviorHolder} contract 
      * must declare that the subclass implements 
      * {@link javax.faces.component.behavior.BehaviorHolder}, and must
-     * override this method to return a non-Empty <code>Seti</code> of the 
-     * client event names that the component supports.</p>
+     * override this method to return a non-Empty <code>Collection</code> 
+     * of the client event names that the component supports.</p>
      */
     public Collection<String> getEventNames() {
         assertBehaviorHolder();
