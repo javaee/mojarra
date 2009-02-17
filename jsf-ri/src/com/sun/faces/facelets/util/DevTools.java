@@ -181,6 +181,10 @@ public final class DevTools {
     private static void writeVariables(Writer writer, FacesContext faces) throws IOException {
         ExternalContext ctx = faces.getExternalContext();
         writeVariables(writer, ctx.getRequestParameterMap(), "Request Parameters");
+        Map<String,Object> viewMap = faces.getViewRoot().getViewMap(false);
+        if (viewMap != null) {
+            writeVariables(writer, viewMap, "View Attributes");
+        }
         writeVariables(writer, ctx.getRequestMap(), "Request Attributes");
         if (ctx.getSession(false) != null) {
             writeVariables(writer, ctx.getSessionMap(), "Session Attributes");
