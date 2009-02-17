@@ -125,7 +125,7 @@ public final class DevTools {
         return str.split("@@");
     }
     
-    public static void debugHtml(Writer writer, FacesContext faces, Exception e) throws IOException {
+    public static void debugHtml(Writer writer, FacesContext faces, Throwable e) throws IOException {
         init();
         Date now = new Date();
         for (int i = 0; i < ERROR_PARTS.length; i++) {
@@ -150,7 +150,7 @@ public final class DevTools {
         }
     }
     
-    private static void writeException(Writer writer, Exception e) throws IOException {
+    private static void writeException(Writer writer, Throwable e) throws IOException {
         StringWriter str = new StringWriter(256);
         PrintWriter pstr = new PrintWriter(str);
         e.printStackTrace(pstr);
@@ -159,6 +159,8 @@ public final class DevTools {
     }
     
     public static void debugHtml(Writer writer, FacesContext faces) throws IOException {
+        // PENDING - this and debugHtml(Writer, FacesContext, Exception) should
+        //           be refactored to share code.
         init();
         Date now = new Date();
         for (int i = 0; i < DEBUG_PARTS.length; i++) {
