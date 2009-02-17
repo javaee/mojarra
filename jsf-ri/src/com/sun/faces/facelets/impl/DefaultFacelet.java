@@ -78,6 +78,7 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * Default Facelet implementation.
@@ -87,7 +88,7 @@ import com.sun.faces.facelets.tag.jsf.ComponentSupport;
  */
 final class DefaultFacelet extends Facelet {
 
-    private static final Logger log = Logger.getLogger("facelets.facelet");
+    private static final Logger log = FacesLogger.FACELETS_FACELET.getLogger();
 
     private final static String APPLIED_KEY = "com.sun.faces.facelets.APPLIED";
 

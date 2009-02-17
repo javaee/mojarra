@@ -58,6 +58,8 @@ import javax.faces.component.UIComponent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyValueBinding;
+import com.sun.faces.util.FacesLogger;
+
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.Metadata;
 import javax.faces.webapp.pdl.facelets.tag.MetaRule;
@@ -129,8 +131,7 @@ final class ComponentRule extends MetaRule {
 
     }
 
-    private final static Logger log = Logger
-            .getLogger("facelets.tag.component");
+    private final static Logger log = FacesLogger.FACELETS_COMPONENT.getLogger();
 
     public final static ComponentRule Instance = new ComponentRule();
 

@@ -70,6 +70,7 @@ import com.sun.faces.facelets.FaceletFactory;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * Default FaceletFactory implementation.
@@ -80,7 +81,7 @@ import com.sun.faces.util.Util;
  */
 public final class DefaultFaceletFactory extends FaceletFactory {
 
-    protected final static Logger log = Logger.getLogger("facelets.factory");
+    protected final static Logger log = FacesLogger.FACELETS_FACTORY.getLogger();
 
     private final Compiler compiler;
 

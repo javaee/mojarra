@@ -64,13 +64,15 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
+import com.sun.faces.util.FacesLogger;
+
 /**
  * @author Roland Huss
  * 
  */
 public final class Resource {
 
-    protected final static Logger log = Logger.getLogger("facelets.factory");
+    protected final static Logger log = FacesLogger.FACELETS_FACTORY.getLogger();
 
     /**
      * Get an URL of an internal resource. First,

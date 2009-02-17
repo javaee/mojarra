@@ -69,6 +69,8 @@ import java.util.logging.Logger;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
+
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 
 /**
@@ -80,8 +82,7 @@ final class MetaRulesetImpl extends MetaRuleset {
 
     private final static WeakHashMap metadata = new WeakHashMap();
     
-    private final static Logger log = Logger
-    .getLogger("facelets.tag.meta");
+    private final static Logger log = FacesLogger.FACELETS_META.getLogger();
 
     private final Tag tag;
 
