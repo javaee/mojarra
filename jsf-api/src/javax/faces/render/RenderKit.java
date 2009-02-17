@@ -241,8 +241,8 @@ public abstract class RenderKit {
      * @param type type of the {@link BehaviorRenderer} to register
      * @param renderer {@link BehaviorRenderer} instance we are registering
      *
-     * @throws NullPointerException if <code>family</code> or
-     *  <code>rendererType</code> or <code>renderer</code> is null
+     * @throws NullPointerException if <code>type</code> or 
+     * <code>renderer</code> is null
      *
      * @since 2.0
      */
@@ -258,8 +258,8 @@ public abstract class RenderKit {
      * @param type type of the requested
      *  {@link BehaviorRenderer} instance
      *
-     * @throws NullPointerException if <code>family</code> or
-     *  <code>rendererType</code> is <code>null</code>
+     * @throws NullPointerException if <code>type</code>
+     *  is <code>null</code>
      *
      * @since 2.0
      */
