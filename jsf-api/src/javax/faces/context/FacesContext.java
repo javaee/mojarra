@@ -644,18 +644,6 @@ public abstract class FacesContext {
     public abstract void validationFailed();
 
     /**
-     * <p class="changed_added_2_0">A convenience method to signal the
-     * JavaServer Faces implementation to invoke the NavigationHandler
-     * with the provided outcome. When the NavigationHandler is invoked,
-     * the current viewId is treated as the "from viewId" and the "from action"
-     * is null.</p>
-     * 
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     */
-    public abstract void fireNavigation(String outcome);
-
-    /**
      * <p class="changed_added_2_0">Return the value last set on this
      * <code>FacesContext</code> instance when {@link #setCurrentPhaseId}
      * was called.</p>

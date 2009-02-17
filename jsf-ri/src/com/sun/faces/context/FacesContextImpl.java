@@ -598,13 +598,6 @@ public class FacesContextImpl extends FacesContext {
     }
 
     /**
-     * @see javax.faces.context.FacesContext#fireNavigation(java.lang.String)
-     */
-    public void fireNavigation(String outcome) {
-        getApplication().getNavigationHandler().handleNavigation(this, null, outcome);
-    }
-
-    /**
      * @see javax.faces.context.FacesContext#getRenderResponse()
      */
     public boolean getRenderResponse() {

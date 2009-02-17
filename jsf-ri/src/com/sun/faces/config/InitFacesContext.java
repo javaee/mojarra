@@ -195,9 +195,6 @@ class InitFacesContext extends FacesContext {
     public void validationFailed() { }
 
     @Override
-    public void fireNavigation(String outcome) { }
-
-    @Override
     public ELContext getELContext() {
        return elContext;
     }

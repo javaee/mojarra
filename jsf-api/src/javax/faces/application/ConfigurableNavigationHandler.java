@@ -92,5 +92,16 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
      */
     public abstract Map<String, Set<NavigationCase>> getNavigationCases();
     
+    /**
+     * <p class="changed_added_2_0">A convenience method to signal the
+     * JavaServer Faces implementation to perform navigaton
+     * with the provided outcome. When the NavigationHandler is invoked,
+     * the current viewId is treated as the "from viewId" and the "from action"
+     * is null.</p>
+     * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     */
+    public abstract void performNavigation(String outcome);
 
 }

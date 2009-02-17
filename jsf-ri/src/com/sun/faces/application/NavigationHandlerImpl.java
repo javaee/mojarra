@@ -209,6 +209,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         } 
     }
 
+    @Override
+    public void performNavigation(String outcome) {
+        this.handleNavigation(FacesContext.getCurrentInstance(), null, outcome);
+    }
+
+
 
     // --------------------------------------------------------- Private Methods
 

@@ -172,6 +172,8 @@ public class UIPageParameter extends UIInput {
 
     // This is the "Apply Request Phase" step
     // QUESTION should we just override processDecodes() directly?
+    // ANSWER: In this case, no.  We don't want to take responsibility for 
+    // traversing any children we may have in the future.
     @Override
     public void decode(FacesContext context) {
         if (context == null) {
@@ -180,6 +182,7 @@ public class UIPageParameter extends UIInput {
 
         // QUESTION can we move forward and support an array? no different than UISelectMany; perhaps need to know
         // if the value expression is single or multi-valued
+        // ANSWER: I'd rather not right now.
         String paramValue = context.getExternalContext().getRequestParameterMap().get(getName());
 
         // submitted value will stay as previous value (null on initial request) if a parameter is absent
@@ -191,6 +194,14 @@ public class UIPageParameter extends UIInput {
         setValid(true);
 
     }
+    
+    /**
+     * <p class="changed_added_2_0">Specialize superclass behavior to treat
+     * <code>null</code> differently.  In this class, a <code>null</code> value
+     * along with the "required" flag being set to <code>true</code> will
+     * cause a validation failure. </p>
+     * @param context
+     */
 
     @Override
     public void processValidators(FacesContext context) {
@@ -233,6 +244,7 @@ public class UIPageParameter extends UIInput {
         super.updateModel(context);
         if (!hasValueExpression() && isValid() && isLocalValueSet()) {
             // QUESTION should this be done even when a value expression is present?
+            // ANSWER: I don't see why not.
             context.getExternalContext().getRequestMap().put(getName(), getLocalValue());
         }
     }
@@ -246,6 +258,7 @@ public class UIPageParameter extends UIInput {
 
         // if there is a value expression, update page parameter w/ latest value after render
         // QUESTION is it okay that a null string value may be suppressing the page parameter value?
+        // ANSWER: I'm not sure.
         setSubmittedValue(getStringValue(context));
     }
 
@@ -297,6 +310,7 @@ public class UIPageParameter extends UIInput {
         for (UIPageParameter candidate : pageParams) {
             if (candidate.getName().equals(name)) {
                 // QUESTION: should this be getStringValue()? That's how it is implemented in Seam
+                // ANSWER: I don't know.
                 return candidate.getStringValue(context);
             }
         }
