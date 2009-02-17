@@ -1259,7 +1259,11 @@ private void doFind(FacesContext context, String clientId) {
      * <p>Broadcast the specified {@link FacesEvent} to all registered
      * event listeners who have expressed an interest in events of this
      * type.  Listeners are called in the order in which they were
-     * added.</p>
+     * added.</p>  
+     * <p class="changed_added_2_0">If the <code>event</code> is an instance of 
+     * {@link javax.faces.event.BehaviorEvent} and the current 
+     * <code>component</code> is the source of the <code>event</code>
+     * call {@link javax.faces.event.BehavorEvent#getTargetBehavior()#broadcast(javax.faces.event.BehaviorEvent)}}.</p>
      *
      * @param event The {@link FacesEvent} to be broadcast
      *

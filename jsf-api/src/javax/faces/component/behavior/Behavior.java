@@ -45,6 +45,7 @@ import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.render.BehaviorRenderer;
 import javax.faces.render.RenderKit;
@@ -77,7 +78,6 @@ public abstract class Behavior {
      *
      * @param context the {@link FacesContext} for the current request
      * @param component the component instance that generates event.
-     * @param behavior the behavior instance that generates script.
      * @param eventName name of the client-side event.  If this argument is
      * <code>null</code> it is assumed the caller will include the 
      * client-side event name with the return value from this method.
@@ -89,7 +89,6 @@ public abstract class Behavior {
      */      
     public String getScript(FacesContext context,
                                      UIComponent component,
-                                     Behavior behavior,
                                      String eventName) {
     	// TODO - check null parameters.
     	BehaviorRenderer renderer = getRenderer(context);
@@ -136,36 +135,58 @@ public abstract class Behavior {
     public abstract String getRendererType();
     
     /**
-     * <p class="changed_added_2_0">Convenience method to return the {@link BehaviorRenderer} instance
-     * associated with this {@link Behavior}, if any; otherwise, return
+     * <p class="changed_added_2_0">Convenience method to return the {@link BehaviorRenderer} 
+     * instance associated with this {@link Behavior}, if any; otherwise, return
      * <code>null</code>.
      * </p>
      * @param context {@link FacesContext} for the request we are processing
      * @return {@link BehaviorRenderer} instance from the current {@link RenderKit} or null.
+     *
+     * @throws NullPointerException if <code>context</code> is null. 
      */
     protected BehaviorRenderer getRenderer(FacesContext context) {
     	if(null == context){
     		throw new NullPointerException();
     	}
     	BehaviorRenderer renderer = null;
-		String rendererType = getRendererType();
-		if(null != rendererType){
-			RenderKit renderKit = context.getRenderKit();
-			if(null != renderKit){
-				renderer = renderKit.getBehaviorRenderer(rendererType);
-			}
-			if(null == renderer){
-				if(logger.isLoggable(Level.FINE)){
-					logger.fine("Can't get  behavior renderer for type " + rendererType);
-				}				
-			}
-		} else {
-			if(logger.isLoggable(Level.FINE)){
-				logger.fine("No renderer-type for behavior " + this.getClass().getName());
-			}
-		}
-		return renderer;
-	}
+        String rendererType = getRendererType();
+        if (null != rendererType){
+            RenderKit renderKit = context.getRenderKit();
+            if (null != renderKit){
+                renderer = renderKit.getBehaviorRenderer(rendererType);
+            }
+            if (null == renderer){
+                if (logger.isLoggable(Level.FINE)){
+                    logger.fine("Can't get  behavior renderer for type " + rendererType);
+                }				
+            }
+        } else {
+            if(logger.isLoggable(Level.FINE)){
+                logger.fine("No renderer-type for behavior " + this.getClass().getName());
+            }
+        }
+        return renderer;
+    }
+
+    /**
+     * <p>Broadcast the specified {@link BehaviorEvent} to all registered
+     * event listeners who have expressed an interest in events of this
+     * type.  Listeners are called in the order in which they were
+     * added.</p>
+     *
+     * @param event The {@link BehaviorEvent} to be broadcast
+     *
+     * @throws AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
+     * @throws IllegalArgumentException if the implementation class
+     *  of this {@link BehaviorEvent} is not supported by this component
+     * @throws NullPointerException if <code>event</code> is
+     * <code>null</code>
+     */
+    public abstract void broadcast(BehaviorEvent event)
+        throws AbortProcessingException;
+
     
     public void processEvent(BehaviorEvent event) {
 		

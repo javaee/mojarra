@@ -54,19 +54,20 @@ import javax.faces.event.FacesEvent;
  */
 public abstract class BehaviorEvent extends FacesEvent {
 
-	private final Behavior targetBehavior;
-	/**
-	 * @param component
-	 */
-	public BehaviorEvent(UIComponent component, Behavior targetBehavior) {
-		super(component);
-		this.targetBehavior = targetBehavior;
-	}
-	/**
-	 * @return the targetBehavior
-	 */
-	public Behavior getTargetBehavior() {
-		return targetBehavior;
-	}
+    private final Behavior targetBehavior;
+    /**
+     * @param component
+     */
+    public BehaviorEvent(UIComponent component, Behavior targetBehavior) {
+        super(component);
+        this.targetBehavior = targetBehavior;
+    }
+
+    /**
+     * @return the targetBehavior
+     */
+    public Behavior getTargetBehavior() {
+        return targetBehavior;
+    }
 
 }

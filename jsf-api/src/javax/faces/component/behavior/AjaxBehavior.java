@@ -43,6 +43,11 @@ package javax.faces.component.behavior;
 import java.io.Serializable;
 
 import javax.el.ValueExpression;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.BehaviorEvent;
+import javax.faces.event.FacesEvent;
 
 
 /**
@@ -203,5 +208,33 @@ public class AjaxBehavior extends Behavior implements Serializable {
         return disabledExpression;
 
     }
+
+    /**
+     * <p class="changed_added_2_0">Pass the {@link BehaviorEvent} being 
+     * broadcast to the method referenced by <code>actionListener</code> (if any),
+     * and to the default {@link ActionListener} registered on the
+     * {@link javax.faces.application.Application}.</p>
+     *
+     * @param event {@link FacesEvent} to be broadcast
+     *
+     * @throws AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
+     * @throws IllegalArgumentException if the implementation class
+     *  of this {@link FacesEvent} is not supported by this component
+     * @throws NullPointerException if <code>event</code> is
+     * <code>null</code>
+     *
+     * @since 2.0
+     */
+    public void broadcast(BehaviorEvent event) throws AbortProcessingException {}
+
+    public String getScript(FacesContext context,
+                                     UIComponent component,
+                                     String eventName) {
+        return "jsf.ajax.request(this,event);return false;";
+    }
+
+
 
 }

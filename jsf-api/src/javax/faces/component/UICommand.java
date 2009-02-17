@@ -54,6 +54,10 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 
+//TODO REmove
+import java.util.Collection;
+import java.util.ArrayList;
+import javax.faces.component.behavior.BehaviorHolder;
 
 /**
  * <p><strong>UICommand</strong> is a {@link UIComponent} that represents
@@ -82,8 +86,9 @@ import javax.faces.render.Renderer;
  * <code>setRendererType()</code> method.</p>
  */
 
+//TODO Remove BehaviorHolder
 public class UICommand extends UIComponentBase
-    implements ActionSource2 {
+    implements ActionSource2, BehaviorHolder {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -415,4 +420,21 @@ public class UICommand extends UIComponentBase
         }
         super.queueEvent(e);
     }
+
+//TODO Remove
+
+static final Collection <String>behaviorNames;
+static {
+   behaviorNames = new ArrayList<String>(1);
+   behaviorNames.add("action");
+}
+
+public Collection<String>getEventNames() {
+    return behaviorNames;
+}
+
+public String getDefaultEventName() {
+    return "action";
+}
+
 }

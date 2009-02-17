@@ -68,7 +68,8 @@ public abstract class BehaviorRenderer {
 
     /**
      * <p class="changed_added_2_0">Return the script that implements this
-     * Behavior's client-side logic.</p>
+     * Behavior's client-side logic.  The default implementation returns 
+     * <code>null</code>.</p>
      *
      * @param context the {@link FacesContext} for the current request
      * @param component the component instance that generates event.
@@ -79,7 +80,6 @@ public abstract class BehaviorRenderer {
      *
      * @return script that provides the client-side behavior
      *
-     * PENDING: flesh out functionality
      */
     public String getScript(FacesContext context,
                                      UIComponent component,
@@ -102,11 +102,17 @@ public abstract class BehaviorRenderer {
      * @param context {@link UIComponent} the component associated with this {@link Behavior}
      * @param context {@link eventName} the event name associated with this {@link Behavior}
      *
-     * PENDING: Flesh out functionality
+     * @throws NullPointerException if <code>context</code>
+     *  or <code>component</code> or <code>eventName</code> is <code>null</code>
+     *
      */
     public void decode(FacesContext context,
                        UIComponent component,
                        String eventName) {
+        if (null == context || null == component || null == eventName) {
+            throw new NullPointerException();
+        }
+
     }
 
 }
