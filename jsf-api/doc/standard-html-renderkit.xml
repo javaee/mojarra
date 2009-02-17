@@ -2232,6 +2232,514 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </component-extension>
   </component>
   <component>
+    <component-type>javax.faces.PageParameter</component-type>
+    <component-class>javax.faces.component.UIPageParameter</component-class>
+
+    <property>
+      <description><![CDATA[
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        ]]></description>
+      <display-name>Attributes Map</display-name>
+      <icon/>
+      <property-name>attributes</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The number of child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component Count</display-name>
+      <icon/>
+      <property-name>childCount</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable List of the child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component List</display-name>
+      <icon/>
+      <property-name>children</property-name>
+      <property-class>java.util.List</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        ]]></description>
+      <display-name>Facets Map</display-name>
+      <icon/>
+      <property-name>facets</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        ]]></description>
+      <display-name>Component Family</display-name>
+      <icon/>
+      <property-name>family</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        ]]></description>
+      <display-name>Component Identifier</display-name>
+      <icon/>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        ]]></description>
+      <display-name>Parent Component</display-name>
+      <icon/>
+      <property-name>parent</property-name>
+      <property-class>javax.faces.component.UIComponent</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.  The default value for this property is true.
+        ]]></description>
+      <display-name>Rendered Flag</display-name>
+      <icon/>
+      <property-name>rendered</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        ]]></description>
+      <display-name>Renderer Type</display-name>
+      <icon/>
+      <property-name>rendererType</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        ]]></description>
+      <display-name>Renders Children</display-name>
+      <icon/>
+      <property-name>rendersChildren</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Converter instance registered with this component.
+        </description>
+      <display-name>Converter</display-name>
+      <icon/>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          For output components, this is the same as the "value" property.
+          For input components, this is the most recently user-entered
+          value, which will be pushed to the application data model during
+          Update Model Values phase, if a value binding is present for the
+          "value" property.
+        </description>
+      <display-name>Local Value</display-name>
+      <icon/>
+      <property-name>localValue</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The current value of this component.
+        </description>
+      <display-name>Value</display-name>
+      <icon/>
+      <property-name>value</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating whether the "localValue" property
+          of this component has been set.  This property is
+          reset automatically when the "value" propertyis set.
+        </description>
+      <display-name>Local Value Set</display-name>
+      <icon/>
+      <property-name>localValueSet</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating that the user is required to provide a submitted
+          value for this input component.
+        </description>
+      <display-name>Required Flag</display-name>
+      <icon/>
+      <property-name>required</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The value submitted for this input component by the user, prior to
+          any required conversion or validation.
+        </description>
+      <display-name>Submitted Value</display-name>
+      <icon/>
+      <property-name>submittedValue</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          MethodExpression representing a validator method that will be called
+          during Process Validations to perform correctness checks on the
+          value of this component.  The expression must evaluate to a public
+          method that takes FacesContext, UIComponent, and Object parameters,
+          with a return type of void.
+        </description>
+      <display-name>Validator</display-name>
+      <icon/>
+      <property-name>validator</property-name>
+      <property-class>javax.el.MethodExpression</property-class>
+      <property-extension>
+        <method-signature>
+                void validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)
+            </method-signature>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
+      <display-name>Value Change Listener</display-name>
+      <icon/>
+      <property-name>valueChangeListener</property-name>
+      <property-class>javax.el.MethodExpression</property-class>
+      <property-extension>
+        <method-signature>
+                void valueChange(javax.faces.event.ValueChangeEvent)
+            </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating that this component's value must be
+          converted and validated immediately (that is, during
+          Apply Request Values phase), rather than waiting
+          until Process Validations phase.
+        </description>
+      <display-name>Immediate Action</display-name>
+      <icon/>
+      <property-name>immediate</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating whether or not any required conversion or validation
+          on this component value has been performed successfully.
+        </description>
+      <display-name>Valid Flag</display-name>
+      <icon/>
+      <property-name>valid</property-name>
+      <property-class>valid</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description><![CDATA[
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        ]]></description>
+      <display-name>Attributes Map</display-name>
+      <icon/>
+      <property-name>attributes</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The number of child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component Count</display-name>
+      <icon/>
+      <property-name>childCount</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable List of the child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component List</display-name>
+      <icon/>
+      <property-name>children</property-name>
+      <property-class>java.util.List</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        ]]></description>
+      <display-name>Facets Map</display-name>
+      <icon/>
+      <property-name>facets</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        ]]></description>
+      <display-name>Component Family</display-name>
+      <icon/>
+      <property-name>family</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        ]]></description>
+      <display-name>Component Identifier</display-name>
+      <icon/>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        ]]></description>
+      <display-name>Parent Component</display-name>
+      <icon/>
+      <property-name>parent</property-name>
+      <property-class>javax.faces.component.UIComponent</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.  The default value for this property is true.
+        ]]></description>
+      <display-name>Rendered Flag</display-name>
+      <icon/>
+      <property-name>rendered</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        ]]></description>
+      <display-name>Renderer Type</display-name>
+      <icon/>
+      <property-name>rendererType</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        ]]></description>
+      <display-name>Renders Children</display-name>
+      <icon/>
+      <property-name>rendersChildren</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Name of the parameter associated with this component.
+        </description>
+      <display-name>Property Name</display-name>
+      <icon/>
+      <property-name>name</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
+          Value of the parameter associated with this component.
+        </description>
+      <display-name>Property Value</display-name>
+      <icon/>
+      <property-name>value</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+
+    <component-extension>
+      <component-family>javax.faces.PageParameter</component-family>
+    </component-extension>
+  </component>
+  <component>
     <component-type>javax.faces.Parameter</component-type>
     <component-class>javax.faces.component.UIParameter</component-class>
 
