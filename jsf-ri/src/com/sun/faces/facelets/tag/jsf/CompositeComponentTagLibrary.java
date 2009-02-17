@@ -54,6 +54,8 @@ package com.sun.faces.facelets.tag.jsf;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.*;
+import com.sun.faces.util.FacesLogger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -66,6 +68,8 @@ import javax.faces.context.FacesContext;
 
 public class CompositeComponentTagLibrary extends TagLibraryImpl {
     
+    private static final Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
+
     public CompositeComponentTagLibrary(String ns) {
         super(ns);
         if (null == ns) {
@@ -101,7 +105,9 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
             try {
                 componentStream = compositeComponentResource.getInputStream();
             } catch (IOException ex) {
-                Logger.getLogger(CompositeComponentTagLibrary.class.getName()).log(Level.SEVERE, null, ex);
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                }
             }
             result = (componentStream != null || super.containsTagHandler(ns, localName));
         }
@@ -164,7 +170,9 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
         try {
             result = (null != scriptComponentResource) && (null != scriptComponentResource.getInputStream());
         } catch (IOException ex) {
-            Logger.getLogger(CompositeComponentTagLibrary.class.getName()).log(Level.SEVERE, null, ex);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            }
         }
         
         return result;

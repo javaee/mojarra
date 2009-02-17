@@ -79,6 +79,8 @@ import com.sun.faces.facelets.el.VariableMapperWrapper;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.FacesLogger;
+
 import javax.el.MethodExpression;
 import javax.faces.application.ViewHandler;
 
@@ -86,6 +88,8 @@ import javax.faces.application.ViewHandler;
  * RELEASE_PENDING (rlubke,driscoll) document
  */
 public class CompositeComponentTagHandler extends ComponentHandler {
+
+    private static final Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
     
     CompositeComponentTagHandler(Resource compositeComponentResource,
             ComponentConfig config) {
@@ -204,16 +208,11 @@ public class CompositeComponentTagHandler extends ComponentHandler {
             };
             ctx.setVariableMapper(wrapper);
             f.apply(facesContext, facetComponent);
-        } catch (IOException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FaceletException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FacesException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ELException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally {
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+            }
+        } finally {
             ctx.setVariableMapper(orig);
         }
 

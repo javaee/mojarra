@@ -74,6 +74,8 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
+import com.sun.faces.util.FacesLogger;
+
 import java.util.Map;
 import javax.faces.event.InitialStateEvent;
 
@@ -86,8 +88,7 @@ import javax.faces.event.InitialStateEvent;
  */
 public class ComponentHandler extends MetaTagHandlerImpl {
 
-    private final static Logger log = Logger
-            .getLogger("facelets.tag.component");
+    private final static Logger log = FacesLogger.FACELETS_COMPONENT.getLogger();
     
     private final TagAttribute binding;
 

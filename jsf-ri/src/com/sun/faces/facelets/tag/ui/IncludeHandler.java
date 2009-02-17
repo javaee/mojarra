@@ -64,6 +64,8 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.util.FacesLogger;
+
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
@@ -74,7 +76,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
  */
 public final class IncludeHandler extends TagHandlerImpl {
 
-    private static final Logger log = Logger.getLogger("facelets.tag.ui.include");
+    private static final Logger log = FacesLogger.FACELETS_INCLUDE.getLogger();
 
     private final TagAttribute src;
 
