@@ -44,12 +44,15 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.AjaxBehavior;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -157,7 +160,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
-        RenderKitUtils.renderOnclick(context, component, params, ajaxBehavior);
+        RenderKitUtils.renderOnclick(context, component, params, getClickBehaviors(component));
 
 
         writer.endElement("input");
@@ -174,6 +177,17 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     // --------------------------------------------------------- Private Methods
 
+    private List<Behavior> getClickBehaviors(UIComponent component) {
+        if (component instanceof BehaviorHolder) {
+            BehaviorHolder bHolder = (BehaviorHolder)component;
+            Map <String, List <Behavior>> behaviors = bHolder.getBehaviors();
+//TODO: Added support for 'cick' events
+            if (null != behaviors) {
+                return behaviors.get("action");
+            }
+        }
+        return null;
+    }
 
     /**
      * @param context the <code>FacesContext</code> for the current request

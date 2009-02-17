@@ -57,12 +57,13 @@ import java.util.*;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.ActionSource;
-import javax.faces.component.AjaxBehavior;
-import javax.faces.component.AjaxBehaviors;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.AjaxBehaviors;
+import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
@@ -161,8 +162,6 @@ public final class AjaxHandler extends TagHandlerImpl {
             return;
         } 
 
-        if (
-
         String event = (this.event != null) ? this.event.getValue() : null;
 
         //AjaxBehavior ajaxBehavior = new AjaxBehavior(event, onevent, onerror, execute, render, disabled);
@@ -174,30 +173,29 @@ public final class AjaxHandler extends TagHandlerImpl {
                                                      ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null));
 
         //
-        // If we are nested within an EditableValueHolder or ActionSource component..
+        // If we are nested within an BehaviorHolder
         //
-        if (parent instanceof ActionSource) {
-            if (null == event || event.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
-                event.equals(AjaxBehavior.AJAX_ACTION)) {
-                parent.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
-                installAjaxResourceIfNecessary();
-                return;
+        if (parent instanceof BehaviorHolder) {
+            BehaviorHolder bHolder = (BehaviorHolder)parent;
+            if (null == event) {
+                event = bHolder.getDefaultEventName();
+                if (null == event) {
+                 //TODO log warning..
+                    return;
+                }
             } else {
-                // RELEASE_PENDING 118N
-                throw new TagAttributeException(this.event, "'event' attribute value must be 'action' for 'ActionSource' components");
+                if (!bHolder.getEventNames().contains(event)) {
+                    //TODO log warning; check for null return from getEventNames
+                    return;
+                }               
             }
-        } else if (parent instanceof EditableValueHolder) {
-            if (null == event || event.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
-                event.equals(AjaxBehavior.AJAX_VALUE_CHANGE)) {
-                parent.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
-                installAjaxResourceIfNecessary();
-                return;
-            } else {
-                // RELEASE_PENDING 118N
-                throw new TagAttributeException(this.event, "'event' attribute value must be 'valueChange' for 'EditableValueHolder' components");
-            }
+            bHolder.addBehavior(event, ajaxBehavior);
+            installAjaxResourceIfNecessary();
+            return;
         }
             
+//TODO:implement for Behavior 
+/*
         AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
             get(AjaxBehaviors.AJAX_BEHAVIORS);
         if (ajaxBehaviors == null) {
@@ -216,6 +214,7 @@ public final class AjaxHandler extends TagHandlerImpl {
         if (ajaxBehaviors != null) {
             ajaxBehaviors.popBehavior();
         }
+*/
     }
 
     // Only install the Ajax resource if it doesn't exist.

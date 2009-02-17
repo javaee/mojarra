@@ -49,6 +49,8 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
@@ -305,263 +307,29 @@ public class RenderKitUtils {
     public static String buildAjaxCommand(FacesContext context,
                                           UIComponent component,
                                           AjaxBehavior ajaxBehavior) {
-        final String AJAX_REQUEST = "jsf.ajax.request";
-        // Is there already an option written?
-        boolean already = false;
-        StringBuilder ajaxCommand = new StringBuilder(256);
-        Collection<String> execute = ajaxBehavior.getExecute(context);
-        Collection<String> render = ajaxBehavior.getRender(context);
-        String onevent = ajaxBehavior.getOnEvent(context);
-        String onerror = ajaxBehavior.getOnError(context);
-        ajaxCommand.append(AJAX_REQUEST);
-        ajaxCommand.append("(this, event");
-        if (execute != null || render != null) {
-            ajaxCommand.append(", {");
-        }
-        if (execute != null) {
-            already = true;
-            boolean first = true;
-            ajaxCommand.append("execute:'");
-            for (String exe : execute) {
-                if (!first) {
-                    ajaxCommand.append(' ');
-                } else {
-                    first = false;
-                }
-                UIComponent resolvedComponent = findComponent(component, exe);
-                if (resolvedComponent == null) {
-                    // RELEASE_PENDING  i18n
-                    throw new FacesException(
-                          "'execute' attribute contains unknown id '"
-                          + exe
-                          + "'");
-                }
-                ajaxCommand.append(resolvedComponent.getClientId());
-            }
-            ajaxCommand.append('\'');
-        }
-        if (render != null) {
-            if (already) {
-                ajaxCommand.append(',');
-            } else {
-                already = true;
-            }
-            boolean first = true;
-            ajaxCommand.append("render:'");
-            for (String rend : render) {
-                if (!first) {
-                    ajaxCommand.append(' ');
-                } else {
-                    first = false;
-                }
-                UIComponent resolvedComponent = findComponent(component, rend);
-                if (resolvedComponent == null) {
-                    // RELEASE_PENDING  i18n
-                    throw new FacesException("'render' attribute contains unknown id '"+rend+"'");
-                }
-                ajaxCommand.append(resolvedComponent.getClientId());
-            }
-            ajaxCommand.append('\'');
-        }
-        if (onevent != null) {
-            if (already) {
-                ajaxCommand.append(',');
-            } else {
-                already = true;
-            }
-            ajaxCommand.append("onevent:");
-            ajaxCommand.append(onevent);
-        }
-        if (onerror != null) {
-            if (already) {
-                ajaxCommand.append(',');
-            } else {
-                already = true;
-            }
-            ajaxCommand.append("onerror:");
-            ajaxCommand.append(onerror);
-        }
-        if (already) {
-            ajaxCommand.append('}');
-        }
-
-        ajaxCommand.append(");");
-
-        return ajaxCommand.toString();
+        return "";
     }
 
     public static void renderOnchange(FacesContext context, UIComponent component)
         throws IOException {
 
-        boolean isCommand = false;
-        final String event = "onchange";
-
-        // is there a user Onchange?
-        boolean userSpecifiedOnchange = false;
-        // do we need to render ajax?
-        boolean renderAjax = false;
-        // String buffer for final output
-        StringBuffer sb;
-        // the ajax command to render
-        String ajaxCommand = "";
-        // the user supplied onchange to render
-        String userOnchange;
-
-        ResponseWriter writer = context.getResponseWriter();
-
-        userOnchange = (String) component.getAttributes().get(event);
-        userSpecifiedOnchange = (userOnchange != null && !"".equals(userOnchange));
-
-        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled(context));
-        if (!userSpecifiedOnchange && !renderAjax) { // nothing to do
-            return;  // save the effort of creating the StringBuffer
-        }
-
-        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
-
-        sb = new StringBuffer(256);
-
-        if (userSpecifiedOnchange && renderAjax) { // Doing both
-            // RELEASE_PENDING driscoll this should use the jsfcbk function, move the detection
-            // into the relevant components, or figure something better out
-            sb.append("var a=function(event){");
-            userOnchange = userOnchange.trim();
-            sb.append(userOnchange);
-            if (userOnchange.charAt(userOnchange.length() - 1) != ';') {
-                sb.append(';');
-            }
-            sb.append("};var b=function(event){");
-            sb.append(ajaxCommand);
-            sb.append("};return mojarra.jsfcbk(a,this,event) ? mojarra.jsfcbk(b,this,event) : false;");
-        } else if (userSpecifiedOnchange) { // do one
-            sb.append(userOnchange);
-        } else if (renderAjax) { // do the other
-            sb.append(ajaxCommand);
-        }
-
-        // At last, write out the completed attribute
-        if (userSpecifiedOnchange || renderAjax) {
-            writer.writeAttribute(event, sb.toString(), event);
-        }
     }
 
+//TODO Support traditional (non behavior)
     public static void renderOnclick(FacesContext context, 
                                      UIComponent component, Param[] params,
-                                     AjaxBehavior ajaxBehavior)
+                                     List <Behavior> behaviors)
         throws IOException {
 
-        boolean isCommand = true;
-        final String event = "onclick";
-
-        // is there a user Onchange?
-        boolean userSpecifiedOnclick = false;
-        // do we need to render ajax?
-        boolean renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled(context));
-        // are there parameters to render?
-        boolean renderParams = (!Arrays.equals(params,EMPTY_PARAMS));
-        // String buffer for final output
-        StringBuffer sb;
-        // the ajax command to render
-        String ajaxCommand = "";
-        // the user supplied onchange to render
-        String userOnclick;
-        // Form Id
-        String formClientId = "";
-        // Client Id
-        String componentClientId = "";
-
-
-        if (renderParams) {
-            formClientId = getFormClientId(component, context);
-            componentClientId = component.getClientId(context);
-        }
-        ResponseWriter writer = context.getResponseWriter();
-
-        userOnclick = (String) component.getAttributes().get(event);
-        userSpecifiedOnclick = (userOnclick != null && !"".equals(userOnclick));
-        if (userSpecifiedOnclick) {
-            userOnclick = userOnclick.trim();
-        }
-
-        if (!userSpecifiedOnclick && !renderAjax && !renderParams) { // nothing to do
-            return;  // save the effort of creating the StringBuffer
-        }
-
-        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
-
-        sb = new StringBuffer(256);
-
-        if (userSpecifiedOnclick && renderAjax && renderParams) {
-            sb.append("var a=function(event){");
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                sb.append(';');
+        if (null != behaviors && !behaviors.isEmpty()) {
+//TODO Iterate over behaviors and chain scripts
+            String script = behaviors.get(0).getScript(context, component, "action");
+            if (null != script) {
+                ResponseWriter writer = context.getResponseWriter();
+                writer.writeAttribute("onclick", script, null);
             }
-            sb.append("};var b=function(event){");
-            sb.append(ajaxCommand);
-            sb.append("};if (mojarra.jsfcbk(a,this,event)===false) { return false;}else{");
-            sb.append("mojarra.apf(document.getElementById('");
-            sb.append(formClientId);
-            sb.append("'),");
-            sb.append(renderParams(componentClientId,params));
-            sb.append(");mojarra.jsfcbk(b,this,event); mojarra.dpf(document.getElementById('");
-            sb.append(formClientId);
-            sb.append("'));return false}");
-
-        } else if (userSpecifiedOnclick && renderAjax) {
-            sb.append("var a=function(event){");
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                sb.append(';');
-            }
-            sb.append("};var b=function(event){");
-            sb.append(ajaxCommand);
-            sb.append("return false;");
-            sb.append("};return (mojarra.jsfcbk(a,this,event)===false) ? false : mojarra.jsfcbk(b,this,event);");
-        } else if (userSpecifiedOnclick && renderParams) {
-            sb.append("var a=function(event){");
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                sb.append(';');
-            }
-            sb.append("};var b=function(event){");
-            sb.append(getCommandOnClickScript(formClientId,
-                                              componentClientId,
-                                              "",
-                                              params,
-                                              renderAjax));
-            sb.append("};return (mojarra.jsfcbk(a,this,event)===false) ? false : mojarra.jsfcbk(b,this,event);");
-        } else if (renderAjax && renderParams) {
-            sb.append("var a=function(event){");
-            sb.append(ajaxCommand);
-            sb.append("};mojarra.apf(document.getElementById('");
-            sb.append(formClientId);
-            sb.append("'),");
-            sb.append(renderParams(componentClientId,params));
-            sb.append(");mojarra.jsfcbk(a,this,event); mojarra.dpf(document.getElementById('");
-            sb.append(formClientId);
-            sb.append("')); return false;");
-        } else if (userSpecifiedOnclick) { // do one
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-               sb.append(';');
-            }
-        } else if (renderAjax) { // do one
-            sb.append(ajaxCommand);
-            sb.append("return false;");
-        } else if (renderParams) { // do one
-            sb.append(getCommandOnClickScript(formClientId,
-                                              componentClientId,
-                                              "",
-                                              params,
-                                              renderAjax));
         }
 
-        // At last, write out the completed attribute
-        if (userSpecifiedOnclick || renderAjax || renderParams) {
-            writer.writeAttribute(event, sb.toString(), event);
-        }
     }
 
 
