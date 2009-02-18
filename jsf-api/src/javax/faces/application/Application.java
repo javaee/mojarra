@@ -1739,22 +1739,4 @@ public abstract class Application {
 
     }
 
-    public void addPage(PageMetadata metadata) {
-        if (defaultApplication != null) {
-            defaultApplication.addPage(metadata);
-        } else {
-            throw new UnsupportedOperationException();
-        }
-        
-    }
-
-    public PageMetadata getPage(String viewId) {
-        if (defaultApplication != null) {
-            return defaultApplication.getPage(viewId);
-        } else {
-            throw new UnsupportedOperationException();
-        }
-        
-    }
-
 }

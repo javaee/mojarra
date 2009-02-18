@@ -71,7 +71,6 @@ import java.util.Map;
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.application.PageMetadata;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.event.PostRestoreStateEvent;
@@ -1482,9 +1481,6 @@ public class UIViewRoot extends UIComponentBase {
             pageParams.add(r.getUIPageParameter(context));
         }
 
-        PageMetadata page = new PageMetadata(context, getViewId(), pageParams);
-        context.getApplication().addPage(page);
-            
         return pageParams;
     }
     
@@ -1493,13 +1489,6 @@ public class UIViewRoot extends UIComponentBase {
     public void decodePageParameters(FacesContext context) {
         
         List<UIPageParameter> params = getPageParameters(context);
-
-        // END TENATIVE is this where we want this logic?
-        String viewId = context.getViewRoot().getViewId();
-        if (context.getApplication().getPage(viewId) == null) {
-            context.getApplication().addPage(new PageMetadata(context, viewId, params));
-        }
-        // END TENATIVE
 
         if (params.isEmpty()) {
             return;

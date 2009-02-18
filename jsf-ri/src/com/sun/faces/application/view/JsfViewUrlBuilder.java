@@ -40,7 +40,6 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.application.PageMetadata;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIPageParameter;
 import javax.faces.component.UIViewRoot;
@@ -161,9 +160,6 @@ public class JsfViewUrlBuilder extends UrlBuilder {
             pageParams.add(r.getUIPageParameter(context));
         }
 
-        PageMetadata page = new PageMetadata(context, viewId, pageParams);
-        context.getApplication().addPage(page);
-            
         return pageParams;
     }
 
