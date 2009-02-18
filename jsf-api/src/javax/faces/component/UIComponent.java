@@ -1587,8 +1587,24 @@ private void doFind(FacesContext context, String clientId) {
             if (null != previouslyPushedCompositeComponent) {
                 contextMap.put(CURRENT_COMPOSITE_COMPONENT, 
                         previouslyPushedCompositeComponent);
-            } 
+            } else {
+                contextMap.remove(CURRENT_COMPOSITE_COMPONENT);
+            }
         }
+
+    }
+
+
+    /**
+     * @param component the {@link UIComponent} to test
+     * @return <code>true</code> if <code>component</code> is a composite component,
+     *  otherwise <code>false</code>
+     *
+     * @since 2.0
+     */
+    public static boolean isCompositeComponent(UIComponent component) {
+
+        return (component.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY));
 
     }
 
