@@ -55,7 +55,23 @@
             <to-view-id>/home.xhtml</to-view-id>
             <redirect include-page-params="true"/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>story2WithParams</from-outcome>
+            <to-view-id>/story2.xhtml</to-view-id>
+            <redirect include-page-params="true"/>
+        </navigation-case>
     </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/story2.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>homeWithParams</from-outcome>
+            <to-view-id>/home.xhtml</to-view-id>
+            <redirect include-page-params="true"/>
+        </navigation-case>
+    </navigation-rule>
+
+
 
     <!--
     <navigation-rule>

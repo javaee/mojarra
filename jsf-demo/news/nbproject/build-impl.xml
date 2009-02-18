@@ -504,32 +504,11 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest" name="do-dist"/>
     <target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
-        <copy todir="${build.web.dir}/WEB-INF/classes">
-            <fileset dir="${libs.jsf-mojarra-trunk.classpath.libdir.3}" includes="**/*"/>
-        </copy>
-        <copy todir="${build.web.dir}/WEB-INF/classes">
-            <fileset dir="${libs.jsf-mojarra-trunk.classpath.libdir.2}" includes="**/*"/>
-        </copy>
-        <copy todir="${build.web.dir}/WEB-INF/classes">
-            <fileset dir="${libs.jsf-mojarra-trunk.classpath.libdir.1}" includes="**/*"/>
-        </copy>
         <mkdir dir="${build.web.dir}/META-INF"/>
-        <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value=""/>
-        </manifest>
+        <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
-    <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
-        <copy todir="${build.web.dir}/WEB-INF/classes">
-            <fileset dir="${libs.jsf-mojarra-trunk.classpath.libdir.3}" includes="**/*"/>
-        </copy>
-        <copy todir="${build.web.dir}/WEB-INF/classes">
-            <fileset dir="${libs.jsf-mojarra-trunk.classpath.libdir.2}" includes="**/*"/>
-        </copy>
-        <copy todir="${build.web.dir}/WEB-INF/classes">
-            <fileset dir="${libs.jsf-mojarra-trunk.classpath.libdir.1}" includes="**/*"/>
-        </copy>
-    </target>
+    <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir"/>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">
         <dirname file="${dist.ear.war}" property="dist.jar.dir"/>
         <mkdir dir="${dist.jar.dir}"/>
