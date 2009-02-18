@@ -1592,6 +1592,20 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
+     * @param component the {@link UIComponent} to test
+     * @return <code>true</code> if <code>component</code> is a composite component,
+     *  otherwise <code>false</code>
+     *
+     * @since 2.0
+     */
+    public static boolean isCompositeComponent(UIComponent component) {
+
+        return (component.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY));
+
+    }
+
+
+    /**
      * <p class="changed_added_2_0">Return the <code>UIComponent</code>
      * instance that is currently processing.  This is equivalent to
      * evaluating the EL expression "<code>#{component}</code>" and
