@@ -138,6 +138,19 @@
             </xsd:documentation>
         </xsd:annotation>
 
+        <xsd:unique name="faces-config-behavior-ID-uniqueness">
+            <xsd:annotation>
+                <xsd:documentation>
+
+                    Behavior IDs must be unique within a document.
+
+                </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:selector xpath="javaee:behavior"/>
+            <xsd:field    xpath="javaee:behavior-id"/>
+        </xsd:unique>
+
         <xsd:unique name="faces-config-converter-ID-uniqueness">
             <xsd:annotation>
                 <xsd:documentation>
@@ -246,6 +259,8 @@
                          type="javaee:faces-config-lifecycleType"/>
             <xsd:element name="validator"
                          type="javaee:faces-config-validatorType"/>
+            <xsd:element name="behavior"
+                         type="javaee:faces-config-behaviorType"/>
             <xsd:element name="faces-config-extension"
                          type="javaee:faces-config-extensionType"
                          minOccurs="0"
@@ -2211,6 +2226,118 @@
                 <xsd:attribute name="id" type="xsd:ID"/> 
             </xsd:extension>
         </xsd:simpleContent>
+    </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name="faces-config-behaviorType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                The "behavior" element represents a concrete Behavior 
+                implementation class that should be registered under the
+                specified behavior identifier.  Behavior identifiers must
+                be unique within the entire web application.
+
+                Nested "attribute" elements identify generic attributes that
+                may be configured on the corresponding UIComponent in order
+                to affect the operation of the Behavior.  Nested "property"
+                elements identify JavaBeans properties of the Behavior 
+                implementation class that may be configured to affect the
+                operation of the Behavior.  "attribute" and "property"
+                elements are intended to allow component developers to
+                more completely describe their components to tools and users.
+                These elements have no required runtime semantics.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:group ref="javaee:descriptionGroup"/>
+            <xsd:element name="behavior-id"
+                         type="javaee:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "behavior-id" element represents the identifier
+                        under which the corresponding Behavior class should
+                        be registered.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="behavior-class"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "behavior-class" element represents the fully
+                        qualified class name of a concrete Behavior 
+                        implementation class.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="attribute"
+                         type="javaee:faces-config-attributeType"
+                         minOccurs="0"
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                       Nested "attribute" elements identify generic
+                       attributes that may be configured on the
+                       corresponding UIComponent in order to affect the
+                       operation of the Behavior.  This attribute is
+                       primarily for design-time tools and is not
+                       specified to have any meaning at runtime.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+
+            </xsd:element>
+            <xsd:element name="property"
+                         type="javaee:faces-config-propertyType"
+                         minOccurs="0"
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                       Nested "property" elements identify JavaBeans
+                       properties of the Behavior implementation class
+                       that may be configured to affect the operation of
+                       the Behavior.  This attribute is primarily for
+                       design-time tools and is not specified to have
+                       any meaning at runtime.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="behavior-extension"
+                         type="javaee:faces-config-behavior-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-behavior-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for behavior.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
 
     <!-- **************************************************** -->

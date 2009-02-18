@@ -679,6 +679,12 @@ public abstract class Application {
     	throws FacesException;
 
     /**
+     * <p>Return an <code>Iterator</code> over the set of currently registered
+     * behavior ids for this <code>Application</code>.</p>
+     */
+    public abstract Iterator<String> getBehaviorIds();
+
+    /**
      * <p>Register a new mapping of component type to the name of the
      * corresponding {@link UIComponent} class.  This allows subsequent calls
      * to <code>createComponent()</code> to serve as a factory for

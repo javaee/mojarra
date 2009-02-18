@@ -849,6 +849,14 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
+    /**
+     * @see javax.faces.application.Application#getBehaviorIds()
+     */
+    public Iterator<String> getBehaviorIds() {
+
+        return behaviorMap.keySet().iterator();
+
+    }
 
     /**
      * @see javax.faces.application.Application#addComponent(String, String)
