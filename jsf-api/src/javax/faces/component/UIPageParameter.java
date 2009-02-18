@@ -426,5 +426,34 @@ public class UIPageParameter extends UIInput {
         setSubmittedValue(values[2]);
 
     }
+    
+    public static class Reference {
+        
+        private int indexInParent = 0;
+        
+        public Reference(int indexInParent)     {
+            this.indexInParent = indexInParent;
+        }
+        
+        public UIPageParameter getUIPageParameter(FacesContext context) {
+            UIPageParameter result = null;
+            UIViewRoot root = context.getViewRoot();
+            UIComponent metadataFacet = root.getFacet("metadata");
+            
+            if (null == metadataFacet) {
+                return null;
+            } else {
+                if (0 == indexInParent && 
+                    metadataFacet instanceof UIPageParameter) {
+                    result = (UIPageParameter) metadataFacet;
+                } else {
+                    result = (UIPageParameter) metadataFacet.getChildren().get(indexInParent);
+                }
+            }
+            
+            return result;
+        }
+        
+    }
 
 }

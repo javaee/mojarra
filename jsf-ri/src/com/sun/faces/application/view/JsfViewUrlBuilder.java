@@ -36,6 +36,9 @@
 
 package com.sun.faces.application.view;
 
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.PageMetadata;
 import javax.faces.application.ViewHandler;
@@ -151,14 +154,18 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         // QUESTION what if the page has changed? we need Facelets to dump the page; or perhaps this is a production time optimization
         List<UIPageParameter> pageParams = context.getApplication().restorePageParameters(context, viewId);
         if (pageParams == null) {
-            UIViewRoot currentViewRoot = context.getViewRoot();
-            context.getAttributes().put(ViewHandler.ONLY_BUILD_METADATA_FACET_KEY, true);
-            UIViewRoot toViewRoot = viewHandler.createView(context, viewId);
-            context.setViewRoot(currentViewRoot);
-            context.getAttributes().remove(ViewHandler.ONLY_BUILD_METADATA_FACET_KEY);
-            pageParams = toViewRoot.getPageParameters();
+            BeanInfo otherWay = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getViewMetadata(context, viewId);
+            BeanDescriptor otherBd = otherWay.getBeanDescriptor();
+            List<UIPageParameter.Reference> params = (List<UIPageParameter.Reference>) 
+                    otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
+            pageParams = new ArrayList<UIPageParameter>(params.size());
+            for (UIPageParameter.Reference r : params) {
+                pageParams.add(r.getUIPageParameter(context));
+            }
+
             PageMetadata page = new PageMetadata(context, viewId, pageParams);
             context.getApplication().addPage(page);
+            
         }
 
         return pageParams;

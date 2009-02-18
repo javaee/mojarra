@@ -79,6 +79,7 @@ public abstract class PageDeclarationLanguage {
      */
     public abstract BeanInfo getComponentMetadata(FacesContext context, Resource componentResource);
 
+    public abstract BeanInfo getViewMetadata(FacesContext context, String viewId);
 
     /**
      * <p class="changed_added_2_0">Take implementation specific action

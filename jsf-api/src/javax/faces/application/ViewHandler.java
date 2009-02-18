@@ -176,9 +176,6 @@ public abstract class ViewHandler {
             "javax.faces.FACELETS_VIEW_MAPPINGS";
 
 
-    public static final String ONLY_BUILD_METADATA_FACET_KEY =
-            "javax.faces.application.ONLY_BUILD_METADATA_FACET";
-
     // ---------------------------------------------------------- Public Methods
 
 
