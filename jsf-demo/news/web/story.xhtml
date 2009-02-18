@@ -12,7 +12,7 @@
                 validatorMessage="Invalid headline. (The id parameter is not a positive number)">
                 <f:validateLongRange minimum="1"/>
             </f:pageParam>
-            <f:event type="preRenderComponent" listener="#{newsReader.loadStory}"/>
+            <f:event type="preRenderView" listener="#{newsReader.loadStory}"/>
         </f:facet>
     <body>
         <h:messages style="color: red; list-style: none; border: 0 solid red; border-left-width: 2px; padding: 0 5px;"/>

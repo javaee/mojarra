@@ -55,7 +55,7 @@ import java.util.logging.Logger;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.OnOffResponseWrapper;
 import com.sun.faces.util.DebugUtil;
-import javax.faces.event.PreRenderComponentEvent;
+import javax.faces.event.PreRenderViewEvent;
 
 
 /**
@@ -94,7 +94,7 @@ public class RenderResponsePhase extends Phase {
         
         try {
             // the before render event on the view root is a special case to keep door open for navigation
-            facesContext.getApplication().publishEvent(PreRenderComponentEvent.class, facesContext.getViewRoot());
+            facesContext.getApplication().publishEvent(PreRenderViewEvent.class, facesContext.getViewRoot());
             //render the view
             facesContext.getApplication().getViewHandler().
                  renderView(facesContext, facesContext.getViewRoot());
