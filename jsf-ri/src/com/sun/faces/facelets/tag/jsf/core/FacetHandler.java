@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
 
@@ -114,7 +115,7 @@ public final class FacetHandler extends TagHandlerImpl {
         
         if (parent instanceof UIViewRoot &&
             METADATA_FACET_NAME.equals(facetName) &&
-            ctx.getFacesContext().getAttributes().get(javax.faces.application.ViewHandler.ONLY_BUILD_METADATA_FACET_KEY) != null) {
+            ctx.getFacesContext().getAttributes().get(FaceletViewHandlingStrategy.ONLY_BUILD_METADATA_FACET_KEY) != null) {
             ctx.setAttribute(ABORT_PROCESSING_KEY, true);
         }
 
