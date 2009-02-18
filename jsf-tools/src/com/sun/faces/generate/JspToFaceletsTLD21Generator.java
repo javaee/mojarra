@@ -164,7 +164,10 @@ public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
                  rendererIter.hasNext();) {
 
                 RendererBean renderer = rendererIter.next();
-             
+               
+                if (renderer.isIgnoreAll()) {
+                    continue;
+                }
                 String rendererType = renderer.getRendererType();
                 writer.startElement("tag");
 

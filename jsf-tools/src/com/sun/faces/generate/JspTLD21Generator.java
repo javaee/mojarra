@@ -151,7 +151,7 @@ public class JspTLD21Generator extends JspTLDGenerator {
                  rendererIter.hasNext();) {
 
                 RendererBean renderer = rendererIter.next();
-                if (renderer.isIgnoreForJsp()) {
+                if (renderer.isIgnoreForJsp() || renderer.isIgnoreAll()) {
                     continue;
                 }
                 String rendererType = renderer.getRendererType();
