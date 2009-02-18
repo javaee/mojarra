@@ -151,23 +151,19 @@ public class JsfViewUrlBuilder extends UrlBuilder {
     }
 
     private List<UIPageParameter> restorePageParameters(FacesContext context, String viewId) {
-        // QUESTION what if the page has changed? we need Facelets to dump the page; or perhaps this is a production time optimization
-        List<UIPageParameter> pageParams = context.getApplication().restorePageParameters(context, viewId);
-        if (pageParams == null) {
-            BeanInfo otherWay = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getViewMetadata(context, viewId);
-            BeanDescriptor otherBd = otherWay.getBeanDescriptor();
-            List<UIPageParameter.Reference> params = (List<UIPageParameter.Reference>) 
-                    otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
-            pageParams = new ArrayList<UIPageParameter>(params.size());
-            for (UIPageParameter.Reference r : params) {
-                pageParams.add(r.getUIPageParameter(context));
-            }
-
-            PageMetadata page = new PageMetadata(context, viewId, pageParams);
-            context.getApplication().addPage(page);
-            
+        List<UIPageParameter> pageParams = null;
+        BeanInfo otherWay = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getViewMetadata(context, viewId);
+        BeanDescriptor otherBd = otherWay.getBeanDescriptor();
+        List<UIPageParameter.Reference> params = (List<UIPageParameter.Reference>)
+          otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
+        pageParams = new ArrayList<UIPageParameter>(params.size());
+        for (UIPageParameter.Reference r : params) {
+            pageParams.add(r.getUIPageParameter(context));
         }
 
+        PageMetadata page = new PageMetadata(context, viewId, pageParams);
+        context.getApplication().addPage(page);
+            
         return pageParams;
     }
 

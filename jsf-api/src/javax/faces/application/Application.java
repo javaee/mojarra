@@ -1757,12 +1757,4 @@ public abstract class Application {
         
     }
 
-    public List<UIPageParameter> restorePageParameters(FacesContext context, String viewId) {
-        if (defaultApplication != null) {
-            return defaultApplication.restorePageParameters(context, viewId);
-        } else {
-            throw new UnsupportedOperationException();
-        }
-    }
-
 }

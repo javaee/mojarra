@@ -1447,15 +1447,6 @@ public class ApplicationImpl extends Application {
         pages.put(page.getViewId(), page);
     }
 
-    public List<UIPageParameter> restorePageParameters(FacesContext context, String viewId) {
-        if (pages.containsKey(viewId)) {
-            return pages.get(viewId).restorePageParameters(context, viewId);
-        }
-        else {
-            return null;
-        }
-    }
-    
     /**
      * <p>PRECONDITIONS: the values in the Map are either Strings
      * representing fully qualified java class names, or java.lang.Class
