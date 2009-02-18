@@ -1934,10 +1934,10 @@ public abstract class UIComponentBase extends UIComponent {
         if (null != state) {
             Object[] values = (Object[]) state;
             String[] names = (String[])values[0];
-            Object[][] attachedBehaviors = (Object[][]) values[1];
+            Object[] attachedBehaviors = (Object[]) values[1];
             behaviors = new HashMap<String, List<Behavior>>(names.length,1.0f);
             for (int i = 0; i < attachedBehaviors.length; i++) {
-                Object[] attachedEventBehaviors = attachedBehaviors[i];
+                Object[] attachedEventBehaviors = (Object[]) attachedBehaviors[i];
                 ArrayList<Behavior> eventBehaviors = new ArrayList<Behavior>(attachedBehaviors.length);
                 for (int j = 0; j < attachedEventBehaviors.length; j++) {
                     eventBehaviors.add((Behavior) restoreAttachedState(context, attachedEventBehaviors[j]));					
