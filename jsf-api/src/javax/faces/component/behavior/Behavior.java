@@ -40,6 +40,8 @@
 
 package javax.faces.component.behavior;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,6 +49,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.BehaviorEvent;
+import javax.faces.event.FacesListener;
 import javax.faces.render.BehaviorRenderer;
 import javax.faces.render.RenderKit;
 
@@ -73,6 +76,12 @@ public abstract class Behavior {
     "javax.faces.LogStrings");
 
     /**
+     * <p>Our {@link javax.faces.event.FacesListener}s.  This data
+     * structure is lazily instantiated as necessary.</p>
+     */
+    private List<FacesListener> listeners;
+
+    /**
      * <p class="changed_added_2_0">Return the script that implements this
      * Behavior's client-side logic.</p>
      *
@@ -86,6 +95,7 @@ public abstract class Behavior {
      * method.
      * @return script that provides the client-side behavior
      *
+     * @since 2.0
      */      
     public String getScript(FacesContext context,
                                      UIComponent component,
@@ -100,7 +110,8 @@ public abstract class Behavior {
     }
 
     /**
-     * <p>Decode any new state of this {@link Behavior} from the
+     * <p class="changed_added_2_0">Decode any new state of this 
+     * {@link Behavior} from the
      * request contained in the specified {@link FacesContext}.</p>
      *
      * <p>During decoding, events may be enqueued for later processing
@@ -115,6 +126,7 @@ public abstract class Behavior {
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      *
+     * @since 2.0
      */
     public void decode(FacesContext context,
                        UIComponent component,
@@ -131,6 +143,8 @@ public abstract class Behavior {
      * bridge patterns for a render-kit depended functionality.
      * </p>
      * @return the {@link BehaviorRenderer} type for this {@link Behavior}, if any.
+     *
+     * @since 2.0
      */
     public abstract String getRendererType();
     
@@ -143,6 +157,8 @@ public abstract class Behavior {
      * @return {@link BehaviorRenderer} instance from the current {@link RenderKit} or null.
      *
      * @throws NullPointerException if <code>context</code> is null. 
+     *
+     * @since 2.0
      */
     protected BehaviorRenderer getRenderer(FacesContext context) {
     	if(null == context){
@@ -169,7 +185,8 @@ public abstract class Behavior {
     }
 
     /**
-     * <p>Broadcast the specified {@link BehaviorEvent} to all registered
+     * <p class="changed_added_2_0">Broadcast the specified 
+     * {@link BehaviorEvent} to all registered
      * event listeners who have expressed an interest in events of this
      * type.  Listeners are called in the order in which they were
      * added.</p>
@@ -183,9 +200,82 @@ public abstract class Behavior {
      *  of this {@link BehaviorEvent} is not supported by this component
      * @throws NullPointerException if <code>event</code> is
      * <code>null</code>
+     *
+     * @since 2.0
      */
     public abstract void broadcast(BehaviorEvent event)
         throws AbortProcessingException;
+
+    /**
+     * <p class="changed_added_2_0">Add the specified {@link FacesListener} 
+     * to the set of listeners registered to receive event notifications 
+     * from this {@link Behavior}.
+     * It is expected that {@link Behavior} classes acting as event sources
+     * will have corresponding typesafe APIs for registering listeners of the
+     * required type, and the implementation of those registration methods
+     * will delegate to this method.  For example:</p>
+     * <pre>
+     * public class AjaxBehaviorEvent extends BehaviorEvent { ... }
+     *
+     * public interface AjaxBehaviorListener extends FacesListener {
+     *   public void processAjaxBehavior(FooEvent event);
+     * }
+     *
+     * public class AjaxBehavior extends Behavior {
+     *   ...
+     *   public void addAjaxBehaviorListener(AjaxBehaviorListener listener) {
+     *     addFacesListener(listener);
+     *   }
+     *   public void removeAjaxBehaviorListener(AjaxBehaviorListener listener) {
+     *     removeFacesListener(listener);
+     *   }
+     *   ...
+     * }
+     * </pre>
+     *
+     * @param listener The {@link FacesListener} to be registered
+     *
+     * @throws NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     *
+     * @since 2.0
+     */
+    protected void addFacesListener(FacesListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+        if (listeners == null) {
+            //noinspection CollectionWithoutInitialCapacity
+            listeners = new ArrayList<FacesListener>();
+        }
+        listeners.add(listener);
+
+    }
+
+    /**
+     * <p class="changed_added_2_0">Remove the specified 
+     * {@link FacesListener} from the set of listeners
+     * registered to receive event notifications from this 
+     * {@link Behavior}.
+     *
+     * @param listener The {@link FacesListener} to be deregistered
+     * @throws NullPointerException if <code>listener</code>
+     *                              is <code>null</code>
+     *
+     * @since 2.0
+     */
+    protected void removeFacesListener(FacesListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+        if (listeners == null) {
+            return;
+        }
+        listeners.remove(listener);
+    }
+
 
     
     public void processEvent(BehaviorEvent event) {

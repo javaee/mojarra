@@ -1049,7 +1049,7 @@ public abstract class UIComponentBase extends UIComponent {
             kid.processDecodes(context);
         }
         // Process behaviors, if supported by the component.
-        if(isBehaviorHolder()){
+        if (isBehaviorHolder()){
             for (Entry<String, List<Behavior>> entry : getBehaviors().entrySet()) {
                 String eventName = entry.getKey();
                 for(Behavior behavior : entry.getValue()){

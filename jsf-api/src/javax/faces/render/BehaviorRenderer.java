@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
  * <p>A <strong class="changed_added_2_0">BehaviorRenderer</strong> produces
  * the client-side script that implements a {@link Behavior}'s client-side 
  * logic.  It also enqueues server-side {@link Behavior} events that may be
- * processed later by event listeners that have registered an interested.</p> 
+ * processed later by event listeners that have registered an interest.</p> 
  *
  * <p>Individual {@link BehaviorRenderer} instances will be instantiated as 
  * requested during the rendering process, and will remain in existence for the
@@ -80,6 +80,8 @@ public abstract class BehaviorRenderer {
      *
      * @return script that provides the client-side behavior
      *
+     * @since 2.0
+     *
      */
     public String getScript(FacesContext context,
                                      UIComponent component,
@@ -91,8 +93,8 @@ public abstract class BehaviorRenderer {
 
 
     /**
-     * <p>Decode any new state of this {@link Behavior} from the
-     * request contained in the specified {@link FacesContext}.</p>
+     * <p class="changed_added_2_0">Decode any new state of this {@link Behavior} 
+     * from the request contained in the specified {@link FacesContext}.</p>
      *
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners who have registered an interest),  by calling
@@ -105,6 +107,7 @@ public abstract class BehaviorRenderer {
      * @throws NullPointerException if <code>context</code>
      *  or <code>component</code> or <code>eventName</code> is <code>null</code>
      *
+     * @since 2.0
      */
     public void decode(FacesContext context,
                        UIComponent component,

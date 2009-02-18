@@ -48,7 +48,8 @@ import javax.faces.render.BehaviorRenderer;
 
 
 /*
- * 
+ *<b>AjaxBehaviorRenderer</b> renders Ajax behavior for a component.
+ * It also  
  */
 
 public class AjaxBehaviorRenderer extends BehaviorRenderer  {
@@ -56,9 +57,7 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
     
     // ------------------------------------------------------ Rendering Methods
 
-    /**
-     *
-     */
+    @Override
     public String getScript(FacesContext context,
                                      UIComponent component,
                                      Behavior behavior,
@@ -69,9 +68,7 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
     }
 
 
-    /**
-     *
-     */
+    @Override
     public void decode(FacesContext context,
                        UIComponent component,
                        String eventName) {

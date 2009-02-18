@@ -46,6 +46,7 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.AjaxBehaviorListener;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.event.FacesEvent;
 
@@ -229,6 +230,39 @@ public class AjaxBehavior extends Behavior implements Serializable {
      */
     public void broadcast(BehaviorEvent event) throws AbortProcessingException {}
 
+    /**
+     * <p class="changed_added_2_0">Add the specified {@link AjaxBehaviorListener}
+     * to the set of listeners registered to receive event notifications
+     * from this {@link AjaxBehavior}.</p>
+     *
+     * @param listener The {@link AjaxBehaviorListener} to be registered
+     *
+     * @throws NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     *
+     * @since 2.0
+     */
+    public void addAjaxBehaviorListener(AjaxBehaviorListener listener) {
+        addFacesListener(listener);
+    }
+
+    /**
+     * <p class="changed_added_2_0">Remove the specified {@link AjaxBehaviorListener}
+     * from the set of listeners registered to receive event notifications
+     * from this {@link AjaxBehavior}.</p>
+     *
+     * @param listener The {@link AjaxBehaviorListener} to be removed
+     *
+     * @throws NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     *
+     * @since 2.0
+     */
+    public void removeAjaxBehaviorListener(AjaxBehaviorListener listener) {
+        removeFacesListener(listener);
+    }
+
+//TODO: REMOVE - ONCE IN AJAXBEHAVIORRENDERER
     public String getScript(FacesContext context,
                                      UIComponent component,
                                      String eventName) {
