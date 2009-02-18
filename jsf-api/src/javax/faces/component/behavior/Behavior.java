@@ -96,7 +96,7 @@ public abstract class Behavior {
      * @return script that provides the client-side behavior
      * @throws NullPointerException if <code>context</code> is <code>null</code>,
      * <code>component</code> is <code>null</code> or <code>eventName</code> 
-     * is <ocde>null</code>.
+     * is <code>null</code>.
      *
      * @since 2.0
      */      
