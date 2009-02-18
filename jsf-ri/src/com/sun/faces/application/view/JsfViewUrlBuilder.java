@@ -36,14 +36,12 @@
 
 package com.sun.faces.application.view;
 
-import java.beans.BeanDescriptor;
-import java.beans.BeanInfo;
-import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIPageParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 /**
  * @author Dan Allen
@@ -101,15 +99,20 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         if (!includePageParams) {
             return;
         }
-
-        List<UIPageParameter> currentPageParams = getPageParameters(context, context.getViewRoot().getViewId());
+        UIViewRoot currentRoot = context.getViewRoot();
+        String currentViewId = currentRoot.getViewId();
+        PageDeclarationLanguage pdl = null;
         List<UIPageParameter> toPageParams;
+        boolean currentIsSameAsNew = false;
 
-        if (context.getViewRoot().getViewId().equals(viewId)) {
-            toPageParams = currentPageParams;
+        if (currentViewId.equals(viewId)) {
+            currentIsSameAsNew = true;
+            pdl = viewHandler.getPageDeclarationLanguage(context, currentViewId);
+            toPageParams = pdl.getPageParameters(context, currentViewId);
         }
         else {
-            toPageParams = getPageParameters(context, viewId);
+            pdl = viewHandler.getPageDeclarationLanguage(context, viewId);
+            toPageParams = pdl.getPageParameters(context, viewId);
         }
 
         if (toPageParams.isEmpty()) {
@@ -128,12 +131,12 @@ public class JsfViewUrlBuilder extends UrlBuilder {
             else {
                 // Anonymous page parameter:
                 // Get string value from UIPageParameter instance stored in current view
-                if (toPageParams == currentPageParams) {
+                if (currentIsSameAsNew) {
                     value = pageParam.getStringValue(context);
                 }
                 // ...or transfer string value from matching UIPageParameter instance stored in current view
                 else {
-                    value = pageParam.getStringValueToTransfer(context, currentPageParams);
+                    value = pageParam.getStringValueToTransfer(context, toPageParams);
                 }
             }
             if (value != null) {
@@ -149,18 +152,5 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         super.setPath(viewHandler.getActionURL(context, viewId));
     }
 
-    private List<UIPageParameter> getPageParameters(FacesContext context, String viewId) {
-        List<UIPageParameter> pageParams = null;
-        BeanInfo otherWay = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getViewMetadata(context, viewId);
-        BeanDescriptor otherBd = otherWay.getBeanDescriptor();
-        List<UIPageParameter.Reference> params = (List<UIPageParameter.Reference>)
-          otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
-        pageParams = new ArrayList<UIPageParameter>(params.size());
-        for (UIPageParameter.Reference r : params) {
-            pageParams.add(r.getUIPageParameter(context));
-        }
-
-        return pageParams;
-    }
 
 }

@@ -1470,25 +1470,11 @@ public class UIViewRoot extends UIComponentBase {
         
     }
     
-    private List<UIPageParameter> getPageParameters(FacesContext context) {
-        List<UIPageParameter> pageParams = null;
-        BeanInfo otherWay = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getViewMetadata(context, getViewId());
-        BeanDescriptor otherBd = otherWay.getBeanDescriptor();
-        List<UIPageParameter.Reference> params = (List<UIPageParameter.Reference>)
-          otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
-        pageParams = new ArrayList<UIPageParameter>(params.size());
-        for (UIPageParameter.Reference r : params) {
-            pageParams.add(r.getUIPageParameter(context));
-        }
-
-        return pageParams;
-    }
-    
 
     // BEGIN TENATIVE
     public void decodePageParameters(FacesContext context) {
         
-        List<UIPageParameter> params = getPageParameters(context);
+        List<UIPageParameter> params = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getPageParameters(context, getViewId());
 
         if (params.isEmpty()) {
             return;
@@ -1514,7 +1500,7 @@ public class UIViewRoot extends UIComponentBase {
 
     // QUESTION: should this be made protected or private instead?
     public void encodePageParameters(FacesContext context) {
-        List<UIPageParameter> params = getPageParameters(context);
+        List<UIPageParameter> params = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getPageParameters(context, getViewId());
         if (params.isEmpty()) {
             return;
         }

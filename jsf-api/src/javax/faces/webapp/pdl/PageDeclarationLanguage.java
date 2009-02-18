@@ -36,9 +36,13 @@
 
 package javax.faces.webapp.pdl;
 
+import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.application.Resource;
+import javax.faces.component.UIPageParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
@@ -81,6 +85,20 @@ public abstract class PageDeclarationLanguage {
 
     public abstract BeanInfo getViewMetadata(FacesContext context, String viewId);
 
+    public List<UIPageParameter> getPageParameters(FacesContext context, String viewId) {
+        List<UIPageParameter> pageParams = null;
+        BeanInfo beanInfo = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getViewMetadata(context, viewId);
+        BeanDescriptor otherBd = beanInfo.getBeanDescriptor();
+        List<UIPageParameter.Reference> params = (List<UIPageParameter.Reference>)
+          otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
+        pageParams = new ArrayList<UIPageParameter>(params.size());
+        for (UIPageParameter.Reference r : params) {
+            pageParams.add(r.getUIPageParameter(context));
+        }
+
+        return pageParams;
+    }
+    
     /**
      * <p class="changed_added_2_0">Take implementation specific action
      * to discover a <code>Resource</code> given the argument
