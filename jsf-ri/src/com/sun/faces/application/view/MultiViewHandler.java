@@ -46,6 +46,8 @@ import java.net.MalformedURLException;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.ProjectStage;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -65,6 +67,8 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
 import java.util.List;
+import java.text.MessageFormat;
+
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
@@ -308,12 +312,11 @@ public class MultiViewHandler extends ViewHandler {
                         valueExpression = (ValueExpression) topLevelComponent.getAttributes().
                                 get(attrName);
                         if (null == valueExpression) {
-                            // PENDING error message in page?
-                            logger.severe("Unable to find attribute with name \""
-                                          + attrName
-                                          + "\" in top level component in consuming page.  "
-                                          + "Page author error.");
-                            continue;
+                            throw new FacesException(
+                                  "Unable to find attribute with name \""
+                                  + attrName
+                                  + "\" in top level component in consuming page.  "
+                                  + "Page author error.");
                         }
 
                         // lazily initialize this local variable
@@ -333,12 +336,11 @@ public class MultiViewHandler extends ViewHandler {
                             // This is the inner component to which the attribute should 
                             // be applied
                             target = topLevelComponent.findComponent(curTarget);
-                            if (null == targets) {
-                                // PENDING error message in page?
-                                logger.severe("Unable to retarget MethodExpression.  " +
-                                        "Unable to find inner component with id " +
-                                        targets + ".");
-                                continue;
+                            if (null == target) {
+                                throw new FacesException(valueExpression.toString()
+                                                         + " : Unable to re-target MethodExpression as inner component referenced by target id '"
+                                                         + curTarget
+                                                         + "' cannot be found.");
                             }
 
                             if (isAction) {

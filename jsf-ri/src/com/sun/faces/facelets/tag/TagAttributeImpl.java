@@ -211,7 +211,7 @@ public final class TagAttributeImpl extends TagAttribute {
         return result;
     }
     
-    private static class AttributeLookupMethodExpression extends MethodExpression implements StateHolder {
+    public static class AttributeLookupMethodExpression extends MethodExpression implements StateHolder {
 
         private String attrName = null;
         private String expressionString = null;

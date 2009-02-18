@@ -102,26 +102,15 @@ public class CompositeComponentTagHandler extends ComponentHandler {
         TagAttributes tagAttributes = this.tag.getAttributes();
         TagAttribute attrs[] = tagAttributes.getAll();
         String name, value;
-        ExpressionFactory expressionFactory = null;
         Expression expression = null;
         for (int i = 0; i < attrs.length; i++) {
             name = attrs[i].getLocalName();
-            if (null != name && 0 < name.length() && 
+            if (null != name && 0 < name.length() &&
                 !name.equals("id") && !name.equals("binding")){
                 value = attrs[i].getValue();
                 if (null != value && 0 < value.length()) {
-                    // lazily initialize this local variable
-                    if (null == expressionFactory) {
-                        expressionFactory = ctx.getFacesContext().getApplication().
-                                getExpressionFactory();
-                    }
-                    if (value.startsWith("#{")) {
-                        expression = expressionFactory.
-                                createValueExpression(ctx, value, Object.class);
-                    } else {
-                        expression = expressionFactory.
-                                createValueExpression(value, Object.class);
-                    }
+
+                    expression = attrs[i].getValueExpression(ctx, Object.class);
                     // PENDING: I don't think copyTagAttributesIntoComponentAttributes
                     // should be getting called 
                     // on postback, yet it is.  In lieu of a real fix, I'll
