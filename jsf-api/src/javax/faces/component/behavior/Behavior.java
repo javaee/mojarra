@@ -94,17 +94,24 @@ public abstract class Behavior {
      * {@link BehaviorRenderer#getScript(FacesContext, UIComponent, Behavior, String)} 
      * method.
      * @return script that provides the client-side behavior
+     * @throws NullPointerException if <code>context</code> is <code>null</code>,
+     * <code>component</code> is <code>null</code> or <code>eventName</code> 
+     * is <ocde>null</code>.
      *
      * @since 2.0
      */      
     public String getScript(FacesContext context,
                                      UIComponent component,
                                      String eventName) {
-    	// TODO - check null parameters.
+
+        if (null == context || null == component || null == eventName) {
+            throw new NullPointerException();
+        }
+
     	BehaviorRenderer renderer = getRenderer(context);
-		String script = null;
-    	if(null != renderer){
-			script = renderer.getScript(context, component, this, eventName);
+        String script = null;
+    	if (null != renderer){
+            script = renderer.getScript(context, component, this, eventName);
     	}
         return script;
     }
@@ -161,8 +168,8 @@ public abstract class Behavior {
      * @since 2.0
      */
     protected BehaviorRenderer getRenderer(FacesContext context) {
-    	if(null == context){
-    		throw new NullPointerException();
+    	if (null == context){
+            throw new NullPointerException();
     	}
     	BehaviorRenderer renderer = null;
         String rendererType = getRendererType();

@@ -242,13 +242,4 @@ public class AjaxBehavior extends Behavior implements Serializable {
         removeBehaviorListener(listener);
     }
 
-//TODO: REMOVE - ONCE IN AJAXBEHAVIORRENDERER
-    public String getScript(FacesContext context,
-                                     UIComponent component,
-                                     String eventName) {
-        return "jsf.ajax.request(this,event);return false;";
-    }
-
-
-
 }
