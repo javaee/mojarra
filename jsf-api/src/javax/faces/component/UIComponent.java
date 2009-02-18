@@ -1583,7 +1583,9 @@ private void doFind(FacesContext context, String clientId) {
             if (null != previouslyPushedCompositeComponent) {
                 contextMap.put(CURRENT_COMPOSITE_COMPONENT, 
                         previouslyPushedCompositeComponent);
-            } 
+            } else {
+                contextMap.remove(CURRENT_COMPOSITE_COMPONENT);
+            }
         }
 
     }
