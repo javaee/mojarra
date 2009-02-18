@@ -100,6 +100,8 @@ public class AjaxBehaviorEvent extends BehaviorEvent {
      * an event processing method, and passing this instance as a 
      * parameter.</p>
      *
+     * @param listener {@link FacesListener} to invoke 
+     *
      * @throws AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed

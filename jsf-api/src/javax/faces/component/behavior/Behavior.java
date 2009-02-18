@@ -49,7 +49,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.BehaviorEvent;
-import javax.faces.event.FacesListener;
+import javax.faces.event.BehaviorListener;
 import javax.faces.render.BehaviorRenderer;
 import javax.faces.render.RenderKit;
 
@@ -76,10 +76,10 @@ public abstract class Behavior {
     "javax.faces.LogStrings");
 
     /**
-     * <p>Our {@link javax.faces.event.FacesListener}s.  This data
+     * <p>Our {@link javax.faces.event.BehaviorListener}s.  This data
      * structure is lazily instantiated as necessary.</p>
      */
-    private List<FacesListener> listeners;
+    private List<BehaviorListener> listeners;
 
     /**
      * <p class="changed_added_2_0">Return the script that implements this
@@ -203,11 +203,18 @@ public abstract class Behavior {
      *
      * @since 2.0
      */
-    public abstract void broadcast(BehaviorEvent event)
-        throws AbortProcessingException;
+    public void broadcast(BehaviorEvent event)
+        throws AbortProcessingException {
+        for (BehaviorListener listener : listeners) {
+            if (event.isAppropriateListener(listener)) {
+                event.processListener(listener);
+            }
+        }
+    }
+
 
     /**
-     * <p class="changed_added_2_0">Add the specified {@link FacesListener} 
+     * <p class="changed_added_2_0">Add the specified {@link BehaviorListener} 
      * to the set of listeners registered to receive event notifications 
      * from this {@link Behavior}.
      * It is expected that {@link Behavior} classes acting as event sources
@@ -217,37 +224,37 @@ public abstract class Behavior {
      * <pre>
      * public class AjaxBehaviorEvent extends BehaviorEvent { ... }
      *
-     * public interface AjaxBehaviorListener extends FacesListener {
+     * public interface AjaxBehaviorListener extends BehaviorListener {
      *   public void processAjaxBehavior(FooEvent event);
      * }
      *
      * public class AjaxBehavior extends Behavior {
      *   ...
      *   public void addAjaxBehaviorListener(AjaxBehaviorListener listener) {
-     *     addFacesListener(listener);
+     *     addBehaviorListener(listener);
      *   }
      *   public void removeAjaxBehaviorListener(AjaxBehaviorListener listener) {
-     *     removeFacesListener(listener);
+     *     removeBehaviorListener(listener);
      *   }
      *   ...
      * }
      * </pre>
      *
-     * @param listener The {@link FacesListener} to be registered
+     * @param listener The {@link BehaviorListener} to be registered
      *
      * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      *
      * @since 2.0
      */
-    protected void addFacesListener(FacesListener listener) {
+    protected void addBehaviorListener(BehaviorListener listener) {
 
         if (listener == null) {
             throw new NullPointerException();
         }
         if (listeners == null) {
             //noinspection CollectionWithoutInitialCapacity
-            listeners = new ArrayList<FacesListener>();
+            listeners = new ArrayList<BehaviorListener>();
         }
         listeners.add(listener);
 
@@ -255,17 +262,17 @@ public abstract class Behavior {
 
     /**
      * <p class="changed_added_2_0">Remove the specified 
-     * {@link FacesListener} from the set of listeners
+     * {@link BehaviorListener} from the set of listeners
      * registered to receive event notifications from this 
      * {@link Behavior}.
      *
-     * @param listener The {@link FacesListener} to be deregistered
+     * @param listener The {@link BehaviorListener} to be deregistered
      * @throws NullPointerException if <code>listener</code>
      *                              is <code>null</code>
      *
      * @since 2.0
      */
-    protected void removeFacesListener(FacesListener listener) {
+    protected void removeBehaviorListener(BehaviorListener listener) {
 
         if (listener == null) {
             throw new NullPointerException();

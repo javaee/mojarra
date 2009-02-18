@@ -211,26 +211,6 @@ public class AjaxBehavior extends Behavior implements Serializable {
     }
 
     /**
-     * <p class="changed_added_2_0">Pass the {@link BehaviorEvent} being 
-     * broadcast to the method referenced by <code>actionListener</code> (if any),
-     * and to the default {@link ActionListener} registered on the
-     * {@link javax.faces.application.Application}.</p>
-     *
-     * @param event {@link FacesEvent} to be broadcast
-     *
-     * @throws AbortProcessingException Signal the JavaServer Faces
-     *  implementation that no further processing on the current event
-     *  should be performed
-     * @throws IllegalArgumentException if the implementation class
-     *  of this {@link FacesEvent} is not supported by this component
-     * @throws NullPointerException if <code>event</code> is
-     * <code>null</code>
-     *
-     * @since 2.0
-     */
-    public void broadcast(BehaviorEvent event) throws AbortProcessingException {}
-
-    /**
      * <p class="changed_added_2_0">Add the specified {@link AjaxBehaviorListener}
      * to the set of listeners registered to receive event notifications
      * from this {@link AjaxBehavior}.</p>
@@ -243,7 +223,7 @@ public class AjaxBehavior extends Behavior implements Serializable {
      * @since 2.0
      */
     public void addAjaxBehaviorListener(AjaxBehaviorListener listener) {
-        addFacesListener(listener);
+        addBehaviorListener(listener);
     }
 
     /**
@@ -259,7 +239,7 @@ public class AjaxBehavior extends Behavior implements Serializable {
      * @since 2.0
      */
     public void removeAjaxBehaviorListener(AjaxBehaviorListener listener) {
-        removeFacesListener(listener);
+        removeBehaviorListener(listener);
     }
 
 //TODO: REMOVE - ONCE IN AJAXBEHAVIORRENDERER

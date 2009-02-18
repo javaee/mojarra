@@ -48,7 +48,7 @@ package javax.faces.event;
  *
  * @since 2.0
  */
-public interface AjaxBehaviorListener extends FacesListener {
+public interface AjaxBehaviorListener extends BehaviorListener {
 
 
     /**
