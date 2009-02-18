@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.FacesConfigBean;
@@ -96,6 +97,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
     private CodeWriter writer;
 
     private PropertyManager propManager;
+
+	private boolean useBehavior;
 
     // ------------------------------------------------------------ Constructors
 
@@ -164,6 +167,13 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                            ".java";
                 File file = new File(dir, fileName);
                 writer = new CodeWriter(new FileWriter(file));
+                useBehavior = false;
+                for (PropertyBean property : cb.getProperties()) {
+        			if(property.isBehavior()){
+        				useBehavior = true;
+        				break;
+        			}
+        		}
                 // Generate the various portions of each class
                 prefix();
                 properties();
@@ -191,7 +201,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             throw new IllegalArgumentException("No base component type for '" +
                 cb.getComponentType() + "'");
         }
-
         // Generate the copyright information
         writer.writeBlockComment(
             propManager.getProperty(PropertyManager.COPYRIGHT));
@@ -203,11 +212,18 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
         // Generate the imports
         writer.writeImport("java.io.IOException");
-        writer.writeImport("java.util.List");
         writer.writeImport("java.util.ArrayList");
         writer.writeImport("java.util.Arrays");
+        if(useBehavior){
+            writer.writeImport("java.util.Collection");        	
+            writer.writeImport("java.util.Collections");        	
+        }
+        writer.writeImport("java.util.List");
         writer.write('\n');
         writer.writeImport("javax.faces.context.FacesContext");
+        if( useBehavior){
+        	writer.writeImport("javax.faces.component.behavior.BehaviorHolder");
+        }
         writer.writeImport("javax.el.MethodExpression");
         writer.writeImport("javax.el.ValueExpression");
         writer.write("\n\n");
@@ -241,7 +257,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         // Generate the class declaration
         writer.writePublicClassDeclaration(shortName(cb.getComponentClass()),
                                            base.getComponentClass(),
-                                           null, false, false);
+                                           useBehavior?(new String[]{"BehaviorHolder"}):null, false, false);
 
         writer.write("\n\n");
 
@@ -481,7 +497,42 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
         writer.outdent();
         writer.fwrite("}\n\n\n");
-
+        // BehaviorHolder mathods
+        if(useBehavior){
+        	writer.fwrite("private static final Collection<String> EVENT_NAMES = Collections.unmodifiableCollection(Arrays.asList(");
+        	boolean first = true;
+        	String defaultEventName = null;
+        	for (PropertyBean property : cb.getProperties()) {
+				if(property.isBehavior()){
+					if(!first){
+						writer.write(",");
+					} else {
+						first = false;
+					}
+					writer.write("\"");
+					writer.write(property.getPropertyName());
+					writer.write("\"");
+					if(property.isDefaultBehavior()){
+						defaultEventName = property.getPropertyName();
+					}
+				}
+			}
+        	writer.write("));\n\n");
+            writer.fwrite("public Collection<String> getEventNames() {\n");
+            writer.indent();
+            writer.fwrite("return EVENT_NAMES;");
+            writer.outdent();
+            writer.fwrite("}\n\n\n");        	
+            writer.fwrite("public String getDefaultEventName() {\n");
+            writer.indent();
+            if(null == defaultEventName){
+                writer.fwrite("return null;");
+            } else {
+                writer.fwrite("return \""+defaultEventName+"\";");
+            }
+            writer.outdent();
+            writer.fwrite("}\n\n\n");        	
+        }
         writer.fwrite("private void handleAttribute(String name, Object value) {\n");
         writer.indent();
         writer.fwrite("List<String> setAttributes = null;\n");

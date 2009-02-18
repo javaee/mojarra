@@ -107,6 +107,39 @@ public class AttributeBean extends FeatureBean {
     }
 
 
+    // Behavior attribute, [dafault=false]
+    private boolean behavior = false;
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @return the behaviorAttribute
+	 */
+	public boolean isBehavior() {
+		return behavior;
+	}
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @param behaviorAttribute the behaviorAttribute to set
+	 */
+	public void setBehavior(boolean behavior) {
+		this.behavior = behavior;
+	}
+
+    private boolean defaultBehavior = false;
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @return the defaultBehavior
+	 */
+	public boolean isDefaultBehavior() {
+		return defaultBehavior;
+	}
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @param defaultBehavior the defaultBehavior to set
+	 */
+	public void setDefaultBehavior(boolean defaultBehavior) {
+		this.defaultBehavior = defaultBehavior;
+	}
+    
     // ----------------------------------------------------------------- Methods
 
 

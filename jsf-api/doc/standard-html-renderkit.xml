@@ -4484,6 +4484,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4496,6 +4497,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4568,6 +4570,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4581,6 +4584,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4661,6 +4665,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
+        <default-behavior>true</default-behavior>
       </property-extension>
     </property>
     <property>
@@ -4674,6 +4680,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4687,6 +4694,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4700,6 +4708,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4713,6 +4722,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4726,6 +4736,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4739,6 +4750,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4752,6 +4764,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4765,6 +4778,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4778,6 +4792,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -4791,6 +4806,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5102,6 +5118,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5114,6 +5131,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5257,6 +5275,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
+        <default-behavior>true</default-behavior>
       </property-extension>
     </property>
     <property>
@@ -5270,6 +5290,15 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5297,6 +5326,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
+        <default-behavior>true</default-behavior>
       </property-extension>
     </property>
     <property>
@@ -5310,6 +5341,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5323,6 +5355,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5336,6 +5369,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5349,6 +5383,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5362,6 +5397,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5375,6 +5411,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5388,6 +5425,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5401,6 +5439,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5414,6 +5453,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -5730,6 +5770,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5743,6 +5784,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5756,6 +5798,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5769,6 +5812,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5782,6 +5826,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5795,6 +5840,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5808,6 +5854,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5821,6 +5868,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5834,6 +5882,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -5847,6 +5896,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -6313,6 +6363,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6326,6 +6377,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6339,6 +6391,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6352,6 +6405,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6365,6 +6419,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6378,6 +6433,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6391,6 +6447,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6404,6 +6461,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6417,6 +6475,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6430,6 +6489,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -6769,6 +6829,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6782,6 +6843,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6795,6 +6857,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6808,6 +6871,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6821,6 +6885,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6834,6 +6899,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6847,6 +6913,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6860,6 +6927,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6873,6 +6941,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -6886,6 +6955,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -7757,6 +7827,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7770,6 +7841,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7783,6 +7855,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7796,6 +7869,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7809,6 +7883,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7822,6 +7897,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7835,6 +7911,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7848,6 +7925,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7861,6 +7939,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7874,6 +7953,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -7901,6 +7981,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7913,6 +7994,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7985,6 +8067,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -7998,6 +8081,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8503,6 +8587,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8516,6 +8601,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8529,6 +8615,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8542,6 +8629,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8555,6 +8643,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8568,6 +8657,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8581,6 +8671,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8594,6 +8685,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8607,6 +8699,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8620,6 +8713,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -8647,6 +8741,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8659,6 +8754,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8731,6 +8827,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -8744,6 +8841,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9233,6 +9331,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9246,6 +9345,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9259,6 +9359,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9272,6 +9373,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9285,6 +9387,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9298,6 +9401,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9311,6 +9415,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9324,6 +9429,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9337,6 +9443,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9350,6 +9457,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -9377,6 +9485,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9389,6 +9498,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9461,6 +9571,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -9474,6 +9585,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10776,6 +10888,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10789,6 +10902,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10802,6 +10916,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10815,6 +10930,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10828,6 +10944,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10841,6 +10958,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10854,6 +10972,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10867,6 +10986,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10880,6 +11000,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10893,6 +11014,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -10920,6 +11042,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -10932,6 +11055,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11252,6 +11376,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11265,6 +11390,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11278,6 +11404,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11291,6 +11418,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11304,6 +11432,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11317,6 +11446,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11330,6 +11460,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11343,6 +11474,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11356,6 +11488,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11369,6 +11502,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -11396,6 +11530,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11408,6 +11543,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11551,6 +11687,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
+        <default-behavior>true</default-behavior>
       </property-extension>
     </property>
     <property>
@@ -11564,6 +11702,15 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11591,6 +11738,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
+        <default-behavior>true</default-behavior>
       </property-extension>
     </property>
     <property>
@@ -11604,6 +11753,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11617,6 +11767,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11630,6 +11781,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11643,6 +11795,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11656,6 +11809,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11669,6 +11823,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11682,6 +11837,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11695,6 +11851,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -11708,6 +11865,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -12192,6 +12350,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -12205,6 +12364,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -12218,6 +12378,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -12231,6 +12392,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -12244,6 +12406,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -12257,6 +12420,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -12270,6 +12434,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -12283,6 +12448,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -12296,6 +12462,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -12309,6 +12476,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -13167,6 +13335,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13180,6 +13349,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13193,6 +13363,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13206,6 +13377,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13219,6 +13391,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13232,6 +13405,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13245,6 +13419,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13258,6 +13433,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13271,6 +13447,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13284,6 +13461,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -13311,6 +13489,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13323,6 +13502,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13395,6 +13575,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13408,6 +13589,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13857,6 +14039,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13870,6 +14053,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13883,6 +14067,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13896,6 +14081,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13909,6 +14095,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13922,6 +14109,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13935,6 +14123,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13948,6 +14137,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13961,6 +14151,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -13974,6 +14165,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -14001,6 +14193,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14013,6 +14206,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14085,6 +14279,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14098,6 +14293,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14615,6 +14811,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14628,6 +14825,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14641,6 +14839,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14654,6 +14853,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14667,6 +14867,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14680,6 +14881,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14693,6 +14895,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14706,6 +14909,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14719,6 +14923,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14732,6 +14937,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -14759,6 +14965,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14771,6 +14978,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14843,6 +15051,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -14856,6 +15065,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15337,6 +15547,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15350,6 +15561,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15363,6 +15575,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15376,6 +15589,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15389,6 +15603,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15402,6 +15617,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15415,6 +15631,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15428,6 +15645,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15441,6 +15659,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15454,6 +15673,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -15481,6 +15701,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15493,6 +15714,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15565,6 +15787,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -15578,6 +15801,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16036,6 +16260,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16049,6 +16274,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16062,6 +16288,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16075,6 +16302,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16088,6 +16316,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16101,6 +16330,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16114,6 +16344,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16127,6 +16358,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16140,6 +16372,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16153,6 +16386,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -16180,6 +16414,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16192,6 +16427,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16264,6 +16500,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16277,6 +16514,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16745,6 +16983,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16758,6 +16997,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16771,6 +17011,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16784,6 +17025,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16797,6 +17039,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16810,6 +17053,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16823,6 +17067,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16836,6 +17081,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16849,6 +17095,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16862,6 +17109,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -16889,6 +17137,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16901,6 +17150,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16973,6 +17223,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -16986,6 +17237,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17444,6 +17696,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17457,6 +17710,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17470,6 +17724,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17483,6 +17738,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17496,6 +17752,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17509,6 +17766,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17522,6 +17780,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17535,6 +17794,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17548,6 +17808,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17561,6 +17822,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
 
@@ -17588,6 +17850,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17600,6 +17863,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17672,6 +17936,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>false</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -17685,6 +17950,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
+        <behavior>true</behavior>
       </property-extension>
     </property>
     <property>
@@ -18055,6 +18321,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18067,6 +18334,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18139,6 +18407,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18152,6 +18421,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18232,6 +18502,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
+          <default-behavior>true</default-behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18245,6 +18517,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18258,6 +18531,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18271,6 +18545,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18284,6 +18559,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18297,6 +18573,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18310,6 +18587,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18323,6 +18601,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18336,6 +18615,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18349,6 +18629,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18362,6 +18643,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18576,6 +18858,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18588,6 +18871,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18731,6 +19015,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
+          <default-behavior>true</default-behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18744,6 +19030,15 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18771,6 +19066,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
+          <default-behavior>true</default-behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18784,6 +19081,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18797,6 +19095,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18810,6 +19109,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18823,6 +19123,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18836,6 +19137,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18849,6 +19151,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18862,6 +19165,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18875,6 +19179,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -18888,6 +19193,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -19083,6 +19389,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19096,6 +19403,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19109,6 +19417,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19122,6 +19431,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19135,6 +19445,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19148,6 +19459,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19161,6 +19473,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19174,6 +19487,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19187,6 +19501,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19200,6 +19515,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -19548,6 +19864,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19561,6 +19878,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19574,6 +19892,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19587,6 +19906,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19600,6 +19920,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19613,6 +19934,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19626,6 +19948,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19639,6 +19962,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19652,6 +19976,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19665,6 +19990,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -19873,6 +20199,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19886,6 +20213,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19899,6 +20227,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19912,6 +20241,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19925,6 +20255,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19938,6 +20269,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19951,6 +20283,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19964,6 +20297,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19977,6 +20311,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -19990,6 +20325,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -20257,6 +20593,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20270,6 +20607,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20283,6 +20621,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20296,6 +20635,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20309,6 +20649,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20322,6 +20663,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20335,6 +20677,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20348,6 +20691,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20361,6 +20705,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20374,6 +20719,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -20401,6 +20747,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20413,6 +20760,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20485,6 +20833,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20498,6 +20847,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20690,6 +21040,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20703,6 +21054,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20716,6 +21068,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20729,6 +21082,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20742,6 +21096,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20755,6 +21110,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20768,6 +21124,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20781,6 +21138,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20794,6 +21152,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20807,6 +21166,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -20834,6 +21194,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20846,6 +21207,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20918,6 +21280,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20931,6 +21294,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21100,6 +21464,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21113,6 +21478,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21126,6 +21492,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21139,6 +21506,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21152,6 +21520,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21165,6 +21534,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21178,6 +21548,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21191,6 +21562,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21204,6 +21576,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21217,6 +21590,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -21244,6 +21618,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21256,6 +21631,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21328,6 +21704,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21341,6 +21718,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22015,6 +22393,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22028,6 +22407,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22041,6 +22421,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22054,6 +22435,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22067,6 +22449,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22080,6 +22463,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22093,6 +22477,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22106,6 +22491,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22119,6 +22505,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22132,6 +22519,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -22159,6 +22547,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22171,6 +22560,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22329,6 +22719,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22342,6 +22733,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22355,6 +22747,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22368,6 +22761,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22381,6 +22775,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22394,6 +22789,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22407,6 +22803,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22420,6 +22817,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22433,6 +22831,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22446,6 +22845,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -22473,6 +22873,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22485,6 +22886,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22628,6 +23030,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
+          <default-behavior>true</default-behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22641,6 +23045,15 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22668,6 +23081,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
+          <default-behavior>true</default-behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22681,6 +23096,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22694,6 +23110,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22707,6 +23124,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22720,6 +23138,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22733,6 +23152,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22746,6 +23166,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22759,6 +23180,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22772,6 +23194,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -22785,6 +23208,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -22992,6 +23416,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23005,6 +23430,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23018,6 +23444,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23031,6 +23458,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23044,6 +23472,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23057,6 +23486,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23070,6 +23500,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23083,6 +23514,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23096,6 +23528,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23109,6 +23542,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -23507,6 +23941,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23520,6 +23955,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23533,6 +23969,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23546,6 +23983,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23559,6 +23997,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23572,6 +24011,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23585,6 +24025,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23598,6 +24039,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23611,6 +24053,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23624,6 +24067,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -23651,6 +24095,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23663,6 +24108,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23735,6 +24181,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23748,6 +24195,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23911,6 +24359,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23924,6 +24373,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23937,6 +24387,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23950,6 +24401,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23963,6 +24415,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23976,6 +24429,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23989,6 +24443,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24002,6 +24457,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24015,6 +24471,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24028,6 +24485,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -24055,6 +24513,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24067,6 +24526,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24139,6 +24599,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24152,6 +24613,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24482,6 +24944,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24495,6 +24958,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24508,6 +24972,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24521,6 +24986,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24534,6 +25000,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24547,6 +25014,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24560,6 +25028,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24573,6 +25042,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24586,6 +25056,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24599,6 +25070,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -24626,6 +25098,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24638,6 +25111,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24710,6 +25184,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24723,6 +25198,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24911,6 +25387,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24924,6 +25401,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24937,6 +25415,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24950,6 +25429,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24963,6 +25443,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24976,6 +25457,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24989,6 +25471,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25002,6 +25485,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25015,6 +25499,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25028,6 +25513,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -25055,6 +25541,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25067,6 +25554,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25139,6 +25627,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25152,6 +25641,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25328,6 +25818,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25341,6 +25832,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25354,6 +25846,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25367,6 +25860,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25380,6 +25874,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25393,6 +25888,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25406,6 +25902,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25419,6 +25916,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25432,6 +25930,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25445,6 +25944,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -25472,6 +25972,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25484,6 +25985,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25556,6 +26058,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25569,6 +26072,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25738,6 +26242,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25751,6 +26256,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25764,6 +26270,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25777,6 +26284,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25790,6 +26298,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25803,6 +26312,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25816,6 +26326,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25829,6 +26340,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25842,6 +26354,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25855,6 +26368,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -25882,6 +26396,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25894,6 +26409,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25966,6 +26482,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25979,6 +26496,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26166,6 +26684,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26179,6 +26698,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26192,6 +26712,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26205,6 +26726,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26218,6 +26740,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26231,6 +26754,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26244,6 +26768,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26257,6 +26782,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26270,6 +26796,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26283,6 +26810,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
 
@@ -26310,6 +26838,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26322,6 +26851,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26394,6 +26924,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26407,6 +26938,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26465,6 +26997,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>false</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26478,6 +27011,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
+          <behavior>true</behavior>
         </attribute-extension>
       </attribute>
       <attribute>
