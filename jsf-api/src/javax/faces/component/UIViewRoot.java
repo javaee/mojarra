@@ -41,6 +41,8 @@
 package javax.faces.component;
 
 
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
 import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
@@ -1468,11 +1470,29 @@ public class UIViewRoot extends UIComponentBase {
         return viewScope;
         
     }
+    
+    private List<UIPageParameter> getPageParameters(FacesContext context) {
+        List<UIPageParameter> pageParams = null;
+        BeanInfo otherWay = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getViewMetadata(context, getViewId());
+        BeanDescriptor otherBd = otherWay.getBeanDescriptor();
+        List<UIPageParameter.Reference> params = (List<UIPageParameter.Reference>)
+          otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
+        pageParams = new ArrayList<UIPageParameter>(params.size());
+        for (UIPageParameter.Reference r : params) {
+            pageParams.add(r.getUIPageParameter(context));
+        }
+
+        PageMetadata page = new PageMetadata(context, getViewId(), pageParams);
+        context.getApplication().addPage(page);
+            
+        return pageParams;
+    }
+    
 
     // BEGIN TENATIVE
     public void decodePageParameters(FacesContext context) {
         
-        List<UIPageParameter> params = getPageParameters();
+        List<UIPageParameter> params = getPageParameters(context);
 
         // END TENATIVE is this where we want this logic?
         String viewId = context.getViewRoot().getViewId();
@@ -1505,7 +1525,7 @@ public class UIViewRoot extends UIComponentBase {
 
     // QUESTION: should this be made protected or private instead?
     public void encodePageParameters(FacesContext context) {
-        List<UIPageParameter> params = getPageParameters();
+        List<UIPageParameter> params = getPageParameters(context);
         if (params.isEmpty()) {
             return;
         }
@@ -1520,28 +1540,6 @@ public class UIViewRoot extends UIComponentBase {
         }
     }
 
-    public List<UIPageParameter> getPageParameters() {
-        UIComponent metadataFacet = getFacet("metadata");
-
-        if (metadataFacet == null) {
-            return Collections.<UIPageParameter>emptyList();
-        }
-
-        if (metadataFacet instanceof UIPageParameter) {
-            List<UIPageParameter> params = new ArrayList<UIPageParameter>();
-            params.add((UIPageParameter) metadataFacet);
-            return params;
-        }
-
-        List<UIPageParameter> params = new ArrayList<UIPageParameter>();
-        for (UIComponent c : metadataFacet.getChildren()) {
-            if (c instanceof UIPageParameter) {
-                params.add((UIPageParameter) c);
-            }
-        }
-
-        return params;
-    }
     // END TENATIVE
 
     // ----------------------------------------------------- StateHolder Methods

@@ -103,14 +103,14 @@ public class JsfViewUrlBuilder extends UrlBuilder {
             return;
         }
 
-        List<UIPageParameter> currentPageParams = context.getViewRoot().getPageParameters();
+        List<UIPageParameter> currentPageParams = getPageParameters(context, context.getViewRoot().getViewId());
         List<UIPageParameter> toPageParams;
 
         if (context.getViewRoot().getViewId().equals(viewId)) {
             toPageParams = currentPageParams;
         }
         else {
-            toPageParams = restorePageParameters(context, viewId);
+            toPageParams = getPageParameters(context, viewId);
         }
 
         if (toPageParams.isEmpty()) {
@@ -150,7 +150,7 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         super.setPath(viewHandler.getActionURL(context, viewId));
     }
 
-    private List<UIPageParameter> restorePageParameters(FacesContext context, String viewId) {
+    private List<UIPageParameter> getPageParameters(FacesContext context, String viewId) {
         List<UIPageParameter> pageParams = null;
         BeanInfo otherWay = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getViewMetadata(context, viewId);
         BeanDescriptor otherBd = otherWay.getBeanDescriptor();
