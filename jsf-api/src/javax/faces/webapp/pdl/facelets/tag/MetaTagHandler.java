@@ -59,7 +59,7 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
  * instance based on rules populated at the time of creating a
  * MetaRuleset.</p>
  * 
- * <p class="changed_added_2_0">PENDING correct documentation</p>
+ * <p class="changed_added_2_0">RELEASE_PENDING correct documentation</p>
  * @since 2.0
  */
 public abstract class MetaTagHandler extends TagHandler {
