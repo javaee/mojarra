@@ -401,10 +401,7 @@ public class MultiViewHandler extends ViewHandler {
                                 try {
                                     expectedReturnType = Util.getTypeFromString(strValue);
                                 } catch (ClassNotFoundException cnfe) {
-                                    logger.log(Level.SEVERE,
-                                            "Unable to determine expected return type for " +
-                                            methodSignature, cnfe);
-                                    continue;
+                                    throw new FacesException(cur.getValue("method-signature") + " : Unable to load type '" + strValue + '\'');
                                 }
                             } else {
                                 logger.severe("Unable to determine expected return type for " +

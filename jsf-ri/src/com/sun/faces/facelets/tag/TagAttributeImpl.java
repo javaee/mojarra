@@ -68,6 +68,7 @@ import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.FacesException;
 
 /**
  * Representation of a Tag's attribute in a Facelet File
@@ -260,6 +261,9 @@ public final class TagAttributeImpl extends TagAttribute {
             // NPE is ok here.
             UIComponent composite = UIComponent.getCurrentCompositeComponent(context);
             MethodExpression me = (MethodExpression) composite.getAttributes().get(attrName);
+            if (me == null) {
+                throw new FacesException("Unable to find named attribute '" + attrName + "' in the using page composite component reference.");
+            }
             return me.invoke(elContext, arg1);
         }
 
