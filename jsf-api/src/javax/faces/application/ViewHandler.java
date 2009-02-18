@@ -379,7 +379,12 @@ public abstract class ViewHandler {
      *
      * @since 2.0
      */
-    public abstract String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includePageParams);
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includePageParams) {
+
+        throw new UnsupportedOperationException();
+
+    }
+
 
     /**
      * <p class="changed_added_2_0">Return the {@link

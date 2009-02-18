@@ -437,7 +437,14 @@ public abstract class FacesContext {
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
-    public abstract boolean getValidationFailed();
+    public boolean getValidationFailed() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getValidationFailed();
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
 
     /**
      * <p>Return the {@link ResponseStream} to which components should
@@ -641,7 +648,14 @@ public abstract class FacesContext {
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
-    public abstract void validationFailed();
+    public void validationFailed() {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.validationFailed();
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
 
     /**
      * <p class="changed_added_2_0">Return the value last set on this

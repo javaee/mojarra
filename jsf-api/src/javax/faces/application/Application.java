@@ -1739,10 +1739,30 @@ public abstract class Application {
 
     }
 
-    public abstract void addPage(PageMetadata metadata);
+    public void addPage(PageMetadata metadata) {
+        if (defaultApplication != null) {
+            defaultApplication.addPage(metadata);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+        
+    }
 
-    public abstract PageMetadata getPage(String viewId);
+    public PageMetadata getPage(String viewId) {
+        if (defaultApplication != null) {
+            return defaultApplication.getPage(viewId);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+        
+    }
 
-    public abstract List<UIPageParameter> restorePageParameters(FacesContext context, String viewId);
+    public List<UIPageParameter> restorePageParameters(FacesContext context, String viewId) {
+        if (defaultApplication != null) {
+            return defaultApplication.restorePageParameters(context, viewId);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
 
 }
