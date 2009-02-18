@@ -1,12 +1,12 @@
 /*
- * $Id:
+ * $Id: 
  */
 
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -14,7 +14,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -23,9 +23,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- *
+ * 
  * Contributor(s):
- *
+ * 
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -41,42 +41,75 @@
 package javax.faces.event;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.Behavior;
-import javax.faces.event.FacesEvent;
+import javax.faces.component.behavior.AjaxBehavior;
 
 /**
- * <p><strong class="changed_added_2_0">BehaviorEvent</strong> is
- * the event that can be generated from component 
- * {@link javax.faces.component.behavior.Behavior}.
- * </p>
+ * <p><strong class="changed_added_2_0">AjaxBehaviorEvent</strong>
+ * represents the component behavior  specific to 
+ * <code>Ajax</code>).</p>
  *
  * @since 2.0
  */
-public abstract class BehaviorEvent extends FacesEvent {
+public class AjaxBehaviorEvent extends BehaviorEvent {
 
-    private final Behavior behavior;
+
+    // ------------------------------------------------------------ Constructors
+
 
     /**
      * <p class="changed_added_2_0">Construct a new event object 
-     * from the specified source component and <code>behavior</code>.</p>
+     * from the specified source component and Ajax behavior.</p>
      *
-     * @param component
-     * @param behavior 
+     * @param component Source {@link UIComponent} for this event
+     * @param ajaxBehavior {@link AjaxBehavior} for this event
+     *
+     * @throws IllegalArgumentException if <code>component</code> or
+     * <code>ajaxBehavior</code> is <code>null</code>
      *
      * @since 2.0
      */
-    public BehaviorEvent(UIComponent component, Behavior behavior) {
-        super(component);
-        this.behavior = behavior;
+    public AjaxBehaviorEvent(UIComponent component, AjaxBehavior ajaxBehavior) {
+
+        super(component, ajaxBehavior);
+
+    }
+
+
+    // ------------------------------------------------- Event Broadcast Methods
+
+
+    /**
+     * <p class="changed_added_2_0">Return <code>true</code> if this 
+     * {@link FacesListener} is an instance of a the appropriate 
+     * listener class that this event supports.</p>
+     *
+     * @param listener {@link FacesListener} to evaluate
+     *
+     * @since 2.0
+     */
+    public  boolean isAppropriateListener(FacesListener listener) {
+
+        return (listener instanceof AjaxBehaviorListener);
+
     }
 
     /**
-     * <p class="changed_added_2_0">Return the source {@link Behavior} 
-     * that sent this event.
+     * <p class="changed_added_2_0">Broadcast this event instance 
+     * to the specified {@link FacesListener}, by whatever mechanism 
+     * is appropriate.  Typically, this will be accomplished by calling 
+     * an event processing method, and passing this instance as a 
+     * parameter.</p>
+     *
+     * @throws AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
      *
      * @since 2.0
-     */
-    public Behavior getBehavior() {
-        return behavior;
+     */ 
+    public void processListener(FacesListener listener) {
+
+        ((AjaxBehaviorListener) listener).processAjaxBehavior(this);
+
     }
+
 }

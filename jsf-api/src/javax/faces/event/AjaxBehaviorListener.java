@@ -40,43 +40,28 @@
 
 package javax.faces.event;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.Behavior;
-import javax.faces.event.FacesEvent;
 
 /**
- * <p><strong class="changed_added_2_0">BehaviorEvent</strong> is
- * the event that can be generated from component 
- * {@link javax.faces.component.behavior.Behavior}.
- * </p>
+ * <p class="changed_added_2_0">By implementing this class, an object
+ * indicates that it is a listener for one or more kinds of {@link
+ * BehaviorEvent}s.</p>
  *
  * @since 2.0
  */
-public abstract class BehaviorEvent extends FacesEvent {
+public interface AjaxBehaviorListener extends FacesListener {
 
-    private final Behavior behavior;
 
     /**
-     * <p class="changed_added_2_0">Construct a new event object 
-     * from the specified source component and <code>behavior</code>.</p>
+     * <p class="changed_added_2_0">
      *
-     * @param component
-     * @param behavior 
+     * @param event the <code>AjaxBehaviorEvent</code> instance that
+     * is being processed.
+     *
+     * @throws AbortProcessingException if lifecycle processing should
+     * cease for this request.
      *
      * @since 2.0
      */
-    public BehaviorEvent(UIComponent component, Behavior behavior) {
-        super(component);
-        this.behavior = behavior;
-    }
-
-    /**
-     * <p class="changed_added_2_0">Return the source {@link Behavior} 
-     * that sent this event.
-     *
-     * @since 2.0
-     */
-    public Behavior getBehavior() {
-        return behavior;
-    }
+    public void processAjaxBehavior(AjaxBehaviorEvent event) 
+        throws AbortProcessingException;
 }
