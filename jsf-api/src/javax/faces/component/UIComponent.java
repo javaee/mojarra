@@ -1536,11 +1536,22 @@ private void doFind(FacesContext context, String clientId) {
      * the previous <code>UIComponent</code> instance will be returned
      * from <code>getCurrentComponent()</code></p>
      *
+     * @param context the {@link FacesContext} for the current request
+     * @param component the <code>component</code> to push to the EL.  If
+     *  <code>component</code> is <code>null</code> the <code>UIComponent</code>
+     *  instance that this call was invoked upon will be pushed to the EL.
+     *
+     * @throws NullPointerException if <code>context</code> is <code>null</code>
+     *
      * @see javax.faces.context.FacesContext#getAttributes()
      *
      * @since 2.0
      */
     public final void pushComponentToEL(FacesContext context, UIComponent component) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (null == component) {
@@ -1566,25 +1577,36 @@ private void doFind(FacesContext context, String clientId) {
      * so that the previous <code>UIComponent</code>, if any, becomes the current
      * component.</p>
      *
+     * @param context the {@link FacesContext} for the current request
+     * 
+     * @throws NullPointerException if <code>context</code> is <code>null</code>
+     *
      * @see javax.faces.context.FacesContext#getAttributes()
      *
      * @since 2.0
      */
     public final void popComponentFromEL(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
+            UIComponent c;
             if (previouslyPushed != null) {
-                contextMap.put(CURRENT_COMPONENT, previouslyPushed);
+                c = (UIComponent) contextMap.put(CURRENT_COMPONENT, previouslyPushed);
             } else {
-                contextMap.remove(CURRENT_COMPONENT);
+                c = (UIComponent) contextMap.remove(CURRENT_COMPONENT);
             }
-            
-            if (null != previouslyPushedCompositeComponent) {
-                contextMap.put(CURRENT_COMPOSITE_COMPONENT, 
-                        previouslyPushedCompositeComponent);
-            } else {
-                contextMap.remove(CURRENT_COMPOSITE_COMPONENT);
+
+            if (c != null && UIComponent.isCompositeComponent(c)) {
+                if (null != previouslyPushedCompositeComponent) {
+                    contextMap.put(CURRENT_COMPOSITE_COMPONENT,
+                                   previouslyPushedCompositeComponent);
+                } else {
+                    contextMap.remove(CURRENT_COMPOSITE_COMPONENT);
+                }
             }
         }
 
@@ -1596,10 +1618,14 @@ private void doFind(FacesContext context, String clientId) {
      * @return <code>true</code> if <code>component</code> is a composite component,
      *  otherwise <code>false</code>
      *
+     * @throws NullPointerException if <code>component</code> is <code>null</code>
      * @since 2.0
      */
     public static boolean isCompositeComponent(UIComponent component) {
 
+        if (component == null) {
+            throw new NullPointerException();
+        }
         return (component.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY));
 
     }
