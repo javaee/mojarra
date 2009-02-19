@@ -103,12 +103,15 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         String currentViewId = currentRoot.getViewId();
         PageDeclarationLanguage pdl = null;
         List<UIPageParameter> toPageParams;
+        List<UIPageParameter> currentPageParams;
         boolean currentIsSameAsNew = false;
 
+        pdl = viewHandler.getPageDeclarationLanguage(context, currentViewId);
+        currentPageParams = pdl.getPageParameters(context, currentViewId);
+        
         if (currentViewId.equals(viewId)) {
             currentIsSameAsNew = true;
-            pdl = viewHandler.getPageDeclarationLanguage(context, currentViewId);
-            toPageParams = pdl.getPageParameters(context, currentViewId);
+            toPageParams = currentPageParams;
         }
         else {
             pdl = viewHandler.getPageDeclarationLanguage(context, viewId);
@@ -136,7 +139,8 @@ public class JsfViewUrlBuilder extends UrlBuilder {
                 }
                 // ...or transfer string value from matching UIPageParameter instance stored in current view
                 else {
-                    value = pageParam.getStringValueToTransfer(context, toPageParams);
+                    value = pageParam.getStringValueToTransfer(context, 
+                            currentPageParams);
                 }
             }
             if (value != null) {

@@ -200,15 +200,14 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 params = Collections.<UIPageParameter.Reference>emptyList();
             } else {
                 params = new ArrayList<UIPageParameter.Reference>();
-                if (metadataFacet instanceof UIPageParameter) {
-                    params.add(new UIPageParameter.Reference(0));
-                } else {
-                    int len = metadataFacet.getChildren().size();
-                    for (int i = 0; i < len; i++) {
-                        UIComponent c = metadataFacet.getChildren().get(i);
-                        if (c instanceof UIPageParameter) {
-                            params.add(new UIPageParameter.Reference(i));
-                        }
+                List<UIComponent> children = metadataFacet.getChildren();
+                int len = children.size();
+                String viewId = root.getViewId();
+                for (int i = 0; i < len; i++ ) {
+                    UIComponent c = children.get(i);
+                    if (c instanceof UIPageParameter) {
+                        params.add(new UIPageParameter.Reference(context,
+                                (UIPageParameter) c, i, viewId));
                     }
                 }
             }

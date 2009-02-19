@@ -6,6 +6,7 @@
     xmlns:h="http://java.sun.com/jsf/html">
     <f:view contentType="text/html">
         <f:facet name="javax_faces_metadata">
+            <f:pageParam id="bar" name="bar" value="foo" />
             <f:pageParam id="id" name="id" value="#{newsReader.selectedStoryId}" required="true"
                 requiredMessage="You did not specify a headline. (The id parameter is missing)"
                 converterMessage="Invalid headline. (The id parameter is not a number)"

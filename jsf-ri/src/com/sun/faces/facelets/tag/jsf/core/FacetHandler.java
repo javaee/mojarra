@@ -118,6 +118,14 @@ public final class FacetHandler extends TagHandlerImpl {
         
         if (parent instanceof UIViewRoot && isMetadataFacet) {
             UIComponent facetComponent = parent.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
+            if (!(facetComponent instanceof UIPanel)) {
+                UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
+                parent.getFacets().remove(UIViewRoot.METADATA_FACET_NAME);
+                panelGroup.getChildren().add(facetComponent);
+                parent.getFacets().put(UIViewRoot.METADATA_FACET_NAME, panelGroup);
+                facetComponent = panelGroup;
+            }
+            
             facetComponent.setId(UIViewRoot.METADATA_FACET_NAME);
             if (ctx.getFacesContext().getAttributes().get(FaceletViewHandlingStrategy.ONLY_BUILD_METADATA_FACET_KEY) != null) {
                 ctx.setAttribute(ABORT_PROCESSING_KEY, true);

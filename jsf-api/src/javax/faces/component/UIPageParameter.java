@@ -429,26 +429,30 @@ public class UIPageParameter extends UIInput {
     
     public static class Reference {
         
-        private int indexInParent = 0;
+        private StateHolderSaver saver;
+        private int indexInParent;
+        private String viewIdAtTimeOfConstruction;
         
-        public Reference(int indexInParent)     {
+        public Reference(FacesContext context, 
+                UIPageParameter param, 
+                int indexInParent,
+                String viewIdAtTimeOfConstruction)     {
+            this.saver = new StateHolderSaver(context, param);
             this.indexInParent = indexInParent;
+            this.viewIdAtTimeOfConstruction = viewIdAtTimeOfConstruction;
         }
         
         public UIPageParameter getUIPageParameter(FacesContext context) {
             UIPageParameter result = null;
             UIViewRoot root = context.getViewRoot();
-            UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
-            
-            if (null == metadataFacet) {
-                return null;
+            // If the view root is the same as when we were constructed...
+            if (this.viewIdAtTimeOfConstruction.equals(root.getViewId())) {
+                // get the actual page parameter from the tree...
+                UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
+                result = (UIPageParameter) metadataFacet.getChildren().get(indexInParent);
             } else {
-                if (0 == indexInParent && 
-                    metadataFacet instanceof UIPageParameter) {
-                    result = (UIPageParameter) metadataFacet;
-                } else {
-                    result = (UIPageParameter) metadataFacet.getChildren().get(indexInParent);
-                }
+                // otherwise, use the saved one
+                result = (UIPageParameter) this.saver.restore(context);
             }
             
             return result;
