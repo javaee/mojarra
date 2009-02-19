@@ -79,8 +79,6 @@ public final class FacetHandler extends TagHandlerImpl {
 
     public static final String KEY = "facelets.FACET_NAME";
 
-	public static final String METADATA_FACET_NAME = "metadata";
-
     /**
      * <p class="changed_added_2_0">The name of the attribute whose presence hints to the next handler that
      * the facet contains multiple children. The handler then knows to implicitly wrap the children in a UIPanel.</p>
@@ -114,7 +112,7 @@ public final class FacetHandler extends TagHandlerImpl {
         }
         
         if (parent instanceof UIViewRoot &&
-            METADATA_FACET_NAME.equals(facetName) &&
+            UIViewRoot.METADATA_FACET_NAME.equals(facetName) &&
             ctx.getFacesContext().getAttributes().get(FaceletViewHandlingStrategy.ONLY_BUILD_METADATA_FACET_KEY) != null) {
             ctx.setAttribute(ABORT_PROCESSING_KEY, true);
         }

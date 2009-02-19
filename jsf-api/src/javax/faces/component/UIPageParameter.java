@@ -438,7 +438,7 @@ public class UIPageParameter extends UIInput {
         public UIPageParameter getUIPageParameter(FacesContext context) {
             UIPageParameter result = null;
             UIViewRoot root = context.getViewRoot();
-            UIComponent metadataFacet = root.getFacet("metadata");
+            UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
             
             if (null == metadataFacet) {
                 return null;

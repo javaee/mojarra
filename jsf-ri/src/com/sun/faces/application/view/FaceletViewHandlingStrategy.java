@@ -193,7 +193,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         // Look for the BeanInfo in the UIViewRoot, if it's there, return it
         if (null == (result = (FacesBeanInfo) root.getAttributes().get(UIViewRoot.METADATA_BEANINFO_KEY))) {
             // Otherwise, see if the viewRoot has the metadata facet
-            UIComponent metadataFacet = root.getFacet("metadata");
+            UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
             List<UIPageParameter.Reference> params = null;
 
             if (metadataFacet == null) {

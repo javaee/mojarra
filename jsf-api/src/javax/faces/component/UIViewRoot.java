@@ -164,6 +164,7 @@ public class UIViewRoot extends UIComponentBase {
      */
     public static final String METADATA_BEANINFO_KEY = "javax.faces.component.VIEW_METADATA_BEANINFO_KEY";
 
+    public static final String METADATA_FACET_NAME = "javax_faces_metadata";
     
     /**
      * <p class="changed_added_2_0">The key in the value set of the
