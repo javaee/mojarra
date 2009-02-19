@@ -1472,33 +1472,6 @@ public class UIViewRoot extends UIComponentBase {
     }
     
 
-    // BEGIN TENATIVE
-    public void decodePageParameters(FacesContext context) {
-        
-        List<UIPageParameter> params = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getPageParameters(context, getViewId());
-
-        if (params.isEmpty()) {
-            return;
-        }
-
-        for (UIPageParameter param : params) {
-            param.processDecodes(context);
-        }
-
-        for (UIPageParameter param : params) {
-            param.processValidators(context);
-        }
-
-        if (context.getRenderResponse()) {
-            return;
-        }
-
-        for (UIPageParameter param : params) {
-            param.processUpdates(context);
-        }
-
-    }
-
     // QUESTION: should this be made protected or private instead?
     public void encodePageParameters(FacesContext context) {
         List<UIPageParameter> params = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getPageParameters(context, getViewId());

@@ -43,7 +43,6 @@
 package com.sun.faces.lifecycle;
 
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,7 +63,11 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import java.util.Collection;
+import java.util.List;
+import javax.faces.component.UIPageParameter;
 import javax.faces.component.visit.VisitCallback;
+import javax.faces.context.PartialViewContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PostRestoreStateEvent;
@@ -194,9 +197,13 @@ public class RestoreViewPhase extends Phase {
             facesContext.setViewRoot(viewRoot);
             assert(null != viewRoot);
             if (renderResponse) {
-                // FIXME: instead of an explicit call, we should instead do a partial tree traversal
-                viewRoot.decodePageParameters(facesContext);
-                facesContext.renderResponse();
+                List<UIPageParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getPageParameters(facesContext, viewId);
+                if (!params.isEmpty() &&
+                        !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
+                    configureLifecycleForViewMetadataTraversal(facesContext);
+                } else {
+                    facesContext.renderResponse();
+                }
             }
 
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -210,9 +217,13 @@ public class RestoreViewPhase extends Phase {
                   createView(facesContext, viewId);           
             facesContext.setViewRoot(viewRoot);
             assert(null != viewRoot);
-            // FIXME: instead of an explicit call, we should instead do a partial tree traversal
-            viewRoot.decodePageParameters(facesContext);
-            facesContext.renderResponse();
+            List<UIPageParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getPageParameters(facesContext, viewId);
+            if (!params.isEmpty() &&
+                !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
+                configureLifecycleForViewMetadataTraversal(facesContext);
+            } else {
+                facesContext.renderResponse();
+            }
             facesContext.getApplication().publishEvent(PostAddToViewEvent.class,
                                                        viewRoot);
         }
@@ -222,6 +233,18 @@ public class RestoreViewPhase extends Phase {
             LOGGER.fine("Exiting RestoreViewPhase");
         }
 
+    }
+    
+    private void configureLifecycleForViewMetadataTraversal(FacesContext context) {
+        PartialViewContext partial = context.getPartialViewContext();
+        partial.setPartialRequest(true);
+        Collection<String> ids = partial.getExecuteIds();
+        // IF this is not an ajax request
+        if (!partial.isAjaxRequest()) {
+            // clear the existing ids
+            ids.clear();
+        }
+        ids.add(UIViewRoot.METADATA_FACET_NAME);
     }
 
 
