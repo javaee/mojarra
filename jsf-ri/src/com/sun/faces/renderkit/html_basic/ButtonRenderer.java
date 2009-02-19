@@ -181,9 +181,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (component instanceof BehaviorHolder) {
             BehaviorHolder bHolder = (BehaviorHolder)component;
             Map <String, List <Behavior>> behaviors = bHolder.getBehaviors();
-//TODO: Added support for 'cick' events
             if (null != behaviors) {
-                return behaviors.get("action");
+                return behaviors.get("onclick");
             }
         }
         return null;

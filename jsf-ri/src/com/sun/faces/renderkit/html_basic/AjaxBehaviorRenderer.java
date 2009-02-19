@@ -63,8 +63,7 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
                                      Behavior behavior,
                                      String eventName) {
 
-        String helloworld = "Hello World";
-        return helloworld;
+        return "alert('AjaxBehaviorRenderer.getScript');";
     }
 
 

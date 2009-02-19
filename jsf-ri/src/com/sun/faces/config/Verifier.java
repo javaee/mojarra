@@ -71,6 +71,7 @@ public class Verifier {
         COMPONENT,
         CONVERTER,
         VALIDATOR,       
+        BEHAVIOR,       
     }
 
 

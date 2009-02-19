@@ -321,7 +321,7 @@ public class RenderKitUtils {
         throws IOException {
 
         final String handlerName = "onclick";
-        final String behaviorEventName = "action";
+        final String behaviorEventName = "onclick";
 
         ResponseWriter writer = context.getResponseWriter();
 

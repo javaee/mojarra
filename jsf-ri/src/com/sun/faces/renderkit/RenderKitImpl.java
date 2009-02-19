@@ -45,6 +45,7 @@ package com.sun.faces.renderkit;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
+import javax.faces.render.BehaviorRenderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.render.ResponseStateManager;
@@ -99,6 +100,16 @@ public class RenderKitImpl extends RenderKit {
 
     private ConcurrentHashMap<String, HashMap<String, Renderer>> rendererFamilies =
          new ConcurrentHashMap<String, HashMap<String, Renderer>>();
+
+    /**
+     * For Behavior Renderers:
+     * Keys are Strings for the behaviorRendererType, and values are the 
+     * behaviorRenderer instances themselves.
+     */
+
+    private ConcurrentHashMap<String, BehaviorRenderer> behaviorRenderers = 
+        new ConcurrentHashMap<String, BehaviorRenderer>();
+
 
     private ResponseStateManager responseStateManager =
          new ResponseStateManagerImpl();
@@ -162,6 +173,39 @@ public class RenderKitImpl extends RenderKit {
         return ((renderers != null) ? renderers.get(rendererType) : null);
 
     }
+
+    public void addBehaviorRenderer(String behaviorRendererType,
+                                    BehaviorRenderer behaviorRenderer) {
+
+        if (behaviorRendererType == null) {
+            String message = MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "behaviorRendererType");
+            throw new NullPointerException(message);
+        }
+        if (behaviorRenderer == null) {
+            String message = MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "behaviorRenderer");
+            throw new NullPointerException(message);
+        }
+
+        behaviorRenderers.put(behaviorRendererType, behaviorRenderer);
+    
+    }
+
+    public BehaviorRenderer getBehaviorRenderer(String behaviorRendererType) {
+            
+        if (behaviorRendererType == null) {
+            String message = MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "behaviorRendererType");
+            throw new NullPointerException(message);
+        }   
+        
+        assert(behaviorRenderers != null);
+        
+        return ((behaviorRenderers != null) ? behaviorRenderers.get(behaviorRendererType) : null);
+            
+    }   
+
 
 
     public synchronized ResponseStateManager getResponseStateManager() {
