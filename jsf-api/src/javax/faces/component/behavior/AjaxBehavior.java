@@ -41,8 +41,12 @@
 package javax.faces.component.behavior;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -141,72 +145,83 @@ public class AjaxBehavior extends Behavior implements Serializable {
     }
 
     /**
-     * <p class="changed_added_2_0">Return the <code>ValueExpression</code> of
+     * <p class="changed_added_2_0">Return the <code>String</code> of
      * JavaScript function name that will be used to identify
      * the client callback function that should be run in the event of
      * an error.
      *
+     * @param context the {@link FacesContext} for the current request
+     *
      * @since 2.0
      */
-    public ValueExpression getOnError() {
+    public String getOnError(FacesContext context) {
 
-        return onerrorExpression;
+        return (String) eval(context, onerrorExpression);
 
     }
 
     /**
-     * <p class="changed_added_2_0">Return the <code>ValueExpression</code> of
+     * <p class="changed_added_2_0">Return the <code>String</code> of
      * JavaScript function name that will be used to identify the
      * client callback function that should be run on the occurance
      * of a client-side event.
      *
+     * @param context the {@link FacesContext} for the current request
+     *
      * @since 2.0
      */
-    public ValueExpression getOnEvent() {
+    public String getOnEvent(FacesContext context) {
 
-        return oneventExpression;
+        return (String) eval(context, oneventExpression);
 
     }
 
     /**
      * <p class="changed_added_2_0">Return a
-     * <code>ValueExpression</code> of component
+     * <code>Collection&lt;String&gt;</code> of component
      * identifiers that will be used to identify components that should be
      * processed during the <code>execute</code> phase of the request
-     * processing lifecycle.</p> 
+     * processing lifecycle.</p>
+     *
+     * @param context the {@link FacesContext} for the current request
      *
      * @since 2.0
      */
-    public ValueExpression getExecute() {
+    public Collection<String> getExecute(FacesContext context) {
 
-        return executeExpression;
+        return getCollectionValue("execute", context, executeExpression);
 
     }
 
     /**
      * <p class="changed_added_2_0">Return a
-     * <code>ValueExpression</code> of component
+     * <code>Collection&lt;String&gt;</code> of component
      * identifiers that will be used to identify components that should be
      * processed during the <code>render</code> phase of the request
-     * processing lifecycle.</p> 
+     * processing lifecycle.</p>
+     *
+     * @param context the {@link FacesContext} for the current request
      *
      * @since 2.0
      */
-    public ValueExpression getRender() {
+    public Collection<String> getRender(FacesContext context) {
 
-        return renderExpression;
+        return getCollectionValue("render", context, renderExpression);
 
     }
 
     /**
-     * <p class="changed_added_2_0">Return the <code>ValueExpression</code>
-     * disabled status of this component.</p>
+     * <p class="changed_added_2_0">Return the disabled status of this component.</p>
+     *
+     * @param context the {@link FacesContext} for the current request
      *
      * @since 2.0
      */
-    public ValueExpression getDisabled() {
+    public Boolean isDisabled(FacesContext context) {
 
-        return disabledExpression;
+        // RELEASE_PENDING why not return boolean instead of Boolean?
+        Boolean result = (Boolean) eval(context, disabledExpression);
+        return ((result != null) ? result : false);
 
     }
 
@@ -241,5 +256,44 @@ public class AjaxBehavior extends Behavior implements Serializable {
     public void removeAjaxBehaviorListener(AjaxBehaviorListener listener) {
         removeBehaviorListener(listener);
     }
+
+    // --------------------------------------------------------- Private Methods
+
+    private static Object eval(FacesContext ctx, ValueExpression expression) {
+
+        return ((expression != null)
+                ? expression.getValue(ctx.getELContext())
+                : null);
+
+    }
+
+
+    private static Collection<String> getCollectionValue(String name,
+                                                         FacesContext ctx,
+                                                         ValueExpression expression) {
+
+        Collection<String> result = null;
+        Object tempAttr = eval(ctx, expression);
+        if (tempAttr != null) {
+            if (tempAttr instanceof String) {
+                // split into separate strings, add these into a new Collection
+                // RELEASE_PENDING String.split() isn't cheap.  It recreates the Pattern
+                // each time it's called.
+                result = new LinkedHashSet<String>(Arrays.asList(((String) tempAttr).split(" ")));
+            } else if (tempAttr instanceof Collection) {
+                //noinspection unchecked
+                result = (Collection<String>) tempAttr;
+            } else {
+                // RELEASE_PENDING  i18n ;
+                throw new FacesException(expression.toString()
+                                         + " : '"
+                                         + name
+                                         + "' attribute value must be either a String or a Collection");
+            }
+        }
+        return result;
+
+    }
+
 
 }
