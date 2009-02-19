@@ -51,7 +51,28 @@ import javax.faces.convert.ConverterException;
  * binding between a request parameter and a model property or {@link UIViewRoot}
  * property. This is a bi-directional binding.</p>
  *
- * @author Dan Allen
+ * <div class="changed_added_2_0">
+
+ * <p>The {@link javax.faces.webapp.pdl.PageDeclarationLanguage}
+ * implementation must cause an instance of this component to appear in
+ * the view for each occurrence of an <code>&lt;f:viewParameter
+ * /&gt;</code> element placed inside of an <code>&lt;f:facet
+ * name=&lt;<em>metadataFacetName</em>&gt; /&gt;</code> where
+ * <code><em>metadataFacetName</em></code> is given by the value of the
+ * symbolic constant {@link
+ * UIViewRoot#METADATA_FACET_NAME}.  The user must
+ * place this facet within the <code>UIViewRoot</code>.</p>
+
+ * <p>Because this class extends <code>UIInput</code> any actions that
+ * one would normally take on a <code>UIInput</code> instance are valid
+ * for instances of this class.  Instances of this class participate in
+ * the regular JSF lifecycle, including on Ajax requests.</p>
+
+ * <p>PENDING:edburns scan the implementation of RestoreViewPhase for
+ * changes relevant to this feature and incorporate it into the spec
+ * pdf.</p>
+ *
+ * </div>
  *
  * @since 2.0
  */
@@ -117,7 +138,9 @@ public class UIViewParameter extends UIInput {
     }
 
     /**
-     * <p>Return the request parameter name from which the value is retrieved.</p>
+     * <p class="changed_added_2_0">Return the request parameter name
+     * from which the value is retrieved.</p>
+     * @since 2.0
      */
     public String getName() {
 
@@ -140,9 +163,11 @@ public class UIViewParameter extends UIInput {
 
 
     /**
-     * <p>Set the request parameter name from which the value is retrieved.</p>
+     * <p class="changed_added_2_0">Set the request parameter name from
+     * which the value is retrieved.</p>
      *
      * @param name The new request parameter name.
+     * @since 2.0
      */
     public void setName(String name) {
 
@@ -151,7 +176,10 @@ public class UIViewParameter extends UIInput {
     }
 
     /**
-     * The immediate setting is not relevant for page parameters and must be assumed to be false.
+     * <p class="changed_added_2_0">Return <code>false</code>.  The
+     * immediate setting is not relevant for page parameters and must be
+     * assumed to be <code>false</code>.</p>
+     * @since 2.0
      */
     @Override
     public boolean isImmediate() {
@@ -159,8 +187,9 @@ public class UIViewParameter extends UIInput {
     }
 
     /**
-     * For right now, we assume that the submitted value is always a string. However, we may want
-     * to support a string array as well.
+     * <p class="changed_added_2_0">Assume that the submitted value is
+     * always a string.</p>
+     * @since 2.0
      */
     @Override
     public String getSubmittedValue() {
@@ -174,6 +203,14 @@ public class UIViewParameter extends UIInput {
     // QUESTION should we just override processDecodes() directly?
     // ANSWER: In this case, no.  We don't want to take responsibility for 
     // traversing any children we may have in the future.
+
+    /**
+     * <p class="changed_added_2_0">Override behavior from superclass to
+     * pull a value from the incoming request parameter map under the
+     * name given by {@link #getName} and store it with a call to {@link
+     * UIInput#setSubmittedValue}.</p>
+     * @since 2.0
+     */
     @Override
     public void decode(FacesContext context) {
         if (context == null) {
@@ -201,6 +238,7 @@ public class UIViewParameter extends UIInput {
      * along with the "required" flag being set to <code>true</code> will
      * cause a validation failure. </p>
      * @param context
+     * @since 2.0
      */
 
     @Override
@@ -238,7 +276,15 @@ public class UIViewParameter extends UIInput {
         }
     }
 
-    // This is the "Update Model Values" step
+    /**
+     * <p class="changed_added_2_0">Call through to superclass {@link
+     * UIInput#updateModel} then take the additional action of pushing
+     * the value into request scope if and only if the value is not a
+     * value expression is valid, and the local value was set on this
+     * lifecycle execution.</p>
+     * @since 2.0
+     */
+
     @Override
     public void updateModel(FacesContext context) {
         super.updateModel(context);
@@ -250,6 +296,13 @@ public class UIViewParameter extends UIInput {
     }
 
     // This is called during the real "Render Response" phase
+
+    /**
+     * <p class="changed_added_2_0">Called specially by {@link
+     * UIViewRoot#encodeEnd}, this method simply sets the submitted
+     * value to be the return from {@link #getStringValue}.</p>
+     * @since 2.0
+     */
     @Override
     public void encodeAll(FacesContext context) throws IOException {
         if (context == null) {
@@ -262,9 +315,27 @@ public class UIViewParameter extends UIInput {
         setSubmittedValue(getStringValue(context));
     }
 
+    /**
+     * <p class="changed_added_2_0">If the value of this parameter comes
+     * from a <code>ValueExpression</code> return the value of the
+     * expression, otherwise, return the local value.</p>
+     *
+     * <p>PENDING(edburns): verify that we really need this and that
+     * getValue() isn't sufficient.</p>
+     * @since 2.0
+     */
+
     public String getStringValue(FacesContext context) {
         return hasValueExpression() ? getStringValueFromModel(context) : rawValue;
     }
+
+    /**
+     * <p class="changed_added_2_0">Manually perform standard conversion
+     * steps to get a string value from the value expression.</p>
+     *
+     * <p>PENDING(edburns): verify that we really need this.</p>
+     * @since 2.0
+     */
 
     public String getStringValueFromModel(FacesContext context)
         throws ConverterException {
@@ -426,6 +497,15 @@ public class UIViewParameter extends UIInput {
         setSubmittedValue(values[2]);
 
     }
+
+    /**
+     * <p class="changed_added_2_0">Inner class to encapsulate a
+     * <code>UIViewParameter</code> instance so that it may be safely
+     * referenced regardless of whether or not the current view is the
+     * same as the view in which this <code>UIViewParameter</code>
+     * resides.</p>
+     * @since 2.0
+     */
     
     public static class Reference {
         
