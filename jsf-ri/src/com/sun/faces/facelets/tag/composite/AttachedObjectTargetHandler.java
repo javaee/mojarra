@@ -77,12 +77,8 @@ public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
 
     public AttachedObjectTargetHandler(TagConfig config) {
         super(config);
-        this.name = this.getAttribute("name");
+        this.name = this.getRequiredAttribute("name");
         this.targets = this.getAttribute("targets");
-        if (name == null && targets == null) {
-            throw new TagException(this.tag, "If the 'name' attribute is not specified, the 'targets' attribute must be.");
-        }
-        
     }
     
     abstract AttachedObjectTargetImpl newAttachedObjectTargetImpl();

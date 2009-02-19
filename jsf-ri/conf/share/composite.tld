@@ -1136,19 +1136,21 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be the component id of
-                a component within the
-                <code>&lt;composite:implementation&gt;</code> section.
-                If not present, the "targets" attribute must be
-                present.  If both "name" and "targets" are present, "targets"
-                takes precedence.</p></div>]]>
+<p>
+  The value of this attribute maps back to the "for" attribute on an attachable object
+  nested within a composite component.   If the "targets" attribute is not specified,
+  this value also represents the component ID of the target component within the
+  that the <code>&lt;composite:implementation&gt;</code>
+  ActionListener should be mapped to.
+</p>
+</div>]]>
 
             </description>
             <name>
                 name
             </name>
             <required>
-                false
+                true
             </required>
             <deferred-value>
                 <type>
@@ -1165,9 +1167,7 @@ example.</p>
 component ids of components within the
 <code>&lt;composite:implementation&gt;</code> section.  Space is used as
 the delimiter for compatibility with the IDREFS and NMTOKENS data types
-from the XML Schema.  If not present, the "name" attribute must be
-present.  If both "name" and "targets" are present, "targets" takes
-precedence.</p></div>]]>
+from the XML Schema.  </p></div>]]>
 
             </description>
             <name>
@@ -1217,21 +1217,24 @@ example.</p>
         <attribute>
             <description>
 
+
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be the component id of
-                a component within the
-                <code>&lt;composite:implementation&gt;</code> section.
-                If not present, the "targets" attribute must be
-                present.  If both "name" and "targets" are present, "targets"
-                takes precedence.</p></div>]]>
-
+<p>
+  The value of this attribute maps back to the "for" attribute on an attachable object
+  nested within a composite component.   If the "targets" attribute is not specified,
+  this value also represents the component ID of the target component within the
+  that the <code>&lt;composite:implementation&gt;</code>
+  ActionListener should be mapped to.
+</p>
+</div>]]>
+            
             </description>
             <name>
                 name
             </name>
             <required>
-                false
+                true
             </required>
             <deferred-value>
                 <type>
@@ -1248,9 +1251,7 @@ example.</p>
 component ids of components within the
 <code>&lt;composite:implementation&gt;</code> section.  Space is used as
 the delimiter for compatibility with the IDREFS and NMTOKENS data types
-from the XML Schema.  If not present, the "name" attribute must be
-present.  If both "name" and "targets" are present, "targets" takes
-precedence.</p></div>]]>
+from the XML Schema.</p></div>]]>
 
             </description>
             <name>
@@ -1330,19 +1331,21 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be the component id of
-                a component within the
-                <code>&lt;composite:implementation&gt;</code> section.
-                If not present, the "targets" attribute must be
-                present.  If both "name" and "targets" are present, "targets"
-                takes precedence.</p></div>]]>
+<p>
+  The value of this attribute maps back to the "for" attribute on an attachable object
+  nested within a composite component.   If the "targets" attribute is not specified,
+  this value also represents the component ID of the target component within the
+  that the <code>&lt;composite:implementation&gt;</code>
+  ActionListener should be mapped to.
+</p>
+</div>]]>
 
             </description>
             <name>
                 name
             </name>
             <required>
-                false
+                true
             </required>
             <deferred-value>
                 <type>
@@ -1359,9 +1362,7 @@ example.</p>
 component ids of components within the
 <code>&lt;composite:implementation&gt;</code> section.  Space is used as
 the delimiter for compatibility with the IDREFS and NMTOKENS data types
-from the XML Schema.  If not present, the "name" attribute must be
-present.  If both "name" and "targets" are present, "targets" takes
-precedence.</p></div>]]>
+from the XML Schema.</p></div>]]>
 
             </description>
             <name>
