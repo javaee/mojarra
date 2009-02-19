@@ -37,7 +37,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:be="http://javaserverfaces.dev.java.net/demo/behavior">
+
 <f:view contentType="text/html"/>
 
 <h:head>
@@ -53,6 +55,12 @@
        <h:commandButton id="submit" value="submit">
            <f:ajax/>
        </h:commandButton>
+
+       <h:commandButton id="greet" value="Greet">
+           <be:greet/>
+           <be:greet name="Joe"/>
+       </h:commandButton>
+
        <h:outputStylesheet name="stylesheet.css" />
    </h:form>
 

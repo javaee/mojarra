@@ -191,5 +191,12 @@ public class Bean {
             output.setValue("Correct!");
         }
     }
+
+    public void processBehavior(AjaxBehaviorEvent event) {
+
+    System.out.println ("BEHAVIOR LISTENER CALLED!";
+
+
+    }
         
 }
