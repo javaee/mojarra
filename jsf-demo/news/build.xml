@@ -127,6 +127,13 @@
                            appName="${example}"/>
     </target>
 
+    <target name="explode">
+        <mkdir dir="${build}/target/news" />
+        <unjar src="${build}/${example}.war" overwrite="true"
+               dest="${build}/target/news" />
+    </target>
+
+
 
 </project>
 
