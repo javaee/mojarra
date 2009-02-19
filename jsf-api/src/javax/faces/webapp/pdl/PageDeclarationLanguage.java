@@ -40,6 +40,7 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.faces.application.Resource;
 import javax.faces.component.UIViewParameter;
@@ -86,14 +87,23 @@ public abstract class PageDeclarationLanguage {
     public abstract BeanInfo getViewMetadata(FacesContext context, String viewId);
 
     public List<UIViewParameter> getViewParameters(FacesContext context, String viewId) {
-        List<UIViewParameter> viewParams = null;
-        BeanInfo beanInfo = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getViewMetadata(context, viewId);
-        BeanDescriptor otherBd = beanInfo.getBeanDescriptor();
-        List<UIViewParameter.Reference> params = (List<UIViewParameter.Reference>)
-          otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
-        viewParams = new ArrayList<UIViewParameter>(params.size());
-        for (UIViewParameter.Reference r : params) {
-            viewParams.add(r.getUIViewParameter(context));
+        List<UIViewParameter> viewParams = Collections.<UIViewParameter>emptyList(); 
+        BeanInfo beanInfo = null;
+        PageDeclarationLanguage pdl = null;
+        try {
+            pdl = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId);
+            beanInfo = pdl.getViewMetadata(context, viewId);
+        } catch (UnsupportedOperationException uoe) {
+            
+        }
+        if (null != beanInfo) {
+            BeanDescriptor otherBd = beanInfo.getBeanDescriptor();
+            List<UIViewParameter.Reference> params = (List<UIViewParameter.Reference>)
+              otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
+            viewParams = new ArrayList<UIViewParameter>(params.size());
+            for (UIViewParameter.Reference r : params) {
+                viewParams.add(r.getUIViewParameter(context));
+            }
         }
 
         return viewParams;

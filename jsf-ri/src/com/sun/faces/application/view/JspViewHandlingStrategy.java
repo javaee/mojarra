@@ -84,7 +84,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
     @Override
     public BeanInfo getViewMetadata(FacesContext context, String viewId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException();
     }
     
     /**

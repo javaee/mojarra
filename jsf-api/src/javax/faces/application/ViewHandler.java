@@ -373,12 +373,16 @@ public abstract class ViewHandler {
      * merged with the parameters parsed from the query string on the viewId and the parameter
      * overrides passed in according to the precendence rules defined in the spec. Finally,
      * the result is encoded by calling {@link ExternalContext#encodeActionURL(java.lang.String)}</p>
+
+     * <p class="changed_added_2_0">A default implementation is provided that 
+     * simply calls through to {@link #getActionURL}, ignoring the 
+     * <code>includeViewParams</code> argument.</p>
      *
      * @since 2.0
      */
     public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
 
-        throw new UnsupportedOperationException();
+        return context.getApplication().getViewHandler().getActionURL(context, viewId);
 
     }
 

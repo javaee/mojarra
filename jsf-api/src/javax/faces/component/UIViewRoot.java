@@ -78,6 +78,7 @@ import javax.faces.event.PostConstructViewMapEvent;
 import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 
 /**
@@ -1472,7 +1473,19 @@ public class UIViewRoot extends UIComponentBase {
     }
     
     private void encodeViewParameters(FacesContext context) {
-        List<UIViewParameter> params = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getViewParameters(context, getViewId());
+        PageDeclarationLanguage pdl = null;
+        
+        try {
+            context.getApplication().getViewHandler().
+                    getPageDeclarationLanguage(context, getViewId());
+        } catch (UnsupportedOperationException uoe) {
+            
+        }
+        
+        if (null == pdl) {
+            return;
+        }
+        List<UIViewParameter> params = pdl.getViewParameters(context, getViewId());
         if (params.isEmpty()) {
             return;
         }
