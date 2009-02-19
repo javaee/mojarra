@@ -1359,12 +1359,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * If any script in the chain returns false, the chain is short-circuited
      * and subsequent scripts are not invoked.  Any number of scripts may
      * specified after the <code>behaviorEventName</code> argument.</p>
+     *
      * @param source The DOM element that triggered this Ajax request, or an 
      * id string of the element to use as the triggering element.
      * @param event The DOM event that triggered this Ajax request.  The
      * <code>event</code> argument is optional.
      * @param behaviorEventName The name of the behavior event that is
      * causing the chain to be invoked.  This argument is optional.
+     *
+     * @function jsf.chain
      */
     jsf.chain = function(source, event, behaviorEventName) {
 
