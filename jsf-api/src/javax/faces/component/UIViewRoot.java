@@ -1471,9 +1471,7 @@ public class UIViewRoot extends UIComponentBase {
         
     }
     
-
-    // QUESTION: should this be made protected or private instead?
-    public void encodePageParameters(FacesContext context) {
+    private void encodePageParameters(FacesContext context) {
         List<UIPageParameter> params = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getPageParameters(context, getViewId());
         if (params.isEmpty()) {
             return;
