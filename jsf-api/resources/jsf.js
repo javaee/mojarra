@@ -1353,6 +1353,39 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         return qString;
     };
 
+
+    /**
+     * <p>A varargs function that invokes an arbitrary number of scripts.
+     * If any script in the chain returns false, the chain is short-circuited
+     * and subsequent scripts are not invoked.  Any number of scripts may
+     * specified after the <code>behaviorEventName</code> argument.</p>
+     * @param source The DOM element that triggered this Ajax request, or an 
+     * id string of the element to use as the triggering element.
+     * @param event The DOM event that triggered this Ajax request.  The
+     * <code>event</code> argument is optional.
+     * @param behaviorEventName The name of the behavior event that is
+     * causing the chain to be invoked.  This argument is optional.
+     */
+    jsf.chain = function(source, event, behaviorEventName) {
+
+        // TODO: support both source id and element
+        // TODO: support behavior event
+
+        var length = arguments.length;
+        if (length < 4)
+            return;
+
+        // Call back any scripts that were passed in
+        for (var i = 3; i < arguments.length; i++) {
+
+          var f = new Function("event", arguments[i]);
+          var returnValue = f.call(source, event);   
+
+          if (returnValue === false)
+            break;
+        }
+    }
+
     /**
      * <p>An integer specifying the specification version that this file implements.
      * It's format is: rightmost two digits, bug release number, next two digits,

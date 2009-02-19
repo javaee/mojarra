@@ -315,25 +315,39 @@ public class RenderKitUtils {
 
     }
 
-//TODO Support traditional (non behavior)
     public static void renderOnclick(FacesContext context, 
                                      UIComponent component, Param[] params,
                                      List <Behavior> behaviors)
         throws IOException {
 
-        if (null != behaviors && !behaviors.isEmpty()) {
-//TODO Iterate over behaviors and chain scripts
-            String script = behaviors.get(0).getScript(context, component, "action");
-            if (null != script) {
-                ResponseWriter writer = context.getResponseWriter();
-                writer.writeAttribute("onclick", script, null);
-            }
+        final String handlerName = "onclick";
+        final String behaviorEventName = "action";
+
+        ResponseWriter writer = context.getResponseWriter();
+
+        String userClickHandler = getUserHandler(component, handlerName);
+
+        if ((null == behaviors) || (behaviors.isEmpty())) {
+            writer.writeAttribute(handlerName, userClickHandler, null);
+            return;
         }
 
+        // If we've got some behavior, we assume that we'll need to
+        // build up a call to jsf.chain().  Hard to know how big of
+        // a buidler to allocate.
+        StringBuilder builder = new StringBuilder(100);
+
+        startChainScript(builder, behaviorEventName);
+        appendScriptToChain(builder, userClickHandler);
+        appendBehaviorsToChain(builder, context, component, behaviors, behaviorEventName);
+        endChainScript(builder);
+
+        // TODO don't always want to return false here - only in
+        // cases where we want to cancel the default submit.
+        builder.append("return false");
+
+        writer.writeAttribute(handlerName, builder.toString(), null);
     }
-
-
-
 
     public static String prefixAttribute(final String attrName,
                                          final ResponseWriter writer) {
@@ -1011,6 +1025,89 @@ public class RenderKitUtils {
         context.getAttributes()
               .put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
 
+    }
+
+    // Starts writing out a call to jsf.chain().
+    private static void startChainScript(StringBuilder builder, 
+                                         String behaviorName) {
+        builder.append("jsf.chain(this,event,");
+
+        if (behaviorName == null)
+            builder.append("0");
+        else {
+            builder.append("'");
+            builder.append(behaviorName);
+            builder.append("'");
+        }
+    }
+
+    // Closes up a call jsf.chain().
+    private static void endChainScript(StringBuilder builder) {
+        builder.append(");");
+    }
+
+    // Appends a script to a jsf.chain() call that was previously
+    // started via startChainScript().
+    private static void appendScriptToChain(StringBuilder builder, 
+                                            String script) {
+        if ((null == script) || script.length() == 0)
+            return;
+
+        if (builder.charAt(builder.length() - 1) != ',')
+            builder.append(',');
+
+        builder.append("'");
+        appendQuotedScriptToChain(builder, script);
+        builder.append("'");
+    }
+
+
+    // Append a script to the chain, escaping any single quotes, since
+    // our script content is itself nested within single quotes.
+    private static void appendQuotedScriptToChain(StringBuilder builder, 
+                                                  String script) {
+
+        int length = script.length();
+
+        for (int i = 0; i < length; i++) {
+            char c = script.charAt(i);
+
+            if (c == '\'')
+                builder.append('\\');
+
+            builder.append(c);
+        }
+    }
+
+    // Appends one or more behavior scripts a jsf.chain() call that was 
+    // previously started via startChainScript().
+    private static void appendBehaviorsToChain(StringBuilder builder,
+                                               FacesContext context, 
+                                               UIComponent component,
+                                               List<Behavior> behaviors,
+                                               String behaviorEventName) {
+
+        for (Behavior behavior : behaviors) {
+            String script = behavior.getScript(context, component, behaviorEventName);
+            appendScriptToChain(builder, script);
+        }
+    }
+
+    // Returns a user-specified DOM event handler script, trimmed
+    // if necessary.
+    private static String getUserHandler(UIComponent component,
+                                         String handlerName) {
+
+        String handler = (String) component.getAttributes().get(handlerName);
+
+        if (null != handler) {
+            handler = handler.trim();
+
+            if (handler.length() == 0)
+                handler = null;
+        }
+
+        return handler;
     }
 
 
