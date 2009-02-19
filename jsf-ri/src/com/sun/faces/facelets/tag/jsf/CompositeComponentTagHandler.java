@@ -79,6 +79,8 @@ import com.sun.faces.facelets.el.VariableMapperWrapper;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.FacesLogger;
+
 import javax.el.MethodExpression;
 import javax.faces.application.ViewHandler;
 
@@ -86,6 +88,8 @@ import javax.faces.application.ViewHandler;
  * RELEASE_PENDING (rlubke,driscoll) document
  */
 public class CompositeComponentTagHandler extends ComponentHandler {
+
+    private static final Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
     
     CompositeComponentTagHandler(Resource compositeComponentResource,
             ComponentConfig config) {
@@ -98,26 +102,15 @@ public class CompositeComponentTagHandler extends ComponentHandler {
         TagAttributes tagAttributes = this.tag.getAttributes();
         TagAttribute attrs[] = tagAttributes.getAll();
         String name, value;
-        ExpressionFactory expressionFactory = null;
         Expression expression = null;
         for (int i = 0; i < attrs.length; i++) {
             name = attrs[i].getLocalName();
-            if (null != name && 0 < name.length() && 
+            if (null != name && 0 < name.length() &&
                 !name.equals("id") && !name.equals("binding")){
                 value = attrs[i].getValue();
                 if (null != value && 0 < value.length()) {
-                    // lazily initialize this local variable
-                    if (null == expressionFactory) {
-                        expressionFactory = ctx.getFacesContext().getApplication().
-                                getExpressionFactory();
-                    }
-                    if (value.startsWith("#{")) {
-                        expression = expressionFactory.
-                                createValueExpression(ctx, value, Object.class);
-                    } else {
-                        expression = expressionFactory.
-                                createValueExpression(value, Object.class);
-                    }
+
+                    expression = attrs[i].getValueExpression(ctx, Object.class);
                     // PENDING: I don't think copyTagAttributesIntoComponentAttributes
                     // should be getting called 
                     // on postback, yet it is.  In lieu of a real fix, I'll
@@ -204,16 +197,11 @@ public class CompositeComponentTagHandler extends ComponentHandler {
             };
             ctx.setVariableMapper(wrapper);
             f.apply(facesContext, facetComponent);
-        } catch (IOException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FaceletException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FacesException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ELException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally {
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+            }
+        } finally {
             ctx.setVariableMapper(orig);
         }
 

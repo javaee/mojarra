@@ -245,11 +245,7 @@
   </target>
 
     <target name="build.java.net"
-            depends="prepare.build.java.net">
-
-        <antcall target="build.as.updater.jars" />
-
-    </target>
+            depends="prepare.build.java.net"/>
 
     <target name="nightly" depends="build.java.net"
             description="update nightly build">
@@ -281,11 +277,6 @@
                                    fileDescription="Mojarra ${impl.version.number} nightly source bundle."
                                    overwrite="yes"/>
 
-                    <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/2.0 Nightly/mojarra-${impl.version}-glassfish-updater.jar"
-                                   fromFile="${dist.dir}/mojarra-${impl.version}-glassfish-updater.jar"
-                                   fileDescription="Installer for updating an existing glassfish binary with a new Mojarra implementation. Run 'java -jar mojarra-${impl.version}-glassfish-updater.jar' and follow the instructions."
-                                   overwrite="yes"/>
                 </sequential>
             </then>
             <else>
@@ -327,25 +318,6 @@
               classFile="${dist.dir}/mojarra-samples.class"
               licenseFile="${LICENSEFILE}"
               zipFile="${basedir}/mojarra-samples.zip"/>
-    </target>
-
-    <target name="build.as.updater.jars">
-     <mkdir dir="${dist.dir}"/>
-     <ant dir="jsf-api" target="tools.javac" inheritAll="false" />
-     <jar destfile="${dist.dir}/mojarra-${impl.version}-glassfish-updater.jar">
-        <fileset dir="${basedir}/jsf-tools/build/classes"
-                 includes="com/sun/faces/tools/GlassfishUpdater*.class" />
-        <fileset dir="${basedir}/jsf-api/build/lib/"
-                 includes="jsf-api.jar" />
-        <fileset dir="${basedir}/jsf-ri/build/lib/"
-                 includes="jsf-impl.jar" />
-        <fileset dir="${basedir}/legal/jsf-cddl"
-                 includes="BINARY_LICENSE.txt" />
-        <manifest>
-          <attribute name="Main-Class"
-                     value="com.sun.faces.tools.GlassfishUpdater" />
-        </manifest>
-      </jar>
     </target>
 
     <target name="updatecenter2" depends="main">

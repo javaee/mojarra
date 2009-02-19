@@ -74,6 +74,7 @@ import com.sun.faces.facelets.tag.composite.InterfaceHandler;
 import com.sun.faces.facelets.tag.ui.ComponentRefHandler;
 import com.sun.faces.facelets.tag.ui.CompositionHandler;
 import com.sun.faces.facelets.tag.ui.UILibrary;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * Compilation unit for managing the creation of a single FaceletHandler based
@@ -86,7 +87,7 @@ import com.sun.faces.facelets.tag.ui.UILibrary;
  */
 final class CompilationManager {
 
-    private final static Logger log = Logger.getLogger("facelets.compiler");
+    private final static Logger log = FacesLogger.FACELETS_COMPILER.getLogger();
 
     private final Compiler compiler;
 

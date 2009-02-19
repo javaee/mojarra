@@ -95,6 +95,11 @@ public class RendererBean extends FeatureBean implements AttributeHolder {
     public void setIgnoreForJsp(boolean notForJsp)
     { this.notForJsp = notForJsp; }
 
+    private boolean ignoreAll = false;
+    public boolean isIgnoreAll() { return ignoreAll; }
+    public void setIgnoreAll(boolean ignoreAll)
+    { this.ignoreAll = ignoreAll; }
+
     // true if the tag handler for this renderer should be a BodyTag
     // [default=false]
     public boolean bodyTag = false;

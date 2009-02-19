@@ -166,6 +166,7 @@ public class ApplicationAssociate {
 
     private String contextName;
     private boolean requestServiced;
+    private boolean errorPagePresent;
 
     private BeanManager beanManager;
     private GroovyHelper groovyHelper;
@@ -288,6 +289,14 @@ public class ApplicationAssociate {
 
     public Compiler getCompiler() {
         return compiler;
+    }
+
+    public boolean isErrorPagePresent() {
+        return errorPagePresent;
+    }
+
+    public void setErrorPagePresent(boolean errorPagePresent) {
+        this.errorPagePresent = errorPagePresent;
     }
 
     public FaceletFactory getFaceletFactory() {

@@ -72,6 +72,7 @@ import com.sun.faces.facelets.tag.TagDecorator;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * A Compiler instance may handle compiling multiple sources
@@ -81,7 +82,7 @@ import com.sun.faces.util.Util;
  */
 public abstract class Compiler {
 
-    protected final static Logger log = Logger.getLogger("facelets.compiler");
+    protected final static Logger log = FacesLogger.FACELETS_COMPILER.getLogger();
 
     public final static String EXPRESSION_FACTORY = "compiler.ExpressionFactory";
 

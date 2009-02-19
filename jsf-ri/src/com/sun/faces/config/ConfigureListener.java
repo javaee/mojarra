@@ -98,7 +98,6 @@ import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.scripting.GroovyHelperFactory;
 import com.sun.faces.mgbean.BeanBuilder;
 import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
@@ -161,22 +160,23 @@ public class ConfigureListener implements ServletRequestListener,
         // Check to see if the FacesServlet is present in the
         // web.xml.   If it is, perform faces configuration as normal,
         // otherwise, simply return.
-        if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles)) {
-            WebXmlProcessor webXmlProcessor = new WebXmlProcessor(context);
-            if (!webXmlProcessor.isFacesServletPresent()) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "No FacesServlet found in deployment descriptor - bypassing configuration");
-                }
-                WebConfiguration.clear(context);
-                return;
-            } else {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "FacesServlet found in deployment descriptor - processing configuration.");
-                }
+        //if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles)) {
+        WebXmlProcessor webXmlProcessor = new WebXmlProcessor(context);
+        if (!webXmlProcessor.isFacesServletPresent()) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                           "No FacesServlet found in deployment descriptor - bypassing configuration");
+            }
+            WebConfiguration.clear(context);
+            return;
+        } else {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                           "FacesServlet found in deployment descriptor - processing configuration.");
             }
         }
+        //}
+
 
         // bootstrap of faces required
         webAppListener = new WebappLifecycleListener(context);
@@ -235,6 +235,12 @@ public class ConfigureListener implements ServletRequestListener,
                     for (String name : eagerBeans) {
                         manager.create(name, initContext);
                     }
+                }
+                if (webXmlProcessor.isErrorPagePresent()) {
+                    context.setAttribute("com.sun.faces.errorPagePresent", Boolean.TRUE);
+                    associate.setErrorPagePresent(true);
+                } else {
+                    context.setAttribute("com.sun.faces.errorPagePresent", Boolean.FALSE);
                 }
             }
             Application app = initContext.getApplication();
@@ -524,6 +530,8 @@ public class ConfigureListener implements ServletRequestListener,
             ApplicationAssociate associate =
                   ApplicationAssociate.getInstance(sc);
             if (associate != null) {
+                Boolean errorPagePresent = (Boolean) sc.getAttribute("com.sun.faces.erroPagePresent");
+                associate.setErrorPagePresent(errorPagePresent);
                 associate.setContextName(getServletContextIdentifier(sc));
             }
         } catch (Exception e) {
@@ -673,6 +681,7 @@ public class ConfigureListener implements ServletRequestListener,
         private static final String WEB_XML_PATH = "/WEB-INF/web.xml";
 
         private boolean facesServletPresent;
+        private boolean errorPagePresent;
 
 
         /**
@@ -702,6 +711,17 @@ public class ConfigureListener implements ServletRequestListener,
             return facesServletPresent;
 
         } // END isFacesServletPresent
+
+
+        /**
+         * @return <code>true</code> if <code>WEB-INF/web.xml</code> contains
+         *  a <code>&lt;error-page&gt;</code> element.
+         */
+        boolean isErrorPagePresent() {
+
+            return errorPagePresent;
+
+        }
 
 
         /**
@@ -755,6 +775,7 @@ public class ConfigureListener implements ServletRequestListener,
          */
         private class WebXmlHandler extends DefaultHandler {
 
+            private static final String ERROR_PAGE = "error-page";
             private static final String SERVLET_CLASS = "servlet-class";
             private static final String FACES_SERVLET =
                 "javax.faces.webapp.FacesServlet";
@@ -775,6 +796,12 @@ public class ConfigureListener implements ServletRequestListener,
                                      String qName, Attributes attributes)
             throws SAXException {
 
+                if (!errorPagePresent) {
+                    if (ERROR_PAGE.equals(localName)) {
+                        errorPagePresent = true;
+                        return;
+                    }
+                }
                 if (!facesServletPresent) {
                     if (SERVLET_CLASS.equals(localName)) {
                         servletClassFound = true;

@@ -353,7 +353,7 @@ public class NavigationCase {
             sb.append(", fromOutcome='").append(fromOutcome).append('\'');
             sb.append(", if='").append(condition).append('\'');
             sb.append(", toViewId='").append(toViewId).append('\'');
-            sb.append(", redirect=").append(redirect);
+            sb.append(", faces-redirect=").append(redirect);
             sb.append(", includeViewParams=").append(includeViewParams).append('\'');
             sb.append('}');
             toString = sb.toString();

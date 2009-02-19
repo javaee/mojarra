@@ -759,8 +759,15 @@ public class UIViewRoot extends UIComponentBase {
                     FacesEvent event =
                           eventsForPhaseId.get(0);
                     UIComponent source = event.getComponent();
+                    UIComponent compositeParent = null;
                     try {
-                        this.pushComponentToEL(context, source);
+                        if (!UIComponent.isCompositeComponent(source)) {
+                            compositeParent = getCompositeComponentParent(source);
+                        }
+                        if (compositeParent != null) {
+                            pushComponentToEL(context, compositeParent);
+                        }
+                        pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
                         context.getApplication().publishEvent(ExceptionQueuedEvent.class,
@@ -771,6 +778,9 @@ public class UIViewRoot extends UIComponentBase {
                     }
                     finally {
                         popComponentFromEL(context);
+                        if (compositeParent != null) {
+                            popComponentFromEL(context);
+                        }
                     }
                     eventsForPhaseId.remove(0); // Stay at current position
                 }
@@ -783,8 +793,15 @@ public class UIViewRoot extends UIComponentBase {
                 while (!eventsForPhaseId.isEmpty()) {
                     FacesEvent event = eventsForPhaseId.get(0);
                     UIComponent source = event.getComponent();
+                    UIComponent compositeParent = null;
                     try {
-                        this.pushComponentToEL(context, source);
+                        if (!UIComponent.isCompositeComponent(source)) {
+                            compositeParent = getCompositeComponentParent(source);
+                        }
+                        if (compositeParent != null) {
+                            pushComponentToEL(context, compositeParent);
+                        }
+                        pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException ape) {
                         // A "return" here would abort remaining events too
@@ -796,6 +813,9 @@ public class UIViewRoot extends UIComponentBase {
                     }
                     finally {
                         popComponentFromEL(context);
+                        if (compositeParent != null) {
+                            popComponentFromEL(context);
+                        }
                     }
                     eventsForPhaseId.remove(0); // Stay at current position
                 }
@@ -816,6 +836,18 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     // ------------------------------------------------ Lifecycle Phase Handlers
+
+
+    private UIComponent getCompositeComponentParent(UIComponent c) {
+        UIComponent parent = c.getParent();
+        while (parent != null) {
+            if (UIComponent.isCompositeComponent(parent)) {
+                return parent;
+            }
+            parent = parent.getParent();
+        }
+        return null;
+    }
 
     private void initState() {
         skipPhase = false;

@@ -91,7 +91,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * Flag indicated the current mode.
      */
     private boolean development;
-    private static final Pattern REDIRECT_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(redirect=true(&|$))");
+    private static final Pattern REDIRECT_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(faces-redirect=true(&|$))");
     private static final Pattern INCLUDE_VIEW_PARAMS_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(includeViewParams=true(&|$))");
 
 

@@ -41,11 +41,14 @@ import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;
 import javax.faces.context.FacesContext;
 
+import com.sun.faces.application.ApplicationAssociate;
+
 /**
  * Default ExceptionHandlerFactory implementation.
  */
 public class ExceptionHandlerFactoryImpl extends ExceptionHandlerFactory {
 
+    private ApplicationAssociate associate;
 
     // ------------------------------------ Methods from ExceptionHandlerFactory
 
@@ -55,10 +58,28 @@ public class ExceptionHandlerFactoryImpl extends ExceptionHandlerFactory {
      */
     public ExceptionHandler getExceptionHandler() {
 
-        if (FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest()) {
-            return new AjaxExceptionHandlerImpl(new ExceptionHandlerImpl());
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (fc.getPartialViewContext().isAjaxRequest()) {
+            return new AjaxExceptionHandlerImpl(new ExceptionHandlerImpl(Boolean.TRUE));
         }
-        return new ExceptionHandlerImpl();
+        ApplicationAssociate associate = getAssociate(fc);
+        return new ExceptionHandlerImpl(((associate != null) ? associate.isErrorPagePresent() : Boolean.TRUE));
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private ApplicationAssociate getAssociate(FacesContext ctx) {
+
+        if (associate == null) {
+            associate = ApplicationAssociate.getCurrentInstance();
+            if (associate == null) {
+                associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
+            }
+        }
+        return associate;
 
     }
 

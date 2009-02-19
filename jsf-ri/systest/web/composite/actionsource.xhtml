@@ -35,24 +35,52 @@
  holder.
 
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite">
-<head>
-    <title>This will not be present in rendered output</title>
-</head>
-<body>
-<composite:interface>
-    <composite:attribute name="action" targets="navbutton" required="true" method-signature="String f1()" /> 
-</composite:interface>
+      xmlns:ez="http://java.sun.com/jsf/composite/composite">
+<h:head>
+<title>actionSource1</title>
+</h:head>
 
-<composite:implementation>
-   <h:commandButton id="navbutton" action="#{compositeComponent.attrs.action}" value="NavButton" type="submit" />
-    <!-- <h:commandButton id="navbutton" action="nav2" value="NavButton" type="submit" /> -->
-</composite:implementation>
-</body>
+<h:body>
+
+  <ui:debug hotkey="p" rendered="true"/>
+
+<h:form id="form">
+
+    <p>
+        Maps ActionListener to commandButton within composite/actionSource1.xhtml using
+        only the name attribute.
+    </p>
+    <ez:actionSource1 id="actionsource1">
+        <f:actionListener for="command" binding="#{compositeBean.actionListener}"/>
+    </ez:actionSource1>
+
+    <p>
+        Maps ActionListener to commandButton within composite/actionSource2.xhtml using
+        name and target attributes.
+    </p>
+    <ez:actionSource2 id="actionsource2">
+        <f:actionListener for="command" binding="#{compositeBean.actionListener}"/>
+    </ez:actionSource2>
+
+    <p>
+        Maps ActionListener to a commandButton within a composite/actionSource1.xhtml
+        which is nested within composite/actionSource3.xhtml.
+    </p>
+    <ez:actionSource3 id="actionsource3">
+        <f:actionListener for="command" binding="#{compositeBean.actionListener}"/>
+    </ez:actionSource3>
+
+    <h:messages/>
+    <p />
+    <h:commandButton value="Clear Messages"/>
+
+</h:form>
+
+</h:body>
+
 </html>

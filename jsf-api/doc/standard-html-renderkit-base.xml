@@ -2663,7 +2663,7 @@
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/naming-container-composite-renderer-class/text())"/>
             </renderer-class>
             <renderer-extension>
-                <jsp-ignore>true</jsp-ignore>
+                <ignore-all>true</ignore-all>
             </renderer-extension>
         </renderer>
 
@@ -2705,7 +2705,7 @@ from the composite component.  For each element in that list, call
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-using-page-children-renderer-class/text())"/>
             </renderer-class>
             <renderer-extension>
-               <jsp-ignore>true</jsp-ignore>
+               <ignore-all>true</ignore-all>
             </renderer-extension>
         </renderer>
 
@@ -2751,7 +2751,7 @@ Otherwise, get the facet whose name is "facetName".  If found call
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-composite-facet-renderer-class/text())"/>
             </renderer-class>
             <renderer-extension>
-               <jsp-ignore>true</jsp-ignore>
+               <ignore-all>true</ignore-all>
             </renderer-extension>
         </renderer>
 

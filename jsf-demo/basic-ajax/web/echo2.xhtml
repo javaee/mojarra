@@ -40,19 +40,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite">
-<head>
-    <title>This will not be present in rendered output</title>
-</head>
-<body>
-<composite:interface>
-    <composite:attribute name="action" targets="navbutton" required="true" method-signature="String f1()" /> 
-</composite:interface>
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html"/>
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    <title>Ajax</title>
+</h:head>
+<h:body>
+    <h:form id="form1">    <!-- Note that unlike previous examples, prependid='true' -->
+        <h:outputScript name="jsf.js" library="javax.faces" target="head"/>
+        <h:outputScript name="javascript/echo1.js" target="head"/>
+        <h:outputStylesheet name="stylesheet.css"/>
 
-<composite:implementation>
-   <h:commandButton id="navbutton" action="#{compositeComponent.attrs.action}" value="NavButton" type="submit" />
-    <!-- <h:commandButton id="navbutton" action="nav2" value="NavButton" type="submit" /> -->
-</composite:implementation>
-</body>
+        Output: <h:outputText id="out1" value="#{echo.str}"/>
+        <br/>
+        Input: <h:inputText id="in1" value="#{echo.str}">
+            <f:ajax render="out1"/>
+        </h:inputText>
+        <br/>
+        <!-- A no-op button, just to lose the focus from "in1" -->
+        <h:commandButton id="button1" value="Echo" type="button"/>
+        <br/>
+        <!-- Resets the string, refreshes the form, but not the page -->
+        <h:commandButton id="reset" value="reset"
+                            onclick="return resetpush(this, event);"
+                            actionListener="#{echo.reset}"/>
+        <!-- Reloads the page, doesn't reset the string -->
+        <h:commandButton id="reload" value="reload"/>
+        <h:messages/>
+    </h:form>
+
+</h:body>
 </html>
