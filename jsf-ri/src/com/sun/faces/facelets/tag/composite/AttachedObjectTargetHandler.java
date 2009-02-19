@@ -79,7 +79,10 @@ public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
         super(config);
         this.name = this.getRequiredAttribute("name");
         this.targets = this.getAttribute("targets");
+<<<<<<< .working
         
+=======
+>>>>>>> .merge-right.r6530
     }
     
     abstract AttachedObjectTargetImpl newAttachedObjectTargetImpl();
