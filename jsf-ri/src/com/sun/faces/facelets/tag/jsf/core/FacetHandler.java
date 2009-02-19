@@ -59,6 +59,7 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
+import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
@@ -105,17 +106,22 @@ public final class FacetHandler extends TagHandlerImpl {
         }
         String facetName = this.name.getValue(ctx);
         parent.getAttributes().put(KEY, facetName);
+        boolean isMetadataFacet = UIViewRoot.METADATA_FACET_NAME.equals(facetName);
+        if (isMetadataFacet) {
+            parent.getFacets().remove(UIViewRoot.METADATA_FACET_NAME);
+        }
         try {
             this.nextHandler.apply(ctx, parent);
         } finally {
             parent.getAttributes().remove(KEY);
         }
         
-        if (parent instanceof UIViewRoot &&
-            UIViewRoot.METADATA_FACET_NAME.equals(facetName) &&
-            ctx.getFacesContext().getAttributes().get(FaceletViewHandlingStrategy.ONLY_BUILD_METADATA_FACET_KEY) != null) {
-            ctx.setAttribute(ABORT_PROCESSING_KEY, true);
+        if (parent instanceof UIViewRoot && isMetadataFacet) {
+            UIComponent facetComponent = parent.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
+            facetComponent.setId(UIViewRoot.METADATA_FACET_NAME);
+            if (ctx.getFacesContext().getAttributes().get(FaceletViewHandlingStrategy.ONLY_BUILD_METADATA_FACET_KEY) != null) {
+                ctx.setAttribute(ABORT_PROCESSING_KEY, true);
+            }
         }
-
     }
 }
