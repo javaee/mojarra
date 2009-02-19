@@ -1951,7 +1951,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:attribute name="id" type="xsd:ID"/>
-        <xsd:attribute name="include-page-params" type="xsd:boolean" use="optional"/>
+        <xsd:attribute name="include-view-params" type="xsd:boolean" use="optional"/>
     </xsd:complexType>
 
     <!-- **************************************************** -->

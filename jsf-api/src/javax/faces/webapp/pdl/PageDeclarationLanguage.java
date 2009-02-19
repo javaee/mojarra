@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.Resource;
-import javax.faces.component.UIPageParameter;
+import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
@@ -85,18 +85,18 @@ public abstract class PageDeclarationLanguage {
 
     public abstract BeanInfo getViewMetadata(FacesContext context, String viewId);
 
-    public List<UIPageParameter> getPageParameters(FacesContext context, String viewId) {
-        List<UIPageParameter> pageParams = null;
+    public List<UIViewParameter> getViewParameters(FacesContext context, String viewId) {
+        List<UIViewParameter> viewParams = null;
         BeanInfo beanInfo = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId).getViewMetadata(context, viewId);
         BeanDescriptor otherBd = beanInfo.getBeanDescriptor();
-        List<UIPageParameter.Reference> params = (List<UIPageParameter.Reference>)
+        List<UIViewParameter.Reference> params = (List<UIViewParameter.Reference>)
           otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
-        pageParams = new ArrayList<UIPageParameter>(params.size());
-        for (UIPageParameter.Reference r : params) {
-            pageParams.add(r.getUIPageParameter(context));
+        viewParams = new ArrayList<UIViewParameter>(params.size());
+        for (UIViewParameter.Reference r : params) {
+            viewParams.add(r.getUIViewParameter(context));
         }
 
-        return pageParams;
+        return viewParams;
     }
     
     /**

@@ -2232,8 +2232,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </component-extension>
   </component>
   <component>
-    <component-type>javax.faces.PageParameter</component-type>
-    <component-class>javax.faces.component.UIPageParameter</component-class>
+    <component-type>javax.faces.ViewParameter</component-type>
+    <component-class>javax.faces.component.UIViewParameter</component-class>
 
     <property>
       <description><![CDATA[
@@ -2736,7 +2736,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
 
     <component-extension>
-      <component-family>javax.faces.PageParameter</component-family>
+      <component-family>javax.faces.ViewParameter</component-family>
     </component-extension>
   </component>
   <component>

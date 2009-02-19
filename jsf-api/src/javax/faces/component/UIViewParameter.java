@@ -47,7 +47,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
 /**
- * <p class="changed_added_2_0"><strong>UIPageParameter</strong> represents a
+ * <p class="changed_added_2_0"><strong>UIViewParameter</strong> represents a
  * binding between a request parameter and a model property or {@link UIViewRoot}
  * property. This is a bi-directional binding.</p>
  *
@@ -55,7 +55,7 @@ import javax.faces.convert.ConverterException;
  *
  * @since 2.0
  */
-public class UIPageParameter extends UIInput {
+public class UIViewParameter extends UIInput {
 
     
     // ------------------------------------------------------ Manifest Constants
@@ -64,13 +64,13 @@ public class UIPageParameter extends UIInput {
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "javax.faces.PageParameter";
+    public static final String COMPONENT_TYPE = "javax.faces.ViewParameter";
 
 
     /**
      * <p>The standard component family for this component.</p>
      */
-    public static final String COMPONENT_FAMILY = "javax.faces.PageParameter";
+    public static final String COMPONENT_FAMILY = "javax.faces.ViewParameter";
 
     // ------------------------------------------------------ Instance Variables
 
@@ -80,10 +80,10 @@ public class UIPageParameter extends UIInput {
 
 
     /**
-     * <p>Create a new {@link UIPageParameter} instance with default
+     * <p>Create a new {@link UIViewParameter} instance with default
      * property values.</p>
      */
-    public UIPageParameter() {
+    public UIViewParameter() {
 
         super();
         setRendererType(null);
@@ -306,8 +306,8 @@ public class UIPageParameter extends UIInput {
         return c.getAsString(context, this, currentValue);
     }
 
-    public String getStringValueToTransfer(FacesContext context, List<UIPageParameter> pageParams) {
-        for (UIPageParameter candidate : pageParams) {
+    public String getStringValueToTransfer(FacesContext context, List<UIViewParameter> viewParams) {
+        for (UIViewParameter candidate : viewParams) {
             if (candidate.getName().equals(name)) {
                 // QUESTION: should this be getStringValue()? That's how it is implemented in Seam
                 // ANSWER: I don't know.
@@ -434,7 +434,7 @@ public class UIPageParameter extends UIInput {
         private String viewIdAtTimeOfConstruction;
         
         public Reference(FacesContext context, 
-                UIPageParameter param, 
+                UIViewParameter param, 
                 int indexInParent,
                 String viewIdAtTimeOfConstruction)     {
             this.saver = new StateHolderSaver(context, param);
@@ -442,17 +442,17 @@ public class UIPageParameter extends UIInput {
             this.viewIdAtTimeOfConstruction = viewIdAtTimeOfConstruction;
         }
         
-        public UIPageParameter getUIPageParameter(FacesContext context) {
-            UIPageParameter result = null;
+        public UIViewParameter getUIViewParameter(FacesContext context) {
+            UIViewParameter result = null;
             UIViewRoot root = context.getViewRoot();
             // If the view root is the same as when we were constructed...
             if (this.viewIdAtTimeOfConstruction.equals(root.getViewId())) {
                 // get the actual page parameter from the tree...
                 UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
-                result = (UIPageParameter) metadataFacet.getChildren().get(indexInParent);
+                result = (UIViewParameter) metadataFacet.getChildren().get(indexInParent);
             } else {
                 // otherwise, use the saved one
-                result = (UIPageParameter) this.saver.restore(context);
+                result = (UIViewParameter) this.saver.restore(context);
             }
             
             return result;

@@ -179,8 +179,8 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 2.0
      */
     @Override
-    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includePageParams) {
-        return getWrapped().getRedirectURL(context, viewId, parameters, includePageParams);
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
+        return getWrapped().getRedirectURL(context, viewId, parameters, includeViewParams);
     }
     
     

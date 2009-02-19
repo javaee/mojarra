@@ -61,7 +61,7 @@ import javax.faces.validator.LengthValidator;
 import javax.faces.validator.LongRangeValidator;
 
 import com.sun.faces.facelets.tag.AbstractTagLibrary;
-import javax.faces.component.UIPageParameter;
+import javax.faces.component.UIViewParameter;
 import javax.faces.validator.RegexValidator;
 
 /**
@@ -99,7 +99,7 @@ public final class CoreLibrary extends AbstractTagLibrary {
 
         this.addTagHandler("loadBundle", LoadBundleHandler.class);
 
-        this.addComponent("pageParam", UIPageParameter.COMPONENT_TYPE, null);
+        this.addComponent("viewParam", UIViewParameter.COMPONENT_TYPE, null);
 
         this.addComponent("param", UIParameter.COMPONENT_TYPE, null);
         

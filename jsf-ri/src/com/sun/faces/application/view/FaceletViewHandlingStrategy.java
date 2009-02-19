@@ -74,7 +74,7 @@ import javax.el.VariableMapper;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPageParameter;
+import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIPanel;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -194,20 +194,20 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (null == (result = (FacesBeanInfo) root.getAttributes().get(UIViewRoot.METADATA_BEANINFO_KEY))) {
             // Otherwise, see if the viewRoot has the metadata facet
             UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
-            List<UIPageParameter.Reference> params = null;
+            List<UIViewParameter.Reference> params = null;
 
             if (metadataFacet == null) {
-                params = Collections.<UIPageParameter.Reference>emptyList();
+                params = Collections.<UIViewParameter.Reference>emptyList();
             } else {
-                params = new ArrayList<UIPageParameter.Reference>();
+                params = new ArrayList<UIViewParameter.Reference>();
                 List<UIComponent> children = metadataFacet.getChildren();
                 int len = children.size();
                 String viewId = root.getViewId();
                 for (int i = 0; i < len; i++ ) {
                     UIComponent c = children.get(i);
-                    if (c instanceof UIPageParameter) {
-                        params.add(new UIPageParameter.Reference(context,
-                                (UIPageParameter) c, i, viewId));
+                    if (c instanceof UIViewParameter) {
+                        params.add(new UIViewParameter.Reference(context,
+                                (UIViewParameter) c, i, viewId));
                     }
                 }
             }

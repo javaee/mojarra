@@ -657,7 +657,7 @@ public class MultiViewHandler extends ViewHandler {
     }
 
     @Override
-    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includePageParams) {
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
         // QUESTION should encodeParams dually be a flag?
         String encoding = null;
 		if (context.getResponseWriter() != null) {
@@ -667,7 +667,7 @@ public class MultiViewHandler extends ViewHandler {
 			encoding = context.getExternalContext().getResponseCharacterEncoding();
 		}
 
-        return new JsfViewUrlBuilder(context, viewId, includePageParams, encoding).addParameters(parameters).createUrl();
+        return new JsfViewUrlBuilder(context, viewId, includeViewParams, encoding).addParameters(parameters).createUrl();
     }
 
     /**

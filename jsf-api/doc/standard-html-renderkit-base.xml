@@ -206,14 +206,14 @@
 
     <component>
 
-        <component-type>javax.faces.PageParameter</component-type>
-        <component-class>javax.faces.component.UIPageParameter</component-class>
+        <component-type>javax.faces.ViewParameter</component-type>
+        <component-class>javax.faces.component.UIViewParameter</component-class>
 
         <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="uiparameter-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
-            <component-family>javax.faces.PageParameter</component-family>
+            <component-family>javax.faces.ViewParameter</component-family>
         </component-extension>
 
     </component>

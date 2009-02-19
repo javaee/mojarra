@@ -376,7 +376,7 @@ public abstract class ViewHandler {
      *
      * @since 2.0
      */
-    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includePageParams) {
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
 
         throw new UnsupportedOperationException();
 

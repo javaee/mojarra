@@ -92,7 +92,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      */
     private boolean development;
     private static final Pattern REDIRECT_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(redirect=true(&|$))");
-    private static final Pattern INCLUDE_PAGE_PARAMS_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(includePageParams=true(&|$))");
+    private static final Pattern INCLUDE_VIEW_PARAMS_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(includeViewParams=true(&|$))");
 
 
     // ------------------------------------------------------------ Constructors
@@ -175,7 +175,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                       viewHandler.getRedirectURL(context,
                                                  caseStruct.viewId,
                                                  null,
-                                                 caseStruct.navCase.isIncludePageParams());
+                                                 caseStruct.navCase.isIncludeViewParams());
                 try {
                     if (logger.isLoggable(Level.FINE)) {
                         logger.fine("Redirecting to path " + redirectUrl
@@ -438,7 +438,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         String viewIdToTest = outcome;
         String currentViewId = root.getViewId();
         boolean isRedirect = false;
-        boolean isIncludePageParams = false;
+        boolean isIncludeViewParams = false;
 
         int questionMark = viewIdToTest.indexOf('?');
         String queryString = null;
@@ -451,9 +451,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 isRedirect = true;
                 queryString = queryString.replace(m.group(1), "");
 
-                m = INCLUDE_PAGE_PARAMS_EQUALS_TRUE.matcher(queryString);
+                m = INCLUDE_VIEW_PARAMS_EQUALS_TRUE.matcher(queryString);
                 if (m.find()) {
-                    isIncludePageParams = true;
+                    isIncludeViewParams = true;
                     queryString = queryString.replace(m.group(1), "");
                 }
             }
@@ -505,7 +505,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     null,
                     viewIdToTest,
                     isRedirect,
-                    isIncludePageParams);
+                    isIncludeViewParams);
             return caseStruct;
         }
 

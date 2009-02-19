@@ -65,7 +65,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import java.util.Collection;
 import java.util.List;
-import javax.faces.component.UIPageParameter;
+import javax.faces.component.UIViewParameter;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.context.PartialViewContext;
 import javax.faces.event.AbortProcessingException;
@@ -197,7 +197,7 @@ public class RestoreViewPhase extends Phase {
             facesContext.setViewRoot(viewRoot);
             assert(null != viewRoot);
             if (renderResponse) {
-                List<UIPageParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getPageParameters(facesContext, viewId);
+                List<UIViewParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getViewParameters(facesContext, viewId);
                 if (!params.isEmpty() &&
                         !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
                     configureLifecycleForViewMetadataTraversal(facesContext);
@@ -217,7 +217,7 @@ public class RestoreViewPhase extends Phase {
                   createView(facesContext, viewId);           
             facesContext.setViewRoot(viewRoot);
             assert(null != viewRoot);
-            List<UIPageParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getPageParameters(facesContext, viewId);
+            List<UIViewParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getViewParameters(facesContext, viewId);
             if (!params.isEmpty() &&
                 !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
                 configureLifecycleForViewMetadataTraversal(facesContext);

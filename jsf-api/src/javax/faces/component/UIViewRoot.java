@@ -169,7 +169,7 @@ public class UIViewRoot extends UIComponentBase {
     /**
      * <p class="changed_added_2_0">The key in the value set of the
      * <em>view metadata BeanDescriptor</em>, the value of which is a 
-     * <code>List&gt;{@link UIPageParameter#Reference}&lt;</code>.</p>
+     * <code>List&gt;{@link UIViewParameter#Reference}&lt;</code>.</p>
      *
      * @since 2.0
      */
@@ -988,7 +988,7 @@ public class UIViewRoot extends UIComponentBase {
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
-        encodePageParameters(context);
+        encodeViewParameters(context);
         notifyAfter(context, PhaseId.RENDER_RESPONSE);
     }
 
@@ -1471,14 +1471,14 @@ public class UIViewRoot extends UIComponentBase {
         
     }
     
-    private void encodePageParameters(FacesContext context) {
-        List<UIPageParameter> params = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getPageParameters(context, getViewId());
+    private void encodeViewParameters(FacesContext context) {
+        List<UIViewParameter> params = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, getViewId()).getViewParameters(context, getViewId());
         if (params.isEmpty()) {
             return;
         }
 
         try {
-            for (UIPageParameter param : params) {
+            for (UIViewParameter param : params) {
                 param.encodeAll(context);
             }
         } catch (IOException e) {

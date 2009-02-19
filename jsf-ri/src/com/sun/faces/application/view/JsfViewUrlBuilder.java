@@ -38,7 +38,7 @@ package com.sun.faces.application.view;
 
 import java.util.List;
 import javax.faces.application.ViewHandler;
-import javax.faces.component.UIPageParameter;
+import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
@@ -48,24 +48,24 @@ import javax.faces.webapp.pdl.PageDeclarationLanguage;
  */
 public class JsfViewUrlBuilder extends UrlBuilder {
     private String viewId;
-    private boolean includePageParams;
+    private boolean includeViewParams;
     private FacesContext context;
     private ViewHandler viewHandler;
 
-    public JsfViewUrlBuilder(FacesContext context, String url, boolean includePageParams, String encoding) {
+    public JsfViewUrlBuilder(FacesContext context, String url, boolean includeViewParams, String encoding) {
         super(url, encoding);
         if (context == null) {
             throw new IllegalArgumentException("The FacesContext is required");
         }
         this.context = context;
         this.viewHandler = context.getApplication().getViewHandler();
-        this.includePageParams = includePageParams;
+        this.includeViewParams = includeViewParams;
         this.viewId = getPath();
         convertViewToAction();
     }
 
-    public JsfViewUrlBuilder(FacesContext context, String url, boolean includePageParams) {
-        this(context, url, includePageParams, DEFAULT_ENCODING);
+    public JsfViewUrlBuilder(FacesContext context, String url, boolean includeViewParams) {
+        this(context, url, includeViewParams, DEFAULT_ENCODING);
     }
 
     // NOTE I'm not quite comfortable with the convoluted exchange of calls here
@@ -85,7 +85,7 @@ public class JsfViewUrlBuilder extends UrlBuilder {
 
     @Override
     protected void appendQueryString() {
-        addPageParameters();
+        addViewParameters();
         super.appendQueryString();
     }
 
@@ -95,56 +95,56 @@ public class JsfViewUrlBuilder extends UrlBuilder {
      * 2. Query string parameter
      * 3. Page parameter
      */
-    protected void addPageParameters() {
-        if (!includePageParams) {
+    protected void addViewParameters() {
+        if (!includeViewParams) {
             return;
         }
         UIViewRoot currentRoot = context.getViewRoot();
         String currentViewId = currentRoot.getViewId();
         PageDeclarationLanguage pdl = null;
-        List<UIPageParameter> toPageParams;
-        List<UIPageParameter> currentPageParams;
+        List<UIViewParameter> toViewParams;
+        List<UIViewParameter> currentViewParams;
         boolean currentIsSameAsNew = false;
 
         pdl = viewHandler.getPageDeclarationLanguage(context, currentViewId);
-        currentPageParams = pdl.getPageParameters(context, currentViewId);
+        currentViewParams = pdl.getViewParameters(context, currentViewId);
         
         if (currentViewId.equals(viewId)) {
             currentIsSameAsNew = true;
-            toPageParams = currentPageParams;
+            toViewParams = currentViewParams;
         }
         else {
             pdl = viewHandler.getPageDeclarationLanguage(context, viewId);
-            toPageParams = pdl.getPageParameters(context, viewId);
+            toViewParams = pdl.getViewParameters(context, viewId);
         }
 
-        if (toPageParams.isEmpty()) {
+        if (toViewParams.isEmpty()) {
             return;
         }
 
-        for (UIPageParameter pageParam : toPageParams) {
+        for (UIViewParameter viewParam : toViewParams) {
             String value = null;
             // don't bother looking at page parameter if it's been overridden
-            if (getParameters().containsKey(pageParam.getName())) {
+            if (getParameters().containsKey(viewParam.getName())) {
                 continue;
             }
-            else if (pageParam.hasValueExpression()) {
-                value = pageParam.getStringValueFromModel(context);
+            else if (viewParam.hasValueExpression()) {
+                value = viewParam.getStringValueFromModel(context);
             }
             else {
                 // Anonymous page parameter:
-                // Get string value from UIPageParameter instance stored in current view
+                // Get string value from UIViewParameter instance stored in current view
                 if (currentIsSameAsNew) {
-                    value = pageParam.getStringValue(context);
+                    value = viewParam.getStringValue(context);
                 }
-                // ...or transfer string value from matching UIPageParameter instance stored in current view
+                // ...or transfer string value from matching UIViewParameter instance stored in current view
                 else {
-                    value = pageParam.getStringValueToTransfer(context, 
-                            currentPageParams);
+                    value = viewParam.getStringValueToTransfer(context, 
+                            currentViewParams);
                 }
             }
             if (value != null) {
-                addParameter(pageParam.getName(), value);
+                addParameter(viewParam.getName(), value);
             }
         }
     }

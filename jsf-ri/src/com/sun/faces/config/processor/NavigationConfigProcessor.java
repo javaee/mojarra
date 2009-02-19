@@ -110,7 +110,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
     /**
      * <p>/faces-config/navigation-rule/navigation-case/redirect[@include-page-params]</p>
      */
-    private static final String INCLUDE_PAGE_PARAMS_ATTRIBUTE = "include-page-params";
+    private static final String INCLUDE_VIEW_PARAMS_ATTRIBUTE = "include-view-params";
 
     /**
      * <p>If <code>from-view-id</code> is not defined.<p>
@@ -217,7 +217,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                 String condition = null;
                 String toViewId = null;
                 boolean redirect = false;
-                boolean includePageParams = false;
+                boolean includeViewParams = false;
                 for (int i = 0, size = children.getLength(); i < size; i++) {
                     Node n = children.item(i);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -252,7 +252,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                             }
                         } else if (REDIRECT.equals(n.getLocalName())) {
                             redirect = true;
-                            includePageParams = Boolean.valueOf(getNodeText(n.getAttributes().getNamedItem(INCLUDE_PAGE_PARAMS_ATTRIBUTE)));
+                            includeViewParams = Boolean.valueOf(getNodeText(n.getAttributes().getNamedItem(INCLUDE_VIEW_PARAMS_ATTRIBUTE)));
                         }
                     }
                 }
@@ -264,7 +264,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                                               condition,
                                               toViewId,
                                               redirect,
-                                              includePageParams);
+                                              includeViewParams);
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                MessageFormat.format("Adding NavigationCase: {0}",

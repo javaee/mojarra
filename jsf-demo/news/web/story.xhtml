@@ -6,12 +6,12 @@
     xmlns:h="http://java.sun.com/jsf/html">
     <f:view contentType="text/html">
         <f:facet name="javax_faces_metadata">
-            <f:pageParam id="id" name="id" value="#{newsReader.selectedStoryId}" required="true"
+            <f:viewParam id="id" name="id" value="#{newsReader.selectedStoryId}" required="true"
                 requiredMessage="You did not specify a headline. (The id parameter is missing)"
                 converterMessage="Invalid headline. (The id parameter is not a number)"
                 validatorMessage="Invalid headline. (The id parameter is not a positive number)">
                 <f:validateLongRange minimum="1"/>
-            </f:pageParam>
+            </f:viewParam>
             <f:event type="preRenderView" listener="#{newsReader.loadStory}"/>
         </f:facet>
     <body>
@@ -26,14 +26,14 @@
                     <f:param name="id" value="#{null}"/>
                 </h:commandButton>
                 #{' '}
-                <h:commandButton id="refreshWithRedirectParams" action="/story.xhtml?redirect=true&amp;includePageParams=true" value="Refresh (Redirect After POST w/ params)"/>
+                <h:commandButton id="refreshWithRedirectParams" action="/story.xhtml?redirect=true&amp;includeViewParams=true" value="Refresh (Redirect After POST w/ params)"/>
                 #{' '}
                 <h:commandButton id="refreshWithRedirect" action="/story.xhtml?redirect=true" value="Refresh (Redirect After POST w/o params)"/>
             </p>
             <p>
                 <h:commandButton id="home" action="/home.xhtml?redirect=true&amp;from=story" value="Home"/>
                 #{' '}
-                <h:commandButton id="homeRememberSelection" action="/home.xhtml?redirect=true&amp;includePageParams=true&amp;from=story" value="Home (Keep selection)"/>
+                <h:commandButton id="homeRememberSelection" action="/home.xhtml?redirect=true&amp;includeViewParams=true&amp;from=story" value="Home (Keep selection)"/>
                 #{' '}
                 <h:commandButton id="homeRememberSelectionNavCase" action="homeWithParams" value="Home (Keep selection nav case)"/>
 

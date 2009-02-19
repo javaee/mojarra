@@ -64,7 +64,7 @@ import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.el.ELException;
 import javax.el.ELResolver;
-import javax.faces.component.UIPageParameter;
+import javax.faces.component.UIViewParameter;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.validator.Validator;

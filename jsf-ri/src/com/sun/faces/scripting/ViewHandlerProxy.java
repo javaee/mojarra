@@ -103,8 +103,8 @@ public class ViewHandlerProxy extends ViewHandler {
     }
 
     @Override
-    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includePageParams) {
-        return getGroovyDelegate().getRedirectURL(context, viewId, parameters, includePageParams);
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
+        return getGroovyDelegate().getRedirectURL(context, viewId, parameters, includeViewParams);
     }
 
     public void renderView(FacesContext context, UIViewRoot viewToRender)
