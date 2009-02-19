@@ -52,9 +52,13 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 
 import javax.el.ELException;
+import javax.el.ELContext;
+import javax.el.MethodExpression;
+import javax.el.MethodNotFoundException;
 import javax.faces.FacesException;
 import javax.faces.component.ActionSource;
 import javax.faces.component.EditableValueHolder;
@@ -65,12 +69,16 @@ import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.AjaxBehaviors;
 import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.AjaxBehaviorListener;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
@@ -80,51 +88,22 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
  * to perform Ajax operations.  This tag handler must create an instance
  * of {@link javax.faces.component.AjaxBehavior} using the tag attribute 
  * values.  If this tag is nested within a single 
- * {@link javax.faces.component.ActionSource} component, and the
- * <code>events</code> attribute value is not specified or is
- * one of the following: 
+ * {@link BehaviorHolder} component:
  * <ul>
- * <li>{@link javax.faces.component.AjaxBehavior#AJAX_ACTION}</li>
- * <li>{@link javax.faces.component.AjaxBehavior#AJAX_VALUE_CHANGE_ACTION}</li>
+ * <li>If the <code>events</code> attribute value is not specified, 
+ * obtain the default event name by calling {@link BehaviorHolder#getDefaultEventName}.
+ * If that returns <code>null</code> throw an <code>exception</code>.</li>
+ * <li>If the <code>events</code> attribute value is specified, ensure it
+ * that it exists in the <code>Collection</code> returned from a call to
+ * {@link BehaviorHolder#getEventNames} and throw an <code>exception</code> if
+ * it doesn't exist.</li>
+ * <li>Add the {@link AjaxBehavior} instance to the {@link BehaviorHolder}
+ * component by calling {@link BehaviorHolder#addBehavior} passing <code>event</code>
+ * and the {@link AjaxBehavior} instance.</li> 
  * </ul>
- * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
- * component's attribute <code>Map</code> under the key 
- * {@link javax.faces.component.AjaxBehavior#AJAX_BEHAVIOR}.  If this tag is nested within
- * a single {@link javax.faces.component.EditableValueHolder} component,
- * and the <code>events</code> attribute value is not specified or is
- * one of the following:
- * <ul>
- * <li>{@link javax.faces.component.AjaxBehavior#AJAX_VALUE_CHANGE}</li>
- * <li>{@link javax.faces.component.AjaxBehavior#AJAX_VALUE_CHANGE_ACTION}</li>
- * </ul>
- * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
- * component's attribute <code>Map</code> under the key
- * {@link javax.faces.component.AjaxBehavior#AJAX_BEHAVIOR}.
- * Throw an <code>exception</code> if the <code>events</code> attribute value
- * does not match the component type.
  * <br/><br/>
- * If this tag is nested within a component other than an 
- * {@link javax.faces.component.ActionSource} or 
- * {@link javax.faces.component.EditableValueHolder} type, 
- * make this tag's parent component subscribe to {@link javax.faces.event.PostAddToViewEvent}
- * events.  Retrieve an {@link javax.faces.component.AjaxBehaviors} instance from 
- * the current {@link javax.faces.context.FacesContext} attributes <code>Map</code>
- * using the key {@link javax.faces.component.AjaxBehaviors#AJAX_BEHAVIORS}.  If an instance does not exist,
- * create it.  Call {@link javax.faces.component.AjaxBehaviors#pushBehavior} passing the
- * {@link javax.faces.component.AjaxBehavior} instance and the parent component instance.
- * Put the {@link javax.faces.component.AjaxBehaviors} instance into the 
- * {@link javax.faces.context.FacesContext} attributes <code>Map</code>.
- * <br/><br/>
- * Check for the existence of the Ajax resource by calling 
- * <code>UIViewRoot.getComponentResources()</code>.  If
- * the Ajax resource does not exist, create a <code>UIOutput</code> component
- * instance and set the renderer type to <code>javax.faces.resource.Script</code>.
- * Set the the following attributes in the component's attribute <code>Map</code>:
- * <code>library</code> with the value <code>javax.faces</code> and 
- * <code>name</code> with the value <code>jsf.js</code>.  Install the component
- * resource using <code>UIViewRoot.addComponentResource()</code> and specifying
- * <code>head</code> as the <code>target</code> argument.</p> 
- *
+ * RELEASE PENDING: add javadocs for region case.
+ * </p>
  * @version $Id: AjaxHandler.java 5369 2008-09-08 19:53:45Z rogerk $
  */
 public final class AjaxHandler extends TagHandlerImpl {
@@ -135,6 +114,7 @@ public final class AjaxHandler extends TagHandlerImpl {
     private final TagAttribute onevent;
     private final TagAttribute onerror;
     private final TagAttribute disabled;
+    private final TagAttribute listener;
 
     /**
      * @param config
@@ -147,6 +127,7 @@ public final class AjaxHandler extends TagHandlerImpl {
         this.onevent = this.getAttribute("onevent");
         this.onerror = this.getAttribute("onerror");
         this.disabled = this.getAttribute("disabled");
+        this.listener = this.getAttribute("listener");
     }
 
     /*
@@ -166,27 +147,34 @@ public final class AjaxHandler extends TagHandlerImpl {
 
         //AjaxBehavior ajaxBehavior = new AjaxBehavior(event, onevent, onerror, execute, render, disabled);
         AjaxBehavior ajaxBehavior = new AjaxBehavior(event,
-                                                     ((this.onevent != null) ? this.onevent.getValueExpression(ctx, String.class) : null),
-                                                     ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
-                                                     ((this.execute != null) ? this.execute.getValueExpression(ctx, Object.class) : null),
-                                                     ((this.render != null) ? this.render.getValueExpression(ctx, Object.class) : null),
-                                                     ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null));
+            ((this.onevent != null) ? this.onevent.getValueExpression(ctx, String.class) : null),
+            ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
+            ((this.execute != null) ? this.execute.getValueExpression(ctx, Object.class) : null),
+            ((this.render != null) ? this.render.getValueExpression(ctx, Object.class) : null),
+            ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null));
+
+        if (null != listener) {
+            ajaxBehavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(
+                this.listener.getMethodExpression(ctx, Object.class, new Class[] { AjaxBehaviorEvent.class }),
+                this.listener.getMethodExpression(ctx, Object.class, new Class[] { })));
+        }
+
 
         //
-        // If we are nested within an BehaviorHolder
+        // If we are nested within a BehaviorHolder
         //
         if (parent instanceof BehaviorHolder) {
             BehaviorHolder bHolder = (BehaviorHolder)parent;
             if (null == event) {
                 event = bHolder.getDefaultEventName();
                 if (null == event) {
-                 //TODO log warning..
-                    return;
+                    throw new TagException(this.tag,
+                        "Event attribute could not be determined: " + event);
                 }
             } else {
                 if (!bHolder.getEventNames().contains(event)) {
-                    //TODO log warning; check for null return from getEventNames
-                    return;
+                    throw new TagException(this.tag,
+                        "Event attribute could not be determined: " + event);
                 }               
             }
             bHolder.addBehavior(event, ajaxBehavior);
@@ -276,5 +264,30 @@ public final class AjaxHandler extends TagHandlerImpl {
         // Set the context to record script as included
         context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
 
+    }
+}
+
+class AjaxBehaviorListenerImpl implements AjaxBehaviorListener, Serializable {
+    private static final long serialVersionUID = -6056525197409773897L;
+
+    private MethodExpression oneArgListener;
+    private MethodExpression noArgListener;
+
+    // Necessary for state saving
+    public AjaxBehaviorListenerImpl() {}
+
+    public AjaxBehaviorListenerImpl(MethodExpression oneArg, MethodExpression noArg) {
+        this.oneArgListener = oneArg;
+        this.noArgListener = noArg;
+    }
+
+    public void processAjaxBehavior(AjaxBehaviorEvent event) throws AbortProcessingException {
+        final ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        try{
+            noArgListener.invoke(elContext, new Object[]{});
+        } catch (MethodNotFoundException mnfe) {
+            // Attempt to call public void method(AjaxBehaviorEvent event)
+            oneArgListener.invoke(elContext, new Object[]{event});
+        }
     }
 }
