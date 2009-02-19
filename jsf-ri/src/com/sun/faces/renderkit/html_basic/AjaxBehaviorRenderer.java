@@ -62,8 +62,7 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
                                      UIComponent component,
                                      Behavior behavior,
                                      String eventName) {
-
-        return "alert('AjaxBehaviorRenderer.getScript');";
+        return "jsf.ajax.request(0,bEvent)";
     }
 
 

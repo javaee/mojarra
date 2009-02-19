@@ -77,6 +77,67 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      */
     var jsf = {};
 
+
+    /**
+     * The namespace for event functionality.
+     * @name jsf.event
+     * @namespace
+     */
+    jsf.event = {};
+
+    /**
+     * <p>The BehaviorEvent class is used to provide context information
+     * while executing scripts produced by javax.faces.component.Behavior
+     * instances.  When a Behavior script is invoked, an instance of
+     * jsf.event.BehaviorEvent is created and made avaiable to the
+     * script via the "bEvent" variable.  This allows Behavior scripts
+     * to retrieve information about the event context in a generic
+     * (browser/component-independent) manner.
+     * </p>
+     * @param source The element that triggered behavior event
+     * or an id string of the element to use as the triggering element.
+     * @param nativeEvent The native event that triggered this behavior.  The
+     * <code>nativeEevent</code> argument is optional.
+     * @param behaviorEventName The name of the behavior event (eg. "action") 
+     * that is being processed.
+     * 
+     * @function jsf.event.BehaviorEvent
+     */
+    jsf.event.BehaviorEvent = function(source, nativeEvent, behaviorEventName) {
+        // TODO: better doc - doc accessor methods
+        // TODO: check arguments - eg. behaviorEventName required
+
+        var _id;
+        var _element;
+        var _event = nativeEvent;
+        var _name = behaviorEventName;
+
+        if (typeof source === 'undefined' || source === null) {
+          throw new Error("jsf.event.BehaviorEvent: source not set");
+        }
+        if (typeof source === 'string') {
+            _id = source;
+            _element = document.getElementById(source);
+        } else if (typeof source === 'object') {
+            _id = source.id;
+
+            // TODO: Hack - commandButton isn't sending id - only sending name
+            //       Need to revisit this.
+            if (!_id || _id == "")
+                _id = source.name;
+
+            _element = source;
+
+        } else {
+            throw new Error("jsf.event.BehaviorEvent: source must be object or string");
+        }
+
+        this.getSourceId = function() { return _id; };
+        this.getSourceElement = function() { return _element; };
+        this.getNativeEvent = function() { return _event; };
+        this.getBehaviorEventName = function() { return _name; };
+    };
+
     /**
      * The namespace for Ajax functionality.
      * @name jsf.ajax
@@ -916,6 +977,19 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              */
             request: function request(source, event, options) {
 
+                // TODO: doc this behavior - ie. doc that BehaviorEvent
+                // is a valid type for the "event" parameter.
+                var behaviorEvent = null;
+
+                if (event instanceof jsf.event.BehaviorEvent) {
+                    behaviorEvent = event;
+                    event = behaviorEvent.getNativeEvent();
+
+                    if (!source) {
+                        source = behaviorEvent.getSourceElement();
+                    }
+                }
+
                 var element;
 
                 if (typeof source === 'undefined' || source === null) {
@@ -967,6 +1041,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var args = {};
 
                 args["javax.faces.partial.source"] = element.id;
+
+                if (behaviorEvent) {
+                    args["javax.faces.behavior.source"] = behaviorEvent.getSourceId();
+                    args["javax.faces.behavior.event"] = behaviorEvent.getBehaviorEventName();
+                }
 
                 // RELEASE_PENDING Get rid of commas.  It's supposed to be spaces.
                 if (options.execute) {
@@ -1371,18 +1450,21 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      */
     jsf.chain = function(source, event, behaviorEventName) {
 
-        // TODO: support both source id and element
-        // TODO: support behavior event
-
         var length = arguments.length;
         if (length < 4)
             return;
 
+        var behaviorEvent = (behaviorEventName) ? 
+            new jsf.event.BehaviorEvent(source, event, behaviorEventName) : 
+            null;
+
+        var thisArg = (typeof source === 'object') ? source : null;
+
         // Call back any scripts that were passed in
         for (var i = 3; i < arguments.length; i++) {
 
-          var f = new Function("event", arguments[i]);
-          var returnValue = f.call(source, event);   
+          var f = new Function("event", "bEvent", arguments[i]);
+          var returnValue = f.call(thisArg, event, behaviorEvent);   
 
           if (returnValue === false)
             break;
