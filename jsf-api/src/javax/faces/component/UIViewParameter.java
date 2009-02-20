@@ -40,10 +40,13 @@ import java.io.IOException;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 
 /**
@@ -378,6 +381,15 @@ public class UIViewParameter extends UIInput {
     }
 
     @Override
+    /**
+     * <p class="changed_added_2_0">Because this class has no {@link
+     * Renderer}, leverage the one from the standard HTML_BASIC {@link
+     * RenderKit} with <code>component-family: javax.faces.Input</code>
+     * and <code>renderer-type: javax.faces.Text</code> and call its
+     * {@link Renderer#getConvertedValue} method.</p>
+     *
+     * @since 2.0
+     */ 
     protected Object getConvertedValue(FacesContext context, Object submittedValue)
           throws ConverterException {
 
@@ -388,7 +400,10 @@ public class UIViewParameter extends UIInput {
     
     private Renderer getInputTextRenderer(FacesContext context) {
         if (null == inputTextRenderer) {
-            inputTextRenderer = context.getRenderKit().
+            RenderKitFactory rkf = (RenderKitFactory) 
+                    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+            RenderKit standard = rkf.getRenderKit(context, RenderKitFactory.HTML_BASIC_RENDER_KIT);
+            inputTextRenderer = standard.
                     getRenderer("javax.faces.Input", "javax.faces.Text");
         }
         assert(null != inputTextRenderer);
