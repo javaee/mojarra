@@ -79,6 +79,8 @@ import javax.faces.webapp.pdl.facelets.tag.TagException;
 public final class FacetHandler extends TagHandlerImpl {
 
     public static final String KEY = "facelets.FACET_NAME";
+    
+    public static final String ABORT_PROCESSING_KEY = "facelets.ABORT_PROCESSING";
 
     /**
      * <p class="changed_added_2_0">The name of the attribute whose presence hints to the next handler that

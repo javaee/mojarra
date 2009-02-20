@@ -65,8 +65,6 @@ import javax.faces.component.UIComponent;
  */
 public interface FaceletHandler {
 
-    public static final String ABORT_PROCESSING_KEY = "facelets.ABORT_PROCESSING";
-
     /**
      * <p class="changed_added_2_0">Process changes on a particular
      * UIComponent</p>

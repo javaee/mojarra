@@ -1009,12 +1009,19 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p class="changed_added_2_0">
-     * If {@link #getAfterPhaseListener} returns
-     * non-<code>null</code>, invoke it, passing a {@link PhaseEvent}
-     * for the {@link PhaseId#RENDER_RESPONSE} phase.  Any errors that
-     * occur during invocation of the afterPhase listener must be
-     * logged and swallowed.</p>
+     * <p class="changed_added_2_0"> If {@link #getAfterPhaseListener}
+     * returns non-<code>null</code>, invoke it, passing a {@link
+     * PhaseEvent} for the {@link PhaseId#RENDER_RESPONSE} phase.  Any
+     * errors that occur during invocation of the afterPhase listener
+     * must be logged and swallowed.  If the current view has view
+     * parameters, as indicated by a non-empty and
+     * non-<code>UnsupportedOperationException</code> throwing return
+     * from {@link
+     * javax.faces.webapp.pdl.PageDeclarationLanguage#getViewParameters},
+     * call {@link UIViewParameter#encodeAll} on each parameter.  If
+     * calling <code>getViewParameters()</code> causes
+     * <code>UnsupportedOperationException</code> to be thrown, the
+     * exception must be silently swallowed.</p>
      */
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
