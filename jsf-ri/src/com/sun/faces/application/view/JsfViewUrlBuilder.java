@@ -128,7 +128,7 @@ public class JsfViewUrlBuilder extends UrlBuilder {
             if (getParameters().containsKey(viewParam.getName())) {
                 continue;
             }
-            else if (viewParam.hasValueExpression()) {
+            else if (paramHasValueExpression(viewParam)) {
                 value = viewParam.getStringValueFromModel(context);
             }
             else {
@@ -149,7 +149,7 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         }
     }
 
-    public static String getStringValueToTransfer(FacesContext context, 
+    private static String getStringValueToTransfer(FacesContext context, 
             UIViewParameter param,
             List<UIViewParameter> viewParams) {
         for (UIViewParameter candidate : viewParams) {
@@ -161,6 +161,12 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         }
 
         return null;
+    }
+    
+    private static boolean paramHasValueExpression(UIViewParameter param) {
+        boolean result = false;
+        result = (null != param.getValueExpression("value"));
+        return result;
     }
 
     protected void convertViewToAction() {

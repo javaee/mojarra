@@ -339,7 +339,7 @@ public class UIViewParameter extends UIInput {
 
     public String getStringValueFromModel(FacesContext context)
         throws ConverterException {
-        ValueExpression ve = getValueExpression();
+        ValueExpression ve = getValueExpression("value");
         if (ve == null) {
             return null;
         }
@@ -397,15 +397,8 @@ public class UIViewParameter extends UIInput {
 
     // ----------------------------------------------------- Helper Methods
 
-    public boolean hasValueExpression() {
-        return getValueExpression() != null;
-    }
-
-    /**
-     * Return the value expression for the "value" attribute (yes, sort of confusing).
-     */
-    protected ValueExpression getValueExpression() {
-        return getValueExpression("value");
+    private boolean hasValueExpression() {
+        return null != getValueExpression("value");
     }
 
     // ----------------------------------------------------- StateHolder Methods
