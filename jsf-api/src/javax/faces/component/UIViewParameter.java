@@ -37,7 +37,6 @@
 package javax.faces.component;
 
 import java.io.IOException;
-import java.util.List;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -45,6 +44,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.faces.render.Renderer;
 
 /**
  * <p class="changed_added_2_0"><strong>UIViewParameter</strong> represents a
@@ -95,7 +95,7 @@ public class UIViewParameter extends UIInput {
 
     // ------------------------------------------------------ Instance Variables
 
-    private Boolean hasStringConverter;
+    private transient Renderer inputTextRenderer = null;
     
     // ------------------------------------------------------------ Constructors
 
@@ -381,56 +381,18 @@ public class UIViewParameter extends UIInput {
     protected Object getConvertedValue(FacesContext context, Object submittedValue)
           throws ConverterException {
 
-        String newValue = (String) submittedValue;
-        ValueExpression valueExpression = getValueExpression();
-        Converter c = null;
+        return getInputTextRenderer(context).getConvertedValue(context, this, 
+                submittedValue);
 
-        // If there is a converter attribute, use it to to ask application
-        // instance for a converter with this identifer.
-        c = getConverter();
-
-        if (null == c && null != valueExpression) {
-            Class converterType = valueExpression.getType(context.getELContext());
-            // if converterType is null, assume the modelType is "String".
-            if (converterType == null ||
-                converterType == Object.class) {
-                return newValue;
-            }
-
-            // If the converterType is a String, and we don't have a
-            // converter-for-class for java.lang.String, assume the type is
-            // "String".
-            if (converterType == String.class && !hasStringConverter(context)) {
-                return newValue;
-            }
-
-            // if getType returns a type for which we support a default
-            // conversion, acquire an appropriate converter instance.
-            try {
-                c = context.getApplication().createConverter(converterType);
-            } catch (Exception e) {
-                return null;
-            }
+    }
+    
+    private Renderer getInputTextRenderer(FacesContext context) {
+        if (null == inputTextRenderer) {
+            inputTextRenderer = context.getRenderKit().
+                    getRenderer("javax.faces.Input", "javax.faces.Text");
         }
-        else if (c == null) {
-            return newValue;
-        }
-
-        if (c != null) {
-            // QUESTION do we still need this?
-            //RequestStateManager.set(context, RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME, this);
-            return c.getAsObject(context, this, newValue);
-        } else {
-            // throw converter exception.
-            Object[] params = {
-                  newValue,
-                  "null Converter"
-            };
-
-            throw new ConverterException(MessageFactory.getMessage(
-                  context, "com.sun.faces.TYPECONVERSION_ERROR", params));
-        }
-
+        assert(null != inputTextRenderer);
+        return inputTextRenderer;
     }
 
     // ----------------------------------------------------- Helper Methods
@@ -444,16 +406,6 @@ public class UIViewParameter extends UIInput {
      */
     protected ValueExpression getValueExpression() {
         return getValueExpression("value");
-    }
-
-    protected boolean hasStringConverter(FacesContext context) {
-
-        if (hasStringConverter == null) {
-            hasStringConverter = (context.getApplication().createConverter(String.class) != null);
-        }
-
-        return hasStringConverter;
-
     }
 
     // ----------------------------------------------------- StateHolder Methods
