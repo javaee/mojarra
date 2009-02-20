@@ -58,7 +58,7 @@ import javax.faces.render.Renderer;
 
  * <p>The {@link javax.faces.webapp.pdl.PageDeclarationLanguage}
  * implementation must cause an instance of this component to appear in
- * the view for each occurrence of an <code>&lt;f:viewParameter
+ * the view for each occurrence of an <code>&lt;f:viewParam
  * /&gt;</code> element placed inside of an <code>&lt;f:facet
  * name=&lt;<em>metadataFacetName</em>&gt; /&gt;</code> where
  * <code><em>metadataFacetName</em></code> is given by the value of the
@@ -283,7 +283,7 @@ public class UIViewParameter extends UIInput {
      * <p class="changed_added_2_0">Call through to superclass {@link
      * UIInput#updateModel} then take the additional action of pushing
      * the value into request scope if and only if the value is not a
-     * value expression is valid, and the local value was set on this
+     * value expression, is valid, and the local value was set on this
      * lifecycle execution.</p>
      * @since 2.0
      */
