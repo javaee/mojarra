@@ -1434,7 +1434,8 @@ public class ApplicationImpl extends Application {
     public String getMessageBundle() {
         return messageBundle;
     }
-
+    
+    
     /**
      * <p>PRECONDITIONS: the values in the Map are either Strings
      * representing fully qualified java class names, or java.lang.Class
