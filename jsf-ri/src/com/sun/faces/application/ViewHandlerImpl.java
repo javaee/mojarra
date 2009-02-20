@@ -53,7 +53,6 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
 
-import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.StateManager;
@@ -1020,11 +1019,6 @@ public class ViewHandlerImpl extends ViewHandler {
                                    offset);
         }
 
-    }
-
-    @Override
-    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
