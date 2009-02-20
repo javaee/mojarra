@@ -45,8 +45,6 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.ProjectStage;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -56,8 +54,8 @@ import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.lifecycle.RestoreViewPhase;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -66,7 +64,6 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
 import java.util.List;
-import java.text.MessageFormat;
 
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
@@ -179,8 +176,15 @@ public class MultiViewHandler extends ViewHandler {
      */
     @Override
     public void retargetAttachedObjects(FacesContext context,
-            UIComponent topLevelComponent,
-            List<AttachedObjectHandler> handlers) {
+                                        UIComponent topLevelComponent,
+                                        List<AttachedObjectHandler> handlers) {
+
+        //List<AttachedObjectHandler> handlers =
+        //      getAttachedObjectHandlers(topLevelComponent, false);
+
+        if (handlers == null || handlers.isEmpty()) {
+            return;
+        }
         
         BeanInfo componentBeanInfo = (BeanInfo) 
                 topLevelComponent.getAttributes().get(UIComponent.BEANINFO_KEY);
@@ -198,8 +202,7 @@ public class MultiViewHandler extends ViewHandler {
         // page.
         List<UIComponent> targetComponents = null;
         String forAttributeValue, curTargetName, handlerTagId, componentTagId;
-        boolean foundMatch = false;
-        
+
         // For each of the attached object handlers...
         for (AttachedObjectHandler curHandler : handlers) {
             // Get the name given to this attached object by the page author
@@ -207,11 +210,7 @@ public class MultiViewHandler extends ViewHandler {
             forAttributeValue = curHandler.getFor();
             // For each of the attached objects in the <composite:interface> section
             // of this composite component...
-            foundMatch = false;
             for (AttachedObjectTarget curTarget : targetList) {
-                if (foundMatch) {
-                    break;
-                }
                 // Get the name given to this attached object target by the
                 // composite component author
                 curTargetName = curTarget.getName();
@@ -221,27 +220,27 @@ public class MultiViewHandler extends ViewHandler {
                     curTarget instanceof ActionSource2AttachedObjectTarget) {
                     if (forAttributeValue.equals(curTargetName)) {
                         for (UIComponent curTargetComponent : targetComponents) {
-                            curHandler.applyAttachedObject(context, curTargetComponent);
-                            foundMatch = true;
+                            retargetHandler(context, curHandler, curTargetComponent);
                         }
+                        break;
                     }
                 }
                 else if (curHandler instanceof EditableValueHolderAttachedObjectHandler &&
                          curTarget instanceof EditableValueHolderAttachedObjectTarget) {
                     if (forAttributeValue.equals(curTargetName)) {
                         for (UIComponent curTargetComponent : targetComponents) {
-                            curHandler.applyAttachedObject(context, curTargetComponent);
-                            foundMatch = true;
+                            retargetHandler(context, curHandler, curTargetComponent);
                         }
+                        break;
                     }
                 }
                 else if (curHandler instanceof ValueHolderAttachedObjectHandler &&
                          curTarget instanceof ValueHolderAttachedObjectTarget) {
                     if (forAttributeValue.equals(curTargetName)) {
                         for (UIComponent curTargetComponent : targetComponents) {
-                            curHandler.applyAttachedObject(context, curTargetComponent);
-                            foundMatch = true;
+                            retargetHandler(context, curHandler, curTargetComponent);
                         }
+                        break;
                     }
                 }
             }
@@ -249,12 +248,14 @@ public class MultiViewHandler extends ViewHandler {
     }
 
 
+
     /**
      * @see ViewHandler#retargetMethodExpressions(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
      */
     @Override
     public void retargetMethodExpressions(FacesContext context,
-            UIComponent topLevelComponent) {
+                                          UIComponent topLevelComponent) {
+
         BeanInfo componentBeanInfo = (BeanInfo) 
                 topLevelComponent.getAttributes().get(UIComponent.BEANINFO_KEY);
         // PENDING(edburns): log error message if componentBeanInfo is null;
@@ -760,10 +761,27 @@ public class MultiViewHandler extends ViewHandler {
         }
 
     }
-    
-    public void setRestoreViewPhase(RestoreViewPhase restoreViewPhase) {
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void retargetHandler(FacesContext context,
+                                 AttachedObjectHandler handler,
+                                 UIComponent targetComponent) {
+
+        if (UIComponent.isCompositeComponent(targetComponent)) {
+            // RELEASE_PENDING Not keen on calling CompositeComponentTagHandler here....
+            List<AttachedObjectHandler> nHandlers =
+                  CompositeComponentTagHandler
+                        .getAttachedObjectHandlers(targetComponent);
+            nHandlers.add(handler);
+            retargetAttachedObjects(context, targetComponent, nHandlers);
+        } else {
+            handler.applyAttachedObject(context, targetComponent);
+        }
         
     }
 
-
+    
 }

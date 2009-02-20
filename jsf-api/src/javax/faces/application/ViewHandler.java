@@ -45,6 +45,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -606,12 +608,6 @@ public abstract class ViewHandler {
      * its component metadata already associated and available from via
      * the JavaBeans API.
      *
-     * @param handlers specified by the page author in the consuming
-     * page, provided to this method by the PDL implementation, this is
-     * a list of implementations of {@link AttachedObjectHandler}, each
-     * one of which represents a relationship between an attached object
-     * and the UIComponent to which it is attached.
-
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>.
 
@@ -619,9 +615,11 @@ public abstract class ViewHandler {
      *
      */
     public void retargetAttachedObjects(FacesContext context,
-            UIComponent topLevelComponent,
-            List<AttachedObjectHandler> handlers)  {
-        throw new UnsupportedOperationException();
+                                        UIComponent topLevelComponent,
+                                        List<AttachedObjectHandler> handlers)  {
+        
+        // no-op
+
     }
 
 
@@ -750,8 +748,10 @@ public abstract class ViewHandler {
      * @since 2.0
      */
     public void retargetMethodExpressions(FacesContext context,
-            UIComponent topLevelComponent) {
-        throw new UnsupportedOperationException();
+                                          UIComponent topLevelComponent) {
+
+        // no-op
+        
     }
     
     /**

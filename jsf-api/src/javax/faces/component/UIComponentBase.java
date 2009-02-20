@@ -591,7 +591,7 @@ public abstract class UIComponentBase extends UIComponent {
             }
             // Treat remainder of the expression as relative
             expr = expr.substring(1);
-        } else {
+        } else if (!(base instanceof NamingContainer)) {
             // Relative expressions start at the closest NamingContainer or root
             while (base.getParent() != null) {
                 if (base instanceof NamingContainer) {
