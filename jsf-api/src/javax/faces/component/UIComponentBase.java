@@ -1057,13 +1057,11 @@ public abstract class UIComponentBase extends UIComponent {
                     .getRequestParameterMap();
                 String behaviorEvent = requestParameterMap.get("javax.faces.behavior.event");
                 if (null != behaviorEvent) {
-                    List behaviors = behaviorsForEvent.get(behaviorEvent);
+                    List<Behavior> behaviors = behaviorsForEvent.get(behaviorEvent);
                     if (null != behaviors && behaviors.size() > 0) {
                         String behaviorSource = requestParameterMap.get("javax.faces.behavior.source");
                         if (null != behaviorSource && behaviorSource.equals(getClientId())) {
-                            Iterator iter = behaviors.iterator();
-                            while (iter.hasNext()) {
-                                Behavior behavior = (Behavior)iter.next();
+                            for (Behavior behavior: behaviors) {
                                 behavior.decode(context, this, behaviorEvent);
                             }
                         }
