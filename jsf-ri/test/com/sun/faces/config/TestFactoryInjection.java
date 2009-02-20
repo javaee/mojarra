@@ -642,6 +642,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
     } // END BasicFacesContextFactory
 
 
+
     public static final class BasicFacesContext extends FacesContext {
 
         FacesContext delegate;
@@ -725,9 +726,22 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         public void responseComplete() {
 
         }
+        
+        boolean validationFailed;
+
+        @Override
+        public boolean getValidationFailed() {
+            return validationFailed;
+        }
+
+        @Override
+        public void validationFailed() {
+            this.validationFailed = true;
+        }
+        
+        
 
     } // END BasicFacesContext
-
 
     public static final class BasicApplicationFactory extends ApplicationFactory {
 

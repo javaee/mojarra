@@ -365,6 +365,29 @@ public abstract class ViewHandler {
     public abstract String getResourceURL(FacesContext context, String path);
 
     /**
+     * <p class="changed_added_2_0">The value returned from this
+     * method should be an encoded JSF action URL that can be used by a NavigationHandler
+     * to request a new page in a redirect case or in a Renderer for generating a link.
+     * The viewId parameter is first fed to the {@link ViewHandler#getActionURL(javax.faces.context.FacesContext, java.lang.String)}.
+     * Then, the parameters are processed. The page parameters are read from the target page if included. They are
+     * merged with the parameters parsed from the query string on the viewId and the parameter
+     * overrides passed in according to the precendence rules defined in the spec. Finally,
+     * the result is encoded by calling {@link ExternalContext#encodeActionURL(java.lang.String)}</p>
+
+     * <p class="changed_added_2_0">A default implementation is provided that 
+     * simply calls through to {@link #getActionURL}, ignoring the 
+     * <code>includeViewParams</code> argument.</p>
+     *
+     * @since 2.0
+     */
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
+
+        return context.getApplication().getViewHandler().getActionURL(context, viewId);
+
+    }
+
+
+    /**
      * <p class="changed_added_2_0">Return the {@link
      * PageDeclarationLanguage} instance used for this <code>ViewHandler</code>
      * instance.</p>

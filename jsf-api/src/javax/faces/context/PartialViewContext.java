@@ -238,6 +238,21 @@ public abstract class PartialViewContext {
      * @since 2.0
      */
     public abstract void setRenderAll(boolean renderAll);
+    
+    /**
+     * <p class="changed_added_2_0">
+     * Dynamically indicate that this is a partial request.</p>
+     *
+     * @param isPartialRequest the value <code>true</code> indicates
+     * this is a partial request.
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
+     */
+
+    public abstract void setPartialRequest(boolean isPartialRequest);
 
     /**
      * <p><span class="changed_added_2.0">Release</span> any

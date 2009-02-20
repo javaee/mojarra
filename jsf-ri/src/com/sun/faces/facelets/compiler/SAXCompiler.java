@@ -222,7 +222,7 @@ public final class SAXCompiler extends Compiler {
                 } else if (systemId != null) {
                     sb.append(" SYSTEM \"").append(systemId).append("\"");
                 }
-                sb.append(" >\n");
+                sb.append(">\n");
                 this.unit.writeInstruction(sb.toString());
             }
             this.inDocument = false;

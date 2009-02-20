@@ -1,8 +1,4 @@
 /*
- * $Id: MethodExpressionValueChangeListener.java,v 1.4 2007/04/27 22:00:08 ofung Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -38,33 +34,24 @@
  * holder.
  */
 
-package javax.faces.event;
+package com.sun.faces.application.view;
 
-import javax.faces.component.UIComponent;
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.beans.SimpleBeanInfo;
 
-/**
- *
- * <p class="changed_added_2_0"></p>
- *
- * @since 2.0
- */
-public class PreValidateEvent extends ComponentSystemEvent {
+public class FacesBeanInfo extends SimpleBeanInfo implements BeanInfo {
+
+    private BeanDescriptor descriptor = null;
 
 
-    // ------------------------------------------------------------ Constructors
+    @Override
+    public BeanDescriptor getBeanDescriptor() {
+        return descriptor;
+    }
 
-
-    /**
-
-     * <p class="changed_added_2_0"></p>
-
-     * @param component the <code>UIComponent</code> that is about to be
-     * validated.
-
-     * @throws <code>IllegalArgumentException</code> if the argument is <code>null</code>.
-     */
-    public PreValidateEvent(UIComponent component) {
-        super(component);
+    public void setBeanDescriptor(BeanDescriptor newDescriptor) {
+        descriptor = newDescriptor;
     }
 
 }

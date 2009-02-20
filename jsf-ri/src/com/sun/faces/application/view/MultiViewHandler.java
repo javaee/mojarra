@@ -42,7 +42,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.net.MalformedURLException;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
@@ -654,6 +653,20 @@ public class MultiViewHandler extends ViewHandler {
             return path;
         }
 
+    }
+
+    @Override
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
+        // QUESTION should encodeParams dually be a flag?
+        String encoding = null;
+		if (context.getResponseWriter() != null) {
+			encoding = Util.isPortletRequest(context) ? null : context.getResponseWriter().getCharacterEncoding();
+		}
+		else {
+			encoding = context.getExternalContext().getResponseCharacterEncoding();
+		}
+
+        return new JsfViewUrlBuilder(context, viewId, includeViewParams, encoding).addParameters(parameters).createUrl();
     }
 
     /**

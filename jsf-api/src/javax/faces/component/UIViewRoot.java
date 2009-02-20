@@ -76,6 +76,7 @@ import javax.faces.event.PostConstructViewMapEvent;
 import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 
 /**
@@ -151,7 +152,28 @@ public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------------ Manifest Constants
 
+    /**
+     * <p class="changed_added_2_0">The value of this constant is used as the key in the
+     * component attribute map, the value for which is a
+     * <code>java.beans.BeanInfo</code> implementation describing the view
+     * metadata.  This <code>BeanInfo</code> is known as the 
+     * <em>view metadata BeanInfo</em>.</p>
+     *
+     * @since 2.0
+     */
+    public static final String METADATA_BEANINFO_KEY = "javax.faces.component.VIEW_METADATA_BEANINFO_KEY";
 
+    public static final String METADATA_FACET_NAME = "javax_faces_metadata";
+    
+    /**
+     * <p class="changed_added_2_0">The key in the value set of the
+     * <em>view metadata BeanDescriptor</em>, the value of which is a 
+     * <code>List&gt;{@link UIViewParameter#Reference}&lt;</code>.</p>
+     *
+     * @since 2.0
+     */
+    public static final String VIEW_PARAMETERS_KEY = "javax.faces.component.VIEW_PARAMETERS_KEY";
+    
     /** <p>The standard component type for this component.</p> */
     public static final String COMPONENT_TYPE = "javax.faces.ViewRoot";
 
@@ -808,7 +830,7 @@ public class UIViewRoot extends UIComponentBase {
                   !events.get(phaseId.getOrdinal()).isEmpty();
 
         } while (hasMoreAnyPhaseEvents || hasMoreCurrentPhaseEvents);
-	
+    
     }
 
     // ------------------------------------------------ Lifecycle Phase Handlers
@@ -987,16 +1009,24 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p class="changed_added_2_0">
-     * If {@link #getAfterPhaseListener} returns
-     * non-<code>null</code>, invoke it, passing a {@link PhaseEvent}
-     * for the {@link PhaseId#RENDER_RESPONSE} phase.  Any errors that
-     * occur during invocation of the afterPhase listener must be
-     * logged and swallowed.</p>
+     * <p class="changed_added_2_0"> If {@link #getAfterPhaseListener}
+     * returns non-<code>null</code>, invoke it, passing a {@link
+     * PhaseEvent} for the {@link PhaseId#RENDER_RESPONSE} phase.  Any
+     * errors that occur during invocation of the afterPhase listener
+     * must be logged and swallowed.  If the current view has view
+     * parameters, as indicated by a non-empty and
+     * non-<code>UnsupportedOperationException</code> throwing return
+     * from {@link
+     * javax.faces.webapp.pdl.PageDeclarationLanguage#getViewParameters},
+     * call {@link UIViewParameter#encodeAll} on each parameter.  If
+     * calling <code>getViewParameters()</code> causes
+     * <code>UnsupportedOperationException</code> to be thrown, the
+     * exception must be silently swallowed.</p>
      */
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
+        encodeViewParameters(context);
         notifyAfter(context, PhaseId.RENDER_RESPONSE);
     }
 
@@ -1478,7 +1508,36 @@ public class UIViewRoot extends UIComponentBase {
         return viewScope;
         
     }
+    
+    private void encodeViewParameters(FacesContext context) {
+        PageDeclarationLanguage pdl = null;
+        
+        try {
+            pdl = context.getApplication().getViewHandler().
+                    getPageDeclarationLanguage(context, getViewId());
+        } catch (UnsupportedOperationException uoe) {
+            
+        }
+        
+        if (null == pdl) {
+            return;
+        }
+        List<UIViewParameter> params = pdl.getViewParameters(context, getViewId());
+        if (params.isEmpty()) {
+            return;
+        }
 
+        try {
+            for (UIViewParameter param : params) {
+                param.encodeAll(context);
+            }
+        } catch (IOException e) {
+            // IOException is forced by contract and is not expected to be thrown in this case
+            throw new RuntimeException("Unexpected IOException", e);
+        }
+    }
+
+    // END TENATIVE
 
     // ----------------------------------------------------- StateHolder Methods
 

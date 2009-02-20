@@ -37,8 +37,10 @@
 package com.sun.faces.scripting;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
+import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
@@ -98,6 +100,11 @@ public class ViewHandlerProxy extends ViewHandler {
 
     public String getResourceURL(FacesContext context, String path) {
         return getGroovyDelegate().getResourceURL(context, path);
+    }
+
+    @Override
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
+        return getGroovyDelegate().getRedirectURL(context, viewId, parameters, includeViewParams);
     }
 
     public void renderView(FacesContext context, UIViewRoot viewToRender)

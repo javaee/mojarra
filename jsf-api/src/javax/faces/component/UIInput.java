@@ -102,7 +102,9 @@ import javax.faces.validator.ValidatorException;
  * This event will be delivered by default in the <em>Process
  * Validators</em> phase, but can be delivered instead during <em>Apply
  * Request Values</em> if the <code>immediate</code> property is set to
- * <code>true</code>.</p>
+ * <code>true</code>. <span class="changed_added_2_0">If the validation
+ * fails, the implementation must call {@link
+ * FacesContext#validationFailed>.</span></p>
 
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Text</code>".  This value can be changed by calling the
@@ -1122,6 +1124,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         if (!isValid()) {
+            context.validationFailed();
             context.renderResponse();
         }
     }

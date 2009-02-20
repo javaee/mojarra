@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import java.io.IOException;
 
 import javax.el.ELException;
@@ -81,7 +82,13 @@ public final class CompositeFaceletHandler implements FaceletHandler {
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
         for (int i = 0; i < len; i++) {
-            this.children[i].apply(ctx, parent);
+            if (ctx.getAttribute(FacetHandler.ABORT_PROCESSING_KEY) != null) {
+                ctx.setAttribute(FacetHandler.ABORT_PROCESSING_KEY, null);
+                break;
+            }
+            else {
+                this.children[i].apply(ctx, parent);
+            }
         }
     }
     

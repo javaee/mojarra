@@ -82,7 +82,11 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         throw new UnsupportedOperationException();
     }
 
-
+    @Override
+    public BeanInfo getViewMetadata(FacesContext context, String viewId) {
+        throw new UnsupportedOperationException();
+    }
+    
     /**
      * <p>
      * Not supported in JSP-based views.

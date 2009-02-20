@@ -150,6 +150,11 @@ class InitFacesContext extends FacesContext {
         return true;
     }
 
+    @Override
+    public boolean getValidationFailed() {
+        return false;
+    }
+
     public ResponseStream getResponseStream() {
         return null;
     }
@@ -185,6 +190,9 @@ class InitFacesContext extends FacesContext {
     public void renderResponse() { }
 
     public void responseComplete() { }
+
+    @Override
+    public void validationFailed() { }
 
     @Override
     public ELContext getELContext() {
