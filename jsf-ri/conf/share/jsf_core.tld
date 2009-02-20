@@ -583,10 +583,28 @@ for <code>@NamedEvent</code>.</p>
 
 
     <tag>
-        <description>
-            Register a named facet on the UIComponent associated with
-            the closest parent UIComponent custom action.
-        </description>
+        <description><![CDATA[
+
+            <p><span class="changed_modified_2_0">Register</span> a
+            named facet on the UIComponent associated with the closest
+            parent UIComponent custom action.</p>
+
+            <p class="changed_added_2_0">FACELETS_ONLY: If the name of
+            this facet is equal to the value of the symbolic constant <a
+            href="../../../javadocs/javax/faces/component/UIViewRoot.html#METADATA_FACET_NAME">UIViewRoot.METADATA_FACET_NAME</a>
+            and the facet parent is an instance of
+            <code>UIViewRoot</code>, the following actions must be
+            taken.  The implementation must remove any existing facet by
+            this name from the facet parent (the
+            <code>UIViewRoot</code>) before processing any children of
+            this facet tag.  The implementation must insure that the
+            direct child of the facet is a <code>UIPanel</code>, even if
+            there is only one child of the facet.  The implementation
+            must set the id of the <code>UIPanel</code> to be the value
+            of the <code>UIViewRoot.METADATA_FACET_NAME</code> symbolic
+            constant.</p>
+
+        ]]></description>
         <name>facet</name>
         <tag-class>javax.faces.webapp.FacetTag</tag-class>
         <body-content>JSP</body-content>
