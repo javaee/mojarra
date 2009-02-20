@@ -461,6 +461,23 @@ public class UIViewParameter extends UIInput {
         private int indexInParent;
         private String viewIdAtTimeOfConstruction;
         
+	/**
+	 * <p class="changed_added_2_0">Construct a reference to a
+	 * <code>UIViewParameter</code>.  This constructor cause the
+	 * {@link StateHolder#saveState} method to be called on
+	 * argument <code>UIViewParameter</code>.</p>
+	 *
+	 * @param context the <code>FacesContext</code>for this request
+	 * @param indexInParent the index of the
+	 * <code>UIViewParameter</code> in its parent
+	 * <code>UIPanel</code>.
+	 * @param viewIdAtTimeOfConstruction the viewId of the view in
+	 * which the <code>UIViewParameter</code> is included.  This may
+	 * not be the same as the viewId from the <code>context</code>
+	 * argument.
+	 *
+	 * @since 2.0
+	 */
         public Reference(FacesContext context, 
                 UIViewParameter param, 
                 int indexInParent,
@@ -469,6 +486,20 @@ public class UIViewParameter extends UIInput {
             this.indexInParent = indexInParent;
             this.viewIdAtTimeOfConstruction = viewIdAtTimeOfConstruction;
         }
+
+	/**
+	 * <p class="changed_added_2_0">Return the
+	 * <code>UIViewParameter</code> to which this instance refers.
+	 * If the current viewId is the same as the viewId passed to our
+	 * constructor, use the index passed to the constructor to find
+	 * the actual <code>UIViewParameter</code> instance and return
+	 * it.  Otherwise, call {@link StateHolder#restoreState} on the
+	 * saved state and return the result.</p>
+	 *
+	 * @param context the <code>FacesContext</code>for this request
+	 *
+	 * @since 2.0
+	 */
         
         public UIViewParameter getUIViewParameter(FacesContext context) {
             UIViewParameter result = null;
