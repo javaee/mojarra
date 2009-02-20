@@ -41,8 +41,6 @@
 package javax.faces.component;
 
 
-import java.beans.BeanDescriptor;
-import java.beans.BeanInfo;
 import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
@@ -1508,7 +1506,7 @@ public class UIViewRoot extends UIComponentBase {
         PageDeclarationLanguage pdl = null;
         
         try {
-            context.getApplication().getViewHandler().
+            pdl = context.getApplication().getViewHandler().
                     getPageDeclarationLanguage(context, getViewId());
         } catch (UnsupportedOperationException uoe) {
             

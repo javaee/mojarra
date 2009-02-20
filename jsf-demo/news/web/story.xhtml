@@ -26,14 +26,14 @@
                     <f:param name="id" value="#{null}"/>
                 </h:commandButton>
                 #{' '}
-                <h:commandButton id="refreshWithRedirectParams" action="/story.xhtml?redirect=true&amp;includeViewParams=true" value="Refresh (Redirect After POST w/ params)"/>
+                <h:commandButton id="refreshWithRedirectParams" action="/story.xhtml?faces-redirect=true&amp;includeViewParams=true" value="Refresh (Redirect After POST w/ params)"/>
                 #{' '}
-                <h:commandButton id="refreshWithRedirect" action="/story.xhtml?redirect=true" value="Refresh (Redirect After POST w/o params)"/>
+                <h:commandButton id="refreshWithRedirect" action="/story.xhtml?faces-redirect=true" value="Refresh (Redirect After POST w/o params)"/>
             </p>
             <p>
-                <h:commandButton id="home" action="/home.xhtml?redirect=true&amp;from=story" value="Home"/>
+                <h:commandButton id="home" action="/home.xhtml?faces-redirect=true&amp;from=story" value="Home"/>
                 #{' '}
-                <h:commandButton id="homeRememberSelection" action="/home.xhtml?redirect=true&amp;includeViewParams=true&amp;from=story" value="Home (Keep selection)"/>
+                <h:commandButton id="homeRememberSelection" action="/home.xhtml?faces-redirect=true&amp;includeViewParams=true&amp;from=story" value="Home (Keep selection)"/>
                 #{' '}
                 <h:commandButton id="homeRememberSelectionNavCase" action="homeWithParams" value="Home (Keep selection nav case)"/>
 
