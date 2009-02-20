@@ -380,7 +380,6 @@ public class UIViewParameter extends UIInput {
         return c.getAsString(context, this, currentValue);
     }
 
-    @Override
     /**
      * <p class="changed_added_2_0">Because this class has no {@link
      * Renderer}, leverage the one from the standard HTML_BASIC {@link
@@ -390,6 +389,7 @@ public class UIViewParameter extends UIInput {
      *
      * @since 2.0
      */ 
+    @Override
     protected Object getConvertedValue(FacesContext context, Object submittedValue)
           throws ConverterException {
 
