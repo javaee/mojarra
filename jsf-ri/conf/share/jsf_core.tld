@@ -583,10 +583,28 @@ for <code>@NamedEvent</code>.</p>
 
 
     <tag>
-        <description>
-            Register a named facet on the UIComponent associated with
-            the closest parent UIComponent custom action.
-        </description>
+        <description><![CDATA[
+
+            <p><span class="changed_modified_2_0">Register</span> a
+            named facet on the UIComponent associated with the closest
+            parent UIComponent custom action.</p>
+
+            <p class="changed_added_2_0">FACELETS_ONLY: If the name of
+            this facet is equal to the value of the symbolic constant <a
+            href="../../../javadocs/javax/faces/component/UIViewRoot.html#METADATA_FACET_NAME">UIViewRoot.METADATA_FACET_NAME</a>
+            and the facet parent is an instance of
+            <code>UIViewRoot</code>, the following actions must be
+            taken.  The implementation must remove any existing facet by
+            this name from the facet parent (the
+            <code>UIViewRoot</code>) before processing any children of
+            this facet tag.  The implementation must insure that the
+            direct child of the facet is a <code>UIPanel</code>, even if
+            there is only one child of the facet.  The implementation
+            must set the id of the <code>UIPanel</code> to be the value
+            of the <code>UIViewRoot.METADATA_FACET_NAME</code> symbolic
+            constant.</p>
+
+        ]]></description>
         <name>facet</name>
         <tag-class>javax.faces.webapp.FacetTag</tag-class>
         <body-content>JSP</body-content>
@@ -691,6 +709,228 @@ for <code>@NamedEvent</code>.</p>
             </description>
             <name>value</name>
             <deferred-value/>
+        </attribute>
+
+    </tag>
+
+    <tag>
+        <description><![CDATA[
+
+            <p class="changed_added_2_0">Used inside of the metada facet
+            of a view, this tag causes a <a target="_"
+            href="../../../javadocs/javax/faces/component/UIViewParameter.html">UIViewParameter</a>
+            to be attached as metadata for the current view.  Because
+            <code>UIViewParameter</code> extends <code>UIInput</code>
+            all of the attributes and nested child content for any
+            <code>UIInput</code> tags are valid on this tag as well.</p>
+
+        ]]></description>
+        <name>viewParam</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ParameterTag</tag-class>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description>
+                <![CDATA[Converter instance registered with this component.]]>
+            </description>
+            <name>
+                converter
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    javax.faces.convert.Converter
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be
+                used as the text of the converter message, replacing any message
+                that comes from the converter.]]>
+            </description>
+            <name>
+                converterMessage
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming
+                container.]]>
+            </description>
+            <name>
+                id
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>
+                true
+            </rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Flag indicating that the user is required to provide a submitted
+                value for this input component.]]>
+            </description>
+            <name>
+                required
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be
+                used as the text of the validation message for the "required"
+                facility, if the "required" facility is used.]]>
+            </description>
+            <name>
+                requiredMessage
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[MethodExpression representing a validator method that will be called
+                during Process Validations to perform correctness checks on the
+                value of this component.  The expression must evaluate to a public
+                method that takes FacesContext, UIComponent, and Object parameters,
+                with a return type of void.]]>
+            </description>
+            <name>
+                validator
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-method>
+                <method-signature>
+                    void validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)
+                </method-signature>
+            </deferred-method>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be
+                used as the text of the validator message, replacing any
+                message that comes from the validator.]]>
+            </description>
+            <name>
+                validatorMessage
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+            <name>
+                value
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.Object
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>
+                
+                MethodExpression representing a value change listener method
+                that will be notified when a new value has been set for this
+                input component.  The expression must evaluate to a public
+                method that takes a <code>ValueChangeEvent</code> parameter,
+                with a return type of void, <span class="changed_added_2_0">or
+                to a public method that takes no arguments with a return type
+                of void.  In the latter case, the method has no way of easily
+                knowing what the new value is, but this can be useful in cases
+                where a notification is needed that "this value
+                changed".</span>
+                
+                </p>]]>
+            </description>
+            <name>
+                valueChangeListener
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-method>
+                <method-signature>
+                    void valueChange(javax.faces.event.ValueChangeEvent)
+                </method-signature>
+            </deferred-method>
+        </attribute>
+
+        <attribute>
+            <description>
+                <![CDATA[The maximum number of characters that may
+                be entered in this field.]]>
+            </description>
+            <name>
+                maxlength
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                The ValueExpression linking this component to a property in a backing bean
+            </description>
+            <name>
+                binding
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    javax.faces.component.UIComponent
+                </type>
+            </deferred-value>
         </attribute>
 
     </tag>

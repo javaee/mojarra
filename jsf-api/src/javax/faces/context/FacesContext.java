@@ -430,6 +430,21 @@ public abstract class FacesContext {
      */
     public abstract boolean getResponseComplete();
 
+    /**
+     * <p class="changed_added_2_0">Return <code>true</code> if the <code>validationFailed()</code>
+     * method has been called for the current request.</p>
+     * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     */
+    public boolean getValidationFailed() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getValidationFailed();
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
 
     /**
      * <p>Return the {@link ResponseStream} to which components should
@@ -624,6 +639,23 @@ public abstract class FacesContext {
      */
     public abstract void responseComplete();
     
+    /**
+     * <p class="changed_added_2_0">Sets a flag which indicates that a conversion or
+     * validation error occurred while processing the inputs. Inputs consist of
+     * either page parameters or form bindings. This flag can be read using
+     * the getValidationFailed() method.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     */
+    public void validationFailed() {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.validationFailed();
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
 
     /**
      * <p class="changed_added_2_0">Return the value last set on this

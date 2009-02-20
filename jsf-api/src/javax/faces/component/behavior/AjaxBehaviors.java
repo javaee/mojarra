@@ -109,4 +109,24 @@ public class AjaxBehaviors implements Serializable {
              ajaxBehaviors.removeLast();
          }
     }   
+
+    /**
+     * <p>Return the current {@link AjaxBehavior} instance from 
+     * the <code>List</code> of {@link AjaxBehavior} instances. 
+     * This will be the last instance added to the 
+     * <code>List</code>.  Return <code>null</code>
+     * if no {@link AjaxBehavior} is available.<p>
+     *
+     * @return the last (most current) {@link AjaxBehavior} 
+     *
+     * @since 2.0
+     */
+    public AjaxBehavior getCurrentBehavior() {
+        AjaxBehavior ajaxBehavior = null;
+        if (ajaxBehaviors.size() > 0) {
+            ajaxBehavior = ajaxBehaviors.getLast();
+        }
+        return ajaxBehavior;
+    }
+        
 }

@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
 
@@ -58,6 +59,8 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
+import javax.faces.component.UIPanel;
+import javax.faces.component.UIViewRoot;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
@@ -76,6 +79,14 @@ import javax.faces.webapp.pdl.facelets.tag.TagException;
 public final class FacetHandler extends TagHandlerImpl {
 
     public static final String KEY = "facelets.FACET_NAME";
+    
+    public static final String ABORT_PROCESSING_KEY = "facelets.ABORT_PROCESSING";
+
+    /**
+     * <p class="changed_added_2_0">The name of the attribute whose presence hints to the next handler that
+     * the facet contains multiple children. The handler then knows to implicitly wrap the children in a UIPanel.</p>
+     */
+    public static final String FACET_IS_COMPOSITE = "facelets.FACET_IS_COMPOSITE";
 
     protected final TagAttribute name;
 
@@ -95,11 +106,32 @@ public final class FacetHandler extends TagHandlerImpl {
         if (parent == null) {
             throw new TagException(this.tag, "Parent UIComponent was null");
         }
-        parent.getAttributes().put(KEY, this.name.getValue(ctx));
+        String facetName = this.name.getValue(ctx);
+        parent.getAttributes().put(KEY, facetName);
+        boolean isMetadataFacet = UIViewRoot.METADATA_FACET_NAME.equals(facetName);
+        if (isMetadataFacet) {
+            parent.getFacets().remove(UIViewRoot.METADATA_FACET_NAME);
+        }
         try {
             this.nextHandler.apply(ctx, parent);
         } finally {
             parent.getAttributes().remove(KEY);
+        }
+        
+        if (parent instanceof UIViewRoot && isMetadataFacet) {
+            UIComponent facetComponent = parent.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
+            if (!(facetComponent instanceof UIPanel)) {
+                UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
+                parent.getFacets().remove(UIViewRoot.METADATA_FACET_NAME);
+                panelGroup.getChildren().add(facetComponent);
+                parent.getFacets().put(UIViewRoot.METADATA_FACET_NAME, panelGroup);
+                facetComponent = panelGroup;
+            }
+            
+            facetComponent.setId(UIViewRoot.METADATA_FACET_NAME);
+            if (ctx.getFacesContext().getAttributes().get(FaceletViewHandlingStrategy.ONLY_BUILD_METADATA_FACET_KEY) != null) {
+                ctx.setAttribute(ABORT_PROCESSING_KEY, true);
+            }
         }
     }
 }

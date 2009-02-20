@@ -43,7 +43,6 @@
 package com.sun.faces.lifecycle;
 
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,7 +63,11 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import java.util.Collection;
+import java.util.List;
+import javax.faces.component.UIViewParameter;
 import javax.faces.component.visit.VisitCallback;
+import javax.faces.context.PartialViewContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PostRestoreStateEvent;
@@ -171,13 +174,16 @@ public class RestoreViewPhase extends Phase {
         if (isPostBack) {
             // try to restore the view
             viewRoot = viewHandler.restoreView(facesContext, viewId);
-
+            boolean renderResponse = false;
             if (viewRoot == null) {
                 if (is11CompatEnabled(facesContext)) {
                     // 1.1 -> create a new view and flag that the response should
                     //        be immediately rendered
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("Postback: recreating a view for " + viewId);
+                    }
                     viewRoot = viewHandler.createView(facesContext, viewId);
-                    facesContext.renderResponse();
+                    renderResponse = true;
                 } else {
                     Object[] params = {viewId};
                     throw new ViewExpiredException(
@@ -187,30 +193,53 @@ public class RestoreViewPhase extends Phase {
                           viewId);
                 }
             }
-
+            
             facesContext.setViewRoot(viewRoot);
+            assert(null != viewRoot);
+            if (renderResponse) {
+                List<UIViewParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getViewParameters(facesContext, viewId);
+                if (!params.isEmpty() &&
+                        !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
+                    configureLifecycleForViewMetadataTraversal(facesContext);
+                } else {
+                    facesContext.renderResponse();
+                }
+            }
 
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Postback: Restored view for " + viewId);
+                LOGGER.fine("Postback: restored view for " + viewId);
             }
         } else {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("New request: creating a view for " + viewId);
             }
-            // if that fails, create one
             viewRoot = (Util.getViewHandler(facesContext)).
                   createView(facesContext, viewId);           
             facesContext.setViewRoot(viewRoot);
-            facesContext.renderResponse();
+            assert(null != viewRoot);
+            List<UIViewParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getViewParameters(facesContext, viewId);
+            if (!params.isEmpty() &&
+                !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
+                configureLifecycleForViewMetadataTraversal(facesContext);
+            } else {
+                facesContext.renderResponse();
+            }
             facesContext.getApplication().publishEvent(PostAddToViewEvent.class,
                                                        viewRoot);
         }
-        assert(null != viewRoot);
         
+
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting RestoreViewPhase");
         }
 
+    }
+    
+    private void configureLifecycleForViewMetadataTraversal(FacesContext context) {
+        PartialViewContext partial = context.getPartialViewContext();
+        partial.setPartialRequest(true);
+        Collection<String> ids = partial.getExecuteIds();
+        ids.add(UIViewRoot.METADATA_FACET_NAME);
     }
 
 

@@ -184,6 +184,13 @@ public class PartialViewContextImpl extends PartialViewContext {
 
     }
 
+    @Override
+    public void setPartialRequest(boolean isPartialRequest) {
+        this.partialRequest = isPartialRequest;
+    }
+    
+    
+
 
     public boolean isRenderNone() {
 
@@ -346,12 +353,12 @@ public class PartialViewContextImpl extends PartialViewContext {
 
         String param = requestParamMap.get(parameterName);
         if (param == null || NO_PARTIAL_PHASE_CLIENT_IDS.equals(param)) {
-            return Collections.emptyList();
+            return new ArrayList<String>();
         } else {
             String[] pcs = Util.split(param, "[ \t]+");
             return ((pcs != null && pcs.length != 0)
                     ? new ArrayList<String>(Arrays.asList(pcs))
-                    : Collections.<String>emptyList());
+                    : new ArrayList<String>());
         }
         
     }

@@ -108,6 +108,11 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
     private static final String REDIRECT = "redirect";
 
     /**
+     * <p>/faces-config/navigation-rule/navigation-case/redirect[@include-page-params]</p>
+     */
+    private static final String INCLUDE_VIEW_PARAMS_ATTRIBUTE = "include-view-params";
+
+    /**
      * <p>If <code>from-view-id</code> is not defined.<p>
      */
     private static final String FROM_VIEW_ID_DEFAULT = "*";
@@ -212,6 +217,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                 String condition = null;
                 String toViewId = null;
                 boolean redirect = false;
+                boolean includeViewParams = false;
                 for (int i = 0, size = children.getLength(); i < size; i++) {
                     Node n = children.item(i);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -246,6 +252,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                             }
                         } else if (REDIRECT.equals(n.getLocalName())) {
                             redirect = true;
+                            includeViewParams = Boolean.valueOf(getNodeText(n.getAttributes().getNamedItem(INCLUDE_VIEW_PARAMS_ATTRIBUTE)));
                         }
                     }
                 }
@@ -256,7 +263,8 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                                               outcome,
                                               condition,
                                               toViewId,
-                                              redirect);
+                                              redirect,
+                                              includeViewParams);
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                MessageFormat.format("Adding NavigationCase: {0}",

@@ -206,6 +206,20 @@
 
     <component>
 
+        <component-type>javax.faces.ViewParameter</component-type>
+        <component-class>javax.faces.component.UIViewParameter</component-class>
+
+        <xi:include href="uiinput-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="uiparameter-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.ViewParameter</component-family>
+        </component-extension>
+
+    </component>
+
+    <component>
+
         <component-type>javax.faces.Parameter</component-type>
         <component-class>javax.faces.component.UIParameter</component-class>
 

@@ -369,8 +369,12 @@ public final class ComponentSupport {
                     parent.getFacets().put(facetName, panelGroup);
                     existing = panelGroup;
                 }
-                // we have a panel group, so add the new component to it
-                existing.getChildren().add(child);
+                if (existing.getAttributes().get(ComponentSupport.IMPLICIT_PANEL) != null) {
+                    // we have a panel group, so add the new component to it
+                    existing.getChildren().add(child);
+                } else {
+                    parent.getFacets().put(facetName, child);
+                }
             } else {
                 parent.getFacets().put(facetName, child);
             }

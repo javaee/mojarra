@@ -79,6 +79,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
+import com.sun.faces.facelets.tag.jsf.ComponentHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
@@ -143,9 +144,10 @@ public final class AjaxHandler extends TagHandlerImpl {
             return;
         } 
 
+        // Construct our AjaxBehavior from tag parameters..
+
         String event = (this.event != null) ? this.event.getValue() : null;
 
-        //AjaxBehavior ajaxBehavior = new AjaxBehavior(event, onevent, onerror, execute, render, disabled);
         AjaxBehavior ajaxBehavior = new AjaxBehavior(event,
             ((this.onevent != null) ? this.onevent.getValueExpression(ctx, String.class) : null),
             ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
@@ -159,31 +161,39 @@ public final class AjaxHandler extends TagHandlerImpl {
                 this.listener.getMethodExpression(ctx, Object.class, new Class[] { })));
         }
 
+        // See if we have any components nested below us..
 
-        //
-        // If we are nested within a BehaviorHolder
-        //
-        if (parent instanceof BehaviorHolder) {
-            BehaviorHolder bHolder = (BehaviorHolder)parent;
-            if (null == event) {
-                event = bHolder.getDefaultEventName();
+        Iterator iter = TagHandlerImpl.findNextByType(this.nextHandler, TagHandler.class);
+        
+        // If we don't have any components nested below us..
+        // then we handle the case of existing as nested within a BehaviorHolder component..
+
+        if (!iter.hasNext()) {
+            //
+            // If we are nested within a BehaviorHolder
+            //
+            if (parent instanceof BehaviorHolder) {
+                BehaviorHolder bHolder = (BehaviorHolder)parent;
                 if (null == event) {
-                    throw new TagException(this.tag,
-                        "Event attribute could not be determined: " + event);
+                    event = bHolder.getDefaultEventName();
+                    if (null == event) {
+                        throw new TagException(this.tag,
+                            "Event attribute could not be determined: " + event);
+                    }
+                } else {
+                    if (!bHolder.getEventNames().contains(event)) {
+                        throw new TagException(this.tag,
+                            "Event attribute could not be determined: " + event);
+                    }               
                 }
-            } else {
-                if (!bHolder.getEventNames().contains(event)) {
-                    throw new TagException(this.tag,
-                        "Event attribute could not be determined: " + event);
-                }               
+                bHolder.addBehavior(event, ajaxBehavior);
+                installAjaxResourceIfNecessary();
             }
-            bHolder.addBehavior(event, ajaxBehavior);
-            installAjaxResourceIfNecessary();
             return;
         }
             
-//TODO:implement for Behavior 
-/*
+        // We have component children nested below us..
+
         AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
             get(AjaxBehaviors.AJAX_BEHAVIORS);
         if (ajaxBehaviors == null) {
@@ -202,7 +212,6 @@ public final class AjaxHandler extends TagHandlerImpl {
         if (ajaxBehaviors != null) {
             ajaxBehaviors.popBehavior();
         }
-*/
     }
 
     // Only install the Ajax resource if it doesn't exist.
