@@ -72,30 +72,38 @@ import javax.faces.validator.ValidatorException;
  * value, or the object referenced by the value binding expression (if
  * any); however, individual {@link javax.faces.render.Renderer}s will
  * generally impose restrictions on the type of data they know how to
- * display.</p> <p/> <p>During the <em>Apply Request Values</em> phase
+ * display.</p> 
+ *
+ * <p>During the <em>Apply Request Values</em> phase
  * of the request processing lifecycle, the decoded value of this
  * component, usually but not necessarily a String, must be stored - but
  * not yet converted - using <code>setSubmittedValue()</code>.  If the
  * component wishes to indicate that no particular value was submitted,
  * it can either do nothing, or set the submitted value to
- * <code>null</code>.</p> <p></p> <p>By default, during the <em>Process
- * Validators</em> phase of the request processing lifecycle, the
- * submitted value will be converted to a typesafe object, and, if
- * validation succeeds, stored as a local value using
- * <code>setValue()</code>.  However, if the <code>immediate</code>
- * property is set to <code>true</code>, this processing will occur
- * instead at the end of the <em>Apply Request Values</em> phase.  </p>
+ * <code>null</code>.</p>
+
+ * <p>By default, during the <em>Process Validators</em> phase of the
+ * request processing lifecycle, the submitted value will be converted
+ * to a typesafe object, and, if validation succeeds, stored as a local
+ * value using <code>setValue()</code>.  However, if the
+ * <code>immediate</code> property is set to <code>true</code>, this
+ * processing will occur instead at the end of the <em>Apply Request
+ * Values</em> phase.</p> 
+
  * <p>During the <em>Render Response</em> phase of the request
  * processing lifecycle, conversion for output occurs as for {@link
- * UIOutput}.</p> <p/> <p>When the <code>validate()</code> method of
- * this {@link UIInput} detects that a value change has actually
- * occurred, and that all validations have been successfully passed, it
- * will queue a {@link ValueChangeEvent}.  Later on, the
- * <code>broadcast()</code> method will ensure that this event is
- * broadcast to all interested listeners.  This event will be delivered
- * by default in the <em>Process Validators</em> phase, but can be
- * delivered instead during <em>Apply Request Values</em> if the
- * <code>immediate</code> property is set to <code>true</code>.</p> <p/>
+ * UIOutput}.</p>
+
+ * <p>When the <code>validate()</code> method of this {@link UIInput}
+ * detects that a value change has actually occurred, and that all
+ * validations have been successfully passed, it will queue a {@link
+ * ValueChangeEvent}.  Later on, the <code>broadcast()</code> method
+ * will ensure that this event is broadcast to all interested listeners.
+ * This event will be delivered by default in the <em>Process
+ * Validators</em> phase, but can be delivered instead during <em>Apply
+ * Request Values</em> if the <code>immediate</code> property is set to
+ * <code>true</code>.</p>
+
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Text</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
