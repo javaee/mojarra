@@ -239,11 +239,6 @@ public class RestoreViewPhase extends Phase {
         PartialViewContext partial = context.getPartialViewContext();
         partial.setPartialRequest(true);
         Collection<String> ids = partial.getExecuteIds();
-        // IF this is not an ajax request
-        if (!partial.isAjaxRequest()) {
-            // clear the existing ids
-            ids.clear();
-        }
         ids.add(UIViewRoot.METADATA_FACET_NAME);
     }
 
