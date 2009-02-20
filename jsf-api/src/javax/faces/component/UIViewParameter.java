@@ -377,18 +377,6 @@ public class UIViewParameter extends UIInput {
         return c.getAsString(context, this, currentValue);
     }
 
-    public String getStringValueToTransfer(FacesContext context, List<UIViewParameter> viewParams) {
-        for (UIViewParameter candidate : viewParams) {
-            if (candidate.getName().equals(name)) {
-                // QUESTION: should this be getStringValue()? That's how it is implemented in Seam
-                // ANSWER: I don't know.
-                return candidate.getStringValue(context);
-            }
-        }
-
-        return null;
-    }
-
     @Override
     protected Object getConvertedValue(FacesContext context, Object submittedValue)
           throws ConverterException {

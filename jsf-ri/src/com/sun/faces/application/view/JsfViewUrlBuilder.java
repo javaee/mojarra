@@ -139,7 +139,7 @@ public class JsfViewUrlBuilder extends UrlBuilder {
                 }
                 // ...or transfer string value from matching UIViewParameter instance stored in current view
                 else {
-                    value = viewParam.getStringValueToTransfer(context, 
+                    value = getStringValueToTransfer(context, viewParam,
                             currentViewParams);
                 }
             }
@@ -147,6 +147,20 @@ public class JsfViewUrlBuilder extends UrlBuilder {
                 addParameter(viewParam.getName(), value);
             }
         }
+    }
+
+    public static String getStringValueToTransfer(FacesContext context, 
+            UIViewParameter param,
+            List<UIViewParameter> viewParams) {
+        for (UIViewParameter candidate : viewParams) {
+            if (candidate.getName().equals(param.getName())) {
+                // QUESTION: should this be getStringValue()? That's how it is implemented in Seam
+                // ANSWER: I don't know.
+                return candidate.getStringValue(context);
+            }
+        }
+
+        return null;
     }
 
     protected void convertViewToAction() {
