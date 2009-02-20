@@ -40,10 +40,15 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.FacesLogger;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.render.BehaviorRenderer;
 
 
@@ -54,6 +59,9 @@ import javax.faces.render.BehaviorRenderer;
 
 public class AjaxBehaviorRenderer extends BehaviorRenderer  {
     
+    // Log instance for this class
+    protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
+
     
     // ------------------------------------------------------ Rendering Methods
 
@@ -69,10 +77,21 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
     @Override
     public void decode(FacesContext context,
                        UIComponent component,
+                       Behavior behavior,
                        String eventName) {
-        if (null == context || null == component || null == eventName) {
+        if (null == context || null == component || null == behavior || null == eventName) {
             throw new NullPointerException();
         }
+
+        component.queueEvent(new AjaxBehaviorEvent(component, behavior));
+
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("This command resulted in form submission " +
+                " AjaxBehaviorEvent queued.");
+            logger.log(Level.FINE,
+                "End decoding component {0}", component.getId());
+        }
+
 
     }
 
