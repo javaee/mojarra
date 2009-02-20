@@ -130,18 +130,23 @@ public abstract class Behavior {
      * @param context {@link UIComponent} the component associated with this {@link Behavior} 
      * @param context {@link eventName} the event name associated with this {@link Behavior} 
      *
-     * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     * @throws NullPointerException if <code>context</code> is <code>null</code> or
+     * <code>component<code> is <code>null</code> or <code>eventName</code> is 
+     * <code>null</code>.
      *
      * @since 2.0
      */
     public void decode(FacesContext context,
                        UIComponent component,
                        String eventName) {
-    	// TODO - check null parameters.
+    
+        if (null == context || null == component || null == eventName) {
+            throw new NullPointerException();
+        }
+
     	BehaviorRenderer renderer = getRenderer(context);
-    	if(null != renderer){
-    		renderer.decode(context, component, eventName);
+    	if (null != renderer){
+            renderer.decode(context, component, this, eventName);
     	}
     }
     

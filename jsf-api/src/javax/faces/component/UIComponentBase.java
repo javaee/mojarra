@@ -1048,15 +1048,29 @@ public abstract class UIComponentBase extends UIComponent {
             UIComponent kid = (UIComponent) kids.next();
             kid.processDecodes(context);
         }
+
         // Process behaviors, if supported by the component.
         if (isBehaviorHolder()){
-            for (Entry<String, List<Behavior>> entry : getBehaviors().entrySet()) {
-                String eventName = entry.getKey();
-                for(Behavior behavior : entry.getValue()){
-                    behavior.decode(context, this, eventName);
+            Map<String, List<Behavior>> behaviorsForEvent = getBehaviors();
+            if (!behaviorsForEvent.isEmpty()) {
+                Map<String, String> requestParameterMap = context.getExternalContext()
+                    .getRequestParameterMap();
+                String behaviorEvent = requestParameterMap.get("javax.faces.behavior.event");
+                if (null != behaviorEvent) {
+                    List behaviors = behaviorsForEvent.get(behaviorEvent);
+                    if (null != behaviors && behaviors.size() > 0) {
+                        String behaviorSource = requestParameterMap.get("javax.faces.behavior.source");
+                        if (null != behaviorSource && behaviorSource.equals(getClientId())) {
+                            Iterator iter = behaviors.iterator();
+                            while (iter.hasNext()) {
+                                Behavior behavior = (Behavior)iter.next();
+                                behavior.decode(context, this, behaviorEvent);
+                            }
+                        }
+                    }
                 }
             }
-        }
+        }                                     
 
         // Process this component itself
         try {
@@ -1634,6 +1648,8 @@ public abstract class UIComponentBase extends UIComponent {
      *        the behavior to.
      * param  behavior the {@link javax.faces.component.behavior.Behavior} 
      * instance to attach for the specified event name.
+     *
+     * @since 2.0
      */
     public void addBehavior(String eventName, Behavior behavior) {
         assertBehaviorHolder();
@@ -1744,6 +1760,8 @@ public abstract class UIComponentBase extends UIComponent {
      * {@link javax.faces.component.behavior.BehaviorHolder}, and must
      * override this method to return a non-Empty <code>Collection</code> 
      * of the client event names that the component supports.</p>
+     *
+     * @since 2.0
      */
     public Collection<String> getEventNames() {
         assertBehaviorHolder();
@@ -1768,6 +1786,8 @@ public abstract class UIComponentBase extends UIComponent {
      * {@link javax.faces.component.bhavior.BehaviorHolder}, and must add
      * an implementation of 
      * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+     *
+     * @since 2.0
      */
     public Map<String, List<Behavior>> getBehaviors() {
         if (null == unmodifiableBehaviors) {

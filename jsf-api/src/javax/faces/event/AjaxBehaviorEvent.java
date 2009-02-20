@@ -41,7 +41,7 @@
 package javax.faces.event;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.Behavior;
 
 /**
  * <p><strong class="changed_added_2_0">AjaxBehaviorEvent</strong>
@@ -61,16 +61,16 @@ public class AjaxBehaviorEvent extends BehaviorEvent {
      * from the specified source component and Ajax behavior.</p>
      *
      * @param component Source {@link UIComponent} for this event
-     * @param ajaxBehavior {@link AjaxBehavior} for this event
+     * @param behavior {@link Behavior} for this event
      *
      * @throws IllegalArgumentException if <code>component</code> or
      * <code>ajaxBehavior</code> is <code>null</code>
      *
      * @since 2.0
      */
-    public AjaxBehaviorEvent(UIComponent component, AjaxBehavior ajaxBehavior) {
+    public AjaxBehaviorEvent(UIComponent component, Behavior behavior) {
 
-        super(component, ajaxBehavior);
+        super(component, behavior);
 
     }
 

@@ -101,8 +101,9 @@ public abstract class BehaviorRenderer {
      * <code>queueEvent()</code>.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
-     * @param context {@link UIComponent} the component associated with this {@link Behavior}
-     * @param context {@link eventName} the event name associated with this {@link Behavior}
+     * @param component {@link UIComponent} the component associated with this {@link Behavior}
+     * @param behavior {@link Behavior} the behavior instance
+     * @param eventName  the event name associated with this {@link Behavior}
      *
      * @throws NullPointerException if <code>context</code>
      *  or <code>component</code> or <code>eventName</code> is <code>null</code>
@@ -111,8 +112,9 @@ public abstract class BehaviorRenderer {
      */
     public void decode(FacesContext context,
                        UIComponent component,
+                       Behavior behavior,
                        String eventName) {
-        if (null == context || null == component || null == eventName) {
+        if (null == context || null == component || behavior == null || null == eventName) {
             throw new NullPointerException();
         }
 
