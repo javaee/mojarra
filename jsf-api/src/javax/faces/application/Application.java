@@ -43,9 +43,7 @@ package javax.faces.application;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
@@ -64,7 +62,6 @@ import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.el.ELException;
 import javax.el.ELResolver;
-import javax.faces.component.UIViewParameter;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.validator.Validator;
@@ -1738,5 +1735,6 @@ public abstract class Application {
         }
 
     }
+
 
 }
