@@ -102,6 +102,8 @@ public abstract class ConfigurableNavigationHandler extends NavigationHandler {
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
-    public abstract void performNavigation(String outcome);
+    public void performNavigation(String outcome) {
+        this.handleNavigation(FacesContext.getCurrentInstance(), null, outcome);
+    }
 
 }
