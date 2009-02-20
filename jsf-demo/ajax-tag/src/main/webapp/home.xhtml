@@ -53,7 +53,7 @@
 
     <h:form id="form1" >
        <h:commandButton id="submit" value="submit">
-           <f:ajax/>
+           <f:ajax listener="#{bean.processBehavior}"/>
        </h:commandButton>
 
        <h:commandButton id="greet" value="Greet">

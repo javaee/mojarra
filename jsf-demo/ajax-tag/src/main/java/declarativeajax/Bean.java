@@ -46,6 +46,7 @@ import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlSelectOneMenu;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.model.ManagedBean;
@@ -194,7 +195,7 @@ public class Bean {
 
     public void processBehavior(AjaxBehaviorEvent event) {
 
-    System.out.println ("BEHAVIOR LISTENER CALLED!";
+    System.out.println ("BEHAVIOR LISTENER CALLED!");
 
 
     }
