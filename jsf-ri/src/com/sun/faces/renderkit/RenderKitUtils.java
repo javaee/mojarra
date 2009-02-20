@@ -304,12 +304,6 @@ public class RenderKitUtils {
         }
     }
 
-    public static String buildAjaxCommand(FacesContext context,
-                                          UIComponent component,
-                                          AjaxBehavior ajaxBehavior) {
-        return "";
-    }
-
     public static void renderOnchange(FacesContext context, UIComponent component)
         throws IOException {
 
@@ -337,14 +331,17 @@ public class RenderKitUtils {
         // a buidler to allocate.
         StringBuilder builder = new StringBuilder(100);
 
-        startChainScript(builder, behaviorEventName);
+        builder.append("jsf.util.chain(this,event,");
+
         appendScriptToChain(builder, userClickHandler);
         appendBehaviorsToChain(builder, context, component, behaviors, behaviorEventName);
-        endChainScript(builder);
+
+        builder.append(")");
+
 
         // TODO don't always want to return false here - only in
         // cases where we want to cancel the default submit.
-        builder.append("return false");
+        builder.append(";return false");
 
         writer.writeAttribute(handlerName, builder.toString(), null);
     }
@@ -452,26 +449,6 @@ public class RenderKitUtils {
 
 
     // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * Attempt to find the component assuming the ID is relative to the
-     * nearest naming container.  If not found, then search for the component
-     * using an absolute component expression.
-     */
-    private static UIComponent findComponent(UIComponent component,
-                                             String exe) {
-
-        // RELEASE_PENDING - perhaps only enable ID validation if ProjectStage
-        // is development
-        UIComponent resolvedComponent = component.findComponent(exe);
-        if (resolvedComponent == null) {
-            // not found using a relative search, try an absolute search
-            resolvedComponent = component.findComponent(':' + exe);
-        }
-        return resolvedComponent;
-
-    }
 
     
     /**
@@ -1027,27 +1004,7 @@ public class RenderKitUtils {
 
     }
 
-    // Starts writing out a call to jsf.chain().
-    private static void startChainScript(StringBuilder builder, 
-                                         String behaviorName) {
-        builder.append("jsf.chain(this,event,");
-
-        if (behaviorName == null)
-            builder.append("0");
-        else {
-            builder.append("'");
-            builder.append(behaviorName);
-            builder.append("'");
-        }
-    }
-
-    // Closes up a call jsf.chain().
-    private static void endChainScript(StringBuilder builder) {
-        builder.append(");");
-    }
-
-    // Appends a script to a jsf.chain() call that was previously
-    // started via startChainScript().
+    // Appends a script to a jsf.util.chain() call
     private static void appendScriptToChain(StringBuilder builder, 
                                             String script) {
         if ((null == script) || script.length() == 0)
@@ -1079,8 +1036,7 @@ public class RenderKitUtils {
         }
     }
 
-    // Appends one or more behavior scripts a jsf.chain() call that was 
-    // previously started via startChainScript().
+    // Appends one or more behavior scripts a jsf.util.chain() call
     private static void appendBehaviorsToChain(StringBuilder builder,
                                                FacesContext context, 
                                                UIComponent component,

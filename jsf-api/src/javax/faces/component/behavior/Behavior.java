@@ -217,9 +217,12 @@ public abstract class Behavior {
      */
     public void broadcast(BehaviorEvent event)
         throws AbortProcessingException {
-        for (BehaviorListener listener : listeners) {
-            if (event.isAppropriateListener(listener)) {
-                event.processListener(listener);
+
+        if (null != listeners) {
+            for (BehaviorListener listener : listeners) {
+                if (event.isAppropriateListener(listener)) {
+                    event.processListener(listener);
+                }
             }
         }
     }

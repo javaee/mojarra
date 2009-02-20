@@ -42,10 +42,14 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.FacesLogger;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -67,10 +71,16 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
 
     @Override
     public String getScript(FacesContext context,
-                                     UIComponent component,
-                                     Behavior behavior,
-                                     String eventName) {
-        return "jsf.ajax.request(0,bEvent)";
+                            UIComponent component,
+                            Behavior behavior,
+                            String eventName) {
+        if (!(behavior instanceof AjaxBehavior)) {
+            // TODO: use MessageUtils for this error message?
+            throw new IllegalArgumentException(
+                "Instance of javax.faces.component.behavior.AjaxBehavior required: " + behavior);
+        }
+
+        return buildAjaxCommand(context, component, eventName, (AjaxBehavior)behavior);
     }
 
 
@@ -95,4 +105,92 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
 
     }
 
+    private static String buildAjaxCommand(FacesContext context,
+                                           UIComponent component,
+                                           String eventName,
+                                           AjaxBehavior ajaxBehavior) {
+
+        StringBuilder ajaxCommand = new StringBuilder(256);
+        Collection<String> execute = ajaxBehavior.getExecute(context);
+        Collection<String> render = ajaxBehavior.getRender(context);
+        String onevent = ajaxBehavior.getOnEvent(context);
+        String onerror = ajaxBehavior.getOnError(context);
+
+        ajaxCommand.append("mojarra.ab(this,event,'");
+        ajaxCommand.append(eventName);
+        ajaxCommand.append("',");
+
+        appendIds(component, ajaxCommand, execute);
+        ajaxCommand.append(",");
+        appendIds(component, ajaxCommand, render);
+
+        if ((onevent != null) || (onerror != null)) {
+            // TODO add these into the options argument
+        }
+
+        ajaxCommand.append(")");
+
+        return ajaxCommand.toString();
+    }
+
+    // Appends an ids argument to the ajax command
+    private static void appendIds(UIComponent component,
+                                  StringBuilder builder,
+                                  Collection<String> ids) {
+
+        if ((null == ids) || ids.isEmpty()) {
+            builder.append('0');
+            return;
+        }
+
+        builder.append("'");
+
+
+        boolean first = true;
+
+        for (String id : ids) {
+            if (!first) {
+                builder.append(' ');
+            } else {
+                first = false;
+            }
+
+            builder.append(getResolvedId(component, id));
+        }
+
+        builder.append("'");
+    }
+
+    // Returns the resolved (client id) for a particular id.
+    private static String getResolvedId(UIComponent component, String id) {
+
+        UIComponent resolvedComponent = findComponent(component, id);
+        if (resolvedComponent == null) {
+            // RELEASE_PENDING  i18n
+            throw new FacesException(
+                "<f:ajax> contains an unknown id '"
+                + id
+                + "'");
+        }
+
+        return resolvedComponent.getClientId();
+    }
+    /**
+     * Attempt to find the component assuming the ID is relative to the
+     * nearest naming container.  If not found, then search for the component
+     * using an absolute component expression.
+     */
+    private static UIComponent findComponent(UIComponent component,
+                                             String exe) {
+
+        // RELEASE_PENDING - perhaps only enable ID validation if ProjectStage
+        // is development
+        UIComponent resolvedComponent = component.findComponent(exe);
+        if (resolvedComponent == null) {
+            // not found using a relative search, try an absolute search
+            resolvedComponent = component.findComponent(':' + exe);
+        }
+        return resolvedComponent;
+
+    }
 }

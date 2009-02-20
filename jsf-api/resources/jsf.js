@@ -77,67 +77,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      */
     var jsf = {};
 
-
-    /**
-     * The namespace for event functionality.
-     * @name jsf.event
-     * @namespace
-     */
-    jsf.event = {};
-
-    /**
-     * <p>The BehaviorEvent class is used to provide context information
-     * while executing scripts produced by javax.faces.component.Behavior
-     * instances.  When a Behavior script is invoked, an instance of
-     * jsf.event.BehaviorEvent is created and made avaiable to the
-     * script via the "bEvent" variable.  This allows Behavior scripts
-     * to retrieve information about the event context in a generic
-     * (browser/component-independent) manner.
-     * </p>
-     * @param source The element that triggered behavior event
-     * or an id string of the element to use as the triggering element.
-     * @param nativeEvent The native event that triggered this behavior.  The
-     * <code>nativeEevent</code> argument is optional.
-     * @param behaviorEventName The name of the behavior event (eg. "action") 
-     * that is being processed.
-     * 
-     * @function jsf.event.BehaviorEvent
-     */
-    jsf.event.BehaviorEvent = function(source, nativeEvent, behaviorEventName) {
-        // TODO: better doc - doc accessor methods
-        // TODO: check arguments - eg. behaviorEventName required
-
-        var _id;
-        var _element;
-        var _event = nativeEvent;
-        var _name = behaviorEventName;
-
-        if (typeof source === 'undefined' || source === null) {
-          throw new Error("jsf.event.BehaviorEvent: source not set");
-        }
-        if (typeof source === 'string') {
-            _id = source;
-            _element = document.getElementById(source);
-        } else if (typeof source === 'object') {
-            _id = source.id;
-
-            // TODO: Hack - commandButton isn't sending id - only sending name
-            //       Need to revisit this.
-            if (!_id || _id == "")
-                _id = source.name;
-
-            _element = source;
-
-        } else {
-            throw new Error("jsf.event.BehaviorEvent: source must be object or string");
-        }
-
-        this.getSourceId = function() { return _id; };
-        this.getSourceElement = function() { return _element; };
-        this.getNativeEvent = function() { return _event; };
-        this.getBehaviorEventName = function() { return _name; };
-    };
-
     /**
      * The namespace for Ajax functionality.
      * @name jsf.ajax
@@ -882,9 +821,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <code>options.render</code> exists, create the post data argument with the name
              * <code>javax.faces.partial.render</code> and the value as a space delimited
              * <code>string</code> of client identifiers.</li>
-             * If <code>options.behavior</code> exists, create the post data argument with the
-             * name <code>javax.faces.behavior.event</code> and the value as the 
-             * <code>options.behavior</code> value. 
              * <li>Determine additional arguments (if any) from the <code>event</code>
              * argument.  The following name/value pairs may be used from the
              * <code>event</code> object:
@@ -969,6 +905,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <td><code>onerror</code></td>
              * <td><code>function to callback for error</code></td>
              * </tr>
+             * <tr>
+             * <td><code>params</code></td>
+             * <td><code>object containing parameters to include in the request</code></td>
+             * </tr>
              * </table>
              * The <code>options</code> argument is optional.
              * @member jsf.ajax
@@ -976,19 +916,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
              */
             request: function request(source, event, options) {
-
-                // TODO: doc this behavior - ie. doc that BehaviorEvent
-                // is a valid type for the "event" parameter.
-                var behaviorEvent = null;
-
-                if (event instanceof jsf.event.BehaviorEvent) {
-                    behaviorEvent = event;
-                    event = behaviorEvent.getNativeEvent();
-
-                    if (!source) {
-                        source = behaviorEvent.getSourceElement();
-                    }
-                }
 
                 var element;
 
@@ -1042,11 +969,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 args["javax.faces.partial.source"] = element.id;
 
-                if (behaviorEvent) {
-                    args["javax.faces.behavior.source"] = behaviorEvent.getSourceId();
-                    args["javax.faces.behavior.event"] = behaviorEvent.getBehaviorEventName();
-                }
-
                 // RELEASE_PENDING Get rid of commas.  It's supposed to be spaces.
                 if (options.execute) {
                     var temp = options.execute.replace(/\s+/, ' ').split(' ');
@@ -1061,10 +983,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 args["javax.faces.partial.execute"] = options.execute.replace(/\s+/, ' ');
                 if (options.render) {
                     args["javax.faces.partial.render"] = options.render.replace(/\s+/, ' ');
-                }
-
-                if (options.behavior) {
-                    args["javax.faces.behavior.event"] = options.behavior;
                 }
 
                 // remove non-passthrough options
@@ -1432,39 +1350,39 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         return qString;
     };
 
+    /**
+     * The namespace for JavaServer Faces JavaScript utilities.
+     * @name jsf.util
+     * @namespace
+     */
+    jsf.util = {};
 
     /**
      * <p>A varargs function that invokes an arbitrary number of scripts.
      * If any script in the chain returns false, the chain is short-circuited
      * and subsequent scripts are not invoked.  Any number of scripts may
-     * specified after the <code>behaviorEventName</code> argument.</p>
+     * specified after the <code>event</code> argument.</p>
      *
      * @param source The DOM element that triggered this Ajax request, or an 
      * id string of the element to use as the triggering element.
      * @param event The DOM event that triggered this Ajax request.  The
      * <code>event</code> argument is optional.
-     * @param behaviorEventName The name of the behavior event that is
-     * causing the chain to be invoked.  This argument is optional.
      *
-     * @function jsf.chain
+     * @function jsf.util.chain
      */
-    jsf.chain = function(source, event, behaviorEventName) {
+    jsf.util.chain = function(source, event) {
 
         var length = arguments.length;
-        if (length < 4)
+        if (length < 3)
             return;
-
-        var behaviorEvent = (behaviorEventName) ? 
-            new jsf.event.BehaviorEvent(source, event, behaviorEventName) : 
-            null;
 
         var thisArg = (typeof source === 'object') ? source : null;
 
         // Call back any scripts that were passed in
-        for (var i = 3; i < arguments.length; i++) {
+        for (var i = 2; i < arguments.length; i++) {
 
-          var f = new Function("event", "bEvent", arguments[i]);
-          var returnValue = f.call(thisArg, event, behaviorEvent);   
+          var f = new Function("event", arguments[i]);
+          var returnValue = f.call(thisArg, event);   
 
           if (returnValue === false)
             break;
