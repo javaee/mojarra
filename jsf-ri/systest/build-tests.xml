@@ -263,6 +263,15 @@
                          includes="com/sun/faces/facelets/*TestCase.class"/> 
             </tests>
         </jsf.junit>
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/viewparameters/ViewParametersTestCase.class"/>
+            </tests>
+        </jsf.junit>  
+
     </target>
 
     <target name="test.annotations">
@@ -1225,7 +1234,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/SelectManyCollectionTestCase.class"/>
+                         includes="com/sun/faces/systest/viewparameters/ViewParametersTestCase.class"/>
             </tests>
         </jsf.junit>  
     </target>

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.faces.model.ManagedBean;
 import javax.faces.model.ManagedProperty;
 import javax.faces.model.RequestScoped;
@@ -33,6 +34,8 @@ public class NewsReader {
     }
 
     public void loadStory() {
+        Flash flash = facesContext.getFlash();
+        flash.put("id", getSelectedStoryId());
         if (!facesContext.getValidationFailed()) {
             NewsStory story = newsIndex.getStory(selectedStoryId);
             if (story != null) {

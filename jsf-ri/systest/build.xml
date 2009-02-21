@@ -168,7 +168,7 @@
     <target name="passthru"
             description="useful for running one test">
        
-        <ant antfile="build-tests.xml" target="test.validator"/>
+        <ant antfile="build-tests.xml" target="scratch"/>
 
         
     </target>  
