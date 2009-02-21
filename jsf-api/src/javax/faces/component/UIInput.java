@@ -104,7 +104,7 @@ import javax.faces.validator.ValidatorException;
  * Request Values</em> if the <code>immediate</code> property is set to
  * <code>true</code>. <span class="changed_added_2_0">If the validation
  * fails, the implementation must call {@link
- * FacesContext#validationFailed>.</span></p>
+ * FacesContext#validationFailed}.</span></p>
 
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Text</code>".  This value can be changed by calling the
