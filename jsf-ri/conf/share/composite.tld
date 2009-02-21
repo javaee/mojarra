@@ -314,6 +314,68 @@ apply.</p>
             <code>&lt;composite:implementation&gt;</code> element in the
             same PDL file.  </p>
 
+           <p><b>Nesting of composite components</b></p>
+
+           <p>The implementation must support nesting of composite
+           components.  Specifically, it must be possible for the
+           <code>&lt;composite:implementation&gt;</code> section of a
+           composite component to act as the <em>using page</em> for
+           another composite component.  When a composite component
+           exposes a behavioral interface to the <em>using page</em>,
+           such as a <code>&lt;composite:actionSource&gt;</code>,
+           <code>&lt;composite:editableValueHolder&gt;</code>,
+           <code>&lt;composite:valueHolder&gt;</code> or other
+           behavioral interface, it must be possible to
+           &#8220;propogate&#8221; the exposure of such an interface in
+           the case of a nested composite component.  The composite
+           component author must ensure that the value of the
+           <code>name</code> attributes exactly match at all levels of
+           the nesting to enable this exposure to work.  The
+           implementation is not required to support
+           &#8220;re-mapping&#8221; of names in a nested composite
+           component.</p>
+
+           <p>For example, consider this nested composite component.</p>
+
+           <p>Using page</p>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;ez:actionSourceOuter&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;f:actionListener <span class="kw3">for</span>=<span class="st0">&quot;button1&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/ez:actionSourceOuter&gt;</span> </div></li></ol></div></div>
+
+<p>actionSourceOuter.xhtml: Outer composite component</p>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;button1&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1"><span class="sc2">&lt;composite:implementation&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;ez:actionSourceInner /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:implementation&gt;</span> </div></li></ol></div></div>
+
+<p>actionSourceInner.xhtml: the composite component used within a
+composite component.</p>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;button1&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1"><span class="sc2">&lt;composite:implementation&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;h:commandButton <span class="kw3">id</span>=<span class="st0">&quot;button1&quot;</span> <span class="kw3">value</span>=<span class="st0">&quot;the real button&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:implementation&gt;</span> </div></li></ol></div></div>
+
+<p>The <code>id</code> of the <code>&lt;h:commandButton&gt;</code> on
+line 6 of actionSourceInner.xhtml must match the <code>name</code> on
+line 2 of that file (this is a standard requirement for all composite
+components, nested or not).  That <code>id</code> must also match the
+<code>name</code> on line 2 of actionSourceOuter.xhtml, and the
+<code>for</code> on line 2 of the using page.</p>
+
+<p>The implementation must support any level of nesting as long as the
+<code>for</code>, <code>name</code>, and <code>id</code> values match
+up.  Furthermore, the <code>targets</code> attribute is also valid for
+use in this nested fashion.</p>
+
 </div>
 ]]>
         </description>
