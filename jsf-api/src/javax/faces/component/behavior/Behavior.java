@@ -41,7 +41,9 @@
 package javax.faces.component.behavior;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -227,6 +229,20 @@ public abstract class Behavior {
         }
     }
 
+    /**
+     * <p>Returns hints that describe the behavior of the Behavior
+     * implementation</p>
+     *
+     * <p>These hints may impact how Renderers behave in the presence
+     * of Behaviors.  For example, when a Behavior that specifies
+     * BehaviorHint.SUBMITTING is present, the Renderer may choose
+     * to alternate the scripts that it generates itself.</p>
+     *   
+     * @return a non-null, unmodifiable collection of BehaviorHints.
+     */
+    public Set<BehaviorHint> getHints() {
+        return Collections.emptySet();
+    }
 
     /**
      * <p class="changed_added_2_0">Add the specified {@link BehaviorListener} 
@@ -297,11 +313,4 @@ public abstract class Behavior {
         }
         listeners.remove(listener);
     }
-
-
-    
-    public void processEvent(BehaviorEvent event) {
-		
-    }
-
 }

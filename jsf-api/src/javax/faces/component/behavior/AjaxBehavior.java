@@ -43,7 +43,10 @@ package javax.faces.component.behavior;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -89,13 +92,8 @@ public class AjaxBehavior extends Behavior implements Serializable {
      */
     public static final String AJAX_ACTION = "action";
 
-    /**
-     * <p class="changed_added_2_0">The identifier for both Ajax value change and 
-     * action events.</p> 
-     *
-     * @since 2.0
-     */
-    public static final String AJAX_VALUE_CHANGE_ACTION = "all";
+    private static final Set<BehaviorHint> HINTS = 
+        Collections.unmodifiableSet(EnumSet.of(BehaviorHint.SUBMITTING));
 
     private String event;
     private ValueExpression onerrorExpression;
@@ -129,6 +127,12 @@ public class AjaxBehavior extends Behavior implements Serializable {
     public String getRendererType() {
        return AJAX_BEHAVIOR;
     }
+
+    @Override
+    public Set<BehaviorHint> getHints() {
+        return HINTS;
+    }
+
     // ---------------------------------------------------------- Public Methods
 
     

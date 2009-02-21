@@ -51,6 +51,7 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorHint;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
@@ -334,14 +335,19 @@ public class RenderKitUtils {
         builder.append("jsf.util.chain(this,event,");
 
         appendScriptToChain(builder, userClickHandler);
-        appendBehaviorsToChain(builder, context, component, behaviors, behaviorEventName);
+        boolean submitting = appendBehaviorsToChain(builder,
+                                                    context,
+                                                    component, 
+                                                    behaviors, 
+                                                    behaviorEventName);
 
         builder.append(")");
 
 
-        // TODO don't always want to return false here - only in
-        // cases where we want to cancel the default submit.
-        builder.append(";return false");
+        // If we've got a "submitting" behavior, return false to
+        // prevent the button from submitting itself.
+        if (submitting)
+            builder.append(";return false");
 
         writer.writeAttribute(handlerName, builder.toString(), null);
     }
@@ -1006,9 +1012,11 @@ public class RenderKitUtils {
 
     // Appends a script to a jsf.util.chain() call
     private static void appendScriptToChain(StringBuilder builder, 
-                                            String script) {
-        if ((null == script) || script.length() == 0)
+                                               String script) {
+
+        if ((script == null) || (script.length() == 0)) {
             return;
+        }
 
         if (builder.charAt(builder.length() - 1) != ',')
             builder.append(',');
@@ -1037,16 +1045,26 @@ public class RenderKitUtils {
     }
 
     // Appends one or more behavior scripts a jsf.util.chain() call
-    private static void appendBehaviorsToChain(StringBuilder builder,
-                                               FacesContext context, 
-                                               UIComponent component,
-                                               List<Behavior> behaviors,
-                                               String behaviorEventName) {
+    private static boolean appendBehaviorsToChain(StringBuilder builder,
+                                                  FacesContext context, 
+                                                  UIComponent component,
+                                                  List<Behavior> behaviors,
+                                                  String behaviorEventName) {
+
+        boolean submitting = false;
 
         for (Behavior behavior : behaviors) {
             String script = behavior.getScript(context, component, behaviorEventName);
-            appendScriptToChain(builder, script);
+            if ((script != null) && (script.length() > 0)) {
+                appendScriptToChain(builder, script);
+
+                if (behavior.getHints().contains(BehaviorHint.SUBMITTING)) {
+                    submitting = true;
+                }
+            }
         }
+
+        return submitting;
     }
 
     // Returns a user-specified DOM event handler script, trimmed
