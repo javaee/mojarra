@@ -329,7 +329,13 @@ public class UIViewParameter extends UIInput {
      */
 
     public String getStringValue(FacesContext context) {
-        return hasValueExpression() ? getStringValueFromModel(context) : rawValue;
+        String result = null;
+        if (hasValueExpression()) {
+            result = getStringValueFromModel(context);
+        } else {
+            result = (null != rawValue) ? rawValue : (String) getValue();
+        }
+        return result;
     }
 
     /**
