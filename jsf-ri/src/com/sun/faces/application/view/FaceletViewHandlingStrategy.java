@@ -212,6 +212,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
             result = new FacesBeanInfo();
             BeanDescriptor viewMetadataDescriptor = new BeanDescriptor(UIViewRoot.class);
+            viewMetadataDescriptor.setName(root.getViewId());
             viewMetadataDescriptor.setValue(UIViewRoot.VIEW_PARAMETERS_KEY, 
                     params);
             result.setBeanDescriptor(viewMetadataDescriptor);

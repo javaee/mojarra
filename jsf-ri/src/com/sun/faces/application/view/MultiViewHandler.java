@@ -667,7 +667,13 @@ public class MultiViewHandler extends ViewHandler {
 			encoding = context.getExternalContext().getResponseCharacterEncoding();
 		}
 
-        return new JsfViewUrlBuilder(context, viewId, includeViewParams, encoding).addParameters(parameters).createUrl();
+        JsfViewUrlBuilder builder = new JsfViewUrlBuilder(context, viewId, includeViewParams, encoding);
+
+        builder.addParameters(parameters);
+        
+        String result = builder.createUrl();
+        
+        return result;
     }
 
     /**

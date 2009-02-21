@@ -71,10 +71,6 @@ import javax.faces.render.Renderer;
  * for instances of this class.  Instances of this class participate in
  * the regular JSF lifecycle, including on Ajax requests.</p>
 
- * <p>PENDING:edburns scan the implementation of RestoreViewPhase for
- * changes relevant to this feature and incorporate it into the spec
- * pdf.</p>
- *
  * </div>
  *
  * @since 2.0
