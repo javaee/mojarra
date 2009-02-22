@@ -208,6 +208,7 @@ public class ApplicationImpl extends Application {
         converterIdMap = new ConcurrentHashMap<String, Object>();
         converterTypeMap = new ConcurrentHashMap<Class<?>, Object>();
         validatorMap = new ConcurrentHashMap<String, Object>();
+        behaviorMap = new ConcurrentHashMap<String, Object>();
         elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
