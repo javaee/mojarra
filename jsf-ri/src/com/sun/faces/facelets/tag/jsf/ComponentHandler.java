@@ -332,7 +332,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         if (ajaxBehaviors != null) {
             AjaxBehavior ajaxBehavior = ajaxBehaviors.getCurrentBehavior();
             if (ajaxBehavior != null) {
-                c.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
+                c.addBehavior(ajaxBehavior.getEvent(), ajaxBehavior);
             }
         }
     }

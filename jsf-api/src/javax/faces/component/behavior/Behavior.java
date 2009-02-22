@@ -74,22 +74,9 @@ import javax.faces.render.RenderKit;
 public abstract class Behavior {
 	
 
-    private static final Logger logger = Logger.getLogger("javax.faces.component.behavior",
-    "javax.faces.LogStrings");
-
-    /**
-     * <p>Our {@link javax.faces.event.BehaviorListener}s.  This data
-     * structure is lazily instantiated as necessary.</p>
-     */
-    private List<BehaviorListener> listeners;
-
     /**
      * <p class="changed_added_2_0">Return the script that implements this
      * Behavior's client-side logic.</p>
-     *
-     * <p>The default implementation delegates that call to 
-     * {@link BehaviorRenderer#getScript(BehaviorContext, Behavior)} 
-     * method.</p>
      *
      * <p>Behavior.getScript() implementations are allowed to return
      * null to indicate that no script is required for this particular
@@ -110,19 +97,7 @@ public abstract class Behavior {
      *
      * @since 2.0
      */      
-    public String getScript(BehaviorContext behaviorContext) {
-
-        if (null == behaviorContext) {
-            throw new NullPointerException();
-        }
-
-    	BehaviorRenderer renderer = getRenderer(behaviorContext.getFacesContext());
-        String script = null;
-    	if (null != renderer){
-            script = renderer.getScript(behaviorContext, this);
-    	}
-        return script;
-    }
+    abstract public String getScript(BehaviorContext behaviorContext);
 
     /**
      * <p class="changed_added_2_0">Decode any new state of this 
@@ -142,73 +117,26 @@ public abstract class Behavior {
      *
      * @since 2.0
      */
-    public void decode(FacesContext context,
-                       UIComponent component) {
-    
-        if (null == context || null == component) {
-            throw new NullPointerException();
-        }
-
-    	BehaviorRenderer renderer = getRenderer(context);
-    	if (null != renderer){
-            renderer.decode(context, component, this);
-    	}
-    }
+    abstract public void decode(FacesContext context, UIComponent component);
     
     /**
      * <p class="changed_added_2_0">Get type of the {@link BehaviorRenderer} if instance uses
      * bridge patterns for a render-kit-specific functionality.
      * </p>
-     * <p>The default implementation returns null.  Subclasses should either
+     * <p>Note that Behavior implementations are not required to delegate
+     * to a BehaviorRenderer.  Implementations that wish to do so should
      * override getRendererType() to return a string that identifies the
-     * type of BehaviorRenderer to use, or should override getScript()
-     * and perform script rendering locally in the Behavior implementation.
+     * type of BehaviorRenderer to use.  Implementations that do not wish
+     * to delegate to a BehaviorRenderer should override getScript() 
+     * to perform script rendering locally in the Behavior implementation.
      * </p>
      * @return the {@link BehaviorRenderer} type for this {@link Behavior}, or null
      * if the Behavior impelentation performs its own script rendering.
      *
      * @since 2.0
      */
-    public String getRendererType() {
-        return null;
-    }
+    abstract public String getRendererType();
     
-    /**
-     * <p class="changed_added_2_0">Convenience method to return the {@link BehaviorRenderer} 
-     * instance associated with this {@link Behavior}, if any; otherwise, return
-     * <code>null</code>.
-     * </p>
-     * @param context {@link FacesContext} for the request we are processing
-     * @return {@link BehaviorRenderer} instance from the current {@link RenderKit} or null.
-     *
-     * @throws NullPointerException if <code>context</code> is null. 
-     *
-     * @since 2.0
-     */
-    protected BehaviorRenderer getRenderer(FacesContext context) {
-    	if (null == context){
-            throw new NullPointerException();
-    	}
-    	BehaviorRenderer renderer = null;
-        String rendererType = getRendererType();
-        if (null != rendererType){
-            RenderKit renderKit = context.getRenderKit();
-            if (null != renderKit){
-                renderer = renderKit.getBehaviorRenderer(rendererType);
-            }
-            if (null == renderer){
-                if (logger.isLoggable(Level.FINE)){
-                    logger.fine("Can't get  behavior renderer for type " + rendererType);
-                }				
-            }
-        } else {
-            if(logger.isLoggable(Level.FINE)){
-                logger.fine("No renderer-type for behavior " + this.getClass().getName());
-            }
-        }
-        return renderer;
-    }
-
     /**
      * <p class="changed_added_2_0">Broadcast the specified 
      * {@link BehaviorEvent} to all registered
@@ -228,100 +156,18 @@ public abstract class Behavior {
      *
      * @since 2.0
      */
-    public void broadcast(BehaviorEvent event)
-        throws AbortProcessingException {
-
-        if (null != listeners) {
-            for (BehaviorListener listener : listeners) {
-                if (event.isAppropriateListener(listener)) {
-                    event.processListener(listener);
-                }
-            }
-        }
-    }
+    abstract public void broadcast(BehaviorEvent event);
 
     /**
      * <p>Returns hints that describe the behavior of the Behavior
      * implementation</p>
      *
-     * <p>These hints may impact how Renderers behave in the presence
+     * <p>The hints may impact how Renderers behave in the presence
      * of Behaviors.  For example, when a Behavior that specifies
      * BehaviorHint.SUBMITTING is present, the Renderer may choose
      * to alternate the scripts that it generates itself.</p>
      *   
      * @return a non-null, unmodifiable collection of BehaviorHints.
      */
-    public Set<BehaviorHint> getHints() {
-        return Collections.emptySet();
-    }
-
-    /**
-     * <p class="changed_added_2_0">Add the specified {@link BehaviorListener} 
-     * to the set of listeners registered to receive event notifications 
-     * from this {@link Behavior}.
-     * It is expected that {@link Behavior} classes acting as event sources
-     * will have corresponding typesafe APIs for registering listeners of the
-     * required type, and the implementation of those registration methods
-     * will delegate to this method.  For example:</p>
-     * <pre>
-     * public class AjaxBehaviorEvent extends BehaviorEvent { ... }
-     *
-     * public interface AjaxBehaviorListener extends BehaviorListener {
-     *   public void processAjaxBehavior(FooEvent event);
-     * }
-     *
-     * public class AjaxBehavior extends Behavior {
-     *   ...
-     *   public void addAjaxBehaviorListener(AjaxBehaviorListener listener) {
-     *     addBehaviorListener(listener);
-     *   }
-     *   public void removeAjaxBehaviorListener(AjaxBehaviorListener listener) {
-     *     removeBehaviorListener(listener);
-     *   }
-     *   ...
-     * }
-     * </pre>
-     *
-     * @param listener The {@link BehaviorListener} to be registered
-     *
-     * @throws NullPointerException if <code>listener</code>
-     *  is <code>null</code>
-     *
-     * @since 2.0
-     */
-    protected void addBehaviorListener(BehaviorListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            //noinspection CollectionWithoutInitialCapacity
-            listeners = new ArrayList<BehaviorListener>();
-        }
-        listeners.add(listener);
-
-    }
-
-    /**
-     * <p class="changed_added_2_0">Remove the specified 
-     * {@link BehaviorListener} from the set of listeners
-     * registered to receive event notifications from this 
-     * {@link Behavior}.
-     *
-     * @param listener The {@link BehaviorListener} to be deregistered
-     * @throws NullPointerException if <code>listener</code>
-     *                              is <code>null</code>
-     *
-     * @since 2.0
-     */
-    protected void removeBehaviorListener(BehaviorListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            return;
-        }
-        listeners.remove(listener);
-    }
+    abstract public Set<BehaviorHint> getHints();
 }

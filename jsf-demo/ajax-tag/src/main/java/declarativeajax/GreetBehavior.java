@@ -40,7 +40,7 @@ import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorBase;
 import javax.faces.component.behavior.BehaviorContext;
 
 
@@ -48,7 +48,7 @@ import javax.faces.component.behavior.BehaviorContext;
  * <p>A trivial Behavior implementation that shows a greeting to the
  * user when invoked.</p>
  */
-public class GreetBehavior extends Behavior implements Serializable {
+public class GreetBehavior extends BehaviorBase implements Serializable {
 
     public GreetBehavior(String name) {
         this.name = name;

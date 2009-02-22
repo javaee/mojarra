@@ -67,7 +67,7 @@ import javax.faces.event.FacesEvent;
  * @since 2.0
  */
 @SuppressWarnings("serial")
-public class AjaxBehavior extends Behavior implements Serializable {
+public class AjaxBehavior extends BehaviorBase implements Serializable {
 
     /**
      * <p class="changed_added_2_0">The key that when added to a 
