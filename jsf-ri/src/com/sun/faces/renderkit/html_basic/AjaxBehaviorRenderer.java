@@ -51,6 +51,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.render.BehaviorRenderer;
@@ -70,26 +71,23 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
     // ------------------------------------------------------ Rendering Methods
 
     @Override
-    public String getScript(FacesContext context,
-                            UIComponent component,
-                            Behavior behavior,
-                            String eventName) {
+    public String getScript(BehaviorContext behaviorContext,
+                            Behavior behavior) {
         if (!(behavior instanceof AjaxBehavior)) {
             // TODO: use MessageUtils for this error message?
             throw new IllegalArgumentException(
                 "Instance of javax.faces.component.behavior.AjaxBehavior required: " + behavior);
         }
 
-        return buildAjaxCommand(context, component, eventName, (AjaxBehavior)behavior);
+        return buildAjaxCommand(behaviorContext, (AjaxBehavior)behavior);
     }
 
 
     @Override
     public void decode(FacesContext context,
                        UIComponent component,
-                       Behavior behavior,
-                       String eventName) {
-        if (null == context || null == component || null == behavior || null == eventName) {
+                       Behavior behavior) {
+        if (null == context || null == component || null == behavior) {
             throw new NullPointerException();
         }
 
@@ -105,10 +103,12 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
 
     }
 
-    private static String buildAjaxCommand(FacesContext context,
-                                           UIComponent component,
-                                           String eventName,
+    private static String buildAjaxCommand(BehaviorContext behaviorContext,
                                            AjaxBehavior ajaxBehavior) {
+
+        FacesContext context = behaviorContext.getFacesContext();
+        UIComponent component = behaviorContext.getComponent();
+        String eventName = behaviorContext.getEventName();
 
         StringBuilder ajaxCommand = new StringBuilder(256);
         Collection<String> execute = ajaxBehavior.getExecute(context);

@@ -87,33 +87,39 @@ public abstract class Behavior {
      * <p class="changed_added_2_0">Return the script that implements this
      * Behavior's client-side logic.</p>
      *
-     * @param context the {@link FacesContext} for the current request
-     * @param component the component instance that generates event.
-     * @param eventName name of the client-side event.  If this argument is
-     * <code>null</code> it is assumed the caller will include the 
-     * client-side event name with the return value from this method.
-     * Default implementation delegates that call to 
-     * {@link BehaviorRenderer#getScript(FacesContext, UIComponent, Behavior, String)} 
-     * method.
-     * @return script that provides the client-side behavior
-     * @throws NullPointerException if <code>context</code> is <code>null</code>,
-     * <code>component</code> is <code>null</code> or <code>eventName</code> 
-     * is <code>null</code>.
+     * <p>The default implementation delegates that call to 
+     * {@link BehaviorRenderer#getScript(BehaviorContext, Behavior)} 
+     * method.</p>
+     *
+     * <p>Behavior.getScript() implementations are allowed to return
+     * null to indicate that no script is required for this particular
+     * getScript() call.  For example, a Behavior implementation may
+     * return null if the Behavior is disabled.
+     * </p>
+     *
+     * @param behaviorContext the {@link BehaviorContext} that provides
+     * properties that might influence this getScript() call.  Note that
+     * BehaviorContext instances are short-lived objects that are only
+     * valid for the duration of the call to getScript().  Behavior
+     * implementations must not hold onto references to BehaviorContexts.
+     *
+     * @return script that provides the client-side behavior, or null
+     * if no script is required.
+     * @throws NullPointerException if <code>behaviorContext</code> is 
+     * <code>null</code>
      *
      * @since 2.0
      */      
-    public String getScript(FacesContext context,
-                                     UIComponent component,
-                                     String eventName) {
+    public String getScript(BehaviorContext behaviorContext) {
 
-        if (null == context || null == component || null == eventName) {
+        if (null == behaviorContext) {
             throw new NullPointerException();
         }
 
-    	BehaviorRenderer renderer = getRenderer(context);
+    	BehaviorRenderer renderer = getRenderer(behaviorContext.getFacesContext());
         String script = null;
     	if (null != renderer){
-            script = renderer.getScript(context, component, this, eventName);
+            script = renderer.getScript(behaviorContext, this);
     	}
         return script;
     }
@@ -130,37 +136,42 @@ public abstract class Behavior {
      *
      * @param context {@link FacesContext} for the request we are processing
      * @param context {@link UIComponent} the component associated with this {@link Behavior} 
-     * @param context {@link eventName} the event name associated with this {@link Behavior} 
      *
-     * @throws NullPointerException if <code>context</code> is <code>null</code> or
-     * <code>component<code> is <code>null</code> or <code>eventName</code> is 
-     * <code>null</code>.
+     * @throws NullPointerException if <code>context</code> or 
+     * <code>component<code> is <code>null</code>.
      *
      * @since 2.0
      */
     public void decode(FacesContext context,
-                       UIComponent component,
-                       String eventName) {
+                       UIComponent component) {
     
-        if (null == context || null == component || null == eventName) {
+        if (null == context || null == component) {
             throw new NullPointerException();
         }
 
     	BehaviorRenderer renderer = getRenderer(context);
     	if (null != renderer){
-            renderer.decode(context, component, this, eventName);
+            renderer.decode(context, component, this);
     	}
     }
     
     /**
      * <p class="changed_added_2_0">Get type of the {@link BehaviorRenderer} if instance uses
-     * bridge patterns for a render-kit depended functionality.
+     * bridge patterns for a render-kit-specific functionality.
      * </p>
-     * @return the {@link BehaviorRenderer} type for this {@link Behavior}, if any.
+     * <p>The default implementation returns null.  Subclasses should either
+     * override getRendererType() to return a string that identifies the
+     * type of BehaviorRenderer to use, or should override getScript()
+     * and perform script rendering locally in the Behavior implementation.
+     * </p>
+     * @return the {@link BehaviorRenderer} type for this {@link Behavior}, or null
+     * if the Behavior impelentation performs its own script rendering.
      *
      * @since 2.0
      */
-    public abstract String getRendererType();
+    public String getRendererType() {
+        return null;
+    }
     
     /**
      * <p class="changed_added_2_0">Convenience method to return the {@link BehaviorRenderer} 

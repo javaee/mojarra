@@ -51,6 +51,7 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorContext;
 import javax.faces.component.behavior.BehaviorHint;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -1051,10 +1052,18 @@ public class RenderKitUtils {
                                                   List<Behavior> behaviors,
                                                   String behaviorEventName) {
 
+        assert(null != behaviors);
+        assert(!behaviors.isEmpty());
+
+
+        BehaviorContext bContext = BehaviorContext.createBehaviorContext(context,
+                                                                         component,
+                                                                         behaviorEventName);
+
         boolean submitting = false;
 
         for (Behavior behavior : behaviors) {
-            String script = behavior.getScript(context, component, behaviorEventName);
+            String script = behavior.getScript(bContext);
             if ((script != null) && (script.length() > 0)) {
                 appendScriptToChain(builder, script);
 

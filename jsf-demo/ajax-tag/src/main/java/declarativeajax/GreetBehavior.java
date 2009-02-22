@@ -41,6 +41,7 @@ import java.io.Serializable;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorContext;
 
 
 /**
@@ -53,13 +54,7 @@ public class GreetBehavior extends Behavior implements Serializable {
         this.name = name;
     }
 
-    public String getRendererType() {
-        return null;
-    }
-
-    public String getScript(FacesContext context,
-                            UIComponent component,
-                            String eventName) {
+    public String getScript(BehaviorContext behaviorContext) {
 
         String name = (this.name == null) ? "World" : this.name;
 

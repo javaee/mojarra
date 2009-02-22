@@ -43,6 +43,7 @@ package javax.faces.render;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorContext;
 import javax.faces.context.FacesContext;
 
 
@@ -71,22 +72,31 @@ public abstract class BehaviorRenderer {
      * Behavior's client-side logic.  The default implementation returns 
      * <code>null</code>.</p>
      *
-     * @param context the {@link FacesContext} for the current request
-     * @param component the component instance that generates event.
+     * <p>BehaviorRenderer.getScript() implementations are allowed to return
+     * null to indicate that no script is required for this particular
+     * getScript() call.  For example, a BehaviorRenderer implementation may
+     * return null if the associated Behavior is disabled.
+     * </p>
+     *
+     * @param behaviorContext the {@link BehaviorContext} that provides
+     * properties that might influence this getScript() call.  Note that
+     * BehaviorContext instances are short-lived objects that are only
+     * valid for the duration of the call to getScript().  BehaviorRenderer
+     * implementations must not hold onto references to BehaviorContexts.
+     *
      * @param behavior the behavior instance that generates script.
      * @param eventName name of the client-side event.  If this argument is
      * <code>null</code> it is assumed the caller will include the
      * client-side event name with the return value from this method.
      *
-     * @return script that provides the client-side behavior
+     * @return script that provides the client-side behavior, or null
+     * if no script is required.
      *
      * @since 2.0
      *
      */
-    public String getScript(FacesContext context,
-                                     UIComponent component,
-                                     Behavior behavior,
-                                     String eventName) {
+    public String getScript(BehaviorContext behaviorContext, 
+                            Behavior behavior) {
 
         return null;
     }
@@ -103,18 +113,17 @@ public abstract class BehaviorRenderer {
      * @param context {@link FacesContext} for the request we are processing
      * @param component {@link UIComponent} the component associated with this {@link Behavior}
      * @param behavior {@link Behavior} the behavior instance
-     * @param eventName  the event name associated with this {@link Behavior}
      *
-     * @throws NullPointerException if <code>context</code>
-     *  or <code>component</code> or <code>eventName</code> is <code>null</code>
+     * @throws NullPointerException if <code>context</code>,
+     *  <code>component</code> <code>behavior</code> is <code>null</code>
      *
      * @since 2.0
      */
     public void decode(FacesContext context,
                        UIComponent component,
-                       Behavior behavior,
-                       String eventName) {
-        if (null == context || null == component || behavior == null || null == eventName) {
+                       Behavior behavior) {
+
+        if (null == context || null == component || behavior == null) {
             throw new NullPointerException();
         }
 

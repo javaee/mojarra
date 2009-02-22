@@ -1062,7 +1062,7 @@ public abstract class UIComponentBase extends UIComponent {
                         String behaviorSource = requestParameterMap.get("javax.faces.behavior.source");
                         if (null != behaviorSource && behaviorSource.equals(getClientId())) {
                             for (Behavior behavior: behaviors) {
-                                behavior.decode(context, this, behaviorEvent);
+                                behavior.decode(context, this);
                             }
                         }
                     }
