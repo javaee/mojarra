@@ -63,10 +63,12 @@
 
        <f:ajax>
           <h:commandButton id="submit1" value="submit1"/>
-          <h:commandButton id="submit2" value="submit2"/>
+          <h:commandButton id="submit2" value="submit2">
+              <f:ajax render="out"/>
+          </h:commandButton>
        </f:ajax>
 
-        
+       <h:outputText id="out"/>
 
        <h:outputStylesheet name="stylesheet.css" />
    </h:form>

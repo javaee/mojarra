@@ -52,6 +52,7 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -332,7 +333,18 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         if (ajaxBehaviors != null) {
             AjaxBehavior ajaxBehavior = ajaxBehaviors.getCurrentBehavior();
             if (ajaxBehavior != null) {
-                c.addBehavior(ajaxBehavior.getEvent(), ajaxBehavior);
+                if (c instanceof BehaviorHolder) {
+                    BehaviorHolder bHolder = (BehaviorHolder)c;
+                    String event = bHolder.getDefaultEventName();
+                    if (null != ajaxBehavior.getEvent()) {
+                        event = ajaxBehavior.getEvent();
+                    }
+                    Collection eventNames = bHolder.getEventNames();
+                    if (null != eventNames && eventNames.contains(event) || 
+                        event.equals(bHolder.getDefaultEventName())) {
+                        bHolder.addBehavior(event, ajaxBehavior);
+                    }
+                }
             }
         }
     }

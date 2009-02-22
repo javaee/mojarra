@@ -194,9 +194,10 @@ public class Bean {
     }
 
     public void processBehavior(AjaxBehaviorEvent event) {
-
-    System.out.println ("BEHAVIOR LISTENER CALLED!");
-
+        FacesContext context = FacesContext.getCurrentInstance();
+        UIForm form = (UIForm)context.getViewRoot().findComponent("form1");
+        UIOutput output = (UIOutput)form.findComponent("out");
+        output.setValue("listener was called");
 
     }
         
