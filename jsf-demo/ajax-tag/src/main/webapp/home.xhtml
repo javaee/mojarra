@@ -70,6 +70,13 @@
 
        <h:outputText id="out"/>
 
+       <h:commandButton id="param" value="Ajax With Params">
+           <f:ajax/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+       </h:commandButton>
+
+
        <h:outputStylesheet name="stylesheet.css" />
    </h:form>
 

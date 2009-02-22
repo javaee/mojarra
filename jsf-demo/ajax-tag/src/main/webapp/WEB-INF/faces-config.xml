@@ -51,4 +51,9 @@
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 
+  <behavior>
+    <behavior-id>Joe</behavior-id>
+    <behavior-class>delcarativeajax.GreetingBehavior</behavior-class>
+  </behavior>
+
 </faces-config>
