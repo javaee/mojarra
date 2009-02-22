@@ -312,8 +312,9 @@ public class RenderKitUtils {
     }
 
     public static void renderOnclick(FacesContext context, 
-                                     UIComponent component, Param[] params,
-                                     List <Behavior> behaviors)
+                                     UIComponent component,
+                                     List <Behavior> behaviors,
+                                     Collection<Behavior.Parameter> params)
         throws IOException {
 
         final String handlerName = "onclick";
@@ -340,7 +341,8 @@ public class RenderKitUtils {
                                                     context,
                                                     component, 
                                                     behaviors, 
-                                                    behaviorEventName);
+                                                    behaviorEventName,
+                                                    params);
 
         builder.append(")");
 
@@ -1022,16 +1024,16 @@ public class RenderKitUtils {
         if (builder.charAt(builder.length() - 1) != ',')
             builder.append(',');
 
-        builder.append("'");
-        appendQuotedScriptToChain(builder, script);
-        builder.append("'");
+        appendQuotedValue(builder, script);
     }
 
 
     // Append a script to the chain, escaping any single quotes, since
     // our script content is itself nested within single quotes.
-    private static void appendQuotedScriptToChain(StringBuilder builder, 
-                                                  String script) {
+    public static void appendQuotedValue(StringBuilder builder, 
+                                         String script) {
+
+        builder.append("'");
 
         int length = script.length();
 
@@ -1043,6 +1045,8 @@ public class RenderKitUtils {
 
             builder.append(c);
         }
+
+        builder.append("'");
     }
 
     // Appends one or more behavior scripts a jsf.util.chain() call
@@ -1050,15 +1054,16 @@ public class RenderKitUtils {
                                                   FacesContext context, 
                                                   UIComponent component,
                                                   List<Behavior> behaviors,
-                                                  String behaviorEventName) {
+                                                  String behaviorEventName,
+                                                  Collection<Behavior.Parameter> params) {
 
         assert(null != behaviors);
         assert(!behaviors.isEmpty());
 
-
         BehaviorContext bContext = BehaviorContext.createBehaviorContext(context,
                                                                          component,
-                                                                         behaviorEventName);
+                                                                         behaviorEventName,
+                                                                         params);
 
         boolean submitting = false;
 

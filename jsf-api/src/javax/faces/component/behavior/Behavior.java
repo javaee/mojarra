@@ -170,4 +170,54 @@ public abstract class Behavior {
      * @return a non-null, unmodifiable collection of BehaviorHints.
      */
     abstract public Set<BehaviorHint> getHints();
+
+    /**
+     * <p class="changed_added_2_0"><strong>Parameter</strong> instances
+     * represent name/value pairs that "submitting" Behavior implementations
+     * should include when posting back into the Faces lifecycle.  Behavior
+     * implementations can determine which Parameters to include by calling
+     * BehaviorContext.getParameters().
+     * </p>
+     */
+    public static class Parameter {
+
+        private String name;
+        private Object value;
+
+        /**
+         * <p class="changed_added_2_0">Creates a Parameter instance.</p>
+         * @param name the name of the parameter
+         * @param value the value of the parameter
+         * @throws NullPointerException if <code>name</code> or
+         * <code>value</code> is null.
+         */
+        public Parameter(String name, Object value) {
+
+            if (null == name) {
+                throw new NullPointerException();
+            }
+
+            if (null == value) {
+                throw new NullPointerException();
+            }
+
+            this.name = name;
+            this.value = value;
+        }
+
+        /**
+         * Returns the Parameter's name.
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Returns the Parameter's value.
+         */
+        public Object getValue() {
+            return value;
+        }
+    }
+
 }

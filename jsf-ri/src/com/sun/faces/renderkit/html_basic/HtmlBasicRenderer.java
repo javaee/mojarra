@@ -44,6 +44,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -57,6 +58,7 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -527,6 +529,45 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return EMPTY_PARAMS;
         }
 
+
+    }
+
+    /**
+     * Collections parameters for use with Behavior script rendering.
+     * Similar to getParamList(), but returns a collection of 
+     * Behavior.Parameter instances.
+     *
+     * @param command the command which may have parameters
+     *
+     * @return a collection of Behavior.Parameter instances.
+     */
+    protected Collection<Behavior.Parameter> getBehaviorParameters(
+        UIComponent command) {
+
+        ArrayList<Behavior.Parameter> params = null;
+        int childCount = command.getChildCount();
+
+        if (childCount > 0) {
+
+            for (UIComponent kid : command.getChildren()) {
+                if (kid instanceof UIParameter) {
+                    UIParameter uiParam = (UIParameter) kid;
+                    String name = uiParam.getName();
+                    Object value = uiParam.getValue();
+
+                    if ((name != null) && (value != null)) {
+
+                        if (params == null) {
+                            params = new ArrayList<Behavior.Parameter>(childCount);
+                        }
+
+                        params.add(new Behavior.Parameter(name, value));
+                    }
+                }
+            }
+        }
+
+        return (params == null) ? Collections.<Behavior.Parameter>emptyList() : params;
 
     }
 

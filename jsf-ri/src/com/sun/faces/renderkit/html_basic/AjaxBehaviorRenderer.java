@@ -56,6 +56,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.render.BehaviorRenderer;
 
+import com.sun.faces.renderkit.RenderKitUtils;
 
 /*
  *<b>AjaxBehaviorRenderer</b> renders Ajax behavior for a component.
@@ -115,6 +116,7 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
         Collection<String> render = ajaxBehavior.getRender(context);
         String onevent = ajaxBehavior.getOnEvent(context);
         String onerror = ajaxBehavior.getOnError(context);
+        Collection<Behavior.Parameter> params = behaviorContext.getParameters();
 
         ajaxCommand.append("mojarra.ab(this,event,'");
         ajaxCommand.append(eventName);
@@ -124,13 +126,47 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
         ajaxCommand.append(",");
         appendIds(component, ajaxCommand, render);
 
-        if ((onevent != null) || (onerror != null)) {
-            // TODO add these into the options argument
+        if ((onevent != null) || (onerror != null) || !params.isEmpty())  {
+
+            ajaxCommand.append(",{");
+
+            // TODO: Support onerror/onevent
+
+            if (!params.isEmpty()) {
+                for (Behavior.Parameter param : params) {
+                    appendOption(ajaxCommand, param.getName(), param.getValue());
+                }
+            }
+             
+            ajaxCommand.append("}");
         }
 
         ajaxCommand.append(")");
 
         return ajaxCommand.toString();
+    }
+
+    // Appends an option to the ajax command.  Assume that the 
+    // options object has already been opened.
+    private static void appendOption(StringBuilder builder, 
+                                     String name,
+                                     Object value) {
+
+
+        if (null == name)
+            throw new IllegalArgumentException();
+
+        // We do null value checking in here so that callers don't have to.
+        if (value == null)
+            return;
+
+        char lastChar = builder.charAt(builder.length() - 1);
+        if ((lastChar != ',') && (lastChar != '{'))
+            builder.append(',');
+
+        RenderKitUtils.appendQuotedValue(builder, name);
+        builder.append(":");
+        RenderKitUtils.appendQuotedValue(builder, value.toString());
     }
 
     // Appends an ids argument to the ajax command
@@ -144,7 +180,6 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
         }
 
         builder.append("'");
-
 
         boolean first = true;
 

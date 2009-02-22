@@ -43,14 +43,13 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
@@ -121,15 +120,14 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
 
         /*
-         * If we have any parameters, or an ajax command with user onclick, and the button type is submit or button, then
-         * render Javascript to use later.
+         * If we have any parameters and the button type is submit or button, 
+         * then render Javascript to use later.
          * RELEASE_PENDING this logic is slightly wrong - we should buffer the user onclick, and use it later.
          * Leaving it for when we decide how to do script injection.
          */
-        Param params[] = getParamList(component);
-        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        boolean hasParams = !Arrays.equals(params,EMPTY_PARAMS);
-        if ( hasParams && (type.equals("submit") || type.equals("button"))) {
+
+        Collection<Behavior.Parameter> params = getBehaviorParameters(component);
+        if ( !params.isEmpty() && (type.equals("submit") || type.equals("button"))) {
            RenderKitUtils.renderJsfJs(context);
         }
 
@@ -160,8 +158,10 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
-        RenderKitUtils.renderOnclick(context, component, params, getClickBehaviors(component));
-
+        RenderKitUtils.renderOnclick(context, 
+                                     component, 
+                                     getClickBehaviors(component),
+                                     params);
 
         writer.endElement("input");
 

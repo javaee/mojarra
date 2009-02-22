@@ -36,6 +36,9 @@
 
 package javax.faces.component.behavior;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -64,8 +67,9 @@ public abstract class BehaviorContext {
      */
     public static BehaviorContext createBehaviorContext(FacesContext context,
                                                         UIComponent component,
-                                                        String eventName) {
-        return new BehaviorContextImpl(context, component, eventName);
+                                                        String eventName,
+                                                        Collection<Behavior.Parameter> parameters) {
+        return new BehaviorContextImpl(context, component, eventName, parameters);
     }
 
     /**
@@ -84,12 +88,26 @@ public abstract class BehaviorContext {
      */
     abstract public String getEventName();
 
+    /**
+     * <p>Returns parameters that "submitting" Behavior implementations
+     * should include when posting back data into the Faces lifecycle.</p>
+     * <p>If no parameters are specified, returns an empty (non-null)
+     * collection.</p>
+     */
+    abstract public Collection<Behavior.Parameter> getParameters();
+
     // Little static member class that provides a default implementation
     private static final class BehaviorContextImpl extends BehaviorContext {
 
+        private FacesContext context;
+        private UIComponent component;
+        private String eventName;
+        private Collection<Behavior.Parameter> parameters;
+
         private BehaviorContextImpl(FacesContext context,
                                     UIComponent component,
-                                    String eventName) {
+                                    String eventName,
+                                    Collection<Behavior.Parameter> parameters) {
 
             if (null == context) {
                 throw new NullPointerException();
@@ -106,6 +124,10 @@ public abstract class BehaviorContext {
             this.context = context;
             this.component = component;
             this.eventName = eventName;
+
+            this.parameters =  (parameters == null) ? 
+                                   Collections.<Behavior.Parameter>emptyList() : 
+                                   parameters;
         }        
 
         @Override
@@ -123,8 +145,9 @@ public abstract class BehaviorContext {
             return eventName;
         }
 
-        private FacesContext context;
-        private UIComponent component;
-        private String eventName;
+        @Override
+        public Collection<Behavior.Parameter> getParameters() {
+            return parameters;
+        }
     }
 }
