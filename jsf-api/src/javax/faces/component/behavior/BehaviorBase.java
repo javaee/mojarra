@@ -53,7 +53,7 @@ import javax.faces.render.RenderKit;
 
 /**
  * <p class="changed_added_2_0"><strong>BehaviorBase</strong> is a
- * convenience base class that implements the default concreate behavior
+ * convenience base class that implements the default concrete behavior
  * of all methods defined by {@link Behavior}.</p>
  * <p>Subclasses should either override getRendererType() to identify
  * the BehaviorRenderer to delegate to, or should override getScript()
@@ -187,11 +187,13 @@ public class BehaviorBase extends Behavior {
     }
 
     /**
-     * <p>Default implementation of Behavior.getHints().  By default,
-     * no hints are specified, and this method returns an empty,
+     * <p class="changed_added_2_0">Default implementation of Behavior.getHints().  
+     * By default, no hints are specified, and this method returns an empty,
      * umodifiable set.</p>
      *   
      * @return an empty, unmodifiable set of BehaviorHints.
+     *
+     * @since 2.0
      */
     @Override
     public Set<BehaviorHint> getHints() {
