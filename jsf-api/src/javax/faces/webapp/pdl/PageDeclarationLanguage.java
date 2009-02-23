@@ -126,7 +126,7 @@ public abstract class PageDeclarationLanguage {
      * section JSF.7.6.2.  Create the
      * <code>List&lt;UIViewParameter&gt;</code> to return.  For each
      * element in <code>List&lt;UIViewParameter.Reference&gt;</code>,
-     * call {@link UIViewParameter.Reference#getUIViewParameter} and add
+     * call {@link javax.faces.component.UIViewParameter.Reference#getUIViewParameter} and add
      * the result to the list to return.</p>
      *
      * </div>

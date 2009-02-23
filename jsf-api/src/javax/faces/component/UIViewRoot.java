@@ -168,7 +168,7 @@ public class UIViewRoot extends UIComponentBase {
     /**
      * <p class="changed_added_2_0">The key in the value set of the
      * <em>view metadata BeanDescriptor</em>, the value of which is a 
-     * <code>List&gt;{@link UIViewParameter#Reference}&lt;</code>.</p>
+     * <code>List&lt;{@link UIViewParameter.Reference}&gt;</code>.</p>
      *
      * @since 2.0
      */
@@ -250,7 +250,7 @@ public class UIViewRoot extends UIComponentBase {
     /**
      * RELEASE_PENDING (edburns,rogerk) docs
      * <p class="changed_added_2_0"> </p>
-     * @return <code>true<code> in all cases as any children or facets added
+     * @return <code>true</code> in all cases as any children or facets added
      *  to the UIViewRoot will automatically be part of the view.  
      */
     @Override

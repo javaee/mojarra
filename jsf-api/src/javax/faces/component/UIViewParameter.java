@@ -71,10 +71,6 @@ import javax.faces.render.Renderer;
  * for instances of this class.  Instances of this class participate in
  * the regular JSF lifecycle, including on Ajax requests.</p>
 
- * <p>PENDING:edburns scan the implementation of RestoreViewPhase for
- * changes relevant to this feature and incorporate it into the spec
- * pdf.</p>
- *
  * </div>
  *
  * @since 2.0
@@ -329,7 +325,13 @@ public class UIViewParameter extends UIInput {
      */
 
     public String getStringValue(FacesContext context) {
-        return hasValueExpression() ? getStringValueFromModel(context) : rawValue;
+        String result = null;
+        if (hasValueExpression()) {
+            result = getStringValueFromModel(context);
+        } else {
+            result = (null != rawValue) ? rawValue : (String) getValue();
+        }
+        return result;
     }
 
     /**
