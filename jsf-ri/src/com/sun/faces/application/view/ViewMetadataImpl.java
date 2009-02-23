@@ -39,6 +39,7 @@ package com.sun.faces.application.view;
 import java.util.Collection;
 
 import javax.faces.webapp.pdl.ViewMetadata;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIViewParameter;
 import javax.faces.context.FacesContext;
@@ -49,12 +50,14 @@ import javax.faces.context.FacesContext;
 public class ViewMetadataImpl extends ViewMetadata {
 
     private String viewId;
+    private PageDeclarationLanguage pdl;
 
     // ------------------------------------------------------------ Constructors
 
 
-    public ViewMetadataImpl(String viewId) {
+    public ViewMetadataImpl(PageDeclarationLanguage pdl, String viewId) {
 
+        this.pdl = pdl;
         this.viewId = viewId;
 
     }
