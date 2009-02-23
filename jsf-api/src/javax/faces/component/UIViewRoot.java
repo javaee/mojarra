@@ -61,6 +61,7 @@ import javax.faces.webapp.FacesServlet;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +78,7 @@ import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewMetadata;
 
 
 /**
@@ -1522,7 +1524,8 @@ public class UIViewRoot extends UIComponentBase {
         if (null == pdl) {
             return;
         }
-        List<UIViewParameter> params = pdl.getViewParameters(context, getViewId());
+        ViewMetadata metadata = pdl.getViewMetadata(context, getViewId());
+        Collection<UIViewParameter> params = metadata.getViewParameters(this);
         if (params.isEmpty()) {
             return;
         }
