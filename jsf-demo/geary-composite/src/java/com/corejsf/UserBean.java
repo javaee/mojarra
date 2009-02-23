@@ -1,6 +1,6 @@
 package com.corejsf;
 
-import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
 import javax.faces.model.ManagedBean;
 
 @ManagedBean(name = "user", eager=true)
@@ -11,7 +11,7 @@ public class UserBean {
         System.out.println("ctor called");
     }
     
-  public void loginActionListener(ActionEvent e) {
-    System.out.println("logging in...");
+  public ActionListener getLoginActionListener() {
+      return new LoginActionListener();
   }  
 }
