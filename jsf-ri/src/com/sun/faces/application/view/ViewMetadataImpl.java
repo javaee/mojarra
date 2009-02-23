@@ -48,9 +48,29 @@ import javax.faces.context.FacesContext;
  */
 public class ViewMetadataImpl extends ViewMetadata {
 
+    private String viewId;
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public ViewMetadataImpl(String viewId) {
+
+        this.viewId = viewId;
+
+    }
+
 
     // ----------------------------------------------- Methods from ViewMetadata
 
+
+    /**
+     * @see javax.faces.webapp.pdl.ViewMetadata#getViewId()
+     */
+    public String getViewId() {
+
+        return viewId;
+
+    }
 
     /**
      * @see javax.faces.webapp.pdl.ViewMetadata#createMetadataView(javax.faces.context.FacesContext)

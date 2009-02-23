@@ -46,6 +46,8 @@ import javax.faces.context.FacesContext;
  * <p class="changed_added_2_0"></p>
  */
 public abstract class ViewMetadata {
+
+    public abstract String getViewId();
     
     public abstract UIViewRoot createMetadataView(FacesContext context);
     
@@ -60,6 +62,9 @@ public abstract class ViewMetadata {
      * <p class="changed_added_2_0"></p>
      */
     public abstract Collection<UIViewParameter> getViewParameters(UIViewRoot root);
+
+
+    
 
 
 }
