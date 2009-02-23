@@ -56,8 +56,9 @@ import javax.faces.render.RenderKit;
  * convenience base class that implements the default concrete behavior
  * of all methods defined by {@link Behavior}.</p>
  * <p>Subclasses should either override getRendererType() to identify
- * the BehaviorRenderer to delegate to, or should override getScript()
- * to locally generate the desired Behavior script.
+ * the BehaviorRenderer to delegate to, or they should override 
+ * <code>getScript()</code> to locally generate the desired Behavior 
+ * script, and <code>decode()</code>.
  * </p>
  *
  * @since 2.0
