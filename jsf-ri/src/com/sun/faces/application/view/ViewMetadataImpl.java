@@ -84,9 +84,9 @@ public class ViewMetadataImpl extends ViewMetadata {
 
     
     /**
-     * @see javax.faces.webapp.pdl.ViewMetadata#getViewParameters()
+     * @see javax.faces.webapp.pdl.ViewMetadata#getViewParameters(javax.faces.context.FacesContext)
      */
-    public Collection<UIViewParameter> getViewParameters() {
+    public Collection<UIViewParameter> getViewParameters(FacesContext context) {
         return null;
     }
 

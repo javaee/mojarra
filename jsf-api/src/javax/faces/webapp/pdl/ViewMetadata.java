@@ -55,7 +55,7 @@ public abstract class ViewMetadata {
      *
      * <p class="changed_added_2_0"></p>
      */
-    public abstract Collection<UIViewParameter> getViewParameters();
+    public abstract Collection<UIViewParameter> getViewParameters(FacesContext context);
     
     /**
      *
