@@ -75,6 +75,7 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIPanel;
+import javax.faces.webapp.pdl.ViewMetadata;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.servlet.http.HttpServletResponse;
 
@@ -168,6 +169,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
     @Override
+    public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
     public BeanInfo getViewMetadata(FacesContext context, String viewId) {
         BeanInfo result = null;
         UIViewRoot root = context.getViewRoot();
