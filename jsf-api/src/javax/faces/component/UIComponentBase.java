@@ -1618,15 +1618,7 @@ public abstract class UIComponentBase extends UIComponent {
     /**
      * behaviors associated with this component.
      */
-    private Map<String, List<Behavior>> behaviors;
-
-    /**
-     * Unmodifiable version of the above.  We could avoid storing
-     * this - and instead re-create the unmodifiable wrapper on
-     * each call to getBehaviors(), but creating this wrapper
-     * once seems more efficient.
-     */
-    private Map<String, List<Behavior>> unmodifiableBehaviors;
+    private BehaviorsMap behaviors;
 
     /**
      * <p class="changed_added_2_0">This is a default implementation of
@@ -1653,97 +1645,45 @@ public abstract class UIComponentBase extends UIComponent {
         assertBehaviorHolder();
         // First, make sure that the event is supported.  We don't want
         // to bother attaching behaviors for unsupported events.
-	
+
         Collection<String> eventNames = getEventNames();
-	
+
         // getClientEventNames() is spec'ed to require a non-null Set.
         // If getClientEventNames() returns null, throw an exception
         // to indicate that the API in not being used properly.
         if (eventNames == null) {
             throw new IllegalStateException(
                 "Attempting to add a Behavior to a component " +
-	          "that does not support any event types. "     +
-	          "getEventTypes() must return a non-null Set.");
+                "that does not support any event types. "     +
+                  "getEventTypes() must return a non-null Set.");
         }
-	
+        
         if (eventNames.contains(eventName)) {
+
             // We've got an event that we support, create our Map
             // if necessary
+
             if (null == behaviors) {
                 // Typically we only have a small number of behaviors for
-	        // any component - usually only 1.  (Currently the standard
-	        // components only support 1 event name each.)  If in the
-	        // future it becomes common for components instances to 
-	        // be associated with many client behaviors, we should
-	        // revisit the initial capacity here.
-	        behaviors = new HashMap<String, List<Behavior>>(eventNames.size(),1.0f);
-	
-	    }
-	    List<Behavior> eventBehaviours = behaviors.get(eventName);
-	    if (null == eventBehaviours) {
-	        eventBehaviours = new ArrayList<Behavior>();
-		behaviors.put(eventName, eventBehaviours);
+                // any component - in most cases only 1.  Using a very small
+                // initial capacity so that we keep the footprint to a minimum.
+                Map<String, List<Behavior>> modifiableMap = 
+                    new HashMap<String, List<Behavior>>(5,1.0f);
+                behaviors = new BehaviorsMap(modifiableMap);
             }
-	    eventBehaviours.add(behavior);
+
+            List<Behavior> eventBehaviours = behaviors.get(eventName);
+
+            if (null == eventBehaviours) {
+                // Again using small initial capacity - we typically
+                // only have 1 Behavior per event type.
+                eventBehaviours = new ArrayList<Behavior>(3);
+                behaviors.getModifiableMap().put(eventName, eventBehaviours);
+            }
+
+            eventBehaviours.add(behavior);
         }
     }
-
-    @SuppressWarnings("serial")
-    private final class BehaviorsList extends ArrayList<Behavior>{
-
-        public BehaviorsList(int length) {
-            // TODO Auto-generated constructor stub
-        }
-
-        public BehaviorsList() {
-            // TODO Auto-generated constructor stub
-        }
-
-        private boolean addBehavior(Behavior behavior){
-            return super.add(behavior);
-        } 
-
-        @Override
-        public boolean add(Behavior e) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean addAll(Collection<? extends Behavior> c) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void add(int index, Behavior element) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean addAll(int index, Collection<? extends Behavior> c) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Behavior remove(int index) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean remove(Object o) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean removeAll(Collection<?> c) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean retainAll(Collection<?> c) {
-            throw new UnsupportedOperationException();
-        }
-    }
-
 
     /**
      * <p class="changed_added_2_0">This is a default implementation of
@@ -1763,12 +1703,12 @@ public abstract class UIComponentBase extends UIComponent {
      */
     public Collection<String> getEventNames() {
         assertBehaviorHolder();
-	// Note: we intentionally return null here even though this
-	// is not a valid value.  The result is that addBehavior()
-	// will fail with an IllegalStateException if getEventNames()
-	// is not overridden.  This should make it obvious to the
-	// component author that something is wrong.
-	return null;
+        // Note: we intentionally return null here even though this
+        // is not a valid value.  The result is that addBehavior()
+        // will fail with an IllegalStateException if getEventNames()
+        // is not overridden.  This should make it obvious to the
+        // component author that something is wrong.
+        return null;
     }
 
     /**
@@ -1781,100 +1721,19 @@ public abstract class UIComponentBase extends UIComponent {
      * subclass implementations.   Subclasses that wish to support the 
      * {@link javax.faces.component.behavior.BehaviorHolder} contract 
      * must declare that the subclass implements 
-     * {@link javax.faces.component.bhavior.BehaviorHolder}, and must add
+     * {@link javax.faces.component.behavior.BehaviorHolder}, and must add
      * an implementation of 
      * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
      *
      * @since 2.0
      */
     public Map<String, List<Behavior>> getBehaviors() {
-        if (null == unmodifiableBehaviors) {
-            // Also, create an unmodifiable wrapper that we can
-            // return from getBehaviors();
-            unmodifiableBehaviors = new UnmodifableBehaviorsMap();
+        if (null == behaviors) {
+            return Collections.emptyMap();
         }
-        return unmodifiableBehaviors;
+
+        return behaviors;
     }
-
-    private final class UnmodifableBehaviorsMap implements Map<String, List<Behavior>>{
-
-        public void clear() {
-            throw new UnsupportedOperationException();
-
-        }
-
-        public boolean containsKey(Object key) {
-            if (null == behaviors){
-                    return false;
-            } else {
-                return behaviors.containsKey(key);
-            }
-        }
-
-        public boolean containsValue(Object value) {
-            if(null == behaviors){
-                return false;
-            } else {
-                return behaviors.containsValue(value);
-            }
-        }
-
-        public Set<Entry<String, List<Behavior>>> entrySet() {
-            if (null == behaviors){
-                return Collections.emptySet();
-            } else {
-                return Collections.unmodifiableSet(behaviors.entrySet());
-            }
-        }
-
-        public List<Behavior> get(Object key) {
-            if (null == behaviors || !behaviors.containsKey(key)){
-                return null;
-            } else {
-                return Collections.unmodifiableList(behaviors.get(key));
-            }
-        }
-
-        public boolean isEmpty() {
-            return null == behaviors?true:behaviors.isEmpty();
-        }
-
-        public Set<String> keySet() {
-            if (null == behaviors){
-                return Collections.emptySet();
-            } else {
-                return Collections.unmodifiableSet(behaviors.keySet());
-            }
-        }
-
-        public List<Behavior> put(String key, List<Behavior> value) {
-            throw new UnsupportedOperationException();
-        }
-
-        public void putAll(Map<? extends String, ? extends List<Behavior>> m) {
-            throw new UnsupportedOperationException();
-        }
-
-        public List<Behavior> remove(Object key) {
-            throw new UnsupportedOperationException();
-        }
-
-        public int size() {
-            return null==behaviors?0:behaviors.size();
-        }
-
-        public Collection<List<Behavior>> values() {
-            if (null == behaviors){
-                return Collections.emptySet();
-            } else {
-                // TODO - wrap walues as unmodifable lists ?
-                return Collections.unmodifiableCollection(behaviors.values());
-            }
-        }
-
-    }
-
-
 
     /**
      * <p class="changed_added_2_0">This is a default implementation of
@@ -1896,7 +1755,7 @@ public abstract class UIComponentBase extends UIComponent {
         // event name;
         return null;
     }
-	
+
     /**
      * {@link UIComponentBase} has stub methods from the {@link BehaviorHolder} interface,
      * but these method should be used only with componets that really implement holder interface.
@@ -1918,7 +1777,7 @@ public abstract class UIComponentBase extends UIComponent {
     private boolean isBehaviorHolder() {
         return BehaviorHolder.class.isInstance(this);
     }
-	
+
     /**
      * Save state of the behaviors map.
      * @param context the {@link FacesContext} for this request.
@@ -1941,29 +1800,34 @@ public abstract class UIComponentBase extends UIComponent {
         }
         return state;
     }
-	
+
     /**
      * @param context the {@link FacesContext} for this request.
      * @param state saved state of the {@link Behavior}'s attached to the component.
      * @return restored <code>Map</code> of the behaviors.
      */
-    private Map<String, List<Behavior>> restoreBehaviorsState(FacesContext context, Object state) {
-        Map<String, List<Behavior>> behaviors = null;
+    private BehaviorsMap restoreBehaviorsState(FacesContext context, Object state) {
+
         if (null != state) {
             Object[] values = (Object[]) state;
             String[] names = (String[])values[0];
             Object[] attachedBehaviors = (Object[]) values[1];
-            behaviors = new HashMap<String, List<Behavior>>(names.length,1.0f);
+
+            Map<String, List<Behavior>> modifiableMap = new HashMap<String, List<Behavior>>(names.length,1.0f);
             for (int i = 0; i < attachedBehaviors.length; i++) {
                 Object[] attachedEventBehaviors = (Object[]) attachedBehaviors[i];
                 ArrayList<Behavior> eventBehaviors = new ArrayList<Behavior>(attachedBehaviors.length);
                 for (int j = 0; j < attachedEventBehaviors.length; j++) {
-                    eventBehaviors.add((Behavior) restoreAttachedState(context, attachedEventBehaviors[j]));					
+                    eventBehaviors.add((Behavior) restoreAttachedState(context, attachedEventBehaviors[j]));
                 }
-                behaviors.put(names[i], eventBehaviors);
+
+                modifiableMap.put(names[i], eventBehaviors);
             }
+
+            return new BehaviorsMap(modifiableMap);
         }
-        return behaviors;
+
+        return null;
     }
 
     private static void publishAfterViewEvents(Application application,
@@ -3110,5 +2974,27 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+    // Private static member class that provide access to Behaviors.
+    // Note that this Map must be unmodifiable to the external world,
+    // but UIComponentBase itself needs to be able to write to the Map.
+    // We solve these requirements wrapping the underlying modifiable
+    // Map inside of a unmodifiable map and providing private access to 
+    // the underlying (modifable) Map
+    private static class BehaviorsMap extends AbstractMap<String, List<Behavior>>{
+        private Map<String, List<Behavior>> unmodifiableMap;
+        private Map<String, List<Behavior>> modifiableMap;
 
+        private BehaviorsMap(Map<String, List<Behavior>> modifiableMap) {
+            this.modifiableMap = modifiableMap;
+            this.unmodifiableMap = Collections.unmodifiableMap(modifiableMap);
+        }
+
+        public Set<Entry<String, List<Behavior>>> entrySet() {
+            return unmodifiableMap.entrySet();
+        }
+
+        private Map<String, List<Behavior>> getModifiableMap() {
+            return modifiableMap;
+        }
+    }
 }
