@@ -79,7 +79,7 @@ public class BehaviorBase extends Behavior {
      * of Behavior.getScript().  If a BehaviorRenderer is available
      * for the specified behavior renderer type, this method
      * delegates to the BehaviorRenderer's getScript() method.  
-     * Otheriwse, returns null.
+     * Otherwise, returns null.
      * </p>
      *
      * @param behaviorContext the {@link BehaviorContext}
@@ -112,7 +112,7 @@ public class BehaviorBase extends Behavior {
      * of Behavior.decode().  If a BehaviorRenderer is available
      * for the specified behavior renderer type, this method
      * delegates to the BehaviorRenderer's decode() method.  
-     * Otheriwse, no decoding is performed.
+     * Otherwise, no decoding is performed.
      * </p>
      *
      * @param context {@link FacesContext} for the request we are processing
