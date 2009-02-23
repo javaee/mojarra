@@ -1018,8 +1018,7 @@ public class UIViewRoot extends UIComponentBase {
      * must be logged and swallowed.  If the current view has view
      * parameters, as indicated by a non-empty and
      * non-<code>UnsupportedOperationException</code> throwing return
-     * from {@link
-     * javax.faces.webapp.pdl.PageDeclarationLanguage#getViewParameters},
+     * from {@link javax.faces.webapp.pdl.PageDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)},
      * call {@link UIViewParameter#encodeAll} on each parameter.  If
      * calling <code>getViewParameters()</code> causes
      * <code>UnsupportedOperationException</code> to be thrown, the
