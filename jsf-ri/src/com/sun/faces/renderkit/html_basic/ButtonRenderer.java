@@ -160,7 +160,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
         RenderKitUtils.renderOnclick(context, 
                                      component, 
-                                     getClickBehaviors(component),
                                      params);
 
         writer.endElement("input");
@@ -176,17 +175,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     }
 
     // --------------------------------------------------------- Private Methods
-
-    private List<Behavior> getClickBehaviors(UIComponent component) {
-        if (component instanceof BehaviorHolder) {
-            BehaviorHolder bHolder = (BehaviorHolder)component;
-            Map <String, List <Behavior>> behaviors = bHolder.getBehaviors();
-            if (null != behaviors) {
-                return behaviors.get("onclick");
-            }
-        }
-        return null;
-    }
 
     /**
      * @param context the <code>FacesContext</code> for the current request

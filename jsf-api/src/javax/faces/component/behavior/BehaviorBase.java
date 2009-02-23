@@ -77,10 +77,10 @@ public class BehaviorBase extends Behavior {
 
     /**
      * <p class="changed_added_2_0">Default implementation of 
-     * of Behavior.getScript().  If a BehaviorRenderer is available
-     * for the specified behavior renderer type, this method
-     * delegates to the BehaviorRenderer's getScript() method.  
-     * Otherwise, returns null.
+     * of {@link Behavior#getScript}.  If a {@link BehaviorRenderer} 
+     * is available for the specified behavior renderer type, this method
+     * delegates to the {@link BehaviorRenderer#getScript} method.  
+     * Otherwise, this method returns null.
      * </p>
      *
      * @param behaviorContext the {@link BehaviorContext}

@@ -54,6 +54,7 @@ import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.BehaviorContext;
 import javax.faces.component.behavior.BehaviorHint;
+import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ExternalContext;
@@ -309,57 +310,32 @@ public class RenderKitUtils {
         }
     }
 
+    // Renders the onchange handler for input components.  Handles
+    // chaining togeter the user-provided onchange handler with
+    // any Behavior scripts.
     public static void renderOnchange(FacesContext context, UIComponent component)
         throws IOException {
 
+        renderHandler(context,
+                      component,
+                      Collections.<Behavior.Parameter>emptyList(),
+                      "onchange",
+                      "onchange");
     }
 
+    // Renders the onclick handler for command buttons.  Handles
+    // chaining together the user-provided onclick handler, any
+    // Behavior scripts, plus the default button submit script.
     public static void renderOnclick(FacesContext context, 
                                      UIComponent component,
-                                     List <Behavior> behaviors,
                                      Collection<Behavior.Parameter> params)
         throws IOException {
 
-        final String handlerName = "onclick";
-        final String behaviorEventName = "onclick";
-        ResponseWriter writer = context.getResponseWriter();
-        String userClickHandler = getUserHandler(component, handlerName);
-
-
-        String handler = null;
-
-        switch (getHandlerType(behaviors, params, userClickHandler)) {
-        
-            case USER_HANDLER_ONLY:
-                handler = userClickHandler;
-                break;
-
-            case SINGLE_BEHAVIOR_ONLY:
-                handler = getSingleBehaviorHandler(context, 
-                                                   component,
-                                                   behaviors.get(0),
-                                                   params,
-                                                   behaviorEventName);
-                break;
-
-            case SUBMIT_ONLY:
-                handler = getSubmitHandler(context, component, params, true);
-                break;
-
-            case CHAIN:
-                handler = getChainedHandler(context,
-                                            component,
-                                            behaviors,
-                                            params,
-                                            behaviorEventName,
-                                            userClickHandler);
-                break;
-            default:
-                assert(false);
-        }
-
-
-        writer.writeAttribute(handlerName, handler, null);
+        renderHandler(context,
+                      component,
+                      params,
+                      "onclick",
+                      "onclick");
     }
 
     public static String prefixAttribute(final String attrName,
@@ -1152,6 +1128,22 @@ public class RenderKitUtils {
         return handler;
     }
 
+    // Returns the Behaviors for the specified component/event name,
+    // or null if no Behaviors are available
+    private static List<Behavior> getBehaviors(UIComponent component,
+                                               String behaviorEventName) {
+
+        if (component instanceof BehaviorHolder) {
+            BehaviorHolder bHolder = (BehaviorHolder)component;
+            Map <String, List <Behavior>> behaviors = bHolder.getBehaviors();
+            if (null != behaviors) {
+                return behaviors.get(behaviorEventName);
+            }
+        }
+
+        return null;
+    }
+
     // Returns a submit handler - ie. a script that calls
     // mojara.jsfcljs()
     private static String getSubmitHandler(FacesContext context,
@@ -1277,6 +1269,56 @@ public class RenderKitUtils {
         return behavior.getHints().contains(BehaviorHint.SUBMITTING);
     }
 
+    private static void renderHandler(FacesContext context,
+                                      UIComponent component,
+                                      Collection<Behavior.Parameter> params,
+                                      String handlerName,
+                                      String behaviorEventName)
+        throws IOException {
+
+        ResponseWriter writer = context.getResponseWriter();
+        String userClickHandler = getUserHandler(component, handlerName);
+        List<Behavior> behaviors = getBehaviors(component, behaviorEventName);
+
+        String handler = null;
+
+        switch (getHandlerType(behaviors, params, userClickHandler)) {
+        
+            case USER_HANDLER_ONLY:
+                handler = userClickHandler;
+                break;
+
+            case SINGLE_BEHAVIOR_ONLY:
+                handler = getSingleBehaviorHandler(context, 
+                                                   component,
+                                                   behaviors.get(0),
+                                                   params,
+                                                   behaviorEventName);
+                break;
+
+            case SUBMIT_ONLY:
+                handler = getSubmitHandler(context, component, params, true);
+                break;
+
+            case CHAIN:
+                handler = getChainedHandler(context,
+                                            component,
+                                            behaviors,
+                                            params,
+                                            behaviorEventName,
+                                            userClickHandler);
+                break;
+            default:
+                assert(false);
+        }
+
+
+        writer.writeAttribute(handlerName, handler, null);
+    }
+
+
+    // Determines the type of handler to render based on what sorts of
+    // scripts we need to render/chain.
     private static HandlerType getHandlerType(List<Behavior> behaviors,
                                               Collection<Behavior.Parameter> params,
                                               String userHandler) {
@@ -1297,7 +1339,7 @@ public class RenderKitUtils {
         // We've got behaviors.  See if we can optimize for the single
         // behavior case.  We can only do this if we don't have a user
         // handler.
-        if ((behaviors.size() == 0) && (userHandler == null)) {
+        if ((behaviors.size() == 1) && (userHandler == null)) {
             Behavior behavior = behaviors.get(0);
 
             // If we've got a submitting behavior, then it will handle
