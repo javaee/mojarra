@@ -159,15 +159,16 @@ public abstract class Behavior {
     abstract public void broadcast(BehaviorEvent event);
 
     /**
-     * <p>Returns hints that describe the behavior of the Behavior
-     * implementation</p>
-     *
-     * <p>The hints may impact how Renderers behave in the presence
-     * of Behaviors.  For example, when a Behavior that specifies
-     * BehaviorHint.SUBMITTING is present, the Renderer may choose
-     * to alternate the scripts that it generates itself.</p>
+     * <p class="changed_added_2_0">Returns hints that describe the 
+     * behavior of the Behavior implementation.  The hints may impact 
+     * how Renderers behave in the presence of Behaviors.  For example, 
+     * when a Behavior that specifies <code>BehaviorHint.SUBMITTING</code> 
+     * is present, the Renderer may choose to alternate the scripts that 
+     * it generates itself.</p>
      *   
      * @return a non-null, unmodifiable collection of BehaviorHints.
+     *
+     * @since 2.0
      */
     abstract public Set<BehaviorHint> getHints();
 
@@ -178,6 +179,8 @@ public abstract class Behavior {
      * implementations can determine which Parameters to include by calling
      * BehaviorContext.getParameters().
      * </p>
+     *
+     * @since 2.0
      */
     public static class Parameter {
 
@@ -190,6 +193,8 @@ public abstract class Behavior {
          * @param value the value of the parameter
          * @throws NullPointerException if <code>name</code> or
          * <code>value</code> is null.
+         *
+         * @since 2.0
          */
         public Parameter(String name, Object value) {
 
@@ -206,14 +211,18 @@ public abstract class Behavior {
         }
 
         /**
-         * Returns the Parameter's name.
+         * <p class="changed_added_2_0">Returns the Parameter's name.</p>
+         *
+         * @since 2.0
          */
         public String getName() {
             return name;
         }
 
         /**
-         * Returns the Parameter's value.
+         * <p class="changed_added_2_0">Returns the Parameter's value.</p>
+         *
+         * @since 2.0
          */
         public Object getValue() {
             return value;
