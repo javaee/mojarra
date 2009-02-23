@@ -56,7 +56,6 @@
            <f:ajax listener="#{bean.processBehavior}"/>
        </h:commandButton>
 
-
        <h:commandButton id="greet" value="Single Greet">
            <be:greet/>
        </h:commandButton>
@@ -78,13 +77,24 @@
           </h:commandButton>
        </f:ajax>
 
-       <h:outputText id="out"/>
-
-       <h:commandButton id="params" value="Ajax With Params">
+       <h:commandButton id="ajaxParams" value="Ajax With Params">
            <f:ajax/>
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
        </h:commandButton>
+
+       <h:commandButton id="nonAjaxParams" value="Non-Ajax With Params">
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+       </h:commandButton>
+
+       <h:commandButton id="greetParams" value="Greet With Params">
+           <be:greet/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+       </h:commandButton>
+
+       <h:outputText id="out"/>
 
        <h:outputStylesheet name="stylesheet.css" />
    </h:form>

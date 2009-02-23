@@ -322,35 +322,38 @@ public class RenderKitUtils {
         ResponseWriter writer = context.getResponseWriter();
         String userClickHandler = getUserHandler(component, handlerName);
 
-        // No behaviors - just render the user handler
-        if ((null == behaviors) || (behaviors.isEmpty())) {
-            writer.writeAttribute(handlerName, userClickHandler, null);
-            return;
-        }
 
         String handler = null;
 
-        if ((behaviors.size() == 1) && (userClickHandler == null)) {
-            // We special case the case where we have a single
-            // behavior and no user script - no chaining in this case.
-            handler = getSingleBehaviorHandler(context, 
-                                               component,
-                                               behaviors.get(0),
-                                               params,
-                                               behaviorEventName);
-        }
-        else {
+        switch (getHandlerType(behaviors, params, userClickHandler)) {
+        
+            case USER_HANDLER_ONLY:
+                handler = userClickHandler;
+                break;
 
-            // Potentially have multiple scripts - build up call to 
-            // jsf.util.chain().
-            handler = getChainedBehaviorHandler(context,
-                                                component,
-                                                behaviors,
-                                                params,
-                                                behaviorEventName,
-                                                userClickHandler);
-        }
+            case SINGLE_BEHAVIOR_ONLY:
+                handler = getSingleBehaviorHandler(context, 
+                                                   component,
+                                                   behaviors.get(0),
+                                                   params,
+                                                   behaviorEventName);
+                break;
 
+            case SUBMIT_ONLY:
+                handler = getSubmitHandler(context, component, params, true);
+                break;
+
+            case CHAIN:
+                handler = getChainedHandler(context,
+                                            component,
+                                            behaviors,
+                                            params,
+                                            behaviorEventName,
+                                            userClickHandler);
+                break;
+            default:
+                assert(false);
+        }
 
 
         writer.writeAttribute(handlerName, handler, null);
@@ -1028,11 +1031,32 @@ public class RenderKitUtils {
         appendQuotedValue(builder, script);
     }
 
+    // Appends an name/value property pair to a JSON object.  Assumes
+    // object has already been opened by the caller.
+    public static void appendProperty(StringBuilder builder, 
+                                      String name,
+                                      Object value) {
+
+        if (null == name)
+            throw new IllegalArgumentException();
+
+        // We do null value checking in here so that callers don't have to.
+        if (value == null)
+            return;
+
+        char lastChar = builder.charAt(builder.length() - 1);
+        if ((lastChar != ',') && (lastChar != '{'))
+            builder.append(',');
+
+        RenderKitUtils.appendQuotedValue(builder, name);
+        builder.append(":");
+        RenderKitUtils.appendQuotedValue(builder, value.toString());
+    }
 
     // Append a script to the chain, escaping any single quotes, since
     // our script content is itself nested within single quotes.
-    public static void appendQuotedValue(StringBuilder builder, 
-                                         String script) {
+    private static void appendQuotedValue(StringBuilder builder, 
+                                          String script) {
 
         builder.append("'");
 
@@ -1099,14 +1123,50 @@ public class RenderKitUtils {
         return handler;
     }
 
+    // Returns a submit handler - ie. a script that calls
+    // mojara.jsfcljs()
+    private static String getSubmitHandler(FacesContext context,
+                                           UIComponent component,
+                                           Collection<Behavior.Parameter> params,
+                                           boolean preventDefault) {
+
+        StringBuilder builder = new StringBuilder(256);
+
+        String formClientId = getFormClientId(component, context);
+        String componentClientId = component.getClientId(context);
+
+        builder.append("mojarra.jsfcljs(document.getElementById('");
+        builder.append(formClientId);
+        builder.append("'),{");
+
+        appendProperty(builder, componentClientId, componentClientId);
+
+        if ((null != params) && (!params.isEmpty())) {
+            for (Behavior.Parameter param : params) {
+                appendProperty(builder, param.getName(), param.getValue());
+            }
+        }
+
+        // Note: 3rd arg to mojarra.jsfcljs() is the form target.
+        // This is always the empty string in our old getCommandOnClickScript()
+        // code, so leaving as empty string here.
+        builder.append("},'')");
+
+        if (preventDefault) {
+            builder.append(";return false");
+        }
+
+        return builder.toString();
+    }
+
     // Chains together a number of Behavior scripts with a user handler
     // script.
-    private static String getChainedBehaviorHandler(FacesContext context,
-                                                    UIComponent component,
-                                                    List<Behavior> behaviors,
-                                                    Collection<Behavior.Parameter> params,
-                                                    String behaviorEventName,
-                                                    String userHandler) {
+    private static String getChainedHandler(FacesContext context,
+                                            UIComponent component,
+                                            List<Behavior> behaviors,
+                                            Collection<Behavior.Parameter> params,
+                                            String behaviorEventName,
+                                            String userHandler) {
 
 
         // Hard to pre-compute builder initial capacity
@@ -1122,12 +1182,28 @@ public class RenderKitUtils {
                                                      behaviorEventName,
                                                      params);
     
+
+
+        boolean hasParams = ((null != params) && !params.isEmpty());
+
+        // If we've got parameters but we didn't render a "submitting"
+        // behavior script, we need to explicitly render a submit script.
+        if (!submitting && hasParams) {
+            String submitHandler = getSubmitHandler(context, component, params, false);
+            appendScriptToChain(builder, submitHandler);
+
+            // We are now submitting since we've rendered a submit script.
+            submitting = true;
+        }
+
         builder.append(")");
 
-        // If we've got a "submitting" behavior, return false to
-        // prevent the button from submitting itself.
-        if (submitting)
+        // If we're submitting (either via a behavior, or by rendering
+        // a submit script), we need to return false to prevent the
+        // default button/link action.
+        if (submitting) {
             builder.append(";return false");
+        }
 
         return builder.toString();
     }
@@ -1170,6 +1246,56 @@ public class RenderKitUtils {
     // Tests whether the specified behavior is submitting
     private static boolean isSubmitting(Behavior behavior) {
         return behavior.getHints().contains(BehaviorHint.SUBMITTING);
+    }
+
+    private static HandlerType getHandlerType(List<Behavior> behaviors,
+                                              Collection<Behavior.Parameter> params,
+                                              String userHandler) {
+
+        if ((behaviors == null) || (behaviors.isEmpty())) {
+
+            // No behaviors and no params means user handler only
+            if (params.isEmpty())
+                return HandlerType.USER_HANDLER_ONLY;
+
+            // We've got params.  If we've also got a user handler, we need 
+            // to chain.  Otherwise, we only render the submit script.
+            return (userHandler == null) ? HandlerType.SUBMIT_ONLY :
+                                           HandlerType.CHAIN;
+        }
+
+
+        // We've got behaviors.  See if we can optimize for the single
+        // behavior case.  We can only do this if we don't have a user
+        // handler.
+        if ((behaviors.size() == 0) && (userHandler == null)) {
+            Behavior behavior = behaviors.get(0);
+
+            // If we've got a submitting behavior, then it will handle
+            // submitting the params.  If not, then we need to use
+            // a submit script to handle the params.
+            if (isSubmitting(behavior) || (params.isEmpty()))
+                return HandlerType.SINGLE_BEHAVIOR_ONLY;            
+        }
+
+        return HandlerType.CHAIN;
+    }
+
+    // Little utility enum that we use to identify the type of
+    // handler that we are going to render.
+    private static enum HandlerType {
+
+        // Indicates that we only have a user handler - nothing else
+        USER_HANDLER_ONLY,
+
+        // Indicates that we only have a single behavior - no chaining
+        SINGLE_BEHAVIOR_ONLY,
+
+        // Indicates that we only render the mojarra.jsfcljs() script
+       SUBMIT_ONLY,
+
+        // Indicates that we've got a chain
+        CHAIN
     }
 
     // ---------------------------------------------------------- Nested Classes

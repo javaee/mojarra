@@ -145,7 +145,9 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
 
             if (!params.isEmpty()) {
                 for (Behavior.Parameter param : params) {
-                    appendOption(ajaxCommand, param.getName(), param.getValue());
+                    RenderKitUtils.appendProperty(ajaxCommand, 
+                                                  param.getName(),
+                                                  param.getValue());
                 }
             }
              
@@ -155,29 +157,6 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
         ajaxCommand.append(")");
 
         return ajaxCommand.toString();
-    }
-
-    // Appends an option to the ajax command.  Assume that the 
-    // options object has already been opened.
-    private static void appendOption(StringBuilder builder, 
-                                     String name,
-                                     Object value) {
-
-
-        if (null == name)
-            throw new IllegalArgumentException();
-
-        // We do null value checking in here so that callers don't have to.
-        if (value == null)
-            return;
-
-        char lastChar = builder.charAt(builder.length() - 1);
-        if ((lastChar != ',') && (lastChar != '{'))
-            builder.append(',');
-
-        RenderKitUtils.appendQuotedValue(builder, name);
-        builder.append(":");
-        RenderKitUtils.appendQuotedValue(builder, value.toString());
     }
 
     // Appends an ids argument to the ajax command
