@@ -110,23 +110,17 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     /**
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#buildView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     * @param context
+     * @param view
+     * @throws IOException
      */
-    public void renderView(FacesContext ctx,
-                           UIViewRoot viewToRender)
+    public void buildView(FacesContext context, UIViewRoot view)
     throws IOException {
 
-        // suppress rendering if "rendered" property on the component is
-        // false
-        if (!viewToRender.isRendered()) {
-            return;
-        }
-
-        ExternalContext extContext = ctx.getExternalContext();
-
         try {
-            if (executePageToBuildView(ctx, viewToRender)) {
-                extContext.responseFlushBuffer();
+            if (executePageToBuildView(context, view)) {
+                context.getExternalContext().responseFlushBuffer();
                 if (associate != null) {
                     associate.responseRendered();
                 }
@@ -138,21 +132,40 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Completed building view for : \n" +
-                                   viewToRender.getViewId());
+                                   view.getViewId());
         }
+
+    }
+
+    /**
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     */
+    public void renderView(FacesContext context,
+                           UIViewRoot view)
+    throws IOException {
+
+        // suppress rendering if "rendered" property on the component is
+        // false
+        if (!view.isRendered()) {
+            return;
+        }
+
+        ExternalContext extContext = context.getExternalContext();
+
+        buildView(context, view);
 
         // set up the ResponseWriter
 
         RenderKitFactory renderFactory = (RenderKitFactory)
               FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
-              renderFactory.getRenderKit(ctx, viewToRender.getRenderKitId());
+              renderFactory.getRenderKit(context, view.getRenderKitId());
 
-        ResponseWriter oldWriter = ctx.getResponseWriter();
+        ResponseWriter oldWriter = context.getResponseWriter();
 
         WriteBehindStateWriter stateWriter =
               new WriteBehindStateWriter(extContext.getResponseOutputWriter(),
-                                         ctx,
+                                         context,
                                          responseBufferSize);
         ResponseWriter newWriter;
         if (null != oldWriter) {
@@ -162,11 +175,11 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
                                                        null,
                                                        extContext.getRequestCharacterEncoding());
         }
-        ctx.setResponseWriter(newWriter);
+        context.setResponseWriter(newWriter);
 
         newWriter.startDocument();
 
-        doRenderView(ctx, viewToRender);
+        doRenderView(context, view);
 
         newWriter.endDocument();
 
@@ -181,13 +194,13 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         stateWriter.release();
 
         if (null != oldWriter) {
-            ctx.setResponseWriter(oldWriter);
+            context.setResponseWriter(oldWriter);
         }
 
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
         ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper)
-              RequestStateManager.remove(ctx, RequestStateManager.AFTER_VIEW_CONTENT);
+              RequestStateManager.remove(context, RequestStateManager.AFTER_VIEW_CONTENT);
         if (null != wrapper) {
             wrapper.flushToWriter(extContext.getResponseOutputWriter(),
                                   extContext.getResponseCharacterEncoding());

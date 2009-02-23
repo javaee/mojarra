@@ -36,14 +36,9 @@
 
 package javax.faces.webapp.pdl;
 
-import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import javax.faces.application.Resource;
-import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
@@ -78,11 +73,12 @@ public abstract class PageDeclarationLanguage {
      *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>.
-
+     *
      * @throws javax.faces.FacesException if there is an error in
      * obtaining the metadata
      */
     public abstract BeanInfo getComponentMetadata(FacesContext context, Resource componentResource);
+
 
     /**
      * <p class="changed_added_2_0">Return a reference to the view
@@ -97,7 +93,7 @@ public abstract class PageDeclarationLanguage {
      *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>.
-
+     *
      * @throws javax.faces.FacesException if there is an error in
      * obtaining the metadata
      */
@@ -113,16 +109,16 @@ public abstract class PageDeclarationLanguage {
      * @param context The <code>FacesContext</code> for this request.
      * @param componentResource The <code>Resource</code> that represents the component.
      * @since 2.0
-
+     *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>.
-
+     *
      * @throws javax.faces.FacesException if there is an error in
      * obtaining the script component resource
      *
      */
     public abstract Resource getScriptComponentResource(FacesContext context,
-            Resource componentResource);
+                                                        Resource componentResource);
     
     
     /**
@@ -154,11 +150,17 @@ public abstract class PageDeclarationLanguage {
      *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>
-
-     * @since 2.0
      */
-
     public abstract UIViewRoot restoreView(FacesContext context, String viewId);
+
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @param context
+     * @param view
+     */
+    public abstract void buildView(FacesContext context, UIViewRoot view)
+    throws IOException;
 
     
     /**
@@ -172,10 +174,7 @@ public abstract class PageDeclarationLanguage {
      *
      * @throws NullPointerException if any of the arguments are
      * <code>null</code>
-
-     * @since 2.0
      */
-
     public abstract void renderView(FacesContext context,
                                     UIViewRoot view)
     throws IOException;

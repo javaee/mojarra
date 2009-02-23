@@ -65,15 +65,12 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
-import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
-import java.util.Collections;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIPanel;
 import javax.faces.webapp.pdl.ViewMetadata;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
@@ -167,8 +164,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     @Override
     public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
-        ViewMetadata result = new ViewMetadataImpl(this, viewId);
-        return result;
+
+        return new ViewMetadataImpl(this, viewId);
+
     }
     
     /**
@@ -350,6 +348,39 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
 
+    /**
+     * Build the view.
+     * @param ctx the {@link FacesContext} for the current request
+     * @param viewToRender the {@link UIViewRoot} to populate based
+     *  of the Facelet template
+     * @throws IOException if an error occurs building the view.
+     */
+    @Override
+    public void buildView(FacesContext ctx, UIViewRoot viewToRender)
+    throws IOException {
+
+        viewToRender.setViewId(viewToRender.getViewId());
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Building View: " + viewToRender.getViewId());
+        }
+        if (faceletFactory == null) {
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
+            faceletFactory = associate.getFaceletFactory();
+            assert (faceletFactory != null);
+        }
+        RequestStateManager.set(ctx,
+                                RequestStateManager.FACELET_FACTORY,
+                                faceletFactory);
+        Facelet f = faceletFactory.getFacelet(viewToRender.getViewId());
+
+        // populate UIViewRoot
+        f.apply(ctx, viewToRender);
+        setViewPopulated(ctx, viewToRender);
+
+    }
+
+
     // ------------------------------------------------------- Protected Methods
 
 
@@ -434,43 +465,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
     }
 
+
     /**
      * @return a new Compiler for Facelet processing.
      */
     protected Compiler createCompiler() {
         return new SAXCompiler();
-    }
-
-
-    /**
-     * Build the view.
-     * @param ctx the {@link FacesContext} for the current request
-     * @param viewToRender the {@link UIViewRoot} to populate based
-     *  of the Facelet template
-     * @throws IOException if an error occurs building the view.
-     */
-    protected void buildView(FacesContext ctx, UIViewRoot viewToRender)
-    throws IOException {
-
-        viewToRender.setViewId(viewToRender.getViewId());
-
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Building View: " + viewToRender.getViewId());
-        }
-        if (faceletFactory == null) {
-            ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
-            faceletFactory = associate.getFaceletFactory();
-            assert (faceletFactory != null);
-        }
-        RequestStateManager.set(ctx,
-                                RequestStateManager.FACELET_FACTORY,
-                                faceletFactory);
-        Facelet f = faceletFactory.getFacelet(viewToRender.getViewId());
-
-        // populate UIViewRoot
-        f.apply(ctx, viewToRender);
-        setViewPopulated(ctx, viewToRender);
-
     }
 
 
