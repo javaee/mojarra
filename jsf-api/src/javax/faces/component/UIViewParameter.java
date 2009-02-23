@@ -117,9 +117,9 @@ public class UIViewParameter extends UIInput {
     private String name;
 
     /**
-     * <p>The raw value is the "implicit" binding for this page parameter. This property
-     * maintains the submitted value of the page parameter for the duration of the request.
-     * If the page parameter does not explicitly specify a value expression, then when the
+     * <p>The raw value is the "implicit" binding for this view parameter. This property
+     * maintains the submitted value of the view parameter for the duration of the request.
+     * If the view parameter does not explicitly specify a value expression, then when the
      * request ends, this value is stored with the state of this component to use as the
      * submitted value on an ensuing postback.</p>
      */
@@ -176,7 +176,7 @@ public class UIViewParameter extends UIInput {
 
     /**
      * <p class="changed_added_2_0">Return <code>false</code>.  The
-     * immediate setting is not relevant for page parameters and must be
+     * immediate setting is not relevant for view parameters and must be
      * assumed to be <code>false</code>.</p>
      * @since 2.0
      */
@@ -308,8 +308,8 @@ public class UIViewParameter extends UIInput {
             throw new NullPointerException();
         }
 
-        // if there is a value expression, update page parameter w/ latest value after render
-        // QUESTION is it okay that a null string value may be suppressing the page parameter value?
+        // if there is a value expression, update view parameter w/ latest value after render
+        // QUESTION is it okay that a null string value may be suppressing the view parameter value?
         // ANSWER: I'm not sure.
         setSubmittedValue(getStringValue(context));
     }
@@ -357,7 +357,7 @@ public class UIViewParameter extends UIInput {
 
         if (c == null) {
             // if value is null and no converter attribute is specified, then
-            // return null (null has meaning for a page parameters; it means remove it).
+            // return null (null has meaning for a view parameters; it means remove it).
             if (currentValue == null) {
                 return null;
             }
@@ -508,7 +508,7 @@ public class UIViewParameter extends UIInput {
             UIViewRoot root = context.getViewRoot();
             // If the view root is the same as when we were constructed...
             if (this.viewIdAtTimeOfConstruction.equals(root.getViewId())) {
-                // get the actual page parameter from the tree...
+                // get the actual view parameter from the tree...
                 UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
                 result = (UIViewParameter) metadataFacet.getChildren().get(indexInParent);
             } else {

@@ -76,11 +76,25 @@
         <f:actionListener for="command" binding="#{compositeBean.actionListener}"/>
     </ez:actionSource3>
 
+    <p>
+        Ensure actionListeners are properly re-targeted when the
+        target of the actionListener is nested within another naming
+        container.  Note that the value of the 'for' attribute doesn't
+        mimic the NamingContainer hierarchy, that's handled by the
+        'targets' attribute within the composite:implementation section
+        of actionSource4.xhtml.
+    </p>
+    <ez:actionSource4 id="actionsource4">
+        <f:actionListener for="command" binding="#{compositeBean.actionListener}"/>
+    </ez:actionSource4>
+
     <h:messages/>
     <p />
-    <h:commandButton value="Clear Messages"/>
+    <h:commandButton id="clear" value="Clear Messages"/>
 
 </h:form>
+
+
 
 </h:body>
 

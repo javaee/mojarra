@@ -93,7 +93,7 @@ public class JsfViewUrlBuilder extends UrlBuilder {
      * Order of precedence for parameters:
      * 1. UIParameter
      * 2. Query string parameter
-     * 3. Page parameter
+     * 3. view parameter
      */
     protected void addViewParameters() {
         if (!includeViewParams) {
@@ -124,7 +124,7 @@ public class JsfViewUrlBuilder extends UrlBuilder {
 
         for (UIViewParameter viewParam : toViewParams) {
             String value = null;
-            // don't bother looking at page parameter if it's been overridden
+            // don't bother looking at view parameter if it's been overridden
             if (getParameters().containsKey(viewParam.getName())) {
                 continue;
             }
@@ -132,7 +132,7 @@ public class JsfViewUrlBuilder extends UrlBuilder {
                 value = viewParam.getStringValueFromModel(context);
             }
             else {
-                // Anonymous page parameter:
+                // Anonymous view parameter:
                 // Get string value from UIViewParameter instance stored in current view
                 if (currentIsSameAsNew) {
                     value = viewParam.getStringValue(context);

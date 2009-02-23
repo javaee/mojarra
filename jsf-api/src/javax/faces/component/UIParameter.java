@@ -64,13 +64,6 @@ import javax.faces.context.FacesContext;
  * nested {@link UIParameter} child components should document
  * their use of this property.</p>
  *
- * <p class="changed_added_2_0">When used with page parameters, a parameter
- * may be added to a parent component to override the value of a page parameter.
- * When the intent is to unset the page parameter by assigning a value of null,
- * the developer can use the <code>disable</code> property of this component,
- * which has the affect of assigning a null value to this parameter. This
- * saves the developer from having to use the value expression <code>#{null}</code>
- * in the <code>value</code> property.</p>
  */
 
 public class UIParameter extends UIComponentBase {

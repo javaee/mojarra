@@ -371,7 +371,7 @@ public abstract class ViewHandler {
      * method should be an encoded JSF action URL that can be used by a NavigationHandler
      * to request a new page in a redirect case or in a Renderer for generating a link.
      * The viewId parameter is first fed to the {@link ViewHandler#getActionURL(javax.faces.context.FacesContext, java.lang.String)}.
-     * Then, the parameters are processed. The page parameters are read from the target page if included. They are
+     * Then, the parameters are processed. The view parameters are read from the target page if included. They are
      * merged with the parameters parsed from the query string on the viewId and the parameter
      * overrides passed in according to the precendence rules defined in the spec. Finally,
      * the result is encoded by calling {@link ExternalContext#encodeActionURL(java.lang.String)}</p>

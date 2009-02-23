@@ -89,7 +89,7 @@ public class NavigationCase {
      * @param toViewId the view id to be navigated to
      * @param redirect <code>true</code> if the new view should be navigated
      *  to via a {@link javax.faces.context.ExternalContext#redirect(String)}
-     * @param includeViewParams  <code>true</code> if the page parametets should
+     * @param includeViewParams  <code>true</code> if the view parametets should
      *  be encoded into the redirect URL (only applies to redirect case)
      */
     public NavigationCase(String fromViewId,
