@@ -896,7 +896,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/composite/*TestCase.class"/>
+                         includes="com/sun/faces/composite/*TestCase.class"/>
             </tests>
         </jsf.junit>  
     </target>
