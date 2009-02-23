@@ -1,4 +1,4 @@
-package com.corejsf;
+package com.sun.faces.systest.composite;
 
 import javax.faces.event.ActionListener;
 import javax.faces.model.ManagedBean;

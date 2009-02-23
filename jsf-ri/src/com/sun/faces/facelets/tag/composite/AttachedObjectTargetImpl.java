@@ -55,11 +55,15 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 
 import com.sun.faces.util.Util;
+import java.util.Iterator;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
+import javax.faces.event.AbortProcessingException;
 
 
 public class AttachedObjectTargetImpl implements AttachedObjectTarget {
@@ -83,8 +87,7 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
             String[] targetArray = Util.split(targetsListStr, " ");
             result = new ArrayList<UIComponent>(targetArray.length);
             for (int i = 0, len = targetArray.length; i < len; i++) {
-                UIComponent comp = topLevelComponent.findComponent(
-                      augmentSearchId(ctx, topLevelComponent, targetArray[i]));
+                UIComponent comp = findWithTreeTraversal(ctx, topLevelComponent, targetArray[i]);
                 if (null != comp) {
                     result.add(comp);
                 }
@@ -92,8 +95,7 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
         }
         else {
             result = new ArrayList<UIComponent>(1);
-            UIComponent comp = topLevelComponent.findComponent(
-                  augmentSearchId(ctx, topLevelComponent, name));
+            UIComponent comp = findWithTreeTraversal(ctx, topLevelComponent, name);
             if (null != comp) {
                 result.add(comp);
             }
@@ -102,27 +104,43 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
         
     }
     
+    private UIComponent findWithTreeTraversal(FacesContext context,
+            UIComponent topLevelComponent,
+            final String componentId) {
+        final UIComponent result[] = new UIComponent[1];
+        result[0] = null;
+        
+        Iterator<UIComponent> iter = topLevelComponent.getFacetsAndChildren();
+        while (null == result[0] && iter.hasNext()) {
+            try {
+                iter.next().visitTree(VisitContext.createVisitContext(context),
+                        new VisitCallback() {
+
+                            public VisitResult visit(VisitContext context,
+                                    UIComponent target) {
+                                VisitResult visitResult = VisitResult.ACCEPT;
+                                String targetId = target.getId();
+                                if (null != targetId &&
+                                    targetId.equals(componentId)) {
+                                    visitResult = VisitResult.COMPLETE;
+                                    result[0] = target;
+                                }
+
+                                return visitResult;
+                            }
+
+                        });
+            } catch (AbortProcessingException e) {
+            }
+        }
+        return result[0];
+    }
+    
     private ValueExpression targetsList;
     
     void setTargetsList(ValueExpression targetsList) {
         this.targetsList = targetsList;
     }
 
-
-    // if the current composite component ID is the same as the target ID,
-    // we'll need to make the ID passed to findComponent be a combination
-    // of the two so we find the correct component.  If we don't do this,
-    // we end with a StackOverFlowException as 'c' will be what is found
-    // and not the child of 'c'.
-    private String augmentSearchId(FacesContext ctx,
-                                   UIComponent c,
-                                   String targetId) {
-        
-        if (targetId.equals(c.getId())) {
-            return targetId + UINamingContainer.getSeparatorChar(ctx) + targetId;
-        }
-        return targetId;
-
-    }
 
 }
