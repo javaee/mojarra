@@ -101,70 +101,9 @@ public abstract class PageDeclarationLanguage {
      * @throws javax.faces.FacesException if there is an error in
      * obtaining the metadata
      */
-    public abstract BeanInfo getViewMetadata(FacesContext context, String viewId);
+    public abstract ViewMetadata getViewMetadata(FacesContext context, String viewId);
 
 
-    /**
-     * <p class="changed_added_2_0">Convenience method that uses the
-     * view metadata specification from section JSF.7.6.2 to obtain the
-     * <code>List&lt;{@link
-     * javax.faces.component.UIViewParameter}&gt;</code> for the
-     * argument <code>viewId</code>.  The default implementation must
-     * perform the following actions.</p>
-     *
-     * <div class="changed_added_2_0">
-     *
-     * <p>Obtain the <code>PageDeclarationLanguage</code> for the
-     * argument <code>viewId</code>.  If
-     * <code>UnsupportedOperationException</code> is thrown, it must be
-     * swallowed and <code>null</code> must be returned from this
-     * method.</p>
-
-     * <p>Otherwise, obtain the <code>List&lt;{@link
-     * javax.faces.component.UIViewParameter.Reference}&gt;</code> by
-     * calling {@link #getViewMetadata} and using the specification from
-     * section JSF.7.6.2.  Create the
-     * <code>List&lt;UIViewParameter&gt;</code> to return.  For each
-     * element in <code>List&lt;UIViewParameter.Reference&gt;</code>,
-     * call {@link javax.faces.component.UIViewParameter.Reference#getUIViewParameter} and add
-     * the result to the list to return.</p>
-     *
-     * </div>
-     *
-     * @param context The <code>FacesContext</code> for this request.
-     * @param viewId the view id from whith to extract the metadata
-     * @since 2.0
-     *
-     * @throws NullPointerException if any of the arguments are
-     * <code>null</code>.
-
-     * @throws javax.faces.FacesException if there is an error in
-     * obtaining the metadata
-     */
-
-    public List<UIViewParameter> getViewParameters(FacesContext context, String viewId) {
-        List<UIViewParameter> viewParams = Collections.<UIViewParameter>emptyList(); 
-        BeanInfo beanInfo = null;
-        PageDeclarationLanguage pdl = null;
-        try {
-            pdl = context.getApplication().getViewHandler().getPageDeclarationLanguage(context, viewId);
-            beanInfo = pdl.getViewMetadata(context, viewId);
-        } catch (UnsupportedOperationException uoe) {
-            
-        }
-        if (null != beanInfo) {
-            BeanDescriptor otherBd = beanInfo.getBeanDescriptor();
-            List<UIViewParameter.Reference> params = (List<UIViewParameter.Reference>)
-              otherBd.getValue(UIViewRoot.VIEW_PARAMETERS_KEY);
-            viewParams = new ArrayList<UIViewParameter>(params.size());
-            for (UIViewParameter.Reference r : params) {
-                viewParams.add(r.getUIViewParameter(context));
-            }
-        }
-
-        return viewParams;
-    }
-    
     /**
      * <p class="changed_added_2_0">Take implementation specific action
      * to discover a <code>Resource</code> given the argument
