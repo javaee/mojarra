@@ -65,6 +65,8 @@ public interface BehaviorHolder {
      * attach the behavior to.
      * @param  behavior the {@link Behavior} instance to attach
      * for the specified event name.
+     *
+     * @since 2.0
      */
     public void addBehavior(String eventName, Behavior behavior);
 
@@ -72,6 +74,8 @@ public interface BehaviorHolder {
      * <p class="changed_added_2_0">Returns a non-null, unmodifiable 
      * <code>Collection</code> containing the names of the logical 
      * events supported by the component implementing this interface.</p>
+     *
+     * @since 2.0
      */
     public Collection<String> getEventNames();
 
@@ -81,6 +85,8 @@ public interface BehaviorHolder {
      * have been attached to the component implementing this interface.
      * The keys in this <code>Map</code> are event names defined by
      * {@link #getEventNames}.</p>
+     *
+     * @since 2.0
      */
     public Map<String, List<Behavior>> getBehaviors();
 
@@ -90,6 +96,8 @@ public interface BehaviorHolder {
      * This must be one of the event names returned by
      * {@link #getEventNames} or null if the component does not have
      * a default event.
+     *
+     * @since 2.0
      */
     public String getDefaultEventName();
 }
