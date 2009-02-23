@@ -178,7 +178,6 @@ public class RestoreViewPhase extends Phase {
         if (isPostBack) {
             // try to restore the view
             viewRoot = viewHandler.restoreView(facesContext, viewId);
-            boolean renderResponse = false;
             if (viewRoot == null) {
                 if (is11CompatEnabled(facesContext)) {
                     // 1.1 -> create a new view and flag that the response should
