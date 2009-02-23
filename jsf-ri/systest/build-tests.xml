@@ -161,6 +161,7 @@
                 test.valuechange,
                 test.component,
                 test.component01,
+                test.composite,
                 test.navigation,
                 test.resourceBundleELResolver,
                 test.tlvalidator,
@@ -887,6 +888,20 @@
               outContent="/component01.jsp PASSED"/>
     </target>
 
+    <target name="test.composite"
+            description="Test composite components">
+
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/composite/*TestCase.class"/>
+            </tests>
+        </jsf.junit>  
+    </target>
+
+
     <target name="test.standard"
             description="Test the Standard RenderKit">
         <jsf.tester
@@ -1229,14 +1244,7 @@
     </target>
 
     <target name="scratch">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/viewparameters/ViewParametersTestCase.class"/>
-            </tests>
-        </jsf.junit>  
+      <antcall target="test.composite" />
     </target>
 
 </project>

@@ -1203,7 +1203,9 @@ example.</p>
   nested within a composite component.   If the "targets" attribute is not specified,
   this value also represents the component ID of the target component within the
   that the <code>&lt;composite:implementation&gt;</code>
-  ActionListener should be mapped to.
+  ActionListener should be mapped to.  If there are multiple inner components
+  that have the same component id, the first one with a matching component id
+  will be used.
 </p>
 </div>]]>
 
@@ -1287,7 +1289,9 @@ example.</p>
   nested within a composite component.   If the "targets" attribute is not specified,
   this value also represents the component ID of the target component within the
   that the <code>&lt;composite:implementation&gt;</code>
-  ActionListener should be mapped to.
+  ActionListener should be mapped to.  If there are multiple inner components
+  that have the same component id, the first one with a matching component id
+  will be used.
 </p>
 </div>]]>
             
@@ -1398,7 +1402,9 @@ example.</p>
   nested within a composite component.   If the "targets" attribute is not specified,
   this value also represents the component ID of the target component within the
   that the <code>&lt;composite:implementation&gt;</code>
-  ActionListener should be mapped to.
+  ActionListener should be mapped to. If there are multiple inner components
+  that have the same component id, the first one with a matching component id
+  will be used.
 </p>
 </div>]]>
 

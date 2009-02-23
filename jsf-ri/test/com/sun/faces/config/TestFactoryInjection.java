@@ -60,6 +60,7 @@ import javax.faces.application.ViewHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ExternalContext;
@@ -924,6 +925,19 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         }
 
         public Iterator<String> getValidatorIds() {
+            return null;
+        }
+
+        public void addBehavior(String behaviorId, String behaviorClass) {
+
+        }
+
+        public Behavior createBehavior(String behaviorId)
+              throws FacesException {
+            return null;
+        }
+
+        public Iterator<String> getBehaviorIds() {
             return null;
         }
 
