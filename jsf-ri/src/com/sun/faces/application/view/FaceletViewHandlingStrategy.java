@@ -98,9 +98,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public static final String IS_BUILDING_METADATA =
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
-    public static final String ONLY_BUILD_METADATA_FACET_KEY =
-            FaceletViewHandlingStrategy.class.getName() + ".ONLY_BUILD_METADATA_FACET";
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -170,84 +167,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     @Override
     public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    public BeanInfo getViewMetadata(FacesContext context, String viewId) {
-        BeanInfo result = null;
-        UIViewRoot root = context.getViewRoot();
-        
-        if (viewId.equals(root.getViewId())) {
-            result = extractViewMetadataFromExistingView(context, root);
-        } else {
-            // we have to first build the metadata from template,
-            // then extract it.
-            root = buildMetadataFromTemplate(context, viewId);
-            result = extractViewMetadataFromExistingView(context, root);
-        }
-        
-        
+        ViewMetadata result = new ViewMetadataImpl(this, viewId);
         return result;
     }
     
-    private BeanInfo extractViewMetadataFromExistingView(FacesContext context,
-            UIViewRoot root) {
-        FacesBeanInfo result = null;
-        
-        // Look for the BeanInfo in the UIViewRoot, if it's there, return it
-        if (null == (result = (FacesBeanInfo) root.getAttributes().get(UIViewRoot.METADATA_BEANINFO_KEY))) {
-            // Otherwise, see if the viewRoot has the metadata facet
-            UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
-            List<UIViewParameter.Reference> params = null;
-
-            if (metadataFacet == null) {
-                params = Collections.<UIViewParameter.Reference>emptyList();
-            } else {
-                params = new ArrayList<UIViewParameter.Reference>();
-                List<UIComponent> children = metadataFacet.getChildren();
-                int len = children.size();
-                String viewId = root.getViewId();
-                for (int i = 0; i < len; i++ ) {
-                    UIComponent c = children.get(i);
-                    if (c instanceof UIViewParameter) {
-                        params.add(new UIViewParameter.Reference(context,
-                                (UIViewParameter) c, i, viewId));
-                    }
-                }
-            }
-            result = new FacesBeanInfo();
-            BeanDescriptor viewMetadataDescriptor = new BeanDescriptor(UIViewRoot.class);
-            viewMetadataDescriptor.setName(root.getViewId());
-            viewMetadataDescriptor.setValue(UIViewRoot.VIEW_PARAMETERS_KEY, 
-                    params);
-            result.setBeanDescriptor(viewMetadataDescriptor);
-            root.getAttributes().put(UIViewRoot.METADATA_BEANINFO_KEY, result);
-
-        }
-        
-        return result;
-        
-    }
-    
-    private UIViewRoot buildMetadataFromTemplate(FacesContext context,
-            String viewId) {
-        UIViewRoot result = null;
-        
-        UIViewRoot currentViewRoot = context.getViewRoot();
-        try {
-            context.getAttributes().put(ONLY_BUILD_METADATA_FACET_KEY, true);
-            result = this.createView(context, viewId);
-        } finally {
-            context.setViewRoot(currentViewRoot);
-            context.getAttributes().remove(ONLY_BUILD_METADATA_FACET_KEY);
-        }
-        
-        return result;
-    }
-    
-    
-
-
     /**
      * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */

@@ -36,13 +36,17 @@
 
 package com.sun.faces.application.view;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import java.util.Collections;
+import java.util.List;
+import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.ViewMetadata;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIViewParameter;
 import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 /**
  * @see javax.faces.webapp.pdl.ViewMetadata
@@ -51,6 +55,9 @@ public class ViewMetadataImpl extends ViewMetadata {
 
     private String viewId;
     private PageDeclarationLanguage pdl;
+    
+    public static final String ONLY_BUILD_METADATA_FACET_KEY =
+            FaceletViewHandlingStrategy.class.getName() + ".ONLY_BUILD_METADATA_FACET";
 
     // ------------------------------------------------------------ Constructors
 
@@ -69,6 +76,7 @@ public class ViewMetadataImpl extends ViewMetadata {
     /**
      * @see javax.faces.webapp.pdl.ViewMetadata#getViewId()
      */
+    @Override
     public String getViewId() {
 
         return viewId;
@@ -78,16 +86,30 @@ public class ViewMetadataImpl extends ViewMetadata {
     /**
      * @see javax.faces.webapp.pdl.ViewMetadata#createMetadataView(javax.faces.context.FacesContext)
      */
+    @Override
     public UIViewRoot createMetadataView(FacesContext context) {
-        return null;
+        UIViewRoot result = null;
+        
+        try {
+            context.getAttributes().put(ONLY_BUILD_METADATA_FACET_KEY, true);
+            result = pdl.createView(context, viewId);
+        } finally {
+            context.getAttributes().remove(ONLY_BUILD_METADATA_FACET_KEY);
+        }
+        
+        return result;
     }
 
     
     /**
      * @see javax.faces.webapp.pdl.ViewMetadata#getViewParameters(javax.faces.context.FacesContext)
      */
+    @Override
     public Collection<UIViewParameter> getViewParameters(FacesContext context) {
-        return null;
+        UIViewRoot root = createMetadataView(context);
+        Collection<UIViewParameter> result = getViewParameters(root);
+
+        return result;
     }
 
 
@@ -95,6 +117,23 @@ public class ViewMetadataImpl extends ViewMetadata {
      * @see javax.faces.webapp.pdl.ViewMetadata#getViewParameters(javax.faces.component.UIViewRoot)
      */
     public Collection<UIViewParameter> getViewParameters(UIViewRoot root) {
-        return null;
+        Collection<UIViewParameter> params = null;
+        UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
+        
+        if (metadataFacet == null) {
+            params = Collections.<UIViewParameter>emptyList();
+        } else {
+            params = new ArrayList<UIViewParameter>();
+            List<UIComponent> children = metadataFacet.getChildren();
+            int len = children.size();
+            for (int i = 0; i < len; i++) {
+                UIComponent c = children.get(i);
+                if (c instanceof UIViewParameter) {
+                    params.add((UIViewParameter) c);
+                }
+            }
+        }
+        
+        return params;
     }
 }

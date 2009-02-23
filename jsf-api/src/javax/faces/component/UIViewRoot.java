@@ -154,17 +154,6 @@ public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------------ Manifest Constants
 
-    /**
-     * <p class="changed_added_2_0">The value of this constant is used as the key in the
-     * component attribute map, the value for which is a
-     * <code>java.beans.BeanInfo</code> implementation describing the view
-     * metadata.  This <code>BeanInfo</code> is known as the 
-     * <em>view metadata BeanInfo</em>.</p>
-     *
-     * @since 2.0
-     */
-    public static final String METADATA_BEANINFO_KEY = "javax.faces.component.VIEW_METADATA_BEANINFO_KEY";
-
     public static final String METADATA_FACET_NAME = "javax_faces_metadata";
     
     /**
