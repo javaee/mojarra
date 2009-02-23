@@ -99,6 +99,7 @@ public class ViewParametersTestCase extends AbstractTestCase {
     public void testViewParameters() throws Exception {
 
         doTestExtensionMapped(0);
+        doTestExtensionMapped(1);
         
     }
     
