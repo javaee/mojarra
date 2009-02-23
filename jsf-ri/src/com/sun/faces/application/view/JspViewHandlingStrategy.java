@@ -43,6 +43,7 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.webapp.pdl.ViewMetadata;
 import javax.faces.application.Resource;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -82,10 +83,18 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * <p>
+     * Not supported in JSP-based views.
+     * </p>
+     *
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)
+     */
     @Override
-    public BeanInfo getViewMetadata(FacesContext context, String viewId) {
+    public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
         throw new UnsupportedOperationException();
     }
+
     
     /**
      * <p>
