@@ -58,7 +58,6 @@ import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
 import com.sun.faces.facelets.tag.ui.UIDebug;
-import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
@@ -624,18 +623,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             LOGGER.log(Level.SEVERE, sb.toString(), e);
         }
 
-        // handle dev response
-        if (associate.isDevModeEnabled() && !context.getResponseComplete()) {
-            ExternalContext extContext = context.getExternalContext();
-            if (!extContext.isResponseCommitted()) {
-                extContext.responseReset();
-                extContext.setResponseContentType("text/html; charset=UTF-8");
-                Writer w = extContext.getResponseOutputWriter();
-                DevTools.debugHtml(w, context, e);
-                w.flush();
-                context.responseComplete();
-            }
-        } else if (e instanceof RuntimeException) {
+        if (e instanceof RuntimeException) {
             throw (RuntimeException) e;
         } else if (e instanceof IOException) {
             throw (IOException) e;

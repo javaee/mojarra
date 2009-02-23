@@ -37,6 +37,7 @@
 package com.sun.faces.renderkit;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +56,7 @@ import javax.faces.component.behavior.BehaviorContext;
 import javax.faces.component.behavior.BehaviorHint;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.ExternalContext;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -62,6 +64,7 @@ import javax.faces.render.ResponseStateManager;
 import javax.faces.render.Renderer;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
@@ -957,6 +960,32 @@ public class RenderKitUtils {
             }
         }
 
+    }
+
+    public static  void renderHtmlErrorPage(FacesContext ctx, FacesException fe) {
+
+        ExternalContext extContext = ctx.getExternalContext();
+        if (!extContext.isResponseCommitted()) {
+            extContext.responseReset();
+            extContext.setResponseContentType("text/html; charset=UTF-8");
+            extContext.setResponseStatus(500);
+            try {
+                Writer w = extContext.getResponseOutputWriter();
+                DevTools.debugHtml(w, ctx, fe.getCause());
+                w.flush();
+            } catch (IOException ioe) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               "Unable to generate Facelets error page.",
+                               ioe);
+                }
+            }
+            ctx.responseComplete();
+        } else {
+            LOGGER.log(Level.WARNING,
+                       "Unable to generate Facelets error page as the response has already been committed.");
+        }
+        
     }
 
 

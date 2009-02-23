@@ -80,26 +80,27 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
  */
 final class MetaRulesetImpl extends MetaRuleset {
 
-    private final static WeakHashMap metadata = new WeakHashMap();
-    
-    private final static Logger log = FacesLogger.FACELETS_META.getLogger();
+    private final static Logger LOGGER = FacesLogger.FACELETS_META.getLogger();
+    private final static WeakHashMap<Class, MetadataTarget> metadata =
+          new WeakHashMap<Class, MetadataTarget>();
 
     private final Tag tag;
-
     private final Class type;
+    private final Map<String,TagAttribute> attributes;
+    private final List<Metadata> mappers;
+    private final List<MetaRule> rules;
 
-    private final Map attributes;
 
-    private final List mappers;
+    // ------------------------------------------------------------ Constructors
 
-    private final List rules;
 
-    public MetaRulesetImpl(Tag tag, Class type) {
+    public MetaRulesetImpl(Tag tag, Class<?> type) {
+
         this.tag = tag;
         this.type = type;
-        this.attributes = new HashMap();
-        this.mappers = new ArrayList();
-        this.rules = new ArrayList();
+        this.attributes = new HashMap<String,TagAttribute>();
+        this.mappers = new ArrayList<Metadata>();
+        this.rules = new ArrayList<MetaRule>();
 
         // setup attributes
         TagAttribute[] attrs = this.tag.getAttributes().getAll();
@@ -109,40 +110,107 @@ final class MetaRulesetImpl extends MetaRuleset {
 
         // add default rules
         this.rules.add(BeanPropertyTagRule.Instance);
+
     }
 
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public MetaRuleset ignore(String attribute) {
+
         Util.notNull("attribute", attribute);
         this.attributes.remove(attribute);
         return this;
+
     }
 
+
     public MetaRuleset alias(String attribute, String property) {
+
         Util.notNull("attribute", attribute);
         Util.notNull("property", property);
-        TagAttribute attr = (TagAttribute) this.attributes.remove(attribute);
+        TagAttribute attr = this.attributes.remove(attribute);
         if (attr != null) {
             this.attributes.put(property, attr);
         }
         return this;
+
     }
 
     public MetaRuleset add(Metadata mapper) {
+
         Util.notNull("mapper", mapper);
         if (!this.mappers.contains(mapper)) {
             this.mappers.add(mapper);
         }
         return this;
+
     }
 
     public MetaRuleset addRule(MetaRule rule) {
+
         Util.notNull("rule", rule);
         this.rules.add(rule);
         return this;
+
     }
 
-    private final MetadataTarget getMetadataTarget() {
-        MetadataTarget meta = (MetadataTarget) metadata.get(type);
+
+     public Metadata finish() {
+
+        if (!this.attributes.isEmpty()) {
+            if (this.rules.isEmpty()) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    for (Iterator<TagAttribute> itr = this.attributes.values().iterator(); itr.hasNext(); ) {
+                        LOGGER.severe(itr.next() + " Unhandled by MetaTagHandler for type "+this.type.getName());
+                    }
+                }
+            } else {
+                MetadataTarget target = this.getMetadataTarget();
+                // now iterate over attributes
+                int ruleEnd = this.rules.size() - 1;
+                for (Map.Entry<String,TagAttribute> entry : attributes.entrySet()) {
+                    Metadata data = null;
+                    int i = ruleEnd;
+                    while (data == null && i >= 0) {
+                        MetaRule rule = this.rules.get(i);
+                        data = rule.applyRule(entry.getKey(), entry.getValue(), target);
+                        i--;
+                    }
+                    if (data == null) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.severe(entry.getValue() + " Unhandled by MetaTagHandler for type "+this.type.getName());
+                        }
+                    } else {
+                        this.mappers.add(data);
+                    }
+                }
+            }
+        }
+
+        if (this.mappers.isEmpty()) {
+            return NONE;
+        } else {
+            return new MetadataImpl(this.mappers.toArray(new Metadata[this.mappers.size()]));
+        }
+
+    }
+
+    public MetaRuleset ignoreAll() {
+
+        this.attributes.clear();
+        return this;
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+    
+    private MetadataTarget getMetadataTarget() {
+
+        MetadataTarget meta = metadata.get(type);
         if (meta == null) {
             try {
                 meta = new MetadataTargetImpl(type);
@@ -153,59 +221,17 @@ final class MetaRulesetImpl extends MetaRuleset {
             metadata.put(type, meta);
         }
         return meta;
+
     }
 
-    public Metadata finish() {
-        if (!this.attributes.isEmpty()) {
-            if (this.rules.isEmpty()) {
-                if (log.isLoggable(Level.SEVERE)) {
-                    for (Iterator itr = this.attributes.values().iterator(); itr.hasNext(); ) {
-                        log.severe(itr.next() + " Unhandled by MetaTagHandler for type "+this.type.getName());
-                    }
-                }
-            } else {
-                MetadataTarget target = this.getMetadataTarget();
-                // now iterate over attributes
-                Map.Entry entry;
-                MetaRule rule;
-                Metadata data;
-                int ruleEnd = this.rules.size() - 1;
-                for (Iterator itr = this.attributes.entrySet().iterator(); itr.hasNext(); ) {
-                    entry = (Map.Entry) itr.next();
-                    data = null;
-                    int i = ruleEnd;
-                    while (data == null && i >= 0) {
-                        rule = (MetaRule) this.rules.get(i);
-                        data = rule.applyRule((String) entry.getKey(), (TagAttribute) entry.getValue(), target);
-                        i--;
-                    }
-                    if (data == null) {
-                        if (log.isLoggable(Level.SEVERE)) {
-                            log.severe(entry.getValue() + " Unhandled by MetaTagHandler for type "+this.type.getName());
-                        }
-                    } else {
-                        this.mappers.add(data);
-                    }
-                }
-            }
-        }
-        
-        if (this.mappers.isEmpty()) {
-            return NONE;
-        } else {
-            return new MetadataImpl((Metadata[]) this.mappers
-                .toArray(new Metadata[this.mappers.size()]));
-        }
-    }
 
-    public MetaRuleset ignoreAll() {
-        this.attributes.clear();
-        return this;
-    }
     
     private final static Metadata NONE = new Metadata() {
+
         public void applyMetadata(FaceletContext ctx, Object instance) {
             // do nothing
         }
+
     };
+
 }

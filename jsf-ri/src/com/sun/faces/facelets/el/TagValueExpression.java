@@ -167,6 +167,6 @@ public final class TagValueExpression extends ValueExpression implements
     }
 
     public String toString() {
-        return this.attr + ": " + this.orig;
+        return this.attr;
     }
 }
