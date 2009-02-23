@@ -43,13 +43,20 @@ package javax.faces.component;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorContext;
+import javax.faces.component.behavior.BehaviorHint;
 import javax.faces.component.behavior.BehaviorHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.event.BehaviorEvent;
 
 /**
  * <p class="changed_added_2_0">
@@ -96,51 +103,66 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 	@SuppressWarnings("serial")
 	public static class TestBehavior extends Behavior implements Serializable {
 
-		private static int sequence = 0;
-		
-		private final int id;
-		
-		public TestBehavior() {
-			id=sequence++;
-		}
+            private static final Set<BehaviorHint> HINTS =
+            Collections.unmodifiableSet(EnumSet.of(BehaviorHint.SUBMITTING));
 
-		@Override
-		public String getRendererType() {
-			return TEST_FAMILY;
-		}
+            private static int sequence = 0;
 		
-		/* (non-Javadoc)
-		 * @see java.lang.Object#hashCode()
-		 */
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + id;
-			return result;
-		}
+            private final int id;
+		
+            public TestBehavior() {
+                id=sequence++;
+            }
 
-		/* (non-Javadoc)
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			TestBehavior other = (TestBehavior) obj;
-			if (id != other.id)
-				return false;
-			return true;
-		}
+            @Override
+            public String getRendererType() {
+                return TEST_FAMILY;
+            }
 
-		@Override
-		public String toString() {
-			return "Behavior #"+id;
-		}
+            @Override
+            public Set<BehaviorHint> getHints() {
+                return HINTS;
+            }
+
+            @Override
+            public void broadcast(BehaviorEvent event) {
+            }
+
+            @Override
+            public void decode(FacesContext context, UIComponent component) {
+            }
+
+            @Override
+            public String getScript(BehaviorContext bContext) {
+                return null;
+            }
+
+            @Override
+            public int hashCode() {
+                final int prime = 31;
+                int result = 1;
+                result = prime * result + id;
+                return result;
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                if (this == obj)
+                    return true;
+                if (obj == null)
+                    return false;
+                if (getClass() != obj.getClass())
+                    return false;
+                TestBehavior other = (TestBehavior) obj;
+                if (id != other.id)
+                    return false;
+                return true;
+            }
+
+            @Override
+            public String toString() {
+                return "Behavior #"+id;
+            }
 		
 	}
 	
@@ -267,22 +289,6 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 		assertEquals(ONTEST, holder.getDefaultEventName());
 	}
 
-	/**
-	 * Test method for {@link javax.faces.component.UIComponentBase#getEventsWhatAreSet()}.
-	 */
-	public void testGetEventsWhatAreSet() {
-		BehaviorComponent comp = new BehaviorComponent();
-		// Cast component to the interface, to be sure about method definition.
-		BehaviorHolder holder = (BehaviorHolder) comp;
-		holder.addBehavior(ONCLICK, new TestBehavior());
-		holder.addBehavior(ONCLICK, new TestBehavior());
-		holder.addBehavior(ONCHANGE, new TestBehavior());
-		Collection<String> eventsWhatAreSet = comp.getEventsWhatAreSet();
-		assertEquals(2, eventsWhatAreSet.size());
-		assertTrue(eventsWhatAreSet.contains(ONCLICK));
-		assertTrue(eventsWhatAreSet.contains(ONCHANGE));
-	}
-	
 	public static <T> Set<T> set(T... ts) 
 	  {
 	    return new HashSet<T>(Arrays.asList(ts));
