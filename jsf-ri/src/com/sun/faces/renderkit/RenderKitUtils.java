@@ -319,40 +319,41 @@ public class RenderKitUtils {
 
         final String handlerName = "onclick";
         final String behaviorEventName = "onclick";
-
         ResponseWriter writer = context.getResponseWriter();
-
         String userClickHandler = getUserHandler(component, handlerName);
 
+        // No behaviors - just render the user handler
         if ((null == behaviors) || (behaviors.isEmpty())) {
             writer.writeAttribute(handlerName, userClickHandler, null);
             return;
         }
 
-        // If we've got some behavior, we assume that we'll need to
-        // build up a call to jsf.chain().  Hard to know how big of
-        // a buidler to allocate.
-        StringBuilder builder = new StringBuilder(100);
+        String handler = null;
 
-        builder.append("jsf.util.chain(this,event,");
+        if ((behaviors.size() == 1) && (userClickHandler == null)) {
+            // We special case the case where we have a single
+            // behavior and no user script - no chaining in this case.
+            handler = getSingleBehaviorHandler(context, 
+                                               component,
+                                               behaviors.get(0),
+                                               params,
+                                               behaviorEventName);
+        }
+        else {
 
-        appendScriptToChain(builder, userClickHandler);
-        boolean submitting = appendBehaviorsToChain(builder,
-                                                    context,
-                                                    component, 
-                                                    behaviors, 
-                                                    behaviorEventName,
-                                                    params);
+            // Potentially have multiple scripts - build up call to 
+            // jsf.util.chain().
+            handler = getChainedBehaviorHandler(context,
+                                                component,
+                                                behaviors,
+                                                params,
+                                                behaviorEventName,
+                                                userClickHandler);
+        }
 
-        builder.append(")");
 
 
-        // If we've got a "submitting" behavior, return false to
-        // prevent the button from submitting itself.
-        if (submitting)
-            builder.append(";return false");
-
-        writer.writeAttribute(handlerName, builder.toString(), null);
+        writer.writeAttribute(handlerName, handler, null);
     }
 
     public static String prefixAttribute(final String attrName,
@@ -1060,11 +1061,10 @@ public class RenderKitUtils {
         assert(null != behaviors);
         assert(!behaviors.isEmpty());
 
-        BehaviorContext bContext = BehaviorContext.createBehaviorContext(context,
-                                                                         component,
-                                                                         behaviorEventName,
-                                                                         null,
-                                                                         params);
+        BehaviorContext bContext = createBehaviorContext(context,
+                                                         component,
+                                                         behaviorEventName,
+                                                         params);
 
         boolean submitting = false;
 
@@ -1073,9 +1073,9 @@ public class RenderKitUtils {
             if ((script != null) && (script.length() > 0)) {
                 appendScriptToChain(builder, script);
 
-                if (behavior.getHints().contains(BehaviorHint.SUBMITTING)) {
+                if (isSubmitting(behavior)) {
                     submitting = true;
-                }
+               }
             }
         }
 
@@ -1099,6 +1099,78 @@ public class RenderKitUtils {
         return handler;
     }
 
+    // Chains together a number of Behavior scripts with a user handler
+    // script.
+    private static String getChainedBehaviorHandler(FacesContext context,
+                                                    UIComponent component,
+                                                    List<Behavior> behaviors,
+                                                    Collection<Behavior.Parameter> params,
+                                                    String behaviorEventName,
+                                                    String userHandler) {
+
+
+        // Hard to pre-compute builder initial capacity
+        StringBuilder builder = new StringBuilder(100);
+        builder.append("jsf.util.chain(this,event,");
+
+        appendScriptToChain(builder, userHandler);
+
+        boolean  submitting = appendBehaviorsToChain(builder,
+                                                     context,
+                                                     component, 
+                                                     behaviors, 
+                                                     behaviorEventName,
+                                                     params);
+    
+        builder.append(")");
+
+        // If we've got a "submitting" behavior, return false to
+        // prevent the button from submitting itself.
+        if (submitting)
+            builder.append(";return false");
+
+        return builder.toString();
+    }
+
+    // Returns the script for a single Behavior
+    private static String getSingleBehaviorHandler(FacesContext context,
+                                                   UIComponent component,
+                                                   Behavior behavior,
+                                                   Collection<Behavior.Parameter> params,
+                                                   String behaviorEventName) {
+
+        BehaviorContext bContext = createBehaviorContext(context,
+                                                         component,
+                                                         behaviorEventName,
+                                                         params);
+
+         String script = behavior.getScript(bContext);
+
+         // If we've got a submitting behavior script, we need to tack
+         // on "return false" to prevent button from submitting.
+         if ((script != null) && isSubmitting(behavior))
+             script = script +  ";return false";
+
+         return script;
+    }
+
+    // Creates a BehaviorContext with the specified properties.
+    private static BehaviorContext createBehaviorContext(FacesContext context,
+                                                         UIComponent component,
+                                                         String behaviorEventName,
+                                                         Collection<Behavior.Parameter> params) {
+
+    return BehaviorContext.createBehaviorContext(context,
+                                                 component,
+                                                 behaviorEventName,
+                                                 null,
+                                                 params);
+    }
+
+    // Tests whether the specified behavior is submitting
+    private static boolean isSubmitting(Behavior behavior) {
+        return behavior.getHints().contains(BehaviorHint.SUBMITTING);
+    }
 
     // ---------------------------------------------------------- Nested Classes
 
