@@ -53,7 +53,7 @@
 
   <behavior>
     <behavior-id>Joe</behavior-id>
-    <behavior-class>delcarativeajax.GreetingBehavior</behavior-class>
+    <behavior-class>declarativeajax.GreetBehavior</behavior-class>
   </behavior>
 
 </faces-config>

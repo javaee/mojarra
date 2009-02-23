@@ -50,6 +50,8 @@ import javax.faces.component.behavior.BehaviorContext;
  */
 public class GreetBehavior extends BehaviorBase implements Serializable {
 
+    public GreetBehavior() {};
+
     public GreetBehavior(String name) {
         this.name = name;
     }

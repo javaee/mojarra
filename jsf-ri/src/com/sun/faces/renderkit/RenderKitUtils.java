@@ -1063,6 +1063,7 @@ public class RenderKitUtils {
         BehaviorContext bContext = BehaviorContext.createBehaviorContext(context,
                                                                          component,
                                                                          behaviorEventName,
+                                                                         null,
                                                                          params);
 
         boolean submitting = false;

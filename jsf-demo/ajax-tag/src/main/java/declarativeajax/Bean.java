@@ -52,6 +52,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.model.ManagedBean;
 import javax.faces.model.SessionScoped;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -72,7 +73,7 @@ import java.util.logging.Logger;
 
 @ManagedBean(name="bean")
 @SessionScoped
-public class Bean {
+public class Bean implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger("declarativeajax");
     

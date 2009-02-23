@@ -116,9 +116,20 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
         Collection<String> render = ajaxBehavior.getRender(context);
         String onevent = ajaxBehavior.getOnEvent(context);
         String onerror = ajaxBehavior.getOnError(context);
+        String sourceId = behaviorContext.getSourceId();
         Collection<Behavior.Parameter> params = behaviorContext.getParameters();
 
-        ajaxCommand.append("mojarra.ab(this,event,'");
+        ajaxCommand.append("mojarra.ab(");
+
+        if (sourceId == null) {
+            ajaxCommand.append("this");
+        } else {
+            ajaxCommand.append("'");
+            ajaxCommand.append(sourceId);
+            ajaxCommand.append("'");
+        }
+
+        ajaxCommand.append(",event,'");
         ajaxCommand.append(eventName);
         ajaxCommand.append("',");
 

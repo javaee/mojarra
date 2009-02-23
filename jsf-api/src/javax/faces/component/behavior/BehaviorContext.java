@@ -59,6 +59,9 @@ public abstract class BehaviorContext {
      * <code>Behavior</code> is attached.
      * @param eventName the name of the behavior event to which the
      * <code>Behavior</code> is attached.
+     * @param sourceId the id to use as the Behavior's "source".
+     * @param parameters the collection of parameters for submitting
+     * Behaviors to include in the request.
      @ @return a <code>BehaviorContext</code> instance configured with the
      * provided values.
      * @throws NullPointerException if <code>context</code>,
@@ -68,8 +71,10 @@ public abstract class BehaviorContext {
     public static BehaviorContext createBehaviorContext(FacesContext context,
                                                         UIComponent component,
                                                         String eventName,
+                                                        String sourceId,
                                                         Collection<Behavior.Parameter> parameters) {
-        return new BehaviorContextImpl(context, component, eventName, parameters);
+
+        return new BehaviorContextImpl(context, component, eventName, sourceId, parameters);
     }
 
     /**
@@ -89,6 +94,26 @@ public abstract class BehaviorContext {
     abstract public String getEventName();
 
     /**
+     * <p>Returns an id for use as the Behavior source.</p>
+     * <p>Behavior implementations that submit back to the Faces lifecycle
+     * are required to identify which component triggered the
+     * Behavior-initiated request via the "javax.faces.behavior.source"
+     * request parameter.  In most cases, th source id can be
+     * trivially derived from the element to which the Behavior's
+     * client-side script is attached - ie. the source id is typically
+     * the id of this element.  However, in components which produce
+     * more complex content, the Behavior script may not be able to
+     * determine the correct id to use for the javax.faces.behavior.source
+     * value.  The BehaviorContext.getSourceId() method allows the component 
+     * to pass this information into the Behavior.getScript()
+     * implementation.</p>
+     *
+     * @return the id for the Behavior's script to use as the "source", or
+     * null if the Behavior's script can identify the source from the DOM.
+     */
+    abstract public String getSourceId();
+
+    /**
      * <p>Returns parameters that "submitting" Behavior implementations
      * should include when posting back data into the Faces lifecycle.</p>
      * <p>If no parameters are specified, returns an empty (non-null)
@@ -102,11 +127,13 @@ public abstract class BehaviorContext {
         private FacesContext context;
         private UIComponent component;
         private String eventName;
+        private String sourceId;
         private Collection<Behavior.Parameter> parameters;
 
         private BehaviorContextImpl(FacesContext context,
                                     UIComponent component,
                                     String eventName,
+                                    String sourceId,
                                     Collection<Behavior.Parameter> parameters) {
 
             if (null == context) {
@@ -124,6 +151,7 @@ public abstract class BehaviorContext {
             this.context = context;
             this.component = component;
             this.eventName = eventName;
+            this.sourceId = sourceId;
 
             this.parameters =  (parameters == null) ? 
                                    Collections.<Behavior.Parameter>emptyList() : 
@@ -143,6 +171,11 @@ public abstract class BehaviorContext {
         @Override
         public String getEventName() {
             return eventName;
+        }
+
+        @Override
+        public String getSourceId() {
+            return sourceId;
         }
 
         @Override

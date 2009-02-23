@@ -42,6 +42,7 @@ import java.io.IOException;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
@@ -90,7 +91,8 @@ public class GreetBehaviorHandler extends TagHandler {
             }
 
             String name = (this.name != null) ? this.name.getValue() : null;
-            bHolder.addBehavior(event, new GreetBehavior(name));
+            Behavior greet = ctx.getFacesContext().getApplication().createBehavior("Joe");
+            bHolder.addBehavior(event, greet);
         }
     }
 }
