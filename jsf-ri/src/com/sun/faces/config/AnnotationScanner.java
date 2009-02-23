@@ -59,12 +59,14 @@ import java.util.logging.Logger;
 import java.lang.annotation.Annotation;
 
 import javax.faces.FacesException;
-import javax.faces.convert.FacesConverter;
-import javax.faces.validator.FacesValidator;
-import javax.faces.render.FacesRenderer;
-import javax.faces.model.ManagedBean;
-import javax.faces.event.NamedEvent;
 import javax.faces.component.FacesComponent;
+import javax.faces.component.behavior.FacesBehavior;
+import javax.faces.convert.FacesConverter;
+import javax.faces.event.NamedEvent;
+import javax.faces.model.ManagedBean;
+import javax.faces.render.FacesBehaviorRenderer;
+import javax.faces.render.FacesRenderer;
+import javax.faces.validator.FacesValidator;
 import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
@@ -75,6 +77,8 @@ import com.sun.faces.util.Util;
  * classes contained within the web application for any of the known
  * Faces configuration Annotations:
  * <ul>
+ *  <li>javax.faces.component.FacesBehavior</li>
+ *  <li>javax.faces.render.FacesBehaviorRenderer</li>
  *  <li>javax.faces.component.FacesComponent</li>
  *  <li>javax.faces.convert.FacesConverter</li>
  *  <li>javax.faces.validator.FacesValidator</li>
@@ -95,24 +99,28 @@ public class AnnotationScanner {
     private static final Set<Class<? extends Annotation>> FACES_ANNOTATION_TYPE;
 
     static {
-        HashSet<String> annotations = new HashSet<String>(6, 1.0f);
+        HashSet<String> annotations = new HashSet<String>(8, 1.0f);
         Collections.addAll(annotations,
                            "Ljavax/faces/component/FacesComponent;",
                            "Ljavax/faces/convert/FacesConverter;",
                            "Ljavax/faces/validator/FacesValidator;",
                            "Ljavax/faces/render/FacesRenderer;",
                            "Ljavax/faces/model/ManagedBean;",
-                           "Ljavax/faces/event/NamedEvent;");
+                           "Ljavax/faces/event/NamedEvent;",
+                           "Ljavax/faces/component/behavior/FacesBehavior;",
+                           "Ljavax/faces/render/FacesBehaviorRenderer;");
         FACES_ANNOTATIONS = Collections.unmodifiableSet(annotations);
         HashSet<Class<? extends Annotation>> annotationInstances =
-              new HashSet<Class<? extends Annotation>>(6, 1.0f);
+              new HashSet<Class<? extends Annotation>>(8, 1.0f);
         Collections.addAll(annotationInstances,
                            FacesComponent.class,
                            FacesConverter.class,
                            FacesValidator.class,
                            FacesRenderer.class,
                            ManagedBean.class,
-                           NamedEvent.class);
+                           NamedEvent.class,
+                           FacesBehavior.class,
+                           FacesBehaviorRenderer.class);
         FACES_ANNOTATION_TYPE = Collections.unmodifiableSet(annotationInstances);
     }
 

@@ -232,6 +232,7 @@ public class AnnotationManager {
               new ComponentConfigHandler(),
               new ConverterConfigHandler(),
               new ValidatorConfigHandler(),
+              new BehaviorConfigHandler(),
               new RenderKitConfigHandler(),
               new ManagedBeanConfigHandler(),
               new NamedEventConfigHandler()

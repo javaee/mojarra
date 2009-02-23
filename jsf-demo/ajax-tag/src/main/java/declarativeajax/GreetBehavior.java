@@ -42,12 +42,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.BehaviorBase;
 import javax.faces.component.behavior.BehaviorContext;
+import javax.faces.component.behavior.FacesBehavior;
 
 
 /**
  * <p>A trivial Behavior implementation that shows a greeting to the
  * user when invoked.</p>
  */
+@FacesBehavior(value="Joe")
 public class GreetBehavior extends BehaviorBase implements Serializable {
 
     public GreetBehavior() {};
