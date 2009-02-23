@@ -137,7 +137,7 @@ public class AjaxBehavior extends BehaviorBase implements Serializable {
 
     
     /**
-     * <p class="changed_added_2_0">Return the Faces event associated with
+     * <p class="changed_added_2_0">Return the event associated with
      * this instance.</p>
      *
      * @since 2.0
