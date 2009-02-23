@@ -48,18 +48,18 @@ import junit.framework.TestSuite;
 /**
  * Test cases for Facelets functionality
  */
-public class GearyCompositeTestCase extends AbstractTestCase {
+public class NamingContainerInCompositeComponentTestCase extends AbstractTestCase {
 
 
     // --------------------------------------------------------------- Test Init
 
 
-    public GearyCompositeTestCase() {
+    public NamingContainerInCompositeComponentTestCase() {
         this("FaceletsTestCase");
     }
 
 
-    public GearyCompositeTestCase(String name) {
+    public NamingContainerInCompositeComponentTestCase(String name) {
         super(name);
     }
 
@@ -76,7 +76,7 @@ public class GearyCompositeTestCase extends AbstractTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(GearyCompositeTestCase.class));
+        return (new TestSuite(NamingContainerInCompositeComponentTestCase.class));
     }
 
 
