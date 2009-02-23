@@ -53,7 +53,8 @@ import javax.faces.context.FacesContext;
 public abstract class BehaviorContext {
 	
     /**
-     * Creates a BehaviorContext instance.
+     * <p class="changed_added_2_0">Creates a BehaviorContext instance.</p>
+     *
      * @param context the <code>FacesContext</code> for the current request.
      * @param component the component instance to which the 
      * <code>Behavior</code> is attached.
@@ -62,11 +63,13 @@ public abstract class BehaviorContext {
      * @param sourceId the id to use as the Behavior's "source".
      * @param parameters the collection of parameters for submitting
      * Behaviors to include in the request.
-     @ @return a <code>BehaviorContext</code> instance configured with the
+     * @return a <code>BehaviorContext</code> instance configured with the
      * provided values.
      * @throws NullPointerException if <code>context</code>,
      * <code>component</code> or <code>eventName</code>
      *  is <code>null</code>
+     *
+     * @since 2.0
      */
     public static BehaviorContext createBehaviorContext(FacesContext context,
                                                         UIComponent component,
@@ -78,46 +81,58 @@ public abstract class BehaviorContext {
     }
 
     /**
-     * <p>Returns the FacesContext for the current request.</p>
+     * <p class="changed_added_2_0">Returns the {@link FacesContext} for 
+     * the current request.</p>
+     *
+     * @since 2.0
      */
     abstract public FacesContext getFacesContext();
 
     /**
-     * <p>Returns the component that is requesting the Behavior script.</p>
+     * <p class="changed_added_2_0">Returns the {@link UIComponent} that is 
+     * requesting the {@link Behavior} script.</p>
+     *
+     * @since 2.0
      */
     abstract public UIComponent getComponent();
 
     /**
-     * <p>Returns the name of the behavior event for which the Behavior
-     * script is being requested. </p>
+     * <p class="changed_added_2_0">Returns the name of the behavior event 
+     * for which the Behavior script is being requested. </p>
+     *
+     * @since 2.0
      */
     abstract public String getEventName();
 
     /**
-     * <p>Returns an id for use as the Behavior source.</p>
-     * <p>Behavior implementations that submit back to the Faces lifecycle
-     * are required to identify which component triggered the
-     * Behavior-initiated request via the "javax.faces.behavior.source"
-     * request parameter.  In most cases, th source id can be
-     * trivially derived from the element to which the Behavior's
-     * client-side script is attached - ie. the source id is typically
-     * the id of this element.  However, in components which produce
-     * more complex content, the Behavior script may not be able to
+     * <p class="changed_added_2_0">Returns an id for use as the 
+     * {@link Behavior} source.  Behavior implementations that submit back 
+     * to the Faces lifecycle are required to identify which component 
+     * triggered the Behavior-initiated request via the 
+     * <code>javax.faces.behavior.source</code> request parameter.  In 
+     * most cases, th source id can be trivially derived from the element 
+     * to which the Behavior's client-side script is attached - ie. the 
+     * source id is typically the id of this element.  However, in components 
+     * which produce more complex content, the Behavior script may not be able to
      * determine the correct id to use for the javax.faces.behavior.source
-     * value.  The BehaviorContext.getSourceId() method allows the component 
-     * to pass this information into the Behavior.getScript()
+     * value.  The {@link BehaviorContext#getSourceId} method allows the component 
+     * to pass this information into the {@link Behavior#getScript}
      * implementation.</p>
      *
      * @return the id for the Behavior's script to use as the "source", or
      * null if the Behavior's script can identify the source from the DOM.
+     *
+     * @since 2.0
      */
     abstract public String getSourceId();
 
     /**
-     * <p>Returns parameters that "submitting" Behavior implementations
-     * should include when posting back data into the Faces lifecycle.</p>
-     * <p>If no parameters are specified, returns an empty (non-null)
-     * collection.</p>
+     * <p class="changed_added_2_0">Returns parameters that "submitting" 
+     * {@link Behavior} implementations should include when posting back data 
+     * into the Faces lifecycle.  If no parameters are specified, this method
+     * returns an empty (non-null) collection.</p>
+     *
+     * @since 2.0
      */
     abstract public Collection<Behavior.Parameter> getParameters();
 
