@@ -38,6 +38,8 @@ package javax.faces.webapp.pdl;
 
 import java.util.Collection;
 import javax.faces.component.UIViewParameter;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -45,6 +47,7 @@ import javax.faces.component.UIViewParameter;
  */
 public abstract class ViewMetadata {
     
+    public abstract UIViewRoot createMetadataView(FacesContext context);
     
     /**
      *
@@ -56,7 +59,7 @@ public abstract class ViewMetadata {
      *
      * <p class="changed_added_2_0"></p>
      */
-    public abstract Collection<UIViewParameter> createViewParameters();
+    public abstract Collection<UIViewParameter> getViewParameters(UIViewRoot root);
 
 
 }
