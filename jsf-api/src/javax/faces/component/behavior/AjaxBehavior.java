@@ -60,9 +60,13 @@ import javax.faces.event.FacesEvent;
 
 /**
  * <p class="changed_added_2_0">An instance of this class is added
- * to a component's attribute <code>Map</code> to cause the rendering 
- * of the JavaScript <code>jsf.ajax.request</code> function call
- * when the component is rendered.</p>
+ * as a {@link Behavior} to a component using the 
+ * {@link javax.faces.component.behavior.BehaviorHolder#addBehavior} 
+ * contract that components implement.  The presence of this 
+ * {@link Behavior} will cause the rendering of JavaScript that 
+ * produces an <code>Ajax</code> request using the 
+ * specification public JavaScript API when the component is 
+ * rendered.</p> 
  *
  * @since 2.0
  */
