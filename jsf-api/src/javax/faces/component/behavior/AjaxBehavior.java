@@ -106,6 +106,31 @@ public class AjaxBehavior extends BehaviorBase implements Serializable {
     // ------------------------------------------------------------ Constructors
 
 
+    /**
+     * <p class="changed_added_2_0">Construct a new <code>AjaxBehavior</code> 
+     * instance from the specified parameters.</p>
+     *
+     * @param event the event associated with this behavior.  In most cases, this is 
+     * the event that triggered this behavior.
+     * @param onevent the JavaScript function name that will be used to identify the
+     * client callback function that should be run on the occurance
+     * of a client-side event. 
+     * @param onerror the JavaScript function name that will be used to identify
+     * the client callback function that should be run in the event of
+     * an error. 
+     * @param execute component identifiers that will be used to identify 
+     * components that should be processed during the <code>execute</code> 
+     * phase of the request processing lifecycle.
+     * @param render component identifiers that will be used to identify 
+     * components that should be processed during the <code>render</code> 
+     * phase of the request processing lifecycle.
+     * @param disabled the disabled status of this behavior. 
+     *
+     * @throws IllegalArgumentException if <code>component</code> is
+     *  <code>null</code>
+     *
+     * @since 2.0
+     */
     public AjaxBehavior(String event,
                         ValueExpression onevent,
                         ValueExpression onerror,
