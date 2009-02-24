@@ -185,6 +185,17 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     
 
     /**
+     * <p class="changed_added_2_0">The value of this constant is used as the attribute within
+     * the attributes map on the {@link UIComponent} to hold a map of default validators for
+     * a branch of the component tree. Each key in the map is a validator id and the value is a Boolean
+     * flag indicating whether the validator is being activated or deactivated for this branch of
+     * the component tree. Each activate validators get registered on any {@link EditableValueHolder}
+     * found in this branch of the component tree.</p>
+     */
+    public static final String DEFAULT_VALIDATOR_IDS_KEY = "javax.faces.component.DEFAULT_VALIDATOR_IDS";
+
+    
+    /**
      * Components within this base package are considered optimizable
      * with respect to attributes processing.
      */

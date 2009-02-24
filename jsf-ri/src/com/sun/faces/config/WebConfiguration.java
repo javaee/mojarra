@@ -218,7 +218,7 @@ public class WebConfiguration {
     private Map<WebContextInitParameter, String []> cachedListParams;
     
     public String [] getOptionValue(WebContextInitParameter param, String sep) {
-        String [] result = null;
+        String [] result;
         
         assert(null != cachedListParams);
         if (null == (result = cachedListParams.get(param))) {
@@ -771,6 +771,10 @@ public class WebConfiguration {
         DuplicateJARPattern(
             "com.sun.faces.duplicateJARPattern",
             ""
+        ),
+        ValidateEmptyFields(
+              "javax.faces.VALIDATE_EMPTY_FIELDS",
+              "auto"
         );
 
 

@@ -40,10 +40,19 @@
 
 package javax.faces.component;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -113,6 +122,9 @@ import javax.faces.validator.ValidatorException;
 
 public class UIInput extends UIOutput implements EditableValueHolder {
 
+    private static Logger LOGGER = Logger.getLogger("javax.faces.component",
+            "javax.faces.LogStrings");
+
     // ------------------------------------------------------ Manifest Constants
 
 
@@ -157,6 +169,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
     private Boolean emptyStringIsNull;
+
+    private Boolean validateEmptyFields;
+
+    private boolean defaultValidatorsProcessed;
 
     // ------------------------------------------------------------ Constructors
 
@@ -617,6 +633,20 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     // ----------------------------------------------------- UIComponent Methods
 
+
+    /**
+     * <p class="changed_modified_2_0">After encoding the component, add any default validators. Putting the logic in this
+     * method allows this service to be provided even for inputs that are added programmatically.</p>
+     */
+    @Override
+    public void encodeEnd(FacesContext context) throws IOException {
+        super.encodeEnd(context);
+        // QUESTION is there another dependable way to perform this only once?
+        if (!defaultValidatorsProcessed) {
+            addDefaultValidators(context);
+        }
+    }
+
     /**
      * <p>Specialized decode behavior on top of that provided by the
      * superclass.  In addition to the standard
@@ -1059,8 +1089,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             setValid(false);
         }
 
-        // If our value is valid and not empty, call all validators
-        if (isValid() && !isEmpty(newValue)) {
+        // If our value is valid and not empty or empty w/ validate empty fields enabled, call all validators
+        if (isValid() && (!isEmpty(newValue) || validateEmptyFields(context))) {
             if (this.validators != null) {
                 for (Validator validator : this.validators) {
                     try {
@@ -1129,7 +1159,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
     }
 
-    private static boolean isEmpty(Object value) {
+    public static boolean isEmpty(Object value) {
 
         if (value == null) {
             return (true);
@@ -1261,7 +1291,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[10];
+            values = new Object[12];
         }
 
         values[0] = super.saveState(context);
@@ -1274,6 +1304,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         values[7] = immediate;
         values[8] = saveAttachedState(context, validators);
         values[9] = emptyStringIsNull;
+        values[10] = validateEmptyFields;
+        values[11] = defaultValidatorsProcessed;
         return (values);
 
     }
@@ -1309,6 +1341,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         emptyStringIsNull = (Boolean) values[9];
+        validateEmptyFields = (Boolean) values[10];
+        defaultValidatorsProcessed = (Boolean) values[11];
 
     }
 
@@ -1382,6 +1416,121 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         return emptyStringIsNull;
         
+    }
+
+    private boolean validateEmptyFields(FacesContext ctx) {
+
+        if (validateEmptyFields == null) {
+            String val = ctx.getExternalContext().getInitParameter("javax.faces.VALIDATE_EMPTY_FIELDS");
+            if (val == null || val.equals("auto")) {
+                validateEmptyFields = true;
+                try {
+                    Thread.currentThread().getContextClassLoader().loadClass("javax.validation.Validation");
+                } catch (ClassNotFoundException e1) {
+                    try {
+                        Class.forName("javax.validation.Validation");
+                    } catch (ClassNotFoundException e2) {
+                        validateEmptyFields = false;
+                    }
+                }
+            }
+            else {
+                validateEmptyFields = Boolean.valueOf(val);
+            }
+        }
+
+        return validateEmptyFields;
+
+    }
+
+    /**
+     * <p class="changed_added_2_0">Append the default validators below any locally defined validators.
+     * The validator is created in the normal way using the <code>Application</code> object. If a validator
+     * with the same validator id already exists on the component, then that default validator is skipped.
+     * Before creating the validator, consult the list of exclusions. An exclusion is defined
+     * by a validator having a "disabled" attribute which resolves to true.</p>
+     */
+    protected void addDefaultValidators(FacesContext context) {
+        
+        Set<String> exclusions;
+        Validator[] validators = getValidators();
+        if (validators.length != 0) {
+            exclusions = new HashSet<String>(validators.length, 1.0f);
+            for (Validator v : validators) {
+                exclusions.add(v.getClass().getName());
+            }
+        } else {
+            exclusions = Collections.emptySet();
+        }
+
+        // first add the registered default validators and then turn them off based on switches in tree
+        List<String> defaultValidatorIds = new ArrayList<String>();
+        Map<String,String> defaultValidatorInfo = context.getApplication().getDefaultValidatorInfo();
+        if (!defaultValidatorInfo.isEmpty()) {
+            for (Map.Entry<String,String> valInfo : defaultValidatorInfo.entrySet()) {
+                defaultValidatorIds.add(valInfo.getKey());
+            }
+        }
+
+        collectDefaultValidatorIds(defaultValidatorIds, this);
+
+        for (String validatorId : defaultValidatorIds) {
+            String defaultValClassName = defaultValidatorInfo.get(validatorId);
+            if (exclusions.contains(defaultValClassName)) {
+                continue;
+            }
+
+            addValidator(context.getApplication().createValidator(validatorId));
+        }
+    }
+
+
+    /**
+     * <p>Work upwards through the component hierarchy and collect any default validators that have been defined.</p>
+     */
+    private void collectDefaultValidatorIds(List<String> defaultValidatorIds, UIComponent component) {
+        Object branchState = component.getAttributes().get(UIComponent.DEFAULT_VALIDATOR_IDS_KEY);
+
+        // check for the "resolved" list for this branch
+        // NOTE we could use a separate key for the resolved list to avoid type hunting
+        if (branchState instanceof List) {
+            if (defaultValidatorIds.isEmpty()) {
+                defaultValidatorIds.addAll((List<String>) branchState);
+            }
+            else {
+                for (String validatorId : (List<String>) branchState) {
+                    if (!defaultValidatorIds.contains(validatorId)) {
+                        defaultValidatorIds.add(0, validatorId);
+                    }
+                }
+            }
+            return;
+        }
+
+        // process parent nodes first
+        if (component.getParent() != null) {
+            collectDefaultValidatorIds(defaultValidatorIds, component.getParent());
+        }
+
+        // collect any default validator ids registered at this branch point
+        if (branchState instanceof Map) {
+            Map<String, Boolean> validatorIdStates = (Map<String, Boolean>) branchState;
+            for (Map.Entry<String, Boolean> e : validatorIdStates.entrySet()) {
+                if (e.getValue()) {
+                    // validators nearer to input component take precendence
+                    // QUESTION if it already present, should we move it to the front?
+                    if (!defaultValidatorIds.contains(e.getKey())) {
+                        defaultValidatorIds.add(0, e.getKey());
+                    }
+                }
+                else {
+                    defaultValidatorIds.remove(e.getKey());
+                }
+            }
+        }
+
+        // make sure we never have to climb the mountain again (could we avoid creating new list if none added at this node?)
+        component.getAttributes().put(UIComponent.DEFAULT_VALIDATOR_IDS_KEY, new ArrayList<String>(defaultValidatorIds));
     }
 
 }

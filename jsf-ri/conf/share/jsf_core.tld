@@ -1467,6 +1467,46 @@ for <code>@NamedEvent</code>.</p>
 
     </tag>
 
+   <!--  retained for documentation migration
+    <tag>
+        <description><![CDATA[<p>
+
+                <span class="changed_added_2_0">
+            A validator that delegates the validation of the local value
+            to the Bean Validation API. The validationGroups attribute
+            serves as a filter that instructs the Bean Validation API which 
+            contraints to enforce. If there are any constraint violations
+            reported by Bean Validation, the value is considered invalid.
+
+         </p>]]>
+        </description>
+        <name>validateBean</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.BeanValidatorTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+             <description>
+                A comma-separated list of validation groups. A validation group
+                is a fully-qualified class name.
+            </description>
+            <name>validationGroups</name>
+            <required>false</required>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                BeanValidator.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.validator.BeanValidator</type>
+            </deferred-value>
+        </attribute>
+    </tag>
+    -->
+    
     <tag>
         <description><![CDATA[<p>
 
@@ -1501,6 +1541,31 @@ for <code>@NamedEvent</code>.</p>
             <name>binding</name>
             <deferred-value>
                 <type>javax.faces.validator.RegexValidator</type>
+            </deferred-value>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description><![CDATA[<p>
+
+                <span class="changed_added_2_0">
+            A validator that enforces the presence of a value. It has
+            the same affect as setting the required attribute on a UIInput
+            to true.
+
+         </p>]]>
+        </description>
+        <name>validateRequired</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.RequiredValidatorTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                RequiredValidator.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.validator.RequiredValidator</type>
             </deferred-value>
         </attribute>
     </tag>

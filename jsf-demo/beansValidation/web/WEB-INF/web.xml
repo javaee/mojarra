@@ -39,29 +39,46 @@
 <web-app version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-
-    <display-name>JavaServer Faces Guess Number Sample Application
-    </display-name>
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" >
+    
+    <display-name>JavaServer Faces "If Navigation" Sample Application</display-name>
     <description>
-        JavaServer Faces Guess Number Sample Application
+        JavaServer Faces "If Navigation" Sample Application
     </description>
-
+    <context-param>
+        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+        <param-value>false</param-value>
+    </context-param>
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>client</param-value>
+        <param-value>server</param-value>
     </context-param>
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
-
-    <jsp-config>
-        <jsp-property-group>
-            <url-pattern>*.jsp</url-pattern>
-            <is-xml>true</is-xml>
-        </jsp-property-group>
-    </jsp-config>
+    <context-param>
+        <param-name>facelets.REFRESH_PERIOD</param-name>
+        <param-value>2</param-value>
+    </context-param>
+    <context-param>
+        <param-name>facelets.DEVELOPMENT</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+        <param-value>.xhtml</param-value>
+    </context-param>
+    <context-param>
+        <description>
+            Set this flag to true if you want the JavaServer Faces
+            Reference Implementation to validate the XML in your
+            faces-config.xml resources against the DTD.  Default
+            value is false.
+        </description>
+        <param-name>com.sun.faces.validateXml</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
     <!-- Faces Servlet -->
     <servlet>
@@ -70,32 +87,9 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-
     <!-- Faces Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/guess/*</url-pattern>
+        <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
-
-    <security-constraint>
-        <!-- This security constraint illustrates how JSP pages 
-with JavaServer Faces components can be protected from
-being accessed without going through the Faces Servlet.
-The security constraint ensures that the Faces Servlet will
-be used or the pages will not be processed. -->
-        <display-name>Restrict access to JSP pages</display-name>
-        <web-resource-collection>
-            <web-resource-name>
-                Restrict access to JSP pages
-            </web-resource-name>
-            <url-pattern>/greeting.jsp</url-pattern>
-            <url-pattern>/response.jsp</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <description>
-                With no roles defined, no access granted
-            </description>
-        </auth-constraint>
-    </security-constraint>
-
 </web-app>

@@ -40,6 +40,7 @@
 
 package com.sun.faces.config.processor;
 
+import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.Verifier;
 import com.sun.faces.util.FacesLogger;
 import org.w3c.dom.Document;
@@ -52,6 +53,8 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.FacesValidator;
 import javax.xml.xpath.XPathExpressionException;
 import java.text.MessageFormat;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -109,12 +112,34 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
                 addValidators(validators, namespace);
             }
         }
+        processDefaultValidatorIds();
+
         invokeNext(documents);
 
     }
 
     // --------------------------------------------------------- Private Methods
 
+    private void processDefaultValidatorIds() {
+
+        Application app = getApplication();
+        Map<String,String> defaultValidatorInfo = app.getDefaultValidatorInfo();
+        for (Map.Entry<String,String> info : defaultValidatorInfo.entrySet()) {
+            String defaultValidatorId = info.getKey();
+            boolean found = false;
+            for (Iterator<String> registered = app.getValidatorIds(); registered.hasNext(); ) {
+                if (defaultValidatorId.equals(registered.next())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                String msg = MessageFormat.format("Default validator ''{0}'' does not reference a registered validator.", defaultValidatorId);
+                throw new ConfigurationException(msg);
+            }
+        }
+        
+    }
 
     private void addValidators(NodeList validators, String namespace)
     throws XPathExpressionException {
