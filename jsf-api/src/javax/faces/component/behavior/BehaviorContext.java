@@ -44,7 +44,8 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0"><strong>BehaviorContext</strong>
- * provides context information that may be useful to Behavior.getScript()
+ * provides context information that may be useful to 
+ * {@link javax.faces.component.behavior.Behavior#getScript}
  * implementations.
  * </p>
  *
