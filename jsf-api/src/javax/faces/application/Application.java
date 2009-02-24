@@ -1184,9 +1184,9 @@ public abstract class Application {
 
 
     /**
-     * <p class="changed_added_2_0">Return an immutable <code>Map</code> over the
-     * set of currently registered default validator IDs and their class name
-     * for this <code>Application</code>.</p>
+     * <p class="changed_added_2_0">Return an immutable <code>Map</code> over 
+     * the set of currently registered default validator IDs and their class
+     * name for this <code>Application</code>.</p>
      *
      * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate

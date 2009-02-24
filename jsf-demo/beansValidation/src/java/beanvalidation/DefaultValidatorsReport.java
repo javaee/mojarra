@@ -3,7 +3,9 @@ package beanvalidation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ManagedBean;
 import javax.faces.model.RequestScoped;
@@ -20,8 +22,11 @@ public class DefaultValidatorsReport {
 	public void onCreate() {
 		validatorIds = new ArrayList<String>();
 		FacesContext ctx = FacesContext.getCurrentInstance();
-		for (Iterator<String> it = ctx.getApplication().getDefaultValidatorIds(); it.hasNext();) {
-			validatorIds.add(it.next());
+                Application app = ctx.getApplication();
+                Map<String, String> defaultValidators = app.getDefaultValidatorInfo();
+                
+		for (String cur : defaultValidators.keySet()) {
+			validatorIds.add(cur);
 		}
 	}
 

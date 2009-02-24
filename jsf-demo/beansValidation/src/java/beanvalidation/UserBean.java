@@ -9,7 +9,6 @@ import javax.faces.model.ManagedBean;
 import javax.faces.model.SessionScoped;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
-import org.hibernate.validation.constraints.NotEmpty;
 
 @SessionScoped @ManagedBean(name = "user")
 public class UserBean implements Serializable {
