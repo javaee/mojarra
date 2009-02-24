@@ -80,7 +80,9 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>false</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
+            <behavior>valueChange</behavior>
+            <default-behavior>true</default-behavior>
         </property-extension>
     </property>
 
@@ -95,7 +97,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 

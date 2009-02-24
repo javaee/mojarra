@@ -422,7 +422,7 @@ public class FacesConfigRuleSet extends RuleSetBase {
              "setAttributeIgnoredForRenderer", 0, new String[] {"java.lang.Boolean"});
         digester.addCallMethod
         	(prefix + "/attribute/attribute-extension/behavior",
-        	"setBehavior", 0, new String[] {"java.lang.Boolean"});
+        	"addBehavior", 0, new String[] {"java.lang.String"});
         digester.addCallMethod
         	(prefix + "/attribute/attribute-extension/default-behavior",
         	"setDefaultBehavior", 0, new String[] {"java.lang.Boolean"});
@@ -545,7 +545,7 @@ public class FacesConfigRuleSet extends RuleSetBase {
             "setValueExpressionEnabled", 0, new String[] { "java.lang.Boolean" });
         digester.addCallMethod
     		(prefix + "/property/property-extension/behavior",
-    	    "setBehavior", 0, new String[] {"java.lang.Boolean"});
+    	    "addBehavior", 0, new String[] {"java.lang.String"});
         digester.addCallMethod
     		(prefix + "/property/property-extension/default-behavior",
     		"setDefaultBehavior", 0, new String[] {"java.lang.Boolean"});

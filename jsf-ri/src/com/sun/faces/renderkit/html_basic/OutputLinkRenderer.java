@@ -50,6 +50,7 @@ import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
@@ -68,7 +69,7 @@ import java.net.URLEncoder;
 public class OutputLinkRenderer extends LinkRenderer {
 
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.OUTPUTLINK);
 
 

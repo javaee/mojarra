@@ -169,7 +169,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer = new CodeWriter(new FileWriter(file));
                 useBehavior = false;
                 for (PropertyBean property : cb.getProperties()) {
-        			if(property.isBehavior()){
+        			if(null != property.getBehaviors() && !property.getBehaviors().isEmpty()){
         				useBehavior = true;
         				break;
         			}
@@ -497,23 +497,41 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
         writer.outdent();
         writer.fwrite("}\n\n\n");
-        // BehaviorHolder mathods
+        // BehaviorHolder methods
         if(useBehavior){
         	writer.fwrite("private static final Collection<String> EVENT_NAMES = Collections.unmodifiableCollection(Arrays.asList(");
         	boolean first = true;
         	String defaultEventName = null;
         	for (PropertyBean property : cb.getProperties()) {
-				if(property.isBehavior()){
-					if(!first){
-						writer.write(",");
-					} else {
-						first = false;
+				if (null != property.getBehaviors()
+						&& !property.getBehaviors().isEmpty()) {
+					String behaviorName = null;
+					for (String behavior : property.getBehaviors()) {
+						if (!first) {
+							writer.write(",");
+						} else {
+							first = false;
+						}
+						writer.write("\"");
+						if (0 == behavior.length()) {
+							behaviorName = property.getPropertyName();
+							// Strip leading "on" preffix.
+							if (behaviorName.length() > 2
+									&& behaviorName.startsWith("on")) {
+								StringBuilder buffer = new StringBuilder(
+										behaviorName.substring(2, 3)
+												.toLowerCase());
+								buffer.append(behaviorName.substring(3));
+								behaviorName = buffer.toString();
+							}
+						} else {
+							behaviorName = behavior;
+						}
+						writer.write(behaviorName);
+						writer.write("\"");
 					}
-					writer.write("\"");
-					writer.write(property.getPropertyName());
-					writer.write("\"");
-					if(property.isDefaultBehavior()){
-						defaultEventName = property.getPropertyName();
+					if (property.isDefaultBehavior()) {
+						defaultEventName = behaviorName;
 					}
 				}
 			}

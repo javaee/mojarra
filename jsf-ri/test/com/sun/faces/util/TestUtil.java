@@ -43,6 +43,7 @@
 package com.sun.faces.util;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -106,7 +107,7 @@ public class TestUtil extends ServletFacesTestCase {
                                                                    "text/html",
                                                                    "ISO-8859-1");
             getFacesContext().setResponseWriter(writer);
-            String[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
+            Attribute[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
             UIInput input = new UIInput();
             input.setId("testRenderPassthruAttributes");
             input.getAttributes().put("notPresent", "notPresent");
@@ -148,7 +149,7 @@ public class TestUtil extends ServletFacesTestCase {
                                                                    "text/html",
                                                                    "ISO-8859-1");
             getFacesContext().setResponseWriter(writer);
-            String[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
+            Attribute[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
             HtmlInputText input = new HtmlInputText();
             input.setId("testRenderPassthruAttributes");
             input.setSize(12);

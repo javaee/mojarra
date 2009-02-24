@@ -206,8 +206,8 @@ public class PropertyRule extends FeatureRule {
             old.setTagAttribute(false);
         }
 
-        if(top.isBehavior()){
-        	old.setBehavior(true);
+        if(null != top.getBehaviors()){
+        	old.addAllBehaviors(top.getBehaviors());
         }
         if(top.isDefaultBehavior()){
         	old.setDefaultBehavior(true);

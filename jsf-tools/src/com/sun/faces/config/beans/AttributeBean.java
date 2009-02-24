@@ -40,6 +40,9 @@
 
 package com.sun.faces.config.beans;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * <p>Configuration bean for <code>&lt;attribute&gt; element.</p>
@@ -108,20 +111,33 @@ public class AttributeBean extends FeatureBean {
 
 
     // Behavior attribute, [dafault=false]
-    private boolean behavior = false;
+    private List<String> behaviors = null;
 	/**
 	 * <p class="changed_added_2_0"></p>
 	 * @return the behaviorAttribute
 	 */
-	public boolean isBehavior() {
-		return behavior;
+	public List<String> getBehaviors() {
+		return behaviors;
 	}
 	/**
 	 * <p class="changed_added_2_0"></p>
 	 * @param behaviorAttribute the behaviorAttribute to set
 	 */
-	public void setBehavior(boolean behavior) {
-		this.behavior = behavior;
+	public void addBehavior(String behavior) {
+		if(null == this.behaviors){
+			this.behaviors = new ArrayList<String>(5);
+		}
+		this.behaviors.add(behavior);
+	}
+	
+	public void addAllBehaviors(List<String>behaviors) {
+		if(null != behaviors){
+			if(null == this.behaviors){
+				this.behaviors = new ArrayList<String>(behaviors);
+			} else {
+				this.behaviors.addAll(behaviors);
+			}
+		}
 	}
 
     private boolean defaultBehavior = false;

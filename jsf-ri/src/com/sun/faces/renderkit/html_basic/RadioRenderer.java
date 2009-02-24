@@ -54,6 +54,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
@@ -69,7 +70,7 @@ import java.util.Iterator;
 
 public class RadioRenderer extends SelectManyCheckboxListRenderer {
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.SELECTONERADIO);
 
     // ------------------------------------------------------- Protected Methods

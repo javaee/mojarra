@@ -56,6 +56,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.RIConstants;
@@ -67,7 +68,7 @@ import com.sun.faces.RIConstants;
 
 public class ButtonRenderer extends HtmlBasicRenderer {
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.COMMANDBUTTON);
 
     // ---------------------------------------------------------- Public Methods

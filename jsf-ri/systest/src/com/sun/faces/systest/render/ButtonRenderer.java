@@ -42,6 +42,7 @@
 
 package com.sun.faces.systest.render;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
@@ -67,7 +68,7 @@ import java.util.Map;
 
 public class ButtonRenderer extends Renderer {
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.COMMANDBUTTON);
 
     public static final String CLEAR_HIDDEN_FIELD_FN_NAME = 

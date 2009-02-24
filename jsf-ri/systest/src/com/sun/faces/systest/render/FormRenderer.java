@@ -43,8 +43,9 @@
 package com.sun.faces.systest.render;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 
 
@@ -67,7 +68,7 @@ import java.util.Map;
 
 public class FormRenderer extends Renderer {
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.FORMFORM);
 
     public static final String SCRIPT_ELEMENT = "script";

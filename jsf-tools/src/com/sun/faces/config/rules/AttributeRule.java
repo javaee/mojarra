@@ -202,8 +202,8 @@ public class AttributeRule extends FeatureRule {
         if (!top.isTagAttribute()) {
             old.setTagAttribute(false);
         }
-        if(top.isBehavior()){
-        	old.setBehavior(true);
+        if(null != top.getBehaviors()){
+        	old.addAllBehaviors(top.getBehaviors());
         }
         if(top.isDefaultBehavior()){
         	old.setDefaultBehavior(true);

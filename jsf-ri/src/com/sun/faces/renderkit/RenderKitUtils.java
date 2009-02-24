@@ -272,7 +272,7 @@ public class RenderKitUtils {
      */
     public static void renderPassThruAttributes(ResponseWriter writer,
                                                 UIComponent component,
-                                                String[] attributes)
+                                                Attribute[] attributes)
     throws IOException {
 
         assert (null != writer);
@@ -296,8 +296,8 @@ public class RenderKitUtils {
             // all known attributes.
             boolean isXhtml =
                   RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
-            for (String attrName : attributes) {
-
+            for (Attribute attribute : attributes) {
+                String attrName = attribute.getName();
                 Object value =
                       attrMap.get(attrName);
                 if (value != null && shouldRenderAttribute(value)) {
@@ -320,7 +320,7 @@ public class RenderKitUtils {
                       component,
                       Collections.<Behavior.Parameter>emptyList(),
                       "onchange",
-                      "onchange");
+                      "valueChange");
     }
 
     // Renders the onclick handler for command buttons.  Handles
@@ -335,7 +335,7 @@ public class RenderKitUtils {
                       component,
                       params,
                       "onclick",
-                      "onclick");
+                      "action");
     }
 
     public static String prefixAttribute(final String attrName,
@@ -471,7 +471,7 @@ public class RenderKitUtils {
      */
     private static void renderPassThruAttributesOptimized(ResponseWriter writer,
                                                           UIComponent component,
-                                                          String[] knownAttributes,
+                                                          Attribute[] knownAttributes, 
                                                           List<String> setAttributes)
     throws IOException {
 
@@ -481,7 +481,7 @@ public class RenderKitUtils {
               RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
         Map<String, Object> attrMap = component.getAttributes();
         for (String name : attributes) {
-            if (Arrays.binarySearch(knownAttributes, name) >= 0) {
+            if (Arrays.binarySearch(knownAttributes, Attribute.attr(name)) >= 0) {
                 Object value =
                       attrMap.get(name);
                 if (value != null && shouldRenderAttribute(value)) {

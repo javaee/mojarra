@@ -64,7 +64,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -79,7 +79,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -94,7 +94,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -109,7 +109,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -124,7 +124,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -139,7 +139,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -154,7 +154,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -169,7 +169,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -184,7 +184,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -199,7 +199,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
-            <behavior>true</behavior>
+            <behavior/>
         </property-extension>
     </property>
 </root>

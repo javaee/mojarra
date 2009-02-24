@@ -53,6 +53,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -66,7 +67,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 public class ImageRenderer extends HtmlBasicRenderer {
 
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.GRAPHICIMAGE);
 
 

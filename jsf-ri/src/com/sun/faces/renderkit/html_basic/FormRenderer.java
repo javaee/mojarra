@@ -55,6 +55,7 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import javax.faces.render.Renderer;
@@ -63,7 +64,7 @@ import javax.faces.render.Renderer;
 
 public class FormRenderer extends HtmlBasicRenderer {
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.FORMFORM);
 
     private boolean writeStateAtEnd;
