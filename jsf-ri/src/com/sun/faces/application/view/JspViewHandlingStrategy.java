@@ -92,7 +92,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      */
     @Override
     public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     
@@ -152,7 +152,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
         ExternalContext extContext = context.getExternalContext();
 
-        buildView(context, view);
+        //buildView(context, view);
 
         // set up the ResponseWriter
 

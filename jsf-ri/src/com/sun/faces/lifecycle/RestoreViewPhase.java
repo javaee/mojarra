@@ -219,14 +219,17 @@ public class RestoreViewPhase extends Phase {
                 // If we have one, get the ViewMetadata...
                 ViewMetadata metadata = pdl.getViewMetadata(facesContext, viewId);
 
-                // and use it to create the ViewRoot.  This will have, at most
-                // the UIViewRoot and its metadata facet.
-                viewRoot = metadata.createMetadataView(facesContext);
-                
-                // Only skip to render response if there are no view parameters
-                Collection<UIViewParameter> params = metadata.getViewParameters(viewRoot);
-                if (params.isEmpty()) {
-                    facesContext.renderResponse();
+                if (metadata != null) { // perhaps it's not supported
+                    // and use it to create the ViewRoot.  This will have, at most
+                    // the UIViewRoot and its metadata facet.
+                    viewRoot = metadata.createMetadataView(facesContext);
+
+                    // Only skip to render response if there are no view parameters
+                    Collection<UIViewParameter> params =
+                          metadata.getViewParameters(viewRoot);
+                    if (params.isEmpty()) {
+                        facesContext.renderResponse();
+                    }
                 }
             }
             

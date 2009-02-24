@@ -1513,18 +1513,21 @@ public class UIViewRoot extends UIComponentBase {
             return;
         }
         ViewMetadata metadata = pdl.getViewMetadata(context, getViewId());
-        Collection<UIViewParameter> params = metadata.getViewParameters(this);
-        if (params.isEmpty()) {
-            return;
-        }
-
-        try {
-            for (UIViewParameter param : params) {
-                param.encodeAll(context);
+        if (metadata != null) { // perhaps it's not supported
+            Collection<UIViewParameter> params =
+                  metadata.getViewParameters(this);
+            if (params.isEmpty()) {
+                return;
             }
-        } catch (IOException e) {
-            // IOException is forced by contract and is not expected to be thrown in this case
-            throw new RuntimeException("Unexpected IOException", e);
+
+            try {
+                for (UIViewParameter param : params) {
+                    param.encodeAll(context);
+                }
+            } catch (IOException e) {
+                // IOException is forced by contract and is not expected to be thrown in this case
+                throw new RuntimeException("Unexpected IOException", e);
+            }
         }
     }
 

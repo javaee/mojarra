@@ -181,9 +181,11 @@ public final class DevTools {
     private static void writeVariables(Writer writer, FacesContext faces) throws IOException {
         ExternalContext ctx = faces.getExternalContext();
         writeVariables(writer, ctx.getRequestParameterMap(), "Request Parameters");
-        Map<String,Object> viewMap = faces.getViewRoot().getViewMap(false);
-        if (viewMap != null) {
-            writeVariables(writer, viewMap, "View Attributes");
+        if (faces.getViewRoot() != null) {
+            Map<String, Object> viewMap = faces.getViewRoot().getViewMap(false);
+            if (viewMap != null) {
+                writeVariables(writer, viewMap, "View Attributes");
+            }
         }
         writeVariables(writer, ctx.getRequestMap(), "Request Attributes");
         if (ctx.getSession(false) != null) {
@@ -225,10 +227,15 @@ public final class DevTools {
     
     private static void writeComponent(Writer writer, UIComponent c) throws IOException {
         writer.write("<dl><dt");
-        if (isText(c)) {
-            writer.write(" class=\"uicText\"");
+        if (c != null) {
+            if (isText(c)) {
+                writer.write(" class=\"uicText\"");
+            }
         }
         writer.write(">");
+        if (c == null) {
+            return;
+        }
         
         boolean hasChildren = c.getChildCount() > 0 || c.getFacets().size() > 0;
         
