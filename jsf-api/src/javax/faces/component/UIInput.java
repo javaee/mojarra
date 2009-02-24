@@ -44,14 +44,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -59,6 +56,7 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExceptionHandler;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
@@ -166,6 +164,18 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     public static final String UPDATE_MESSAGE_ID =
          "javax.faces.component.UIInput.UPDATE";
+
+
+    /**
+     * <p class="changed_added_2_0">The name of an application parameter
+     * that indicates how empty values should be handled with respect to
+     * validation.  See {@link #validateValue} for the allowable values
+     * and specification of how they should be interpreted.</p>
+     */
+
+    public static final String VALIDATE_EMPTY_FIELDS_PARAM_NAME = 
+	"javax.faces.VALIDATE_EMPTY_FIELDS";
+
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
     private Boolean emptyStringIsNull;
@@ -1036,37 +1046,71 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
     /**
-     * <p>Set the "valid" property according to the below algorithm.</p>
-     * <p/>
+     * <p><span class="changed_modified_2_0">Set</span> the "valid"
+     * property according to the below algorithm.</p>
+
      * <ul>
-     * <p/>
-     * <li>If the <code>valid</code> property on this component is still
-     * <code>true</code>, and the <code>required</code> property is also
-     * true, ensure that the local value is not empty (where "empty" is
-     * defined as <code>null</code> or a zero-length String.  If the local
-     * value is empty:
+
+     * <li>
+
+     * <p>If the <code>valid</code> property on this component is
+     * still <code>true</code>, and the <code>required</code> property
+     * is also <code>true</code>, ensure that the local value is not
+     * empty (where "empty" is defined as <code>null</code> or a
+     * zero-length String).  If the local value is empty:</p>
+
      * <ul>
-     * <li>Enqueue an appropriate error message by calling the
+
+     * <li><p>Enqueue an appropriate error message by calling the
      * <code>addMessage()</code> method on the <code>FacesContext</code>
-     * instance for the current request.  If the {@link #getRequiredMessage}
-     * returns non-<code>null</code>, use the value as the <code>summary</code>
-     * and <code>detail</code> in the {@link FacesMessage} that
-     * is enqueued on the <code>FacesContext</code>, otherwise
-     * use the message for the {@link #REQUIRED_MESSAGE_ID}.
+     * instance for the current request.  If the {@link
+     * #getRequiredMessage} returns non-<code>null</code>, use the value
+     * as the <code>summary</code> and <code>detail</code> in the {@link
+     * FacesMessage} that is enqueued on the <code>FacesContext</code>,
+     * otherwise use the message for the {@link #REQUIRED_MESSAGE_ID}.
+     * </li> <li>Set the <code>valid</code> property on this component
+     * to <code>false</code>.</p></li> 
+     *
+     * </ul>
+
      * </li>
-     * <li>Set the <code>valid</code> property on this component to
-     * <code>false</code>.</li>
-     * </ul></li>
-     * <li>If the <code>valid</code> property on this component is still
-     * <code>true</code>, and the local value is not empty, call the
-     * <code>validate()</code> method of each {@link Validator}
-     * registered for this {@link UIInput}, followed by the method
-     * pointed at by the <code>validatorBinding</code> property (if any).
-     * If any of these validators or the method throws a
-     * {@link ValidatorException}, catch the exception, add
-     * its message (if any) to the {@link FacesContext}, and set
-     * the <code>valid</code> property of this component to false.</li>
-     * <p/>
+     *
+     *
+     * <li><p>Otherwise, if the <code>valid</code> property on this
+     * component is still <code>true</code>, take the following action
+     * to determine if validation of this component should proceed.</p>
+
+     * <ul>
+     *
+     * <li><p>If the value is not empty, validation should proceed.</p></li>
+
+     * <li><p>If the value is empty, but the system has been directed to
+     * validate empty fields, validation should proceed.  The
+     * implementation must obtain the init parameter <code>Map</code>
+     * from the <code>ExternalContext</code> and inspect the value for
+     * the key given by the value of the symbolic constant {@link
+     * #VALIDATE_EMPTY_FIELDS_PARAM_NAME}.  If there is no value under
+     * that key, use the same key and look in the application map from
+     * the <code>ExternalContext</code>.  If the value is
+     * <code>null</code> or equal to the string
+     * &#8220;<code>auto</code>&#8221; (without the quotes) look in the
+     * context <code>ClassLoader</code> of the current
+     * <code>Thread</code> for the class
+     * <code>javax.validation.Validation</code>.  If no such class can
+     * be found, validation should not proceed.  If the value is equal
+     * (ignoring case) to &#8220;<code>true</code>&#8221; (without the
+     * quotes) validation should proceed.  Otherwise, validation should
+     * not proceed.</p></li>
+
+     * <p>If the above determination indicates that validation should
+     * proceed, call the <code>validate()</code> method of each {@link
+     * Validator} registered for this {@link UIInput}, followed by the
+     * method pointed at by the <code>validatorBinding</code> property
+     * (if any).  If any of these validators or the method throws a
+     * {@link ValidatorException}, catch the exception, add its message
+     * (if any) to the {@link FacesContext}, and set the
+     * <code>valid</code> property of this component to false.</li>
+
      * </ul>
      */
 
@@ -1421,7 +1465,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private boolean validateEmptyFields(FacesContext ctx) {
 
         if (validateEmptyFields == null) {
-            String val = ctx.getExternalContext().getInitParameter("javax.faces.VALIDATE_EMPTY_FIELDS");
+            ExternalContext extCtx = ctx.getExternalContext();
+            String val = extCtx.getInitParameter(VALIDATE_EMPTY_FIELDS_PARAM_NAME);
+
+            if (null == val) {
+                val = (String) extCtx.getApplicationMap().get(VALIDATE_EMPTY_FIELDS_PARAM_NAME);
+            }
             if (val == null || val.equals("auto")) {
                 validateEmptyFields = true;
                 try {

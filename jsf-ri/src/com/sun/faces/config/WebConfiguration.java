@@ -56,6 +56,7 @@ import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
 import java.util.HashMap;
+import javax.faces.component.UIInput;
 
 
 /** Class Documentation */
@@ -773,7 +774,7 @@ public class WebConfiguration {
             ""
         ),
         ValidateEmptyFields(
-              "javax.faces.VALIDATE_EMPTY_FIELDS",
+              UIInput.VALIDATE_EMPTY_FIELDS_PARAM_NAME,
               "auto"
         );
 
