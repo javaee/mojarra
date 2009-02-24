@@ -140,11 +140,11 @@ public class BehaviorBase extends Behavior {
     
     /**
      * <p class="changed_added_2_0">Default implementation of 
-     * Behavior.getRendererType(). The default implementation returns null.  
-     * Subclasses should either override getRendererType() to return a 
-     * string that identifies the type of BehaviorRenderer to use, or should 
-     * override getScript() and perform script rendering locally in the 
-     * Behavior implementation.
+     * {@link Behavior#getRendererType}. The default implementation 
+     * returns null.  Subclasses should either override this method to 
+     * return a string that identifies the type of {@link BehaviorRenderer} 
+     * to use, or should override {@link #getScript} and perform script 
+     * rendering locally in the {@link Behavior} implementation.
      * </p>
      * @return the default renderer type, which is null.
      *
@@ -157,10 +157,10 @@ public class BehaviorBase extends Behavior {
     
     /**
      * <p class="changed_added_2_0">Default implementation of 
-     * Behavior.braodcast().  Devliers the specified {@link BehaviorEvent} to 
-     * all registered event listeners who have expressed an interest in events 
-     * of this type.  Listeners are called in the order in which they were
-     * added.</p>
+     * Behavior.braodcast().  Delivers the specified {@link BehaviorEvent} to 
+     * all registered {@link BehaviorListener} event listeners who have 
+     * expressed an interest in events of this type.  Listeners are called 
+     * in the order in which they were registered (added).</p>
      *
      * @param event The {@link BehaviorEvent} to be broadcast
      *
