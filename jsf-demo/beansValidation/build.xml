@@ -133,6 +133,14 @@
                            appName="${example}"/>
     </target>
 
+    <target name="explode" depends="clean,build">
+        <mkdir dir="${build}/target/${example}" />
+        <unjar src="dist/${example}.war" overwrite="true"
+               dest="${build}/target/${example}" />
+    </target>
+
+
+
 
 </project>
 
