@@ -73,6 +73,7 @@ import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
@@ -217,10 +218,20 @@ public class RestoreViewPhase extends Phase {
                   createView(facesContext, viewId);           
             facesContext.setViewRoot(viewRoot);
             assert(null != viewRoot);
-            List<UIViewParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getViewParameters(facesContext, viewId);
-            if (!params.isEmpty() &&
-                !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
-                configureLifecycleForViewMetadataTraversal(facesContext);
+            PageDeclarationLanguage pdl = null;
+            try {
+                pdl = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId);
+            } catch (UnsupportedOperationException uoe) {
+                
+            }
+            if (null != pdl) {
+                List<UIViewParameter> params = pdl.getViewParameters(facesContext, viewId);
+                if (!params.isEmpty() &&
+                        !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
+                    configureLifecycleForViewMetadataTraversal(facesContext);
+                } else {
+                    facesContext.renderResponse();
+                }
             } else {
                 facesContext.renderResponse();
             }
