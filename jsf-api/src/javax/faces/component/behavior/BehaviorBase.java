@@ -157,10 +157,11 @@ public class BehaviorBase extends Behavior {
     
     /**
      * <p class="changed_added_2_0">Default implementation of 
-     * Behavior.braodcast().  Delivers the specified {@link BehaviorEvent} to 
-     * all registered {@link BehaviorListener} event listeners who have 
-     * expressed an interest in events of this type.  Listeners are called 
-     * in the order in which they were registered (added).</p>
+     * {@link Behavior#broadcast}.  Delivers the specified 
+     * {@link BehaviorEvent} to all registered {@link BehaviorListener} 
+     * event listeners who have expressed an interest in events of 
+     * this type.  Listeners are called in the order in which they were 
+     * registered (added).</p>
      *
      * @param event The {@link BehaviorEvent} to be broadcast
      *
