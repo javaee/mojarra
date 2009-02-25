@@ -103,6 +103,13 @@
            <f:param name="bar" value="Goodbye"/>
        </h:commandButton>
 
+       <h:commandButton id="nonAjaxParamsHandler" 
+                        value="Non-Ajax With Params With User Handler"
+                        onclick="alert('Hello from onclick')">
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+       </h:commandButton>
+
        <h:commandButton id="greetParams" value="Greet With Params">
            <be:greet/>
            <f:param name="foo" value="Hello"/>
@@ -138,6 +145,28 @@
            <f:ajax/>
        </h:inputText>
 
+       <h:panelGrid>
+           <be:greet event="dblclick"/>
+           <h:outputText value="Panel Grid with Double Click Greet"/>
+       </h:panelGrid>
+
+       <h:panelGrid ondblclick="alert('Hello from user handler')">
+           <be:greet event="dblclick"/>
+           <h:outputText value="Panel Grid with Double Click User Handler and Greet"/>
+       </h:panelGrid>
+
+       <h:panelGrid>
+           <be:greet event="click"/>
+           <be:greet event="dblclick"/>
+           <h:outputText value="Panel Grid with Both Click And Double Click Greet"/>
+       </h:panelGrid>
+
+       <h:panelGrid onclick="alert('Hello from onclick user handler')"
+                    ondblclick="alert('Hello from ondblclick user handler')">
+           <be:greet event="click"/>
+           <be:greet event="dblclick"/>
+           <h:outputText value="Panel Grid with Both Click And Double Click Greet And User Handlers"/>
+       </h:panelGrid>
 
        <h:outputText id="out"/>
 

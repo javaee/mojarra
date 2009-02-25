@@ -34,24 +34,37 @@
  * holder.
  */
 
-package com.sun.faces.application.view;
+package javax.faces.webapp.pdl;
 
-import java.beans.BeanDescriptor;
-import java.beans.BeanInfo;
-import java.beans.SimpleBeanInfo;
+import java.util.Collection;
+import javax.faces.component.UIViewParameter;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 
-public class FacesBeanInfo extends SimpleBeanInfo implements BeanInfo {
+/**
+ *
+ * <p class="changed_added_2_0"></p>
+ */
+public abstract class ViewMetadata {
 
-    private BeanDescriptor descriptor = null;
+    public abstract String getViewId();
+    
+    public abstract UIViewRoot createMetadataView(FacesContext context);
+    
+    /**
+     *
+     * <p class="changed_added_2_0"></p>
+     */
+    public abstract Collection<UIViewParameter> getViewParameters(FacesContext context);
+    
+    /**
+     *
+     * <p class="changed_added_2_0"></p>
+     */
+    public abstract Collection<UIViewParameter> getViewParameters(UIViewRoot root);
 
 
-    @Override
-    public BeanDescriptor getBeanDescriptor() {
-        return descriptor;
-    }
+    
 
-    public void setBeanDescriptor(BeanDescriptor newDescriptor) {
-        descriptor = newDescriptor;
-    }
 
 }

@@ -222,7 +222,7 @@ public class ViewParametersTestCase extends AbstractTestCase {
         
         // no story content on home page
         assertTrue(-1 == pageText.indexOf(getContentContains(storyNum)));
-        assertTrue(-1 != pageText.indexOf("The headline you requested does not exist."));
+        assertTrue(-1 != pageText.indexOf("You did not specify a headline. (The id parameter is missing)"));
         assertOnHomePage(pageText);
         return page;
     }

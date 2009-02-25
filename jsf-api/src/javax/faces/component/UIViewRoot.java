@@ -61,6 +61,7 @@ import javax.faces.webapp.FacesServlet;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +78,7 @@ import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewMetadata;
 
 
 /**
@@ -151,17 +153,6 @@ import javax.faces.webapp.pdl.PageDeclarationLanguage;
 public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------------ Manifest Constants
-
-    /**
-     * <p class="changed_added_2_0">The value of this constant is used as the key in the
-     * component attribute map, the value for which is a
-     * <code>java.beans.BeanInfo</code> implementation describing the view
-     * metadata.  This <code>BeanInfo</code> is known as the 
-     * <em>view metadata BeanInfo</em>.</p>
-     *
-     * @since 2.0
-     */
-    public static final String METADATA_BEANINFO_KEY = "javax.faces.component.VIEW_METADATA_BEANINFO_KEY";
 
     public static final String METADATA_FACET_NAME = "javax_faces_metadata";
     
@@ -1016,8 +1007,7 @@ public class UIViewRoot extends UIComponentBase {
      * must be logged and swallowed.  If the current view has view
      * parameters, as indicated by a non-empty and
      * non-<code>UnsupportedOperationException</code> throwing return
-     * from {@link
-     * javax.faces.webapp.pdl.PageDeclarationLanguage#getViewParameters},
+     * from {@link javax.faces.webapp.pdl.PageDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)},
      * call {@link UIViewParameter#encodeAll} on each parameter.  If
      * calling <code>getViewParameters()</code> causes
      * <code>UnsupportedOperationException</code> to be thrown, the
@@ -1522,18 +1512,22 @@ public class UIViewRoot extends UIComponentBase {
         if (null == pdl) {
             return;
         }
-        List<UIViewParameter> params = pdl.getViewParameters(context, getViewId());
-        if (params.isEmpty()) {
-            return;
-        }
-
-        try {
-            for (UIViewParameter param : params) {
-                param.encodeAll(context);
+        ViewMetadata metadata = pdl.getViewMetadata(context, getViewId());
+        if (metadata != null) { // perhaps it's not supported
+            Collection<UIViewParameter> params =
+                  metadata.getViewParameters(this);
+            if (params.isEmpty()) {
+                return;
             }
-        } catch (IOException e) {
-            // IOException is forced by contract and is not expected to be thrown in this case
-            throw new RuntimeException("Unexpected IOException", e);
+
+            try {
+                for (UIViewParameter param : params) {
+                    param.encodeAll(context);
+                }
+            } catch (IOException e) {
+                // IOException is forced by contract and is not expected to be thrown in this case
+                throw new RuntimeException("Unexpected IOException", e);
+            }
         }
     }
 

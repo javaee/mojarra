@@ -51,9 +51,10 @@
 
 package com.sun.faces.facelets.tag.composite;
 
-import com.sun.faces.application.view.FacesBeanInfo;
 import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Externalizable;
@@ -62,7 +63,18 @@ import java.io.IOException;
 import java.io.ObjectInput;
 
 
-public class CompositeComponentBeanInfo extends FacesBeanInfo implements  Externalizable {
+public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanInfo, Externalizable {
+
+    private BeanDescriptor descriptor = null;
+
+    @Override
+    public BeanDescriptor getBeanDescriptor() {
+        return descriptor;
+    }
+
+    public void setBeanDescriptor(BeanDescriptor newDescriptor) {
+        descriptor = newDescriptor;
+    }
 
     @Override
     public PropertyDescriptor[] getPropertyDescriptors() {
@@ -87,15 +99,15 @@ public class CompositeComponentBeanInfo extends FacesBeanInfo implements  Extern
 
     public void writeExternal(ObjectOutput out) throws IOException {
 
-        out.writeObject(getBeanDescriptor().getBeanClass());
+        out.writeObject(descriptor.getBeanClass());
 
     }
 
-    
+
     public void readExternal(ObjectInput in)
     throws IOException, ClassNotFoundException {
 
-        setBeanDescriptor(new BeanDescriptor((Class) in.readObject()));
+        descriptor = new BeanDescriptor((Class) in.readObject());
 
     }
 }

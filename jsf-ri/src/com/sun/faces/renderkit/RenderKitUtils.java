@@ -1102,8 +1102,10 @@ public class RenderKitUtils {
                                                   String behaviorEventName,
                                                   Collection<Behavior.Parameter> params) {
 
-        assert(null != behaviors);
-        assert(!behaviors.isEmpty());
+        if ((behaviors == null) || (behaviors.isEmpty())) {
+            return false;
+        }
+
 
         BehaviorContext bContext = createBehaviorContext(context,
                                                          component,
