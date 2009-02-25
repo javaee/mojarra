@@ -6,11 +6,11 @@
             <name>beanvalidation</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <web-module-libraries>
-                <library dirs="3">
-                    <file>${libs.jsf-mojarra-trunk.classpath}</file>
-                </library>
                 <library files="1">
                     <file>${libs.validation-api.classpath}</file>
+                </library>
+                <library dirs="3">
+                    <file>${libs.jsf-mojarra-trunk.classpath}</file>
                 </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
