@@ -45,6 +45,21 @@
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <title>Ajax Request</title>
+
+    <script type="text/javascript">
+        function statusUpdate(data) {
+
+            text = "Name: "+ data.source.id;
+            if (data.type === "event") {
+                text = text + ", Event: " + data.name;
+            } else {
+                text = text + ", Error: " + data.name;
+            }
+
+            window.status = text;
+        }
+    </script>
+
 </h:head>
 
 <h:body>
@@ -94,17 +109,21 @@
            <f:param name="bar" value="Goodbye"/>
        </h:commandButton>
 
+       <h:commandButton id="status" value="Ajax With Status Updates">
+           <f:ajax onevent="statusUpdate" onerror="statusUpdate"/>
+       </h:commandButton>
+
        <h:inputText id="inputAjax" value="Ajax">
-           <f:ajax event="onchange"/>
+           <f:ajax/>
        </h:inputText>
 
        <h:inputText id="inputGreet" value="Greet">
-           <be:greet event="onchange"/>
+           <be:greet/>
        </h:inputText>
 
        <h:inputText id="inputAjaxGreet" value="Greet and Ajax">
-           <be:greet event="onchange"/>
-           <f:ajax event="onchange"/>
+           <be:greet/>
+           <f:ajax/>
        </h:inputText>
 
        <h:inputText id="inputUser" 
@@ -116,7 +135,7 @@
        <h:inputText id="inputUserAndAjax" 
                     value="User Handler And Ajax"
                     onchange="alert('Hello from user handler')">
-           <f:ajax event="onchange"/>
+           <f:ajax/>
        </h:inputText>
 
 

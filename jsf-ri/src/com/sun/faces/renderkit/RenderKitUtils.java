@@ -1037,10 +1037,20 @@ public class RenderKitUtils {
     }
 
     // Appends an name/value property pair to a JSON object.  Assumes
-    // object has already been opened by the caller.
+    // object has already been opened by the caller.  The value will
+    // be quoted (ie. wrapped in single quotes and escaped appropriately).
     public static void appendProperty(StringBuilder builder, 
                                       String name,
                                       Object value) {
+        appendProperty(builder, name, value, true);
+    }
+
+    // Appends an name/value property pair to a JSON object.  Assumes
+    // object has already been opened by the caller.
+    public static void appendProperty(StringBuilder builder, 
+                                      String name,
+                                      Object value,
+                                      boolean quoteValue) {
 
         if (null == name)
             throw new IllegalArgumentException();
@@ -1055,7 +1065,12 @@ public class RenderKitUtils {
 
         RenderKitUtils.appendQuotedValue(builder, name);
         builder.append(":");
-        RenderKitUtils.appendQuotedValue(builder, value.toString());
+
+        if (quoteValue) {
+            RenderKitUtils.appendQuotedValue(builder, value.toString());
+        } else {
+            builder.append(value.toString());
+        }
     }
 
     // Append a script to the chain, escaping any single quotes, since

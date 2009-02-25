@@ -141,7 +141,13 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
 
             ajaxCommand.append(",{");
 
-            // TODO: Support onerror/onevent
+            if (onevent != null) {
+                RenderKitUtils.appendProperty(ajaxCommand, "onevent", onevent, false);
+            }
+
+            if (onerror != null) {
+                RenderKitUtils.appendProperty(ajaxCommand, "onerror", onerror, false);
+            }
 
             if (!params.isEmpty()) {
                 for (Behavior.Parameter param : params) {
