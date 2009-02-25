@@ -96,20 +96,30 @@ public class RenderResponsePhase extends Phase {
         }
         
         try {
-            ViewHandler vh = facesContext.getApplication().getViewHandler();
-            try {
-                PageDeclarationLanguage pdl =
-                      vh.getPageDeclarationLanguage(facesContext,
-                                                    facesContext.getViewRoot().getViewId());
-                pdl.buildView(facesContext, facesContext.getViewRoot());
-            } catch (UnsupportedOperationException uoe) {
-                // if no PDL is available assume the older VH has handled things
-                // appropriately
-            }
-            
+
+                
+            String viewId = facesContext.getViewRoot().getViewId();
+
             // the before render event on the view root is a special case to keep door open for navigation
             facesContext.getApplication().publishEvent(PreRenderViewEvent.class,
                                                        facesContext.getViewRoot());
+
+            String postPublishId = facesContext.getViewRoot().getViewId();
+            ViewHandler vh = facesContext.getApplication().getViewHandler();
+            if ((viewId == null && postPublishId == null)
+                 || viewId.equals(postPublishId)) {
+
+                try {
+                    PageDeclarationLanguage pdl =
+                          vh.getPageDeclarationLanguage(facesContext,
+                                                        facesContext
+                                                              .getViewRoot().getViewId());
+                    pdl.buildView(facesContext, facesContext.getViewRoot());
+                } catch (UnsupportedOperationException uoe) {
+                    // if no PDL is available assume the older VH has handled things
+                    // appropriately
+                }
+            }
             //render the view
             vh.renderView(facesContext, facesContext.getViewRoot());
 
