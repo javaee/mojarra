@@ -645,8 +645,35 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     /**
-     * <p class="changed_modified_2_0">After encoding the component, add any default validators. Putting the logic in this
-     * method allows this service to be provided even for inputs that are added programmatically.</p>
+     * <p class="changed_added_2_0">After encoding the component, add
+     * any default validators. Putting the logic in this method allows
+     * this service to be provided even for inputs that are added
+     * programmatically.</p>
+     *
+     * <p class="changed_added_2_0">Append the default validators after
+     * any locally defined validators.  The validators to be appended
+     * must be discovered in the following manner.  Let <em>toAdd</em>
+     * be a logical list of validatorIds to add.</p>
+
+     * <ul>
+     *
+     * <li><p>Call {@link Application#getDefaultValidatorInfo} and add
+     * each key from the returned <code>Map</code> to
+     * <em>toAdd</em>.</p></li>
+
+     * <li><p>PENDING(edburns): continue after correct application of
+     * patch.</p></li>
+
+
+
+     * <p>The validator
+     * is created in the normal way using the <code>Application</code>
+     * object. If a validator with the same validator id already exists
+     * on the component, then that default validator is skipped.  Before
+     * creating the validator, consult the list of exclusions. An
+     * exclusion is defined by a validator having a "disabled" attribute
+     * which resolves to true.</p>
+
      */
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
@@ -1493,13 +1520,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
     /**
-     * <p class="changed_added_2_0">Append the default validators below any locally defined validators.
-     * The validator is created in the normal way using the <code>Application</code> object. If a validator
-     * with the same validator id already exists on the component, then that default validator is skipped.
-     * Before creating the validator, consult the list of exclusions. An exclusion is defined
-     * by a validator having a "disabled" attribute which resolves to true.</p>
      */
-    protected void addDefaultValidators(FacesContext context) {
+    private void addDefaultValidators(FacesContext context) {
         
         Set<String> exclusions;
         Validator[] validators = getValidators();

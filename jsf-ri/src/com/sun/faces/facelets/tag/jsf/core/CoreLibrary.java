@@ -61,7 +61,9 @@ import javax.faces.validator.LengthValidator;
 import javax.faces.validator.LongRangeValidator;
 
 import com.sun.faces.facelets.tag.AbstractTagLibrary;
+import javax.faces.validator.BeanValidator;
 import javax.faces.validator.RegexValidator;
+import javax.faces.validator.RequiredValidator;
 
 /**
  * For Tag details, see JSF Core <a target="_new"
@@ -110,6 +112,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
         
         this.addComponent("subview", "javax.faces.NamingContainer", null);
         
+        this.addValidator("validateBean", BeanValidator.VALIDATOR_ID, BeanValidateHandler.class);
+        
         this.addValidator("validateLength", LengthValidator.VALIDATOR_ID);
         
         this.addValidator("validateLongRange", LongRangeValidator.VALIDATOR_ID);
@@ -117,6 +121,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
         this.addValidator("validateDoubleRange", DoubleRangeValidator.VALIDATOR_ID);
 
         this.addValidator("validateRegex", RegexValidator.VALIDATOR_ID);
+        
+        this.addValidator("validateRequired", RequiredValidator.VALIDATOR_ID);
 
         this.addValidator("validator", null, ValidateDelegateHandler.class);
 
