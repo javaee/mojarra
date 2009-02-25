@@ -46,7 +46,9 @@
 
     <tag>
         <tag-name>greet</tag-name>
-        <handler-class>declarativeajax.GreetBehaviorHandler</handler-class>
+        <behavior>
+           <behavior-id>Joe</behavior-id>
+        </behavior>
     </tag>
 
 </facelet-taglib>
