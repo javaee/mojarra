@@ -46,7 +46,6 @@
     <property name="validation.spec.version" value="${validation-api.version}" />
     <property name="validation.impl.name" value="validation-api" />
     <property name="validation.impl.version" value="${validation-api.version}" />
-    <property name="validation.extension.name" value="javax.validation" />
     <property name="validation.version" value="${validation-api.version}" />
 
 
@@ -158,8 +157,12 @@
         <copy file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api.jar"/>
         <copy file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/modules/jsf-impl.jar"/>
 
-        <antcall target="add.osgi" />
-        <copy file="${validation.root.build.dir}/dist/validation-api-${validation-api.version}.jar" toFile="${container.home}/modules/validation-api.jar"/>
+        <antcall target="validation.add.osgi" />
+        <copy overwrite="true" 
+              file="${validation.root.build.dir}/dist/validation-api-${validation-api.version}.jar" toFile="${container.home}/modules/validation-api.jar"/>
+        <copy overwrite="true"
+              file="${validation.root.build.dir}/dist/validation-ri-${validation-api.version}.jar" toFile="${container.home}/modules/validation-ri.jar"/>
+        <antcall target="validation.clean.osgi" />
         <if>
             <os family="windows"/>
             <then>
@@ -273,11 +276,35 @@
     <target name="main">
     </target>
 
-    <target name="add.osgi">
+    <target name="validation.add.osgi">
       <mkdir dir="${validation.dist.dir}" />
-      <mkdir dir="${validation.build.dir}" />
-      <unjar src="${validation-api.jar}" dest="${validation.build.dir}" />
-      <copy file="${validation.root.dir}/validation-api.bnd" tofile="${validation.tmp.bnd}"/>
+        <validation.do.add.osgi 
+            validation-input-jar="${validation-api.jar}" 
+            validation-input-bnd="${validation.root.dir}/validation-api.bnd" 
+            validation-output-jar="${validation.dist.dir}/validation-api-${validation-api.version}.jar"
+          
+        />
+      <validation.do.add.osgi 
+            validation-input-jar="${validations-ri.jar}" 
+            validation-input-bnd="${validation.root.dir}/validation-ri.bnd" 
+            validation-output-jar="${validation.dist.dir}/validation-ri-${validation-api.version}.jar"
+        />
+     
+   </target>
+
+   <macrodef name="validation.do.add.osgi">
+      <attribute name="validation-input-jar" 
+                 description="The which should be OSGified" />
+      <attribute name="validation-input-bnd" 
+                 description="The file to be input to bnd" />
+      <attribute name="validation-output-jar" 
+                 description="The OSGified jar file" />
+
+      <sequential>
+        <delete dir="${validation.build.dir}" />
+        <mkdir dir="${validation.build.dir}" />
+        <unjar src="@{validation-input-jar}" dest="${validation.build.dir}" />
+        <copy overwrite="true" file="@{validation-input-bnd}" tofile="${validation.tmp.bnd}"/>
         <replace file="${validation.tmp.bnd}"
                  token="@validation.spec.version@"
                  value="${validation.spec.version}"/>
@@ -300,16 +327,16 @@
                          value="${validation.impl.version}-${build.type}"/>
             </else>
         </if>
-        <replace file="${validation.tmp.bnd}"
-                 token="@validation.extension.name@"
-                 value="${validation.extension.name}"/>
-        <jsf.osgi.jar jarfile="${validation.dist.dir}/validation-api-${validation-api.version}.jar"
+        <jsf.osgi.jar jarfile="@{validation-output-jar}"
                             basedir="${validation.build.dir}"
-                            extension-name="${validation.extension.name}"
+                            extension-name="@{validation-extension-name}"
                             bndfile="${validation.tmp.bnd}"
                             includes="**/*.class,**/*.properties"/>
-        <delete file="${validation.tmp.bnd}"/>
+      </sequential>
+    </macrodef>
 
+    <target name="validation.clean.osgi">
+      <delete dir="${validation.root.build.dir}" />
     </target>
 
 

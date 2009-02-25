@@ -40,12 +40,11 @@ Implementation-Title: @validation.impl.name@
 Implementation-Version: @validation.impl.version@
 Implementation-Vendor: JBoss A Division of RedHat
 Implementation-Vendor-Id: org.jboss
-Extension-Name: javax.validation
+Extension-Name: org.hibernate.validation
 
 # BND/OSGI Properties
-Export-Package: javax.validation.*;version=@validation.spec.version@
-Import-Package: javax.el.*;version=2.1
+Export-Package: org.hibernate.validation.*;version=@validation.spec.version@
 Bundle-Version: @validation.spec.version@
 Bundle-Name: Mojarra JSF API Implementation @validation.impl.version@
 Bundle-Description: Bean Validation API (javax.validation/@validation.spec.version@) @validation.impl.version@
-Bundle-SymbolicName: org.jboss.hibernate.validation-api
+Bundle-SymbolicName: org.hibernate.validation-api
