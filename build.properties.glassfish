@@ -96,7 +96,7 @@ container.port=8080
 # --------------------------------------------------
 glassfish.home=${container.home}
 glassfish.admin.user=admin
-glassfish.password.file=${container.home}/password.txt
+glassfish.password.file=${jsf.build.home}/password.txt
 glassfish.admin.host=${container.host}
 glassfish.admin.port=4848
 glassfish.domain=domain1
