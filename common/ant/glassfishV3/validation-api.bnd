@@ -45,7 +45,7 @@ Extension-Name: @validation.extension.name@
 # BND/OSGI Properties
 Export-Package: javax.validation.*;version=@validation.spec.version@
 Import-Package: javax.el.*;version=2.1
-Bundle-Version: @validation.osgi.version@
+Bundle-Version: @validation.spec.version@
 Bundle-Name: Mojarra JSF API Implementation @validation.impl.version@
 Bundle-Description: Bean Validation API (javax.validation/@validation.spec.version@) @validation.impl.version@
 Bundle-SymbolicName: org.jboss.hibernate.validation-api

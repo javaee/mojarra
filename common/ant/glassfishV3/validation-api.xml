@@ -39,12 +39,12 @@
 
 <!-- ************ Bean Validation integration ************************************** -->
 
-<project name="bean-validation" default="main" basedir=".">
+<project name="bean-validation" default="add.osgi" basedir=".">
 
     <!-- ************ Per user local properties ******************************* -->
 
     <property file="${user.home}/build.properties"/>
-    <property file="../build.properties"/>
+    <property file="../../../build.properties"/>
     <property environment="myenv"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     <property name="output.root.dir" value="${basedir}/build-bean-validation"/>
@@ -76,7 +76,7 @@
       <delete dir="${output.root.dir}" />
     </target>
 
-    <target name="add.osgi">
+    <target name="add.osgi" depends="clean,prepare">
       <unjar src="${validation-api.jar}" dest="${build.dir}" />
       <copy file="${basedir}/validation-api.bnd" tofile="${tmp.bnd}"/>
         <replace file="${tmp.bnd}"

@@ -37,6 +37,17 @@
 -->
 <project name="GlassFishV3" basedir=".">
 
+    <property name="validation.root.dir" value="${basedir}/common/ant/glassfishV3"/>
+    <property name="validation.root.build.dir" value="${validation.root.dir}/build-bean-validation"/>
+    <property name="validation.tmp.bnd" value="${validation.root.build.dir}/tmp.bnd"/>
+    <property name="validation.dist.dir" value="${validation.root.build.dir}/dist"/>
+    <property name="validation.build.dir" value="${validation.root.build.dir}/build"/>
+
+    <property name="validation.spec.version" value="${validation-api.version}" />
+    <property name="validation.impl.name" value="validation-api" />
+    <property name="validation.impl.version" value="${validation-api.version}" />
+    <property name="validation.extension.name" value="javax.validation" />
+    <property name="validation.version" value="${validation-api.version}" />
 
 
     <!-- JARs that may be packaged in WEB-INF/lib
@@ -138,16 +149,17 @@
         </if>
         <delete>
                 <fileset dir="${container.home}/lib">
-                   <include name="validation-api*.jar"/>
                    <include name="hibernate-validator*.jar"/>
                 </fileset>
         </delete>
 
         <copy todir="${container.home}/lib" file="${validations-ri.jar}"/>
-        <copy todir="${container.home}/lib" file="${validation-api.jar}"/>
 
         <copy file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api.jar"/>
         <copy file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/modules/jsf-impl.jar"/>
+
+        <antcall target="add.osgi" />
+        <copy file="${validation.root.build.dir}/dist/validation-api-${validation-api.version}.jar" toFile="${container.home}/modules/validation-api.jar"/>
         <if>
             <os family="windows"/>
             <then>
@@ -251,6 +263,55 @@
             <sleep seconds="15"/>
         </sequential>
     </macrodef>
+
+
+    <!-- ************ Compiler Defaults *************************************** -->
+
+
+    <!-- ************ Executable Targets ************************************** -->
+
+    <target name="main">
+    </target>
+
+    <target name="add.osgi">
+      <mkdir dir="${validation.dist.dir}" />
+      <mkdir dir="${validation.build.dir}" />
+      <unjar src="${validation-api.jar}" dest="${validation.build.dir}" />
+      <copy file="${validation.root.dir}/validation-api.bnd" tofile="${validation.tmp.bnd}"/>
+        <replace file="${validation.tmp.bnd}"
+                 token="@validation.spec.version@"
+                 value="${validation.spec.version}"/>
+        <replace file="${validation.tmp.bnd}"
+                 token="@validation.impl.name@"
+                 value="${validation.impl.name}"/>
+        <replace file="${validation.tmp.bnd}"
+                 token="@validation.impl.version@"
+                 value="${validation.impl.version}"/>
+        <if>
+            <equals arg1="${build.type}" arg2=""/>
+            <then>
+                <replace file="${validation.tmp.bnd}"
+                         token="@validation.version@"
+                         value="${validation.impl.version}"/>
+            </then>
+            <else>
+                <replace file="${validation.tmp.bnd}"
+                         token="@validation.version@"
+                         value="${validation.impl.version}-${build.type}"/>
+            </else>
+        </if>
+        <replace file="${validation.tmp.bnd}"
+                 token="@validation.extension.name@"
+                 value="${validation.extension.name}"/>
+        <jsf.osgi.jar jarfile="${validation.dist.dir}/validation-api-${validation-api.version}.jar"
+                            basedir="${validation.build.dir}"
+                            extension-name="${validation.extension.name}"
+                            bndfile="${validation.tmp.bnd}"
+                            includes="**/*.class,**/*.properties"/>
+        <delete file="${validation.tmp.bnd}"/>
+
+    </target>
+
 
 </project>
 
