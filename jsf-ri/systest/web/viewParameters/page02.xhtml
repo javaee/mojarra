@@ -6,7 +6,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
     <f:view contentType="text/html">
-        <f:facet name="javax_faces_metadata">
+        <f:metadata>
             <f:viewParam id="id" name="id" value="#{newsReader.selectedStoryId}" required="true"
                 requiredMessage="You did not specify a headline. (The id parameter is missing)"
                 converterMessage="Invalid headline. (The id parameter is not a number)"
@@ -14,7 +14,7 @@
                 <f:validateLongRange minimum="1"/>
             </f:viewParam>
             <f:event type="preRenderView" listener="#{newsReader.loadStory}"/>
-        </f:facet>
+        </f:metadata>
     <body>
 
         <h:messages style="color: red; list-style: none; border: 0 solid red; border-left-width: 2px; padding: 0 5px;"/>

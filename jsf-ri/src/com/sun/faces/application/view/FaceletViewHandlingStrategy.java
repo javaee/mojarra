@@ -65,16 +65,14 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
-import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
-import java.util.Collections;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIPanel;
+import javax.faces.webapp.pdl.ViewMetadata;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.servlet.http.HttpServletResponse;
 
@@ -97,9 +95,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public static final String IS_BUILDING_METADATA =
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
-    public static final String ONLY_BUILD_METADATA_FACET_KEY =
-            FaceletViewHandlingStrategy.class.getName() + ".ONLY_BUILD_METADATA_FACET";
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -168,81 +163,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
     @Override
-    public BeanInfo getViewMetadata(FacesContext context, String viewId) {
-        BeanInfo result = null;
-        UIViewRoot root = context.getViewRoot();
-        
-        if (viewId.equals(root.getViewId())) {
-            result = extractViewMetadataFromExistingView(context, root);
-        } else {
-            // we have to first build the metadata from template,
-            // then extract it.
-            root = buildMetadataFromTemplate(context, viewId);
-            result = extractViewMetadataFromExistingView(context, root);
-        }
-        
-        
-        return result;
+    public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
+
+        return new ViewMetadataImpl(this, viewId);
+
     }
     
-    private BeanInfo extractViewMetadataFromExistingView(FacesContext context,
-            UIViewRoot root) {
-        FacesBeanInfo result = null;
-        
-        // Look for the BeanInfo in the UIViewRoot, if it's there, return it
-        if (null == (result = (FacesBeanInfo) root.getAttributes().get(UIViewRoot.METADATA_BEANINFO_KEY))) {
-            // Otherwise, see if the viewRoot has the metadata facet
-            UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
-            List<UIViewParameter.Reference> params = null;
-
-            if (metadataFacet == null) {
-                params = Collections.<UIViewParameter.Reference>emptyList();
-            } else {
-                params = new ArrayList<UIViewParameter.Reference>();
-                List<UIComponent> children = metadataFacet.getChildren();
-                int len = children.size();
-                String viewId = root.getViewId();
-                for (int i = 0; i < len; i++ ) {
-                    UIComponent c = children.get(i);
-                    if (c instanceof UIViewParameter) {
-                        params.add(new UIViewParameter.Reference(context,
-                                (UIViewParameter) c, i, viewId));
-                    }
-                }
-            }
-            result = new FacesBeanInfo();
-            BeanDescriptor viewMetadataDescriptor = new BeanDescriptor(UIViewRoot.class);
-            viewMetadataDescriptor.setName(root.getViewId());
-            viewMetadataDescriptor.setValue(UIViewRoot.VIEW_PARAMETERS_KEY, 
-                    params);
-            result.setBeanDescriptor(viewMetadataDescriptor);
-            root.getAttributes().put(UIViewRoot.METADATA_BEANINFO_KEY, result);
-
-        }
-        
-        return result;
-        
-    }
-    
-    private UIViewRoot buildMetadataFromTemplate(FacesContext context,
-            String viewId) {
-        UIViewRoot result = null;
-        
-        UIViewRoot currentViewRoot = context.getViewRoot();
-        try {
-            context.getAttributes().put(ONLY_BUILD_METADATA_FACET_KEY, true);
-            result = this.createView(context, viewId);
-        } finally {
-            context.setViewRoot(currentViewRoot);
-            context.getAttributes().remove(ONLY_BUILD_METADATA_FACET_KEY);
-        }
-        
-        return result;
-    }
-    
-    
-
-
     /**
      * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
@@ -422,6 +348,39 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
 
+    /**
+     * Build the view.
+     * @param ctx the {@link FacesContext} for the current request
+     * @param viewToRender the {@link UIViewRoot} to populate based
+     *  of the Facelet template
+     * @throws IOException if an error occurs building the view.
+     */
+    @Override
+    public void buildView(FacesContext ctx, UIViewRoot viewToRender)
+    throws IOException {
+
+        viewToRender.setViewId(viewToRender.getViewId());
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Building View: " + viewToRender.getViewId());
+        }
+        if (faceletFactory == null) {
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
+            faceletFactory = associate.getFaceletFactory();
+            assert (faceletFactory != null);
+        }
+        RequestStateManager.set(ctx,
+                                RequestStateManager.FACELET_FACTORY,
+                                faceletFactory);
+        Facelet f = faceletFactory.getFacelet(viewToRender.getViewId());
+
+        // populate UIViewRoot
+        f.apply(ctx, viewToRender);
+        setViewPopulated(ctx, viewToRender);
+
+    }
+
+
     // ------------------------------------------------------- Protected Methods
 
 
@@ -506,43 +465,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
     }
 
+
     /**
      * @return a new Compiler for Facelet processing.
      */
     protected Compiler createCompiler() {
         return new SAXCompiler();
-    }
-
-
-    /**
-     * Build the view.
-     * @param ctx the {@link FacesContext} for the current request
-     * @param viewToRender the {@link UIViewRoot} to populate based
-     *  of the Facelet template
-     * @throws IOException if an error occurs building the view.
-     */
-    protected void buildView(FacesContext ctx, UIViewRoot viewToRender)
-    throws IOException {
-
-        viewToRender.setViewId(viewToRender.getViewId());
-
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Building View: " + viewToRender.getViewId());
-        }
-        if (faceletFactory == null) {
-            ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
-            faceletFactory = associate.getFaceletFactory();
-            assert (faceletFactory != null);
-        }
-        RequestStateManager.set(ctx,
-                                RequestStateManager.FACELET_FACTORY,
-                                faceletFactory);
-        Facelet f = faceletFactory.getFacelet(viewToRender.getViewId());
-
-        // populate UIViewRoot
-        f.apply(ctx, viewToRender);
-        setViewPopulated(ctx, viewToRender);
-
     }
 
 

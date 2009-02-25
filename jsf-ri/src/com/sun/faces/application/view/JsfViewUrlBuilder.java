@@ -36,7 +36,8 @@
 
 package com.sun.faces.application.view;
 
-import java.util.List;
+import java.util.Collection;
+
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
@@ -102,12 +103,13 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         UIViewRoot currentRoot = context.getViewRoot();
         String currentViewId = currentRoot.getViewId();
         PageDeclarationLanguage pdl = null;
-        List<UIViewParameter> toViewParams;
-        List<UIViewParameter> currentViewParams;
+        Collection<UIViewParameter> toViewParams;
+        Collection<UIViewParameter> currentViewParams;
         boolean currentIsSameAsNew = false;
 
         pdl = viewHandler.getPageDeclarationLanguage(context, currentViewId);
-        currentViewParams = pdl.getViewParameters(context, currentViewId);
+        //currentViewParams = pdl.getViewParameters(context, currentViewId);
+        currentViewParams = pdl.getViewMetadata(context, currentViewId).getViewParameters(currentRoot);
         
         if (currentViewId.equals(viewId)) {
             currentIsSameAsNew = true;
@@ -115,7 +117,8 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         }
         else {
             pdl = viewHandler.getPageDeclarationLanguage(context, viewId);
-            toViewParams = pdl.getViewParameters(context, viewId);
+            toViewParams = pdl.getViewMetadata(context, viewId).getViewParameters(context);
+            //toViewParams = pdl.getViewParameters(context, viewId);
         }
 
         if (toViewParams.isEmpty()) {
@@ -150,14 +153,17 @@ public class JsfViewUrlBuilder extends UrlBuilder {
     }
 
     private static String getStringValueToTransfer(FacesContext context, 
-            UIViewParameter param,
-            List<UIViewParameter> viewParams) {
-        for (UIViewParameter candidate : viewParams) {
-            if ((null != candidate.getName() && null != param.getName()) &&
-                candidate.getName().equals(param.getName())) {
-                // QUESTION: should this be getStringValue()? That's how it is implemented in Seam
-                // ANSWER: I don't know.
-                return candidate.getStringValue(context);
+                                                   UIViewParameter param,
+                                                   Collection<UIViewParameter> viewParams) {
+
+        if (viewParams != null && !viewParams.isEmpty()) {
+            for (UIViewParameter candidate : viewParams) {
+                if ((null != candidate.getName() && null != param.getName()) &&
+                    candidate.getName().equals(param.getName())) {
+                    // QUESTION: should this be getStringValue()? That's how it is implemented in Seam
+                    // ANSWER: I don't know.
+                    return candidate.getStringValue(context);
+                }
             }
         }
 

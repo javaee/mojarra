@@ -97,6 +97,8 @@ public final class CoreLibrary extends AbstractTagLibrary {
 
         this.addTagHandler("facet", FacetHandler.class);
 
+        this.addTagHandler("metadata", MetadataHandler.class);
+
         this.addTagHandler("loadBundle", LoadBundleHandler.class);
 
         this.addComponent("viewParam", UIViewParameter.COMPONENT_TYPE, null);
