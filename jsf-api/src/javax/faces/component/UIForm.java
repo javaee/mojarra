@@ -226,6 +226,10 @@ public class UIForm extends UIComponentBase implements NamingContainer {
         if (context == null) {
             throw new NullPointerException();
         }
+        // If not already marked as submitted, check if it should be based on request
+        if (!isSubmitted()) {
+            setSubmitted(context.getExternalContext().getRequestParameterMap().containsKey(getClientId(context)));
+        }
         if (!isSubmitted()) {
             return;
         }
@@ -251,6 +255,10 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
         if (context == null) {
             throw new NullPointerException();
+        }
+        // If not already marked as submitted, check if it should be based on request
+        if (!isSubmitted()) {
+            setSubmitted(context.getExternalContext().getRequestParameterMap().containsKey(getClientId(context)));
         }
         if (!isSubmitted()) {
             return;
