@@ -43,11 +43,8 @@ Implementation-Vendor-Id: org.jboss
 Extension-Name: @validation.extension.name@
 
 # BND/OSGI Properties
-Export-Package: javax.validator.*;version=@validation.spec.version@
-Import-Package: javax.servlet.jsp.jstl.*;version=1.2,\
-  javax.servlet.jsp.*;version=2.1,\
-  javax.servlet.*;version=2.4,\
-  javax.el.*;version=2.1
+Export-Package: javax.validation.*;version=@validation.spec.version@
+Import-Package: javax.el.*;version=2.1
 Bundle-Version: @validation.osgi.version@
 Bundle-Name: Mojarra JSF API Implementation @validation.impl.version@
 Bundle-Description: Bean Validation API (javax.validation/@validation.spec.version@) @validation.impl.version@

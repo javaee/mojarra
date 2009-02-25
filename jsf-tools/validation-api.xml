@@ -53,11 +53,11 @@
     <property name="build.dir" value="${output.root.dir}/build"/>
 
 
-    <property name="validation.spec.version" value="${validation-api.osgi.version}" />
+    <property name="validation.spec.version" value="${validation-api.version}" />
     <property name="validation.impl.name" value="validation-api" />
-    <property name="validation.impl.version" value="${validation-api.osgi.version}" />
+    <property name="validation.impl.version" value="${validation-api.version}" />
     <property name="validation.extension.name" value="javax.validation" />
-    <property name="validation.osgi.version" value="${validation-api.osgi.version}" />
+    <property name="validation.version" value="${validation-api.version}" />
 
     <!-- ************ Compiler Defaults *************************************** -->
 
@@ -92,12 +92,12 @@
             <equals arg1="${build.type}" arg2=""/>
             <then>
                 <replace file="${tmp.bnd}"
-                         token="@validation.osgi.version@"
+                         token="@validation.version@"
                          value="${validation.impl.version}"/>
             </then>
             <else>
                 <replace file="${tmp.bnd}"
-                         token="@validation.osgi.version@"
+                         token="@validation.version@"
                          value="${validation.impl.version}-${build.type}"/>
             </else>
         </if>

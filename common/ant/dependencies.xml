@@ -63,7 +63,6 @@
     <property name="groovy.version" value="1.5.5"/>
     <property name="el.version" value="1.0"/>
     <property name="validation-api.version" value="1.0.Beta3"/>
-    <property name="validation-api.osgi.version" value="1.0"/>
     <property name="validations.ri.version" value="4.0.0.Alpha1"/>
     <property name="maven.repository.importer.version" value="1.2"/>
 
