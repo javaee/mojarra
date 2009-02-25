@@ -278,35 +278,69 @@ public class RenderKitUtils {
         assert (null != writer);
         assert (null != component);
 
-        Map<String, Object> attrMap = component.getAttributes();
+        // TODO - update renderers to pass this in.
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, List<Behavior>> behaviors = null;
 
-        if (canBeOptimized(component)) {
+        if (component instanceof BehaviorHolder) {
+            behaviors = ((BehaviorHolder)component).getBehaviors();
+        }
+
+        renderPassThruAttributes(context, writer, component, attributes, behaviors);
+    }
+
+    /**
+     * <p>Render any "passthru" attributes, where we simply just output the
+     * raw name and value of the attribute.  This method is aware of the
+     * set of HTML4 attributes that fall into this bucket.  Examples are
+     * all the javascript attributes, alt, rows, cols, etc. </p>
+     *
+     * @param context the FacesContext for this request
+     * @param writer writer the {@link javax.faces.context.ResponseWriter} to be used when writing
+     *  the attributes
+     * @param component the component
+     * @param attributes an array of attributes to be processed
+     * @param behaviors the behaviors for this component, or null if
+     *   component is not a BehaviorHolder
+     * @throws IOException if an error occurs writing the attributes
+     */
+    public static void renderPassThruAttributes(FacesContext context,
+                                                ResponseWriter writer,
+                                                UIComponent component,
+                                                Attribute[] attributes,
+                                                Map<String, List<Behavior>> behaviors)
+    throws IOException {
+
+        assert (null != writer);
+        assert (null != component);
+
+        if (behaviors == null) {
+            behaviors = Collections.emptyMap();
+        }
+
+        if (canBeOptimized(component, behaviors)) {
             //noinspection unchecked
             List<String> setAttributes = (List<String>)
               component.getAttributes().get(ATTRIBUTES_THAT_ARE_SET_KEY);
             if (setAttributes != null) {
-                renderPassThruAttributesOptimized(writer,
+                renderPassThruAttributesOptimized(context,
+                                                  writer,
                                                   component,
                                                   attributes,
-                                                  setAttributes);
+                                                  setAttributes,
+                                                  behaviors);
             }
         } else {
-            // this block should only be hit by custom components leveraging
-            // the RI's rendering code.  We make no assumptions and loop through
-            // all known attributes.
-            boolean isXhtml =
-                  RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
-            for (Attribute attribute : attributes) {
-                String attrName = attribute.getName();
-                Object value =
-                      attrMap.get(attrName);
-                if (value != null && shouldRenderAttribute(value)) {
-                    writer.writeAttribute(prefixAttribute(attrName, isXhtml),
-                                          value,
-                                          attrName);
-                }
-            }
 
+            // this block should only be hit by custom components leveraging
+            // the RI's rendering code, or in cases where we have behaviors
+            // attached to multiple events.  We make no assumptions and loop
+            // through
+            renderPassThruAttributesUnoptimized(context,
+                                                writer,
+                                                component,
+                                                attributes,
+                                                behaviors);
         }
     }
 
@@ -449,11 +483,22 @@ public class RenderKitUtils {
      *  <code>javax.faces.component</code> or <code>javax.faces.component.html</code>
      *  packages, otherwise return <code>false</code>
      */
-    private static boolean canBeOptimized(UIComponent component) {
+    private static boolean canBeOptimized(UIComponent component,
+                                          Map<String, List<Behavior>> behaviors) {
+        assert(component != null);
+        assert(behaviors != null);
 
         String name = component.getClass().getName();
-        return (name != null && name.startsWith(OPTIMIZED_PACKAGE));
+        if (name != null && name.startsWith(OPTIMIZED_PACKAGE)) {
 
+            // If we've got behaviors attached to multiple events
+            // it is difficult to optimize, so fall back to the
+            // non-optimized code path.  Behaviors attached to 
+            // multiple event handlers should be a fairly rare case.
+            return (behaviors.size() < 2);
+        }
+
+        return false;
     }
 
 
@@ -461,19 +506,28 @@ public class RenderKitUtils {
      * <p>For each attribute in <code>setAttributes</code>, perform a binary
      * search against the array of <code>knownAttributes</code>  If a match is found
      * and the value is not <code>null</code>, render the attribute.
+     * @param context the {@link FacesContext} of the current request
      * @param writer the current writer
      * @param component the component whose attributes we're rendering
      * @param knownAttributes an array of pass-through attributes supported by
      *  this component
      * @param setAttributes a <code>List</code> of attributes that have been set
      *  on the provided component
+     * @param behaviors the non-null behaviors map for this request.
      * @throws IOException if an error occurs during the write
      */
-    private static void renderPassThruAttributesOptimized(ResponseWriter writer,
+    private static void renderPassThruAttributesOptimized(FacesContext context,
+                                                          ResponseWriter writer,
                                                           UIComponent component,
                                                           Attribute[] knownAttributes, 
-                                                          List<String> setAttributes)
+                                                          List<String> setAttributes,
+                                                          Map<String,List<Behavior>> behaviors)
     throws IOException {
+
+        // We should only come in here if we've got zero or one behavior event
+        assert((behaviors != null) && (behaviors.size() < 2));
+        String behaviorEventName = getSingleBehaviorEventName(behaviors);
+        boolean renderedBehavior = false;
 
         String[] attributes = setAttributes.toArray(new String[setAttributes.size()]);
         Arrays.sort(attributes);
@@ -481,19 +535,105 @@ public class RenderKitUtils {
               RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
         Map<String, Object> attrMap = component.getAttributes();
         for (String name : attributes) {
-            if (Arrays.binarySearch(knownAttributes, Attribute.attr(name)) >= 0) {
+
+            // Note that this search can be optimized by switching from
+            // an array to a Map<String, Attribute>.  This would change
+            // the search time from O(log n) to O(1), will allow us to 
+            // remove the Arrays.sort above, and will also allow us 
+            // to avoid the Attribute object allocation.
+            int index = Arrays.binarySearch(knownAttributes, Attribute.attr(name));
+            if (index >= 0) {
                 Object value =
                       attrMap.get(name);
                 if (value != null && shouldRenderAttribute(value)) {
-                    writer.writeAttribute(prefixAttribute(name, isXhtml),
-                                          value,
-                                          name);
+
+                    Attribute attr = knownAttributes[index];
+
+                    if (isBehaviorEventAttribute(attr, behaviorEventName)) {
+                        renderHandler(context, component, null, name, behaviorEventName);
+                        renderedBehavior = true;
+                    } else {
+                        writer.writeAttribute(prefixAttribute(name, isXhtml),
+                                              value,
+                                              name);
+                    }
                 }
             }
         }
 
+        // We did not render out the behavior as part of our optimized
+        // attribute rendering.  Need to manually render it out now.
+        if ((behaviorEventName != null) && !renderedBehavior) {
+
+            // Note that we can optimize this search by providing
+            // an event name -> Attribute inverse look up map.
+            // This would change the search time from O(n) to O(1).
+            for (int i = 0; i < knownAttributes.length; i++) {
+                Attribute attr = knownAttributes[i];
+                String[] events = attr.getEvents();
+                if ((events != null) &&
+                    (events.length > 0) &&
+                    (behaviorEventName.equals(events[0]))) {
+
+                        renderHandler(context, 
+                                      component,
+                                      null,
+                                      attr.getName(),
+                                      behaviorEventName);
+                }
+            }
+ 
+
+        }
     }
 
+    /**
+     * <p>Loops over all known attributes and attempts to render each one.
+     * @param context the {@link FacesContext} of the current request
+     * @param writer the current writer
+     * @param component the component whose attributes we're rendering
+     * @param knownAttributes an array of pass-through attributes supported by
+     *  this component
+     * @param behaviors the non-null behaviors map for this request.
+     * @throws IOException if an error occurs during the write
+     */
+    private static void renderPassThruAttributesUnoptimized(FacesContext context,
+                                                            ResponseWriter writer,
+                                                            UIComponent component,
+                                                            Attribute[] knownAttributes, 
+                                                            Map<String,List<Behavior>> behaviors)
+    throws IOException {
+
+        boolean isXhtml = RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
+
+        Map<String, Object> attrMap = component.getAttributes();
+
+        for (Attribute attribute : knownAttributes) {
+            String attrName = attribute.getName();
+            String[] events = attribute.getEvents();
+            boolean hasBehavior = ((events != null) &&
+                                   (events.length > 0) &&
+                                   (behaviors.containsKey(events[0])));
+
+            Object value = attrMap.get(attrName);
+
+            if (value != null && shouldRenderAttribute(value) && !hasBehavior) {
+                writer.writeAttribute(prefixAttribute(attrName, isXhtml),
+                                      value,
+                                      attrName);
+            } else if (hasBehavior) {
+
+                // If we've got a behavior for this attribute,
+                // we may need to chain scripts together, so use 
+                // renderHandler().
+                renderHandler(context, 
+                              component, 
+                              null,
+                              attrName,
+                              events[0]);
+            }
+        }
+    }
 
     /**
      * <p>Determines if an attribute should be rendered based on the
@@ -1106,7 +1246,6 @@ public class RenderKitUtils {
             return false;
         }
 
-
         BehaviorContext bContext = createBehaviorContext(context,
                                                          component,
                                                          behaviorEventName,
@@ -1126,6 +1265,40 @@ public class RenderKitUtils {
         }
 
         return submitting;
+    }
+
+    // Given a behaviors Map with a single entry, returns the event name
+    // for that entry.  Or, if no entries, returns null.  Used by 
+    // renderPassThruAttributesOptimized.
+    private static String getSingleBehaviorEventName(Map<String, List<Behavior>> behaviors) {
+        assert(behaviors != null);
+
+        int size = behaviors.size();
+        if (size == 0) {
+            return null;
+        }
+
+        // If we made it this far, we should have a single
+        // entry in the behaviors map.
+        assert(size == 1);
+
+        Iterator<String> keys = behaviors.keySet().iterator();
+        assert(keys.hasNext());
+
+        return keys.next();
+    }
+
+    // Tests whether the specified Attribute matches to specified
+    // behavior event name.  Used by renderPassThruAttributesOptimized.
+    private static boolean isBehaviorEventAttribute(Attribute attr,
+                                                    String behaviorEventName) {
+
+      String[] events = attr.getEvents();
+
+      return ((behaviorEventName != null) &&
+              (events != null) &&
+              (events.length > 0) &&
+              (behaviorEventName.equals(events[0])));
     }
 
     // Returns a user-specified DOM event handler script, trimmed
@@ -1239,7 +1412,7 @@ public class RenderKitUtils {
         // If we're submitting (either via a behavior, or by rendering
         // a submit script), we need to return false to prevent the
         // default button/link action.
-        if (submitting) {
+        if (submitting && "action".equals(behaviorEventName)) {
             builder.append(";return false");
         }
 
@@ -1262,7 +1435,7 @@ public class RenderKitUtils {
 
          // If we've got a submitting behavior script, we need to tack
          // on "return false" to prevent button from submitting.
-         if ((script != null) && isSubmitting(behavior))
+         if ((script != null) && isSubmitting(behavior) && "action".equals(behaviorEventName))
              script = script +  ";return false";
 
          return script;
@@ -1297,6 +1470,9 @@ public class RenderKitUtils {
         String userClickHandler = getUserHandler(component, handlerName);
         List<Behavior> behaviors = getBehaviors(component, behaviorEventName);
 
+        if (params == null) {
+            params = Collections.emptyList();
+        }
         String handler = null;
 
         switch (getHandlerType(behaviors, params, userClickHandler)) {
