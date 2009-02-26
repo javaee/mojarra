@@ -299,7 +299,7 @@
                 </sequential>
             </then>
             <else>
-                <fail message="Javanettasks version 1.0.8 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+                <fail message="Javanettasks version 1.0.13 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
             </else>
         </if>
     </target>
