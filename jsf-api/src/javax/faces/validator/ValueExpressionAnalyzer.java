@@ -57,9 +57,34 @@ class ValueExpressionAnalyzer {
     }
 
     public ValueReference getReference(ELContext elContext) {
+        ValueReference result = null;
+        
         InterceptingResolver resolver = new InterceptingResolver(elContext.getELResolver());
-        expression.setValue(decorateELContext(elContext, resolver), null);
-        return resolver.getValueReference();
+        
+        ELContext decoratedContext = decorateELContext(elContext, resolver);
+        
+        expression.setValue(decoratedContext, null);
+        
+        // PENDING(edburns): remove this terrible hack
+        if (null == (result = resolver.getValueReference())) {
+            try {
+                String 
+                        expr = expression.getExpressionString(),
+                        property = null;
+                int len = expr.length();
+                property = expr.substring(2, len - 1);
+                result = new ValueReference(null, property);
+                
+            } catch (Throwable t) {
+                
+            }
+        } else {
+            String expr = expression.getExpressionString(),
+                    property = null;
+            int len = expr.length();
+            property = expr.substring(2, len - 1);
+        }
+        return result;
     }
 
     private ELContext decorateELContext(final ELContext context, final ELResolver resolver) {

@@ -46,7 +46,14 @@ class ValueReference {
     }
 
     public Class getBaseClass() {
-        return base.getClass();
+        Class result = null;
+        if (null == base) {
+            result = Object.class;
+        } else {
+            result = base.getClass();
+        }
+        
+        return result;
     }
 
     public Object getBase() {
