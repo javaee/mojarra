@@ -40,12 +40,13 @@
 
 package javax.faces.validator;
 
+import java.util.Collection;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 
 
 /**
- * <p>A <strong>ValidatorException</strong> is an exception
+ * <p>A <strong class="changed_modified_2_0">ValidatorException</strong> is an exception
  * thrown by the <code>validate()</code> method of a
  * {@link Validator} to indicate that validation failed.
  */
@@ -64,7 +65,18 @@ public class ValidatorException extends FacesException {
         super(message.getSummary());
         this.message = message;
     }
+    
+    /**
+     * <p class="changed_added_2_0">Allow this one exception to contain
+     * multiple messages.</p>
+     * @param messages
+     * 
+     * @since 2.0
+     */
 
+    public ValidatorException(Collection<FacesMessage> messages) {
+        this.messages = messages;
+    }
 
     /**
      * <p>Construct a new exception with the specified detail message and
@@ -80,11 +92,50 @@ public class ValidatorException extends FacesException {
     }
 
     /**
-     * Returns the FacesMessage associated with the exception.
+     * <p class="changed_added_2_0">Allow this one exception to contain
+     * multiple messages, while passing on the root cause to the superclass</p>
+     * @param messages the detail messages for this exception
+     * @param cause the root cause for this exception
+     * 
+     * @since 2.0
+     */
+
+    public ValidatorException(Collection<FacesMessage> messages, Throwable cause) {
+        super(messages.isEmpty() ? "" : messages.iterator().next().getSummary(),
+              cause);
+        this.messages = messages;
+    }
+
+    /**
+     * <p class="changed_modified_2_0">Returns the <code>FacesMessage</code>
+     * associated with 
+     * the exception.  If this instance
+     * was created with a constructor that takes 
+     * <code>Collection&lt;FacesMessage&gt;</code>, this method returns the first
+     * message in the <code>Collection</code></p>
      */
     public FacesMessage getFacesMessage() {
-        return this.message;
+        FacesMessage result = this.message;
+        if (null == result && null != this.messages && !this.messages.isEmpty()) {
+            result = messages.iterator().next();
+        }
+        return result;
+    }
+    
+    
+    /**
+     * <p class="changed_modified_2_0">If this instance was created with a 
+     * constructor that takes 
+     * <code>Collection&lt;FacesMessage&gt;</code>, this method returns the passed
+     * collection, otherwise this method returns <code>null</code>.</p>
+     * 
+     * @since 2.0
+     */
+
+    public Collection<FacesMessage> getFacesMessages() {
+        return this.messages;
     }
 
     private FacesMessage message;
+    private Collection<FacesMessage> messages;
 }

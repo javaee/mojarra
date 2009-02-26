@@ -42,6 +42,7 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -1148,6 +1149,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * otherwise use the message for the {@link #REQUIRED_MESSAGE_ID}.
      * </li> <li>Set the <code>valid</code> property on this component
      * to <code>false</code>.</p></li> 
+
+     * <li><p class="changed_modified_2_0">If calling {@link
+     * ValidatorException#getFacesMessages} returns
+     * non-<code>null</code>, each message should be added to the
+     * <code>FacesContext</code>.  Otherwise the single message returned
+     * from {@link ValidatorException#getFacesMessage} should be
+     * added.</p></li>
      *
      * </ul>
 
@@ -1232,7 +1240,17 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                                                    validatorMessageString);
                             message.setSeverity(FacesMessage.SEVERITY_ERROR);
                         } else {
-                            message = ve.getFacesMessage();
+                            Collection<FacesMessage> messages = ve.getFacesMessages();
+                            if (null != messages) {
+                                message = null;
+                                Iterator<FacesMessage> iter = messages.iterator();
+                                while (iter.hasNext()) {
+                                    context.addMessage(getClientId(context), 
+                                            iter.next());
+                                }
+                            } else {
+                                message = ve.getFacesMessage();
+                            }
                         }
                         if (message != null) {
                             context.addMessage(getClientId(context), message);
@@ -1281,7 +1299,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
     }
 
-    private static boolean isEmpty(Object value) {
+    public static boolean isEmpty(Object value) {
 
         if (value == null) {
             return (true);

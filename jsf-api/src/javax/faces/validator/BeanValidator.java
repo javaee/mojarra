@@ -37,6 +37,8 @@
 package javax.faces.validator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -50,6 +52,7 @@ import javax.validation.ConstraintDescriptor;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
+import javax.validation.ValidatorContext;
 import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
@@ -102,12 +105,12 @@ public class BeanValidator implements Validator, StateHolder {
     /**
      * <p class="changed_added_2_0">A comma-separated list of validation
      * groups which are used to filter which validations get checked by
-     * this validator. If the validationGroups attribute is omitted or
+     * this validator. If the validationGroupsArray attribute is omitted or
      * is empty, the validation groups will be inherited from the branch
      * defaults or, if there are no branch defaults, the {@link
      * javax.validation.groups.Default} group will be used.</p>
      *
-     * @param validationGroups comma-separated list of validation groups
+     * @param validationGroupsArray comma-separated list of validation groups
      * (string with only spaces and commas treated as null)
      */
 
@@ -129,7 +132,7 @@ public class BeanValidator implements Validator, StateHolder {
     /**
      * <p class="changed_added_2_0">Return the validation groups passed
      * to the Validation API when checking constraints.  If the
-     * validationGroups attribute is omitted or empty, the validation
+     * validationGroupsArray attribute is omitted or empty, the validation
      * groups will be inherited from the branch defaults, or if there
      * are no branch defaults, the {@link
      * javax.validation.groups.Default} group will be used.</p>
@@ -140,7 +143,68 @@ public class BeanValidator implements Validator, StateHolder {
 
     /**
      * <p class="changed_added_2_0">Verify that the value is valid
-     * according to the Bean Validation constraints.  </p>
+     * according to the Bean Validation constraints.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p>Obtain a {@link ValidatorFactory} instance by calling {@link
+     * javax.validation.Validation#buildDefaultValidatorFactory}.</p>
+
+     * <p>Let <em>validationGroupsArray</em> be a <code>Class []</code>
+     * representing validator groups discovered by looking in the
+     * component attribute <code>Map</code> for every ancestor {@link
+     * UIComponent} between argument <em>component</em> up to and
+     * including the {@link javax.faces.component.UIViewRoot} for a key
+     * given by the value of the symbolic constant {@link
+     * #VALIDATION_GROUPS_KEY}.  The first search component terminates
+     * the search for the validation groups value.  If no such value is
+     * found use the class name of {@link
+     * javax.validation.groups.Default} as the value of the validation
+     * groups.</p>
+
+     * <p>Let <em>valueExpression</em> be the return from calling {@link
+     * UIComponent#getValueExpression} on the argument
+     * <em>component</em>, passing the literal string
+     * &#8220;value&#8221; (without the quotes) as an argument.  If this
+     * application is running in an environment with a Unified EL
+     * Implementation version 1.3 or greater, obtain the
+     * <code>ValueReference</code> from <em>valueExpression</em> and let
+     * <em>valueBaseClase</em> be the return from calling
+     * <code>ValueReference.getBase()</code> and <em>valueProperty</em>
+     * be the return from calling
+     * <code>ValueReference.getProperty()</code>.  If an earlier version
+     * of the Unified EL is present, use the appropriate methods to
+     * inspect <em>valueExpression</em> and derive values for
+     * <em>valueBaseClass</em> and <em>valueProperty</em>.</p>
+
+     * <p>Obtain the {@link ValidatorContext} from the {@link
+     * ValidatorFactory}.</p>
+
+     * <p>Decorate the {@link MessageInterpolator} returned from {@link
+     * ValidatorFactory#getMessageInterpolator} with one that leverages
+     * the <code>Locale</code> returned from {@link
+     * javax.faces.component.UIViewRoot#getLocale}, and store it in the
+     * <code>ValidatorContext</code> using {@link
+     * ValidatorContext#messageInterpolator}.</p>
+
+     * <p>Obtain the {@link javax.validation.Validator} instance from
+     * the <code>validatorContext</code>.</p>
+
+     * <p>Call {@link javax.validation.Validator#validateValue}, passing
+     * <em>valueBaseClass</em>, <em>valueProperty</em>, the
+     * <em>value</em> argument, and <em>validatorGroupsArray</em> as
+     * arguments.</p>
+
+     * <p>If the returned <code>Set&lt;{@link
+     * ConstraintViolation}&gt;</code> is non-empty, for each element in
+     * the <code>Set</code>, create a {@link FacesMessage} where the
+     * summary and detail are the return from calling {@link
+     * ConstraintViolation#getInterpolatedMessage}.  Capture all such
+     * <code>FacesMessage</code> instances into a
+     * <code>Collection</code> and pass them to {@link
+     * ValidatorException(Collection)}, throwing the new exception.</p>
+
+     * </div>
      *
      * @param context {@inheritDoc}
      * @param component {@inheritDoc}
@@ -158,13 +222,15 @@ public class BeanValidator implements Validator, StateHolder {
         }
 
         ValidatorFactory validatorFactory = null;
-        Object cachedObject = context.getExternalContext().getApplicationMap().get(VALIDATOR_FACTORY_KEY);
+        Object cachedObject = context.getExternalContext().getApplicationMap().
+	    get(VALIDATOR_FACTORY_KEY);
         if (cachedObject instanceof ValidatorFactory) {
             validatorFactory = (ValidatorFactory) cachedObject;
         }
         else {
-            // TODO throw a FacesException if Validation is not available on the classpath
-            // QUESTION is this the right way to handle this?
+            // TODO throw a FacesException if Validation is not
+            // available on the classpath QUESTION is this the right way
+            // to handle this?
             try {
                 validatorFactory = Validation.buildDefaultValidatorFactory();
             }
@@ -178,14 +244,36 @@ public class BeanValidator implements Validator, StateHolder {
             inheritValidationGroups(component);
         }
 
-        ValueReference valueReference = new ValueExpressionAnalyzer(valueExpression).getReference(context.getELContext());
-        Set<ConstraintViolation> violations = validatorFactory
-            .usingContext().messageInterpolator(new JsfAwareMessageInterpolator(context, validatorFactory.getMessageInterpolator()))
-            .getValidator().validateValue(valueReference.getBaseClass(), valueReference.getProperty(), value, parseValidationGroups(getValidationGroups()));
+        ValidatorContext validatorContext = validatorFactory.usingContext();
+        MessageInterpolator jsfMessageInterpolator = 
+                new JsfAwareMessageInterpolator(context, 
+		                   validatorFactory.getMessageInterpolator());
+        validatorContext.messageInterpolator(jsfMessageInterpolator);
+        javax.validation.Validator beanValidator = validatorContext.getValidator();
+        Class [] validationGroupsArray = parseValidationGroups(getValidationGroups());
+        ValueReference valueReference = new ValueExpressionAnalyzer(valueExpression).
+	    getReference(context.getELContext());
+
+        Set<ConstraintViolation> violations = 
+            beanValidator.validateValue(valueReference.getBaseClass(), 
+                                        valueReference.getProperty(), 
+                                        value, validationGroupsArray);
 
         if (!violations.isEmpty()) {
-            ConstraintViolation firstViolation = violations.iterator().next();
-            throw new ValidatorException(getMessage(context, component, firstViolation.getInterpolatedMessage(), value));
+            ValidatorException toThrow = null;
+            if (1 == violations.size()) {
+                toThrow = new ValidatorException(getMessage(context, component, 
+                 violations.iterator().next().getInterpolatedMessage(), value));
+            } else {
+                Set<FacesMessage> messages = new HashSet<FacesMessage>(violations.size());
+                Iterator<ConstraintViolation> iter = violations.iterator();
+                while (iter.hasNext()) {
+                    messages.add(getMessage(context, component, 
+                            iter.next().getInterpolatedMessage(), value));
+                }
+                toThrow = new ValidatorException(messages);
+            }
+            throw toThrow;
         }
     }
 
