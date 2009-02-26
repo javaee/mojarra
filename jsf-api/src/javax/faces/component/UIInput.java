@@ -669,8 +669,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * inputs that are added programmatically because this method is
      * guaranteed to be called before any validations happen on a
      * subsequent postback.</p>
-     *
-     * <p class="changed_added_2_0">Append the default validators after
+
+     * <div class="changed_added_2_0">
+
+     * <p>Append the default validators after
      * any locally defined validators.  The validators to be appended
      * must be discovered in the following manner.  Let <em>toAdd</em>
      * be a logical list of validatorIds to add.</p>
@@ -681,17 +683,47 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * each key from the returned <code>Map</code> to
      * <em>toAdd</em>.</p></li>
 
-     * <li><p></p></li>
+     * <li><p>Perform following algorithm
+     * <em>collectDefaultValidatorIds</em> (or its semantic equivalent)
+     * for each ancestor component between <em>this</em> component
+     * instance up to and including the {@link UIViewRoot}.</p>
 
+     * <ul>
 
+     * 	  <li><p>Let <em>defaultValidatiorIds</em> be the value in the
+     * 	  current component's attribute <code>Map</code> under the key
+     * 	  given by the value of the symbolic constant {@link
+     * 	  #DEFAULT_VALIDATOR_IDS}.</p></li>
 
-     * <p>The validator
-     * is created in the normal way using the <code>Application</code>
+     * 	  <li><p>If <em>defaultValidatiorIds</em> is a
+     * 	  <code>List</code>, assume it is a
+     * 	  <code>List&lt;String&gt;</code> and add all of its values to
+     * 	  <em>toAdd</em>.</p></li>
+
+     * 	  <li><p>Perform <em>collectDefaultValidatorIds</em> on the
+     * 	  component's parent, if present.</p></li>
+
+     * 	  <li><p>If <em>defaultValidatiorIds</em> is a <code>Map</code>,
+     * 	  assume it is a <code>Map&lt;String, Boolean&gt;</code> and
+     * 	  interpret the key to be a validatorId, and the value to be a
+     * 	  boolean indicating whether or not the user has flagged this
+     * 	  particular validator instance as enabled or disabled.  For
+     * 	  each entry in the map whose value is enabled, add the
+     * 	  corresponding validatorId to <em>toAdd</em>.</p></li>
+
+     * </ul>
+
+     * </li>
+
+     * <p>For each validatorId in <em>toAdd</em>, the validator is
+     * created in the normal way using the <code>Application</code>
      * object. If a validator with the same validator id already exists
-     * on the component, then that default validator is skipped.  Before
-     * creating the validator, consult the list of exclusions. An
-     * exclusion is defined by a validator having a "disabled" attribute
-     * which resolves to true.</p>
+     * on the component, then that default validator is skipped.</p>
+
+     * </div>
+
+     * @throws NullPointerException {@inheritDoc}
+     * @throws IOException {@inheritDoc}
 
      */
     @Override
@@ -1249,7 +1281,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
     }
 
-    public static boolean isEmpty(Object value) {
+    private static boolean isEmpty(Object value) {
 
         if (value == null) {
             return (true);

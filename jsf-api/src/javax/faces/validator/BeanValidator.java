@@ -65,40 +65,52 @@ public class BeanValidator implements Validator, StateHolder {
     private transient Class[] cachedValidationGroups;
 
     /**
-     * <p>The standard validator id for this validator, as defined by the JSF specification.</p>
+     * <p class="changed_added_2_0">The standard validator id for this
+     * validator, as defined by the JSF specification.</p>
      */
     public static final String VALIDATOR_ID = "javax.faces.Bean";
 
     /**
-     * <p>The name of the servlet context attribute which holds the object used by JSF to obtain Validator instances.
-     * If the servlet context attribute is missing or contains a null value, JSF is free to use this servlet context
-     * attribute to store the ValidatorFactory bootstrapped by this validator.</p>
+     * <p class="changed_added_2_0">The name of the servlet context
+     * attribute which holds the object used by JSF to obtain Validator
+     * instances.  If the servlet context attribute is missing or
+     * contains a null value, JSF is free to use this servlet context
+     * attribute to store the ValidatorFactory bootstrapped by this
+     * validator.</p>
      */
     public static final String VALIDATOR_FACTORY_KEY = "javax.faces.validator.beanValidator.ValidatorFactory";
 
     /**
-     * <p>The name of the component attribute which holds the validation groups defined for a branch of the component tree.</p>
+     * <p class="changed_added_2_0">The name of the component attribute
+     * which holds the validation groups defined for a branch of the
+     * component tree.</p>
      */
     public static final String VALIDATION_GROUPS_KEY = "javax.faces.validator.beanValidator.ValidationGroups";
     
     /**
-     * <p>The delimiter that is used to separate the list of fully-qualified group names as strings.</p>
+     * <p class="changed_added_2_0">The delimiter that is used to
+     * separate the list of fully-qualified group names as strings.</p>
      */
     public static final String VALIDATION_GROUPS_DELIMITER = ",";
 
     /**
-     * <p>The regular expression pattern that identifies an empty list of validation groups.</p>
+     * <p class="changed_added_2_0">The regular expression pattern that
+     * identifies an empty list of validation groups.</p>
      */
     public static final String EMPTY_VALIDATION_GROUPS_PATTERN = "^[\\W" + VALIDATION_GROUPS_DELIMITER + "]*$";
 
     /**
-     * <p>A comma-separated list of validation groups which are used to filter
-     * which validations get checked by this validator. If the validationGroups attribute is omitted
-     * or is empty, the validation groups will be inherited from the branch defaults or, if
-     * there are no branch defaults, the {@link javax.validation.groups.Default} group will be used.</p>
+     * <p class="changed_added_2_0">A comma-separated list of validation
+     * groups which are used to filter which validations get checked by
+     * this validator. If the validationGroups attribute is omitted or
+     * is empty, the validation groups will be inherited from the branch
+     * defaults or, if there are no branch defaults, the {@link
+     * javax.validation.groups.Default} group will be used.</p>
      *
-     * @param validationGroups comma-separated list of validation groups (string with only spaces and commas treated as null)
+     * @param validationGroups comma-separated list of validation groups
+     * (string with only spaces and commas treated as null)
      */
+
     public void setValidationGroups(String validationGroups) {
         // treat empty list as null
         if (validationGroups != null && validationGroups.matches(EMPTY_VALIDATION_GROUPS_PATTERN)) {
@@ -115,17 +127,20 @@ public class BeanValidator implements Validator, StateHolder {
     }
 
     /**
-     * <p>Return the validation groups passed to the Validation API when checking constraints.
-     * If the validationGroups attribute is omitted or empty, the validation groups will be inherited
-     * from the branch defaults, or if there are no branch defaults, the {@link javax.validation.groups.Default}
-     * group will be used.</p>
+     * <p class="changed_added_2_0">Return the validation groups passed
+     * to the Validation API when checking constraints.  If the
+     * validationGroups attribute is omitted or empty, the validation
+     * groups will be inherited from the branch defaults, or if there
+     * are no branch defaults, the {@link
+     * javax.validation.groups.Default} group will be used.</p>
      */
     public String getValidationGroups() {
         return validationGroups;
     }
 
     /**
-     * </p>Verify that the value is valid according to the Bean Validation constraints.</p>
+     * <p class="changed_added_2_0">Verify that the value is valid
+     * according to the Bean Validation constraints.  </p>
      *
      * @param context {@inheritDoc}
      * @param component {@inheritDoc}
@@ -175,8 +190,9 @@ public class BeanValidator implements Validator, StateHolder {
     }
 
     /**
-     * If no validation groups are defined on this validator, search upwards in the component tree to find a branch that
-     * defines validation groups.
+     * If no validation groups are defined on this validator, search
+     * upwards in the component tree to find a branch that defines
+     * validation groups.
      */
     private void inheritValidationGroups(UIComponent component) {
         UIComponent branch = findNearestBranchWithValidationGroups(component);
