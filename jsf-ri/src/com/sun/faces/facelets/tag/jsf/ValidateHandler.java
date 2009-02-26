@@ -70,6 +70,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.application.Resource;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
 
@@ -246,10 +247,10 @@ public class ValidateHandler extends MetaTagHandlerImpl implements EditableValue
      * component.</p>
      */
     protected void setDefaultValidatorIdStateForBranch(String validatorId, UIComponent parent, boolean state) {
-        Map<String, Boolean> defaultValidatorIds = (Map<String, Boolean>) parent.getAttributes().get(UIComponent.DEFAULT_VALIDATOR_IDS_KEY);
+        Map<String, Boolean> defaultValidatorIds = (Map<String, Boolean>) parent.getAttributes().get(UIInput.DEFAULT_VALIDATOR_IDS_KEY);
         if (defaultValidatorIds == null) {
             defaultValidatorIds = new LinkedHashMap<String, Boolean>();
-            parent.getAttributes().put(UIComponent.DEFAULT_VALIDATOR_IDS_KEY, defaultValidatorIds);
+            parent.getAttributes().put(UIInput.DEFAULT_VALIDATOR_IDS_KEY, defaultValidatorIds);
         }
 
         defaultValidatorIds.put(validatorId, state);

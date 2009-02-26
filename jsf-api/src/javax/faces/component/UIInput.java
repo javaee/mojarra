@@ -175,6 +175,23 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public static final String VALIDATE_EMPTY_FIELDS_PARAM_NAME = 
 	"javax.faces.VALIDATE_EMPTY_FIELDS";
+    
+    /**
+
+     * <p class="changed_added_2_0">The value of this constant is used
+     * as the attribute within the attributes <code>Map</code> on the
+     * {@link UIComponent} to hold a <code>Map</code> of default
+     * validators for a subtree of the component tree. Each key in the
+     * <code>Map</code> is a validator id and the value is a
+     * <code>Boolean</code> flag indicating whether the validator is
+     * being activated or deactivated for this branch of the component
+     * tree. Each activated validator gets registered on any {@link
+     * EditableValueHolder} found in this subtree of the component
+     * tree.</p>
+
+     */
+    public static final String DEFAULT_VALIDATOR_IDS_KEY = "javax.faces.component.DEFAULT_VALIDATOR_IDS";
+    
 
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
@@ -645,10 +662,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     /**
-     * <p class="changed_added_2_0">After encoding the component, add
-     * any default validators. Putting the logic in this method allows
-     * this service to be provided even for inputs that are added
-     * programmatically.</p>
+     * <p class="changed_added_2_0">Override the default superclass
+     * behavior to provide additional Beans Validation behavior.  After
+     * encoding the component, add any default validators. Putting the
+     * logic in this method allows this service to be provided even for
+     * inputs that are added programmatically because this method is
+     * guaranteed to be called before any validations happen on a
+     * subsequent postback.</p>
      *
      * <p class="changed_added_2_0">Append the default validators after
      * any locally defined validators.  The validators to be appended
@@ -661,8 +681,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * each key from the returned <code>Map</code> to
      * <em>toAdd</em>.</p></li>
 
-     * <li><p>PENDING(edburns): continue after correct application of
-     * patch.</p></li>
+     * <li><p></p></li>
 
 
 
@@ -1560,7 +1579,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <p>Work upwards through the component hierarchy and collect any default validators that have been defined.</p>
      */
     private void collectDefaultValidatorIds(List<String> defaultValidatorIds, UIComponent component) {
-        Object branchState = component.getAttributes().get(UIComponent.DEFAULT_VALIDATOR_IDS_KEY);
+        Object branchState = component.getAttributes().get(DEFAULT_VALIDATOR_IDS_KEY);
 
         // check for the "resolved" list for this branch
         // NOTE we could use a separate key for the resolved list to avoid type hunting
@@ -1601,7 +1620,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         // make sure we never have to climb the mountain again (could we avoid creating new list if none added at this node?)
-        component.getAttributes().put(UIComponent.DEFAULT_VALIDATOR_IDS_KEY, new ArrayList<String>(defaultValidatorIds));
+        component.getAttributes().put(DEFAULT_VALIDATOR_IDS_KEY, new ArrayList<String>(defaultValidatorIds));
     }
 
 }
