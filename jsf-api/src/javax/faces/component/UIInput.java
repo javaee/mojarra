@@ -697,7 +697,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * 	  <li><p>Let <em>defaultValidatiorIds</em> be the value in the
      * 	  current component's attribute <code>Map</code> under the key
      * 	  given by the value of the symbolic constant {@link
-     * 	  #DEFAULT_VALIDATOR_IDS}.</p></li>
+     * 	  #DEFAULT_VALIDATOR_IDS_KEY}.</p></li>
 
      * 	  <li><p>If <em>defaultValidatiorIds</em> is a
      * 	  <code>List</code>, assume it is a

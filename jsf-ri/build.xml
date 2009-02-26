@@ -460,13 +460,14 @@
             <arg line="-d ${build.dir}/pdldocs/facelets"/>
             <arg line="-windowtitle 'JSF ${spec.version} Page Decraration Language: Facelets Variant'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
-
+            <arg value="${conf.share.dir}/jsf_core_facelets.tld"/>
+<!--
             <arg value="${build.generate.tld.dir}/facelets_html_basic.tld"/>
-            <arg value="${conf.share.dir}/jsf_core.tld"/>
             <arg value="${conf.share.dir}/composite.tld"/>
             <arg value="${conf.share.dir}/ui.tld"/>
             <arg value="${conf.share.dir}/jstl-core.tld"/>
             <arg value="${conf.share.dir}/jstl-fn.tld"/>
+-->
         </java>
         <copy todir="${build.dir}/pdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
@@ -637,8 +638,7 @@
 
 <!-- scratch
 
-ant -emacs -Dbuild.generate.tld.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/jsf-ri/build/generate/conf/share -Dbuild.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/dist/jsf-spec-2.0-20081030 facelets.tlddocs
-   
+ant -emacs -Dbuild.generate.tld.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/jsf-ri/build/generate/conf/share  -Dbuild.dir=/Users/edburns/Documents/Projects/JavaEE/workareas/javaserverfaces-spec-eg/javadocs/spec-snapshot/pdldocs/facelets/ facelets.tlddocs   
 -->
     
 </project>

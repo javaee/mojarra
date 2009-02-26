@@ -110,7 +110,7 @@ public class BeanValidator implements Validator, StateHolder {
      * defaults or, if there are no branch defaults, the {@link
      * javax.validation.groups.Default} group will be used.</p>
      *
-     * @param validationGroupsArray comma-separated list of validation groups
+     * @param validationGroups comma-separated list of validation groups
      * (string with only spaces and commas treated as null)
      */
 
@@ -202,7 +202,8 @@ public class BeanValidator implements Validator, StateHolder {
      * ConstraintViolation#getInterpolatedMessage}.  Capture all such
      * <code>FacesMessage</code> instances into a
      * <code>Collection</code> and pass them to {@link
-     * ValidatorException(Collection)}, throwing the new exception.</p>
+     * ValidatorException#ValidatorException(java.util.Collection)},
+     * throwing the new exception.</p>
 
      * </div>
      *
