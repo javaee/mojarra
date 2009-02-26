@@ -51,6 +51,7 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,10 +65,15 @@ import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.faces.FacesException;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.application.Resource;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
+import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 
@@ -142,6 +148,10 @@ public class CompositeComponentTagHandler extends ComponentHandler {
         UIComponent result = null;
         FacesContext context = ctx.getFacesContext();
         result = context.getApplication().createComponent(context, compositeComponentResource);
+        result.subscribeToEvent(PostAddToViewEvent.class,
+                                new CompositeAttributesCopyListener());
+
+
 
         return result;
     }
@@ -227,6 +237,84 @@ public class CompositeComponentTagHandler extends ComponentHandler {
             }
         }
         return result;
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+     public static class CompositeAttributesCopyListener implements
+           ComponentSystemEventListener, Serializable {
+
+
+
+        // --------------------------- Methods from ComponentSystemEventListener
+
+
+         public void processEvent(ComponentSystemEvent event)
+               throws AbortProcessingException {
+
+             UIComponent compositeComponent = event.getComponent();
+             UIComponent compositeParent = getCompositeComponentParent(
+                   compositeComponent);
+             if (compositeParent != null) {
+                 for (Map.Entry<String, Object> entry : compositeComponent
+                       .getAttributes().entrySet()) {
+                     if (entry.getValue() instanceof Expression) {
+                         Expression expr = (Expression) entry.getValue();
+                         if (!expr.isLiteralText()) {
+                             String exprString = expr
+                                   .getExpressionString();
+                             if (exprString.startsWith(
+                                   "#{compositeComponent.attrs.")) {
+                                 int lastDot = exprString
+                                       .lastIndexOf('.');
+                                 if (lastDot != -1) {
+                                     String attrName = exprString
+                                           .substring((lastDot + 1),
+                                                      (exprString.length()
+                                                       - 1));
+
+                                     // see if our parent composite component
+                                     // has an Expression in its attribute
+                                     // map for this attribute name, if so,
+                                     // use that as the expression for this
+                                     // composite component
+                                     Object parentExpr = compositeParent
+                                           .getAttributes()
+                                           .get(attrName);
+                                     if (parentExpr instanceof Expression) {
+                                         compositeComponent.getAttributes()
+                                               .put(entry.getKey(), parentExpr);
+                                     }
+
+                                 }
+                             }
+                         }
+                     }
+                 }
+             }
+
+
+         }
+
+
+         // ----------------------------------------------------- Private Methods
+
+
+        private UIComponent getCompositeComponentParent(UIComponent c) {
+
+            UIComponent parent = c.getParent();
+            while (parent != null) {
+                if (UIComponent.isCompositeComponent(parent)) {
+                    return parent;
+                }
+                parent = parent.getParent();
+            }
+            return null;
+
+        }
+
     }
     
     

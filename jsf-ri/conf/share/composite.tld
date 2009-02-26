@@ -382,14 +382,15 @@ use in this nested fashion.</p>
 possible id conflicts between inner components and components in the
 using page are avoided.  However, special care must be taken when using
 naming containers in the <code>&lt;composite:implementation&gt;</code>
-section.  In such cases the &#8220;targets&#8221; attribute must be used
-with a clientId relative to the <em>top level component</em> to expose
-any attached object targets to the using page.  For example:</p>
+section.  In such cases the value of the &#8220;name&#8221; attribute,
+or the values of the &#8220;targets&#8221; attribute must be used with a
+clientId relative to the <em>top level component</em> to expose any
+attached object targets to the using page.  For example:</p>
 
            <p>Using page</p>
 
 <div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;ez:loginButton&gt;</span></div></li>
-<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;f:actionListener <span class="kw3">for</span>=<span class="st0">&quot;loginAction&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;f:actionListener <span class="kw3">for</span>=<span class="st0">&quot;button&quot;</span> <span class="kw3">binding</span>=<span class="st0">&quot;#{foo.actionListener}&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/ez:loginButton&gt;</span> </div></li></ol></div></div>
 
 
@@ -407,7 +408,10 @@ any attached object targets to the using page.  For example:</p>
 <li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/composite:implementation&gt;</span> </div></li></ol></div></div>
 
 <p>Because the button on line 8 resides within a form, it must be
-referred to using the "targets" attribute on line 2.  Simply using the "name" attribute is not sufficient because "name" is always interprented as a simple component id, whereas  the elements of the "targets" attribute are interpreted as client ids, relative to the <em>top level component</em>.</p>
+referred to using a client id, relative to the <em>top level
+component</em>, in the "targets" attribute on line 2.  Using a relative
+clientId is required due to the semantics of
+<code>UIComponent.findComponent()</code>.</p>
 
 </div>
 ]]>
