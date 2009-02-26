@@ -1678,11 +1678,28 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
     </tag>
 
     <tag>
-        <description>
-            Register a named Validator instance on the
-            UIComponent associated with the closest parent
-            UIComponent custom action.
-        </description>
+        <description><![CDATA[
+
+            <p><span class="changed_modified_2_0"Register</span> a named
+            Validator instance on the UIComponent associated with the
+            closest parent UIComponent custom action.</p>
+
+           <div class="changed_added_2_0">
+
+           <p>Usage outside of an <code>EditableValueHolder</code>
+           parent</p>
+
+           <p>If this element is nested within a
+           <code>UIComponent</code> tag that has other
+           <code>UIComponent</code> children, the validator will be
+           automatically added to all the child components as well as
+           this one.  The implementation must ensure this occurs even if
+           the parent of this element is not an instance of
+           <code>EditableValueHolder</code>.</p>
+
+           </div>
+
+        ]]></description>
         <name>validator</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ValidatorTag</tag-class>
         <body-content>empty</body-content>
