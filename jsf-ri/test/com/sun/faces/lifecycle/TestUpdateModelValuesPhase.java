@@ -149,10 +149,11 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         }
         assertTrue(!(getFacesContext().getRenderResponse()) &&
                    !(getFacesContext().getResponseComplete()));
-        assertTrue(null == userName.getLocalValue());
+        Object localvalue = userName.getLocalValue();
+        assertTrue(localvalue == null);
 
         assertTrue(testBean.getOne().equals("one"));
-        assertTrue(false == (getFacesContext().getMessages().hasNext()));
+        assertTrue(!getFacesContext().getMessages().hasNext());
     }
 
 

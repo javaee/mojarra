@@ -270,14 +270,14 @@
             description="update nightly build">
         <if>
             <available
-                  file="${tasks.home}/javanettasks-1.0.8.jar"/>
+                  file="${tasks.home}/javanettasks-1.0.13.jar"/>
             <then>
                 <sequential>
                     <taskdef
                           resource="org/kohsuke/javanettasks.properties">
                         <classpath>
                             <pathelement
-                                  location="${tasks.home}/javanettasks-1.0.8.jar"/>
+                                  location="${tasks.home}/javanettasks-1.0.13.jar"/>
                             <fileset dir="${tasks.home}/lib"
                                      includes="*.jar"/>
                         </classpath>

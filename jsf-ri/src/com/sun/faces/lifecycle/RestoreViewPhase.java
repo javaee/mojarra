@@ -74,6 +74,7 @@ import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewMetadata;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
@@ -137,7 +138,7 @@ public class RestoreViewPhase extends Phase {
             }
             facesContext.getViewRoot().setLocale(
                  facesContext.getExternalContext().getRequestLocale());
-            
+
             // do per-component actions
             UIViewRoot root = facesContext.getViewRoot();
             final PostRestoreStateEvent event = new PostRestoreStateEvent(root);
@@ -153,29 +154,30 @@ public class RestoreViewPhase extends Phase {
 
                 });
             } catch (AbortProcessingException e) {
-                facesContext.getApplication().publishEvent(ExceptionQueuedEvent.class, new ExceptionQueuedEventContext(facesContext, e));    
+                facesContext.getApplication().publishEvent(ExceptionQueuedEvent.class, new ExceptionQueuedEventContext(facesContext, e));
             }
-            
-            
+
+
             if (!facesContext.isPostback()) {
                 facesContext.renderResponse();
             }
             return;
         }
         ViewHandler viewHandler = Util.getViewHandler(facesContext);
+        PageDeclarationLanguage pdl = null;
+
         String viewId = null;
-        
+
         try {
             viewId = viewHandler.deriveViewId(facesContext, null);
         } catch (UnsupportedOperationException e) {
             viewId = Util.deriveViewId(facesContext, null);
         }
-        
+
         boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
         if (isPostBack) {
             // try to restore the view
             viewRoot = viewHandler.restoreView(facesContext, viewId);
-            boolean renderResponse = false;
             if (viewRoot == null) {
                 if (is11CompatEnabled(facesContext)) {
                     // 1.1 -> create a new view and flag that the response should
@@ -184,7 +186,8 @@ public class RestoreViewPhase extends Phase {
                         LOGGER.fine("Postback: recreating a view for " + viewId);
                     }
                     viewRoot = viewHandler.createView(facesContext, viewId);
-                    renderResponse = true;
+                    facesContext.renderResponse();
+
                 } else {
                     Object[] params = {viewId};
                     throw new ViewExpiredException(
@@ -194,18 +197,8 @@ public class RestoreViewPhase extends Phase {
                           viewId);
                 }
             }
-            
+
             facesContext.setViewRoot(viewRoot);
-            assert(null != viewRoot);
-            if (renderResponse) {
-                List<UIViewParameter> params = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId).getViewParameters(facesContext, viewId);
-                if (!params.isEmpty() &&
-                        !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
-                    configureLifecycleForViewMetadataTraversal(facesContext);
-                } else {
-                    facesContext.renderResponse();
-                }
-            }
 
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("Postback: restored view for " + viewId);
@@ -214,45 +207,50 @@ public class RestoreViewPhase extends Phase {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("New request: creating a view for " + viewId);
             }
-            viewRoot = (Util.getViewHandler(facesContext)).
-                  createView(facesContext, viewId);           
-            facesContext.setViewRoot(viewRoot);
-            assert(null != viewRoot);
-            PageDeclarationLanguage pdl = null;
+
             try {
+                // try to get the PDL
                 pdl = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId);
             } catch (UnsupportedOperationException uoe) {
-                
+
             }
+
             if (null != pdl) {
-                List<UIViewParameter> params = pdl.getViewParameters(facesContext, viewId);
-                if (!params.isEmpty() &&
-                        !facesContext.getExternalContext().getRequestParameterMap().isEmpty()) {
-                    configureLifecycleForViewMetadataTraversal(facesContext);
-                } else {
-                    facesContext.renderResponse();
+                // If we have one, get the ViewMetadata...
+                ViewMetadata metadata = pdl.getViewMetadata(facesContext, viewId);
+
+                if (metadata != null) { // perhaps it's not supported
+                    // and use it to create the ViewRoot.  This will have, at most
+                    // the UIViewRoot and its metadata facet.
+                    viewRoot = metadata.createMetadataView(facesContext);
+
+                    // Only skip to render response if there are no view parameters
+                    Collection<UIViewParameter> params =
+                          metadata.getViewParameters(viewRoot);
+                    if (params.isEmpty()) {
+                        facesContext.renderResponse();
+                    }
                 }
             } else {
                 facesContext.renderResponse();
             }
+
+            if (null == viewRoot) {
+                viewRoot = (Util.getViewHandler(facesContext)).
+                   createView(facesContext, viewId);
+            }
+            facesContext.setViewRoot(viewRoot);
+            assert(null != viewRoot);
             facesContext.getApplication().publishEvent(PostAddToViewEvent.class,
                                                        viewRoot);
         }
-        
+
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting RestoreViewPhase");
         }
 
     }
-    
-    private void configureLifecycleForViewMetadataTraversal(FacesContext context) {
-        PartialViewContext partial = context.getPartialViewContext();
-        partial.setPartialRequest(true);
-        Collection<String> ids = partial.getExecuteIds();
-        ids.add(UIViewRoot.METADATA_FACET_NAME);
-    }
-
 
     // --------------------------------------------------------- Private Methods
 
