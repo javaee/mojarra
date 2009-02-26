@@ -56,9 +56,8 @@ import java.lang.annotation.Target;
  * The implementation must indicate a fatal error if such a constructor
  * does not exist and the application must not be placed in service.
  * Within that {@link RenderKit}, The value of the {@link #rendererType}
- * attribute is taken to be the <em>renderer-type</em>, and the value of
- * the {@link #componentFamily} attribute is to be taken as the
- * <em>component-family</em>.  The implementation must guarantee that
+ * attribute is taken to be the <em>renderer-type</em>
+ * The implementation must guarantee that
  * for each class annotated with <code>FacesBehaviorRenderer</code>, 
  * found with the algorithm in section JSF.11.5,
  * the following actions are taken.</p>

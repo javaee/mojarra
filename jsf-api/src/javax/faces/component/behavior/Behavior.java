@@ -107,10 +107,10 @@ public abstract class Behavior {
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners who have registered an interest),  by calling
      * <code>queueEvent()</code>. Default implementation delegates decoding 
-     * to {@link BehaviorRenderer#decode(FacesContext, UIComponent, String)}</p>
+     * to {@link javax.faces.render.BehaviorRenderer#decode(FacesContext, UIComponent, Behavior)}</p>
      *
      * @param context {@link FacesContext} for the request we are processing
-     * @param context {@link UIComponent} the component associated with this {@link Behavior} 
+     * @param component {@link UIComponent} the component associated with this {@link Behavior} 
      *
      * @throws NullPointerException if <code>context</code> or 
      * <code>component<code> is <code>null</code>.

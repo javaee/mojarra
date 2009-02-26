@@ -1263,7 +1263,9 @@ private void doFind(FacesContext context, String clientId) {
      * <p class="changed_added_2_0">If the <code>event</code> is an instance of 
      * {@link javax.faces.event.BehaviorEvent} and the current 
      * <code>component</code> is the source of the <code>event</code>
-     * call {@link javax.faces.event.BehavorEvent#getTargetBehavior()#broadcast(javax.faces.event.BehaviorEvent)}}.</p>
+     * call {@link javax.faces.event.BehaviorEvent#getBehavior} to get the
+     * {@link javax.faces.component.behavior.Behavior} for the event.  Then
+     * call {@link javax.faces.component.behavior.Behavior#broadcast(javax.faces.event.BehaviorEvent)}}.</p>
      *
      * @param event The {@link FacesEvent} to be broadcast
      *
@@ -1960,14 +1962,15 @@ private void doFind(FacesContext context, String clientId) {
      * process {@link javax.faces.component.behavior.Behavior}s as follows:
      * <ul>
      * <li>Determine if there are {@link javax.faces.component.behavior.Behavior}s
-     * associated with this component by calling {@link #getBehaviors}.</li> 
+     * associated with this component by calling the implementation of 
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li> 
      * <li>If there are <code>behaviors</code>, determine the 
      * <code>behavior event name</code> from the request parameter:
      * <code>javax.faces.behavior.event</code>.</li>
      * <li>If that request parameter exists, get the <code>List</code> of
      * {@link javax.faces.component.behavior.Behavior}s for the 
      * <code>behavior event name</code> from the <code>Map</code> returned from
-     * {@link #getBehaviors}.</li>
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li>
      * <li>If there are <code>behaviors</code> for the <code>behavior event name</code>,
      * determine the <code>behavior source name</code> from the request parameter:
      * <code>javax.faces.behavior.source</code>.</li>

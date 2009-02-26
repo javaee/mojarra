@@ -85,9 +85,6 @@ public abstract class BehaviorRenderer {
      * implementations must not hold onto references to BehaviorContexts.
      *
      * @param behavior the behavior instance that generates script.
-     * @param eventName name of the client-side event.  If this argument is
-     * <code>null</code> it is assumed the caller will include the
-     * client-side event name with the return value from this method.
      *
      * @return script that provides the client-side behavior, or null
      * if no script is required.

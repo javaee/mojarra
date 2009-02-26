@@ -117,7 +117,7 @@ public class BehaviorBase extends Behavior {
      * </p>
      *
      * @param context {@link FacesContext} for the request we are processing
-     * @param context {@link UIComponent} the component associated with this {@link Behavior} 
+     * @param component {@link UIComponent} the component associated with this {@link Behavior} 
      *
      * @throws NullPointerException if <code>context</code> or 
      * <code>component<code> is <code>null</code>.
