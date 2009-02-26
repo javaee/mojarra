@@ -1195,9 +1195,6 @@ public class RenderKitUtils {
         if (null == name)
             throw new IllegalArgumentException();
 
-        // We do null value checking in here so that callers don't have to.
-        if (value == null)
-            return;
 
         char lastChar = builder.charAt(builder.length() - 1);
         if ((lastChar != ',') && (lastChar != '{'))
@@ -1206,7 +1203,9 @@ public class RenderKitUtils {
         RenderKitUtils.appendQuotedValue(builder, name);
         builder.append(":");
 
-        if (quoteValue) {
+        if (value == null) {
+            builder.append("''");
+        } else if (quoteValue) {
             RenderKitUtils.appendQuotedValue(builder, value.toString());
         } else {
             builder.append(value.toString());
