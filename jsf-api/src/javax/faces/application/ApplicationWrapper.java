@@ -39,6 +39,7 @@ package javax.faces.application;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.el.ELContextListener;
@@ -94,6 +95,16 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     @Override
     public String getDefaultRenderKitId() {
         return getWrapped().getDefaultRenderKitId();
+    }
+
+    @Override
+    public void addDefaultValidatorId(String validatorId) {
+        getWrapped().addDefaultValidatorId(validatorId);
+    }
+
+    @Override
+    public Map<String, String> getDefaultValidatorInfo() {
+        return getWrapped().getDefaultValidatorInfo();
     }
 
     @Override

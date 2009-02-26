@@ -149,6 +149,7 @@
         <pathelement location="${jstl.jar}"/>
         <pathelement location="${annotation.jar}"/>
         <pathelement location="${groovy.jar}"/>
+        <pathelement location="${validation-api.jar}"/>
     </path>
     
     <path id="sun.commons.classpath">

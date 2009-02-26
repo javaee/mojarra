@@ -212,6 +212,10 @@
   <!-- Configure Standard Validators -->
 
   <validator>
+      <validator-id>javax.faces.Bean</validator-id>
+      <validator-class>javax.faces.validator.BeanValidator</validator-class>
+  </validator>
+  <validator>
     <validator-id>javax.faces.DoubleRange</validator-id>
     <validator-class>
       javax.faces.validator.DoubleRangeValidator
@@ -228,6 +232,10 @@
   <validator>
       <validator-id>javax.faces.RegularExpression</validator-id>
       <validator-class>javax.faces.validator.RegexValidator</validator-class>
+  </validator>
+  <validator>
+      <validator-id>javax.faces.Required</validator-id>
+      <validator-class>javax.faces.validator.RequiredValidator</validator-class>
   </validator>
 
   <!-- Add our implementation specific Validators -->

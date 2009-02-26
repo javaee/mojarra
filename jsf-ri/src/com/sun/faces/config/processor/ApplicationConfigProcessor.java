@@ -73,6 +73,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
+import java.util.LinkedHashSet;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 
 import org.w3c.dom.Document;
@@ -107,6 +108,18 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String DEFAULT_RENDERKIT_ID
          = "default-render-kit-id";
+
+    /**
+     * <code>/faces-config/application/default-validators</code>
+     */
+    private static final String DEFAULT_VALIDATORS
+        = "default-validators";
+
+    /**
+     * <code>/faces-config/application/default-validators/validator-id</code>
+     */
+    private static final String VALIDATOR_ID
+        = "validator-id";
 
     /**
      * <code>/faces-config/application/message-bundle
@@ -236,6 +249,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
               ApplicationAssociate.getInstance(
                     FacesContext.getCurrentInstance().getExternalContext());
         LinkedHashMap<String,Node> viewHandlers = new LinkedHashMap<String,Node>();
+        LinkedHashSet<String> defaultValidatorIds = null;
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -290,12 +304,22 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                 setResourceHandler(app, n);
                             } else if (SYSTEM_EVENT_LISTENER.equals(n.getLocalName())) {
                                 addSystemEventListener(app, n);
-                            } 
+                            } else if (DEFAULT_VALIDATORS.equals(n.getLocalName())) {
+                                if (defaultValidatorIds == null) {
+                                    defaultValidatorIds = new LinkedHashSet<String>();
+                                } else {
+                                    defaultValidatorIds.clear();
+                                }
+                            } else if (VALIDATOR_ID.equals(n.getLocalName())) {
+                                defaultValidatorIds.add(getNodeText(n));
+                            }
                         }
                     }
                 }
             }
         }
+
+        registerDefaultValidatorIds(app, defaultValidatorIds);
 
         // perform any special processing for ViewHandlers...
         processViewHandlers(app, viewHandlers);
@@ -311,6 +335,42 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
     // --------------------------------------------------------- Private Methods
 
+    /**
+     * If defaultValidatorIds is null, then no &lt;default-validators&gt; element appeared in any configuration file.
+     * In that case, add javax.faces.Bean if Bean Validation is available. If the &lt;default-validators&gt; appeared
+     * at least once, don't add the default (and empty &lt;default-validator&gt; element disabled default validators)
+     */
+    private void registerDefaultValidatorIds(Application application, LinkedHashSet<String> defaultValidatorIds) {
+        if (defaultValidatorIds == null) {
+            defaultValidatorIds = new LinkedHashSet<String>();
+            if (beanValidationAvailable()) {
+                defaultValidatorIds.add("javax.faces.Bean");
+            }
+        }
+
+        for (String validatorId : defaultValidatorIds) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                        MessageFormat.format(
+                        "Calling Application.addDefaultValidatorId({0})",
+                        validatorId));
+            }
+            application.addDefaultValidatorId(validatorId);
+        }
+    }
+
+    private boolean beanValidationAvailable() {
+        try {
+            try {
+                Thread.currentThread().getContextClassLoader().loadClass("javax.validation.Validation");
+            } catch (ClassNotFoundException e) {
+                Class.forName("javax.validation.Validation");
+            }
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 
     private void setMessageBundle(Application application,
                                   Node messageBundle) {
@@ -349,7 +409,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
 
     }
-
 
     private void addActionListener(Application application,
                                    Node actionListener) {

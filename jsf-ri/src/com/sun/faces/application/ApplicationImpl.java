@@ -109,6 +109,7 @@ import com.sun.faces.util.Util;
 
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
+import java.util.LinkedHashSet;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
@@ -116,6 +117,7 @@ import javax.faces.event.ExceptionQueuedEventContext;
 
 import java.util.List;
 import java.util.TimeZone;
+import java.util.LinkedHashMap;
 
 import javax.el.ValueExpression;
 import javax.faces.application.Resource;
@@ -179,7 +181,7 @@ public class ApplicationImpl extends Application {
     //
     
     //
-    // These maps store store "identifier" | "class name"
+    // These three maps store store "identifier" | "class name"
     // mappings.
     //
     private Map<String,Object> behaviorMap = null;
@@ -187,6 +189,8 @@ public class ApplicationImpl extends Application {
     private Map<String,Object> converterIdMap = null;
     private Map<Class<?>,Object> converterTypeMap = null;
     private Map<String,Object> validatorMap = null;
+    private Set<String> defaultValidatorIds = null;
+    private volatile Map<String,String> defaultValidatorInfo = null;
     private volatile String messageBundle = null;
 
     private List<ELContextListener> elContextListeners = null;
@@ -208,6 +212,7 @@ public class ApplicationImpl extends Application {
         converterIdMap = new ConcurrentHashMap<String, Object>();
         converterTypeMap = new ConcurrentHashMap<Class<?>, Object>();
         validatorMap = new ConcurrentHashMap<String, Object>();
+        defaultValidatorIds = new LinkedHashSet<String>();
         behaviorMap = new ConcurrentHashMap<String, Object>();
         elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
         propertyResolver = new PropertyResolverImpl();
@@ -1466,6 +1471,50 @@ public class ApplicationImpl extends Application {
                
     }
 
+    /**
+     * @see javax.faces.application.Application#addDefaultValidatorId(String)
+     */
+    public synchronized void addDefaultValidatorId(String validatorId) {
+
+        Util.notNull("validatorId", validatorId);
+        defaultValidatorInfo = null;
+        defaultValidatorIds.add(validatorId);
+
+    }
+
+    /**
+     * @see javax.faces.application.Application#getDefaultValidatorIds()
+     */
+    public Map<String,String> getDefaultValidatorInfo() {
+
+        if (defaultValidatorInfo == null) {
+            synchronized (this) {
+                if (defaultValidatorInfo == null) {
+                    defaultValidatorInfo = new LinkedHashMap<String, String>();
+                    if (!defaultValidatorIds.isEmpty()) {
+                        for (String id : defaultValidatorIds) {
+                            String validatorClass;
+                            Object result = validatorMap.get(id);
+                            if (null != result) {
+                                if (result instanceof Class) {
+                                    validatorClass = ((Class) result).getName();
+                                } else {
+                                    validatorClass = result.toString();
+                                }
+                                defaultValidatorInfo.put(id, validatorClass);
+                            }
+                        }
+
+                    }
+                }
+            }
+            defaultValidatorInfo =
+                  Collections.unmodifiableMap(defaultValidatorInfo);
+        }
+
+        return defaultValidatorInfo;
+
+    }
 
     /**
      * @see javax.faces.application.Application#setMessageBundle(String)

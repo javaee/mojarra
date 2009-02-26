@@ -56,6 +56,7 @@ import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
 import java.util.HashMap;
+import javax.faces.component.UIInput;
 
 
 /** Class Documentation */
@@ -218,7 +219,7 @@ public class WebConfiguration {
     private Map<WebContextInitParameter, String []> cachedListParams;
     
     public String [] getOptionValue(WebContextInitParameter param, String sep) {
-        String [] result = null;
+        String [] result;
         
         assert(null != cachedListParams);
         if (null == (result = cachedListParams.get(param))) {
@@ -771,6 +772,10 @@ public class WebConfiguration {
         DuplicateJARPattern(
             "com.sun.faces.duplicateJARPattern",
             ""
+        ),
+        ValidateEmptyFields(
+              UIInput.VALIDATE_EMPTY_FIELDS_PARAM_NAME,
+              "auto"
         );
 
 

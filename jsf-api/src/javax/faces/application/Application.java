@@ -42,9 +42,11 @@ package javax.faces.application;
 
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -1200,6 +1202,48 @@ public abstract class Application {
      * registered.</p>
      */
     public abstract Iterator<Class<?>> getConverterTypes();
+
+    
+    /**
+     * <p class="changed_added_2_0">Register a validator by its id
+     * that is applied to all <code>UIInput</code> components in a view.
+     * The validator to most often serve this role is the <code>BeanValidator</code>.</p>
+     *
+     * <p>An implementation is provided that takes no action
+     * so that users that decorate
+     * the <code>Application</code> continue to work.
+     *
+     * @since 2.0
+     */
+    public void addDefaultValidatorId(String validatorId) {
+
+        if (defaultApplication != null) {
+            defaultApplication.addDefaultValidatorId(validatorId);
+        } 
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Return an immutable <code>Map</code> over 
+     * the set of currently registered default validator IDs and their class
+     * name for this <code>Application</code>.</p>
+     *
+     * <p>An implementation is provided that returns <code>Collections.emptyMap</code>
+     * so that users that decorate
+     * the <code>Application</code> continue to work.
+     *
+     * @since 2.0
+     */
+    public Map<String,String> getDefaultValidatorInfo() {
+
+        if (defaultApplication != null) {
+            return defaultApplication.getDefaultValidatorInfo();
+        }
+        return Collections.emptyMap();
+
+    }
+
 
     /**
      * <p>Return the {@link ExpressionFactory} instance for this

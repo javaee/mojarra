@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <f:view>
+    <body>
+        <h1>Validate Credit Card</h1>
+        <p>Enter a credit card number and see if it passes the LUHN check. Spaces and hyphens are accepted.</p>
+        <h:messages style="color: red;"/>
+        <h:form>
+            <h:panelGrid columns="2">
+                Credit card number
+                <h:inputText value="#{user.creditCard}" label="Credit card number">
+                    <f:validateBean validationGroups="beanvalidation.groups.Order"/>
+                </h:inputText>
+            </h:panelGrid>
+            <h:commandButton action="success" value="Check"/>
+        </h:form>
+        <p><h:outputLink value="home.jsf">Back to home</h:outputLink></p>
+    </body>
+    </f:view>
+</html>
