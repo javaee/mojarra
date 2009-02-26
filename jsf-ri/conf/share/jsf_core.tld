@@ -462,147 +462,9 @@
     <tag>
         <description><![CDATA[
 
-            <p class="changed_added_2_0">Allow JSF page authors to
-            install <code>ComponentSystemEventListener</code> instances
-            on a component in a page. <i>Facelets only: This tag will
-            not be present in the JSP f: library, just the facelets f:
-            library.<i></p>
-
-            <div class="changed_added_2_0">
-
-            <p></p>
-
-            </div>
-
-        ]]></description>
-        <name>event</name>
-        <body-content>JSP</body-content>
-
-        <attribute>
-            <description><![CDATA[
-
-                <p class="changed_added_2_0">Name of the event for which
-                to install a listener.  The following table lists the
-                valid values for this attribute, and the corresponding
-                event type for which the listener action is
-                registered.</p>
-
-<table border="1">
-<tr>
-
-<th>value for "<code>name</code>" tag attribute</th>
-
-<th>Type of event sent to listener method
-</th>
-
-</tr>
-
-<tr>
-
-<td>preRenderComponent
-</td>
-
-<td>javax.faces.event.PreRenderComponentEvent
-</td>
-
-</tr>
-
-<tr>
-
-<td>PostAddToView
-</td>
-
-<td>javax.faces.event.PostAddToViewEvent
-</td>
-
-</tr>
-
-<tr>
-
-<td>preValidate
-</td>
-
-<td>javax.faces.event.PreValidateEvent
-</td>
-
-</tr>
-
-<tr>
-
-<td>postValidate
-</td>
-
-<td>javax.faces.event.PostValidateEvent
-</td>
-
-</tr>
-
-</table>
-
-<div class="changed_added_2_0">
-
-<p>In addition to these values, the fully qualified class name of any
-java class that extends
-<code>javax.faces.event.ComponentSystemEvent</code> may be used as the
-value of the "type" attribute.</p>
-
-<p>Also, the <code>@javax.faces.event.NamedEvent</code> annotation may
-be attached to any java class that extends
-<code>javax.faces.event.ComponentSystemEvent</code>.  This enables that
-event to be referenced from this attribute, as descibed in the javadocs
-for <code>@NamedEvent</code>.</p>
-
-</div>
-
-
-            ]]></description>
-            <name>name</name>
-            <required>true</required>
-            <rtexprvalue>false</rtexprvalue>
-            <deferred-value>
-              <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Method expression pointing to a method expression of
-                that will be called when the listener's processEvent
-                method would have been called.
-            </description>
-            <name>listener</name>
-            <required>true</required>
-            <rtexprvalue>false</rtexprvalue>
-            <deferred-method>
-              <method-signature>public void listener(javax.faces.event.ComponentSystemEvent event) throws javax.faces.event.AbortProcessingException</method-signature>
-            </deferred-method>
-
-        </attribute>
-
-    </tag>
-
-
-    <tag>
-        <description><![CDATA[
-
             <p><span class="changed_modified_2_0">Register</span> a
             named facet on the UIComponent associated with the closest
             parent UIComponent custom action.</p>
-
-            <p class="changed_added_2_0">FACELETS_ONLY: If the name of
-            this facet is equal to the value of the symbolic constant <a
-            href="../../../javadocs/javax/faces/component/UIViewRoot.html#METADATA_FACET_NAME">UIViewRoot.METADATA_FACET_NAME</a>
-            and the facet parent is an instance of
-            <code>UIViewRoot</code>, the following actions must be
-            taken.  The implementation must remove any existing facet by
-            this name from the facet parent (the
-            <code>UIViewRoot</code>) before processing any children of
-            this facet tag.  The implementation must insure that the
-            direct child of the facet is a <code>UIPanel</code>, even if
-            there is only one child of the facet.  The implementation
-            must set the id of the <code>UIPanel</code> to be the value
-            of the <code>UIViewRoot.METADATA_FACET_NAME</code> symbolic
-            constant.</p>
 
         ]]></description>
         <name>facet</name>
@@ -1096,12 +958,9 @@ for <code>@NamedEvent</code>.</p>
             associated with the closed parent UIComponent custom
             action.</p>
 
-            <p>RELEASE_PENDING (edburns, rogerk) documentation,
-            including the fact that toString() should be called on the
-            string rendered attribute values when iterating over the
-            select items.
-
-            </p>]]>
+            <p class="changed_modified_2_0">When iterating over the
+            select items, <code>toString()</code> mest be called on the
+            string rendered attribute values.</p>]]>
 
         </description>
         <name>selectItems</name>
@@ -1144,7 +1003,13 @@ for <code>@NamedEvent</code>.</p>
 
         <attribute>
             <description>
-                RELEASE_PENDING (edburns, rogerk) documentation
+                <![CDATA[
+
+<p class="changed_added_2_0">Expose the value from the
+<code>value</code> attribute under this request scoped key so that it
+may be referred to in EL for the value of other attributes.</p>
+
+                ]]>
             </description>
             <name>var</name>
             <required>false</required>
@@ -1154,7 +1019,11 @@ for <code>@NamedEvent</code>.</p>
 
         <attribute>
             <description>
-                RELEASE_PENDING (edburns, rogerk) documentation
+
+<![CDATA[ <p class="changed_added_2_0">evaluates to a
+<code>Collection</code>, array, or <code>Map</code> from which the items
+to be shown will be rendered.</p> ]]>
+
             </description>
             <name>itemValue</name>
             <deferred-value>
@@ -1164,7 +1033,10 @@ for <code>@NamedEvent</code>.</p>
 
         <attribute>
             <description>
-                RELEASE_PENDING (edburns, rogerk) documentation
+
+<![CDATA[ <p class="changed_added_2_0">evaluates to a String that will
+serve as the label to be shown for the item.</p> ]]>
+
             </description>
             <name>itemLabel</name>
             <deferred-value>
@@ -1174,7 +1046,11 @@ for <code>@NamedEvent</code>.</p>
 
         <attribute>
             <description>
-                RELEASE_PENDING (edburns, rogerk) documentation
+
+
+<![CDATA[ <p class="changed_added_2_0">evaluates to a String that will
+serve as the description to be shown for the item.</p> ]]>
+
             </description>
             <name>itemDescription</name>
             <deferred-value>
@@ -1184,7 +1060,10 @@ for <code>@NamedEvent</code>.</p>
 
         <attribute>
             <description>
-                RELEASE_PENDING (edburns, rogerk) documentation
+
+<![CDATA[ <p class="changed_added_2_0">evaluates to a boolean that will
+determine if the item value is selectable or not.</p> ]]>
+
             </description>
             <name>itemDisabled</name>
             <deferred-value>
@@ -1194,7 +1073,10 @@ for <code>@NamedEvent</code>.</p>
 
         <attribute>
             <description>
-                RELEASE_PENDING (edburns, rogerk) documentation
+
+<![CDATA[ <p class="changed_added_2_0">evaluates to a boolean that will
+determine if the rendered markup for the item receives normal JSF HTML escaping or not.</p> ]]>
+
             </description>
             <name>itemLabelEscaped</name>
             <deferred-value>
