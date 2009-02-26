@@ -226,10 +226,6 @@ public class UIForm extends UIComponentBase implements NamingContainer {
         if (context == null) {
             throw new NullPointerException();
         }
-        // Hack for bug 928 - RELEASE_PENDING see bug # 1004
-        if (!isSubmitted()) {
-            setSubmitted(context.getExternalContext().getRequestParameterMap().containsKey(getClientId(context)));
-        }
         if (!isSubmitted()) {
             return;
         }
@@ -255,10 +251,6 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
         if (context == null) {
             throw new NullPointerException();
-        }
-        // Hack for bug 928 - RELEASE_PENDING see bug # 1004
-        if (!isSubmitted()) {
-            setSubmitted(context.getExternalContext().getRequestParameterMap().containsKey(getClientId(context)));
         }
         if (!isSubmitted()) {
             return;

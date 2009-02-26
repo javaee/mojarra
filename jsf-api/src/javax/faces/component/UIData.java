@@ -1597,6 +1597,15 @@ public class UIData extends UIComponentBase
             // This *must* be set after the call to setValue(), since
             // calling setValue() always resets "localValueSet" to true.
             input.setLocalValueSet(state.isLocalValueSet());
+        } else if (component instanceof UIForm) {
+            UIForm form = (UIForm) component;
+            String clientId = component.getClientId(context);
+            SavedState state = saved.get(clientId);
+            if (state == null) {
+                state = new SavedState();
+            }
+            form.setSubmitted(state.getSubmitted());
+            state.setSubmitted(form.isSubmitted());
         }
 
         // Restore state for children of this component
@@ -1657,6 +1666,15 @@ public class UIData extends UIComponentBase
             state.setValid(input.isValid());
             state.setSubmittedValue(input.getSubmittedValue());
             state.setLocalValueSet(input.isLocalValueSet());
+        } else if (component instanceof UIForm) {
+            UIForm form = (UIForm) component;
+            String clientId = component.getClientId(context);
+            SavedState state = saved.get(clientId);
+            if (state == null) {
+                state = new SavedState();
+                saved.put(clientId, state);
+            }
+            state.setSubmitted(form.isSubmitted());
         }
 
         // Save state for children of this component
@@ -1682,6 +1700,7 @@ class SavedState implements Serializable {
 
     private static final long serialVersionUID = 2920252657338389849L;
     private Object submittedValue;
+    private boolean submitted;
 
     Object getSubmittedValue() {
         return (this.submittedValue);
@@ -1719,6 +1738,14 @@ class SavedState implements Serializable {
 
     public void setLocalValueSet(boolean localValueSet) {
         this.localValueSet = localValueSet;
+    }
+
+    public boolean getSubmitted() {
+        return this.submitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
     }
 
     public String toString() {
