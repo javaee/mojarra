@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.web.project</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/web-project/3">
+            <name>beanvalidation</name>
+            <minimum-ant-version>1.6.5</minimum-ant-version>
+            <web-module-libraries>
+                <library files="1">
+                    <file>${libs.validation-api.classpath}</file>
+                </library>
+                <library dirs="3">
+                    <file>${libs.jsf-mojarra-trunk.classpath}</file>
+                </library>
+            </web-module-libraries>
+            <web-module-additional-libraries/>
+            <source-roots>
+                <root id="src.dir"/>
+                <root id="src.resources.dir" name="Resources"/>
+            </source-roots>
+            <test-roots/>
+        </data>
+    </configuration>
+</project>

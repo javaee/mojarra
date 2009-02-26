@@ -45,6 +45,10 @@
 
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+    <c:set scope="application" var="javax.faces.VALIDATE_EMPTY_FIELDS"
+           value="false" />
 
     <f:view>  
       <h:form id="form">
@@ -83,7 +87,7 @@
     <address><a href="mailto:Ed Burns <ed.burns@sun.com>"></a></address>
 <!-- Created: Fri Oct 31 10:49:23 Eastern Standard Time 2003 -->
 <!-- hhmts start -->
-Last modified: Mon Jan 19 10:03:14 Pacific Standard Time 2004
+Last modified: Thu Feb 26 13:28:40 EST 2009
 <!-- hhmts end -->
   </body>
 </html>

@@ -1244,7 +1244,7 @@
     </target>
 
     <target name="scratch">
-      <antcall target="test.composite" />
+      <antcall target="test.methodRef" />
     </target>
 
 </project>

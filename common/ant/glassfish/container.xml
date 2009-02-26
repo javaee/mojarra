@@ -162,13 +162,26 @@ grant {
                 </then>
             </if>
             <delete>
-                <fileset dir="${container.home}/lib" includes="jsf-*.jar"/>
+                <fileset dir="${container.home}/lib">
+                   <include name="jsf-*.jar"/>
+                   <include name="validation-api*.jar"/>
+                   <include name="hibernate-validator*.jar"/>
+                   <include name="slf4j-*.jar"/>
+                </fileset>
             </delete>
             <jar jarfile="${container.home}/lib/javaee.jar" update="yes">
                 <zipfileset src="${api.dir}/build/lib/jsf-api.jar"/>
             </jar>
             <copy todir="${container.home}/lib"
                   file="${dist.dir}/jsf-impl.jar"/>
+            <copy todir="${container.home}/lib"
+                  file="${validations-ri.jar}"/>
+            <copy todir="${container.home}/lib"
+                  file="${slf4j-api.jar}"/>
+            <copy todir="${container.home}/lib"
+                  file="${slf4j-jdk14.jar}"/>
+            <copy todir="${container.home}/lib"
+                  file="${validation-api.jar}"/>
             <if>
                 <os family="windows"/>
                 <then>

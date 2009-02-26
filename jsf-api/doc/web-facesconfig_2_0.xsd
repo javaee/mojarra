@@ -590,6 +590,9 @@
                          type="javaee:faces-config-application-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
+            <xsd:element 
+                name="default-validators"
+                type="javaee:faces-config-default-validatorsType"/>
             </xsd:choice>
         <xsd:attribute name = "id" type = "xsd:ID"/>
     </xsd:complexType>
@@ -1425,6 +1428,38 @@
                          type="javaee:faces-config-supported-localeType"
                          minOccurs="0" 
                          maxOccurs="unbounded">                
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name="faces-config-default-validatorsType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                The "default-validators" element allows the app developer to 
+                register a set of validators, referenced by identifier, that
+                are automatically assigned to any EditableValueHolder component
+                in the application, unless overridden or disabled locally.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        
+        <xsd:sequence>
+            <xsd:element name="validator-id"
+                         type="javaee:string"
+                         minOccurs="0"
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        
+                        The "validator-id" element represents the identifier 
+                        of a registered validator.
+                        
+                    </xsd:documentation>
+                </xsd:annotation>
             </xsd:element>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
