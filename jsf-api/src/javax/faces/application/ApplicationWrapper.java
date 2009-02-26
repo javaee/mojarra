@@ -70,87 +70,108 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     public abstract Application getWrapped();
 
+    @Override
     public ActionListener getActionListener() {
         return getWrapped().getActionListener();
     }
 
+    @Override
     public void setActionListener(ActionListener listener) {
         getWrapped().setActionListener(listener);
     }
 
+    @Override
     public Locale getDefaultLocale() {
         return getWrapped().getDefaultLocale();
     }
 
+    @Override
     public void setDefaultLocale(Locale locale) {
         getWrapped().setDefaultLocale(locale);
     }
 
+    @Override
     public String getDefaultRenderKitId() {
         return getWrapped().getDefaultRenderKitId();
     }
 
+    @Override
     public void setDefaultRenderKitId(String renderKitId) {
         getWrapped().setDefaultRenderKitId(renderKitId);
     }
 
+    @Override
     public String getMessageBundle() {
         return getWrapped().getMessageBundle();
     }
 
+    @Override
     public void setMessageBundle(String bundle) {
         getWrapped().setMessageBundle(bundle);
     }
 
+    @Override
     public NavigationHandler getNavigationHandler() {
         return getWrapped().getNavigationHandler();
     }
 
+    @Override
     public void setNavigationHandler(NavigationHandler handler) {
         getWrapped().setNavigationHandler(handler);
     }
 
+    @Override
     public PropertyResolver getPropertyResolver() {
         return getWrapped().getPropertyResolver();
     }
 
+    @Override
     public void setPropertyResolver(PropertyResolver resolver) {
         getWrapped().setPropertyResolver(resolver);
     }
 
+    @Override
     public VariableResolver getVariableResolver() {
         return getWrapped().getVariableResolver();
     }
 
+    @Override
     public void setVariableResolver(VariableResolver resolver) {
         getWrapped().setVariableResolver(resolver);
     }
 
+    @Override
     public ViewHandler getViewHandler() {
         return getWrapped().getViewHandler();
     }
 
+    @Override
     public void setViewHandler(ViewHandler handler) {
         getWrapped().setViewHandler(handler);
     }
 
+    @Override
     public StateManager getStateManager() {
         return getWrapped().getStateManager();
     }
 
+    @Override
     public void setStateManager(StateManager manager) {
         getWrapped().setStateManager(manager);
     }
 
+    @Override
     public void addComponent(String componentType, String componentClass) {
         getWrapped().addComponent(componentType, componentClass);
     }
 
+    @Override
     public UIComponent createComponent(String componentType)
           throws FacesException {
         return getWrapped().createComponent(componentType);
     }
 
+    @Override
     public UIComponent createComponent(ValueBinding componentBinding,
                                        FacesContext context,
                                        String componentType)
@@ -160,59 +181,73 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
                                             componentType);
     }
 
+    @Override
     public Iterator<String> getComponentTypes() {
         return getWrapped().getComponentTypes();
     }
 
+    @Override
     public void addConverter(String converterId, String converterClass) {
         getWrapped().addConverter(converterId, converterClass);
     }
 
+    @Override
     public void addConverter(Class<?> targetClass, String converterClass) {
         getWrapped().addConverter(targetClass, converterClass);
     }
 
+    @Override
     public Converter createConverter(String converterId) {
         return getWrapped().createConverter(converterId);
     }
 
+    @Override
     public Converter createConverter(Class<?> targetClass) {
         return getWrapped().createConverter(targetClass);
     }
 
+    @Override
     public Iterator<String> getConverterIds() {
         return getWrapped().getConverterIds();
     }
 
+    @Override
     public Iterator<Class<?>> getConverterTypes() {
         return getWrapped().getConverterTypes();
     }
 
+    @Override
     public MethodBinding createMethodBinding(String ref, Class<?>[] params)
           throws ReferenceSyntaxException {
         return getWrapped().createMethodBinding(ref, params);
     }
 
+    @Override
     public Iterator<Locale> getSupportedLocales() {
         return getWrapped().getSupportedLocales();
     }
 
+    @Override
     public void setSupportedLocales(Collection<Locale> locales) {
         getWrapped().setSupportedLocales(locales);
     }
 
+    @Override
     public void addValidator(String validatorId, String validatorClass) {
         getWrapped().addValidator(validatorId, validatorClass);
     }
 
+    @Override
     public Validator createValidator(String validatorId) throws FacesException {
         return getWrapped().createValidator(validatorId);
     }
 
+    @Override
     public Iterator<String> getValidatorIds() {
         return getWrapped().getValidatorIds();
     }
 
+    @Override
     public ValueBinding createValueBinding(String ref)
           throws ReferenceSyntaxException {
         return getWrapped().createValueBinding(ref);
@@ -220,7 +255,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     @Override
     public ResourceHandler getResourceHandler() {
-        return super.getResourceHandler();
+        return getWrapped().getResourceHandler();
     }
 
     @Override
@@ -230,12 +265,12 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     @Override
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
-        return super.getResourceBundle(ctx, name);
+        return getWrapped().getResourceBundle(ctx, name);
     }
 
     @Override
     public ProjectStage getProjectStage() {
-        return super.getProjectStage();
+        return getWrapped().getProjectStage();
     }
 
     @Override
@@ -245,7 +280,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     @Override
     public ELResolver getELResolver() {
-        return super.getELResolver();
+        return getWrapped().getELResolver();
     }
 
     @Override
@@ -253,7 +288,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
                                        FacesContext context,
                                        String componentType)
           throws FacesException {
-        return super.createComponent(componentExpression, context, componentType);
+        return getWrapped().createComponent(componentExpression, context, componentType);
     }
 
     @Override
@@ -261,25 +296,25 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
                                        FacesContext context,
                                        String componentType,
                                        String rendererType) {
-        return super.createComponent(componentExpression, context, componentType, rendererType);
+        return getWrapped().createComponent(componentExpression, context, componentType, rendererType);
     }
 
     @Override
     public UIComponent createComponent(FacesContext context,
                                        String componentType,
                                        String rendererType) {
-        return super.createComponent(context, componentType, rendererType);
+        return getWrapped().createComponent(context, componentType, rendererType);
     }
 
     @Override
     public UIComponent createComponent(FacesContext context,
                                        Resource componentResource) {
-        return super.createComponent(context, componentResource);
+        return getWrapped().createComponent(context, componentResource);
     }
 
     @Override
     public ExpressionFactory getExpressionFactory() {
-        return super.getExpressionFactory();
+        return getWrapped().getExpressionFactory();
     }
 
     @Override
@@ -287,7 +322,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
                                        String expression,
                                        Class<? extends T> expectedType)
           throws ELException {
-        return super.evaluateExpressionGet(context, expression, expectedType);
+        return getWrapped().evaluateExpressionGet(context, expression, expectedType);
     }
 
     @Override
@@ -302,7 +337,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     @Override
     public ELContextListener[] getELContextListeners() {
-        return super.getELContextListeners();
+        return getWrapped().getELContextListeners();
     }
 
     @Override
