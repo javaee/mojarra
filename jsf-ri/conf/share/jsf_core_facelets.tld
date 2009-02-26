@@ -462,9 +462,132 @@
     <tag>
         <description><![CDATA[
 
-            <p><span class="changed_modified_2_0">Register</span> a
-            named facet on the UIComponent associated with the closest
-            parent UIComponent custom action.</p>
+            <p class="changed_added_2_0">Allow JSF page authors to
+            install <code>ComponentSystemEventListener</code> instances
+            on a component in a page. <i>Facelets only: This tag will
+            not be present in the JSP f: library, just the facelets f:
+            library.<i></p>
+
+            <div class="changed_added_2_0">
+
+            <p></p>
+
+            </div>
+
+        ]]></description>
+        <name>event</name>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description><![CDATA[
+
+                <p class="changed_added_2_0">Name of the event for which
+                to install a listener.  The following table lists the
+                valid values for this attribute, and the corresponding
+                event type for which the listener action is
+                registered.</p>
+
+<table border="1">
+<tr>
+
+<th>value for "<code>name</code>" tag attribute</th>
+
+<th>Type of event sent to listener method
+</th>
+
+</tr>
+
+<tr>
+
+<td>preRenderComponent
+</td>
+
+<td>javax.faces.event.PreRenderComponentEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>PostAddToView
+</td>
+
+<td>javax.faces.event.PostAddToViewEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>preValidate
+</td>
+
+<td>javax.faces.event.PreValidateEvent
+</td>
+
+</tr>
+
+<tr>
+
+<td>postValidate
+</td>
+
+<td>javax.faces.event.PostValidateEvent
+</td>
+
+</tr>
+
+</table>
+
+<div class="changed_added_2_0">
+
+<p>In addition to these values, the fully qualified class name of any
+java class that extends
+<code>javax.faces.event.ComponentSystemEvent</code> may be used as the
+value of the "type" attribute.</p>
+
+<p>Also, the <code>@javax.faces.event.NamedEvent</code> annotation may
+be attached to any java class that extends
+<code>javax.faces.event.ComponentSystemEvent</code>.  This enables that
+event to be referenced from this attribute, as descibed in the javadocs
+for <code>@NamedEvent</code>.</p>
+
+</div>
+
+
+            ]]></description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <deferred-value>
+              <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Method expression pointing to a method expression of
+                that will be called when the listener's processEvent
+                method would have been called.
+            </description>
+            <name>listener</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <deferred-method>
+              <method-signature>public void listener(javax.faces.event.ComponentSystemEvent event) throws javax.faces.event.AbortProcessingException</method-signature>
+            </deferred-method>
+
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description><![CDATA[
+
+            <p>Register a named facet on the UIComponent associated with
+            the closest parent UIComponent custom action.</p>
+
 
         ]]></description>
         <name>facet</name>
@@ -480,6 +603,31 @@
             <rtexprvalue>false</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
+
+    </tag>
+
+    <tag>
+        <description><![CDATA[
+
+            <p class="changed_added_2_0">Declare the metadata facet for
+            this view.  This must be a child of the
+            <code>&lt;f:view&gt;</code> for best performance, this
+            should be the <b>first</b> child of the
+            <code>&lt;f:view&gt;</code>.  The implementation must insure
+            that the direct child of the facet is a
+            <code>UIPanel</code>, even if there is only one child of the
+            facet.  The implementation must set the id of the
+            <code>UIPanel</code> to be the value of the
+            <code>UIViewRoot.METADATA_FACET_NAME</code> symbolic
+            constant.</p>
+
+            <p class="changed_added_2_0">This element may contain one or more
+            <code>&lt;f:viewParam&gt;</code> elements.</p>
+
+        ]]></description>
+        <name>metadata</name>
+        <tag-class>javax.faces.webapp.FacetTag</tag-class>
+        <body-content>JSP</body-content>
 
     </tag>
 
@@ -960,7 +1108,9 @@
 
             <p class="changed_modified_2_0">When iterating over the
             select items, <code>toString()</code> mest be called on the
-            string rendered attribute values.</p>]]>
+            string rendered attribute values.
+
+            </p>]]>
 
         </description>
         <name>selectItems</name>
@@ -1046,7 +1196,6 @@ serve as the label to be shown for the item.</p> ]]>
 
         <attribute>
             <description>
-
 
 <![CDATA[ <p class="changed_added_2_0">evaluates to a String that will
 serve as the description to be shown for the item.</p> ]]>
@@ -1228,6 +1377,19 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
 
         <attribute>
             <description>
+                <![CDATA[ <p class="changed_added_2_0">A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.</p>
+
+                ]]>
+            </description>
+            <name>disabled</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
                 Maximum value allowed for this component.
             </description>
             <name>maximum</name>
@@ -1270,6 +1432,19 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
         <tag-class>com.sun.faces.taglib.jsf_core.ValidateLengthTag</tag-class>
         <body-content>JSP</body-content>
 
+        <attribute>
+            <description>
+                <![CDATA[ <p class="changed_added_2_0">A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.</p>
+
+                ]]>
+            </description>
+            <name>disabled</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
         <attribute>
             <description>
                 Maximum length allowed for this component.
@@ -1315,6 +1490,19 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
         <tag-class>com.sun.faces.taglib.jsf_core.ValidateLongRangeTag</tag-class>
         <body-content>JSP</body-content>
 
+        <attribute>
+            <description>
+                <![CDATA[ <p class="changed_added_2_0">A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.</p>
+
+                ]]>
+            </description>
+            <name>disabled</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
         <attribute>
             <description>
                 Maximum value allowed for this component.
@@ -1377,6 +1565,19 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
         </attribute>
         <attribute>
             <description>
+                <![CDATA[ <p class="changed_added_2_0">A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.</p>
+
+                ]]>
+            </description>
+            <name>disabled</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
                 A ValueExpression that evaluates to an instance of
                 BeanValidator.
             </description>
@@ -1401,6 +1602,19 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
         <name>validateRegex</name>
         <tag-class>com.sun.faces.taglib.jsf_core.RegexValidatorTag</tag-class>
         <body-content>empty</body-content>
+        <attribute>
+            <description>
+                <![CDATA[ <p class="changed_added_2_0">A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.</p>
+
+                ]]>
+            </description>
+            <name>disabled</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
         <attribute>
              <description>
                 A regular expression pattern.  Remember that, like in
@@ -1435,6 +1649,19 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
 
          </p>]]>
         </description>
+        <attribute>
+            <description>
+                <![CDATA[ <p class="changed_added_2_0">A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.</p>
+
+                ]]>
+            </description>
+            <name>disabled</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
         <name>validateRequired</name>
         <tag-class>com.sun.faces.taglib.jsf_core.RequiredValidatorTag</tag-class>
         <body-content>empty</body-content>
@@ -1460,6 +1687,19 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
         <tag-class>com.sun.faces.taglib.jsf_core.ValidatorTag</tag-class>
         <body-content>empty</body-content>
 
+        <attribute>
+            <description>
+                <![CDATA[ <p class="changed_added_2_0">A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.</p>
+
+                ]]>
+            </description>
+            <name>disabled</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
         <attribute>
              <description>
                 Validator identifier of the Validator
