@@ -68,6 +68,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
+import javax.faces.validator.BeanValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
@@ -664,7 +665,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     /**
      * <p class="changed_added_2_0">Override the default superclass
-     * behavior to provide additional Beans Validation behavior.  After
+     * behavior to provide conditional support for Beans Validation behavior.  
+     * If Beans Validation is not available in the current environment,
+     * this method must take no action.  After
      * encoding the component, add any default validators. Putting the
      * logic in this method allows this service to be provided even for
      * inputs that are added programmatically because this method is
@@ -731,7 +734,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
         // QUESTION is there another dependable way to perform this only once?
-        if (!defaultValidatorsProcessed) {
+        if (isBeansValidationAvailable(context) && !defaultValidatorsProcessed) {
             addDefaultValidators(context);
         }
     }
@@ -1568,16 +1571,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 val = (String) extCtx.getApplicationMap().get(VALIDATE_EMPTY_FIELDS_PARAM_NAME);
             }
             if (val == null || val.equals("auto")) {
-                validateEmptyFields = true;
-                try {
-                    Thread.currentThread().getContextClassLoader().loadClass("javax.validation.Validation");
-                } catch (ClassNotFoundException e1) {
-                    try {
-                        Class.forName("javax.validation.Validation");
-                    } catch (ClassNotFoundException e2) {
-                        validateEmptyFields = false;
-                    }
-                }
+                validateEmptyFields = isBeansValidationAvailable(ctx);
             }
             else {
                 validateEmptyFields = Boolean.valueOf(val);
@@ -1586,6 +1580,26 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         return validateEmptyFields;
 
+    }
+    
+    private boolean isBeansValidationAvailable(FacesContext context) {
+        boolean result = false;
+        final String beansValidationAvailabilityCacheKey = 
+                "javax.faces.BEANS_VALIDATION_AVAILABLE";
+        Map<String,Object> appMap = context.getExternalContext().getApplicationMap();
+        
+        if (appMap.containsKey(beansValidationAvailabilityCacheKey)) {
+            result = (Boolean) appMap.get(beansValidationAvailabilityCacheKey);
+        } else {
+            try {
+                new BeanValidator();
+                appMap.put(beansValidationAvailabilityCacheKey, result = true);
+            } catch (Throwable t) {
+                appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
+            }
+        }
+
+        return result;
     }
 
     /**

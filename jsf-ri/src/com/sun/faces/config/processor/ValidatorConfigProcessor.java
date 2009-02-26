@@ -57,6 +57,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.validator.BeanValidator;
 
 /**
  * <p>
@@ -82,6 +83,8 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
      * <p>/faces-config/component/validator-class</p>
      */
     private static final String VALIDATOR_CLASS = "validator-class";
+    
+    private Boolean beansValidationIsAvailable = false;
 
 
     // -------------------------------------------- Methods from ConfigProcessor
@@ -172,15 +175,40 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
                                     validatorId,
                                     validatorClass));
                 }
-                if (verifier != null) {
-                    verifier.validateObject(Verifier.ObjectType.VALIDATOR,
-                                            validatorClass,
-                                            Validator.class);
+                
+                boolean doAdd = true;
+                if (validatorId.equals(BeanValidator.VALIDATOR_ID)) {
+                    doAdd = isBeansValidationAvailable();
                 }
-                app.addValidator(validatorId, validatorClass);
+                
+                if (doAdd) {
+                    if (verifier != null) {
+                        verifier.validateObject(Verifier.ObjectType.VALIDATOR,
+                                validatorClass,
+                                Validator.class);
+                    }
+                    app.addValidator(validatorId, validatorClass);
+                }
             }
 
         }
     }
+    
+    private boolean isBeansValidationAvailable() {
+        boolean result = false;
+        if (null != beansValidationIsAvailable) {
+            result = beansValidationIsAvailable;
+        } else {
+            try {
+                new BeanValidator();
+                beansValidationIsAvailable = Boolean.TRUE;
+            } catch (Throwable t) {
+                beansValidationIsAvailable = Boolean.FALSE;
+            }
+        }
 
+        return result;
+    }
+    
+    
 }

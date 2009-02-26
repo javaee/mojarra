@@ -42,6 +42,7 @@ package javax.faces.application;
 
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -1166,8 +1167,8 @@ public abstract class Application {
      * that is applied to all <code>UIInput</code> components in a view.
      * The validator to most often serve this role is the <code>BeanValidator</code>.</p>
      *
-     * <p>An implementation is provided that throws
-     * <code>UnsupportedOperationException</code> so that users that decorate
+     * <p>An implementation is provided that takes no action
+     * so that users that decorate
      * the <code>Application</code> continue to work.
      *
      * @since 2.0
@@ -1176,9 +1177,7 @@ public abstract class Application {
 
         if (defaultApplication != null) {
             defaultApplication.addDefaultValidatorId(validatorId);
-        } else {
-            throw new UnsupportedOperationException();
-        }
+        } 
 
     }
 
@@ -1188,8 +1187,8 @@ public abstract class Application {
      * the set of currently registered default validator IDs and their class
      * name for this <code>Application</code>.</p>
      *
-     * <p>An implementation is provided that throws
-     * <code>UnsupportedOperationException</code> so that users that decorate
+     * <p>An implementation is provided that returns <code>Collections.emptyMap</code>
+     * so that users that decorate
      * the <code>Application</code> continue to work.
      *
      * @since 2.0
@@ -1199,7 +1198,7 @@ public abstract class Application {
         if (defaultApplication != null) {
             return defaultApplication.getDefaultValidatorInfo();
         }
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
 
     }
 

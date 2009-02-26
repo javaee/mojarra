@@ -1442,12 +1442,14 @@ public class ApplicationImpl extends Application {
                         for (String id : defaultValidatorIds) {
                             String validatorClass;
                             Object result = validatorMap.get(id);
-                            if (result instanceof Class) {
-                                validatorClass = ((Class) result).getName();
-                            } else {
-                                validatorClass = result.toString();
+                            if (null != result) {
+                                if (result instanceof Class) {
+                                    validatorClass = ((Class) result).getName();
+                                } else {
+                                    validatorClass = result.toString();
+                                }
+                                defaultValidatorInfo.put(id, validatorClass);
                             }
-                            defaultValidatorInfo.put(id, validatorClass);
                         }
 
                     }

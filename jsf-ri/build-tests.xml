@@ -485,4 +485,10 @@
         </copy>
     </target>    
 
+    <target name="passthru">
+
+      <antcall target="run.cactus.test" />
+       
+    </target>
+
 </project>

@@ -630,6 +630,11 @@
   <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${impl.version}" goals="deploy" />
 </target>
 
+    <target name="passthru">
+        <ant antfile="build-tests.xml" target="passthru"/>
+    </target>
+
+
 <!-- scratch
 
 ant -emacs -Dbuild.generate.tld.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/jsf-ri/build/generate/conf/share -Dbuild.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/dist/jsf-spec-2.0-20081030 facelets.tlddocs
