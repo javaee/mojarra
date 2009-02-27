@@ -759,7 +759,7 @@ public class HtmlTaglib12Generator extends AbstractGenerator {
                  rendererIter.hasNext(); ) {
 
                 renderer = rendererIter.next();
-                if (renderer.isIgnoreForJsp()) {
+                if (renderer.isIgnoreForJsp() || renderer.isIgnoreAll()) {
                     continue;
                 }
                 String rendererType = renderer.getRendererType();
