@@ -361,6 +361,7 @@ public class RenderKitUtils {
                       handlerName,
                       userHandler,
                       behaviorEventName,
+                      null,
                       false);
     }
 
@@ -370,6 +371,7 @@ public class RenderKitUtils {
     public static void renderOnclick(FacesContext context, 
                                      UIComponent component,
                                      Collection<Behavior.Parameter> params,
+                                     String submitTarget,
                                      boolean needsSubmit)
         throws IOException {
 
@@ -383,6 +385,7 @@ public class RenderKitUtils {
                       handlerName,
                       userHandler,
                       behaviorEventName,
+                      submitTarget,
                       needsSubmit);
     }
 
@@ -570,6 +573,7 @@ public class RenderKitUtils {
                                       name,
                                       value,
                                       behaviorEventName,
+                                      null,
                                       false);
 
                         renderedBehavior = true;
@@ -602,6 +606,7 @@ public class RenderKitUtils {
                                       attr.getName(),
                                       null,
                                       behaviorEventName,
+                                      null,
                                       false);
                 }
             }
@@ -655,6 +660,7 @@ public class RenderKitUtils {
                               attrName,
                               value,
                               events[0],
+                              null,
                               false);
             }
         }
@@ -1307,6 +1313,7 @@ public class RenderKitUtils {
     private static String getSubmitHandler(FacesContext context,
                                            UIComponent component,
                                            Collection<Behavior.Parameter> params,
+                                           String submitTarget,
                                            boolean preventDefault) {
 
         StringBuilder builder = new StringBuilder(256);
@@ -1326,10 +1333,13 @@ public class RenderKitUtils {
             }
         }
 
-        // Note: 3rd arg to mojarra.jsfcljs() is the form target.
-        // This is always the empty string in our old getCommandOnClickScript()
-        // code, so leaving as empty string here.
-        builder.append("},'')");
+        builder.append("},'");
+
+        if (submitTarget != null) {
+            builder.append(submitTarget);
+        }
+
+        builder.append("')");
 
         if (preventDefault) {
             builder.append(";return false");
@@ -1346,6 +1356,7 @@ public class RenderKitUtils {
                                             Collection<Behavior.Parameter> params,
                                             String behaviorEventName,
                                             String userHandler,
+                                            String submitTarget,
                                             boolean needsSubmit) {
 
 
@@ -1369,7 +1380,12 @@ public class RenderKitUtils {
         // If we've got parameters but we didn't render a "submitting"
         // behavior script, we need to explicitly render a submit script.
         if (!submitting && (hasParams || needsSubmit)) {
-            String submitHandler = getSubmitHandler(context, component, params, false);
+            String submitHandler = getSubmitHandler(context, 
+                                                    component,
+                                                    params,
+                                                    submitTarget,
+                                                    false);
+
             appendScriptToChain(builder, submitHandler);
 
             // We are now submitting since we've rendered a submit script.
@@ -1455,6 +1471,7 @@ public class RenderKitUtils {
                                       String handlerName,
                                       Object handlerValue,
                                       String behaviorEventName,
+                                      String submitTarget,
                                       boolean needsSubmit)
         throws IOException {
 
@@ -1481,7 +1498,11 @@ public class RenderKitUtils {
                 break;
 
             case SUBMIT_ONLY:
-                handler = getSubmitHandler(context, component, params, true);
+                handler = getSubmitHandler(context, 
+                                           component,
+                                           params,
+                                           submitTarget,
+                                           true);
                 break;
 
             case CHAIN:
@@ -1491,6 +1512,7 @@ public class RenderKitUtils {
                                             params,
                                             behaviorEventName,
                                             userHandler,
+                                            submitTarget,
                                             needsSubmit);
                 break;
             default:

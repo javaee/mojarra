@@ -88,6 +88,8 @@ import java.lang.annotation.Target;
 
 
  * </div>
+ *
+ * @since 2.0
 
  */
 
@@ -100,6 +102,8 @@ public @interface FacesBehaviorRenderer {
      * attribute is taken to be the <em>render-kit-id</em> in which an
      * instance of this class of <code>Renderer</code> must be
      * installed.</p>
+     *
+     * @since 2.0
      */ 
 
     String renderKitId() default RenderKitFactory.HTML_BASIC_RENDER_KIT;

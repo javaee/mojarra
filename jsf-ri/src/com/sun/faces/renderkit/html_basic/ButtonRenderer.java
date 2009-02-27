@@ -164,6 +164,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         RenderKitUtils.renderOnclick(context, 
                                      component, 
                                      params,
+                                     null,
                                      false);
 
         writer.endElement("input");

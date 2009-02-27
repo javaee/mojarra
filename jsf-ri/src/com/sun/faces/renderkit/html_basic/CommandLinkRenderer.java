@@ -224,10 +224,18 @@ public class CommandLinkRenderer extends LinkRenderer {
 
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, command);
 
+        String target = (String) command.getAttributes().get("target");
+        if (target != null) {
+            target = target.trim();
+        } else {
+            target = "";
+        }
+
         Collection<Behavior.Parameter> params = getBehaviorParameters(command);
         RenderKitUtils.renderOnclick(context, 
                                      command,
                                      params,
+                                     target,
                                      true);
 
         writeCommonLinkAttributes(writer, command);
