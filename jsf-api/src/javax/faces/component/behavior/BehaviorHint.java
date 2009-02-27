@@ -40,8 +40,6 @@ package javax.faces.component.behavior;
  * <p class="changed_added_2_0">An enum that specifies hints that describes
  * the behavior of Behavior implementations.</p>
  *
- * RELEASE_PENDING
- *
  * @see Behavior#getHints Behavior.getHints()
  *
  * @since 2.0
