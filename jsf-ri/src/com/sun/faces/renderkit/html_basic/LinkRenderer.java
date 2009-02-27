@@ -87,7 +87,8 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("name", writtenId, "name");
         }
 
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
                                                 ATTRIBUTES);
 

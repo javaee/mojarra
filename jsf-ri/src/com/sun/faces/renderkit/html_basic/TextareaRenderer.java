@@ -98,7 +98,8 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
         }
 
         // style is rendered as a passthru attribute
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);

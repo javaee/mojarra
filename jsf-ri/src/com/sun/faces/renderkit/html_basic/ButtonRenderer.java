@@ -51,7 +51,6 @@ import java.util.logging.Level;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
-import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -148,9 +147,12 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("value", label, "value");
         }
 
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
-                                                ATTRIBUTES);
+                                                ATTRIBUTES,
+                                                getNonOnClickBehaviors(component));
+
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         String styleClass = (String)
@@ -255,6 +257,17 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
         return type;
 
+    }
+
+    // Returns the Behaviors map, but only if it contains some entry other
+    // than those handled by renderOnclick().  This helps us optimize
+    // renderPassThruAttributes() in the very common case where the
+    // button only contains an "action" (or "click") Behavior.  In that
+    // we pass a null Behaviors map into renderPassThruAttributes(),
+    // which allows us to take a more optimized code path.
+    private static Map<String, List<Behavior>> getNonOnClickBehaviors(UIComponent component) {
+
+        return getPassThruBehaviors(component, "click", "action");
     }
 
 } // end of class ButtonRenderer

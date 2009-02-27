@@ -224,7 +224,8 @@ public class OutputLinkRenderer extends LinkRenderer {
                                  context.getExternalContext()
                                        .encodeResourceURL(sb.toString()),
                                  "href");
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);

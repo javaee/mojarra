@@ -225,7 +225,7 @@ public class ButtonRenderer extends Renderer {
         }
         writer.writeAttribute("onclick", sb.toString(), null);
 
-        RenderKitUtils.renderPassThruAttributes(
+        RenderKitUtils.renderPassThruAttributes(context,
               writer,
                                                 component,
                                                 ATTRIBUTES);

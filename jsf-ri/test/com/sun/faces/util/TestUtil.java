@@ -113,7 +113,7 @@ public class TestUtil extends ServletFacesTestCase {
             input.getAttributes().put("notPresent", "notPresent");
             input.getAttributes().put("onblur", "javascript:f.blur()");
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),
                   writer,
                                                     input,
                                                     attrs);
@@ -128,7 +128,7 @@ public class TestUtil extends ServletFacesTestCase {
             getFacesContext().setResponseWriter(writer);
             input.getAttributes().remove("onblur");
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),writer, input, attrs);
             writer.endElement("input");
             assertTrue(sw.toString().equals("<input />"));
         } catch (IOException e) {
@@ -154,7 +154,7 @@ public class TestUtil extends ServletFacesTestCase {
             input.setId("testRenderPassthruAttributes");
             input.setSize(12);
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),writer, input, attrs);
             writer.endElement("input");
             String expectedResult = " size=\"12\"";
             assertTrue(sw.toString().contains(expectedResult));
@@ -166,7 +166,7 @@ public class TestUtil extends ServletFacesTestCase {
                                                     "ISO-8859-1");
             input.setSize(Integer.MIN_VALUE);
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),writer, input, attrs);
             writer.endElement("input");
             expectedResult = "<input />";
             assertEquals(expectedResult, sw.toString());
@@ -176,7 +176,7 @@ public class TestUtil extends ServletFacesTestCase {
                                                     "ISO-8859-1");
             input.setReadonly(false);
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),
                   writer,
                                                     input,
                                                     attrs);

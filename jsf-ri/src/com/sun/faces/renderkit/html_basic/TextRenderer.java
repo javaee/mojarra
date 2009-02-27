@@ -123,9 +123,11 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             }
 
             // style is rendered as a passthur attribute
-            RenderKitUtils.renderPassThruAttributes(writer,
+            RenderKitUtils.renderPassThruAttributes(context,
+                                                    writer,
                                                     component,
-                                                    INPUT_ATTRIBUTES);
+                                                    INPUT_ATTRIBUTES,
+                                                    getNonOnChangeBehaviors(component));
             RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
             RenderKitUtils.renderOnchange(context, component);
@@ -146,7 +148,8 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                RenderKitUtils.renderPassThruAttributes(writer,
+                RenderKitUtils.renderPassThruAttributes(context,
+                                                        writer,
                                                         component,
                                                         OUTPUT_ATTRIBUTES);
 

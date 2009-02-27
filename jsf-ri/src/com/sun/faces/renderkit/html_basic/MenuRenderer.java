@@ -852,9 +852,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
         writeDefaultSize(writer, size);
 
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
-                                                ATTRIBUTES);
+                                                ATTRIBUTES,
+                                                getNonOnChangeBehaviors(component));
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
                                                          component);
 

@@ -141,7 +141,8 @@ public class FormRenderer extends HtmlBasicRenderer {
                                   "acceptcharset");
         }
 
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
                                                 ATTRIBUTES);
         writer.writeText("\n", component, null);

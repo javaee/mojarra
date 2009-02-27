@@ -204,7 +204,7 @@ public class TextRenderer extends Renderer {
             }
 
             // style is rendered as a passthur attribute
-            RenderKitUtils.renderPassThruAttributes(
+            RenderKitUtils.renderPassThruAttributes(context,
                   writer,
                                                     component,
                                                     INPUT_ATTRIBUTES);
@@ -225,7 +225,7 @@ public class TextRenderer extends Renderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                RenderKitUtils.renderPassThruAttributes(
+                RenderKitUtils.renderPassThruAttributes(context,
                       writer,
                                                         component,
                                                         OUTPUT_ATTRIBUTES);

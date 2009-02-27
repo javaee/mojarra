@@ -166,7 +166,7 @@ public class FormRenderer extends Renderer {
                     "acceptcharset");
         }
         
-        RenderKitUtils.renderPassThruAttributes(
+        RenderKitUtils.renderPassThruAttributes(context,
               writer,
                                                 component,
                                                 ATTRIBUTES);       

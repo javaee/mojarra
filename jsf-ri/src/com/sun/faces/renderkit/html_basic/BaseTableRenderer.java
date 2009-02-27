@@ -131,7 +131,8 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 table,
                                                 attributes);
         writer.writeText("\n", table, null);

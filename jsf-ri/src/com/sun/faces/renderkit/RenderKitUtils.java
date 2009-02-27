@@ -264,22 +264,23 @@ public class RenderKitUtils {
      * set of HTML4 attributes that fall into this bucket.  Examples are
      * all the javascript attributes, alt, rows, cols, etc. </p>
      *
+     * @param context the FacesContext for this request
      * @param writer writer the {@link javax.faces.context.ResponseWriter} to be used when writing
      *  the attributes
      * @param component the component
      * @param attributes an array of attributes to be processed
      * @throws IOException if an error occurs writing the attributes
      */
-    public static void renderPassThruAttributes(ResponseWriter writer,
+    public static void renderPassThruAttributes(FacesContext context,
+                                                ResponseWriter writer,
                                                 UIComponent component,
                                                 Attribute[] attributes)
     throws IOException {
 
+        assert (null != context);
         assert (null != writer);
         assert (null != component);
 
-        // TODO - update renderers to pass this in.
-        FacesContext context = FacesContext.getCurrentInstance();
         Map<String, List<Behavior>> behaviors = null;
 
         if (component instanceof BehaviorHolder) {
@@ -350,11 +351,16 @@ public class RenderKitUtils {
     public static void renderOnchange(FacesContext context, UIComponent component)
         throws IOException {
 
+        final String handlerName = "onchange";
+        final String behaviorEventName = "valueChange";
+        final Object userHandler = component.getAttributes().get(handlerName);
+
         renderHandler(context,
                       component,
                       Collections.<Behavior.Parameter>emptyList(),
-                      "onchange",
-                      "valueChange");
+                      handlerName,
+                      userHandler,
+                      behaviorEventName);
     }
 
     // Renders the onclick handler for command buttons.  Handles
@@ -365,11 +371,16 @@ public class RenderKitUtils {
                                      Collection<Behavior.Parameter> params)
         throws IOException {
 
+        final String handlerName = "onclick";
+        final String behaviorEventName = "action";
+        final Object userHandler = component.getAttributes().get(handlerName);
+
         renderHandler(context,
                       component,
                       params,
-                      "onclick",
-                      "action");
+                      handlerName,
+                      userHandler,
+                      behaviorEventName);
     }
 
     public static String prefixAttribute(final String attrName,
@@ -550,7 +561,13 @@ public class RenderKitUtils {
                     Attribute attr = knownAttributes[index];
 
                     if (isBehaviorEventAttribute(attr, behaviorEventName)) {
-                        renderHandler(context, component, null, name, behaviorEventName);
+                        renderHandler(context,
+                                      component,
+                                      null,
+                                      name,
+                                      value,
+                                      behaviorEventName);
+
                         renderedBehavior = true;
                     } else {
                         writer.writeAttribute(prefixAttribute(name, isXhtml),
@@ -579,6 +596,7 @@ public class RenderKitUtils {
                                       component,
                                       null,
                                       attr.getName(),
+                                      null,
                                       behaviorEventName);
                 }
             }
@@ -630,6 +648,7 @@ public class RenderKitUtils {
                               component, 
                               null,
                               attrName,
+                              value,
                               events[0]);
             }
         }
@@ -1300,14 +1319,14 @@ public class RenderKitUtils {
               (behaviorEventName.equals(events[0])));
     }
 
-    // Returns a user-specified DOM event handler script, trimmed
-    // if necessary.
-    private static String getUserHandler(UIComponent component,
-                                         String handlerName) {
+    // Ensures that the user-specified DOM event handler script
+    // is non-empty, and trimmed if necessary.
+    private static String getNonEmptyUserHandler(Object handlerObject) {
 
-        String handler = (String) component.getAttributes().get(handlerName);
+        String handler = null;
 
-        if (null != handler) {
+        if (null != handlerObject) {
+            handler = handlerObject.toString();
             handler = handler.trim();
 
             if (handler.length() == 0)
@@ -1462,11 +1481,12 @@ public class RenderKitUtils {
                                       UIComponent component,
                                       Collection<Behavior.Parameter> params,
                                       String handlerName,
+                                      Object handlerValue,
                                       String behaviorEventName)
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        String userClickHandler = getUserHandler(component, handlerName);
+        String userHandler = getNonEmptyUserHandler(handlerValue);
         List<Behavior> behaviors = getBehaviors(component, behaviorEventName);
 
         if (params == null) {
@@ -1474,10 +1494,10 @@ public class RenderKitUtils {
         }
         String handler = null;
 
-        switch (getHandlerType(behaviors, params, userClickHandler)) {
+        switch (getHandlerType(behaviors, params, userHandler)) {
         
             case USER_HANDLER_ONLY:
-                handler = userClickHandler;
+                handler = userHandler;
                 break;
 
             case SINGLE_BEHAVIOR_ONLY:
@@ -1498,7 +1518,7 @@ public class RenderKitUtils {
                                             behaviors,
                                             params,
                                             behaviorEventName,
-                                            userClickHandler);
+                                            userHandler);
                 break;
             default:
                 assert(false);

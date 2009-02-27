@@ -106,7 +106,8 @@ public class ImageRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("alt", "", "alt");
         }
 
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);

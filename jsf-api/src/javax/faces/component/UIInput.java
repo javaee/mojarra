@@ -1165,9 +1165,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * </li>
      *
      *
-     * <li><p>Otherwise, if the <code>valid</code> property on this
-     * component is still <code>true</code>, take the following action
-     * to determine if validation of this component should proceed.</p>
+     * <li class="changed_added_2_0"><p>Otherwise, if the
+     * <code>valid</code> property on this component is still
+     * <code>true</code>, take the following action to determine if
+     * validation of this component should proceed.</p>
 
      * <ul>
      *

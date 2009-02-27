@@ -252,8 +252,14 @@ public class BeanValidator implements Validator, StateHolder {
         validatorContext.messageInterpolator(jsfMessageInterpolator);
         javax.validation.Validator beanValidator = validatorContext.getValidator();
         Class [] validationGroupsArray = parseValidationGroups(getValidationGroups());
-        ValueReference valueReference = new ValueExpressionAnalyzer(valueExpression).
-	    getReference(context.getELContext());
+        
+        // PENDING(rlubke, driscoll): When EL 1.3 is present, we won't need
+        // this.
+        
+        ValueExpressionAnalyzer expressionAnalyzer = 
+                new ValueExpressionAnalyzer(valueExpression);
+        
+        ValueReference valueReference = expressionAnalyzer.getReference(context.getELContext());
 
         Set<ConstraintViolation> violations = 
             beanValidator.validateValue(valueReference.getBaseClass(), 
