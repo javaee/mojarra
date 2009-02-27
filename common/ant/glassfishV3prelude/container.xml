@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+<project name="GlassFishV3" basedir=".">
+
+    <property name="validation.root.dir" value="${basedir}/common/ant/glassfishV3"/>
+    <property name="validation.root.build.dir" value="${validation.root.dir}/build-bean-validation"/>
+    <property name="validation.tmp.bnd" value="${validation.root.build.dir}/tmp.bnd"/>
+    <property name="validation.dist.dir" value="${validation.root.build.dir}/dist"/>
+    <property name="validation.build.dir" value="${validation.root.build.dir}/build"/>
+
+    <property name="validation.spec.version" value="${validation-api.version}" />
+    <property name="validation.impl.name" value="validation-api" />
+    <property name="validation.impl.version" value="${validation-api.version}" />
+    <property name="validation.version" value="${validation-api.version}" />
+
+
+    <!-- JARs that may be packaged in WEB-INF/lib
+  in order for the implementation to run
+  properly if they aren't availabe in the
+  container's classloader.
+
+  This is a comma separated list of fully
+  qualified JARs -->
+
+    <property name="webapp.jars" value=""/>
+
+    <!-- Required Targets -->
+    <macrodef name="deploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <condition property="exec.name" value="cmd.exe">
+                <os family="windows"/>
+            </condition>
+            <condition property="exec.arg.1"
+                       value="/c ${container.home}/bin/asadmin">
+                <os family="windows"/>
+            </condition>
+            <property name="exec.name" value="${container.home}/bin/asadmin"/>
+            <property name="exec.arg.1" value=""/>
+            <echo>
+
+---------------- Glassfish - Deploying @{appName} ---------------- 
+
+            </echo>
+            <exec executable="${exec.name}" failonerror="true">
+                <arg line="${exec.arg.1}"/>
+                <arg line="deploy"/>
+                <arg line="--user ${glassfish.admin.user}"/>
+                <arg line="--passwordfile ${glassfish.password.file}"/>
+                <arg line="--host ${glassfish.admin.host}"/>
+                <arg line="--port ${glassfish.admin.port}"/>
+                <arg line="@{artifact}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="undeploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <condition property="exec.name" value="cmd.exe">
+                <os family="windows"/>
+            </condition>
+            <condition property="exec.arg.1"
+                       value="/c ${container.home}/bin/asadmin">
+                <os family="windows"/>
+            </condition>
+            <property name="exec.name" value="${container.home}/bin/asadmin"/>
+            <property name="exec.arg.1" value=""/>
+            <echo>
+
+---------------- Glassfish - Undeploying @{appName} ---------------- 
+
+            </echo>
+            <exec executable="${exec.name}">
+                <arg line="${exec.arg.1}"/>
+                <arg line="undeploy"/>
+                <arg line="--user ${glassfish.admin.user}"/>
+                <arg line="--passwordfile ${glassfish.password.file}"/>
+                <arg line="--host ${glassfish.admin.host}"/>
+                <arg line="--port ${glassfish.admin.port}"/>
+                <arg line="@{appName}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <target name="config.container">
+    </target>
+
+    <!-- Require target to display information about the build environment -->
+    <target name="props">
+        <echo message="PENDING - Please add a message"/>
+        <echo message="container.home->${container.home}" />
+        <echo message="javaee.jar->${container.home}/lib/javaee.jar" />
+    </target>
+
+    <target name="update.impl.manifest">
+        <echo message="PENDING - Please implement"/>
+    </target>
+
+    <target name="container.deploy"
+            description="Deploy the JSF Implementation artifacts to the target container.">
+        <if>
+            <os family="windows"/>
+            <then>
+                <container.stop/>
+            </then>
+        </if>
+        <delete>
+                <fileset dir="${container.home}/lib">
+                   <include name="hibernate-validator*.jar"/>
+                </fileset>
+        </delete>
+
+        <copy todir="${container.home}/lib" file="${validations-ri.jar}"/>
+
+        <copy file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api.jar"/>
+        <copy file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/modules/web/jsf-impl.jar"/>
+
+        <antcall target="validation.add.osgi" />
+        <copy overwrite="true" 
+              file="${validation.root.build.dir}/dist/validation-api-${validation-api.version}.jar" toFile="${container.home}/modules/validation-api.jar"/>
+        <copy overwrite="true"
+              file="${validation.root.build.dir}/dist/validation-ri-${validation-api.version}.jar" toFile="${container.home}/modules/validation-ri.jar"/>
+        <antcall target="validation.clean.osgi" />
+        <if>
+            <os family="windows"/>
+            <then>
+                <!-- container.start/ -->
+                <echo>The container may have been stopped. Please restart it, if
+                    needed.
+                </echo>
+            </then>
+        </if>       
+    </target>
+
+    <target name="container.start"
+            description="Start the GlassFish container">
+        <container.start/>
+    </target>
+
+    <target name="container.stop"
+            description="Stop the GlassFish container">
+        <container.stop/>
+    </target>
+
+    <target name="container.restart"
+            description="Stop the GlassFish container">
+        <container.stop/>
+        <container.start/>
+    </target>
+
+    <macrodef name="container.start"
+            description="Start the GlassFish container">
+        <sequential>
+            <start.domain/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="container.stop"
+            description="Stop the GlassFish container">
+        <sequential>
+            <stop.domain/>
+        </sequential>
+    </macrodef>
+
+    <!-- 'PRIVATE' targets -->
+    <macrodef name="start.domain">
+        <sequential>
+            <echo>
+
+"------------ Starting ${glassfish.domain} ------------"
+
+            </echo>
+            <if>
+                <os family="unix"/>
+                <then>
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="true">
+                        <arg line="start-domain"/>
+                        <arg line="--user ${glassfish.admin.user}"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </then>
+                <else>
+                    <exec executable="${container.home}/bin/asadmin.bat"
+                          spawn="true">
+                        <arg line="start-domain"/>
+                        <arg line="--user ${glassfish.admin.user}"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="stop.domain">
+        <sequential>
+            <echo>
+
+"------------ Stopping ${glassfish.domain} ------------"
+
+            </echo>
+            <if>
+                <os family="unix"/>
+                <then>
+                    <exec executable="${container.home}/bin/asadmin">
+                        <arg line="stop-domain"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                </then>
+                <else>
+                    <exec executable="${container.home}/bin/asadmin.bat"
+                          spawn="true">
+                        <arg line="stop-domain"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                </else>
+            </if>
+            <sleep seconds="15"/>
+        </sequential>
+    </macrodef>
+
+
+    <!-- ************ Compiler Defaults *************************************** -->
+
+
+    <!-- ************ Executable Targets ************************************** -->
+
+    <target name="main">
+    </target>
+
+    <target name="validation.add.osgi">
+      <mkdir dir="${validation.dist.dir}" />
+        <validation.do.add.osgi 
+            validation-input-jar="${validation-api.jar}" 
+            validation-input-bnd="${validation.root.dir}/validation-api.bnd" 
+            validation-output-jar="${validation.dist.dir}/validation-api-${validation-api.version}.jar"
+          
+        />
+      <validation.do.add.osgi 
+            validation-input-jar="${validations-ri.jar}" 
+            validation-input-bnd="${validation.root.dir}/validation-ri.bnd" 
+            validation-output-jar="${validation.dist.dir}/validation-ri-${validation-api.version}.jar"
+        />
+     
+   </target>
+
+   <macrodef name="validation.do.add.osgi">
+      <attribute name="validation-input-jar" 
+                 description="The which should be OSGified" />
+      <attribute name="validation-input-bnd" 
+                 description="The file to be input to bnd" />
+      <attribute name="validation-output-jar" 
+                 description="The OSGified jar file" />
+
+      <sequential>
+        <delete dir="${validation.build.dir}" />
+        <mkdir dir="${validation.build.dir}" />
+        <unjar src="@{validation-input-jar}" dest="${validation.build.dir}" />
+        <copy overwrite="true" file="@{validation-input-bnd}" tofile="${validation.tmp.bnd}"/>
+        <replace file="${validation.tmp.bnd}"
+                 token="@validation.spec.version@"
+                 value="${validation.spec.version}"/>
+        <replace file="${validation.tmp.bnd}"
+                 token="@validation.impl.name@"
+                 value="${validation.impl.name}"/>
+        <replace file="${validation.tmp.bnd}"
+                 token="@validation.impl.version@"
+                 value="${validation.impl.version}"/>
+        <if>
+            <equals arg1="${build.type}" arg2=""/>
+            <then>
+                <replace file="${validation.tmp.bnd}"
+                         token="@validation.version@"
+                         value="${validation.impl.version}"/>
+            </then>
+            <else>
+                <replace file="${validation.tmp.bnd}"
+                         token="@validation.version@"
+                         value="${validation.impl.version}-${build.type}"/>
+            </else>
+        </if>
+        <jsf.osgi.jar jarfile="@{validation-output-jar}"
+                            basedir="${validation.build.dir}"
+                            extension-name="@{validation-extension-name}"
+                            bndfile="${validation.tmp.bnd}"
+                            includes="**/*.class,**/*.properties"/>
+      </sequential>
+    </macrodef>
+
+    <target name="validation.clean.osgi">
+      <delete dir="${validation.root.build.dir}" />
+    </target>
+
+
+</project>
+

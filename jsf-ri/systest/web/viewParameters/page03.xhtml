@@ -7,8 +7,10 @@
 <body>
 <ui:composition template="/viewParameters/template.xhtml">
 <ui:define name="metadata">
-    <f:viewParam id="bar" name="bar" value="foo"/>
-    <f:viewParam id="id" name="id" value="#{flash.id}"/>
+    <f:metadata>
+        <f:viewParam id="bar" name="bar" value="foo"/>
+        <f:viewParam id="id" name="id" value="#{flash.id}"/>
+    </f:metadata>
 </ui:define>
 <ui:define name="content">
     <h1>Story 2</h1>

@@ -56,9 +56,10 @@ http.proxy.port=
 #    Container Name - a simple identifier which maps
 #      to the container.xml file in 
 #      ${jsf.build.home}/common/ant/${container.name}
-#   
-#  use glassfish for a v2 version and
-#  use glassfishV3 for a v3 version
+#
+#  For Glassfish V1/V2, use:      glassfish
+#  For GlassFish V3 Prelude, use: glassfishV3prelude
+#  For GlassFish V3, use:         glassfishV3
 # --------------------------------------------------
 container.name=glassfish
 

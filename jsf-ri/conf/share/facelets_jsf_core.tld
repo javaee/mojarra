@@ -464,9 +464,7 @@
 
             <p class="changed_added_2_0">Allow JSF page authors to
             install <code>ComponentSystemEventListener</code> instances
-            on a component in a page. <i>Facelets only: This tag will
-            not be present in the JSP f: library, just the facelets f:
-            library.<i></p>
+            on a component in a page.</p>
 
             <div class="changed_added_2_0">
 
@@ -611,18 +609,69 @@ for <code>@NamedEvent</code>.</p>
 
             <p class="changed_added_2_0">Declare the metadata facet for
             this view.  This must be a child of the
-            <code>&lt;f:view&gt;</code> for best performance, this
-            should be the <b>first</b> child of the
-            <code>&lt;f:view&gt;</code>.  The implementation must insure
-            that the direct child of the facet is a
-            <code>UIPanel</code>, even if there is only one child of the
-            facet.  The implementation must set the id of the
-            <code>UIPanel</code> to be the value of the
+            <code>&lt;f:view&gt;</code>. This tag must reside within the
+            top level XHTML file for the given viewId, not in a
+            template.  The implementation must insure that the direct
+            child of the facet is a <code>UIPanel</code>, even if there
+            is only one child of the facet.  The implementation must set
+            the id of the <code>UIPanel</code> to be the value of the
             <code>UIViewRoot.METADATA_FACET_NAME</code> symbolic
             constant.</p>
 
-            <p class="changed_added_2_0">This element may contain one or more
-            <code>&lt;f:viewParam&gt;</code> elements.</p>
+            <div class="changed_added_2_0">
+
+<p>The implementation must allow templating for this element according
+to the following pattern.</p>
+
+<p>viewId XHTML page, page01.xhtml</p>
+
+</div>
+
+<div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;ui:composition template=<span class="st0">&quot;template.xhtml&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span class="st0">&quot;metadata&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc2">&lt;f:metadata&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;f:viewParam <span class="kw3">name</span>=<span class="st0">&quot;id&quot;</span>/<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/f:metadata&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span class="st0">&quot;content&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;h1&gt;</span></span>The big news stories of the day<span class="sc2"><span class="kw2">&lt;/h1&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
+<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/ui:composition&gt;</span> </div></li></ol></div></div>
+
+            <div class="changed_added_2_0">
+<p>Note line 4.  The page author must ensure that the
+<code>&lt;f:metadata&gt;</code> element does not appear on a template or
+included page.  It must reside on the root page that corresponds to the
+viewId.</p>
+
+<p>The template page, template.xhtml</p>
+
+</div>
+
+
+<div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;html</span> xmlns=<span class="st0">&quot;http://www.w3.org/1999/xhtml&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; xmlns:ui=<span class="st0">&quot;http://java.sun.com/jsf/facelets&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; xmlns:f=<span class="st0">&quot;http://java.sun.com/jsf/core&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; xml:<span class="kw3">lang</span>=<span class="st0">&quot;en&quot;</span> <span class="kw3">lang</span>=<span class="st0">&quot;en&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp;</div></li>
+<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;body&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2">&lt;f:view&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; </div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;ui:insert <span class="kw3">name</span>=<span class="st0">&quot;metadata&quot;</span>/<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;div</span> <span class="kw3">id</span>=<span class="st0">&quot;container&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;ui:insert <span class="kw3">name</span>=<span class="st0">&quot;content&quot;</span>/<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;/div&gt;</span></span></div></li>
+<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/f:view&gt;</span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;/body&gt;</span></span></div></li>
+<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;/html&gt;</span></span> </div></li></ol></div></div>
+
+<p>The page author is not <em>required</em> to use templating, but if
+they do, it must be done as shown above, (or with
+<code>&lt;ui:include&gt;</code> in a similar manner).</p>
+
+            </div>
+
 
         ]]></description>
         <name>metadata</name>
@@ -1640,15 +1689,17 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
     </tag>
 
     <tag>
-        <description><![CDATA[<p>
+        <description>
 
-                <span class="changed_added_2_0">
-            A validator that enforces the presence of a value. It has
-            the same affect as setting the required attribute on a UIInput
-            to true.
+        <![CDATA[<p class="changed_added_2_0">A validator that enforces
+        the presence of a value. It has the same affect as setting the
+        required attribute on a UIInput to true.</p>]]>
 
-         </p>]]>
         </description>
+        <name>validateRequired</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ValidateLengthTag</tag-class>
+        <body-content>JSP</body-content>
+
         <attribute>
             <description>
                 <![CDATA[ <p class="changed_added_2_0">A boolean value
@@ -1662,9 +1713,7 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
                 <type>java.lang.Boolean</type>
             </deferred-value>
         </attribute>
-        <name>validateRequired</name>
-        <tag-class>com.sun.faces.taglib.jsf_core.RequiredValidatorTag</tag-class>
-        <body-content>empty</body-content>
+
         <attribute>
             <description>
                 A ValueExpression that evaluates to an instance of
@@ -1675,12 +1724,13 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
                 <type>javax.faces.validator.RequiredValidator</type>
             </deferred-value>
         </attribute>
+
     </tag>
 
     <tag>
         <description><![CDATA[
 
-            <p><span class="changed_modified_2_0"Register</span> a named
+            <p><span class="changed_modified_2_0">Register</span> a named
             Validator instance on the UIComponent associated with the
             closest parent UIComponent custom action.</p>
 

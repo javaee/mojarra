@@ -8,14 +8,16 @@
 <body>
 <ui:composition template="/viewParameters/template.xhtml">
     <ui:define name="metadata">
-        <f:viewParam id="id" name="id" value="#{newsReader.selectedStoryId}"
+        <f:metadata>
+            <f:viewParam id="id" name="id" value="#{newsReader.selectedStoryId}"
                      required="true"
                      requiredMessage="You did not specify a headline. (The id parameter is missing)"
                      converterMessage="Invalid headline. (The id parameter is not a number)"
                      validatorMessage="Invalid headline. (The id parameter is not a positive number)">
-            <f:validateLongRange minimum="1"/>
-        </f:viewParam>
-        <ui:include src="events.xhtml"/>
+                <f:validateLongRange minimum="1"/>
+            </f:viewParam>
+            <ui:include src="events.xhtml"/>
+        </f:metadata>
     </ui:define>
     <ui:define name="content">
         <h:messages style="color: red; list-style: none; border: 0 solid red; border-left-width: 2px; padding: 0 5px;"/>

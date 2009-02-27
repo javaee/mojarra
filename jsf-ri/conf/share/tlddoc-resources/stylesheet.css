@@ -165,17 +165,94 @@ a[href^="ui"] { cursor: url(changed_added_2_0_cursor.png), pointer;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:green }
 
-a[href^="c"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+a[href^="f/event.html"] { cursor: url(changed_added_2_0_cursor.png), pointer;
                  background: url(changed_added_2_0.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:green }
 
-a[href^="fn"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+a[href^="event"] { cursor: url(changed_added_2_0_cursor.png), pointer;
                  background: url(changed_added_2_0.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:green }
+
+a[href^="f/metadata.html"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="metadata"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="f/viewParam.html"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="viewParam"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="f/selectItems.html"] { cursor: url(changed_modified_2_0_cursor.png), pointer;
+                 background: url(changed_modified_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="selectItems"] { cursor: url(changed_modified_2_0_cursor.png), pointer;
+                 background: url(changed_modified_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="f/validat"] { cursor: url(changed_modified_2_0_cursor.png), pointer;
+                 background: url(changed_modified_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="validat"] { cursor: url(changed_modified_2_0_cursor.png), pointer;
+                 background: url(changed_modified_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="f/validateBean.html"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="validateBean"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="f/validateRequired.html"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="validateRequired"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+
+
+
+
 
 code { font-size:12px;width:98%;}
 
