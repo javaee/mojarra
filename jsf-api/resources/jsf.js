@@ -138,7 +138,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var getForm = function getForm(element) {
             if (element) {
                 var form = $(element);
-                while (form && form.nodeName && form.nodeName.toLowerCase() !== 'form') {
+                while (form) {
+
+                    if (form.nodeName && (form.nodeName.toLowerCase() == 'form')) {
+                        return form;
+                    }
                     if (form.form) {
                         return form.form;
                     }
@@ -146,9 +150,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         form = form.parentNode;
                     } else {
                         form = null;
-                    }
-                    if (form) {
-                        return form;
                     }
                 }
                 return document.forms[0];

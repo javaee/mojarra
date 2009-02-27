@@ -67,7 +67,12 @@
 <!-- Ajaxify Individual Controls -->
 
     <h:form id="form1" >
-       <h:commandButton id="submit" value="Single Ajax">
+
+       <h:panelGrid columns="1">
+
+       <h:commandButton id="submit" value="Submit"/>
+
+       <h:commandButton id="singleAjax" value="Single Ajax">
            <f:ajax listener="#{bean.processBehavior}"/>
        </h:commandButton>
 
@@ -97,12 +102,14 @@
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
            <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
        </h:commandButton>
 
        <h:commandButton id="nonAjaxParams" value="Non-Ajax With Params">
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
            <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
        </h:commandButton>
 
        <h:commandButton id="nonAjaxParamsHandler" 
@@ -121,6 +128,70 @@
        <h:commandButton id="status" value="Ajax With Status Updates">
            <f:ajax onevent="statusUpdate" onerror="statusUpdate"/>
        </h:commandButton>
+
+       <h:commandLink id="submitLink" value="Submit"/>
+
+       <h:commandLink id="singleAjaxLink" value="Single Ajax">
+           <f:ajax listener="#{bean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink id="greetLink" value="Single Greet">
+           <be:greet/>
+       </h:commandLink>
+
+       <h:commandLink id="doubleGreetLink" value="Double Greet">
+           <be:greet/>
+           <be:greet name="Joe"/>
+       </h:commandLink>
+
+       <h:commandLink id="greetAndAjaxLink" value="Greet and Ajax">
+           <be:greet/>
+           <f:ajax listener="#{bean.processBehavior}"/>
+       </h:commandLink>
+
+       <f:ajax>
+          <h:commandLink id="submit1Link" value="submit1"/>
+          <h:commandLink id="submit2Link" value="submit2">
+              <f:ajax render="out"/>
+          </h:commandLink>
+       </f:ajax>
+
+       <h:commandLink id="ajaxParamsLink" value="Ajax With Params">
+           <f:ajax/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandLink>
+
+       <h:commandLink id="nonAjaxParamsLink" value="Non-Ajax With Params">
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandLink>
+
+       <h:commandLink id="nonAjaxParamsHandlerLink" 
+                        value="Non-Ajax With Params With User Handler"
+                        onclick="alert('Hello from onclick')">
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandLink>
+
+       <h:commandLink id="greetParamsLink" value="Greet With Params">
+           <be:greet/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
+       </h:commandLink>
+
+       <h:commandLink id="statusLink" value="Ajax With Status Updates">
+           <f:ajax onevent="statusUpdate" onerror="statusUpdate"/>
+       </h:commandLink>
+
 
        <h:inputText id="inputAjax" value="Ajax">
            <f:ajax/>
@@ -171,6 +242,8 @@
        </h:panelGrid>
 
        <h:outputText id="out"/>
+
+       </h:panelGrid>
 
        <h:outputStylesheet name="stylesheet.css" />
    </h:form>

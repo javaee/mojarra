@@ -131,7 +131,7 @@
 
       <TR>
         <TD>
-            <a id="basicForm:hrefParamLink" href="#" onclick="mojarra.jsfcljs(document.getElementById('basicForm'),{'basicForm:hrefParamLink':'basicForm:hrefParamLink','name':'horwat','value':'password'},'_top');return false"><img src="duke.gif" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="mojarra.jsfcljs(document.getElementById('basicForm'),{'basicForm:hrefParamLink':'basicForm:hrefParamLink','name':'horwat','value':'password'},'');return false"><img src="duke.gif" /></a>
         </TD>
       </TR>
 

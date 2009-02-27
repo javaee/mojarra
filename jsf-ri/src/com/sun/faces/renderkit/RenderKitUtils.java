@@ -360,7 +360,8 @@ public class RenderKitUtils {
                       Collections.<Behavior.Parameter>emptyList(),
                       handlerName,
                       userHandler,
-                      behaviorEventName);
+                      behaviorEventName,
+                      false);
     }
 
     // Renders the onclick handler for command buttons.  Handles
@@ -368,7 +369,8 @@ public class RenderKitUtils {
     // Behavior scripts, plus the default button submit script.
     public static void renderOnclick(FacesContext context, 
                                      UIComponent component,
-                                     Collection<Behavior.Parameter> params)
+                                     Collection<Behavior.Parameter> params,
+                                     boolean needsSubmit)
         throws IOException {
 
         final String handlerName = "onclick";
@@ -380,7 +382,8 @@ public class RenderKitUtils {
                       params,
                       handlerName,
                       userHandler,
-                      behaviorEventName);
+                      behaviorEventName,
+                      needsSubmit);
     }
 
     public static String prefixAttribute(final String attrName,
@@ -566,7 +569,8 @@ public class RenderKitUtils {
                                       null,
                                       name,
                                       value,
-                                      behaviorEventName);
+                                      behaviorEventName,
+                                      false);
 
                         renderedBehavior = true;
                     } else {
@@ -597,7 +601,8 @@ public class RenderKitUtils {
                                       null,
                                       attr.getName(),
                                       null,
-                                      behaviorEventName);
+                                      behaviorEventName,
+                                      false);
                 }
             }
  
@@ -649,7 +654,8 @@ public class RenderKitUtils {
                               null,
                               attrName,
                               value,
-                              events[0]);
+                              events[0],
+                              false);
             }
         }
     }
@@ -989,62 +995,6 @@ public class RenderKitUtils {
         context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
     }
 
-    /**
-     * <p>Returns a string that can be inserted into the <code>onclick</code>
-     * handler of a command.  This string will add all request parameters
-     * as well as the client ID of the activated command to the form as
-     * hidden input parameters, update the target of the link if necessary,
-     * and handle the form submission.  The jsf.js file will be rendered
-     * as part of this call.</p>
-     * @param formClientId the client ID of the form
-     * @param commandClientId the client ID of the command
-     * @param target the link target
-     * @param params the nested parameters, if any @return a String suitable for the <code>onclick</code> handler
-     *  of a command
-     * @return the default <code>onclick</code> JavaScript for the default
-     *  command link component
-     */
-    public static String getCommandOnClickScript(String formClientId,
-                                                     String commandClientId,
-                                                     String target,
-                                                     Param[] params,
-                                                     boolean isAjax) {
-
-        StringBuilder sb = new StringBuilder(256);
-        sb.append("mojarra.jsfcljs(document.getElementById('");
-        sb.append(formClientId);
-        sb.append("'),");
-        sb.append(renderParams(commandClientId, params));
-        sb.append(",'");
-        sb.append(target);
-        sb.append("');return false");
-
-        return sb.toString();
-    }
-
-    /*
-     *
-     */
-    private static String renderParams(String commandClientId, Param[] params) {
-        StringBuilder sb = new StringBuilder(128);
-        sb.append("{'");
-        sb.append(commandClientId).append("':'").append(commandClientId);
-        for (Param param : params) {
-            String pn = param.name;
-            if (pn != null && pn.length() != 0) {
-                String pv = param.value;
-                sb.append("','");
-                sb.append(pn.replace("'", "\\\'"));
-                sb.append("':'");
-                if (pv != null && pv.length() != 0) {
-                    sb.append(pv.replace("'", "\\\'"));
-                }
-            }
-        }
-        sb.append("'}");
-        return sb.toString();
-    }
-
     public static void renderUnhandledMessages(FacesContext ctx) {
 
         Application app = ctx.getApplication();
@@ -1211,7 +1161,7 @@ public class RenderKitUtils {
                                       Object value,
                                       boolean quoteValue) {
 
-        if (null == name)
+        if ((null == name) || (name.length() == 0))
             throw new IllegalArgumentException();
 
 
@@ -1395,7 +1345,8 @@ public class RenderKitUtils {
                                             List<Behavior> behaviors,
                                             Collection<Behavior.Parameter> params,
                                             String behaviorEventName,
-                                            String userHandler) {
+                                            String userHandler,
+                                            boolean needsSubmit) {
 
 
         // Hard to pre-compute builder initial capacity
@@ -1417,7 +1368,7 @@ public class RenderKitUtils {
 
         // If we've got parameters but we didn't render a "submitting"
         // behavior script, we need to explicitly render a submit script.
-        if (!submitting && hasParams) {
+        if (!submitting && (hasParams || needsSubmit)) {
             String submitHandler = getSubmitHandler(context, component, params, false);
             appendScriptToChain(builder, submitHandler);
 
@@ -1477,12 +1428,34 @@ public class RenderKitUtils {
         return behavior.getHints().contains(BehaviorHint.SUBMITTING);
     }
 
+    /**
+     * Renders a handler script, which may require chaining together
+     * the user-specified event handler, any scripts required by attached 
+     * Behaviors, and also possibly the mojarra.jsfcljs() "submit" script.
+     * @param context the FacesContext for this request.
+     * @param component the UIComponent that we are rendering
+     * @param params any parameters that should be included by "submitting"
+     *        scripts.
+     * @param handlerName the name of the handler attribute to render (eg.
+     *        "onclick" or "ommouseover")
+     * @param handerValue the user-specified value for the handler attribute
+     * @param behaviorEventName the name of the behavior event that corresponds
+     *        to this handler (eg. "action" or "mouseover").
+     * @param needsSubmit indicates whether the mojarra.jsfcljs() 
+     *        "submit" script is required by the component.  Most components 
+     *        do not need this, either because they submit themselves
+     *        (eg. commandButton), or because they do not perform submits
+     *        (eg. non-command components).  This flag is mainly here for
+     *        the commandLink case, where we need to render the submit
+     *        script to make the link submit.
+     */
     private static void renderHandler(FacesContext context,
                                       UIComponent component,
                                       Collection<Behavior.Parameter> params,
                                       String handlerName,
                                       Object handlerValue,
-                                      String behaviorEventName)
+                                      String behaviorEventName,
+                                      boolean needsSubmit)
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -1493,8 +1466,7 @@ public class RenderKitUtils {
             params = Collections.emptyList();
         }
         String handler = null;
-
-        switch (getHandlerType(behaviors, params, userHandler)) {
+        switch (getHandlerType(behaviors, params, userHandler, needsSubmit)) {
         
             case USER_HANDLER_ONLY:
                 handler = userHandler;
@@ -1518,7 +1490,8 @@ public class RenderKitUtils {
                                             behaviors,
                                             params,
                                             behaviorEventName,
-                                            userHandler);
+                                            userHandler,
+                                            needsSubmit);
                 break;
             default:
                 assert(false);
@@ -1533,12 +1506,13 @@ public class RenderKitUtils {
     // scripts we need to render/chain.
     private static HandlerType getHandlerType(List<Behavior> behaviors,
                                               Collection<Behavior.Parameter> params,
-                                              String userHandler) {
+                                              String userHandler,
+                                              boolean needsSubmit) {
 
         if ((behaviors == null) || (behaviors.isEmpty())) {
 
             // No behaviors and no params means user handler only
-            if (params.isEmpty())
+            if (params.isEmpty() && !needsSubmit)
                 return HandlerType.USER_HANDLER_ONLY;
 
             // We've got params.  If we've also got a user handler, we need 
@@ -1557,7 +1531,7 @@ public class RenderKitUtils {
             // If we've got a submitting behavior, then it will handle
             // submitting the params.  If not, then we need to use
             // a submit script to handle the params.
-            if (isSubmitting(behavior) || (params.isEmpty()))
+            if (isSubmitting(behavior) || ((params.isEmpty()) && !needsSubmit))
                 return HandlerType.SINGLE_BEHAVIOR_ONLY;            
         }
 

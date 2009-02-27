@@ -556,7 +556,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     String name = uiParam.getName();
                     Object value = uiParam.getValue();
 
-                    if (name != null) {
+                    if ((name != null) && (name.length() > 1)) {
 
                         if (params == null) {
                             params = new ArrayList<Behavior.Parameter>(childCount);

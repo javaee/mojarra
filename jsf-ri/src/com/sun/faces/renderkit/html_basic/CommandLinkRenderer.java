@@ -43,11 +43,14 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -194,20 +197,6 @@ public class CommandLinkRenderer extends LinkRenderer {
 
     }
 
-
-    protected String getOnClickScript(String formClientId,
-                                      String commandClientId,
-                                      String target,
-                                      Param[] params) {
-
-        return RenderKitUtils.getCommandOnClickScript(formClientId,
-                                                          commandClientId,
-                                                          target,
-                                                          params,
-                                                          false);
-
-    }
-
     /*
      * Render the necessary Javascript for the link.
      * Note that much of this code is shared with CommandButtonRenderer.renderOnClick
@@ -230,53 +219,16 @@ public class CommandLinkRenderer extends LinkRenderer {
         RenderKitUtils.renderPassThruAttributes(context,
                                                 writer,
                                                 command,
-                                                ATTRIBUTES);
+                                                ATTRIBUTES,
+                                                getNonOnClickBehaviors(command));
+
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, command);
 
-        // render onclick
-        String userOnclick = (String) command.getAttributes().get("onclick");
-        StringBuffer sb = new StringBuffer(128);
-        boolean userSpecifiedOnclick =
-              (userOnclick != null && !"".equals(userOnclick));
-
-        // if user specified their own onclick value, we are going to
-        // wrap their js and the injected js each in a function and
-        // execute them in a choose statement, if the user didn't specify
-        // an onclick, the original logic executes unaffected
-        // RELEASE_PENDING (driscoll) still need to change to use the jsfcbk function
-        // RELEASE_PENDING (driscoll) still need to determine if there's a way to merge this with
-        // RenderKitUtils.renderOnclick()
-        if (userSpecifiedOnclick) {
-            sb.append("var a=function(event){");
-            userOnclick = userOnclick.trim();
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                sb.append(';');
-            }
-            sb.append("};var b=function(event){");
-        }
-
-        Param[] params = getParamList(command);
-        String commandClientId = command.getClientId(context);
-        String target = (String) command.getAttributes().get("target");
-        if (target != null) {
-            target = target.trim();
-        } else {
-            target = "";
-        }
-
-        sb.append(
-              getOnClickScript(formClientId,
-                               commandClientId,
-                               target,
-                               params));
-
-        // we need to finish wrapping the injected js then
-        if (userSpecifiedOnclick) {
-            sb.append("};return (mojarra.jsfcbk(a,this,event)===false) ? false : mojarra.jsfcbk(b,this,event);");
-        }
-
-        writer.writeAttribute("onclick", sb.toString(), "onclick");
+        Collection<Behavior.Parameter> params = getBehaviorParameters(command);
+        RenderKitUtils.renderOnclick(context, 
+                                     command,
+                                     params,
+                                     true);
 
         writeCommonLinkAttributes(writer, command);
 
@@ -296,5 +248,17 @@ public class CommandLinkRenderer extends LinkRenderer {
         return (requestParamMap.containsKey(component.getClientId(context)));
 
     }
+
+    // Returns the Behaviors map, but only if it contains some entry other
+    // than those handled by renderOnclick().  This helps us optimize
+    // renderPassThruAttributes() in the very common case where the
+    // link only contains an "action" (or "click") Behavior.  In that
+    // we pass a null Behaviors map into renderPassThruAttributes(),
+    // which allows us to take a more optimized code path.
+    private static Map<String, List<Behavior>> getNonOnClickBehaviors(UIComponent component) {
+
+        return getPassThruBehaviors(component, "click", "action");
+    }
+
 
 } // end of class CommandLinkRenderer
