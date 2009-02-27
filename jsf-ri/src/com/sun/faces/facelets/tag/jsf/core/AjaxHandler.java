@@ -104,7 +104,11 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
  * and the {@link AjaxBehavior} instance.</li> 
  * </ul>
  * <br/><br/>
- * RELEASE PENDING: add javadocs for region case.
+ * If this tag has component children, add the {@link AjaxBehavior} to 
+ * {@link AjaxBehaviors} by calling {@link AjaxBehaviors#pushBehavior}. As 
+ * subsequent child components that implement the {@link BehaviorHolder} interface 
+ * are evaluated this {@link AjaxBehavior} instance must be added as a behavior to
+ * the component.
  * </p>
  * @version $Id: AjaxHandler.java 5369 2008-09-08 19:53:45Z rogerk $
  */
