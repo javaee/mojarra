@@ -43,6 +43,7 @@
 package com.sun.faces.util;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -106,13 +107,13 @@ public class TestUtil extends ServletFacesTestCase {
                                                                    "text/html",
                                                                    "ISO-8859-1");
             getFacesContext().setResponseWriter(writer);
-            String[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
+            Attribute[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
             UIInput input = new UIInput();
             input.setId("testRenderPassthruAttributes");
             input.getAttributes().put("notPresent", "notPresent");
             input.getAttributes().put("onblur", "javascript:f.blur()");
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),
                   writer,
                                                     input,
                                                     attrs);
@@ -127,7 +128,7 @@ public class TestUtil extends ServletFacesTestCase {
             getFacesContext().setResponseWriter(writer);
             input.getAttributes().remove("onblur");
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),writer, input, attrs);
             writer.endElement("input");
             assertTrue(sw.toString().equals("<input />"));
         } catch (IOException e) {
@@ -148,12 +149,12 @@ public class TestUtil extends ServletFacesTestCase {
                                                                    "text/html",
                                                                    "ISO-8859-1");
             getFacesContext().setResponseWriter(writer);
-            String[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
+            Attribute[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
             HtmlInputText input = new HtmlInputText();
             input.setId("testRenderPassthruAttributes");
             input.setSize(12);
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),writer, input, attrs);
             writer.endElement("input");
             String expectedResult = " size=\"12\"";
             assertTrue(sw.toString().contains(expectedResult));
@@ -165,7 +166,7 @@ public class TestUtil extends ServletFacesTestCase {
                                                     "ISO-8859-1");
             input.setSize(Integer.MIN_VALUE);
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),writer, input, attrs);
             writer.endElement("input");
             expectedResult = "<input />";
             assertEquals(expectedResult, sw.toString());
@@ -175,7 +176,7 @@ public class TestUtil extends ServletFacesTestCase {
                                                     "ISO-8859-1");
             input.setReadonly(false);
             writer.startElement("input", input);
-            RenderKitUtils.renderPassThruAttributes(
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(),
                   writer,
                                                     input,
                                                     attrs);

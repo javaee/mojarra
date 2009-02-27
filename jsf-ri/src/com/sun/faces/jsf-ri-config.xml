@@ -202,6 +202,13 @@
         <phase-listener>com.sun.faces.context.flash.FlashPhaseListener</phase-listener>
     </lifecycle>
 
+  <!-- Configure Behaviors -->
+
+  <behavior>
+    <behavior-id>javax.faces.behavior.AjaxBehavior</behavior-id>
+    <behavior-class>javax.faces.component.behavior.AjaxBehavior</behavior-class>
+  </behavior>
+
   <!-- Configure Standard Validators -->
 
   <validator>
@@ -278,5 +285,9 @@
             <renderer-type>facelets.ui.Repeat</renderer-type>
             <renderer-class>com.sun.faces.facelets.component.RepeatRenderer</renderer-class>
         </renderer>
+        <behavior-renderer>
+            <behavior-renderer-type>javax.faces.behavior.AjaxBehavior</behavior-renderer-type>
+            <behavior-renderer-class>com.sun.faces.renderkit.html_basic.AjaxBehaviorRenderer</behavior-renderer-class>
+        </behavior-renderer>
     </render-kit>
 </faces-config>

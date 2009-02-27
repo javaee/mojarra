@@ -50,6 +50,11 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorContext;
+import javax.faces.component.behavior.BehaviorHint;
+import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ExternalContext;
@@ -259,316 +264,130 @@ public class RenderKitUtils {
      * set of HTML4 attributes that fall into this bucket.  Examples are
      * all the javascript attributes, alt, rows, cols, etc. </p>
      *
+     * @param context the FacesContext for this request
      * @param writer writer the {@link javax.faces.context.ResponseWriter} to be used when writing
      *  the attributes
      * @param component the component
      * @param attributes an array of attributes to be processed
      * @throws IOException if an error occurs writing the attributes
      */
-    public static void renderPassThruAttributes(ResponseWriter writer,
+    public static void renderPassThruAttributes(FacesContext context,
+                                                ResponseWriter writer,
                                                 UIComponent component,
-                                                String[] attributes)
+                                                Attribute[] attributes)
+    throws IOException {
+
+        assert (null != context);
+        assert (null != writer);
+        assert (null != component);
+
+        Map<String, List<Behavior>> behaviors = null;
+
+        if (component instanceof BehaviorHolder) {
+            behaviors = ((BehaviorHolder)component).getBehaviors();
+        }
+
+        renderPassThruAttributes(context, writer, component, attributes, behaviors);
+    }
+
+    /**
+     * <p>Render any "passthru" attributes, where we simply just output the
+     * raw name and value of the attribute.  This method is aware of the
+     * set of HTML4 attributes that fall into this bucket.  Examples are
+     * all the javascript attributes, alt, rows, cols, etc. </p>
+     *
+     * @param context the FacesContext for this request
+     * @param writer writer the {@link javax.faces.context.ResponseWriter} to be used when writing
+     *  the attributes
+     * @param component the component
+     * @param attributes an array of attributes to be processed
+     * @param behaviors the behaviors for this component, or null if
+     *   component is not a BehaviorHolder
+     * @throws IOException if an error occurs writing the attributes
+     */
+    public static void renderPassThruAttributes(FacesContext context,
+                                                ResponseWriter writer,
+                                                UIComponent component,
+                                                Attribute[] attributes,
+                                                Map<String, List<Behavior>> behaviors)
     throws IOException {
 
         assert (null != writer);
         assert (null != component);
 
-        Map<String, Object> attrMap = component.getAttributes();
+        if (behaviors == null) {
+            behaviors = Collections.emptyMap();
+        }
 
-        if (canBeOptimized(component)) {
+        if (canBeOptimized(component, behaviors)) {
             //noinspection unchecked
             List<String> setAttributes = (List<String>)
               component.getAttributes().get(ATTRIBUTES_THAT_ARE_SET_KEY);
             if (setAttributes != null) {
-                renderPassThruAttributesOptimized(writer,
+                renderPassThruAttributesOptimized(context,
+                                                  writer,
                                                   component,
                                                   attributes,
-                                                  setAttributes);
+                                                  setAttributes,
+                                                  behaviors);
             }
         } else {
+
             // this block should only be hit by custom components leveraging
-            // the RI's rendering code.  We make no assumptions and loop through
-            // all known attributes.
-            boolean isXhtml =
-                  RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
-            for (String attrName : attributes) {
-
-                Object value =
-                      attrMap.get(attrName);
-                if (value != null && shouldRenderAttribute(value)) {
-                    writer.writeAttribute(prefixAttribute(attrName, isXhtml),
-                                          value,
-                                          attrName);
-                }
-            }
-
+            // the RI's rendering code, or in cases where we have behaviors
+            // attached to multiple events.  We make no assumptions and loop
+            // through
+            renderPassThruAttributesUnoptimized(context,
+                                                writer,
+                                                component,
+                                                attributes,
+                                                behaviors);
         }
     }
 
-    public static String buildAjaxCommand(FacesContext context,
-                                          UIComponent component,
-                                          AjaxBehavior ajaxBehavior) {
-        final String AJAX_REQUEST = "jsf.ajax.request";
-        // Is there already an option written?
-        boolean already = false;
-        StringBuilder ajaxCommand = new StringBuilder(256);
-        Collection<String> execute = ajaxBehavior.getExecute(context);
-        Collection<String> render = ajaxBehavior.getRender(context);
-        String onevent = ajaxBehavior.getOnEvent(context);
-        String onerror = ajaxBehavior.getOnError(context);
-        ajaxCommand.append(AJAX_REQUEST);
-        ajaxCommand.append("(this, event");
-        if (execute != null || render != null) {
-            ajaxCommand.append(", {");
-        }
-        if (execute != null) {
-            already = true;
-            boolean first = true;
-            ajaxCommand.append("execute:'");
-            for (String exe : execute) {
-                if (!first) {
-                    ajaxCommand.append(' ');
-                } else {
-                    first = false;
-                }
-                UIComponent resolvedComponent = findComponent(component, exe);
-                if (resolvedComponent == null) {
-                    // RELEASE_PENDING  i18n
-                    throw new FacesException(
-                          "'execute' attribute contains unknown id '"
-                          + exe
-                          + "'");
-                }
-                ajaxCommand.append(resolvedComponent.getClientId());
-            }
-            ajaxCommand.append('\'');
-        }
-        if (render != null) {
-            if (already) {
-                ajaxCommand.append(',');
-            } else {
-                already = true;
-            }
-            boolean first = true;
-            ajaxCommand.append("render:'");
-            for (String rend : render) {
-                if (!first) {
-                    ajaxCommand.append(' ');
-                } else {
-                    first = false;
-                }
-                UIComponent resolvedComponent = findComponent(component, rend);
-                if (resolvedComponent == null) {
-                    // RELEASE_PENDING  i18n
-                    throw new FacesException("'render' attribute contains unknown id '"+rend+"'");
-                }
-                ajaxCommand.append(resolvedComponent.getClientId());
-            }
-            ajaxCommand.append('\'');
-        }
-        if (onevent != null) {
-            if (already) {
-                ajaxCommand.append(',');
-            } else {
-                already = true;
-            }
-            ajaxCommand.append("onevent:");
-            ajaxCommand.append(onevent);
-        }
-        if (onerror != null) {
-            if (already) {
-                ajaxCommand.append(',');
-            } else {
-                already = true;
-            }
-            ajaxCommand.append("onerror:");
-            ajaxCommand.append(onerror);
-        }
-        if (already) {
-            ajaxCommand.append('}');
-        }
-
-        ajaxCommand.append(");");
-
-        return ajaxCommand.toString();
-    }
-
+    // Renders the onchange handler for input components.  Handles
+    // chaining togeter the user-provided onchange handler with
+    // any Behavior scripts.
     public static void renderOnchange(FacesContext context, UIComponent component)
         throws IOException {
 
-        boolean isCommand = false;
-        final String event = "onchange";
+        final String handlerName = "onchange";
+        final String behaviorEventName = "valueChange";
+        final Object userHandler = component.getAttributes().get(handlerName);
 
-        // is there a user Onchange?
-        boolean userSpecifiedOnchange = false;
-        // do we need to render ajax?
-        boolean renderAjax = false;
-        // String buffer for final output
-        StringBuffer sb;
-        // the ajax command to render
-        String ajaxCommand = "";
-        // the user supplied onchange to render
-        String userOnchange;
-
-        ResponseWriter writer = context.getResponseWriter();
-
-        userOnchange = (String) component.getAttributes().get(event);
-        userSpecifiedOnchange = (userOnchange != null && !"".equals(userOnchange));
-
-        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled(context));
-        if (!userSpecifiedOnchange && !renderAjax) { // nothing to do
-            return;  // save the effort of creating the StringBuffer
-        }
-
-        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
-
-        sb = new StringBuffer(256);
-
-        if (userSpecifiedOnchange && renderAjax) { // Doing both
-            // RELEASE_PENDING driscoll this should use the jsfcbk function, move the detection
-            // into the relevant components, or figure something better out
-            sb.append("var a=function(event){");
-            userOnchange = userOnchange.trim();
-            sb.append(userOnchange);
-            if (userOnchange.charAt(userOnchange.length() - 1) != ';') {
-                sb.append(';');
-            }
-            sb.append("};var b=function(event){");
-            sb.append(ajaxCommand);
-            sb.append("};return mojarra.jsfcbk(a,this,event) ? mojarra.jsfcbk(b,this,event) : false;");
-        } else if (userSpecifiedOnchange) { // do one
-            sb.append(userOnchange);
-        } else if (renderAjax) { // do the other
-            sb.append(ajaxCommand);
-        }
-
-        // At last, write out the completed attribute
-        if (userSpecifiedOnchange || renderAjax) {
-            writer.writeAttribute(event, sb.toString(), event);
-        }
+        renderHandler(context,
+                      component,
+                      Collections.<Behavior.Parameter>emptyList(),
+                      handlerName,
+                      userHandler,
+                      behaviorEventName,
+                      null,
+                      false);
     }
 
+    // Renders the onclick handler for command buttons.  Handles
+    // chaining together the user-provided onclick handler, any
+    // Behavior scripts, plus the default button submit script.
     public static void renderOnclick(FacesContext context, 
-                                     UIComponent component, Param[] params,
-                                     AjaxBehavior ajaxBehavior)
+                                     UIComponent component,
+                                     Collection<Behavior.Parameter> params,
+                                     String submitTarget,
+                                     boolean needsSubmit)
         throws IOException {
 
-        boolean isCommand = true;
-        final String event = "onclick";
+        final String handlerName = "onclick";
+        final String behaviorEventName = "action";
+        final Object userHandler = component.getAttributes().get(handlerName);
 
-        // is there a user Onchange?
-        boolean userSpecifiedOnclick = false;
-        // do we need to render ajax?
-        boolean renderAjax = (ajaxBehavior != null && !ajaxBehavior.isDisabled(context));
-        // are there parameters to render?
-        boolean renderParams = (!Arrays.equals(params,EMPTY_PARAMS));
-        // String buffer for final output
-        StringBuffer sb;
-        // the ajax command to render
-        String ajaxCommand = "";
-        // the user supplied onchange to render
-        String userOnclick;
-        // Form Id
-        String formClientId = "";
-        // Client Id
-        String componentClientId = "";
-
-
-        if (renderParams) {
-            formClientId = getFormClientId(component, context);
-            componentClientId = component.getClientId(context);
-        }
-        ResponseWriter writer = context.getResponseWriter();
-
-        userOnclick = (String) component.getAttributes().get(event);
-        userSpecifiedOnclick = (userOnclick != null && !"".equals(userOnclick));
-        if (userSpecifiedOnclick) {
-            userOnclick = userOnclick.trim();
-        }
-
-        if (!userSpecifiedOnclick && !renderAjax && !renderParams) { // nothing to do
-            return;  // save the effort of creating the StringBuffer
-        }
-
-        if (renderAjax) ajaxCommand = buildAjaxCommand(context, component, ajaxBehavior);
-
-        sb = new StringBuffer(256);
-
-        if (userSpecifiedOnclick && renderAjax && renderParams) {
-            sb.append("var a=function(event){");
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                sb.append(';');
-            }
-            sb.append("};var b=function(event){");
-            sb.append(ajaxCommand);
-            sb.append("};if (mojarra.jsfcbk(a,this,event)===false) { return false;}else{");
-            sb.append("mojarra.apf(document.getElementById('");
-            sb.append(formClientId);
-            sb.append("'),");
-            sb.append(renderParams(componentClientId,params));
-            sb.append(");mojarra.jsfcbk(b,this,event); mojarra.dpf(document.getElementById('");
-            sb.append(formClientId);
-            sb.append("'));return false}");
-
-        } else if (userSpecifiedOnclick && renderAjax) {
-            sb.append("var a=function(event){");
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                sb.append(';');
-            }
-            sb.append("};var b=function(event){");
-            sb.append(ajaxCommand);
-            sb.append("return false;");
-            sb.append("};return (mojarra.jsfcbk(a,this,event)===false) ? false : mojarra.jsfcbk(b,this,event);");
-        } else if (userSpecifiedOnclick && renderParams) {
-            sb.append("var a=function(event){");
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                sb.append(';');
-            }
-            sb.append("};var b=function(event){");
-            sb.append(getCommandOnClickScript(formClientId,
-                                              componentClientId,
-                                              "",
-                                              params,
-                                              renderAjax));
-            sb.append("};return (mojarra.jsfcbk(a,this,event)===false) ? false : mojarra.jsfcbk(b,this,event);");
-        } else if (renderAjax && renderParams) {
-            sb.append("var a=function(event){");
-            sb.append(ajaxCommand);
-            sb.append("};mojarra.apf(document.getElementById('");
-            sb.append(formClientId);
-            sb.append("'),");
-            sb.append(renderParams(componentClientId,params));
-            sb.append(");mojarra.jsfcbk(a,this,event); mojarra.dpf(document.getElementById('");
-            sb.append(formClientId);
-            sb.append("')); return false;");
-        } else if (userSpecifiedOnclick) { // do one
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-               sb.append(';');
-            }
-        } else if (renderAjax) { // do one
-            sb.append(ajaxCommand);
-            sb.append("return false;");
-        } else if (renderParams) { // do one
-            sb.append(getCommandOnClickScript(formClientId,
-                                              componentClientId,
-                                              "",
-                                              params,
-                                              renderAjax));
-        }
-
-        // At last, write out the completed attribute
-        if (userSpecifiedOnclick || renderAjax || renderParams) {
-            writer.writeAttribute(event, sb.toString(), event);
-        }
+        renderHandler(context,
+                      component,
+                      params,
+                      handlerName,
+                      userHandler,
+                      behaviorEventName,
+                      submitTarget,
+                      needsSubmit);
     }
-
-
-
 
     public static String prefixAttribute(final String attrName,
                                          final ResponseWriter writer) {
@@ -674,26 +493,6 @@ public class RenderKitUtils {
 
     // --------------------------------------------------------- Private Methods
 
-
-    /**
-     * Attempt to find the component assuming the ID is relative to the
-     * nearest naming container.  If not found, then search for the component
-     * using an absolute component expression.
-     */
-    private static UIComponent findComponent(UIComponent component,
-                                             String exe) {
-
-        // RELEASE_PENDING - perhaps only enable ID validation if ProjectStage
-        // is development
-        UIComponent resolvedComponent = component.findComponent(exe);
-        if (resolvedComponent == null) {
-            // not found using a relative search, try an absolute search
-            resolvedComponent = component.findComponent(':' + exe);
-        }
-        return resolvedComponent;
-
-    }
-
     
     /**
      * @param component the UIComponent in question
@@ -701,11 +500,22 @@ public class RenderKitUtils {
      *  <code>javax.faces.component</code> or <code>javax.faces.component.html</code>
      *  packages, otherwise return <code>false</code>
      */
-    private static boolean canBeOptimized(UIComponent component) {
+    private static boolean canBeOptimized(UIComponent component,
+                                          Map<String, List<Behavior>> behaviors) {
+        assert(component != null);
+        assert(behaviors != null);
 
         String name = component.getClass().getName();
-        return (name != null && name.startsWith(OPTIMIZED_PACKAGE));
+        if (name != null && name.startsWith(OPTIMIZED_PACKAGE)) {
 
+            // If we've got behaviors attached to multiple events
+            // it is difficult to optimize, so fall back to the
+            // non-optimized code path.  Behaviors attached to 
+            // multiple event handlers should be a fairly rare case.
+            return (behaviors.size() < 2);
+        }
+
+        return false;
     }
 
 
@@ -713,19 +523,28 @@ public class RenderKitUtils {
      * <p>For each attribute in <code>setAttributes</code>, perform a binary
      * search against the array of <code>knownAttributes</code>  If a match is found
      * and the value is not <code>null</code>, render the attribute.
+     * @param context the {@link FacesContext} of the current request
      * @param writer the current writer
      * @param component the component whose attributes we're rendering
      * @param knownAttributes an array of pass-through attributes supported by
      *  this component
      * @param setAttributes a <code>List</code> of attributes that have been set
      *  on the provided component
+     * @param behaviors the non-null behaviors map for this request.
      * @throws IOException if an error occurs during the write
      */
-    private static void renderPassThruAttributesOptimized(ResponseWriter writer,
+    private static void renderPassThruAttributesOptimized(FacesContext context,
+                                                          ResponseWriter writer,
                                                           UIComponent component,
-                                                          String[] knownAttributes,
-                                                          List<String> setAttributes)
+                                                          Attribute[] knownAttributes, 
+                                                          List<String> setAttributes,
+                                                          Map<String,List<Behavior>> behaviors)
     throws IOException {
+
+        // We should only come in here if we've got zero or one behavior event
+        assert((behaviors != null) && (behaviors.size() < 2));
+        String behaviorEventName = getSingleBehaviorEventName(behaviors);
+        boolean renderedBehavior = false;
 
         String[] attributes = setAttributes.toArray(new String[setAttributes.size()]);
         Arrays.sort(attributes);
@@ -733,19 +552,119 @@ public class RenderKitUtils {
               RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
         Map<String, Object> attrMap = component.getAttributes();
         for (String name : attributes) {
-            if (Arrays.binarySearch(knownAttributes, name) >= 0) {
+
+            // Note that this search can be optimized by switching from
+            // an array to a Map<String, Attribute>.  This would change
+            // the search time from O(log n) to O(1), will allow us to 
+            // remove the Arrays.sort above, and will also allow us 
+            // to avoid the Attribute object allocation.
+            int index = Arrays.binarySearch(knownAttributes, Attribute.attr(name));
+            if (index >= 0) {
                 Object value =
                       attrMap.get(name);
                 if (value != null && shouldRenderAttribute(value)) {
-                    writer.writeAttribute(prefixAttribute(name, isXhtml),
-                                          value,
-                                          name);
+
+                    Attribute attr = knownAttributes[index];
+
+                    if (isBehaviorEventAttribute(attr, behaviorEventName)) {
+                        renderHandler(context,
+                                      component,
+                                      null,
+                                      name,
+                                      value,
+                                      behaviorEventName,
+                                      null,
+                                      false);
+
+                        renderedBehavior = true;
+                    } else {
+                        writer.writeAttribute(prefixAttribute(name, isXhtml),
+                                              value,
+                                              name);
+                    }
                 }
             }
         }
 
+        // We did not render out the behavior as part of our optimized
+        // attribute rendering.  Need to manually render it out now.
+        if ((behaviorEventName != null) && !renderedBehavior) {
+
+            // Note that we can optimize this search by providing
+            // an event name -> Attribute inverse look up map.
+            // This would change the search time from O(n) to O(1).
+            for (int i = 0; i < knownAttributes.length; i++) {
+                Attribute attr = knownAttributes[i];
+                String[] events = attr.getEvents();
+                if ((events != null) &&
+                    (events.length > 0) &&
+                    (behaviorEventName.equals(events[0]))) {
+
+                        renderHandler(context, 
+                                      component,
+                                      null,
+                                      attr.getName(),
+                                      null,
+                                      behaviorEventName,
+                                      null,
+                                      false);
+                }
+            }
+ 
+
+        }
     }
 
+    /**
+     * <p>Loops over all known attributes and attempts to render each one.
+     * @param context the {@link FacesContext} of the current request
+     * @param writer the current writer
+     * @param component the component whose attributes we're rendering
+     * @param knownAttributes an array of pass-through attributes supported by
+     *  this component
+     * @param behaviors the non-null behaviors map for this request.
+     * @throws IOException if an error occurs during the write
+     */
+    private static void renderPassThruAttributesUnoptimized(FacesContext context,
+                                                            ResponseWriter writer,
+                                                            UIComponent component,
+                                                            Attribute[] knownAttributes, 
+                                                            Map<String,List<Behavior>> behaviors)
+    throws IOException {
+
+        boolean isXhtml = RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
+
+        Map<String, Object> attrMap = component.getAttributes();
+
+        for (Attribute attribute : knownAttributes) {
+            String attrName = attribute.getName();
+            String[] events = attribute.getEvents();
+            boolean hasBehavior = ((events != null) &&
+                                   (events.length > 0) &&
+                                   (behaviors.containsKey(events[0])));
+
+            Object value = attrMap.get(attrName);
+
+            if (value != null && shouldRenderAttribute(value) && !hasBehavior) {
+                writer.writeAttribute(prefixAttribute(attrName, isXhtml),
+                                      value,
+                                      attrName);
+            } else if (hasBehavior) {
+
+                // If we've got a behavior for this attribute,
+                // we may need to chain scripts together, so use 
+                // renderHandler().
+                renderHandler(context, 
+                              component, 
+                              null,
+                              attrName,
+                              value,
+                              events[0],
+                              null,
+                              false);
+            }
+        }
+    }
 
     /**
      * <p>Determines if an attribute should be rendered based on the
@@ -1082,62 +1001,6 @@ public class RenderKitUtils {
         context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
     }
 
-    /**
-     * <p>Returns a string that can be inserted into the <code>onclick</code>
-     * handler of a command.  This string will add all request parameters
-     * as well as the client ID of the activated command to the form as
-     * hidden input parameters, update the target of the link if necessary,
-     * and handle the form submission.  The jsf.js file will be rendered
-     * as part of this call.</p>
-     * @param formClientId the client ID of the form
-     * @param commandClientId the client ID of the command
-     * @param target the link target
-     * @param params the nested parameters, if any @return a String suitable for the <code>onclick</code> handler
-     *  of a command
-     * @return the default <code>onclick</code> JavaScript for the default
-     *  command link component
-     */
-    public static String getCommandOnClickScript(String formClientId,
-                                                     String commandClientId,
-                                                     String target,
-                                                     Param[] params,
-                                                     boolean isAjax) {
-
-        StringBuilder sb = new StringBuilder(256);
-        sb.append("mojarra.jsfcljs(document.getElementById('");
-        sb.append(formClientId);
-        sb.append("'),");
-        sb.append(renderParams(commandClientId, params));
-        sb.append(",'");
-        sb.append(target);
-        sb.append("');return false");
-
-        return sb.toString();
-    }
-
-    /*
-     *
-     */
-    private static String renderParams(String commandClientId, Param[] params) {
-        StringBuilder sb = new StringBuilder(128);
-        sb.append("{'");
-        sb.append(commandClientId).append("':'").append(commandClientId);
-        for (Param param : params) {
-            String pn = param.name;
-            if (pn != null && pn.length() != 0) {
-                String pv = param.value;
-                sb.append("','");
-                sb.append(pn.replace("'", "\\\'"));
-                sb.append("':'");
-                if (pv != null && pv.length() != 0) {
-                    sb.append(pv.replace("'", "\\\'"));
-                }
-            }
-        }
-        sb.append("'}");
-        return sb.toString();
-    }
-
     public static void renderUnhandledMessages(FacesContext ctx) {
 
         Application app = ctx.getApplication();
@@ -1274,6 +1137,445 @@ public class RenderKitUtils {
 
     }
 
+    // Appends a script to a jsf.util.chain() call
+    private static void appendScriptToChain(StringBuilder builder, 
+                                               String script) {
+
+        if ((script == null) || (script.length() == 0)) {
+            return;
+        }
+
+        if (builder.charAt(builder.length() - 1) != ',')
+            builder.append(',');
+
+        appendQuotedValue(builder, script);
+    }
+
+    // Appends an name/value property pair to a JSON object.  Assumes
+    // object has already been opened by the caller.  The value will
+    // be quoted (ie. wrapped in single quotes and escaped appropriately).
+    public static void appendProperty(StringBuilder builder, 
+                                      String name,
+                                      Object value) {
+        appendProperty(builder, name, value, true);
+    }
+
+    // Appends an name/value property pair to a JSON object.  Assumes
+    // object has already been opened by the caller.
+    public static void appendProperty(StringBuilder builder, 
+                                      String name,
+                                      Object value,
+                                      boolean quoteValue) {
+
+        if ((null == name) || (name.length() == 0))
+            throw new IllegalArgumentException();
+
+
+        char lastChar = builder.charAt(builder.length() - 1);
+        if ((lastChar != ',') && (lastChar != '{'))
+            builder.append(',');
+
+        RenderKitUtils.appendQuotedValue(builder, name);
+        builder.append(":");
+
+        if (value == null) {
+            builder.append("''");
+        } else if (quoteValue) {
+            RenderKitUtils.appendQuotedValue(builder, value.toString());
+        } else {
+            builder.append(value.toString());
+        }
+    }
+
+    // Append a script to the chain, escaping any single quotes, since
+    // our script content is itself nested within single quotes.
+    private static void appendQuotedValue(StringBuilder builder, 
+                                          String script) {
+
+        builder.append("'");
+
+        int length = script.length();
+
+        for (int i = 0; i < length; i++) {
+            char c = script.charAt(i);
+
+            if (c == '\'')
+                builder.append('\\');
+
+            builder.append(c);
+        }
+
+        builder.append("'");
+    }
+
+    // Appends one or more behavior scripts a jsf.util.chain() call
+    private static boolean appendBehaviorsToChain(StringBuilder builder,
+                                                  FacesContext context, 
+                                                  UIComponent component,
+                                                  List<Behavior> behaviors,
+                                                  String behaviorEventName,
+                                                  Collection<Behavior.Parameter> params) {
+
+        if ((behaviors == null) || (behaviors.isEmpty())) {
+            return false;
+        }
+
+        BehaviorContext bContext = createBehaviorContext(context,
+                                                         component,
+                                                         behaviorEventName,
+                                                         params);
+
+        boolean submitting = false;
+
+        for (Behavior behavior : behaviors) {
+            String script = behavior.getScript(bContext);
+            if ((script != null) && (script.length() > 0)) {
+                appendScriptToChain(builder, script);
+
+                if (isSubmitting(behavior)) {
+                    submitting = true;
+               }
+            }
+        }
+
+        return submitting;
+    }
+
+    // Given a behaviors Map with a single entry, returns the event name
+    // for that entry.  Or, if no entries, returns null.  Used by 
+    // renderPassThruAttributesOptimized.
+    private static String getSingleBehaviorEventName(Map<String, List<Behavior>> behaviors) {
+        assert(behaviors != null);
+
+        int size = behaviors.size();
+        if (size == 0) {
+            return null;
+        }
+
+        // If we made it this far, we should have a single
+        // entry in the behaviors map.
+        assert(size == 1);
+
+        Iterator<String> keys = behaviors.keySet().iterator();
+        assert(keys.hasNext());
+
+        return keys.next();
+    }
+
+    // Tests whether the specified Attribute matches to specified
+    // behavior event name.  Used by renderPassThruAttributesOptimized.
+    private static boolean isBehaviorEventAttribute(Attribute attr,
+                                                    String behaviorEventName) {
+
+      String[] events = attr.getEvents();
+
+      return ((behaviorEventName != null) &&
+              (events != null) &&
+              (events.length > 0) &&
+              (behaviorEventName.equals(events[0])));
+    }
+
+    // Ensures that the user-specified DOM event handler script
+    // is non-empty, and trimmed if necessary.
+    private static String getNonEmptyUserHandler(Object handlerObject) {
+
+        String handler = null;
+
+        if (null != handlerObject) {
+            handler = handlerObject.toString();
+            handler = handler.trim();
+
+            if (handler.length() == 0)
+                handler = null;
+        }
+
+        return handler;
+    }
+
+    // Returns the Behaviors for the specified component/event name,
+    // or null if no Behaviors are available
+    private static List<Behavior> getBehaviors(UIComponent component,
+                                               String behaviorEventName) {
+
+        if (component instanceof BehaviorHolder) {
+            BehaviorHolder bHolder = (BehaviorHolder)component;
+            Map <String, List <Behavior>> behaviors = bHolder.getBehaviors();
+            if (null != behaviors) {
+                return behaviors.get(behaviorEventName);
+            }
+        }
+
+        return null;
+    }
+
+    // Returns a submit handler - ie. a script that calls
+    // mojara.jsfcljs()
+    private static String getSubmitHandler(FacesContext context,
+                                           UIComponent component,
+                                           Collection<Behavior.Parameter> params,
+                                           String submitTarget,
+                                           boolean preventDefault) {
+
+        StringBuilder builder = new StringBuilder(256);
+
+        String formClientId = getFormClientId(component, context);
+        String componentClientId = component.getClientId(context);
+
+        builder.append("mojarra.jsfcljs(document.getElementById('");
+        builder.append(formClientId);
+        builder.append("'),{");
+
+        appendProperty(builder, componentClientId, componentClientId);
+
+        if ((null != params) && (!params.isEmpty())) {
+            for (Behavior.Parameter param : params) {
+                appendProperty(builder, param.getName(), param.getValue());
+            }
+        }
+
+        builder.append("},'");
+
+        if (submitTarget != null) {
+            builder.append(submitTarget);
+        }
+
+        builder.append("')");
+
+        if (preventDefault) {
+            builder.append(";return false");
+        }
+
+        return builder.toString();
+    }
+
+    // Chains together a number of Behavior scripts with a user handler
+    // script.
+    private static String getChainedHandler(FacesContext context,
+                                            UIComponent component,
+                                            List<Behavior> behaviors,
+                                            Collection<Behavior.Parameter> params,
+                                            String behaviorEventName,
+                                            String userHandler,
+                                            String submitTarget,
+                                            boolean needsSubmit) {
+
+
+        // Hard to pre-compute builder initial capacity
+        StringBuilder builder = new StringBuilder(100);
+        builder.append("jsf.util.chain(this,event,");
+
+        appendScriptToChain(builder, userHandler);
+
+        boolean  submitting = appendBehaviorsToChain(builder,
+                                                     context,
+                                                     component, 
+                                                     behaviors, 
+                                                     behaviorEventName,
+                                                     params);
+    
+
+
+        boolean hasParams = ((null != params) && !params.isEmpty());
+
+        // If we've got parameters but we didn't render a "submitting"
+        // behavior script, we need to explicitly render a submit script.
+        if (!submitting && (hasParams || needsSubmit)) {
+            String submitHandler = getSubmitHandler(context, 
+                                                    component,
+                                                    params,
+                                                    submitTarget,
+                                                    false);
+
+            appendScriptToChain(builder, submitHandler);
+
+            // We are now submitting since we've rendered a submit script.
+            submitting = true;
+        }
+
+        builder.append(")");
+
+        // If we're submitting (either via a behavior, or by rendering
+        // a submit script), we need to return false to prevent the
+        // default button/link action.
+        if (submitting && "action".equals(behaviorEventName)) {
+            builder.append(";return false");
+        }
+
+        return builder.toString();
+    }
+
+    // Returns the script for a single Behavior
+    private static String getSingleBehaviorHandler(FacesContext context,
+                                                   UIComponent component,
+                                                   Behavior behavior,
+                                                   Collection<Behavior.Parameter> params,
+                                                   String behaviorEventName) {
+
+        BehaviorContext bContext = createBehaviorContext(context,
+                                                         component,
+                                                         behaviorEventName,
+                                                         params);
+
+         String script = behavior.getScript(bContext);
+
+         // If we've got a submitting behavior script, we need to tack
+         // on "return false" to prevent button from submitting.
+         if ((script != null) && isSubmitting(behavior) && "action".equals(behaviorEventName))
+             script = script +  ";return false";
+
+         return script;
+    }
+
+    // Creates a BehaviorContext with the specified properties.
+    private static BehaviorContext createBehaviorContext(FacesContext context,
+                                                         UIComponent component,
+                                                         String behaviorEventName,
+                                                         Collection<Behavior.Parameter> params) {
+
+    return BehaviorContext.createBehaviorContext(context,
+                                                 component,
+                                                 behaviorEventName,
+                                                 null,
+                                                 params);
+    }
+
+    // Tests whether the specified behavior is submitting
+    private static boolean isSubmitting(Behavior behavior) {
+        return behavior.getHints().contains(BehaviorHint.SUBMITTING);
+    }
+
+    /**
+     * Renders a handler script, which may require chaining together
+     * the user-specified event handler, any scripts required by attached 
+     * Behaviors, and also possibly the mojarra.jsfcljs() "submit" script.
+     * @param context the FacesContext for this request.
+     * @param component the UIComponent that we are rendering
+     * @param params any parameters that should be included by "submitting"
+     *        scripts.
+     * @param handlerName the name of the handler attribute to render (eg.
+     *        "onclick" or "ommouseover")
+     * @param handerValue the user-specified value for the handler attribute
+     * @param behaviorEventName the name of the behavior event that corresponds
+     *        to this handler (eg. "action" or "mouseover").
+     * @param needsSubmit indicates whether the mojarra.jsfcljs() 
+     *        "submit" script is required by the component.  Most components 
+     *        do not need this, either because they submit themselves
+     *        (eg. commandButton), or because they do not perform submits
+     *        (eg. non-command components).  This flag is mainly here for
+     *        the commandLink case, where we need to render the submit
+     *        script to make the link submit.
+     */
+    private static void renderHandler(FacesContext context,
+                                      UIComponent component,
+                                      Collection<Behavior.Parameter> params,
+                                      String handlerName,
+                                      Object handlerValue,
+                                      String behaviorEventName,
+                                      String submitTarget,
+                                      boolean needsSubmit)
+        throws IOException {
+
+        ResponseWriter writer = context.getResponseWriter();
+        String userHandler = getNonEmptyUserHandler(handlerValue);
+        List<Behavior> behaviors = getBehaviors(component, behaviorEventName);
+
+        if (params == null) {
+            params = Collections.emptyList();
+        }
+        String handler = null;
+        switch (getHandlerType(behaviors, params, userHandler, needsSubmit)) {
+        
+            case USER_HANDLER_ONLY:
+                handler = userHandler;
+                break;
+
+            case SINGLE_BEHAVIOR_ONLY:
+                handler = getSingleBehaviorHandler(context, 
+                                                   component,
+                                                   behaviors.get(0),
+                                                   params,
+                                                   behaviorEventName);
+                break;
+
+            case SUBMIT_ONLY:
+                handler = getSubmitHandler(context, 
+                                           component,
+                                           params,
+                                           submitTarget,
+                                           true);
+                break;
+
+            case CHAIN:
+                handler = getChainedHandler(context,
+                                            component,
+                                            behaviors,
+                                            params,
+                                            behaviorEventName,
+                                            userHandler,
+                                            submitTarget,
+                                            needsSubmit);
+                break;
+            default:
+                assert(false);
+        }
+
+
+        writer.writeAttribute(handlerName, handler, null);
+    }
+
+
+    // Determines the type of handler to render based on what sorts of
+    // scripts we need to render/chain.
+    private static HandlerType getHandlerType(List<Behavior> behaviors,
+                                              Collection<Behavior.Parameter> params,
+                                              String userHandler,
+                                              boolean needsSubmit) {
+
+        if ((behaviors == null) || (behaviors.isEmpty())) {
+
+            // No behaviors and no params means user handler only
+            if (params.isEmpty() && !needsSubmit)
+                return HandlerType.USER_HANDLER_ONLY;
+
+            // We've got params.  If we've also got a user handler, we need 
+            // to chain.  Otherwise, we only render the submit script.
+            return (userHandler == null) ? HandlerType.SUBMIT_ONLY :
+                                           HandlerType.CHAIN;
+        }
+
+
+        // We've got behaviors.  See if we can optimize for the single
+        // behavior case.  We can only do this if we don't have a user
+        // handler.
+        if ((behaviors.size() == 1) && (userHandler == null)) {
+            Behavior behavior = behaviors.get(0);
+
+            // If we've got a submitting behavior, then it will handle
+            // submitting the params.  If not, then we need to use
+            // a submit script to handle the params.
+            if (isSubmitting(behavior) || ((params.isEmpty()) && !needsSubmit))
+                return HandlerType.SINGLE_BEHAVIOR_ONLY;            
+        }
+
+        return HandlerType.CHAIN;
+    }
+
+    // Little utility enum that we use to identify the type of
+    // handler that we are going to render.
+    private static enum HandlerType {
+
+        // Indicates that we only have a user handler - nothing else
+        USER_HANDLER_ONLY,
+
+        // Indicates that we only have a single behavior - no chaining
+        SINGLE_BEHAVIOR_ONLY,
+
+        // Indicates that we only render the mojarra.jsfcljs() script
+       SUBMIT_ONLY,
+
+        // Indicates that we've got a chain
+        CHAIN
+    }
 
     // ---------------------------------------------------------- Nested Classes
 

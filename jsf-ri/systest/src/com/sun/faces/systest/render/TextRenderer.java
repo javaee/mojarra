@@ -55,8 +55,9 @@ import javax.faces.render.Renderer;
 
 import java.io.IOException;
 
-import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -69,9 +70,9 @@ import com.sun.faces.util.Util;
  */
 public class TextRenderer extends Renderer {
 
-    private static final String[] INPUT_ATTRIBUTES =
+    private static final Attribute[] INPUT_ATTRIBUTES =
               AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
-        private static final String[] OUTPUT_ATTRIBUTES =
+        private static final Attribute[] OUTPUT_ATTRIBUTES =
               AttributeManager.getAttributes(AttributeManager.Key.OUTPUTTEXT);
 
 
@@ -203,7 +204,7 @@ public class TextRenderer extends Renderer {
             }
 
             // style is rendered as a passthur attribute
-            RenderKitUtils.renderPassThruAttributes(
+            RenderKitUtils.renderPassThruAttributes(context,
                   writer,
                                                     component,
                                                     INPUT_ATTRIBUTES);
@@ -224,7 +225,7 @@ public class TextRenderer extends Renderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                RenderKitUtils.renderPassThruAttributes(
+                RenderKitUtils.renderPassThruAttributes(context,
                       writer,
                                                         component,
                                                         OUTPUT_ATTRIBUTES);

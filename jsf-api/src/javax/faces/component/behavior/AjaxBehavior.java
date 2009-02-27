@@ -38,28 +38,40 @@
  * holder.
  */
  
-package javax.faces.component;
+package javax.faces.component.behavior;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.AjaxBehaviorListener;
+import javax.faces.event.BehaviorEvent;
+import javax.faces.event.FacesEvent;
 
 
 /**
  * <p class="changed_added_2_0">An instance of this class is added
- * to an {@link EditableValueHolder} or {@link ActionSource} component's
- * attribute <code>Map</code> to cause the rendering of the 
- * JavaScript <code>jsf.ajax.request</code> function call
- * when the component is rendered.</p>
+ * as a {@link Behavior} to a component using the 
+ * {@link javax.faces.component.behavior.BehaviorHolder#addBehavior} 
+ * contract that components implement.  The presence of this 
+ * {@link Behavior} will cause the rendering of JavaScript that 
+ * produces an <code>Ajax</code> request using the 
+ * specification public JavaScript API when the component is 
+ * rendered.</p> 
  *
  * @since 2.0
  */
-public class AjaxBehavior implements Serializable {
+@SuppressWarnings("serial")
+public class AjaxBehavior extends BehaviorBase implements Serializable {
 
     /**
      * <p class="changed_added_2_0">The key that when added to a 
@@ -68,7 +80,7 @@ public class AjaxBehavior implements Serializable {
      *
      * @since 2.0
      */
-    public static final String AJAX_BEHAVIOR = "javax.faces.component.AjaxBehavior";
+    public static final String AJAX_BEHAVIOR = "javax.faces.behavior.AjaxBehavior";
 
     /**
      * <p class="changed_added_2_0">The identifier for Ajax value change events.</p> 
@@ -84,13 +96,8 @@ public class AjaxBehavior implements Serializable {
      */
     public static final String AJAX_ACTION = "action";
 
-    /**
-     * <p class="changed_added_2_0">The identifier for both Ajax value change and 
-     * action events.</p> 
-     *
-     * @since 2.0
-     */
-    public static final String AJAX_VALUE_CHANGE_ACTION = "all";
+    private static final Set<BehaviorHint> HINTS = 
+        Collections.unmodifiableSet(EnumSet.of(BehaviorHint.SUBMITTING));
 
     private String event;
     private ValueExpression onerrorExpression;
@@ -103,6 +110,31 @@ public class AjaxBehavior implements Serializable {
     // ------------------------------------------------------------ Constructors
 
 
+    /**
+     * <p class="changed_added_2_0">Construct a new <code>AjaxBehavior</code> 
+     * instance from the specified parameters.</p>
+     *
+     * @param event the event associated with this behavior.  In most cases, this is 
+     * the event that triggered this behavior.
+     * @param onevent the JavaScript function name that will be used to identify the
+     * client callback function that should be run on the occurance
+     * of a client-side event. 
+     * @param onerror the JavaScript function name that will be used to identify
+     * the client callback function that should be run in the event of
+     * an error. 
+     * @param execute component identifiers that will be used to identify 
+     * components that should be processed during the <code>execute</code> 
+     * phase of the request processing lifecycle.
+     * @param render component identifiers that will be used to identify 
+     * components that should be processed during the <code>render</code> 
+     * phase of the request processing lifecycle.
+     * @param disabled the disabled status of this behavior. 
+     *
+     * @throws IllegalArgumentException if <code>component</code> is
+     *  <code>null</code>
+     *
+     * @since 2.0
+     */
     public AjaxBehavior(String event,
                         ValueExpression onevent,
                         ValueExpression onerror,
@@ -120,11 +152,21 @@ public class AjaxBehavior implements Serializable {
     }
 
 
+    @Override
+    public String getRendererType() {
+       return AJAX_BEHAVIOR;
+    }
+
+    @Override
+    public Set<BehaviorHint> getHints() {
+        return HINTS;
+    }
+
     // ---------------------------------------------------------- Public Methods
 
     
     /**
-     * <p class="changed_added_2_0">Return the Faces event associated with
+     * <p class="changed_added_2_0">Return the event associated with
      * this instance.</p>
      *
      * @since 2.0
@@ -172,7 +214,7 @@ public class AjaxBehavior implements Serializable {
      * <code>Collection&lt;String&gt;</code> of component
      * identifiers that will be used to identify components that should be
      * processed during the <code>execute</code> phase of the request
-     * processing lifecycle.</p> 
+     * processing lifecycle.</p>
      *
      * @param context the {@link FacesContext} for the current request
      *
@@ -189,7 +231,7 @@ public class AjaxBehavior implements Serializable {
      * <code>Collection&lt;String&gt;</code> of component
      * identifiers that will be used to identify components that should be
      * processed during the <code>render</code> phase of the request
-     * processing lifecycle.</p> 
+     * processing lifecycle.</p>
      *
      * @param context the {@link FacesContext} for the current request
      *
@@ -216,6 +258,37 @@ public class AjaxBehavior implements Serializable {
 
     }
 
+    /**
+     * <p class="changed_added_2_0">Add the specified {@link AjaxBehaviorListener}
+     * to the set of listeners registered to receive event notifications
+     * from this {@link AjaxBehavior}.</p>
+     *
+     * @param listener The {@link AjaxBehaviorListener} to be registered
+     *
+     * @throws NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     *
+     * @since 2.0
+     */
+    public void addAjaxBehaviorListener(AjaxBehaviorListener listener) {
+        addBehaviorListener(listener);
+    }
+
+    /**
+     * <p class="changed_added_2_0">Remove the specified {@link AjaxBehaviorListener}
+     * from the set of listeners registered to receive event notifications
+     * from this {@link AjaxBehavior}.</p>
+     *
+     * @param listener The {@link AjaxBehaviorListener} to be removed
+     *
+     * @throws NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     *
+     * @since 2.0
+     */
+    public void removeAjaxBehaviorListener(AjaxBehaviorListener listener) {
+        removeBehaviorListener(listener);
+    }
 
     // --------------------------------------------------------- Private Methods
 
@@ -254,5 +327,6 @@ public class AjaxBehavior implements Serializable {
         return result;
 
     }
+
 
 }

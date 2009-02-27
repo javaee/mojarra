@@ -69,11 +69,25 @@ public class TagLibraryImpl extends AbstractTagLibrary {
             this.addValidator(name, id);
         }
 
+
         public void putValidator(String name, String id, Class handlerClass) {
             Util.notNull("name", name);
             Util.notNull("id", id);
             Util.notNull("handlerClass", handlerClass);
             this.addValidator(name, id, handlerClass);
+        }
+
+        public void putBehavior(String name, String id) {
+            Util.notNull("name", name);
+            Util.notNull("id", id);
+            this.addBehavior(name, id);
+        }
+
+        public void putBehavior(String name, String id, Class handlerClass) {
+            Util.notNull("name", name);
+            Util.notNull("id", id);
+            Util.notNull("handlerClass", handlerClass);
+            this.addBehavior(name, id, handlerClass);
         }
 
         public void putTagHandler(String name, Class type) {

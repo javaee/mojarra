@@ -49,6 +49,7 @@ import com.sun.faces.config.configprovider.WebFacesConfigResourceProvider;
 import com.sun.faces.config.configprovider.MetaInfFaceletTaglibraryConfigProvider;
 import com.sun.faces.config.configprovider.WebFaceletTaglibResourceProvider;
 import com.sun.faces.config.processor.ApplicationConfigProcessor;
+import com.sun.faces.config.processor.BehaviorConfigProcessor;
 import com.sun.faces.config.processor.ComponentConfigProcessor;
 import com.sun.faces.config.processor.ConfigProcessor;
 import com.sun.faces.config.processor.ConverterConfigProcessor;
@@ -243,6 +244,7 @@ public class ConfigManager {
              new ManagedBeanConfigProcessor(),
              new RenderKitConfigProcessor(),
              new NavigationConfigProcessor(),
+             new BehaviorConfigProcessor(),
         };
         for (int i = 0; i < configProcessors.length; i++) {
             ConfigProcessor p = configProcessors[i];

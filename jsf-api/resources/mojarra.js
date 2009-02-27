@@ -158,3 +158,51 @@ mojarra.jsfcljs = function jsfcljs(f, pvp, t) {
 mojarra.jsfcbk = function jsfcbk(f, t, e) {
     return f.call(t,e);
 };
+
+/*
+ * This is called by the AjaxBehaviorRenderer script to
+ * trigger a jsf.ajax.request() call.
+ *
+ *  @param s the source element or id
+ *  @param e event of the calling function
+ *  @param n name of the behavior event that has fired
+ *  @param ex execute list
+ *  @param re render list
+ *  @param op options object
+ */
+mojarra.ab = function ab(s, e, n, ex, re, op) {
+    if (!op) {
+        op = {};
+    }
+
+    if (n) {
+
+        var id;
+
+        if (typeof s === 'string') {
+            id = s;
+        } else if (typeof s === 'object') {
+            // If object, assume that source id can be found via "id" prop.
+            id = s.id;
+
+            // TODO: Remove this hack to work around commadButton not 
+            // specifying id property for auto-generated ids.
+            if (!id) {
+                id = s.name;
+            }
+        }
+
+        op["javax.faces.behavior.source"] = id;
+        op["javax.faces.behavior.event"] = n;
+    }
+
+    if (ex) {
+        op["execute"] = ex;
+    }
+
+    if (re) {
+        op["render"] = re;
+    }
+
+    jsf.ajax.request(s, e, op);
+}

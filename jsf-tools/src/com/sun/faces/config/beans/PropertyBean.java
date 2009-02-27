@@ -40,6 +40,9 @@
 
 package com.sun.faces.config.beans;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * <p>Configuration bean for <code>&lt;property&gt; element.</p>
@@ -137,6 +140,51 @@ public class PropertyBean extends FeatureBean {
         this.valueExpressionEnabled = valueExpressionEnabled;
     }
 
+    // Behavior attribute, [dafault=false]
+    private List<String> behaviors = null;
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @return the behaviorAttribute
+	 */
+	public List<String> getBehaviors() {
+		return behaviors;
+	}
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @param behaviorAttribute the behaviorAttribute to set
+	 */
+	public void addBehavior(String behavior) {
+		if(null == this.behaviors){
+			this.behaviors = new ArrayList<String>(5);
+		}
+		this.behaviors.add(behavior);
+	}
+	
+	public void addAllBehaviors(List<String>behaviors) {
+		if(null != behaviors){
+//			if(null == this.behaviors){
+				this.behaviors = new ArrayList<String>(behaviors);
+//			} else {
+//				this.behaviors.addAll(behaviors);
+//			}
+		}
+	}
+
+    private boolean defaultBehavior = false;
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @return the defaultBehavior
+	 */
+	public boolean isDefaultBehavior() {
+		return defaultBehavior;
+	}
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @param defaultBehavior the defaultBehavior to set
+	 */
+	public void setDefaultBehavior(boolean defaultBehavior) {
+		this.defaultBehavior = defaultBehavior;
+	}
 
     // ----------------------------------------------------------------- Methods
 

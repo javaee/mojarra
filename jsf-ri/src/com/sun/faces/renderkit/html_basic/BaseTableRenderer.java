@@ -52,6 +52,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIData;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
 
@@ -114,14 +115,14 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
      * @param context the <code>FacesContext</code> for the current request
      * @param table the table that's being rendered
      * @param writer the current writer
-     * @param passThroughAttributes pass-through attributes that the component
+     * @param attributes pass-through attributes that the component
      *  supports
      * @throws IOException if content cannot be written
      */
     protected void renderTableStart(FacesContext context,
                                     UIComponent table,
                                     ResponseWriter writer,
-                                    String[] passThroughAttributes)
+                                    Attribute[] attributes)
     throws IOException {
 
         writer.startElement("table", table);
@@ -130,9 +131,10 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 table,
-                                                passThroughAttributes);
+                                                attributes);
         writer.writeText("\n", table, null);
 
     }

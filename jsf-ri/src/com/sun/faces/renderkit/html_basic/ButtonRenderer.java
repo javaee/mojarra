@@ -43,17 +43,19 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.AjaxBehavior;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.RIConstants;
@@ -65,7 +67,7 @@ import com.sun.faces.RIConstants;
 
 public class ButtonRenderer extends HtmlBasicRenderer {
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.COMMANDBUTTON);
 
     // ---------------------------------------------------------- Public Methods
@@ -118,15 +120,14 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
 
         /*
-         * If we have any parameters, or an ajax command with user onclick, and the button type is submit or button, then
-         * render Javascript to use later.
+         * If we have any parameters and the button type is submit or button, 
+         * then render Javascript to use later.
          * RELEASE_PENDING this logic is slightly wrong - we should buffer the user onclick, and use it later.
          * Leaving it for when we decide how to do script injection.
          */
-        Param params[] = getParamList(component);
-        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        boolean hasParams = !Arrays.equals(params,EMPTY_PARAMS);
-        if ( hasParams && (type.equals("submit") || type.equals("button"))) {
+
+        Collection<Behavior.Parameter> params = getBehaviorParameters(component);
+        if ( !params.isEmpty() && (type.equals("submit") || type.equals("button"))) {
            RenderKitUtils.renderJsfJs(context);
         }
 
@@ -146,9 +147,12 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("value", label, "value");
         }
 
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
-                                                ATTRIBUTES);
+                                                ATTRIBUTES,
+                                                getNonOnClickBehaviors(component));
+
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         String styleClass = (String)
@@ -157,8 +161,11 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
-        RenderKitUtils.renderOnclick(context, component, params, ajaxBehavior);
-
+        RenderKitUtils.renderOnclick(context, 
+                                     component, 
+                                     params,
+                                     null,
+                                     false);
 
         writer.endElement("input");
 
@@ -173,7 +180,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     }
 
     // --------------------------------------------------------- Private Methods
-
 
     /**
      * @param context the <code>FacesContext</code> for the current request
@@ -253,6 +259,17 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
         return type;
 
+    }
+
+    // Returns the Behaviors map, but only if it contains some entry other
+    // than those handled by renderOnclick().  This helps us optimize
+    // renderPassThruAttributes() in the very common case where the
+    // button only contains an "action" (or "click") Behavior.  In that
+    // we pass a null Behaviors map into renderPassThruAttributes(),
+    // which allows us to take a more optimized code path.
+    private static Map<String, List<Behavior>> getNonOnClickBehaviors(UIComponent component) {
+
+        return getPassThruBehaviors(component, "click", "action");
     }
 
 } // end of class ButtonRenderer

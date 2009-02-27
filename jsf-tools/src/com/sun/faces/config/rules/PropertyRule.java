@@ -206,6 +206,12 @@ public class PropertyRule extends FeatureRule {
             old.setTagAttribute(false);
         }
 
+        if(null != top.getBehaviors()){
+        	old.addAllBehaviors(top.getBehaviors());
+        }
+        if(top.isDefaultBehavior()){
+        	old.setDefaultBehavior(true);
+        }
         // Merge common collections
         mergeFeatures(top, old);
 

@@ -55,6 +55,16 @@
             <xsd:selector xpath="javaee:tag"/>
             <xsd:field    xpath="javaee:tag-name"/>
         </xsd:unique>
+        <xsd:unique name="faces-config-behavior-ID-uniqueness">
+            <xsd:annotation>
+                <xsd:documentation>
+
+                    Behavior IDs must be unique within a document.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:selector xpath="javaee:behavior"/>
+            <xsd:field    xpath="javaee:behavior-id"/>
+        </xsd:unique>
         <xsd:unique name="faces-config-converter-ID-uniqueness">
             <xsd:annotation>
                 <xsd:documentation>
@@ -143,6 +153,8 @@
             <xsd:choice>
                 <xsd:element name="handler-class"
                              type="javaee:fully-qualified-classType"/>
+                <xsd:element name="behavior"
+                             type="javaee:facelet-taglib-tag-behaviorType"/>
                 <xsd:element name="component"
                              type="javaee:facelet-taglib-tag-componentType"/>
                 <xsd:element name="converter"
@@ -262,6 +274,41 @@
                          type="javaee:fully-qualified-classType"/>
             <xsd:element name="function-signature" type="javaee:string"/>
         </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="facelet-taglib-tag-behaviorType">
+        <xsd:annotation>
+          <xsd:documentation>
+            Within a tag element, the behavior element encapsulates
+            information specific to a JSF Behavior.
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:group ref="javaee:descriptionGroup"/>
+            <xsd:element minOccurs="1" maxOccurs="1"
+                         name="behavior-id" type="javaee:string"/>
+            <xsd:element minOccurs="0" maxOccurs="1"
+                         name="handler-class" type="javaee:fully-qualified-classType"/>
+            <xsd:element name="behavior-extension"
+                         type="javaee:facelet-taglib-tag-behavior-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="facelet-taglib-tag-behavior-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Extension element for behavior. It may contain
+                implementation specific content.
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
     <xsd:complexType name="facelet-taglib-tag-componentType">
 	<xsd:annotation>

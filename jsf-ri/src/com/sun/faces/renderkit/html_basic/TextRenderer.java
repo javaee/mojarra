@@ -50,6 +50,7 @@ import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -61,9 +62,9 @@ import com.sun.faces.renderkit.RenderKitUtils;
 public class TextRenderer extends HtmlBasicInputRenderer {
 
 
-    private static final String[] INPUT_ATTRIBUTES =
+    private static final Attribute[] INPUT_ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
-    private static final String[] OUTPUT_ATTRIBUTES = 
+    private static final Attribute[] OUTPUT_ATTRIBUTES = 
           AttributeManager.getAttributes(AttributeManager.Key.OUTPUTTEXT);
 
 
@@ -122,9 +123,11 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             }
 
             // style is rendered as a passthur attribute
-            RenderKitUtils.renderPassThruAttributes(writer,
+            RenderKitUtils.renderPassThruAttributes(context,
+                                                    writer,
                                                     component,
-                                                    INPUT_ATTRIBUTES);
+                                                    INPUT_ATTRIBUTES,
+                                                    getNonOnChangeBehaviors(component));
             RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
             RenderKitUtils.renderOnchange(context, component);
@@ -145,7 +148,8 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                RenderKitUtils.renderPassThruAttributes(writer,
+                RenderKitUtils.renderPassThruAttributes(context,
+                                                        writer,
                                                         component,
                                                         OUTPUT_ATTRIBUTES);
 

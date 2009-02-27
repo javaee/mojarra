@@ -51,6 +51,7 @@ import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -58,7 +59,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 public class LabelRenderer extends HtmlBasicInputRenderer {
 
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.OUTPUTLABEL);
 
 
@@ -105,7 +106,8 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("for", forClientId, "for");
         }
 
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
                                                 ATTRIBUTES);
         String styleClass = (String)

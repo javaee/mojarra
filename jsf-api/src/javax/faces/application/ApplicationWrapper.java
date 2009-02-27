@@ -50,6 +50,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
@@ -241,6 +242,21 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     @Override
     public void setSupportedLocales(Collection<Locale> locales) {
         getWrapped().setSupportedLocales(locales);
+    }
+
+    @Override
+    public void addBehavior(String behaviorId, String behaviorClass) {
+        getWrapped().addBehavior(behaviorId, behaviorClass);
+    }
+
+    @Override
+    public Behavior createBehavior(String behaviorId) throws FacesException {
+        return getWrapped().createBehavior(behaviorId);
+    }
+
+    @Override
+    public Iterator<String> getBehaviorIds() {
+        return getWrapped().getBehaviorIds();
     }
 
     @Override

@@ -138,7 +138,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var getForm = function getForm(element) {
             if (element) {
                 var form = $(element);
-                while (form && form.nodeName && form.nodeName.toLowerCase() !== 'form') {
+                while (form) {
+
+                    if (form.nodeName && (form.nodeName.toLowerCase() == 'form')) {
+                        return form;
+                    }
                     if (form.form) {
                         return form.form;
                     }
@@ -146,9 +150,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         form = form.parentNode;
                     } else {
                         form = null;
-                    }
-                    if (form) {
-                        return form;
                     }
                 }
                 return document.forms[0];
@@ -905,6 +906,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <td><code>onerror</code></td>
              * <td><code>function to callback for error</code></td>
              * </tr>
+             * <tr>
+             * <td><code>params</code></td>
+             * <td><code>object containing parameters to include in the request</code></td>
+             * </tr>
              * </table>
              * The <code>options</code> argument is optional.
              * @member jsf.ajax
@@ -1345,6 +1350,45 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         }
         return qString;
     };
+
+    /**
+     * The namespace for JavaServer Faces JavaScript utilities.
+     * @name jsf.util
+     * @namespace
+     */
+    jsf.util = {};
+
+    /**
+     * <p>A varargs function that invokes an arbitrary number of scripts.
+     * If any script in the chain returns false, the chain is short-circuited
+     * and subsequent scripts are not invoked.  Any number of scripts may
+     * specified after the <code>event</code> argument.</p>
+     *
+     * @param source The DOM element that triggered this Ajax request, or an 
+     * id string of the element to use as the triggering element.
+     * @param event The DOM event that triggered this Ajax request.  The
+     * <code>event</code> argument is optional.
+     *
+     * @function jsf.util.chain
+     */
+    jsf.util.chain = function(source, event) {
+
+        var length = arguments.length;
+        if (length < 3)
+            return;
+
+        var thisArg = (typeof source === 'object') ? source : null;
+
+        // Call back any scripts that were passed in
+        for (var i = 2; i < arguments.length; i++) {
+
+          var f = new Function("event", arguments[i]);
+          var returnValue = f.call(thisArg, event);   
+
+          if (returnValue === false)
+            break;
+        }
+    }
 
     /**
      * <p>An integer specifying the specification version that this file implements.

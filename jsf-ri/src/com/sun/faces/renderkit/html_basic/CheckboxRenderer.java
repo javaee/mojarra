@@ -53,6 +53,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.ConverterException;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -64,7 +65,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 
 public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.SELECTBOOLEANCHECKBOX);
 
     // ---------------------------------------------------------- Public Methods
@@ -141,9 +142,11 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
               component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
-                                                ATTRIBUTES);
+                                                ATTRIBUTES,
+                                                getNonOnChangeBehaviors(component));
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         RenderKitUtils.renderOnchange(context, component);

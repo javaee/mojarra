@@ -49,10 +49,12 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 
 import javax.faces.FactoryFinder;
+import javax.faces.render.BehaviorRenderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 import javax.faces.render.FacesRenderer;
+import javax.faces.render.FacesBehaviorRenderer;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -108,6 +110,20 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String RENDERER_CLASS = "renderer-class";
 
+    /**
+     * <p>/faces-config/render-kit/behavior-renderer</p>
+     */
+    private static final String BEHAVIOR_RENDERER = "behavior-renderer";
+
+    /**
+     * <p>/faces-config/render-kit/behavior-renderer/behavior-renderer-type</p>
+     */
+    private static final String BEHAVIOR_RENDERER_TYPE = "behavior-renderer-type";
+
+    /**
+     * <p>/faces-config/render-kit/behavior-renderer/behavior-renderer-class</p>
+     */
+    private static final String BEHAVIOR_RENDERER_CLASS = "behavior-renderer-class";
 
     // -------------------------------------------- Methods from ConfigProcessor
 
@@ -119,6 +135,8 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     throws Exception {
 
         Map<String,Map<Document,List<Node>>> renderers =
+              new LinkedHashMap<String,Map<Document,List<Node>>>();
+        Map<String,Map<Document,List<Node>>> behaviorRenderers =
               new LinkedHashMap<String,Map<Document,List<Node>>>();
         RenderKitFactory rkf = (RenderKitFactory)
              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
@@ -136,13 +154,14 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                  .getElementsByTagNameNS(namespace, RENDERKIT);
 
             if (renderkits != null && renderkits.getLength() > 0) {
-                addRenderKits(renderkits, document, renderers, rkf);
+                addRenderKits(renderkits, document, renderers, behaviorRenderers, rkf);
             }
         }
 
-        // process annotated Renderers first as Renderers configured
+        // process annotated Renderers, BehaviorRenderers first as Renderers configured
         // via config files take precedence
         processAnnotations(FacesRenderer.class);
+        processAnnotations(FacesBehaviorRenderer.class);
 
         // now add the accumulated renderers to the RenderKits
         for (Map.Entry<String,Map<Document,List<Node>>> entry : renderers.entrySet()) {
@@ -158,6 +177,20 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 addRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
             }
         }
+        // now add the accumulated behavior renderers to the RenderKits
+        for (Map.Entry<String,Map<Document,List<Node>>> entry : behaviorRenderers.entrySet()) {
+            RenderKit rk = rkf.getRenderKit(null, entry.getKey());
+            if (rk == null) {
+                throw new ConfigurationException(
+                      MessageUtils.getExceptionMessageString(
+                            MessageUtils.RENDERER_CANNOT_BE_REGISTERED_ID,
+                            entry.getKey()));
+            }
+            
+            for (Map.Entry<Document,List<Node>> renderEntry : entry.getValue().entrySet()) {
+                addBehaviorRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
+            }
+        }
         invokeNext(documents);
 
     }
@@ -169,6 +202,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     private void addRenderKits(NodeList renderKits,
                                Document owningDocument,
                                Map<String,Map<Document,List<Node>>> renderers,
+                               Map<String,Map<Document,List<Node>>> behaviorRenderers,
                                RenderKitFactory rkf) {
 
         String namespace = owningDocument.getDocumentElement()
@@ -181,6 +215,8 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             String rkClass = null;
             List<Node> renderersList =
                  new ArrayList<Node>(children.getLength());
+            List<Node> behaviorRenderersList =
+                 new ArrayList<Node>(children.getLength());
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (RENDERKIT_ID.equals(n.getLocalName())) {
@@ -189,6 +225,8 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                     rkClass = getNodeText(n);
                 } else if (RENDERER.equals(n.getLocalName())) {
                     renderersList.add(n);
+                } else if (BEHAVIOR_RENDERER.equals(n.getLocalName())) {
+                    behaviorRenderersList.add(n);
                 }
             }
 
@@ -223,10 +261,24 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 existingRenderers.put(owningDocument, renderersList);
             }
             renderers.put(rkId, existingRenderers);
+
+            Map<Document,List<Node>> existingBehaviorRenderers = behaviorRenderers.get(rkId);
+            if (existingBehaviorRenderers != null) {
+                List<Node> list = existingBehaviorRenderers.get(owningDocument);
+                if (list != null) {
+                    list.addAll(behaviorRenderersList);
+                } else {
+                    existingBehaviorRenderers.put(owningDocument, behaviorRenderersList);
+                }
+            } else {
+                existingBehaviorRenderers = new LinkedHashMap<Document,List<Node>>();
+                existingBehaviorRenderers.put(owningDocument, behaviorRenderersList);
+            }
+            behaviorRenderers.put(rkId, existingBehaviorRenderers);
+
         }
 
     }
-
 
     private void addRenderers(RenderKit renderKit,
                               Document owningDocument,
@@ -257,7 +309,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 Renderer r = (Renderer) createInstance(rendererClass,
                                                        Renderer.class,
                                                        null,
-                                                       renderer);                
+                                                       renderer);
                 if (r != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
@@ -269,6 +321,48 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                                         renderKit.getClass()));
                     }
                     renderKit.addRenderer(rendererFamily, rendererType, r);
+                }
+            }
+        }
+
+    }
+
+    private void addBehaviorRenderers(RenderKit renderKit,
+                              Document owningDocument,
+                              List<Node> behaviorRenderers) {
+
+        String namespace = owningDocument.getDocumentElement()
+                 .getNamespaceURI();
+        for (Node behaviorRenderer : behaviorRenderers) {
+            NodeList children = ((Element) behaviorRenderer)
+                 .getElementsByTagNameNS(namespace, "*");
+            String behaviorRendererType = null;
+            String behaviorRendererClass = null;
+            for (int i = 0, size = children.getLength(); i < size; i++) {
+                Node n = children.item(i);
+                if (BEHAVIOR_RENDERER_TYPE.equals(n.getLocalName())) {
+                    behaviorRendererType = getNodeText(n);
+                } else if (BEHAVIOR_RENDERER_CLASS.equals(n.getLocalName())) {
+                    behaviorRendererClass = getNodeText(n);
+                }
+            }
+
+            if ((behaviorRendererType != null)
+                  && (behaviorRendererClass != null)) {
+                BehaviorRenderer r = (BehaviorRenderer) createInstance(behaviorRendererClass,
+                                                       BehaviorRenderer.class,
+                                                       null,
+                                                       behaviorRenderer);                
+                if (r != null) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   MessageFormat.format(
+                                        "Calling RenderKit.addBehaviorRenderer({0},{1}, {2}) for RenderKit ''{2}''",
+                                        behaviorRendererType,
+                                        behaviorRendererClass,
+                                        renderKit.getClass()));
+                    }
+                    renderKit.addBehaviorRenderer(behaviorRendererType, r);
                 }
             }
         }

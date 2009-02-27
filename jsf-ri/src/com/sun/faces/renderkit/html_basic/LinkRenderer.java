@@ -49,6 +49,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -61,7 +62,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 public abstract class LinkRenderer extends HtmlBasicRenderer {
 
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.COMMANDLINK);
 
 
@@ -86,7 +87,8 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("name", writtenId, "name");
         }
 
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
                                                 ATTRIBUTES);
 

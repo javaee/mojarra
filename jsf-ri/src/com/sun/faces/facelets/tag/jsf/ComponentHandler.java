@@ -52,6 +52,7 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,8 +61,9 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.ActionSource;
-import javax.faces.component.AjaxBehavior;
-import javax.faces.component.AjaxBehaviors;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.AjaxBehaviors;
+import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -326,29 +328,25 @@ public class ComponentHandler extends MetaTagHandlerImpl {
      * @param parent
      */
     protected void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
-        // Default Behavior  
-        String facesEventType = getFacesEventType(c);
-        if (facesEventType == null) {
-           return;
-        }
         AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
             get(AjaxBehaviors.AJAX_BEHAVIORS);
         if (ajaxBehaviors != null) {
-            AjaxBehavior ajaxBehavior = ajaxBehaviors.getBehaviorForEvent(facesEventType);
+            AjaxBehavior ajaxBehavior = ajaxBehaviors.getCurrentBehavior();
             if (ajaxBehavior != null) {
-                c.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
+                if (c instanceof BehaviorHolder) {
+                    BehaviorHolder bHolder = (BehaviorHolder)c;
+                    String event = bHolder.getDefaultEventName();
+                    if (null != ajaxBehavior.getEvent()) {
+                        event = ajaxBehavior.getEvent();
+                    }
+                    Collection eventNames = bHolder.getEventNames();
+                    if (null != eventNames && eventNames.contains(event) || 
+                        event.equals(bHolder.getDefaultEventName())) {
+                        bHolder.addBehavior(event, ajaxBehavior);
+                    }
+                }
             }
         }
-    }
-
-    protected String getFacesEventType(UIComponent c) {
-        String event = null;
-        if (c instanceof EditableValueHolder) {
-            event = AjaxBehavior.AJAX_VALUE_CHANGE;
-        } else if (c instanceof ActionSource) {
-            event = AjaxBehavior.AJAX_ACTION;
-        } 
-        return event;
     }
 
     protected void onComponentPopulated(FaceletContext ctx, UIComponent c, UIComponent parent) {
