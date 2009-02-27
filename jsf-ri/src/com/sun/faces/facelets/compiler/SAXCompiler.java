@@ -58,8 +58,6 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -98,13 +96,13 @@ public final class SAXCompiler extends Compiler {
     private static class CompilationHandler extends DefaultHandler implements
             LexicalHandler {
 
-        private final String alias;
+        protected final String alias;
 
-        private boolean inDocument = false;
+        protected boolean inDocument = false;
 
-        private Locator locator;
+        protected Locator locator;
 
-        private final CompilationManager unit;
+        protected final CompilationManager unit;
         
         public CompilationHandler(CompilationManager unit, String alias) {
             this.unit = unit;
@@ -253,20 +251,140 @@ public final class SAXCompiler extends Compiler {
         }
     }
 
+
+    private static class MetadataCompilationHandler extends CompilationHandler {
+
+        private boolean processingMetadata = false;
+        private boolean metadataProcessed = false;
+
+        // -------------------------------------------------------- Constructors
+
+
+        public MetadataCompilationHandler(CompilationManager unit, String alias) {
+
+            super(unit, alias);
+
+        }
+
+
+        // ------------------------------------- Methods from CompilationHandler
+
+
+        @Override
+        public void characters(char[] ch, int start, int length)
+        throws SAXException {
+            // no-op
+        }
+
+        @Override
+        public void comment(char[] ch, int start, int length)
+        throws SAXException {
+            // no-op
+        }
+
+        @Override
+        public void endCDATA() throws SAXException {
+            // no-op
+        }
+
+        @Override
+        public void ignorableWhitespace(char[] ch, int start, int length)
+        throws SAXException {
+           // no-op
+        }
+
+        @Override
+        public void startCDATA() throws SAXException {
+            // no-op
+        }
+
+        @Override
+        public void startDTD(String name, String publicId, String systemId)
+        throws SAXException {
+            // no-op
+        }
+
+        @Override
+        public void startEntity(String name) throws SAXException {
+            // no-op
+        }
+
+        @Override
+        public void processingInstruction(String target, String data)
+        throws SAXException {
+            // no-op
+        }
+
+
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
+        throws SAXException {
+
+            if (!metadataProcessed) {
+                if (!processingMetadata && "http://java.sun.com/jsf/core".equals(uri)) {
+                    if ("metadata".equals(localName)) {
+                        processingMetadata = true;
+                    }
+                }
+                if (processingMetadata) {
+                    super.startElement(uri, localName, qName, attributes);
+                }
+            }
+
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName)
+        throws SAXException {
+
+            if (!metadataProcessed) {
+                if (processingMetadata) {
+                    super.endElement(uri, localName, qName);
+                }
+                if (processingMetadata && "http://java.sun.com/jsf/core".equals(uri)) {
+                    if ("metadata".equals(localName)) {
+                        processingMetadata = false;
+                        metadataProcessed = true;
+                    }
+                }
+            }
+
+        }
+
+    }
+
     public SAXCompiler() {
         super();
     }
 
-    public FaceletHandler doCompile(URL src, String alias) throws IOException,
-            FaceletException, ELException, FacesException {
-        CompilationManager mngr = null;
+    public FaceletHandler doCompile(URL src, String alias) throws IOException {
+
+        CompilationManager mgr = new CompilationManager(alias, this);
+        CompilationHandler handler = new CompilationHandler(mgr, alias);
+        return doCompile(mgr, handler, src, alias);
+
+    }
+
+    public FaceletHandler doMetadataCompile(URL src, String alias)
+    throws IOException {
+
+        CompilationManager mgr = new CompilationManager(alias, this);
+        CompilationHandler handler = new MetadataCompilationHandler(mgr, alias);
+        return doCompile(mgr, handler, src, alias);
+    }
+
+    protected FaceletHandler doCompile(CompilationManager mngr,
+                                       CompilationHandler handler,
+                                       URL src,
+                                       String alias)
+    throws IOException {
+
         InputStream is = null;
         String encoding = "UTF-8";
         try {
             is = new BufferedInputStream(src.openStream(), 1024);
-            mngr = new CompilationManager(alias, this);
             encoding = writeXmlDecl(is, mngr);
-            CompilationHandler handler = new CompilationHandler(mngr, alias);
             SAXParser parser = this.createSAXParser(handler);
             parser.parse(is, handler);
         } catch (SAXException e) {
@@ -285,6 +403,7 @@ public final class SAXCompiler extends Compiler {
         mngr.setCompilationMessageHolder(null);
 
         return result;
+
     }
 
     protected static final String writeXmlDecl(InputStream is, CompilationManager mngr)

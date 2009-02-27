@@ -51,7 +51,6 @@
 
 package com.sun.faces.facelets.tag;
 
-import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import java.io.IOException;
 
 import javax.el.ELException;
@@ -66,7 +65,7 @@ import javax.faces.webapp.pdl.facelets.FaceletHandler;
  * A FaceletHandler that is derived of 1 or more, inner FaceletHandlers. This
  * class would be found if the next FaceletHandler is structually, a body
  * with multiple child elements as defined in XML.
- * 
+ *
  * @author Jacob Hookom
  * @version $Id$
  */
@@ -74,21 +73,15 @@ public final class CompositeFaceletHandler implements FaceletHandler {
 
     private final FaceletHandler[] children;
     private final int len;
-    
+
     public CompositeFaceletHandler(FaceletHandler[] children) {
         this.children = children;
         this.len = children.length;
     }
-    
+
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
         for (int i = 0; i < len; i++) {
-            if (ctx.getAttribute(FacetHandler.ABORT_PROCESSING_KEY) != null) {
-                ctx.setAttribute(FacetHandler.ABORT_PROCESSING_KEY, null);
-                break;
-            }
-            else {
-                this.children[i].apply(ctx, parent);
-            }
+            this.children[i].apply(ctx, parent);
         }
     }
     

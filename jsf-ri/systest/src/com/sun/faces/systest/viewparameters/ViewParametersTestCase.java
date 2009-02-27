@@ -102,12 +102,22 @@ public class ViewParametersTestCase extends AbstractTestCase {
         doTestExtensionMapped(1);
         
     }
+
+    public void testViewParametersValidation() throws Exception {
+
+        HtmlPage page = getPage("/viewParameters/page02.faces?id=0");
+        assertTrue(page.asText().contains("Invalid headline. (The id parameter is not a positive number)"));
+
+    }
+    
     
     private void doTestExtensionMapped(int i) throws Exception {
 
         int storyNum = i + 1;
         HtmlPage page = null;
         
+        page = fetchHomePageAndClickStoryLink(i);
+
         page = fetchHomePageAndClickStoryLink(i);
         
         page = doRefreshButton(page, storyNum);

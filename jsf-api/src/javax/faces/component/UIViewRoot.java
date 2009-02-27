@@ -1017,7 +1017,7 @@ public class UIViewRoot extends UIComponentBase {
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
         encodeViewParameters(context);
-        notifyAfter(context, PhaseId.RENDER_RESPONSE);
+        notifyAfter(context, PhaseId.RENDER_RESPONSE);               
     }
 
     /**

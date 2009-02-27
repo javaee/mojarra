@@ -255,7 +255,9 @@ public class ApplicationImpl extends Application {
 
         Util.notNull("systemEventClass", systemEventClass);
         Util.notNull("source", source);
-
+        if (!FacesContext.getCurrentInstance().isProcessingEvents()) {
+            return;
+        }
         // source is not compatible with the provided base type.
         // Log a warning that the types are incompatible and return. 
         if (getProjectStage() == ProjectStage.Development

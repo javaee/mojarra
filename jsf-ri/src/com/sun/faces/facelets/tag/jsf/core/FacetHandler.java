@@ -78,7 +78,6 @@ public final class FacetHandler extends TagHandlerImpl {
     public static final String KEY = "facelets.FACET_NAME";
 
     protected final TagAttribute name;
-    public static final String ABORT_PROCESSING_KEY = "facelets.ABORT_PROCESSING";
 
     public FacetHandler(TagConfig config) {
         super(config);

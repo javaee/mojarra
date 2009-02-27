@@ -290,13 +290,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
         UIViewRoot root = super.createView(ctx, viewId);
         ctx.setViewRoot(root);
-        if (root != null) {
-            try {
-                buildView(ctx, root);
-            } catch (IOException ioe) {
-                throw new FacesException(ioe);
-            }
-        }
 
         return root;
 

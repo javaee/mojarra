@@ -37,34 +37,96 @@
 package javax.faces.webapp.pdl;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
+ * RELEASE_PENDING (edburns,rogerk) review docs
  *
- * <p class="changed_added_2_0"></p>
+ * <p class="changed_added_2_0"/>
+ * <code>ViewMetadata</code> is reponsible for extracting and providing
+ * view parameter metadata from PDL views.
+ * </p>
+ *
+ * @since 2.0
  */
 public abstract class ViewMetadata {
 
-    public abstract String getViewId();
-    
-    public abstract UIViewRoot createMetadataView(FacesContext context);
-    
+
     /**
+     * <p class="changed_added_2_0"/>
+     * @return the view ID for which this <code>ViewMetadata</code> instance
+     *  was created
+     */
+    public abstract String getViewId();
+
+
+    /**
+     * <p class="changed_added_2_0">
+     * Creates a new {@link UIViewRoot} containing
+     * only view parameter metadata.  The processing of building this
+     * <code>UIViewRoot</code> with metadata should not cause any events to be
+     * published to the application.
+     * </p>
      *
-     * <p class="changed_added_2_0"></p>
+     * @param context the {@link FacesContext} for the current request
+     * @return a <code>UIViewRoot</code> containing only view parameter metadata
+     *  (if any)
+     */
+    public abstract UIViewRoot createMetadataView(FacesContext context);
+
+
+    /**
+     * <p class="changed_added_2_0">
+     * Returns the view parameter metadata for the view id for which this
+     * <code>ViewMetadata</code> instance was created.
+     * </p>
+     * @param context the {@link FacesContext} for the current request
+     * @return a <code>Collection</code> of {@link UIViewParameter} instances
+     *  (if any) from the view associated with this <code>ViewMetadata</code>
+     *  instance
      */
     public abstract Collection<UIViewParameter> getViewParameters(FacesContext context);
-    
+
+
     /**
+     * <p class="changed_added_2_0">
+     * Utility method to extract view metadata from the provided {@link UIViewRoot}.
+     * </p>
      *
-     * <p class="changed_added_2_0"></p>
+     * @param root the {@link UIViewRoot} from which the metadata will be extracted
+     *  from
+     *
+     * @return a <code>Collection</code> of {@link UIViewParameter} instances.  If
+     *  the view has no metadata, the collection will be empty.
      */
-    public abstract Collection<UIViewParameter> getViewParameters(UIViewRoot root);
+    public static Collection<UIViewParameter> getViewParameters(UIViewRoot root) {
 
+        Collection<UIViewParameter> params;
+        UIComponent metadataFacet = root.getFacet(UIViewRoot.METADATA_FACET_NAME);
 
-    
+        if (metadataFacet == null) {
+            params = Collections.emptyList();
+        } else {
+            params = new ArrayList<UIViewParameter>();
+            List<UIComponent> children = metadataFacet.getChildren();
+            int len = children.size();
+            for (int i = 0; i < len; i++) {
+                UIComponent c = children.get(i);
+                if (c instanceof UIViewParameter) {
+                    params.add((UIViewParameter) c);
+                }
+            }
+        }
+
+        return params;
+
+    }
 
 
 }

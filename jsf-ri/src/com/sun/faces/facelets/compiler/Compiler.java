@@ -113,14 +113,23 @@ public abstract class Compiler {
     }
 
     public final FaceletHandler compile(URL src, String alias)
-            throws IOException, FaceletException, ELException, FacesException {
+    throws IOException {
         //if (!this.initialized)
         //    this.initialize();
         return this.doCompile(src, alias);
     }
 
+    public final FaceletHandler metadataCompile(URL src, String alias)
+    throws IOException {
+
+        return this.doMetadataCompile(src, alias);
+    }
+
+    protected abstract FaceletHandler doMetadataCompile(URL src, String alias)
+    throws IOException;
+
     protected abstract FaceletHandler doCompile(URL src, String alias)
-            throws IOException, FaceletException, ELException, FacesException;
+    throws IOException;
 
     public final TagDecorator createTagDecorator() {
         if (this.decorators.size() > 0) {

@@ -48,7 +48,6 @@ import javax.faces.FacesException;
 import javax.el.ELException;
 
 import com.sun.faces.util.Util;
-import com.sun.faces.application.view.ViewMetadataImpl;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 
 /**
@@ -102,11 +101,7 @@ public class MetadataHandler extends TagHandlerImpl {
                 facetComponent = panelGroup;
 
                 facetComponent.setId(UIViewRoot.METADATA_FACET_NAME);
-                if (ctx.getFacesContext().getAttributes()
-                      .get(ViewMetadataImpl.ONLY_BUILD_METADATA_FACET_KEY)
-                    != null) {
-                    ctx.setAttribute(FacetHandler.ABORT_PROCESSING_KEY, true);
-                }
+
             }
         }
     }

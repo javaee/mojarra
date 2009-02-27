@@ -80,11 +80,13 @@ public abstract class FaceletFactory {
      * @throws FacesException
      * @throws ELException
      */
-    public abstract Facelet getFacelet(String uri) throws IOException,
-            FaceletException, FacesException, ELException;
+    public abstract Facelet getFacelet(String uri) throws IOException;
     
-    public abstract Facelet getFacelet(URL url) throws IOException, FaceletException,
-            FacesException, ELException;
+    public abstract Facelet getFacelet(URL url) throws IOException;
+
+    public abstract Facelet getMetadataFacelet(String uri) throws IOException;
+
+    public abstract Facelet getMetadataFacelet(URL url) throws IOException;
     
 
     /**

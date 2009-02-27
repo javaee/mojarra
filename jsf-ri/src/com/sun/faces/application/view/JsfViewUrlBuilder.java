@@ -43,6 +43,7 @@ import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewMetadata;
 
 /**
  * @author Dan Allen
@@ -108,8 +109,7 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         boolean currentIsSameAsNew = false;
 
         pdl = viewHandler.getPageDeclarationLanguage(context, currentViewId);
-        //currentViewParams = pdl.getViewParameters(context, currentViewId);
-        currentViewParams = pdl.getViewMetadata(context, currentViewId).getViewParameters(currentRoot);
+        currentViewParams = ViewMetadata.getViewParameters(currentRoot);
         
         if (currentViewId.equals(viewId)) {
             currentIsSameAsNew = true;
@@ -118,7 +118,6 @@ public class JsfViewUrlBuilder extends UrlBuilder {
         else {
             pdl = viewHandler.getPageDeclarationLanguage(context, viewId);
             toViewParams = pdl.getViewMetadata(context, viewId).getViewParameters(context);
-            //toViewParams = pdl.getViewParameters(context, viewId);
         }
 
         if (toViewParams.isEmpty()) {

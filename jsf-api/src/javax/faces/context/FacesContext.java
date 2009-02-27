@@ -80,6 +80,7 @@ public abstract class FacesContext {
 
     @SuppressWarnings({"UnusedDeclaration"})
     private FacesContext defaultFacesContext;
+    private boolean processingEvents = true;
 
     // -------------------------------------------------------------- Properties
 
@@ -698,6 +699,29 @@ public abstract class FacesContext {
             throw new UnsupportedOperationException();
         }
 
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Allows control of wheter or not the runtime
+     * will publish events when {@link Application#publishEvent(Class, Object)} or
+     * {@link Application#publishEvent(Class, Class, Object)} is called.</p>
+     *
+     * @param processingEvents flag indicating events should be processed or not
+     */
+    public void setProcessingEvents(boolean processingEvents) {
+        this.processingEvents = processingEvents;    
+    }
+
+
+    /**
+     * <p class="chaged_added_2_0">Returns a flag indicating whether or not the
+     * runtime should publish events when asked to do so.</p>
+     * @return <code>true</code> if events should be published, otherwise
+     *  <code>false</code>
+     */
+    public boolean isProcessingEvents() {
+        return this.processingEvents;
     }
 
     // ---------------------------------------------------------- Static Methods

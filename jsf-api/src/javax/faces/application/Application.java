@@ -1481,7 +1481,8 @@ public abstract class Application {
 
 
     /**
-     * <p class="changed_added_2_0">If there are one or more listeners
+     * <p class="changed_added_2_0">If {@link javax.faces.context.FacesContext#isProcessingEvents()} is
+     * <code>true</code> and there are one or more listeners
      * for events of the type represented by
      * <code>systemEventClass</code>, call those listeners, passing
      * <code>source</code> as the source of the event.  The

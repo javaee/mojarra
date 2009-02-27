@@ -87,6 +87,8 @@ public final class DefaultFaceletFactory extends FaceletFactory {
 
     private Map facelets;
 
+    private Map metadataFacelets;
+
     private Map relativeLocations;
 
     private final ResourceResolver resolver;
@@ -106,6 +108,7 @@ public final class DefaultFaceletFactory extends FaceletFactory {
         Util.notNull("resolver", resolver);
         this.compiler = compiler;
         this.facelets = new HashMap();
+        this.metadataFacelets = new HashMap();
         this.relativeLocations = new HashMap();
         this.resolver = resolver;
         this.baseUrl = resolver.resolveUrl("/");
@@ -120,21 +123,20 @@ public final class DefaultFaceletFactory extends FaceletFactory {
       *
       * @see com.sun.facelets.FaceletFactory#getFacelet(java.lang.String)
       */
-    public Facelet getFacelet(String uri) throws IOException, FaceletException,
-                                                 FacesException, ELException {
-        URL url = (URL) this.relativeLocations.get(uri);
-        if (url == null) {
-            url = this.resolveURL(this.baseUrl, uri);
-            if (url != null) {
-                Map newLoc = new HashMap(this.relativeLocations);
-                newLoc.put(uri, url);
-                this.relativeLocations = newLoc;
-            } else {
-                throw new IOException("'" + uri + "' not found.");
-            }
-        }
-        return this.getFacelet(url);
+    public Facelet getFacelet(String uri) throws IOException {
+
+        return this.getFacelet(resolveURL(uri));
+
     }
+
+
+
+    public Facelet getMetadataFacelet(String uri) throws IOException {
+
+        return this.getMetadataFacelet(resolveURL(uri));
+
+    }
+
 
     /**
      * Resolves a path based on the passed URL. If the path starts with '/', then
@@ -193,6 +195,22 @@ public final class DefaultFaceletFactory extends FaceletFactory {
         return f;
     }
 
+    public Facelet getMetadataFacelet(URL url) throws IOException {
+
+        Util.notNull("url", url);
+        String key = url.toString();
+        DefaultFacelet f = (DefaultFacelet) this.metadataFacelets.get(key);
+        if (f == null || this.needsToBeRefreshed(f)) {
+            f = this.createMetadataFacelet(url);
+            if (this.refreshPeriod != 0) {
+                Map newLoc = new HashMap(this.metadataFacelets);
+                newLoc.put(key, f);
+                this.metadataFacelets = newLoc;
+            }
+        }
+        return f;
+    }
+
     /**
      * Template method for determining if the Facelet needs to be refreshed.
      *
@@ -234,6 +252,24 @@ public final class DefaultFaceletFactory extends FaceletFactory {
         return false;
     }
 
+    private URL resolveURL(String uri) throws IOException {
+
+        URL url = (URL) this.relativeLocations.get(uri);
+        if (url == null) {
+            url = this.resolveURL(this.baseUrl, uri);
+            if (url != null) {
+                Map newLoc = new HashMap(this.relativeLocations);
+                newLoc.put(uri, url);
+                this.relativeLocations = newLoc;
+            } else {
+                throw new IOException("'" + uri + "' not found.");
+            }
+        }
+        return url;
+
+    }
+
+
     /**
      * Uses the internal Compiler reference to build a Facelet given the passed
      * URL.
@@ -254,7 +290,7 @@ public final class DefaultFaceletFactory extends FaceletFactory {
         if (log.isLoggable(Level.FINE)) {
             log.fine("Creating Facelet for: " + url);
         }
-        String alias = "/"
+        String alias = '/'
                        + url.getFile().replaceFirst(this.baseUrl.getFile(), "");
         try {
             FaceletHandler h = this.compiler.compile(url, alias);
@@ -267,6 +303,27 @@ public final class DefaultFaceletFactory extends FaceletFactory {
                                             + " not found at: "
                                             + url.toExternalForm());
         }
+    }
+
+    private DefaultFacelet createMetadataFacelet(URL url) throws IOException {
+
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Creating Metadata Facelet for: " + url);
+        }
+        String alias = '/'
+                       + url.getFile().replaceFirst(this.baseUrl.getFile(), "");
+        try {
+            FaceletHandler h = this.compiler.metadataCompile(url, alias);
+            DefaultFacelet f = new DefaultFacelet(this, this.compiler
+                  .createExpressionFactory(), url, alias, h);
+            return f;
+        } catch (FileNotFoundException fnfe) {
+            throw new FileNotFoundException("Facelet "
+                                            + alias
+                                            + " not found at: "
+                                            + url.toExternalForm());
+        }
+
     }
 
     /**
