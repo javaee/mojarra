@@ -236,6 +236,11 @@
             <fileset dir="${basedir}/web/test"
                      excludes="*.jsp,*.xml,*.gif,*html,**/WEB-INF/**"/>
         </copy>
+
+        <mkdir dir="${basedir}/build/target/test" />
+        <unjar src="${basedir}/build/test.war" overwrite="true"
+               dest="${basedir}/build/target/test" />
+
     </target>
 
     <target name="execute.cactus.tests" depends="prepare.test.webapp">
