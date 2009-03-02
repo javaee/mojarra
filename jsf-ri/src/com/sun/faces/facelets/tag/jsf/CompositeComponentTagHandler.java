@@ -93,7 +93,7 @@ import javax.faces.application.ViewHandler;
 /**
  * RELEASE_PENDING (rlubke,driscoll) document
  */
-public class CompositeComponentTagHandler extends ComponentHandler {
+public class CompositeComponentTagHandler extends ComponentHandlerImpl {
 
     private static final Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
     

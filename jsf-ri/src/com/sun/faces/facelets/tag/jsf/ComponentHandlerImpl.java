@@ -88,7 +88,7 @@ import javax.faces.event.InitialStateEvent;
  * @author Jacob Hookom
  * @version $Id$
  */
-public class ComponentHandler extends MetaTagHandlerImpl {
+public class ComponentHandlerImpl extends MetaTagHandlerImpl {
 
     private final static Logger log = FacesLogger.FACELETS_COMPONENT.getLogger();
     
@@ -100,7 +100,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
 
     private final String rendererType;
 
-    public ComponentHandler(ComponentConfig config) {
+    public ComponentHandlerImpl(ComponentConfig config) {
         super(config);
         this.componentType = config.getComponentType();
         this.rendererType = config.getRendererType();

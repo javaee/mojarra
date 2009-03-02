@@ -80,7 +80,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentHandler;
+import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;

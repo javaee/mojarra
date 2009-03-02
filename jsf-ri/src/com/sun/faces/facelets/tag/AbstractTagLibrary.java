@@ -70,7 +70,7 @@ import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.jsf.BehaviorConfig;
 import com.sun.faces.facelets.tag.jsf.BehaviorHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandler;
+import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ConvertHandler;
 import com.sun.faces.facelets.tag.jsf.ConverterConfig;
 import com.sun.faces.facelets.tag.jsf.ValidateHandler;
@@ -276,7 +276,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
                 ELException {
             ComponentConfig ccfg = new ComponentConfigWrapper(cfg,
                     this.componentType, this.renderType);
-            return new ComponentHandler(ccfg);
+            return new ComponentHandlerImpl(ccfg);
         }
     }
 
@@ -496,10 +496,10 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     }
 
     /**
-     * Add a ComponentHandler with the specified componentType and rendererType,
+     * Add a ComponentHandlerImpl with the specified componentType and rendererType,
      * aliased by the tag name.
      * 
-     * @see ComponentHandler
+     * @see ComponentHandlerImpl
      * @see javax.faces.application.Application#createComponent(java.lang.String)
      * @param name
      *            name to use, "foo" would be &lt;my:foo />
@@ -515,11 +515,11 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     }
 
     /**
-     * Add a ComponentHandler with the specified componentType and rendererType,
+     * Add a ComponentHandlerImpl with the specified componentType and rendererType,
      * aliased by the tag name. The Facelet will be compiled with the specified
      * HandlerType (which must extend AbstractComponentHandler).
      * 
-     * @see ComponentHandler
+     * @see ComponentHandlerImpl
      * @param name
      *            name to use, "foo" would be &lt;my:foo />
      * @param componentType
