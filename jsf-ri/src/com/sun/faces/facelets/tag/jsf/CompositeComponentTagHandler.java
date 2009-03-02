@@ -61,7 +61,6 @@ import java.util.logging.Logger;
 
 import javax.el.ELException;
 import javax.el.Expression;
-import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.faces.FacesException;
@@ -70,16 +69,13 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.application.Resource;
-import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
-import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 
 import com.sun.faces.facelets.Facelet;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
@@ -89,6 +85,7 @@ import com.sun.faces.util.FacesLogger;
 
 import javax.el.MethodExpression;
 import javax.faces.application.ViewHandler;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 
 /**
  * RELEASE_PENDING (rlubke,driscoll) document

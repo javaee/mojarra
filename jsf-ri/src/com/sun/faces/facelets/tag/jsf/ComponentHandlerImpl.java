@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Level;

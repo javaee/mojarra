@@ -69,7 +69,7 @@ import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 import com.sun.faces.facelets.tag.jsf.BehaviorConfig;
 import com.sun.faces.facelets.tag.jsf.BehaviorHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ConvertHandler;
 import com.sun.faces.facelets.tag.jsf.ConverterConfig;

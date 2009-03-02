@@ -52,7 +52,7 @@
 package com.sun.faces.facelets.tag.jsf.html;
 
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 
 /**

@@ -213,6 +213,13 @@ public final class FactoryFinder {
     public final static String PAGE_DECLARATION_LANGUAGE_FACTORY =
          "javax.faces.webapp.pdl.PageDeclarationLanguageFactory";
 
+    /**
+     * <p>The property name for the
+     * {@link javax.faces.webapp.pdl.tag.TagHandlerHelper} class name.</p>
+     */
+    public final static String TAG_HANDLER_HELPER_FACTORY =
+         "javax.faces.webapp.pdl.tag.TagHandlerHelperFactory";
+
     // ------------------------------------------------------- Static Variables
 
     private static final FactoryManagerCache FACTORIES_CACHE =

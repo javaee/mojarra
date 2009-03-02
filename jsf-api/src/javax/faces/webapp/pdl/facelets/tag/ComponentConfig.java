@@ -49,35 +49,32 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.composite;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
-import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
+/**
+ * <p class="changed_added_2_0">Passed to the constructor of {@link
+ * ComponentHandler}.  Represents a component-type/renderer-type
+ * pair.</p>
+ *
+ * @since 2.0
+ * 
+ */
+public interface ComponentConfig extends TagConfig {
+    /**
+     * <p class="changed_added_2_0">ComponentType to pass to the
+     * <code>Application</code>. Cannot be <code>null</code>.
+     * 
+     * @since 2.0
+     */
+    public String getComponentType();
 
-public class InsertFacetHandler extends ComponentHandlerImpl {
-
-    private TagAttribute name = null;
-
-    public InsertFacetHandler(ComponentConfig config) {
-        super(config);
-        this.name = this.getRequiredAttribute("name");
-    }
-
-    @Override
-    protected void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
-        ValueExpression ve = null;
-        String strValue = null;
-        // Get the value of required the name propertyDescriptor
-        ve = name.getValueExpression(ctx, String.class);
-        strValue = (String) ve.getValue(ctx);
-        
-        c.getAttributes().put(UIComponent.FACETS_KEY, strValue);
-        
-    }
-
+    /**
+     * <p class="changed_added_2_0">RendererType to set on created
+     * <code>UIComponent</code> instances.
+     *
+     * @since 2.0
+     */
+    public String getRendererType();
 }

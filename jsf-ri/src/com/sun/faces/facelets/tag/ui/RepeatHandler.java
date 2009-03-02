@@ -63,8 +63,8 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.Metadata;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 
 public class RepeatHandler extends ComponentHandlerImpl {
 

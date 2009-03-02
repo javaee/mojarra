@@ -58,7 +58,7 @@ import javax.faces.component.UIComponent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.tag.TextHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 
 /**

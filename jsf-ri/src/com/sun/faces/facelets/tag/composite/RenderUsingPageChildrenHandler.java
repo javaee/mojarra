@@ -51,8 +51,8 @@
 
 package com.sun.faces.facelets.tag.composite;
 
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 
 
 public class RenderUsingPageChildrenHandler extends ComponentHandlerImpl {
