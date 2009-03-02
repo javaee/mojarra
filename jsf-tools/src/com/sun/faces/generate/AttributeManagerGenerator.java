@@ -40,7 +40,6 @@
 
 package com.sun.faces.generate;
 
-import com.sun.faces.config.beans.AttributeBean;
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
@@ -50,10 +49,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Iterator;
 
 /**
  * PENDING
@@ -254,27 +251,28 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                         }
                         writer.write(aBean.getPropertyName());
                         writer.write("\"");
-                        if(null != aBean.getBehaviors() && !aBean.getBehaviors().isEmpty()){
-                        	for (String behavior : aBean.getBehaviors()) {
+                        if (aBean.getBehaviors() != null
+                             && !aBean.getBehaviors().isEmpty()) {
+                            for (String behavior : aBean.getBehaviors()) {
                                 writer.write(",\"");
-        						String behaviorName;
-								if (0 == behavior.length()) {
-        							behaviorName = aBean.getPropertyName();
-        							// Strip leading "on" preffix.
-        							if (behaviorName.length() > 2
-        									&& behaviorName.startsWith("on")) {
-        								StringBuilder buffer = new StringBuilder(
-        										behaviorName.substring(2, 3)
-        												.toLowerCase());
-        								buffer.append(behaviorName.substring(3));
-        								behaviorName = buffer.toString();
-        							}
-        						} else {
-        							behaviorName = behavior;
-        						}
-        						writer.write(behaviorName);
-		                        writer.write("\"");
-							}
+                                String behaviorName;
+                                if (0 == behavior.length()) {
+                                    behaviorName = aBean.getPropertyName();
+                                    // Strip leading "on" preffix.
+                                    if (behaviorName.length() > 2
+                                        && behaviorName.startsWith("on")) {
+                                        StringBuilder buffer = new StringBuilder(
+                                              behaviorName.substring(2, 3)
+                                                    .toLowerCase());
+                                        buffer.append(behaviorName.substring(3));
+                                        behaviorName = buffer.toString();
+                                    }
+                                } else {
+                                    behaviorName = behavior;
+                                }
+                                writer.write(behaviorName);
+                                writer.write("\"");
+                            }
                         }
                         writer.write(")\n");
                         attributeWritten = true;
@@ -285,10 +283,11 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                     }
 
                 }
-				if (attributeWritten) {
-					writer.outdent();
-					writer.fwrite("))\n");
-				}            }
+                if (attributeWritten) {
+                    writer.outdent();
+                    writer.fwrite("))\n");
+                }
+            }
         }
         writer.fwrite(".fix();\n");
 
