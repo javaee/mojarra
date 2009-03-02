@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
@@ -34,25 +36,47 @@
  holder.
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-<h:head>
-    <title>GuessNumber 2.0</title>
-</h:head>
-<h:body bgcolor="white">
-    <h:form id="responseForm">
-        <img src="#{resource['images/wave.med.gif']}" alt="Hello!"/>
+<!-- ========== UICommand Properties ======================================= -->
 
-        <h2>
-            #{userNumberBean.response}
-        </h2>
-        <p><h:commandButton id="back" value="Back" action="greeting?redirect=true"/></p>
-        <p><h:link outcome="/greeting.xhtml" fragment="about" value="Read"/>#{' '}about how this game leverages features in JSF 2.</p>
 
-    </h:form>
-</h:body>
-</html>
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+<root xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="uioutput-props.xml" xpointer="xpointer(/root/*)"/>
+    <property>
+        <description>
+          The logical outcome used to resolve a navigation case.
+        </description>
+        <display-name>Outcome</display-name>
+        <icon></icon>
+        <property-name>outcome</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
+    </property>
+    <property>
+        <description>
+          Whether to include page parameters in the target URI.
+        </description>
+        <display-name>Include Page Parameters</display-name>
+        <icon></icon>
+        <property-name>includeViewParams</property-name>
+        <property-class>java.lang.Boolean</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
+    </property>
+   
+</root>
+

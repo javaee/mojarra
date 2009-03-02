@@ -741,4 +741,18 @@
         </navigation-case>
     </navigation-rule>
 
+    <navigation-rule>
+        <from-view-id>/standard/outcometarget01.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>nav1</from-outcome>
+            <to-view-id>/standard/nav1.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>nav2</from-outcome>
+            <to-view-id>/standard/nav2.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+
+
 </faces-config>

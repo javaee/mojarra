@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
@@ -34,25 +36,61 @@
  holder.
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-<h:head>
-    <title>GuessNumber 2.0</title>
-</h:head>
-<h:body bgcolor="white">
-    <h:form id="responseForm">
-        <img src="#{resource['images/wave.med.gif']}" alt="Hello!"/>
 
-        <h2>
-            #{userNumberBean.response}
-        </h2>
-        <p><h:commandButton id="back" value="Back" action="greeting?redirect=true"/></p>
-        <p><h:link outcome="/greeting.xhtml" fragment="about" value="Read"/>#{' '}about how this game leverages features in JSF 2.</p>
+<!-- ========== Command+Button Properties ================================== -->
 
-    </h:form>
-</h:body>
-</html>
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+<root>
+    <property>
+      <description>
+        Alternate textual description of the
+        element rendered by this component.
+      </description>
+      <display-name>Alternate Text</display-name>
+      <icon></icon>
+      <property-name>alt</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+    <property>
+      <description><![CDATA[<p>
+        Absolute or relative URL of the
+        image to be displayed for this
+        button.  If specified, this
+        "input" element will be of type
+        "image".  Otherwise, it will be
+        of the type specified by the
+        "type" property with a label
+        specified by the "value"
+        property.  <span
+        class="changed_added_2_0">Note
+        that if the value of this
+        attribute starts with "/", the
+        rendered value for this
+        attribute will be prefixed with
+        the context-root for this
+        application.</span>
+      </p>]]></description>
+      <display-name>Image URL</display-name>
+      <icon></icon>
+      <property-name>image</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+
+</root>
+

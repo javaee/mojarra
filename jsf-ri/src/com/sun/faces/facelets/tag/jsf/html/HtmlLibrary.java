@@ -67,6 +67,9 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
         this.addHtmlComponent("body", "javax.faces.Output",
                 "javax.faces.Body");
 
+        this.addHtmlComponent("button", "javax.faces.HtmlOutcomeTargetButton",
+                "javax.faces.Button");
+
         this.addHtmlComponent("column", "javax.faces.Column", null);
 
         this.addHtmlComponent("commandButton", "javax.faces.HtmlCommandButton",
@@ -98,6 +101,9 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
 
         this.addHtmlComponent("inputTextarea", "javax.faces.HtmlInputTextarea",
                 "javax.faces.Textarea");
+
+        this.addHtmlComponent("link", "javax.faces.HtmlOutcomeTargetLink",
+                "javax.faces.Link");
 
         this.addHtmlComponent("message", "javax.faces.HtmlMessage",
                 "javax.faces.Message");

@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
@@ -34,25 +36,36 @@
  holder.
 -->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
-<h:head>
-    <title>GuessNumber 2.0</title>
-</h:head>
-<h:body bgcolor="white">
-    <h:form id="responseForm">
-        <img src="#{resource['images/wave.med.gif']}" alt="Hello!"/>
 
-        <h2>
-            #{userNumberBean.response}
-        </h2>
-        <p><h:commandButton id="back" value="Back" action="greeting?redirect=true"/></p>
-        <p><h:link outcome="/greeting.xhtml" fragment="about" value="Read"/>#{' '}about how this game leverages features in JSF 2.</p>
+<!-- ========== Link Properties ============================================ -->
 
-    </h:form>
-</h:body>
-</html>
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+<root>
+    <property>
+        <description>
+            RELEASE_PENDING (rogerk) review docs
+          The identifier of the page fragment which should
+          be brought into focus when the target page is
+          rendered. The value of this attribute is appended
+          to the end of target URL following a hash (#) mark.
+          This notation is part the standard URL syntax.
+        </description>
+        <display-name>Fragment Identifier</display-name>
+        <icon></icon>
+        <property-name>fragment</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+</root>

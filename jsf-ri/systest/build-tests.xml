@@ -938,7 +938,8 @@
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/SelectOneManyEnumTestCase.class,
                                    com/sun/faces/systest/SelectManyCollectionTestCase.class,
-                                   com/sun/faces/systest/DataTableTestCase.class"/>
+                                   com/sun/faces/systest/DataTableTestCase.class,
+                                   com/sun/faces/systest/TestOutputTargets.class"/>
             </tests>
         </jsf.junit>  
     </target>

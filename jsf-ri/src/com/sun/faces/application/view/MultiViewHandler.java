@@ -660,12 +660,13 @@ public class MultiViewHandler extends ViewHandler {
     public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
         // QUESTION should encodeParams dually be a flag?
         String encoding = null;
-		if (context.getResponseWriter() != null) {
-			encoding = Util.isPortletRequest(context) ? null : context.getResponseWriter().getCharacterEncoding();
-		}
-		else {
-			encoding = context.getExternalContext().getResponseCharacterEncoding();
-		}
+        if (context.getResponseWriter() != null) {
+            encoding = Util.isPortletRequest(context)
+                       ? null
+                       : context.getResponseWriter().getCharacterEncoding();
+        } else {
+            encoding = context.getExternalContext().getResponseCharacterEncoding();
+        }
 
         JsfViewUrlBuilder builder = new JsfViewUrlBuilder(context, viewId, includeViewParams, encoding);
 
