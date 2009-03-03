@@ -751,7 +751,7 @@ public class UIViewRoot extends UIComponentBase {
                     UIComponent compositeParent = null;
                     try {
                         if (!UIComponent.isCompositeComponent(source)) {
-                            compositeParent = getCompositeComponentParent(source);
+                            compositeParent = UIComponent.getCompositeComponentParent(source);
                         }
                         if (compositeParent != null) {
                             pushComponentToEL(context, compositeParent);
@@ -826,17 +826,6 @@ public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
-
-    private UIComponent getCompositeComponentParent(UIComponent c) {
-        UIComponent parent = c.getParent();
-        while (parent != null) {
-            if (UIComponent.isCompositeComponent(parent)) {
-                return parent;
-            }
-            parent = parent.getParent();
-        }
-        return null;
-    }
 
     private void initState() {
         skipPhase = false;

@@ -1638,6 +1638,38 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
+     * <p>
+     * Finds the nearest composite component parent of the specified component.
+     * </p>
+     *
+     * @param component the component from which to start the search from
+     *
+     * @return if <code>component</code> is <code>null</code>, return
+     *  <code>null</code>, otherwise search the component's parent hierachy
+     *  for the nearest parent composite component.  If no parent composite
+     *  component is found, return <code>null</code>
+     *
+     * @since 2.0
+     */
+    public static UIComponent getCompositeComponentParent(UIComponent component) {
+
+        if (component == null) {
+            return null;
+        } else {
+            UIComponent parent = component.getParent();
+            while (parent != null) {
+                if (UIComponent.isCompositeComponent(parent)) {
+                    return parent;
+                }
+                parent = parent.getParent();
+            }
+            return null;
+        }
+        
+    }
+
+
+    /**
      * <p class="changed_added_2_0">Return the <code>UIComponent</code>
      * instance that is currently processing.  This is equivalent to
      * evaluating the EL expression "<code>#{component}</code>" and

@@ -262,10 +262,8 @@ public class MultiViewHandler extends ViewHandler {
         if (null == componentBeanInfo) {
             return;
         }
+
         PropertyDescriptor attributes[] = componentBeanInfo.getPropertyDescriptors();
-        String targets = null, attrName = null, strValue = null, 
-                methodSignature = null;
-        UIComponent target = null;
         ExpressionFactory expressionFactory = null;
         ValueExpression valueExpression = null;
         MethodExpression toApply = null;
@@ -281,16 +279,17 @@ public class MultiViewHandler extends ViewHandler {
             }
             // If the current attribute representes a MethodExpression
             if (null != (valueExpression = (ValueExpression) cur.getValue("method-signature"))) {
-                methodSignature = (String) valueExpression.getValue(context.getELContext());
+                String methodSignature = (String) valueExpression.getValue(context.getELContext());
                 if (null != methodSignature) {
                 
                     // This is the name of the attribute on the top level component,
                     // and on the inner component.
+                    String targets = null;
                     if (null != (valueExpression = (ValueExpression) cur.getValue("targets"))) {
                         targets = (String) valueExpression.getValue(context.getELContext());
                     }
                     
-                    if (null == targets) {
+                    if (targets == null) {
                         targets = cur.getName();
                     }
                     
@@ -306,8 +305,8 @@ public class MultiViewHandler extends ViewHandler {
                     
                     for (String curTarget : targetIds) {
                     
-                        attrName = cur.getName();
-
+                        String attrName = cur.getName();
+                        UIComponent target = topLevelComponent.findComponent(curTarget);
                         // Find the attribute on the top level component
                         valueExpression = (ValueExpression) topLevelComponent.getAttributes().
                                 get(attrName);
@@ -397,7 +396,7 @@ public class MultiViewHandler extends ViewHandler {
                             // Get expectedReturnType
                             int j, i = methodSignature.indexOf(" ");
                             if (-1 != i) {
-                                strValue = methodSignature.substring(0, i);
+                                String strValue = methodSignature.substring(0, i);
                                 try {
                                     expectedReturnType = Util.getTypeFromString(strValue);
                                 } catch (ClassNotFoundException cnfe) {
@@ -414,7 +413,7 @@ public class MultiViewHandler extends ViewHandler {
                             if (-1 != i) {
                                 j = methodSignature.indexOf(")", i+1);
                                 if (-1 != j) {
-                                    strValue = methodSignature.substring(i + 1, j);
+                                    String strValue = methodSignature.substring(i + 1, j);
                                     if (0 < strValue.length()) {
                                         String [] params = strValue.split(",");
                                         expectedParameters = new Class[params.length];
@@ -448,7 +447,13 @@ public class MultiViewHandler extends ViewHandler {
                             toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                     valueExpression.getExpressionString(),
                                     expectedReturnType, expectedParameters);
-                            topLevelComponent.getAttributes().put(attrName, toApply);
+
+                            // get the nearest composite component parent to
+                            // the target component and push the expression
+                            // there
+                            UIComponent compositeParent =
+                                  UIComponent.getCompositeComponentParent(target);
+                            compositeParent.getAttributes().put(attrName, toApply);
                             
 
                         }

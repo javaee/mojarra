@@ -252,8 +252,8 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
                throws AbortProcessingException {
 
              UIComponent compositeComponent = event.getComponent();
-             UIComponent compositeParent = getCompositeComponentParent(
-                   compositeComponent);
+             UIComponent compositeParent =
+                   UIComponent.getCompositeComponentParent(compositeComponent);
              if (compositeParent != null) {
                  for (Map.Entry<String, Object> entry : compositeComponent
                        .getAttributes().entrySet()) {
@@ -294,23 +294,6 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
 
 
          }
-
-
-         // ----------------------------------------------------- Private Methods
-
-
-        private UIComponent getCompositeComponentParent(UIComponent c) {
-
-            UIComponent parent = c.getParent();
-            while (parent != null) {
-                if (UIComponent.isCompositeComponent(parent)) {
-                    return parent;
-                }
-                parent = parent.getParent();
-            }
-            return null;
-
-        }
 
     }
     
