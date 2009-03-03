@@ -362,7 +362,7 @@ public final class ComponentSupport {
                 if (!(existing instanceof UIPanel)) {
                     // move existing component under a panel group
                     UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
-                    panelGroup.setId(ctx.getFacesContext().getViewRoot().createUniqueId());
+                    panelGroup.setId(getViewRoot(ctx.getFacesContext(), parent).createUniqueId());
                     panelGroup.getAttributes().put(ComponentSupport.IMPLICIT_PANEL, true);
                     panelGroup.getChildren().add(existing);
                     // the panel group becomes the facet
@@ -383,5 +383,32 @@ public final class ComponentSupport {
 
     public final static String getFacetName(UIComponent parent) {
         return (String) parent.getAttributes().get(FacetHandler.KEY);
+    }
+
+
+    // --------------------------------------------------------- private classes
+
+
+    private static UIViewRoot getViewRoot(FacesContext ctx, UIComponent parent) {
+
+        if (parent instanceof UIViewRoot) {
+            return (UIViewRoot) parent;
+        }
+        UIViewRoot root = ctx.getViewRoot();
+        if (root != null) {
+            return root;
+        }
+        UIComponent c = parent.getParent();
+        while (c != null) {
+            if (c instanceof UIViewRoot) {
+                root = (UIViewRoot) c;
+                break;
+            } else {
+                c = c.getParent();
+            }
+        }
+
+        return root;
+
     }
 }

@@ -47,6 +47,7 @@ import javax.faces.webapp.pdl.ViewMetadata;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIViewParameter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.FacesContextWrapper;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.FacesException;
 
@@ -90,10 +91,9 @@ public class ViewMetadataImpl extends ViewMetadata {
      */
     @Override
     public UIViewRoot createMetadataView(FacesContext context) {
+
         UIViewRoot result = null;
 
-
-        // things get a little goofy here as we're calling the PDL directly
         try {
             context.setProcessingEvents(false);
             if (faceletFactory == null) {
@@ -113,6 +113,7 @@ public class ViewMetadataImpl extends ViewMetadata {
 
 
         return result;
+        
     }
 
     
