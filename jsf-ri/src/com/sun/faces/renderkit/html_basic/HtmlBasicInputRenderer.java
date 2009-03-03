@@ -42,6 +42,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import javax.el.ValueExpression;
@@ -49,6 +51,7 @@ import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.ValueHolder;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
@@ -208,6 +211,16 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
 
         return null;
 
+    }
+
+    // Returns the Behaviors map, but only if it contains some entry other
+    // than those handled by renderOnchange().  This helps us optimize
+    // renderPassThruAttributes() in the very common case where the
+    // button only contains an "valueChange" (or "change") Behavior.  In that
+    // we pass a null Behaviors map into renderPassThruAttributes(),
+    // which allows us to take a more optimized code path.
+    protected static Map<String, List<Behavior>> getNonOnChangeBehaviors(UIComponent component) {
+        return getPassThruBehaviors(component, "change", "valueChange");
     }
 
     // --------------------------------------------------------- Private Methods

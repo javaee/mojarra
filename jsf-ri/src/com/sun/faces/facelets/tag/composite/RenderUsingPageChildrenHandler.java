@@ -52,10 +52,10 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.jsf.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandler;
+import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 
 
-public class RenderUsingPageChildrenHandler extends ComponentHandler {
+public class RenderUsingPageChildrenHandler extends ComponentHandlerImpl {
 
     public RenderUsingPageChildrenHandler(ComponentConfig config) {
         super(config);

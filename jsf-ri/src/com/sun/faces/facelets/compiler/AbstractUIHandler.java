@@ -56,26 +56,15 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.TextHandler;
-import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 public abstract class AbstractUIHandler implements FaceletHandler, TextHandler {
 
     public void addComponent(FaceletContext ctx,
                              UIComponent parent,
                              UIComponent c) {
-        // possible facet scoped
-        String facetName = this.getFacetName(ctx, parent);
         c.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
-        if (facetName == null) {
-            parent.getChildren().add(c);
-        } else {
-            parent.getFacets().put(facetName, c);
-        }
-    }
-
-    protected final String getFacetName(FaceletContext ctx,
-                                        UIComponent parent) {
-        return (String) parent.getAttributes().get(FacetHandler.KEY);
+	ComponentSupport.addComponent(ctx, parent, c);
     }
 
 }

@@ -202,8 +202,19 @@
         <phase-listener>com.sun.faces.context.flash.FlashPhaseListener</phase-listener>
     </lifecycle>
 
+  <!-- Configure Behaviors -->
+
+  <behavior>
+    <behavior-id>javax.faces.behavior.AjaxBehavior</behavior-id>
+    <behavior-class>javax.faces.component.behavior.AjaxBehavior</behavior-class>
+  </behavior>
+
   <!-- Configure Standard Validators -->
 
+  <validator>
+      <validator-id>javax.faces.Bean</validator-id>
+      <validator-class>javax.faces.validator.BeanValidator</validator-class>
+  </validator>
   <validator>
     <validator-id>javax.faces.DoubleRange</validator-id>
     <validator-class>
@@ -221,6 +232,10 @@
   <validator>
       <validator-id>javax.faces.RegularExpression</validator-id>
       <validator-class>javax.faces.validator.RegexValidator</validator-class>
+  </validator>
+  <validator>
+      <validator-id>javax.faces.Required</validator-id>
+      <validator-class>javax.faces.validator.RequiredValidator</validator-class>
   </validator>
 
   <!-- Add our implementation specific Validators -->
@@ -270,5 +285,9 @@
             <renderer-type>facelets.ui.Repeat</renderer-type>
             <renderer-class>com.sun.faces.facelets.component.RepeatRenderer</renderer-class>
         </renderer>
+        <behavior-renderer>
+            <behavior-renderer-type>javax.faces.behavior.AjaxBehavior</behavior-renderer-type>
+            <behavior-renderer-class>com.sun.faces.renderkit.html_basic.AjaxBehaviorRenderer</behavior-renderer-class>
+        </behavior-renderer>
     </render-kit>
 </faces-config>

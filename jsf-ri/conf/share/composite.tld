@@ -314,6 +314,105 @@ apply.</p>
             <code>&lt;composite:implementation&gt;</code> element in the
             same PDL file.  </p>
 
+           <p><b>Nesting of composite components</b></p>
+
+           <p>The implementation must support nesting of composite
+           components.  Specifically, it must be possible for the
+           <code>&lt;composite:implementation&gt;</code> section of a
+           composite component to act as the <em>using page</em> for
+           another composite component.  When a composite component
+           exposes a behavioral interface to the <em>using page</em>,
+           such as a <code>&lt;composite:actionSource&gt;</code>,
+           <code>&lt;composite:editableValueHolder&gt;</code>,
+           <code>&lt;composite:valueHolder&gt;</code> or other
+           behavioral interface, it must be possible to
+           &#8220;propogate&#8221; the exposure of such an interface in
+           the case of a nested composite component.  The composite
+           component author must ensure that the value of the
+           <code>name</code> attributes exactly match at all levels of
+           the nesting to enable this exposure to work.  The
+           implementation is not required to support
+           &#8220;re-mapping&#8221; of names in a nested composite
+           component.</p>
+
+           <p>For example, consider this nested composite component.</p>
+
+           <p>Using page</p>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;ez:actionSourceOuter&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;f:actionListener <span class="kw3">for</span>=<span class="st0">&quot;button1&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/ez:actionSourceOuter&gt;</span> </div></li></ol></div></div>
+
+<p>actionSourceOuter.xhtml: Outer composite component</p>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;button1&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1"><span class="sc2">&lt;composite:implementation&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;ez:actionSourceInner /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:implementation&gt;</span> </div></li></ol></div></div>
+
+<p>actionSourceInner.xhtml: the composite component used within a
+composite component.</p>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;button1&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1"><span class="sc2">&lt;composite:implementation&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;h:commandButton <span class="kw3">id</span>=<span class="st0">&quot;button1&quot;</span> <span class="kw3">value</span>=<span class="st0">&quot;the real button&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:implementation&gt;</span> </div></li></ol></div></div>
+
+<p>The <code>id</code> of the <code>&lt;h:commandButton&gt;</code> on
+line 6 of actionSourceInner.xhtml must match the <code>name</code> on
+line 2 of that file (this is a standard requirement for all composite
+components, nested or not).  That <code>id</code> must also match the
+<code>name</code> on line 2 of actionSourceOuter.xhtml, and the
+<code>for</code> on line 2 of the using page.</p>
+
+<p>The implementation must support any level of nesting as long as the
+<code>for</code>, <code>name</code>, and <code>id</code> values match
+up.  Furthermore, the <code>targets</code> attribute is also valid for
+use in this nested fashion.</p>
+
+<p><b>Naming containers within composite components</b></p>
+
+<p>Composite components are themselves naming containers so that any
+possible id conflicts between inner components and components in the
+using page are avoided.  However, special care must be taken when using
+naming containers in the <code>&lt;composite:implementation&gt;</code>
+section.  In such cases the value of the &#8220;name&#8221; attribute,
+or the values of the &#8220;targets&#8221; attribute must be used with a
+clientId relative to the <em>top level component</em> to expose any
+attached object targets to the using page.  For example:</p>
+
+           <p>Using page</p>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;ez:loginButton&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;f:actionListener <span class="kw3">for</span>=<span class="st0">&quot;button&quot;</span> <span class="kw3">binding</span>=<span class="st0">&quot;#{foo.actionListener}&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/ez:loginButton&gt;</span> </div></li></ol></div></div>
+
+
+<p>loginButton.xhtml</p>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;button&quot;</span> targets=<span class="st0">&quot;form:button&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1"><span class="sc2">&lt;composite:implementation&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;h:form <span class="kw3">id</span>=<span class="st0">&quot;form&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2">&lt;h:commandButton <span class="kw3">id</span>=<span class="st0">&quot;button&quot;</span> <span class="kw3">value</span>=<span class="st0">&quot;Submit&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; <span class="sc2"><span class="kw2">&lt;</span>/h:form&gt;</span></div></li>
+<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/composite:implementation&gt;</span> </div></li></ol></div></div>
+
+<p>Because the button on line 8 resides within a form, it must be
+referred to using a client id, relative to the <em>top level
+component</em>, in the "targets" attribute on line 2.  Using a relative
+clientId is required due to the semantics of
+<code>UIComponent.findComponent()</code>.</p>
+
 </div>
 ]]>
         </description>
@@ -549,7 +648,8 @@ its value is derived as described in
 
 <p>If this element has a <code>method-signature</code> attribute, the
 value of the <code>targets</code> attribute must be interpreted as a
-space (not tab) separated list of component ids of components within the
+space (not tab) separated list of client ids (relative to the <em>top
+level component</em>) of components within the
 <code>&lt;composite:implementation&gt;</code> section.  Space is used as
 the delimiter for compatibility with the IDREFS and NMTOKENS data types
 from the XML Schema.  Each entry in the list must be interpreted as the
@@ -1114,10 +1214,10 @@ above, the revised <em>PDL page</em> is:</p>
 <p>In this case, the "targets" attribute on the
 <code>&lt;composite:valueHolder&gt;</code> element, on line 2 above,
 replaces the "name" attribute in the previous example.  "targets" is a
-list of ids of components within the
-<code>&lt;composite:implementation&gt;</code> section.  In this case,
-"targets" refers to the <code>&lt;h:inputText&gt;</code> components on
-lines 6 and 7 above.</p>
+list of ids of client ids (relative to the <em>top level component</em>)
+within the <code>&lt;composite:implementation&gt;</code> section.  In
+this case, "targets" refers to the <code>&lt;h:inputText&gt;</code>
+components on lines 6 and 7 above.</p>
 
 <p>Please see <code>&lt;<a
 href="interface.html">composite:interface</a>&gt;</code> for a usage
@@ -1136,19 +1236,21 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be the component id of
-                a component within the
-                <code>&lt;composite:implementation&gt;</code> section.
-                If not present, the "targets" attribute must be
-                present.  If both "name" and "targets" are present, "targets"
-                takes precedence.</p></div>]]>
+<p>
+  The value of this attribute maps back to the "for" attribute on an attachable object
+  nested within a composite component.   If the "targets" attribute is not specified,
+  this value also represents the component ID of the target component within the
+  that the <code>&lt;composite:implementation&gt;</code>
+  ActionListener should be mapped to.  
+</p>
+</div>]]>
 
             </description>
             <name>
                 name
             </name>
             <required>
-                false
+                true
             </required>
             <deferred-value>
                 <type>
@@ -1161,13 +1263,11 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be a space (not tab) separated list of
-component ids of components within the
-<code>&lt;composite:implementation&gt;</code> section.  Space is used as
-the delimiter for compatibility with the IDREFS and NMTOKENS data types
-from the XML Schema.  If not present, the "name" attribute must be
-present.  If both "name" and "targets" are present, "targets" takes
-precedence.</p></div>]]>
+<p>If present, this must be a space (not tab) separated list of client
+ids (relative to the <em>top level component</em>) of components within
+the <code>&lt;composite:implementation&gt;</code> section.  Space is
+used as the delimiter for compatibility with the IDREFS and NMTOKENS
+data types from the XML Schema.  </p></div>]]>
 
             </description>
             <name>
@@ -1217,21 +1317,24 @@ example.</p>
         <attribute>
             <description>
 
+
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be the component id of
-                a component within the
-                <code>&lt;composite:implementation&gt;</code> section.
-                If not present, the "targets" attribute must be
-                present.  If both "name" and "targets" are present, "targets"
-                takes precedence.</p></div>]]>
-
+<p>
+  The value of this attribute maps back to the "for" attribute on an attachable object
+  nested within a composite component.   If the "targets" attribute is not specified,
+  this value also represents the component ID of the target component within the
+  that the <code>&lt;composite:implementation&gt;</code>
+  ActionListener should be mapped to.  
+</p>
+</div>]]>
+            
             </description>
             <name>
                 name
             </name>
             <required>
-                false
+                true
             </required>
             <deferred-value>
                 <type>
@@ -1244,13 +1347,11 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be a space (not tab) separated list of
-component ids of components within the
-<code>&lt;composite:implementation&gt;</code> section.  Space is used as
-the delimiter for compatibility with the IDREFS and NMTOKENS data types
-from the XML Schema.  If not present, the "name" attribute must be
-present.  If both "name" and "targets" are present, "targets" takes
-precedence.</p></div>]]>
+<p>If present, this must be a space (not tab) separated list of client
+ids (relative to the <em>top level component</em>) of components within
+the <code>&lt;composite:implementation&gt;</code> section.  Space is
+used as the delimiter for compatibility with the IDREFS and NMTOKENS
+data types from the XML Schema.</p></div>]]>
 
             </description>
             <name>
@@ -1330,19 +1431,21 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be the component id of
-                a component within the
-                <code>&lt;composite:implementation&gt;</code> section.
-                If not present, the "targets" attribute must be
-                present.  If both "name" and "targets" are present, "targets"
-                takes precedence.</p></div>]]>
+<p>
+  The value of this attribute maps back to the "for" attribute on an attachable object
+  nested within a composite component.   If the "targets" attribute is not specified,
+  this value also represents the component ID of the target component within the
+  that the <code>&lt;composite:implementation&gt;</code>
+  ActionListener should be mapped to. 
+</p>
+</div>]]>
 
             </description>
             <name>
                 name
             </name>
             <required>
-                false
+                true
             </required>
             <deferred-value>
                 <type>
@@ -1355,13 +1458,11 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be a space (not tab) separated list of
-component ids of components within the
-<code>&lt;composite:implementation&gt;</code> section.  Space is used as
-the delimiter for compatibility with the IDREFS and NMTOKENS data types
-from the XML Schema.  If not present, the "name" attribute must be
-present.  If both "name" and "targets" are present, "targets" takes
-precedence.</p></div>]]>
+<p>If present, this must be a space (not tab) separated list of client
+ids (relative to the <em>top level component</em>) of components within
+the <code>&lt;composite:implementation&gt;</code> section.  Space is
+used as the delimiter for compatibility with the IDREFS and NMTOKENS
+data types from the XML Schema.</p></div>]]>
 
             </description>
             <name>

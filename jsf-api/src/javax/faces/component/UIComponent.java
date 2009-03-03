@@ -1271,7 +1271,13 @@ private void doFind(FacesContext context, String clientId) {
      * <p>Broadcast the specified {@link FacesEvent} to all registered
      * event listeners who have expressed an interest in events of this
      * type.  Listeners are called in the order in which they were
-     * added.</p>
+     * added.</p>  
+     * <p class="changed_added_2_0">If the <code>event</code> is an instance of 
+     * {@link javax.faces.event.BehaviorEvent} and the current 
+     * <code>component</code> is the source of the <code>event</code>
+     * call {@link javax.faces.event.BehaviorEvent#getBehavior} to get the
+     * {@link javax.faces.component.behavior.Behavior} for the event.  Then
+     * call {@link javax.faces.component.behavior.Behavior#broadcast(javax.faces.event.BehaviorEvent)}}.</p>
      *
      * @param event The {@link FacesEvent} to be broadcast
      *
@@ -1548,11 +1554,22 @@ private void doFind(FacesContext context, String clientId) {
      * the previous <code>UIComponent</code> instance will be returned
      * from <code>getCurrentComponent()</code></p>
      *
+     * @param context the {@link FacesContext} for the current request
+     * @param component the <code>component</code> to push to the EL.  If
+     *  <code>component</code> is <code>null</code> the <code>UIComponent</code>
+     *  instance that this call was invoked upon will be pushed to the EL.
+     *
+     * @throws NullPointerException if <code>context</code> is <code>null</code>
+     *
      * @see javax.faces.context.FacesContext#getAttributes()
      *
      * @since 2.0
      */
     public final void pushComponentToEL(FacesContext context, UIComponent component) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (null == component) {
@@ -1578,25 +1595,56 @@ private void doFind(FacesContext context, String clientId) {
      * so that the previous <code>UIComponent</code>, if any, becomes the current
      * component.</p>
      *
+     * @param context the {@link FacesContext} for the current request
+     * 
+     * @throws NullPointerException if <code>context</code> is <code>null</code>
+     *
      * @see javax.faces.context.FacesContext#getAttributes()
      *
      * @since 2.0
      */
     public final void popComponentFromEL(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
+            UIComponent c;
             if (previouslyPushed != null) {
-                contextMap.put(CURRENT_COMPONENT, previouslyPushed);
+                c = (UIComponent) contextMap.put(CURRENT_COMPONENT, previouslyPushed);
             } else {
-                contextMap.remove(CURRENT_COMPONENT);
+                c = (UIComponent) contextMap.remove(CURRENT_COMPONENT);
             }
-            
-            if (null != previouslyPushedCompositeComponent) {
-                contextMap.put(CURRENT_COMPOSITE_COMPONENT, 
-                        previouslyPushedCompositeComponent);
-            } 
+
+            if (c != null && UIComponent.isCompositeComponent(c)) {
+                if (null != previouslyPushedCompositeComponent) {
+                    contextMap.put(CURRENT_COMPOSITE_COMPONENT,
+                                   previouslyPushedCompositeComponent);
+                } else {
+                    contextMap.remove(CURRENT_COMPOSITE_COMPONENT);
+                }
+            }
         }
+
+    }
+
+
+    /**
+     * @param component the {@link UIComponent} to test
+     * @return <code>true</code> if <code>component</code> is a composite component,
+     *  otherwise <code>false</code>
+     *
+     * @throws NullPointerException if <code>component</code> is <code>null</code>
+     * @since 2.0
+     */
+    public static boolean isCompositeComponent(UIComponent component) {
+
+        if (component == null) {
+            throw new NullPointerException();
+        }
+        return (component.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY));
 
     }
 
@@ -1939,6 +1987,29 @@ private void doFind(FacesContext context, String clientId) {
      * <li>Call the <code>processDecodes()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
+     * <li>If this component is a {@link javax.faces.component.behavior.BehaviorHolder},
+     * process {@link javax.faces.component.behavior.Behavior}s as follows:
+     * <ul>
+     * <li>Determine if there are {@link javax.faces.component.behavior.Behavior}s
+     * associated with this component by calling the implementation of 
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li> 
+     * <li>If there are <code>behaviors</code>, determine the 
+     * <code>behavior event name</code> from the request parameter:
+     * <code>javax.faces.behavior.event</code>.</li>
+     * <li>If that request parameter exists, get the <code>List</code> of
+     * {@link javax.faces.component.behavior.Behavior}s for the 
+     * <code>behavior event name</code> from the <code>Map</code> returned from
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li>
+     * <li>If there are <code>behaviors</code> for the <code>behavior event name</code>,
+     * determine the <code>behavior source name</code> from the request parameter:
+     * <code>javax.faces.behavior.source</code>.</li>
+     * <li>If the request parameter exists, and its value is the same as this
+     * component's <code>clientId</code>, iterate over the <code>List</code> of
+     * {@link javax.faces.component.behavior.Behavior}s and call the <code>decode()</code>
+     * method for each {@link javax.faces.component.behavior.Behavior}.</li>
+     * </ul>
+     * </li>
+     *  
      * <li>Call the <code>decode()</code> method of this component.</li>
 
      * <li>Call {@link #popComponentFromEL} from inside of a

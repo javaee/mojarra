@@ -44,12 +44,18 @@
 <head>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
 
 <%
   pageContext.setAttribute("hello", new String("hello"), PageContext.REQUEST_SCOPE);
 %>
+
+
+    <c:set scope="application" var="javax.faces.VALIDATE_EMPTY_FIELDS"
+           value="false" />
+
 
 <h1>TLV commandButton, no lable or key</h1>
 This page should FAIL.

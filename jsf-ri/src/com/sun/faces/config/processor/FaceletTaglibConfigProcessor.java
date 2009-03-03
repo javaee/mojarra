@@ -132,6 +132,12 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     /**
      * <p>
+     * /facelet-taglib/tag/behavior
+     * </p>
+     */
+    private static final String BEHAVIOR = "behavior";
+    /**
+     * <p>
      * /facelet-taglib/tag/source
      * </p>
      */
@@ -160,11 +166,17 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
     /**
      * <p>
-     *  /facelet-taglib/tag/validator/converter-id
+     *  /facelet-taglib/tag/converter/converter-id
      * </p>
      */
     private static final String CONVERTER_ID = "converter-id";
 
+    /**
+     * <p>
+     *  /facelet-taglib/tag/behavior/behavior-id
+     * </p>
+     */
+    private static final String BEHAVIOR_ID = "behavior-id";
 
     /**
      * <p>
@@ -319,6 +331,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 NodeList component = null;
                 NodeList converter = null;
                 NodeList validator = null;
+                NodeList behavior = null;
                 Node source = null;
                 Node handlerClass = null;
                 for (int j = 0, jlen = children.getLength(); j < jlen; j++) {
@@ -333,6 +346,8 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                         converter = n.getChildNodes();
                     } else if (VALIDATOR.equals(n.getLocalName())) {
                         validator = n.getChildNodes();
+                    } else if (BEHAVIOR.equals(n.getLocalName())) {
+                        behavior = n.getChildNodes();
                     } else if (SOURCE.equals(n.getLocalName())) {
                         source = n;
                     } else if (HANDLER_CLASS.equals(n.getLocalName())) {
@@ -345,6 +360,8 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                     processConverter(converter, taglibrary, tagName);
                 } else if (validator != null) {
                     processValidator(validator, taglibrary, tagName);
+                } else if (behavior != null) {
+                    processBehavior(behavior, taglibrary, tagName);
                 } else if (source != null) {
                     processSource(documentElement, source, taglibrary, tagName);
                 } else if (handlerClass != null) {
@@ -356,7 +373,37 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void processHandlerClass(Node handlerClass,
+    private void processBehavior(NodeList behavior, TagLibraryImpl taglibrary,
+			String tagName) {
+        if (behavior != null && behavior.getLength() > 0) {
+            String behaviorId = null;
+            String handlerClass = null;
+            for (int i = 0, ilen = behavior.getLength(); i < ilen; i++) {
+                Node n = behavior.item(i);
+                if (BEHAVIOR_ID.equals(n.getLocalName())) {
+                    behaviorId = getNodeText(n);
+                } else if (HANDLER_CLASS.equals(n.getLocalName())) {
+                    handlerClass = getNodeText(n);
+                }
+
+            }
+            if (handlerClass != null) {
+                try {
+                    Class<?> clazz = loadClass(handlerClass, this, null);
+                    taglibrary.putBehavior(tagName, behaviorId, clazz);
+                } catch (ClassNotFoundException e) {
+                    throw new ConfigurationException(e);
+                }
+
+            } else {
+                taglibrary.putBehavior(tagName, behaviorId);
+            }
+        }
+		
+	}
+
+
+	private void processHandlerClass(Node handlerClass,
                                      TagLibraryImpl taglibrary,
                                      String name) {
 
@@ -419,7 +466,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
         
     }
 
-
+    
     private void processConverter(NodeList converter,
                                   TagLibraryImpl taglibrary,
                                   String name) {

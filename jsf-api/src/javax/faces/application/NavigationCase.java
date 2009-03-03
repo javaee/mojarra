@@ -35,7 +35,7 @@
  * its licensees as provided above.  However, if you add GPL Version 2 code
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
- * holder.
+ * holder.p
  */
 
 package javax.faces.application;
@@ -63,6 +63,7 @@ public class NavigationCase {
     private final String condition;
     private final String toViewId;
     private final boolean redirect;
+    private final boolean includeViewParams;
 
     private ValueExpression toViewIdExpr;
     private ValueExpression conditionExpr;
@@ -88,13 +89,16 @@ public class NavigationCase {
      * @param toViewId the view id to be navigated to
      * @param redirect <code>true</code> if the new view should be navigated
      *  to via a {@link javax.faces.context.ExternalContext#redirect(String)}
+     * @param includeViewParams  <code>true</code> if the view parametets should
+     *  be encoded into the redirect URL (only applies to redirect case)
      */
     public NavigationCase(String fromViewId,
                           String fromAction,
                           String fromOutcome,
                           String condition,
                           String toViewId,
-                          boolean redirect) {
+                          boolean redirect,
+                          boolean includeViewParams) {
 
         this.fromViewId = fromViewId;
         this.fromAction = fromAction;
@@ -102,6 +106,7 @@ public class NavigationCase {
         this.condition = condition;
         this.toViewId = toViewId;
         this.redirect = redirect;
+        this.includeViewParams = includeViewParams;
 
     }
 
@@ -271,6 +276,16 @@ public class NavigationCase {
 
     }
 
+    /**
+     * <p class="changed_added_2_0">Return the <code>&lt;redirect&gt;</code>
+     * value for this <code>&lt;navigation-case&gt;</code></p>
+     */
+    public boolean isIncludeViewParams() {
+
+        return includeViewParams;
+
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -338,7 +353,8 @@ public class NavigationCase {
             sb.append(", fromOutcome='").append(fromOutcome).append('\'');
             sb.append(", if='").append(condition).append('\'');
             sb.append(", toViewId='").append(toViewId).append('\'');
-            sb.append(", redirect=").append(redirect);
+            sb.append(", faces-redirect=").append(redirect);
+            sb.append(", includeViewParams=").append(includeViewParams).append('\'');
             sb.append('}');
             toString = sb.toString();
         }

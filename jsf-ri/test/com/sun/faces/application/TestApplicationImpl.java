@@ -81,7 +81,7 @@ import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ListenersFor;
-import javax.faces.event.BeforeRenderEvent;
+import javax.faces.event.PreRenderComponentEvent;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.TestComponent;
@@ -738,7 +738,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         assertTrue(c3.getEvent() instanceof PostAddToViewEvent);
         c3.reset();
         c3.encodeAll(getFacesContext());
-        assertTrue(c3.getEvent() instanceof BeforeRenderEvent);
+        assertTrue(c3.getEvent() instanceof PreRenderComponentEvent);
 
     }
 
@@ -833,7 +833,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
     @ListenersFor({
         @ListenerFor(systemEventClass = PostAddToViewEvent.class,
                      sourceClass = CustomOutput.class),
-        @ListenerFor(systemEventClass = BeforeRenderEvent.class,
+        @ListenerFor(systemEventClass = PreRenderComponentEvent.class,
                      sourceClass = CustomOutput.class)
     })
     public static final class CustomOutput2

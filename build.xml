@@ -207,6 +207,23 @@
 
    </target>
 
+   <target name="deploy.spec.locally" if="spec-eg-dir-available">
+
+     <mkdir dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot" />
+     <unzip src="${dist.dir}/jsf-spec-${spec.version}-${build.number}.zip"
+            dest="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot"
+            overwrite="true"/>
+     <move todir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot">
+       <fileset dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot/jsf-spec-${spec.version}-${build.number}">
+         <include name="**/*.*" />
+         <include name="**/*" />
+       </fileset>
+     </move>
+     <delete dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot/jsf-spec-${spec.version}-${build.number}" />
+
+   </target>
+
+
    <target name="build.spec.snapshot" depends="prepare.build.java.net">
 
        <available type="dir" file="${javaserverfaces-spec-eg.dir}"
@@ -246,27 +263,25 @@
                         prefix="jsf-spec-${spec.version}-${build.number}"/>
         </zip>
 
+       <antcall target="deploy.spec.locally" />
+
   </target>
 
     <target name="build.java.net"
-            depends="prepare.build.java.net">
-
-        <antcall target="build.as.updater.jars" />
-
-    </target>
+            depends="prepare.build.java.net"/>
 
     <target name="nightly" depends="build.java.net"
             description="update nightly build">
         <if>
             <available
-                  file="${tasks.home}/javanettasks-1.0.8.jar"/>
+                  file="${tasks.home}/javanettasks-1.0.13.jar"/>
             <then>
                 <sequential>
                     <taskdef
                           resource="org/kohsuke/javanettasks.properties">
                         <classpath>
                             <pathelement
-                                  location="${tasks.home}/javanettasks-1.0.8.jar"/>
+                                  location="${tasks.home}/javanettasks-1.0.13.jar"/>
                             <fileset dir="${tasks.home}/lib"
                                      includes="*.jar"/>
                         </classpath>
@@ -285,15 +300,10 @@
                                    fileDescription="Mojarra ${impl.version.number} nightly source bundle."
                                    overwrite="yes"/>
 
-                    <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/2.0 Nightly/mojarra-${impl.version}-glassfish-updater.jar"
-                                   fromFile="${dist.dir}/mojarra-${impl.version}-glassfish-updater.jar"
-                                   fileDescription="Installer for updating an existing glassfish binary with a new Mojarra implementation. Run 'java -jar mojarra-${impl.version}-glassfish-updater.jar' and follow the instructions."
-                                   overwrite="yes"/>
                 </sequential>
             </then>
             <else>
-                <fail message="Javanettasks version 1.0.8 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+                <fail message="Javanettasks version 1.0.13 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
             </else>
         </if>
     </target>
@@ -331,25 +341,6 @@
               classFile="${dist.dir}/mojarra-samples.class"
               licenseFile="${LICENSEFILE}"
               zipFile="${basedir}/mojarra-samples.zip"/>
-    </target>
-
-    <target name="build.as.updater.jars">
-     <mkdir dir="${dist.dir}"/>
-     <ant dir="jsf-api" target="tools.javac" inheritAll="false" />
-     <jar destfile="${dist.dir}/mojarra-${impl.version}-glassfish-updater.jar">
-        <fileset dir="${basedir}/jsf-tools/build/classes"
-                 includes="com/sun/faces/tools/GlassfishUpdater*.class" />
-        <fileset dir="${basedir}/jsf-api/build/lib/"
-                 includes="jsf-api.jar" />
-        <fileset dir="${basedir}/jsf-ri/build/lib/"
-                 includes="jsf-impl.jar" />
-        <fileset dir="${basedir}/legal/jsf-cddl"
-                 includes="BINARY_LICENSE.txt" />
-        <manifest>
-          <attribute name="Main-Class"
-                     value="com.sun.faces.tools.GlassfishUpdater" />
-        </manifest>
-      </jar>
     </target>
 
     <target name="updatecenter2" depends="main">

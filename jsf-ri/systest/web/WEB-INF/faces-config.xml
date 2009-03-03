@@ -717,6 +717,28 @@
       <to-view-id>/hello.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
-  
+
+    <navigation-rule>
+        <from-view-id>/viewParameters/page02.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>homeWithParams</from-outcome>
+            <to-view-id>/viewParameters/page01.xhtml</to-view-id>
+            <redirect include-view-params="true"/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>story2WithParams</from-outcome>
+            <to-view-id>/viewParameters/page03.xhtml</to-view-id>
+            <redirect include-view-params="true"/>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/viewParameters/page03.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>homeWithParams</from-outcome>
+            <to-view-id>/viewParameters/page01.xhtml</to-view-id>
+            <redirect include-view-params="true"/>
+        </navigation-case>
+    </navigation-rule>
 
 </faces-config>

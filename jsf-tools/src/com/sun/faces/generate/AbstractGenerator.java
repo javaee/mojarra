@@ -329,7 +329,7 @@ public abstract class AbstractGenerator implements Generator {
                 sb.append(" implements ");
                 for (int i = 0; i < implementsClasses.length; i++) {
                     sb.append(implementsClasses[i]);
-                    if (i < implementsClasses.length) {
+                    if (i < implementsClasses.length-1) {
                         sb.append(", ");
                     }
                 }

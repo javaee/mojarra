@@ -125,7 +125,7 @@ public final class DevTools {
         return str.split("@@");
     }
     
-    public static void debugHtml(Writer writer, FacesContext faces, Exception e) throws IOException {
+    public static void debugHtml(Writer writer, FacesContext faces, Throwable e) throws IOException {
         init();
         Date now = new Date();
         for (int i = 0; i < ERROR_PARTS.length; i++) {
@@ -150,7 +150,7 @@ public final class DevTools {
         }
     }
     
-    private static void writeException(Writer writer, Exception e) throws IOException {
+    private static void writeException(Writer writer, Throwable e) throws IOException {
         StringWriter str = new StringWriter(256);
         PrintWriter pstr = new PrintWriter(str);
         e.printStackTrace(pstr);
@@ -159,6 +159,8 @@ public final class DevTools {
     }
     
     public static void debugHtml(Writer writer, FacesContext faces) throws IOException {
+        // PENDING - this and debugHtml(Writer, FacesContext, Exception) should
+        //           be refactored to share code.
         init();
         Date now = new Date();
         for (int i = 0; i < DEBUG_PARTS.length; i++) {
@@ -179,6 +181,12 @@ public final class DevTools {
     private static void writeVariables(Writer writer, FacesContext faces) throws IOException {
         ExternalContext ctx = faces.getExternalContext();
         writeVariables(writer, ctx.getRequestParameterMap(), "Request Parameters");
+        if (faces.getViewRoot() != null) {
+            Map<String, Object> viewMap = faces.getViewRoot().getViewMap(false);
+            if (viewMap != null) {
+                writeVariables(writer, viewMap, "View Attributes");
+            }
+        }
         writeVariables(writer, ctx.getRequestMap(), "Request Attributes");
         if (ctx.getSession(false) != null) {
             writeVariables(writer, ctx.getSessionMap(), "Session Attributes");
@@ -219,10 +227,15 @@ public final class DevTools {
     
     private static void writeComponent(Writer writer, UIComponent c) throws IOException {
         writer.write("<dl><dt");
-        if (isText(c)) {
-            writer.write(" class=\"uicText\"");
+        if (c != null) {
+            if (isText(c)) {
+                writer.write(" class=\"uicText\"");
+            }
         }
         writer.write(">");
+        if (c == null) {
+            return;
+        }
         
         boolean hasChildren = c.getChildCount() > 0 || c.getFacets().size() > 0;
         

@@ -50,6 +50,7 @@ import java.util.ResourceBundle;
 import javax.faces.FacesException;
 import javax.faces.application.*;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
@@ -346,4 +347,15 @@ public class NewApplication extends Application {
         return oldApp.getELResolver();
     }
 
+    public void addBehavior(String behaviorId, String behaviorClass) {
+        oldApp.addBehavior(behaviorId, behaviorClass);
+    }
+
+    public Behavior createBehavior(String behaviorId) throws FacesException {
+        return oldApp.createBehavior(behaviorId);
+    }
+
+    public Iterator<String> getBehaviorIds() {
+        return oldApp.getBehaviorIds();
+    }
 }

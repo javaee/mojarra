@@ -59,7 +59,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.tag.TextHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandler;
+import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 
 /**
  * Handler for f:verbatim
@@ -67,7 +67,7 @@ import com.sun.faces.facelets.tag.jsf.ComponentHandler;
  * @author Adam Winer
  * @version $Id$
  */
-public final class VerbatimHandler extends ComponentHandler {
+public final class VerbatimHandler extends ComponentHandlerImpl {
     public VerbatimHandler(ComponentConfig config) {
         super(config);
     }

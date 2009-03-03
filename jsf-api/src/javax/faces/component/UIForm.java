@@ -56,7 +56,7 @@ import javax.faces.context.FacesContext;
  * input form to be presented to the user, and whose child components represent
  * (among other things) the input fields to be included when the form is
  * submitted.</p>
- *
+ * <p/>
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>javax.faces.Form</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
@@ -119,7 +119,6 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * <p>Returns the current value of the <code>submitted</code>
      * property.  The default value is <code>false</code>.  See {@link
      * #setSubmitted} for details.</p>
-     *
      */
     public boolean isSubmitted() {
 
@@ -139,7 +138,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * called, with <code>false</code> as the argument, during the
      * {@link UIComponent#decode} for this <code>UIForm</code>
      * instance.</p>
-     *
+     * <p/>
      * <p>The value of a <code>UIForm</code>'s submitted property must
      * not be saved as part of its state.</p>
      */
@@ -148,7 +147,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         this.submitted = submitted;
 
     }
-    
+
     /**
      * <p>The prependId flag.</p>
      */
@@ -157,20 +156,20 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
 
     public boolean isPrependId() {
 
-	if (this.prependId != null) {
-	    return (this.prependId);
-	}
-	ValueExpression ve = getValueExpression("prependId");
-	if (ve != null) {
-	    try {
-		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (true);
-	}
+        if (this.prependId != null) {
+            return (this.prependId);
+        }
+        ValueExpression ve = getValueExpression("prependId");
+        if (ve != null) {
+            try {
+                return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+            }
+            catch (ELException e) {
+                throw new FacesException(e);
+            }
+        } else {
+            return (true);
+        }
 
     }
 
@@ -197,14 +196,14 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         if (context == null) {
             throw new NullPointerException();
         }
-	
+
         // Process this component itself
         decode(context);
 
-	// if we're not the submitted form, don't process children.
-	if (!isSubmitted()) {
-	    return;
-	}
+        // if we're not the submitted form, don't process children.
+        if (!isSubmitted()) {
+            return;
+        }
 
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
@@ -212,7 +211,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
             UIComponent kid = (UIComponent) kids.next();
             kid.processDecodes(context);
         }
-	
+
     }
 
 
@@ -220,7 +219,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * <p>Override {@link UIComponent#processValidators} to ensure that
      * the children of this <code>UIForm</code> instance are only
      * processed if {@link #isSubmitted} returns <code>true</code>.</p>
-     * 
+     *
      * @throws NullPointerException {@inheritDoc}
      */
     public void processValidators(FacesContext context) {
@@ -228,9 +227,9 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         if (context == null) {
             throw new NullPointerException();
         }
-	if (!isSubmitted()) {
-	    return;
-	}
+        if (!isSubmitted()) {
+            return;
+        }
 
         // Process all the facets and children of this component
         Iterator kids = getFacetsAndChildren();
@@ -246,7 +245,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * <p>Override {@link UIComponent#processUpdates} to ensure that the
      * children of this <code>UIForm</code> instance are only processed
      * if {@link #isSubmitted} returns <code>true</code>.</p>
-     * 
+     *
      * @throws NullPointerException {@inheritDoc}
      */
     public void processUpdates(FacesContext context) {
@@ -254,9 +253,9 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         if (context == null) {
             throw new NullPointerException();
         }
-	if (!isSubmitted()) {
-	    return;
-	}
+        if (!isSubmitted()) {
+            return;
+        }
 
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
@@ -322,8 +321,8 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
      * @see UIComponent#visitTree
      */
     @Override
-    public boolean visitTree(VisitContext context, 
-                               VisitCallback callback) {
+    public boolean visitTree(VisitContext context,
+                             VisitCallback callback) {
 
         // NamingContainers can optimize partial tree visits by taking advantage
         // of the fact that it is possible to detect whether any ids to visit
@@ -342,7 +341,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         }
 
         Collection<String> idsToVisit = context.getSubtreeIdsToVisit(this);
-        assert(idsToVisit != null);
+        assert (idsToVisit != null);
 
         // If we have ids to visit, let the superclass implementation
         // handle the visit

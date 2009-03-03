@@ -46,6 +46,12 @@
     <namespace>
         https://javaserverfaces.dev.java.net/demo/basic-ajax
     </namespace>
+<!--
+    <tag>
+        <tag-name>greet</tag-name>
+        <handler-clas>declarativeajax.GreetBehaviorHandler</handler-class>
+    </tag>
+-->
 
     <function>
         <function-name>writeSource</function-name>

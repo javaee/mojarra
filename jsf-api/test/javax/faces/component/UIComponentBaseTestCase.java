@@ -59,7 +59,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.PostAddToViewEvent;
-import javax.faces.event.BeforeRenderEvent;
+import javax.faces.event.PreRenderComponentEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.PostConstructViewMapEvent;
@@ -1662,7 +1662,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void testEncodeBeginPublish() throws Exception {
 
         Listener listener = new Listener();
-        application.subscribeToEvent(BeforeRenderEvent.class, listener);
+        application.subscribeToEvent(PreRenderComponentEvent.class, listener);
 
         UIComponent c1 = createComponent();
         c1.encodeBegin(facesContext);
@@ -1675,7 +1675,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         c1.encodeEnd(facesContext);
         assertNull(listener.getEvent());
 
-        application.unsubscribeFromEvent(BeforeRenderEvent.class, listener);
+        application.unsubscribeFromEvent(PreRenderComponentEvent.class, listener);
         
     }
 

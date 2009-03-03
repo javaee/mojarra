@@ -61,6 +61,7 @@ import javax.faces.webapp.FacesServlet;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +77,8 @@ import javax.faces.event.PostConstructViewMapEvent;
 import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewMetadata;
 
 
 /**
@@ -151,7 +154,17 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     // ------------------------------------------------------ Manifest Constants
 
-
+    public static final String METADATA_FACET_NAME = "javax_faces_metadata";
+    
+    /**
+     * <p class="changed_added_2_0">The key in the value set of the
+     * <em>view metadata BeanDescriptor</em>, the value of which is a 
+     * <code>List&lt;{@link UIViewParameter.Reference}&gt;</code>.</p>
+     *
+     * @since 2.0
+     */
+    public static final String VIEW_PARAMETERS_KEY = "javax.faces.component.VIEW_PARAMETERS_KEY";
+    
     /** <p>The standard component type for this component.</p> */
     public static final String COMPONENT_TYPE = "javax.faces.ViewRoot";
 
@@ -228,7 +241,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     /**
      * RELEASE_PENDING (edburns,rogerk) docs
      * <p class="changed_added_2_0"> </p>
-     * @return <code>true<code> in all cases as any children or facets added
+     * @return <code>true</code> in all cases as any children or facets added
      *  to the UIViewRoot will automatically be part of the view.  
      */
     @Override
@@ -735,8 +748,15 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                     FacesEvent event =
                           eventsForPhaseId.get(0);
                     UIComponent source = event.getComponent();
+                    UIComponent compositeParent = null;
                     try {
-                        this.pushComponentToEL(context, source);
+                        if (!UIComponent.isCompositeComponent(source)) {
+                            compositeParent = getCompositeComponentParent(source);
+                        }
+                        if (compositeParent != null) {
+                            pushComponentToEL(context, compositeParent);
+                        }
+                        pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
                         context.getApplication().publishEvent(ExceptionQueuedEvent.class,
@@ -747,6 +767,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                     }
                     finally {
                         popComponentFromEL(context);
+                        if (compositeParent != null) {
+                            popComponentFromEL(context);
+                        }
                     }
                     eventsForPhaseId.remove(0); // Stay at current position
                 }
@@ -759,8 +782,15 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                 while (!eventsForPhaseId.isEmpty()) {
                     FacesEvent event = eventsForPhaseId.get(0);
                     UIComponent source = event.getComponent();
+                    UIComponent compositeParent = null;
                     try {
-                        this.pushComponentToEL(context, source);
+                        if (!UIComponent.isCompositeComponent(source)) {
+                            compositeParent = getCompositeComponentParent(source);
+                        }
+                        if (compositeParent != null) {
+                            pushComponentToEL(context, compositeParent);
+                        }
+                        pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException ape) {
                         // A "return" here would abort remaining events too
@@ -772,6 +802,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                     }
                     finally {
                         popComponentFromEL(context);
+                        if (compositeParent != null) {
+                            popComponentFromEL(context);
+                        }
                     }
                     eventsForPhaseId.remove(0); // Stay at current position
                 }
@@ -788,10 +821,22 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                   !events.get(phaseId.getOrdinal()).isEmpty();
 
         } while (hasMoreAnyPhaseEvents || hasMoreCurrentPhaseEvents);
-	
+    
     }
 
     // ------------------------------------------------ Lifecycle Phase Handlers
+
+
+    private UIComponent getCompositeComponentParent(UIComponent c) {
+        UIComponent parent = c.getParent();
+        while (parent != null) {
+            if (UIComponent.isCompositeComponent(parent)) {
+                return parent;
+            }
+            parent = parent.getParent();
+        }
+        return null;
+    }
 
     private void initState() {
         skipPhase = false;
@@ -955,17 +1000,24 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     /**
-     * <p class="changed_added_2_0">
-     * If {@link #getAfterPhaseListener} returns
-     * non-<code>null</code>, invoke it, passing a {@link PhaseEvent}
-     * for the {@link PhaseId#RENDER_RESPONSE} phase.  Any errors that
-     * occur during invocation of the afterPhase listener must be
-     * logged and swallowed.</p>
+     * <p class="changed_added_2_0"> If {@link #getAfterPhaseListener}
+     * returns non-<code>null</code>, invoke it, passing a {@link
+     * PhaseEvent} for the {@link PhaseId#RENDER_RESPONSE} phase.  Any
+     * errors that occur during invocation of the afterPhase listener
+     * must be logged and swallowed.  If the current view has view
+     * parameters, as indicated by a non-empty and
+     * non-<code>UnsupportedOperationException</code> throwing return
+     * from {@link javax.faces.webapp.pdl.PageDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)},
+     * call {@link UIViewParameter#encodeAll} on each parameter.  If
+     * calling <code>getViewParameters()</code> causes
+     * <code>UnsupportedOperationException</code> to be thrown, the
+     * exception must be silently swallowed.</p>
      */
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
-        notifyAfter(context, PhaseId.RENDER_RESPONSE);
+        encodeViewParameters(context);
+        notifyAfter(context, PhaseId.RENDER_RESPONSE);               
     }
 
     /**
@@ -1450,7 +1502,40 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         return viewScope;
         
     }
+    
+    private void encodeViewParameters(FacesContext context) {
+        PageDeclarationLanguage pdl = null;
+        
+        try {
+            pdl = context.getApplication().getViewHandler().
+                    getPageDeclarationLanguage(context, getViewId());
+        } catch (UnsupportedOperationException uoe) {
+            
+        }
+        
+        if (null == pdl) {
+            return;
+        }
+        ViewMetadata metadata = pdl.getViewMetadata(context, getViewId());
+        if (metadata != null) { // perhaps it's not supported
+            Collection<UIViewParameter> params =
+                  metadata.getViewParameters(this);
+            if (params.isEmpty()) {
+                return;
+            }
 
+            try {
+                for (UIViewParameter param : params) {
+                    param.encodeAll(context);
+                }
+            } catch (IOException e) {
+                // IOException is forced by contract and is not expected to be thrown in this case
+                throw new RuntimeException("Unexpected IOException", e);
+            }
+        }
+    }
+
+    // END TENATIVE
 
     // ----------------------------------------------------- StateHolder Methods
 

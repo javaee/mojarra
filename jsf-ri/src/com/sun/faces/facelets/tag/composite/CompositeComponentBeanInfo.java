@@ -71,7 +71,7 @@ public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanIn
     public BeanDescriptor getBeanDescriptor() {
         return descriptor;
     }
-    
+
     public void setBeanDescriptor(BeanDescriptor newDescriptor) {
         descriptor = newDescriptor;
     }
@@ -103,7 +103,7 @@ public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanIn
 
     }
 
-    
+
     public void readExternal(ObjectInput in)
     throws IOException, ClassNotFoundException {
 

@@ -46,11 +46,13 @@ import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlSelectOneMenu;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.model.ManagedBean;
 import javax.faces.model.SessionScoped;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,7 +73,7 @@ import java.util.logging.Logger;
 
 @ManagedBean(name="bean")
 @SessionScoped
-public class Bean {
+public class Bean implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger("declarativeajax");
     
@@ -190,6 +192,14 @@ public class Bean {
             output = (UIOutput)form.findComponent("out1");
             output.setValue("Correct!");
         }
+    }
+
+    public void processBehavior(AjaxBehaviorEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        UIForm form = (UIForm)context.getViewRoot().findComponent("form1");
+        UIOutput output = (UIOutput)form.findComponent("out");
+        output.setValue("listener was called");
+
     }
         
 }

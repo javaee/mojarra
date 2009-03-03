@@ -80,6 +80,7 @@ public abstract class FacesContext {
 
     @SuppressWarnings({"UnusedDeclaration"})
     private FacesContext defaultFacesContext;
+    private boolean processingEvents = true;
 
     // -------------------------------------------------------------- Properties
 
@@ -425,6 +426,21 @@ public abstract class FacesContext {
      */
     public abstract boolean getResponseComplete();
 
+    /**
+     * <p class="changed_added_2_0">Return <code>true</code> if the <code>validationFailed()</code>
+     * method has been called for the current request.</p>
+     * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     */
+    public boolean getValidationFailed() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getValidationFailed();
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
 
     /**
      * <p>Return the {@link ResponseStream} to which components should
@@ -619,6 +635,23 @@ public abstract class FacesContext {
      */
     public abstract void responseComplete();
     
+    /**
+     * <p class="changed_added_2_0">Sets a flag which indicates that a conversion or
+     * validation error occurred while processing the inputs. Inputs consist of
+     * either page parameters or form bindings. This flag can be read using
+     * the getValidationFailed() method.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     */
+    public void validationFailed() {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.validationFailed();
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
 
     /**
      * <p class="changed_added_2_0">Return the value last set on this
@@ -661,6 +694,29 @@ public abstract class FacesContext {
             throw new UnsupportedOperationException();
         }
 
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Allows control of wheter or not the runtime
+     * will publish events when {@link Application#publishEvent(Class, Object)} or
+     * {@link Application#publishEvent(Class, Class, Object)} is called.</p>
+     *
+     * @param processingEvents flag indicating events should be processed or not
+     */
+    public void setProcessingEvents(boolean processingEvents) {
+        this.processingEvents = processingEvents;    
+    }
+
+
+    /**
+     * <p class="chaged_added_2_0">Returns a flag indicating whether or not the
+     * runtime should publish events when asked to do so.</p>
+     * @return <code>true</code> if events should be published, otherwise
+     *  <code>false</code>
+     */
+    public boolean isProcessingEvents() {
+        return this.processingEvents;
     }
 
     // ---------------------------------------------------------- Static Methods

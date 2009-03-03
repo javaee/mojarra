@@ -159,6 +159,7 @@
                 test.valuechange,
                 test.component,
                 test.component01,
+                test.composite,
                 test.navigation,
                 test.state,
                 test.resourceBundleELResolver,
@@ -266,6 +267,15 @@
                          includes="com/sun/faces/facelets/*TestCase.class"/> 
             </tests>
         </jsf.junit>
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/viewparameters/ViewParametersTestCase.class"/>
+            </tests>
+        </jsf.junit>  
+
     </target>
 
     <target name="test.annotations">
@@ -902,6 +912,20 @@ excludes="com/sun/faces/render/CommandButtonTestCase.class"
               outContent="/component01.jsp PASSED"/>
     </target>
 
+    <target name="test.composite"
+            description="Test composite components">
+
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/composite/*TestCase.class"/>
+            </tests>
+        </jsf.junit>  
+    </target>
+
+
     <target name="test.standard"
             description="Test the Standard RenderKit">
         <jsf.tester
@@ -1246,14 +1270,7 @@ excludes="com/sun/faces/render/CommandButtonTestCase.class"
     </target>
 
     <target name="scratch">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/SelectManyCollectionTestCase.class"/>
-            </tests>
-        </jsf.junit>  
+      <antcall target="test.methodRef" />
     </target>
 
 </project>

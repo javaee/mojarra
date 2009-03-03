@@ -41,6 +41,7 @@
 package javax.faces.application;
 
 import java.util.List;
+import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
@@ -169,6 +170,20 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
         return getWrapped().getActionURL(context, viewId);
 
     }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#getRedirectURL}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @since 2.0
+     */
+    @Override
+    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
+        return getWrapped().getRedirectURL(context, viewId, parameters, includeViewParams);
+    }
+    
+    
 
 
     /**

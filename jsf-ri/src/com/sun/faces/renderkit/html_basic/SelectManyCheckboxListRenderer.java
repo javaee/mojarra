@@ -60,6 +60,7 @@ import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
+import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
@@ -73,7 +74,7 @@ import com.sun.faces.util.RequestStateManager;
 public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
 
-    private static final String[] ATTRIBUTES =
+    private static final Attribute[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.SELECTMANYCHECKBOX);
 
     // ---------------------------------------------------------- Public Methods
@@ -302,9 +303,12 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         // Apply HTML 4.x attributes specified on UISelectMany component to all
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
-        RenderKitUtils.renderPassThruAttributes(writer,
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
-                                                ATTRIBUTES);
+                                                ATTRIBUTES,
+                                                getNonOnChangeBehaviors(component));
+
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         RenderKitUtils.renderOnchange(context, component);

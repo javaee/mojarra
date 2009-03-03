@@ -429,8 +429,6 @@
         <java fork="true" jar="${tlddoc.jar}">
             <arg line="-d ${build.dir}/pdldocs/jsp"/>
             <arg line="-windowtitle 'JSF ${spec.version} Page Decraration Language: JSP Variant'"/>
-            <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
-
             <arg value="${build.generate.tld.dir}/html_basic.tld"/>
             <arg value="${conf.share.dir}/jsf_core.tld"/>
         </java>
@@ -468,9 +466,8 @@
             <arg line="-d ${build.dir}/pdldocs/facelets"/>
             <arg line="-windowtitle 'JSF ${spec.version} Page Decraration Language: Facelets Variant'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
-
+            <arg value="${conf.share.dir}/facelets_jsf_core.tld"/>
             <arg value="${build.generate.tld.dir}/facelets_html_basic.tld"/>
-            <arg value="${conf.share.dir}/jsf_core.tld"/>
             <arg value="${conf.share.dir}/composite.tld"/>
             <arg value="${conf.share.dir}/ui.tld"/>
             <arg value="${conf.share.dir}/jstl-core.tld"/>
@@ -638,10 +635,14 @@
   <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${impl.version}" goals="deploy" />
 </target>
 
+    <target name="passthru">
+        <ant antfile="build-tests.xml" target="passthru"/>
+    </target>
+
+
 <!-- scratch
 
-ant -emacs -Dbuild.generate.tld.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/jsf-ri/build/generate/conf/share -Dbuild.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/dist/jsf-spec-2.0-20081030 facelets.tlddocs
-   
+ant -emacs -Dbuild.generate.tld.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/jsf-ri/build/generate/conf/share  -Dbuild.dir=/Users/edburns/Documents/Projects/JavaEE/workareas/javaserverfaces-spec-eg/javadocs/spec-snapshot/pdldocs/facelets/ facelets.tlddocs   
 -->
     
 </project>

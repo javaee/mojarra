@@ -53,13 +53,10 @@ package com.sun.faces.facelets.compiler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import javax.faces.webapp.pdl.facelets.tag.Tag;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
@@ -74,6 +71,7 @@ import com.sun.faces.facelets.tag.composite.InterfaceHandler;
 import com.sun.faces.facelets.tag.ui.ComponentRefHandler;
 import com.sun.faces.facelets.tag.ui.CompositionHandler;
 import com.sun.faces.facelets.tag.ui.UILibrary;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * Compilation unit for managing the creation of a single FaceletHandler based
@@ -86,7 +84,7 @@ import com.sun.faces.facelets.tag.ui.UILibrary;
  */
 final class CompilationManager {
 
-    private final static Logger log = Logger.getLogger("facelets.compiler");
+    private final static Logger log = FacesLogger.FACELETS_COMPILER.getLogger();
 
     private final Compiler compiler;
 

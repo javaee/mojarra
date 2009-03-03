@@ -80,6 +80,7 @@ import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
@@ -108,6 +109,7 @@ import com.sun.faces.util.Util;
 
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
+import java.util.LinkedHashSet;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
@@ -115,6 +117,7 @@ import javax.faces.event.ExceptionQueuedEventContext;
 
 import java.util.List;
 import java.util.TimeZone;
+import java.util.LinkedHashMap;
 
 import javax.el.ValueExpression;
 import javax.faces.application.Resource;
@@ -181,10 +184,13 @@ public class ApplicationImpl extends Application {
     // These three maps store store "identifier" | "class name"
     // mappings.
     //
+    private Map<String,Object> behaviorMap = null;
     private Map<String,Object> componentMap = null;
     private Map<String,Object> converterIdMap = null;
     private Map<Class<?>,Object> converterTypeMap = null;
     private Map<String,Object> validatorMap = null;
+    private Set<String> defaultValidatorIds = null;
+    private volatile Map<String,String> defaultValidatorInfo = null;
     private volatile String messageBundle = null;
 
     private List<ELContextListener> elContextListeners = null;
@@ -206,6 +212,8 @@ public class ApplicationImpl extends Application {
         converterIdMap = new ConcurrentHashMap<String, Object>();
         converterTypeMap = new ConcurrentHashMap<Class<?>, Object>();
         validatorMap = new ConcurrentHashMap<String, Object>();
+        defaultValidatorIds = new LinkedHashSet<String>();
+        behaviorMap = new ConcurrentHashMap<String, Object>();
         elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
@@ -247,7 +255,9 @@ public class ApplicationImpl extends Application {
 
         Util.notNull("systemEventClass", systemEventClass);
         Util.notNull("source", source);
-
+        if (!FacesContext.getCurrentInstance().isProcessingEvents()) {
+            return;
+        }
         // source is not compatible with the provided base type.
         // Log a warning that the types are incompatible and return. 
         if (getProjectStage() == ProjectStage.Development
@@ -805,6 +815,56 @@ public class ApplicationImpl extends Application {
 
     }
 
+    /**
+     * @see javax.faces.application.Application#addBehavior(String, String)
+     */
+    public void addBehavior(String behaviorId, String behaviorClass) {
+
+        Util.notNull("behaviorId", behaviorId);
+        Util.notNull("behaviorClass", behaviorClass);
+
+        behaviorMap.put(behaviorId, behaviorClass);
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("added behavior of type ''{0}'' class ''{1}''",
+                                             behaviorId,
+                                             behaviorClass));
+        }
+
+    }
+
+    /**
+     * @see javax.faces.application.Application#createBehavior(String)
+     */
+    public Behavior createBehavior(String behaviorId) throws FacesException {
+
+        Util.notNull("behaviorId", behaviorId);
+        Behavior returnVal = (Behavior) newThing(behaviorId, behaviorMap);
+        if (returnVal == null) {
+            Object[] params = {behaviorId};
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                        "jsf.cannot_instantiate_behavior_error", params);
+            }
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+        }
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("created behavior of type ''{0}''",
+                                             behaviorId));
+        }
+        associate.getAnnotationManager().applyBehaviorAnnotations(FacesContext.getCurrentInstance(), returnVal);
+        return returnVal;
+    }
+
+    /**
+     * @see javax.faces.application.Application#getBehaviorIds()
+     */
+    public Iterator<String> getBehaviorIds() {
+
+        return behaviorMap.keySet().iterator();
+
+    }
 
     /**
      * @see javax.faces.application.Application#addComponent(String, String)
@@ -1413,6 +1473,50 @@ public class ApplicationImpl extends Application {
                
     }
 
+    /**
+     * @see javax.faces.application.Application#addDefaultValidatorId(String)
+     */
+    public synchronized void addDefaultValidatorId(String validatorId) {
+
+        Util.notNull("validatorId", validatorId);
+        defaultValidatorInfo = null;
+        defaultValidatorIds.add(validatorId);
+
+    }
+
+    /**
+     * @see javax.faces.application.Application#getDefaultValidatorIds()
+     */
+    public Map<String,String> getDefaultValidatorInfo() {
+
+        if (defaultValidatorInfo == null) {
+            synchronized (this) {
+                if (defaultValidatorInfo == null) {
+                    defaultValidatorInfo = new LinkedHashMap<String, String>();
+                    if (!defaultValidatorIds.isEmpty()) {
+                        for (String id : defaultValidatorIds) {
+                            String validatorClass;
+                            Object result = validatorMap.get(id);
+                            if (null != result) {
+                                if (result instanceof Class) {
+                                    validatorClass = ((Class) result).getName();
+                                } else {
+                                    validatorClass = result.toString();
+                                }
+                                defaultValidatorInfo.put(id, validatorClass);
+                            }
+                        }
+
+                    }
+                }
+            }
+            defaultValidatorInfo =
+                  Collections.unmodifiableMap(defaultValidatorInfo);
+        }
+
+        return defaultValidatorInfo;
+
+    }
 
     /**
      * @see javax.faces.application.Application#setMessageBundle(String)

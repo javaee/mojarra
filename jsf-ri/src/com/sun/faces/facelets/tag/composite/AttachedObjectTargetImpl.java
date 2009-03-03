@@ -52,12 +52,14 @@
 package com.sun.faces.facelets.tag.composite;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
+
+import com.sun.faces.util.Util;
 
 
 public class AttachedObjectTargetImpl implements AttachedObjectTarget {
@@ -66,46 +68,61 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
     public String getName() {
         return name;
     }
-    
+
     void setName(String name) {
         this.name = name;
     }
 
     public List<UIComponent> getTargets(UIComponent topLevelComponent) {
         assert(null != name);
-        
-        List<UIComponent> result = Collections.EMPTY_LIST;
-        UIComponent comp = null;
+
+        List<UIComponent> result;
+        FacesContext ctx = FacesContext.getCurrentInstance();
         if (null != targetsList) {
-            
-            String targetsListStr = (String) 
-                    targetsList.getValue(FacesContext.getCurrentInstance().getELContext());
-            
-            result = new ArrayList<UIComponent>();
-            // PENDING(rlubke) do something faster than split.
-            String [] targetArray = targetsListStr.split(" ");
-            for (int i = 0; i < targetArray.length; i++) {
-                comp = topLevelComponent.findComponent(targetArray[i]);
+            String targetsListStr = (String) targetsList.getValue(ctx.getELContext());
+            String[] targetArray = Util.split(targetsListStr, " ");
+            result = new ArrayList<UIComponent>(targetArray.length);
+            for (int i = 0, len = targetArray.length; i < len; i++) {
+                UIComponent comp = topLevelComponent.findComponent(
+                      augmentSearchId(ctx, topLevelComponent, targetArray[i]));
                 if (null != comp) {
                     result.add(comp);
                 }
             }
         }
         else {
-            result = new ArrayList<UIComponent>();
-            comp = topLevelComponent.findComponent(name);
+            result = new ArrayList<UIComponent>(1);
+            UIComponent comp = topLevelComponent.findComponent(
+                  augmentSearchId(ctx, topLevelComponent, name));
             if (null != comp) {
                 result.add(comp);
             }
         }
         return result;
-        
+
     }
-    
+
     private ValueExpression targetsList;
-    
+
     void setTargetsList(ValueExpression targetsList) {
         this.targetsList = targetsList;
+    }
+
+
+    // if the current composite component ID is the same as the target ID,
+    // we'll need to make the ID passed to findComponent be a combination
+    // of the two so we find the correct component.  If we don't do this,
+    // we end with a StackOverFlowException as 'c' will be what is found
+    // and not the child of 'c'.
+    private String augmentSearchId(FacesContext ctx,
+                                   UIComponent c,
+                                   String targetId) {
+
+        if (targetId.equals(c.getId())) {
+            return targetId + UINamingContainer.getSeparatorChar(ctx) + targetId;
+        }
+        return targetId;
+
     }
 
 }

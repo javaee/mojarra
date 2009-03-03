@@ -40,6 +40,8 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.*;
@@ -592,7 +594,7 @@ public abstract class UIComponentBase extends UIComponent {
             }
             // Treat remainder of the expression as relative
             expr = expr.substring(1);
-        } else {
+        } else if (!(base instanceof NamingContainer)) {
             // Relative expressions start at the closest NamingContainer or root
             while (base.getParent() != null) {
                 if (base instanceof NamingContainer) {
@@ -761,11 +763,15 @@ public abstract class UIComponentBase extends UIComponent {
      * @throws IllegalStateException    {@inheritDoc}
      * @throws NullPointerException     {@inheritDoc}
      */
-    public void broadcast(FacesEvent event)
-            throws AbortProcessingException {
+    public void broadcast(FacesEvent event) 
+        throws AbortProcessingException {
 
         if (event == null) {
             throw new NullPointerException();
+        }
+        if (event instanceof BehaviorEvent) {
+            BehaviorEvent behaviorEvent = (BehaviorEvent) event;
+            behaviorEvent.getBehavior().broadcast(behaviorEvent);
         }
         if (listeners == null) {
             return;
@@ -816,7 +822,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        context.getApplication().publishEvent(BeforeRenderEvent.class, this);
+        context.getApplication().publishEvent(PreRenderComponentEvent.class, this);
 
         String rendererType = getRendererType();
         if (rendererType != null) {
@@ -1044,6 +1050,27 @@ public abstract class UIComponentBase extends UIComponent {
             kid.processDecodes(context);
         }
 
+        // Process behaviors, if supported by the component.
+        if (isBehaviorHolder()){
+            Map<String, List<Behavior>> behaviorsForEvent = getBehaviors();
+            if (!behaviorsForEvent.isEmpty()) {
+                Map<String, String> requestParameterMap = context.getExternalContext()
+                    .getRequestParameterMap();
+                String behaviorEvent = requestParameterMap.get("javax.faces.behavior.event");
+                if (null != behaviorEvent) {
+                    List<Behavior> behaviors = behaviorsForEvent.get(behaviorEvent);
+                    if (null != behaviors && behaviors.size() > 0) {
+                        String behaviorSource = requestParameterMap.get("javax.faces.behavior.source");
+                        if (null != behaviorSource && behaviorSource.equals(getClientId())) {
+                            for (Behavior behavior: behaviors) {
+                                behavior.decode(context, this);
+                            }
+                        }
+                    }
+                }
+            }
+        }                                     
+
         // Process this component itself
         try {
             decode(context);
@@ -1078,9 +1105,9 @@ public abstract class UIComponentBase extends UIComponent {
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             Application app = context.getApplication();
-            app.publishEvent(BeforeValidateEvent.class, kid);
+            app.publishEvent(PreValidateEvent.class, kid);
             kid.processValidators(context);
-            app.publishEvent(AfterValidateEvent.class, kid);
+            app.publishEvent(PostValidateEvent.class, kid);
             popComponentFromEL(context);
         }
     }
@@ -1288,7 +1315,7 @@ public abstract class UIComponentBase extends UIComponent {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[10];
+            values = new Object[11];
         }
 
         if (attributes != null) {
@@ -1306,6 +1333,7 @@ public abstract class UIComponentBase extends UIComponent {
         values[7] = saveAttachedState(context, listeners);
         values[8] = attributesThatAreSet;
         values[9] = saveSystemEventListeners(context);
+        values[10] = saveBehaviorsState(context);
         assert (!transientFlag);
 
         return (values);
@@ -1349,6 +1377,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
         //noinspection unchecked
         attributesThatAreSet = (List<String>) values[8];
+        behaviors = restoreBehaviorsState(context, values[10]);
     }
 
 
@@ -1356,7 +1385,6 @@ public abstract class UIComponentBase extends UIComponent {
      * <p>Flag indicating a desire to now participate in state saving.</p>
      */
     private boolean transientFlag = false;
-
 
     public boolean isTransient() {
 
@@ -1590,7 +1618,223 @@ public abstract class UIComponentBase extends UIComponent {
             UIComponent toRemove) {
         context.getApplication().publishEvent(PreRemoveFromViewEvent.class,
                 toRemove);
+    }
 
+    //------------------------------------------------------------- BehaviorHolder stub methods.
+
+    /**
+     * behaviors associated with this component.
+     */
+    private BehaviorsMap behaviors;
+
+    /**
+     * <p class="changed_added_2_0">This is a default implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#addBehavior}.  
+     * <code>UIComponent</code> does not implement the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+     * but provides default implementations for the methods defined by 
+     * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+     * subclass implementations.   Subclasses that wish to support the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} contract must 
+     * declare that the subclass implements 
+     * {@link javax.faces.component.behavior.BehaviorHolder}, and must provide
+     * an implementation of 
+     * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+     *
+     * @param eventName the logical name of the client-side event to attach
+     *        the behavior to.
+     * param  behavior the {@link javax.faces.component.behavior.Behavior} 
+     * instance to attach for the specified event name.
+     *
+     * @since 2.0
+     */
+    public void addBehavior(String eventName, Behavior behavior) {
+        assertBehaviorHolder();
+        // First, make sure that the event is supported.  We don't want
+        // to bother attaching behaviors for unsupported events.
+
+        Collection<String> eventNames = getEventNames();
+
+        // getClientEventNames() is spec'ed to require a non-null Set.
+        // If getClientEventNames() returns null, throw an exception
+        // to indicate that the API in not being used properly.
+        if (eventNames == null) {
+            throw new IllegalStateException(
+                "Attempting to add a Behavior to a component " +
+                "that does not support any event types. "     +
+                  "getEventTypes() must return a non-null Set.");
+        }
+        
+        if (eventNames.contains(eventName)) {
+
+            // We've got an event that we support, create our Map
+            // if necessary
+
+            if (null == behaviors) {
+                // Typically we only have a small number of behaviors for
+                // any component - in most cases only 1.  Using a very small
+                // initial capacity so that we keep the footprint to a minimum.
+                Map<String, List<Behavior>> modifiableMap = 
+                    new HashMap<String, List<Behavior>>(5,1.0f);
+                behaviors = new BehaviorsMap(modifiableMap);
+            }
+
+            List<Behavior> eventBehaviours = behaviors.get(eventName);
+
+            if (null == eventBehaviours) {
+                // Again using small initial capacity - we typically
+                // only have 1 Behavior per event type.
+                eventBehaviours = new ArrayList<Behavior>(3);
+                behaviors.getModifiableMap().put(eventName, eventBehaviours);
+            }
+
+            eventBehaviours.add(behavior);
+        }
+    }
+
+    /**
+     * <p class="changed_added_2_0">This is a default implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.  
+     * <code>UIComponent</code> does not implement the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+     * but provides default implementations for the methods defined by 
+     * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+     * subclass implementations.   Subclasses that wish to support the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} contract 
+     * must declare that the subclass implements 
+     * {@link javax.faces.component.behavior.BehaviorHolder}, and must
+     * override this method to return a non-Empty <code>Collection</code> 
+     * of the client event names that the component supports.</p>
+     *
+     * @since 2.0
+     */
+    public Collection<String> getEventNames() {
+        assertBehaviorHolder();
+        // Note: we intentionally return null here even though this
+        // is not a valid value.  The result is that addBehavior()
+        // will fail with an IllegalStateException if getEventNames()
+        // is not overridden.  This should make it obvious to the
+        // component author that something is wrong.
+        return null;
+    }
+
+    /**
+     * <p class="changed_added_2_0">This is a default implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.  
+     * <code>UIComponent</code> does not implement the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+     * but provides default implementations for the methods defined by 
+     * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+     * subclass implementations.   Subclasses that wish to support the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} contract 
+     * must declare that the subclass implements 
+     * {@link javax.faces.component.behavior.BehaviorHolder}, and must add
+     * an implementation of 
+     * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+     *
+     * @since 2.0
+     */
+    public Map<String, List<Behavior>> getBehaviors() {
+        if (null == behaviors) {
+            return Collections.emptyMap();
+        }
+
+        return behaviors;
+    }
+
+    /**
+     * <p class="changed_added_2_0">This is a default implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#getDefaultEventName}.  
+     * <code>UIComponent</code> does not implement the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} interface, 
+     * but provides default implementations for the methods defined by 
+     * {@link javax.faces.component.behavior.BehaviorHolder} to simplify 
+     * subclass implementations.   Subclasses that wish to support the 
+     * {@link javax.faces.component.behavior.BehaviorHolder} contract 
+     * must declare that the subclass implements 
+     * {@link javax.faces.component.behavior.BehaviorHolder}, and must 
+     * provide an implementation of 
+     * {@link javax.faces.component.behavior.BehaviorHolder#getEventNames}.</p>
+     */
+    public String getDefaultEventName() {
+        assertBehaviorHolder();
+        // Our default implementation just returns null - no default
+        // event name;
+        return null;
+    }
+
+    /**
+     * {@link UIComponentBase} has stub methods from the {@link BehaviorHolder} interface,
+     * but these method should be used only with componets that really implement holder interface.
+     * For an any other classes this method throws {@link IllegalStateException}
+     * @throws IllegalStateException 
+     */
+    private void assertBehaviorHolder() {
+        if (!isBehaviorHolder()) {
+            throw new IllegalStateException(
+                "Attempting to use a Behavior feature with a component " +
+                "that does not support any event types. "     +
+                "Component must implement BehaviourHolder interface.");
+        }
+    }
+
+    /**
+     * @return true if component implements {@link BehaviorHolder} interface.
+     */
+    private boolean isBehaviorHolder() {
+        return BehaviorHolder.class.isInstance(this);
+    }
+
+    /**
+     * Save state of the behaviors map.
+     * @param context the {@link FacesContext} for this request.
+     * @return map converted to the array of <code>Object</code> or null if no behaviors have been set. 
+     */
+    private Object saveBehaviorsState(FacesContext context){
+        Object state = null;
+        if (null != behaviors && behaviors.size() >0){
+            behaviors.keySet().toArray(new String[behaviors.size()]);
+            Object[] attachedBehaviors = new Object[behaviors.size()];
+            int i = 0;
+            for (List<Behavior> eventBehaviors : behaviors.values()) {
+                Object[] attachedEventBehaviors = new Object[eventBehaviors.size()];
+                for (int j = 0; j < attachedEventBehaviors.length; j++) {
+                    attachedEventBehaviors[j]= saveAttachedState(context, eventBehaviors.get(j));
+                }
+                attachedBehaviors[i++] = attachedEventBehaviors;
+            }
+            state = new Object[]{behaviors.keySet().toArray(new String[behaviors.size()]),attachedBehaviors};
+        }
+        return state;
+    }
+
+    /**
+     * @param context the {@link FacesContext} for this request.
+     * @param state saved state of the {@link Behavior}'s attached to the component.
+     * @return restored <code>Map</code> of the behaviors.
+     */
+    private BehaviorsMap restoreBehaviorsState(FacesContext context, Object state) {
+
+        if (null != state) {
+            Object[] values = (Object[]) state;
+            String[] names = (String[])values[0];
+            Object[] attachedBehaviors = (Object[]) values[1];
+
+            Map<String, List<Behavior>> modifiableMap = new HashMap<String, List<Behavior>>(names.length,1.0f);
+            for (int i = 0; i < attachedBehaviors.length; i++) {
+                Object[] attachedEventBehaviors = (Object[]) attachedBehaviors[i];
+                ArrayList<Behavior> eventBehaviors = new ArrayList<Behavior>(attachedBehaviors.length);
+                for (int j = 0; j < attachedEventBehaviors.length; j++) {
+                    eventBehaviors.add((Behavior) restoreAttachedState(context, attachedEventBehaviors[j]));
+                }
+
+                modifiableMap.put(names[i], eventBehaviors);
+            }
+
+            return new BehaviorsMap(modifiableMap);
+        }
+
+        return null;
     }
 
     private static void publishAfterViewEvents(FacesContext context,
@@ -2744,5 +2988,27 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+    // Private static member class that provide access to Behaviors.
+    // Note that this Map must be unmodifiable to the external world,
+    // but UIComponentBase itself needs to be able to write to the Map.
+    // We solve these requirements wrapping the underlying modifiable
+    // Map inside of a unmodifiable map and providing private access to 
+    // the underlying (modifable) Map
+    private static class BehaviorsMap extends AbstractMap<String, List<Behavior>>{
+        private Map<String, List<Behavior>> unmodifiableMap;
+        private Map<String, List<Behavior>> modifiableMap;
 
+        private BehaviorsMap(Map<String, List<Behavior>> modifiableMap) {
+            this.modifiableMap = modifiableMap;
+            this.unmodifiableMap = Collections.unmodifiableMap(modifiableMap);
+        }
+
+        public Set<Entry<String, List<Behavior>>> entrySet() {
+            return unmodifiableMap.entrySet();
+        }
+
+        private Map<String, List<Behavior>> getModifiableMap() {
+            return modifiableMap;
+        }
+    }
 }

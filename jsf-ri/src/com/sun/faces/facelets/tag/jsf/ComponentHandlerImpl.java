@@ -52,6 +52,7 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,8 +61,9 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.ActionSource;
-import javax.faces.component.AjaxBehavior;
-import javax.faces.component.AjaxBehaviors;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.AjaxBehaviors;
+import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -74,8 +76,9 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
+import com.sun.faces.util.FacesLogger;
+
 import java.util.Map;
-import javax.faces.component.UniqueIdVendor;
 import javax.faces.event.InitialStateEvent;
 
 /**
@@ -85,10 +88,9 @@ import javax.faces.event.InitialStateEvent;
  * @author Jacob Hookom
  * @version $Id$
  */
-public class ComponentHandler extends MetaTagHandlerImpl {
+public class ComponentHandlerImpl extends MetaTagHandlerImpl {
 
-    private final static Logger log = Logger
-            .getLogger("facelets.tag.component");
+    private final static Logger log = FacesLogger.FACELETS_COMPONENT.getLogger();
     
     private final TagAttribute binding;
 
@@ -98,7 +100,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
 
     private final String rendererType;
 
-    public ComponentHandler(ComponentConfig config) {
+    public ComponentHandlerImpl(ComponentConfig config) {
         super(config);
         this.componentType = config.getComponentType();
         this.rendererType = config.getRendererType();
@@ -143,14 +145,9 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         if (parent == null) {
             throw new TagException(this.tag, "Parent UIComponent was null");
         }
-        
-        // possible facet scoped
-        String facetName = this.getFacetName(ctx, parent);
 
         // our id
         String id = ctx.generateUniqueId(this.tagId);
-        
-        FacesContext faces = ctx.getFacesContext();
 
         // grab our component
         UIComponent c = ComponentSupport.findChildByTagId(parent, id);
@@ -165,7 +162,6 @@ public class ComponentHandler extends MetaTagHandlerImpl {
             ComponentSupport.markForDeletion(c);
         } else {
             c = this.createComponent(ctx);
-            c.getClientId(faces);
             if (log.isLoggable(Level.FINE)) {
                 log.fine(this.tag + " Component["+id+"] Created: "
                         + c.getClass().getName());
@@ -181,14 +177,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
             } else {
                 UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
                 if (root != null) {
-                    String uid;
-                    UIComponent ancestorNamingContainer = parent.getNamingContainer();
-                    if (null != ancestorNamingContainer &&
-                        ancestorNamingContainer instanceof UniqueIdVendor) {
-                        uid = ((UniqueIdVendor)ancestorNamingContainer).createUniqueId(faces);
-                    } else {
-                        uid = root.createUniqueId();
-                    }
+                    String uid = root.createUniqueId();
                     c.setId(uid);
                 }
             }
@@ -208,25 +197,18 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         if (componentFound) {
             ComponentSupport.finalizeForDeletion(c);
             
-            if (facetName == null) {
-            	parent.getChildren().remove(c);
+            if (getFacetName(ctx, parent) == null) {
+                parent.getChildren().remove(c);
             }
         }
-        String viewId = faces.getViewRoot().getViewId();
-        if (faces.getApplication().getViewHandler().getPageDeclarationLanguage(faces, viewId).getStateManagementStrategy(faces, viewId).isPdlDeliversInitialStateEvent(faces)) {
-            c.processEvent(getInitialStateEvent(faces, c));
-        }
+        
+        c.processEvent(getInitialStateEvent(ctx.getFacesContext(), c));
         this.onComponentPopulated(ctx, c, parent);
 
         // add to the tree afterwards
         // this allows children to determine if it's
         // been part of the tree or not yet
-        c.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
-        if (facetName == null) {
-        	parent.getChildren().add(c);
-        } else {
-        	parent.getFacets().put(facetName, c);
-        }
+		ComponentSupport.addComponent(ctx, parent, c);
         c.popComponentFromEL(ctx.getFacesContext());
         
     }
@@ -254,7 +236,7 @@ public class ComponentHandler extends MetaTagHandlerImpl {
      * @return
      */
     protected final String getFacetName(FaceletContext ctx, UIComponent parent) {
-    	return (String) parent.getAttributes().get(FacetHandler.KEY);
+        return (String) parent.getAttributes().get(FacetHandler.KEY);
     }
 
     /**
@@ -346,29 +328,25 @@ public class ComponentHandler extends MetaTagHandlerImpl {
      * @param parent
      */
     protected void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
-        // Default Behavior  
-        String facesEventType = getFacesEventType(c);
-        if (facesEventType == null) {
-           return;
-        }
         AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
             get(AjaxBehaviors.AJAX_BEHAVIORS);
         if (ajaxBehaviors != null) {
-            AjaxBehavior ajaxBehavior = ajaxBehaviors.getBehaviorForEvent(facesEventType);
+            AjaxBehavior ajaxBehavior = ajaxBehaviors.getCurrentBehavior();
             if (ajaxBehavior != null) {
-                c.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
+                if (c instanceof BehaviorHolder) {
+                    BehaviorHolder bHolder = (BehaviorHolder)c;
+                    String event = bHolder.getDefaultEventName();
+                    if (null != ajaxBehavior.getEvent()) {
+                        event = ajaxBehavior.getEvent();
+                    }
+                    Collection eventNames = bHolder.getEventNames();
+                    if (null != eventNames && eventNames.contains(event) || 
+                        event.equals(bHolder.getDefaultEventName())) {
+                        bHolder.addBehavior(event, ajaxBehavior);
+                    }
+                }
             }
         }
-    }
-
-    protected String getFacesEventType(UIComponent c) {
-        String event = null;
-        if (c instanceof EditableValueHolder) {
-            event = AjaxBehavior.AJAX_VALUE_CHANGE;
-        } else if (c instanceof ActionSource) {
-            event = AjaxBehavior.AJAX_ACTION;
-        } 
-        return event;
     }
 
     protected void onComponentPopulated(FaceletContext ctx, UIComponent c, UIComponent parent) {
@@ -380,4 +358,4 @@ public class ComponentHandler extends MetaTagHandlerImpl {
         // first allow c to get populated
         this.nextHandler.apply(ctx, c);
     }
-}
+    }

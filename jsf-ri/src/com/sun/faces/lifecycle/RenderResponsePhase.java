@@ -44,6 +44,8 @@ package com.sun.faces.lifecycle;
 
 
 import javax.faces.FacesException;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 import javax.faces.event.PhaseId;
@@ -55,6 +57,8 @@ import java.util.logging.Logger;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.OnOffResponseWrapper;
 import com.sun.faces.util.DebugUtil;
+
+import javax.faces.event.PreRenderViewEvent;
 
 
 /**
@@ -93,9 +97,31 @@ public class RenderResponsePhase extends Phase {
         
         try {
 
+                
+            String viewId = facesContext.getViewRoot().getViewId();
+
+            // the before render event on the view root is a special case to keep door open for navigation
+            facesContext.getApplication().publishEvent(PreRenderViewEvent.class,
+                                                       facesContext.getViewRoot());
+
+            String postPublishId = facesContext.getViewRoot().getViewId();
+            ViewHandler vh = facesContext.getApplication().getViewHandler();
+            if ((viewId == null && postPublishId == null)
+                 || viewId.equals(postPublishId)) {
+
+                try {
+                    PageDeclarationLanguage pdl =
+                          vh.getPageDeclarationLanguage(facesContext,
+                                                        facesContext
+                                                              .getViewRoot().getViewId());
+                    pdl.buildView(facesContext, facesContext.getViewRoot());
+                } catch (UnsupportedOperationException uoe) {
+                    // if no PDL is available assume the older VH has handled things
+                    // appropriately
+                }
+            }
             //render the view
-            facesContext.getApplication().getViewHandler().
-                 renderView(facesContext, facesContext.getViewRoot());
+            vh.renderView(facesContext, facesContext.getViewRoot());
 
         } catch (IOException e) {
             throw new FacesException(e.getMessage(), e);

@@ -62,7 +62,6 @@ import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
 import com.sun.faces.facelets.tag.ui.UIDebug;
-import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
@@ -77,6 +76,7 @@ import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
+import javax.faces.webapp.pdl.ViewMetadata;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.servlet.http.HttpServletResponse;
 
@@ -171,7 +171,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         return result;
     }
 
+    @Override
+    public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
 
+        return new ViewMetadataImpl(this, viewId);
+
+    }
+    
     /**
      * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
@@ -294,15 +300,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         UIViewRoot root = super.createView(ctx, viewId);
         root.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         ctx.setViewRoot(root);
-        root.getClientId(ctx);
-
-        if (root != null) {
-            try {
-                buildView(ctx, root);
-            } catch (IOException ioe) {
-                throw new FacesException(ioe);
-            }
-        }
 
         return root;
 
@@ -351,6 +348,39 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         return false;
+    }
+
+
+    /**
+     * Build the view.
+     * @param ctx the {@link FacesContext} for the current request
+     * @param viewToRender the {@link UIViewRoot} to populate based
+     *  of the Facelet template
+     * @throws IOException if an error occurs building the view.
+     */
+    @Override
+    public void buildView(FacesContext ctx, UIViewRoot viewToRender)
+    throws IOException {
+
+        viewToRender.setViewId(viewToRender.getViewId());
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Building View: " + viewToRender.getViewId());
+        }
+        if (faceletFactory == null) {
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
+            faceletFactory = associate.getFaceletFactory();
+            assert (faceletFactory != null);
+        }
+        RequestStateManager.set(ctx,
+                                RequestStateManager.FACELET_FACTORY,
+                                faceletFactory);
+        Facelet f = faceletFactory.getFacelet(viewToRender.getViewId());
+
+        // populate UIViewRoot
+        f.apply(ctx, viewToRender);
+        setViewPopulated(ctx, viewToRender);
+
     }
 
 
@@ -439,43 +469,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
     }
 
+
     /**
      * @return a new Compiler for Facelet processing.
      */
     protected Compiler createCompiler() {
         return new SAXCompiler();
-    }
-
-
-    /**
-     * Build the view.
-     * @param ctx the {@link FacesContext} for the current request
-     * @param viewToRender the {@link UIViewRoot} to populate based
-     *  of the Facelet template
-     * @throws IOException if an error occurs building the view.
-     */
-    protected void buildView(FacesContext ctx, UIViewRoot viewToRender)
-    throws IOException {
-
-        viewToRender.setViewId(viewToRender.getViewId());
-
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Building View: " + viewToRender.getViewId());
-        }
-        if (faceletFactory == null) {
-            ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
-            faceletFactory = associate.getFaceletFactory();
-            assert (faceletFactory != null);
-        }
-        RequestStateManager.set(ctx,
-                                RequestStateManager.FACELET_FACTORY,
-                                faceletFactory);
-        Facelet f = faceletFactory.getFacelet(viewToRender.getViewId());
-
-        // populate UIViewRoot
-        f.apply(ctx, viewToRender);
-        setViewPopulated(ctx, viewToRender);
-
     }
 
 
@@ -556,18 +555,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             LOGGER.log(Level.SEVERE, sb.toString(), e);
         }
 
-        // handle dev response
-        if (associate.isDevModeEnabled() && !context.getResponseComplete()) {
-            ExternalContext extContext = context.getExternalContext();
-            if (!extContext.isResponseCommitted()) {
-                extContext.responseReset();
-                extContext.setResponseContentType("text/html; charset=UTF-8");
-                Writer w = extContext.getResponseOutputWriter();
-                DevTools.debugHtml(w, context, e);
-                w.flush();
-                context.responseComplete();
-            }
-        } else if (e instanceof RuntimeException) {
+        if (e instanceof RuntimeException) {
             throw (RuntimeException) e;
         } else if (e instanceof IOException) {
             throw (IOException) e;

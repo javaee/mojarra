@@ -105,6 +105,7 @@ public class FacesContextImpl extends FacesContext {
     private Severity maxSeverity;
     private boolean renderResponse = false;
     private boolean responseComplete = false;
+    private boolean validationFailed = false;
     private Map<Object, Object> attributes;
     private PhaseId currentPhaseId;
     private PartialViewContext partialViewContext = null;
@@ -542,6 +543,7 @@ public class FacesContextImpl extends FacesContext {
         componentMessageLists = null;
         renderResponse = false;
         responseComplete = false;
+        validationFailed = false;
         viewRoot = null;
         maxSeverity = null;
         application = null;
@@ -587,6 +589,13 @@ public class FacesContextImpl extends FacesContext {
         responseComplete = true;
     }
 
+    /**
+     * @see javax.faces.context.FacesContext#validationFailed()
+     */
+    public void validationFailed() {
+        assertNotReleased();
+        validationFailed = true;
+    }
 
     /**
      * @see javax.faces.context.FacesContext#getRenderResponse()
@@ -603,6 +612,14 @@ public class FacesContextImpl extends FacesContext {
     public boolean getResponseComplete() {
         assertNotReleased();
         return responseComplete;
+    }
+
+    /**
+     * @see javax.faces.context.FacesContext#getValidationFailed()
+     */
+    public boolean getValidationFailed() {
+        assertNotReleased();
+        return validationFailed;
     }
 
     // --------------------------------------------------------- Public Methods

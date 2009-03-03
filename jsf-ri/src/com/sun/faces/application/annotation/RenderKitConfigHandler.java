@@ -44,6 +44,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 import javax.faces.context.FacesContext;
+import javax.faces.render.BehaviorRenderer;
+import javax.faces.render.FacesBehaviorRenderer;
 import javax.faces.render.FacesRenderer;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
@@ -62,10 +64,11 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
         Collection<Class<? extends Annotation>> handles =
               new ArrayList<Class<? extends Annotation>>(2);
         handles.add(FacesRenderer.class);
+        handles.add(FacesBehaviorRenderer.class);
         HANDLES = Collections.unmodifiableCollection(handles);
     }
 
-    Map<Class<?>, FacesRenderer> annotatedRenderers;
+    Map<Class<?>, Annotation> annotatedRenderers;
 
     // ------------------------------------- Methods from ComponentConfigHandler
 
@@ -86,9 +89,9 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (annotatedRenderers == null) {
-            annotatedRenderers = new HashMap<Class<?>, FacesRenderer>();
+            annotatedRenderers = new HashMap<Class<?>, Annotation>();
         }
-        annotatedRenderers.put(target, (FacesRenderer) annotation);
+        annotatedRenderers.put(target,  annotation);
 
     }
 
@@ -98,31 +101,51 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
      */
     public void push(FacesContext ctx) {
 
-        RenderKitFactory rkf = (RenderKitFactory) FactoryFinder
-              .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 
         if (annotatedRenderers != null) {
-            for (Map.Entry<Class<?>,FacesRenderer> entry : annotatedRenderers.entrySet()) {
-                Class<?> rClass = entry.getKey();
-                FacesRenderer ra = entry.getValue();
-                try {
-                    RenderKit rk = rkf.getRenderKit(ctx, ra.renderKitId());
-                    if (rk == null) {
-                        throw new IllegalStateException(
-                              "Error processing annotated Renderer "
-                              + ra.toString()
-                              + " on class "
-                              + rClass.getName()
-                              + ".  Unable to find specified RenderKit.");
-                    }
-                    rk.addRenderer(ra.componentFamily(),
-                                   ra.rendererType(),
-                                   (Renderer) rClass.newInstance());
-                } catch (Exception e) {
-                    throw new FacesException(e);
-                }
-            }
-        }
+            RenderKitFactory rkf = (RenderKitFactory) FactoryFinder
+            .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+			for (Map.Entry<Class<?>, Annotation> entry : annotatedRenderers
+					.entrySet()) {
+				Class<?> rClass = entry.getKey();
+				if (entry.getValue() instanceof FacesRenderer) {
+					FacesRenderer ra = (FacesRenderer) entry.getValue();
+					try {
+						RenderKit rk = rkf.getRenderKit(ctx, ra.renderKitId());
+						if (rk == null) {
+							throw new IllegalStateException(
+									"Error processing annotated Renderer "
+											+ ra.toString()
+											+ " on class "
+											+ rClass.getName()
+											+ ".  Unable to find specified RenderKit.");
+						}
+						rk.addRenderer(ra.componentFamily(), ra.rendererType(),
+								(Renderer) rClass.newInstance());
+					} catch (Exception e) {
+						throw new FacesException(e);
+					}
+				} else if (entry.getValue() instanceof FacesBehaviorRenderer) {
+					FacesBehaviorRenderer bra = (FacesBehaviorRenderer) entry
+							.getValue();
+					try {
+						RenderKit rk = rkf.getRenderKit(ctx, bra.renderKitId());
+						if (rk == null) {
+							throw new IllegalStateException(
+									"Error processing annotated BehaviorRenderer "
+											+ bra.toString()
+											+ " on class "
+											+ rClass.getName()
+											+ ".  Unable to find specified RenderKit.");
+						}
+						rk.addBehaviorRenderer(bra.rendererType(),
+								(BehaviorRenderer) rClass.newInstance());
+					} catch (Exception e) {
+						throw new FacesException(e);
+					}
+				}
+			}
+		}
 
     }
 

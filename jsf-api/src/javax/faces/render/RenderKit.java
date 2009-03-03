@@ -230,5 +230,51 @@ public abstract class RenderKit {
         return empty.iterator();
 
     }
+    
+    /**
+     * <p>Register the specified {@link BehaviorRenderer} instance, 
+     * associated with the specified component <code>type</code>,
+     * to the set of {@link BehaviorRenderer}s registered with this 
+     * {@link RenderKit}, replacing any previously registered 
+     * {@link BehaviorRenderer} for this type.</p>
+     *
+     * @param type type of the {@link BehaviorRenderer} to register
+     * @param renderer {@link BehaviorRenderer} instance we are registering
+     *
+     * @throws NullPointerException if <code>type</code> or 
+     * <code>renderer</code> is null
+     *
+     * @since 2.0
+     */
+    public void addBehaviorRenderer(String type, BehaviorRenderer renderer) {
+        throw new UnsupportedOperationException("The default implementation must override this method");
+    }
+    
+    /**
+     * <p>Return the {@link BehaviorRenderer} instance most recently 
+     * registered for the specified <code>type</code>, if any; 
+     * otherwise, return <code>null</code>.</p>
+     *
+     * @param type type of the requested
+     *  {@link BehaviorRenderer} instance
+     *
+     * @throws NullPointerException if <code>type</code>
+     *  is <code>null</code>
+     *
+     * @since 2.0
+     */
+    public BehaviorRenderer getBehaviorRenderer(String type) {
+        throw new UnsupportedOperationException("The default implementation must override this method");
+    }
+    
+    /**
+     * <p class="changed_added_2_0">Return an <code>Iterator</code> over
+     * the {@link BehaviorRenderer} types.</p>
+     *
+     * @since 2.0
+     */
+    public Iterator<String> getBehaviorRendererTypes() {
+        throw new UnsupportedOperationException("The default implementation must override this method");		
+    }
 
 }

@@ -199,6 +199,9 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>false</pass-through>
+            <behavior/>
+            <behavior>action</behavior>
+            <default-behavior>true</default-behavior>
         </property-extension>
     </property>
 
@@ -213,6 +216,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -227,6 +231,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -241,6 +246,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -255,6 +261,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -269,6 +276,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -283,6 +291,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -297,6 +306,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -311,6 +321,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
+            <behavior/>
         </property-extension>
     </property>
 
@@ -325,6 +336,7 @@
         <property-class>java.lang.String</property-class>
         <property-extension>
             <pass-through>true</pass-through>
+            <behavior/>
         </property-extension>
     </property>
 

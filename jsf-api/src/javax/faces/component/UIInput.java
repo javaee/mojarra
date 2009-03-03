@@ -40,16 +40,24 @@
 
 package javax.faces.component;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.Collections;
+import java.util.logging.Logger;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExceptionHandler;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
@@ -60,6 +68,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
+import javax.faces.validator.BeanValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
@@ -72,36 +81,49 @@ import javax.faces.validator.ValidatorException;
  * value, or the object referenced by the value binding expression (if
  * any); however, individual {@link javax.faces.render.Renderer}s will
  * generally impose restrictions on the type of data they know how to
- * display.</p> <p/> <p>During the <em>Apply Request Values</em> phase
+ * display.</p> 
+ *
+ * <p>During the <em>Apply Request Values</em> phase
  * of the request processing lifecycle, the decoded value of this
  * component, usually but not necessarily a String, must be stored - but
  * not yet converted - using <code>setSubmittedValue()</code>.  If the
  * component wishes to indicate that no particular value was submitted,
  * it can either do nothing, or set the submitted value to
- * <code>null</code>.</p> <p></p> <p>By default, during the <em>Process
- * Validators</em> phase of the request processing lifecycle, the
- * submitted value will be converted to a typesafe object, and, if
- * validation succeeds, stored as a local value using
- * <code>setValue()</code>.  However, if the <code>immediate</code>
- * property is set to <code>true</code>, this processing will occur
- * instead at the end of the <em>Apply Request Values</em> phase.  </p>
+ * <code>null</code>.</p>
+
+ * <p>By default, during the <em>Process Validators</em> phase of the
+ * request processing lifecycle, the submitted value will be converted
+ * to a typesafe object, and, if validation succeeds, stored as a local
+ * value using <code>setValue()</code>.  However, if the
+ * <code>immediate</code> property is set to <code>true</code>, this
+ * processing will occur instead at the end of the <em>Apply Request
+ * Values</em> phase.</p> 
+
  * <p>During the <em>Render Response</em> phase of the request
  * processing lifecycle, conversion for output occurs as for {@link
- * UIOutput}.</p> <p/> <p>When the <code>validate()</code> method of
- * this {@link UIInput} detects that a value change has actually
- * occurred, and that all validations have been successfully passed, it
- * will queue a {@link ValueChangeEvent}.  Later on, the
- * <code>broadcast()</code> method will ensure that this event is
- * broadcast to all interested listeners.  This event will be delivered
- * by default in the <em>Process Validators</em> phase, but can be
- * delivered instead during <em>Apply Request Values</em> if the
- * <code>immediate</code> property is set to <code>true</code>.</p> <p/>
+ * UIOutput}.</p>
+
+ * <p>When the <code>validate()</code> method of this {@link UIInput}
+ * detects that a value change has actually occurred, and that all
+ * validations have been successfully passed, it will queue a {@link
+ * ValueChangeEvent}.  Later on, the <code>broadcast()</code> method
+ * will ensure that this event is broadcast to all interested listeners.
+ * This event will be delivered by default in the <em>Process
+ * Validators</em> phase, but can be delivered instead during <em>Apply
+ * Request Values</em> if the <code>immediate</code> property is set to
+ * <code>true</code>. <span class="changed_added_2_0">If the validation
+ * fails, the implementation must call {@link
+ * FacesContext#validationFailed}.</span></p>
+
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Text</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
 public class UIInput extends UIOutput implements EditableValueHolder {
+
+    private static Logger LOGGER = Logger.getLogger("javax.faces.component",
+            "javax.faces.LogStrings");
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -144,9 +166,42 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     public static final String UPDATE_MESSAGE_ID =
          "javax.faces.component.UIInput.UPDATE";
+
+
+    /**
+     * <p class="changed_added_2_0">The name of an application parameter
+     * that indicates how empty values should be handled with respect to
+     * validation.  See {@link #validateValue} for the allowable values
+     * and specification of how they should be interpreted.</p>
+     */
+
+    public static final String VALIDATE_EMPTY_FIELDS_PARAM_NAME = 
+	"javax.faces.VALIDATE_EMPTY_FIELDS";
+    
+    /**
+
+     * <p class="changed_added_2_0">The value of this constant is used
+     * as the attribute within the attributes <code>Map</code> on the
+     * {@link UIComponent} to hold a <code>Map</code> of default
+     * validators for a subtree of the component tree. Each key in the
+     * <code>Map</code> is a validator id and the value is a
+     * <code>Boolean</code> flag indicating whether the validator is
+     * being activated or deactivated for this branch of the component
+     * tree. Each activated validator gets registered on any {@link
+     * EditableValueHolder} found in this subtree of the component
+     * tree.</p>
+
+     */
+    public static final String DEFAULT_VALIDATOR_IDS_KEY = "javax.faces.component.DEFAULT_VALIDATOR_IDS";
+    
+
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
     private Boolean emptyStringIsNull;
+
+    private Boolean validateEmptyFields;
+
+    private boolean defaultValidatorsProcessed;
 
     // ------------------------------------------------------------ Constructors
 
@@ -607,6 +662,83 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     // ----------------------------------------------------- UIComponent Methods
 
+
+    /**
+     * <p class="changed_added_2_0">Override the default superclass
+     * behavior to provide conditional support for Beans Validation behavior.  
+     * If Beans Validation is not available in the current environment,
+     * this method must take no action.  After
+     * encoding the component, add any default validators. Putting the
+     * logic in this method allows this service to be provided even for
+     * inputs that are added programmatically because this method is
+     * guaranteed to be called before any validations happen on a
+     * subsequent postback.</p>
+
+     * <div class="changed_added_2_0">
+
+     * <p>Append the default validators after
+     * any locally defined validators.  The validators to be appended
+     * must be discovered in the following manner.  Let <em>toAdd</em>
+     * be a logical list of validatorIds to add.</p>
+
+     * <ul>
+     *
+     * <li><p>Call {@link Application#getDefaultValidatorInfo} and add
+     * each key from the returned <code>Map</code> to
+     * <em>toAdd</em>.</p></li>
+
+     * <li><p>Perform following algorithm
+     * <em>collectDefaultValidatorIds</em> (or its semantic equivalent)
+     * for each ancestor component between <em>this</em> component
+     * instance up to and including the {@link UIViewRoot}.</p>
+
+     * <ul>
+
+     * 	  <li><p>Let <em>defaultValidatiorIds</em> be the value in the
+     * 	  current component's attribute <code>Map</code> under the key
+     * 	  given by the value of the symbolic constant {@link
+     * 	  #DEFAULT_VALIDATOR_IDS_KEY}.</p></li>
+
+     * 	  <li><p>If <em>defaultValidatiorIds</em> is a
+     * 	  <code>List</code>, assume it is a
+     * 	  <code>List&lt;String&gt;</code> and add all of its values to
+     * 	  <em>toAdd</em>.</p></li>
+
+     * 	  <li><p>Perform <em>collectDefaultValidatorIds</em> on the
+     * 	  component's parent, if present.</p></li>
+
+     * 	  <li><p>If <em>defaultValidatiorIds</em> is a <code>Map</code>,
+     * 	  assume it is a <code>Map&lt;String, Boolean&gt;</code> and
+     * 	  interpret the key to be a validatorId, and the value to be a
+     * 	  boolean indicating whether or not the user has flagged this
+     * 	  particular validator instance as enabled or disabled.  For
+     * 	  each entry in the map whose value is enabled, add the
+     * 	  corresponding validatorId to <em>toAdd</em>.</p></li>
+
+     * </ul>
+
+     * </li>
+
+     * <p>For each validatorId in <em>toAdd</em>, the validator is
+     * created in the normal way using the <code>Application</code>
+     * object. If a validator with the same validator id already exists
+     * on the component, then that default validator is skipped.</p>
+
+     * </div>
+
+     * @throws NullPointerException {@inheritDoc}
+     * @throws IOException {@inheritDoc}
+
+     */
+    @Override
+    public void encodeEnd(FacesContext context) throws IOException {
+        super.encodeEnd(context);
+        // QUESTION is there another dependable way to perform this only once?
+        if (isBeansValidationAvailable(context) && !defaultValidatorsProcessed) {
+            addDefaultValidators(context);
+        }
+    }
+
     /**
      * <p>Specialized decode behavior on top of that provided by the
      * superclass.  In addition to the standard
@@ -996,37 +1128,79 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
     /**
-     * <p>Set the "valid" property according to the below algorithm.</p>
-     * <p/>
+     * <p><span class="changed_modified_2_0">Set</span> the "valid"
+     * property according to the below algorithm.</p>
+
      * <ul>
-     * <p/>
-     * <li>If the <code>valid</code> property on this component is still
-     * <code>true</code>, and the <code>required</code> property is also
-     * true, ensure that the local value is not empty (where "empty" is
-     * defined as <code>null</code> or a zero-length String.  If the local
-     * value is empty:
+
+     * <li>
+
+     * <p>If the <code>valid</code> property on this component is
+     * still <code>true</code>, and the <code>required</code> property
+     * is also <code>true</code>, ensure that the local value is not
+     * empty (where "empty" is defined as <code>null</code> or a
+     * zero-length String).  If the local value is empty:</p>
+
      * <ul>
-     * <li>Enqueue an appropriate error message by calling the
+
+     * <li><p>Enqueue an appropriate error message by calling the
      * <code>addMessage()</code> method on the <code>FacesContext</code>
-     * instance for the current request.  If the {@link #getRequiredMessage}
-     * returns non-<code>null</code>, use the value as the <code>summary</code>
-     * and <code>detail</code> in the {@link FacesMessage} that
-     * is enqueued on the <code>FacesContext</code>, otherwise
-     * use the message for the {@link #REQUIRED_MESSAGE_ID}.
+     * instance for the current request.  If the {@link
+     * #getRequiredMessage} returns non-<code>null</code>, use the value
+     * as the <code>summary</code> and <code>detail</code> in the {@link
+     * FacesMessage} that is enqueued on the <code>FacesContext</code>,
+     * otherwise use the message for the {@link #REQUIRED_MESSAGE_ID}.
+     * </li> <li>Set the <code>valid</code> property on this component
+     * to <code>false</code>.</p></li> 
+
+     * <li><p class="changed_modified_2_0">If calling {@link
+     * ValidatorException#getFacesMessages} returns
+     * non-<code>null</code>, each message should be added to the
+     * <code>FacesContext</code>.  Otherwise the single message returned
+     * from {@link ValidatorException#getFacesMessage} should be
+     * added.</p></li>
+     *
+     * </ul>
+
      * </li>
-     * <li>Set the <code>valid</code> property on this component to
-     * <code>false</code>.</li>
-     * </ul></li>
-     * <li>If the <code>valid</code> property on this component is still
-     * <code>true</code>, and the local value is not empty, call the
-     * <code>validate()</code> method of each {@link Validator}
-     * registered for this {@link UIInput}, followed by the method
-     * pointed at by the <code>validatorBinding</code> property (if any).
-     * If any of these validators or the method throws a
-     * {@link ValidatorException}, catch the exception, add
-     * its message (if any) to the {@link FacesContext}, and set
-     * the <code>valid</code> property of this component to false.</li>
-     * <p/>
+     *
+     *
+     * <li class="changed_added_2_0"><p>Otherwise, if the
+     * <code>valid</code> property on this component is still
+     * <code>true</code>, take the following action to determine if
+     * validation of this component should proceed.</p>
+
+     * <ul>
+     *
+     * <li><p>If the value is not empty, validation should proceed.</p></li>
+
+     * <li><p>If the value is empty, but the system has been directed to
+     * validate empty fields, validation should proceed.  The
+     * implementation must obtain the init parameter <code>Map</code>
+     * from the <code>ExternalContext</code> and inspect the value for
+     * the key given by the value of the symbolic constant {@link
+     * #VALIDATE_EMPTY_FIELDS_PARAM_NAME}.  If there is no value under
+     * that key, use the same key and look in the application map from
+     * the <code>ExternalContext</code>.  If the value is
+     * <code>null</code> or equal to the string
+     * &#8220;<code>auto</code>&#8221; (without the quotes) look in the
+     * context <code>ClassLoader</code> of the current
+     * <code>Thread</code> for the class
+     * <code>javax.validation.Validation</code>.  If no such class can
+     * be found, validation should not proceed.  If the value is equal
+     * (ignoring case) to &#8220;<code>true</code>&#8221; (without the
+     * quotes) validation should proceed.  Otherwise, validation should
+     * not proceed.</p></li>
+
+     * <p>If the above determination indicates that validation should
+     * proceed, call the <code>validate()</code> method of each {@link
+     * Validator} registered for this {@link UIInput}, followed by the
+     * method pointed at by the <code>validatorBinding</code> property
+     * (if any).  If any of these validators or the method throws a
+     * {@link ValidatorException}, catch the exception, add its message
+     * (if any) to the {@link FacesContext}, and set the
+     * <code>valid</code> property of this component to false.</li>
+
      * </ul>
      */
 
@@ -1049,8 +1223,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             setValid(false);
         }
 
-        // If our value is valid and not empty, call all validators
-        if (isValid() && !isEmpty(newValue)) {
+        // If our value is valid and not empty or empty w/ validate empty fields enabled, call all validators
+        if (isValid() && (!isEmpty(newValue) || validateEmptyFields(context))) {
             if (this.validators != null) {
                 for (Validator validator : this.validators) {
                     try {
@@ -1070,7 +1244,17 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                                                    validatorMessageString);
                             message.setSeverity(FacesMessage.SEVERITY_ERROR);
                         } else {
-                            message = ve.getFacesMessage();
+                            Collection<FacesMessage> messages = ve.getFacesMessages();
+                            if (null != messages) {
+                                message = null;
+                                Iterator<FacesMessage> iter = messages.iterator();
+                                while (iter.hasNext()) {
+                                    context.addMessage(getClientId(context), 
+                                            iter.next());
+                                }
+                            } else {
+                                message = ve.getFacesMessage();
+                            }
                         }
                         if (message != null) {
                             context.addMessage(getClientId(context), message);
@@ -1114,11 +1298,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         if (!isValid()) {
+            context.validationFailed();
             context.renderResponse();
         }
     }
 
-    private static boolean isEmpty(Object value) {
+    public static boolean isEmpty(Object value) {
 
         if (value == null) {
             return (true);
@@ -1250,7 +1435,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[10];
+            values = new Object[12];
         }
 
         values[0] = super.saveState(context);
@@ -1263,6 +1448,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         values[7] = immediate;
         values[8] = saveAttachedState(context, validators);
         values[9] = emptyStringIsNull;
+        values[10] = validateEmptyFields;
+        values[11] = defaultValidatorsProcessed;
         return (values);
 
     }
@@ -1298,6 +1485,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         emptyStringIsNull = (Boolean) values[9];
+        validateEmptyFields = (Boolean) values[10];
+        defaultValidatorsProcessed = (Boolean) values[11];
 
     }
 
@@ -1371,6 +1560,132 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         return emptyStringIsNull;
         
+    }
+
+    private boolean validateEmptyFields(FacesContext ctx) {
+
+        if (validateEmptyFields == null) {
+            ExternalContext extCtx = ctx.getExternalContext();
+            String val = extCtx.getInitParameter(VALIDATE_EMPTY_FIELDS_PARAM_NAME);
+
+            if (null == val) {
+                val = (String) extCtx.getApplicationMap().get(VALIDATE_EMPTY_FIELDS_PARAM_NAME);
+            }
+            if (val == null || val.equals("auto")) {
+                validateEmptyFields = isBeansValidationAvailable(ctx);
+            }
+            else {
+                validateEmptyFields = Boolean.valueOf(val);
+            }
+        }
+
+        return validateEmptyFields;
+
+    }
+    
+    private boolean isBeansValidationAvailable(FacesContext context) {
+        boolean result = false;
+        final String beansValidationAvailabilityCacheKey = 
+                "javax.faces.BEANS_VALIDATION_AVAILABLE";
+        Map<String,Object> appMap = context.getExternalContext().getApplicationMap();
+        
+        if (appMap.containsKey(beansValidationAvailabilityCacheKey)) {
+            result = (Boolean) appMap.get(beansValidationAvailabilityCacheKey);
+        } else {
+            try {
+                new BeanValidator();
+                appMap.put(beansValidationAvailabilityCacheKey, result = true);
+            } catch (Throwable t) {
+                appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     */
+    private void addDefaultValidators(FacesContext context) {
+        
+        Set<String> exclusions;
+        Validator[] validators = getValidators();
+        if (validators.length != 0) {
+            exclusions = new HashSet<String>(validators.length, 1.0f);
+            for (Validator v : validators) {
+                exclusions.add(v.getClass().getName());
+            }
+        } else {
+            exclusions = Collections.emptySet();
+        }
+
+        // first add the registered default validators and then turn them off based on switches in tree
+        List<String> defaultValidatorIds = new ArrayList<String>();
+        Map<String,String> defaultValidatorInfo = context.getApplication().getDefaultValidatorInfo();
+        if (!defaultValidatorInfo.isEmpty()) {
+            for (Map.Entry<String,String> valInfo : defaultValidatorInfo.entrySet()) {
+                defaultValidatorIds.add(valInfo.getKey());
+            }
+        }
+
+        collectDefaultValidatorIds(defaultValidatorIds, this);
+
+        for (String validatorId : defaultValidatorIds) {
+            String defaultValClassName = defaultValidatorInfo.get(validatorId);
+            if (exclusions.contains(defaultValClassName)) {
+                continue;
+            }
+
+            addValidator(context.getApplication().createValidator(validatorId));
+        }
+    }
+
+
+    /**
+     * <p>Work upwards through the component hierarchy and collect any default validators that have been defined.</p>
+     */
+    private void collectDefaultValidatorIds(List<String> defaultValidatorIds, UIComponent component) {
+        Object branchState = component.getAttributes().get(DEFAULT_VALIDATOR_IDS_KEY);
+
+        // check for the "resolved" list for this branch
+        // NOTE we could use a separate key for the resolved list to avoid type hunting
+        if (branchState instanceof List) {
+            if (defaultValidatorIds.isEmpty()) {
+                defaultValidatorIds.addAll((List<String>) branchState);
+            }
+            else {
+                for (String validatorId : (List<String>) branchState) {
+                    if (!defaultValidatorIds.contains(validatorId)) {
+                        defaultValidatorIds.add(0, validatorId);
+                    }
+                }
+            }
+            return;
+        }
+
+        // process parent nodes first
+        if (component.getParent() != null) {
+            collectDefaultValidatorIds(defaultValidatorIds, component.getParent());
+        }
+
+        // collect any default validator ids registered at this branch point
+        if (branchState instanceof Map) {
+            Map<String, Boolean> validatorIdStates = (Map<String, Boolean>) branchState;
+            for (Map.Entry<String, Boolean> e : validatorIdStates.entrySet()) {
+                if (e.getValue()) {
+                    // validators nearer to input component take precendence
+                    // QUESTION if it already present, should we move it to the front?
+                    if (!defaultValidatorIds.contains(e.getKey())) {
+                        defaultValidatorIds.add(0, e.getKey());
+                    }
+                }
+                else {
+                    defaultValidatorIds.remove(e.getKey());
+                }
+            }
+        }
+
+        // make sure we never have to climb the mountain again (could we avoid creating new list if none added at this node?)
+        component.getAttributes().put(DEFAULT_VALIDATOR_IDS_KEY, new ArrayList<String>(defaultValidatorIds));
     }
 
 }

@@ -299,6 +299,9 @@ public class Util {
         } else if (type.equals("void")) {
             result = Void.TYPE;
         } else {
+            if (type.indexOf('.') == -1) {
+                type = "java.lang." + type;
+            }
             result = Util.loadClass(type, Void.TYPE);
         }
 

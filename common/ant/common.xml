@@ -149,6 +149,7 @@
         <pathelement location="${jstl.jar}"/>
         <pathelement location="${annotation.jar}"/>
         <pathelement location="${groovy.jar}"/>
+        <pathelement location="${validation-api.jar}"/>
     </path>
     
     <path id="sun.commons.classpath">
@@ -227,9 +228,6 @@
             <echo message="Creating archive '@{archive-name}'..."/>
 
             <jar destfile="@{basedir}/@{archive-name}.war">
-                <manifest>
-                    <attribute name="HK2-Import-Bundles" value="org.glassfish.external:apache-commons"/>
-                </manifest>
                 <zipfileset file="@{webxml}"
                             prefix="WEB-INF"/>
                 <archive-elements/>

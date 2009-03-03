@@ -52,9 +52,9 @@
 package com.sun.faces.facelets.tag.ui;
 
 import com.sun.faces.facelets.tag.jsf.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandler;
+import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 
-public final class ComponentRefHandler extends ComponentHandler {
+public final class ComponentRefHandler extends ComponentHandlerImpl {
 
     public final static String Name = "component";
     

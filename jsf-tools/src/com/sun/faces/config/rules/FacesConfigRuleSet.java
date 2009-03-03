@@ -355,6 +355,9 @@ public class FacesConfigRuleSet extends RuleSetBase {
             digester.addCallMethod
                   ("faces-config/render-kit/renderer/renderer-extension/jsp-ignore",
                    "setIgnoreForJsp", 0, new String[] { "java.lang.Boolean" });
+             digester.addCallMethod
+                  ("faces-config/render-kit/renderer/renderer-extension/ignore-all",
+                   "setIgnoreAll", 0, new String[] { "java.lang.Boolean" });
             digester.addCallMethod
                 ("faces-config/render-kit/renderer/renderer-extension/tag-name",
                 "setTagName", 0);
@@ -420,6 +423,12 @@ public class FacesConfigRuleSet extends RuleSetBase {
         digester.addCallMethod
             (prefix + "/attribute/attribute-extension/renderer-attribute-ignore",
              "setAttributeIgnoredForRenderer", 0, new String[] {"java.lang.Boolean"});
+        digester.addCallMethod
+        	(prefix + "/attribute/attribute-extension/behavior",
+        	"addBehavior", 0, new String[] {"java.lang.String"});
+        digester.addCallMethod
+        	(prefix + "/attribute/attribute-extension/default-behavior",
+        	"setDefaultBehavior", 0, new String[] {"java.lang.Boolean"});
     }
 
 
@@ -537,6 +546,12 @@ public class FacesConfigRuleSet extends RuleSetBase {
         digester.addCallMethod
             (prefix + "/property/property-extension/value-expression-enabled",
             "setValueExpressionEnabled", 0, new String[] { "java.lang.Boolean" });
+        digester.addCallMethod
+    		(prefix + "/property/property-extension/behavior",
+    	    "addBehavior", 0, new String[] {"java.lang.String"});
+        digester.addCallMethod
+    		(prefix + "/property/property-extension/default-behavior",
+    		"setDefaultBehavior", 0, new String[] {"java.lang.Boolean"});
 
     }
 

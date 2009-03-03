@@ -63,6 +63,7 @@ import javax.faces.context.FacesContext;
  * {@link javax.faces.render.Renderer}s that support parameter names on their
  * nested {@link UIParameter} child components should document
  * their use of this property.</p>
+ *
  */
 
 public class UIParameter extends UIComponentBase {
@@ -103,6 +104,7 @@ public class UIParameter extends UIComponentBase {
 
     private String name = null;
     private Object value = null;
+    private Boolean disable = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -158,6 +160,10 @@ public class UIParameter extends UIComponentBase {
      */
     public Object getValue() {
 
+    if (isDisable()) {
+        return null;
+    }
+    
 	if (this.value != null) {
 	    return (this.value);
 	}
@@ -188,6 +194,35 @@ public class UIParameter extends UIComponentBase {
 
     }
 
+    /**
+     * <p class="changed_added_2_0">Return the value of the <code>disable</code>
+     * directive for this component. This directive determines whether the
+     * parameter value should be disabled by assigning it a null value.
+     * If true, the <code>value</code> set on this component is ignored.</p>
+     */
+    public boolean isDisable() {
+        if (disable != null) {
+            return (this.disable);
+        }
+        ValueExpression ve = getValueExpression("disable");
+        if (ve != null) {
+            try {
+                return Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext()));
+            } catch (ELException e) {
+                throw new FacesException(e);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * <p>Sets the <code>disable</code> property of the <code>UIParameter</code>.</p>
+     * @param disable
+     */
+    public void setDisable(boolean disable) {
+        this.disable = disable;
+    }
 
     // ----------------------------------------------------- StateHolder Methods
 
@@ -197,12 +232,13 @@ public class UIParameter extends UIComponentBase {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[3];
+             values = new Object[4];
         }
      
         values[0] = super.saveState(context);
         values[1] = name;
         values[2] = value;
+        values[3] = disable;
         return (values);
 
     }
@@ -214,6 +250,7 @@ public class UIParameter extends UIComponentBase {
         super.restoreState(context, values[0]);
         name = (String) values[1];
         value = values[2];
+        disable = (Boolean) values[3];
 
     }
 

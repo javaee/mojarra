@@ -42,10 +42,7 @@ import java.util.ArrayList;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.AbstractTestCase;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlTable;
-import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
+import com.gargoylesoftware.htmlunit.html.*;
 
 public class DataTableTestCase extends AbstractTestCase {
 
@@ -69,7 +66,7 @@ public class DataTableTestCase extends AbstractTestCase {
     // ------------------------------------------------------------ Test Methods
 
 
-    /**
+    /*
      * Test for https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=774
      */
     public void testVarNotOverrwrittenByNull() throws Exception {
@@ -95,9 +92,8 @@ public class DataTableTestCase extends AbstractTestCase {
     }
 
 
-    /**
+    /*
      * Test regression https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=902.
-     * @throws Exception
      */
     public void testRowClasses() throws Exception {
 
@@ -118,5 +114,43 @@ public class DataTableTestCase extends AbstractTestCase {
             }
         }
         
+    }
+
+    public void testTableForms() throws Exception {
+        getPage("/faces/standard/dtablemultiforms.jsp");
+        checkTrue("out","");
+
+        HtmlTextInput in0 = (HtmlTextInput) lastpage.getHtmlElementById("table:0:columnform:columninput");
+        in0.setValueAttribute("test0");
+
+        HtmlSubmitInput button0 = (HtmlSubmitInput) lastpage.getHtmlElementById("table:0:columnform:columnbutton");
+        lastpage = (HtmlPage) button0.click();
+
+        checkTrue("out","test0");
+
+        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("table:1:columnform:columninput");
+        in1.setValueAttribute("test1");
+
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("table:1:columnform:columnbutton");
+        lastpage = (HtmlPage) button1.click();
+
+        checkTrue("out","test1");
+
+        HtmlTextInput in2 = (HtmlTextInput) lastpage.getHtmlElementById("table:2:columnform:columninput");
+        in2.setValueAttribute("test2");
+
+        HtmlSubmitInput button2 = (HtmlSubmitInput) lastpage.getHtmlElementById("table:2:columnform:columnbutton");
+        lastpage = (HtmlPage) button2.click();
+
+        checkTrue("out","test2");
+
+        HtmlTextInput finalin = (HtmlTextInput) lastpage.getHtmlElementById("finalform:finalinput");
+        finalin.setValueAttribute("testfinal");
+
+        HtmlSubmitInput finalbutton = (HtmlSubmitInput) lastpage.getHtmlElementById("finalform:finalbutton");
+        lastpage = (HtmlPage) finalbutton.click();
+
+        checkTrue("out","testfinal");
+
     }
 }

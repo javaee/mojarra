@@ -43,8 +43,10 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExceptionHandler;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.SystemEvent;
@@ -53,6 +55,7 @@ import javax.faces.event.PhaseId;
 import javax.el.ELException;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 
 /**
@@ -82,6 +85,24 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     private LinkedList<ExceptionQueuedEvent> unhandledExceptions;
     private LinkedList<ExceptionQueuedEvent> handledExceptions;
     private ExceptionQueuedEvent handled;
+    private boolean errorPagePresent;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public ExceptionHandlerImpl() {
+
+        this.errorPagePresent = true;
+
+    }
+
+    
+    public ExceptionHandlerImpl(boolean errorPagePresent) {
+
+        this.errorPagePresent = errorPagePresent;
+        
+    }
 
 
     // ------------------------------------------- Methods from ExceptionHandler
@@ -100,6 +121,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     /**
      * @see javax.faces.context.ExceptionHandler#handle()
      */
+    @SuppressWarnings({"ThrowableInstanceNeverThrown"})
     public void handle() throws FacesException {
 
         for (Iterator<ExceptionQueuedEvent> i = getUnhandledExceptionQueuedEvents().iterator(); i.hasNext(); ) {
@@ -111,12 +133,14 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
                     handled = event;
                     Throwable unwrapped = getRootCause(t);
                     if (unwrapped != null) {
-                        throw new FacesException(unwrapped.getMessage(), unwrapped);
+                        throwIt(context.getContext(),
+                                new FacesException(unwrapped.getMessage(), unwrapped));
                     } else {
                         if (t instanceof FacesException) {
-                            throw (FacesException) t;
+                            throwIt(context.getContext(), (FacesException) t);
                         } else {
-                            throw new FacesException(t.getMessage(), t);
+                            throwIt(context.getContext(),
+                                    new FacesException(t.getMessage(), t));
                         }
                     }
                 } else {
@@ -212,6 +236,17 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
 
     // --------------------------------------------------------- Private Methods
+
+
+    private void throwIt(FacesContext ctx, FacesException fe) {
+
+        if (ProjectStage.Development.equals(ctx.getApplication().getProjectStage()) && !errorPagePresent) {
+            // RELEASE_PENDING what about other device types?
+            RenderKitUtils.renderHtmlErrorPage(ctx, fe);
+        } else {
+            throw fe;
+        }
+    }
 
 
     /**

@@ -40,7 +40,6 @@
 
 package com.sun.faces.generate;
 
-import com.sun.faces.config.beans.AttributeBean;
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
@@ -50,10 +49,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Iterator;
 
 /**
  * PENDING
@@ -158,8 +155,13 @@ public class AttributeManagerGenerator extends AbstractGenerator {
 
     private void writeImports(CodeWriter writer) throws Exception {
         addImport("java.util.Map");
-        addImport("java.util.HashMap");
-        addImport("java.util.Collections");
+//        addImport("java.util.HashMap");
+//        addImport("java.util.Collections");
+        addImport("static com.sun.faces.util.CollectionsUtils.*");
+        addImport("com.sun.faces.util.CollectionsUtils");
+        addImport("static com.sun.faces.renderkit.Attribute.*");
+        addImport("com.sun.faces.renderkit.Attribute");
+        
         Collections.sort(imports);
 
         for (Iterator i = imports.iterator(); i.hasNext();) {
@@ -211,11 +213,8 @@ public class AttributeManagerGenerator extends AbstractGenerator {
     private void writeClassBody(CodeWriter writer, FacesConfigBean bean)
     throws Exception {
         writer.indent();
-        writer.fwrite("private static Map<String,String[]> ATTRIBUTE_LOOKUP;\n");
+        writer.fwrite("private static Map<String,Attribute[]> ATTRIBUTE_LOOKUP=CollectionsUtils.<String,Attribute[]>map()\n");
         writer.indent();
-        writer.fwrite("static {\n");
-        writer.indent();
-        writer.fwrite("HashMap<String,String[]> map = new HashMap<String,String[]>();\n");
 
         ComponentBean[] components = bean.getComponents();
         List<String> keys = new ArrayList<String>();
@@ -230,15 +229,6 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                 type = type.substring(type.lastIndexOf('.') + 1);
                 family = family.substring(family.lastIndexOf('.') + 1);
                 String key = family + type;
-                keys.add(key);
-                writer.fwrite("map.put(\"");
-                writer.write(key);
-                writer.write("\",\n");
-                writer.indent();
-                writer.indent();
-                writer.fwrite("new String[] {\n");
-                writer.indent();
-                writer.indent();
                 PropertyBean[] props = comp.getProperties();
                 boolean attributeWritten = false;
                 for (int ii = 0, llen = props.length; ii < llen; ii++) {
@@ -249,13 +239,43 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                                 || ("border".equals(aBean.getPropertyName())))) {
                             continue;
                         }                        
-                        writer.fwrite("\"");
+                        if (attributeWritten) {
+                            writer.fwrite(",attr(\"");
+                        } else {
+                            keys.add(key);
+                            writer.fwrite(".add(\"");
+                            writer.write(key);
+                            writer.write("\",ar(\n");
+                            writer.indent();
+                        	writer.fwrite("attr(\"");
+                        }
                         writer.write(aBean.getPropertyName());
                         writer.write("\"");
-                        attributeWritten = true;
-                        if (attributeWritten) {
-                            writer.write(",\n");
+                        if (aBean.getBehaviors() != null
+                             && !aBean.getBehaviors().isEmpty()) {
+                            for (String behavior : aBean.getBehaviors()) {
+                                writer.write(",\"");
+                                String behaviorName;
+                                if (0 == behavior.length()) {
+                                    behaviorName = aBean.getPropertyName();
+                                    // Strip leading "on" preffix.
+                                    if (behaviorName.length() > 2
+                                        && behaviorName.startsWith("on")) {
+                                        StringBuilder buffer = new StringBuilder(
+                                              behaviorName.substring(2, 3)
+                                                    .toLowerCase());
+                                        buffer.append(behaviorName.substring(3));
+                                        behaviorName = buffer.toString();
+                                    }
+                                } else {
+                                    behaviorName = behavior;
+                                }
+                                writer.write(behaviorName);
+                                writer.write("\"");
+                            }
                         }
+                        writer.write(")\n");
+                        attributeWritten = true;
                     }
                     if (key.contains("Button") && "onclick".equals(aBean.getPropertyName())) {
                         // reset to the original state
@@ -263,17 +283,17 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                     }
 
                 }
-                writer.outdent();
-                writer.outdent();
-                writer.outdent();
-                writer.fwrite("});\n");
-                writer.outdent();
+                if (attributeWritten) {
+                    writer.outdent();
+                    writer.fwrite("))\n");
+                }
             }
         }
+        writer.fwrite(".fix();\n");
 
-        writer.fwrite("ATTRIBUTE_LOOKUP = Collections.unmodifiableMap(map);\n");
-        writer.outdent();
-        writer.fwrite("}\n\n");
+//        writer.fwrite("ATTRIBUTE_LOOKUP = Collections.unmodifiableMap(map);\n");
+//        writer.outdent();
+//        writer.fwrite("}\n\n");
         writer.outdent();
         writer.fwrite("public enum Key {\n");
         writer.indent();
@@ -300,7 +320,7 @@ public class AttributeManagerGenerator extends AbstractGenerator {
         writer.outdent();
         writer.fwrite("}\n");
         writer.write("\n\n");
-        writer.fwrite("public static String[] getAttributes(Key key) {\n");
+        writer.fwrite("public static Attribute[] getAttributes(Key key) {\n");
         writer.indent();
         writer.fwrite("return ATTRIBUTE_LOOKUP.get(key.value());\n");
         writer.outdent();

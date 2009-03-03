@@ -42,12 +42,15 @@ package javax.faces.application;
 
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
@@ -640,6 +643,48 @@ public abstract class Application {
 
     // ------------------------------------------------------- Object Factories
 
+    /**
+     * <p><span class="changed_added_2_0">Register</span> a new mapping 
+     * of behavior id to the name of the corresponding
+     * {@link Behavior} class.  This allows subsequent calls
+     * to <code>createBehavior()</code> to serve as a factory for
+     * {@link Behavior} instances.</p>
+     *                                 
+     * @param behaviorId The behavior id to be registered
+     * @param behaviorClass The fully qualified class name of the
+     *  corresponding {@link Behavior} implementation
+     *                                                
+     * @throws NullPointerException if <code>behaviorId</code>
+     *  or <code>behaviorClass</code> is <code>null</code>
+     *  
+     * @since 2.0
+     */
+    public abstract void addBehavior(String behaviorId, 
+        String behaviorClass);
+    
+    /**
+     * <p><span class="changed_added_2_0">Instantiate</span> and
+     * return a new {@link Behavior} instance of the class specified by
+     * a previous call to <code>addBehavior()</code> for the specified
+     * behavior id.  If there is no such registration for this
+     * behavior id, return <code>null</code>.</p>
+     *
+     * @param behaviorId The behavior id for which to create and
+     *  return a new {@link Behavior} instance
+     * 
+     * @throws FacesException if the {@link Behavior} cannot be
+     *  created
+     * @throws NullPointerException if <code>behaviorId</code>
+     *  is <code>null</code> 
+     */
+    public abstract Behavior createBehavior(String behaviorId)
+    	throws FacesException;
+
+    /**
+     * <p>Return an <code>Iterator</code> over the set of currently registered
+     * behavior ids for this <code>Application</code>.</p>
+     */
+    public abstract Iterator<String> getBehaviorIds();
 
     /**
      * <p>Register a new mapping of component type to the name of the
@@ -1036,7 +1081,6 @@ public abstract class Application {
      */
     public abstract Iterator<String> getComponentTypes();
 
-
     /**
      * <p>Register a new mapping of converter id to the name of the
      * corresponding {@link Converter} class.  This allows subsequent calls
@@ -1158,6 +1202,48 @@ public abstract class Application {
      * registered.</p>
      */
     public abstract Iterator<Class<?>> getConverterTypes();
+
+    
+    /**
+     * <p class="changed_added_2_0">Register a validator by its id
+     * that is applied to all <code>UIInput</code> components in a view.
+     * The validator to most often serve this role is the <code>BeanValidator</code>.</p>
+     *
+     * <p>An implementation is provided that takes no action
+     * so that users that decorate
+     * the <code>Application</code> continue to work.
+     *
+     * @since 2.0
+     */
+    public void addDefaultValidatorId(String validatorId) {
+
+        if (defaultApplication != null) {
+            defaultApplication.addDefaultValidatorId(validatorId);
+        } 
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Return an immutable <code>Map</code> over 
+     * the set of currently registered default validator IDs and their class
+     * name for this <code>Application</code>.</p>
+     *
+     * <p>An implementation is provided that returns <code>Collections.emptyMap</code>
+     * so that users that decorate
+     * the <code>Application</code> continue to work.
+     *
+     * @since 2.0
+     */
+    public Map<String,String> getDefaultValidatorInfo() {
+
+        if (defaultApplication != null) {
+            return defaultApplication.getDefaultValidatorInfo();
+        }
+        return Collections.emptyMap();
+
+    }
+
 
     /**
      * <p>Return the {@link ExpressionFactory} instance for this
@@ -1395,7 +1481,8 @@ public abstract class Application {
 
 
     /**
-     * <p class="changed_added_2_0">If there are one or more listeners
+     * <p class="changed_added_2_0">If {@link javax.faces.context.FacesContext#isProcessingEvents()} is
+     * <code>true</code> and there are one or more listeners
      * for events of the type represented by
      * <code>systemEventClass</code>, call those listeners, passing
      * <code>source</code> as the source of the event.  The
