@@ -219,6 +219,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         Map<String, String> requestParameterMap = context.getExternalContext()
               .getRequestParameterMap();
         if (requestParameterMap.get(clientId) == null) {
+
+            // Check to see whether we've got an action event
+            // as a result of a partial/behavior postback.
+            if (RenderKitUtils.isPartialOrBehaviorAction(context, clientId)) {
+                return true;
+            }
+
             StringBuilder builder = new StringBuilder(clientId);
             String xValue = builder.append(".x").toString();
             builder.setLength(clientId.length());

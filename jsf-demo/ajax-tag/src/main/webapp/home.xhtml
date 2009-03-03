@@ -68,7 +68,7 @@
 
     <h:form id="form1" >
 
-       <h:panelGrid columns="1">
+       <h:panelGrid columns="3">
 
        <h:commandButton id="submit" value="Submit"/>
 
@@ -128,6 +128,20 @@
        <h:commandButton id="status" value="Ajax With Status Updates">
            <f:ajax onevent="statusUpdate" onerror="statusUpdate"/>
        </h:commandButton>
+
+       <h:commandButton id="action" 
+                        value="Ajax With Action Listener"
+                        actionListener="#{bean.updateStatus}">
+           <f:ajax/>
+           <f:ajax event="mouseover"/>
+       </h:commandButton>
+
+       <h:commandButton id="actionJavaScript" 
+                        value="JavaScript Ajax With Action Listener"
+                        actionListener="#{bean.updateStatus}"
+                        onclick="jsf.ajax.request(this,event);return false;"
+                        onmouseover="jsf.ajax.request(this,event)"/>
+
 
        <h:commandLink id="submitLink" value="Submit"/>
 
@@ -194,6 +208,20 @@
            <f:ajax onevent="statusUpdate" onerror="statusUpdate"/>
        </h:commandLink>
 
+       <h:commandLink id="actionLink" 
+                        value="Ajax With Action Listener"
+                        actionListener="#{bean.updateStatus}">
+           <f:ajax/>
+           <f:ajax event="mouseover"/>
+       </h:commandLink>
+
+       <h:commandLink id="actionJavaScriptLink" 
+                        value="JavaScript Ajax With Action Listener"
+                        actionListener="#{bean.updateStatus}"
+                        onclick="jsf.ajax.request(this,event);return false;"
+                        onmouseover="jsf.ajax.request(this,event)"/>
+
+
 
        <h:inputText id="inputAjax" value="Ajax">
            <f:ajax/>
@@ -246,6 +274,8 @@
        <h:outputText id="out"/>
 
        </h:panelGrid>
+
+       <h:outputText id="statusText" value="#{bean.status}"/>
 
        <h:outputStylesheet name="stylesheet.css" />
    </h:form>

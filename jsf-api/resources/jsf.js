@@ -970,6 +970,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 args["javax.faces.partial.source"] = element.id;
 
+                if (event) {
+                    args["javax.faces.partial.event"] = event.type;
+                }
+
                 // RELEASE_PENDING Get rid of commas.  It's supposed to be spaces.
                 if (options.execute) {
                     var temp = options.execute.replace(/\s+/, ' ').split(' ');
@@ -1001,13 +1005,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 args["javax.faces.partial.ajax"] = "true";
                 args["method"] = "POST";
                 args["url"] = form.action;
-                // add source
-                var action = $(element);
-                if (action && action.form) {
-                    args[action.name] = action.value || 'x';
-                } else {
-                    args[element] = element;
-                }
 
                 var ajaxEngine = new AjaxEngine();
                 ajaxEngine.setupArguments(args);

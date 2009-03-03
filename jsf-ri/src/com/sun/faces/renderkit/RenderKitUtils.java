@@ -1079,6 +1079,37 @@ public class RenderKitUtils {
         
     }
 
+    // Check the request parameters to see whether an action event has
+    // been triggered either via jsf.ajax.request() or via a submitting
+    // behavior.
+    public static boolean isPartialOrBehaviorAction(FacesContext context,
+                                                    String clientId) {
+        if ((clientId == null) || (clientId.length() == 0)) {
+            return false;
+        }
+
+        ExternalContext external = context.getExternalContext();
+        Map<String, String> params = external.getRequestParameterMap();
+
+        String behaviorSource = params.get("javax.faces.behavior.source");
+        String behaviorEvent = params.get("javax.faces.behavior.event");
+
+        // First check to see whether we've got a Behavior firing an
+        // action event.
+        if (clientId.equals(behaviorSource)) {
+
+            // If the request was fired by a Behavior, we only want to
+            // trigger an ActionEvent if the event type is "action".
+            return "action".equals(behaviorEvent);
+        }
+
+        // Not a Behavior-related request.  Check for jsf.ajax.request()
+        // request params.
+        String partialSource = params.get("javax.faces.partial.source");
+        String partialEvent = params.get("javax.faces.partial.event");
+
+        return (clientId.equals(partialSource) && "click".equals(partialEvent));
+    }
 
     // --------------------------------------------------------- Private Methods
 

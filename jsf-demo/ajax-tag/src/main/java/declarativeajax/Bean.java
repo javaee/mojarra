@@ -44,7 +44,9 @@ import javax.faces.component.UIPanel;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlSelectOneMenu;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -84,6 +86,13 @@ public class Bean implements Serializable {
     private Map<String,String> stateMap = null;
 
     private List stateOptions = null;
+
+    // Status message to display in response to action events
+    private String status = "No status updates";
+
+    // Counter just to keep track of number of action events
+    private int actionCount = 0;
+
     
     //
     // Constructors
@@ -201,5 +210,40 @@ public class Bean implements Serializable {
         output.setValue("listener was called");
 
     }
-        
+
+
+    public void updateStatus(ActionEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        PartialViewContext partial = context.getPartialViewContext();
+        ExternalContext external = context.getExternalContext();
+        Map<String, String> params = external.getRequestParameterMap();
+        String partialSource = params.get("javax.faces.partial.source");
+        String partialEvent = params.get("javax.faces.partial.event");
+        String behaviorSource = params.get("javax.faces.behavior.source");
+        String behaviorEvent = params.get("javax.faces.behavior.event");
+
+        actionCount++;
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(actionCount);
+        builder.append(": partial source='");
+        builder.append(partialSource);
+        builder.append("', partial event='");
+        builder.append(partialEvent);
+        builder.append("', behavior source='");
+        builder.append(behaviorSource);
+        builder.append("', behavior event='");
+        builder.append(behaviorEvent);
+        builder.append("'");
+
+        status = builder.toString();
+
+        if (partial != null) {
+            partial.getRenderIds().add("form1:statusText");
+        }
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }
