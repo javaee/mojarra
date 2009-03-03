@@ -55,12 +55,11 @@
 <root>
     <property>
         <description>
-            RELEASE_PENDING (rogerk) review docs
           The identifier of the page fragment which should
           be brought into focus when the target page is
           rendered. The value of this attribute is appended
           to the end of target URL following a hash (#) mark.
-          This notation is part the standard URL syntax.
+          This notation is part of the standard URL syntax.
         </description>
         <display-name>Fragment Identifier</display-name>
         <icon></icon>

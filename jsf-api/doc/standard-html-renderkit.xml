@@ -12583,12 +12583,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
     <property>
       <description>
-            RELEASE_PENDING (rogerk) review docs
           The identifier of the page fragment which should
           be brought into focus when the target page is
           rendered. The value of this attribute is appended
           to the end of target URL following a hash (#) mark.
-          This notation is part the standard URL syntax.
+          This notation is part of the standard URL syntax.
         </description>
       <display-name>Fragment Identifier</display-name>
       <icon/>
@@ -13209,12 +13208,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
     <property>
       <description>
-            RELEASE_PENDING (rogerk) review docs
           The identifier of the page fragment which should
           be brought into focus when the target page is
           rendered. The value of this attribute is appended
           to the end of target URL following a hash (#) mark.
-          This notation is part the standard URL syntax.
+          This notation is part of the standard URL syntax.
         </description>
       <display-name>Fragment Identifier</display-name>
       <icon/>
@@ -13748,12 +13746,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
     <property>
       <description>
-            RELEASE_PENDING (rogerk) review docs
           The identifier of the page fragment which should
           be brought into focus when the target page is
           rendered. The value of this attribute is appended
           to the end of target URL following a hash (#) mark.
-          This notation is part the standard URL syntax.
+          This notation is part of the standard URL syntax.
         </description>
       <display-name>Fragment Identifier</display-name>
       <icon/>
@@ -25115,18 +25112,17 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-<!-- RELEASE_PENDING (rogerk) reivew docs -->
       <description><![CDATA[Render an HTML "a" anchor element.  The value of the
       component is rendered as the anchor text and the outcome of the component is used
       to determine the target URL rendered in the "href" attribute.  Any
-      child UIParameter components are appended to the String to be
+      child <code>UIParameter</code> components are appended to the String to be
       output as the value of the "href" attribute as query parameters
       before rendering.  The entire "href" string must be passed through
       a call to the <code>encodeResourceURL()</code> method of the
-      <code>ExternalContext</code>.  The name of the UIParameter goes on
-      the left hand side, and the value of the UIParameter on the right
+      <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on
+      the left hand side, and the value of the <code>UIParameter</code> on the right
       hand side.  The name and the value must be URLEncoded.  Each
-      UIParameter instance is separeted by an ampersand, as dictated in
+      <code>UIParameter</code> instance is separated by an ampersand, as dictated in
       the URL spec.  If the "fragment" attribute is specified, the value will be
       included at the end of the resulting URL preceded by a hash mark.
       If the "styleClass" attribute is specified, render
@@ -25683,12 +25679,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
       <attribute>
         <description>
-            RELEASE_PENDING (rogerk) review docs
           The identifier of the page fragment which should
           be brought into focus when the target page is
           rendered. The value of this attribute is appended
           to the end of target URL following a hash (#) mark.
-          This notation is part the standard URL syntax.
+          This notation is part of the standard URL syntax.
         </description>
         <display-name>Fragment Identifier</display-name>
         <icon/>
@@ -25704,17 +25699,19 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-<!-- RELEASE_PENDING (rogerk) reivew docs -->
       <description><![CDATA[Render an HTML "input" element of type "button".
       The value of the component is rendered as the button text and the outcome of the
-      component is used to determine the target URL which is activated onclick.  Any
-      child UIParameter components are appended to the String to be used as the target URL
-      as query parameters before rendering.  The entire target URL string
-      must be passed through a call to the <code>encodeResourceURL()</code> method of the
-      <code>ExternalContext</code>.  The name of the UIParameter goes on the left hand
-      side, and the value of the UIParameter on the right hand side.  The name and the
-      value must be URLEncoded.  Each UIParameter instance is separeted by an ampersand,
-      as dictated in the URL spec.  The final encoded result will be written out to the
+      component is used to determine the target URL which is activated by onclick.  If
+      "image" attribute is specified, render it as the value of the "src" attribute after
+      passing it to the <code>getResourceURL()</code> method of the <code>ViewHandler</code>
+      for this application, and passing the result through the <code>encodeResourceURL()</code>
+      method of the <code>ExternalContext</code>. Any child <code>UIParameter</code> components
+      are appended to the String to be used as the target URL as query parameters before rendering.
+      The entire target URL string must be passed through a call to the <code>encodeResourceURL()</code>
+      method of the <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on the 
+      left hand side, and the value of the <code>UIParameter</code> on the right hand side.  The name 
+      and the value must be URLEncoded.  Each <code>UIParameter</code> instance is separeted by an 
+      ampersand, as dictated in the URL spec.  The final encoded result will be written out to the
       onclick attribute of the button as "window.location.href = '<encoded HREF value>'".
       If the developer has specified a custom onlclick the window.location.href name/value
       pair will be appended at the end of the developer specified script.
@@ -26038,12 +26035,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
       <attribute>
         <description>
-            RELEASE_PENDING (rogerk) review docs
           The identifier of the page fragment which should
           be brought into focus when the target page is
           rendered. The value of this attribute is appended
           to the end of target URL following a hash (#) mark.
-          This notation is part the standard URL syntax.
+          This notation is part of the standard URL syntax.
         </description>
         <display-name>Fragment Identifier</display-name>
         <icon/>
