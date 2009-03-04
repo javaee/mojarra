@@ -372,7 +372,7 @@
         <ant dir="${basedir}/mojarra_ext" inheritAll="false" />
         <ant dir="${basedir}/helloDuke" inheritAll="false" />
         <ant dir="${basedir}/guessNumber" inheritAll="false" />
-        <ant dir="${basedir}/guessNumber2.0" inheritAll="false" />
+<!--        <ant dir="${basedir}/guessNumber2.0" inheritAll="false" /> -->
         <ant dir="${basedir}/ifnavigation" inheritAll="false" />
         <ant dir="${basedir}/basic-ezcomp" inheritAll="false" />
         <ant dir="${basedir}/basic-ajax" inheritAll="false" />        

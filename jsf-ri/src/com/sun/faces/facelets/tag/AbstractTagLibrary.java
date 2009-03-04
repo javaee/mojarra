@@ -73,7 +73,7 @@ import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ConvertHandler;
 import com.sun.faces.facelets.tag.jsf.ConverterConfig;
 import com.sun.faces.facelets.tag.jsf.ValidateHandler;
-import com.sun.faces.facelets.tag.jsf.ValidatorConfig;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
 import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**

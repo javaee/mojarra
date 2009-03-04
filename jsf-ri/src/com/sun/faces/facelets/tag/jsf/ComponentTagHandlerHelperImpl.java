@@ -236,7 +236,7 @@ public class ComponentTagHandlerHelperImpl extends TagHandlerHelper {
         return m;
     }
     
-    public void setCreateComponentDelegate(CreateComponentDelegate createComponentDelegate) {
+    void setCreateComponentDelegate(CreateComponentDelegate createComponentDelegate) {
         this.createComponentDelegate = createComponentDelegate;
     }
     

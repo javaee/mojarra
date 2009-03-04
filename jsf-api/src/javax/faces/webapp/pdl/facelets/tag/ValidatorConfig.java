@@ -49,22 +49,22 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 /**
- * Used in creating ValidateHandler's and all implementations.
+ * <p class="changed_added_2_0">Used in creating <code>ValidatorHandler</code>
+ * and all implementations.</p>
+ *
+ * @since 2.0
  * 
- * @see com.sun.faces.facelets.tag.jsf.ValidateHandler
- * @author Jacob Hookom
- * @version $Id$
  */
 public interface ValidatorConfig extends TagConfig {
 
     /**
-     * The validator-id associated with a particular validator in your faces-config
-     * @return passable to Application.createValidator(String)
+     * <p class="changed_added_2_0">Return the validator-id associated with a 
+     * particular validator in your faces-config</p>
+     * @since 2.0
      */
     public String getValidatorId();
     
