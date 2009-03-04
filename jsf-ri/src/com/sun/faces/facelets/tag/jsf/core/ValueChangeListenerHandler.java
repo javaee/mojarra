@@ -72,10 +72,10 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import javax.faces.application.Resource;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**
  * Register an ValueChangeListener instance on the UIComponent associated with
@@ -169,7 +169,7 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
         // only process if it's been created
-        if (parent == null || !(ComponentSupport.isNew(parent))) {
+        if (parent == null || !(ComponentHandler.isNew(parent))) {
             return;
         }
 

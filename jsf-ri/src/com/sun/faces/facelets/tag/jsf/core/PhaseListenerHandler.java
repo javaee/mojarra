@@ -74,6 +74,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.ReflectionUtil;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 public class PhaseListenerHandler extends TagHandlerImpl {
 
@@ -166,7 +167,7 @@ public class PhaseListenerHandler extends TagHandlerImpl {
 
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
-        if (ComponentSupport.isNew(parent)) {
+        if (ComponentHandler.isNew(parent)) {
             UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
             if (root == null) {
                 throw new TagException(this.tag, "UIViewRoot not available");

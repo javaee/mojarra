@@ -72,11 +72,11 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.ReflectionUtil;
 
 import javax.faces.application.Resource;
 import javax.faces.webapp.pdl.ActionSource2AttachedObjectHandler;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**
  * Register an ActionListener instance on the UIComponent associated with the
@@ -174,7 +174,7 @@ public final class ActionListenerHandler extends TagHandlerImpl
      */
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
-        if (null == parent || !(ComponentSupport.isNew(parent))) {
+        if (null == parent || !(ComponentHandler.isNew(parent))) {
             return;
         }
         if (parent instanceof ActionSource) {

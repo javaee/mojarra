@@ -77,9 +77,9 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**
  * <p class="changed_added_2_0">Enable one or more components in the view
@@ -151,7 +151,7 @@ public final class AjaxHandler extends TagHandlerImpl {
     @SuppressWarnings("unchecked")
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
-        if (null == parent || !(ComponentSupport.isNew(parent))) {
+        if (null == parent || !(ComponentHandler.isNew(parent))) {
             return;
         } 
 

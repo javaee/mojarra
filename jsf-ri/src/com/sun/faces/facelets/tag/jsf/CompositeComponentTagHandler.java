@@ -163,7 +163,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         // Apply the facelet for this composite component
         applyCompositeComponent(ctx, c);
         // Allow any PDL declared attached objects to be retargeted
-        if (ComponentSupport.isNew(c)) {
+        if (ComponentHandler.isNew(c)) {
             FacesContext context = ctx.getFacesContext();
             ViewHandler viewHandler = context.getApplication().getViewHandler();
             viewHandler.retargetAttachedObjects(context, c,
@@ -181,7 +181,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         VariableMapper orig = ctx.getVariableMapper();
         
         UIPanel facetComponent = null;
-        if (ComponentSupport.isNew(c)) {
+        if (ComponentHandler.isNew(c)) {
             facetComponent = (UIPanel)
              facesContext.getApplication().createComponent("javax.faces.Panel");
             facetComponent.setRendererType("javax.faces.Group");

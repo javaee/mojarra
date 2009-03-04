@@ -57,7 +57,6 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import java.beans.BeanDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,6 +70,7 @@ import javax.faces.webapp.pdl.AttachedObjectTarget;
 import javax.faces.application.Resource;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 public class InterfaceHandler extends TagHandlerImpl {
 
@@ -95,7 +95,7 @@ public class InterfaceHandler extends TagHandlerImpl {
         // only process if it's been created
         if (null == parent || 
             (null == (parent = parent.getParent())) ||
-            !(ComponentSupport.isNew(parent))) {
+            !(ComponentHandler.isNew(parent))) {
             return;
         }
         

@@ -175,5 +175,19 @@ public class ComponentHandler extends MetaTagHandler {
         
     }
     
+    /**
+     * <p class="changed_added_2_0">Determine if the passed component is 
+     * not null and if it's new to the tree.  This operation can be used for determining if attributes
+     * should be wired to the component.</p>
+     * 
+     * @param component the component you wish to modify
+     * @since 2.0
+     */
+    public final static boolean isNew(UIComponent component) {
+        return component != null && component.getParent() == null;
+    }
+
+    
+    
 
 }
