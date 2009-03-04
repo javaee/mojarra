@@ -1203,9 +1203,12 @@ public abstract class Application {
 
     
     /**
-     * <p class="changed_added_2_0">Register a validator by its id
-     * that is applied to all <code>UIInput</code> components in a view.
-     * The validator to most often serve this role is the <code>BeanValidator</code>.</p>
+     * <p class="changed_added_2_0">Register a validator by its id that
+     * is applied to all <code>UIInput</code> components in a view.  The
+     * validator to most often serve this role is the
+     * <code>BeanValidator</code>.  The usage contract for this method
+     * assumes that the validator has been registered using the normal
+     * &#8220;by-id&#8221; registration mechanism.</p>
      *
      * <p>An implementation is provided that takes no action
      * so that users that decorate
