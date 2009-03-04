@@ -88,7 +88,9 @@ public class CommandLinkRenderer extends LinkRenderer {
             return;
         }
 
-        if (wasClicked(context, component)) {
+        String clientId = decodeBehaviors(context, component);
+
+        if (wasClicked(context, component, clientId)) {
             component.queueEvent(new ActionEvent(component));
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("This commandLink resulted in form submission " +
@@ -249,12 +251,15 @@ public class CommandLinkRenderer extends LinkRenderer {
     // --------------------------------------------------------- Private Methods
 
     private static boolean wasClicked(FacesContext context,
-                                      UIComponent component) {
+                                      UIComponent component,
+                                      String clientId) {
 
         Map<String,String> requestParamMap =
               context.getExternalContext().getRequestParameterMap();
 
-        String clientId = component.getClientId(context);
+        if (clientId == null) {
+            clientId = component.getClientId(context);
+        }
 
         // Fire an action event if we've had a traditional (non-Ajax)
         // postback, or if we've had a partial or behavior-based postback.

@@ -1049,27 +1049,6 @@ public abstract class UIComponentBase extends UIComponent {
             kid.processDecodes(context);
         }
 
-        // Process behaviors, if supported by the component.
-        if (isBehaviorHolder()){
-            Map<String, List<Behavior>> behaviorsForEvent = getBehaviors();
-            if (!behaviorsForEvent.isEmpty()) {
-                Map<String, String> requestParameterMap = context.getExternalContext()
-                    .getRequestParameterMap();
-                String behaviorEvent = requestParameterMap.get("javax.faces.behavior.event");
-                if (null != behaviorEvent) {
-                    List<Behavior> behaviors = behaviorsForEvent.get(behaviorEvent);
-                    if (null != behaviors && behaviors.size() > 0) {
-                        String behaviorSource = requestParameterMap.get("javax.faces.behavior.source");
-                        if (null != behaviorSource && behaviorSource.equals(getClientId())) {
-                            for (Behavior behavior: behaviors) {
-                                behavior.decode(context, this);
-                            }
-                        }
-                    }
-                }
-            }
-        }                                     
-
         // Process this component itself
         try {
             decode(context);

@@ -88,10 +88,15 @@ public class FormRenderer extends HtmlBasicRenderer {
     public void decode(FacesContext context, UIComponent component) {
 
         rendererParamsNotNull(context, component);
+
+        String clientId = decodeBehaviors(context, component);
+
+        if (clientId == null) {
+            clientId = component.getClientId(context);
+        }
                 
         // Was our form the one that was submitted?  If so, we need to set
         // the indicator accordingly..
-        String clientId = component.getClientId(context);
         Map<String, String> requestParameterMap = context.getExternalContext()
               .getRequestParameterMap();
         if (requestParameterMap.containsKey(clientId)) {

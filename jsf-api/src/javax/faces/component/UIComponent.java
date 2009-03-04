@@ -1286,6 +1286,29 @@ private void doFind(FacesContext context, String clientId) {
      * request contained in the specified {@link FacesContext}, and store
      * this state as needed.</p>
      *
+     * <p class="changed_added_2_0">If this component is a 
+     * {@link javax.faces.component.behavior.BehaviorHolder},
+     * process {@link javax.faces.component.behavior.Behavior}s as follows:
+     * <ul>
+     * <li>Determine if there are {@link javax.faces.component.behavior.Behavior}s
+     * associated with this component by calling the implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li>
+     * <li>If there are <code>behaviors</code>, determine the
+     * <code>behavior event name</code> from the request parameter:
+     * <code>javax.faces.behavior.event</code>.</li>
+     * <li>If that request parameter exists, get the <code>List</code> of
+     * {@link javax.faces.component.behavior.Behavior}s for the
+     * <code>behavior event name</code> from the <code>Map</code> returned from
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li>
+     * <li>If there are <code>behaviors</code> for the <code>behavior event name</code>,
+     * determine the <code>behavior source name</code> from the request parameter:
+     * <code>javax.faces.behavior.source</code>.</li>
+     * <li>If the request parameter exists, and its value is the same as this
+     * component's <code>clientId</code>, iterate over the <code>List</code> of
+     * {@link javax.faces.component.behavior.Behavior}s and call the <code>decode()</code>
+     * method for each {@link javax.faces.component.behavior.Behavior}.</li>
+     * </ul>
+     * </p>
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners who have registered an interest),  by calling
      * <code>queueEvent()</code>.</p>
@@ -1990,29 +2013,7 @@ private void doFind(FacesContext context, String clientId) {
      * <li>Call the <code>processDecodes()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>If this component is a {@link javax.faces.component.behavior.BehaviorHolder},
-     * process {@link javax.faces.component.behavior.Behavior}s as follows:
-     * <ul>
-     * <li>Determine if there are {@link javax.faces.component.behavior.Behavior}s
-     * associated with this component by calling the implementation of 
-     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li> 
-     * <li>If there are <code>behaviors</code>, determine the 
-     * <code>behavior event name</code> from the request parameter:
-     * <code>javax.faces.behavior.event</code>.</li>
-     * <li>If that request parameter exists, get the <code>List</code> of
-     * {@link javax.faces.component.behavior.Behavior}s for the 
-     * <code>behavior event name</code> from the <code>Map</code> returned from
-     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li>
-     * <li>If there are <code>behaviors</code> for the <code>behavior event name</code>,
-     * determine the <code>behavior source name</code> from the request parameter:
-     * <code>javax.faces.behavior.source</code>.</li>
-     * <li>If the request parameter exists, and its value is the same as this
-     * component's <code>clientId</code>, iterate over the <code>List</code> of
-     * {@link javax.faces.component.behavior.Behavior}s and call the <code>decode()</code>
-     * method for each {@link javax.faces.component.behavior.Behavior}.</li>
-     * </ul>
-     * </li>
-     *  
+
      * <li>Call the <code>decode()</code> method of this component.</li>
 
      * <li>Call {@link #popComponentFromEL} from inside of a

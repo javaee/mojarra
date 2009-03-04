@@ -88,12 +88,8 @@ public class Bean implements Serializable {
     private List stateOptions = null;
 
     // Status message to display in response to action events
-    private String status = "No status updates";
+    private List<StatusMessage> statusMessages= new ArrayList<StatusMessage>();
 
-    // Counter just to keep track of number of action events
-    private int actionCount = 0;
-
-    
     //
     // Constructors
     //
@@ -204,17 +200,19 @@ public class Bean implements Serializable {
     }
 
     public void processBehavior(AjaxBehaviorEvent event) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        UIForm form = (UIForm)context.getViewRoot().findComponent("form1");
-        UIOutput output = (UIOutput)form.findComponent("out");
-        output.setValue("listener was called");
-
+        addStatusMessage("AjaxBehaviorEvent");
     }
 
+    public void processAction(ActionEvent event) {
+        addStatusMessage("ActionEvent");
+    }
 
-    public void updateStatus(ActionEvent event) {
+    public void processValueChange(ValueChangeEvent event) {
+        addStatusMessage("ValueChangeEvent");
+    }
+
+    public void addStatusMessage(String messageType) {
         FacesContext context = FacesContext.getCurrentInstance();
-        PartialViewContext partial = context.getPartialViewContext();
         ExternalContext external = context.getExternalContext();
         Map<String, String> params = external.getRequestParameterMap();
         String partialSource = params.get("javax.faces.partial.source");
@@ -222,11 +220,8 @@ public class Bean implements Serializable {
         String behaviorSource = params.get("javax.faces.behavior.source");
         String behaviorEvent = params.get("javax.faces.behavior.event");
 
-        actionCount++;
-
         StringBuilder builder = new StringBuilder();
-        builder.append(actionCount);
-        builder.append(": partial source='");
+        builder.append("partial source='");
         builder.append(partialSource);
         builder.append("', partial event='");
         builder.append(partialEvent);
@@ -236,14 +231,59 @@ public class Bean implements Serializable {
         builder.append(behaviorEvent);
         builder.append("'");
 
-        status = builder.toString();
+        String messageDetails = builder.toString();
+
+        StatusMessage message = new StatusMessage(statusMessages.size(),
+                                                  messageType,
+                                                  messageDetails);
+        statusMessages.add(message);
+
+        updateStatusTable(context);
+    }
+
+    public void resetStatusMessages(ActionEvent event) {
+
+        statusMessages.clear();
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        updateStatusTable(context);
+    }
+
+    public void updateStatusTable(FacesContext context) {
+        PartialViewContext partial = context.getPartialViewContext();
 
         if (partial != null) {
-            partial.getRenderIds().add("form1:statusText");
+            partial.getRenderIds().add("form1:statusTable");
         }
     }
 
-    public String getStatus() {
-        return status;
+
+    public List<StatusMessage> getStatusMessages() {
+        return statusMessages;
+    }
+
+    public static class StatusMessage {
+
+        private int count;
+        private String type;
+        private String details;
+
+        public StatusMessage(int count, String type, String details) {
+            this.count = count;
+            this.type = type;
+            this.details = details;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getDetails() {
+            return details;
+        }
     }
 }

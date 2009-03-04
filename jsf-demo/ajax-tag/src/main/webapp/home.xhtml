@@ -70,22 +70,32 @@
 
        <h:panelGrid columns="3">
 
-       <h:commandButton id="submit" value="Submit"/>
+       <h:commandButton id="nonAjax" 
+                        value="Non-Ajax" 
+                        actionListener="#{bean.processAction}"/>
 
-       <h:commandButton id="singleAjax" value="Single Ajax">
+       <h:commandButton id="singleAjax"
+                        value="Ajax"
+                        actionListener="#{bean.processAction}">
            <f:ajax listener="#{bean.processBehavior}"/>
        </h:commandButton>
 
-       <h:commandButton id="greet" value="Single Greet">
+       <h:commandButton id="greet" 
+                        value="Greet"
+                        actionListener="#{bean.processAction}">
            <be:greet/>
        </h:commandButton>
 
-       <h:commandButton id="doubleGreet" value="Double Greet">
+       <h:commandButton id="doubleGreet" 
+                        value="Double Greet"
+                        actionListener="#{bean.processAction}">
            <be:greet/>
            <be:greet name="Joe"/>
        </h:commandButton>
 
-       <h:commandButton id="greetAndAjax" value="Greet and Ajax">
+       <h:commandButton id="greetAndAjax" 
+                        value="Greet and Ajax"
+                        actionListener="#{bean.processAction}">
            <be:greet/>
            <f:ajax listener="#{bean.processBehavior}"/>
        </h:commandButton>
@@ -97,15 +107,19 @@
           </h:commandButton>
        </f:ajax>
 
-       <h:commandButton id="ajaxParams" value="Ajax With Params">
-           <f:ajax/>
+       <h:commandButton id="ajaxParams" 
+                        value="Ajax With Params"
+                        actionListener="#{bean.processAction}">
+           <f:ajax listener="#{bean.processBehavior}"/>
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
            <f:param name="foobar" value="#{null}"/>
            <f:param name="#{null}" value="should_not_be_present"/>
        </h:commandButton>
 
-       <h:commandButton id="nonAjaxParams" value="Non-Ajax With Params">
+       <h:commandButton id="nonAjaxParams" 
+                        value="Non-Ajax With Params"
+                        actionListener="#{bean.processAction}">
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
            <f:param name="foobar" value="#{null}"/>
@@ -114,53 +128,92 @@
 
        <h:commandButton id="nonAjaxParamsHandler" 
                         value="Non-Ajax With Params With User Handler"
-                        onclick="alert('Hello from onclick')">
+                        onclick="alert('Hello from onclick')"
+                        actionListener="#{bean.processAction}">
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
        </h:commandButton>
 
-       <h:commandButton id="greetParams" value="Greet With Params">
+       <h:commandButton id="greetParams"
+                        value="Greet With Params"
+                        actionListener="#{bean.processAction}">
            <be:greet/>
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
        </h:commandButton>
 
-       <h:commandButton id="status" value="Ajax With Status Updates">
-           <f:ajax onevent="statusUpdate" onerror="statusUpdate"/>
+       <h:commandButton id="status" 
+                        value="Ajax With OnEvent"
+                        actionListener="#{bean.processAction}">
+           <f:ajax onevent="statusUpdate" 
+                   onerror="statusUpdate"
+                   listener="#{bean.processBehavior}"/>
        </h:commandButton>
 
-       <h:commandButton id="action" 
-                        value="Ajax With Action Listener"
-                        actionListener="#{bean.updateStatus}">
-           <f:ajax/>
-           <f:ajax event="mouseover"/>
+       <h:commandButton id="mouseOver" 
+                        value="MouseOver Ajax"
+                        actionListener="#{bean.processAction}">
+           <f:ajax listener="#{bean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{bean.processBehavior}"/>
        </h:commandButton>
 
-       <h:commandButton id="actionJavaScript" 
-                        value="JavaScript Ajax With Action Listener"
-                        actionListener="#{bean.updateStatus}"
+       <h:commandButton id="mouseOverJavaScript" 
+                        value="MouseOver JavaScript Ajax"
+                        actionListener="#{bean.processAction}"
                         onclick="jsf.ajax.request(this,event);return false;"
                         onmouseover="jsf.ajax.request(this,event)"/>
 
+       <h:commandButton id="disabledButton" 
+                        value="Disabled Button With Enabled Ajax"
+                        actionListener="#{bean.processAction}"
+                        disabled="true">
+           <f:ajax listener="#{bean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{bean.processBehavior}"/>
+       </h:commandButton>
 
-       <h:commandLink id="submitLink" value="Submit"/>
+       <h:commandButton id="disabledAjax" 
+                        value="Enabled Button With Disabled Ajax"
+                        actionListener="#{bean.processAction}">
+           <f:ajax disabled="true" listener="#{bean.processBehavior}"/>
+           <f:ajax event="mouseover" 
+                   disabled="true" 
+                   listener="#{bean.processBehavior}"/>
+       </h:commandButton>
 
-       <h:commandLink id="targetLink" value="Submit With Target" target="foo"/>
+       </h:panelGrid>
 
-       <h:commandLink id="singleAjaxLink" value="Single Ajax">
+       <h:panelGrid columns="3">
+
+       <h:commandLink id="nonAjaxLink" 
+                        value="Non-Ajax" 
+                        actionListener="#{bean.processAction}"/>
+
+       <h:commandLink id="singleAjaxLink"
+                        value="Ajax"
+                        actionListener="#{bean.processAction}">
            <f:ajax listener="#{bean.processBehavior}"/>
        </h:commandLink>
 
-       <h:commandLink id="greetLink" value="Single Greet">
+       <h:commandLink id="greetLink" 
+                        value="Greet"
+                        actionListener="#{bean.processAction}">
            <be:greet/>
        </h:commandLink>
 
-       <h:commandLink id="doubleGreetLink" value="Double Greet">
+       <h:commandLink id="doubleGreetLink" 
+                        value="Double Greet"
+                        actionListener="#{bean.processAction}">
            <be:greet/>
            <be:greet name="Joe"/>
        </h:commandLink>
 
-       <h:commandLink id="greetAndAjaxLink" value="Greet and Ajax">
+       <h:commandLink id="greetAndAjaxLink" 
+                        value="Greet and Ajax"
+                        actionListener="#{bean.processAction}">
            <be:greet/>
            <f:ajax listener="#{bean.processBehavior}"/>
        </h:commandLink>
@@ -172,15 +225,19 @@
           </h:commandLink>
        </f:ajax>
 
-       <h:commandLink id="ajaxParamsLink" value="Ajax With Params">
-           <f:ajax/>
+       <h:commandLink id="ajaxParamsLink" 
+                        value="Ajax With Params"
+                        actionListener="#{bean.processAction}">
+           <f:ajax listener="#{bean.processBehavior}"/>
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
            <f:param name="foobar" value="#{null}"/>
            <f:param name="#{null}" value="should_not_be_present"/>
        </h:commandLink>
 
-       <h:commandLink id="nonAjaxParamsLink" value="Non-Ajax With Params">
+       <h:commandLink id="nonAjaxParamsLink" 
+                        value="Non-Ajax With Params"
+                        actionListener="#{bean.processAction}">
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
            <f:param name="foobar" value="#{null}"/>
@@ -189,14 +246,17 @@
 
        <h:commandLink id="nonAjaxParamsHandlerLink" 
                         value="Non-Ajax With Params With User Handler"
-                        onclick="alert('Hello from onclick')">
+                        onclick="alert('Hello from onclick')"
+                        actionListener="#{bean.processAction}">
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
            <f:param name="foobar" value="#{null}"/>
            <f:param name="#{null}" value="should_not_be_present"/>
        </h:commandLink>
 
-       <h:commandLink id="greetParamsLink" value="Greet With Params">
+       <h:commandLink id="greetParamsLink"
+                        value="Greet With Params"
+                        actionListener="#{bean.processAction}">
            <be:greet/>
            <f:param name="foo" value="Hello"/>
            <f:param name="bar" value="Goodbye"/>
@@ -204,49 +264,134 @@
            <f:param name="#{null}" value="should_not_be_present"/>
        </h:commandLink>
 
-       <h:commandLink id="statusLink" value="Ajax With Status Updates">
-           <f:ajax onevent="statusUpdate" onerror="statusUpdate"/>
+       <h:commandLink id="statusLink" 
+                        value="Ajax With OnEvent"
+                        actionListener="#{bean.processAction}">
+           <f:ajax onevent="statusUpdate" 
+                   onerror="statusUpdate"
+                   listener="#{bean.processBehavior}"/>
        </h:commandLink>
 
-       <h:commandLink id="actionLink" 
-                        value="Ajax With Action Listener"
-                        actionListener="#{bean.updateStatus}">
-           <f:ajax/>
-           <f:ajax event="mouseover"/>
+       <h:commandLink id="mouseOverLink" 
+                        value="MouseOver Ajax"
+                        actionListener="#{bean.processAction}">
+           <f:ajax listener="#{bean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{bean.processBehavior}"/>
        </h:commandLink>
 
-       <h:commandLink id="actionJavaScriptLink" 
-                        value="JavaScript Ajax With Action Listener"
-                        actionListener="#{bean.updateStatus}"
+       <h:commandLink id="mouseOverJavaScriptLink" 
+                        value="MouseOver JavaScript Ajax"
+                        actionListener="#{bean.processAction}"
                         onclick="jsf.ajax.request(this,event);return false;"
                         onmouseover="jsf.ajax.request(this,event)"/>
 
+       <h:commandLink id="disabledLinkLink" 
+                        value="Disabled Link With Enabled Ajax"
+                        actionListener="#{bean.processAction}"
+                        disabled="true">
+           <f:ajax listener="#{bean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{bean.processBehavior}"/>
+       </h:commandLink>
 
+       <h:commandLink id="disabledAjaxLink" 
+                        value="Enabled Link With Disabled Ajax"
+                        actionListener="#{bean.processAction}">
+           <f:ajax disabled="true" listener="#{bean.processBehavior}"/>
+           <f:ajax event="mouseover" 
+                   disabled="true" 
+                   listener="#{bean.processBehavior}"/>
+       </h:commandLink>
 
-       <h:inputText id="inputAjax" value="Ajax">
-           <f:ajax/>
+       </h:panelGrid>
+
+       <h:panelGrid columns="3">
+
+       <h:inputText id="nonAjaxInput" 
+                        value="Non-Ajax" 
+                        valueChangeListener="#{bean.processValueChange}"/>
+
+       <h:inputText id="singleAjaxInput"
+                        value="Ajax"
+                        valueChangeListener="#{bean.processValueChange}">
+           <f:ajax listener="#{bean.processBehavior}"/>
        </h:inputText>
 
-       <h:inputText id="inputGreet" value="Greet">
+       <h:inputText id="greetInput" 
+                        value="Greet"
+                        valueChangeListener="#{bean.processValueChange}">
            <be:greet/>
        </h:inputText>
 
-       <h:inputText id="inputAjaxGreet" value="Greet and Ajax">
+       <h:inputText id="doubleGreetInput" 
+                        value="Double Greet"
+                        valueChangeListener="#{bean.processValueChange}">
            <be:greet/>
-           <f:ajax/>
+           <be:greet name="Joe"/>
        </h:inputText>
 
-       <h:inputText id="inputUser" 
-                    value="User Handler"
-                    onchange="alert('Hello from user handler')">
-
+       <h:inputText id="greetAndAjaxInput" 
+                        value="Greet and Ajax"
+                        valueChangeListener="#{bean.processValueChange}">
+           <be:greet/>
+           <f:ajax listener="#{bean.processBehavior}"/>
        </h:inputText>
 
-       <h:inputText id="inputUserAndAjax" 
-                    value="User Handler And Ajax"
-                    onchange="alert('Hello from user handler')">
-           <f:ajax/>
+       <f:ajax>
+          <h:inputText id="submit1Input" value="submit1"/>
+          <h:inputText id="submit2Input" value="submit2">
+              <f:ajax render="out"/>
+          </h:inputText>
+       </f:ajax>
+
+       <h:inputText id="ajaxParamsInput" 
+                        value="Ajax With Params"
+                        valueChangeListener="#{bean.processValueChange}">
+           <f:ajax listener="#{bean.processBehavior}"/>
+           <f:param name="foo" value="Hello"/>
+           <f:param name="bar" value="Goodbye"/>
+           <f:param name="foobar" value="#{null}"/>
+           <f:param name="#{null}" value="should_not_be_present"/>
        </h:inputText>
+
+       <h:inputText id="statusInput" 
+                        value="Ajax With OnEvent"
+                        valueChangeListener="#{bean.processValueChange}">
+           <f:ajax onevent="statusUpdate" 
+                   onerror="statusUpdate"
+                   listener="#{bean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="mouseOverInput" 
+                        value="MouseOver Ajax"
+                        valueChangeListener="#{bean.processValueChange}">
+           <f:ajax listener="#{bean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{bean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="mouseOverJavaScriptInput" 
+                        value="MouseOver JavaScript Ajax"
+                        valueChangeListener="#{bean.processValueChange}"
+                        onchange="jsf.ajax.request(this,event);return false;"
+                        onmouseover="jsf.ajax.request(this,event)"/>
+
+       <h:inputText id="disabledInput" 
+                        value="Disabled Input With Enabled Ajax"
+                        valueChangeListener="#{bean.processValueChange}"
+                        disabled="true">
+           <f:ajax listener="#{bean.processBehavior}"/>
+           <f:ajax event="mouseover" listener="#{bean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText id="disabledAjaxInput" 
+                        value="Enabled Input With Disabled Ajax"
+                        valueChangeListener="#{bean.processValueChange}">
+           <f:ajax disabled="true" listener="#{bean.processBehavior}"/>
+           <f:ajax event="mouseover" 
+                   disabled="true" 
+                   listener="#{bean.processBehavior}"/>
+       </h:inputText>
+
+       </h:panelGrid> 
 
        <h:panelGrid>
            <be:greet event="dblclick"/>
@@ -273,9 +418,49 @@
 
        <h:outputText id="out"/>
 
-       </h:panelGrid>
+       <h:dataTable value="#{bean.statusMessages}" 
+                    var="message" 
+                    id="statusTable"
+                    border="1">
+           <h:column>
+               <f:facet name="header">
+                   <h:outputText value="Count"/>
+               </f:facet>
+    
+               <h:outputText value="#{message.count}"/>
+           </h:column>
 
-       <h:outputText id="statusText" value="#{bean.status}"/>
+           <h:column>
+               <f:facet name="header">
+                   <h:outputText value="Type"/>
+               </f:facet>
+    
+               <h:outputText value="#{message.type}"/>
+           </h:column>
+
+           <h:column>
+               <f:facet name="header">
+                   <h:outputText value="Type"/>
+               </f:facet>
+    
+               <h:outputText value="#{message.type}"/>
+           </h:column>
+
+           <h:column>
+               <f:facet name="header">
+                   <h:outputText value="Details"/>
+               </f:facet>
+    
+               <h:outputText value="#{message.details}"/>
+           </h:column>
+
+       </h:dataTable>
+
+       <h:commandButton value="Reset Status Messages" id="resetMessages"
+                        actionListener="#{bean.resetStatusMessages}">
+           <f:ajax/>
+       </h:commandButton>
+    
 
        <h:outputStylesheet name="stylesheet.css" />
    </h:form>

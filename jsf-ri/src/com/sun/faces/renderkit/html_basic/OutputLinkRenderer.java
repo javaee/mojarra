@@ -82,6 +82,10 @@ public class OutputLinkRenderer extends LinkRenderer {
 
         rendererParamsNotNull(context, component);
 
+
+        if (shouldDecode(component)) {
+            decodeBehaviors(context, component);
+        }
     }
 
 
