@@ -70,11 +70,11 @@ import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.jsf.BehaviorConfig;
 import com.sun.faces.facelets.tag.jsf.BehaviorHandler;
 import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ConvertHandler;
 import com.sun.faces.facelets.tag.jsf.ConverterConfig;
 import com.sun.faces.facelets.tag.jsf.ValidateHandler;
 import com.sun.faces.facelets.tag.jsf.ValidatorConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**
  * Base class for defining TagLibraries in Java
@@ -276,7 +276,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
                 ELException {
             ComponentConfig ccfg = new ComponentConfigWrapper(cfg,
                     this.componentType, this.renderType);
-            return new ComponentHandlerImpl(ccfg);
+            return new ComponentHandler(ccfg);
         }
     }
 

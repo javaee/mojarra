@@ -78,6 +78,7 @@ import com.sun.faces.facelets.Facelet;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
+import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerHelperImpl.CreateComponentDelegate;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
@@ -86,11 +87,12 @@ import com.sun.faces.util.FacesLogger;
 import javax.el.MethodExpression;
 import javax.faces.application.ViewHandler;
 import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**
  * RELEASE_PENDING (rlubke,driscoll) document
  */
-public class CompositeComponentTagHandler extends ComponentHandlerImpl {
+public class CompositeComponentTagHandler extends ComponentHandler implements CreateComponentDelegate {
 
     private static final Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
     
@@ -98,6 +100,7 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
             ComponentConfig config) {
         super(config);
         this.compositeComponentResource = compositeComponentResource;
+        ((ComponentTagHandlerHelperImpl)this.getTagHandlerHelper()).setCreateComponentDelegate(this);
     }
     
     private void copyTagAttributesIntoComponentAttributes(FaceletContext ctx,
@@ -140,8 +143,7 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
     
     
 
-    @Override
-    protected UIComponent createComponent(FaceletContext ctx) {
+    public UIComponent createComponent(FaceletContext ctx) {
         UIComponent result = null;
         FacesContext context = ctx.getFacesContext();
         result = context.getApplication().createComponent(context, compositeComponentResource);
@@ -154,7 +156,7 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
     }
     
     @Override
-    protected void applyNextHandler(FaceletContext ctx, UIComponent c) throws IOException, FacesException, ELException {
+    public void applyNextHandler(FaceletContext ctx, UIComponent c) throws IOException, FacesException, ELException {
         // Allow any nested elements that reside inside the markup element
         // for this tag to get applied
         super.applyNextHandler(ctx, c);

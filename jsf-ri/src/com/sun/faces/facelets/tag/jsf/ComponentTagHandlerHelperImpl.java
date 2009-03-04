@@ -83,6 +83,8 @@ public class ComponentTagHandlerHelperImpl extends TagHandlerHelper {
     protected final TagAttribute id;
 
     private final String rendererType;
+    
+    private CreateComponentDelegate createComponentDelegate;
 
 
     public ComponentTagHandlerHelperImpl(ComponentHandler owner) {
@@ -234,6 +236,10 @@ public class ComponentTagHandlerHelperImpl extends TagHandlerHelper {
         return m;
     }
     
+    public void setCreateComponentDelegate(CreateComponentDelegate createComponentDelegate) {
+        this.createComponentDelegate = createComponentDelegate;
+    }
+    
     /**
      * If the binding attribute was specified, use that in conjuction with our
      * componentType String variable to call createComponent on the Application,
@@ -250,6 +256,11 @@ public class ComponentTagHandlerHelperImpl extends TagHandlerHelper {
      * @return
      */
     private UIComponent createComponent(FaceletContext ctx) {
+        
+        if (null != createComponentDelegate) {
+            return createComponentDelegate.createComponent(ctx);
+        }
+        
         UIComponent c = null;
         FacesContext faces = ctx.getFacesContext();
         Application app = faces.getApplication();
@@ -323,5 +334,11 @@ public class ComponentTagHandlerHelperImpl extends TagHandlerHelper {
         return ise;
     }
     
+    
+    interface CreateComponentDelegate {
+
+        public UIComponent createComponent(FaceletContext ctx);
+        
+    }
 
 }

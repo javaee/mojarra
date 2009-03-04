@@ -89,6 +89,10 @@ public class ComponentHandler extends MetaTagHandler {
         return this.tagId;
     }
     
+    protected TagHandlerHelper getTagHandlerHelper() {
+        return this.helper;
+    }
+    
     @Override
     public void setAttributes(FaceletContext ctx, Object instance) {
         super.setAttributes(ctx, instance);

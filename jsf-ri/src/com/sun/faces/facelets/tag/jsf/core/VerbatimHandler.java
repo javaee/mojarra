@@ -59,7 +59,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.tag.TextHandler;
 import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**
  * Handler for f:verbatim
@@ -67,12 +67,13 @@ import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
  * @author Adam Winer
  * @version $Id$
  */
-public final class VerbatimHandler extends ComponentHandlerImpl {
+public final class VerbatimHandler extends ComponentHandler {
     public VerbatimHandler(ComponentConfig config) {
         super(config);
     }
 
-    protected void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
+    @Override
+    public void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
         StringBuffer content = new StringBuffer();
         Iterator iter = TagHandlerImpl.findNextByType(this.nextHandler,
                 TextHandler.class);
@@ -86,6 +87,7 @@ public final class VerbatimHandler extends ComponentHandlerImpl {
         c.setTransient(true);
     }
 
-    protected void applyNextHandler(FaceletContext ctx, UIComponent c) {
+    @Override
+    public void applyNextHandler(FaceletContext ctx, UIComponent c) {
     }
 }

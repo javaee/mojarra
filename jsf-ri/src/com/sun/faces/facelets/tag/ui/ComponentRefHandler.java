@@ -51,10 +51,10 @@
 
 package com.sun.faces.facelets.tag.ui;
 
-import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
-public final class ComponentRefHandler extends ComponentHandlerImpl {
+public final class ComponentRefHandler extends ComponentHandler {
 
     public final static String Name = "component";
     
