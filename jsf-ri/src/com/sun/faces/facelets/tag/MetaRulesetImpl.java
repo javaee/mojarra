@@ -78,7 +78,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
  * @author Jacob Hookom
  * @version $Id$
  */
-final class MetaRulesetImpl extends MetaRuleset {
+public final class MetaRulesetImpl extends MetaRuleset {
 
     private final static Logger LOGGER = FacesLogger.FACELETS_META.getLogger();
     private final static WeakHashMap<Class, MetadataTarget> metadata =

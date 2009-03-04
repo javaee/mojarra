@@ -94,6 +94,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String PAGE_DECLARATION_LANGUAGE_FACTORY = "page-declaration-language-factory";
 
     /**
+     * <code>/faces-config/factory/tag-handler-helper-factory</code>
+     */
+    private static final String TAG_HANDLER_HELPER_FACTORY = "tag-handler-helper-factory";
+
+    /**
      * <code>/faces-config/factory/faces-context-factory</code>
      */
     private static final String FACES_CONTEXT_FACTORY = "faces-context-factory";
@@ -251,6 +256,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                getNodeText(n));
                 } else if (PAGE_DECLARATION_LANGUAGE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
+                               getNodeText(n));
+                } else if (TAG_HANDLER_HELPER_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY,
                                getNodeText(n));
                 } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     extCount.incrementAndGet();

@@ -34,53 +34,19 @@
  * holder.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package com.sun.faces.facelets.tag.jsf;
 
-import java.io.IOException;
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelperFactory;
 
+public class TagHandlerHelperFactoryImpl extends TagHandlerHelperFactory {
 
-/**
- * <p class="changed_added_2_0">Abstract class that defines methods
- * relating to helping tag handler instances.  This abstraction enables
- * implementation details to be hidden by the JSF implementation while
- * still allowing concrete classes to be defined for extension by
- * users.</p>
- * 
- * @since 2.0
- */
+    @Override
+    public TagHandlerHelper createComponentHandlerHelper(ComponentHandler owner) {
+        return new ComponentTagHandlerHelperImpl(owner);
+    }
 
-public abstract class TagHandlerHelper {
-
-    /**
-     * <p class="changed_added_2_0">Return a {@link MetaRuleset}
-     * particular to this kind of tag handler.  Called from classes that
-     * implement {@link MetaTagHandler}.</p>
-     *
-     * @param type the <code>Class</code> for which the
-     * <code>MetaRuleset</code> must be created.
-     *
-     * @since 2.0
-     */ 
     
-    public abstract MetaRuleset createMetaRuleset(Class type);
     
-
-    /**
-     * <p class="changed_added_2_0">Called by classes that implement
-     * {@link FaceletHandler} in their implementation of
-     * <code>apply()</code>.</p>
-     *
-     * @param ctx the <code>FaceletContext</code> for this request
-     *
-     * @param comp the <code>UIComponent</code> that corresponds to this
-     * element.
-     *
-     */
-    public abstract void apply(FaceletContext ctx, UIComponent comp) throws IOException, FacesException, FaceletException, ELException;
-
 }

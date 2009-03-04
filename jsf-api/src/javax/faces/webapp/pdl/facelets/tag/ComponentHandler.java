@@ -54,6 +54,7 @@ import javax.faces.webapp.pdl.facelets.FaceletException;
 public class ComponentHandler extends MetaTagHandler {
     
     private TagHandlerHelper helper = null;
+    private ComponentConfig componentConfig = null;
 
     /**
      * <p class="changed_added_2_0">Leverage the {@link
@@ -65,10 +66,32 @@ public class ComponentHandler extends MetaTagHandler {
      */ 
     public ComponentHandler(ComponentConfig config) {
         super(config);
+        this.componentConfig = config;
+
         TagHandlerHelperFactory helperFactory = (TagHandlerHelperFactory)
                 FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY);
         helper = helperFactory.createComponentHandlerHelper(this);
-        
+    }
+    
+    public Tag getTag() {
+        return this.tag;
+    }
+    
+    public ComponentConfig getComponentConfig() {
+        return this.componentConfig;
+    }
+    
+    public TagAttribute getTagAttribute(String localName) { 
+        return super.getAttribute(localName);
+    }
+    
+    public String getTagId() {
+        return this.tagId;
+    }
+    
+    @Override
+    public void setAttributes(FaceletContext ctx, Object instance) {
+        super.setAttributes(ctx, instance);
     }
 
     /**
@@ -103,6 +126,13 @@ public class ComponentHandler extends MetaTagHandler {
         helper.apply(ctx, parent);
     }
     
+    public void applyNextHandler(FaceletContext ctx, UIComponent c) 
+            throws IOException, FacesException, ELException {
+        // first allow c to get populated
+        this.nextHandler.apply(ctx, c);
+    }
+    
+    
     /**
      * <p class="changed_added_2_0">This method is guaranteed to be
      * called after the component has been created but before it has
@@ -117,7 +147,7 @@ public class ComponentHandler extends MetaTagHandler {
      *
      * @since 2.0
      */
-    protected void onComponentCreated(FaceletContext ctx, UIComponent c, 
+    public void onComponentCreated(FaceletContext ctx, UIComponent c, 
             UIComponent parent) {
         
     }
@@ -136,7 +166,7 @@ public class ComponentHandler extends MetaTagHandler {
      *
      * @since 2.0
      */
-    protected void onComponentPopulated(FaceletContext ctx, UIComponent c, 
+    public void onComponentPopulated(FaceletContext ctx, UIComponent c, 
             UIComponent parent) {
         
     }
