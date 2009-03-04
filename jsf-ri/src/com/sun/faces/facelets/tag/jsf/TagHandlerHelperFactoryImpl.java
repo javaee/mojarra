@@ -37,9 +37,10 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
-import javax.faces.webapp.pdl.facelets.tag.MetaTagHandler;
+import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
 import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
 import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelperFactory;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
 
 public class TagHandlerHelperFactoryImpl extends TagHandlerHelperFactory {
 
@@ -49,8 +50,13 @@ public class TagHandlerHelperFactoryImpl extends TagHandlerHelperFactory {
     }
 
     @Override
-    public TagHandlerHelper createValidatorHandlerHelper(MetaTagHandler owner) {
+    public TagHandlerHelper createValidatorHandlerHelper(ValidatorHandler owner) {
         return new ValidatorTagHandlerHelperImpl(owner);
+    }
+
+    @Override
+    public TagHandlerHelper createConverterHandlerHelper(ConverterHandler owner) {
+        return new ConverterTagHandlerHelperImpl(owner);
     }
     
     

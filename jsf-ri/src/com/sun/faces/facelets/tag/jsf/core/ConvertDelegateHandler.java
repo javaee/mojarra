@@ -59,8 +59,8 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import com.sun.faces.facelets.tag.jsf.ConvertHandler;
-import com.sun.faces.facelets.tag.jsf.ConverterConfig;
+import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
+import javax.faces.webapp.pdl.facelets.tag.ConverterConfig;
 
 /**
  * Register a named Converter instance on the UIComponent associated with the
@@ -71,7 +71,7 @@ import com.sun.faces.facelets.tag.jsf.ConverterConfig;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class ConvertDelegateHandler extends ConvertHandler {
+public final class ConvertDelegateHandler extends ConverterHandler {
 
     private final TagAttribute converterId;
 
@@ -87,7 +87,7 @@ public final class ConvertDelegateHandler extends ConvertHandler {
      * Uses the specified "converterId" to pull an instance from the Application
      * 
      * @see javax.faces.application.Application#createComponent(java.lang.String)
-     * @see com.sun.faces.facelets.tag.jsf.ConvertHandler#createConverter(com.sun.faces.facelets.FaceletContext)
+     * @see com.sun.faces.facelets.tag.jsf.ConverterHandler#createConverter(com.sun.faces.facelets.FaceletContext)
      */
     protected Converter createConverter(FaceletContext ctx)
             throws FacesException, ELException, FaceletException {

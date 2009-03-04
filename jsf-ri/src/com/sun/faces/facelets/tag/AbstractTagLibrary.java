@@ -70,8 +70,8 @@ import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.jsf.BehaviorConfig;
 import com.sun.faces.facelets.tag.jsf.BehaviorHandler;
 import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ConvertHandler;
-import com.sun.faces.facelets.tag.jsf.ConverterConfig;
+import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
+import javax.faces.webapp.pdl.facelets.tag.ConverterConfig;
 import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
 import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
 import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
@@ -346,7 +346,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
-            return new ConvertHandler(new ConverterConfigWrapper(cfg, this.converterId));
+            return new ConverterHandler(new ConverterConfigWrapper(cfg, this.converterId));
         }
     }
     
@@ -536,9 +536,9 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     }
 
     /**
-     * Add a ConvertHandler for the specified converterId
+     * Add a ConverterHandler for the specified converterId
      * 
-     * @see ConvertHandler
+     * @see ConverterHandler
      * @see javax.faces.application.Application#createConverter(java.lang.String)
      * @param name
      *            name to use, "foo" would be &lt;my:foo />
@@ -550,9 +550,9 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     }
     
     /**
-     * Add a ConvertHandler for the specified converterId of a TagHandler type
+     * Add a ConverterHandler for the specified converterId of a TagHandler type
      * 
-     * @see ConvertHandler
+     * @see ConverterHandler
      * @see ConverterConfig
      * @see javax.faces.application.Application#createConverter(java.lang.String)
      * @param name

@@ -66,5 +66,19 @@ public abstract class TagHandlerHelperFactory {
      *
      * @since 2.0
      */ 
-    public abstract TagHandlerHelper createValidatorHandlerHelper(MetaTagHandler owner);
+    public abstract TagHandlerHelper createValidatorHandlerHelper(ValidatorHandler owner);
+
+    /**
+     * <p class="changed_added_2_0">Create and return a {@link
+     * TagHandlerHelper} instance designed for use with {@link
+     * ConverterHandler}.</p>
+     *
+     * @param owner the <code>ValidatorHandler</code> instance being
+     * helped by this helper instance.
+     *
+     * @since 2.0
+     */ 
+    public abstract TagHandlerHelper createConverterHandlerHelper(ConverterHandler owner);
+
+
 }

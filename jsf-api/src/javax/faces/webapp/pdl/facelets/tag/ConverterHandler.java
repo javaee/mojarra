@@ -49,68 +49,59 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jsf.core;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
+
+import javax.faces.FactoryFinder;
+import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
-import javax.faces.convert.NumberConverter;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
-import javax.faces.webapp.pdl.facelets.tag.ConverterConfig;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
+import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
 
 /**
- * Register a NumberConverter instance on the UIComponent associated with the
- * closest parent UIComponent custom action. <p/> See <a target="_new"
- * href="http://java.sun.com/j2ee/javaserverfaces/1.1_01/docs/tlddocs/f/convertNumber.html">tag
- * documentation</a>.
+ * Handles setting a Converter instance on a ValueHolder. Will wire all
+ * attributes set to the Converter instance created/fetched. Uses the "binding"
+ * attribute for grabbing instances to apply attributes to. <p/> Will only
+ * set/create Converter is the passed UIComponent's parent is null, signifying
+ * that it wasn't restored from an existing tree.
  * 
+ * @see javax.faces.webapp.ConverterELTag
+ * @see javax.faces.convert.Converter
+ * @see javax.faces.component.ValueHolder
  * @author Jacob Hookom
- * @version $Id$
+ * @version $Id: ConverterHandler.java 6118 2008-12-16 03:56:08Z edburns $
  */
-public final class ConvertNumberHandler extends ConverterHandler {
+public class ConverterHandler extends FaceletsAttachedObjectHandler implements ValueHolderAttachedObjectHandler {
 
-    private final TagAttribute locale;
+    
+    private String converterId;
+    
+    
+    private TagHandlerHelper helper;
 
-    /**
-     * @param config
-     */
-    public ConvertNumberHandler(ConverterConfig config) {
+    public ConverterHandler(ConverterConfig config) {
         super(config);
-        this.locale = this.getAttribute("locale");
-    }
-
-    /**
-     * Returns a new NumberConverter
-     * 
-     * @see NumberConverter
-     * @see com.sun.faces.facelets.tag.jsf.ConverterHandler#createConverter(com.sun.faces.facelets.FaceletContext)
-     */
-    protected Converter createConverter(FaceletContext ctx)
-            throws FacesException, ELException, FaceletException {
-        return ctx.getFacesContext().getApplication().createConverter(NumberConverter.CONVERTER_ID);
-    }
-
-    /* (non-Javadoc)
-     * @see com.sun.facelets.tag.ObjectHandler#setAttributes(com.sun.facelets.FaceletContext, java.lang.Object)
-     */
-    @Override
-    public void setAttributes(FaceletContext ctx, Object obj) {
-        super.setAttributes(ctx, obj);
-        NumberConverter c = (NumberConverter) obj;
-        if (this.locale != null) {
-            c.setLocale(ComponentSupport.getLocale(ctx, this.locale));
-        }
+        this.converterId = config.getConverterId();
+        
+        TagHandlerHelperFactory helperFactory = (TagHandlerHelperFactory)
+                FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY);
+        helper = helperFactory.createConverterHandlerHelper(this);
+        
     }
 
     @Override
-    public MetaRuleset createMetaRuleset(Class type) {
-        return super.createMetaRuleset(type).ignore("locale");
+    protected TagHandlerHelper getTagHandlerHelper() {
+        return this.helper;
     }
 
+    @Override
+    protected AttachedObjectHandler getAttachedObjectHandlerHelper() {
+        return (AttachedObjectHandler) this.helper;
+    }
+
+    public String getConverterId() {
+        return converterId;
+    }
+    
 }
