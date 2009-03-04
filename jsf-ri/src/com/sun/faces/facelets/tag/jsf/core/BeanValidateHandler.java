@@ -35,7 +35,7 @@
  */
 package com.sun.faces.facelets.tag.jsf.core;
 
-import com.sun.faces.facelets.tag.jsf.ValidateHandler;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
 import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerHelperImpl;
 import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
 import javax.faces.component.UIComponent;
@@ -52,7 +52,7 @@ import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerHelperImpl.SetValidator
  *
  * @author Dan Allen
  */
-public class BeanValidateHandler extends ValidateHandler implements SetValidatorDefaultsOnParentDelegate {
+public class BeanValidateHandler extends ValidatorHandler implements SetValidatorDefaultsOnParentDelegate {
 
     private final TagAttribute validationGroups;
 

@@ -38,18 +38,22 @@ package guessnumber;
 
 import java.io.IOException;
 
+import java.io.Serializable;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.PreRenderComponentEvent;
-import javax.faces.validator.Validator;
 
-import com.sun.faces.facelets.tag.jsf.ValidateHandler;
-import com.sun.faces.facelets.tag.jsf.ValidatorConfig;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.TagException;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
+
 
 /**
  * <p>A custom ValidateHandler that registers the created Validator as
@@ -59,7 +63,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagException;
  * NOTE:  These APIs <em>WILL</em> be changing so if you write similar code,
  * expect breakage when the next EDR comes out.
  */
-public class ClientSideValidatorHandler extends ValidateHandler {
+public class ClientSideValidatorHandler extends ValidatorHandler {
 
     public ClientSideValidatorHandler(ValidatorConfig config) {
         super(config);
@@ -67,30 +71,27 @@ public class ClientSideValidatorHandler extends ValidateHandler {
 
 
     @Override
-    protected Validator createValidator(FaceletContext ctx) {
-        return super.createValidator(ctx);
-    }
-
-    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
-         if (parent == null || !(parent instanceof EditableValueHolder)) {
-            throw new TagException(this.tag,
-                    "Parent not an instance of EditableValueHolder: " + parent);
-        }
+        super.apply(ctx, parent);
 
         // only process if it's been created
         if (parent.getParent() == null) {
             // cast to a ValueHolder
             EditableValueHolder evh = (EditableValueHolder) parent;
-            Validator v = this.createValidator(ctx);
             parent.subscribeToEvent(PreRenderComponentEvent.class,
-                                    ((ClientSideValidator) v));
-            if (v == null) {
-                throw new TagException(this.tag, "No Validator was created");
-            }
-            this.setAttributes(ctx, v);
-            evh.addValidator(v);
+                                    new PreRenderListener());
         }
     }
+    
+    
+    public static class PreRenderListener implements ComponentSystemEventListener, Serializable {
+        public void processEvent(ComponentSystemEvent event)
+                throws AbortProcessingException {
+            UIComponent c = (UIComponent) event.getSource();
+            c.getAttributes().put("onmouseout", "validate('" + c.getClientId(FacesContext.getCurrentInstance()) + "')");
+        }
+    }
+
+    
 }

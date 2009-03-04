@@ -49,49 +49,76 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jsf.core;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.validator.Validator;
+
+import java.io.IOException;
+import javax.el.ELException;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
-import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
+import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 
 /**
- * Register a named Validator instance on the UIComponent associated with the
- * closest parent UIComponent custom action.<p/> See <a target="_new"
- * href="http://java.sun.com/j2ee/javaserverfaces/1.1_01/docs/tlddocs/f/validator.html">tag
- * documentation</a>.
- * 
- * @author Jacob Hookom
- * @version $Id$
  */
-public final class ValidateDelegateHandler extends ValidatorHandler {
+public abstract class FaceletsAttachedObjectHandler extends MetaTagHandler implements AttachedObjectHandler {
 
-    private final TagAttribute validatorId;
+    private final TagAttribute binding;
 
-    public ValidateDelegateHandler(ValidatorConfig config) {
+    private final TagAttribute disabled;
+    
+    
+    public FaceletsAttachedObjectHandler(TagConfig config) {
         super(config);
-        // FIXME this attribute need not be required since we can reflect on the class of the
-        // object resolved from the binding to get the value of the VALIDATOR_ID field
-        this.validatorId = this.getRequiredAttribute("validatorId");
+        this.binding = this.getAttribute("binding");
+        this.disabled = this.getAttribute("disabled");
+    }
+    
+    protected abstract AttachedObjectHandler getAttachedObjectHandlerHelper();
+
+    protected abstract TagHandlerHelper getTagHandlerHelper();
+
+    public boolean isDisabled(FaceletContext ctx) {
+        return disabled != null ? Boolean.TRUE.equals(disabled.getBoolean(ctx)) : false;
+    }
+    
+    public void apply(FaceletContext ctx, UIComponent parent)
+            throws IOException, FacesException, FaceletException, ELException {
+        getTagHandlerHelper().apply(ctx, parent);
     }
 
-    /**
-     * Resolve the validator id from the attribute "validatorId", which is then used to create a new
-     * Validator instance from the Application.
-     * 
-     * @see javax.faces.application.Application#createValidator(java.lang.String)
-     * @see com.sun.faces.facelets.tag.jsf.ValidatorHandler#getValidator(com.sun.faces.facelets.FaceletContext)
-     */
-    protected String getValidator(FaceletContext ctx) {
-        return this.validatorId.getValue(ctx);
+    public final void applyAttachedObject(FacesContext ctx, UIComponent parent) {
+        getAttachedObjectHandlerHelper().applyAttachedObject(ctx, parent);
     }
-
+    
+    public final String getFor() {
+        return getAttachedObjectHandlerHelper().getFor();
+    }
+    
+    @Override
     protected MetaRuleset createMetaRuleset(Class type) {
-        return super.createMetaRuleset(type).ignoreAll();
+        return getTagHandlerHelper().createMetaRuleset(type);
+    }
+    
+    public TagAttribute getTagAttribute(String localName) {
+        return super.getAttribute(localName);
+    }
+    
+    
+    public Tag getTag() {
+        return this.tag;
+    }
+    
+    public TagAttribute getBinding() {
+        return this.binding;
+    }
+
+    @Override
+    public void setAttributes(FaceletContext ctx, Object instance) {
+        super.setAttributes(ctx, instance);
     }
 
 }

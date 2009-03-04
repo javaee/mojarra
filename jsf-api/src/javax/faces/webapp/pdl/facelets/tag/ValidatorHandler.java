@@ -49,27 +49,14 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
-import java.io.IOException;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import com.sun.faces.facelets.tag.MetaTagHandlerImpl;
 import javax.faces.FactoryFinder;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
-import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
-import javax.faces.webapp.pdl.facelets.tag.Tag;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelperFactory;
 
 /**
  * Handles setting a Validator instance on a EditableValueHolder. Will wire all
@@ -79,62 +66,32 @@ import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelperFactory;
  * that it wasn't restored from an existing tree.
  * 
  * @author Jacob Hookom
- * @version $Id$
+ * @version $Id: ValidatorHandler.java 6760 2009-03-04 19:57:28Z edburns $
  */
-public class ValidateHandler extends MetaTagHandlerImpl implements EditableValueHolderAttachedObjectHandler {
+public class ValidatorHandler extends FaceletsAttachedObjectHandler implements EditableValueHolderAttachedObjectHandler {
 
-    private final TagAttribute binding;
-
-    private final TagAttribute disabled;
-    
     private String validatorId;
     
-    private ValidatorTagHandlerHelperImpl helper;
+    private TagHandlerHelper helper;
 
-    /**
-     * 
-     * @param config
-     * @deprecated
-     */
-    public ValidateHandler(TagConfig config) {
+    public ValidatorHandler(ValidatorConfig config) {
         super(config);
-        this.binding = this.getAttribute("binding");
-        this.disabled = this.getAttribute("disabled");
-        
-        TagHandlerHelperFactory helperFactory = (TagHandlerHelperFactory)
-                FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY);
-        helper = (ValidatorTagHandlerHelperImpl) helperFactory.createValidatorHandlerHelper(this);
-        
-    }
-    
-    public ValidateHandler(ValidatorConfig config) {
-        this((TagConfig) config);
         this.validatorId = config.getValidatorId();
 
         TagHandlerHelperFactory helperFactory = (TagHandlerHelperFactory)
                 FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY);
-        helper = (ValidatorTagHandlerHelperImpl) helperFactory.createValidatorHandlerHelper(this);
+        helper = helperFactory.createValidatorHandlerHelper(this);
     }
 
-    /**
-     * TODO
-     * 
-     * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
-     */
-    public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
-        helper.apply(ctx, parent);
+    @Override
+    protected TagHandlerHelper getTagHandlerHelper() {
+        return this.helper;
     }
 
-    public boolean isDisabled(FaceletContext ctx) {
-        return disabled != null ? Boolean.TRUE.equals(disabled.getBoolean(ctx)) : false;
+    @Override
+    protected AttachedObjectHandler getAttachedObjectHandlerHelper() {
+        return (AttachedObjectHandler) this.helper;
     }
-
-    public void applyAttachedObject(FacesContext ctx, UIComponent parent) {
-        helper.applyAttachedObject(ctx, parent);
-    }
-    
-    
 
     /**
      * <p>Retrieve the id of the validator that is to be created an added to the parent <code>EditableValueHolder</code>.
@@ -147,41 +104,6 @@ public class ValidateHandler extends MetaTagHandlerImpl implements EditableValue
      */
     public String getValidatorId(FaceletContext ctx) {
         return validatorId;
-    }
-
-    @Override
-    protected MetaRuleset createMetaRuleset(Class type) {
-        return helper.createMetaRuleset(type);
-    }
-    
-    protected TagHandlerHelper getTagHandlerHelper() {
-        return this.helper;
-    }
-    
-    
-    public String getFor() {
-        String result = null;
-        TagAttribute attr = this.getAttribute("for");
-        
-        if (null != attr) {
-            result = attr.getValue();
-        }
-        return result;
-        
-    }
-    
-    public Tag getTag() {
-        return this.tag;
-    }
-    
-    public TagAttribute getBinding() {
-        return this.binding;
-    }
-
-    
-    @Override
-    public void setAttributes(FaceletContext ctx, Object instance) {
-        super.setAttributes(ctx, instance);
     }
 
 }

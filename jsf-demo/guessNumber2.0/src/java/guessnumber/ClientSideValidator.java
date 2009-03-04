@@ -43,9 +43,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.faces.validator.FacesValidator;
@@ -66,7 +63,6 @@ import javax.faces.validator.FacesValidator;
 @FacesValidator(value="ClientSideValidator")
 @ResourceDependency(name="js/validator.js")
 public class ClientSideValidator implements Validator,
-                                            ComponentSystemEventListener,
                                             Serializable {
 
     private static final long serialVersionUID = -5174092316834520806L;
@@ -110,12 +106,6 @@ public class ClientSideValidator implements Validator,
             throw new ValidatorException(facesMessage);
         }
 
-    }
-
-    public void processEvent(ComponentSystemEvent event)
-          throws AbortProcessingException {
-        UIComponent c = (UIComponent) event.getSource();
-        c.getAttributes().put("onmouseout", "validate('" + c.getClientId(FacesContext.getCurrentInstance()) + "')");
     }
 
 }

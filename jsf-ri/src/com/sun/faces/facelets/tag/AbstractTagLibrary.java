@@ -72,7 +72,7 @@ import com.sun.faces.facelets.tag.jsf.BehaviorHandler;
 import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ConvertHandler;
 import com.sun.faces.facelets.tag.jsf.ConverterConfig;
-import com.sun.faces.facelets.tag.jsf.ValidateHandler;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
 import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
 import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
@@ -332,7 +332,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 
         public TagHandler createHandler(TagConfig cfg) throws FacesException,
                 ELException {
-            return new ValidateHandler(new ValidatorConfigWrapper(cfg, this.validatorId));
+            return new ValidatorHandler(new ValidatorConfigWrapper(cfg, this.validatorId));
         }
     }
 
@@ -567,9 +567,9 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     }
 
     /**
-     * Add a ValidateHandler for the specified validatorId
+     * Add a ValidatorHandler for the specified validatorId
      * 
-     * @see ValidateHandler
+     * @see ValidatorHandler
      * @see javax.faces.application.Application#createValidator(java.lang.String)
      * @param name
      *            name to use, "foo" would be &lt;my:foo />
@@ -581,9 +581,9 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     }
     
     /**
-     * Add a ValidateHandler for the specified validatorId
+     * Add a ValidatorHandler for the specified validatorId
      * 
-     * @see ValidateHandler
+     * @see ValidatorHandler
      * @see ValidatorConfig
      * @see javax.faces.application.Application#createValidator(java.lang.String)
      * @param name

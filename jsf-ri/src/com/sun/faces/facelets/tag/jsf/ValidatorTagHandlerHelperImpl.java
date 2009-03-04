@@ -36,6 +36,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.util.Util;
 import java.io.IOException;
@@ -50,22 +51,24 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.MetaTagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
 
-public class ValidatorTagHandlerHelperImpl extends TagHandlerHelper {
+public class ValidatorTagHandlerHelperImpl extends TagHandlerHelper implements AttachedObjectHandler {
 
-    private ValidateHandler owner = null;
+    private ValidatorHandler owner = null;
     
     private SetValidatorDefaultsOnParentDelegate 
             setValidatorDefaultsOnParentDelegate;
 
     public ValidatorTagHandlerHelperImpl(MetaTagHandler owner) {
-        this.owner = (ValidateHandler) owner;
+        this.owner = (ValidatorHandler) owner;
     }
     
     public void setSetValidatorDefaultsOnParentDelegate(SetValidatorDefaultsOnParentDelegate delegate) {
@@ -136,8 +139,18 @@ public class ValidatorTagHandlerHelperImpl extends TagHandlerHelper {
         }
         owner.setAttributes(ctx, v);
         evh.addValidator(v);
-    }   
-    
+    }
+
+    public String getFor() {
+        String result = null;
+        TagAttribute attr = owner.getTagAttribute("for");
+        
+        if (null != attr) {
+            result = attr.getValue();
+        }
+        return result;
+        
+    }
     
     /**
      * Template method for creating a Validator instance
