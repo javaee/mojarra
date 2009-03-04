@@ -666,8 +666,7 @@ public abstract class Application {
      * <p><span class="changed_added_2_0">Instantiate</span> and
      * return a new {@link Behavior} instance of the class specified by
      * a previous call to <code>addBehavior()</code> for the specified
-     * behavior id.  If there is no such registration for this
-     * behavior id, return <code>null</code>.</p>
+     * behavior id.</p> 
      *
      * @param behaviorId The behavior id for which to create and
      *  return a new {@link Behavior} instance
@@ -1117,8 +1116,7 @@ public abstract class Application {
      * <p><span class="changed_modified_2_0">Instantiate</span> and
      * return a new {@link Converter} instance of the class specified by
      * a previous call to <code>addConverter()</code> for the specified
-     * converter id.  If there is no such registration for this
-     * converter id, return <code>null</code>.</p>
+     * converter id.</p>
      *
      * <p class="changed_added_2_0">If the <code>toLowerCase()</code> of
      * the <code>String</code> represenation of the value of the
