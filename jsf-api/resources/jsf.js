@@ -1288,7 +1288,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
     /**
      * <p>Collect and encode state for input controls associated
-     * with the specified <code>form</code> element.</p>
+     * with the specified <code>form</code> element.  This will include
+     * all input controls of type <code>hidden</code>.</p>
      * <p><b>Usage:</b></p>
      * <pre><code>
      * var state = jsf.getViewState(form);
