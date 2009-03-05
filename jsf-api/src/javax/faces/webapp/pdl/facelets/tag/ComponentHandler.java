@@ -36,13 +36,8 @@
 
 package javax.faces.webapp.pdl.facelets.tag;
 
-import java.io.IOException;
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
 
 
 /**
@@ -51,15 +46,15 @@ import javax.faces.webapp.pdl.facelets.FaceletException;
  *
  * @since 2.0
  */
-public class ComponentHandler extends MetaTagHandler {
+public class ComponentHandler extends DelegatingMetaTagHandler {
     
-    private TagHandlerHelper helper = null;
+    private TagHandlerDelegate helper = null;
     private ComponentConfig componentConfig = null;
 
     /**
      * <p class="changed_added_2_0">Leverage the {@link
-     * TagHandlerHelperFactory} provided by the implementation to create
-     * an instance of {@link TagHandlerHelper} designed for use with
+     * TagHandlerDelegateFactory} provided by the implementation to create
+     * an instance of {@link TagHandlerDelegate} designed for use with
      * <code>ComponentHandler</code>.</p>
      *
      * @since 2.0
@@ -67,73 +62,18 @@ public class ComponentHandler extends MetaTagHandler {
     public ComponentHandler(ComponentConfig config) {
         super(config);
         this.componentConfig = config;
-
-        TagHandlerHelperFactory helperFactory = (TagHandlerHelperFactory)
-                FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY);
-        helper = helperFactory.createComponentHandlerHelper(this);
     }
     
-    public Tag getTag() {
-        return this.tag;
+    @Override
+    protected TagHandlerDelegate getTagHandlerHelper() {
+        if (null == helper) {
+            helper = helperFactory.createComponentHandlerDelegate(this);
+        }
+        return helper;
     }
     
     public ComponentConfig getComponentConfig() {
         return this.componentConfig;
-    }
-    
-    public TagAttribute getTagAttribute(String localName) { 
-        return super.getAttribute(localName);
-    }
-    
-    public String getTagId() {
-        return this.tagId;
-    }
-    
-    protected TagHandlerHelper getTagHandlerHelper() {
-        return this.helper;
-    }
-    
-    @Override
-    public void setAttributes(FaceletContext ctx, Object instance) {
-        super.setAttributes(ctx, instance);
-    }
-
-    /**
-     * <p class="changed_added_2_0">The default implementation simply
-     * calls through to {@link TagHandlerHelper#createMetaRuleset} and
-     * returns the result.</p>
-     *
-     * @param type the <code>Class</code> for which the
-     * <code>MetaRuleset</code> must be created.
-     *
-     * @since 2.0
-     */
-
-    @Override
-    protected MetaRuleset createMetaRuleset(Class type) {
-        return helper.createMetaRuleset(type);
-    }
-
-    /**
-     * <p class="changed_added_2_0">The default implementation simply
-     * calls through to {@link TagHandlerHelper#apply}.</p>
-     *
-     * @param ctx the <code>FaceletContext</code> for this view execution
-     *
-     * @param parent the parent <code>UIComponent</code> of the
-     * component represented by this element instance.
-     * @since 2.0
-     */
-
-    public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
-        helper.apply(ctx, parent);
-    }
-    
-    public void applyNextHandler(FaceletContext ctx, UIComponent c) 
-            throws IOException, FacesException, ELException {
-        // first allow c to get populated
-        this.nextHandler.apply(ctx, c);
     }
     
     

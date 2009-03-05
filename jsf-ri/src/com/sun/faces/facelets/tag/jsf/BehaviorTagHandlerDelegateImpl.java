@@ -54,17 +54,17 @@ import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
 
 /**
  *
  * @author edburns
  */
-class BehaviorTagHandlerHelperImpl extends TagHandlerHelper implements AttachedObjectHandler {
+class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements AttachedObjectHandler {
     
     private BehaviorHandler owner;
 
-    public BehaviorTagHandlerHelperImpl(BehaviorHandler owner) {
+    public BehaviorTagHandlerDelegateImpl(BehaviorHandler owner) {
         this.owner = owner;
     }
     

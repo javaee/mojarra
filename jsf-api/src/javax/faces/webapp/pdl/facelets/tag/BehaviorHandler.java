@@ -40,10 +40,7 @@
 
 package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.FactoryFinder;
-import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler;
-
 
 public class BehaviorHandler extends FaceletsAttachedObjectHandler implements BehaviorHolderAttachedObjectHandler {
 
@@ -51,7 +48,7 @@ public class BehaviorHandler extends FaceletsAttachedObjectHandler implements Be
     
     private String behaviorId;
 	
-    private TagHandlerHelper helper;
+    private TagHandlerDelegate helper;
 
     public BehaviorHandler(BehaviorConfig config) {
         super(config);
@@ -60,10 +57,6 @@ public class BehaviorHandler extends FaceletsAttachedObjectHandler implements Be
         if (null != event && !event.isLiteral()){
             throw new TagException(this.tag, "The 'event' attribute for behavior tag have to be literal");
         }
-        TagHandlerHelperFactory helperFactory = (TagHandlerHelperFactory)
-                FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY);
-        helper = helperFactory.createBehaviorHandlerHelper(this);
-        
     }
     
     public TagAttribute getEvent() {
@@ -71,15 +64,13 @@ public class BehaviorHandler extends FaceletsAttachedObjectHandler implements Be
     }
     
     @Override
-    protected TagHandlerHelper getTagHandlerHelper() {
-        return this.helper;
+    protected TagHandlerDelegate getTagHandlerHelper() {
+        if (null == helper) {
+            helper = helperFactory.createBehaviorHandlerDelegate(this);
+        }
+        return helper;
     }
 
-    @Override
-    protected AttachedObjectHandler getAttachedObjectHandlerHelper() {
-        return (AttachedObjectHandler) this.helper;
-    }
-    
     public String getBehaviorId() {
         return behaviorId;
     }

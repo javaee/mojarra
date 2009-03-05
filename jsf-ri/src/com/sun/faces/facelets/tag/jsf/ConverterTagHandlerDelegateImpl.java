@@ -54,18 +54,18 @@ import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
 
 
 /**
  *
  * @author edburns
  */
-public class ConverterTagHandlerHelperImpl extends TagHandlerHelper implements AttachedObjectHandler {
+public class ConverterTagHandlerDelegateImpl extends TagHandlerDelegate implements AttachedObjectHandler {
 
     private ConverterHandler owner;
     
-    public ConverterTagHandlerHelperImpl(ConverterHandler owner) {
+    public ConverterTagHandlerDelegateImpl(ConverterHandler owner) {
         this.owner = owner;
     }
     

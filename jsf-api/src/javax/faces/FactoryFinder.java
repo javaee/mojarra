@@ -215,10 +215,10 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
-     * {@link javax.faces.webapp.pdl.tag.TagHandlerHelper} class name.</p>
+     * {@link javax.faces.webapp.pdl.tag.TagHandlerDelegate} class name.</p>
      */
-    public final static String TAG_HANDLER_HELPER_FACTORY =
-         "javax.faces.webapp.pdl.facelets.tag.TagHandlerHelperFactory";
+    public final static String TAG_HANDLER_DELEGATE_FACTORY =
+         "javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegateFactory";
 
     // ------------------------------------------------------- Static Variables
 
@@ -242,7 +242,7 @@ public final class FactoryFinder {
          PAGE_DECLARATION_LANGUAGE_FACTORY,
          PARTIAL_VIEW_CONTEXT_FACTORY,
          RENDER_KIT_FACTORY,
-         TAG_HANDLER_HELPER_FACTORY
+         TAG_HANDLER_DELEGATE_FACTORY
     };
 
     /**
@@ -636,8 +636,8 @@ public final class FactoryFinder {
                  javax.faces.render.RenderKitFactory.class);
             factoryClasses.put(PAGE_DECLARATION_LANGUAGE_FACTORY,
                  javax.faces.webapp.pdl.PageDeclarationLanguageFactory.class);
-            factoryClasses.put(TAG_HANDLER_HELPER_FACTORY,
-                 javax.faces.webapp.pdl.facelets.tag.TagHandlerHelperFactory.class);
+            factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
+                 javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegateFactory.class);
         }
         return factoryClasses.get(factoryClassName);
 

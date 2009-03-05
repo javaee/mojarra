@@ -58,16 +58,16 @@ import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.MetaTagHandler;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
 
-public class ValidatorTagHandlerHelperImpl extends TagHandlerHelper implements AttachedObjectHandler {
+public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implements AttachedObjectHandler {
 
     private ValidatorHandler owner = null;
     
     private SetValidatorDefaultsOnParentDelegate 
             setValidatorDefaultsOnParentDelegate;
 
-    public ValidatorTagHandlerHelperImpl(MetaTagHandler owner) {
+    public ValidatorTagHandlerDelegateImpl(MetaTagHandler owner) {
         this.owner = (ValidatorHandler) owner;
     }
     

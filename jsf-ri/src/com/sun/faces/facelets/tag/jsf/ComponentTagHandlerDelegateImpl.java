@@ -66,9 +66,9 @@ import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
 
-public class ComponentTagHandlerHelperImpl extends TagHandlerHelper {
+public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
     private static final String INITIAL_STATE_EVENT_KEY = "facelets.tag.InitialStateEvent";
     
@@ -87,7 +87,7 @@ public class ComponentTagHandlerHelperImpl extends TagHandlerHelper {
     private CreateComponentDelegate createComponentDelegate;
 
 
-    public ComponentTagHandlerHelperImpl(ComponentHandler owner) {
+    public ComponentTagHandlerDelegateImpl(ComponentHandler owner) {
         this.owner = owner;
         ComponentConfig config = owner.getComponentConfig();
         this.componentType = config.getComponentType();

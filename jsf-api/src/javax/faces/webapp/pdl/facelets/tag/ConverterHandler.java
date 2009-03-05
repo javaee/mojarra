@@ -52,11 +52,9 @@
 package javax.faces.webapp.pdl.facelets.tag;
 
 
-import javax.faces.FactoryFinder;
 import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 
-import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
 
 /**
@@ -78,26 +76,20 @@ public class ConverterHandler extends FaceletsAttachedObjectHandler implements V
     private String converterId;
     
     
-    private TagHandlerHelper helper;
+    private TagHandlerDelegate helper;
 
     public ConverterHandler(ConverterConfig config) {
         super(config);
         this.converterId = config.getConverterId();
-        
-        TagHandlerHelperFactory helperFactory = (TagHandlerHelperFactory)
-                FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY);
-        helper = helperFactory.createConverterHandlerHelper(this);
-        
     }
 
     @Override
-    protected TagHandlerHelper getTagHandlerHelper() {
-        return this.helper;
-    }
+    protected TagHandlerDelegate getTagHandlerHelper() {
+        if (null == helper) {
+            helper = helperFactory.createConverterHandlerDelegate(this);
+        }
+        return helper;
 
-    @Override
-    protected AttachedObjectHandler getAttachedObjectHandlerHelper() {
-        return (AttachedObjectHandler) this.helper;
     }
 
     public String getConverterId() {

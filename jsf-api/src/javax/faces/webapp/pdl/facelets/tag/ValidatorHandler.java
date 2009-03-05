@@ -54,8 +54,6 @@ package javax.faces.webapp.pdl.facelets.tag;
 
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.FactoryFinder;
-import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
 
 /**
@@ -72,25 +70,19 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
 
     private String validatorId;
     
-    private TagHandlerHelper helper;
+    private TagHandlerDelegate helper;
 
     public ValidatorHandler(ValidatorConfig config) {
         super(config);
         this.validatorId = config.getValidatorId();
-
-        TagHandlerHelperFactory helperFactory = (TagHandlerHelperFactory)
-                FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY);
-        helper = helperFactory.createValidatorHandlerHelper(this);
     }
 
     @Override
-    protected TagHandlerHelper getTagHandlerHelper() {
-        return this.helper;
-    }
-
-    @Override
-    protected AttachedObjectHandler getAttachedObjectHandlerHelper() {
-        return (AttachedObjectHandler) this.helper;
+    protected TagHandlerDelegate getTagHandlerHelper() {
+        if (null == helper) {
+            helper = helperFactory.createValidatorHandlerDelegate(this);
+        }
+        return helper;
     }
 
     /**

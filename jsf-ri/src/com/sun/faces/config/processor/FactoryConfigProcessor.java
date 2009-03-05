@@ -96,7 +96,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     /**
      * <code>/faces-config/factory/tag-handler-helper-factory</code>
      */
-    private static final String TAG_HANDLER_HELPER_FACTORY = "tag-handler-helper-factory";
+    private static final String TAG_HANDLER_DELEGATE_FACTORY = "tag-handler-delegate-factory";
 
     /**
      * <code>/faces-config/factory/faces-context-factory</code>
@@ -136,6 +136,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
           FactoryFinder.RENDER_KIT_FACTORY,
           FactoryFinder.VISIT_CONTEXT_FACTORY,
+          FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY
     };
 
     private boolean validateFactories = true;
@@ -257,8 +258,8 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 } else if (PAGE_DECLARATION_LANGUAGE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
                                getNodeText(n));
-                } else if (TAG_HANDLER_HELPER_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY,
+                } else if (TAG_HANDLER_DELEGATE_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
                                getNodeText(n));
                 } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     extCount.incrementAndGet();

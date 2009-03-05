@@ -78,7 +78,7 @@ import com.sun.faces.facelets.Facelet;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
-import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerHelperImpl.CreateComponentDelegate;
+import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
@@ -100,7 +100,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             ComponentConfig config) {
         super(config);
         this.compositeComponentResource = compositeComponentResource;
-        ((ComponentTagHandlerHelperImpl)this.getTagHandlerHelper()).setCreateComponentDelegate(this);
+        ((ComponentTagHandlerDelegateImpl)this.getTagHandlerHelper()).setCreateComponentDelegate(this);
     }
     
     private void copyTagAttributesIntoComponentAttributes(FaceletContext ctx,

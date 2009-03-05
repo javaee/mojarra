@@ -34,53 +34,36 @@
  * holder.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package com.sun.faces.facelets.tag.jsf;
 
-import java.io.IOException;
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegateFactory;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
 
+public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
 
-/**
- * <p class="changed_added_2_0">Abstract class that defines methods
- * relating to helping tag handler instances.  This abstraction enables
- * implementation details to be hidden by the JSF implementation while
- * still allowing concrete classes to be defined for extension by
- * users.</p>
- * 
- * @since 2.0
- */
+    @Override
+    public TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner) {
+        return new ComponentTagHandlerDelegateImpl(owner);
+    }
 
-public abstract class TagHandlerHelper {
+    @Override
+    public TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner) {
+        return new ValidatorTagHandlerDelegateImpl(owner);
+    }
 
-    /**
-     * <p class="changed_added_2_0">Return a {@link MetaRuleset}
-     * particular to this kind of tag handler.  Called from classes that
-     * implement {@link MetaTagHandler}.</p>
-     *
-     * @param type the <code>Class</code> for which the
-     * <code>MetaRuleset</code> must be created.
-     *
-     * @since 2.0
-     */ 
+    @Override
+    public TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner) {
+        return new ConverterTagHandlerDelegateImpl(owner);
+    }
+
+    @Override
+    public TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner) {
+        return new BehaviorTagHandlerDelegateImpl(owner);
+    }
     
-    public abstract MetaRuleset createMetaRuleset(Class type);
     
-
-    /**
-     * <p class="changed_added_2_0">Called by classes that implement
-     * {@link FaceletHandler} in their implementation of
-     * <code>apply()</code>.</p>
-     *
-     * @param ctx the <code>FaceletContext</code> for this request
-     *
-     * @param comp the <code>UIComponent</code> that corresponds to this
-     * element.
-     *
-     */
-    public abstract void apply(FaceletContext ctx, UIComponent comp) throws IOException, FacesException, FaceletException, ELException;
-
 }

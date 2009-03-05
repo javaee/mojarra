@@ -798,16 +798,16 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="tag-handler-helper-factory"
+            <xsd:element name="tag-handler-delegate-factory"
                         type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
                             
-                        The "tag-handler-helper-factory" element contains 
+                        The "tag-handler-delegate-factory" element contains 
                         the fully qualified class name of the concrete 
                         PageDeclarationLanguageFactory
                         implementation class that will be called when
-                        FactoryFinder.getFactory(TAG_HANDLER_HELPER_FACTORY) is called.
+                        FactoryFinder.getFactory(TAG_HANDLER_DELEGATE_FACTORY) is called.
                             
                     </xsd:documentation>
                 </xsd:annotation>

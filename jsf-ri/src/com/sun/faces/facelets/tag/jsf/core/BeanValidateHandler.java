@@ -36,14 +36,14 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
-import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerHelperImpl;
+import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerDelegateImpl;
 import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.validator.BeanValidator;
 
-import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerHelperImpl.SetValidatorDefaultsOnParentDelegate;
+import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerDelegateImpl.SetValidatorDefaultsOnParentDelegate;
 
 /**
  * This handler is intended to be used to back the &lt;f:validateBean&gt;. In addition to serving its normal
@@ -59,7 +59,7 @@ public class BeanValidateHandler extends ValidatorHandler implements SetValidato
     public BeanValidateHandler(ValidatorConfig config) {
         super(config);
         validationGroups = getAttribute("validationGroups");
-        ((ValidatorTagHandlerHelperImpl)this.getTagHandlerHelper()).setSetValidatorDefaultsOnParentDelegate(this);
+        ((ValidatorTagHandlerDelegateImpl)this.getTagHandlerHelper()).setSetValidatorDefaultsOnParentDelegate(this);
     }
 
     protected String getValidationGroups(FaceletContext ctx) {

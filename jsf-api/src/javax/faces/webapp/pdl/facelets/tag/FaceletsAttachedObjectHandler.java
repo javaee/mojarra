@@ -52,42 +52,21 @@
 package javax.faces.webapp.pdl.facelets.tag;
 
 
-import java.io.IOException;
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
-import javax.faces.webapp.pdl.facelets.FaceletException;
 
 /**
  */
-public abstract class FaceletsAttachedObjectHandler extends MetaTagHandler implements AttachedObjectHandler {
+public abstract class FaceletsAttachedObjectHandler extends DelegatingMetaTagHandler implements AttachedObjectHandler {
 
-    private final TagAttribute binding;
-
-    private final TagAttribute disabled;
-    
-    
     public FaceletsAttachedObjectHandler(TagConfig config) {
         super(config);
-        this.binding = this.getAttribute("binding");
-        this.disabled = this.getAttribute("disabled");
     }
     
-    protected abstract AttachedObjectHandler getAttachedObjectHandlerHelper();
-
-    protected abstract TagHandlerHelper getTagHandlerHelper();
-
-    public boolean isDisabled(FaceletContext ctx) {
-        return disabled != null ? Boolean.TRUE.equals(disabled.getBoolean(ctx)) : false;
-    }
-    
-    public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
-        getTagHandlerHelper().apply(ctx, parent);
+    protected final AttachedObjectHandler getAttachedObjectHandlerHelper() {
+        return (AttachedObjectHandler) this.getTagHandlerHelper();
     }
 
     public final void applyAttachedObject(FacesContext ctx, UIComponent parent) {
@@ -98,27 +77,4 @@ public abstract class FaceletsAttachedObjectHandler extends MetaTagHandler imple
         return getAttachedObjectHandlerHelper().getFor();
     }
     
-    @Override
-    protected MetaRuleset createMetaRuleset(Class type) {
-        return getTagHandlerHelper().createMetaRuleset(type);
-    }
-    
-    public TagAttribute getTagAttribute(String localName) {
-        return super.getAttribute(localName);
-    }
-    
-    
-    public Tag getTag() {
-        return this.tag;
-    }
-    
-    public TagAttribute getBinding() {
-        return this.binding;
-    }
-
-    @Override
-    public void setAttributes(FaceletContext ctx, Object instance) {
-        super.setAttributes(ctx, instance);
-    }
-
 }

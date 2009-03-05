@@ -34,36 +34,62 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
-import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
-import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelperFactory;
-import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
-
-public class TagHandlerHelperFactoryImpl extends TagHandlerHelperFactory {
-
-    @Override
-    public TagHandlerHelper createComponentHandlerHelper(ComponentHandler owner) {
-        return new ComponentTagHandlerHelperImpl(owner);
-    }
-
-    @Override
-    public TagHandlerHelper createValidatorHandlerHelper(ValidatorHandler owner) {
-        return new ValidatorTagHandlerHelperImpl(owner);
-    }
-
-    @Override
-    public TagHandlerHelper createConverterHandlerHelper(ConverterHandler owner) {
-        return new ConverterTagHandlerHelperImpl(owner);
-    }
-
-    @Override
-    public TagHandlerHelper createBehaviorHandlerHelper(BehaviorHandler owner) {
-        return new BehaviorTagHandlerHelperImpl(owner);
-    }
+/**
+ * <p class="changed_added_2_0">Abstract factory for creating instances
+ * of {@link TagHandlerDelegate}.</p>
+ *
+ * @since 2.0
+ */
+public abstract class TagHandlerDelegateFactory {
     
-    
+    /**
+     * <p class="changed_added_2_0">Create and return a {@link
+     * TagHandlerDelegate} instance designed for use with {@link
+     * ComponentHandler}.</p>
+     *
+     * @param owner the <code>ComponentHandler</code> instance being
+     * helped by this helper instance.
+     *
+     * @since 2.0
+     */ 
+    public abstract TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner);
+
+    /**
+     * <p class="changed_added_2_0">Create and return a {@link
+     * TagHandlerDelegate} instance designed for use with {@link
+     * ValidatorHandler}.</p>
+     *
+     * @param owner the <code>ValidatorHandler</code> instance being
+     * helped by this helper instance.
+     *
+     * @since 2.0
+     */ 
+    public abstract TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner);
+
+    /**
+     * <p class="changed_added_2_0">Create and return a {@link
+     * TagHandlerDelegate} instance designed for use with {@link
+     * ConverterHandler}.</p>
+     *
+     * @param owner the <code>ValidatorHandler</code> instance being
+     * helped by this helper instance.
+     *
+     * @since 2.0
+     */ 
+    public abstract TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner);
+
+    /**
+     * <p class="changed_added_2_0">Create and return a {@link
+     * TagHandlerDelegate} instance designed for use with {@link
+     * BehaviorHandler}.</p>
+     *
+     * @param owner the <code>ValidatorHandler</code> instance being
+     * helped by this helper instance.
+     *
+     * @since 2.0
+     */ 
+    public abstract TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner);
+
 }

@@ -36,60 +36,51 @@
 
 package javax.faces.webapp.pdl.facelets.tag;
 
+import java.io.IOException;
+import javax.el.ELException;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+
+
 /**
- * <p class="changed_added_2_0">Abstract factory for creating instances
- * of {@link TagHandlerHelper}.</p>
- *
+ * <p class="changed_added_2_0">Abstract class that defines methods
+ * relating to helping tag handler instances.  This abstraction enables
+ * implementation details to be hidden by the JSF implementation while
+ * still allowing concrete classes to be defined for extension by
+ * users.</p>
+ * 
  * @since 2.0
  */
-public abstract class TagHandlerHelperFactory {
+
+public abstract class TagHandlerDelegate {
+
+    /**
+     * <p class="changed_added_2_0">Return a {@link MetaRuleset}
+     * particular to this kind of tag handler.  Called from classes that
+     * implement {@link MetaTagHandler}.</p>
+     *
+     * @param type the <code>Class</code> for which the
+     * <code>MetaRuleset</code> must be created.
+     *
+     * @since 2.0
+     */ 
     
-    /**
-     * <p class="changed_added_2_0">Create and return a {@link
-     * TagHandlerHelper} instance designed for use with {@link
-     * ComponentHandler}.</p>
-     *
-     * @param owner the <code>ComponentHandler</code> instance being
-     * helped by this helper instance.
-     *
-     * @since 2.0
-     */ 
-    public abstract TagHandlerHelper createComponentHandlerHelper(ComponentHandler owner);
+    public abstract MetaRuleset createMetaRuleset(Class type);
+    
 
     /**
-     * <p class="changed_added_2_0">Create and return a {@link
-     * TagHandlerHelper} instance designed for use with {@link
-     * ValidatorHandler}.</p>
+     * <p class="changed_added_2_0">Called by classes that implement
+     * {@link FaceletHandler} in their implementation of
+     * <code>apply()</code>.</p>
      *
-     * @param owner the <code>ValidatorHandler</code> instance being
-     * helped by this helper instance.
+     * @param ctx the <code>FaceletContext</code> for this request
      *
-     * @since 2.0
-     */ 
-    public abstract TagHandlerHelper createValidatorHandlerHelper(ValidatorHandler owner);
-
-    /**
-     * <p class="changed_added_2_0">Create and return a {@link
-     * TagHandlerHelper} instance designed for use with {@link
-     * ConverterHandler}.</p>
+     * @param comp the <code>UIComponent</code> that corresponds to this
+     * element.
      *
-     * @param owner the <code>ValidatorHandler</code> instance being
-     * helped by this helper instance.
-     *
-     * @since 2.0
-     */ 
-    public abstract TagHandlerHelper createConverterHandlerHelper(ConverterHandler owner);
-
-    /**
-     * <p class="changed_added_2_0">Create and return a {@link
-     * TagHandlerHelper} instance designed for use with {@link
-     * BehaviorHandler}.</p>
-     *
-     * @param owner the <code>ValidatorHandler</code> instance being
-     * helped by this helper instance.
-     *
-     * @since 2.0
-     */ 
-    public abstract TagHandlerHelper createBehaviorHandlerHelper(BehaviorHandler owner);
+     */
+    public abstract void apply(FaceletContext ctx, UIComponent comp) throws IOException, FacesException, FaceletException, ELException;
 
 }
