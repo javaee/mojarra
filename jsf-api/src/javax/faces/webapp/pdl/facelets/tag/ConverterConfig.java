@@ -54,17 +54,18 @@ package javax.faces.webapp.pdl.facelets.tag;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 /**
- * Used in creating ConvertHandler's and all implementations.
+ * <p class="changed_modified_2_0">A Facelet version of the JSP {@link
+ * javax.faces.webapp.ConverterTag}.  PENDING(edburns): better
+ * specification.</p>
+ *
+ * @since 2.0
  * 
- * @see com.sun.faces.facelets.tag.jsf.ConvertHandler
- * @author Jacob Hookom
- * @version $Id$
  */
 public interface ConverterConfig extends TagConfig {
 
     /**
-     * The converter id to be used in instantiating this converter
-     * @return the converter id that can be passed to Application.createConverter
+     * <p class="changed_added_2_0">Return the converter id to be used
+     * in instantiating this converter</p>
      */
     public String getConverterId();
     

@@ -43,15 +43,16 @@ package javax.faces.webapp.pdl.facelets.tag;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 /**
- * <p class="changed_added_2_0"></p>
- * @author asmirnov@exadel.com
+ * <p class="changed_added_2_0">Convey the id of a behavior declared in
+ * a view.</p>
  *
+ * @since 2.0
  */
 public interface BehaviorConfig extends TagConfig {
 	
 	/**
-	 * <p class="changed_added_2_0"></p>
-	 * @return
+	 * <p>Return the value of the behavior-id.</p>
+	 * @since 2.0
 	 */
 	public String getBehaviorId();
 

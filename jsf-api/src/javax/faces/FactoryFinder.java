@@ -215,7 +215,7 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
-     * {@link javax.faces.webapp.pdl.tag.TagHandlerDelegate} class name.</p>
+     * {@link javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate} class name.</p>
      */
     public final static String TAG_HANDLER_DELEGATE_FACTORY =
          "javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegateFactory";

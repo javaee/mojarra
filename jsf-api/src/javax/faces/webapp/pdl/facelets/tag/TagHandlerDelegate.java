@@ -72,8 +72,8 @@ public abstract class TagHandlerDelegate {
 
     /**
      * <p class="changed_added_2_0">Called by classes that implement
-     * {@link FaceletHandler} in their implementation of
-     * <code>apply()</code>.</p>
+     * {@link javax.faces.webapp.pdl.facelets.FaceletHandler} in their
+     * implementation of <code>apply()</code>.</p>
      *
      * @param ctx the <code>FaceletContext</code> for this request
      *
