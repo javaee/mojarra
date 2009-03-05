@@ -553,18 +553,15 @@ public class RenderKitUtils {
         String behaviorEventName = getSingleBehaviorEventName(behaviors);
         boolean renderedBehavior = false;
 
-        String[] attributes = setAttributes.toArray(new String[setAttributes.size()]);
-        Arrays.sort(attributes);
+        Collections.sort(setAttributes);
         boolean isXhtml =
               RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
         Map<String, Object> attrMap = component.getAttributes();
-        for (String name : attributes) {
+        for (String name : setAttributes) {
 
             // Note that this search can be optimized by switching from
             // an array to a Map<String, Attribute>.  This would change
-            // the search time from O(log n) to O(1), will allow us to 
-            // remove the Arrays.sort above, and will also allow us 
-            // to avoid the Attribute object allocation.
+            // the search time from O(log n) to O(1).
             int index = Arrays.binarySearch(knownAttributes, Attribute.attr(name));
             if (index >= 0) {
                 Object value =
