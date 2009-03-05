@@ -48,30 +48,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sun.faces.facelets.tag;
+package javax.faces.webapp.pdl.facelets.tag;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
- * A mixin' interface that allows other code to identify FaceletHandlers
- * that may provide text (String) content.
- * 
- * @author Jacob Hookom
- * 
+ * <p class="changed_added_2_0">An interface that allows other code 
+ * to identify FaceletHandlers that correspond to component attributes.</p>
+ *
+ * @since 2.0
  */
-public interface TextHandler {
+public interface AttributeHandler {
 
     /**
-     * Return the literal String value of the contained text
-     * @return
+     * <p class="changed_added_2_0">Returns the resolved literal String value 
+     * of the attribute name after evaluating EL.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
      */
-    public String getText();
-    
-    /**
-     * Evaluate the literal String value against EL of the contained text
-     * @param ctx
-     * @return
-     */
-    public String getText(FaceletContext ctx);
-    
+    public String getAttributeName(FaceletContext ctx);
 }

@@ -79,7 +79,8 @@ import javax.faces.webapp.pdl.facelets.tag.TagException;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class AttributeHandler extends TagHandlerImpl {
+public final class AttributeHandler extends TagHandlerImpl 
+    implements javax.faces.webapp.pdl.facelets.tag.AttributeHandler {
 
     private final TagAttribute name;
 
@@ -108,7 +109,7 @@ public final class AttributeHandler extends TagHandlerImpl {
 
         // only process if the parent is new to the tree
         if (parent.getParent() == null) {
-            String n = this.name.getValue(ctx);
+            String n = getAttributeName(ctx);
             if (!parent.getAttributes().containsKey(n)) {
                 if (this.value.isLiteral()) {
                     parent.getAttributes().put(n, this.value.getValue());
@@ -117,5 +118,12 @@ public final class AttributeHandler extends TagHandlerImpl {
                 }
             }
         }
+    }
+
+
+    // javax.faces.webapp.pdl.facelets.tag.AttributeHandler.getAttributeName()
+    // implementation.
+    public String getAttributeName(FaceletContext ctxt) {
+        return this.name.getValue(ctxt);
     }
 }

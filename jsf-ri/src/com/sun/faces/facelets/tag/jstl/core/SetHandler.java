@@ -52,7 +52,7 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.facelets.tag.TextHandler;
+import javax.faces.webapp.pdl.facelets.tag.TextHandler;
 
 import java.io.IOException;
 import java.util.Iterator;

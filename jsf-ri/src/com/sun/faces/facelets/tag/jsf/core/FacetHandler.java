@@ -73,7 +73,8 @@ import javax.faces.webapp.pdl.facelets.tag.TagException;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class FacetHandler extends TagHandlerImpl {
+public final class FacetHandler extends TagHandlerImpl
+    implements javax.faces.webapp.pdl.facelets.tag.FacetHandler {
 
     public static final String KEY = "facelets.FACET_NAME";
 
@@ -95,11 +96,17 @@ public final class FacetHandler extends TagHandlerImpl {
         if (parent == null) {
             throw new TagException(this.tag, "Parent UIComponent was null");
         }
-        parent.getAttributes().put(KEY, this.name.getValue(ctx));
+        parent.getAttributes().put(KEY, getFacetName(ctx));
         try {
             this.nextHandler.apply(ctx, parent);
         } finally {
             parent.getAttributes().remove(KEY);
         }
+    }
+
+    // javax.faces.webapp.pdl.facelets.tag.FacetHandler.getFacetName()
+    // implementation
+    public String getFacetName(FaceletContext ctxt) {
+        return this.name.getValue(ctxt);
     }
 }

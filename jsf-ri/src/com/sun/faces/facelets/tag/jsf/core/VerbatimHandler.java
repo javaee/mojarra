@@ -57,7 +57,7 @@ import java.util.Iterator;
 import javax.faces.component.UIComponent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import com.sun.faces.facelets.tag.TextHandler;
+import javax.faces.webapp.pdl.facelets.tag.TextHandler;
 import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 

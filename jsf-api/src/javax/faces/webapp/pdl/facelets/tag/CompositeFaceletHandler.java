@@ -49,7 +49,7 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag;
+package javax.faces.webapp.pdl.facelets.tag;
 
 import java.io.IOException;
 
@@ -67,7 +67,7 @@ import javax.faces.webapp.pdl.facelets.FaceletHandler;
  * with multiple child elements as defined in XML.
  *
  * @author Jacob Hookom
- * @version $Id$
+ * @version $Id: CompositeFaceletHandler.java 6739 2009-02-27 23:18:02Z rlubke $
  */
 public final class CompositeFaceletHandler implements FaceletHandler {
 
@@ -79,12 +79,25 @@ public final class CompositeFaceletHandler implements FaceletHandler {
         this.len = children.length;
     }
 
+    /**
+     * <p class="changed_added_2_0">Calls apply on any child handlers.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
+     *
+     * @param parent the parent <code>UIComponent</code> of the
+     * component represented by this element instance.
+     * @since 2.0
+     */
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
         for (int i = 0; i < len; i++) {
             this.children[i].apply(ctx, parent);
         }
     }
-    
+
+    /**
+     * <p class="changed_added_2_0">Returns the array of child
+     * handlers contained by this handler.</p>
+     */
     public FaceletHandler[] getHandlers() {
         return this.children;
     }

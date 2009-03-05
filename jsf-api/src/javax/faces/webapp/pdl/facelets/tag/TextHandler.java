@@ -48,69 +48,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.sun.faces.facelets.compiler;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
+package javax.faces.webapp.pdl.facelets.tag;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import javax.faces.webapp.pdl.facelets.tag.CompositeFaceletHandler;
 
 /**
- * 
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">An interface that allows other code 
+ * to identify FaceletHandlers that may provide text (String) content.</p>
+ *
+ * @since 2.0
  */
-class CompilationUnit {
+public interface TextHandler {
 
-    protected final static FaceletHandler LEAF = new FaceletHandler() {
-        public void apply(FaceletContext ctx, UIComponent parent)
-                throws IOException, FacesException, FaceletException,
-                ELException {
-        }
-        public String toString() {
-            return "FaceletHandler Tail";
-        }
-    };
-
-    private List children;
-
-    public CompilationUnit() {
-    }
-
-    public void addChild(CompilationUnit unit) {
-        if (this.children == null) {
-            this.children = new ArrayList();
-        }
-        this.children.add(unit);
-    }
-
-    public FaceletHandler createFaceletHandler() {
-        return this.getNextFaceletHandler();
-    }
-
-    protected final FaceletHandler getNextFaceletHandler() {
-        if (this.children == null || this.children.size() == 0) {
-            return LEAF;
-        }
-        if (this.children.size() == 1) {
-            CompilationUnit u = (CompilationUnit) this.children.get(0);
-            return u.createFaceletHandler();
-        }
-        FaceletHandler[] fh = new FaceletHandler[this.children.size()];
-        for (int i = 0; i < fh.length; i++) {
-            fh[i] = ((CompilationUnit) this.children.get(i))
-                    .createFaceletHandler();
-        }
-        return new CompositeFaceletHandler(fh);
-    }
-
+    /**
+     * <p class="changed_added_2_0">Returns the literal String value of the 
+     * contained text.</p>
+     */
+    public String getText();
+    
+    /**
+     * <p class="changed_added_2_0">Returns the resolved literal String value 
+     * of the contained text after evaluating EL.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
+     */
+    public String getText(FaceletContext ctx);
 }
