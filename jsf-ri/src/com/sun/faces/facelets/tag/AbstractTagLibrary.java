@@ -67,8 +67,8 @@ import javax.faces.FacesException;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
-import com.sun.faces.facelets.tag.jsf.BehaviorConfig;
-import com.sun.faces.facelets.tag.jsf.BehaviorHandler;
+import javax.faces.webapp.pdl.facelets.tag.BehaviorConfig;
+import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
 import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
 import javax.faces.webapp.pdl.facelets.tag.ConverterConfig;

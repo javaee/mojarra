@@ -36,6 +36,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
 import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
 import javax.faces.webapp.pdl.facelets.tag.TagHandlerHelper;
@@ -58,9 +59,11 @@ public class TagHandlerHelperFactoryImpl extends TagHandlerHelperFactory {
     public TagHandlerHelper createConverterHandlerHelper(ConverterHandler owner) {
         return new ConverterTagHandlerHelperImpl(owner);
     }
-    
-    
 
+    @Override
+    public TagHandlerHelper createBehaviorHandlerHelper(BehaviorHandler owner) {
+        return new BehaviorTagHandlerHelperImpl(owner);
+    }
     
     
 }

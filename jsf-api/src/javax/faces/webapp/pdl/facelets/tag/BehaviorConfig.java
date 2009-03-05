@@ -38,15 +38,21 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.AttachedObjectHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 /**
  * <p class="changed_added_2_0"></p>
  * @author asmirnov@exadel.com
  *
  */
-public interface AttachedBehaviorObjectHandler extends AttachedObjectHandler {
+public interface BehaviorConfig extends TagConfig {
+	
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @return
+	 */
+	public String getBehaviorId();
 
 }

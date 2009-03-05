@@ -1,4 +1,8 @@
 /*
+ * $Id$
+ */
+
+/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -34,62 +38,15 @@
  * holder.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl;
+
+import javax.faces.webapp.pdl.AttachedObjectHandler;
 
 /**
- * <p class="changed_added_2_0">Abstract factory for creating instances
- * of {@link TagHandlerHelper}.</p>
+ * <p class="changed_added_2_0"></p>
+ * @author asmirnov@exadel.com
  *
- * @since 2.0
  */
-public abstract class TagHandlerHelperFactory {
-    
-    /**
-     * <p class="changed_added_2_0">Create and return a {@link
-     * TagHandlerHelper} instance designed for use with {@link
-     * ComponentHandler}.</p>
-     *
-     * @param owner the <code>ComponentHandler</code> instance being
-     * helped by this helper instance.
-     *
-     * @since 2.0
-     */ 
-    public abstract TagHandlerHelper createComponentHandlerHelper(ComponentHandler owner);
-
-    /**
-     * <p class="changed_added_2_0">Create and return a {@link
-     * TagHandlerHelper} instance designed for use with {@link
-     * ValidatorHandler}.</p>
-     *
-     * @param owner the <code>ValidatorHandler</code> instance being
-     * helped by this helper instance.
-     *
-     * @since 2.0
-     */ 
-    public abstract TagHandlerHelper createValidatorHandlerHelper(ValidatorHandler owner);
-
-    /**
-     * <p class="changed_added_2_0">Create and return a {@link
-     * TagHandlerHelper} instance designed for use with {@link
-     * ConverterHandler}.</p>
-     *
-     * @param owner the <code>ValidatorHandler</code> instance being
-     * helped by this helper instance.
-     *
-     * @since 2.0
-     */ 
-    public abstract TagHandlerHelper createConverterHandlerHelper(ConverterHandler owner);
-
-    /**
-     * <p class="changed_added_2_0">Create and return a {@link
-     * TagHandlerHelper} instance designed for use with {@link
-     * BehaviorHandler}.</p>
-     *
-     * @param owner the <code>ValidatorHandler</code> instance being
-     * helped by this helper instance.
-     *
-     * @since 2.0
-     */ 
-    public abstract TagHandlerHelper createBehaviorHandlerHelper(BehaviorHandler owner);
+public interface BehaviorHolderAttachedObjectHandler extends AttachedObjectHandler {
 
 }

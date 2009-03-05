@@ -38,21 +38,50 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.FactoryFinder;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
+import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler;
 
-/**
- * <p class="changed_added_2_0"></p>
- * @author asmirnov@exadel.com
- *
- */
-public interface BehaviorConfig extends TagConfig {
+
+public class BehaviorHandler extends FaceletsAttachedObjectHandler implements BehaviorHolderAttachedObjectHandler {
+
+    private final TagAttribute event;
+    
+    private String behaviorId;
 	
-	/**
-	 * <p class="changed_added_2_0"></p>
-	 * @return
-	 */
-	public String getBehaviorId();
+    private TagHandlerHelper helper;
+
+    public BehaviorHandler(BehaviorConfig config) {
+        super(config);
+        this.behaviorId = config.getBehaviorId();
+        this.event = this.getAttribute("event");
+        if (null != event && !event.isLiteral()){
+            throw new TagException(this.tag, "The 'event' attribute for behavior tag have to be literal");
+        }
+        TagHandlerHelperFactory helperFactory = (TagHandlerHelperFactory)
+                FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_HELPER_FACTORY);
+        helper = helperFactory.createBehaviorHandlerHelper(this);
+        
+    }
+    
+    public TagAttribute getEvent() {
+        return this.event;
+    }
+    
+    @Override
+    protected TagHandlerHelper getTagHandlerHelper() {
+        return this.helper;
+    }
+
+    @Override
+    protected AttachedObjectHandler getAttachedObjectHandlerHelper() {
+        return (AttachedObjectHandler) this.helper;
+    }
+    
+    public String getBehaviorId() {
+        return behaviorId;
+    }
 
 }
