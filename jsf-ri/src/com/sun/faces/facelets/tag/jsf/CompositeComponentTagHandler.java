@@ -169,9 +169,8 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     
 
     public UIComponent createComponent(FaceletContext ctx) {
-        UIComponent result = null;
         FacesContext context = ctx.getFacesContext();
-        result = context.getApplication().createComponent(context, compositeComponentResource);
+        UIComponent result = context.getApplication().createComponent(context, compositeComponentResource);
         result.subscribeToEvent(PostAddToViewEvent.class,
                                 new CompositeAttributesCopyListener());
 
@@ -207,13 +206,12 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     }
     
     private void applyCompositeComponent(FaceletContext ctx, UIComponent c) {
-        Facelet f = null;
         FacesContext facesContext = ctx.getFacesContext();
         FaceletFactory factory = (FaceletFactory)
               RequestStateManager.get(facesContext, RequestStateManager.FACELET_FACTORY);
         VariableMapper orig = ctx.getVariableMapper();
         
-        UIPanel facetComponent = null;
+        UIPanel facetComponent;
         if (ComponentHandler.isNew(c)) {
             facetComponent = (UIPanel)
              facesContext.getApplication().createComponent("javax.faces.Panel");
@@ -227,7 +225,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         assert(null != facetComponent);
         
         try {
-            f = factory.getFacelet(compositeComponentResource.getURL());
+            Facelet f = factory.getFacelet(compositeComponentResource.getURL());
             copyTagAttributesIntoComponentAttributes(ctx, c);
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 
@@ -253,6 +251,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         return getAttachedObjectHandlers(component, true);
     }
     
+    @SuppressWarnings({"unchecked"})
     public static List<AttachedObjectHandler> getAttachedObjectHandlers(UIComponent component,
             boolean create) {
         Map<String, Object> attrs = component.getAttributes();
