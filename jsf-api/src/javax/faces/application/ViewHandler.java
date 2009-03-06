@@ -306,9 +306,9 @@ public abstract class ViewHandler {
     public abstract UIViewRoot createView(FacesContext context, String viewId);
 
     /**
-     * <p class="changed_added_2_0">Derive the viewId from the current
-     * request, or the argument input by following the algorithm defined
-     * in the specification.</p>
+     * <p class="changed_added_2_0">Derive and return the viewId from
+     * the current request, or the argument input by following the
+     * algorithm defined in specification section JSF.7.5.2.</p>
      *
      * @since 2.0
      * @param context the <code>FacesContext</code> for this request
@@ -317,7 +317,6 @@ public abstract class ViewHandler {
      * or <code>null</code> to use the information in the current
      * request to derive the <code>viewId</code>.
      *
-     * @return RELEASE_PENDING
      */
     public String deriveViewId(FacesContext context, String input) {
         throw new UnsupportedOperationException("The default implementation must override this method");
@@ -742,8 +741,8 @@ public abstract class ViewHandler {
      * its component metadata already associated and available from via
      * the JavaBeans API.
      *
-     * RELEASE_PENDING (edburns, rogerk) Exceptions for null arguments?  If so,
-     *  which ones?
+     * @throws NullPointerException if <code>context</code>
+     * or <code>topLevelComponent</code> is <code>null</code>.
      *
      * @since 2.0
      */

@@ -600,7 +600,14 @@ convey a usage contract that includes nested properties.</p>
 <p>Please see <a href="tld-summary.html#composite_example">summary
 page</a> for a usage example.</p>
 
-            <p></p>
+            <p>Because every <em>top level component</em> is a
+            <code>NamingContainer</code>, the restrictions on allowable
+            attributes described in the javadocs for <code><a
+            href="../../../javadocs/javax/faces/component/NamingContainer.html">NamingContainer</a></code>
+            apply.  The motivation for these restrictions is that the
+            mapping of markup attributes to component
+            properties/attributes does not allow for these attributes to
+            be set.</p>
 
 </div>]]>
         </description>
