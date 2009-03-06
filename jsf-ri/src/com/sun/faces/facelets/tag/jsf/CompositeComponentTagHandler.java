@@ -52,12 +52,11 @@ package com.sun.faces.facelets.tag.jsf;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.beans.PropertyDescriptor;
+import java.beans.Introspector;
 
 import javax.el.ELException;
 import javax.el.Expression;
@@ -71,6 +70,8 @@ import javax.faces.event.PostAddToViewEvent;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
+import javax.faces.component.UIInput;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 
@@ -95,6 +96,31 @@ import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 public class CompositeComponentTagHandler extends ComponentHandler implements CreateComponentDelegate {
 
     private static final Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
+
+     private static String[] EXCLUDED_COPY_ATTRIBUTES;
+
+    // setup the list of properties that will not be exposed as composite
+    // component attributes
+    static {
+        try {
+            PropertyDescriptor[] properties =
+                  Introspector.getBeanInfo(UINamingContainer.class).getPropertyDescriptors();
+            Set<String> props = new HashSet<String>();
+            for (PropertyDescriptor pd : properties) {
+                if (pd.getWriteMethod() != null) {
+                    props.add(pd.getName());
+                }
+            }
+            // add attributes that aren't exposed as standard properties
+            props.add("binding");
+            String[] propNames = props.toArray(new String[props.size()]);
+            Arrays.sort(propNames);
+            System.out.println("PROPERTIES" + Arrays.toString(propNames));
+            EXCLUDED_COPY_ATTRIBUTES = propNames;
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
+    }
     
     CompositeComponentTagHandler(Resource compositeComponentResource,
             ComponentConfig config) {
@@ -104,25 +130,25 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     }
     
     private void copyTagAttributesIntoComponentAttributes(FaceletContext ctx,
-            UIComponent compositeComponent) {
+                                                          UIComponent compositeComponent) {
+        
         TagAttributes tagAttributes = this.tag.getAttributes();
         TagAttribute attrs[] = tagAttributes.getAll();
-        String name, value;
-        Expression expression = null;
-        for (int i = 0; i < attrs.length; i++) {
-            name = attrs[i].getLocalName();
-            if (null != name && 0 < name.length() &&
-                !name.equals("id") && !name.equals("binding")){
-                value = attrs[i].getValue();
+
+        for (TagAttribute attr : attrs) {
+            String name = attr.getLocalName();
+            if (isNameValid(name)) {
+                String value = attr.getValue();
                 if (null != value && 0 < value.length()) {
 
-                    expression = attrs[i].getValueExpression(ctx, Object.class);
+                    Expression expression = attr.getValueExpression(ctx, Object.class);
                     // PENDING: I don't think copyTagAttributesIntoComponentAttributes
                     // should be getting called 
                     // on postback, yet it is.  In lieu of a real fix, I'll
                     // make sure I'm not overwriting a MethodExpression with a 
                     // ValueExpression.
-                    Map<String, Object> map = compositeComponent.getAttributes();
+                    Map<String, Object> map = compositeComponent
+                          .getAttributes();
                     boolean doPut = true;
                     if (map.containsKey(name)) {
                         Object curVal = map.get(name);
@@ -171,6 +197,14 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             viewHandler.retargetMethodExpressions(context, c);
         }
 
+    }
+
+    private boolean isNameValid(String name) {
+
+        return (name != null
+                && name.length() > 0
+                && (Arrays.binarySearch(EXCLUDED_COPY_ATTRIBUTES, name) < 0));
+        
     }
     
     private void applyCompositeComponent(FaceletContext ctx, UIComponent c) {
