@@ -600,14 +600,24 @@ convey a usage contract that includes nested properties.</p>
 <p>Please see <a href="tld-summary.html#composite_example">summary
 page</a> for a usage example.</p>
 
-            <p>Because every <em>top level component</em> is a
-            <code>NamingContainer</code>, the restrictions on allowable
-            attributes described in the javadocs for <code><a
-            href="../../../javadocs/javax/faces/component/NamingContainer.html">NamingContainer</a></code>
-            apply.  The motivation for these restrictions is that the
-            mapping of markup attributes to component
-            properties/attributes does not allow for these attributes to
-            be set.</p>
+            <p>The <em>top level component</em> in which this element is
+            ultimately nested must be a <code>NamingContainer</code>.
+            There are certain component properties that must not be
+            exposed using this element.  The motivation for this
+            restriction is that the mapping of markup attributes to
+            component properties/attributes does not allow for these
+            attributes to be set.  The following properties must not be
+            exposed using this element.</p>
+
+  	<ul>
+  	  <li><p>binding</p></li>
+  	  <li><p>id</p></li>
+  	  <li><p>inView</p></li>
+  	  <li><p>parent</p></li>
+  	  <li><p>rendered</p></li>
+  	  <li><p>rendererType</p></li>
+  	  <li><p>transient</p></li>
+ 	</ul>
 
 </div>]]>
         </description>

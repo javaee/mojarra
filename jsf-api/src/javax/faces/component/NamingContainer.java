@@ -48,28 +48,6 @@ package javax.faces.component;
  * container.  Naming containers affect the behavior of the
  * {@link UIComponent#findComponent} and {@link UIComponent#getClientId}
  * methods;  see those methods for further information.</p>
- *
- * <div class="changed_added_2_0">
- * <p>Any {@link UIComponent} subclasses that
- * implement this interface must ensure that the following properties
- * are not allowed to be set via the markup tag for the component.</p>
- *
- * 	<ul>
- * 	  <li><p>binding</p></li>
- * 	  <li><p>id</p></li>
- * 	  <li><p>inView</p></li>
- * 	  <li><p>parent</p></li>
- * 	  <li><p>rendered</p></li>
- * 	  <li><p>rendererType</p></li>
- * 	  <li><p>transient</p></li>
- *	</ul>
- *
- * <p>The motivation for this restriction is described in the
- * specification for the <a
- * href="../../../../pdldocs/facelets/composite/attribute.html"><code>&lt;composite:attribute&gt;</code></a>
- * element.</p>
- * 
- * </div>
  */
 
 public interface NamingContainer {
