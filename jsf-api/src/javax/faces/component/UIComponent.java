@@ -417,10 +417,9 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review docs
-     * <p class="changed_added_2_0"> </p>
-     * @return <code>true</code> if this component is within the view hierarchy
-     *  otherwise <code>false</code>
+     * <p class="changed_added_2_0">Return <code>true</code> if this
+     * component is within the view hierarchy otherwise
+     * <code>false</code></code>
      *
      * @since 2.0
      */
@@ -430,13 +429,12 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review docs
-     * Updates the status as to whether or not this component is currently within
-     * the view hierarchy.  <strong>This method must
-     * never be called by developers;  a {@link UIComponent}'s internal
-     * implementation will call it as components are added to or
-     * removed from a parent's child <code>List</code> or
-     * facet <code>Map</code></strong>.</p>
+     * <p class="changed_added_2_0">Updates the status as to whether or
+     * not this component is currently within the view hierarchy.
+     * <strong>This method must never be called by developers; a {@link
+     * UIComponent}'s internal implementation will call it as components
+     * are added to or removed from a parent's child <code>List</code>
+     * or facet <code>Map</code></strong>.</p>
      *
      * @param isInView flag indicating whether or not this component is within
      *  the view hierachy
@@ -579,16 +577,16 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review docus
-     * <p class="changed_modified_2_0">Set the parent <code>UIComponent</code> of this
-     * <code>UIComponent</code>.  This method, when called will cause
-     * an {@link javax.faces.event.PostAddToViewEvent} to be published and
-     * if <code>parent.isInView()</code> returns <code>true</code> an
-     * {@link javax.faces.event.PostAddToViewEvent} will be published as well.
-     *  <strong>This method must never be called by developers;  a
-     * {@link UIComponent}'s internal implementation will call it as components
-     * are added to or removed from a parent's child <code>List</code> or
-     * facet <code>Map</code></strong>.</p>
+     * <p class="changed_modified_2_0">Set the parent
+     * <code>UIComponent</code> of this <code>UIComponent</code>.  <span
+     * class="changed_added_2_0">This method will cause an {@link
+     * javax.faces.event.PostAddToViewEvent} to be published and if
+     * <code>parent.isInView()</code> returns <code>true</code> an
+     * {@link javax.faces.event.PostAddToViewEvent} will be published as
+     * well.  <strong>This method must never be called by developers; a
+     * {@link UIComponent}'s internal implementation will call it as
+     * components are added to or removed from a parent's child
+     * <code>List</code> or facet <code>Map</code></strong></span>.</p>
      *
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree

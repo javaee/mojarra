@@ -47,7 +47,11 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * RELEASE_PENDING (rogerk) docs
+ * <p class="changed_added_2_0">This component is paired with the
+ * <code>javax.faces.Button</code> or <code>javax.faces.Link</code>
+ * renderers and uncapsulates properties relating to the rendering of
+ * outcomes directly to the response.  This enables bookmarkability in
+ * JSF applications.</p>
  *
  * @since 2.0
  */
@@ -100,7 +104,10 @@ public class UIOutcomeTarget extends UIOutput {
 
     
     /**
-     * @return whether the view parameters should be encoded into the target url.
+     * <p class="changed_added_2_0">Return whether or not the view
+     * parameters should be encoded into the target url.</p>
+     *
+     * @since 2.0
      */
     public boolean isIncludeViewParams() {
 
@@ -123,9 +130,13 @@ public class UIOutcomeTarget extends UIOutput {
     }
 
     /**
-     * Set whether the page parameters should be encoded into the target url.
+     * <p class="changed_added_2_0">Set whether or not the page
+     * parameters should be encoded into the target url.</p>
      *
-     * @param includeViewParams The state of the switch for encoding page parameters
+     * @param includeViewParams The state of the switch for encoding
+     * page parameters
+     *
+     * @since 2.0
      */
     public void setIncludeViewParams(boolean includeViewParams) {
 
@@ -135,10 +146,12 @@ public class UIOutcomeTarget extends UIOutput {
 
 
     /**
-     * @return Returns the <code>outcome</code> property of the
-     *  <code>UIOutcomeTarget</code>. This value is passed to the
-     *  NavigationHandler when resolving the target url of this
-     *  component.
+     * <p class="changed_added_2_0">Returns the <code>outcome</code>
+     * property of the <code>UIOutcomeTarget</code>. This value is
+     * passed to the {@link javax.faces.application.NavigationHandler}
+     * when resolving the target url of this component.</p>
+     *
+     * @since 2.0
      */
     public String getOutcome() {
 
@@ -160,9 +173,12 @@ public class UIOutcomeTarget extends UIOutput {
     }
 
     /**
-     * <p>Sets the <code>outcome</code> property of the <code>UIOutcomeTarget</code>.
-     * This value is passed to the NavigationHandler when resolving the
-     * target url of this component.</p>
+     * <p class="changed_added_2_0">Sets the <code>outcome</code>
+     * property of the <code>UIOutcomeTarget</code>.  This value is
+     * passed to the NavigationHandler when resolving the target url of
+     * this component.</p>
+     *
+     * @since 2.0
      *
      * @param outcome the navigation outcome
      */
@@ -173,11 +189,16 @@ public class UIOutcomeTarget extends UIOutput {
     }
 
     /**
-     * RELEASE_PENDING (rogerk) review docs
-     * <p>Represents the fragement of the document that should be brought into
-     * focus when the view is rendered.</p>
+     * <p class="changed_added_2_0">For HTML pages, represents the
+     * fragement of the document that should be brought into focus when
+     * the view is rendered.</p>
+
+     * PENDING(edburns): move this property to the renderkit, removing
+     * getter and setter here.
      *
      * @return the target view fragment
+     *
+     * @since 2.0
      */
     public String getFragment() {
 
