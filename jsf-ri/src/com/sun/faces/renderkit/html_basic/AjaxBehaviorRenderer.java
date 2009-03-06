@@ -92,6 +92,19 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
             throw new NullPointerException();
         }
 
+        if (!(behavior instanceof AjaxBehavior)) {
+            // TODO: use MessageUtils for this error message?
+            throw new IllegalArgumentException(
+                "Instance of javax.faces.component.behavior.AjaxBehavior required: " + behavior);
+        }
+
+        AjaxBehavior ajaxBehavior = (AjaxBehavior)behavior;
+
+        // First things first - if AjaxBehavior is disabled, we are done.
+        if (ajaxBehavior.isDisabled(context)) {
+            return;
+        }        
+
         component.queueEvent(new AjaxBehaviorEvent(component, behavior));
 
         if (logger.isLoggable(Level.FINE)) {
@@ -108,6 +121,12 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
                                            AjaxBehavior ajaxBehavior) {
 
         FacesContext context = behaviorContext.getFacesContext();
+
+        // First things first - if AjaxBehavior is disabled, we are done.
+        if (ajaxBehavior.isDisabled(context)) {
+            return null;
+        }        
+
         UIComponent component = behaviorContext.getComponent();
         String eventName = behaviorContext.getEventName();
 

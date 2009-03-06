@@ -74,6 +74,12 @@
     <output-link-renderer-class>
        com.sun.faces.renderkit.html_basic.OutputLinkRenderer
     </output-link-renderer-class>
+    <outcome-target-link-renderer-class>
+       com.sun.faces.renderkit.html_basic.OutcomeTargetLinkRenderer
+    </outcome-target-link-renderer-class>
+    <outcome-target-button-renderer-class>
+       com.sun.faces.renderkit.html_basic.OutcomeTargetButtonRenderer
+    </outcome-target-button-renderer-class>
     <output-format-renderer-class>
         com.sun.faces.renderkit.html_basic.OutputMessageRenderer
     </output-format-renderer-class>

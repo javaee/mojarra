@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
- *
+ * 
+ * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- *
+ * 
  * Contributor(s):
- *
+ * 
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -32,64 +32,48 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- *
- * This file incorporates work covered by the following copyright and
- * permission notice:
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.facelets.tag.MetaRulesetImpl;
+import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.ActionSource;
-import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.behavior.AjaxBehaviors;
-import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
+import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.AjaxBehaviors;
+import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
-
+import javax.faces.event.InitialStateEvent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import com.sun.faces.facelets.tag.MetaTagHandlerImpl;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
-import com.sun.faces.util.FacesLogger;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
 
-import java.util.Map;
-import javax.faces.event.InitialStateEvent;
-
-/**
- * Implementation of the tag logic used in the JSF specification. This is your
- * golden hammer for wiring UIComponents to Facelets.
- * 
- * @author Jacob Hookom
- * @version $Id$
- */
-public class ComponentHandlerImpl extends MetaTagHandlerImpl {
-
+public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
+    
+    private static final String INITIAL_STATE_EVENT_KEY = "facelets.tag.InitialStateEvent";
+    
+    private ComponentHandler owner;
+    
     private final static Logger log = FacesLogger.FACELETS_COMPONENT.getLogger();
     
     private final TagAttribute binding;
@@ -99,13 +83,18 @@ public class ComponentHandlerImpl extends MetaTagHandlerImpl {
     protected final TagAttribute id;
 
     private final String rendererType;
+    
+    private CreateComponentDelegate createComponentDelegate;
 
-    public ComponentHandlerImpl(ComponentConfig config) {
-        super(config);
+
+    public ComponentTagHandlerDelegateImpl(ComponentHandler owner) {
+        this.owner = owner;
+        ComponentConfig config = owner.getComponentConfig();
         this.componentType = config.getComponentType();
         this.rendererType = config.getRendererType();
-        this.id = this.getAttribute("id");
-        this.binding = this.getAttribute("binding");
+        this.id = owner.getTagAttribute("id");
+        this.binding = owner.getTagAttribute("binding");
+        
     }
 
     /**
@@ -139,15 +128,16 @@ public class ComponentHandlerImpl extends MetaTagHandlerImpl {
      * @throws TagException
      *             if the UIComponent parent is null
      */
-    public final void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, ELException {
+    
+    @Override
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
         // make sure our parent is not null
         if (parent == null) {
-            throw new TagException(this.tag, "Parent UIComponent was null");
+            throw new TagException(owner.getTag(), "Parent UIComponent was null");
         }
 
         // our id
-        String id = ctx.generateUniqueId(this.tagId);
+        String id = ctx.generateUniqueId(owner.getTagId());
 
         // grab our component
         UIComponent c = ComponentSupport.findChildByTagId(parent, id);
@@ -156,17 +146,17 @@ public class ComponentHandlerImpl extends MetaTagHandlerImpl {
             componentFound = true;
             // mark all children for cleaning
             if (log.isLoggable(Level.FINE)) {
-                log.fine(this.tag
+                log.fine(owner.getTag()
                         + " Component["+id+"] Found, marking children for cleanup");
             }
             ComponentSupport.markForDeletion(c);
         } else {
             c = this.createComponent(ctx);
             if (log.isLoggable(Level.FINE)) {
-                log.fine(this.tag + " Component["+id+"] Created: "
+                log.fine(owner.getTag() + " Component["+id+"] Created: "
                         + c.getClass().getName());
             }
-            this.setAttributes(ctx, c);
+            owner.setAttributes(ctx, c);
             
             // mark it owned by a facelet instance
             c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
@@ -187,11 +177,12 @@ public class ComponentHandlerImpl extends MetaTagHandlerImpl {
             }
 
             // hook method
-            this.onComponentCreated(ctx, c, parent);
+            this.privateOnComponentCreated(ctx, c, parent);
+            owner.onComponentCreated(ctx, c, parent);
         }
         c.pushComponentToEL(ctx.getFacesContext(), c);
         // first allow c to get populated
-        this.applyNextHandler(ctx, c);
+        owner.applyNextHandler(ctx, c);
 
         // finish cleaning up orphaned children
         if (componentFound) {
@@ -203,94 +194,22 @@ public class ComponentHandlerImpl extends MetaTagHandlerImpl {
         }
         
         c.processEvent(getInitialStateEvent(ctx.getFacesContext(), c));
-        this.onComponentPopulated(ctx, c, parent);
+        owner.onComponentPopulated(ctx, c, parent);
 
         // add to the tree afterwards
         // this allows children to determine if it's
         // been part of the tree or not yet
-		ComponentSupport.addComponent(ctx, parent, c);
+        ComponentSupport.addComponent(ctx, parent, c);
         c.popComponentFromEL(ctx.getFacesContext());
         
-    }
-    
-    private static final String INITIAL_STATE_EVENT_KEY = "facelets.tag.InitialStateEvent";
-    
-    private static InitialStateEvent getInitialStateEvent(FacesContext context,
-            UIComponent source) {
-        InitialStateEvent ise = null;
-        Map<Object,Object> attrs = context.getAttributes();
-        if (null == (ise = (InitialStateEvent) attrs.get(INITIAL_STATE_EVENT_KEY))) {
-            ise = new InitialStateEvent(source);
-            attrs.put(INITIAL_STATE_EVENT_KEY, ise);
-        }
-        else {
-            ise.setComponent(source);
-        }
-
-        return ise;
-    }
-    
-    /**
-     * Return the Facet name we are scoped in, otherwise null
-     * @param ctx
-     * @return
-     */
-    protected final String getFacetName(FaceletContext ctx, UIComponent parent) {
-        return (String) parent.getAttributes().get(FacetHandler.KEY);
-    }
-
-    /**
-     * If the binding attribute was specified, use that in conjuction with our
-     * componentType String variable to call createComponent on the Application,
-     * otherwise just pass the componentType String.
-     * <p />
-     * If the binding was used, then set the ValueExpression "binding" on the
-     * created UIComponent.
-     * 
-     * @see Application#createComponent(javax.faces.el.ValueBinding,
-     *      javax.faces.context.FacesContext, java.lang.String)
-     * @see Application#createComponent(java.lang.String)
-     * @param ctx
-     *            FaceletContext to use in creating a component
-     * @return
-     */
-    protected UIComponent createComponent(FaceletContext ctx) {
-        UIComponent c = null;
-        FacesContext faces = ctx.getFacesContext();
-        Application app = faces.getApplication();
-        if (this.binding != null) {
-            ValueExpression ve = this.binding.getValueExpression(ctx,
-                                                                 Object.class);
-            c = app.createComponent(ve, faces, this.componentType, this.rendererType);
-            if (c != null) {
-                // Make sure the component supports 1.2
-                c.setValueExpression("binding", ve);
-            }
-        } else {
-            c = app.createComponent(faces, this.componentType, this.rendererType);
-        }
-        return c;
-    }
-
-    /**
-     * If the id TagAttribute was specified, get it's value, otherwise generate
-     * a unique id from our tagId.
-     * 
-     * @see TagAttribute#getValue(FaceletContext)
-     * @param ctx
-     *            FaceletContext to use
-     * @return what should be a unique Id
-     */
-    protected String getId(FaceletContext ctx) {
-        if (this.id != null) {
-            return this.id.getValue(ctx);
-        }
-        return ctx.generateUniqueId(this.tagId);
-    }
-
-    protected MetaRuleset createMetaRuleset(Class type) {
-        MetaRuleset m = super.createMetaRuleset(type);
         
+    }
+
+    @Override
+    public MetaRuleset createMetaRuleset(Class type) {
+        Util.notNull("type", type);
+        MetaRuleset m = new MetaRulesetImpl(owner.getTag(), type);
+
         // ignore standard component attributes
         m.ignore("binding").ignore("id");
         
@@ -317,6 +236,48 @@ public class ComponentHandlerImpl extends MetaTagHandlerImpl {
         return m;
     }
     
+    void setCreateComponentDelegate(CreateComponentDelegate createComponentDelegate) {
+        this.createComponentDelegate = createComponentDelegate;
+    }
+    
+    /**
+     * If the binding attribute was specified, use that in conjuction with our
+     * componentType String variable to call createComponent on the Application,
+     * otherwise just pass the componentType String.
+     * <p />
+     * If the binding was used, then set the ValueExpression "binding" on the
+     * created UIComponent.
+     * 
+     * @see Application#createComponent(javax.faces.el.ValueBinding,
+     *      javax.faces.context.FacesContext, java.lang.String)
+     * @see Application#createComponent(java.lang.String)
+     * @param ctx
+     *            FaceletContext to use in creating a component
+     * @return
+     */
+    private UIComponent createComponent(FaceletContext ctx) {
+        
+        if (null != createComponentDelegate) {
+            return createComponentDelegate.createComponent(ctx);
+        }
+        
+        UIComponent c = null;
+        FacesContext faces = ctx.getFacesContext();
+        Application app = faces.getApplication();
+        if (this.binding != null) {
+            ValueExpression ve = this.binding.getValueExpression(ctx,
+                                                                 Object.class);
+            c = app.createComponent(ve, faces, this.componentType, this.rendererType);
+            if (c != null) {
+                // Make sure the component supports 1.2
+                c.setValueExpression("binding", ve);
+            }
+        } else {
+            c = app.createComponent(faces, this.componentType, this.rendererType);
+        }
+        return c;
+    }
+
     /**
      * A hook method for allowing developers to do additional processing once Facelets
      * creates the component.  The 'setAttributes' method is still perferred, but this
@@ -327,7 +288,7 @@ public class ComponentHandlerImpl extends MetaTagHandlerImpl {
      * @param c
      * @param parent
      */
-    protected void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
+    private void privateOnComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
         AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
             get(AjaxBehaviors.AJAX_BEHAVIORS);
         if (ajaxBehaviors != null) {
@@ -348,14 +309,36 @@ public class ComponentHandlerImpl extends MetaTagHandlerImpl {
             }
         }
     }
+    
+    /**
+     * Return the Facet name we are scoped in, otherwise null
+     * @param ctx
+     * @return
+     */
+    private final String getFacetName(FaceletContext ctx, UIComponent parent) {
+        return (String) parent.getAttributes().get(FacetHandler.KEY);
+    }
+    
+    private static InitialStateEvent getInitialStateEvent(FacesContext context,
+            UIComponent source) {
+        InitialStateEvent ise = null;
+        Map<Object,Object> attrs = context.getAttributes();
+        if (null == (ise = (InitialStateEvent) attrs.get(INITIAL_STATE_EVENT_KEY))) {
+            ise = new InitialStateEvent(source);
+            attrs.put(INITIAL_STATE_EVENT_KEY, ise);
+        }
+        else {
+            ise.setComponent(source);
+        }
 
-    protected void onComponentPopulated(FaceletContext ctx, UIComponent c, UIComponent parent) {
-        // do nothing
+        return ise;
+    }
+    
+    
+    interface CreateComponentDelegate {
+
+        public UIComponent createComponent(FaceletContext ctx);
+        
     }
 
-    protected void applyNextHandler(FaceletContext ctx, UIComponent c) 
-            throws IOException, FacesException, ELException {
-        // first allow c to get populated
-        this.nextHandler.apply(ctx, c);
-    }
-    }
+}

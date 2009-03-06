@@ -76,11 +76,16 @@ public class OutputLinkRenderer extends LinkRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+
     @Override
     public void decode(FacesContext context, UIComponent component) {
 
         rendererParamsNotNull(context, component);
 
+
+        if (shouldDecode(component)) {
+            decodeBehaviors(context, component);
+        }
     }
 
 
@@ -158,6 +163,17 @@ public class OutputLinkRenderer extends LinkRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
+    protected String getFragment(UIComponent component) {
+
+        String fragment = (String) component.getAttributes().get("fragment");
+        fragment = (fragment != null ? fragment.trim() : "");
+        if (fragment.length() > 0) {
+            fragment = "#" + fragment;
+        }
+        return fragment;
+
+    }
+
     @Override
     protected Object getValue(UIComponent component) {
 
@@ -211,15 +227,16 @@ public class OutputLinkRenderer extends LinkRenderer {
             String pn = paramList[i].name;
             if (pn != null && pn.length() != 0) {
                 String pv = paramList[i].value;
-                sb.append((paramWritten) ? '&' : '?');              
+                sb.append((paramWritten) ? '&' : '?');
                 sb.append(URLEncoder.encode(pn,"UTF-8"));
                 sb.append('=');
                 if (pv != null && pv.length() != 0) {
                     sb.append(URLEncoder.encode(pv, "UTF-8"));
-                }                
+                }
                 paramWritten = true;
             }
         }
+        sb.append(getFragment(component));
         writer.writeURIAttribute("href",
                                  context.getExternalContext()
                                        .encodeResourceURL(sb.toString()),

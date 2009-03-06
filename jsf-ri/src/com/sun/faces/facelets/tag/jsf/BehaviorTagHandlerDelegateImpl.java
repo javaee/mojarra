@@ -1,8 +1,4 @@
 /*
- * $Id$
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -40,8 +36,9 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.facelets.tag.MetaRulesetImpl;
+import com.sun.faces.util.Util;
 import java.io.IOException;
-
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -50,47 +47,28 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-
-import com.sun.faces.facelets.tag.MetaTagHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
 
 /**
- * <p class="changed_added_2_0"></p>
- * @author asmirnov@exadel.com
  *
+ * @author edburns
  */
-public class BehaviorHandler extends MetaTagHandlerImpl implements AttachedBehaviorObjectHandler {
-
-    private final TagAttribute binding;
+class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements AttachedObjectHandler {
     
-    private final TagAttribute event;
-    
-    private String behaviorId;
-	
-    /**
-     * <p class="changed_added_2_0"></p>
-     * @param config
-     * @deprecated
-     */
-    public BehaviorHandler(TagConfig config) {
-        super(config);
-        this.binding = this.getAttribute("binding");
-        this.event = this.getAttribute("event");
-        if (null != event && !event.isLiteral()){
-            throw new TagException(this.tag, "The 'event' attribute for behavior tag have to be literal");
-        }
-    }
-	
-    public BehaviorHandler(BehaviorConfig config) {
-        this((TagConfig) config);
-        this.behaviorId = config.getBehaviorId();
-    }
+    private BehaviorHandler owner;
 
+    public BehaviorTagHandlerDelegateImpl(BehaviorHandler owner) {
+        this.owner = owner;
+    }
+    
+    @Override
     public void apply(FaceletContext ctx, UIComponent parent)
         throws IOException, FacesException, FaceletException, ELException {
         // only process if it's been created
@@ -98,74 +76,80 @@ public class BehaviorHandler extends MetaTagHandlerImpl implements AttachedBehav
             return;
         }
         if (parent instanceof BehaviorHolder) {
-            applyAttachedObject(ctx.getFacesContext(), parent);
+            owner.applyAttachedObject(ctx.getFacesContext(), parent);
         } else if (parent.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
-            if (null == getFor()) {
+            if (null == owner.getFor()) {
                 // PENDING(): I18N
-                throw new TagException(this.tag,
+                throw new TagException(owner.getTag(),
                     "behavior tags nested within composite components must have a non-null \"for\" attribute");
             }
             // Allow the composite component to know about the target component.
             CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(this);
         } else {
-            throw new TagException(this.tag, "Parent not an instance of BehaviorHolder: " + parent);
+            throw new TagException(owner.getTag(), "Parent not an instance of BehaviorHolder: " + parent);
         }
 
     }
-	
-    private String getEventName(BehaviorHolder holder){
-        String eventName;
-        if (null != event){
-            eventName = event.getValue();
-        } else {
-            eventName = holder.getDefaultEventName();
-        }
-        if (null == eventName){
-            throw new TagException(this.tag, "The event name is not defined");			
-        }
-        return eventName;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected MetaRuleset createMetaRuleset(Class type) {
-        return super.createMetaRuleset(type).ignore("binding");
-    }
-
+    
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
         // cast to the BehaviorHolder.
         BehaviorHolder behaviorHolder = (BehaviorHolder) parent;
         ValueExpression bindingExpr=null;
         Behavior behavior=null;
-        if (null != binding){
-            bindingExpr = binding.getValueExpression(ctx, Behavior.class);
+        if (null != owner.getBinding()){
+            bindingExpr = owner.getBinding().getValueExpression(ctx, Behavior.class);
             behavior = (Behavior) bindingExpr.getValue(ctx);
         }
         if (null == behavior){
-            if (null != this.behaviorId){
-                behavior = ctx.getFacesContext().getApplication().createBehavior(behaviorId);
+            if (null != owner.getBehaviorId()){
+                behavior = ctx.getFacesContext().getApplication().createBehavior(owner.getBehaviorId());
                 if (null == behavior){
-                    throw new TagException(this.tag,"No Faces behavior defined for Id "+this.behaviorId);
+                    throw new TagException(owner.getTag(),
+                            "No Faces behavior defined for Id "+owner.getBehaviorId());
                 }
                 if (null != bindingExpr){
                     bindingExpr.setValue(ctx, behavior);
                 }
             } else {
-                throw new TagException(this.tag,"No behaviorId defined");
+                throw new TagException(owner.getTag(),"No behaviorId defined");
             }
         }
-        this.setAttributes(ctx, behavior);
+        owner.setAttributes(ctx, behavior);
         behaviorHolder.addBehavior(getEventName(behaviorHolder), behavior);
     }
 
+    
+	
+    public MetaRuleset createMetaRuleset(Class type) {
+        Util.notNull("type", type);
+        MetaRuleset m = new MetaRulesetImpl(owner.getTag(), type);
+
+        return m.ignore("binding");
+    }
+    
     public String getFor() {
         String result = null;
-        TagAttribute attr = this.getAttribute("for");
+        TagAttribute attr = owner.getTagAttribute("for");
         
         if (null != attr) {
             result = attr.getValue();
         }
         return result;
+        
     }
+    
+    private String getEventName(BehaviorHolder holder){
+        String eventName;
+        if (null != owner.getEvent()){
+            eventName = owner.getEvent().getValue();
+        } else {
+            eventName = holder.getDefaultEventName();
+        }
+        if (null == eventName){
+            throw new TagException(owner.getTag(), "The event name is not defined");			
+        }
+        return eventName;
+    }
+    
 }

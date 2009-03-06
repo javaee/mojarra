@@ -64,6 +64,7 @@ import javax.faces.FacesException;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
 
 
 public class CompositeComponentTagLibrary extends TagLibraryImpl {

@@ -429,10 +429,9 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review docs
-     * <p class="changed_added_2_0"> </p>
-     * @return <code>true</code> if this component is within the view hierarchy
-     *  otherwise <code>false</code>
+     * <p class="changed_added_2_0">Return <code>true</code> if this
+     * component is within the view hierarchy otherwise
+     * <code>false</code></code>
      *
      * @since 2.0
      */
@@ -442,13 +441,12 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review docs
-     * Updates the status as to whether or not this component is currently within
-     * the view hierarchy.  <strong>This method must
-     * never be called by developers;  a {@link UIComponent}'s internal
-     * implementation will call it as components are added to or
-     * removed from a parent's child <code>List</code> or
-     * facet <code>Map</code></strong>.</p>
+     * <p class="changed_added_2_0">Updates the status as to whether or
+     * not this component is currently within the view hierarchy.
+     * <strong>This method must never be called by developers; a {@link
+     * UIComponent}'s internal implementation will call it as components
+     * are added to or removed from a parent's child <code>List</code>
+     * or facet <code>Map</code></strong>.</p>
      *
      * @param isInView flag indicating whether or not this component is within
      *  the view hierachy
@@ -591,16 +589,16 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review docus
-     * <p class="changed_modified_2_0">Set the parent <code>UIComponent</code> of this
-     * <code>UIComponent</code>.  This method, when called will cause
-     * an {@link javax.faces.event.PostAddToViewEvent} to be published and
-     * if <code>parent.isInView()</code> returns <code>true</code> an
-     * {@link javax.faces.event.PostAddToViewEvent} will be published as well.
-     *  <strong>This method must never be called by developers;  a
-     * {@link UIComponent}'s internal implementation will call it as components
-     * are added to or removed from a parent's child <code>List</code> or
-     * facet <code>Map</code></strong>.</p>
+     * <p class="changed_modified_2_0">Set the parent
+     * <code>UIComponent</code> of this <code>UIComponent</code>.  <span
+     * class="changed_added_2_0">This method will cause an {@link
+     * javax.faces.event.PostAddToViewEvent} to be published and if
+     * <code>parent.isInView()</code> returns <code>true</code> an
+     * {@link javax.faces.event.PostAddToViewEvent} will be published as
+     * well.  <strong>This method must never be called by developers; a
+     * {@link UIComponent}'s internal implementation will call it as
+     * components are added to or removed from a parent's child
+     * <code>List</code> or facet <code>Map</code></strong></span>.</p>
      *
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
@@ -1298,6 +1296,29 @@ private void doFind(FacesContext context, String clientId) {
      * request contained in the specified {@link FacesContext}, and store
      * this state as needed.</p>
      *
+     * <p class="changed_added_2_0">If this component is a 
+     * {@link javax.faces.component.behavior.BehaviorHolder},
+     * process {@link javax.faces.component.behavior.Behavior}s as follows:
+     * <ul>
+     * <li>Determine if there are {@link javax.faces.component.behavior.Behavior}s
+     * associated with this component by calling the implementation of
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li>
+     * <li>If there are <code>behaviors</code>, determine the
+     * <code>behavior event name</code> from the request parameter:
+     * <code>javax.faces.behavior.event</code>.</li>
+     * <li>If that request parameter exists, get the <code>List</code> of
+     * {@link javax.faces.component.behavior.Behavior}s for the
+     * <code>behavior event name</code> from the <code>Map</code> returned from
+     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li>
+     * <li>If there are <code>behaviors</code> for the <code>behavior event name</code>,
+     * determine the <code>behavior source name</code> from the request parameter:
+     * <code>javax.faces.behavior.source</code>.</li>
+     * <li>If the request parameter exists, and its value is the same as this
+     * component's <code>clientId</code>, iterate over the <code>List</code> of
+     * {@link javax.faces.component.behavior.Behavior}s and call the <code>decode()</code>
+     * method for each {@link javax.faces.component.behavior.Behavior}.</li>
+     * </ul>
+     * </p>
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners who have registered an interest),  by calling
      * <code>queueEvent()</code>.</p>
@@ -1424,7 +1445,7 @@ private void doFind(FacesContext context, String clientId) {
      * response contained in the specified {@link FacesContext}. 
      * Call {@link #pushComponentToEL(javax.faces.context.FacesContext,javax.faces.component.UIComponent)}.
      * Call {@link javax.faces.application.Application#publishEvent}, passing
-     * {@link javax.faces.event.BeforeRenderEvent}<code>.class</code> as the
+     * {@link javax.faces.event.PreRenderComponentEvent}<code>.class</code> as the
      * first argument and the component instance to be rendered as the
      * second argument.</p></li>
 
@@ -1646,6 +1667,38 @@ private void doFind(FacesContext context, String clientId) {
         }
         return (component.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY));
 
+    }
+
+
+    /**
+     * <p>
+     * Finds the nearest composite component parent of the specified component.
+     * </p>
+     *
+     * @param component the component from which to start the search from
+     *
+     * @return if <code>component</code> is <code>null</code>, return
+     *  <code>null</code>, otherwise search the component's parent hierachy
+     *  for the nearest parent composite component.  If no parent composite
+     *  component is found, return <code>null</code>
+     *
+     * @since 2.0
+     */
+    public static UIComponent getCompositeComponentParent(UIComponent component) {
+
+        if (component == null) {
+            return null;
+        } else {
+            UIComponent parent = component.getParent();
+            while (parent != null) {
+                if (UIComponent.isCompositeComponent(parent)) {
+                    return parent;
+                }
+                parent = parent.getParent();
+            }
+            return null;
+        }
+        
     }
 
 
@@ -1987,29 +2040,7 @@ private void doFind(FacesContext context, String clientId) {
      * <li>Call the <code>processDecodes()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>If this component is a {@link javax.faces.component.behavior.BehaviorHolder},
-     * process {@link javax.faces.component.behavior.Behavior}s as follows:
-     * <ul>
-     * <li>Determine if there are {@link javax.faces.component.behavior.Behavior}s
-     * associated with this component by calling the implementation of 
-     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li> 
-     * <li>If there are <code>behaviors</code>, determine the 
-     * <code>behavior event name</code> from the request parameter:
-     * <code>javax.faces.behavior.event</code>.</li>
-     * <li>If that request parameter exists, get the <code>List</code> of
-     * {@link javax.faces.component.behavior.Behavior}s for the 
-     * <code>behavior event name</code> from the <code>Map</code> returned from
-     * {@link javax.faces.component.behavior.BehaviorHolder#getBehaviors}.</li>
-     * <li>If there are <code>behaviors</code> for the <code>behavior event name</code>,
-     * determine the <code>behavior source name</code> from the request parameter:
-     * <code>javax.faces.behavior.source</code>.</li>
-     * <li>If the request parameter exists, and its value is the same as this
-     * component's <code>clientId</code>, iterate over the <code>List</code> of
-     * {@link javax.faces.component.behavior.Behavior}s and call the <code>decode()</code>
-     * method for each {@link javax.faces.component.behavior.Behavior}.</li>
-     * </ul>
-     * </li>
-     *  
+
      * <li>Call the <code>decode()</code> method of this component.</li>
 
      * <li>Call {@link #popComponentFromEL} from inside of a

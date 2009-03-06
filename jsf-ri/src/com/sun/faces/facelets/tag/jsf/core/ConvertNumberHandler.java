@@ -61,8 +61,8 @@ import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import com.sun.faces.facelets.tag.jsf.ConvertHandler;
-import com.sun.faces.facelets.tag.jsf.ConverterConfig;
+import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
+import javax.faces.webapp.pdl.facelets.tag.ConverterConfig;
 
 /**
  * Register a NumberConverter instance on the UIComponent associated with the
@@ -73,7 +73,7 @@ import com.sun.faces.facelets.tag.jsf.ConverterConfig;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class ConvertNumberHandler extends ConvertHandler {
+public final class ConvertNumberHandler extends ConverterHandler {
 
     private final TagAttribute locale;
 
@@ -89,7 +89,7 @@ public final class ConvertNumberHandler extends ConvertHandler {
      * Returns a new NumberConverter
      * 
      * @see NumberConverter
-     * @see com.sun.faces.facelets.tag.jsf.ConvertHandler#createConverter(com.sun.faces.facelets.FaceletContext)
+     * @see com.sun.faces.facelets.tag.jsf.ConverterHandler#createConverter(com.sun.faces.facelets.FaceletContext)
      */
     protected Converter createConverter(FaceletContext ctx)
             throws FacesException, ELException, FaceletException {
@@ -99,7 +99,8 @@ public final class ConvertNumberHandler extends ConvertHandler {
     /* (non-Javadoc)
      * @see com.sun.facelets.tag.ObjectHandler#setAttributes(com.sun.facelets.FaceletContext, java.lang.Object)
      */
-    protected void setAttributes(FaceletContext ctx, Object obj) {
+    @Override
+    public void setAttributes(FaceletContext ctx, Object obj) {
         super.setAttributes(ctx, obj);
         NumberConverter c = (NumberConverter) obj;
         if (this.locale != null) {
@@ -107,7 +108,8 @@ public final class ConvertNumberHandler extends ConvertHandler {
         }
     }
 
-    protected MetaRuleset createMetaRuleset(Class type) {
+    @Override
+    public MetaRuleset createMetaRuleset(Class type) {
         return super.createMetaRuleset(type).ignore("locale");
     }
 

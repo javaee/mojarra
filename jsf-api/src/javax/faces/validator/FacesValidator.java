@@ -79,5 +79,14 @@ public @interface FacesValidator {
 
     String value();
 
+    /**
+     * <p class="changed_added_2_0">If <code>true</code>, the validator
+     * id for this annotation is added to the list of default validators
+     * by a call to {@link
+     * javax.faces.application.Application#addDefaultValidatorId}.</p>
+     */ 
+
+    boolean isDefault() default true;
+
 
 }

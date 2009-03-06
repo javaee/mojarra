@@ -319,8 +319,6 @@ public class UIViewParameter extends UIInput {
      * from a <code>ValueExpression</code> return the value of the
      * expression, otherwise, return the local value.</p>
      *
-     * <p>PENDING(edburns): verify that we really need this and that
-     * getValue() isn't sufficient.</p>
      * @since 2.0
      */
 
@@ -338,7 +336,6 @@ public class UIViewParameter extends UIInput {
      * <p class="changed_added_2_0">Manually perform standard conversion
      * steps to get a string value from the value expression.</p>
      *
-     * <p>PENDING(edburns): verify that we really need this.</p>
      * @since 2.0
      */
 

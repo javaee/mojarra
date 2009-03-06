@@ -60,6 +60,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.BehaviorHolder;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -108,6 +109,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         rendererParamsNotNull(context, component);
 
+        if (!shouldDecode(component)) {
+            return;
+        }
+
+        String clientId = decodeBehaviors(context, component);
+
         if (!(component instanceof UIInput)) {
             // decode needs to be invoked only for components that are
             // instances or subclasses of UIInput.
@@ -119,11 +126,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return;
         }
 
-        if (!shouldDecode(component)) {
-            return;
+        if (clientId == null) {
+            clientId = component.getClientId(context);
         }
 
-        String clientId = component.getClientId(context);
         assert(clientId != null);
         Map<String, String> requestMap =
               context.getExternalContext().getRequestParameterMap();
@@ -174,6 +180,47 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     // ------------------------------------------------------- Protected Methods
 
+
+    // Decodes Behaviors if any match the behavior source/event.
+    // As a convenience, returns component id, but only if it
+    // was retrieved.  This allows us to avoid duplicating
+    // calls to getClientId(), which can be expensive for 
+    // deep component trees.
+    protected final String decodeBehaviors(FacesContext context, 
+                                           UIComponent component)  {
+
+        if (!(component instanceof BehaviorHolder)) {
+            return null;
+        }
+
+        BehaviorHolder holder = (BehaviorHolder)component;
+        Map<String, List<Behavior>> behaviors = holder.getBehaviors();
+        if (behaviors.isEmpty()) {
+            return null;
+        }
+
+        ExternalContext external = context.getExternalContext();
+        Map<String, String> params = external.getRequestParameterMap();
+        String behaviorEvent = params.get("javax.faces.behavior.event");
+
+        if (null != behaviorEvent) {
+            List<Behavior> behaviorsForEvent = behaviors.get(behaviorEvent);
+
+            if (null != behaviors && behaviors.size() > 0) {
+                String behaviorSource = params.get("javax.faces.behavior.source");
+               String clientId = component.getClientId();
+               if (null != behaviorSource && behaviorSource.equals(clientId)) {
+                   for (Behavior behavior: behaviorsForEvent) {
+                       behavior.decode(context, component);
+                   }
+               }
+
+               return clientId;
+            }
+        }
+
+        return null;
+    }
 
     /**
      * <p>Conditionally augment an id-reference value.</p>

@@ -49,23 +49,32 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+
+import javax.faces.component.UIComponent;
+
+import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
 
 /**
- * Used in creating ConvertHandler's and all implementations.
- * 
- * @see com.sun.faces.facelets.tag.jsf.ConvertHandler
- * @author Jacob Hookom
- * @version $Id$
  */
-public interface ConverterConfig extends TagConfig {
+public abstract class FaceletsAttachedObjectHandler extends DelegatingMetaTagHandler implements AttachedObjectHandler {
 
-    /**
-     * The converter id to be used in instantiating this converter
-     * @return the converter id that can be passed to Application.createConverter
-     */
-    public String getConverterId();
+    public FaceletsAttachedObjectHandler(TagConfig config) {
+        super(config);
+    }
+    
+    protected final AttachedObjectHandler getAttachedObjectHandlerHelper() {
+        return (AttachedObjectHandler) this.getTagHandlerHelper();
+    }
+
+    public final void applyAttachedObject(FacesContext ctx, UIComponent parent) {
+        getAttachedObjectHandlerHelper().applyAttachedObject(ctx, parent);
+    }
+    
+    public final String getFor() {
+        return getAttachedObjectHandlerHelper().getFor();
+    }
     
 }

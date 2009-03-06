@@ -218,7 +218,12 @@ public class NavigationCase {
                                                          toViewId,
                                                          String.class);
         }
-        return (String) toViewIdExpr.getValue(context.getELContext());
+        String toViewId = (String) toViewIdExpr.getValue(context.getELContext());
+        if (toViewId.charAt(0) != '/') {
+            toViewId = '/' + toViewId;
+        }
+
+        return toViewId;
 
     }
 

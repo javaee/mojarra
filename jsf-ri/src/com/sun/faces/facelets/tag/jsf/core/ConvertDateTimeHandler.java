@@ -64,8 +64,8 @@ import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import com.sun.faces.facelets.tag.jsf.ConvertHandler;
-import com.sun.faces.facelets.tag.jsf.ConverterConfig;
+import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
+import javax.faces.webapp.pdl.facelets.tag.ConverterConfig;
 
 /**
  * Register a DateTimeConverter instance on the UIComponent associated with the
@@ -76,7 +76,7 @@ import com.sun.faces.facelets.tag.jsf.ConverterConfig;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class ConvertDateTimeHandler extends ConvertHandler {
+public final class ConvertDateTimeHandler extends ConverterHandler {
 
     private final TagAttribute dateStyle;
 
@@ -107,7 +107,7 @@ public final class ConvertDateTimeHandler extends ConvertHandler {
      * Returns a new DateTimeConverter
      * 
      * @see DateTimeConverter
-     * @see com.sun.faces.facelets.tag.jsf.ConvertHandler#createConverter(com.sun.faces.facelets.FaceletContext)
+     * @see com.sun.faces.facelets.tag.jsf.ConverterHandler#createConverter(com.sun.faces.facelets.FaceletContext)
      */
     protected Converter createConverter(FaceletContext ctx)
             throws FacesException, ELException, FaceletException {
@@ -120,7 +120,8 @@ public final class ConvertDateTimeHandler extends ConvertHandler {
      * 
      * @see com.sun.faces.facelets.tag.MetaTagHandler#setAttributes(com.sun.faces.facelets.FaceletContext, Object)
      */
-    protected void setAttributes(FaceletContext ctx, Object obj) {
+    @Override
+    public void setAttributes(FaceletContext ctx, Object obj) {
         DateTimeConverter c = (DateTimeConverter) obj;
         if (this.locale != null) {
             c.setLocale(ComponentSupport.getLocale(ctx, this.locale));
@@ -158,7 +159,8 @@ public final class ConvertDateTimeHandler extends ConvertHandler {
         }
     }
 
-    protected MetaRuleset createMetaRuleset(Class type) {
+    @Override
+    public MetaRuleset createMetaRuleset(Class type) {
         return super.createMetaRuleset(type).ignoreAll();
     }
 }

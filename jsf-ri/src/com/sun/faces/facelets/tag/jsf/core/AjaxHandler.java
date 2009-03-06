@@ -60,8 +60,6 @@ import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.FacesException;
-import javax.faces.component.ActionSource;
-import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
@@ -76,14 +74,12 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**
  * <p class="changed_added_2_0">Enable one or more components in the view
@@ -155,7 +151,7 @@ public final class AjaxHandler extends TagHandlerImpl {
     @SuppressWarnings("unchecked")
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
-        if (null == parent || !(ComponentSupport.isNew(parent))) {
+        if (null == parent || !(ComponentHandler.isNew(parent))) {
             return;
         } 
 

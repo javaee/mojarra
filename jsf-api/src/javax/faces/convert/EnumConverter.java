@@ -175,7 +175,7 @@ public class EnumConverter implements Converter, StateHolder {
      * provided to the constructor of this instance, throw a
      * <code>ConverterException</code> containing the
      * {@link #ENUM_NO_CLASS_ID} message with proper parameters. If the
-     * <code>value,/code> argument is <code>null</code>, return <code>null</code>.
+     * <code>value</code> argument is <code>null</code>, return <code>null</code>.
      * If the value is an instance of the provided target class, return its
      * string value (<code>value.toString()</code>).  Otherwise, throw a
      * {@link ConverterException} containing the {@link #ENUM_ID} message with

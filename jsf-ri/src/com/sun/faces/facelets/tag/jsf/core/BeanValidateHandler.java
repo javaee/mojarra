@@ -35,12 +35,15 @@
  */
 package com.sun.faces.facelets.tag.jsf.core;
 
-import com.sun.faces.facelets.tag.jsf.ValidateHandler;
-import com.sun.faces.facelets.tag.jsf.ValidatorConfig;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
+import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerDelegateImpl;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.validator.BeanValidator;
+
+import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerDelegateImpl.SetValidatorDefaultsOnParentDelegate;
 
 /**
  * This handler is intended to be used to back the &lt;f:validateBean&gt;. In addition to serving its normal
@@ -49,22 +52,21 @@ import javax.faces.validator.BeanValidator;
  *
  * @author Dan Allen
  */
-public class BeanValidateHandler extends ValidateHandler {
+public class BeanValidateHandler extends ValidatorHandler implements SetValidatorDefaultsOnParentDelegate {
 
     private final TagAttribute validationGroups;
 
     public BeanValidateHandler(ValidatorConfig config) {
         super(config);
         validationGroups = getAttribute("validationGroups");
+        ((ValidatorTagHandlerDelegateImpl)this.getTagHandlerHelper()).setSetValidatorDefaultsOnParentDelegate(this);
     }
 
     protected String getValidationGroups(FaceletContext ctx) {
         return (validationGroups != null ? validationGroups.getValue(ctx) : null);
     }
 
-    @Override
-    protected void setValidatorDefaultsOnParent(FaceletContext ctx, UIComponent parent, boolean disabled) {
-        super.setValidatorDefaultsOnParent(ctx, parent, disabled);
+    public void setValidatorDefaultsOnParent(FaceletContext ctx, UIComponent parent, boolean disabled) {
         // QUESTION should we register the validation groups if disabled attribute is true?
         // NOTE <f:validateBean/> and <f:validateBean validationGroups=""/> at this level have no effect on the validation groups
         String validationGroupsStr = getValidationGroups(ctx);

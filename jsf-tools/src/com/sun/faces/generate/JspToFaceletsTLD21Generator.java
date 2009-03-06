@@ -186,9 +186,13 @@ public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
                     }
                 }
 
-                String tagName = makeTldTagName(
-                    GeneratorUtil.stripJavaxFacesPrefix(componentFamily),
-                    GeneratorUtil.stripJavaxFacesPrefix(rendererType));
+                String tagName = renderer.getTagName();
+
+                if (tagName == null) {
+                    tagName = makeTldTagName(
+                        GeneratorUtil.stripJavaxFacesPrefix(componentFamily),
+                        GeneratorUtil.stripJavaxFacesPrefix(rendererType));
+                }
 
                 if (tagName == null) {
                     throw new IllegalStateException(

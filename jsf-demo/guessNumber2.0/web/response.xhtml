@@ -50,9 +50,8 @@
         <h2>
             #{userNumberBean.response}
         </h2>
-        <h:commandButton id="back" value="Back" action="greeting?redirect=true"/>
-
-        <p/>
+        <p><h:commandButton id="back" value="Back" action="greeting?redirect=true"/></p>
+        <p><h:link outcome="/greeting.xhtml" fragment="about" value="Read"/>#{' '}about how this game leverages features in JSF 2.</p>
 
     </h:form>
 </h:body>

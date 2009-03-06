@@ -216,7 +216,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             return;
         }
 
-        String clientId = component.getClientId(context);
+        String clientId = decodeBehaviors(context, component);
+
+        if (clientId == null) {
+            clientId = component.getClientId(context);
+        }
         assert(clientId != null);
         // currently we assume the model type to be of type string or
         // convertible to string and localized by the application.

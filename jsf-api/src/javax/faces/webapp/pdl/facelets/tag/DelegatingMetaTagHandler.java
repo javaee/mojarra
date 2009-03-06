@@ -1,0 +1,133 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ * 
+ * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * 
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License. You can obtain
+ * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ * 
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ * Sun designates this particular file as subject to the "Classpath" exception
+ * as provided by Sun in the GPL Version 2 section of the License file that
+ * accompanied this code.  If applicable, add the following below the License
+ * Header, with the fields enclosed by brackets [] replaced by your own
+ * identifying information: "Portions Copyrighted [year]
+ * [name of copyright owner]"
+ * 
+ * Contributor(s):
+ * 
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+package javax.faces.webapp.pdl.facelets.tag;
+
+import java.io.IOException;
+import javax.el.ELException;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+
+public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
+    
+    private final TagAttribute binding;
+
+    private final TagAttribute disabled;
+    
+    protected TagHandlerDelegateFactory helperFactory;
+    
+    public DelegatingMetaTagHandler(TagConfig config) {
+        super(config);
+        this.binding = this.getAttribute("binding");
+        this.disabled = this.getAttribute("disabled");
+        helperFactory = (TagHandlerDelegateFactory)
+                FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY);
+    }
+    
+    protected abstract TagHandlerDelegate getTagHandlerHelper();
+    
+    // Properties ----------------------------------------
+
+    public boolean isDisabled(FaceletContext ctx) {
+        return disabled != null ? Boolean.TRUE.equals(disabled.getBoolean(ctx)) : false;
+    }
+    
+    public TagAttribute getBinding() {
+        return this.binding;
+    }
+    
+    public Tag getTag() {
+        return this.tag;
+    }
+    
+    public String getTagId() {
+        return this.tagId;
+    }
+    
+    public TagAttribute getTagAttribute(String localName) {
+        return super.getAttribute(localName);
+    }
+    
+    @Override
+    public void setAttributes(FaceletContext ctx, Object instance) {
+        super.setAttributes(ctx, instance);
+    }
+    
+    // Methods ----------------------------------------
+    
+
+    /**
+     * <p class="changed_added_2_0">The default implementation simply
+     * calls through to {@link TagHandlerDelegate#apply}.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
+     *
+     * @param parent the parent <code>UIComponent</code> of the
+     * component represented by this element instance.
+     * @since 2.0
+     */
+
+    public void apply(FaceletContext ctx, UIComponent parent)
+            throws IOException, FacesException, FaceletException, ELException {
+        getTagHandlerHelper().apply(ctx, parent);
+    }
+    
+    public void applyNextHandler(FaceletContext ctx, UIComponent c) 
+            throws IOException, FacesException, ELException {
+        // first allow c to get populated
+        this.nextHandler.apply(ctx, c);
+    }
+    
+    /**
+     * <p class="changed_added_2_0">The default implementation simply
+     * calls through to {@link TagHandlerDelegate#createMetaRuleset} and
+     * returns the result.</p>
+     *
+     * @param type the <code>Class</code> for which the
+     * <code>MetaRuleset</code> must be created.
+     *
+     * @since 2.0
+     */
+
+    @Override
+    protected MetaRuleset createMetaRuleset(Class type) {
+        return getTagHandlerHelper().createMetaRuleset(type);
+    }
+    
+}

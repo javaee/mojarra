@@ -135,7 +135,7 @@
 
     <target name="explode">
         <mkdir dir="${build}/target/${example}" />
-        <unjar src="dist/${example}.war" overwrite="true"
+        <unjar src="build/${example}.war" overwrite="true"
                dest="${build}/target/${example}" />
     </target>
 

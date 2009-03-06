@@ -528,15 +528,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             String cncFromOutcome = cnc.getFromOutcome();
             boolean cncHasCondition = cnc.hasCondition();
             String cncToViewId = cnc.getToViewId(ctx);
-            if (cncToViewId.charAt(0) != '/') {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.log(Level.WARNING,
-                        "jsf.config.navigation.to_view_id_leading_slash",
-                        new String[] { cncToViewId,
-                                       cnc.getFromViewId() });
-                }
-                cncToViewId = '/' + cncToViewId;
-            }
            
             if ((cncFromAction != null) && (cncFromOutcome != null)) {
                 if ((cncFromAction.equals(fromAction)) &&

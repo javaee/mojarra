@@ -239,10 +239,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * <p class="changed_added_2_0"> </p>
-     * @return <code>true</code> in all cases as any children or facets added
-     *  to the UIViewRoot will automatically be part of the view.  
+     * <p class="changed_added_2_0">Return <code>trues</code>.</p>
+     *
+     * @since 2.0
      */
     @Override
     public boolean isInView() {
@@ -252,7 +251,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
+     * <p class="changed_added_2_0">Overridden to take no action.</p>
+     *
+     * @since 2.0
      * @param isInView
      */
     @Override
@@ -751,7 +752,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                     UIComponent compositeParent = null;
                     try {
                         if (!UIComponent.isCompositeComponent(source)) {
-                            compositeParent = getCompositeComponentParent(source);
+                            compositeParent = UIComponent.getCompositeComponentParent(source);
                         }
                         if (compositeParent != null) {
                             pushComponentToEL(context, compositeParent);
@@ -826,17 +827,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
-
-    private UIComponent getCompositeComponentParent(UIComponent c) {
-        UIComponent parent = c.getParent();
-        while (parent != null) {
-            if (UIComponent.isCompositeComponent(parent)) {
-                return parent;
-            }
-            parent = parent.getParent();
-        }
-        return null;
-    }
 
     private void initState() {
         skipPhase = false;

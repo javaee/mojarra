@@ -53,44 +53,7 @@
 
 -->
 <root>
-    <property>
-      <description>
-        Alternate textual description of the
-        element rendered by this component.
-      </description>
-      <display-name>Alternate Text</display-name>
-      <icon></icon>
-      <property-name>alt</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-
-    <property>
-      <description><![CDATA[<p>
-        Absolute or relative URL of the
-        image to be displayed for this
-        button.  If specified, this
-        "input" element will be of type
-        "image".  Otherwise, it will be
-        of the type specified by the
-        "type" property with a label
-        specified by the "value"
-        property.  <span
-        class="changed_added_2_0">Note
-        that if the value of this
-        attribute starts with "/", the
-        rendered value for this
-        attribute will be prefixed with
-        the context-root for this
-        application.</span>
-      </p>]]></description>
-      <display-name>Image URL</display-name>
-      <icon></icon>
-      <property-name>image</property-name>
-      <property-class>java.lang.String</property-class>
-    </property>
+    
 
     <property>
         <description>

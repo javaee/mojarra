@@ -128,6 +128,8 @@
     <target name="test"
             description="Execute all tests against installed application"
             depends="test.annotations,
+                test.ajax,
+                test.facelets,
                 test.init,
                 test.render,
                 test.html.taglib,
@@ -960,11 +962,9 @@ excludes="com/sun/faces/render/CommandButtonTestCase.class"
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/SelectOneManyEnumTestCase.class,
-                                   com/sun/faces/systest/SelectManyCollectionTestCase.class"/>
-<!-- 139-StateSaving re-add this.
-,
-                                   com/sun/faces/systest/DataTableTestCase.class
--->
+                                   com/sun/faces/systest/SelectManyCollectionTestCase.class,
+                                   com/sun/faces/systest/DataTableTestCase.class,
+                                   com/sun/faces/systest/TestOutputTargets.class"/>
             </tests>
         </jsf.junit>  
     </target>

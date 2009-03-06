@@ -120,25 +120,30 @@ public abstract class StateManager {
      * same nearest {@link NamingContainer} must have unique identifiers.</p>
      *
      * @param context {@link FacesContext} for the current request
-     *
+      *
      * @throws IllegalStateException if more than one component or
      *                               facet within the same {@link NamingContainer} in this view has
      *                               the same non-<code>null</code> component id
      * @deprecated this has been replaced by {@link #saveView}.  The
-     *             default implementation returns <code>null</code>.
-     * RELEASE_PENDING (edburns,rogerK) default implementation does something as
-     *  the old behavior was broken and forced implementations to implement
-     *  deprecated APIs.
+     * default implementation calls <code>saveView</code> and inspects the 
+     * return.  If the return is an <code>Object []</code>, it casts the
+     * result to an <code>Object []</code> wrapping the first and second
+     * elements in an instance of {@link SerializedView}, which it then
+     * returns.  Otherwise, it return <code>null</code>
      */
     public SerializedView saveSerializedView(FacesContext context) {
 
-        Object[] state = (Object[]) saveView(context);
-        if (state != null && state.length == 2) {
-            return new SerializedView(state[0], state[1]);
-        } else {
-            return null;
-        }
-
+        Object stateObj = saveView(context);
+        SerializedView result = null;
+        if (null != stateObj) {
+            if (stateObj instanceof Object[]) {
+                Object [] state = (Object[]) stateObj;
+                if (state.length == 2) {
+                    result = new SerializedView(state[0], state[1]);
+                }
+            }
+        } 
+        return result;
     }
 
     /**
@@ -298,10 +303,12 @@ public abstract class StateManager {
      *
      * @deprecated This method has been replaced by {@link
      *             #writeState(javax.faces.context.FacesContext,java.lang.Object)}.
-     *             The default implementation of this method does nothing.
-     * RELEASE_PENDING (edburns,rogerK) default implementation does something as
-     *  the old behavior was broken and forced implementations to implement
-     *  deprecated APIs.
+     *             The default implementation calls the non-deprecated variant
+     * of the method passing an <code>Object []</code> as the second
+     * argument, where the first element of the array is the return from
+     * <code>getStructure()</code> and the second is the return from
+     * <code>getState()</code> on the argument <code>state</code>.
+     * 
      */
     public void writeState(FacesContext context,
                            SerializedView state) throws IOException {

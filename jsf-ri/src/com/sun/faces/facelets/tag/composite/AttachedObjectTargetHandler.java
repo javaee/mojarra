@@ -58,7 +58,6 @@ import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.io.IOException;
@@ -68,6 +67,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 
 public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
@@ -90,7 +90,7 @@ public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
         // only process if it's been created
         if (null == parent || 
             (null == (parent = parent.getParent())) ||
-            !(ComponentSupport.isNew(parent))) {
+            !(ComponentHandler.isNew(parent))) {
             return;
         }
 

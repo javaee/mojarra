@@ -1,8 +1,4 @@
 /*
- * $Id$
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -40,19 +36,34 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
+import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegateFactory;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
 
-/**
- * <p class="changed_added_2_0"></p>
- * @author asmirnov@exadel.com
- *
- */
-public interface BehaviorConfig extends TagConfig {
-	
-	/**
-	 * <p class="changed_added_2_0"></p>
-	 * @return
-	 */
-	public String getBehaviorId();
+public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
 
+    @Override
+    public TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner) {
+        return new ComponentTagHandlerDelegateImpl(owner);
+    }
+
+    @Override
+    public TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner) {
+        return new ValidatorTagHandlerDelegateImpl(owner);
+    }
+
+    @Override
+    public TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner) {
+        return new ConverterTagHandlerDelegateImpl(owner);
+    }
+
+    @Override
+    public TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner) {
+        return new BehaviorTagHandlerDelegateImpl(owner);
+    }
+    
+    
 }

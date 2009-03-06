@@ -71,6 +71,9 @@
     <page-declaration-language-factory>
       com.sun.faces.application.view.PageDeclarationLanguageFactoryImpl
     </page-declaration-language-factory>
+    <tag-handler-delegate-factory>
+      com.sun.faces.facelets.tag.jsf.TagHandlerDelegateFactoryImpl
+    </tag-handler-delegate-factory>
     <external-context-factory>
       com.sun.faces.context.ExternalContextFactoryImpl
     </external-context-factory>

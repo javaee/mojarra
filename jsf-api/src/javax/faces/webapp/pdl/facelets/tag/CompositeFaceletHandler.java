@@ -49,23 +49,56 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import java.io.IOException;
+
+import javax.el.ELException;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
- * Used in creating ValidateHandler's and all implementations.
- * 
- * @see com.sun.faces.facelets.tag.jsf.ValidateHandler
+ * A FaceletHandler that is derived of 1 or more, inner FaceletHandlers. This
+ * class would be found if the next FaceletHandler is structually, a body
+ * with multiple child elements as defined in XML.
+ *
  * @author Jacob Hookom
- * @version $Id$
+ * @version $Id: CompositeFaceletHandler.java 6739 2009-02-27 23:18:02Z rlubke $
  */
-public interface ValidatorConfig extends TagConfig {
+public final class CompositeFaceletHandler implements FaceletHandler {
+
+    private final FaceletHandler[] children;
+    private final int len;
+
+    public CompositeFaceletHandler(FaceletHandler[] children) {
+        this.children = children;
+        this.len = children.length;
+    }
 
     /**
-     * The validator-id associated with a particular validator in your faces-config
-     * @return passable to Application.createValidator(String)
+     * <p class="changed_added_2_0">Calls apply on any child handlers.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
+     *
+     * @param parent the parent <code>UIComponent</code> of the
+     * component represented by this element instance.
+     * @since 2.0
      */
-    public String getValidatorId();
-    
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+        for (int i = 0; i < len; i++) {
+            this.children[i].apply(ctx, parent);
+        }
+    }
+
+    /**
+     * <p class="changed_added_2_0">Returns the array of child
+     * handlers contained by this handler.</p>
+     */
+    public FaceletHandler[] getHandlers() {
+        return this.children;
+    }
 }

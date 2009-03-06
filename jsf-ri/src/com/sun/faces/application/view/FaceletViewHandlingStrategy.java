@@ -295,13 +295,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                  String viewId) {
 
         if (UIDebug.debugRequest(ctx)) {
-            ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
+            UIViewRoot root = (UIViewRoot)
+                  ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
+            root.setViewId(viewId);
+            return root;
         }
-        UIViewRoot root = super.createView(ctx, viewId);
-        root.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
-        ctx.setViewRoot(root);
 
-        return root;
+        return super.createView(ctx, viewId);
 
     }
     

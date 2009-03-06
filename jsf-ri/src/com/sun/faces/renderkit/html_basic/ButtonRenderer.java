@@ -82,7 +82,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             return;
         }
 
-        if (wasClicked(context, component) && !isReset(component)) {
+        String clientId = decodeBehaviors(context, component);
+
+        if (wasClicked(context, component, clientId) && !isReset(component)) {
             component.queueEvent(new ActionEvent(component));
 
             if (logger.isLoggable(Level.FINE)) {
@@ -204,21 +206,34 @@ public class ButtonRenderer extends HtmlBasicRenderer {
      *
      * @param context the <code>FacesContext</code> for the current request
      * @param component the component of interest
+     * @param clientId the client id, if it has been retrieved, otherwise null
      * @return <code>true</code> if this component was in fact activated,
      *  otherwise <code>false</code>
      */
     private static boolean wasClicked(FacesContext context,
-                                      UIComponent component) {
+                                      UIComponent component,
+                                      String clientId) {
 
         // Was our command the one that caused this submission?
         // we don' have to worry about getting the value from request parameter
         // because we just need to know if this command caused the submission. We
         // can get the command name by calling currentValue. This way we can
         // get around the IE bug.
-        String clientId = component.getClientId(context);
+
+        if (clientId == null) {
+            clientId = component.getClientId(context);
+        }
+
         Map<String, String> requestParameterMap = context.getExternalContext()
               .getRequestParameterMap();
         if (requestParameterMap.get(clientId) == null) {
+
+            // Check to see whether we've got an action event
+            // as a result of a partial/behavior postback.
+            if (RenderKitUtils.isPartialOrBehaviorAction(context, clientId)) {
+                return true;
+            }
+
             StringBuilder builder = new StringBuilder(clientId);
             String xValue = builder.append(".x").toString();
             builder.setLength(clientId.length());

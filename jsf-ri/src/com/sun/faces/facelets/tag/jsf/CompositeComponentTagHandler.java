@@ -52,16 +52,14 @@ package com.sun.faces.facelets.tag.jsf;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.beans.PropertyDescriptor;
+import java.beans.Introspector;
 
 import javax.el.ELException;
 import javax.el.Expression;
-import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.faces.FacesException;
@@ -70,18 +68,17 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.application.Resource;
-import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
-import javax.faces.component.StateHolder;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 
 import com.sun.faces.facelets.Facelet;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
+import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
@@ -89,40 +86,68 @@ import com.sun.faces.util.FacesLogger;
 
 import javax.el.MethodExpression;
 import javax.faces.application.ViewHandler;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**
  * RELEASE_PENDING (rlubke,driscoll) document
  */
-public class CompositeComponentTagHandler extends ComponentHandlerImpl {
+public class CompositeComponentTagHandler extends ComponentHandler implements CreateComponentDelegate {
 
     private static final Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
+
+     private static String[] EXCLUDED_COPY_ATTRIBUTES;
+
+    // setup the list of properties that will not be exposed as composite
+    // component attributes
+    static {
+        try {
+            PropertyDescriptor[] properties =
+                  Introspector.getBeanInfo(UINamingContainer.class).getPropertyDescriptors();
+            Set<String> props = new HashSet<String>();
+            for (PropertyDescriptor pd : properties) {
+                if (pd.getWriteMethod() != null) {
+                    props.add(pd.getName());
+                }
+            }
+            // add attributes that aren't exposed as standard properties
+            props.add("binding");
+            String[] propNames = props.toArray(new String[props.size()]);
+            Arrays.sort(propNames);
+            System.out.println("PROPERTIES" + Arrays.toString(propNames));
+            EXCLUDED_COPY_ATTRIBUTES = propNames;
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
+    }
     
     CompositeComponentTagHandler(Resource compositeComponentResource,
             ComponentConfig config) {
         super(config);
         this.compositeComponentResource = compositeComponentResource;
+        ((ComponentTagHandlerDelegateImpl)this.getTagHandlerHelper()).setCreateComponentDelegate(this);
     }
     
     private void copyTagAttributesIntoComponentAttributes(FaceletContext ctx,
-            UIComponent compositeComponent) {
+                                                          UIComponent compositeComponent) {
+        
         TagAttributes tagAttributes = this.tag.getAttributes();
         TagAttribute attrs[] = tagAttributes.getAll();
-        String name, value;
-        Expression expression = null;
-        for (int i = 0; i < attrs.length; i++) {
-            name = attrs[i].getLocalName();
-            if (null != name && 0 < name.length() &&
-                !name.equals("id") && !name.equals("binding")){
-                value = attrs[i].getValue();
+
+        for (TagAttribute attr : attrs) {
+            String name = attr.getLocalName();
+            if (isNameValid(name)) {
+                String value = attr.getValue();
                 if (null != value && 0 < value.length()) {
 
-                    expression = attrs[i].getValueExpression(ctx, Object.class);
+                    Expression expression = attr.getValueExpression(ctx, Object.class);
                     // PENDING: I don't think copyTagAttributesIntoComponentAttributes
                     // should be getting called 
                     // on postback, yet it is.  In lieu of a real fix, I'll
                     // make sure I'm not overwriting a MethodExpression with a 
                     // ValueExpression.
-                    Map<String, Object> map = compositeComponent.getAttributes();
+                    Map<String, Object> map = compositeComponent
+                          .getAttributes();
                     boolean doPut = true;
                     if (map.containsKey(name)) {
                         Object curVal = map.get(name);
@@ -143,11 +168,9 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
     
     
 
-    @Override
-    protected UIComponent createComponent(FaceletContext ctx) {
-        UIComponent result = null;
+    public UIComponent createComponent(FaceletContext ctx) {
         FacesContext context = ctx.getFacesContext();
-        result = context.getApplication().createComponent(context, compositeComponentResource);
+        UIComponent result = context.getApplication().createComponent(context, compositeComponentResource);
         result.subscribeToEvent(PostAddToViewEvent.class,
                                 new CompositeAttributesCopyListener());
 
@@ -157,14 +180,14 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
     }
     
     @Override
-    protected void applyNextHandler(FaceletContext ctx, UIComponent c) throws IOException, FacesException, ELException {
+    public void applyNextHandler(FaceletContext ctx, UIComponent c) throws IOException, FacesException, ELException {
         // Allow any nested elements that reside inside the markup element
         // for this tag to get applied
         super.applyNextHandler(ctx, c);
         // Apply the facelet for this composite component
         applyCompositeComponent(ctx, c);
         // Allow any PDL declared attached objects to be retargeted
-        if (ComponentSupport.isNew(c)) {
+        if (ComponentHandler.isNew(c)) {
             FacesContext context = ctx.getFacesContext();
             ViewHandler viewHandler = context.getApplication().getViewHandler();
             viewHandler.retargetAttachedObjects(context, c,
@@ -173,16 +196,23 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
         }
 
     }
+
+    private boolean isNameValid(String name) {
+
+        return (name != null
+                && name.length() > 0
+                && (Arrays.binarySearch(EXCLUDED_COPY_ATTRIBUTES, name) < 0));
+        
+    }
     
     private void applyCompositeComponent(FaceletContext ctx, UIComponent c) {
-        Facelet f = null;
         FacesContext facesContext = ctx.getFacesContext();
         FaceletFactory factory = (FaceletFactory)
               RequestStateManager.get(facesContext, RequestStateManager.FACELET_FACTORY);
         VariableMapper orig = ctx.getVariableMapper();
         
-        UIPanel facetComponent = null;
-        if (ComponentSupport.isNew(c)) {
+        UIPanel facetComponent;
+        if (ComponentHandler.isNew(c)) {
             facetComponent = (UIPanel)
              facesContext.getApplication().createComponent("javax.faces.Panel");
             facetComponent.setRendererType("javax.faces.Group");
@@ -195,7 +225,7 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
         assert(null != facetComponent);
         
         try {
-            f = factory.getFacelet(compositeComponentResource.getURL());
+            Facelet f = factory.getFacelet(compositeComponentResource.getURL());
             copyTagAttributesIntoComponentAttributes(ctx, c);
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 
@@ -221,6 +251,7 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
         return getAttachedObjectHandlers(component, true);
     }
     
+    @SuppressWarnings({"unchecked"})
     public static List<AttachedObjectHandler> getAttachedObjectHandlers(UIComponent component,
             boolean create) {
         Map<String, Object> attrs = component.getAttributes();
@@ -255,8 +286,8 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
                throws AbortProcessingException {
 
              UIComponent compositeComponent = event.getComponent();
-             UIComponent compositeParent = getCompositeComponentParent(
-                   compositeComponent);
+             UIComponent compositeParent =
+                   UIComponent.getCompositeComponentParent(compositeComponent);
              if (compositeParent != null) {
                  for (Map.Entry<String, Object> entry : compositeComponent
                        .getAttributes().entrySet()) {
@@ -297,23 +328,6 @@ public class CompositeComponentTagHandler extends ComponentHandlerImpl {
 
 
          }
-
-
-         // ----------------------------------------------------- Private Methods
-
-
-        private UIComponent getCompositeComponentParent(UIComponent c) {
-
-            UIComponent parent = c.getParent();
-            while (parent != null) {
-                if (UIComponent.isCompositeComponent(parent)) {
-                    return parent;
-                }
-                parent = parent.getParent();
-            }
-            return null;
-
-        }
 
     }
     

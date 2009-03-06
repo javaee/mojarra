@@ -72,10 +72,10 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.el.LegacyValueBinding;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 public class SetPropertyActionListenerHandler extends TagHandlerImpl {
 
@@ -93,7 +93,7 @@ public class SetPropertyActionListenerHandler extends TagHandlerImpl {
             throws IOException, FacesException, FaceletException, ELException {
         if (parent instanceof ActionSource) {
             ActionSource src = (ActionSource) parent;
-            if (ComponentSupport.isNew(parent)) {
+            if (ComponentHandler.isNew(parent)) {
                 ValueExpression valueExpr = this.value.getValueExpression(ctx,
                         Object.class);
                 ValueExpression targetExpr = this.target.getValueExpression(

@@ -48,44 +48,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.sun.faces.facelets.tag;
-
-import java.io.IOException;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
+package javax.faces.webapp.pdl.facelets.tag;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
- * A FaceletHandler that is derived of 1 or more, inner FaceletHandlers. This
- * class would be found if the next FaceletHandler is structually, a body
- * with multiple child elements as defined in XML.
+ * <p class="changed_added_2_0">An interface that allows other code 
+ * to identify FaceletHandlers that correspond to component attributes.</p>
  *
- * @author Jacob Hookom
- * @version $Id$
+ * @since 2.0
  */
-public final class CompositeFaceletHandler implements FaceletHandler {
+public interface AttributeHandler {
 
-    private final FaceletHandler[] children;
-    private final int len;
-
-    public CompositeFaceletHandler(FaceletHandler[] children) {
-        this.children = children;
-        this.len = children.length;
-    }
-
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
-        for (int i = 0; i < len; i++) {
-            this.children[i].apply(ctx, parent);
-        }
-    }
-    
-    public FaceletHandler[] getHandlers() {
-        return this.children;
-    }
+    /**
+     * <p class="changed_added_2_0">Returns the resolved literal String value 
+     * of the attribute name after evaluating EL.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
+     */
+    public String getAttributeName(FaceletContext ctx);
 }

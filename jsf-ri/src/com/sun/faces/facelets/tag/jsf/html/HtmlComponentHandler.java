@@ -52,14 +52,14 @@
 package com.sun.faces.facelets.tag.jsf.html;
 
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 /**
  * @author Jacob Hookom
  * @version $Id$
  */
-public class HtmlComponentHandler extends ComponentHandlerImpl {
+public class HtmlComponentHandler extends ComponentHandler {
 
     /**
      * @param config

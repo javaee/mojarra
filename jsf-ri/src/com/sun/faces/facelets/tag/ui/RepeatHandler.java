@@ -63,10 +63,10 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
 import javax.faces.webapp.pdl.facelets.tag.Metadata;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
-public class RepeatHandler extends ComponentHandlerImpl {
+public class RepeatHandler extends ComponentHandler {
 
     public RepeatHandler(ComponentConfig config) {
         super(config);
@@ -114,10 +114,10 @@ public class RepeatHandler extends ComponentHandlerImpl {
 
         public void applyMetadata(FaceletContext ctx, Object instance) {
             UIComponent c = (UIComponent) instance;
-            Map attrs = c.getAttributes();
-            attrs.put("alias.element", tag.getQName());
+            Map localAttrs = c.getAttributes();
+            localAttrs.put("alias.element", tag.getQName());
             if (this.attrs.length > 0) {
-                attrs.put("alias.attributes", this.attrs);
+                localAttrs.put("alias.attributes", this.attrs);
             }
         }
 

@@ -150,8 +150,6 @@ public abstract class ViewHandlingStrategy extends PageDeclarationLanguage {
               ctx.getApplication()
                     .createComponent(UIViewRoot.COMPONENT_TYPE);
 
-        result.setViewId(viewId);
-
         Locale locale = null;
         String renderKitId = null;
 
@@ -203,6 +201,7 @@ public abstract class ViewHandlingStrategy extends PageDeclarationLanguage {
 
         result.setLocale(locale);
         result.setRenderKitId(renderKitId);
+        result.setViewId(viewId);
 
         return result;
     }

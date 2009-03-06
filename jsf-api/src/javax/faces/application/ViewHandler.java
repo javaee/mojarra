@@ -40,25 +40,21 @@
 
 package javax.faces.application;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Locale;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.faces.FacesException;
-import javax.faces.component.ActionSource2;
-import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIViewRoot;
-import javax.faces.event.MethodExpressionActionListener;
-import javax.faces.event.MethodExpressionValueChangeListener;
-import javax.faces.validator.MethodExpressionValidator;
 import javax.faces.webapp.pdl.ActionSource2AttachedObjectHandler;
 import javax.faces.webapp.pdl.ActionSource2AttachedObjectTarget;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
@@ -310,9 +306,9 @@ public abstract class ViewHandler {
     public abstract UIViewRoot createView(FacesContext context, String viewId);
 
     /**
-     * <p class="changed_added_2_0">Derive the viewId from the current
-     * request, or the argument input by following the algorithm defined
-     * in the specification.</p>
+     * <p class="changed_added_2_0">Derive and return the viewId from
+     * the current request, or the argument input by following the
+     * algorithm defined in specification section JSF.7.5.2.</p>
      *
      * @since 2.0
      * @param context the <code>FacesContext</code> for this request
@@ -320,7 +316,7 @@ public abstract class ViewHandler {
      * @param input the input candidate <code>viewId</code> to derive,
      * or <code>null</code> to use the information in the current
      * request to derive the <code>viewId</code>.
-
+     *
      */
     public String deriveViewId(FacesContext context, String input) {
         throw new UnsupportedOperationException("The default implementation must override this method");
@@ -745,8 +741,8 @@ public abstract class ViewHandler {
      * its component metadata already associated and available from via
      * the JavaBeans API.
      *
-     * RELEASE_PENDING (edburns, rogerk) Exceptions for null arguments?  If so,
-     *  which ones?
+     * @throws NullPointerException if <code>context</code>
+     * or <code>topLevelComponent</code> is <code>null</code>.
      *
      * @since 2.0
      */

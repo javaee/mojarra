@@ -37,7 +37,7 @@
 -->
 <project name="GlassFishV3" basedir=".">
 
-    <property name="validation.root.dir" value="${basedir}/common/ant/glassfishV3"/>
+    <property name="validation.root.dir" value="${basedir}/common/ant/glassfishV3prelude"/>
     <property name="validation.root.build.dir" value="${validation.root.dir}/build-bean-validation"/>
     <property name="validation.tmp.bnd" value="${validation.root.build.dir}/tmp.bnd"/>
     <property name="validation.dist.dir" value="${validation.root.build.dir}/dist"/>

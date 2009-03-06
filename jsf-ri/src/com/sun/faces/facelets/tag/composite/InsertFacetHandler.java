@@ -53,13 +53,13 @@ package com.sun.faces.facelets.tag.composite;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandlerImpl;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
+import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 
-public class InsertFacetHandler extends ComponentHandlerImpl {
+public class InsertFacetHandler extends ComponentHandler {
 
     private TagAttribute name = null;
 
@@ -69,7 +69,7 @@ public class InsertFacetHandler extends ComponentHandlerImpl {
     }
 
     @Override
-    protected void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
+    public void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
         ValueExpression ve = null;
         String strValue = null;
         // Get the value of required the name propertyDescriptor

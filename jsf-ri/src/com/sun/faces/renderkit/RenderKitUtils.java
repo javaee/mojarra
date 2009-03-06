@@ -287,6 +287,13 @@ public class RenderKitUtils {
             behaviors = ((BehaviorHolder)component).getBehaviors();
         }
 
+        // Don't render behavior scripts if component is disabled
+        if ((null != behaviors) && 
+            (behaviors.size() > 0) &&
+            Util.componentIsDisabled(component)) {
+            behaviors = null;
+        }
+
         renderPassThruAttributes(context, writer, component, attributes, behaviors);
     }
 
@@ -546,18 +553,15 @@ public class RenderKitUtils {
         String behaviorEventName = getSingleBehaviorEventName(behaviors);
         boolean renderedBehavior = false;
 
-        String[] attributes = setAttributes.toArray(new String[setAttributes.size()]);
-        Arrays.sort(attributes);
+        Collections.sort(setAttributes);
         boolean isXhtml =
               RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
         Map<String, Object> attrMap = component.getAttributes();
-        for (String name : attributes) {
+        for (String name : setAttributes) {
 
             // Note that this search can be optimized by switching from
             // an array to a Map<String, Attribute>.  This would change
-            // the search time from O(log n) to O(1), will allow us to 
-            // remove the Arrays.sort above, and will also allow us 
-            // to avoid the Attribute object allocation.
+            // the search time from O(log n) to O(1).
             int index = Arrays.binarySearch(knownAttributes, Attribute.attr(name));
             if (index >= 0) {
                 Object value =
@@ -1079,6 +1083,37 @@ public class RenderKitUtils {
         
     }
 
+    // Check the request parameters to see whether an action event has
+    // been triggered either via jsf.ajax.request() or via a submitting
+    // behavior.
+    public static boolean isPartialOrBehaviorAction(FacesContext context,
+                                                    String clientId) {
+        if ((clientId == null) || (clientId.length() == 0)) {
+            return false;
+        }
+
+        ExternalContext external = context.getExternalContext();
+        Map<String, String> params = external.getRequestParameterMap();
+
+        String behaviorSource = params.get("javax.faces.behavior.source");
+        String behaviorEvent = params.get("javax.faces.behavior.event");
+
+        // First check to see whether we've got a Behavior firing an
+        // action event.
+        if (clientId.equals(behaviorSource)) {
+
+            // If the request was fired by a Behavior, we only want to
+            // trigger an ActionEvent if the event type is "action".
+            return "action".equals(behaviorEvent);
+        }
+
+        // Not a Behavior-related request.  Check for jsf.ajax.request()
+        // request params.
+        String partialSource = params.get("javax.faces.partial.source");
+        String partialEvent = params.get("javax.faces.partial.event");
+
+        return (clientId.equals(partialSource) && "click".equals(partialEvent));
+    }
 
     // --------------------------------------------------------- Private Methods
 
@@ -1409,19 +1444,39 @@ public class RenderKitUtils {
                                                    UIComponent component,
                                                    Behavior behavior,
                                                    Collection<Behavior.Parameter> params,
-                                                   String behaviorEventName) {
+                                                   String behaviorEventName,
+                                                   String submitTarget,
+                                                   boolean needsSubmit) {
 
         BehaviorContext bContext = createBehaviorContext(context,
                                                          component,
                                                          behaviorEventName,
                                                          params);
 
-         String script = behavior.getScript(bContext);
+        String script = behavior.getScript(bContext);
 
-         // If we've got a submitting behavior script, we need to tack
-         // on "return false" to prevent button from submitting.
-         if ((script != null) && isSubmitting(behavior) && "action".equals(behaviorEventName))
+        // TODO: The "action".equals(behaviorEventName) is a bit awkward - we
+        // should find a better solution.  The problem that we are trying
+        // to avoid is that we do not want to prevent the default behavior
+        // (ie. we do not want to return false), for handlers most handlers.
+        // However, for actions we do since the HTML content (links, buttons)
+        // has native default behavior.  We should generalize this so that
+        // we do not have to perform that explicitly check for "action".
+        boolean preventDefault = ((needsSubmit || isSubmitting(behavior)) &&
+                                  "action".equals(behaviorEventName));
+
+         if (script == null) {
+             if (needsSubmit) {
+                 script = getSubmitHandler(context, 
+                                           component,
+                                           params,
+                                           submitTarget,
+                                           preventDefault);
+             }
+         }
+         else if (preventDefault) {
              script = script +  ";return false";
+         }
 
          return script;
     }
@@ -1479,6 +1534,13 @@ public class RenderKitUtils {
         String userHandler = getNonEmptyUserHandler(handlerValue);
         List<Behavior> behaviors = getBehaviors(component, behaviorEventName);
 
+        // Don't render behavior scripts if component is disabled
+        if ((null != behaviors) && 
+            (behaviors.size() > 0) && 
+             Util.componentIsDisabled(component)) {
+            behaviors = null;
+        }
+
         if (params == null) {
             params = Collections.emptyList();
         }
@@ -1494,7 +1556,9 @@ public class RenderKitUtils {
                                                    component,
                                                    behaviors.get(0),
                                                    params,
-                                                   behaviorEventName);
+                                                   behaviorEventName,
+                                                   submitTarget,
+                                                   needsSubmit);
                 break;
 
             case SUBMIT_ONLY:

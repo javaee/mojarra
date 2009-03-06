@@ -56,8 +56,8 @@ import javax.faces.validator.Validator;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import com.sun.faces.facelets.tag.jsf.ValidateHandler;
-import com.sun.faces.facelets.tag.jsf.ValidatorConfig;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
+import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
 
 /**
  * Register a named Validator instance on the UIComponent associated with the
@@ -68,7 +68,7 @@ import com.sun.faces.facelets.tag.jsf.ValidatorConfig;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class ValidateDelegateHandler extends ValidateHandler {
+public final class ValidateDelegateHandler extends ValidatorHandler {
 
     private final TagAttribute validatorId;
 
@@ -84,7 +84,7 @@ public final class ValidateDelegateHandler extends ValidateHandler {
      * Validator instance from the Application.
      * 
      * @see javax.faces.application.Application#createValidator(java.lang.String)
-     * @see com.sun.faces.facelets.tag.jsf.ValidateHandler#getValidator(com.sun.faces.facelets.FaceletContext)
+     * @see com.sun.faces.facelets.tag.jsf.ValidatorHandler#getValidator(com.sun.faces.facelets.FaceletContext)
      */
     protected String getValidator(FaceletContext ctx) {
         return this.validatorId.getValue(ctx);

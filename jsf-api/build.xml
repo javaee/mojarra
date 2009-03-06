@@ -575,6 +575,7 @@ javax.faces.level=ALL
         <delete file="${basedir}/doc/standard-html-renderkit-impl.xml"/>
 
         <mkdir dir="${tools.dir}/build/classes"/>
+        <antcall target="tools.javac"/>
         <javac srcdir="${tools.dir}/src"
                destdir="${tools.dir}/build/classes">
             <classpath>

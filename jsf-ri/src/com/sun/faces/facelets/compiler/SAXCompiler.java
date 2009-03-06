@@ -80,6 +80,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 
 import com.sun.faces.facelets.tag.TagAttributeImpl;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
+import com.sun.faces.RIConstants;
 
 /**
  * Compiler implementation that uses SAX
@@ -254,8 +255,10 @@ public final class SAXCompiler extends Compiler {
 
     private static class MetadataCompilationHandler extends CompilationHandler {
 
+        private static final String METADATA_HANDLER = "metadata";
         private boolean processingMetadata = false;
         private boolean metadataProcessed = false;
+
 
         // -------------------------------------------------------- Constructors
 
@@ -322,8 +325,8 @@ public final class SAXCompiler extends Compiler {
         throws SAXException {
 
             if (!metadataProcessed) {
-                if (!processingMetadata && "http://java.sun.com/jsf/core".equals(uri)) {
-                    if ("metadata".equals(localName)) {
+                if (!processingMetadata && RIConstants.CORE_NAMESPACE.equals(uri)) {
+                    if (METADATA_HANDLER.equals(localName)) {
                         processingMetadata = true;
                     }
                 }
@@ -342,8 +345,8 @@ public final class SAXCompiler extends Compiler {
                 if (processingMetadata) {
                     super.endElement(uri, localName, qName);
                 }
-                if (processingMetadata && "http://java.sun.com/jsf/core".equals(uri)) {
-                    if ("metadata".equals(localName)) {
+                if (processingMetadata && RIConstants.CORE_NAMESPACE.equals(uri)) {
+                    if (METADATA_HANDLER.equals(localName)) {
                         processingMetadata = false;
                         metadataProcessed = true;
                     }

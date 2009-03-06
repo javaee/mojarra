@@ -36,7 +36,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd" version="2.0">
-  <!-- Generic User Interface Components -->
+<!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -373,7 +373,7 @@
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -1326,7 +1326,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -2082,6 +2082,218 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     <component-extension>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Text</renderer-type>
+    </component-extension>
+  </component>
+  <component>
+    <component-type>javax.faces.OutcomeTarget</component-type>
+    <component-class>javax.faces.component.UIOutcomeTarget</component-class>
+
+    <property>
+      <description><![CDATA[
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        ]]></description>
+      <display-name>Attributes Map</display-name>
+      <icon/>
+      <property-name>attributes</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The number of child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component Count</display-name>
+      <icon/>
+      <property-name>childCount</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable List of the child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component List</display-name>
+      <icon/>
+      <property-name>children</property-name>
+      <property-class>java.util.List</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        ]]></description>
+      <display-name>Facets Map</display-name>
+      <icon/>
+      <property-name>facets</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        ]]></description>
+      <display-name>Component Family</display-name>
+      <icon/>
+      <property-name>family</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        ]]></description>
+      <display-name>Component Identifier</display-name>
+      <icon/>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        ]]></description>
+      <display-name>Parent Component</display-name>
+      <icon/>
+      <property-name>parent</property-name>
+      <property-class>javax.faces.component.UIComponent</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.  The default value for this property is true.
+        ]]></description>
+      <display-name>Rendered Flag</display-name>
+      <icon/>
+      <property-name>rendered</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        ]]></description>
+      <display-name>Renderer Type</display-name>
+      <icon/>
+      <property-name>rendererType</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        ]]></description>
+      <display-name>Renders Children</display-name>
+      <icon/>
+      <property-name>rendersChildren</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Converter instance registered with this component.
+        </description>
+      <display-name>Converter</display-name>
+      <icon/>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          For output components, this is the same as the "value" property.
+          For input components, this is the most recently user-entered
+          value, which will be pushed to the application data model during
+          Update Model Values phase, if a value binding is present for the
+          "value" property.
+        </description>
+      <display-name>Local Value</display-name>
+      <icon/>
+      <property-name>localValue</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The current value of this component.
+        </description>
+      <display-name>Value</display-name>
+      <icon/>
+      <property-name>value</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The logical outcome used to resolve a navigation case.
+        </description>
+      <display-name>Outcome</display-name>
+      <icon/>
+      <property-name>outcome</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Whether to include page parameters in the target URI.
+        </description>
+      <display-name>Include Page Parameters</display-name>
+      <icon/>
+      <property-name>includeViewParams</property-name>
+      <property-class>java.lang.Boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+
+    <component-extension>
+      <component-family>javax.faces.OutcomeTarget</component-family>
+      <renderer-type>javax.faces.Link</renderer-type>
     </component-extension>
   </component>
   <component>
@@ -3212,7 +3424,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -3932,7 +4144,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4293,7 +4505,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4519,7 +4731,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-  <!-- Concrete HTML Components -->
+<!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -4890,7 +5102,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -5164,6 +5376,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>image</property-name>
       <property-class>java.lang.String</property-class>
     </property>
+
+
     <property>
       <description>
           Javascript code executed when a pointer button is
@@ -5527,7 +5741,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -7882,7 +8096,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8237,7 +8451,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8999,7 +9213,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -9745,7 +9959,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -12366,9 +12580,1187 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </property-extension>
     </property>
 
+
+    <property>
+      <description>
+          The identifier of the page fragment which should
+          be brought into focus when the target page is
+          rendered. The value of this attribute is appended
+          to the end of target URL following a hash (#) mark.
+          This notation is part of the standard URL syntax.
+        </description>
+      <display-name>Fragment Identifier</display-name>
+      <icon/>
+      <property-name>fragment</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+
     <component-extension>
       <base-component-type>javax.faces.Output</base-component-type>
       <renderer-type>javax.faces.Link</renderer-type>
+    </component-extension>
+  </component>
+  <component>
+    <description><![CDATA[<p>Represents an HTML <code>a</code> (hyperlink) element that may be
+      used to link to a URL handled by the Faces Servlet resolved preemptively using the logical
+      outcome defined by the <code>outcome</code> property.]]></description>
+    <display-name>Outcome Target Hyperlink</display-name>
+    <component-type>javax.faces.HtmlOutcomeTargetLink</component-type>
+    <component-class>javax.faces.component.html.HtmlOutcomeTargetLink</component-class>
+
+    <property>
+      <description><![CDATA[
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        ]]></description>
+      <display-name>Attributes Map</display-name>
+      <icon/>
+      <property-name>attributes</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The number of child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component Count</display-name>
+      <icon/>
+      <property-name>childCount</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable List of the child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component List</display-name>
+      <icon/>
+      <property-name>children</property-name>
+      <property-class>java.util.List</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        ]]></description>
+      <display-name>Facets Map</display-name>
+      <icon/>
+      <property-name>facets</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        ]]></description>
+      <display-name>Component Family</display-name>
+      <icon/>
+      <property-name>family</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        ]]></description>
+      <display-name>Component Identifier</display-name>
+      <icon/>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        ]]></description>
+      <display-name>Parent Component</display-name>
+      <icon/>
+      <property-name>parent</property-name>
+      <property-class>javax.faces.component.UIComponent</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.  The default value for this property is true.
+        ]]></description>
+      <display-name>Rendered Flag</display-name>
+      <icon/>
+      <property-name>rendered</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        ]]></description>
+      <display-name>Renderer Type</display-name>
+      <icon/>
+      <property-name>rendererType</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        ]]></description>
+      <display-name>Renders Children</display-name>
+      <icon/>
+      <property-name>rendersChildren</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Converter instance registered with this component.
+        </description>
+      <display-name>Converter</display-name>
+      <icon/>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          For output components, this is the same as the "value" property.
+          For input components, this is the most recently user-entered
+          value, which will be pushed to the application data model during
+          Update Model Values phase, if a value binding is present for the
+          "value" property.
+        </description>
+      <display-name>Local Value</display-name>
+      <icon/>
+      <property-name>localValue</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The current value of this component.
+        </description>
+      <display-name>Value</display-name>
+      <icon/>
+      <property-name>value</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The logical outcome used to resolve a navigation case.
+        </description>
+      <display-name>Outcome</display-name>
+      <icon/>
+      <property-name>outcome</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Whether to include page parameters in the target URI.
+        </description>
+      <display-name>Include Page Parameters</display-name>
+      <icon/>
+      <property-name>includeViewParams</property-name>
+      <property-class>java.lang.Boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+      <display-name>CSS Styles</display-name>
+      <icon/>
+      <property-name>style</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+      <display-name>CSS Style Classes</display-name>
+      <icon/>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+      <display-name>Advisory Title</display-name>
+      <icon/>
+      <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Access key that, when pressed, transfers focus
+          to this element.
+        </description>
+      <display-name>Access Key</display-name>
+      <icon/>
+      <property-name>accesskey</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when this element loses focus.
+        </description>
+      <display-name>Focus Off Script</display-name>
+      <icon/>
+      <property-name>onblur</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when this element receives focus.
+        </description>
+      <display-name>Focus On Script</display-name>
+      <icon/>
+      <property-name>onfocus</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Position of this element in the tabbing order
+          for the current document.  This value must be
+          an integer between 0 and 32767.
+        </description>
+      <display-name>Tab Index</display-name>
+      <icon/>
+      <property-name>tabindex</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+      <display-name>Direction</display-name>
+      <icon/>
+      <property-name>dir</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+      <display-name>Language Code</display-name>
+      <icon/>
+      <property-name>lang</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          The character encoding of the resource designated
+          by this hyperlink.
+        </description>
+      <display-name>Character Set</display-name>
+      <icon/>
+      <property-name>charset</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The position and shape of the hot spot on the screen
+          (for use in client-side image maps).
+        </description>
+      <display-name>Coordinates</display-name>
+      <icon/>
+      <property-name>coords</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The language code of the resource designated
+          by this hyperlink.
+        </description>
+      <display-name>Language</display-name>
+      <icon/>
+      <property-name>hreflang</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The relationship from the current document
+          to the anchor specified by this hyperlink.
+          The value of this attribute is a space-separated
+          list of link types.
+        </description>
+      <display-name>Relationship</display-name>
+      <icon/>
+      <property-name>rel</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A reverse link from the anchor specified
+          by this hyperlink to the current document.
+          The value of this attribute is a space-separated
+          list of link types.
+        </description>
+      <display-name>Reverse Link</display-name>
+      <icon/>
+      <property-name>rev</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The shape of the hot spot on the screen
+          (for use in client-side image maps).  Valid
+          values are:  default (entire region); rect
+          (rectangular region); circle (circular region);
+          and poly (polygonal region).
+        </description>
+      <display-name>Shape</display-name>
+      <icon/>
+      <property-name>shape</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Name of a frame where the resource
+          retrieved via this hyperlink is to
+          be displayed.
+        </description>
+      <display-name>Target Frame</display-name>
+      <icon/>
+      <property-name>target</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The content type of the resource designated
+          by this hyperlink.
+        </description>
+      <display-name>Content Type</display-name>
+      <icon/>
+      <property-name>type</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating that this element must never
+          receive focus or be included in a subsequent
+          submit.
+        </description>
+      <display-name>Disabled Flag</display-name>
+      <icon/>
+      <property-name>disabled</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+        <behavior/>
+        <behavior>action</behavior>
+        <default-behavior>true</default-behavior>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+      <display-name>Double Click Script</display-name>
+      <icon/>
+      <property-name>ondblclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+      <display-name>Mouse Down Script</display-name>
+      <icon/>
+      <property-name>onmousedown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+      <display-name>Mouse Up Script</display-name>
+      <icon/>
+      <property-name>onmouseup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+      <display-name>Mouse Over Script</display-name>
+      <icon/>
+      <property-name>onmouseover</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+      <display-name>Mouse Move Script</display-name>
+      <icon/>
+      <property-name>onmousemove</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+      <display-name>Mouse Out Script</display-name>
+      <icon/>
+      <property-name>onmouseout</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+      <display-name>Key Press Script</display-name>
+      <icon/>
+      <property-name>onkeypress</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+      <display-name>Key Down Script</display-name>
+      <icon/>
+      <property-name>onkeydown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+      <display-name>Key Up Script</display-name>
+      <icon/>
+      <property-name>onkeyup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          The identifier of the page fragment which should
+          be brought into focus when the target page is
+          rendered. The value of this attribute is appended
+          to the end of target URL following a hash (#) mark.
+          This notation is part of the standard URL syntax.
+        </description>
+      <display-name>Fragment Identifier</display-name>
+      <icon/>
+      <property-name>fragment</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+
+    <component-extension>
+      <base-component-type>javax.faces.OutcomeTarget</base-component-type>
+      <renderer-type>javax.faces.Link</renderer-type>
+    </component-extension>
+  </component>
+  <component>
+    <description><![CDATA[<p>Represents an HTML <code>input</code> element of type "button" or image that
+            may be used to link to a URL handled by the Faces Servlet resolved preemptively using
+            the logical outcome defined by the <code>outcome</code> property. The button behaves like
+            a link, so the current form is not submitted when it is activated (the transitive of how
+            the UICommandLink behaves like a submit button).]]></description>
+    <display-name>Outcome Target Button</display-name>
+    <component-type>javax.faces.HtmlOutcomeTargetButton</component-type>
+    <component-class>javax.faces.component.html.HtmlOutcomeTargetButton</component-class>
+
+    <property>
+      <description><![CDATA[
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        ]]></description>
+      <display-name>Attributes Map</display-name>
+      <icon/>
+      <property-name>attributes</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The number of child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component Count</display-name>
+      <icon/>
+      <property-name>childCount</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable List of the child components associated with
+          this component.
+        ]]></description>
+      <display-name>Child Component List</display-name>
+      <icon/>
+      <property-name>children</property-name>
+      <property-class>java.util.List</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        ]]></description>
+      <display-name>Facets Map</display-name>
+      <icon/>
+      <property-name>facets</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        ]]></description>
+      <display-name>Component Family</display-name>
+      <icon/>
+      <property-name>family</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        ]]></description>
+      <display-name>Component Identifier</display-name>
+      <icon/>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description><![CDATA[
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        ]]></description>
+      <display-name>Parent Component</display-name>
+      <icon/>
+      <property-name>parent</property-name>
+      <property-class>javax.faces.component.UIComponent</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.  The default value for this property is true.
+        ]]></description>
+      <display-name>Rendered Flag</display-name>
+      <icon/>
+      <property-name>rendered</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        ]]></description>
+      <display-name>Renderer Type</display-name>
+      <icon/>
+      <property-name>rendererType</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        ]]></description>
+      <display-name>Renders Children</display-name>
+      <icon/>
+      <property-name>rendersChildren</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Converter instance registered with this component.
+        </description>
+      <display-name>Converter</display-name>
+      <icon/>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          For output components, this is the same as the "value" property.
+          For input components, this is the most recently user-entered
+          value, which will be pushed to the application data model during
+          Update Model Values phase, if a value binding is present for the
+          "value" property.
+        </description>
+      <display-name>Local Value</display-name>
+      <icon/>
+      <property-name>localValue</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The current value of this component.
+        </description>
+      <display-name>Value</display-name>
+      <icon/>
+      <property-name>value</property-name>
+      <property-class>java.lang.Object</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The logical outcome used to resolve a navigation case.
+        </description>
+      <display-name>Outcome</display-name>
+      <icon/>
+      <property-name>outcome</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Whether to include page parameters in the target URI.
+        </description>
+      <display-name>Include Page Parameters</display-name>
+      <icon/>
+      <property-name>includeViewParams</property-name>
+      <property-class>java.lang.Boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+      <display-name>CSS Styles</display-name>
+      <icon/>
+      <property-name>style</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+      <display-name>CSS Style Classes</display-name>
+      <icon/>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+      <display-name>Advisory Title</display-name>
+      <icon/>
+      <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Access key that, when pressed, transfers focus
+          to this element.
+        </description>
+      <display-name>Access Key</display-name>
+      <icon/>
+      <property-name>accesskey</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when this element loses focus.
+        </description>
+      <display-name>Focus Off Script</display-name>
+      <icon/>
+      <property-name>onblur</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when this element receives focus.
+        </description>
+      <display-name>Focus On Script</display-name>
+      <icon/>
+      <property-name>onfocus</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Position of this element in the tabbing order
+          for the current document.  This value must be
+          an integer between 0 and 32767.
+        </description>
+      <display-name>Tab Index</display-name>
+      <icon/>
+      <property-name>tabindex</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+      <display-name>Direction</display-name>
+      <icon/>
+      <property-name>dir</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+      <display-name>Language Code</display-name>
+      <icon/>
+      <property-name>lang</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+      <display-name>Double Click Script</display-name>
+      <icon/>
+      <property-name>ondblclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+      <display-name>Mouse Down Script</display-name>
+      <icon/>
+      <property-name>onmousedown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+      <display-name>Mouse Up Script</display-name>
+      <icon/>
+      <property-name>onmouseup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+      <display-name>Mouse Over Script</display-name>
+      <icon/>
+      <property-name>onmouseover</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+      <display-name>Mouse Move Script</display-name>
+      <icon/>
+      <property-name>onmousemove</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+      <display-name>Mouse Out Script</display-name>
+      <icon/>
+      <property-name>onmouseout</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+      <display-name>Key Press Script</display-name>
+      <icon/>
+      <property-name>onkeypress</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+      <display-name>Key Down Script</display-name>
+      <icon/>
+      <property-name>onkeydown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+      <display-name>Key Up Script</display-name>
+      <icon/>
+      <property-name>onkeyup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+        Alternate textual description of the
+        element rendered by this component.
+      </description>
+      <display-name>Alternate Text</display-name>
+      <icon/>
+      <property-name>alt</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description><![CDATA[<p>
+        Absolute or relative URL of the
+        image to be displayed for this
+        button.  If specified, this
+        "input" element will be of type
+        "image".  Otherwise, it will be
+        of the type specified by the
+        "type" property with a label
+        specified by the "value"
+        property.  <span
+        class="changed_added_2_0">Note
+        that if the value of this
+        attribute starts with "/", the
+        rendered value for this
+        attribute will be prefixed with
+        the context-root for this
+        application.</span>
+      </p>]]></description>
+      <display-name>Image URL</display-name>
+      <icon/>
+      <property-name>image</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+
+
+    <property>
+      <description>
+          The identifier of the page fragment which should
+          be brought into focus when the target page is
+          rendered. The value of this attribute is appended
+          to the end of target URL following a hash (#) mark.
+          This notation is part of the standard URL syntax.
+        </description>
+      <display-name>Fragment Identifier</display-name>
+      <icon/>
+      <property-name>fragment</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+
+    <component-extension>
+      <base-component-type>javax.faces.OutcomeTarget</base-component-type>
+      <renderer-type>javax.faces.Button</renderer-type>
     </component-extension>
   </component>
   <component>
@@ -13728,7 +15120,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -14434,7 +15826,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15208,7 +16600,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15946,7 +17338,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -16674,7 +18066,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -17399,7 +18791,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -18114,7 +19506,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -18560,7 +19952,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-  <!-- Standard HTML Renderkit -->
+<!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -19004,6 +20396,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>image</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
+
+
       <attribute>
         <description>
           Javascript code executed when a pointer button is
@@ -23718,6 +25112,949 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
+      <description><![CDATA[Render an HTML "a" anchor element.  The value of the
+      component is rendered as the anchor text and the outcome of the component is used
+      to determine the target URL rendered in the "href" attribute.  Any
+      child <code>UIParameter</code> components are appended to the String to be
+      output as the value of the "href" attribute as query parameters
+      before rendering.  The entire "href" string must be passed through
+      a call to the <code>encodeResourceURL()</code> method of the
+      <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on
+      the left hand side, and the value of the <code>UIParameter</code> on the right
+      hand side.  The name and the value must be URLEncoded.  Each
+      <code>UIParameter</code> instance is separated by an ampersand, as dictated in
+      the URL spec.  If the "fragment" attribute is specified, the value will be
+      included at the end of the resulting URL preceded by a hash mark.
+      If the "styleClass" attribute is specified, render
+      its value as the value of the "class" attribute.  If the "id" attribute
+      is specified, follow the same steps as mentioned in the 
+      "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
+      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.
+      If the "disabled" attribute is specified, do not render the HTML "a"
+      anchor element or the "href" element.  Instead, render a "span" element. 
+      If the "styleClass" attribute is specified, render its value as the value 
+      of the "class" attribute on the "span".  Render any pass-through attributes
+      on the "span".]]></description>
+      <component-family>javax.faces.OutcomeTarget</component-family>
+      <renderer-type>javax.faces.Link</renderer-type>
+      <renderer-class>
+       com.sun.faces.renderkit.html_basic.OutcomeTargetLinkRenderer
+    </renderer-class>
+
+      <attribute>
+        <description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+        <display-name>CSS Styles</display-name>
+        <icon/>
+        <attribute-name>style</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+        <display-name>CSS Style Classes</display-name>
+        <icon/>
+        <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+        <display-name>Advisory Title</display-name>
+        <icon/>
+        <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+        <display-name>Button Click Script</display-name>
+        <icon/>
+        <attribute-name>onclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+        <display-name>Double Click Script</display-name>
+        <icon/>
+        <attribute-name>ondblclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+        <display-name>Mouse Down Script</display-name>
+        <icon/>
+        <attribute-name>onmousedown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+        <display-name>Mouse Up Script</display-name>
+        <icon/>
+        <attribute-name>onmouseup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+        <display-name>Mouse Over Script</display-name>
+        <icon/>
+        <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+        <display-name>Mouse Move Script</display-name>
+        <icon/>
+        <attribute-name>onmousemove</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+        <display-name>Mouse Out Script</display-name>
+        <icon/>
+        <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+        <display-name>Key Press Script</display-name>
+        <icon/>
+        <attribute-name>onkeypress</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+        <display-name>Key Down Script</display-name>
+        <icon/>
+        <attribute-name>onkeydown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+        <display-name>Key Up Script</display-name>
+        <icon/>
+        <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Access key that, when pressed, transfers focus
+          to this element.
+        </description>
+        <display-name>Access Key</display-name>
+        <icon/>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when this element loses focus.
+        </description>
+        <display-name>Focus Off Script</display-name>
+        <icon/>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when this element receives focus.
+        </description>
+        <display-name>Focus On Script</display-name>
+        <icon/>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Position of this element in the tabbing order
+          for the current document.  This value must be
+          an integer between 0 and 32767.
+        </description>
+        <display-name>Tab Index</display-name>
+        <icon/>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+        <display-name>Direction</display-name>
+        <icon/>
+        <attribute-name>dir</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+        <display-name>Language Code</display-name>
+        <icon/>
+        <attribute-name>lang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          The character encoding of the resource designated
+          by this hyperlink.
+        </description>
+        <display-name>Character Set</display-name>
+        <icon/>
+        <attribute-name>charset</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          The position and shape of the hot spot on the screen
+          (for use in client-side image maps).
+        </description>
+        <display-name>Coordinates</display-name>
+        <icon/>
+        <attribute-name>coords</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          The language code of the resource designated
+          by this hyperlink.
+        </description>
+        <display-name>Language</display-name>
+        <icon/>
+        <attribute-name>hreflang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          The relationship from the current document
+          to the anchor specified by this hyperlink.
+          The value of this attribute is a space-separated
+          list of link types.
+        </description>
+        <display-name>Relationship</display-name>
+        <icon/>
+        <attribute-name>rel</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A reverse link from the anchor specified
+          by this hyperlink to the current document.
+          The value of this attribute is a space-separated
+          list of link types.
+        </description>
+        <display-name>Reverse Link</display-name>
+        <icon/>
+        <attribute-name>rev</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          The shape of the hot spot on the screen
+          (for use in client-side image maps).  Valid
+          values are:  default (entire region); rect
+          (rectangular region); circle (circular region);
+          and poly (polygonal region).
+        </description>
+        <display-name>Shape</display-name>
+        <icon/>
+        <attribute-name>shape</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Name of a frame where the resource
+          retrieved via this hyperlink is to
+          be displayed.
+        </description>
+        <display-name>Target Frame</display-name>
+        <icon/>
+        <attribute-name>target</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          The content type of the resource designated
+          by this hyperlink.
+        </description>
+        <display-name>Content Type</display-name>
+        <icon/>
+        <attribute-name>type</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Flag indicating that this element must never
+          receive focus or be included in a subsequent
+          submit.
+        </description>
+        <display-name>Disabled Flag</display-name>
+        <icon/>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+        <display-name>Button Click Script</display-name>
+        <icon/>
+        <attribute-name>onclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+          <behavior/>
+          <behavior>action</behavior>
+          <default-behavior>true</default-behavior>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+        <display-name>Double Click Script</display-name>
+        <icon/>
+        <attribute-name>ondblclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+        <display-name>Mouse Down Script</display-name>
+        <icon/>
+        <attribute-name>onmousedown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+        <display-name>Mouse Up Script</display-name>
+        <icon/>
+        <attribute-name>onmouseup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+        <display-name>Mouse Over Script</display-name>
+        <icon/>
+        <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+        <display-name>Mouse Move Script</display-name>
+        <icon/>
+        <attribute-name>onmousemove</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+        <display-name>Mouse Out Script</display-name>
+        <icon/>
+        <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+        <display-name>Key Press Script</display-name>
+        <icon/>
+        <attribute-name>onkeypress</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+        <display-name>Key Down Script</display-name>
+        <icon/>
+        <attribute-name>onkeydown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+        <display-name>Key Up Script</display-name>
+        <icon/>
+        <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          The identifier of the page fragment which should
+          be brought into focus when the target page is
+          rendered. The value of this attribute is appended
+          to the end of target URL following a hash (#) mark.
+          This notation is part of the standard URL syntax.
+        </description>
+        <display-name>Fragment Identifier</display-name>
+        <icon/>
+        <attribute-name>fragment</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <renderer-extension>
+        <renders-children>true</renders-children>
+        <body-tag>true</body-tag>
+        <jsp-ignore>true</jsp-ignore>
+        <tag-name>link</tag-name>
+      </renderer-extension>
+    </renderer>
+    <renderer>
+      <description><![CDATA[Render an HTML "input" element of type "button".
+      The value of the component is rendered as the button text and the outcome of the
+      component is used to determine the target URL which is activated by onclick.  If
+      "image" attribute is specified, render it as the value of the "src" attribute after
+      passing it to the <code>getResourceURL()</code> method of the <code>ViewHandler</code>
+      for this application, and passing the result through the <code>encodeResourceURL()</code>
+      method of the <code>ExternalContext</code>. Any child <code>UIParameter</code> components
+      are appended to the String to be used as the target URL as query parameters before rendering.
+      The entire target URL string must be passed through a call to the <code>encodeResourceURL()</code>
+      method of the <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on the 
+      left hand side, and the value of the <code>UIParameter</code> on the right hand side.  The name 
+      and the value must be URLEncoded.  Each <code>UIParameter</code> instance is separeted by an 
+      ampersand, as dictated in the URL spec.  The final encoded result will be written out to the
+      onclick attribute of the button as "window.location.href = '<encoded HREF value>'".
+      If the developer has specified a custom onlclick the window.location.href name/value
+      pair will be appended at the end of the developer specified script.
+      If the "fragment" attribute is specified, the value will be included at the end
+      of the resulting URL preceded by a hash mark.  If the "styleClass" attribute is specified,
+      render its value as the value of the "class" attribute.  If the "id" attribute is specified,
+      follow the same steps as mentioned in the "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
+      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.  If the
+      "disabled" attribute is specified, do not render the "onclick" element and assign the
+      "disabled" attribute a value of true.]]></description>
+      <component-family>javax.faces.OutcomeTarget</component-family>
+      <renderer-type>javax.faces.Button</renderer-type>
+      <renderer-class>
+       com.sun.faces.renderkit.html_basic.OutcomeTargetButtonRenderer
+    </renderer-class>
+
+      <attribute>
+        <description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+        <display-name>CSS Styles</display-name>
+        <icon/>
+        <attribute-name>style</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+        <display-name>CSS Style Classes</display-name>
+        <icon/>
+        <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+        <display-name>Advisory Title</display-name>
+        <icon/>
+        <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Access key that, when pressed, transfers focus
+          to this element.
+        </description>
+        <display-name>Access Key</display-name>
+        <icon/>
+        <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when this element loses focus.
+        </description>
+        <display-name>Focus Off Script</display-name>
+        <icon/>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when this element receives focus.
+        </description>
+        <display-name>Focus On Script</display-name>
+        <icon/>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Position of this element in the tabbing order
+          for the current document.  This value must be
+          an integer between 0 and 32767.
+        </description>
+        <display-name>Tab Index</display-name>
+        <icon/>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+        <display-name>Direction</display-name>
+        <icon/>
+        <attribute-name>dir</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+        <display-name>Language Code</display-name>
+        <icon/>
+        <attribute-name>lang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+        <display-name>Button Click Script</display-name>
+        <icon/>
+        <attribute-name>onclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+        <display-name>Double Click Script</display-name>
+        <icon/>
+        <attribute-name>ondblclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+        <display-name>Mouse Down Script</display-name>
+        <icon/>
+        <attribute-name>onmousedown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+        <display-name>Mouse Up Script</display-name>
+        <icon/>
+        <attribute-name>onmouseup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+        <display-name>Mouse Over Script</display-name>
+        <icon/>
+        <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+        <display-name>Mouse Move Script</display-name>
+        <icon/>
+        <attribute-name>onmousemove</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+        <display-name>Mouse Out Script</display-name>
+        <icon/>
+        <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+        <display-name>Key Press Script</display-name>
+        <icon/>
+        <attribute-name>onkeypress</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+        <display-name>Key Down Script</display-name>
+        <icon/>
+        <attribute-name>onkeydown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+        <display-name>Key Up Script</display-name>
+        <icon/>
+        <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+        Alternate textual description of the
+        element rendered by this component.
+      </description>
+        <display-name>Alternate Text</display-name>
+        <icon/>
+        <attribute-name>alt</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description><![CDATA[<p>
+        Absolute or relative URL of the
+        image to be displayed for this
+        button.  If specified, this
+        "input" element will be of type
+        "image".  Otherwise, it will be
+        of the type specified by the
+        "type" property with a label
+        specified by the "value"
+        property.  <span
+        class="changed_added_2_0">Note
+        that if the value of this
+        attribute starts with "/", the
+        rendered value for this
+        attribute will be prefixed with
+        the context-root for this
+        application.</span>
+      </p>]]></description>
+        <display-name>Image URL</display-name>
+        <icon/>
+        <attribute-name>image</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          The identifier of the page fragment which should
+          be brought into focus when the target page is
+          rendered. The value of this attribute is appended
+          to the end of target URL following a hash (#) mark.
+          This notation is part of the standard URL syntax.
+        </description>
+        <display-name>Fragment Identifier</display-name>
+        <icon/>
+        <attribute-name>fragment</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <renderer-extension>
+        <renders-children>true</renders-children>
+        <body-tag>true</body-tag>
+        <jsp-ignore>true</jsp-ignore>
+        <tag-name>button</tag-name>
+      </renderer-extension>
+    </renderer>
+    <renderer>
       <description>If the "styleClass", "style", "dir" or "lang"
       attributes are present, render a "span" element.  If the
       "styleClass" attribute is present, render its value as the value
@@ -28065,6 +30402,7 @@ the literal string "<code>head</code>" as the last argument.</p>
     </renderer-class>
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
+        <tag-name>head</tag-name>
       </renderer-extension>
     </renderer>
     <renderer>
@@ -28105,6 +30443,7 @@ the literal string "<code>head</code>" as the last argument.</p>
     </renderer-class>
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
+        <tag-name>body</tag-name>
       </renderer-extension>
     </renderer>
   </render-kit>

@@ -335,18 +335,6 @@ public final class ComponentSupport {
     }
     
     /**
-     * Determine if the passed component is not null and if it's new
-     * to the tree.  This operation can be used for determining if attributes
-     * should be wired to the component.
-     * 
-     * @param component the component you wish to modify
-     * @return true if it's new
-     */
-    public final static boolean isNew(UIComponent component) {
-        return component != null && component.getParent() == null;
-    }
-
-    /**
      * <p class="changed_added_2_0">Add the child component to the parent. If the parent is a facet,
      * check to see whether the facet is already defined. If it is, wrap the existing component
      * in a panel group, if it's not already, then add the child to the panel group. If the facet
@@ -362,7 +350,7 @@ public final class ComponentSupport {
                 if (!(existing instanceof UIPanel)) {
                     // move existing component under a panel group
                     UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
-                    panelGroup.setId(ctx.getFacesContext().getViewRoot().createUniqueId());
+                    panelGroup.setId(getViewRoot(ctx.getFacesContext(), parent).createUniqueId());
                     panelGroup.getAttributes().put(ComponentSupport.IMPLICIT_PANEL, true);
                     panelGroup.getChildren().add(existing);
                     // the panel group becomes the facet
@@ -383,5 +371,32 @@ public final class ComponentSupport {
 
     public final static String getFacetName(UIComponent parent) {
         return (String) parent.getAttributes().get(FacetHandler.KEY);
+    }
+
+
+    // --------------------------------------------------------- private classes
+
+
+    private static UIViewRoot getViewRoot(FacesContext ctx, UIComponent parent) {
+
+        if (parent instanceof UIViewRoot) {
+            return (UIViewRoot) parent;
+        }
+        UIViewRoot root = ctx.getViewRoot();
+        if (root != null) {
+            return root;
+        }
+        UIComponent c = parent.getParent();
+        while (c != null) {
+            if (c instanceof UIViewRoot) {
+                root = (UIViewRoot) c;
+                break;
+            } else {
+                c = c.getParent();
+            }
+        }
+
+        return root;
+
     }
 }

@@ -190,6 +190,20 @@
         </component-extension>
 
     </component>
+
+    <component>
+
+        <component-type>javax.faces.OutcomeTarget</component-type>
+        <component-class>javax.faces.component.UIOutcomeTarget</component-class>
+
+        <xi:include href="uioutcometarget-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <component-family>javax.faces.OutcomeTarget</component-family>
+            <renderer-type>javax.faces.Link</renderer-type>
+        </component-extension>
+
+    </component>
     
     <component>
 
@@ -350,6 +364,7 @@
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="image-button-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="command-button-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
@@ -655,10 +670,62 @@
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="link-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="direct-link-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
             <base-component-type>javax.faces.Output</base-component-type>
             <renderer-type>javax.faces.Link</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+       <description>
+            <![CDATA[<p>Represents an HTML <code>a</code> (hyperlink) element that may be
+      used to link to a URL handled by the Faces Servlet resolved preemptively using the logical
+      outcome defined by the <code>outcome</code> property.]]></description>
+        <display-name>Outcome Target Hyperlink</display-name>
+        <component-type>javax.faces.HtmlOutcomeTargetLink</component-type>
+        <component-class>javax.faces.component.html.HtmlOutcomeTargetLink</component-class>
+
+        <xi:include href="uioutcometarget-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="link-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="direct-link-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.OutcomeTarget</base-component-type>
+            <renderer-type>javax.faces.Link</renderer-type>
+        </component-extension>
+
+    </component>
+
+    <component>
+
+       <description>
+            <![CDATA[<p>Represents an HTML <code>input</code> element of type "button" or image that
+            may be used to link to a URL handled by the Faces Servlet resolved preemptively using
+            the logical outcome defined by the <code>outcome</code> property. The button behaves like
+            a link, so the current form is not submitted when it is activated (the transitive of how
+            the UICommandLink behaves like a submit button).]]></description>
+        <display-name>Outcome Target Button</display-name>
+        <component-type>javax.faces.HtmlOutcomeTargetButton</component-type>
+        <component-class>javax.faces.component.html.HtmlOutcomeTargetButton</component-class>
+
+        <xi:include href="uioutcometarget-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="image-button-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="direct-link-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.OutcomeTarget</base-component-type>
+            <renderer-type>javax.faces.Button</renderer-type>
         </component-extension>
 
     </component>
@@ -1135,6 +1202,7 @@
             <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="image-button-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="command-button-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
@@ -1952,6 +2020,101 @@
             <renderer-extension>
                 <renders-children>true</renders-children>
                 <body-tag>true</body-tag>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[Render an HTML "a" anchor element.  The value of the
+      component is rendered as the anchor text and the outcome of the component is used
+      to determine the target URL rendered in the "href" attribute.  Any
+      child <code>UIParameter</code> components are appended to the String to be
+      output as the value of the "href" attribute as query parameters
+      before rendering.  The entire "href" string must be passed through
+      a call to the <code>encodeResourceURL()</code> method of the
+      <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on
+      the left hand side, and the value of the <code>UIParameter</code> on the right
+      hand side.  The name and the value must be URLEncoded.  Each
+      <code>UIParameter</code> instance is separated by an ampersand, as dictated in
+      the URL spec.  If the "fragment" attribute is specified, the value will be
+      included at the end of the resulting URL preceded by a hash mark.
+      If the "styleClass" attribute is specified, render
+      its value as the value of the "class" attribute.  If the "id" attribute
+      is specified, follow the same steps as mentioned in the 
+      "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
+      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.
+      If the "disabled" attribute is specified, do not render the HTML "a"
+      anchor element or the "href" element.  Instead, render a "span" element. 
+      If the "styleClass" attribute is specified, render its value as the value 
+      of the "class" attribute on the "span".  Render any pass-through attributes
+      on the "span".]]>
+            </description>
+            <component-family>javax.faces.OutcomeTarget</component-family>
+            <renderer-type>javax.faces.Link</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/outcome-target-link-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="link-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="direct-link-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+                <body-tag>true</body-tag>
+                <jsp-ignore>true</jsp-ignore>
+                <tag-name>link</tag-name>
+            </renderer-extension>
+
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[Render an HTML "input" element of type "button".
+      The value of the component is rendered as the button text and the outcome of the
+      component is used to determine the target URL which is activated by onclick.  If
+      "image" attribute is specified, render it as the value of the "src" attribute after
+      passing it to the <code>getResourceURL()</code> method of the <code>ViewHandler</code>
+      for this application, and passing the result through the <code>encodeResourceURL()</code>
+      method of the <code>ExternalContext</code>. Any child <code>UIParameter</code> components
+      are appended to the String to be used as the target URL as query parameters before rendering.
+      The entire target URL string must be passed through a call to the <code>encodeResourceURL()</code>
+      method of the <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on the 
+      left hand side, and the value of the <code>UIParameter</code> on the right hand side.  The name 
+      and the value must be URLEncoded.  Each <code>UIParameter</code> instance is separeted by an 
+      ampersand, as dictated in the URL spec.  The final encoded result will be written out to the
+      onclick attribute of the button as "window.location.href = '<encoded HREF value>'".
+      If the developer has specified a custom onlclick the window.location.href name/value
+      pair will be appended at the end of the developer specified script.
+      If the "fragment" attribute is specified, the value will be included at the end
+      of the resulting URL preceded by a hash mark.  If the "styleClass" attribute is specified,
+      render its value as the value of the "class" attribute.  If the "id" attribute is specified,
+      follow the same steps as mentioned in the "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
+      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.  If the
+      "disabled" attribute is specified, do not render the "onclick" element and assign the
+      "disabled" attribute a value of true.]]>
+
+            </description>
+            <component-family>javax.faces.OutcomeTarget</component-family>
+            <renderer-type>javax.faces.Button</renderer-type>
+            <renderer-class>
+                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/outcome-target-button-renderer-class/text())"/>
+            </renderer-class>
+
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="image-button-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="direct-link-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <renderer-extension>
+                <renders-children>true</renders-children>
+                <body-tag>true</body-tag>
+                <jsp-ignore>true</jsp-ignore>
+                <tag-name>button</tag-name>
             </renderer-extension>
 
         </renderer>
@@ -3009,6 +3172,7 @@ the literal string "<code>head</code>" as the last argument.</p>
             </renderer-class>
             <renderer-extension>
                 <jsp-ignore>true</jsp-ignore>
+                <tag-name>head</tag-name>
             </renderer-extension>
         </renderer>
 
@@ -3050,6 +3214,7 @@ the literal string "<code>head</code>" as the last argument.</p>
             </renderer-class>
             <renderer-extension>
                 <jsp-ignore>true</jsp-ignore>
+                <tag-name>body</tag-name>
             </renderer-extension>
         </renderer>
 

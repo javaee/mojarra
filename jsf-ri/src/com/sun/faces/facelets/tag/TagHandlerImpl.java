@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.tag.CompositeFaceletHandler;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 

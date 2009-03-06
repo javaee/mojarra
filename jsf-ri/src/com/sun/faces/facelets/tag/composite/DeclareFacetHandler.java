@@ -57,7 +57,6 @@ import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import java.beans.BeanDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -68,6 +67,7 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 
 public class DeclareFacetHandler extends TagHandlerImpl {
@@ -87,7 +87,7 @@ public class DeclareFacetHandler extends TagHandlerImpl {
         // only process if it's been created
         if (null == parent || 
             (null == (parent = parent.getParent())) ||
-            !(ComponentSupport.isNew(parent))) {
+            !(ComponentHandler.isNew(parent))) {
             return;
         }
         

@@ -49,28 +49,51 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+
+import javax.faces.component.ValueHolder;
+import javax.faces.convert.Converter;
+
+import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
 
 /**
- * Used in creating AbstractComponentHandler's and all implementations.
+ * Handles setting a Converter instance on a ValueHolder. Will wire all
+ * attributes set to the Converter instance created/fetched. Uses the "binding"
+ * attribute for grabbing instances to apply attributes to. <p/> Will only
+ * set/create Converter is the passed UIComponent's parent is null, signifying
+ * that it wasn't restored from an existing tree.
  * 
+ * @see javax.faces.webapp.ConverterELTag
+ * @see javax.faces.convert.Converter
+ * @see javax.faces.component.ValueHolder
  * @author Jacob Hookom
- * @version $Id$
+ * @version $Id: ConverterHandler.java 6118 2008-12-16 03:56:08Z edburns $
  */
-public interface ComponentConfig extends TagConfig {
-    /**
-     * ComponentType to pass to the Application. Cannot be null.
-     * 
-     * @return ComponentType to pass to the Application. Cannot be null.
-     */
-    public String getComponentType();
+public class ConverterHandler extends FaceletsAttachedObjectHandler implements ValueHolderAttachedObjectHandler {
 
-    /**
-     * RendererType to set on created UIComponent instances.
-     * 
-     * @return RendererType to set on created UIComponent instances
-     */
-    public String getRendererType();
+    
+    private String converterId;
+    
+    
+    private TagHandlerDelegate helper;
+
+    public ConverterHandler(ConverterConfig config) {
+        super(config);
+        this.converterId = config.getConverterId();
+    }
+
+    @Override
+    protected TagHandlerDelegate getTagHandlerHelper() {
+        if (null == helper) {
+            helper = helperFactory.createConverterHandlerDelegate(this);
+        }
+        return helper;
+
+    }
+
+    public String getConverterId() {
+        return converterId;
+    }
+    
 }

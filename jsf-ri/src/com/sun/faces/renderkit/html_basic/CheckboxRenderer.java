@@ -80,7 +80,11 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
             return;
         }
 
-        String clientId = component.getClientId(context);
+        String clientId = decodeBehaviors(context, component);
+
+        if (clientId == null) {
+            clientId = component.getClientId(context);
+        }
         assert(clientId != null);
         // Convert the new value
 

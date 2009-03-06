@@ -100,10 +100,6 @@ public class RenderResponsePhase extends Phase {
                 
             String viewId = facesContext.getViewRoot().getViewId();
 
-            // the before render event on the view root is a special case to keep door open for navigation
-            facesContext.getApplication().publishEvent(PreRenderViewEvent.class,
-                                                       facesContext.getViewRoot());
-
             String postPublishId = facesContext.getViewRoot().getViewId();
             ViewHandler vh = facesContext.getApplication().getViewHandler();
             if ((viewId == null && postPublishId == null)
@@ -120,6 +116,10 @@ public class RenderResponsePhase extends Phase {
                     // appropriately
                 }
             }
+            // the before render event on the view root is a special case to keep door open for navigation
+            // this must be called *after* PDL.buildView() and before VH.renderView()
+            facesContext.getApplication().publishEvent(PreRenderViewEvent.class,
+                                                       facesContext.getViewRoot());
             //render the view
             vh.renderView(facesContext, facesContext.getViewRoot());
 
