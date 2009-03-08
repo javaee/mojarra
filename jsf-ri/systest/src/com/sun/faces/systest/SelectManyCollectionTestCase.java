@@ -106,7 +106,9 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               "hintClass",
               "object",
               "intList1",
-              "integerList1"
+              "integerList1",
+              "escape01",
+              "escape02"
         };
         String[][] initialSelections = {
               new String[0],
@@ -124,6 +126,8 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               new String[0],
               new String[0],
               new String[0],
+              new String[] { "Frodo - &lt;Ring Bearer&gt;" },
+              new String[] { "Frodo -" }
         };
 
         String[][] postBackSelections = {
@@ -141,7 +145,9 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               new String[] { "Bilbo" },
               new String[] { "Bilbo" },
               new String[] { "2" },
-              new String[] { "3" }
+              new String[] { "3" },
+              new String[] { "Bilbo - &lt;Ring Finder&gt;" },
+              new String[] {  }
         };
 
         // =====================================================================
@@ -149,7 +155,7 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
         //
         List<HtmlSelect> selects = new ArrayList<HtmlSelect>(15);
         getAllElementsOfGivenClass(page, selects, HtmlSelect.class);
-        assertTrue(selects.size() == 15);
+        assertTrue(selects.size() == 17);
         for (int i = 0; i < selectIds.length; i++) {
             String id = selectIds[i];
             System.out.println("Validating HtmlSelect with ID: " + id);
@@ -169,8 +175,8 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
 
         selects.clear();
         getAllElementsOfGivenClass(page, selects, HtmlSelect.class);
-        assertTrue(selects.size() == 15);
-        for (int i = 0; i < selectIds.length; i++) {
+        assertTrue(selects.size() == 17);
+        for (int i = 0; i < selectIds.length - 1; i++) {
             String id = selectIds[i];
             String[] newSelection = postBackSelections[i];
             HtmlSelect select = getHtmlSelectForId(selects, id);

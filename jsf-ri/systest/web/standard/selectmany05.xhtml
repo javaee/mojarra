@@ -45,6 +45,7 @@
 </head>
 <body>
 <h:form id="f">
+
     <p>
         Array Values
     </p>
@@ -173,6 +174,32 @@
                        var="n"
                        itemLabel="#{n}"
                        itemDescription="#{n}"/>
+    </h:selectManyListbox>
+
+    <!-- //////////////////////////////////////////////////////////// -->
+
+    <p>
+        Item Label Escape (true)
+    </p>
+    <h:selectManyListbox id="escape01" value="#{select05.initialCollectionValues}">
+       <f:selectItems value="#{select05.hobbitCollection}"
+                      var="n"
+                      itemValue="#{n}"
+                      itemLabel="#{n.bio}"
+                      itemLabelEscaped="true"/>
+    </h:selectManyListbox>
+
+    <!-- //////////////////////////////////////////////////////////// -->
+
+    <p>
+        Item Label Escape (false)
+    </p>
+    <h:selectManyListbox id="escape02" value="#{select05.initialCollectionValues}">
+       <f:selectItems value="#{select05.hobbitCollection}"
+                      var="n"
+                      itemValue="#{n}"
+                      itemLabel="#{n.bio}"
+                      itemLabelEscaped="false"/>
     </h:selectManyListbox>
 
     <p>

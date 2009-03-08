@@ -288,7 +288,7 @@ public class TestUtil extends ServletFacesTestCase {
                                  createValueExpression(ctx,
                                                        "#{item.description}",
                                                        String.class));
-        items.setValueExpression("itemEscaped",
+        items.setValueExpression("itemLabelEscaped",
                                  createValueExpression(ctx,
                                                        "#{item.escaped}",
                                                        Boolean.TYPE));
