@@ -41,13 +41,13 @@
 package javax.faces.application;
 
 import java.util.List;
-import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
 import javax.faces.FacesException;
 
 import java.util.Locale;
+import java.util.Map;
 import java.io.IOException;
 import javax.faces.FacesWrapper;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
@@ -171,19 +171,49 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
     }
 
+
     /**
      * <p>The default behavior of this method is to
-     * call {@link ViewHandler#getRedirectURL}
+     * call {@link ViewHandler#getRedirectURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)}
      * on the wrapped {@link ViewHandler} object.</p>
      *
+     * @see ViewHandler#getRedirectURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)
      * @since 2.0
      */
     @Override
-    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
-        return getWrapped().getRedirectURL(context, viewId, parameters, includeViewParams);
+    public String getRedirectURL(FacesContext context,
+                                 String viewId,
+                                 Map<String,List<String>> parameters,
+                                 boolean includeViewParams) {
+
+        return getWrapped().getRedirectURL(context,
+                                           viewId,
+                                           parameters,
+                                           includeViewParams);
+
     }
-    
-    
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#getBookmarkableURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#getBookmarkableURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)
+     * @since 2.0
+     */
+    @Override
+    public String getBookmarkableURL(FacesContext context,
+                                     String viewId,
+                                     Map<String,List<String>> parameters,
+                                     boolean includeViewParams) {
+
+        return getWrapped().getBookmarkableURL(context,
+                                               viewId,
+                                               parameters,
+                                               includeViewParams);
+
+    }
 
 
     /**

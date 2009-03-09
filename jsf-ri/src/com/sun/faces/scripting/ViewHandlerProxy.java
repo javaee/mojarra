@@ -39,11 +39,14 @@ package com.sun.faces.scripting;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-
 import java.util.Map;
+
 import javax.faces.FacesException;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
@@ -103,8 +106,47 @@ public class ViewHandlerProxy extends ViewHandler {
     }
 
     @Override
-    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
-        return getGroovyDelegate().getRedirectURL(context, viewId, parameters, includeViewParams);
+    public String deriveViewId(FacesContext context, String input) {
+        return getGroovyDelegate().deriveViewId(context, input);
+    }
+
+    @Override
+    public String getRedirectURL(FacesContext context,
+                                 String viewId,
+                                 Map<String,List<String>> parameters,
+                                 boolean includeViewParams) {
+        return getGroovyDelegate().getRedirectURL(context,
+                                                  viewId,
+                                                  parameters,
+                                                  includeViewParams);
+    }
+
+    @Override
+    public String getBookmarkableURL(FacesContext context,
+                                     String viewId,
+                                     Map<String,List<String>> parameters,
+                                     boolean includeViewParams) {
+        return getGroovyDelegate().getBookmarkableURL(context,
+                                                      viewId,
+                                                      parameters,
+                                                      includeViewParams);
+    }
+
+    @Override
+    public PageDeclarationLanguage getPageDeclarationLanguage(FacesContext context, String viewId) {
+        return getGroovyDelegate().getPageDeclarationLanguage(context, viewId);
+    }
+
+    @Override
+    public void retargetAttachedObjects(FacesContext context, UIComponent topLevelComponent, List<AttachedObjectHandler> handlers) {
+        getGroovyDelegate().retargetAttachedObjects(context,
+                                                    topLevelComponent,
+                                                    handlers);
+    }
+
+    @Override
+    public void retargetMethodExpressions(FacesContext context, UIComponent topLevelComponent) {
+        getGroovyDelegate().retargetMethodExpressions(context, topLevelComponent);
     }
 
     public void renderView(FacesContext context, UIViewRoot viewToRender)

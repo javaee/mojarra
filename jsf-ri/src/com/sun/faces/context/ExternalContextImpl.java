@@ -56,19 +56,14 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
+import com.sun.faces.context.UrlBuilder;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
@@ -840,6 +835,26 @@ public class ExternalContextImpl extends ExternalContext {
 
         return response.getBufferSize();
 
+    }
+
+    @Override
+    public String encodeBookmarkableURL(String baseUrl,
+                                        Map<String, List<String>> parameters) {
+
+        UrlBuilder builder = new UrlBuilder(baseUrl, getResponseCharacterEncoding());
+        builder.addParameters(parameters);
+        return builder.createUrl();
+
+    }
+
+    @Override
+    public String encodeRedirectURL(String baseUrl,
+                                    Map<String, List<String>> parameters) {
+
+        UrlBuilder builder = new UrlBuilder(baseUrl, getResponseCharacterEncoding());
+        builder.addParameters(parameters);
+        return builder.createUrl();
+        
     }
 
 
