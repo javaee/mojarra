@@ -64,7 +64,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.behavior.AjaxBehaviors;
 import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -79,8 +78,10 @@ import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 import com.sun.faces.RIConstants;
+import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+
 
 /**
  * <p class="changed_added_2_0">Enable one or more components in the view

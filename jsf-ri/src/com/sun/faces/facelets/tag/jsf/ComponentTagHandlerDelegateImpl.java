@@ -36,6 +36,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.FacesLogger;
@@ -56,7 +57,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.behavior.AjaxBehaviors;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
