@@ -42,6 +42,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,6 +57,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.AjaxBehaviors;
+import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.InitialStateEvent;
@@ -177,7 +179,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             }
 
             // hook method
-            this.privateOnComponentCreated(ctx, c, parent);
             owner.onComponentCreated(ctx, c, parent);
         }
         c.pushComponentToEL(ctx.getFacesContext(), c);
@@ -194,6 +195,8 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         }
         
         c.processEvent(getInitialStateEvent(ctx.getFacesContext(), c));
+
+        this.privateOnComponentPopulated(ctx, c, parent);
         owner.onComponentPopulated(ctx, c, parent);
 
         // add to the tree afterwards
@@ -278,38 +281,43 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         return c;
     }
 
-    /**
-     * A hook method for allowing developers to do additional processing once Facelets
-     * creates the component.  The 'setAttributes' method is still perferred, but this
-     * method will provide the parent UIComponent before it's been added to the tree and
-     * before any children have been added to the newly created UIComponent.
-     * 
-     * @param ctx
-     * @param c
-     * @param parent
+    /*
+     * Internal hook that allows us to perform common processing for all
+     * components after they are populated.  At the moment, the only common
+     * processing we need to perform is applying wrapping AjaxBehaviors,
+     * if any exist.
      */
-    private void privateOnComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
-        AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
-            get(AjaxBehaviors.AJAX_BEHAVIORS);
+    private void privateOnComponentPopulated(FaceletContext ctx, UIComponent c, UIComponent parent) {
+
+        if (!(c instanceof BehaviorHolder)) {
+            return;
+        }
+
+        BehaviorHolder bHolder = (BehaviorHolder)c;
+        AjaxBehaviors ajaxBehaviors = getAjaxBehaviors(ctx);
         if (ajaxBehaviors != null) {
             AjaxBehavior ajaxBehavior = ajaxBehaviors.getCurrentBehavior();
             if (ajaxBehavior != null) {
-                if (c instanceof BehaviorHolder) {
-                    BehaviorHolder bHolder = (BehaviorHolder)c;
-                    String event = bHolder.getDefaultEventName();
-                    if (null != ajaxBehavior.getEvent()) {
-                        event = ajaxBehavior.getEvent();
-                    }
-                    Collection eventNames = bHolder.getEventNames();
-                    if (null != eventNames && eventNames.contains(event) || 
-                        event.equals(bHolder.getDefaultEventName())) {
+                String event = bHolder.getDefaultEventName();
+                if (null != ajaxBehavior.getEvent()) {
+                    event = ajaxBehavior.getEvent();
+                }
+                Collection eventNames = bHolder.getEventNames();
+                if (eventNames.contains(event)) {
+
+                    // We only add the AjaxBehavior if the BehaviorHolder does
+                    // not already contain a Behavior for the event.
+                    Map<String, List<Behavior>> behaviors = bHolder.getBehaviors();
+                    List<Behavior> behaviorsForEvent =  behaviors.get(event);
+                    if ((null == behaviorsForEvent) || behaviorsForEvent.isEmpty()) {
+
                         bHolder.addBehavior(event, ajaxBehavior);
                     }
                 }
             }
         }
     }
-    
+
     /**
      * Return the Facet name we are scoped in, otherwise null
      * @param ctx
@@ -317,6 +325,13 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      */
     private final String getFacetName(FaceletContext ctx, UIComponent parent) {
         return (String) parent.getAttributes().get(FacetHandler.KEY);
+    }
+
+    // Returns the AjaxBehaviors instance, if one exists.
+    private static AjaxBehaviors getAjaxBehaviors(FaceletContext ctx) {
+        Map<Object, Object> attrs = ctx.getFacesContext().getAttributes();
+
+        return (AjaxBehaviors)attrs.get(AjaxBehaviors.AJAX_BEHAVIORS);
     }
     
     private static InitialStateEvent getInitialStateEvent(FacesContext context,
