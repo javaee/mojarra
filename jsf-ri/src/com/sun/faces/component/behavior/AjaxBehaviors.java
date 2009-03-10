@@ -38,11 +38,12 @@
  * holder.
  */
  
-package javax.faces.component.behavior;
+package com.sun.faces.component.behavior;
 
 import java.io.Serializable;
 import java.util.LinkedList;
 
+import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.context.FacesContext;
 
 /**

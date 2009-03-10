@@ -45,8 +45,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -308,9 +306,9 @@ public abstract class ViewHandler {
     /**
      * <p class="changed_added_2_0">Derive and return the viewId from
      * the current request, or the argument input by following the
+     * @since 2.0
      * algorithm defined in specification section JSF.7.5.2.</p>
      *
-     * @since 2.0
      * @param context the <code>FacesContext</code> for this request
 
      * @param input the input candidate <code>viewId</code> to derive,
@@ -365,25 +363,94 @@ public abstract class ViewHandler {
      */
     public abstract String getResourceURL(FacesContext context, String path);
 
-    /**
-     * <p class="changed_added_2_0">The value returned from this
-     * method should be an encoded JSF action URL that can be used by a NavigationHandler
-     * to request a new page in a redirect case or in a Renderer for generating a link.
-     * The viewId parameter is first fed to the {@link ViewHandler#getActionURL(javax.faces.context.FacesContext, java.lang.String)}.
-     * Then, the parameters are processed. The view parameters are read from the target page if included. They are
-     * merged with the parameters parsed from the query string on the viewId and the parameter
-     * overrides passed in according to the precendence rules defined in the spec. Finally,
-     * the result is encoded by calling {@link ExternalContext#encodeActionURL(java.lang.String)}</p>
 
-     * <p class="changed_added_2_0">A default implementation is provided that 
-     * simply calls through to {@link #getActionURL}, ignoring the 
-     * <code>includeViewParams</code> argument.</p>
+    /**
+     * <p class="changed_added_2_0">
+     * Return a JSF action URL derived from the viewId argument that
+     * is suitable to be used by the NavigationHandler to issue a redirect request to the URL using a
+     * NonFaces request. The requirements for how to build the JSF action URL are described below.
+     * </p>
+     *
+     * <p>
+     * To build the JSF action URL the value of the viewId argument should be
+     * fed through the ViewHandler#getActionURL(FacesContext, String) method to produce a URL; this URL may include parameters which are passed untouched to encodeRedirectUrl as part of the baseURL. The additional parameters, represented as
+     * Parameter objects, are collected as follows. If the includeViewParams argument is true,
+     * the view parameters (i.e., UIViewParameter components) are read from the target page. The
+     * value of the each page parameter is retrieved by calling
+     * UIViewParameter#getStringValue(FacesContext) and forming a parameter. The view
+     * parameters, if included, are merged with the <code>parameters</code> argument.  When a parameter is contributed by more
+     * than one of the previously mentioned source, the parameter with the highest precendence is
+     * used, replacing all parameters with the same name from the lower precendence source. The
+     * order of precendence for parameters, from lowest to highest, is view parameters, the
+     * parameters argument (parameter overrides).
+     * The parameters are encoded into the query string of the URL by delegating to the method
+     * {@link ExternalContext#encodeRedirectURL(String, java.util.Map)} .  Finally, the result
+     * is encoded by calling ExternalContext#encodeActionURL(String).
+     * </p>
+     *
+     * <p>
+     *  The default implementation returns the result of {@link ViewHandler#getActionURL(javax.faces.context.FacesContext, String)}.
+     * </p>
+     *
+     * @param context           The FacesContext processing this request
+     * @param viewId            The view identifier of the target page
+     * @param parameters        A mapping of parameter names to one or more values
+     * @param includeViewParams A flag indicating whether view parameters should be encoded into this URL
+     * @since 2.0
+     */
+    public String getRedirectURL(FacesContext context,
+                                 String viewId,
+                                 Map<String,List<String>>parameters,
+                                 boolean includeViewParams) {
+        
+        return getActionURL(context, viewId);
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">
+     * Return a JSF action URL derived from the viewId argument that
+     * is suitable to be used as the target of a link in a JSF response. The URL if activated,
+     * would issue a NonFaces request to the viewId mapped in the action URL. The intent is that
+     * this URL can serve as a bookmark for that JSF view. The requirements for how to build the
+     * JSF action URL are described below.
+     * </p>
+     *
+     * <p>
+     * To build the JSF action URL the value of the viewId argument without the query string should be
+     * fed through the ViewHandler#getActionURL(FacesContext, String) method method to produce a URL; this URL may include parameters which are passed untouched to encodeBookmarkableUrl as part of the baseURL. The additional parameters, represented as
+     * Parameter objects, are collected as follows. If the includeViewParams argument is true,
+     * the view parameters (i.e., UIViewParameter components) are read from the target page. The
+     * value of the each page parameter is retrieved by calling
+     * UIViewParameter#getStringValue(FacesContext) and forming a parameter. The view
+     * parameters, if included, are merged the <code>parameters</code> argument.  When a parameter is contributed by more
+     * than one of the previously mentioned source, the parameter with the highest precendence is
+     * used, replacing all parameters with the same name from the lower precendence source. The
+     * order of precendence for parameters, from lowest to highest, is view parameters, the
+     * parameters argument (parameter overrides).
+     * The parameters are encoded into the query string of the URL by delegating to the method
+     * {@link ExternalContext#encodeBookmarkableURL(String, java.util.Map)}.  Finally, the result
+     * is encoded by calling ExternalContext#encodeActionURL(String).
+     * </p>
+     *
+     * <p>
+     * The default implementation returns the result of {@link ViewHandler#getActionURL(javax.faces.context.FacesContext, String)}.
+     * </p>
+     *
+     * @param context           The FacesContext processing this request
+     * @param viewId            The view identifier of the target page
+     * @param parameters        A mapping of parameter names to one or more values
+     * @param includeViewParams A flag indicating whether view parameters should be encoded into this URL
      *
      * @since 2.0
      */
-    public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
+    public String getBookmarkableURL(FacesContext context,
+                                     String viewId,
+                                     Map<String,List<String>> parameters,
+                                     boolean includeViewParams) {
 
-        return context.getApplication().getViewHandler().getActionURL(context, viewId);
+        return getActionURL(context, viewId);
 
     }
 

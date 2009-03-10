@@ -140,9 +140,7 @@ public class ResourceCache {
         contextName = getServletContextIdentifier(sc);
         shutdown = false;
         long checkPeriod = getCheckPeriod(config);
-        if (checkPeriod >= 0) {
-            resourceCache = new MultiKeyConcurrentHashMap<String,ResourceInfo>(30);
-        }
+        resourceCache = new MultiKeyConcurrentHashMap<String,ResourceInfo>(30);
         if (checkPeriod >= 1) {
             initExecutor((checkPeriod * 1000L * 60L));
             initMonitors(sc);
@@ -156,7 +154,11 @@ public class ResourceCache {
 
     /**
      * Add the {@link ResourceInfo} to the internal cache.
+     *
      * @param info resource metadata
+     *
+     * @return previous value associated with specified key, or null
+     *  if there was no mapping for key
      */
     public ResourceInfo add(ResourceInfo info) {
 
@@ -166,18 +168,18 @@ public class ResourceCache {
 
         Util.notNull("info", info);
 
-        if (resourceCache != null) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "Caching ResourceInfo: {0}",
-                           info.toString());
-            }
-            return resourceCache.putIfAbsent(info.name,
-                                             info.libraryName,
-                                             info.localePrefix,
-                                             info);
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE,
+                       "Caching ResourceInfo: {0}",
+                       info.toString());
         }
-        return null;
+        return resourceCache.putIfAbsent(info.name,
+                                         info.libraryName,
+                                         info.localePrefix,
+                                         info);
+
+
 
     }
 
@@ -211,12 +213,12 @@ public class ResourceCache {
             throw new IllegalStateException("ResourceCache has been terminated");
         }
 
-        if (resourceCache != null) {
-            resourceCache.clear();
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Cache Cleared");
-            }
+
+        resourceCache.clear();
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, "Cache Cleared");
         }
+
 
     }
 
@@ -232,10 +234,10 @@ public class ResourceCache {
             return;
         }
         shutdown = true;
-        if (resourceCache != null) {
-            resourceCache.clear();
-            resourceCache = null;
-        }
+
+        resourceCache.clear();
+        resourceCache = null;
+
         if (service != null) {
             if (monitorTask != null) {
                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -562,6 +564,9 @@ public class ResourceCache {
          *
          * @param url source URL from which the URL to owning JAR will be
          *  obtained.
+         *
+         * @throws IOException if an problem occurs when accessing the provided
+         *  <code>url</code>
          */
         public JarResourceMonitor(URL url) throws IOException {
 

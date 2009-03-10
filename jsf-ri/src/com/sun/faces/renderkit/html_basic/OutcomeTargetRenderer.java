@@ -150,7 +150,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
 
     /**
      * <p>Resolve the target view id and then delegate to
-     * {@link ViewHandler#getRedirectURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)}
+     * {@link ViewHandler#getBookmarkableURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)}
      * to produce a redirect URL, which will add the page parameters if necessary
      * and properly prioritizing the parameter overrides.</p>
      *
@@ -163,10 +163,10 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
     protected String getEncodedTargetURL(FacesContext context, UIComponent component, NavigationCase navCase) {
         // FIXME getNavigationCase doesn't resolve the target viewId (it is part of CaseStruct)
         String toViewId = navCase.getToViewId(context);
-        return Util.getViewHandler(context).getRedirectURL(context,
-                                                           toViewId,
-                                                           getParamOverrides(component),
-                                                           isIncludeViewParams(component));
+        return Util.getViewHandler(context).getBookmarkableURL(context,
+                                                               toViewId,
+                                                               getParamOverrides(component),
+                                                               isIncludeViewParams(component));
     }
 
     protected Map<String, List<String>> getParamOverrides(UIComponent component) {

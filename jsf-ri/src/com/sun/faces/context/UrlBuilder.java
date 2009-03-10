@@ -34,7 +34,7 @@
  * holder.
  */
 
-package com.sun.faces.application.view;
+package com.sun.faces.context;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -54,10 +54,8 @@ import java.util.Map;
  * <p>Note that this class is optimized to parse the query string lazily so as
  * to avoid unnecessary work if the seed URL differs little from the URL to be
  * built.</p>
- *
- * @author Dan Allen
  */
-public class UrlBuilder {
+class UrlBuilder {
     public static final String QUERY_STRING_SEPARATOR = "?";
     public static final String PARAMETER_PAIR_SEPARATOR = "&";
     public static final String PARAMETER_NAME_VALUE_SEPARATOR = "=";

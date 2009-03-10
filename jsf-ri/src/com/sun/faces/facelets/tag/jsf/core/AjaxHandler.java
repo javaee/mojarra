@@ -64,7 +64,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.behavior.AjaxBehaviors;
 import javax.faces.component.behavior.BehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -73,13 +72,16 @@ import javax.faces.event.AjaxBehaviorListener;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 
+import javax.faces.webapp.pdl.facelets.tag.CompositeFaceletHandler;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 import com.sun.faces.RIConstants;
+import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+
 
 /**
  * <p class="changed_added_2_0">Enable one or more components in the view
@@ -128,6 +130,8 @@ public final class AjaxHandler extends TagHandlerImpl {
     private final TagAttribute disabled;
     private final TagAttribute listener;
 
+    private final boolean wrapping;
+
     /**
      * @param config
      */
@@ -140,6 +144,8 @@ public final class AjaxHandler extends TagHandlerImpl {
         this.onerror = this.getAttribute("onerror");
         this.disabled = this.getAttribute("disabled");
         this.listener = this.getAttribute("listener");
+
+        this.wrapping = isWrapping();
     }
 
     /*
@@ -151,15 +157,90 @@ public final class AjaxHandler extends TagHandlerImpl {
     @SuppressWarnings("unchecked")
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
-        if (null == parent || !(ComponentHandler.isNew(parent))) {
+
+        String eventName = (this.event != null) ? this.event.getValue() : null;
+
+        if (this.wrapping) {
+            applyWrapping(ctx, parent, eventName);
+        }  else {
+            applyNested(ctx, parent, eventName);
+        }
+    }
+
+    // Tests whether the <f:ajax> is wrapping other tags.
+    private boolean isWrapping() {
+
+        // Would be nice if there was some easy way to determine whether
+        // we are a leaf handler.  However, even leaf handlers have a
+        // non-null nextHandler - the CompilationUnit.LEAF instance.
+        // We assume that if we've got a TagHandler or CompositeFaceletHandler
+        // as our nextHandler, we are not a leaf.
+        return ((this.nextHandler instanceof TagHandler) || 
+                (this.nextHandler instanceof CompositeFaceletHandler));
+    }
+
+    // Applies a wrapping AjaxHandler by pushing/popping the AjaxBehavior
+    // to the AjaxBeahviors object.
+    private void applyWrapping(FaceletContext ctx, 
+                               UIComponent parent,
+                               String eventName) throws IOException {
+
+        // In the wrapping case, we assume that some wrapped component
+        // is going to be Ajax enabled and install the Ajax resource.
+        installAjaxResourceIfNecessary();
+
+        AjaxBehavior ajaxBehavior = createAjaxBehavior(ctx, eventName);
+
+        // We leverage AjaxBehaviors to support the wrapping case.  We
+        // push/pop the AjaxBehavior instance on AjaxBehaviors so that
+        // child tags will have access to it.
+        AjaxBehaviors ajaxBehaviors = getNonNullAjaxBehaviors(ctx);
+        ajaxBehaviors.pushBehavior(ajaxBehavior); 
+
+        nextHandler.apply(ctx, parent);
+
+        ajaxBehaviors.popBehavior();
+    }
+
+    // Applies a nested AjaxHandler by adding the AjaxBehavior to the
+    // parent component.
+    private void applyNested(FaceletContext ctx, 
+                             UIComponent parent,
+                             String eventName) {
+        
+        if (!ComponentHandler.isNew(parent)) {
             return;
-        } 
+        }
 
-        // Construct our AjaxBehavior from tag parameters..
+        if (!(parent instanceof BehaviorHolder)) {
+            throw new TagException(this.tag,
+                    "Unable to attach <f:ajax> to non-BehaviorHolder parent");
+        }
 
-        String event = (this.event != null) ? this.event.getValue() : null;
+        BehaviorHolder bHolder = (BehaviorHolder)parent;
 
-        AjaxBehavior ajaxBehavior = new AjaxBehavior(event,
+        if (null == eventName) {
+            eventName = bHolder.getDefaultEventName();
+            if (null == eventName) {
+                throw new TagException(this.tag,
+                    "Event attribute could not be determined: " + eventName);
+            }
+        } else {
+            if (!bHolder.getEventNames().contains(eventName)) {
+                throw new TagException(this.tag,
+                    "Event attribute could not be determined: " + eventName);
+            }               
+        }
+
+        AjaxBehavior ajaxBehavior = createAjaxBehavior(ctx, eventName);
+        bHolder.addBehavior(eventName, ajaxBehavior);
+        installAjaxResourceIfNecessary();
+    }
+
+    // Construct our AjaxBehavior from tag parameters.
+    private AjaxBehavior createAjaxBehavior(FaceletContext ctx, String eventName) {
+
+        AjaxBehavior ajaxBehavior = new AjaxBehavior(eventName,
             ((this.onevent != null) ? this.onevent.getValueExpression(ctx, String.class) : null),
             ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
             ((this.execute != null) ? this.execute.getValueExpression(ctx, Object.class) : null),
@@ -172,57 +253,22 @@ public final class AjaxHandler extends TagHandlerImpl {
                 this.listener.getMethodExpression(ctx, Object.class, new Class[] { })));
         }
 
-        // See if we have any components nested below us..
+        return ajaxBehavior;
+    }
 
-        Iterator iter = TagHandlerImpl.findNextByType(this.nextHandler, TagHandler.class);
-        
-        // If we don't have any components nested below us..
-        // then we handle the case of existing as nested within a BehaviorHolder component..
+    // Returns the AjaxBehaviors instance, creating it if necessary.
+    private AjaxBehaviors getNonNullAjaxBehaviors(FaceletContext ctx) {
 
-        if (!iter.hasNext()) {
-            //
-            // If we are nested within a BehaviorHolder
-            //
-            if (parent instanceof BehaviorHolder) {
-                BehaviorHolder bHolder = (BehaviorHolder)parent;
-                if (null == event) {
-                    event = bHolder.getDefaultEventName();
-                    if (null == event) {
-                        throw new TagException(this.tag,
-                            "Event attribute could not be determined: " + event);
-                    }
-                } else {
-                    if (!bHolder.getEventNames().contains(event)) {
-                        throw new TagException(this.tag,
-                            "Event attribute could not be determined: " + event);
-                    }               
-                }
-                bHolder.addBehavior(event, ajaxBehavior);
-                installAjaxResourceIfNecessary();
-            }
-            return;
-        }
-            
-        // We have component children nested below us..
+        Map<Object, Object> attrs = ctx.getFacesContext().getAttributes();
+        final String key = AjaxBehaviors.AJAX_BEHAVIORS;
+        AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)attrs.get(key);
 
-        AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
-            get(AjaxBehaviors.AJAX_BEHAVIORS);
         if (ajaxBehaviors == null) {
             ajaxBehaviors = new AjaxBehaviors();
+            attrs.put(key, ajaxBehaviors);
         }
-        ajaxBehaviors.pushBehavior(ajaxBehavior); 
-        ctx.getFacesContext().getAttributes().put(AjaxBehaviors.AJAX_BEHAVIORS, ajaxBehaviors);
-        installAjaxResourceIfNecessary();
 
-        nextHandler.apply(ctx, parent);
-
-        // At this point, we have reached the closing </f:ajax> tag..
-
-        FacesContext context = ctx.getFacesContext();
-        ajaxBehaviors = (AjaxBehaviors)context.getAttributes().get(AjaxBehaviors.AJAX_BEHAVIORS);
-        if (ajaxBehaviors != null) {
-            ajaxBehaviors.popBehavior();
-        }
+        return ajaxBehaviors;
     }
 
     // Only install the Ajax resource if it doesn't exist.

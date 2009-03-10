@@ -41,10 +41,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.util.Map;
-import java.util.Locale;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.security.Principal;
@@ -815,6 +812,31 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     @Override
     public void setResponseContentLength(int length) {
         getWrapped().setResponseContentLength(length);
+    }
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.ExternalContext#encodeBookmarkableURL(String, java.util.Map)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#encodeBookmarkableURL(String, java.util.Map)
+     */
+    @Override
+    public String encodeBookmarkableURL(String baseUrl, Map<String, List<String>> parameters) {
+        return getWrapped().encodeBookmarkableURL(baseUrl, parameters);
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.ExternalContext#encodeRedirectURL(String, java.util.Map)}
+     * on the wrapped {@link ExternalContext} object.</p>
+     *
+     * @see javax.faces.context.ExternalContext#encodeRedirectURL(String, java.util.Map)
+     */
+    @Override
+    public String encodeRedirectURL(String baseUrl, Map<String, List<String>> parameters) {
+        return getWrapped().encodeRedirectURL(baseUrl, parameters);
     }
     
 }

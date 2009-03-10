@@ -100,10 +100,24 @@
            <f:ajax listener="#{bean.processBehavior}"/>
        </h:commandButton>
 
-       <f:ajax>
-          <h:commandButton id="submit1" value="submit1"/>
-          <h:commandButton id="submit2" value="submit2">
-              <f:ajax render="out"/>
+       <f:ajax listener="#{bean.processBehavior}">
+          <h:commandButton id="wrapped" 
+                           value="Wrapped Button"
+                           actionListener="#{bean.processAction}"/>
+          <h:commandButton id="wrappedRender" 
+                           value="Wrapped Button, Local Ajax"
+                           actionListener="#{bean.processAction}">
+              <f:ajax render="out" listener="#{bean.processBehavior}"/>
+          </h:commandButton>
+          <h:commandButton id="wrappedDisabled" 
+                           value="Wrapped Button, Local Disabled Ajax"
+                           actionListener="#{bean.processAction}">
+              <f:ajax disabled="true" listener="#{bean.processBehavior}"/>
+          </h:commandButton>
+          <h:commandButton id="wrappedGreet" 
+                           value="Wrapped Button, Local Greet"
+                           actionListener="#{bean.processAction}">
+              <be:greet/>
           </h:commandButton>
        </f:ajax>
 
@@ -218,10 +232,24 @@
            <f:ajax listener="#{bean.processBehavior}"/>
        </h:commandLink>
 
-       <f:ajax>
-          <h:commandLink id="submit1Link" value="submit1"/>
-          <h:commandLink id="submit2Link" value="submit2">
-              <f:ajax render="out"/>
+       <f:ajax listener="#{bean.processBehavior}">
+          <h:commandLink id="wrappedLink" 
+                           value="Wrapped Link"
+                           actionListener="#{bean.processAction}"/>
+          <h:commandLink id="wrappedRenderLink" 
+                           value="Wrapped Link, Local Ajax"
+                           actionListener="#{bean.processAction}">
+              <f:ajax render="out" listener="#{bean.processBehavior}"/>
+          </h:commandLink>
+          <h:commandLink id="wrappedDisabledLink" 
+                           value="Wrapped Link, Local Disabled Ajax"
+                           actionListener="#{bean.processAction}">
+              <f:ajax disabled="true" listener="#{bean.processBehavior}"/>
+          </h:commandLink>
+          <h:commandLink id="wrappedGreetLink" 
+                           value="Wrapped Link, Local Greet"
+                           actionListener="#{bean.processAction}">
+              <be:greet/>
           </h:commandLink>
        </f:ajax>
 
@@ -336,10 +364,24 @@
            <f:ajax listener="#{bean.processBehavior}"/>
        </h:inputText>
 
-       <f:ajax>
-          <h:inputText id="submit1Input" value="submit1"/>
-          <h:inputText id="submit2Input" value="submit2">
-              <f:ajax render="out"/>
+       <f:ajax listener="#{bean.processBehavior}">
+          <h:inputText id="wrappedInput" 
+                           value="Wrapped Input"
+                           valueChangeListener="#{bean.processValueChange}"/>
+          <h:inputText id="wrappedRenderInput" 
+                           value="Wrapped Input, Local Ajax"
+                           valueChangeListener="#{bean.processValueChange}">
+              <f:ajax render="out" listener="#{bean.processBehavior}"/>
+          </h:inputText>
+          <h:inputText id="wrappedDisabledInput" 
+                           value="Wrapped Input, Local Disabled Ajax"
+                           valueChangeListener="#{bean.processValueChange}">
+              <f:ajax disabled="true" listener="#{bean.processBehavior}"/>
+          </h:inputText>
+          <h:inputText id="wrappedGreetInput" 
+                           value="Wrapped Input, Local Greet"
+                           valueChangeListener="#{bean.processValueChange}">
+              <be:greet/>
           </h:inputText>
        </f:ajax>
 

@@ -53,7 +53,6 @@ import java.lang.reflect.Array;
 import javax.faces.model.SelectItem;
 import javax.faces.context.FacesContext;
 import javax.el.ValueExpression;
-import javax.el.ELContext;
 
 
 /**
@@ -71,6 +70,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
     /**
      * <p>Construct an iterator instance for the specified parent component.</p>
      *
+     * @param ctx the {@link FacesContext} for the current request
      * @param parent The parent {@link UIComponent} whose children will be
      *  processed
      */
@@ -414,7 +414,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
             private static final String ITEM_VALUE = "itemValue";
             private static final String ITEM_LABEL = "itemLabel";
             private static final String ITEM_DESCRIPTION = "itemDescription";
-            private static final String ITEM_ESCAPED = "itemEscaped";
+            private static final String ITEM_ESCAPED = "itemLabelEscaped";
             private static final String ITEM_DISABLED = "itemDisabled";
             private static final String NO_SELECTION_OPTION = "noSelectionOption";
 
@@ -454,18 +454,21 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
              */
             private String var;
 
+            private UISelectItems sourceComponent;
+
             // -------------------------------------------------------- Constructors
 
 
             private GenericObjectSelectItem(UISelectItems sourceComponent) {
 
                 var = (String) sourceComponent.getAttributes().get(VAR);
-                itemValue = sourceComponent.getValueExpression(ITEM_VALUE);
-                itemLabel = sourceComponent.getValueExpression(ITEM_LABEL);
-                itemDescription = sourceComponent.getValueExpression(ITEM_DESCRIPTION);
-                itemEscaped = sourceComponent.getValueExpression(ITEM_ESCAPED);
-                itemDisabled = sourceComponent.getValueExpression(ITEM_DISABLED);
-                noSelectionOption = sourceComponent.getValueExpression(NO_SELECTION_OPTION);
+                this.sourceComponent = sourceComponent;
+                //itemValue = sourceComponent.getValueExpression(ITEM_VALUE);
+                //itemLabel = sourceComponent.getValueExpression(ITEM_LABEL);
+                //itemDescription = sourceComponent.getValueExpression(ITEM_DESCRIPTION);
+                //itemEscaped = sourceComponent.getValueExpression(ITEM_ESCAPED);
+                //itemDisabled = sourceComponent.getValueExpression(ITEM_DISABLED);
+                //noSelectionOption = sourceComponent.getValueExpression(NO_SELECTION_OPTION);
 
             }
 
@@ -488,25 +491,13 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                     oldVarValue = reqMap.put(var, value);
                 }
                 try {
-                    ELContext elContext = ctx.getELContext();
-                    Object itemValueResult = ((itemValue != null)
-                                              ? itemValue.getValue(elContext)
-                                              : null);
-                    Object itemLabelResult = ((itemLabel != null)
-                                              ? itemLabel.getValue(elContext)
-                                              : null);
-                    Object itemDescriptionResult = ((itemDescription != null)
-                                                    ? itemDescription.getValue(elContext)
-                                                    : null);
-                    Object itemEscapedResult = ((itemEscaped != null)
-                                                 ? itemEscaped.getValue(elContext)
-                                                 : null);
-                    Object itemDisabledResult = ((itemDisabled != null)
-                                                 ? itemDisabled.getValue(elContext)
-                                                 : null);
-                    Object noSelectionOptionResult = ((noSelectionOption != null)
-                                                      ? noSelectionOption.getValue(elContext)
-                                                      : null);
+                    Map<String,Object> attrs = sourceComponent.getAttributes();
+                    Object itemValueResult = attrs.get(ITEM_VALUE);
+                    Object itemLabelResult = attrs.get(ITEM_LABEL);
+                    Object itemDescriptionResult = attrs.get(ITEM_DESCRIPTION);
+                    Object itemEscapedResult = attrs.get(ITEM_ESCAPED);
+                    Object itemDisabledResult = attrs.get(ITEM_DISABLED);
+                    Object noSelectionOptionResult = attrs.get(NO_SELECTION_OPTION);
                     setValue(((itemValueResult != null) ? itemValueResult : value));
                     setLabel(((itemLabelResult != null)
                                   ? itemLabelResult.toString()
@@ -522,7 +513,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                                      : false));
                     setNoSelectionOption(((noSelectionOptionResult != null)
                                      ? Boolean.valueOf(noSelectionOptionResult.toString())
-                                     : false));
+                                    : false));
                 } finally {
                     if (var != null) {
                         if (oldVarValue != null) {

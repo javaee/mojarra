@@ -79,10 +79,10 @@ public class SelectMany05Bean {
     public SelectMany05Bean() {
 
         HobbitBean[] hobbits = {
-              new HobbitBean("Bilbo", "Ring Finder"),
-              new HobbitBean("Frodo", "Ring Bearer"),
-              new HobbitBean("Merry", "Trouble Maker"),
-              new HobbitBean("Pippin", "Trouble Maker")
+              new HobbitBean("Bilbo", "Bilbo - <Ring Finder>"),
+              new HobbitBean("Frodo", "Frodo - <Ring Bearer>"),
+              new HobbitBean("Merry", "Merry - <Trouble Maker>"),
+              new HobbitBean("Pippin", "Pipping - <Trouble Maker>")
         };
 
         Set<SelectItem> items = new LinkedHashSet<SelectItem>();

@@ -37,20 +37,15 @@
 package com.sun.faces.application.view;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.RIConstants;
@@ -63,28 +58,18 @@ import java.awt.event.ActionEvent;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
-import java.util.List;
+import java.util.*;
 
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.FactoryFinder;
-import javax.faces.component.ActionSource2;
-import javax.faces.component.EditableValueHolder;
-import javax.faces.component.UIComponent;
+import javax.faces.component.*;
 import javax.faces.event.MethodExpressionActionListener;
 import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.MethodExpressionValidator;
-import javax.faces.webapp.pdl.ActionSource2AttachedObjectHandler;
-import javax.faces.webapp.pdl.ActionSource2AttachedObjectTarget;
-import javax.faces.webapp.pdl.AttachedObjectHandler;
-import javax.faces.webapp.pdl.AttachedObjectTarget;
-import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
-import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectTarget;
-import javax.faces.webapp.pdl.PageDeclarationLanguageFactory;
-import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
-import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
+import javax.faces.webapp.pdl.*;
 
 /**
  * This {@link ViewHandler} implementation handles both JSP-based and
@@ -661,25 +646,40 @@ public class MultiViewHandler extends ViewHandler {
 
     }
 
+
+    @Override
+    public String getBookmarkableURL(FacesContext context,
+                                     String viewId,
+                                     Map<String,List<String>> parameters,
+                                     boolean includeViewParams) {
+
+        Map<String,List<String>> params;
+        if (includeViewParams) {
+            params = getFullParameterList(context, viewId, parameters);
+        } else {
+            params = parameters;
+        }
+        ExternalContext ectx = context.getExternalContext();
+        return ectx.encodeActionURL(ectx.encodeBookmarkableURL(getActionURL(context, viewId), params));
+
+    }
+
+
+    /**
+     * @see ViewHandler#getRedirectURL(javax.faces.context.FacesContext, String, java.util.Map, boolean)
+     */
     @Override
     public String getRedirectURL(FacesContext context, String viewId, Map<String, List<String>> parameters, boolean includeViewParams) {
-        // QUESTION should encodeParams dually be a flag?
-        String encoding = null;
-        if (context.getResponseWriter() != null) {
-            encoding = Util.isPortletRequest(context)
-                       ? null
-                       : context.getResponseWriter().getCharacterEncoding();
+
+        Map<String,List<String>> params;
+        if (includeViewParams) {
+            params = getFullParameterList(context, viewId, parameters);
         } else {
-            encoding = context.getExternalContext().getResponseCharacterEncoding();
+            params = parameters;
         }
+        ExternalContext ectx = context.getExternalContext();
+        return ectx.encodeActionURL(ectx.encodeRedirectURL(getActionURL(context, viewId), params));
 
-        JsfViewUrlBuilder builder = new JsfViewUrlBuilder(context, viewId, includeViewParams, encoding);
-
-        builder.addParameters(parameters);
-        
-        String result = builder.createUrl();
-        
-        return result;
     }
 
     /**
@@ -695,6 +695,88 @@ public class MultiViewHandler extends ViewHandler {
     
 
     // ------------------------------------------------------- Protected Methods
+
+
+    protected Map<String,List<String>> getFullParameterList(FacesContext ctx,
+                                                            String viewId,
+                                                            Map<String,List<String>> existingParameters) {
+
+        Map<String,List<String>> copy;
+        if (existingParameters == null || existingParameters.isEmpty()) {
+            copy = new LinkedHashMap<String,List<String>>(4);
+        } else {
+          copy = new LinkedHashMap<String,List<String>>(existingParameters);
+        }
+        addViewParameters(ctx, viewId, copy);
+        return copy;
+
+    }
+
+
+    protected void addViewParameters(FacesContext ctx,
+                                     String viewId,
+                                     Map<String,List<String>> existingParameters) {
+
+        UIViewRoot currentRoot = ctx.getViewRoot();
+        String currentViewId = extractViewId(currentRoot.getViewId());
+        PageDeclarationLanguage pdl = null;
+        Collection<UIViewParameter> toViewParams;
+        Collection<UIViewParameter> currentViewParams;
+        boolean currentIsSameAsNew = false;
+        String targetViewId = extractViewId(viewId);
+
+        pdl = getPageDeclarationLanguage(ctx, currentViewId);
+        currentViewParams = ViewMetadata.getViewParameters(currentRoot);
+
+        if (currentViewId.equals(targetViewId)) {
+            currentIsSameAsNew = true;
+            toViewParams = currentViewParams;
+        }
+        else {
+            pdl = getPageDeclarationLanguage(ctx, targetViewId);
+            toViewParams = pdl.getViewMetadata(ctx, targetViewId).getViewParameters(ctx);
+        }
+
+        if (toViewParams.isEmpty()) {
+            return;
+        }
+
+        for (UIViewParameter viewParam : toViewParams) {
+            String value = null;
+            // don't bother looking at view parameter if it's been overridden
+            if (existingParameters.containsKey(viewParam.getName())) {
+                continue;
+            }
+            else if (paramHasValueExpression(viewParam)) {
+                value = viewParam.getStringValueFromModel(ctx);
+            }
+            else {
+                // Anonymous view parameter:
+                // Get string value from UIViewParameter instance stored in current view
+                if (currentIsSameAsNew) {
+                    value = viewParam.getStringValue(ctx);
+                }
+                // ...or transfer string value from matching UIViewParameter instance stored in current view
+                else {
+                    value = getStringValueToTransfer(ctx,
+                                                     viewParam,
+                                                     toViewParams);
+                }
+            }
+            if (value != null) {
+                List<String> existing = existingParameters.get(viewParam.getName());
+                if (existing == null) {
+                    existing = new ArrayList<String>(4);
+                    existingParameters.put(viewParam.getName(), existing);
+                }
+                existing.add(value);
+            }
+
+        }
+    }
+
+
+
 
 
      /**
@@ -793,6 +875,44 @@ public class MultiViewHandler extends ViewHandler {
             handler.applyAttachedObject(context, targetComponent);
         }
         
+    }
+
+
+    private static boolean paramHasValueExpression(UIViewParameter param) {
+
+        boolean result = false;
+        result = (null != param.getValueExpression("value"));
+        return result;
+
+    }
+
+
+    private static String getStringValueToTransfer(FacesContext context,
+                                                   UIViewParameter param,
+                                                   Collection<UIViewParameter> viewParams) {
+
+        if (viewParams != null && !viewParams.isEmpty()) {
+            for (UIViewParameter candidate : viewParams) {
+                if ((null != candidate.getName() && null != param.getName()) &&
+                    candidate.getName().equals(param.getName())) {
+                    return candidate.getStringValue(context);
+                }
+            }
+        }
+
+        return null;
+
+    }
+
+
+    private static String extractViewId(String viewId) {
+
+        int idx = viewId.indexOf('?');
+        if (idx != -1) {
+            return viewId.substring(0, idx);
+        }
+        return viewId;
+
     }
 
     
