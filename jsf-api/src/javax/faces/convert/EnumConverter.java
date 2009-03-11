@@ -47,7 +47,7 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p>{@link Converter} implementation for <code>java.lang.Enum</code>
+ * <p><span class="changed_modified_2_0">{@link Converter}</span> implementation for <code>java.lang.Enum</code>
  * (and enum primitive) values.</p>
  *
  * @since 1.2
@@ -173,12 +173,15 @@ public class EnumConverter implements Converter, StateHolder {
      * <p>Convert the enum constant given by the <code>value</code>
      * argument into a String.  If no target class argument has been
      * provided to the constructor of this instance, throw a
-     * <code>ConverterException</code> containing the
-     * {@link #ENUM_NO_CLASS_ID} message with proper parameters. If the
-     * <code>value</code> argument is <code>null</code>, return <code>null</code>.
-     * If the value is an instance of the provided target class, return its
-     * string value (<code>value.toString()</code>).  Otherwise, throw a
-     * {@link ConverterException} containing the {@link #ENUM_ID} message with
+     * <code>ConverterException</code> containing the {@link
+     * #ENUM_NO_CLASS_ID} message with proper parameters. If the
+     * <code>value</code> argument is <code>null</code>, return
+     * <code>null</code>.  If the value is an instance of the provided
+     * target class, return its string value by <span
+     * class="changed_added_2_0">casting it to a
+     * <code>java.lang.Enum</code> and returning the result of calling
+     * the <code>name()</code> method.</span> Otherwise, throw a {@link
+     * ConverterException} containing the {@link #ENUM_ID} message with
      * proper parameters.</p>
      *
      * @throws ConverterException   {@inheritDoc}
@@ -206,7 +209,7 @@ public class EnumConverter implements Converter, StateHolder {
         }
 
         if (targetClass.isInstance(value)) {
-            return value.toString();
+            return ((Enum)value).name();
         }
 
         throw new ConverterException(
