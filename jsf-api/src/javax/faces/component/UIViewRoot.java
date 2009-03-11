@@ -205,6 +205,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
         super();
         setRendererType(null);
+        setId(createUniqueId());
 
     }
 
@@ -1254,11 +1255,21 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * this UIViewRoot.</p>
      */
     public String createUniqueId() {
-        return UNIQUE_ID_PREFIX + lastId++;
+        return createUniqueId(getFacesContext(), null);
     }
 
-    public String createUniqueId(FacesContext context) {
-        return createUniqueId();
+    /**<p>Generate an identifier for a component. The identifier
+     * will be prefixed with UNIQUE_ID_PREFIX, and will be unique
+     * within this UIViewRoot. Optionally, a unique seed value can
+     * be supplied by component creators which should be
+     * included in the generated unique id.</p>
+     *
+     * @param context FacesContext
+     * @param seed an optional seed value - e.g. based on the position of the component in the PDL-template
+     * @return a unique-id in this component-container
+     */
+    public String createUniqueId(FacesContext context, String seed) {
+        return UNIQUE_ID_PREFIX + (seed == null ? lastId++ : seed);
     }
 
     /*
@@ -1597,6 +1608,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         UIComponent facet = getFacet(location);
         if (facet == null && create) {
             facet = context.getApplication().createComponent("javax.faces.Panel");
+            facet.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
             facet.setId(location);
             getFacets().put(location, facet);
         }

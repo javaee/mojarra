@@ -95,7 +95,7 @@ public class EventTestCase extends AbstractTestCase {
 
         HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "click");
         assertNotNull(submit);
-        page = submit.click();
+        page = (HtmlPage) submit.click();
         outputs.clear();
         getAllElementsOfGivenClass(page, outputs, HtmlSpan.class);
         assertTrue(outputs.size() == 6);
@@ -104,7 +104,7 @@ public class EventTestCase extends AbstractTestCase {
 
     public void testBeforeViewRender() throws Exception {
         HtmlPage page = getPage("/faces/eventTag01.xhtml");
-        assertTrue(-1 != page.asText().indexOf("class javax.faces.component.UIViewRoot before render"));
+        assertTrue(-1 != page.asText().indexOf("class javax.faces.component.UIViewRoot pre-render"));
     }
 
 
@@ -138,11 +138,11 @@ public class EventTestCase extends AbstractTestCase {
 
         // Short name
         s = outputs.get(0);
-        assertTrue(("The 'javax.faces.event.BeforeRenderEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.PreRenderComponentEvent' event fired!").equals(s.asText()));
 
         // Long name
         s = outputs.get(1);
-        assertTrue(("The 'javax.faces.event.BeforeRenderEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.PreRenderComponentEvent' event fired!").equals(s.asText()));
 
         // Short Name
         s = outputs.get(2);
@@ -154,7 +154,7 @@ public class EventTestCase extends AbstractTestCase {
 
         // Fully-qualified class name
         s = outputs.get(4);
-        assertTrue(("The 'javax.faces.event.BeforeRenderEvent' event fired!").equals(s.asText()));
+        assertTrue(("The 'javax.faces.event.PreRenderComponentEvent' event fired!").equals(s.asText()));
 
         // No-arg
         s = outputs.get(5);

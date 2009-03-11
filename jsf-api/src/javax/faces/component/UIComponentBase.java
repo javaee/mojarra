@@ -175,6 +175,16 @@ public abstract class UIComponentBase extends UIComponent {
      */
     private AttributesMap attributes = null;
 
+    private PartialStateHolder stateHolder = null;
+
+    protected PartialStateHolder getStateHolder() {
+        if(stateHolder == null) {
+            stateHolder = new DefaultComponentPartialStateMap(getFacesContext(),this);
+        }
+
+        return stateHolder;
+    }
+
 
     public Map<String, Object> getAttributes() {
 
@@ -277,7 +287,7 @@ public abstract class UIComponentBase extends UIComponent {
                 String generatedId;
                 if (null != namingContainerAncestor &&
                     namingContainerAncestor instanceof UniqueIdVendor) {
-                    generatedId = ((UniqueIdVendor)namingContainerAncestor).createUniqueId(context);
+                    generatedId = ((UniqueIdVendor)namingContainerAncestor).createUniqueId(context, null);
                 }
                 else {
                     generatedId = context.getViewRoot().createUniqueId();
@@ -380,38 +390,24 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-
     /**
-     * <p>The "should this component be rendered" flag.</p>
+     * List all properties here
+     * which can be stored in the partial-map
      */
-    private boolean rendered = true;
-    private boolean renderedSet = false;
+    private enum PropertyKeys {
+        rendered
+    }
+
 
     public boolean isRendered() {
-
-        if (renderedSet) {
-            return (rendered);
-        }
-        ValueExpression ve = getValueExpression("rendered");
-        if (ve != null) {
-            try {
-                return (!Boolean.FALSE.equals(ve.getValue(getFacesContext().getELContext())));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return (this.rendered);
-        }
-
+        Object retVal = getStateHolder().get(PropertyKeys.rendered, Boolean.TRUE);
+        return Boolean.TRUE.equals(retVal);
     }
 
 
     public void setRendered(boolean rendered) {
-
-        this.rendered = rendered;
-        this.renderedSet = true;
-
+        getStateHolder().notifyStoreState();
+        getStateHolder().put(PropertyKeys.rendered, rendered);
     }
 
 
@@ -1294,7 +1290,7 @@ public abstract class UIComponentBase extends UIComponent {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[11];
+            values = new Object[10];
         }
 
         if (attributes != null) {
@@ -1306,13 +1302,17 @@ public abstract class UIComponentBase extends UIComponent {
         values[1] = saveBindingsState(context);
         values[2] = clientId;
         values[3] = id;
-        values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = rendererType;
-        values[7] = saveAttachedState(context, listeners);
-        values[8] = attributesThatAreSet;
-        values[9] = saveSystemEventListeners(context);
-        values[10] = saveBehaviorsState(context);
+        //values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;
+        //values[5] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
+        values[4] = rendererType;
+        values[5] = saveAttachedState(context, listeners);
+        values[6] = attributesThatAreSet;
+        values[7] = saveSystemEventListeners(context);
+        values[8] = saveBehaviorsState(context);
+
+        if(stateHolder != null) {
+            values[9] = stateHolder.saveState(getFacesContext());
+        }
         assert (!transientFlag);
 
         return (values);
@@ -1333,12 +1333,10 @@ public abstract class UIComponentBase extends UIComponent {
         bindings = restoreBindingsState(context, values[1]);
         clientId = (String) values[2];
         id = (String) values[3];
-        rendered = ((Boolean) values[4]).booleanValue();
-        renderedSet = ((Boolean) values[5]).booleanValue();
-        rendererType = (String) values[6];
+        rendererType = (String) values[4];
         List<FacesListener> restoredListeners;
         if (null != (restoredListeners = TypedCollections.dynamicallyCastList((List)
-                restoreAttachedState(context, values[7]), FacesListener.class))) {
+                restoreAttachedState(context, values[5]), FacesListener.class))) {
             // if there were some listeners registered prior to this
             // method being invoked, merge them with the list to be
             // restored.
@@ -1348,15 +1346,19 @@ public abstract class UIComponentBase extends UIComponent {
                 listeners = restoredListeners;
             }
         }
-        Map m = restoreSystemEventListeners(context, values[9]);
+        Map m = restoreSystemEventListeners(context, values[7]);
         if (listenersByEventClass != null) {
             listenersByEventClass.putAll(m);
         } else {
             listenersByEventClass = m;
         }
         //noinspection unchecked
-        attributesThatAreSet = (List<String>) values[8];
-        behaviors = restoreBehaviorsState(context, values[10]);
+        attributesThatAreSet = (List<String>) values[6];
+        behaviors = restoreBehaviorsState(context, values[8]);
+
+        if(values[9] != null) {
+            getStateHolder().restoreState(getFacesContext(), values[9]);
+        }
     }
 
 

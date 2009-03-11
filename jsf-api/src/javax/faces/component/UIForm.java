@@ -266,8 +266,8 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
 
     }
 
-    public String createUniqueId(FacesContext context) {
-        return this.getClientId(context) + lastId++;
+    public String createUniqueId(FacesContext context, String seed) {
+        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId++ : seed);
     }
     
     /**

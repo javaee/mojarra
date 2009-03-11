@@ -301,8 +301,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             return root;
         }
 
-        return super.createView(ctx, viewId);
-
+        UIViewRoot root = super.createView(ctx, viewId);
+        root.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
+        return root;
+        
     }
     
 
@@ -362,6 +364,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public void buildView(FacesContext ctx, UIViewRoot viewToRender)
     throws IOException {
 
+        if (isViewPopulated(ctx, viewToRender)) {
+            return;
+        }
         viewToRender.setViewId(viewToRender.getViewId());
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -425,7 +430,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         this.initializeMappings();
-        this.stateManagementStrategy = new StateManagementStrategyImpl();
+        this.stateManagementStrategy = new StateManagementStrategyImpl(this);
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Initialization Successful");

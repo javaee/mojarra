@@ -63,7 +63,7 @@
   <p>
 
     <h:outputText value="This text has a listener attached to it that deletes the button with id cbutton">
-      <f:event type="beforeRender" listener="#{dynamicStateBean.beforeRenderDeletion}" />
+      <f:event type="preRenderComponent" listener="#{dynamicStateBean.beforeRenderDeletion}" />
     </h:outputText>
 
   </p>

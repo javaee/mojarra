@@ -83,18 +83,18 @@ public class MetadataHandler extends TagHandlerImpl {
         UIComponent facetComponent =
               parent.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
         if (facetComponent == null) {
-            parent.getAttributes()
-                  .put(FacetHandler.KEY, UIViewRoot.METADATA_FACET_NAME);
+            parent.getAttributes().put(FacetHandler.KEY,
+                                       UIViewRoot.METADATA_FACET_NAME);
             try {
                 this.nextHandler.apply(ctx, parent);
             } finally {
                 parent.getAttributes().remove(FacetHandler.KEY);
             }
-            facetComponent =
-                  parent.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
+            facetComponent = parent.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
             if (!(facetComponent instanceof UIPanel)) {
                 UIComponent panelGroup = ctx.getFacesContext().getApplication()
                       .createComponent(UIPanel.COMPONENT_TYPE);
+                panelGroup.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
                 panelGroup.getChildren().add(facetComponent);
                 parent.getFacets()
                       .put(UIViewRoot.METADATA_FACET_NAME, panelGroup);

@@ -59,6 +59,7 @@ import com.sun.faces.util.MessageUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.io.IOException;
 import javax.faces.application.Application;
 import javax.faces.application.StateManager;
 import javax.faces.component.ContextCallback;
@@ -71,6 +72,8 @@ import javax.faces.event.PreRemoveFromViewEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.SystemEventListener;
 import javax.faces.webapp.pdl.StateManagementStrategy;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.FacesException;
 
 /**
  * <p>
@@ -88,6 +91,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
 
+    private final PageDeclarationLanguage pdl;
     private AddRemoveListener removeListener;
     
     private static final String CLIENTIDS_TO_REMOVE_NAME = 
@@ -103,7 +107,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     /**
      * Create a new <code>StateManagerImpl</code> instance.
      */
-    public StateManagementStrategyImpl() {
+    public StateManagementStrategyImpl(PageDeclarationLanguage pdl) {
+        this.pdl = pdl;
         removeListener = new AddRemoveListener(this);
         Application app = FacesContext.getCurrentInstance().getApplication();
         app.subscribeToEvent(PostAddToViewNonPDLEvent.class, removeListener);
@@ -125,27 +130,29 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     }
     
     private class ComponentStruct implements StateHolder {
-        String 
-                parentClientId,
-                clientId;
-        int indexOfChildInParent;
+        String parentClientId;
+        String clientId;
+        int indexOfChildInParent = -1;
+        String facetName;
 
         public boolean isTransient() {
             return false;
         }
 
-        public void restoreState(FacesContext arg0, Object arg1) {
-            Object state[] = (Object []) arg1;
-            this.parentClientId = state[0].toString();
-            this.clientId = state[1].toString();
-            this.indexOfChildInParent = (Integer) state[2];
+        public void restoreState(FacesContext ctx, Object state) {
+            Object s[] = (Object []) state;
+            this.parentClientId = s[0].toString();
+            this.clientId = s[1].toString();
+            this.indexOfChildInParent = (Integer) s[2];
+            this.facetName = (String) s[3];
         }
 
         public Object saveState(FacesContext arg0) {
-            Object state[] = new Object[3];
+            Object state[] = new Object[4];
             state[0] = this.parentClientId;
             state[1] = this.clientId;
             state[2] = this.indexOfChildInParent;
+            state[3] = this.facetName;
             return state;
         }
 
@@ -183,7 +190,19 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 added = event.getComponent();
         toAdd.clientId = added.getClientId(context);
         toAdd.parentClientId = (parent = added.getParent()).getClientId(context);
-        toAdd.indexOfChildInParent = parent.getChildren().indexOf(added);
+        // this needs work
+        int idx = parent.getChildren().indexOf(added);
+        if (idx == -1) {
+            // this must be a facet
+            for (Map.Entry<String,UIComponent> facet : parent.getFacets().entrySet()) {
+                if (facet.getValue() == added) {
+                    toAdd.facetName = facet.getKey();
+                    break;
+                }
+            }
+        } else {
+            toAdd.indexOfChildInParent = parent.getChildren().indexOf(added);
+        }
         idsToAdd.add(toAdd);
     
     }
@@ -239,14 +258,18 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             public VisitResult visit(VisitContext context, UIComponent target) {
                 VisitResult result = VisitResult.ACCEPT;
                 Object stateObj = null;
-                if (!target.getAttributes().containsKey(UIComponent.ADDED_BY_PDL_KEY)) {
-                    stateObj = new StateHolderSaver(finalContext, target);
+                if (!target.isTransient()) {
+                    if (!target.getAttributes().containsKey(UIComponent.ADDED_BY_PDL_KEY)) {
+                        stateObj = new StateHolderSaver(finalContext, target);
+                    } else {
+                        stateObj = target.saveState(context.getFacesContext());
+                    }
+                    if (null != stateObj) {
+                        stateMap.put(target.getClientId(context.getFacesContext()),
+                                                        stateObj);
+                    }
                 } else {
-                    stateObj = target.saveState(context.getFacesContext());
-                }
-                if (null != stateObj) {
-                    stateMap.put(target.getClientId(context.getFacesContext()),
-                            stateObj);
+                    return result;
                 }
                 
                 return result;
@@ -285,8 +308,15 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
               RenderKitUtils.getResponseStateManager(context, renderKitId);
         
         // Build the tree to initial state
-        UIViewRoot viewRoot = context.getApplication().getViewHandler().createView(context, viewId);
+        UIViewRoot viewRoot;
 
+        try {
+            viewRoot = pdl.getViewMetadata(context, viewId).createMetadataView(context);
+            context.setViewRoot(viewRoot);
+            pdl.buildView(context, viewRoot);
+        } catch (IOException ioe) {
+            throw new FacesException(ioe);
+        }
         final Map<String, Object> state = (Map<String,Object>) rsm.getState(context, viewId);
 
         if (null != state) {
@@ -302,7 +332,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 public VisitResult visit(VisitContext context, UIComponent target) {
                     VisitResult result = VisitResult.ACCEPT;
                     Object stateObj = state.get(target.getClientId(context.getFacesContext()));
-                    if (null != stateObj) {
+                    if (stateObj != null && target.getAttributes().containsKey(UIComponent.ADDED_BY_PDL_KEY)) {
                         target.restoreState(context.getFacesContext(),
                                 stateObj);
                     }
@@ -344,14 +374,20 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 for (ComponentStruct cur : addList) {
                     final ComponentStruct finalCur = cur;
                     // Find the parent
-                    viewRoot.invokeOnComponent(context, finalCur.parentClientId, 
+                    viewRoot.invokeOnComponent(context, finalCur.parentClientId,
                             new ContextCallback() {
                         public void invokeContextCallback(FacesContext context, UIComponent parent) {
                             // Create the child
                             StateHolderSaver saver = (StateHolderSaver) state.get(finalCur.clientId);
                             UIComponent toAdd = (UIComponent) saver.restore(context);
-                            // Add the child to the parent
-                            parent.getChildren().add(finalCur.indexOfChildInParent, toAdd);
+                            int idx = finalCur.indexOfChildInParent;
+                            if (idx == -1) {
+                                // add facet to the parent
+                                parent.getFacets().put(finalCur.facetName, toAdd);
+                            } else {
+                                // add the child to the parent at correct index
+                                parent.getChildren().add(finalCur.indexOfChildInParent, toAdd);
+                            }
                         }
                     });
                 }

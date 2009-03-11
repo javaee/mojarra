@@ -79,7 +79,7 @@ final class UILiteralTextHandler extends AbstractUIHandler {
             UIComponent ancestorNamingContainer = parent.getNamingContainer();
             if (null != ancestorNamingContainer &&
                     ancestorNamingContainer instanceof UniqueIdVendor) {
-                uid = ((UniqueIdVendor) ancestorNamingContainer).createUniqueId(ctx.getFacesContext());
+                uid = ((UniqueIdVendor) ancestorNamingContainer).createUniqueId(ctx.getFacesContext(), null);
             } else {
                 uid = ComponentSupport.getViewRoot(ctx, parent).createUniqueId();
             }

@@ -49,18 +49,18 @@ import javax.faces.context.FacesContext;
  * @since 2.0
  */
 public interface UniqueIdVendor {
-    
-    /**
-     * <p class="changed_added_2_0">The implementation must prepend the
-     * return from this component&#8217;s {@link
-     * UIComponent#getClientId(javax.faces.context.FacesContext)} to a
-     * unique id such that each time this method is called during the
-     * life of this component instance the each call returns a unique
-     * value.</p>
-     * 
-     * @param context the <code>FacesContext</code> for this request
-     * @since 2.0
-     */ 
-    public String createUniqueId(FacesContext context);
+
+
+    /**<p>Generate an identifier for a component. The identifier
+     * will be prefixed with UNIQUE_ID_PREFIX, and will be unique
+     * within this component-container. Optionally, a unique seed value can
+     * be supplied by component creators which should be
+     * included in the generated unique id.</p>
+     *
+     * @param context FacesContext
+     * @param seed an optional seed value - e.g. based on the position of the component in the PDL-template
+     * @return a unique-id in this component-container
+     */
+    public String createUniqueId(FacesContext context, String seed);
 
 }

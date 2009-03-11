@@ -46,28 +46,28 @@
 
 
     <h:form id="form" prependId="false">
-        <h:outputText id="beforeRenderTest1" >
-            <f:event type="beforeRender" listener="#{eventTagBean.beforeEncode}" />
+        <h:outputText id="preRenderComponentTest1" >
+            <f:event type="preRenderComponent" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
-        <h:outputText id="beforeRenderTest2" >
-            <f:event type="javax.faces.event.beforeRender" listener="#{eventTagBean.beforeEncode}" />
+        <h:outputText id="preRenderComponentTest2" >
+            <f:event type="javax.faces.event.PreRenderComponent" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
-        <h:outputText id="afterAddToViewTest1" >
-            <f:event type="afterAddToView" listener="#{eventTagBean.beforeEncode}" />
+        <h:outputText id="postAddToViewTest1" >
+            <f:event type="postAddToView" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
-        <h:outputText id="afterAddToViewTest2" >
-            <f:event type="javax.faces.event.afterAddToView" listener="#{eventTagBean.beforeEncode}" />
+        <h:outputText id="postAddToViewTest2" >
+            <f:event type="javax.faces.event.PostAddToView" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
         <h:outputText id="fqcnTest" >
-            <f:event type="javax.faces.event.BeforeRenderEvent" listener="#{eventTagBean.beforeEncode}" />
+            <f:event type="javax.faces.event.PreRenderComponentEvent" listener="#{eventTagBean.beforeEncode}" />
         </h:outputText>
         <br />
         <h:outputText id="noArgTest" >
-            <f:event type="beforeRender" listener="#{eventTagBean.beforeEncodeNoArg}" />
+            <f:event type="preRenderComponent" listener="#{eventTagBean.beforeEncodeNoArg}" />
         </h:outputText>
         <h:commandButton id="click" value="Click" />
     </h:form>

@@ -63,8 +63,7 @@ public abstract class AbstractUIHandler implements FaceletHandler, TextHandler {
     public void addComponent(FaceletContext ctx,
                              UIComponent parent,
                              UIComponent c) {
-        c.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
-	ComponentSupport.addComponent(ctx, parent, c);
+        ComponentSupport.addComponent(ctx, parent, c);
     }
 
 }

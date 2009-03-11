@@ -322,6 +322,8 @@ public final class AjaxHandler extends TagHandlerImpl {
         }
         
         UIOutput output = new UIOutput();
+        // Hold your nose!!
+        output.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         output.setRendererType("javax.faces.resource.Script");
         output.getAttributes().put("name", name);
         output.getAttributes().put("library", library);
