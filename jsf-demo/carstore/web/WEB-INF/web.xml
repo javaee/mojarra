@@ -113,7 +113,7 @@
 
     <!-- Enable encryption for client side state saving -->
     <env-entry>
-        <env-entry-name>com.sun.faces.ClientStateSavingPassword</env-entry-name>
+        <env-entry-name>ClientStateSavingPassword</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
         <env-entry-value>password</env-entry-value>
     </env-entry>
