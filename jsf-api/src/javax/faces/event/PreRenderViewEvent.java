@@ -50,6 +50,10 @@ import javax.faces.component.UIViewRoot;
  * implementation may assume that the <code>source</code> of this event
  * instance is the {@link UIViewRoot} instance that is about to be
  * rendered.</p>
+
+ * PENDING(edburns): make sure to clearly document what the state of
+ * the system is when this event is published.  You can call
+ * buildView(), etc.
  *
  * @since 2.0
  */
