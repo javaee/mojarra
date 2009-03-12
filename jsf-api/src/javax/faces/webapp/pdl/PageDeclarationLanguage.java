@@ -156,6 +156,9 @@ public abstract class PageDeclarationLanguage {
 
     /**
      * RELEASE_PENDING (docs)
+     * Make sure that we document that buildView should take no action on the
+     * argument UIViewRoot if the view has already been built (this does not
+     * include a UIViewRoot that includes only metadata.
      * @param context
      * @param view
      */

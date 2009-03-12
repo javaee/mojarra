@@ -353,6 +353,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public void buildView(FacesContext ctx, UIViewRoot viewToRender)
     throws IOException {
 
+        if (isViewPopulated(ctx, viewToRender)) {
+            return;
+        }
         viewToRender.setViewId(viewToRender.getViewId());
 
         if (LOGGER.isLoggable(Level.FINE)) {
