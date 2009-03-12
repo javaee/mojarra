@@ -1821,6 +1821,13 @@
             <xsd:element name="if"
                          type="javaee:faces-config-ifType"
                          minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        RELEASE_PENDING (edburns,rogerk) docs
+
+                    </xsd:documentation>
+                </xsd:annotation>
             </xsd:element>
             <xsd:element name="to-view-id"
                          type="javaee:faces-config-valueType">
