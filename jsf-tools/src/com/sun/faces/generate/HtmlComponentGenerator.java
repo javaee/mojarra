@@ -222,7 +222,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.write('\n');
         writer.writeImport("javax.faces.context.FacesContext");
         if( useBehavior){
-        	writer.writeImport("javax.faces.component.behavior.BehaviorHolder");
+        	writer.writeImport("javax.faces.component.behavior.ClientBehaviorHolder");
         }
         writer.writeImport("javax.el.MethodExpression");
         writer.writeImport("javax.el.ValueExpression");
@@ -257,7 +257,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         // Generate the class declaration
         writer.writePublicClassDeclaration(shortName(cb.getComponentClass()),
                                            base.getComponentClass(),
-                                           useBehavior?(new String[]{"BehaviorHolder"}):null, false, false);
+                                           useBehavior?(new String[]{"ClientBehaviorHolder"}):null, false, false);
 
         writer.write("\n\n");
 
@@ -497,7 +497,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
         writer.outdent();
         writer.fwrite("}\n\n\n");
-        // BehaviorHolder methods
+        // ClientBehaviorHolder methods
         if(useBehavior){
         	writer.fwrite("private static final Collection<String> EVENT_NAMES = Collections.unmodifiableCollection(Arrays.asList(");
         	boolean first = true;

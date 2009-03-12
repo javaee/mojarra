@@ -49,7 +49,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 
 import javax.faces.FactoryFinder;
-import javax.faces.render.BehaviorRenderer;
+import javax.faces.render.ClientBehaviorRenderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
@@ -158,7 +158,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             }
         }
 
-        // process annotated Renderers, BehaviorRenderers first as Renderers configured
+        // process annotated Renderers, ClientBehaviorRenderers first as Renderers configured
         // via config files take precedence
         processAnnotations(FacesRenderer.class);
         processAnnotations(FacesBehaviorRenderer.class);
@@ -188,7 +188,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             }
             
             for (Map.Entry<Document,List<Node>> renderEntry : entry.getValue().entrySet()) {
-                addBehaviorRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
+                addClientBehaviorRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
             }
         }
         invokeNext(documents);
@@ -327,7 +327,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void addBehaviorRenderers(RenderKit renderKit,
+    private void addClientBehaviorRenderers(RenderKit renderKit,
                               Document owningDocument,
                               List<Node> behaviorRenderers) {
 
@@ -349,20 +349,20 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
             if ((behaviorRendererType != null)
                   && (behaviorRendererClass != null)) {
-                BehaviorRenderer r = (BehaviorRenderer) createInstance(behaviorRendererClass,
-                                                       BehaviorRenderer.class,
+                ClientBehaviorRenderer r = (ClientBehaviorRenderer) createInstance(behaviorRendererClass,
+                                                       ClientBehaviorRenderer.class,
                                                        null,
                                                        behaviorRenderer);                
                 if (r != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
-                                        "Calling RenderKit.addBehaviorRenderer({0},{1}, {2}) for RenderKit ''{2}''",
+                                        "Calling RenderKit.addClientBehaviorRenderer({0},{1}, {2}) for RenderKit ''{2}''",
                                         behaviorRendererType,
                                         behaviorRendererClass,
                                         renderKit.getClass()));
                     }
-                    renderKit.addBehaviorRenderer(behaviorRendererType, r);
+                    renderKit.addClientBehaviorRenderer(behaviorRendererType, r);
                 }
             }
         }

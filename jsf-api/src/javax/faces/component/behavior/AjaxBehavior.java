@@ -60,10 +60,10 @@ import javax.faces.event.FacesEvent;
 
 /**
  * <p class="changed_added_2_0">An instance of this class is added
- * as a {@link Behavior} to a component using the 
- * {@link javax.faces.component.behavior.BehaviorHolder#addBehavior} 
+ * as a {@link ClientBehavior} to a component using the 
+ * {@link javax.faces.component.behavior.ClientBehaviorHolder#addClientBehavior} 
  * contract that components implement.  The presence of this 
- * {@link Behavior} will cause the rendering of JavaScript that 
+ * {@link ClientBehavior} will cause the rendering of JavaScript that 
  * produces an <code>Ajax</code> request using the 
  * specification public JavaScript API when the component is 
  * rendered.</p> 
@@ -71,7 +71,7 @@ import javax.faces.event.FacesEvent;
  * @since 2.0
  */
 @SuppressWarnings("serial")
-public class AjaxBehavior extends BehaviorBase implements Serializable {
+public class AjaxBehavior extends ClientBehaviorBase implements Serializable {
 
     /**
      * <p class="changed_added_2_0">The key that when added to a 
@@ -96,8 +96,8 @@ public class AjaxBehavior extends BehaviorBase implements Serializable {
      */
     public static final String AJAX_ACTION = "action";
 
-    private static final Set<BehaviorHint> HINTS = 
-        Collections.unmodifiableSet(EnumSet.of(BehaviorHint.SUBMITTING));
+    private static final Set<ClientBehaviorHint> HINTS = 
+        Collections.unmodifiableSet(EnumSet.of(ClientBehaviorHint.SUBMITTING));
 
     private String event;
     private ValueExpression onerrorExpression;
@@ -158,7 +158,7 @@ public class AjaxBehavior extends BehaviorBase implements Serializable {
     }
 
     @Override
-    public Set<BehaviorHint> getHints() {
+    public Set<ClientBehaviorHint> getHints() {
         return HINTS;
     }
 

@@ -50,11 +50,11 @@ import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.behavior.Behavior;
-import javax.faces.component.behavior.BehaviorContext;
+import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.render.BehaviorRenderer;
+import javax.faces.render.ClientBehaviorRenderer;
 
 import com.sun.faces.renderkit.RenderKitUtils;
 
@@ -63,7 +63,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * It also  
  */
 
-public class AjaxBehaviorRenderer extends BehaviorRenderer  {
+public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     
     // Log instance for this class
     protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
@@ -72,8 +72,8 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
     // ------------------------------------------------------ Rendering Methods
 
     @Override
-    public String getScript(BehaviorContext behaviorContext,
-                            Behavior behavior) {
+    public String getScript(ClientBehaviorContext behaviorContext,
+                            ClientBehavior behavior) {
         if (!(behavior instanceof AjaxBehavior)) {
             // TODO: use MessageUtils for this error message?
             throw new IllegalArgumentException(
@@ -87,7 +87,7 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
     @Override
     public void decode(FacesContext context,
                        UIComponent component,
-                       Behavior behavior) {
+                       ClientBehavior behavior) {
         if (null == context || null == component || null == behavior) {
             throw new NullPointerException();
         }
@@ -117,7 +117,7 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
 
     }
 
-    private static String buildAjaxCommand(BehaviorContext behaviorContext,
+    private static String buildAjaxCommand(ClientBehaviorContext behaviorContext,
                                            AjaxBehavior ajaxBehavior) {
 
         FacesContext context = behaviorContext.getFacesContext();
@@ -136,7 +136,7 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
         String onevent = ajaxBehavior.getOnEvent(context);
         String onerror = ajaxBehavior.getOnError(context);
         String sourceId = behaviorContext.getSourceId();
-        Collection<Behavior.Parameter> params = behaviorContext.getParameters();
+        Collection<ClientBehaviorContext.Parameter> params = behaviorContext.getParameters();
 
         ajaxCommand.append("mojarra.ab(");
 
@@ -169,7 +169,7 @@ public class AjaxBehaviorRenderer extends BehaviorRenderer  {
             }
 
             if (!params.isEmpty()) {
-                for (Behavior.Parameter param : params) {
+                for (ClientBehaviorContext.Parameter param : params) {
                     RenderKitUtils.appendProperty(ajaxCommand, 
                                                   param.getName(),
                                                   param.getValue());
