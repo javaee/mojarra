@@ -114,7 +114,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             props.add("binding");
             String[] propNames = props.toArray(new String[props.size()]);
             Arrays.sort(propNames);
-            System.out.println("PROPERTIES" + Arrays.toString(propNames));
             EXCLUDED_COPY_ATTRIBUTES = propNames;
         } catch (Exception e) {
             throw new FacesException(e);
