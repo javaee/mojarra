@@ -205,7 +205,12 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
                 first = false;
             }
 
-            builder.append(getResolvedId(component, id));
+            if (id.equals("@all") || id.equals("@none") ||
+                id.equals("@form") || id.equals("@this")) {
+                builder.append(id);
+            } else {
+                builder.append(getResolvedId(component, id));
+            }
         }
 
         builder.append("'");

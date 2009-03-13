@@ -139,7 +139,7 @@ public class PartialViewContextImpl extends PartialViewContext {
         String execute = ctx.
             getExternalContext().getRequestParameterMap()
               .get(PARTIAL_EXECUTE_PARAM_NAME);
-        return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
+        return (null == execute);
 
     }
 
@@ -189,16 +189,13 @@ public class PartialViewContextImpl extends PartialViewContext {
         this.partialRequest = isPartialRequest;
     }
     
-    
-
-
     public boolean isRenderNone() {
 
         assertNotReleased();
         String render = ctx.
             getExternalContext().getRequestParameterMap()
             .get(PARTIAL_RENDER_PARAM_NAME);
-        return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(render));
+        return (null == render);
 
     }
 
@@ -352,7 +349,7 @@ public class PartialViewContextImpl extends PartialViewContext {
               getExternalContext().getRequestParameterMap();
 
         String param = requestParamMap.get(parameterName);
-        if (param == null || NO_PARTIAL_PHASE_CLIENT_IDS.equals(param)) {
+        if (param == null) {
             return new ArrayList<String>();
         } else {
             String[] pcs = Util.split(param, "[ \t]+");

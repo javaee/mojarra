@@ -904,15 +904,31 @@ public class UIViewRoot extends UIComponentBase {
     
 
     /**
-     * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isPartialRequest} returns 
-     * <code>true</code>, perform partial processing by calling
+     * <div class="changed_added_2_0">
+     * <p>Perform partial processing by calling
      * {@link javax.faces.context.PartialViewContext#processPartial} with
-     * {@link PhaseId#APPLY_REQUEST_VALUES}.  If 
-     * {@link javax.faces.context.PartialViewContext#isPartialRequest}
-     * returned <code>false</code>, perform <code>processDecodes</code> on all
-     * components in the view.</p> 
+     * {@link PhaseId#APPLY_REQUEST_VALUES} if:
+     * <ul>
+     * <li>{@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returns <code>true</code> and we don't have a request to process all 
+     * components in the view
+     * ({@link javax.faces.context.PartialViewContext#isExecuteAll} returns
+     * <code>false</code>)</li>
+     * </ul>
+     * Perform full processing by calling 
+     * {@link UIComponentBase#processDecodes} if one of the following 
+     * conditions are met:
+     * <ul>
+     * <li> {@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returns <code>true</code> and we have a request to process all 
+     * components in the view
+     * ({@link javax.faces.context.PartialViewContext#isExecuteAll} returns
+     * <code>true</code>)</li>
+     * <li>{@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returns <code>false</code></li>
+     * </ul>
      * </p>
+     * </div>
      * <p class="changed_modified_2_0">Override the default 
      * {@link UIComponentBase#processDecodes} behavior to broadcast any queued 
      * events after the default processing or partial processing has been 
@@ -932,10 +948,11 @@ public class UIViewRoot extends UIComponentBase {
 
         try {
             if (!skipPhase) {
-                if (context.getPartialViewContext().isPartialRequest()) {
+                if (context.getPartialViewContext().isPartialRequest() &&
+                    !context.getPartialViewContext().isExecuteAll()) {
                     context.getPartialViewContext().processPartial(PhaseId.APPLY_REQUEST_VALUES);
                 } else {
-                super.processDecodes(context);
+                    super.processDecodes(context);
                 }
                 broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
             }
@@ -1124,14 +1141,31 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isPartialRequest} returns 
-     * <code>true</code>, perform partial processing by calling
-     * {@link javax.faces.context.PartialViewContext#processPartial} with 
-     * {@link PhaseId#PROCESS_VALIDATIONS}.  If 
-     * {@link javax.faces.context.PartialViewContext#isPartialRequest}
-     * returned <code>false</code>, perform <code>processValidators</code> on all
-     * components in the view.</p>
+     * <div class="changed_added_2_0">
+     * <p>Perform partial processing by calling
+     * {@link javax.faces.context.PartialViewContext#processPartial} with
+     * {@link PhaseId#PROCESS_VALIDATIONS} if:
+     * <ul>
+     * <li>{@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returns <code>true</code> and we don't have a request to process all
+     * components in the view
+     * ({@link javax.faces.context.PartialViewContext#isExecuteAll} returns
+     * <code>false</code>)</li>
+     * </ul>
+     * Perform full processing by calling
+     * {@link UIComponentBase#processValidators} if one of the following
+     * conditions are met:
+     * <ul>
+     * <li> {@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returns <code>true</code> and we have a request to process all
+     * components in the view
+     * ({@link javax.faces.context.PartialViewContext#isExecuteAll} returns
+     * <code>true</code>)</li>
+     * <li>{@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returns <code>false</code></li>
+     * </ul>
+     * </p>
+     * </div>
      * <p class="changed_modified_2_0">Override the default 
      * {@link UIComponentBase#processValidators} behavior to broadcast any 
      * queued events after the default processing or partial processing has been 
@@ -1151,7 +1185,8 @@ public class UIViewRoot extends UIComponentBase {
 
         try {
             if (!skipPhase) {
-                if (context.getPartialViewContext().isPartialRequest()) {
+                if (context.getPartialViewContext().isPartialRequest() &&
+                    !context.getPartialViewContext().isExecuteAll()) {
                     context.getPartialViewContext().processPartial(PhaseId.PROCESS_VALIDATIONS);
                 } else {
                     super.processValidators(context);
@@ -1165,15 +1200,31 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isPartialRequest} returns 
-     * <code>true</code>, perform partial processing by calling
-     * {@link javax.faces.context.PartialViewContext#processPartial} with 
-     * {@link PhaseId#UPDATE_MODEL_VALUES}.  If 
-     * {@link javax.faces.context.PartialViewContext#isPartialRequest}
-     * returned <code>false</code>, perform <code>processUpdates</code> on all
-     * components in the view.</p>
+     * <div class="changed_added_2_0">
+     * <p>Perform partial processing by calling
+     * {@link javax.faces.context.PartialViewContext#processPartial} with
+     * {@link PhaseId#UPDATE_MODEL_VALUES} if:
+     * <ul>
+     * <li>{@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returns <code>true</code> and we don't have a request to process all
+     * components in the view
+     * ({@link javax.faces.context.PartialViewContext#isExecuteAll} returns
+     * <code>false</code>)</li>
+     * </ul>
+     * Perform full processing by calling
+     * {@link UIComponentBase#processUpdates} if one of the following
+     * conditions are met:
+     * <ul>
+     * <li> {@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returns <code>true</code> and we have a request to process all
+     * components in the view
+     * ({@link javax.faces.context.PartialViewContext#isExecuteAll} returns
+     * <code>true</code>)</li>
+     * <li>{@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returns <code>false</code></li>
+     * </ul>
      * </p>
+     *</div>
      * <p class="changed_modified_2_0">Override the default {@link UIComponentBase}
      * behavior to broadcast any queued events after the default processing or 
      * partial processing has been completed and to clear out any events for 
@@ -1193,7 +1244,8 @@ public class UIViewRoot extends UIComponentBase {
 
         try {
             if (!skipPhase) {
-                if (context.getPartialViewContext().isPartialRequest()) {
+                if (context.getPartialViewContext().isPartialRequest() &&
+                    !context.getPartialViewContext().isExecuteAll()) {
                     context.getPartialViewContext().processPartial(PhaseId.UPDATE_MODEL_VALUES);
                 } else {
                     super.processUpdates(context);

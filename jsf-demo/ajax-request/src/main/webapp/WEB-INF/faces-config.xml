@@ -43,6 +43,10 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
               version="2.0">
     
+  <lifecycle>
+    <phase-listener>ajaxrequest.RequestPhaseListener</phase-listener>
+  </lifecycle>
+
     <component>
         <component-type>ajaxrequest.Panel</component-type>
         <component-class>ajaxrequest.Panel</component-class>

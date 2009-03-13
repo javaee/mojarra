@@ -72,6 +72,8 @@ public class Panel extends UIPanel {
         } else {
             if (style.equals("execute")) {
                 getAttributes().put("styleClass", "execute-render");
+            } else if (style.equals("execute-norender")) {
+                getAttributes().put("styleClass", "execute-norender");
             } else {
                 getAttributes().put("styleClass", "render");
             }

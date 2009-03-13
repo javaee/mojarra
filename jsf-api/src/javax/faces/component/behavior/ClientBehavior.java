@@ -106,7 +106,7 @@ public interface ClientBehavior extends Behavior {
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners who have registered an interest),  by calling
      * <code>queueEvent()</code>. Default implementation delegates decoding 
-     * to {@link javax.faces.render.ClientBehaviorRenderer#decode(FacesContext, UIComponent, Behavior)}</p>
+     * to {@link javax.faces.render.ClientBehaviorRenderer#decode(FacesContext, UIComponent, ClientBehavior)}</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      * @param component {@link UIComponent} the component associated with this {@link Behavior} 

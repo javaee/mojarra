@@ -67,8 +67,8 @@ import javax.faces.render.RenderKit;
  * future other types of behavior contracts may be added.</p>
  * 
  * <p>Like other attached objects (converters, validators) Behavior instances 
- * are created via the {@link Application} object.  See 
- * {@Application#createBehavior} for more details.</p>
+ * are created via the {@link javax.faces.application.Application} object.  See 
+ * {@link javax.faces.application.Application#createBehavior} for more details.</p>
  *
  * @since 2.0
  */

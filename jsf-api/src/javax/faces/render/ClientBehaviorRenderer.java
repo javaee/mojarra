@@ -50,7 +50,7 @@ import javax.faces.context.FacesContext;
 /**
  * <p>A <strong class="changed_added_2_0">ClientBehaviorRenderer</strong> produces
  * the client-side script that implements a {@link ClientBehavior}'s client-side 
- * logic.  It can also enqueue server-side {@link BehaviorEvent}s that may be
+ * logic.  It can also enqueue server-side {@link javax.faces.event.BehaviorEvent}s that may be
  * processed later by event listeners that have registered an interest.</p> 
  *
  * <p>Individual {@link ClientBehaviorRenderer} instances will be instantiated as 
@@ -108,7 +108,8 @@ public abstract class ClientBehaviorRenderer {
      * <code>queueEvent()</code>.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
-     * @param component {@link UIComponent} the component associated with this {@link Behavior}
+     * @param component {@link UIComponent} the component associated with this 
+     * {@link javax.faces.component.behavior.Behavior}
      * @param behavior {@link ClientBehavior} the behavior instance
      *
      * @throws NullPointerException if <code>context</code>,
