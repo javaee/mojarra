@@ -2290,6 +2290,18 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>
+    <property>
+      <description>
+          Return the URI fragment, as specified in RFC 2396.
+        </description>
+      <display-name>HTML Fragment</display-name>
+      <icon/>
+      <property-name>fragment</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
 
     <component-extension>
       <component-family>javax.faces.OutcomeTarget</component-family>
@@ -12810,6 +12822,18 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>
+    <property>
+      <description>
+          Return the URI fragment, as specified in RFC 2396.
+        </description>
+      <display-name>HTML Fragment</display-name>
+      <icon/>
+      <property-name>fragment</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -13433,6 +13457,18 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <icon/>
       <property-name>includeViewParams</property-name>
       <property-class>java.lang.Boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Return the URI fragment, as specified in RFC 2396.
+        </description>
+      <display-name>HTML Fragment</display-name>
+      <icon/>
+      <property-name>fragment</property-name>
+      <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
