@@ -48,12 +48,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
+import javax.faces.component.ActionSource;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.render.ClientBehaviorRenderer;
 
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -105,7 +108,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             return;
         }        
 
-        component.queueEvent(new AjaxBehaviorEvent(component, behavior));
+        component.queueEvent(createEvent(context, component, ajaxBehavior));
 
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("This command resulted in form submission " +
@@ -116,6 +119,36 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
 
 
     }
+
+    // Creates an AjaxBehaviorEvent for the specified component/behavior
+    private static AjaxBehaviorEvent createEvent(FacesContext context,
+                                                 UIComponent component,
+                                                 AjaxBehavior ajaxBehavior) {
+
+        AjaxBehaviorEvent event = new AjaxBehaviorEvent(component, ajaxBehavior);
+
+        // If immediate is specified on the AjaxBehavior, we honor it.
+        // Otherwise, we inherit immediate from an ActionSource or 
+        // EditableValueHolder parent, if we have one.
+        Boolean immediate = ajaxBehavior.isImmediate(context);
+
+        if (immediate == null) {
+            if (component instanceof EditableValueHolder) {
+                immediate = ((EditableValueHolder)component).isImmediate();
+            } else if (component instanceof ActionSource) {
+                immediate = ((ActionSource)component).isImmediate();
+            }
+        }
+
+        PhaseId phaseId = (Boolean.TRUE.equals(immediate)) ?
+                              PhaseId.APPLY_REQUEST_VALUES :
+                              PhaseId.INVOKE_APPLICATION;
+
+        event.setPhaseId(phaseId);
+
+        return event;
+    }
+
 
     private static String buildAjaxCommand(ClientBehaviorContext behaviorContext,
                                            AjaxBehavior ajaxBehavior) {

@@ -128,6 +128,7 @@ public final class AjaxHandler extends TagHandlerImpl {
     private final TagAttribute onevent;
     private final TagAttribute onerror;
     private final TagAttribute disabled;
+    private final TagAttribute immediate;
     private final TagAttribute listener;
 
     private final boolean wrapping;
@@ -143,6 +144,7 @@ public final class AjaxHandler extends TagHandlerImpl {
         this.onevent = this.getAttribute("onevent");
         this.onerror = this.getAttribute("onerror");
         this.disabled = this.getAttribute("disabled");
+        this.immediate = this.getAttribute("immediate");
         this.listener = this.getAttribute("listener");
 
         this.wrapping = isWrapping();
@@ -245,7 +247,8 @@ public final class AjaxHandler extends TagHandlerImpl {
             ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
             ((this.execute != null) ? this.execute.getValueExpression(ctx, Object.class) : null),
             ((this.render != null) ? this.render.getValueExpression(ctx, Object.class) : null),
-            ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null));
+            ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null),
+            ((this.immediate != null) ? this.immediate.getValueExpression(ctx, Boolean.class) : null));
 
         if (null != listener) {
             ajaxBehavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(
