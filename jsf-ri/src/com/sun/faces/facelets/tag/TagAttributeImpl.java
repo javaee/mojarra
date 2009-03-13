@@ -64,8 +64,9 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.el.TagMethodExpression;
 import com.sun.faces.facelets.el.TagValueExpression;
+import com.sun.faces.util.Util;
+
 import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.FacesException;
@@ -187,20 +188,15 @@ public final class TagAttributeImpl extends TagAttribute {
     public MethodExpression getMethodExpression(FaceletContext ctx, Class type,
             Class[] paramTypes) {
         MethodExpression result = null;
-        final String specialPrefix = "#{compositeComponent.attrs.";
+        final String specialPrefix = "#{compositeComponent.";
         final int specialPrefixLen = specialPrefix.length();
         try {
             ExpressionFactory f = ctx.getExpressionFactory();
             // Determine if this is a composite component attribute lookup.
             // If so, look for a MethodExpression under the attribute key
-            if (this.value.startsWith(specialPrefix)) {
+            if (this.value.startsWith(specialPrefix) && this.value.contains(".attrs.")) {
                 // Make sure this is *only* an attribute lookup
-                if (specialPrefixLen < this.value.length() &&
-                        -1 == this.value.indexOf(".", specialPrefixLen)) {
-                    String attrName = this.value.substring(specialPrefixLen,
-                            this.value.length() - 1);
-                    result = new AttributeLookupMethodExpression(this.value, attrName);
-                }
+                result = new AttributeLookupMethodExpression(getValueExpression(ctx, MethodExpression.class));
             }
             if (null == result) {
                 result = new TagMethodExpression(this, f.createMethodExpression(ctx,
@@ -214,17 +210,14 @@ public final class TagAttributeImpl extends TagAttribute {
     
     public static class AttributeLookupMethodExpression extends MethodExpression implements StateHolder {
 
-        private String attrName = null;
-        private String expressionString = null;
+        private ValueExpression lookupExpression;
         private boolean isTransient = false;
         
-        public AttributeLookupMethodExpression(String expressionString,
-                String attrName) {
-            if (null == expressionString || null == attrName) {
-                throw new NullPointerException("null MethodExpression");
-            }
-            this.expressionString = expressionString;
-            this.attrName = attrName;
+        public AttributeLookupMethodExpression(ValueExpression lookupExpression) {
+
+            Util.notNull("lookupExpression", lookupExpression);
+            this.lookupExpression = lookupExpression;
+
         }
         
         public AttributeLookupMethodExpression() {}
@@ -238,15 +231,13 @@ public final class TagAttributeImpl extends TagAttribute {
         }
         
         public void restoreState(FacesContext context, Object stateObj) {
-            String [] state = (String []) stateObj;
-            this.attrName = state[0];
-            this.expressionString = state[1];
+            Object[] state = (Object[]) stateObj;
+            lookupExpression = (ValueExpression) state[0];
         }
 
         public Object saveState(FacesContext arg0) {
-            String [] state = new String[2];
-            state[0] = this.attrName;
-            state[1] = this.expressionString;
+            Object[] state = new Object[1];
+            state[0] = lookupExpression;
             return state;
         }
 
@@ -257,19 +248,20 @@ public final class TagAttributeImpl extends TagAttribute {
 
         @Override
         public Object invoke(ELContext elContext, Object[] arg1) {
-            FacesContext context = (FacesContext) elContext.getContext(FacesContext.class);
-            // NPE is ok here.
-            UIComponent composite = UIComponent.getCurrentCompositeComponent(context);
-            MethodExpression me = (MethodExpression) composite.getAttributes().get(attrName);
-            if (me == null) {
-                throw new FacesException("Unable to find named attribute '" + attrName + "' in the using page composite component reference.");
+            Object result = lookupExpression.getValue(elContext);
+            if (result == null) {
+                throw new FacesException("Unable to resolve composite component from using page using EL expression '" + lookupExpression.getExpressionString() + '\'');
             }
-            return me.invoke(elContext, arg1);
+            if (!(result instanceof MethodExpression)) {
+                throw new FacesException("Successfully resolved expression '" + lookupExpression.getExpressionString() + "', but the value is not a MethodExpression");
+            }
+
+            return ((MethodExpression) result).invoke(elContext, arg1);
         }
 
         @Override
         public String getExpressionString() {
-            return expressionString;
+            return lookupExpression.getExpressionString();
         }
 
         @Override
@@ -278,20 +270,19 @@ public final class TagAttributeImpl extends TagAttribute {
             if (otherObj instanceof AttributeLookupMethodExpression) {
                 AttributeLookupMethodExpression other = 
                         (AttributeLookupMethodExpression) otherObj;
-                result = this.expressionString.equals(other.expressionString);
+                result = lookupExpression.getExpressionString().equals(other.lookupExpression.getExpressionString());
             }
             return result;
         }
 
         @Override
         public boolean isLiteralText() {
-            return (this.expressionString.startsWith("#{") &&
-                          (this.expressionString.endsWith("}")));
+            return lookupExpression.isLiteralText();
         }
 
         @Override
         public int hashCode() {
-            return this.expressionString.hashCode();
+            return lookupExpression.hashCode();
         }
     }
 
