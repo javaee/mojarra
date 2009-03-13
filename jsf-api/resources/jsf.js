@@ -805,7 +805,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <ul>
              * <li>The following name/value pairs are required post data arguments:
              * <ul>
-             * <li><code>javax.faces.partial.source</code> with the value as the
+             * <li><code>javax.faces.source</code> with the value as the
              * source element identifier.</li>
              * <li>The name and value of the <code>source</code> element that
              * triggered this request;</li>
@@ -980,7 +980,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var viewState = jsf.getViewState(form);
 
                 // Set up additional arguments to be used in the request..
-                // Make sure "javax.faces.partial.source" is set up.
+                // Make sure "javax.faces.source" is set up.
                 // If there were "execute" ids specified, make sure we
                 // include the identifier of the source element in the
                 // "execute" list.  If there were no "execute" ids
@@ -988,7 +988,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 var args = {};
 
-                args["javax.faces.partial.source"] = element.id;
+                args["javax.faces.source"] = element.id;
 
                 if (event) {
                     args["javax.faces.partial.event"] = event.type;

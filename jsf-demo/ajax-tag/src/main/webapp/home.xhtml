@@ -218,6 +218,18 @@
            <f:ajax immediate="false" listener="#{bean.processBehavior}"/>
        </h:commandButton>
 
+       <h:commandButton value="No Id Ajax"
+                        actionListener="#{bean.processAction}">
+           <f:ajax listener="#{bean.processBehavior}"/>
+       </h:commandButton>
+
+       <h:commandButton value="No Id JavaScript Ajax"
+                        onclick="jsf.ajax.request(this,event);return false;"
+                        actionListener="#{bean.processAction}"/>
+
+       <h:commandButton value="No Id Non-Ajax"
+                        actionListener="#{bean.processAction}"/>
+
        </h:panelGrid>
 
        <h:panelGrid columns="3">
@@ -370,6 +382,18 @@
            <f:ajax immediate="false" listener="#{bean.processBehavior}"/>
        </h:commandLink>
 
+       <h:commandLink value="No Id Ajax"
+                        actionListener="#{bean.processAction}">
+           <f:ajax listener="#{bean.processBehavior}"/>
+       </h:commandLink>
+
+       <h:commandLink value="No Id JavaScript Ajax"
+                        onclick="jsf.ajax.request(this,event);return false;"
+                        actionListener="#{bean.processAction}"/>
+
+       <h:commandLink value="No Id Non-Ajax"
+                        actionListener="#{bean.processAction}"/>
+
        </h:panelGrid>
 
        <h:panelGrid columns="3">
@@ -493,6 +517,15 @@
            <f:ajax immediate="false" listener="#{bean.processBehavior}"/>
        </h:inputText>
 
+
+       <h:inputText value="No Id Ajax"
+                    valueChangeListener="#{bean.processValueChange}">
+           <f:ajax listener="#{bean.processBehavior}"/>
+       </h:inputText>
+
+       <h:inputText value="No Id JavaScript Ajax"
+                    valueChangeListener="#{bean.processValueChange}"
+                    onchange="jsf.ajax.request(this,event)"/>
 
        </h:panelGrid> 
 

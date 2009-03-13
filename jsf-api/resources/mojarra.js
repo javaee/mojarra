@@ -176,23 +176,6 @@ mojarra.ab = function ab(s, e, n, ex, re, op) {
     }
 
     if (n) {
-
-        var id;
-
-        if (typeof s === 'string') {
-            id = s;
-        } else if (typeof s === 'object') {
-            // If object, assume that source id can be found via "id" prop.
-            id = s.id;
-
-            // TODO: Remove this hack to work around commadButton not 
-            // specifying id property for auto-generated ids.
-            if (!id) {
-                id = s.name;
-            }
-        }
-
-        op["javax.faces.behavior.source"] = id;
         op["javax.faces.behavior.event"] = n;
     }
 

@@ -215,18 +215,15 @@ public class Bean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext external = context.getExternalContext();
         Map<String, String> params = external.getRequestParameterMap();
-        String partialSource = params.get("javax.faces.partial.source");
+        String source = params.get("javax.faces.source");
         String partialEvent = params.get("javax.faces.partial.event");
-        String behaviorSource = params.get("javax.faces.behavior.source");
         String behaviorEvent = params.get("javax.faces.behavior.event");
 
         StringBuilder builder = new StringBuilder();
-        builder.append("partial source='");
-        builder.append(partialSource);
+        builder.append("source='");
+        builder.append(source);
         builder.append("', partial event='");
         builder.append(partialEvent);
-        builder.append("', behavior source='");
-        builder.append(behaviorSource);
         builder.append("', behavior event='");
         builder.append(behaviorEvent);
         builder.append("'");
