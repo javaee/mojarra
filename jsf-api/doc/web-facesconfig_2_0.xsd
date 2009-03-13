@@ -2120,8 +2120,8 @@
                          type="javaee:faces-config-rendererType"
                          minOccurs="0" 
                          maxOccurs="unbounded"/>
-            <xsd:element name="behavior-renderer"
-                         type="javaee:faces-config-behavior-rendererType"
+            <xsd:element name="client-behavior-renderer"
+                         type="javaee:faces-config-client-behavior-rendererType"
                          minOccurs="0" 
                          maxOccurs="unbounded"/>
             <xsd:element name="render-kit-extension"
@@ -2134,15 +2134,15 @@
 
     <!-- **************************************************** -->
 
-    <xsd:complexType name="faces-config-behavior-rendererType">
+    <xsd:complexType name="faces-config-client-behavior-rendererType">
         <xsd:annotation>
             <xsd:documentation>
 
-                The "behavior-renderer" element represents a concrete 
-                BehaviorRenderer implementation class that should be 
+                The "client-behavior-renderer" element represents a concrete 
+                ClientBehaviorRenderer implementation class that should be 
                 registered under the specified behavior renderer type identifier,
                 in the RenderKit associated with the parent "render-kit"
-                element.  Behavior renderer type must be unique within the RenderKit
+                element.  Client Behavior renderer type must be unique within the RenderKit
                 associated with the parent "render-kit" element.
 
                 Nested "attribute" elements identify generic component
@@ -2152,25 +2152,25 @@
         </xsd:annotation>
 
         <xsd:sequence>
-            <xsd:element name="behavior-renderer-type"
+            <xsd:element name="client-behavior-renderer-type"
                          type="javaee:string">
                 <xsd:annotation>
                     <xsd:documentation>
 
-                        The "behavior-renderer-type" element represents a renderer type
-                        identifier for the Behavior Renderer represented by the parent
-                        "behavior-renderer" element.
+                        The "client-behavior-renderer-type" element represents a renderer type
+                        identifier for the Client Behavior Renderer represented by the parent
+                        "client-behavior-renderer" element.
 
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="behavior-renderer-class"
+            <xsd:element name="client-behavior-renderer-class"
                          type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
-                        The "behavior-renderer-class" element represents the fully
-                        qualified class name of a concrete Behavior Renderer
+                        The "client-behavior-renderer-class" element represents the fully
+                        qualified class name of a concrete Client Behavior Renderer
                         implementation class.
 
                     </xsd:documentation>
