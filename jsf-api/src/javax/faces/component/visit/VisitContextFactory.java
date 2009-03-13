@@ -42,7 +42,10 @@ import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
 /**
- * RELEASE_PENDING (docs)
+ * <p class="changed_added_2_0">Provide for separation of interface and
+ * implementation for the {@link VisitContext} contract.</p>
+ * 
+
  * @since 2.0
  */
 public abstract class VisitContextFactory implements FacesWrapper<VisitContextFactory> {
@@ -52,6 +55,7 @@ public abstract class VisitContextFactory implements FacesWrapper<VisitContextFa
      * implementation doing the decorating may override this method to provide
      * access to the implementation being wrapped.  A default implementation
      * is provided that returns <code>null</code>.</p>
+     * @since 2.0
      */
     public VisitContextFactory getWrapped() {
         return null;
@@ -59,11 +63,14 @@ public abstract class VisitContextFactory implements FacesWrapper<VisitContextFa
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param context
-     * @param ids
-     * @param hints
-     * @return {@link VisitContext}
+     * <p class="changed_added_2_0">Return a new {@link VisitContext}
+     * instance.</p>
+     * @param context the <code>FacesContext</code> for this request.
+     * @param ids a <code>Collection</code> of clientIds to visit.  If
+     * <code>null</code> all components will be visited.
+     * @param hints the <code>VisitHints</code> that apply to this
+     * visit.
+     * @since 2.0
      */
     public abstract VisitContext getVisitContext(FacesContext context, 
             Collection<String> ids, Set<VisitHint> hints);

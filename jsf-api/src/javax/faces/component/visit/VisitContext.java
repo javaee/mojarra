@@ -50,14 +50,14 @@ import javax.faces.context.FacesContext;
 /**
  *
  * <p class="changed_added_2_0">A context object that is used to hold 
- * state relating to a component tree visit.</p>
+ * state relating to performing a component tree visit.</p>
  *
- * RELEASE_PENDING (edburns, rogerk) documentation
+ * <div class="changed_added_2_0">
  *
- * <p>Component tree visits are initiated by calling
- * {@link UIComponent#visitTree UIComponent.visitTree()}, 
- * at which point both a {@link VisitContext} and a {@link VisitCallback} 
- * must be provided.
+ * <p>Component tree visits are initiated by calling {@link
+ * UIComponent#visitTree}, at which point both a
+ * {@link VisitContext} and a {@link VisitCallback} must be provided.</p>
+ * </div>
  *
  * @see UIComponent#visitTree UIComponent.visitTree()
  * @see VisitCallback
@@ -80,12 +80,17 @@ abstract public class VisitContext {
     // so going with a pure contract (no implementation).
 
     /**
-     * <p>This unmodifiable Collection is returned by 
-     * getIdsToVisit()and getSubtreeIdsToVisit() in cases where all ids
-     * should be visited.</p>
-     * <p>To simplify logic for visitTree() implementations, this Collection
-     * always return {@code false} for {@code isEmpty}.  All other methods 
-     * throw {@code UnsupportedOperationException}.</p>
+     * <p class="changed_added_2_0">This unmodifiable Collection is
+     * returned by <code>getIdsToVisit()</code> and
+     * <code>getSubtreeIdsToVisit()</code> in cases where all ids should
+     * be visited.</p>
+
+     * <p class="changed_added_2_0">To simplify logic for
+     * <code>visitTree()</code> implementations, this Collection always
+     * returns <code>false</code> for <code>isEmpty</code>.  All other
+     * methods throw <code>UnsupportedOperationException</code>.</p>
+     *
+     * @since 2.0
      */
     // Note: We cannot use Collections.emptyList() as that returns
     // a shared instance - we want to unique instance to allow for
@@ -112,45 +117,46 @@ abstract public class VisitContext {
         };
 
     /**
-     * <p>Returns the FacesContext for the current request.</p>
+     * <p class="changed_added_2_0">Returns the FacesContext for the
+     * current request.</p>
+     * @since 2.0
      */
     abstract public FacesContext getFacesContext();
 
     /**
-     * <p>
-     * Returns the ids of the components to visit.
-     * </p>
-     * <p>
-     * In the case of a full tree visit, this method returns the
-     * ALL_IDS collection.  Otherwise, if a partial visit is beign
-     * performed, returns a modifiable collection containing the
-     * client ids of the components that should be visited.
-     * </p>
-     * @return {@code VisitContext.ALL_IDS}, or a modifiable 
-     * Collection of client ids.
+     * <p class="changed_added_2_0"> Returns the ids of the components
+     * to visit.  </p>
+
+     * <p class="changed_added_2_0"> In the case of a full tree visit,
+     * this method returns the ALL_IDS collection.  Otherwise, if a
+     * partial visit is beign performed, returns a modifiable collection
+     * containing the client ids of the components that should be
+     * visited.  </p>
      */
     abstract public Collection<String> getIdsToVisit();
 
     /**
-     * <p>
-     * Given a NamingContainer component, returns the client ids of 
-     * any components underneath the NamingContainer that should be
-     * visited.
-     * </p>
-     * <p>
-     * This method is called by NamingContainer visitTree() implementations 
-     * to determine whether the NamingContainer contains components to be 
-     * visited.  In the case where no such components exist, the 
-     * NamingContainer can short-circuit the tree visit and avoid 
-     * descending into child subtrees.
-     * </p>
-     * <p>
-     * In addition, iterating components such as UIData may be able to
-     * use the returned ids to determine which iterated states (ie. rows)
-     * need to be visited.  This allows the visit traversal to be
-     * contstrained such only those rows that contain visit targets
-     * need to be traversed.
-     * </p>
+     * <p class="changed_added_2_0"> Given a {@link
+     * javax.faces.component.NamingContainer} component, returns the
+     * client ids of any components underneath the NamingContainer that
+     * should be visited.  </p>
+
+     * <div class="changed_added_2_0">
+
+     * <p> This method is called by NamingContainer visitTree()
+     * implementations to determine whether the NamingContainer contains
+     * components to be visited.  In the case where no such components
+     * exist, the NamingContainer can short-circuit the tree visit and
+     * avoid descending into child subtrees.  </p>
+
+     * <p> In addition, iterating components such as UIData may be able
+     * to use the returned ids to determine which iterated states
+     * (ie. rows) need to be visited.  This allows the visit traversal
+     * to be contstrained such only those rows that contain visit
+     * targets need to be traversed.  </p>
+
+     * </div>
+
      * @param component a NamingContainer component
      * @return an unmodifiable Collection containing the client ids of 
      *   any components underneath the NamingContainer that are known to be
