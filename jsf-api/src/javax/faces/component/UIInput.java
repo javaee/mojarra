@@ -1183,11 +1183,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * that key, use the same key and look in the application map from
      * the <code>ExternalContext</code>.  If the value is
      * <code>null</code> or equal to the string
-     * &#8220;<code>auto</code>&#8221; (without the quotes) look in the
-     * context <code>ClassLoader</code> of the current
-     * <code>Thread</code> for the class
-     * <code>javax.validation.Validation</code>.  If no such class can
-     * be found, validation should not proceed.  If the value is equal
+     * &#8220;<code>auto</code>&#8221; (without the quotes) take
+     * appropriate action to determine if Bean Validation is present in
+     * the runtime environment.  If not, validation should not proceed.
+     * If so, validation should proceed.  If the value is equal
      * (ignoring case) to &#8220;<code>true</code>&#8221; (without the
      * quotes) validation should proceed.  Otherwise, validation should
      * not proceed.</p></li>

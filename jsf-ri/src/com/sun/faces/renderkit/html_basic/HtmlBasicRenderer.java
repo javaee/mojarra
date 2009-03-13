@@ -58,8 +58,9 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
-import javax.faces.component.behavior.Behavior;
-import javax.faces.component.behavior.BehaviorHolder;
+import javax.faces.component.behavior.ClientBehaviorContext;
+import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -189,12 +190,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
     protected final String decodeBehaviors(FacesContext context, 
                                            UIComponent component)  {
 
-        if (!(component instanceof BehaviorHolder)) {
+        if (!(component instanceof ClientBehaviorHolder)) {
             return null;
         }
 
-        BehaviorHolder holder = (BehaviorHolder)component;
-        Map<String, List<Behavior>> behaviors = holder.getBehaviors();
+        ClientBehaviorHolder holder = (ClientBehaviorHolder)component;
+        Map<String, List<ClientBehavior>> behaviors = holder.getClientBehaviors();
         if (behaviors.isEmpty()) {
             return null;
         }
@@ -204,13 +205,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
         String behaviorEvent = params.get("javax.faces.behavior.event");
 
         if (null != behaviorEvent) {
-            List<Behavior> behaviorsForEvent = behaviors.get(behaviorEvent);
+            List<ClientBehavior> behaviorsForEvent = behaviors.get(behaviorEvent);
 
             if (null != behaviors && behaviors.size() > 0) {
                 String behaviorSource = params.get("javax.faces.behavior.source");
                String clientId = component.getClientId();
                if (null != behaviorSource && behaviorSource.equals(clientId)) {
-                   for (Behavior behavior: behaviorsForEvent) {
+                   for (ClientBehavior behavior: behaviorsForEvent) {
                        behavior.decode(context, component);
                    }
                }
@@ -583,16 +584,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
     /**
      * Collections parameters for use with Behavior script rendering.
      * Similar to getParamList(), but returns a collection of 
-     * Behavior.Parameter instances.
+     * ClientBehaviorContext.Parameter instances.
      *
      * @param command the command which may have parameters
      *
-     * @return a collection of Behavior.Parameter instances.
+     * @return a collection of ClientBehaviorContext.Parameter instances.
      */
-    protected Collection<Behavior.Parameter> getBehaviorParameters(
+    protected Collection<ClientBehaviorContext.Parameter> getBehaviorParameters(
         UIComponent command) {
 
-        ArrayList<Behavior.Parameter> params = null;
+        ArrayList<ClientBehaviorContext.Parameter> params = null;
         int childCount = command.getChildCount();
 
         if (childCount > 0) {
@@ -606,16 +607,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     if ((name != null) && (name.length() > 1)) {
 
                         if (params == null) {
-                            params = new ArrayList<Behavior.Parameter>(childCount);
+                            params = new ArrayList<ClientBehaviorContext.Parameter>(childCount);
                         }
 
-                        params.add(new Behavior.Parameter(name, value));
+                        params.add(new ClientBehaviorContext.Parameter(name, value));
                     }
                 }
             }
         }
 
-        return (params == null) ? Collections.<Behavior.Parameter>emptyList() : params;
+        return (params == null) ? Collections.<ClientBehaviorContext.Parameter>emptyList() : params;
 
     }
 
@@ -763,16 +764,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * @param domEventName the name of the dom-level event
      * @param componentEventName the name of the component-level event
      */
-    protected static Map<String, List<Behavior>> getPassThruBehaviors(
+    protected static Map<String, List<ClientBehavior>> getPassThruBehaviors(
         UIComponent component,
         String domEventName,
         String componentEventName) {
 
-        if (!(component instanceof BehaviorHolder)) {
+        if (!(component instanceof ClientBehaviorHolder)) {
             return null;
         }
 
-        Map<String, List<Behavior>> behaviors = ((BehaviorHolder)component).getBehaviors();
+        Map<String, List<ClientBehavior>> behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
 
         int size = behaviors.size();
 

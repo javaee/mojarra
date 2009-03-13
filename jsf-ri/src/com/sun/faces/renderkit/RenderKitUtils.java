@@ -51,10 +51,10 @@ import javax.faces.application.ProjectStage;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.behavior.Behavior;
-import javax.faces.component.behavior.BehaviorContext;
-import javax.faces.component.behavior.BehaviorHint;
-import javax.faces.component.behavior.BehaviorHolder;
+import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorContext;
+import javax.faces.component.behavior.ClientBehaviorHint;
+import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ExternalContext;
@@ -281,10 +281,10 @@ public class RenderKitUtils {
         assert (null != writer);
         assert (null != component);
 
-        Map<String, List<Behavior>> behaviors = null;
+        Map<String, List<ClientBehavior>> behaviors = null;
 
-        if (component instanceof BehaviorHolder) {
-            behaviors = ((BehaviorHolder)component).getBehaviors();
+        if (component instanceof ClientBehaviorHolder) {
+            behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
         }
 
         // Don't render behavior scripts if component is disabled
@@ -309,14 +309,14 @@ public class RenderKitUtils {
      * @param component the component
      * @param attributes an array of attributes to be processed
      * @param behaviors the behaviors for this component, or null if
-     *   component is not a BehaviorHolder
+     *   component is not a ClientBehaviorHolder
      * @throws IOException if an error occurs writing the attributes
      */
     public static void renderPassThruAttributes(FacesContext context,
                                                 ResponseWriter writer,
                                                 UIComponent component,
                                                 Attribute[] attributes,
-                                                Map<String, List<Behavior>> behaviors)
+                                                Map<String, List<ClientBehavior>> behaviors)
     throws IOException {
 
         assert (null != writer);
@@ -364,7 +364,7 @@ public class RenderKitUtils {
 
         renderHandler(context,
                       component,
-                      Collections.<Behavior.Parameter>emptyList(),
+                      Collections.<ClientBehaviorContext.Parameter>emptyList(),
                       handlerName,
                       userHandler,
                       behaviorEventName,
@@ -377,7 +377,7 @@ public class RenderKitUtils {
     // Behavior scripts, plus the default button submit script.
     public static void renderOnclick(FacesContext context, 
                                      UIComponent component,
-                                     Collection<Behavior.Parameter> params,
+                                     Collection<ClientBehaviorContext.Parameter> params,
                                      String submitTarget,
                                      boolean needsSubmit)
         throws IOException {
@@ -508,7 +508,7 @@ public class RenderKitUtils {
      *  packages, otherwise return <code>false</code>
      */
     private static boolean canBeOptimized(UIComponent component,
-                                          Map<String, List<Behavior>> behaviors) {
+                                          Map<String, List<ClientBehavior>> behaviors) {
         assert(component != null);
         assert(behaviors != null);
 
@@ -545,7 +545,7 @@ public class RenderKitUtils {
                                                           UIComponent component,
                                                           Attribute[] knownAttributes, 
                                                           List<String> setAttributes,
-                                                          Map<String,List<Behavior>> behaviors)
+                                                          Map<String,List<ClientBehavior>> behaviors)
     throws IOException {
 
         // We should only come in here if we've got zero or one behavior event
@@ -633,7 +633,7 @@ public class RenderKitUtils {
                                                             ResponseWriter writer,
                                                             UIComponent component,
                                                             Attribute[] knownAttributes, 
-                                                            Map<String,List<Behavior>> behaviors)
+                                                            Map<String,List<ClientBehavior>> behaviors)
     throws IOException {
 
         boolean isXhtml = RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
@@ -1247,22 +1247,22 @@ public class RenderKitUtils {
     private static boolean appendBehaviorsToChain(StringBuilder builder,
                                                   FacesContext context, 
                                                   UIComponent component,
-                                                  List<Behavior> behaviors,
+                                                  List<ClientBehavior> behaviors,
                                                   String behaviorEventName,
-                                                  Collection<Behavior.Parameter> params) {
+                                                  Collection<ClientBehaviorContext.Parameter> params) {
 
         if ((behaviors == null) || (behaviors.isEmpty())) {
             return false;
         }
 
-        BehaviorContext bContext = createBehaviorContext(context,
+        ClientBehaviorContext bContext = createClientBehaviorContext(context,
                                                          component,
                                                          behaviorEventName,
                                                          params);
 
         boolean submitting = false;
 
-        for (Behavior behavior : behaviors) {
+        for (ClientBehavior behavior : behaviors) {
             String script = behavior.getScript(bContext);
             if ((script != null) && (script.length() > 0)) {
                 appendScriptToChain(builder, script);
@@ -1279,7 +1279,7 @@ public class RenderKitUtils {
     // Given a behaviors Map with a single entry, returns the event name
     // for that entry.  Or, if no entries, returns null.  Used by 
     // renderPassThruAttributesOptimized.
-    private static String getSingleBehaviorEventName(Map<String, List<Behavior>> behaviors) {
+    private static String getSingleBehaviorEventName(Map<String, List<ClientBehavior>> behaviors) {
         assert(behaviors != null);
 
         int size = behaviors.size();
@@ -1329,12 +1329,12 @@ public class RenderKitUtils {
 
     // Returns the Behaviors for the specified component/event name,
     // or null if no Behaviors are available
-    private static List<Behavior> getBehaviors(UIComponent component,
+    private static List<ClientBehavior> getClientBehaviors(UIComponent component,
                                                String behaviorEventName) {
 
-        if (component instanceof BehaviorHolder) {
-            BehaviorHolder bHolder = (BehaviorHolder)component;
-            Map <String, List <Behavior>> behaviors = bHolder.getBehaviors();
+        if (component instanceof ClientBehaviorHolder) {
+            ClientBehaviorHolder bHolder = (ClientBehaviorHolder)component;
+            Map <String, List <ClientBehavior>> behaviors = bHolder.getClientBehaviors();
             if (null != behaviors) {
                 return behaviors.get(behaviorEventName);
             }
@@ -1347,7 +1347,7 @@ public class RenderKitUtils {
     // mojara.jsfcljs()
     private static String getSubmitHandler(FacesContext context,
                                            UIComponent component,
-                                           Collection<Behavior.Parameter> params,
+                                           Collection<ClientBehaviorContext.Parameter> params,
                                            String submitTarget,
                                            boolean preventDefault) {
 
@@ -1363,7 +1363,7 @@ public class RenderKitUtils {
         appendProperty(builder, componentClientId, componentClientId);
 
         if ((null != params) && (!params.isEmpty())) {
-            for (Behavior.Parameter param : params) {
+            for (ClientBehaviorContext.Parameter param : params) {
                 appendProperty(builder, param.getName(), param.getValue());
             }
         }
@@ -1387,8 +1387,8 @@ public class RenderKitUtils {
     // script.
     private static String getChainedHandler(FacesContext context,
                                             UIComponent component,
-                                            List<Behavior> behaviors,
-                                            Collection<Behavior.Parameter> params,
+                                            List<ClientBehavior> behaviors,
+                                            Collection<ClientBehaviorContext.Parameter> params,
                                             String behaviorEventName,
                                             String userHandler,
                                             String submitTarget,
@@ -1442,13 +1442,13 @@ public class RenderKitUtils {
     // Returns the script for a single Behavior
     private static String getSingleBehaviorHandler(FacesContext context,
                                                    UIComponent component,
-                                                   Behavior behavior,
-                                                   Collection<Behavior.Parameter> params,
+                                                   ClientBehavior behavior,
+                                                   Collection<ClientBehaviorContext.Parameter> params,
                                                    String behaviorEventName,
                                                    String submitTarget,
                                                    boolean needsSubmit) {
 
-        BehaviorContext bContext = createBehaviorContext(context,
+        ClientBehaviorContext bContext = createClientBehaviorContext(context,
                                                          component,
                                                          behaviorEventName,
                                                          params);
@@ -1481,13 +1481,13 @@ public class RenderKitUtils {
          return script;
     }
 
-    // Creates a BehaviorContext with the specified properties.
-    private static BehaviorContext createBehaviorContext(FacesContext context,
+    // Creates a ClientBehaviorContext with the specified properties.
+    private static ClientBehaviorContext createClientBehaviorContext(FacesContext context,
                                                          UIComponent component,
                                                          String behaviorEventName,
-                                                         Collection<Behavior.Parameter> params) {
+                                                         Collection<ClientBehaviorContext.Parameter> params) {
 
-    return BehaviorContext.createBehaviorContext(context,
+    return ClientBehaviorContext.createClientBehaviorContext(context,
                                                  component,
                                                  behaviorEventName,
                                                  null,
@@ -1495,8 +1495,8 @@ public class RenderKitUtils {
     }
 
     // Tests whether the specified behavior is submitting
-    private static boolean isSubmitting(Behavior behavior) {
-        return behavior.getHints().contains(BehaviorHint.SUBMITTING);
+    private static boolean isSubmitting(ClientBehavior behavior) {
+        return behavior.getHints().contains(ClientBehaviorHint.SUBMITTING);
     }
 
     /**
@@ -1522,7 +1522,7 @@ public class RenderKitUtils {
      */
     private static void renderHandler(FacesContext context,
                                       UIComponent component,
-                                      Collection<Behavior.Parameter> params,
+                                      Collection<ClientBehaviorContext.Parameter> params,
                                       String handlerName,
                                       Object handlerValue,
                                       String behaviorEventName,
@@ -1532,7 +1532,7 @@ public class RenderKitUtils {
 
         ResponseWriter writer = context.getResponseWriter();
         String userHandler = getNonEmptyUserHandler(handlerValue);
-        List<Behavior> behaviors = getBehaviors(component, behaviorEventName);
+        List<ClientBehavior> behaviors = getClientBehaviors(component, behaviorEventName);
 
         // Don't render behavior scripts if component is disabled
         if ((null != behaviors) && 
@@ -1590,8 +1590,8 @@ public class RenderKitUtils {
 
     // Determines the type of handler to render based on what sorts of
     // scripts we need to render/chain.
-    private static HandlerType getHandlerType(List<Behavior> behaviors,
-                                              Collection<Behavior.Parameter> params,
+    private static HandlerType getHandlerType(List<ClientBehavior> behaviors,
+                                              Collection<ClientBehaviorContext.Parameter> params,
                                               String userHandler,
                                               boolean needsSubmit) {
 
@@ -1612,7 +1612,7 @@ public class RenderKitUtils {
         // behavior case.  We can only do this if we don't have a user
         // handler.
         if ((behaviors.size() == 1) && (userHandler == null)) {
-            Behavior behavior = behaviors.get(0);
+            ClientBehavior behavior = behaviors.get(0);
 
             // If we've got a submitting behavior, then it will handle
             // submitting the params.  If not, then we need to use

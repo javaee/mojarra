@@ -288,9 +288,9 @@
             <renderer-type>facelets.ui.Repeat</renderer-type>
             <renderer-class>com.sun.faces.facelets.component.RepeatRenderer</renderer-class>
         </renderer>
-        <behavior-renderer>
-            <behavior-renderer-type>javax.faces.behavior.AjaxBehavior</behavior-renderer-type>
-            <behavior-renderer-class>com.sun.faces.renderkit.html_basic.AjaxBehaviorRenderer</behavior-renderer-class>
-        </behavior-renderer>
+        <client-behavior-renderer>
+            <client-behavior-renderer-type>javax.faces.behavior.AjaxBehavior</client-behavior-renderer-type>
+            <client-behavior-renderer-class>com.sun.faces.renderkit.html_basic.AjaxBehaviorRenderer</client-behavior-renderer-class>
+        </client-behavior-renderer>
     </render-kit>
 </faces-config>

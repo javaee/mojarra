@@ -186,14 +186,14 @@ public abstract class ResponseStateManager {
      *
      * @deprecated This method has been replaced by {@link
      * #writeState(javax.faces.context.FacesContext,java.lang.Object)}.
-     * The default implementation of this method does nothing.
+     * The default implementation creates a two element
+     * <code>Object</code> array with the first element being the return
+     * from calling {@link SerializedView#getStructure}, and the second
+     * being the return from {@link SerializedView#getState}.  It then
+     * passes this <code>Object</code> array to {@link writeState}.
      * 
      * @param context The {@link FacesContext} instance for the current request
      * @param state The serialized state information previously saved
-     *
-     * RELEASE_PENDING (edburns,rogerK) default implementation does something as
-     *  the old behavior was broken and forced implementations to implement
-     *  deprecated APIs.
      *
      */
     public void writeState(FacesContext context,

@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import javax.faces.context.FacesContext;
-import javax.faces.render.BehaviorRenderer;
+import javax.faces.render.ClientBehaviorRenderer;
 import javax.faces.render.FacesBehaviorRenderer;
 import javax.faces.render.FacesRenderer;
 import javax.faces.render.RenderKitFactory;
@@ -132,14 +132,14 @@ public class RenderKitConfigHandler implements ConfigAnnotationHandler {
 						RenderKit rk = rkf.getRenderKit(ctx, bra.renderKitId());
 						if (rk == null) {
 							throw new IllegalStateException(
-									"Error processing annotated BehaviorRenderer "
+									"Error processing annotated ClientBehaviorRenderer "
 											+ bra.toString()
 											+ " on class "
 											+ rClass.getName()
 											+ ".  Unable to find specified RenderKit.");
 						}
-						rk.addBehaviorRenderer(bra.rendererType(),
-								(BehaviorRenderer) rClass.newInstance());
+						rk.addClientBehaviorRenderer(bra.rendererType(),
+								(ClientBehaviorRenderer) rClass.newInstance());
 					} catch (Exception e) {
 						throw new FacesException(e);
 					}

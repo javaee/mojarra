@@ -47,8 +47,8 @@ import java.util.Collections;
 import javax.el.ELResolver;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
+import javax.el.MethodExpression;
 import javax.faces.component.UIComponent;
-import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
@@ -65,6 +65,12 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      * Implicit object related only to the compositeComponent implicitObject.
      */
     private static final String COMPOSITE_COMPONENT_ATTRIBUTES_NAME = "attrs";
+
+    /**
+     * Implicit object related only to the compositeComponent implicit object
+     * and refers to the composite component parent (if any).
+     */
+    private static final String COMPOSITE_COMPONENT_PARENT_NAME = "parent";
 
     /**
      * Key to which we store the mappings between composite component instances
@@ -90,6 +96,14 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      * the result.
      * </p>
      *
+     * <p>
+     * If <code>base</code> is a composite component and <code>property</code>
+     * is <code>parent</code> attempt to resolve the composite componet parent
+     * of the current composite component by calling
+     * {@link UIComponent#getCompositeComponentParent(javax.faces.component.UIComponent)})
+     * and returning that value.
+     * </p>
+     *
      * @see javax.el.ELResolver#getValue(javax.el.ELContext, Object, Object)
      * @see com.sun.faces.el.CompositeComponentAttributesELResolver.ExpressionEvalMap
      */
@@ -98,15 +112,24 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         Util.notNull("context", context);
 
         if (base != null
-           && (base instanceof UIComponent)
-           && property != null
-           && COMPOSITE_COMPONENT_ATTRIBUTES_NAME.equals(property.toString())) {
-            UIComponent c = (UIComponent) base;
-            // ensure we're dealing with a composit component...    
-            if (c.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY) != null) {
+            && (base instanceof UIComponent)
+            && UIComponent.isCompositeComponent((UIComponent) base)
+            && property != null) {
+
+            String propertyName = property.toString();
+            if (COMPOSITE_COMPONENT_ATTRIBUTES_NAME.equals(propertyName)) {
+                UIComponent c = (UIComponent) base;
                 context.setPropertyResolved(true);
-                FacesContext ctx = (FacesContext) context.getContext(FacesContext.class);
+                FacesContext ctx = (FacesContext)
+                      context.getContext(FacesContext.class);
                 return getEvalMapFor(c, ctx);
+            }
+
+            if (COMPOSITE_COMPONENT_PARENT_NAME.equals(propertyName)) {
+                UIComponent c = (UIComponent) base;
+                context.setPropertyResolved(true);
+                UIComponent ccParent = UIComponent.getCompositeComponentParent(c);
+                return ccParent;
             }
         }
 
@@ -280,6 +303,9 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             Object v = attributesMap.get(key);
             if (v != null && v instanceof ValueExpression) {
                 return (((ValueExpression) v).getValue(ctx.getELContext()));
+            }
+            if (v != null && v instanceof MethodExpression) {
+                return v;
             }
             return null;
         }

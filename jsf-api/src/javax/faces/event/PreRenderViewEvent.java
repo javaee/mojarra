@@ -50,6 +50,20 @@ import javax.faces.component.UIViewRoot;
  * implementation may assume that the <code>source</code> of this event
  * instance is the {@link UIViewRoot} instance that is about to be
  * rendered.</p>
+
+ * <div class="changed_added_2_0">
+ *
+ * <p>It is valid for a listener for this event to change the {@link
+ * UIViewRoot} in the current {@link javax.faces.context.FacesContext},
+ * but the listener must ensure that the new <code>UIViewRoot</code> was
+ * created with a call to {@link
+ * javax.faces.application.ViewHandler#createView}, and that the view is
+ * fully populated with the children to be traversed during render.  The
+ * listener implementation may call {@link
+ * javax.faces.webapp.pdl.PageDeclarationLanguage#buildView} to populate
+ * the <code>UIViewRoot</code>.</p>
+ *
+ * </div>
  *
  * @since 2.0
  */
@@ -62,7 +76,7 @@ public class PreRenderViewEvent extends ComponentSystemEvent {
     /**
 
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>PreRenderComponentEvent</code> that indicates the argument
+     * <code>PreRenderViewEvent</code> that indicates the argument
      * <code>root</code> is about to be rendered.</p>
 
      * @param root the <code>UIViewRoot</code> that is about to be

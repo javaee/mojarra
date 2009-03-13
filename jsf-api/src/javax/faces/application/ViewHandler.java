@@ -366,30 +366,32 @@ public abstract class ViewHandler {
 
     /**
      * <p class="changed_added_2_0">
-     * Return a JSF action URL derived from the viewId argument that
-     * is suitable to be used by the NavigationHandler to issue a redirect request to the URL using a
+     * Return a JSF action URL derived from the <code>viewId</code> argument that
+     * is suitable to be used by the {@link NavigationHandler} to issue a redirect request to the URL using a
      * NonFaces request. The requirements for how to build the JSF action URL are described below.
      * </p>
      *
      * <p>
      * To build the JSF action URL the value of the viewId argument should be
-     * fed through the ViewHandler#getActionURL(FacesContext, String) method to produce a URL; this URL may include parameters which are passed untouched to encodeRedirectUrl as part of the baseURL. The additional parameters, represented as
-     * Parameter objects, are collected as follows. If the includeViewParams argument is true,
-     * the view parameters (i.e., UIViewParameter components) are read from the target page. The
-     * value of the each page parameter is retrieved by calling
-     * UIViewParameter#getStringValue(FacesContext) and forming a parameter. The view
-     * parameters, if included, are merged with the <code>parameters</code> argument.  When a parameter is contributed by more
-     * than one of the previously mentioned source, the parameter with the highest precendence is
-     * used, replacing all parameters with the same name from the lower precendence source. The
+     * fed through the {@link #getActionURL(FacesContext, String)} method to produce a URL; 
+     * this URL may include parameters which are passed untouched to {@link ExternalContext#encodeRedirectURL}
+     * as part of the baseURL. The additional parameters, represented as a <code>Map</code> of
+     * parameter names to one or more values, are collected as follows. If the <code>includeViewParams</code> 
+     * argument is <code>true</code>, the view parameters (i.e., {@link javax.faces.component.UIViewParameter} 
+     * components) are read from the target page. The value of the each page parameter is retrieved by calling
+     * {@link javax.faces.component.UIViewParameter#getStringValue(FacesContext)} and forming a parameter. 
+     * The view parameters, if included, are merged with the <code>parameters</code> argument.  When a parameter 
+     * is contributed by more than one of the previously mentioned source, the parameter with the highest 
+     * precendence is used, replacing all parameters with the same name from the lower precendence source. The
      * order of precendence for parameters, from lowest to highest, is view parameters, the
      * parameters argument (parameter overrides).
      * The parameters are encoded into the query string of the URL by delegating to the method
      * {@link ExternalContext#encodeRedirectURL(String, java.util.Map)} .  Finally, the result
-     * is encoded by calling ExternalContext#encodeActionURL(String).
+     * is encoded by calling {@link ExternalContext#encodeActionURL(String)}.
      * </p>
      *
      * <p>
-     *  The default implementation returns the result of {@link ViewHandler#getActionURL(javax.faces.context.FacesContext, String)}.
+     *  The default implementation returns the result of {@link #getActionURL(javax.faces.context.FacesContext, String)}.
      * </p>
      *
      * @param context           The FacesContext processing this request

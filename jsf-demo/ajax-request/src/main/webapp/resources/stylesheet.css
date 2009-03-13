@@ -183,6 +183,11 @@ th {
     background-color: #bfefff;
 }
 
+.execute-norender {
+    border: 3px outset green;
+    background-color: #bfefff;
+}
+
 .keytitle {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;

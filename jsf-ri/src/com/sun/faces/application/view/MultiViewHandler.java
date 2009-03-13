@@ -432,15 +432,7 @@ public class MultiViewHandler extends ViewHandler {
                             toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                     valueExpression.getExpressionString(),
                                     expectedReturnType, expectedParameters);
-
-                            // get the nearest composite component parent to
-                            // the target component and push the expression
-                            // there
-                            UIComponent compositeParent =
-                                  UIComponent.getCompositeComponentParent(target);
-                            compositeParent.getAttributes().put(attrName, toApply);
-                            
-
+                            topLevelComponent.getAttributes().put(attrName, toApply);
                         }
                     }
                 }

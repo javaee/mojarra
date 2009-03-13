@@ -45,7 +45,8 @@ import javax.faces.FacesException;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
-import javax.faces.component.behavior.BehaviorHolder;
+import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
@@ -75,7 +76,7 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
         if (parent == null || !(parent.getParent() == null)) {
             return;
         }
-        if (parent instanceof BehaviorHolder) {
+        if (parent instanceof ClientBehaviorHolder) {
             owner.applyAttachedObject(ctx.getFacesContext(), parent);
         } else if (parent.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
             if (null == owner.getFor()) {
@@ -86,15 +87,15 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
             // Allow the composite component to know about the target component.
             CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(this);
         } else {
-            throw new TagException(owner.getTag(), "Parent not an instance of BehaviorHolder: " + parent);
+            throw new TagException(owner.getTag(), "Parent not an instance of ClientBehaviorHolder: " + parent);
         }
 
     }
     
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-        // cast to the BehaviorHolder.
-        BehaviorHolder behaviorHolder = (BehaviorHolder) parent;
+        // cast to the ClientBehaviorHolder.
+        ClientBehaviorHolder behaviorHolder = (ClientBehaviorHolder) parent;
         ValueExpression bindingExpr=null;
         Behavior behavior=null;
         if (null != owner.getBinding()){
@@ -116,7 +117,10 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
             }
         }
         owner.setAttributes(ctx, behavior);
-        behaviorHolder.addBehavior(getEventName(behaviorHolder), behavior);
+
+        if (behavior instanceof ClientBehavior) {
+            behaviorHolder.addClientBehavior(getEventName(behaviorHolder), (ClientBehavior)behavior);
+        }
     }
 
     
@@ -139,7 +143,7 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
         
     }
     
-    private String getEventName(BehaviorHolder holder){
+    private String getEventName(ClientBehaviorHolder holder){
         String eventName;
         if (null != owner.getEvent()){
             eventName = owner.getEvent().getValue();

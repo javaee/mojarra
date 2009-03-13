@@ -51,10 +51,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.Behavior;
-import javax.faces.component.behavior.BehaviorContext;
-import javax.faces.component.behavior.BehaviorHint;
-import javax.faces.component.behavior.BehaviorHolder;
+import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorContext;
+import javax.faces.component.behavior.ClientBehaviorHint;
+import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.BehaviorEvent;
 
@@ -77,7 +77,7 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 	 * @author asmirnov
 	 *
 	 */
-	public static class BehaviorComponent extends UIComponentBase implements BehaviorHolder {
+	public static class BehaviorComponent extends UIComponentBase implements ClientBehaviorHolder {
 
 		
 		/* (non-Javadoc)
@@ -101,10 +101,10 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 	}
 
 	@SuppressWarnings("serial")
-	public static class TestBehavior extends Behavior implements Serializable {
+	public static class TestBehavior implements ClientBehavior, Serializable {
 
-            private static final Set<BehaviorHint> HINTS =
-            Collections.unmodifiableSet(EnumSet.of(BehaviorHint.SUBMITTING));
+            private static final Set<ClientBehaviorHint> HINTS =
+            Collections.unmodifiableSet(EnumSet.of(ClientBehaviorHint.SUBMITTING));
 
             private static int sequence = 0;
 		
@@ -114,26 +114,21 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
                 id=sequence++;
             }
 
-            @Override
             public String getRendererType() {
                 return TEST_FAMILY;
             }
 
-            @Override
-            public Set<BehaviorHint> getHints() {
+            public Set<ClientBehaviorHint> getHints() {
                 return HINTS;
             }
 
-            @Override
             public void broadcast(BehaviorEvent event) {
             }
 
-            @Override
             public void decode(FacesContext context, UIComponent component) {
             }
 
-            @Override
-            public String getScript(BehaviorContext bContext) {
+            public String getScript(ClientBehaviorContext bContext) {
                 return null;
             }
 
@@ -190,17 +185,17 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 	public void testSaveState() {
 		BehaviorComponent comp = new BehaviorComponent();
 		// Cast component to the interface, to be sure about method definition.
-		BehaviorHolder holder = (BehaviorHolder) comp;
+		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
 		TestBehavior behavior = new TestBehavior();
-		holder.addBehavior(ONCLICK, behavior);
+		holder.addClientBehavior(ONCLICK, behavior);
 		TestBehavior behavior2 = new TestBehavior();
-		holder.addBehavior(ONCLICK, behavior2);
+		holder.addClientBehavior(ONCLICK, behavior2);
 		TestBehavior behavior3 = new TestBehavior();
-		holder.addBehavior(ONCHANGE, behavior3);
+		holder.addClientBehavior(ONCHANGE, behavior3);
 		Object state = comp.saveState(facesContext);
 		BehaviorComponent restoredComp = new BehaviorComponent();
 		restoredComp.restoreState(facesContext, state);
-		Map<String, List<Behavior>> behaviors = restoredComp.getBehaviors();
+		Map<String, List<ClientBehavior>> behaviors = restoredComp.getClientBehaviors();
 		assertFalse(behaviors.isEmpty());
 		assertTrue(behaviors.containsKey(ONCLICK));
 		assertTrue(behaviors.containsKey(ONCHANGE));
@@ -216,10 +211,10 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 
 	}
 
-	public void testNonBehaviorHolder() throws Exception {
+	public void testNonClientBehaviorHolder() throws Exception {
 		UIInput input = new UIInput();
 		try {
-			input.addBehavior(ONTEST, new TestBehavior());
+			input.addClientBehavior(ONTEST, new TestBehavior());
 		} catch (IllegalStateException e) {
 			return;
 		}
@@ -227,17 +222,17 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 	}
 
 	/**
-	 * Test method for {@link javax.faces.component.UIComponentBase#addBehavior(java.lang.String, javax.faces.component.behavior.Behavior)}.
+	 * Test method for {@link javax.faces.component.UIComponentBase#addClientBehavior(java.lang.String, javax.faces.component.behavior.Behavior)}.
 	 */
 	public void testAddBehavior() {
 		BehaviorComponent comp = new BehaviorComponent();
 		// Cast component to the interface, to be sure about method definition.
-		BehaviorHolder holder = (BehaviorHolder) comp;
-		holder.addBehavior(ONCLICK, new TestBehavior());
-		holder.addBehavior(ONCLICK, new TestBehavior());
-		holder.addBehavior(ONCHANGE, new TestBehavior());
+		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
+		holder.addClientBehavior(ONCLICK, new TestBehavior());
+		holder.addClientBehavior(ONCLICK, new TestBehavior());
+		holder.addClientBehavior(ONCHANGE, new TestBehavior());
 		try {
-			holder.addBehavior("foo", new TestBehavior());
+			holder.addClientBehavior("foo", new TestBehavior());
 		} catch (IllegalArgumentException e) {
 			return;
 		}
@@ -249,25 +244,25 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 	 */
 	public void testGetEventNames() {
 		BehaviorComponent comp = new BehaviorComponent();
-		BehaviorHolder holder = (BehaviorHolder) comp;
+		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
 		assertEquals(EVENTS, holder.getEventNames());
 	}
 
 	/**
-	 * Test method for {@link javax.faces.component.UIComponentBase#getBehaviors()}.
+	 * Test method for {@link javax.faces.component.UIComponentBase#getClientBehaviors()}.
 	 */
 	public void testGetBehaviors() {
 		BehaviorComponent comp = new BehaviorComponent();
 		// Cast component to the interface, to be sure about method definition.
-		BehaviorHolder holder = (BehaviorHolder) comp;
-		Map<String, List<Behavior>> behaviors = holder.getBehaviors();
+		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
+		Map<String, List<ClientBehavior>> behaviors = holder.getClientBehaviors();
 		assertTrue(behaviors.isEmpty());
 		assertFalse(behaviors.containsKey(ONCLICK));
 		assertFalse(behaviors.containsValue(new TestBehavior()));
 		assertEquals(0, behaviors.entrySet().size());
-		holder.addBehavior(ONCLICK, new TestBehavior());
-		holder.addBehavior(ONCLICK, new TestBehavior());
-		holder.addBehavior(ONCHANGE, new TestBehavior());
+		holder.addClientBehavior(ONCLICK, new TestBehavior());
+		holder.addClientBehavior(ONCLICK, new TestBehavior());
+		holder.addClientBehavior(ONCHANGE, new TestBehavior());
 		assertFalse(behaviors.isEmpty());
 		assertTrue(behaviors.containsKey(ONCLICK));
 		assertTrue(behaviors.containsKey(ONCHANGE));
@@ -285,7 +280,7 @@ public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 	public void testGetDefaultEventName() {
 		BehaviorComponent comp = new BehaviorComponent();
 		// Cast component to the interface, to be sure about method definition.
-		BehaviorHolder holder = (BehaviorHolder) comp;
+		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
 		assertEquals(ONTEST, holder.getDefaultEventName());
 	}
 

@@ -233,9 +233,12 @@ public class Bean implements Serializable {
 
         String messageDetails = builder.toString();
 
+        String phase = context.getCurrentPhaseId().toString();
+
         StatusMessage message = new StatusMessage(statusMessages.size(),
                                                   messageType,
-                                                  messageDetails);
+                                                  messageDetails,
+                                                  phase);
         statusMessages.add(message);
 
         updateStatusTable(context);
@@ -267,11 +270,16 @@ public class Bean implements Serializable {
         private int count;
         private String type;
         private String details;
+        private String phase;
 
-        public StatusMessage(int count, String type, String details) {
+        public StatusMessage(int count,
+                             String type,
+                             String details,
+                             String phase) {
             this.count = count;
             this.type = type;
             this.details = details;
+            this.phase = phase;
         }
 
         public int getCount() {
@@ -280,6 +288,10 @@ public class Bean implements Serializable {
 
         public String getType() {
             return type;
+        }
+
+        public String getPhase() {
+            return phase;
         }
 
         public String getDetails() {

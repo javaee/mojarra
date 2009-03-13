@@ -64,7 +64,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.behavior.BehaviorHolder;
+import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -88,17 +88,17 @@ import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
  * to perform Ajax operations.  This tag handler must create an instance
  * of {@link javax.faces.component.AjaxBehavior} using the tag attribute 
  * values.  If this tag is nested within a single 
- * {@link BehaviorHolder} component:
+ * {@link ClientBehaviorHolder} component:
  * <ul>
  * <li>If the <code>events</code> attribute value is not specified, 
- * obtain the default event name by calling {@link BehaviorHolder#getDefaultEventName}.
+ * obtain the default event name by calling {@link ClientBehaviorHolder#getDefaultEventName}.
  * If that returns <code>null</code> throw an <code>exception</code>.</li>
  * <li>If the <code>events</code> attribute value is specified, ensure it
  * that it exists in the <code>Collection</code> returned from a call to
- * {@link BehaviorHolder#getEventNames} and throw an <code>exception</code> if
+ * {@link ClientBehaviorHolder#getEventNames} and throw an <code>exception</code> if
  * it doesn't exist.</li>
- * <li>Add the {@link AjaxBehavior} instance to the {@link BehaviorHolder}
- * component by calling {@link BehaviorHolder#addBehavior} passing <code>event</code>
+ * <li>Add the {@link AjaxBehavior} instance to the {@link ClientBehaviorHolder}
+ * component by calling {@link ClientBehaviorHolder#addClientBehavior} passing <code>event</code>
  * and the {@link AjaxBehavior} instance.</li> 
  * </ul>
  * <br/><br/>
@@ -114,7 +114,7 @@ import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
  *
  * If this tag has component children, add the {@link AjaxBehavior} to 
  * {@link AjaxBehaviors} by calling {@link AjaxBehaviors#pushBehavior}. As 
- * subsequent child components that implement the {@link BehaviorHolder} interface 
+ * subsequent child components that implement the {@link ClientBehaviorHolder} interface 
  * are evaluated this {@link AjaxBehavior} instance must be added as a behavior to
  * the component.
  * </p>
@@ -128,6 +128,7 @@ public final class AjaxHandler extends TagHandlerImpl {
     private final TagAttribute onevent;
     private final TagAttribute onerror;
     private final TagAttribute disabled;
+    private final TagAttribute immediate;
     private final TagAttribute listener;
 
     private final boolean wrapping;
@@ -143,6 +144,7 @@ public final class AjaxHandler extends TagHandlerImpl {
         this.onevent = this.getAttribute("onevent");
         this.onerror = this.getAttribute("onerror");
         this.disabled = this.getAttribute("disabled");
+        this.immediate = this.getAttribute("immediate");
         this.listener = this.getAttribute("listener");
 
         this.wrapping = isWrapping();
@@ -212,12 +214,12 @@ public final class AjaxHandler extends TagHandlerImpl {
             return;
         }
 
-        if (!(parent instanceof BehaviorHolder)) {
+        if (!(parent instanceof ClientBehaviorHolder)) {
             throw new TagException(this.tag,
-                    "Unable to attach <f:ajax> to non-BehaviorHolder parent");
+                    "Unable to attach <f:ajax> to non-ClientBehaviorHolder parent");
         }
 
-        BehaviorHolder bHolder = (BehaviorHolder)parent;
+        ClientBehaviorHolder bHolder = (ClientBehaviorHolder)parent;
 
         if (null == eventName) {
             eventName = bHolder.getDefaultEventName();
@@ -233,7 +235,7 @@ public final class AjaxHandler extends TagHandlerImpl {
         }
 
         AjaxBehavior ajaxBehavior = createAjaxBehavior(ctx, eventName);
-        bHolder.addBehavior(eventName, ajaxBehavior);
+        bHolder.addClientBehavior(eventName, ajaxBehavior);
         installAjaxResourceIfNecessary();
     }
 
@@ -245,7 +247,8 @@ public final class AjaxHandler extends TagHandlerImpl {
             ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
             ((this.execute != null) ? this.execute.getValueExpression(ctx, Object.class) : null),
             ((this.render != null) ? this.render.getValueExpression(ctx, Object.class) : null),
-            ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null));
+            ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null),
+            ((this.immediate != null) ? this.immediate.getValueExpression(ctx, Boolean.class) : null));
 
         if (null != listener) {
             ajaxBehavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(

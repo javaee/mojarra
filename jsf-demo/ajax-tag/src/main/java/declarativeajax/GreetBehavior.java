@@ -40,8 +40,8 @@ import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.BehaviorBase;
-import javax.faces.component.behavior.BehaviorContext;
+import javax.faces.component.behavior.ClientBehaviorBase;
+import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.FacesBehavior;
 
 
@@ -50,7 +50,7 @@ import javax.faces.component.behavior.FacesBehavior;
  * user when invoked.</p>
  */
 @FacesBehavior(value="Joe")
-public class GreetBehavior extends BehaviorBase implements Serializable {
+public class GreetBehavior extends ClientBehaviorBase implements Serializable {
 
     public GreetBehavior() {};
 
@@ -58,7 +58,7 @@ public class GreetBehavior extends BehaviorBase implements Serializable {
         this.name = name;
     }
 
-    public String getScript(BehaviorContext behaviorContext) {
+    public String getScript(ClientBehaviorContext behaviorContext) {
 
         String name = (this.name == null) ? "World" : this.name;
 

@@ -47,8 +47,8 @@
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
     <distributionManagement>
         <repository>
-            <id>java.net-m2-repository</id>
-            <url>java-net:/maven2-repository/trunk/www/repository/</url>
+            <id>java.net-maven2-repository</id>
+            <url>java-net:/maven2-repository/trunk/repository/</url>
         </repository>
     </distributionManagement>
     <build>

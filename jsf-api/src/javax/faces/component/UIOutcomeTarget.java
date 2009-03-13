@@ -188,52 +188,6 @@ public class UIOutcomeTarget extends UIOutput {
 
     }
 
-    /**
-     * <p class="changed_added_2_0">For HTML pages, represents the
-     * fragement of the document that should be brought into focus when
-     * the view is rendered.</p>
-
-     * PENDING(edburns): move this property to the renderkit, removing
-     * getter and setter here.
-     *
-     * @return the target view fragment
-     *
-     * @since 2.0
-     */
-    public String getFragment() {
-
-        if (fragment != null) {
-            return fragment;
-        }
-
-        ValueExpression ve = getValueExpression("fragment");
-        if (ve != null) {
-            try {
-                return (String) ve.getValue(getFacesContext().getELContext());
-            } catch (ELException e) {
-                throw new FacesException(e);
-            }
-
-        } else {
-            return null;
-        }
-
-    }
-
-
-    /**
-     * // RELEASE_PENDING (rogerk) review docs
-     * <p>Sets the fragment of the document that should be brought into focus
-     * when the view is rendered.</p>
-     *
-     * @param fragment the view fragment
-     */
-    public void setFragment(String fragment) {
-
-        this.fragment = fragment;
-
-    }
-
 
     // ----------------------------------------------------- StateHolder Methods
 

@@ -88,8 +88,8 @@
 
     <distributionManagement>
         <repository>
-            <id>java.net-m2-repository</id>
-            <url>java-net:/maven2-repository/trunk/www/repository/</url>
+            <id>java.net-mavent2-repository</id>
+            <url>java-net:/maven2-repository/trunk/repository/</url>
         </repository>
     </distributionManagement>
 

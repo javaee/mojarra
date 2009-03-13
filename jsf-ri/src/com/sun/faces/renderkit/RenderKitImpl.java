@@ -45,7 +45,7 @@ package com.sun.faces.renderkit;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.BehaviorRenderer;
+import javax.faces.render.ClientBehaviorRenderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.render.ResponseStateManager;
@@ -107,8 +107,8 @@ public class RenderKitImpl extends RenderKit {
      * behaviorRenderer instances themselves.
      */
 
-    private ConcurrentHashMap<String, BehaviorRenderer> behaviorRenderers = 
-        new ConcurrentHashMap<String, BehaviorRenderer>();
+    private ConcurrentHashMap<String, ClientBehaviorRenderer> behaviorRenderers = 
+        new ConcurrentHashMap<String, ClientBehaviorRenderer>();
 
 
     private ResponseStateManager responseStateManager =
@@ -174,8 +174,8 @@ public class RenderKitImpl extends RenderKit {
 
     }
 
-    public void addBehaviorRenderer(String behaviorRendererType,
-                                    BehaviorRenderer behaviorRenderer) {
+    public void addClientBehaviorRenderer(String behaviorRendererType,
+                                    ClientBehaviorRenderer behaviorRenderer) {
 
         if (behaviorRendererType == null) {
             String message = MessageUtils.getExceptionMessageString
@@ -192,7 +192,7 @@ public class RenderKitImpl extends RenderKit {
     
     }
 
-    public BehaviorRenderer getBehaviorRenderer(String behaviorRendererType) {
+    public ClientBehaviorRenderer getClientBehaviorRenderer(String behaviorRendererType) {
             
         if (behaviorRendererType == null) {
             String message = MessageUtils.getExceptionMessageString

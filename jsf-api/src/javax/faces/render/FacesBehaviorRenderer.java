@@ -79,7 +79,7 @@ import java.lang.annotation.Target;
           <li><p>Create an instance of this class using the public
           zero-argument constructor.</p></li>
 
-          <li><p>Call {@link RenderKit#addBehaviorRenderer} on
+          <li><p>Call {@link RenderKit#addClientBehaviorRenderer} on
           <em>renderKit</em>, passing <em>type</em> as the
           first argument, and a {@link BehaviorRenderer} instance as
           the second argument.</p></li>

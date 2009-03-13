@@ -107,14 +107,17 @@ public class Bean {
     
     private void loadOptions() {
         options = new HashMap<String, String>();
-        options.put("ajax1", "{execute:'_1,ajax1'}");
-        options.put("ajax2", "{execute:'_6,_10,ajax2'}");
-        options.put("ajax3", "{execute:'_5,ajax3'}");
-        options.put("ajax4", "{execute:'_4,_9,ajax4'}");
+        options.put("ajax1", "{execute:'@this _1',render:'@form'}");
+        options.put("ajax2", "{execute:'ajax2 _6 _10',render:'form'}");
+        options.put("ajax3", "{execute:'ajax3 _5',render:'form'}");
+        options.put("ajax4", "{execute:'ajax4 _4 _9',render:'@form'}");
         options.put("ajax5", "{execute:'ajax5',render:'_1'}");
         options.put("ajax6", "{execute:'ajax6',render:'_6'}");
-        options.put("ajax7", "{execute:'ajax7,_10',render:'_5'}");
-        options.put("ajax8", "{execute:'ajax8,_1,_2,_3,_4',render:'_1,_2,_3,_4'}"); 
+        options.put("ajax7", "{execute:'@this _10',render:'_5'}");
+        options.put("ajax8", "{execute:'@this _1 _2 _3 _4',render:'_1 _2 _3 _4'}"); 
+        options.put("ajax9", "{execute:'@all',render:'@all'}"); 
+        options.put("ajax10", "{execute:'@none',render:'@all'}"); 
+        options.put("ajax11", "{execute:'@all',render:'@none'}"); 
     }
     
     private void displayOptions() {

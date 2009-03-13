@@ -91,17 +91,6 @@ public abstract class PartialViewContext {
     public static final String PARTIAL_EXECUTE_PARAM_NAME =
           "javax.faces.partial.execute";
 
-
-    /**
-     * <p class="changed_added_2_0">
-     * The value that when used with {@link #PARTIAL_EXECUTE_PARAM_NAME}
-     * or {@link #PARTIAL_RENDER_PARAM_NAME} indicates these phases
-     * must be skipped.</p>  
-     *
-     * @since 2.0
-     */
-    public static final String NO_PARTIAL_PHASE_CLIENT_IDS = "@none";
-
     /**
      * <p class="changed_added_2_0">
      * The value that when used with {@link #PARTIAL_EXECUTE_PARAM_NAME}
@@ -119,8 +108,7 @@ public abstract class PartialViewContext {
      * <p class="changed_added_2_0">Return a
      * <code>Collection</code> of client identifiers from the current request
      * with the request parameter name {@link #PARTIAL_EXECUTE_PARAM_NAME}.
-     * If the value of the request parameter is {@link #NO_PARTIAL_PHASE_CLIENT_IDS},
-     * or there is no such request parameter, return an empty <code>Collection</code>.
+     * If there is no such request parameter, return an empty <code>Collection</code>.
      * These client identifiers are used to identify components that
      * will be processed during the <code>execute</code> phase of the
      * request processing lifecycle.  The returned <code>Collection</code> is
@@ -137,8 +125,7 @@ public abstract class PartialViewContext {
      * <p class="changed_added_2_0">Return a
      * <code>Collection</code> of client identifiers from the current request
      * with the request parameter name {@link #PARTIAL_RENDER_PARAM_NAME}.
-     * If the value of the request parameter is {@link #NO_PARTIAL_PHASE_CLIENT_IDS},
-     * or there is no such request parameter, return an empty <code>Collection</code>.
+     * If there is no such request parameter, return an empty <code>Collection</code>.
      * These client identifiers are used to identify components that
      * will be processed during the <code>render</code> phase of the
      * request processing lifecycle.  The returned <code>Collection</code> is 

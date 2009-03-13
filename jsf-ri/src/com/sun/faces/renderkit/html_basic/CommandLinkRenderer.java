@@ -50,7 +50,8 @@ import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.ClientBehaviorContext;
+import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -233,7 +234,7 @@ public class CommandLinkRenderer extends LinkRenderer {
             target = "";
         }
 
-        Collection<Behavior.Parameter> params = getBehaviorParameters(command);
+        Collection<ClientBehaviorContext.Parameter> params = getBehaviorParameters(command);
         RenderKitUtils.renderOnclick(context, 
                                      command,
                                      params,
@@ -273,7 +274,7 @@ public class CommandLinkRenderer extends LinkRenderer {
     // link only contains an "action" (or "click") Behavior.  In that
     // we pass a null Behaviors map into renderPassThruAttributes(),
     // which allows us to take a more optimized code path.
-    private static Map<String, List<Behavior>> getNonOnClickBehaviors(UIComponent component) {
+    private static Map<String, List<ClientBehavior>> getNonOnClickBehaviors(UIComponent component) {
 
         return getPassThruBehaviors(component, "click", "action");
     }

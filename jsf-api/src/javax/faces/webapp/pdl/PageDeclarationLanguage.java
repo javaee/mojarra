@@ -156,11 +156,22 @@ public abstract class PageDeclarationLanguage {
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param context
-     * @param view
+     * <p class="changed_added_2_0">Take any actions specific to this
+     * PDL implementation to cause the argument <code>UIViewRoot</code>
+     * which must have been created via a call to {@link #createView},
+     * to be populated with children.</p>
+
+     * <p class="changed_added_2_0">The implementation must take no
+     * action if the argument <code>root</code> already has non-metadata
+     * children.  See section JSF.7.6.2.3 for the view metadata
+     * specification.</p>
+
+     * @param context the <code>FacesContext</code> for this request
+
+     * @param root the <code>UIViewRoot</code> to populate with children
+     * using techniques specific to this PDL implementation.
      */
-    public abstract void buildView(FacesContext context, UIViewRoot view)
+    public abstract void buildView(FacesContext context, UIViewRoot root)
     throws IOException;
 
     

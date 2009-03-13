@@ -49,7 +49,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 
 import javax.faces.FactoryFinder;
-import javax.faces.render.BehaviorRenderer;
+import javax.faces.render.ClientBehaviorRenderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
@@ -111,19 +111,19 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     private static final String RENDERER_CLASS = "renderer-class";
 
     /**
-     * <p>/faces-config/render-kit/behavior-renderer</p>
+     * <p>/faces-config/render-kit/client-behavior-renderer</p>
      */
-    private static final String BEHAVIOR_RENDERER = "behavior-renderer";
+    private static final String CLIENT_BEHAVIOR_RENDERER = "client-behavior-renderer";
 
     /**
-     * <p>/faces-config/render-kit/behavior-renderer/behavior-renderer-type</p>
+     * <p>/faces-config/render-kit/client-behavior-renderer/client-behavior-renderer-type</p>
      */
-    private static final String BEHAVIOR_RENDERER_TYPE = "behavior-renderer-type";
+    private static final String CLIENT_BEHAVIOR_RENDERER_TYPE = "client-behavior-renderer-type";
 
     /**
-     * <p>/faces-config/render-kit/behavior-renderer/behavior-renderer-class</p>
+     * <p>/faces-config/render-kit/client-behavior-renderer/client-behavior-renderer-class</p>
      */
-    private static final String BEHAVIOR_RENDERER_CLASS = "behavior-renderer-class";
+    private static final String CLIENT_BEHAVIOR_RENDERER_CLASS = "client-behavior-renderer-class";
 
     // -------------------------------------------- Methods from ConfigProcessor
 
@@ -158,7 +158,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             }
         }
 
-        // process annotated Renderers, BehaviorRenderers first as Renderers configured
+        // process annotated Renderers, ClientBehaviorRenderers first as Renderers configured
         // via config files take precedence
         processAnnotations(FacesRenderer.class);
         processAnnotations(FacesBehaviorRenderer.class);
@@ -188,7 +188,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             }
             
             for (Map.Entry<Document,List<Node>> renderEntry : entry.getValue().entrySet()) {
-                addBehaviorRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
+                addClientBehaviorRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
             }
         }
         invokeNext(documents);
@@ -225,7 +225,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                     rkClass = getNodeText(n);
                 } else if (RENDERER.equals(n.getLocalName())) {
                     renderersList.add(n);
-                } else if (BEHAVIOR_RENDERER.equals(n.getLocalName())) {
+                } else if (CLIENT_BEHAVIOR_RENDERER.equals(n.getLocalName())) {
                     behaviorRenderersList.add(n);
                 }
             }
@@ -327,7 +327,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void addBehaviorRenderers(RenderKit renderKit,
+    private void addClientBehaviorRenderers(RenderKit renderKit,
                               Document owningDocument,
                               List<Node> behaviorRenderers) {
 
@@ -340,29 +340,29 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             String behaviorRendererClass = null;
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node n = children.item(i);
-                if (BEHAVIOR_RENDERER_TYPE.equals(n.getLocalName())) {
+                if (CLIENT_BEHAVIOR_RENDERER_TYPE.equals(n.getLocalName())) {
                     behaviorRendererType = getNodeText(n);
-                } else if (BEHAVIOR_RENDERER_CLASS.equals(n.getLocalName())) {
+                } else if (CLIENT_BEHAVIOR_RENDERER_CLASS.equals(n.getLocalName())) {
                     behaviorRendererClass = getNodeText(n);
                 }
             }
 
             if ((behaviorRendererType != null)
                   && (behaviorRendererClass != null)) {
-                BehaviorRenderer r = (BehaviorRenderer) createInstance(behaviorRendererClass,
-                                                       BehaviorRenderer.class,
+                ClientBehaviorRenderer r = (ClientBehaviorRenderer) createInstance(behaviorRendererClass,
+                                                       ClientBehaviorRenderer.class,
                                                        null,
                                                        behaviorRenderer);                
                 if (r != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
-                                        "Calling RenderKit.addBehaviorRenderer({0},{1}, {2}) for RenderKit ''{2}''",
+                                        "Calling RenderKit.addClientBehaviorRenderer({0},{1}, {2}) for RenderKit ''{2}''",
                                         behaviorRendererType,
                                         behaviorRendererClass,
                                         renderKit.getClass()));
                     }
-                    renderKit.addBehaviorRenderer(behaviorRendererType, r);
+                    renderKit.addClientBehaviorRenderer(behaviorRendererType, r);
                 }
             }
         }

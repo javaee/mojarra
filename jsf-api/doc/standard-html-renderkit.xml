@@ -2290,6 +2290,18 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>
+    <property>
+      <description>
+          Return the URI fragment, as specified in RFC 2396.
+        </description>
+      <display-name>HTML Fragment</display-name>
+      <icon/>
+      <property-name>fragment</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
 
     <component-extension>
       <component-family>javax.faces.OutcomeTarget</component-family>
@@ -12810,6 +12822,18 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>
+    <property>
+      <description>
+          Return the URI fragment, as specified in RFC 2396.
+        </description>
+      <display-name>HTML Fragment</display-name>
+      <icon/>
+      <property-name>fragment</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
 
 
     <property>
@@ -13433,6 +13457,18 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <icon/>
       <property-name>includeViewParams</property-name>
       <property-class>java.lang.Boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Return the URI fragment, as specified in RFC 2396.
+        </description>
+      <display-name>HTML Fragment</display-name>
+      <icon/>
+      <property-name>fragment</property-name>
+      <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
@@ -20009,6 +20045,36 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
      ignoring case, the string "true" (without the quotes) the decode
      method must take no action and return immediately.</p>
 
+     <div class="changed_added_2_0">
+     <p>If the component associated with the Renderer implements the
+     <code>javax.faces.component.behavior.BehaviorHolder</code> interface,
+     process <code>javax.faces.component.behavior.Behavior</code>s as follows:
+      <ul>
+      <li>Determine if there are <code>javax.faces.component.behavior.Behavior</code>s
+      associated with this component by calling the implementation of
+      <code>javax.faces.component.behavior.BehaviorHolder.getBehaviors</code>.</li>
+      <li>If there are <code>behaviors</code>, determine the
+      <code>behavior event name</code> from the request parameter:
+      <code>javax.faces.behavior.event</code>.</li>
+      <li>If that request parameter exists, get the <code>List</code> of
+      <code>javax.faces.component.behavior.Behavior</code>s for the
+      <code>behavior event name</code> from the <code>Map</code> returned from
+      <code>javax.faces.component.behavior.BehaviorHolder.getBehaviors</code>.</li>
+      <li>If there are <code>behaviors</code> for the <code>behavior event name</code>,
+      determine the <code>behavior source name</code> from the request parameter:
+      <code>javax.faces.behavior.source</code>.</li>
+      <li>If the request parameter exists, and its value is the same as this
+      component's <code>clientId</code>, iterate over the <code>List</code> of
+      <code>javax.faces.component.behavior.Behavior</code>s and call the
+      <code>decode()</code> method for each
+      <code>javax.faces.component.behavior.Behavior</code>}.</li>
+      </ul>
+      Behavior decoding is applicable to components that are "readonly", but it is
+      not applicable to components that are "disabled".</p>
+      </div>
+
+     <p>
+
      </ul>
 
      <p><a name="general_encoding">General</a> notes on encoding</p>
@@ -20079,6 +20145,35 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
      </ul>
 
+     <div class="changed_added_2_0">
+     <p><a name="general_behavior_encoding">General</a> notes regarding the rendering of component <code>Behavior</code>.</p>
+
+     <ul>
+
+       <p>Components that implement the <code>javax.faces.component.behavior.BehaviorHolder</code>
+       interface are eligable to have <code>Behavior</code> instances attached to them.  This enables
+       those components to render script content.  For example, such a component may have an 
+       <code>AjaxBehavior</code> instance attached to it, which would enable it to initiate
+       <code>Ajax</code> requests to the server.  <code>Behavior</code>s that are capable of 
+       sending requests to the server are called <code>submitting behaviors</code>.  <code>Behavior</code>s
+       can be associated with <code>BehaviorRenderer</code>s, which is similar to the component
+       renderer association.</p>
+       
+       <p>If a component has a single <code>Behavior</code> attached to it, call the 
+       <code>Behavior.getScript</code> method to get the <code>Behavior</code> script that will be 
+       rendered.  Render the script with the event attribute (for example, onclick).  If a
+       component has multiple <code>Behavior</code>s attached to it, call
+       <code>Behavior.getScript</code> for each of the behaviors and string together the scripts.
+    .  Render the scripts such that when the component is activated, the scripts are invoked in the order 
+       that the <code>Behavior</code>s were attached to the component.  If any of the scripts in the chain 
+       return <code>false</code>, subsequent scripts in the chain must not execute.  The specification
+       provides a nice utility function <code>jsf.util.chain</code> to handle this capability.  If there
+       are <code>UIParameter</code> children with a <code>submitting behavior</code> (such as 
+       <code>AjaxBehavior</code>), pass each of the <code>UIParameter</code> name/value pairs as 
+       parameters to the <code>Behavior</code> script.</p>
+         
+     </ul>
+     </div>
 
 
     </ul>]]></description>
@@ -25112,7 +25207,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[Render an HTML "a" anchor element.  The value of the
+      <description><![CDATA[<div class="changed_added_2_0">Render an HTML "a" anchor element.  The value of the
       component is rendered as the anchor text and the outcome of the component is used
       to determine the target URL rendered in the "href" attribute.  Any
       child <code>UIParameter</code> components are appended to the String to be
@@ -25134,7 +25229,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       anchor element or the "href" element.  Instead, render a "span" element. 
       If the "styleClass" attribute is specified, render its value as the value 
       of the "class" attribute on the "span".  Render any pass-through attributes
-      on the "span".]]></description>
+      on the "span".</div>]]></description>
       <component-family>javax.faces.OutcomeTarget</component-family>
       <renderer-type>javax.faces.Link</renderer-type>
       <renderer-class>
@@ -25699,7 +25794,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[Render an HTML "input" element of type "button".
+      <description><![CDATA[<div class="changed_added_2_0">Render an HTML "input" element of type "button".
       The value of the component is rendered as the button text and the outcome of the
       component is used to determine the target URL which is activated by onclick.  If
       "image" attribute is specified, render it as the value of the "src" attribute after
@@ -25721,7 +25816,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       follow the same steps as mentioned in the "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
       Notes on Encoding</a>" regarding the "id" attribute for UIInput components.  If the
       "disabled" attribute is specified, do not render the "onclick" element and assign the
-      "disabled" attribute a value of true.]]></description>
+      "disabled" attribute a value of true.</div>]]></description>
       <component-family>javax.faces.OutcomeTarget</component-family>
       <renderer-type>javax.faces.Button</renderer-type>
       <renderer-class>

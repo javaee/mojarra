@@ -816,12 +816,32 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <li>Collect optional post data arguments for the Ajax request.
              * <ul>
              * <li>Determine additional arguments (if any) from the <code>options</code>
-             * argument. If <code>options.execute</code> exists, create the post data argument
-             * with the name <code>javax.faces.partial.execute</code> and the value as a
-             * space delimited <code>string</code> of client identifiers.  If
-             * <code>options.render</code> exists, create the post data argument with the name
-             * <code>javax.faces.partial.render</code> and the value as a space delimited
-             * <code>string</code> of client identifiers.</li>
+             * argument. If <code>options.execute</code> exists:
+             * <ul>
+             * <li>If the keyword <code>@none</code> is present, do not create and send
+             * the post data argument <code>javax.faces.partial.execute</code>.</li>
+             * <li>If the keyword <code>@all</code> is present, create the post data argument with 
+             * the name <code>javax.faces.partial.execute</code> and the value <code>@all</code>.</li>
+             * <li>Otherwise, there are specific identifiers that need to be sent.  Create the post 
+             * data argument with the name <code>javax.faces.partial.execute</code> and the value as a
+             * space delimited <code>string</code> of client identifiers.</li>
+             * </ul>
+             * </li>
+             * <li>If <code>options.execute</code> does not exist, create the post data argument with the
+             * name <code>javax.faces.partial.execute</code> and the value as the identifier of the
+             * element that caused this request.</li>
+             * <li>If <code>options.render</code> exists:
+             * <ul>
+             * <li>If the keyword <code>@none</code> is present, do not create and send
+             * the post data argument <code>javax.faces.partial.render</code>.</li>
+             * <li>If the keyword <code>@all</code> is present, create the post data argument with 
+             * the name <code>javax.faces.partial.render</code> and the value <code>@all</code>.</li>
+             * <li>Otherwise, there are specific identifiers that need to be sent.  Create the post 
+             * data argument with the name <code>javax.faces.partial.render</code> and the value as a
+             * space delimited <code>string</code> of client identifiers.</li>
+             * </ul>
+             * <li>If <code>options.render</code> does not exist do not create and send the 
+             * post data argument <code>javax.faces.partial.render</code>.</li>
              * <li>Determine additional arguments (if any) from the <code>event</code>
              * argument.  The following name/value pairs may be used from the
              * <code>event</code> object:
@@ -974,20 +994,47 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     args["javax.faces.partial.event"] = event.type;
                 }
 
-                // RELEASE_PENDING Get rid of commas.  It's supposed to be spaces.
+                // If we have 'execute' identifiers:
+                // Handle any keywords that may be present.
+                // If @none present anywhere, do not send the 
+                // "javax.faces.partial.execute" parameter.
+                // The 'execute' and 'render' lists must be space
+                // delimited.
+
                 if (options.execute) {
-                    var temp = options.execute.replace(/\s+/, ' ').split(' ');
-                    // RELEASE_PENDING refactor isInArray function
-                    if (!isInArray(temp, element.name)) {
-                        options.execute = element.name + " " + options.execute;
+                    var none = options.execute.search(/@none/);
+                    if (none < 0) {
+                        var all = options.execute.search(/@all/);
+                        if (all < 0) {
+                            options.execute = options.execute.replace("@this", element.id);
+                            options.execute = options.execute.replace("@form", form.id);
+                            var temp = options.execute.split(' ');
+                            // RELEASE_PENDING refactor isInArray function
+                            if (!isInArray(temp, element.name)) {
+                                options.execute = element.name + " " + options.execute;
+                            }
+                        } else {
+                            options.execute = "@all";
+                        }
+                        args["javax.faces.partial.execute"] = options.execute
                     }
                 } else {
                     options.execute = element.id;
+                    args["javax.faces.partial.execute"] = options.execute
                 }
 
-                args["javax.faces.partial.execute"] = options.execute.replace(/\s+/, ' ');
                 if (options.render) {
-                    args["javax.faces.partial.render"] = options.render.replace(/\s+/, ' ');
+                    var none = options.render.search(/@none/);
+                    if (none < 0) {
+                        var all = options.render.search(/@all/);
+                        if (all < 0) {
+                            options.render = options.render.replace("@this", element.id);
+                            options.render = options.render.replace("@form", form.id);
+                        } else {
+                            options.render = "@all";
+                        }
+                        args["javax.faces.partial.render"] = options.render;
+                    }
                 }
 
                 // remove non-passthrough options

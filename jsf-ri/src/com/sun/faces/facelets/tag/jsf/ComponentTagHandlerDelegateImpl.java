@@ -53,8 +53,8 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.*;
 import javax.faces.component.behavior.AjaxBehavior;
-import javax.faces.component.behavior.Behavior;
-import javax.faces.component.behavior.BehaviorHolder;
+import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.InitialStateEvent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
@@ -295,11 +295,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      */
     private void privateOnComponentPopulated(FaceletContext ctx, UIComponent c, UIComponent parent) {
 
-        if (!(c instanceof BehaviorHolder)) {
+        if (!(c instanceof ClientBehaviorHolder)) {
             return;
         }
 
-        BehaviorHolder bHolder = (BehaviorHolder)c;
+        ClientBehaviorHolder bHolder = (ClientBehaviorHolder)c;
         AjaxBehaviors ajaxBehaviors = getAjaxBehaviors(ctx);
         if (ajaxBehaviors != null) {
             AjaxBehavior ajaxBehavior = ajaxBehaviors.getCurrentBehavior();
@@ -313,11 +313,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
                     // We only add the AjaxBehavior if the BehaviorHolder does
                     // not already contain a Behavior for the event.
-                    Map<String, List<Behavior>> behaviors = bHolder.getBehaviors();
-                    List<Behavior> behaviorsForEvent =  behaviors.get(event);
+                    Map<String, List<ClientBehavior>> behaviors = bHolder.getClientBehaviors();
+                    List<ClientBehavior> behaviorsForEvent =  behaviors.get(event);
                     if ((null == behaviorsForEvent) || behaviorsForEvent.isEmpty()) {
 
-                        bHolder.addBehavior(event, ajaxBehavior);
+                        bHolder.addClientBehavior(event, ajaxBehavior);
                     }
                 }
             }

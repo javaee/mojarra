@@ -37,124 +37,29 @@
 package javax.faces.component.behavior;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.event.BehaviorListener;
-import javax.faces.render.BehaviorRenderer;
-import javax.faces.render.RenderKit;
 
 /**
  * <p class="changed_added_2_0"><strong>BehaviorBase</strong> is a
- * convenience base class that implements the default concrete behavior
- * of all methods defined by {@link Behavior}.</p>
- * <p>Subclasses should either override getRendererType() to identify
- * the BehaviorRenderer to delegate to, or they should override 
- * <code>getScript()</code> to locally generate the desired Behavior 
- * script, and <code>decode()</code>.
+ * convenience base class that provides a default implementation of the 
+ * {@link Behavior} contract.  It also provides behavior listener registration 
+ * support.</p>
  * </p>
  *
  * @since 2.0
  */
-public class BehaviorBase extends Behavior {
+public class BehaviorBase implements Behavior {
 	
-
-    private static final Logger logger = Logger.getLogger("javax.faces.component.behavior",
-    "javax.faces.LogStrings");
-
-    /**
+ /**
      * <p>Our {@link javax.faces.event.BehaviorListener}s.  This data
      * structure is lazily instantiated as necessary.</p>
      */
     private List<BehaviorListener> listeners;
 
-    /**
-     * <p class="changed_added_2_0">Default implementation of 
-     * of {@link Behavior#getScript}.  If a {@link BehaviorRenderer} 
-     * is available for the specified behavior renderer type, this method
-     * delegates to the {@link BehaviorRenderer#getScript} method.  
-     * Otherwise, this method returns null.
-     * </p>
-     *
-     * @param behaviorContext the {@link BehaviorContext}
-     *
-     * @return the script provided by the associated BehaviorRenderer, or
-     * null if no BehaviorRenderer is available.
-     *
-     * @throws NullPointerException if <code>behaviorContext</code> is 
-     * <code>null</code>
-     *
-     * @since 2.0
-     */
-    @Override
-    public String getScript(BehaviorContext behaviorContext) {
-
-        if (null == behaviorContext) {
-            throw new NullPointerException();
-        }
-
-    	BehaviorRenderer renderer = getRenderer(behaviorContext.getFacesContext());
-        String script = null;
-    	if (null != renderer){
-            script = renderer.getScript(behaviorContext, this);
-    	}
-        return script;
-    }
-
-    /**
-     * <p class="changed_added_2_0">Default implementation of 
-     * of Behavior.decode().  If a BehaviorRenderer is available
-     * for the specified behavior renderer type, this method
-     * delegates to the BehaviorRenderer's decode() method.  
-     * Otherwise, no decoding is performed.
-     * </p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     * @param component {@link UIComponent} the component associated with this {@link Behavior} 
-     *
-     * @throws NullPointerException if <code>context</code> or 
-     * <code>component<code> is <code>null</code>.
-     *
-     * @since 2.0
-     */
-    @Override
-    public void decode(FacesContext context,
-                       UIComponent component) {
-    
-        if (null == context || null == component) {
-            throw new NullPointerException();
-        }
-
-    	BehaviorRenderer renderer = getRenderer(context);
-    	if (null != renderer){
-            renderer.decode(context, component, this);
-    	}
-    }
-    
-    /**
-     * <p class="changed_added_2_0">Default implementation of 
-     * {@link Behavior#getRendererType}. The default implementation 
-     * returns null.  Subclasses should either override this method to 
-     * return a string that identifies the type of {@link BehaviorRenderer} 
-     * to use, or should override {@link #getScript} and perform script 
-     * rendering locally in the {@link Behavior} implementation.
-     * </p>
-     * @return the default renderer type, which is null.
-     *
-     * @since 2.0
-     */
-    @Override
-    public String getRendererType() {
-        return null;
-    }
-    
     /**
      * <p class="changed_added_2_0">Default implementation of 
      * {@link Behavior#broadcast}.  Delivers the specified 
@@ -175,7 +80,6 @@ public class BehaviorBase extends Behavior {
      *
      * @since 2.0
      */
-    @Override
     public void broadcast(BehaviorEvent event)
         throws AbortProcessingException {
 
@@ -186,20 +90,6 @@ public class BehaviorBase extends Behavior {
                 }
             }
         }
-    }
-
-    /**
-     * <p class="changed_added_2_0">Default implementation of Behavior.getHints().  
-     * By default, no hints are specified, and this method returns an empty,
-     * umodifiable set.</p>
-     *   
-     * @return an empty, unmodifiable set of BehaviorHints.
-     *
-     * @since 2.0
-     */
-    @Override
-    public Set<BehaviorHint> getHints() {
-        return Collections.emptySet();
     }
 
     /**
@@ -217,7 +107,7 @@ public class BehaviorBase extends Behavior {
      *   public void processAjaxBehavior(FooEvent event);
      * }
      *
-     * public class AjaxBehavior extends Behavior {
+     * public class AjaxBehavior extends ClientBehaviorBase {
      *   ...
      *   public void addAjaxBehaviorListener(AjaxBehaviorListener listener) {
      *     addBehaviorListener(listener);
@@ -270,41 +160,5 @@ public class BehaviorBase extends Behavior {
             return;
         }
         listeners.remove(listener);
-    }
-
-    /**
-     * <p class="changed_added_2_0">Convenience method to return the {@link BehaviorRenderer} 
-     * instance associated with this {@link Behavior}, if any; otherwise, return
-     * <code>null</code>.
-     * </p>
-     * @param context {@link FacesContext} for the request we are processing
-     * @return {@link BehaviorRenderer} instance from the current {@link RenderKit} or null.
-     *
-     * @throws NullPointerException if <code>context</code> is null. 
-     *
-     * @since 2.0
-     */
-    protected BehaviorRenderer getRenderer(FacesContext context) {
-    	if (null == context){
-            throw new NullPointerException();
-    	}
-    	BehaviorRenderer renderer = null;
-        String rendererType = getRendererType();
-        if (null != rendererType){
-            RenderKit renderKit = context.getRenderKit();
-            if (null != renderKit){
-                renderer = renderKit.getBehaviorRenderer(rendererType);
-            }
-            if (null == renderer){
-                if (logger.isLoggable(Level.FINE)){
-                    logger.fine("Can't get  behavior renderer for type " + rendererType);
-                }				
-            }
-        } else {
-            if(logger.isLoggable(Level.FINE)){
-                logger.fine("No renderer-type for behavior " + this.getClass().getName());
-            }
-        }
-        return renderer;
     }
 }

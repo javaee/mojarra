@@ -51,7 +51,7 @@ import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.ValueHolder;
-import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
@@ -219,7 +219,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
     // button only contains an "valueChange" (or "change") Behavior.  In that
     // we pass a null Behaviors map into renderPassThruAttributes(),
     // which allows us to take a more optimized code path.
-    protected static Map<String, List<Behavior>> getNonOnChangeBehaviors(UIComponent component) {
+    protected static Map<String, List<ClientBehavior>> getNonOnChangeBehaviors(UIComponent component) {
         return getPassThruBehaviors(component, "change", "valueChange");
     }
 
