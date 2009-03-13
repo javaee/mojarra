@@ -51,7 +51,7 @@ import javax.faces.render.RenderKit;
  * convenience base class that implements the default concrete behavior
  * of all methods defined by {@link ClientBehavior}.</p>
  * <p>Subclasses should either override getRendererType() to identify
- * the ClientBehaviorRenderer to delegate to, or they should override 
+ * the {@link ClientBehaviorRenderer} to delegate to, or they should override 
  * <code>getScript()</code> to locally generate the desired Behavior 
  * script, and <code>decode()</code>.
  * </p>
@@ -98,7 +98,7 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
 
     /**
      * <p class="changed_added_2_0">Default implementation of 
-     * of ClientBehavior.decode().  If a ClientBehaviorRenderer is available
+     * of {@link ClientBehavior#decode()}.  If a {@link ClientBehaviorRenderer} is available
      * for the specified behavior renderer type, this method
      * delegates to the ClientBehaviorRenderer's decode() method.  
      * Otherwise, no decoding is performed.
@@ -127,7 +127,7 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
     
     /**
      * <p class="changed_added_2_0">Returns the renderer type of the
-     * ClientBehaviorRenderer to use for the behavior.   The default 
+     * {@link ClientBehaviorRenderer} to use for the behavior.   The default 
      * implementation returns null.  Subclasses should either override this 
      * method to return a string that identifies the type of 
      * {@link ClientBehaviorRenderer} to use, or should override 
@@ -143,11 +143,12 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
     }
     
     /**
-     * <p class="changed_added_2_0">Default implementation of ClientBehavior.getHints().  
+     * <p class="changed_added_2_0">Default implementation of 
+     * {@link ClientBehavior#getHints()}.  
      * By default, no hints are specified, and this method returns an empty,
      * umodifiable set.</p>
      *   
-     * @return an empty, unmodifiable set of ClientBehaviorHints.
+     * @return an empty, unmodifiable set of {@link ClientBehaviorHint}s.
      *
      * @since 2.0
      */
