@@ -74,4 +74,25 @@ import javax.faces.render.RenderKit;
  */
 public interface Behavior {
 
+    /**
+     * <p class="changed_added_2_0">Broadcast the specified 
+     * {@link BehaviorEvent} to all registered
+     * event listeners who have expressed an interest in events of this
+     * type.  Listeners are called in the order in which they were
+     * added.</p>
+     *
+     * @param event The {@link BehaviorEvent} to be broadcast
+     *
+     * @throws AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
+     * @throws IllegalArgumentException if the implementation class
+     *  of this {@link BehaviorEvent} is not supported by this component
+     * @throws NullPointerException if <code>event</code> is
+     * <code>null</code>
+     *
+     * @since 2.0
+     */
+    public void broadcast(BehaviorEvent event);
+
 }

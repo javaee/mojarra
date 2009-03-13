@@ -36,18 +36,13 @@
 
 package javax.faces.component.behavior;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.BehaviorEvent;
-import javax.faces.event.BehaviorListener;
 import javax.faces.render.ClientBehaviorRenderer;
 import javax.faces.render.RenderKit;
 
@@ -63,17 +58,11 @@ import javax.faces.render.RenderKit;
  *
  * @since 2.0
  */
-public class ClientBehaviorBase implements ClientBehavior {
+public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
 	
 
     private static final Logger logger = Logger.getLogger("javax.faces.component.behavior",
     "javax.faces.LogStrings");
-
-    /**
-     * <p>Our {@link javax.faces.event.BehaviorListener}s.  This data
-     * structure is lazily instantiated as necessary.</p>
-     */
-    private List<BehaviorListener> listeners;
 
     /**
      * <p class="changed_added_2_0">Default implementation of 
@@ -154,38 +143,6 @@ public class ClientBehaviorBase implements ClientBehavior {
     }
     
     /**
-     * <p class="changed_added_2_0">Default implementation of 
-     * {@link ClientBehavior#broadcast}.  Delivers the specified 
-     * {@link BehaviorEvent} to all registered {@link BehaviorListener} 
-     * event listeners who have expressed an interest in events of 
-     * this type.  Listeners are called in the order in which they were 
-     * registered (added).</p>
-     *
-     * @param event The {@link BehaviorEvent} to be broadcast
-     *
-     * @throws AbortProcessingException Signal the JavaServer Faces
-     *  implementation that no further processing on the current event
-     *  should be performed
-     * @throws IllegalArgumentException if the implementation class
-     *  of this {@link BehaviorEvent} is not supported by this component
-     * @throws NullPointerException if <code>event</code> is
-     * <code>null</code>
-     *
-     * @since 2.0
-     */
-    public void broadcast(BehaviorEvent event)
-        throws AbortProcessingException {
-
-        if (null != listeners) {
-            for (BehaviorListener listener : listeners) {
-                if (event.isAppropriateListener(listener)) {
-                    event.processListener(listener);
-                }
-            }
-        }
-    }
-
-    /**
      * <p class="changed_added_2_0">Default implementation of ClientBehavior.getHints().  
      * By default, no hints are specified, and this method returns an empty,
      * umodifiable set.</p>
@@ -196,76 +153,6 @@ public class ClientBehaviorBase implements ClientBehavior {
      */
     public Set<ClientBehaviorHint> getHints() {
         return Collections.emptySet();
-    }
-
-    /**
-     * <p class="changed_added_2_0">Add the specified {@link BehaviorListener} 
-     * to the set of listeners registered to receive event notifications 
-     * from this {@link ClientBehavior}.
-     * It is expected that {@link ClientBehavior} classes acting as event sources
-     * will have corresponding typesafe APIs for registering listeners of the
-     * required type, and the implementation of those registration methods
-     * will delegate to this method.  For example:</p>
-     * <pre>
-     * public class AjaxBehaviorEvent extends BehaviorEvent { ... }
-     *
-     * public interface AjaxBehaviorListener extends BehaviorListener {
-     *   public void processAjaxBehavior(FooEvent event);
-     * }
-     *
-     * public class AjaxBehavior extends ClientBehaviorBase {
-     *   ...
-     *   public void addAjaxBehaviorListener(AjaxBehaviorListener listener) {
-     *     addBehaviorListener(listener);
-     *   }
-     *   public void removeAjaxBehaviorListener(AjaxBehaviorListener listener) {
-     *     removeBehaviorListener(listener);
-     *   }
-     *   ...
-     * }
-     * </pre>
-     *
-     * @param listener The {@link BehaviorListener} to be registered
-     *
-     * @throws NullPointerException if <code>listener</code>
-     *  is <code>null</code>
-     *
-     * @since 2.0
-     */
-    protected void addBehaviorListener(BehaviorListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            //noinspection CollectionWithoutInitialCapacity
-            listeners = new ArrayList<BehaviorListener>();
-        }
-        listeners.add(listener);
-
-    }
-
-    /**
-     * <p class="changed_added_2_0">Remove the specified 
-     * {@link BehaviorListener} from the set of listeners
-     * registered to receive event notifications from this 
-     * {@link ClientBehavior}.
-     *
-     * @param listener The {@link BehaviorListener} to be deregistered
-     * @throws NullPointerException if <code>listener</code>
-     *                              is <code>null</code>
-     *
-     * @since 2.0
-     */
-    protected void removeBehaviorListener(BehaviorListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            return;
-        }
-        listeners.remove(listener);
     }
 
     /**
