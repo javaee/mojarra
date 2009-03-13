@@ -20047,27 +20047,26 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
      <div class="changed_added_2_0">
      <p>If the component associated with the Renderer implements the
-     <code>javax.faces.component.behavior.BehaviorHolder</code> interface,
-     process <code>javax.faces.component.behavior.Behavior</code>s as follows:
+     <code>javax.faces.component.behavior.ClientBehaviorHolder</code> interface,
+     process <code>javax.faces.component.behavior.ClientBehavior</code>s as follows:
       <ul>
-      <li>Determine if there are <code>javax.faces.component.behavior.Behavior</code>s
+      <li>Determine if there are <code>javax.faces.component.behavior.ClientBehavior</code>s
       associated with this component by calling the implementation of
-      <code>javax.faces.component.behavior.BehaviorHolder.getBehaviors</code>.</li>
-      <li>If there are <code>behaviors</code>, determine the
-      <code>behavior event name</code> from the request parameter:
+      <code>javax.faces.component.behavior.ClientBehaviorHolder.getClientBehaviors</code>.</li>
+      <li>If there are <code>client behaviors</code>, determine the
+      client behavior event name from the request parameter:
       <code>javax.faces.behavior.event</code>.</li>
       <li>If that request parameter exists, get the <code>List</code> of
-      <code>javax.faces.component.behavior.Behavior</code>s for the
-      <code>behavior event name</code> from the <code>Map</code> returned from
-      <code>javax.faces.component.behavior.BehaviorHolder.getBehaviors</code>.</li>
-      <li>If there are <code>behaviors</code> for the <code>behavior event name</code>,
-      determine the <code>behavior source name</code> from the request parameter:
-      <code>javax.faces.behavior.source</code>.</li>
+      <code>javax.faces.component.behavior.ClientBehavior</code>s for the
+      behavior event name from the <code>Map</code> returned from
+      <code>javax.faces.component.behavior.ClientBehaviorHolder.getClientBehaviors</code>.</li>
+      <li>If there are <code>client behaviors</code> for the <code>behavior event name</code>,
+      determine the behavior source name from the request parameter:
+      <code>javax.faces.source</code>.</li>
       <li>If the request parameter exists, and its value is the same as this
       component's <code>clientId</code>, iterate over the <code>List</code> of
-      <code>javax.faces.component.behavior.Behavior</code>s and call the
-      <code>decode()</code> method for each
-      <code>javax.faces.component.behavior.Behavior</code>}.</li>
+      <code>javax.faces.component.behavior.ClientBehavior</code>s and call the
+      <code>decode()</code> method for each one.</li>
       </ul>
       Behavior decoding is applicable to components that are "readonly", but it is
       not applicable to components that are "disabled".</p>
@@ -20146,31 +20145,25 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
      </ul>
 
      <div class="changed_added_2_0">
-     <p><a name="general_behavior_encoding">General</a> notes regarding the rendering of component <code>Behavior</code>.</p>
+     <p><a name="general_behavior_encoding">General</a> notes regarding the rendering of component <code>Client Behaviors</code>.</p>
 
      <ul>
 
-       <p>Components that implement the <code>javax.faces.component.behavior.BehaviorHolder</code>
-       interface are eligable to have <code>Behavior</code> instances attached to them.  This enables
-       those components to render script content.  For example, such a component may have an 
-       <code>AjaxBehavior</code> instance attached to it, which would enable it to initiate
-       <code>Ajax</code> requests to the server.  <code>Behavior</code>s that are capable of 
-       sending requests to the server are called <code>submitting behaviors</code>.  <code>Behavior</code>s
-       can be associated with <code>BehaviorRenderer</code>s, which is similar to the component
-       renderer association.</p>
-       
-       <p>If a component has a single <code>Behavior</code> attached to it, call the 
-       <code>Behavior.getScript</code> method to get the <code>Behavior</code> script that will be 
-       rendered.  Render the script with the event attribute (for example, onclick).  If a
-       component has multiple <code>Behavior</code>s attached to it, call
-       <code>Behavior.getScript</code> for each of the behaviors and string together the scripts.
-    .  Render the scripts such that when the component is activated, the scripts are invoked in the order 
-       that the <code>Behavior</code>s were attached to the component.  If any of the scripts in the chain 
-       return <code>false</code>, subsequent scripts in the chain must not execute.  The specification
-       provides a nice utility function <code>jsf.util.chain</code> to handle this capability.  If there
-       are <code>UIParameter</code> children with a <code>submitting behavior</code> (such as 
-       <code>AjaxBehavior</code>), pass each of the <code>UIParameter</code> name/value pairs as 
-       parameters to the <code>Behavior</code> script.</p>
+       <p>Components that implement the <code>javax.faces.component.behavior.ClientBehaviorHolder</code>
+       interface are eligable to have <code>ClientBehavior</code> instances attached to them. The standard
+       renderers are responsible for inserting the scripts produced by client behaviors into the component's
+       rendered content.  Components may obtain script from multiple sources.  Event handler scripts may be specified 
+       by page authors, scripts may be produced by client behaviors and renderers may produce ther own scripts.
+       When multiple scripts are present, the scripts must be chained together in this order:
+       <ul>
+       <li>User specified event handler scripts</li>
+       <li>client behavior scripts</li>
+       <li>renderer specific scripts</li>
+       </ul>
+       If any of the scripts in the chain returns <code>false</code>, subsequent script must not be executed.
+       The specification provides a utility function <code>jsf.util.chain</code> to handle this capability.  If there
+       are <code>UIParameter</code> children the parameter names and values must be passed into the client behavior
+       getScript method via the <code>ClientBehaviorContext</code>.</p> 
          
      </ul>
      </div>
