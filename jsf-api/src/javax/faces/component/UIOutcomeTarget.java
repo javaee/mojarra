@@ -222,7 +222,6 @@ public class UIOutcomeTarget extends UIOutput {
 
 
     /**
-     * // RELEASE_PENDING (rogerk) review docs
      * <p>Sets the fragment of the document that should be brought into focus
      * when the view is rendered.</p>
      *
