@@ -111,19 +111,19 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     private static final String RENDERER_CLASS = "renderer-class";
 
     /**
-     * <p>/faces-config/render-kit/behavior-renderer</p>
+     * <p>/faces-config/render-kit/client-behavior-renderer</p>
      */
-    private static final String BEHAVIOR_RENDERER = "behavior-renderer";
+    private static final String CLIENT_BEHAVIOR_RENDERER = "client-behavior-renderer";
 
     /**
-     * <p>/faces-config/render-kit/behavior-renderer/behavior-renderer-type</p>
+     * <p>/faces-config/render-kit/client-behavior-renderer/client-behavior-renderer-type</p>
      */
-    private static final String BEHAVIOR_RENDERER_TYPE = "behavior-renderer-type";
+    private static final String CLIENT_BEHAVIOR_RENDERER_TYPE = "client-behavior-renderer-type";
 
     /**
-     * <p>/faces-config/render-kit/behavior-renderer/behavior-renderer-class</p>
+     * <p>/faces-config/render-kit/client-behavior-renderer/client-behavior-renderer-class</p>
      */
-    private static final String BEHAVIOR_RENDERER_CLASS = "behavior-renderer-class";
+    private static final String CLIENT_BEHAVIOR_RENDERER_CLASS = "client-behavior-renderer-class";
 
     // -------------------------------------------- Methods from ConfigProcessor
 
@@ -225,7 +225,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                     rkClass = getNodeText(n);
                 } else if (RENDERER.equals(n.getLocalName())) {
                     renderersList.add(n);
-                } else if (BEHAVIOR_RENDERER.equals(n.getLocalName())) {
+                } else if (CLIENT_BEHAVIOR_RENDERER.equals(n.getLocalName())) {
                     behaviorRenderersList.add(n);
                 }
             }
@@ -340,9 +340,9 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             String behaviorRendererClass = null;
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node n = children.item(i);
-                if (BEHAVIOR_RENDERER_TYPE.equals(n.getLocalName())) {
+                if (CLIENT_BEHAVIOR_RENDERER_TYPE.equals(n.getLocalName())) {
                     behaviorRendererType = getNodeText(n);
-                } else if (BEHAVIOR_RENDERER_CLASS.equals(n.getLocalName())) {
+                } else if (CLIENT_BEHAVIOR_RENDERER_CLASS.equals(n.getLocalName())) {
                     behaviorRendererClass = getNodeText(n);
                 }
             }
