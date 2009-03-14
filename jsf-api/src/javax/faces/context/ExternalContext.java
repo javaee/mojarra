@@ -372,6 +372,26 @@ public abstract class ExternalContext {
 
 
     /**
+     * <p class="changed_added_2_0">Return the threadsafe flash for this
+     * application.</p>
+     *
+     * @since 2.0
+     */ 
+
+    public Flash getFlash() {
+
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getFlash();
+        }
+
+        throw new UnsupportedOperationException();
+
+    }    
+
+
+
+
+    /**
      * <p class="changed_added_2_0">Returns the MIME type of the
      * specified file or <code>null</code> if the MIME type is not
      * known.  The MIME type is determined by the container.</p>

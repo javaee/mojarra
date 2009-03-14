@@ -222,14 +222,8 @@ public abstract class FacesContext {
         throw new UnsupportedOperationException();
 
     }
-    
-    /**
-     * <p class="changed_added_2_0">Return the threadsafe flash for this
-     * application.</p>
-     *
-     * @since 2.0
-     */ 
 
+    // PENDING(rlubke): remove this, moved to ExternalContext    
     public Flash getFlash() {
 
         if (defaultFacesContext != null) {
