@@ -423,6 +423,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
             private static final String ITEM_ESCAPED = "itemLabelEscaped";
             private static final String ITEM_DISABLED = "itemDisabled";
             private static final String NO_SELECTION_OPTION = "noSelectionOption";
+            private static final String NO_SELECTION_VALUE = "noSelectionValue";
 
             /**
              * Resolves to the value of the <code>SelectItem</code>.
@@ -503,6 +504,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                     Object itemDescriptionResult = attrs.get(ITEM_DESCRIPTION);
                     Object itemEscapedResult = attrs.get(ITEM_ESCAPED);
                     Object itemDisabledResult = attrs.get(ITEM_DISABLED);
+                    Object noSelectionValueResult = attrs.get(NO_SELECTION_VALUE);
                     Object noSelectionOptionResult = attrs.get(NO_SELECTION_OPTION);
                     setValue(((itemValueResult != null) ? itemValueResult : value));
                     setLabel(((itemLabelResult != null)
@@ -517,9 +519,11 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                     setDisabled(((itemDisabledResult != null)
                                      ? Boolean.valueOf(itemDisabledResult.toString())
                                      : false));
-                    setNoSelectionOption(((noSelectionOptionResult != null)
-                                     ? Boolean.valueOf(noSelectionOptionResult.toString())
-                                     : false));
+                    if (null != noSelectionOptionResult) {
+                        setNoSelectionOption(Boolean.valueOf(noSelectionOptionResult.toString()));
+                    } else if (null != noSelectionValueResult) {
+                        setNoSelectionOption(getValue().equals(noSelectionValueResult));
+                    }
                 } finally {
                     if (var != null) {
                         if (oldVarValue != null) {

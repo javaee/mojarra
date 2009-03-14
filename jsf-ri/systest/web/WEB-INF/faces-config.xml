@@ -292,6 +292,13 @@
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>select05NoSelection</managed-bean-name>
+        <managed-bean-class>com.sun.faces.systest.model.SelectMany05BeanWithNoSelectionValue</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+
    <!-- validator -->
   <validator>
     <description>TestValidator Description</description>

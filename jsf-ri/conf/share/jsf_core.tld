@@ -836,9 +836,13 @@
 
     <tag>
         <description>
-            Add a child UISelectItem component to the UIComponent
-            associated with the closed parent UIComponent custom
-            action.
+                <![CDATA[
+
+            <p><span class="changed_modified_2_0">Add</span> a child
+            UISelectItem component to the UIComponent associated with
+            the closed parent UIComponent custom action.</p>
+
+                ]]>
         </description>
         <name>selectItem</name>
         <tag-class>com.sun.faces.taglib.jsf_core.SelectItemTag</tag-class>
@@ -937,10 +941,14 @@
 
         <attribute>
             <description>
-                Flag indicating whether the option created by this
-                component represents the special "no selection"
-                option.  Expressions must evaluate to a boolean.
-                Default value is false.
+                <![CDATA[
+
+                <p class="changed_added_2_0">Flag indicating whether the
+                option created by this component represents the special
+                "no selection" option.  Expressions must evaluate to a
+                boolean.  Default value is false.</p>
+
+                ]]>
             </description>
             <name>noSelectionOption</name>
             <deferred-value>
@@ -954,13 +962,19 @@
 
     <tag>
         <description>
-            <![CDATA[<p>Add a child UISelectItems component to the UIComponent
-            associated with the closed parent UIComponent custom
-            action.</p>
+            <![CDATA[<p><span class="changed_modified_2_0">Add</span> a
+            child UISelectItems component to the UIComponent associated
+            with the closed parent UIComponent custom action.</p>
 
             <p class="changed_modified_2_0">When iterating over the
             select items, <code>toString()</code> mest be called on the
-            string rendered attribute values.</p>]]>
+            string rendered attribute values.</p>
+
+<p class="changed_added_2_0">Version 2 of the specification introduces
+several new attributes, described below.  These are: var, itemValue,
+itemLabel, itemDescription, itemDisabled, and itemLabelEscaped.</p>
+
+            ]]>
 
         </description>
         <name>selectItems</name>
@@ -991,9 +1005,46 @@
 
         <attribute>
             <description>
-                Value binding expression pointing at a List
-                or array of SelectItem instances containing the
-                information for these options.
+                <![CDATA[
+
+                <p>Value expression pointing at <span
+                class="changed_modified_2_0">any <code>Collection</code>
+                or array.</span> The member elements may be instances of
+                <code>SelectItem</code> <span
+                class="changed_added_2_0">or any Java Object.  In the
+                case where the member elements are plain Java Objects,
+                several additional attributes must be used by the page
+                author to correctly identify the data to the enclosing
+                <code>UISelectOne</code> or <code>UISelectMany</code>
+                component, as shown in the following example.</span>
+
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;h:selectOneListbox <span class="kw3">size</span>=<span class="st0">&quot;1&quot;</span> <span class="kw3">id</span>=<span class="st0">&quot;escape02&quot;</span> <span class="kw3">value</span>=<span class="st0">&quot;#{select05NoSelection.initialCollectionValues}&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;f:selectItems <span class="kw3">value</span>=<span class="st0">&quot;#{select05NoSelection.hobbitList}&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;var=<span class="st0">&quot;n&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemValue=<span class="st0">&quot;#{n}&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemLabel=<span class="st0">&quot;#{n.bio}&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemDescription=<span class="st0">&quot;#{n.description}&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemDisabled=<span class="st0">&quot;#{n.disabled}&quot;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;itemLabelEscaped=<span class="st0">&quot;true&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;noSelectionValue=<span class="st0">&quot;#{select05NoSelection.hobbitList[0]}&quot;</span>/<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/h:selectOneListbox&gt;</span> </div></li></ol></div></div>
+
+<p class="changed_added_2_0">In the preceding example, the
+<code>value</code> attribute on line 1 points to a
+<code>Collection&lt;HobbitBean&gt;</code>.  <code>HobbitBean</code> is
+just a regular Java Object (POJO) that conforms to JavaBeans naming
+conventions for its properties.  The <code>value</code> attribute on
+line 2 points to a <code>List&lt;HobbitBean&gt;</code>, though it could
+just as well point to a <code>Collection</code>, array, or
+<code>javax.faces.model.DataModel</code>.  The attributes on lines 3
+through 9, inclusive, leverage the fact that the value is a collection
+of POJOs.
+</p>
+
+
+</p>
+
+                ]]>
             </description>
             <name>value</name>
             <deferred-value>
@@ -1083,6 +1134,25 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
                 <type>java.lang.Boolean</type>
             </deferred-value>
         </attribute>
+
+        <attribute>
+            <description>
+
+<![CDATA[ <p class="changed_added_2_0">Is either an EL expression
+pointing to the element in the value collection whose value should be
+marked as a &#8220;no selection&#8221; item, or a literal string that
+exactly matches the value of the item in the collection that must be
+marked as the &#8220;no selection&#8221; item.  If the user selects such
+an item <strong>and</strong> the field is marked as required, then it
+will not pass validation.</p> ]]>
+
+            </description>
+            <name>itemLabelEscaped</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
     </tag>
 
     <tag>

@@ -192,6 +192,31 @@
     <!-- //////////////////////////////////////////////////////////// -->
 
     <p>
+        Item Label Escape (true) with noSelectionValue
+    </p>
+    <h:selectOneListbox size="1" id="escape03" value="#{select05NoSelection.initialCollectionValues}">
+       <f:selectItems value="#{select05NoSelection.hobbitList}"
+                      var="n"
+                      itemValue="#{n}"
+                      itemLabel="#{n.bio}"
+                      itemLabelEscaped="true"
+                      noSelectionValue="#{select05NoSelection.hobbitList[0]}"/>
+
+<!-- 
+
+If you wanted to refer to an individual collection element with an EL
+expression for the noSelectionValue, you would have to make your value
+point to a list.  If you don't do this you have to hard code your
+noSelectionValue
+
+-->
+
+    </h:selectOneListbox>
+
+
+    <!-- //////////////////////////////////////////////////////////// -->
+
+    <p>
         Item Label Escape (false)
     </p>
     <h:selectManyListbox id="escape02" value="#{select05.initialCollectionValues}">
