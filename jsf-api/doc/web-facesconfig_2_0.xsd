@@ -2021,8 +2021,39 @@
 
             </xsd:documentation>
         </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="view-param"
+                         type="javaee:faces-config-redirect-viewParamType"
+                         minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
         <xsd:attribute name="include-view-params" type="xsd:boolean" use="optional"/>
+
+    </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name="faces-config-redirect-viewParamType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                    The "view-param" element, only valid within
+                    a "redirect" element, contains child "name"
+                    and "value" elements that must be included in the
+                    redirect url when the redirect is performed.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="name"
+                         type="javaee:string"
+                         minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="value"
+                         type="javaee:string"
+                         minOccurs="1" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:ID"/>
+
     </xsd:complexType>
 
     <!-- **************************************************** -->
