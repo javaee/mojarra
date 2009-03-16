@@ -804,12 +804,25 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <li>Collect post data arguments for the Ajax request.
              * <ul>
              * <li>The following name/value pairs are required post data arguments:
-             * <ul>
-             * <li><code>javax.faces.source</code> with the value as the
-             * source element identifier.</li>
-             * <li>The name and value of the <code>source</code> element that
-             * triggered this request;</li>
-             * </ul>
+             * <table border="1">
+             * <tr>
+             * <th>name</th>
+             * <th>value</th>
+             * </tr>
+             * <tr>
+             * <td><code>javax.faces.ViewState</code></td>
+             * <td><code>Contents of javax.faces.ViewState hidden field.  This is included when 
+             * {@link jsf.getViewState} is used.</code></td>
+             * </tr>
+             * <tr>
+             * <td><code>javax.faces.partial.ajax</code></td>
+             * <td><code>true</code></td>
+             * </tr>
+             * <tr>
+             * <td><code>javax.faces.source</code></td>
+             * <td><code>The identifier of the element that triggered this request.</code></td>
+             * </tr>
+             * </table>
              * </li>
              * </ul>
              * </li>
