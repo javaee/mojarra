@@ -43,7 +43,7 @@ package javax.faces.event;
  * javax.faces.application.Application#publishEvent} is called with
  * <code>ExceptionQueuedEvent.class</code> as <code>systemEventClass</code>
  * argument.  In this case, an instance of {@link ExceptionQueuedEventContext}
- * is be passed as the <code>source</code> argument.  The specification
+ * must be passed as the <code>source</code> argument.  The specification
  * for <code>publishEvent()</code>, requires the instantiation of the
  * <code>systemEventClass</code> argument, passing the
  * <code>source</code> argument to the constructor.</p>

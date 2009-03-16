@@ -199,6 +199,16 @@ public class Bean implements Serializable {
         }
     }
 
+    // Returns a Collection of ids for testing execute/render binding.
+    public Collection<String> getMultipleIds() {
+        return MULTIPLE_IDS;
+    }
+
+    // Used to test binding execute/render lists to String value expression
+    public String getThisKeyword() {
+        return "@this";
+    }
+
     public void processBehavior(AjaxBehaviorEvent event) {
         addStatusMessage("AjaxBehaviorEvent");
     }
@@ -215,18 +225,15 @@ public class Bean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext external = context.getExternalContext();
         Map<String, String> params = external.getRequestParameterMap();
-        String partialSource = params.get("javax.faces.partial.source");
+        String source = params.get("javax.faces.source");
         String partialEvent = params.get("javax.faces.partial.event");
-        String behaviorSource = params.get("javax.faces.behavior.source");
         String behaviorEvent = params.get("javax.faces.behavior.event");
 
         StringBuilder builder = new StringBuilder();
-        builder.append("partial source='");
-        builder.append(partialSource);
+        builder.append("source='");
+        builder.append(source);
         builder.append("', partial event='");
         builder.append(partialEvent);
-        builder.append("', behavior source='");
-        builder.append(behaviorSource);
         builder.append("', behavior event='");
         builder.append(behaviorEvent);
         builder.append("'");
@@ -298,4 +305,8 @@ public class Bean implements Serializable {
             return details;
         }
     }
+
+    // Some ids for testing execute/render binding
+    private static Collection<String> MULTIPLE_IDS = 
+        Arrays.asList("@this", "formKeyword", "thisKeyword", "noneKeyword");
 }

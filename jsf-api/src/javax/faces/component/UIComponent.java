@@ -1367,12 +1367,14 @@ private void doFind(FacesContext context, String clientId) {
      * <p class="changed_added_2_0">Perform a tree visit starting at
      * this node in the tree.</p>
      *
+     * <div class="changed_added_2_0">
+     *
      * <p>UIComponent.visitTree() implementations do not invoke the
-     * {@code VisitCallback} directly, but instead cal
-     * {@code VisitContext.invokeVisitCallback()} to invoke the
-     * callback.  This allows {@code VisitContext} implementations
-     * to provide optimized tree traversals, for example by only
-     * calling the {@code VisitCallback} for a subset of components.</p>
+     * {@link VisitCallback} directly, but instead call {@link
+     * VisitContext#invokeVisitCallback} to invoke the callback.  This
+     * allows {@code VisitContext} implementations to provide optimized
+     * tree traversals, for example by only calling the {@code
+     * VisitCallback} for a subset of components.</p>
      *
      * <p>UIComponent.visitTree() implementations must call
      * UIComponent.pushComponentToEL() before performing the
@@ -1388,6 +1390,8 @@ private void doFind(FacesContext context, String clientId) {
      *   that need to be visited have been visited).  This results in
      *   the tree visit being short-circuited such that no more components
      *   are visited.
+     *
+     * </div>
      *
      * @see VisitContext#invokeVisitCallback VisitContext.invokeVisitCallback()
      *
@@ -1438,20 +1442,25 @@ private void doFind(FacesContext context, String clientId) {
     }
 
     /**
-     * <p class="changed_added_2_0">Called by 
-     * {@link UIComponent#visitTree UIComponent.visitTree()} to determine
-     * whether this component is "visitable" - ie. whether this component
-     * satisfies the hints returned by 
-     * {@link javax.faces.component.visit.VisitContext#getHints 
-     * VisitContext.getHints()}.</p>
-     * <p>If this component is not visitable (ie. if this method returns
-     * false), the tree visited is short-circuited such that neither the
-     * component nor any of its descendents will be visited></p>
-     * <p>Custom {@code visitTree()} implementations may call this method
-     * to determine whether the component is visitable before performing
-     * any visit-related processing.</p>
+     * <p class="changed_added_2_0">Return <code>true</code> if this
+     * component should be visited, <code>false</code> otherwise.
+     * Called by {@link UIComponent#visitTree UIComponent.visitTree()}
+     * to determine whether this component satisfies the hints returned
+     * by {@link javax.faces.component.visit.VisitContext#getHints}.</p>
+
+     * <div class="changed_added_2_0">
+
+     * <p>If this method returns false, the tree visited is
+     * short-circuited such that neither the component nor any of its
+     * descendents will be visited></p> 
+
+     * <p>Custom {@code visitTree()} implementations may call this
+     * method to determine whether the component is visitable before
+     * performing any visit-related processing.</p>
      *
-     * @return true if this component should be visited, false otherwise.
+     * </div>
+     *
+     * @since 2.0
      */
     protected boolean isVisitable(VisitContext context) {
 

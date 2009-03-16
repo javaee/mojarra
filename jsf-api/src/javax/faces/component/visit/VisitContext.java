@@ -197,13 +197,16 @@ abstract public class VisitContext {
 
 
     /**
-     * <p>Creates a VisitContext instance for use with 
-     * {@link UIComponent#visitTree UIComponent.visitTree()}.</p>
+     * <p>Returns a VisitContext instance that is initialized with the
+     * specified ids and hintsfor use with {@link
+     * UIComponent#visitTree}.</p>
      *
      * @param context the FacesContext for the current request
      * @param ids the client ids of the components to visit.  If null,
      *   all components will be visited.
-     * @param hints the VisitHints to apply to the visit
+     * @param hints the VisitHints to apply to the visit.  If
+     * <code>null</code>, no hints are applied.
+
      * @return a VisitContext instance that is initialized with the 
      *   specified ids and hints.
      */

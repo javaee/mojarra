@@ -301,11 +301,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         ClientBehaviorHolder bHolder = (ClientBehaviorHolder)c;
         AjaxBehaviors ajaxBehaviors = getAjaxBehaviors(ctx);
         if (ajaxBehaviors != null) {
-            AjaxBehavior ajaxBehavior = ajaxBehaviors.getCurrentBehavior();
-            if (ajaxBehavior != null) {
+            AjaxBehaviors.BehaviorInfo behaviorInfo = ajaxBehaviors.getCurrentBehavior();
+            if (behaviorInfo != null) {
                 String event = bHolder.getDefaultEventName();
-                if (null != ajaxBehavior.getEvent()) {
-                    event = ajaxBehavior.getEvent();
+
+                if (null != behaviorInfo.getEventName()) {
+                    event = behaviorInfo.getEventName();
                 }
                 Collection eventNames = bHolder.getEventNames();
                 if (eventNames.contains(event)) {
@@ -316,7 +317,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                     List<ClientBehavior> behaviorsForEvent =  behaviors.get(event);
                     if ((null == behaviorsForEvent) || behaviorsForEvent.isEmpty()) {
 
-                        bHolder.addClientBehavior(event, ajaxBehavior);
+                        bHolder.addClientBehavior(event, behaviorInfo.getBehavior());
                     }
                 }
             }

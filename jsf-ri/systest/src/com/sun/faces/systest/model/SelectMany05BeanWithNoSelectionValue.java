@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- *
+ * 
  * Contributor(s):
- *
+ * 
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -34,67 +34,46 @@
  * holder.
  */
 
-package declarativeajax;
+package com.sun.faces.systest.model;
 
-import java.io.Serializable;
-
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.component.behavior.ClientBehaviorBase;
-import javax.faces.component.behavior.ClientBehaviorContext;
-import javax.faces.component.behavior.FacesBehavior;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * <p>A trivial Behavior implementation that shows a greeting to the
- * user when invoked.</p>
+ *
+ * @author edburns
  */
-@FacesBehavior(value="custom.behavior.Greet")
-public class GreetBehavior extends ClientBehaviorBase {
+public class SelectMany05BeanWithNoSelectionValue extends SelectMany05Bean {
 
-    public GreetBehavior() {};
+    private List<HobbitBean> hobbitList;
+    
+    
+    public SelectMany05BeanWithNoSelectionValue() {
+        HobbitBean[] hobbits = getHobbitBeanArray();
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getScript(ClientBehaviorContext behaviorContext) {
-
-        String name = (this.name == null) ? "World" : this.name;
-
-        StringBuilder builder = new StringBuilder(19 + name.length());
-        builder.append("alert('Hello, ");
-        builder.append(name);
-        builder.append("!');");
-
-        return builder.toString();
+        hobbitList = new ArrayList<HobbitBean>();
+        hobbitList.addAll(Arrays.asList(hobbits));
+        
     }
 
     @Override
-    public Object saveState(FacesContext context) {
-
-        Object[] values = new Object[2];
-      
-        values[0] = super.saveState(context);
-        values[1] = name;
-
-        return values;
+    protected HobbitBean[] getHobbitBeanArray() {
+        // Prepend a HobbitBean with the value of "No Selection"
+        // without the quotes, to the super's hobbit bean array.
+        HobbitBean [] superResult = super.getHobbitBeanArray();
+        HobbitBean [] result = new HobbitBean[superResult.length + 1];
+        result[0] = new HobbitBean("No Selection", "<No Selection>");
+        for (int i = 1; i < result.length; i++) {
+            result[i] = superResult[i-1];
+        }
+        
+        return result;
     }
-
-
-    @Override
-    public void restoreState(FacesContext context, Object state) {
-
-        Object[] values = (Object[]) state;
-        super.restoreState(context, values[0]);
-
-        name = (String)values[1];
-
+    
+    public List<HobbitBean> getHobbitList() {
+        return hobbitList;
     }
+    
 
-    private String name;
 }

@@ -59,6 +59,7 @@ public class SelectItemsTag extends UIComponentELTag {
     private ValueExpression itemDescription;
     private ValueExpression itemDisabled;
     private ValueExpression itemLabelEscaped;
+    private ValueExpression noSelectionOption;
     
 
     // ---------------------------------------------------------- Tag Attributes
@@ -92,6 +93,9 @@ public class SelectItemsTag extends UIComponentELTag {
         this.itemLabelEscaped = itemLabelEscaped;
     }
 
+    public void setNoSelectionOption(ValueExpression noSelectionOption) {
+        this.noSelectionOption = noSelectionOption;
+    }
     
     // ----------------------------------------- Methods from UIComponentTagBase
 
@@ -144,6 +148,9 @@ public class SelectItemsTag extends UIComponentELTag {
         }
         if (itemLabelEscaped != null) {
             component.setValueExpression("itemLabelEscaped", itemLabelEscaped);
+        }
+        if (noSelectionOption != null) {
+            component.setValueExpression("noSelectionOption", noSelectionOption);
         }
 
     }

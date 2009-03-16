@@ -39,6 +39,9 @@ package javax.faces.component.behavior;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponentBase;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.event.BehaviorListener;
@@ -47,18 +50,21 @@ import javax.faces.event.BehaviorListener;
  * <p class="changed_added_2_0"><strong>BehaviorBase</strong> is a
  * convenience base class that provides a default implementation of the 
  * {@link Behavior} contract.  It also provides behavior listener registration 
- * support.</p>
+ * and state saving support.</p>
  * </p>
  *
  * @since 2.0
  */
-public class BehaviorBase implements Behavior {
+public class BehaviorBase implements Behavior, StateHolder {
 	
  /**
      * <p>Our {@link javax.faces.event.BehaviorListener}s.  This data
      * structure is lazily instantiated as necessary.</p>
      */
     private List<BehaviorListener> listeners;
+
+    // Flag indicating a desire to not participate in state saving.
+    private boolean transientFlag = false;
 
     /**
      * <p class="changed_added_2_0">Default implementation of 
@@ -90,6 +96,43 @@ public class BehaviorBase implements Behavior {
                 }
             }
         }
+    }
+
+    /**
+     * <p class="changed_added_2_0">Implementation of
+     * {@link javax.faces.component.StateHolder#isTransient}.
+     */
+    public boolean isTransient() {
+        return transientFlag;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Implementation of
+     * {@link javax.faces.component.StateHolder#setTransient}.
+     */
+    public void setTransient(boolean transientFlag) {
+        this.transientFlag = transientFlag;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Implementation of
+     * {@link javax.faces.component.StateHolder#saveState}.
+     */
+    public Object saveState(FacesContext context) {
+
+        // At the moment, the only state we need to save is our listeners
+        return UIComponentBase.saveAttachedState(context, listeners);
+    }
+
+    /**
+     * <p class="changed_added_2_0">Implementation of
+     * {@link javax.faces.component.StateHolder#restoreState}.
+     */
+    @SuppressWarnings("unchecked")
+    public void restoreState(FacesContext context, Object state) {
+
+        // Unchecked cast from Object to List<BehaviorListener>
+        listeners = (List<BehaviorListener>)UIComponentBase.restoreAttachedState(context, state);
     }
 
     /**

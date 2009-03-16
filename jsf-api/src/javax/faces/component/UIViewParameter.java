@@ -56,13 +56,10 @@ import javax.faces.render.Renderer;
 
  * <p>The {@link javax.faces.webapp.pdl.PageDeclarationLanguage}
  * implementation must cause an instance of this component to appear in
- * the view for each occurrence of an <code>&lt;f:viewParam
- * /&gt;</code> element placed inside of an <code>&lt;f:facet
- * name=&lt;<em>metadataFacetName</em>&gt; /&gt;</code> where
- * <code><em>metadataFacetName</em></code> is given by the value of the
- * symbolic constant {@link
- * UIViewRoot#METADATA_FACET_NAME}.  The user must
- * place this facet within the <code>UIViewRoot</code>.</p>
+ * the view for each occurrence of an <code>&lt;f:viewParam /&gt;</code>
+ * element placed inside of an <code>&lt;f:metadata /&gt;</code>
+ * element.  The user must place this facet within the
+ * <code>UIViewRoot</code>.</p>
 
  * <p>Because this class extends <code>UIInput</code> any actions that
  * one would normally take on a <code>UIInput</code> instance are valid

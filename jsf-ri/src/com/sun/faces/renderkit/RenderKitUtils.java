@@ -1095,24 +1095,22 @@ public class RenderKitUtils {
         ExternalContext external = context.getExternalContext();
         Map<String, String> params = external.getRequestParameterMap();
 
-        String behaviorSource = params.get("javax.faces.behavior.source");
+        String source = params.get("javax.faces.source");
+        if (!clientId.equals(source)) {
+            return false;
+        }
+
+        // First check for a Behavior action event.
         String behaviorEvent = params.get("javax.faces.behavior.event");
-
-        // First check to see whether we've got a Behavior firing an
-        // action event.
-        if (clientId.equals(behaviorSource)) {
-
-            // If the request was fired by a Behavior, we only want to
-            // trigger an ActionEvent if the event type is "action".
-            return "action".equals(behaviorEvent);
+        if (null != behaviorEvent) {
+            return ("action".equals(behaviorEvent));
         }
 
         // Not a Behavior-related request.  Check for jsf.ajax.request()
         // request params.
-        String partialSource = params.get("javax.faces.partial.source");
         String partialEvent = params.get("javax.faces.partial.event");
 
-        return (clientId.equals(partialSource) && "click".equals(partialEvent));
+        return ("click".equals(partialEvent));
     }
 
     // --------------------------------------------------------- Private Methods

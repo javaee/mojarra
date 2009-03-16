@@ -110,12 +110,12 @@ public abstract class ClientBehaviorContext {
      * {@link ClientBehavior} source.  ClientBehavior implementations that submit back 
      * to the Faces lifecycle are required to identify which component 
      * triggered the ClientBehavior-initiated request via the 
-     * <code>javax.faces.behavior.source</code> request parameter.  In 
+     * <code>javax.faces.source</code> request parameter.  In 
      * most cases, th source id can be trivially derived from the element 
      * to which the behavior's client-side script is attached - ie. the 
      * source id is typically the id of this element.  However, in components 
      * which produce more complex content, the behavior script may not be able to
-     * determine the correct id to use for the javax.faces.behavior.source
+     * determine the correct id to use for the javax.faces.source
      * value.  The {@link ClientBehaviorContext#getSourceId} method allows the component 
      * to pass this information into the {@link ClientBehavior#getScript}
      * implementation.</p>

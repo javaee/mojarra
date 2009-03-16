@@ -47,7 +47,7 @@
     <tag>
         <tag-name>greet</tag-name>
         <behavior>
-           <behavior-id>Joe</behavior-id>
+           <behavior-id>custom.behavior.Greet</behavior-id>
         </behavior>
     </tag>
 

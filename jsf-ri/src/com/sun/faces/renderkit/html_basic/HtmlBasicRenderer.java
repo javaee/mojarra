@@ -208,7 +208,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             List<ClientBehavior> behaviorsForEvent = behaviors.get(behaviorEvent);
 
             if (null != behaviors && behaviors.size() > 0) {
-                String behaviorSource = params.get("javax.faces.behavior.source");
+                String behaviorSource = params.get("javax.faces.source");
                String clientId = component.getClientId();
                if (null != behaviorSource && behaviorSource.equals(clientId)) {
                    for (ClientBehavior behavior: behaviorsForEvent) {
@@ -652,10 +652,19 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     protected boolean shouldWriteIdAttribute(UIComponent component) {
 
+        // By default we only write the id attribute if:
+        //
+        // - We have a non-auto-generated id, or...
+        // - We have client behaviors.
+        //
+        // We assume that if client behaviors are present, they
+        // may need access to the id (AjaxBehavior certainly does).
+
         String id;
         return (null != (id = component.getId()) &&
-                    !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
-
+                    (!id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX) ||
+                        ((component instanceof ClientBehaviorHolder) &&
+                          !((ClientBehaviorHolder)component).getClientBehaviors().isEmpty())));
     }
 
 

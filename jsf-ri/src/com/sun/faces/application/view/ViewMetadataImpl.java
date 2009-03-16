@@ -116,14 +116,4 @@ public class ViewMetadataImpl extends ViewMetadata {
         
     }
 
-    
-    /**
-     * @see javax.faces.webapp.pdl.ViewMetadata#getViewParameters(javax.faces.context.FacesContext)
-     */
-    @Override
-    public Collection<UIViewParameter> getViewParameters(FacesContext context) {
-        UIViewRoot root = createMetadataView(context);
-        return getViewParameters(root);
-    }
-
 }

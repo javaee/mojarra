@@ -83,19 +83,6 @@ public abstract class ViewMetadata {
 
     /**
      * <p class="changed_added_2_0">
-     * Returns the view parameter metadata for the view id for which this
-     * <code>ViewMetadata</code> instance was created.
-     * </p>
-     * @param context the {@link FacesContext} for the current request
-     * @return a <code>Collection</code> of {@link UIViewParameter} instances
-     *  (if any) from the view associated with this <code>ViewMetadata</code>
-     *  instance
-     */
-    public abstract Collection<UIViewParameter> getViewParameters(FacesContext context);
-
-
-    /**
-     * <p class="changed_added_2_0">
      * Utility method to extract view metadata from the provided {@link UIViewRoot}.
      * </p>
      *

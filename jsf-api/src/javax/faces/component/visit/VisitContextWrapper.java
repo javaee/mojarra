@@ -43,14 +43,14 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * <p>Provides a simple implementation of {@link VisitContext} that can
- * be subclassed by developers wishing to provide specialized behavior
- * to an existing {@link VisitContext} instance.  The default
- * implementation of all methods is to call through to the wrapped
- * {@link VisitContext} instance.</p>
+ * <p class="changed_added_2_0">Provides a simple implementation of
+ * {@link VisitContext} that can be subclassed by developers wishing to
+ * provide specialized behavior to an existing {@link VisitContext}
+ * instance.  The default implementation of all methods is to call
+ * through to the wrapped {@link VisitContext} instance.</p>
  *
- * <p>Usage: extend this class and override {@link #getWrapped} to
- * return the instance we are wrapping.</p>
+ * <p class="changed_added_2_0">Usage: extend this class and override
+ * {@link #getWrapped} to return the instance we are wrapping.</p>
  *
  * @since 2.0
  */

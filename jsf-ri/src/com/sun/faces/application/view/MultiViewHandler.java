@@ -726,7 +726,9 @@ public class MultiViewHandler extends ViewHandler {
         }
         else {
             pdl = getPageDeclarationLanguage(ctx, targetViewId);
-            toViewParams = pdl.getViewMetadata(ctx, targetViewId).getViewParameters(ctx);
+            ViewMetadata viewMetadata = pdl.getViewMetadata(ctx, targetViewId);
+            UIViewRoot root = viewMetadata.createMetadataView(ctx);
+            toViewParams = ViewMetadata.getViewParameters(root);
         }
 
         if (toViewParams.isEmpty()) {

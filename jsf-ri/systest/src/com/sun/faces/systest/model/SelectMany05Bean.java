@@ -77,13 +77,7 @@ public class SelectMany05Bean {
     // ------------------------------------------------------------ Constructors
 
     public SelectMany05Bean() {
-
-        HobbitBean[] hobbits = {
-              new HobbitBean("Bilbo", "Bilbo - <Ring Finder>"),
-              new HobbitBean("Frodo", "Frodo - <Ring Bearer>"),
-              new HobbitBean("Merry", "Merry - <Trouble Maker>"),
-              new HobbitBean("Pippin", "Pipping - <Trouble Maker>")
-        };
+        HobbitBean[] hobbits = getHobbitBeanArray();
 
         Set<SelectItem> items = new LinkedHashSet<SelectItem>();
         for (HobbitBean hobbit : hobbits) {
@@ -106,6 +100,16 @@ public class SelectMany05Bean {
         initialListValues.add("Merry");
         hobbitDataModel = new ListDataModel<HobbitBean>(new ArrayList<HobbitBean>(Arrays.asList(hobbits)));
 
+    }
+    
+    protected HobbitBean [] getHobbitBeanArray() {
+        HobbitBean[] hobbits = {
+              new HobbitBean("Bilbo", "Bilbo - <Ring Finder>"),
+              new HobbitBean("Frodo", "Frodo - <Ring Bearer>"),
+              new HobbitBean("Merry", "Merry - <Trouble Maker>"),
+              new HobbitBean("Pippin", "Pipping - <Trouble Maker>")
+        };
+        return hobbits;
     }
 
 
