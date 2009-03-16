@@ -340,11 +340,11 @@ public final class FactoryFinder {
 
 
     /**
-     * <p>Release any references to factory instances associated with the
-     * class loader for the calling web application.  This method should be
-     * called as apart of web application shutdown in a container where the
-     * JavaServer Faces API classes are part of the container itself, rather
-     * than being included inside the web application.</p>
+     * <p><span class="changed_modified_2_0">Release</span> any
+     * references to factory instances associated with the class loader
+     * for the calling web application.  <span
+     * class="changed_modified_2_0">This method must be called during of
+     * web application shutdown.</span></p>
      *
      * @throws FacesException if the web application class loader
      *                        cannot be identified
