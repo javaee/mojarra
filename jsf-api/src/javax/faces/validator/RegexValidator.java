@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import javax.faces.component.StateHolder;
+import javax.faces.component.PartialStateHolder;
 
 /**
  * <p class="changed_added_2_0">A Validator that checks against a
@@ -15,7 +15,7 @@ import javax.faces.component.StateHolder;
  * resolve to a String that follows the java.util.regex standards.</p>
  * @since 2.0
  */
-public class RegexValidator implements Validator, StateHolder {
+public class RegexValidator implements Validator, PartialStateHolder {
 
     private String regex;
 
@@ -60,6 +60,7 @@ public class RegexValidator implements Validator, StateHolder {
      * @param pattern a regular expression pattern
      */
     public void setPattern(String pattern) {
+        initialState = false;
         this.regex = pattern;
     }
 
@@ -124,18 +125,23 @@ public class RegexValidator implements Validator, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[1];
-        values[0] = regex;
+        if (!initialState) {
+            Object values[] = new Object[1];
+            values[0] = regex;
 
-        return (values);
+            return (values);
+        }
+        return null;
 
     }
 
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
-        regex = (String) values[0];
+        if (state != null) {
+            Object values[] = (Object[]) state;
+            regex = (String) values[0];
+        }
 
     }
 
@@ -154,6 +160,17 @@ public class RegexValidator implements Validator, StateHolder {
 
         this.transientValue = transientValue;
 
+    }
+
+
+    private boolean initialState;
+
+    public void markInitialState() {
+        initialState = true;
+    }
+
+    public boolean initialStateMarked() {
+        return initialState;
     }
     
 }

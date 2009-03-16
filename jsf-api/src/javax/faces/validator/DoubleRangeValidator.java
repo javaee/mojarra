@@ -41,8 +41,8 @@
 package javax.faces.validator;
 
 
-import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.PartialStateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
@@ -82,7 +82,7 @@ import javax.faces.convert.Converter;
  * <code>Locale</code>.</p>
  */
 
-public class DoubleRangeValidator implements Validator, StateHolder {
+public class DoubleRangeValidator implements Validator, PartialStateHolder {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -214,6 +214,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      */
     public void setMaximum(double maximum) {
 
+        initialState = false;
         this.maximum = maximum;
 
     }
@@ -241,6 +242,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      */
     public void setMinimum(double minimum) {
 
+        initialState = false;
         this.minimum = minimum;
 
     }
@@ -378,19 +380,24 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[2];
-        values[0] = maximum;
-        values[1] = minimum;
-        return (values);
+        if (!initialState) {
+            Object values[] = new Object[2];
+            values[0] = maximum;
+            values[1] = minimum;
+            return (values);
+        }
+        return null;
 
     }
 
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
-        maximum = (Double) values[0];
-        minimum = (Double) values[1];
+        if (state != null) {
+            Object values[] = (Object[]) state;
+            maximum = (Double) values[0];
+            minimum = (Double) values[1];
+        }
 
     }
 
@@ -409,6 +416,16 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 
         this.transientValue = transientValue;
 
+    }
+
+    private boolean initialState;
+
+    public void markInitialState() {
+        initialState = true;
+    }
+
+    public boolean initialStateMarked() {
+        return initialState;
     }
 
 }

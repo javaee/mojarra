@@ -41,8 +41,8 @@
 package javax.faces.convert;
 
 
-import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.PartialStateHolder;
 import javax.faces.context.FacesContext;
 
 
@@ -53,7 +53,7 @@ import javax.faces.context.FacesContext;
  * @since 1.2
  */
 
-public class EnumConverter implements Converter, StateHolder {
+public class EnumConverter implements Converter, PartialStateHolder {
 
     // for StateHolder
     public EnumConverter() {
@@ -224,11 +224,16 @@ public class EnumConverter implements Converter, StateHolder {
     // ----------------------------------------------------------- StateHolder
 
     public void restoreState(FacesContext facesContext, Object object) {
-        this.targetClass = (Class<? extends Enum>) object;
+        if (object != null) {
+            this.targetClass = (Class<? extends Enum>) object;
+        }
     }
 
     public Object saveState(FacesContext facesContext) {
-        return this.targetClass;
+        if (!initialState) {
+            return this.targetClass;
+        }
+        return null;
     }
 
     private boolean isTransient = false;
@@ -241,4 +246,13 @@ public class EnumConverter implements Converter, StateHolder {
         return isTransient;
     }
 
+    private boolean initialState;
+
+    public void markInitialState() {
+        initialState = true;
+    }
+
+    public boolean initialStateMarked() {
+        return initialState;
+    }
 }

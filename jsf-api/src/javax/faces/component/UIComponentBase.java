@@ -1306,16 +1306,18 @@ public abstract class UIComponentBase extends UIComponent {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[5];
+            values = new Object[6];
         }
 
         values[0] = clientId;
         values[1] = id;
         values[2] = saveSystemEventListeners(context);
         values[3] = saveBehaviorsState(context);
-
+        if (bindings != null) {
+            values[4] = saveBindingsState(context);
+        }
         if(stateHelper != null) {
-            values[4] = stateHelper.saveState(getFacesContext());
+            values[5] = stateHelper.saveState(getFacesContext());
         }
         assert (!transientFlag);
 
@@ -1339,8 +1341,11 @@ public abstract class UIComponentBase extends UIComponent {
             listenersByEventClass = m;
         }
         behaviors = restoreBehaviorsState(context, values[3]);
-        if(values[4] != null) {
-            getStateHelper().restoreState(getFacesContext(), values[4]);
+        if (values[4] != null) {
+            bindings = restoreBindingsState(context, values[4]);
+        }
+        if(values[5] != null) {
+            getStateHelper().restoreState(getFacesContext(), values[5]);
         }
 
     }

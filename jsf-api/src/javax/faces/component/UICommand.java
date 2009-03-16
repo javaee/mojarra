@@ -120,12 +120,6 @@ public class UICommand extends UIComponentBase
     }
 
 
-    // ------------------------------------------------------ Instance Variables
-
-
-    //private Object value = null;
-
-
     // -------------------------------------------------------------- Properties
 
 

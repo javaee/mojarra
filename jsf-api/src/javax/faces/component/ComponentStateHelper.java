@@ -301,6 +301,9 @@ class ComponentStateHelper implements StateHelper {
                 value = Void.TYPE;
             }
             savedState[i * 2] = entry.getKey();
+            if (value instanceof Collection) {
+                value = saveAttachedState(fc,value);
+            }
             savedState[i * 2 + 1] = value instanceof Serializable?value:saveAttachedState(fc, value);
             i++;
         }

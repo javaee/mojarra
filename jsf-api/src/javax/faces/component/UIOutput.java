@@ -170,5 +170,24 @@ public class UIOutput extends UIComponentBase
 
     }
 
-    
+
+    /**
+     * <p>
+     * In addition to the actions taken in {@link UIComponentBase}
+     * when {@link PartialStateHolder#markInitialState()} is called,
+     * check if the installed {@link Converter} is a PartialStateHolder and
+     * if it is, call {@link javax.faces.component.PartialStateHolder#markInitialState()}
+     * on it.
+     * </p>
+     */
+    @Override
+    public void markInitialState() {
+
+        super.markInitialState();
+        Converter c = getConverter();
+        if (c != null && c instanceof PartialStateHolder) {
+            ((PartialStateHolder) c).markInitialState();
+        }
+
+    }
 }

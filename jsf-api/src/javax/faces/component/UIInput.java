@@ -628,6 +628,31 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     /**
+     * <p>
+     * In addition to the actions taken in {@link UIOutput}
+     * when {@link PartialStateHolder#markInitialState()} is called,
+     * check if any of the installed {@link Validator}s are PartialStateHolders and
+     * if so, call {@link javax.faces.component.PartialStateHolder#markInitialState()}
+     * as appropriate.
+     * </p>
+     */
+    @Override
+    public void markInitialState() {
+
+        super.markInitialState();
+        Validator[] validators = getValidators();
+        if (validators != null) {
+            for (Validator v : validators) {
+                if (v instanceof PartialStateHolder) {
+                    ((PartialStateHolder) v).markInitialState();
+                }
+            }
+        }
+
+    }
+
+
+    /**
      * <p class="changed_added_2_0">Override the default superclass
      * behavior to provide conditional support for Beans Validation behavior.  
      * If Beans Validation is not available in the current environment,
