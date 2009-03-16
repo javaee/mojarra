@@ -302,7 +302,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
     }
 
-
     /**
      * <p>Generate the property instance variable, and getter and setter
      * methods, for all non-duplicate properties of this component class.</p>
@@ -311,6 +310,37 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
         ComponentBean base = configBean.getComponent(cb.getBaseComponentType());
         PropertyBean[] pbs = cb.getProperties();
+        writer.fwrite("protected enum PropertyKeys {\n");
+        writer.indent();
+
+        for (PropertyBean pb : pbs) {
+            if (base.getProperty(pb.getPropertyName()) != null) {
+                if (logger.isLoggable(Level.FINER)) {
+                    logger.log(Level.FINER, "Skipping base class property '" +
+                                            pb.getPropertyName() + "'");
+                }
+                continue;
+            }
+            if ("for".equals(pb.getPropertyName())) {
+                writer.fwrite(pb.getPropertyName());
+                writer.write("Val(\"for\")");
+            } else {
+                writer.fwrite(pb.getPropertyName());
+            }
+            writer.write(",\n");
+        }
+        writer.write(";\n");
+        writer.fwrite("String toString;\n");
+        writer.fwrite("PropertyKeys(String toString) { this.toString = toString; }\n");
+        writer.fwrite("PropertyKeys() { }\n");
+        writer.fwrite("public String toString() {\n");
+        writer.indent();
+        writer.fwrite("return ((toString != null) ? toString : super.toString());\n");
+        writer.outdent();
+        writer.fwrite("}\n");
+        writer.outdent();
+        writer.write("}\n\n");
+
         for (PropertyBean pb : pbs) {
 
             // Should we generate this property?
@@ -331,11 +361,11 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             String var = mangle(pb.getPropertyName());
 
             // Generate the instance variable
-            writer.fwrite("private ");
-            writer.write(primitive(type) ? GeneratorUtil.convertToObject(type) : type);
-            writer.write(' ');
-            writer.write(var);
-            writer.write(";\n");
+            //writer.fwrite("private ");
+            //writer.write(primitive(type) ? GeneratorUtil.convertToObject(type) : type);
+            //writer.write(' ');
+            //writer.write(var);
+            //writer.write(";\n");
 
             // Document getter method
             String description = "<p>Return the value of the <code>" +
@@ -360,42 +390,56 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(capitalize(pb.getPropertyName()));
             writer.write("() {\n");
             writer.indent();
-            writer.fwrite("if (null != this.");
-            writer.write(var);
-            writer.write(") {\n");
-            writer.indent();
-            writer.fwrite("return this.");
-            writer.write(var);
-            writer.write(";\n");
-            writer.outdent();
-            writer.fwrite("}\n");
-            writer.fwrite("ValueExpression _ve = getValueExpression(\"");
-            writer.write(pb.getPropertyName());
-            writer.write("\");\n");
-            writer.fwrite("if (_ve != null) {\n");
-            writer.indent();
             writer.fwrite("return (");
-            writer.write(primitive(type)
-                         ? GeneratorUtil.convertToObject(type)
-                         : type);
-            writer.write(
-                  ") _ve.getValue(getFacesContext().getELContext());\n");
-            writer.outdent();
-            writer.fwrite("} else {\n");
-            writer.indent();
-            if (primitive(type) || (pb.getDefaultValue() != null)) {
-                writer.fwrite("return ");
+            writer.write(primitive(type) ? GeneratorUtil.convertToObject(type) : type);
+            writer.write(") getStateHelper().eval(PropertyKeys.");
+            writer.write((pb.getPropertyName().equals("for")) ? pb
+                  .getPropertyName() + "Val" : pb.getPropertyName());
+             if (primitive(type) || (pb.getDefaultValue() != null)) {
+                writer.write(", ");
                 writer.write(pb.getDefaultValue() != null
                              ? pb.getDefaultValue()
                              : TYPE_DEFAULTS.get(type));
-                writer.write(";\n");
-            } else {
-                writer.fwrite("return null;\n");
             }
-            writer.outdent();
-            writer.fwrite("}\n");
+            writer.write(");\n\n");
             writer.outdent();
             writer.fwrite("}\n\n");
+//            writer.fwrite("if (null != this.");
+//            writer.write(var);
+//            writer.write(") {\n");
+//            writer.indent();
+//            writer.fwrite("return this.");
+//            writer.write(var);
+//            writer.write(";\n");
+//            writer.outdent();
+//            writer.fwrite("}\n");
+//            writer.fwrite("ValueExpression _ve = getValueExpression(\"");
+//            writer.write(pb.getPropertyName());
+//            writer.write("\");\n");
+//            writer.fwrite("if (_ve != null) {\n");
+//            writer.indent();
+//            writer.fwrite("return (");
+//            writer.write(primitive(type)
+//                         ? GeneratorUtil.convertToObject(type)
+//                         : type);
+//            writer.write(
+//                  ") _ve.getValue(getFacesContext().getELContext());\n");
+//            writer.outdent();
+//            writer.fwrite("} else {\n");
+//            writer.indent();
+//            if (primitive(type) || (pb.getDefaultValue() != null)) {
+//                writer.fwrite("return ");
+//                writer.write(pb.getDefaultValue() != null
+//                             ? pb.getDefaultValue()
+//                             : TYPE_DEFAULTS.get(type));
+//                writer.write(";\n");
+//            } else {
+//                writer.fwrite("return null;\n");
+//            }
+            //writer.outdent();
+            //writer.fwrite("}\n");
+            //writer.outdent();
+            //writer.fwrite("}\n\n");
 
             // Generate the setter method
             writer.writeJavadocComment("<p>Set the value of the <code>"
@@ -411,11 +455,17 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(var);
             writer.write(") {\n");
             writer.indent();
-            writer.fwrite("this.");
+            //writer.fwrite("this.");
+            //writer.write(var);
+            //writer.write(" = ");
+            //writer.write(var);
+            writer.fwrite("getStateHelper().put(PropertyKeys.");
+            writer.write((pb.getPropertyName().equals("for")) ? pb
+                  .getPropertyName() + "Val" : pb.getPropertyName());
+            writer.write(", ");
             writer.write(var);
-            writer.write(" = ");
-            writer.write(var);
-            writer.write(";\n");
+            writer.write(");\n");
+           // writer.write(";\n");
             if ((pb.isPassThrough() && pb.getDefaultValue() == null)
                   || (cb.getComponentClass().contains("HtmlCommandButton")
                         && "onclick".equals(pb.getPropertyName()))) {
@@ -441,7 +491,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
      * <p>Generate the suffix for this component class.</p>
      */
     private void suffix() throws Exception {
-
+        /*
         writer.fwrite("private Object[] _values;\n\n");
         // Generate the saveState() method
         writer.fwrite("public Object saveState(FacesContext _context) {\n");
@@ -497,6 +547,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
         writer.outdent();
         writer.fwrite("}\n\n\n");
+        */
         // ClientBehaviorHolder methods
         if(useBehavior){
         	writer.fwrite("private static final Collection<String> EVENT_NAMES = Collections.unmodifiableCollection(Arrays.asList(");

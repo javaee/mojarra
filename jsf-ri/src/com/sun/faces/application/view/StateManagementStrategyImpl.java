@@ -291,7 +291,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             }
             stateMap.put(CLIENTIDS_TO_ADD_NAME, savedAddList);
         }
-        return stateMap;
+        //return stateMap;
+        return new Object[] { null, stateMap };
 
     }
 
@@ -317,7 +318,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         }
-        final Map<String, Object> state = (Map<String,Object>) rsm.getState(context, viewId);
+        Object[] rawState = (Object[]) rsm.getState(context, viewId);
+        final Map<String, Object> state = (Map<String,Object>) rawState[1];
 
         if (null != state) {
             // We need to clone the tree, otherwise we run the risk
