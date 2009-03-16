@@ -285,47 +285,6 @@ public class UICommand extends UIComponentBase
     }
 
 
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    private Object[] values;
-
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[2];
-        }
-      
-        values[0] = super.saveState(context);
-        if (stateHelper != null) {
-            values[1] = stateHelper.saveState(context);
-        }
-        //values[1] = saveAttachedState(context, methodBindingActionListener);
-        //values[2] = saveAttachedState(context, actionExpression);
-        //values[3] = immediate;
-        //values[4] = value;
-        
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        //methodBindingActionListener = (MethodBinding)
-        //    restoreAttachedState(context, values[1]);
-        //actionExpression =
-	    //(MethodExpression) restoreAttachedState(context, values[2]);
-        //immediate = (Boolean) values[3];
-        //value = values[4];
-        if (values[1] != null) {
-            getStateHelper().restoreState(context, values[1]);
-        }
-        
-    }
-
-
     // ----------------------------------------------------- UIComponent Methods
 
 

@@ -418,34 +418,6 @@ public class UIViewParameter extends UIInput {
         submittedValue
     }
 
-    private Object[] values;
-
-    @Override
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[2];
-        }
-
-        values[0] = super.saveState(context);
-        if (stateHelper != null) {
-            values[1] = stateHelper.saveState(context);
-        }
-        return (values);
-
-    }
-
-
-    @Override
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        if (values[1] != null) {
-            getStateHelper().restoreState(context, values[1]);
-        }
-
-    }
 
     /**
      * <p class="changed_added_2_0">Inner class to encapsulate a

@@ -282,38 +282,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         prependId,
         lastId
     }
-    private Object[] values;
-
-    @Override
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[2];
-        }
-        values[0] = super.saveState(context);
-        //values[1] = prependId;
-        //values[2] = lastId;
-        if (stateHelper != null) {
-            values[1] = stateHelper.saveState(context);
-        }
-
-        return values;
-
-    }
-
-    @Override
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        //prependId = (Boolean) values[1];
-        //lastId = ((Integer) values[2]).intValue();
-        if (values[1] != null) {
-            getStateHelper().restoreState(context, values[1]);
-        }
-        
-    }
-
+   
     /**
      * @see UIComponent#visitTree
      */

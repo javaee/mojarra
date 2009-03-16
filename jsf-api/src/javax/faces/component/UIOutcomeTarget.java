@@ -169,33 +169,4 @@ public class UIOutcomeTarget extends UIOutput {
         outcome
     }
 
-    private Object[] values;
-
-    @Override
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[2];
-        }
-
-        values[0] = super.saveState(context);
-        if (stateHelper != null) {
-            values[1] = stateHelper.saveState(context);
-        }
-        return values;
-
-    }
-
-
-    @Override
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        if (values[1] != null) {
-            getStateHelper().restoreState(context, values[1]);
-        }
-
-    }
-
 }

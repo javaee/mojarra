@@ -553,9 +553,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/lifecycle/*TestCase.class"
-                         excludes="com/sun/faces/systest/lifecycle/ManagedBeanLifecycleAnnotationTestCase.class"/>
-                <!-- This test hangs - I haven't figured out why yet -->
+                         includes="com/sun/faces/systest/lifecycle/*TestCase.class"/>
             </tests>
         </jsf.junit>         
     </target>

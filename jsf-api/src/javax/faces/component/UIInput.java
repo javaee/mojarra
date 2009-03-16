@@ -1370,24 +1370,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[5];
+            values = new Object[4];
         }
 
         values[0] = super.saveState(context);
-        if (stateHelper != null) {
-            values[1] = stateHelper.saveState(context);
-        }
-        //values[1] = localValueSet;
-        //values[2] = required;
-        //values[3] = requiredMessage;
-        //values[4] = converterMessage;
-        //values[5] = validatorMessage;
-        //values[6] = valid;
-        //values[7] = immediate;
-        //values[8] = saveAttachedState(context, validators);
-        values[2] = emptyStringIsNull;
-        values[3] = validateEmptyFields;
-        values[4] = defaultValidatorsProcessed;
+        values[1] = emptyStringIsNull;
+        values[2] = validateEmptyFields;
+        values[3] = defaultValidatorsProcessed;
         return (values);
 
     }
@@ -1397,37 +1386,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        if (values[1] != null) {
-            getStateHelper().restoreState(context, values[1]);
-        }
-        //localValueSet = (Boolean) values[1];
-        //required = (Boolean) values[2];
-        //requiredMessage = ((String) values[3]);
-        //converterMessage = ((String) values[4]);
-        //validatorMessage = ((String) values[5]);
-        //valid = (Boolean) values[6];
-        //immediate = (Boolean) values[7];
-        //List<Validator> restoredValidators;
-        //Iterator<Validator> iter;
-
-        //if (null != (restoredValidators = TypedCollections.dynamicallyCastList((List)
-        //     restoreAttachedState(context, values[8]), Validator.class))) {
-        //    // if there were some validators registered prior to this
-        //    // method being invoked, merge them with the list to be
-        //    // restored.
-        //    if (null != validators) {
-        //        iter = restoredValidators.iterator();
-        //        while (iter.hasNext()) {
-        //            validators.add(iter.next());
-        //        }
-        //    } else {
-        //        validators = restoredValidators;
-        //    }
-        //}
-
-        emptyStringIsNull = (Boolean) values[2];
-        validateEmptyFields = (Boolean) values[3];
-        defaultValidatorsProcessed = (Boolean) values[4];
+        emptyStringIsNull = (Boolean) values[1];
+        validateEmptyFields = (Boolean) values[2];
+        defaultValidatorsProcessed = (Boolean) values[3];
 
     }
 

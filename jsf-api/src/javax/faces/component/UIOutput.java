@@ -180,32 +180,5 @@ public class UIOutput extends UIComponentBase
         value
     }
 
-    private Object[] values;
-
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[2];
-        }
-       
-        values[0] = super.saveState(context);
-        if (stateHelper != null) {
-            values[1] = stateHelper.saveState(context);
-        }
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        if (values[1] != null) {
-            getStateHelper().restoreState(context, values[1]);
-        }
-
-    }
-
 
 }

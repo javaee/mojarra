@@ -1570,14 +1570,11 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[3];
+            values = new Object[2];
         }
 
         values[0] = super.saveState(context);
-        if (stateHelper != null) {
-            values[1] = getStateHelper().saveState(context);
-        }
-        values[2] = saveAttachedState(context, viewScope);
+        values[1] = saveAttachedState(context, viewScope);
         return (values);
 
     }
@@ -1587,10 +1584,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        if (values[1] != null) {
-            getStateHelper().restoreState(context, values[1]);
-        }
-        viewScope = (Map<String,Object>) restoreAttachedState(context, values[2]);
+        viewScope = (Map<String,Object>) restoreAttachedState(context, values[1]);
         
     }
 

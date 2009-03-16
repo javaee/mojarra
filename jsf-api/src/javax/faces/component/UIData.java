@@ -537,48 +537,6 @@ public class UIData extends UIComponentBase
         lastId
     }
 
-    private Object[] values;
-
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-            values = new Object[2];
-        }
-
-        values[0] = super.saveState(context);
-        if (stateHelper != null) {
-            values[1] = stateHelper.saveState(context);
-        }
-        //values[1] = first;
-        //values[2] = rowIndex;
-        //values[3] = rows;
-        //values[4] = saved;
-        //values[5] = value;
-        //values[6] = var;
-        //values[7] = lastId;
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        //first = (Integer) values[1];
-        //rowIndex = (Integer) values[2];
-        //rows = (Integer) values[3];
-        //saved = TypedCollections
-        //      .dynamicallyCastMap((Map) values[4], String.class, SavedState.class);
-        //value = values[5];
-        //var = (String) values[6];
-        //lastId = ((Integer) values[7]).intValue();
-        if (values[1] != null) {
-            getStateHelper().restoreState(context, values[1]);
-        }
-
-    }
-
 
     /**
      * <p>Return the value of the UIData.  This value must either be
