@@ -41,9 +41,6 @@
 package javax.faces.component;
 
 import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-import javax.el.ELException;
-import javax.el.ValueExpression;
 
 
 /**
@@ -94,12 +91,12 @@ public class UIMessage extends UIComponentBase {
     // ------------------------------------------------------ Instance Variables
 
 
-    private String forVal = null;
-    private boolean showDetail = true;
-    private boolean showDetailSet = false;
-    private boolean showSummary = false;
-    private boolean showSummarySet = false;
-    private Boolean redisplay = true;
+    //private String forVal = null;
+    //private boolean showDetail = true;
+    //private boolean showDetailSet = false;
+    //private boolean showSummary = false;
+    //private boolean showSummarySet = false;
+    //private Boolean redisplay = true;
 
 
     // -------------------------------------------------------------- Properties
@@ -118,20 +115,7 @@ public class UIMessage extends UIComponentBase {
      */
     public String getFor() {
 
-	if (this.forVal != null) {
-	    return (this.forVal);
-	}
-	ValueExpression ve = getValueExpression("for");
-	if (ve != null) {
-	    try {
-		return ((String) ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return (String) getStateHelper().eval(PropertyKeys.forValue);
 
     }
 
@@ -145,7 +129,7 @@ public class UIMessage extends UIComponentBase {
      */
     public void setFor(String newFor) {
 
-	forVal = newFor;
+        getStateHelper().put(PropertyKeys.forValue, newFor);
 
     }
 
@@ -157,20 +141,7 @@ public class UIMessage extends UIComponentBase {
      */
     public boolean isShowDetail() {
 
-	if (this.showDetailSet){
-	    return (this.showDetail);
-	}
-	ValueExpression ve = getValueExpression("showDetail");
-	if (ve != null) {
-	    try {
-		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (this.showDetail);
-	}
+        return (Boolean) getStateHelper().eval(PropertyKeys.showDetail, true);
 
     }
 
@@ -183,8 +154,7 @@ public class UIMessage extends UIComponentBase {
      */
     public void setShowDetail(boolean showDetail) {
 
-	this.showDetail = showDetail;
-	this.showDetailSet = true;
+        getStateHelper().put(PropertyKeys.showDetail, showDetail);
 
     }
 
@@ -196,20 +166,7 @@ public class UIMessage extends UIComponentBase {
      */
     public boolean isShowSummary() {
 
-	if (this.showSummarySet) {
-	    return (this.showSummary);
-	}
-	ValueExpression ve = getValueExpression("showSummary");
-	if (ve != null) {
-	    try {
-		return (!Boolean.FALSE.equals(ve.getValue(getFacesContext().getELContext())));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (this.showSummary);
-	}
+        return (Boolean) getStateHelper().eval(PropertyKeys.showSummary, false);
 
     }
 
@@ -222,8 +179,7 @@ public class UIMessage extends UIComponentBase {
      */
     public void setShowSummary(boolean showSummary) {
 
-	this.showSummary = showSummary;
-	this.showSummarySet = true;
+        getStateHelper().put(PropertyKeys.showSummary, true);
 
     }
 
@@ -239,7 +195,7 @@ public class UIMessage extends UIComponentBase {
      */
     public boolean isRedisplay() {
 
-        return ((redisplay == null) ? true : redisplay);
+        return (Boolean) getStateHelper().eval(PropertyKeys.redisplay, true);
 
     }
 
@@ -255,29 +211,45 @@ public class UIMessage extends UIComponentBase {
      */
     public void setRedisplay(boolean redisplay) {
 
-        this.redisplay = redisplay;
+        getStateHelper().put(PropertyKeys.redisplay, true);
 
     }
 
 
     // ----------------------------------------------------- StateHolder Methods
 
+    protected enum PropertyKeys {
+        forValue("for"),
+        showDetail,
+        showSummary,
+        redisplay;
+
+        String toString;
+
+        PropertyKeys(String toString) {
+            this.toString = toString;
+        }
+
+        PropertyKeys() { }
+
+        public String toString() {
+            return ((this.toString != null) ? this.toString : super.toString());
+        }
+
+    }
 
     private Object[] values;
 
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[7];
+             values = new Object[2];
         }
        
         values[0] = super.saveState(context);
-        values[1] = this.forVal;
-        values[2] = this.showDetail;
-        values[3] = this.showDetailSet;
-        values[4] = this.showSummary;
-        values[5] = this.showSummarySet;
-        values[6] = this.redisplay;
+        if (stateHelper != null) {
+            values[1] = stateHelper.saveState(context);
+        }
         return (values);
 
     }
@@ -287,12 +259,9 @@ public class UIMessage extends UIComponentBase {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-	forVal = (String) values[1];
-        showDetail = (Boolean) values[2];
-        showDetailSet = (Boolean) values[3];
-        showSummary = (Boolean) values[4];
-        showSummarySet = (Boolean) values[5];
-        redisplay = (Boolean) values[6];
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
+        }
 
     }
 

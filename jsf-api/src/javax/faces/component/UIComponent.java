@@ -107,7 +107,7 @@ import javax.faces.render.Renderer;
 
  */
 
-public abstract class UIComponent implements StateHolder, SystemEventListenerHolder, 
+public abstract class UIComponent implements PartialStateHolder, SystemEventListenerHolder,
         ComponentSystemEventListener {
     
     /**
@@ -202,6 +202,21 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      */
     private static final String OPTIMIZED_PACKAGE = "javax.faces.component.";
 
+    protected enum PropertyKeys {
+        rendered,
+        attributes,
+        bindings,
+        clientId,
+        id,
+        rendererType,
+        listeners,
+        systemEventListeners,
+        behaviors
+    }
+
+    enum PropertyKeysPrivate {
+        attributesThatAreSet
+    }
 
     /**
      * List of attributes that have been set on the component (this
@@ -211,6 +226,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * on what has been set.
      */
     List<String> attributesThatAreSet;
+    protected PartialStateHelper stateHelper = null;
 
 
     // -------------------------------------------------------------- Attributes
@@ -301,6 +317,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     // name This collection is lazily instantiated
     // The set of ValueExpressions for this component, keyed by property
     // name This collection is lazily instantiated
+    @Deprecated
     protected Map<String,ValueExpression> bindings = null;
 
     /**
@@ -325,21 +342,25 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
         if (name == null) {
             throw new NullPointerException();
         }
-        if (bindings == null) {
-            if (!isUIComponentBase()) {
-                ValueBinding binding = getValueBinding(name);
-                if (null != binding) {
-                    result = new ValueExpressionValueBindingAdapter(binding);
-                    // Cache this for future reference.
-                    //noinspection CollectionWithoutInitialCapacity
-                    bindings = new HashMap<String, ValueExpression>();
-                    bindings.put(name, result);
-                }
-            }
-            return (result);
-        } else {
-            return (bindings.get(name));
-        }
+
+       // Map<String,ValueExpression> m =
+       //       (Map<String,ValueExpression>) getStateHelper().get(PropertyKeys.bindings);
+       // if (m == null) {
+       //     if (!isUIComponentBase()) {
+       //         ValueBinding binding = getValueBinding(name);
+       //         if (binding != null) {
+       //             result = new ValueExpressionValueBindingAdapter(binding);
+       //             getStateHelper().put(name,
+       //                                  result);
+       //         }
+       //
+       //     }
+       //     return result;
+       // } else {
+            Map<String,ValueExpression> map = (Map<String,ValueExpression>)
+                  getStateHelper().get(PropertyKeys.bindings);
+            return ((map != null) ? map.get(name) : null);
+       // }
 
     }
 
@@ -385,19 +406,28 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
         } else if ("id".equals(name) || "parent".equals(name)) {
             throw new IllegalArgumentException();
         }
+
         if (binding != null) {
             if (!binding.isLiteralText()) {
-                if (bindings == null) {
-                    //noinspection CollectionWithoutInitialCapacity
-                    bindings = new HashMap<String, ValueExpression>();
-                }
+                //if (bindings == null) {
+                //    //noinspection CollectionWithoutInitialCapacity
+                //    bindings = new HashMap<String, ValueExpression>();
+                //}
                 // add this binding name to the 'attributesThatAreSet' list
-                List<String> sProperties = getAttributesThatAreSet(true);
-                if (sProperties != null && !sProperties.contains(name)) {
-                    sProperties.add(name);
-                }
+                //List<String> sProperties = (List<String>)
+                //      getStateHelper().get(PropertyKeysPrivate.attributesThatAreSet);
 
-                bindings.put(name, binding);
+                 List<String> sProperties =
+                      (List<String>) getStateHelper().get(PropertyKeysPrivate.attributesThatAreSet);
+                if (sProperties == null) {
+                    getStateHelper().add(PropertyKeysPrivate.attributesThatAreSet, name);
+                } else if (!sProperties.contains(name)) {
+                    getStateHelper().add(PropertyKeysPrivate.attributesThatAreSet, name);
+                }
+                getStateHelper().put(PropertyKeys.bindings,
+                                     name,
+                                     binding);
+                //bindings.put(name, binding);
             } else {
                 ELContext context =
                     FacesContext.getCurrentInstance().getELContext();
@@ -408,22 +438,35 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
                 }
             }
         } else {
-            if (bindings != null) {
+            //if (bindings != null) {
                 // remove this binding name from the 'attributesThatAreSet' list
-                List<String> sProperties = getAttributesThatAreSet(false);
-                if (sProperties != null) {
-                    sProperties.remove(name);
-                }
-                bindings.remove(name);
-                if (bindings.isEmpty()) {
-                    bindings = null;
-                }
+//                List<String> sProperties = getAttributesThatAreSet(false);
+//                if (sProperties != null) {
+//                    sProperties.remove(name);
+//                }
+                getStateHelper().remove(PropertyKeysPrivate.attributesThatAreSet,
+                                        name);
+                getStateHelper().remove(PropertyKeys.bindings, name);
+                //bindings.remove(name);
+               // if (bindings.isEmpty()) {
+               //     bindings = null;
+               // }
             }
-        }
+       // }
 
     }
 
     // -------------------------------------------------------------- Properties
+
+    protected boolean initialState;
+
+    public void markInitialState() {
+        initialState = true;
+    }
+
+    public boolean initialStateMarked() {
+        return initialState;
+    }
 
     private boolean isInView;
 
@@ -1838,7 +1881,7 @@ private void doFind(FacesContext context, String clientId) {
      * @throws <code>NullPointerException</code> if any of the
      * arguments are <code>null</code>.
      *
-     * @since 2.0
+     * @since 2.0                                             
      */
     public void subscribeToEvent(Class<? extends SystemEvent> eventClass,
                                  ComponentSystemEventListener componentListener) {
@@ -1850,6 +1893,9 @@ private void doFind(FacesContext context, String clientId) {
             throw new NullPointerException();
         }
 
+        if (initialStateMarked()) {
+            initialState = false;
+        }
         if (null == listenersByEventClass) {
             listenersByEventClass = new HashMap<Class<? extends SystemEvent>,
                                                 List<SystemEventListener>>(3, 1.0f);
@@ -2193,15 +2239,24 @@ private void doFind(FacesContext context, String clientId) {
     List<String> getAttributesThatAreSet(boolean create) {
 
 
-        String name = this.getClass().getName();
-        if (name != null && name.startsWith(OPTIMIZED_PACKAGE)) {
-            if (create && attributesThatAreSet == null) {
-                attributesThatAreSet = new ArrayList<String>(6);
-            }
+        //String name = this.getClass().getName();
+        //if (name != null && name.startsWith(OPTIMIZED_PACKAGE)) {
+        //    if (create && attributesThatAreSet == null) {
+        //        attributesThatAreSet = new ArrayList<String>(6);
+        //    }
+        //}
+        //
+        //return attributesThatAreSet;
+        return (List<String>) getStateHelper().get(PropertyKeysPrivate.attributesThatAreSet);
+        
+    }
+
+    protected PartialStateHelper getStateHelper() {
+        if(stateHelper == null) {
+            stateHelper = new PartialStateHelper(this);
         }
 
-        return attributesThatAreSet;
-        
+        return stateHelper;
     }
 
 

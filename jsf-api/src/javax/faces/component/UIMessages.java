@@ -95,10 +95,10 @@ public class UIMessages extends UIComponentBase {
     // ------------------------------------------------------ Instance Variables
 
 
-    private Boolean globalOnly;
-    private Boolean showDetail;
-    private Boolean showSummary;
-    private Boolean redisplay;
+    //private Boolean globalOnly;
+    //private Boolean showDetail;
+    //private Boolean showSummary;
+    //private Boolean redisplay;
 
     // -------------------------------------------------------------- Properties
 
@@ -117,20 +117,7 @@ public class UIMessages extends UIComponentBase {
      */
     public boolean isGlobalOnly() {
 
-	if (this.globalOnly != null) {
-	    return (this.globalOnly);
-	}
-	ValueExpression ve = getValueExpression("globalOnly");
-	if (ve != null) {
-	    try {
-		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (false);
-	}
+        return (Boolean) getStateHelper().eval(PropertyKeys.globalOnly, false);
 
     }
 
@@ -143,7 +130,7 @@ public class UIMessages extends UIComponentBase {
      */
     public void setGlobalOnly(boolean globalOnly) {
 
-	this.globalOnly = globalOnly;
+        getStateHelper().put(PropertyKeys.globalOnly, globalOnly);
 
     }
 
@@ -154,20 +141,7 @@ public class UIMessages extends UIComponentBase {
      */
     public boolean isShowDetail() {
 
-	if (this.showDetail != null){
-	    return (this.showDetail);
-	}
-	ValueExpression ve = getValueExpression("showDetail");
-	if (ve != null) {
-	    try {
-		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (false);
-	}
+        return (Boolean) getStateHelper().eval(PropertyKeys.showDetail, false);
 
     }
 
@@ -180,8 +154,7 @@ public class UIMessages extends UIComponentBase {
      */
     public void setShowDetail(boolean showDetail) {
 
-	this.showDetail = showDetail;
-
+        getStateHelper().put(PropertyKeys.showDetail, showDetail);
     }
 
 
@@ -192,20 +165,7 @@ public class UIMessages extends UIComponentBase {
      */
     public boolean isShowSummary() {
 
-	if (this.showSummary != null) {
-	    return (this.showSummary);
-	}
-	ValueExpression ve = getValueExpression("showSummary");
-	if (ve != null) {
-	    try {
-		return (!Boolean.FALSE.equals(ve.getValue(getFacesContext().getELContext())));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (true);
-	}
+        return (Boolean) getStateHelper().eval(PropertyKeys.showSummary, true);
 
     }
 
@@ -218,7 +178,7 @@ public class UIMessages extends UIComponentBase {
      */
     public void setShowSummary(boolean showSummary) {
 
-	this.showSummary = showSummary;
+        getStateHelper().put(PropertyKeys.showSummary, showSummary);
 
     }
 
@@ -234,7 +194,7 @@ public class UIMessages extends UIComponentBase {
      */
     public boolean isRedisplay() {
 
-        return ((redisplay == null) ? true : redisplay);
+        return (Boolean) getStateHelper().eval(PropertyKeys.redisplay, true);
 
     }
 
@@ -250,27 +210,31 @@ public class UIMessages extends UIComponentBase {
      */
     public void setRedisplay(boolean redisplay) {
 
-        this.redisplay = redisplay;
+        getStateHelper().eval(PropertyKeys.redisplay, redisplay);
 
     }
 
 
     // ----------------------------------------------------- StateHolder Methods
 
+    protected enum PropertyKeys {
+        globalOnly,
+        showDetail,
+        showSummary,
+        redisplay
+    }
 
     private Object[] values;
 
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[5];
+             values = new Object[2];
         }
-       
-        values[0] = super.saveState(context);
-        values[1] = this.globalOnly;
-        values[2] = this.showDetail;
-        values[3] = this.showSummary;
-        values[4] = this.redisplay;
+
+        if (stateHelper != null) {
+            values[1] = stateHelper.saveState(context);
+        }
 
         return (values);
 
@@ -281,10 +245,9 @@ public class UIMessages extends UIComponentBase {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        globalOnly = (Boolean) values[1];
-        showDetail = (Boolean) values[2];
-        showSummary = (Boolean) values[3];
-        redisplay = (Boolean) values[4];
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
+        }
 
     }
 

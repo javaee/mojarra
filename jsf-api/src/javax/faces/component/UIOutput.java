@@ -120,8 +120,8 @@ public class UIOutput extends UIComponentBase
     // ------------------------------------------------------ Instance Variables
 
 
-    private Converter converter = null;
-    private Object value = null;
+    //private Converter converter = null;
+    //private Object value = null;
 
 
 
@@ -140,79 +140,58 @@ public class UIOutput extends UIComponentBase
 
     public Converter getConverter() {
 
-	if (this.converter != null) {
-	    return (this.converter);
-	}
-	ValueExpression ve = getValueExpression("converter");
-	if (ve != null) {
-	    try {
-		return ((Converter) ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return (Converter) getStateHelper().eval(PropertyKeys.converter);
 
     }
 
 
     public void setConverter(Converter converter) {
 
-        this.converter = converter;
+        getStateHelper().put(PropertyKeys.converter, converter);
 
     }
 
 
     public Object getLocalValue() {
 
-	return (this.value);
+        return getStateHelper().get(PropertyKeys.value);
 
     }
 
 
     public Object getValue() {
 
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueExpression ve = getValueExpression("value");
-	if (ve != null) {
-	    try {
-		return (ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
 
     public void setValue(Object value) {
 
-        this.value = value;
+        getStateHelper().put(PropertyKeys.value, value);
 
     }
 
 
     // ----------------------------------------------------- StateHolder Methods
 
+    protected enum PropertyKeys {
+        converter,
+        value
+    }
 
     private Object[] values;
 
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[3];
+             values = new Object[2];
         }
        
         values[0] = super.saveState(context);
-        values[1] = saveAttachedState(context, converter);
-        values[2] = value;
+        if (stateHelper != null) {
+            values[1] = stateHelper.saveState(context);
+        }
         return (values);
 
     }
@@ -222,8 +201,9 @@ public class UIOutput extends UIComponentBase
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        converter = (Converter) restoreAttachedState(context, values[1]);
-        value = values[2];
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
+        }
 
     }
 

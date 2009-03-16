@@ -132,20 +132,7 @@ public class UISelectItems extends UIComponentBase {
      */
     public Object getValue() {
 
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueExpression ve = getValueExpression("value");
-	if (ve != null) {
-	    try {
-		return (ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
@@ -158,13 +145,16 @@ public class UISelectItems extends UIComponentBase {
      */
     public void setValue(Object value) {
 
-        this.value = value;
+        getStateHelper().put(PropertyKeys.value, value);
 
     }
 
 
     // ----------------------------------------------------- StateHolder Methods
 
+    protected enum PropertyKeys {
+        value
+    }
 
     private Object[] values;
 
@@ -175,7 +165,9 @@ public class UISelectItems extends UIComponentBase {
         }
       
         values[0] = super.saveState(context);
-        values[1] = value;
+        if (stateHelper != null) {
+            values[1] = stateHelper.saveState(context);
+        }
         return (values);
 
     }
@@ -185,7 +177,9 @@ public class UISelectItems extends UIComponentBase {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        value = values[1];
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
+        }
 
     }
 

@@ -365,8 +365,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         UIComponent facet2 = createComponent();
         facet2.setId("facet2");
         preSave.getFacets().put("facet2 key", facet2);
-        populateComponent(preSave);
         parent.getChildren().add(preSave);
+        populateComponent(preSave);
         UIComponent postSave = createComponent();
 
         // Save and restore state and compare the results

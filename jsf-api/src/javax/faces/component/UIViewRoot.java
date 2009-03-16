@@ -288,30 +288,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      */
     public String getRenderKitId() {
 
-        String result;
-        if (null != renderKitId) {
-            result = this.renderKitId;
-        } else {
-            ValueExpression vb = getValueExpression("renderKitId");
-            FacesContext context = getFacesContext();
-            if (vb != null) {
-                try {
-                    result = (String) vb.getValue(context.getELContext());
-                }
-                catch (ELException e) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                   "severe.component.unable_to_process_expression",
-                                   new Object[]{vb.getExpressionString(),
-                                                "renderKitId"});
-                    }
-                    result = null;
-                }
-            } else {
-                result = null;
-            }
-        }
-        return result;
+        return (String) getStateHelper().eval(PropertyKeys.renderKitId);
+
     }
 
 
@@ -328,7 +306,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      */
     public void setRenderKitId(String renderKitId) {
 
-        this.renderKitId = renderKitId;
+        getStateHelper().put(PropertyKeys.renderKitId, renderKitId);
 
     }
 
@@ -340,7 +318,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     /** <p>Return the view identifier for this view.</p> */
     public String getViewId() {
 
-        return (this.viewId);
+        return (String) getStateHelper().get(PropertyKeys.viewId);
 
     }
 
@@ -352,14 +330,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      */
     public void setViewId(String viewId) {
 
-        this.viewId = viewId;
+        getStateHelper().put(PropertyKeys.viewId, viewId);
 
     }
 
     // ------------------------------------------------ Event Management Methods
 
-    private MethodExpression beforePhase = null;
-    private MethodExpression afterPhase = null;
+    //private MethodExpression beforePhase = null;
+    //private MethodExpression afterPhase = null;
 
     /**
      * <p>Return the {@link MethodExpression} that will be invoked
@@ -370,7 +348,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @since 1.2
      */
     public MethodExpression getBeforePhaseListener() {
-        return beforePhase;
+
+        return (MethodExpression) getStateHelper().get(PropertyKeys.beforePhase);
     }
 
     /**
@@ -389,7 +368,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @since 1.2
      */
     public void setBeforePhaseListener(MethodExpression newBeforePhase) {
-        beforePhase = newBeforePhase;
+        getStateHelper().put(PropertyKeys.beforePhase, newBeforePhase);
     }
 
     /**
@@ -402,7 +381,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @since 1.2
      */
     public MethodExpression getAfterPhaseListener() {
-        return afterPhase;
+        return (MethodExpression) getStateHelper().get(PropertyKeys.afterPhase);
     }
 
     /**
@@ -422,10 +401,10 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @since 1.2
      */
     public void setAfterPhaseListener(MethodExpression newAfterPhase) {
-        afterPhase = newAfterPhase;
+        getStateHelper().put(PropertyKeys.afterPhase, newAfterPhase);
     }
 
-    private List<PhaseListener> phaseListeners = null;
+    //private List<PhaseListener> phaseListeners = null;
 
     /**
      * <p>If the argument <code>toRemove</code> is in the list of {@link
@@ -435,9 +414,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @since 1.2
      */
     public void removePhaseListener(PhaseListener toRemove) {
-        if (null != phaseListeners) {
-            phaseListeners.remove(toRemove);
-        }
+
+        getStateHelper().remove(PropertyKeys.phaseListeners, toRemove);
     }
 
     /**
@@ -449,11 +427,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @since 1.2
      */
     public void addPhaseListener(PhaseListener newPhaseListener) {
-        if (null == phaseListeners) {
-            //noinspection CollectionWithoutInitialCapacity
-            phaseListeners = new ArrayList<PhaseListener>();
-        }
-        phaseListeners.add(newPhaseListener);
+
+        getStateHelper().add(PropertyKeys.phaseListeners, newPhaseListener);
+
     }
 
     
@@ -467,15 +443,12 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      */
     public List<PhaseListener> getPhaseListeners() {
 
-        List<PhaseListener> result;
+        List<PhaseListener> result = (List<PhaseListener>)
+              getStateHelper().get(PropertyKeys.phaseListeners);
 
-        if (null == phaseListeners) {
-            result = Collections.unmodifiableList(Collections.<PhaseListener>emptyList());
-        } else {
-            result = Collections.unmodifiableList(phaseListeners);
-        }
-        
-        return result;
+        return ((result != null)
+                ? Collections.unmodifiableList(result)
+                : Collections.unmodifiableList(Collections.<PhaseListener>emptyList()));
 
     }
 
@@ -832,14 +805,16 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     private void initState() {
         skipPhase = false;
         beforeMethodException = false;
+        List<PhaseListener> listeners =
+              (List<PhaseListener>) getStateHelper().get(PropertyKeys.phaseListeners);
         phaseListenerIterator =
-              ((phaseListeners != null) ? phaseListeners.listIterator() : null);
+              ((listeners != null) ? listeners.listIterator() : null);
     }
 
     // avoid creating the PhaseEvent if possible by doing redundant
     // null checks.
     private void notifyBefore(FacesContext context, PhaseId phaseId) {
-        if (null != beforePhase || null != phaseListenerIterator) {
+        if (getBeforePhaseListener() != null || phaseListenerIterator != null) {
             notifyPhaseListeners(context, phaseId, true);
         }
     }
@@ -847,7 +822,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     // avoid creating the PhaseEvent if possible by doing redundant
     // null checks.
     private void notifyAfter(FacesContext context, PhaseId phaseId) {
-        if (null != afterPhase || null != phaseListenerIterator) {
+        if (getAfterPhaseListener() != null || phaseListenerIterator != null) {
             notifyPhaseListeners(context, phaseId, false);
         }
     }
@@ -1061,6 +1036,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                                       boolean isBefore) {
         PhaseEvent event = createPhaseEvent(context, phaseId);
 
+        MethodExpression beforePhase = getBeforePhaseListener();
+        MethodExpression afterPhase = getAfterPhaseListener();
         boolean hasPhaseMethodExpression =
               (isBefore && (null != beforePhase)) ||
               (!isBefore && (null != afterPhase) && !beforeMethodException);
@@ -1321,7 +1298,10 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @return a unique-id in this component-container
      */
     public String createUniqueId(FacesContext context, String seed) {
-        return UNIQUE_ID_PREFIX + (seed == null ? lastId++ : seed);
+        Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
+        int lastId = ((i != null) ? i : 0);
+        getStateHelper().put(PropertyKeys.lastId,  ++lastId);
+        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
     }
 
     /*
@@ -1349,42 +1329,21 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      *         above algorithm.
      */
     public Locale getLocale() {
-        Locale result = null;
-        if (null != locale) {
-            result = this.locale;
-        } else {
-            ValueExpression vb = getValueExpression("locale");
-            FacesContext context = getFacesContext();
-            if (vb != null) {
-                Object resultLocale = null;
 
-                try {
-                    resultLocale = vb.getValue(context.getELContext());
-                }
-                catch (ELException e) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                   "severe.component.unable_to_process_expression",
-                                   new Object[]{vb.getExpressionString(), "locale"});
-                    }
-                }
+        Object result = getStateHelper().eval(PropertyKeys.locale);
 
-                if (null == resultLocale) {
-                    result =
-                          context.getApplication().getViewHandler()
-                                .calculateLocale(context);
-                } else if (resultLocale instanceof Locale) {
-                    result = (Locale) resultLocale;
-                } else if (resultLocale instanceof String) {
-                    result = getLocaleFromString((String) resultLocale);
-                }
-            } else {
-                result =
-                      context.getApplication().getViewHandler()
-                            .calculateLocale(context);
+        if (result != null) {
+            if (result instanceof Locale) {
+                    locale = (Locale) result;
+            } else if (result instanceof String) {
+                   locale = getLocaleFromString((String) result);
             }
+            return locale;
+        } else {
+            FacesContext context = getFacesContext();
+            return context.getApplication().getViewHandler().calculateLocale(context);
         }
-        return result;
+
     }
 
 
@@ -1495,9 +1454,11 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @param locale The new localization Locale
      */
     public void setLocale(Locale locale) {
-        this.locale = locale;
+
+        getStateHelper().put(PropertyKeys.locale, locale);
         // Make sure to appraise the EL of this switch in Locale.
         FacesContext.getCurrentInstance().getELContext().setLocale(locale);
+
     }
     
     private Map<String, Object> viewScope = null;
@@ -1592,6 +1553,16 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     // ----------------------------------------------------- StateHolder Methods
 
+    protected enum PropertyKeys {
+        renderKitId,
+        viewId,
+        locale,
+        lastId,
+        beforePhase,
+        afterPhase,
+        phaseListeners,
+        viewScope  // RELEASE_PENDING
+    }
 
     private Object[] values;
 
@@ -1599,18 +1570,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[9];
+            values = new Object[3];
         }
 
         values[0] = super.saveState(context);
-        values[1] = renderKitId;
-        values[2] = viewId;
-        values[3] = locale;
-        values[4] = lastId;
-        values[5] = saveAttachedState(context, beforePhase);
-        values[6] = saveAttachedState(context, afterPhase);
-        values[7] = saveAttachedState(context, phaseListeners);
-        values[8] = saveAttachedState(context, viewScope);
+        if (stateHelper != null) {
+            values[1] = getStateHelper().saveState(context);
+        }
+        values[2] = saveAttachedState(context, viewScope);
         return (values);
 
     }
@@ -1620,19 +1587,11 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        renderKitId = (String) values[1];
-        viewId = (String) values[2];
-        locale = (Locale) values[3];
-        lastId = ((Integer) values[4]).intValue();
-        beforePhase =
-              (MethodExpression) restoreAttachedState(context, values[5]);
-        afterPhase =
-              (MethodExpression) restoreAttachedState(context, values[6]);
-        phaseListeners = TypedCollections.dynamicallyCastList((List)
-              restoreAttachedState(context, values[7]), PhaseListener.class);
-        //noinspection unchecked
-        viewScope =
-              (Map<String, Object>) restoreAttachedState(context, values[8]);
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
+        }
+        viewScope = (Map<String,Object>) restoreAttachedState(context, values[2]);
+        
     }
 
 

@@ -101,13 +101,13 @@ public class UISelectItem extends UIComponentBase {
     // ------------------------------------------------------ Instance Variables
 
 
-    private String itemDescription = null;
-    private Boolean itemDisabled;
-    private Boolean itemEscaped;
-    private Boolean noSelectionOption = false;
-    private String itemLabel = null;
-    private Object itemValue = null;
-    private Object value = null;
+    //private String itemDescription = null;
+    //private Boolean itemDisabled;
+    //private Boolean itemEscaped;
+    //private Boolean noSelectionOption = false;
+    //private String itemLabel = null;
+    //private Object itemValue = null;
+    //private Object value = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -125,20 +125,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public String getItemDescription() {
 
-	if (this.itemDescription != null) {
-	    return (this.itemDescription);
-	}
-	ValueExpression ve = getValueExpression("itemDescription");
-	if (ve != null) {
-	    try {
-		return ((String) ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return (String) getStateHelper().eval(PropertyKeys.itemDescription);
 
     }
 
@@ -150,7 +137,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public void setItemDescription(String itemDescription) {
 
-        this.itemDescription = itemDescription;
+        getStateHelper().put(PropertyKeys.itemDescription, itemDescription);
 
     }
 
@@ -159,20 +146,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public boolean isItemDisabled() {
 
-	if (this.itemDisabled != null) {
-	    return (this.itemDisabled);
-	}
-	ValueExpression ve = getValueExpression("itemDisabled");
-	if (ve != null) {
-	    try {
-		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (false);
-	}
+        return (Boolean) getStateHelper().eval(PropertyKeys.itemDisabled, false);
 
     }
 
@@ -183,7 +157,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public void setItemDisabled(boolean itemDisabled) {
 
-        this.itemDisabled = itemDisabled;
+        getStateHelper().put(PropertyKeys.itemDisabled, itemDisabled);
 
     }
     
@@ -192,20 +166,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public boolean isItemEscaped() {
 
-	if (this.itemEscaped != null) {
-	    return (this.itemEscaped);
-	}
-	ValueExpression ve = getValueExpression("itemEscaped");
-	if (ve != null) {
-	    try {
-		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (true);
-	}
+        return (Boolean) getStateHelper().eval(PropertyKeys.itemEscaped, true);
 
     }
 
@@ -216,7 +177,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public void setItemEscaped(boolean itemEscaped) {
 
-        this.itemEscaped = itemEscaped;
+        getStateHelper().put(PropertyKeys.itemEscaped, itemEscaped);
 
     }
     
@@ -226,20 +187,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public String getItemLabel() {
 
-	if (this.itemLabel != null) {
-	    return (this.itemLabel);
-	}
-	ValueExpression ve = getValueExpression("itemLabel");
-	if (ve != null) {
-	    try {
-		return ((String) ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return (String) getStateHelper().eval(PropertyKeys.itemLabel);
 
     }
 
@@ -251,7 +199,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public void setItemLabel(String itemLabel) {
 
-        this.itemLabel = itemLabel;
+        getStateHelper().put(PropertyKeys.itemLabel, itemLabel);
 
     }
 
@@ -261,20 +209,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public Object getItemValue() {
 
-	if (this.itemValue != null) {
-	    return (this.itemValue);
-	}
-	ValueExpression ve = getValueExpression("itemValue");
-	if (ve != null) {
-	    try {
-		return ve.getValue(getFacesContext().getELContext());
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return getStateHelper().eval(PropertyKeys.itemValue);
 
     }
 
@@ -286,7 +221,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public void setItemValue(Object itemValue) {
 
-        this.itemValue = itemValue;
+        getStateHelper().put(PropertyKeys.itemValue, itemValue);
 
     }
 
@@ -298,20 +233,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public Object getValue() {
 
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueExpression ve = getValueExpression("value");
-	if (ve != null) {
-	    try {
-		return (ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
@@ -324,7 +246,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public void setValue(Object value) {
 
-        this.value = value;
+        getStateHelper().put(PropertyKeys.value,  value);
 
     }
     
@@ -339,7 +261,8 @@ public class UISelectItem extends UIComponentBase {
      * @since 2.0
      */
     public boolean isNoSelectionOption() {
-        return noSelectionOption;
+
+        return (Boolean) getStateHelper().eval(PropertyKeys.noSelectionOption, false);
     }
 
     /**
@@ -349,29 +272,36 @@ public class UISelectItem extends UIComponentBase {
      * @since 2.0
      */
     public void setNoSelectionOption(boolean noSelectionOption) {
-        this.noSelectionOption = noSelectionOption;
+
+        getStateHelper().put(PropertyKeys.noSelectionOption, noSelectionOption);
+
     }
 
 
     // ----------------------------------------------------- StateHolder Methods
 
+    protected enum PropertyKeys {
+        itemDescription,
+        itemDisabled,
+        itemEscaped,
+        itemLabel,
+        itemValue,
+        value,
+        noSelectionOption
+    }
 
     private Object[] values;
 
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[8];
+             values = new Object[2];
         }
        
         values[0] = super.saveState(context);
-        values[1] = itemDescription;
-        values[2] = itemDisabled;
-        values[3] = itemEscaped;
-        values[4] = itemLabel;
-        values[5] = itemValue;
-        values[6] = value;
-        values[7] = noSelectionOption;
+        if (stateHelper != null) {
+            values[1] = stateHelper.saveState(context);
+        }
         return (values);
 
     }
@@ -381,13 +311,9 @@ public class UISelectItem extends UIComponentBase {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        itemDescription = (String) values[1];
-        itemDisabled = (Boolean) values[2];
-        itemEscaped = (Boolean) values[3];
-        itemLabel = (String) values[4];
-        itemValue = values[5];
-        value = values[6];
-        noSelectionOption = (Boolean) values[7];
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
+        }
 
     }
 

@@ -143,20 +143,7 @@ public class UIViewParameter extends UIInput {
      */
     public String getName() {
 
-        if (this.name != null) {
-            return this.name;
-        }
-
-        ValueExpression ve = getValueExpression("name");
-        if (ve != null) {
-            try {
-                return ((String) ve.getValue(getFacesContext().getELContext()));
-            } catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return null;
-        }
+        return (String) getStateHelper().eval(PropertyKeys.name);
 
     }
 
@@ -170,7 +157,7 @@ public class UIViewParameter extends UIInput {
      */
     public void setName(String name) {
 
-        this.name = name;
+        getStateHelper().put(PropertyKeys.name, name);
 
     }
 
@@ -192,7 +179,16 @@ public class UIViewParameter extends UIInput {
      */
     @Override
     public String getSubmittedValue() {
-        return (String) super.getSubmittedValue();
+        return (String) getStateHelper().get(PropertyKeys.submittedValue);
+    }
+
+    /**
+     * PENDING (docs)  Interesting that submitted value isn't saved by the parent
+     * @param submittedValue The new submitted value
+     */
+    @Override
+    public void setSubmittedValue(Object submittedValue) {
+        getStateHelper().put(PropertyKeys.submittedValue, submittedValue);
     }
 
     // ----------------------------------------------------- UIComponent Methods
@@ -417,6 +413,10 @@ public class UIViewParameter extends UIInput {
 
     // ----------------------------------------------------- StateHolder Methods
 
+    protected enum PropertyKeys {
+        name,
+        submittedValue
+    }
 
     private Object[] values;
 
@@ -424,12 +424,13 @@ public class UIViewParameter extends UIInput {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[3];
+             values = new Object[2];
         }
 
         values[0] = super.saveState(context);
-        values[1] = name;
-        values[2] = getSubmittedValue();
+        if (stateHelper != null) {
+            values[1] = stateHelper.saveState(context);
+        }
         return (values);
 
     }
@@ -440,8 +441,9 @@ public class UIViewParameter extends UIInput {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        name = (String) values[1];
-        setSubmittedValue(values[2]);
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
+        }
 
     }
 

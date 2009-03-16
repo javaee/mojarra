@@ -41,9 +41,7 @@
 package javax.faces.component;
 
 
-import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
@@ -94,7 +92,7 @@ public class UIGraphic extends UIComponentBase {
     // ------------------------------------------------------ Instance Variables
 
 
-    private Object value = null;
+    //private Object value = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -139,21 +137,7 @@ public class UIGraphic extends UIComponentBase {
      */
     public Object getValue() {
 
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueExpression ve = getValueExpression("value");
-	if (ve != null) {
-	    try {
-		return (ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-
-	} else {
-	    return (null);
-	}
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
@@ -166,7 +150,7 @@ public class UIGraphic extends UIComponentBase {
      */
     public void setValue(Object value) {
 
-        this.value = value;
+        getStateHelper().put(PropertyKeys.value, value);
 
     }
 
@@ -273,6 +257,9 @@ public class UIGraphic extends UIComponentBase {
 
     // ----------------------------------------------------- StateHolder Methods
 
+    protected enum PropertyKeys {
+        value
+    }
 
     private Object[] values;
 
@@ -283,7 +270,9 @@ public class UIGraphic extends UIComponentBase {
         }
       
         values[0] = super.saveState(context);
-        values[1] = value;
+        if (stateHelper != null) {
+            values[1] = stateHelper.saveState(context);
+        }
         return (values);
 
     }
@@ -293,7 +282,10 @@ public class UIGraphic extends UIComponentBase {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        value = values[1];
+        //value = values[1];
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
+        }
 
     }
 

@@ -103,7 +103,7 @@ public class ImplicitFacetTestCase extends AbstractTestCase {
         
         String text = page.asText();
         
-        assertTrue(-1 != text.indexOf("Implicit facet 01 id:j_id3. Child 01 of facet 01 id:output01. Child 02 of facet 01 id:output02. Child 03 of facet 01 id:output03."));
+        assertTrue(-1 != text.indexOf("Implicit facet 01 id:j_id4. Child 01 of facet 01 id:output01. Child 02 of facet 01 id:output02. Child 03 of facet 01 id:output03."));
         assertTrue(-1 != text.indexOf("Implicit facet 01 id:panelGroup01. Child 01 of facet 01 id:output07. Child 02 of facet 01 id:output08. Child 03 of facet 01 id:output09."));
 
         HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "command");
@@ -111,7 +111,7 @@ public class ImplicitFacetTestCase extends AbstractTestCase {
 
         text = page.asText();
 
-        assertTrue(-1 != text.indexOf("Implicit facet 01 id:j_id3. Child 01 of facet 01 id:output01. Child 02 of facet 01 id:output02. Child 03 of facet 01 id:output03."));
+        assertTrue(-1 != text.indexOf("Implicit facet 01 id:j_id4. Child 01 of facet 01 id:output01. Child 02 of facet 01 id:output02. Child 03 of facet 01 id:output03."));
         assertTrue(-1 != text.indexOf("Implicit facet 01 id:panelGroup01. Child 01 of facet 01 id:output07. Child 02 of facet 01 id:output08. Child 03 of facet 01 id:output09."));
 
 

@@ -95,7 +95,6 @@ public class UINamingContainer extends UIComponentBase
 
     }
     
-    private int lastId = 0;
 
     // -------------------------------------------------------------- Properties
 
@@ -179,14 +178,23 @@ public class UINamingContainer extends UIComponentBase
     }
 
      public String createUniqueId(FacesContext context, String seed) {
-         return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId++ : seed);
+        Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
+        int lastId = ((i != null) ? i : 0);
+        getStateHelper().put(PropertyKeys.lastId,  ++lastId);
+        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
      }
+
+    protected enum PropertyKeys {
+        lastId
+    }
  
      @Override
      public void restoreState(FacesContext context, Object state) {
          values = (Object[]) state;
          super.restoreState(context, values[0]);
-         lastId = ((Integer) values[1]).intValue();
+         if (values[1] != null) {
+             getStateHelper().restoreState(context, values[1]);
+         }
      }
  
      private Object[] values;
@@ -198,8 +206,10 @@ public class UINamingContainer extends UIComponentBase
          }
  
          values[0] = super.saveState(context);
-         values[1] = lastId;
-         
+         if (stateHelper != null) {
+             values[1] = stateHelper.saveState(context);
+         }
+
          return (values);
      
      }

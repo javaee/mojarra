@@ -295,7 +295,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      * <p>The "localValueSet" state for this component.
      */
-    private boolean localValueSet;
+    //private boolean localValueSet;
 
     /**
      * Return the "local value set" state for this component.
@@ -303,45 +303,26 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * this property to <code>true</code>.
      */
     public boolean isLocalValueSet() {
-        return localValueSet;
+        return (Boolean) getStateHelper().eval(PropertyKeys.localValueSet, false);
     }
 
     /**
      * Sets the "local value set" state for this component.
      */
     public void setLocalValueSet(boolean localValueSet) {
-        this.localValueSet = localValueSet;
+        getStateHelper().put(PropertyKeys.localValueSet, localValueSet);
     }
 
-
-    /**
-     * <p>The "required field" state for this component.</p>
-     */
-    private Boolean required;
 
     /**
      * <p>Return the "required field" state for this component.</p>
      */
     public boolean isRequired() {
 
-        if (required != null) {
-            return (this.required);
-        }
-        ValueExpression ve = getValueExpression("required");
-        if (ve != null) {
-            try {
-                return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return (false);
-        }
+        return (Boolean) getStateHelper().eval(PropertyKeys.required, false);
 
     }
 
-    private String requiredMessage;
 
     /**
      * <p>If there has been a call to {@link #setRequiredMessage} on this
@@ -352,21 +333,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public String getRequiredMessage() {
-        if (requiredMessage != null) {
-            return requiredMessage;
-        }
 
-        ValueExpression ve = getValueExpression("requiredMessage");
-        if (ve != null) {
-            try {
-                return ((String) ve.getValue(getFacesContext().getELContext()));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return (null);
-        }
+        return (String) getStateHelper().eval(PropertyKeys.requiredMessage);
 
     }
 
@@ -380,10 +348,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public void setRequiredMessage(String message) {
-        requiredMessage = message;
+
+        getStateHelper().put(PropertyKeys.requiredMessage,  message);
+
     }
 
-    private String converterMessage;
 
     /**
      * <p>If there has been a call to {@link #setConverterMessage} on this
@@ -394,21 +363,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public String getConverterMessage() {
-        if (converterMessage != null) {
-            return converterMessage;
-        }
 
-        ValueExpression ve = getValueExpression("converterMessage");
-        if (ve != null) {
-            try {
-                return ((String) ve.getValue(getFacesContext().getELContext()));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return (null);
-        }
+        return (String) getStateHelper().eval(PropertyKeys.converterMessage);
 
     }
 
@@ -422,10 +378,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public void setConverterMessage(String message) {
-        converterMessage = message;
+
+        getStateHelper().put(PropertyKeys.converterMessage, message);
+
     }
 
-    private String validatorMessage;
 
     /**
      * <p>If there has been a call to {@link #setValidatorMessage} on this
@@ -436,21 +393,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public String getValidatorMessage() {
-        if (validatorMessage != null) {
-            return validatorMessage;
-        }
 
-        ValueExpression ve = getValueExpression("validatorMessage");
-        if (ve != null) {
-            try {
-                return ((String) ve.getValue(getFacesContext().getELContext()));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return (null);
-        }
+        return (String) getStateHelper().eval(PropertyKeys.validatorMessage);
 
     }
 
@@ -464,22 +408,22 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public void setValidatorMessage(String message) {
-        validatorMessage = message;
-    }
 
-    private boolean valid = true;
+        getStateHelper().put(PropertyKeys.validatorMessage, message);
+
+    }
 
 
     public boolean isValid() {
 
-        return (this.valid);
+        return (Boolean) getStateHelper().eval(PropertyKeys.valid, true);
 
     }
 
 
     public void setValid(boolean valid) {
 
-        this.valid = valid;
+        getStateHelper().put(PropertyKeys.valid, valid);
 
     }
 
@@ -491,40 +435,21 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     public void setRequired(boolean required) {
 
-        this.required = required;
+        getStateHelper().put(PropertyKeys.required, required);
 
     }
-
-    /**
-     * <p>The immediate flag.</p>
-     */
-    private Boolean immediate;
 
 
     public boolean isImmediate() {
 
-        if (this.immediate != null) {
-            return (this.immediate);
-        }
-        ValueExpression ve = getValueExpression("immediate");
-        if (ve != null) {
-            try {
-                return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-
-        } else {
-            return (false);
-        }
+        return (Boolean) getStateHelper().eval(PropertyKeys.immediate, false);
 
     }
 
 
     public void setImmediate(boolean immediate) {
 
-        this.immediate = immediate;
+        getStateHelper().put(PropertyKeys.immediate, immediate);
 
     }
 
@@ -1224,8 +1149,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         // If our value is valid and not empty or empty w/ validate empty fields enabled, call all validators
         if (isValid() && (!isEmpty(newValue) || validateEmptyFields(context))) {
-            if (this.validators != null) {
-                for (Validator validator : this.validators) {
+            List<Validator> validators = (List<Validator>) getStateHelper().get(PropertyKeys.validators);
+            if (validators != null) {
+                for (Validator validator : validators) {
                     try {
                         validator.validate(context, this, newValue);
                     }
@@ -1326,7 +1252,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <p>The set of {@link Validator}s associated with this
      * <code>UIComponent</code>.</p>
      */
-    List<Validator> validators = null;
+    //List<Validator> validators = null;
 
 
     /**
@@ -1342,11 +1268,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         if (validator == null) {
             throw new NullPointerException();
         }
-        if (validators == null) {
-            //noinspection CollectionWithoutInitialCapacity
-            validators = new ArrayList<Validator>();
-        }
-        validators.add(validator);
+
+        getStateHelper().add(PropertyKeys.validators, validator);
 
     }
     
@@ -1358,6 +1281,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     public Validator[] getValidators() {
 
+        List<Validator> validators = (List<Validator>)
+              getStateHelper().get(PropertyKeys.validators);
         if (validators == null) {
             return EMPTY_VALIDATOR;
         } else {
@@ -1376,9 +1301,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     public void removeValidator(Validator validator) {
 
-        if (validators != null) {
-            validators.remove(validator);
-        }
+        getStateHelper().remove(PropertyKeys.validators, validator);
 
     }
 
@@ -1428,27 +1351,43 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     // ----------------------------------------------------- StateHolder Methods
 
+    protected enum PropertyKeys {
+        localValueSet,
+        required,
+        requiredMessage,
+        converterMessage,
+        validatorMessage,
+        valid,
+        immediate,
+        validators,
+        emptyStringIsNull,
+        validateEmptyFields,
+        defaultValidatorsProcessed
+    }
 
     private Object[] values;
 
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[12];
+            values = new Object[5];
         }
 
         values[0] = super.saveState(context);
-        values[1] = localValueSet;
-        values[2] = required;
-        values[3] = requiredMessage;
-        values[4] = converterMessage;
-        values[5] = validatorMessage;
-        values[6] = valid;
-        values[7] = immediate;
-        values[8] = saveAttachedState(context, validators);
-        values[9] = emptyStringIsNull;
-        values[10] = validateEmptyFields;
-        values[11] = defaultValidatorsProcessed;
+        if (stateHelper != null) {
+            values[1] = stateHelper.saveState(context);
+        }
+        //values[1] = localValueSet;
+        //values[2] = required;
+        //values[3] = requiredMessage;
+        //values[4] = converterMessage;
+        //values[5] = validatorMessage;
+        //values[6] = valid;
+        //values[7] = immediate;
+        //values[8] = saveAttachedState(context, validators);
+        values[2] = emptyStringIsNull;
+        values[3] = validateEmptyFields;
+        values[4] = defaultValidatorsProcessed;
         return (values);
 
     }
@@ -1458,34 +1397,37 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        localValueSet = (Boolean) values[1];
-        required = (Boolean) values[2];
-        requiredMessage = ((String) values[3]);
-        converterMessage = ((String) values[4]);
-        validatorMessage = ((String) values[5]);
-        valid = (Boolean) values[6];
-        immediate = (Boolean) values[7];
-        List<Validator> restoredValidators;
-        Iterator<Validator> iter;
-
-        if (null != (restoredValidators = TypedCollections.dynamicallyCastList((List)
-             restoreAttachedState(context, values[8]), Validator.class))) {
-            // if there were some validators registered prior to this
-            // method being invoked, merge them with the list to be
-            // restored.
-            if (null != validators) {
-                iter = restoredValidators.iterator();
-                while (iter.hasNext()) {
-                    validators.add(iter.next());
-                }
-            } else {
-                validators = restoredValidators;
-            }
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
         }
+        //localValueSet = (Boolean) values[1];
+        //required = (Boolean) values[2];
+        //requiredMessage = ((String) values[3]);
+        //converterMessage = ((String) values[4]);
+        //validatorMessage = ((String) values[5]);
+        //valid = (Boolean) values[6];
+        //immediate = (Boolean) values[7];
+        //List<Validator> restoredValidators;
+        //Iterator<Validator> iter;
 
-        emptyStringIsNull = (Boolean) values[9];
-        validateEmptyFields = (Boolean) values[10];
-        defaultValidatorsProcessed = (Boolean) values[11];
+        //if (null != (restoredValidators = TypedCollections.dynamicallyCastList((List)
+        //     restoreAttachedState(context, values[8]), Validator.class))) {
+        //    // if there were some validators registered prior to this
+        //    // method being invoked, merge them with the list to be
+        //    // restored.
+        //    if (null != validators) {
+        //        iter = restoredValidators.iterator();
+        //        while (iter.hasNext()) {
+        //            validators.add(iter.next());
+        //        }
+        //    } else {
+        //        validators = restoredValidators;
+        //    }
+        //}
+
+        emptyStringIsNull = (Boolean) values[2];
+        validateEmptyFields = (Boolean) values[3];
+        defaultValidatorsProcessed = (Boolean) values[4];
 
     }
 

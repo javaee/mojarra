@@ -204,7 +204,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         this.privateOnComponentPopulated(ctx, c, parent);
         owner.onComponentPopulated(ctx, c, parent);
-
+        c.markInitialState();
         // add to the tree afterwards
         // this allows children to determine if it's
         // been part of the tree or not yet

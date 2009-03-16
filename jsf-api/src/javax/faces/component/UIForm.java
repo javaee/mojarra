@@ -42,9 +42,6 @@ package javax.faces.component;
 
 import java.util.Collection;
 import java.util.Iterator;
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
@@ -97,7 +94,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
 
     // ------------------------------------------------------ Instance Variables
 
-    private int lastId = 0;
+    //private int lastId = 0;
 
     // -------------------------------------------------------------- Properties
 
@@ -151,32 +148,19 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
     /**
      * <p>The prependId flag.</p>
      */
-    private Boolean prependId;
+    //private Boolean prependId;
 
 
     public boolean isPrependId() {
 
-        if (this.prependId != null) {
-            return (this.prependId);
-        }
-        ValueExpression ve = getValueExpression("prependId");
-        if (ve != null) {
-            try {
-                return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return (true);
-        }
+        return (Boolean) getStateHelper().eval(PropertyKeys.prependId, true);
 
     }
 
 
     public void setPrependId(boolean prependId) {
 
-        this.prependId = prependId;
+        getStateHelper().put(PropertyKeys.prependId, prependId);
 
     }
 
@@ -267,7 +251,10 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
     }
 
     public String createUniqueId(FacesContext context, String seed) {
-        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId++ : seed);
+        Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
+        int lastId = ((i != null) ? i : 0);
+        getStateHelper().put(PropertyKeys.lastId,  ++lastId);
+        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
     }
     
     /**
@@ -291,17 +278,24 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         return null;
     }
 
+    protected enum PropertyKeys {
+        prependId,
+        lastId
+    }
     private Object[] values;
 
     @Override
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[3];
+             values = new Object[2];
         }
         values[0] = super.saveState(context);
-        values[1] = prependId;
-        values[2] = lastId;
+        //values[1] = prependId;
+        //values[2] = lastId;
+        if (stateHelper != null) {
+            values[1] = stateHelper.saveState(context);
+        }
 
         return values;
 
@@ -312,8 +306,11 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        prependId = (Boolean) values[1];
-        lastId = ((Integer) values[2]).intValue();
+        //prependId = (Boolean) values[1];
+        //lastId = ((Integer) values[2]).intValue();
+        if (values[1] != null) {
+            getStateHelper().restoreState(context, values[1]);
+        }
         
     }
 

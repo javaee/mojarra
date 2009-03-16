@@ -65,30 +65,6 @@ import java.io.Serializable;
  */
 public interface PartialStateHolder extends StateHolder {
 
-    /**Put a new value to the state.
-     *
-     * @param key
-     * @param value
-     * @return
-     */
-    Object put(Serializable key, Object value);
-
-    /**Get a value from the state
-     *
-     * @param key
-     * @return
-     */
-    Object get(Serializable key);
-
-    /**Get a value from the state, return
-     * default value if value in the state
-     * is null.
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    Object get(Serializable key, Object defaultValue);
 
     /**Notify this state-holder that it
      * a) should start collecting delta-state
@@ -96,5 +72,11 @@ public interface PartialStateHolder extends StateHolder {
      * save-state gets called.
      *
      */
-    void notifyStoreState();
+    void markInitialState();
+
+    /**
+     * @return <code>true</code> if delta state changes are being tracked,
+     *  otherwise <code>false</code>
+     */
+    boolean initialStateMarked();
 }
