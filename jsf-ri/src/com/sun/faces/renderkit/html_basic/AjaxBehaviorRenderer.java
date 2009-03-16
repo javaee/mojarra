@@ -104,7 +104,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         AjaxBehavior ajaxBehavior = (AjaxBehavior)behavior;
 
         // First things first - if AjaxBehavior is disabled, we are done.
-        if (ajaxBehavior.isDisabled(context)) {
+        if (ajaxBehavior.isDisabled()) {
             return;
         }        
 
@@ -127,20 +127,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
 
         AjaxBehaviorEvent event = new AjaxBehaviorEvent(component, ajaxBehavior);
 
-        // If immediate is specified on the AjaxBehavior, we honor it.
-        // Otherwise, we inherit immediate from an ActionSource or 
-        // EditableValueHolder parent, if we have one.
-        Boolean immediate = ajaxBehavior.isImmediate(context);
-
-        if (immediate == null) {
-            if (component instanceof EditableValueHolder) {
-                immediate = ((EditableValueHolder)component).isImmediate();
-            } else if (component instanceof ActionSource) {
-                immediate = ((ActionSource)component).isImmediate();
-            }
-        }
-
-        PhaseId phaseId = (Boolean.TRUE.equals(immediate)) ?
+        PhaseId phaseId = isImmediate(component, ajaxBehavior) ?
                               PhaseId.APPLY_REQUEST_VALUES :
                               PhaseId.INVOKE_APPLICATION;
 
@@ -150,13 +137,31 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     }
 
 
+    // Tests whether we should perform immediate processing.  Note
+    // that we "inherit" immediate from the parent if not specified
+    // on the behavior.
+    private static boolean isImmediate(UIComponent component,
+                                       AjaxBehavior ajaxBehavior) {
+
+        boolean immediate = false;
+
+        if (ajaxBehavior.isImmediateSet()) {
+            immediate = ajaxBehavior.isImmediate();
+        } else if (component instanceof EditableValueHolder) {
+            immediate = ((EditableValueHolder)component).isImmediate();
+        } else if (component instanceof ActionSource) {
+            immediate = ((ActionSource)component).isImmediate();
+        }
+
+        return immediate;
+    }
     private static String buildAjaxCommand(ClientBehaviorContext behaviorContext,
                                            AjaxBehavior ajaxBehavior) {
 
         FacesContext context = behaviorContext.getFacesContext();
 
         // First things first - if AjaxBehavior is disabled, we are done.
-        if (ajaxBehavior.isDisabled(context)) {
+        if (ajaxBehavior.isDisabled()) {
             return null;
         }        
 
@@ -164,10 +169,10 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         String eventName = behaviorContext.getEventName();
 
         StringBuilder ajaxCommand = new StringBuilder(256);
-        Collection<String> execute = ajaxBehavior.getExecute(context);
-        Collection<String> render = ajaxBehavior.getRender(context);
-        String onevent = ajaxBehavior.getOnEvent(context);
-        String onerror = ajaxBehavior.getOnError(context);
+        Collection<String> execute = ajaxBehavior.getExecute();
+        Collection<String> render = ajaxBehavior.getRender();
+        String onevent = ajaxBehavior.getOnevent();
+        String onerror = ajaxBehavior.getOnerror();
         String sourceId = behaviorContext.getSourceId();
         Collection<ClientBehaviorContext.Parameter> params = behaviorContext.getParameters();
 

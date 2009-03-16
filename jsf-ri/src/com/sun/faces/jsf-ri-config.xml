@@ -208,7 +208,7 @@
   <!-- Configure Behaviors -->
 
   <behavior>
-    <behavior-id>javax.faces.behavior.AjaxBehavior</behavior-id>
+    <behavior-id>javax.faces.behavior.Ajax</behavior-id>
     <behavior-class>javax.faces.component.behavior.AjaxBehavior</behavior-class>
   </behavior>
 
@@ -289,7 +289,7 @@
             <renderer-class>com.sun.faces.facelets.component.RepeatRenderer</renderer-class>
         </renderer>
         <client-behavior-renderer>
-            <client-behavior-renderer-type>javax.faces.behavior.AjaxBehavior</client-behavior-renderer-type>
+            <client-behavior-renderer-type>javax.faces.behavior.Ajax</client-behavior-renderer-type>
             <client-behavior-renderer-class>com.sun.faces.renderkit.html_basic.AjaxBehaviorRenderer</client-behavior-renderer-class>
         </client-behavior-renderer>
     </render-kit>

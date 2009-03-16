@@ -199,6 +199,16 @@ public class Bean implements Serializable {
         }
     }
 
+    // Returns a Collection of ids for testing execute/render binding.
+    public Collection<String> getMultipleIds() {
+        return MULTIPLE_IDS;
+    }
+
+    // Used to test binding execute/render lists to String value expression
+    public String getThisKeyword() {
+        return "@this";
+    }
+
     public void processBehavior(AjaxBehaviorEvent event) {
         addStatusMessage("AjaxBehaviorEvent");
     }
@@ -295,4 +305,8 @@ public class Bean implements Serializable {
             return details;
         }
     }
+
+    // Some ids for testing execute/render binding
+    private static Collection<String> MULTIPLE_IDS = 
+        Arrays.asList("@this", "formKeyword", "thisKeyword", "noneKeyword");
 }

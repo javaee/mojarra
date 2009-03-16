@@ -60,6 +60,7 @@ import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
@@ -156,7 +157,6 @@ public final class AjaxHandler extends TagHandlerImpl {
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
-    @SuppressWarnings("unchecked")
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
 
@@ -197,7 +197,7 @@ public final class AjaxHandler extends TagHandlerImpl {
         // push/pop the AjaxBehavior instance on AjaxBehaviors so that
         // child tags will have access to it.
         AjaxBehaviors ajaxBehaviors = getNonNullAjaxBehaviors(ctx);
-        ajaxBehaviors.pushBehavior(ajaxBehavior); 
+        ajaxBehaviors.pushBehavior(ajaxBehavior, eventName); 
 
         nextHandler.apply(ctx, parent);
 
@@ -241,22 +241,36 @@ public final class AjaxHandler extends TagHandlerImpl {
 
     // Construct our AjaxBehavior from tag parameters.
     private AjaxBehavior createAjaxBehavior(FaceletContext ctx, String eventName) {
+        Application application = ctx.getFacesContext().getApplication();
+        AjaxBehavior behavior = (AjaxBehavior)application.createBehavior(
+                                                  AjaxBehavior.BEHAVIOR_ID);
 
-        AjaxBehavior ajaxBehavior = new AjaxBehavior(eventName,
-            ((this.onevent != null) ? this.onevent.getValueExpression(ctx, String.class) : null),
-            ((this.onerror != null) ? this.onerror.getValueExpression(ctx, String.class) : null),
-            ((this.execute != null) ? this.execute.getValueExpression(ctx, Object.class) : null),
-            ((this.render != null) ? this.render.getValueExpression(ctx, Object.class) : null),
-            ((this.disabled != null) ? this.disabled.getValueExpression(ctx, Boolean.class) : null),
-            ((this.immediate != null) ? this.immediate.getValueExpression(ctx, Boolean.class) : null));
+        setBehaviorAttribute(ctx, behavior, this.onevent, String.class);
+        setBehaviorAttribute(ctx, behavior, this.onerror, String.class);
+        setBehaviorAttribute(ctx, behavior, this.disabled, Boolean.class);
+        setBehaviorAttribute(ctx, behavior, this.immediate, Boolean.class);
+        setBehaviorAttribute(ctx, behavior, this.execute, Object.class);
+        setBehaviorAttribute(ctx, behavior, this.render, Object.class);
 
         if (null != listener) {
-            ajaxBehavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(
+            behavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(
                 this.listener.getMethodExpression(ctx, Object.class, new Class[] { AjaxBehaviorEvent.class }),
                 this.listener.getMethodExpression(ctx, Object.class, new Class[] { })));
         }
 
-        return ajaxBehavior;
+        return behavior;
+    }
+
+    // Sets the value from the TagAttribute on the behavior
+    private void setBehaviorAttribute(FaceletContext ctx,
+                                      AjaxBehavior behavior,
+                                      TagAttribute attr,
+                                      Class type) {
+
+        if (attr != null) {
+            behavior.setValueExpression(attr.getLocalName(),
+                                        attr.getValueExpression(ctx, type));
+        }    
     }
 
     // Returns the AjaxBehaviors instance, creating it if necessary.

@@ -49,12 +49,16 @@ import javax.faces.component.behavior.FacesBehavior;
  * <p>A trivial Behavior implementation that shows a greeting to the
  * user when invoked.</p>
  */
-@FacesBehavior(value="Joe")
-public class GreetBehavior extends ClientBehaviorBase implements Serializable {
+@FacesBehavior(value="custom.behavior.Greet")
+public class GreetBehavior extends ClientBehaviorBase {
 
     public GreetBehavior() {};
 
-    public GreetBehavior(String name) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -68,6 +72,28 @@ public class GreetBehavior extends ClientBehaviorBase implements Serializable {
         builder.append("!');");
 
         return builder.toString();
+    }
+
+    @Override
+    public Object saveState(FacesContext context) {
+
+        Object[] values = new Object[2];
+      
+        values[0] = super.saveState(context);
+        values[1] = name;
+
+        return values;
+    }
+
+
+    @Override
+    public void restoreState(FacesContext context, Object state) {
+
+        Object[] values = (Object[]) state;
+        super.restoreState(context, values[0]);
+
+        name = (String)values[1];
+
     }
 
     private String name;

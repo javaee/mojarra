@@ -43,7 +43,7 @@ package com.sun.faces.component.behavior;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-import javax.faces.component.behavior.AjaxBehavior;
+import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.context.FacesContext;
 
 /**
@@ -56,35 +56,10 @@ public class AjaxBehaviors implements Serializable {
 
     public static final String AJAX_BEHAVIORS = "javax.faces.component.AjaxBehaviors";
 
-    private LinkedList<AjaxBehavior> ajaxBehaviors = null;
+    private LinkedList<BehaviorInfo> ajaxBehaviors = null;
 
     public AjaxBehaviors() {
-        ajaxBehaviors = new LinkedList<AjaxBehavior>();
-    }
-
-    /**
-     * <p>Return the {@link AjaxBehavior} instance containing the event 
-     * that matches <code>eventName</code>.  Interrogate the 
-     * <code>List</code> of {@link AjaxBehavior} instances
-     * starting at the end of the <code>List</code>.  Return <code>null</code>
-     * if no matching {@link AjaxBehavior} is available.<p>
-     *
-     * @return the {@link AjaxBehavior} that contains the event
-     *    matching <code>eventName</code>. 
-     * @param eventName 
-     *
-     * @since 2.0
-     */
-    public AjaxBehavior getBehaviorForEvent(String eventName) {
-        AjaxBehavior ajaxBehavior = null;
-        for (int i=ajaxBehaviors.size()-1; i>=0; i--) {
-            AjaxBehavior behavior = ajaxBehaviors.get(i);
-            String event = behavior.getEvent();
-            if (event == null || event.equals(eventName)) {
-                ajaxBehavior = behavior;
-            }
-        }
-        return ajaxBehavior;
+        ajaxBehaviors = new LinkedList<BehaviorInfo>();
     }
 
     /**
@@ -92,11 +67,13 @@ public class AjaxBehaviors implements Serializable {
      * for subsequent calls to {@link #getBehaviorForEvent}.</p>
      *
      * @param ajaxBehavior the {@link AjaxBehavior} instance
+     * @param eventName the name of the event that the behavior is associated
+     *     with.
      *
      * @since 2.0
      */ 
-    public void pushBehavior(AjaxBehavior ajaxBehavior) {
-        ajaxBehaviors.add(ajaxBehavior);
+    public void pushBehavior(ClientBehavior ajaxBehavior, String eventName) {
+        ajaxBehaviors.add(new BehaviorInfo(ajaxBehavior, eventName));
     }
 
     /**
@@ -122,12 +99,35 @@ public class AjaxBehaviors implements Serializable {
      *
      * @since 2.0
      */
-    public AjaxBehavior getCurrentBehavior() {
-        AjaxBehavior ajaxBehavior = null;
+    public BehaviorInfo getCurrentBehavior() {
+        BehaviorInfo ajaxBehavior  = null;
         if (ajaxBehaviors.size() > 0) {
             ajaxBehavior = ajaxBehaviors.getLast();
         }
         return ajaxBehavior;
     }
-        
+
+    // Little value holder class that holds onto an AjaxBehavior
+    // and its event.
+    public static class BehaviorInfo {
+        private ClientBehavior behavior;
+        private String eventName;
+
+        public BehaviorInfo(ClientBehavior behavior, String eventName) {
+            this.behavior = behavior;
+            this.eventName = eventName;
+        }
+
+        public ClientBehavior getBehavior() {
+            return behavior;
+        }
+
+        public String getEventName() {
+            return eventName;
+        }
+
+        private BehaviorInfo() {
+        }
+    }
+
 }
