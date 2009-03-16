@@ -330,7 +330,9 @@ class ComponentStateHelper implements StateHelper {
            }
             Serializable serializable = (Serializable) savedState[i * 2];
             if (value != null) {
-                if (value instanceof StateHolderSaver) {
+                if (value instanceof Collection) {
+                    value = restoreAttachedState(fc, value);
+                } else if (value instanceof StateHolderSaver) {
                     value = ((StateHolderSaver) value).restore(context);
                 } else {
                     value = (value instanceof Serializable
