@@ -44,8 +44,8 @@ import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
-import javax.faces.component.PartialStateHolder;
 import javax.faces.context.FacesContext;
 
 /**
@@ -54,7 +54,7 @@ import javax.faces.context.FacesContext;
  * a method on an object identified by the {@link MethodExpression}.</p>
  */
 
-public class MethodExpressionValidator implements Validator, PartialStateHolder {
+public class MethodExpressionValidator implements Validator, StateHolder {
 
     // ------------------------------------------------------ Instance Variables
 
@@ -113,23 +113,17 @@ public class MethodExpressionValidator implements Validator, PartialStateHolder 
 
     public Object saveState(FacesContext context) {
 
-        if (!initialState) {
-            Object values[] = new Object[1];
-            values[0] = methodExpression;
-            return (values);
-        }
-        return null;
+        Object values[] = new Object[1];
+        values[0] = methodExpression;
+        return (values);
 
     }
 
 
     public void restoreState(FacesContext context, Object state) {
 
-        if (state != null) {
-            Object values[] = (Object[]) state;
-            methodExpression = (MethodExpression) values[0];
-        }
-        
+        Object values[] = (Object[]) state;
+        methodExpression = (MethodExpression) values[0];
     }
 
 
@@ -147,16 +141,6 @@ public class MethodExpressionValidator implements Validator, PartialStateHolder 
 
         this.transientValue = transientValue;
 
-    }
-
-    private boolean initialState;
-
-    public void markInitialState() {
-        initialState = true;
-    }
-
-    public boolean initialStateMarked() {
-        return initialState;
     }
 
 }
