@@ -944,13 +944,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 @SuppressWarnings({"ThrowableInstanceNeverThrown"})
                 UpdateModelException toQueue =
                       new UpdateModelException(message, caught);
-                ExceptionHandler exHandler = context.getExceptionHandler();
                 ExceptionQueuedEventContext eventContext =
                       new ExceptionQueuedEventContext(context,
                                                 toQueue,
                                                 this,
                                                 PhaseId.UPDATE_MODEL_VALUES);
-                exHandler.processEvent(new ExceptionQueuedEvent(eventContext));
+                context.getApplication().publishEvent(ExceptionQueuedEvent.class,
+                                                      eventContext);
+                
             }
             
         }
