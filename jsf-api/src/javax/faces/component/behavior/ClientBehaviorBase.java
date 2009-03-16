@@ -97,12 +97,11 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
     }
 
     /**
-     * <p class="changed_added_2_0">Default implementation of 
-     * of {@link ClientBehavior#decode()}.  If a {@link ClientBehaviorRenderer} is available
-     * for the specified behavior renderer type, this method
-     * delegates to the ClientBehaviorRenderer's decode() method.  
-     * Otherwise, no decoding is performed.
-     * </p>
+     * <p class="changed_added_2_0">Default implementation of of {@link
+     * ClientBehavior#decode}.  If a {@link ClientBehaviorRenderer} is
+     * available for the specified behavior renderer type, this method
+     * delegates to the ClientBehaviorRenderer's decode() method.
+     * Otherwise, no decoding is performed.  </p>
      *
      * @param context {@link FacesContext} for the request we are processing
      * @param component {@link UIComponent} the component associated with this {@link ClientBehavior} 
