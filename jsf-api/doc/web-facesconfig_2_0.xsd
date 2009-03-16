@@ -2024,7 +2024,7 @@
         <xsd:sequence>
             <xsd:element name="view-param"
                          type="javaee:faces-config-redirect-viewParamType"
-                         minOccurs="0" maxOccurs="1"/>
+                         minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
         <xsd:attribute name="include-view-params" type="xsd:boolean" use="optional"/>
