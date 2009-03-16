@@ -194,15 +194,15 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      * @since 2.0
      */
     public static final String COMPOSITE_FACET_NAME = "javax.faces.component.COMPOSITE_FACET_NAME";
-    
+
+    enum PropertyKeysPrivate {
+        attributesThatAreSet
+    }
 
     /**
-     * Components within this base package are considered optimizable
-     * with respect to attributes processing.
+     * Properties that are tracked by state saving.
      */
-    private static final String OPTIMIZED_PACKAGE = "javax.faces.component.";
-
-    protected enum PropertyKeys {
+    enum PropertyKeys {
         rendered,
         attributes,
         bindings,
@@ -214,10 +214,6 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
         behaviors
     }
 
-    enum PropertyKeysPrivate {
-        attributesThatAreSet
-    }
-
     /**
      * List of attributes that have been set on the component (this
      * may be from setValueExpression, the attributes map, or setters
@@ -226,7 +222,7 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      * on what has been set.
      */
     List<String> attributesThatAreSet;
-    protected PartialStateHelper stateHelper = null;
+    StateHelper stateHelper = null;
 
 
     // -------------------------------------------------------------- Attributes
@@ -337,30 +333,14 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      *
      */
     public ValueExpression getValueExpression(String name) {
-        ValueExpression result = null;
 
         if (name == null) {
             throw new NullPointerException();
         }
 
-       // Map<String,ValueExpression> m =
-       //       (Map<String,ValueExpression>) getStateHelper().get(PropertyKeys.bindings);
-       // if (m == null) {
-       //     if (!isUIComponentBase()) {
-       //         ValueBinding binding = getValueBinding(name);
-       //         if (binding != null) {
-       //             result = new ValueExpressionValueBindingAdapter(binding);
-       //             getStateHelper().put(name,
-       //                                  result);
-       //         }
-       //
-       //     }
-       //     return result;
-       // } else {
-            Map<String,ValueExpression> map = (Map<String,ValueExpression>)
-                  getStateHelper().get(PropertyKeys.bindings);
-            return ((map != null) ? map.get(name) : null);
-       // }
+        Map<String,ValueExpression> map = (Map<String,ValueExpression>)
+              getStateHelper().get(UIComponentBase.PropertyKeys.bindings);
+        return ((map != null) ? map.get(name) : null);
 
     }
 
@@ -424,7 +404,7 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
                 } else if (!sProperties.contains(name)) {
                     getStateHelper().add(PropertyKeysPrivate.attributesThatAreSet, name);
                 }
-                getStateHelper().put(PropertyKeys.bindings,
+                getStateHelper().put(UIComponentBase.PropertyKeys.bindings,
                                      name,
                                      binding);
                 //bindings.put(name, binding);
@@ -446,7 +426,7 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 //                }
                 getStateHelper().remove(PropertyKeysPrivate.attributesThatAreSet,
                                         name);
-                getStateHelper().remove(PropertyKeys.bindings, name);
+                getStateHelper().remove(UIComponentBase.PropertyKeys.bindings, name);
                 //bindings.remove(name);
                // if (bindings.isEmpty()) {
                //     bindings = null;
@@ -458,15 +438,48 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 
     // -------------------------------------------------------------- Properties
 
-    protected boolean initialState;
+    boolean initialState;
 
+    /**
+     * RELEASE_PENDING (docs)
+     */
     public void markInitialState() {
         initialState = true;
     }
 
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
     public boolean initialStateMarked() {
         return initialState;
     }
+
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
+    protected StateHelper getStateHelper() {
+        return getStateHelper(true);
+    }
+
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @param create
+     * @return
+     */
+    protected StateHelper getStateHelper(boolean create) {
+
+        if (create && stateHelper == null) {
+            stateHelper = new ComponentStateHelper(this);
+        }
+        return stateHelper;
+
+    }
+
 
     private boolean isInView;
 
@@ -2227,37 +2240,6 @@ private void doFind(FacesContext context, String clientId) {
 
 
     // --------------------------------------------------------- Package Private
-
-
-    /**
-     * @param create <code>true</code> if the list should be created
-     * @return A List of Strings of all the attributes that have been set
-     *  against this component.  If the component isn't in the default
-     *  javax.faces.component or javax.faces.component.html packages, or
-     *  create is <code>false</code>, this will return null;
-     */
-    List<String> getAttributesThatAreSet(boolean create) {
-
-
-        //String name = this.getClass().getName();
-        //if (name != null && name.startsWith(OPTIMIZED_PACKAGE)) {
-        //    if (create && attributesThatAreSet == null) {
-        //        attributesThatAreSet = new ArrayList<String>(6);
-        //    }
-        //}
-        //
-        //return attributesThatAreSet;
-        return (List<String>) getStateHelper().get(PropertyKeysPrivate.attributesThatAreSet);
-        
-    }
-
-    protected PartialStateHelper getStateHelper() {
-        if(stateHelper == null) {
-            stateHelper = new PartialStateHelper(this);
-        }
-
-        return stateHelper;
-    }
 
 
     static final class ComponentSystemEventListenerAdapter

@@ -41,10 +41,6 @@
 package javax.faces.component;
 
 
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 
@@ -83,6 +79,17 @@ public class UISelectItem extends UIComponentBase {
     public static final String COMPONENT_FAMILY = "javax.faces.SelectItem";
 
 
+    enum PropertyKeys {
+        itemDescription,
+        itemDisabled,
+        itemEscaped,
+        itemLabel,
+        itemValue,
+        value,
+        noSelectionOption
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -96,18 +103,6 @@ public class UISelectItem extends UIComponentBase {
         setRendererType(null);
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    //private String itemDescription = null;
-    //private Boolean itemDisabled;
-    //private Boolean itemEscaped;
-    //private Boolean noSelectionOption = false;
-    //private String itemLabel = null;
-    //private Object itemValue = null;
-    //private Object value = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -276,19 +271,5 @@ public class UISelectItem extends UIComponentBase {
         getStateHelper().put(PropertyKeys.noSelectionOption, noSelectionOption);
 
     }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-    protected enum PropertyKeys {
-        itemDescription,
-        itemDisabled,
-        itemEscaped,
-        itemLabel,
-        itemValue,
-        value,
-        noSelectionOption
-    }
-
 
 }

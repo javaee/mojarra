@@ -52,19 +52,22 @@ import java.io.Serializable;
  * converters and validators and other implementations
  * of the StateHolder interface.
  */
-public class PartialStateHelper extends HashMap<Serializable, Object> implements StateHolder {
+@SuppressWarnings({"unchecked"})
+class ComponentStateHelper implements StateHelper {
 
     private UIComponent component;
     private boolean isTransient;
     private Map<Serializable, Object> deltaMap;
+    private Map<Serializable, Object> defaultMap;
 
     // ------------------------------------------------------------ Constructors
 
 
-    public PartialStateHelper(UIComponent component) {
+    public ComponentStateHelper(UIComponent component) {
 
         this.component = component;
         this.deltaMap = new HashMap<Serializable,Object>();
+        this.defaultMap = new HashMap<Serializable,Object>();
         
     }
 
@@ -79,22 +82,21 @@ public class PartialStateHelper extends HashMap<Serializable, Object> implements
      * @param value
      * @return the original value in the delta-map, if not present, the old value in the main map
      */
-    @Override
     public Object put(Serializable key, Object value) {
 
         if(component.initialStateMarked() || value instanceof PartialStateHolder) {
             Object retVal = deltaMap.put(key, value);
 
             if(retVal==null) {
-                return super.put(key,value);
+                return defaultMap.put(key,value);
             }
             else {
-                super.put(key,value);
+                defaultMap.put(key,value);
                 return retVal;
             }
         }
         else {
-            return super.put(key,value);
+            return defaultMap.put(key,value);
         }
     }
 
@@ -105,21 +107,20 @@ public class PartialStateHelper extends HashMap<Serializable, Object> implements
      * @param key
      * @return the removed object in the delta-map. if not present, the removed object from the main map
      */
-    @Override
-    public Object remove(Object key) {
+    public Object remove(Serializable key) {
         if(component.initialStateMarked()) {
             Object retVal = deltaMap.remove(key);
 
             if(retVal==null) {
-                return super.remove(key);
+                return defaultMap.remove(key);
             }
             else {
-                super.remove(key);
+                defaultMap.remove(key);
                 return retVal;
             }
         }
         else {
-            return super.remove(key);
+            return defaultMap.remove(key);
         }
     }
 
@@ -139,7 +140,7 @@ public class PartialStateHelper extends HashMap<Serializable, Object> implements
         Map<String,Object> map = (Map<String,Object>) get(key);
         if (map == null) {
             map = new HashMap<String,Object>(8);
-            super.put(key, map);
+            defaultMap.put(key, map);
         }
         if (ret == null) {
             return map.put(mapKey, value);
@@ -159,7 +160,7 @@ public class PartialStateHelper extends HashMap<Serializable, Object> implements
      * @return
      */
     public Object get(Serializable key) {
-        return super.get(key);
+        return defaultMap.get(key);
     }
 
     public Object eval(Serializable key) {
@@ -198,14 +199,14 @@ public class PartialStateHelper extends HashMap<Serializable, Object> implements
         List<Object> items = (List<Object>) get(key);
         if (items == null) {
             items = new ArrayList<Object>(4);
-            super.put(key, items);
+            defaultMap.put(key, items);
         }
         items.add(value);
 
     }
 
 
-    public Object remove(Object key, Object valueOrKey) {
+    public Object remove(Serializable key, Object valueOrKey) {
         Object source = get(key);
         if (source instanceof Collection) {
             return removeFromList(key, valueOrKey);
@@ -215,7 +216,7 @@ public class PartialStateHelper extends HashMap<Serializable, Object> implements
         return null;
     }
 
-    private Object removeFromList(Object key, Object value) {
+    private Object removeFromList(Serializable key, Object value) {
         Object ret = null;
         if (component.initialStateMarked() || value instanceof PartialStateHolder) {
             Collection<Object> deltaList = (Collection<Object>) deltaMap.get(key);
@@ -234,13 +235,13 @@ public class PartialStateHelper extends HashMap<Serializable, Object> implements
                 list.remove(value);
             }
             if (list.isEmpty()) {
-                super.remove(key);
+                defaultMap.remove(key);
             }
         }
         return ret;
     }
 
-    private Object removeFromMap(Object key, String mapKey) {
+    private Object removeFromMap(Serializable key, String mapKey) {
         Object ret = null;
         if (component.initialStateMarked()) {
             Map<String,Object> dMap = (Map<String,Object>) deltaMap.get(key);
@@ -260,21 +261,13 @@ public class PartialStateHelper extends HashMap<Serializable, Object> implements
 
             }
             if (map.isEmpty()) {
-                super.remove(key);
+                defaultMap.remove(key);
             }
         }
         if (ret != null && !component.initialStateMarked()) {
             deltaMap.remove(key);
         }
         return ret;
-    }
-
-    /**TODO should this be supported?
-     *
-     * @param map
-     */
-    public void putAll(Map map) {
-        throw new UnsupportedOperationException();
     }
 
 
@@ -290,7 +283,7 @@ public class PartialStateHelper extends HashMap<Serializable, Object> implements
             return saveMap(deltaMap);
         }
         else {
-            return saveMap(this);
+            return saveMap(defaultMap);
         }
     }
 

@@ -58,6 +58,16 @@ import javax.faces.el.ValueBinding;
 
 public class UIGraphic extends UIComponentBase {
 
+    /**
+     * Properties that are tracked by state saving.
+     */
+    enum PropertyKeys {
+
+        /**
+         * <p>The local value of this {@link UIComponent}.</p>
+         */
+        value
+    }
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -257,9 +267,7 @@ public class UIGraphic extends UIComponentBase {
 
     // ----------------------------------------------------- StateHolder Methods
 
-    protected enum PropertyKeys {
-        value
-    }
+
 
 
 }

@@ -203,6 +203,49 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     private boolean defaultValidatorsProcessed;
 
+    enum PropertyKeys {
+        /**
+     * <p>The "localValueSet" state for this component.
+     */
+        localValueSet,
+
+        /**
+         * <p>If the input is required or not.</p>
+         */
+        required,
+
+        /**
+         * <p>Custom message to be displayed if input is required but non was submitted.</p>
+         */
+        requiredMessage,
+
+        /**
+         * <p>Custom message to be displayed when conversion fails.</p>
+         */
+        converterMessage,
+
+        /**
+         * <p>Custom message to be displayed when validation fails.</p>
+         */
+        validatorMessage,
+
+        /**
+         * <p>Flag indicating whether or not this component is valid.</p>
+         */
+        valid,
+
+        /**
+         * <p>Flag indicating when conversion/validation should occur.</p>
+         */
+        immediate,
+
+        /**
+         * <p>List of validators associated with this component.</p>
+         */
+        validators,
+
+    }
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -292,10 +335,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         this.setValid(true);
     }
 
-    /**
-     * <p>The "localValueSet" state for this component.
-     */
-    //private boolean localValueSet;
 
     /**
      * Return the "local value set" state for this component.
@@ -1351,19 +1390,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     // ----------------------------------------------------- StateHolder Methods
 
-    protected enum PropertyKeys {
-        localValueSet,
-        required,
-        requiredMessage,
-        converterMessage,
-        validatorMessage,
-        valid,
-        immediate,
-        validators,
-        emptyStringIsNull,
-        validateEmptyFields,
-        defaultValidatorsProcessed
-    }
+
 
     private Object[] values;
 

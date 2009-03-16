@@ -84,6 +84,13 @@ public class UIParameter extends UIComponentBase {
     public static final String COMPONENT_FAMILY = "javax.faces.Parameter";
 
 
+    enum PropertyKeys {
+        name,
+        value,
+        disble
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -97,14 +104,6 @@ public class UIParameter extends UIComponentBase {
         setRendererType(null);
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    //private String name = null;
-    //private Object value = null;
-    //private Boolean disable = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -186,12 +185,5 @@ public class UIParameter extends UIComponentBase {
 
     }
 
-    // ----------------------------------------------------- StateHolder Methods
-
-    protected enum PropertyKeys {
-        name,
-        value,
-        disble
-    }
 
 }

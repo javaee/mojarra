@@ -41,9 +41,7 @@
 package javax.faces.component;
 
 
-import javax.el.ELException;
 import javax.el.MethodExpression;
-import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
@@ -193,6 +191,24 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         LOCATION_IDENTIFIER_MAP.put("body", LOCATION_IDENTIFIER_PREFIX + "BODY");        
     }
 
+    enum PropertyKeys {
+        /**
+         * <p>The render kit identifier of the {@link javax.faces.render.RenderKit} associated
+         * wth this view.</p>
+         */
+        renderKitId,
+        /**
+         * <p>The view identifier of this view.</p>
+         */
+        viewId,
+        locale,
+        lastId,
+        beforePhase,
+        afterPhase,
+        phaseListeners,
+        viewScope  // RELEASE_PENDING
+    }
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -211,7 +227,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     // ------------------------------------------------------ Instance Variables
 
-    private int lastId = 0;
 
     /**
      * <p>Set and cleared during the lifetime of a lifecycle phase.  Has
@@ -273,13 +288,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
 
     /**
-     * <p>The render kit identifier of the {@link javax.faces.render.RenderKit} associated
-     * wth this view.</p>
-     */
-    private String renderKitId = null;
-
-
-    /**
      * <p>Return the render kit identifier of the {@link
      * javax.faces.render.RenderKit} associated with this view.  Unless
      * explicitly set, as in {@link
@@ -311,10 +319,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
 
-    /** <p>The view identifier of this view.</p> */
-    private String viewId = null;
-
-
     /** <p>Return the view identifier for this view.</p> */
     public String getViewId() {
 
@@ -336,8 +340,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     // ------------------------------------------------ Event Management Methods
 
-    //private MethodExpression beforePhase = null;
-    //private MethodExpression afterPhase = null;
 
     /**
      * <p>Return the {@link MethodExpression} that will be invoked
@@ -404,7 +406,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         getStateHelper().put(PropertyKeys.afterPhase, newAfterPhase);
     }
 
-    //private List<PhaseListener> phaseListeners = null;
 
     /**
      * <p>If the argument <code>toRemove</code> is in the list of {@link
@@ -1304,10 +1305,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
     }
 
-    /*
-    * <p>The locale for this view.</p>
-    */
-    private Locale locale = null;
 
     /**
      * <p>Return the <code>Locale</code> to be used in localizing the
@@ -1333,6 +1330,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         Object result = getStateHelper().eval(PropertyKeys.locale);
 
         if (result != null) {
+            Locale locale = null;
             if (result instanceof Locale) {
                     locale = (Locale) result;
             } else if (result instanceof String) {
@@ -1553,16 +1551,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     // ----------------------------------------------------- StateHolder Methods
 
-    protected enum PropertyKeys {
-        renderKitId,
-        viewId,
-        locale,
-        lastId,
-        beforePhase,
-        afterPhase,
-        phaseListeners,
-        viewScope  // RELEASE_PENDING
-    }
+
 
     private Object[] values;
 

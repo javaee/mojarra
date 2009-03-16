@@ -73,6 +73,12 @@ public class UIOutcomeTarget extends UIOutput {
     public static final String COMPONENT_FAMILY = "javax.faces.OutcomeTarget";
 
 
+    enum PropertyKeys {
+        includeViewParams,
+        outcome
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -85,13 +91,6 @@ public class UIOutcomeTarget extends UIOutput {
         setRendererType("javax.faces.Link");
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    //private Boolean includeViewParams;
-    //private String outcome;
 
 
     // -------------------------------------------------------------- Properties
@@ -161,12 +160,5 @@ public class UIOutcomeTarget extends UIOutput {
 
     }
 
-
-    // ----------------------------------------------------- StateHolder Methods
-
-    protected enum PropertyKeys {
-        includeViewParams,
-        outcome
-    }
 
 }

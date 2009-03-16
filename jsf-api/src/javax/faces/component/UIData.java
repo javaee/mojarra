@@ -122,9 +122,51 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>The first row number (zero-relative) to be displayed.</p>
+     * Properties that are tracked by state saving.
      */
-    //private Integer first;
+    enum PropertyKeys {
+        /**
+         * <p>The first row number (zero-relative) to be displayed.</p>
+         */
+        first,
+
+        /**
+         * <p>The zero-relative index of the current row number, or -1 for no
+         * current row association.</p>
+         */
+        rowIndex,
+
+        /**
+         * <p>The number of rows to display, or zero for all remaining rows in the
+         * table.</p>
+         */
+        rows,
+
+        /**
+         * <p>This map contains <code>SavedState</code> instances for each
+         * descendant component, keyed by the client identifier of the descendant.
+         * Because descendant client identifiers will contain the
+         * <code>rowIndex</code> value of the parent, per-row state information is
+         * actually preserved.</p>
+         */
+        saved,
+
+        /**
+         * <p>The local value of this {@link UIComponent}.</p>
+         */
+        value,
+
+        /**
+         * <p>The request scope attribute under which the data object for the
+         * current row will be exposed when iterating.</p>
+         */
+        var,
+
+        /**
+         * <p>Last id vended by {@link UIData#createUniqueId(javax.faces.context.FacesContext, String)}.</p>
+         */
+        lastId
+    }
 
 
     /**
@@ -141,44 +183,6 @@ public class UIData extends UIComponentBase
      * is complete, this value is restored to the request map.
      */
     private Object oldVar;
-
-
-    /**
-     * <p>The zero-relative index of the current row number, or -1 for no
-     * current row association.</p>
-     */
-    //private int rowIndex = -1;
-
-
-    /**
-     * <p>The number of rows to display, or zero for all remaining rows in the
-     * table.</p>
-     */
-    //private Integer rows;
-
-
-    /**
-     * <p>This map contains <code>SavedState</code> instances for each
-     * descendant component, keyed by the client identifier of the descendant.
-     * Because descendant client identifiers will contain the
-     * <code>rowIndex</code> value of the parent, per-row state information is
-     * actually preserved.</p>
-     */
-    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
-    //private Map<String, SavedState> saved = new HashMap<String, SavedState>();
-
-
-    /**
-     * <p>The local value of this {@link UIComponent}.</p>
-     */
-    //private Object value = null;
-
-
-    /**
-     * <p>The request scope attribute under which the data object for the
-     * current row will be exposed when iterating.</p>
-     */
-    //private String var = null;
 
 
     /**
@@ -214,9 +218,7 @@ public class UIData extends UIComponentBase
      * <p>This is not part of the component state.</p>
      */
     private Boolean isNested = null;
-    
-    
-    //private int lastId = 0;
+
 
     // -------------------------------------------------------------- Properties
 
@@ -527,15 +529,7 @@ public class UIData extends UIComponentBase
 
     // ----------------------------------------------------- StateHolder Methods
 
-    protected enum PropertyKeys {
-        first,
-        rowIndex,
-        rows,
-        saved,
-        value,
-        var,
-        lastId
-    }
+
 
 
     /**

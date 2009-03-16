@@ -94,7 +94,10 @@ public class UICommand extends UIComponentBase
     public static final String COMPONENT_FAMILY = "javax.faces.Command";
 
 
-    protected enum PropertyKeys {
+    /**
+     * Properties that are tracked by state saving.
+     */
+    enum PropertyKeys {
         value,
         immediate,
         methodBindingActionListener,
@@ -236,17 +239,8 @@ public class UICommand extends UIComponentBase
     }
 
 
-    //private MethodBinding methodBindingActionListener = null;
-
-
     // ---------------------------------------------------- ActionSource / ActionSource2 Methods
 
-    
-    /**
-     * <p>The {@link MethodExpression} that, when invoked, yields the
-     * literal outcome value.</p>
-     */
-    //private MethodExpression actionExpression = null;
     
     public MethodExpression getActionExpression() {
         return (MethodExpression) getStateHelper().get(PropertyKeys.actionExpression);

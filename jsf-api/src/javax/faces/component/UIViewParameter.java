@@ -37,9 +37,7 @@
 package javax.faces.component;
 
 import java.io.IOException;
-import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -92,9 +90,15 @@ public class UIViewParameter extends UIInput {
      */
     public static final String COMPONENT_FAMILY = "javax.faces.ViewParameter";
 
+
+    enum PropertyKeys {
+        name,
+        submittedValue
+    }
+
     // ------------------------------------------------------ Instance Variables
 
-    private transient Renderer inputTextRenderer = null;
+    private Renderer inputTextRenderer = null;
     
     // ------------------------------------------------------------ Constructors
 
@@ -114,8 +118,6 @@ public class UIViewParameter extends UIInput {
     // ------------------------------------------------------ Instance Variables
 
 
-    private String name;
-
     /**
      * <p>The raw value is the "implicit" binding for this view parameter. This property
      * maintains the submitted value of the view parameter for the duration of the request.
@@ -123,7 +125,7 @@ public class UIViewParameter extends UIInput {
      * request ends, this value is stored with the state of this component to use as the
      * submitted value on an ensuing postback.</p>
      */
-    private transient String rawValue;
+    private String rawValue;
 
 
     // -------------------------------------------------------------- Properties
@@ -411,14 +413,7 @@ public class UIViewParameter extends UIInput {
         return null != getValueExpression("value");
     }
 
-    // ----------------------------------------------------- StateHolder Methods
-
-    protected enum PropertyKeys {
-        name,
-        submittedValue
-    }
-
-
+    
     /**
      * <p class="changed_added_2_0">Inner class to encapsulate a
      * <code>UIViewParameter</code> instance so that it may be safely

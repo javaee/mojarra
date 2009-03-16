@@ -77,6 +77,13 @@ public class UIMessages extends UIComponentBase {
     public static final String COMPONENT_FAMILY = "javax.faces.Messages";
 
 
+    enum PropertyKeys {
+        globalOnly,
+        showDetail,
+        showSummary,
+        redisplay
+    }
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -91,14 +98,6 @@ public class UIMessages extends UIComponentBase {
 
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    //private Boolean globalOnly;
-    //private Boolean showDetail;
-    //private Boolean showSummary;
-    //private Boolean redisplay;
 
     // -------------------------------------------------------------- Properties
 
@@ -213,16 +212,5 @@ public class UIMessages extends UIComponentBase {
         getStateHelper().eval(PropertyKeys.redisplay, redisplay);
 
     }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-    protected enum PropertyKeys {
-        globalOnly,
-        showDetail,
-        showSummary,
-        redisplay
-    }
-
 
 }

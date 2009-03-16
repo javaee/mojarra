@@ -40,10 +40,6 @@
 
 package javax.faces.component;
 
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 
@@ -92,6 +88,10 @@ public class UISelectItems extends UIComponentBase {
     public static final String COMPONENT_FAMILY = "javax.faces.SelectItems";
 
 
+    enum PropertyKeys {
+        value
+    }
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -105,12 +105,6 @@ public class UISelectItems extends UIComponentBase {
         setRendererType(null);
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    private Object value = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -147,13 +141,6 @@ public class UISelectItems extends UIComponentBase {
 
         getStateHelper().put(PropertyKeys.value, value);
 
-    }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-    protected enum PropertyKeys {
-        value
     }
 
 

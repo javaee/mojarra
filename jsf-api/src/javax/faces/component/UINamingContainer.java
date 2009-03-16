@@ -81,6 +81,12 @@ public class UINamingContainer extends UIComponentBase
     public static final String SEPARATOR_CHAR_PARAM_NAME =
           "javax.faces.SEPARATOR_CHAR";
 
+
+    enum PropertyKeys {
+           lastId
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -183,10 +189,6 @@ public class UINamingContainer extends UIComponentBase
         getStateHelper().put(PropertyKeys.lastId,  ++lastId);
         return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
      }
-
-    protected enum PropertyKeys {
-        lastId
-    }
 
 }
 

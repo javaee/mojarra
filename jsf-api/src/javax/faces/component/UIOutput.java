@@ -102,6 +102,12 @@ public class UIOutput extends UIComponentBase
     public static final String COMPONENT_FAMILY = "javax.faces.Output";
 
 
+    enum PropertyKeys {
+        converter,
+        value
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -115,14 +121,6 @@ public class UIOutput extends UIComponentBase
         setRendererType("javax.faces.Text");
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    //private Converter converter = null;
-    //private Object value = null;
-
 
 
     // -------------------------------------------------------------- Properties
@@ -172,13 +170,5 @@ public class UIOutput extends UIComponentBase
 
     }
 
-
-    // ----------------------------------------------------- StateHolder Methods
-
-    protected enum PropertyKeys {
-        converter,
-        value
-    }
-
-
+    
 }

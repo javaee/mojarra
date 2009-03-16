@@ -73,6 +73,29 @@ public class UIMessage extends UIComponentBase {
     public static final String COMPONENT_FAMILY = "javax.faces.Message";
 
 
+    enum PropertyKeys {
+
+        forValue("for"),
+        showDetail,
+        showSummary,
+        redisplay;
+
+        String toString;
+
+        PropertyKeys(String toString) {
+            this.toString = toString;
+        }
+
+        PropertyKeys() {
+        }
+
+        public String toString() {
+            return ((this.toString != null) ? this.toString : super.toString());
+        }
+
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -86,17 +109,6 @@ public class UIMessage extends UIComponentBase {
         setRendererType("javax.faces.Message");
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    //private String forVal = null;
-    //private boolean showDetail = true;
-    //private boolean showDetailSet = false;
-    //private boolean showSummary = false;
-    //private boolean showSummarySet = false;
-    //private Boolean redisplay = true;
 
 
     // -------------------------------------------------------------- Properties
@@ -179,7 +191,7 @@ public class UIMessage extends UIComponentBase {
      */
     public void setShowSummary(boolean showSummary) {
 
-        getStateHelper().put(PropertyKeys.showSummary, true);
+        getStateHelper().put(PropertyKeys.showSummary, showSummary);
 
     }
 
@@ -211,30 +223,7 @@ public class UIMessage extends UIComponentBase {
      */
     public void setRedisplay(boolean redisplay) {
 
-        getStateHelper().put(PropertyKeys.redisplay, true);
-
-    }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-    protected enum PropertyKeys {
-        forValue("for"),
-        showDetail,
-        showSummary,
-        redisplay;
-
-        String toString;
-
-        PropertyKeys(String toString) {
-            this.toString = toString;
-        }
-
-        PropertyKeys() { }
-
-        public String toString() {
-            return ((this.toString != null) ? this.toString : super.toString());
-        }
+        getStateHelper().put(PropertyKeys.redisplay, redisplay);
 
     }
 

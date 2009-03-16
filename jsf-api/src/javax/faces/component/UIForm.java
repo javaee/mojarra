@@ -77,6 +77,23 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
     public static final String COMPONENT_FAMILY = "javax.faces.Form";
 
 
+    /**
+     * Properties that are tracked by state saving.
+     */
+    enum PropertyKeys {
+
+        /**
+         * <p>The prependId flag.</p>
+         */
+        prependId,
+
+        /**
+         * <p>Last id vended by {@link UIForm#createUniqueId(javax.faces.context.FacesContext, String)}.</p>
+         */
+        lastId
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -278,10 +295,6 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         return null;
     }
 
-    protected enum PropertyKeys {
-        prependId,
-        lastId
-    }
    
     /**
      * @see UIComponent#visitTree
