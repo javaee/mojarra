@@ -61,7 +61,8 @@ import java.io.Serializable;
  * should be called, for dynamically
  * created components (in Java), notifyStoreState
  * should not be called.
- * 
+ *
+ * RELEASE_PENDING (edburns,rogerk) docs
  */
 public interface PartialStateHolder extends StateHolder {
 

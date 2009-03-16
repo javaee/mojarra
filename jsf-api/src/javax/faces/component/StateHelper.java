@@ -3,7 +3,7 @@ package javax.faces.component;
 import java.io.Serializable;
 
 /**
- * Docs
+ * * RELEASE_PENDING (edburns,rogerk) docs
  *
  * @since 2.0
  */
