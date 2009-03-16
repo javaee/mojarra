@@ -76,10 +76,10 @@ import java.util.*;
  * from the javadocs</a>, for a reference.</p>
 
  * <p class="changed_added_2_0">If a reference to an
- * <code>ExternalContext</code> is obtained during application startup
+ * <code>ExternalContext</code> is obtained during application startup or shutdown
  * time, any method documented as "valid to call this method during
- * application startup" must be supported during application startup
- * time.  The result of calling a method during application startup time
+ * application startup or shutdown" must be supported during application startup or shutdown
+ * time.  The result of calling a method during application startup or shutdown time
  * that does not have this designation is undefined.</p>
 
 
@@ -338,7 +338,7 @@ public abstract class ExternalContext {
      * rethrown.  The exception may be logged.</p>
 
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called at startup time, this
+     * during application startup or shutdown.  If called at startup or shutdown time, this
      * method returns a <code>Map</code> that is backed by the same
      * container context instance (<code>ServletContext</code> or
      * <code>PortletContext</code>) as the one returned by calling
@@ -397,8 +397,8 @@ public abstract class ExternalContext {
      * known.  The MIME type is determined by the container.</p>
 
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this method calls through to the
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this method calls through to the
      * <code>getMimeType()</code> method on the same container
      * context instance (<code>ServletContext</code> or
      * <code>PortletContext</code>) as the one used when calling
@@ -436,8 +436,8 @@ public abstract class ExternalContext {
      * appication.</p>
 
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this returns the same container context instance
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this returns the same container context instance
      * (<code>ServletContext</code> or <code>PortletContext</code>) as
      * the one returned when calling <code>getContext()</code> on the
      * <code>ExternalContext</code> returned by the
@@ -458,7 +458,7 @@ public abstract class ExternalContext {
      * <p class="changed_added_2_0">Return the result of calling
      * <code>getServletContextName()</code> on the
      * <code>ServletContext</code> instance for this application.  It is
-     * valid to call this method during application startup.</p>
+     * valid to call this method during application startup or shutdown.</p>
      *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided for
@@ -490,8 +490,8 @@ public abstract class ExternalContext {
      * <code>getInitParameter(name)</code>.</p>
      *
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this method calls through to the actual container
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this method calls through to the actual container
      * context to return the init parameter value.</p>
 
      * @param name Name of the requested initialization parameter
@@ -512,8 +512,8 @@ public abstract class ExternalContext {
      * <code>java.util.Map</code>.</p>
      *
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this method returns a <code>Map</code> that is backed by
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this method returns a <code>Map</code> that is backed by
      * the same container context instance (<code>ServletContext</code>
      * or <code>PortletContext</code>) as the one returned by calling
      * <code>getInitParameterMap()</code> on the
@@ -1057,8 +1057,8 @@ public abstract class ExternalContext {
      * <code>null</code>.</p>
      *
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this method calls through to the
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this method calls through to the
      * <code>getResource()</code> method on the same container
      * context instance (<code>ServletContext</code> or
      * <code>PortletContext</code>) as the one used when calling
@@ -1088,8 +1088,8 @@ public abstract class ExternalContext {
      * <code>null</code>.</p>
 
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this method calls through to the
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this method calls through to the
      * <code>getResourceAsStream()</code> method on the same container
      * context instance (<code>ServletContext</code> or
      * <code>PortletContext</code>) as the one used when calling
@@ -1116,8 +1116,8 @@ public abstract class ExternalContext {
      * whose resource path starts with the specified argument.</p>
      *
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this method calls through to the
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this method calls through to the
      * <code>getResourcePaths()</code> method on the same container
      * context instance (<code>ServletContext</code> or
      * <code>PortletContext</code>) as the one used when calling
@@ -1416,8 +1416,8 @@ public abstract class ExternalContext {
      * message to the application object.</p>
      *
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this calls the <code>log()</code> method on the same
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this calls the <code>log()</code> method on the same
      * container context instance (<code>ServletContext</code> or
      * <code>PortletContext</code>) as the one used during a call to
      * <code>log()</code> on the <code>ExternalContext</code> returned
@@ -1441,8 +1441,8 @@ public abstract class ExternalContext {
      * message and exception to the application object.</p>
 
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this calls the <code>log()</code> method on the same
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this calls the <code>log()</code> method on the same
      * container context instance (<code>ServletContext</code> or
      * <code>PortletContext</code>) as the one used when calling
      * <code>log()</code> on the <code>ExternalContext</code> returned

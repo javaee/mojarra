@@ -90,8 +90,8 @@ public abstract class FacesContext {
      * Application} instance associated with this web application.</p>
 
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, returns the correct current {@link
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, returns the correct current {@link
      * javax.faces.application.Application} instance.</p>
 
      * @throws IllegalStateException if this method is called after
@@ -273,11 +273,11 @@ public abstract class FacesContext {
      * instance.</p>
 
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this method returns an {@link ExternalContext} instance
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this method returns an {@link ExternalContext} instance
      * with the special behaviors indicated in the javadoc for that
      * class.  Methods document as being valid to call during
-     * application startup must be supported.</p>
+     * application startup or shutdown must be supported.</p>
 
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
@@ -499,8 +499,8 @@ public abstract class FacesContext {
      * component that is associated with the this request.  </p>
 
      * <p class="changed_added_2_0">It is valid to call this method
-     * during application startup.  If called during application
-     * startup, this method returns a new <code>UIViewRoot</code> with
+     * during application startup or shutdown.  If called during application
+     * startup or shutdown, this method returns a new <code>UIViewRoot</code> with
      * its locale set to <code>Locale.getDefault()</code>.</p>
 
      *
@@ -733,11 +733,12 @@ public abstract class FacesContext {
     /**
      * <p class="changed_modified_2_0">Return the {@link FacesContext}
      * instance for the request that is being processed by the current
-     * thread.  If called during application initialization, any method
-     * documented as "valid to call this method during application
-     * startup" must be supported during application startup time.  The
-     * result of calling a method during application startup time that
-     * does not have this designation is undefined.</p> 
+     * thread.  If called during application initialization or shutdown,
+     * any method documented as "valid to call this method during
+     * application startup or shutdown" must be supported during
+     * application startup or shutdown time.  The result of calling a
+     * method during application startup or shutdown time that does not
+     * have this designation is undefined.</p>
      */
     public static FacesContext getCurrentInstance() {
 
