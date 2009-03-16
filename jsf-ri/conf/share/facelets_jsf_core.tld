@@ -124,6 +124,23 @@
 
     </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
+
+
 
  </tag>
 
@@ -263,6 +280,21 @@
             </deferred-value>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
 
     <tag>
@@ -424,6 +456,22 @@
             </deferred-value>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
+
     </tag>
 
     <tag>
@@ -457,6 +505,49 @@
             </deferred-value>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
+    </tag>
+
+    <tag>
+        <description><![CDATA[
+
+<p class="changed_added_2_0">RELEASE_PENDING: documentation</p>
+
+
+        ]]></description>
+        <name>ajax</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.AjaxTag</tag-class>
+        <body-content>empty</body-content>
+
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
 
     <tag>
@@ -992,6 +1083,22 @@ they do, it must be done as shown above, (or with
             </deferred-value>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
+
     </tag>
 
   <tag>
@@ -1422,6 +1529,21 @@ will not pass validation.</p> ]]>
             <deferred-value/>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
 
 
@@ -1529,6 +1651,21 @@ will not pass validation.</p> ]]>
             </deferred-value>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
 
 
@@ -1587,6 +1724,21 @@ will not pass validation.</p> ]]>
             </deferred-value>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
 
 
@@ -1645,6 +1797,21 @@ will not pass validation.</p> ]]>
             </deferred-value>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
 
     <tag>
@@ -1696,6 +1863,21 @@ will not pass validation.</p> ]]>
                 <type>javax.faces.validator.BeanValidator</type>
             </deferred-value>
         </attribute>
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
     
     <tag>
@@ -1747,6 +1929,21 @@ will not pass validation.</p> ]]>
                 <type>javax.faces.validator.RegexValidator</type>
             </deferred-value>
         </attribute>
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
 
     <tag>
@@ -1786,6 +1983,21 @@ will not pass validation.</p> ]]>
             </deferred-value>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
 
     <tag>
@@ -1850,6 +2062,21 @@ will not pass validation.</p> ]]>
             </deferred-value>
         </attribute>
 
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
     </tag>
 
 

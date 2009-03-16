@@ -159,6 +159,18 @@ a[href^="composite"] { cursor: url(changed_added_2_0_cursor.png), pointer;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:green }
 
+a[href^="f/ajax.html"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="ajax"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
 a[href^="ui"] { cursor: url(changed_added_2_0_cursor.png), pointer;
                  background: url(changed_added_2_0.png); 
                  padding-left:0.2em; border-left:solid;

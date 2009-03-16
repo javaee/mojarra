@@ -44,6 +44,47 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
  * <p class="changed_added_2_0">Public base class for markup element
  * instances that map to {@link UIComponent} instances in the view.</p>
  *
+ * <div class="changed_added_2_0">
+ *
+ * <p>The implementation must guarantee that the <code>apply()</code>
+ * method is overridden and takes the following actions, in this order.
+ * These actions must only happen the first time this facelet is applied
+ * for each user.  Subsequent applications must take no action.</p>
+
+ * <ol>
+
+ * 	  <li><p>The <code>UIComponent</code> represented by this
+ * 	  element is created with the appropriate
+ * 	  <code>Application.createComponent()</code> method.  </p></li>
+
+	  <li><p>The rendererType property of the component is set properly.
+	  </p></li>
+
+	  <li><p>{@link #onComponentCreated} is called.
+	  </p></li>
+
+	  <li><p>{@link UIComponent#pushComponentToEL} is called on the
+	  newly created component.</p></li>
+
+	  <li><p>The next handler in the facelet chain is applied.  This
+	  will cause the component to be populated with children.
+	  </p></li>
+
+	  <li><p>{@link UIComponent#processEvent} is called, passing an
+	  instance of {@link javax.faces.event.InitialStateEvent}.
+	  </p></li>
+
+	  <li><p>The component is added to its parent in the view.
+	  </p></li>
+
+	  <li><p>{@link UIComponent#popComponentFromEL} is called on the
+	  newly created component.</p></li>
+
+
+ * </ol>
+ *
+ * </div>
+ *
  * @since 2.0
  */
 public class ComponentHandler extends DelegatingMetaTagHandler {
