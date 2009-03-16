@@ -49,7 +49,7 @@ import java.lang.annotation.Target;
 /**
  * <p class="changed_added_2_0">The presence of this annotation on a
  * class automatically registers the class with the runtime as a {@link
- * BehaviorRenderer}.  The value of the {@link #renderKitId} attribute is taken
+ * ClientBehaviorRenderer}.  The value of the {@link #renderKitId} attribute is taken
  * to be the <em>render-kit-id</em> to which an instance of this
  * <code>Renderer</code> is to be added.  There must be a public
  * zero-argument constructor on any class where this annotation appears.
@@ -81,7 +81,7 @@ import java.lang.annotation.Target;
 
           <li><p>Call {@link RenderKit#addClientBehaviorRenderer} on
           <em>renderKit</em>, passing <em>type</em> as the
-          first argument, and a {@link BehaviorRenderer} instance as
+          first argument, and a {@link ClientBehaviorRenderer} instance as
           the second argument.</p></li>
 
  * </ul>

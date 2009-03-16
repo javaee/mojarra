@@ -115,8 +115,6 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * the client callback function that should be run in the event of
      * an error.
      *
-     * @param context the {@link FacesContext} for the current request
-     *
      * @since 2.0
      */
     public String getOnerror() {
@@ -180,8 +178,6 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * <p>Note that the returned collection may be unmodifiable.  Modifications
      * should be performed by calling {@link #setExecute}.</p>
      *
-     * @param context the {@link FacesContext} for the current request
-     *
      * @since 2.0
      */
     public Collection<String> getExecute() {
@@ -215,8 +211,6 @@ public class AjaxBehavior extends ClientBehaviorBase {
      * processing lifecycle.</p>
      * <p>Note that the returned collection may be unmodifiable.  Modifications
      * should be performed by calling {@link #setRender}.</p>
-     *
-     * @param context the {@link FacesContext} for the current request
      *
      * @since 2.0
      */

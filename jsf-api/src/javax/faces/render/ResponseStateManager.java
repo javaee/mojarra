@@ -190,7 +190,7 @@ public abstract class ResponseStateManager {
      * <code>Object</code> array with the first element being the return
      * from calling {@link SerializedView#getStructure}, and the second
      * being the return from {@link SerializedView#getState}.  It then
-     * passes this <code>Object</code> array to {@link writeState}.
+     * passes this <code>Object</code> array to {@link #writeState}.
      * 
      * @param context The {@link FacesContext} instance for the current request
      * @param state The serialized state information previously saved

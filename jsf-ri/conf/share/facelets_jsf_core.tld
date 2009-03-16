@@ -525,29 +525,140 @@
     <tag>
         <description><![CDATA[
 
-<p class="changed_added_2_0">RELEASE_PENDING: documentation</p>
-
+        <p class="changed_added_2_0">Register an AjaxBehavior instance on one or more
+        UIComponents implementing the ClientBehaviorHolder interface.  This tag
+        may be nested witin a single component (enabling Ajax for a single component),
+        or it may be "wrapped" around multiple components (enabling Ajax for many components).</p>
 
         ]]></description>
         <name>ajax</name>
-        <tag-class>com.sun.faces.taglib.jsf_core.AjaxTag</tag-class>
         <body-content>empty</body-content>
+
+     <attribute>
+         <description><![CDATA[
+             <p class="changed_added_2_0">A value of "true" indicates the 
+             AjaxBehavior should not be rendered.  A value of "false" indicates 
+             the AjaxBehavior should be rendered.  "false" is the default.</p>
+
+         ]]></description>
+         <name>disabled</name>
+         <required>false</required>
+         <deferred-value>
+             <type>java.lang.Boolean</type>
+         </deferred-value>
+
+     </attribute>
+
+     <attribute>
+         <description><![CDATA[
+             <p class="changed_added_2_0">A String identifying the type of event 
+             the Ajax action will apply to. If specified, it must be one of the 
+             events supported by the component the Ajax behavior is being applied to. 
+             For HTML components this would be the set of supported DOM events for the
+             component, plus "action" for Faces ActionSource components and "valueChange"
+             for Faces EditableValueHolder components.  If not specified, the default 
+             event is determined for the component.</p>
+
+         ]]></description>
+         <name>event</name>
+         <required>false</required>
+         <deferred-value>
+             <type>java.lang.String</type>
+         </deferred-value>
+
+     </attribute>
+
+     <attribute>
+         <description><![CDATA[
+             <p class="changed_added_2_0">Evaluates to Collection<String>. Identifiers of 
+             components that will participate in the "execute" portion of the Request 
+             Processing Lifecycle.  If a literal is specified the identifiers must be space 
+             delimited.  Any of the keywords "@this", "@form", "@all", "@none" may be specified
+             in the identifier list.</p>
+
+         ]]></description>
+         <name>execute</name>
+         <required>false</required>
+         <deferred-value>
+             <type>java.lang.Object</type>
+         </deferred-value>
+
+     </attribute>
 
     <attribute>
       <description><![CDATA[
-
-        <p class="changed_added_2_0">If present, this attribute refers
-        to the value of one of the exposed attached objects within the
-        composite component inside of which this tag is nested.</p>
+        <p class="changed_added_2_0">If "true" behavior events generated from this behavior 
+        are broadcast during Apply Request Values phase. Otherwise, the events will be 
+        broadcast during Invoke Aplications phase</p>
 
       ]]></description>
-      <name>for</name>
+      <name>immediate</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.Boolean</type>
+      </deferred-value>
+
+    </attribute>
+
+     <attribute>
+         <description><![CDATA[
+             <p class="changed_added_2_0">Method expression referencing a method 
+             that will be called when an AjaxBehaviorEvent has been 
+             broadcast for the listener.</p>
+
+         ]]></description>
+         <name>listener</name>
+         <required>false</required>
+         <rtexprvalue>false</rtexprvalue>
+         <deferred-method>
+             <method-signature>public void processAjaxBehavior(javax.faces.event.AjaxBehaviorEvent event) throws javax.faces.event.AbortProcessingException</method-signature>
+         </deferred-method>
+
+    </attribute>
+
+    <attribute>
+      <description><![CDATA[
+        <p class="changed_added_2_0">The name of the JavaScript function that will handle UI events.</p>
+
+      ]]></description>
+      <name>onevent</name>
       <required>false</required>
       <deferred-value>
           <type>java.lang.String</type>
-      </deferred-value>         
+      </deferred-value>
 
     </attribute>
+
+    <attribute>
+      <description><![CDATA[
+        <p class="changed_added_2_0">The name of the JavaScript function that will handle errors.</p>
+
+      ]]></description>
+      <name>oneerror</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>
+
+    </attribute>
+
+     <attribute>
+         <description><![CDATA[
+             <p class="changed_added_2_0">Evaluates to Collection<String>. Identifiers of
+             components that will participate in the "render" portion of the Request
+             Processing Lifecycle.  If a literal is specified the identifiers must be space
+             delimited.  Any of the keywords "@this", "@form", "@all", "@none" may be specified
+             in the identifier list.</p>
+
+         ]]></description>
+         <name>render</name>
+         <required>false</required>
+         <deferred-value>
+             <type>java.lang.Object</type>
+         </deferred-value>
+
+     </attribute>
+
     </tag>
 
     <tag>

@@ -156,7 +156,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#String} on the
+     * is to call {@link Application#getDefaultValidatorInfo} on the
      * wrapped {@link Application} object.</p>
      *
      * @since 2.0
@@ -366,7 +366,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#String} on the
+     * is to call {@link Application#getComponentTypes} on the
      * wrapped {@link Application} object.</p>
      *
      * @since 2.0
@@ -426,7 +426,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#String} on the
+     * is to call {@link Application#getConverterIds} on the
      * wrapped {@link Application} object.</p>
      *
      * @since 2.0
@@ -438,7 +438,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#Class} on the
+     * is to call {@link Application#getConverterTypes} on the
      * wrapped {@link Application} object.</p>
      *
      * @since 2.0
@@ -463,7 +463,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#Locale} on the
+     * is to call {@link Application#getSupportedLocales} on the
      * wrapped {@link Application} object.</p>
      *
      * @since 2.0
@@ -511,7 +511,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#String} on the
+     * is to call {@link Application#getBehaviorIds} on the
      * wrapped {@link Application} object.</p>
      *
      * @since 2.0
@@ -547,7 +547,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#String} on the
+     * is to call {@link Application#getValidatorIds} on the
      * wrapped {@link Application} object.</p>
      *
      * @since 2.0
@@ -713,7 +713,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application# T} on the
+     * is to call {@link Application#evaluateExpressionGet} on the
      * wrapped {@link Application} object.</p>
      *
      * @since 2.0
@@ -752,7 +752,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#] getELContextListeners} on the
+     * is to call {@link Application#getELContextListeners} on the
      * wrapped {@link Application} object.</p>
      *
      * @since 2.0
