@@ -39,7 +39,7 @@ package javax.faces.component.behavior;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.component.StateHolder;
+import javax.faces.component.PartialStateHolder;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -55,7 +55,7 @@ import javax.faces.event.BehaviorListener;
  *
  * @since 2.0
  */
-public class BehaviorBase implements Behavior, StateHolder {
+public class BehaviorBase implements Behavior, PartialStateHolder {
 	
  /**
      * <p>Our {@link javax.faces.event.BehaviorListener}s.  This data
@@ -65,6 +65,9 @@ public class BehaviorBase implements Behavior, StateHolder {
 
     // Flag indicating a desire to not participate in state saving.
     private boolean transientFlag = false;
+
+    // Flag indicating that initial state has been marked.
+    private boolean initialState = false;
 
     /**
      * <p class="changed_added_2_0">Default implementation of 
@@ -120,6 +123,12 @@ public class BehaviorBase implements Behavior, StateHolder {
      */
     public Object saveState(FacesContext context) {
 
+        // If initial state has been marked, we don't need to
+        // save any state.
+        if (initialStateMarked()) {
+            return null;
+        }
+
         // At the moment, the only state we need to save is our listeners
         return UIComponentBase.saveAttachedState(context, listeners);
     }
@@ -131,8 +140,40 @@ public class BehaviorBase implements Behavior, StateHolder {
     @SuppressWarnings("unchecked")
     public void restoreState(FacesContext context, Object state) {
 
-        // Unchecked cast from Object to List<BehaviorListener>
-        listeners = (List<BehaviorListener>)UIComponentBase.restoreAttachedState(context, state);
+        if (state != null) {
+
+            // Unchecked cast from Object to List<BehaviorListener>
+            listeners = (List<BehaviorListener>)UIComponentBase.restoreAttachedState(context, state);
+
+            // If we saved state last time, save state again next time.
+            clearInitialState();
+        }
+    }
+
+  
+    /**
+     * <p class="changed_added_2_0">Implementation of
+     * {@link javax.faces.component.PartialStateHolder#markInitialState}.
+     */
+    public void markInitialState() {
+        // temporary 'fix' until we can correct behavior save/restore
+        initialState = false;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Implementation of
+     * {@link javax.faces.component.PartialStateHolder#initialStateMarked}.
+     */
+    public boolean initialStateMarked() {
+        return initialState;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Clears the initial state flag, causing
+     * the behavior to revert from partial to full state saving.</p>
+     */
+    protected void clearInitialState() {
+        initialState = false;
     }
 
     /**
@@ -180,6 +221,7 @@ public class BehaviorBase implements Behavior, StateHolder {
         }
         listeners.add(listener);
 
+        clearInitialState();
     }
 
     /**
@@ -203,5 +245,7 @@ public class BehaviorBase implements Behavior, StateHolder {
             return;
         }
         listeners.remove(listener);
+
+        clearInitialState();
     }
 }

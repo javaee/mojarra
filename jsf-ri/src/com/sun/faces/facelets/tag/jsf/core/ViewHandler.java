@@ -145,6 +145,8 @@ public final class ViewHandler extends TagHandlerImpl {
                 root.setAfterPhaseListener(m);
             }
         }
+
+        root.markInitialState();
         this.nextHandler.apply(ctx, parent);
     }
 

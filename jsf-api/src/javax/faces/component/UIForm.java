@@ -42,9 +42,6 @@ package javax.faces.component;
 
 import java.util.Collection;
 import java.util.Iterator;
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
@@ -62,7 +59,7 @@ import javax.faces.context.FacesContext;
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIForm extends UIComponentBase implements NamingContainer {
+public class UIForm extends UIComponentBase implements NamingContainer, UniqueIdVendor {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -78,6 +75,23 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * <p>The standard component family for this component.</p>
      */
     public static final String COMPONENT_FAMILY = "javax.faces.Form";
+
+
+    /**
+     * Properties that are tracked by state saving.
+     */
+    enum PropertyKeys {
+
+        /**
+         * <p>The prependId flag.</p>
+         */
+        prependId,
+
+        /**
+         * <p>Last id vended by {@link UIForm#createUniqueId(javax.faces.context.FacesContext, String)}.</p>
+         */
+        lastId
+    }
 
 
     // ------------------------------------------------------------ Constructors
@@ -97,6 +111,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
     // ------------------------------------------------------ Instance Variables
 
+    //private int lastId = 0;
 
     // -------------------------------------------------------------- Properties
 
@@ -150,32 +165,19 @@ public class UIForm extends UIComponentBase implements NamingContainer {
     /**
      * <p>The prependId flag.</p>
      */
-    private Boolean prependId;
+    //private Boolean prependId;
 
 
     public boolean isPrependId() {
 
-        if (this.prependId != null) {
-            return (this.prependId);
-        }
-        ValueExpression ve = getValueExpression("prependId");
-        if (ve != null) {
-            try {
-                return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return (true);
-        }
+        return (Boolean) getStateHelper().eval(PropertyKeys.prependId, true);
 
     }
 
 
     public void setPrependId(boolean prependId) {
 
-        this.prependId = prependId;
+        getStateHelper().put(PropertyKeys.prependId, prependId);
 
     }
 
@@ -265,7 +267,13 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
     }
 
-
+    public String createUniqueId(FacesContext context, String seed) {
+        Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
+        int lastId = ((i != null) ? i : 0);
+        getStateHelper().put(PropertyKeys.lastId,  ++lastId);
+        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
+    }
+    
     /**
      * <p>Override the {@link UIComponent#getContainerClientId} to allow
      * users to disable this form from prepending its <code>clientId</code> to
@@ -287,30 +295,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
         return null;
     }
 
-    private Object[] values;
-
-    @Override
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-            values = new Object[2];
-        }
-        values[0] = super.saveState(context);
-        values[1] = prependId;
-
-        return values;
-
-    }
-
-    @Override
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        prependId = (Boolean) values[1];
-
-    }
-
+   
     /**
      * @see UIComponent#visitTree
      */

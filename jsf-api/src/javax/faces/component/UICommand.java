@@ -40,18 +40,11 @@
 
 package javax.faces.component;
 
-import javax.el.ELException;
 import javax.el.MethodExpression;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.PhaseId;
+import javax.faces.event.*;
 import javax.faces.render.Renderer;
 
 
@@ -101,6 +94,17 @@ public class UICommand extends UIComponentBase
     public static final String COMPONENT_FAMILY = "javax.faces.Command";
 
 
+    /**
+     * Properties that are tracked by state saving.
+     */
+    enum PropertyKeys {
+        value,
+        immediate,
+        methodBindingActionListener,
+        actionExpression,
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -114,12 +118,6 @@ public class UICommand extends UIComponentBase
         setRendererType("javax.faces.Button");
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    private Object value = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -137,41 +135,41 @@ public class UICommand extends UIComponentBase
 
     /**
      * {@inheritDoc}
+     *
      * @deprecated This has been replaced by {@link #getActionExpression}.
      */
     public MethodBinding getAction() {
-	MethodBinding result = null;
-	MethodExpression me;
+        MethodBinding result = null;
+        MethodExpression me;
 
-	if (null != (me = getActionExpression())) {
-	    // if the MethodExpression is an instance of our private
-	    // wrapper class.
-	    if (me.getClass().equals(MethodExpressionMethodBindingAdapter.class)) {
-		result = ((MethodExpressionMethodBindingAdapter)me).getWrapped();
-	    }
-	    else {
-		// otherwise, this is a real MethodExpression.  Wrap it
-		// in a MethodBinding.
-		result = new MethodBindingMethodExpressionAdapter(me);
-	    }
-	}
-	return result;
-	    
+        if (null != (me = getActionExpression())) {
+            // if the MethodExpression is an instance of our private
+            // wrapper class.
+            if (me.getClass().equals(MethodExpressionMethodBindingAdapter.class)) {
+                result = ((MethodExpressionMethodBindingAdapter) me).getWrapped();
+            } else {
+                // otherwise, this is a real MethodExpression.  Wrap it
+                // in a MethodBinding.
+                result = new MethodBindingMethodExpressionAdapter(me);
+            }
+        }
+        return result;
+
     }
 
     /**
      * {@inheritDoc}
+     *
      * @deprecated This has been replaced by {@link #setActionExpression(javax.el.MethodExpression)}.
      */
     public void setAction(MethodBinding action) {
-	MethodExpressionMethodBindingAdapter adapter;
-	if (null != action) {
-	    adapter = new MethodExpressionMethodBindingAdapter(action);
-	    setActionExpression(adapter);
-	}
-	else {
-	    setActionExpression(null);
-	}
+        MethodExpressionMethodBindingAdapter adapter;
+        if (null != action) {
+            adapter = new MethodExpressionMethodBindingAdapter(action);
+            setActionExpression(adapter);
+        } else {
+            setActionExpression(null);
+        }
     }
     
     /**
@@ -179,7 +177,7 @@ public class UICommand extends UIComponentBase
      * @deprecated Use {@link #getActionListeners} instead.
      */
     public MethodBinding getActionListener() {
-        return this.methodBindingActionListener;
+        return (MethodBinding) getStateHelper().get(PropertyKeys.methodBindingActionListener);
     }
 
     /**
@@ -187,38 +185,25 @@ public class UICommand extends UIComponentBase
      * @deprecated This has been replaced by {@link #addActionListener(javax.faces.event.ActionListener)}.
      */
     public void setActionListener(MethodBinding actionListener) {
-        this.methodBindingActionListener = actionListener;
+        getStateHelper().put(PropertyKeys.methodBindingActionListener, actionListener);
     } 
 
     /**
      * <p>The immediate flag.</p>
      */
-    private Boolean immediate;
+    //private Boolean immediate;
 
 
     public boolean isImmediate() {
 
-	if (this.immediate != null) {
-	    return (this.immediate);
-	}
-	ValueExpression ve = getValueExpression("immediate");
-	if (ve != null) {
-	    try {
-		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (false);
-	}
+        return (Boolean) getStateHelper().eval(PropertyKeys.immediate, false);
 
     }
 
 
     public void setImmediate(boolean immediate) {
 
-        this.immediate = immediate;
+        getStateHelper().put(PropertyKeys.immediate, immediate);
 
     }
 
@@ -230,21 +215,7 @@ public class UICommand extends UIComponentBase
      */
     public Object getValue() {
 
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueExpression ve = getValueExpression("value");
-	if (ve != null) {
-	    try {
-		return (ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-
-	} else {
-	    return (null);
-	}
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
@@ -257,28 +228,20 @@ public class UICommand extends UIComponentBase
      */
     public void setValue(Object value) {
 
-        this.value = value;
+        getStateHelper().put(PropertyKeys.value, value);
 
     }
-    
-    private MethodBinding methodBindingActionListener = null;
 
 
     // ---------------------------------------------------- ActionSource / ActionSource2 Methods
 
     
-    /**
-     * <p>The {@link MethodExpression} that, when invoked, yields the
-     * literal outcome value.</p>
-     */
-    private MethodExpression actionExpression = null;
-    
     public MethodExpression getActionExpression() {
-        return actionExpression;
+        return (MethodExpression) getStateHelper().get(PropertyKeys.actionExpression);
     }
     
     public void setActionExpression(MethodExpression actionExpression) {
-        this.actionExpression = actionExpression;    
+        getStateHelper().put(PropertyKeys.actionExpression, actionExpression);
     }
     
     /** 
@@ -293,7 +256,7 @@ public class UICommand extends UIComponentBase
     public ActionListener[] getActionListeners() {
 
         ActionListener al[] = (ActionListener [])
-	    getFacesListeners(ActionListener.class);
+        getFacesListeners(ActionListener.class);
         return (al);
 
     }
@@ -307,41 +270,6 @@ public class UICommand extends UIComponentBase
 
         removeFacesListener(listener);
 
-    }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    private Object[] values;
-
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[5];
-        }
-      
-        values[0] = super.saveState(context);
-        values[1] = saveAttachedState(context, methodBindingActionListener);
-        values[2] = saveAttachedState(context, actionExpression);
-        values[3] = immediate;
-        values[4] = value;
-        
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        methodBindingActionListener = (MethodBinding)
-            restoreAttachedState(context, values[1]);
-        actionExpression = 
-	    (MethodExpression) restoreAttachedState(context, values[2]);
-        immediate = (Boolean) values[3];
-        value = values[4];
-        
     }
 
 

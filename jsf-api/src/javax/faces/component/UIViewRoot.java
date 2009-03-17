@@ -41,9 +41,7 @@
 package javax.faces.component;
 
 
-import javax.el.ELException;
 import javax.el.MethodExpression;
-import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
@@ -150,7 +148,7 @@ import javax.faces.webapp.pdl.ViewMetadata;
  * </ul>
  */
 
-public class UIViewRoot extends UIComponentBase {
+public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -193,6 +191,24 @@ public class UIViewRoot extends UIComponentBase {
         LOCATION_IDENTIFIER_MAP.put("body", LOCATION_IDENTIFIER_PREFIX + "BODY");        
     }
 
+    enum PropertyKeys {
+        /**
+         * <p>The render kit identifier of the {@link javax.faces.render.RenderKit} associated
+         * wth this view.</p>
+         */
+        renderKitId,
+        /**
+         * <p>The view identifier of this view.</p>
+         */
+        viewId,
+        locale,
+        lastId,
+        beforePhase,
+        afterPhase,
+        phaseListeners,
+        viewScope  // RELEASE_PENDING
+    }
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -205,12 +221,12 @@ public class UIViewRoot extends UIComponentBase {
 
         super();
         setRendererType(null);
+        setId(createUniqueId());
 
     }
 
     // ------------------------------------------------------ Instance Variables
 
-    private int lastId = 0;
 
     /**
      * <p>Set and cleared during the lifetime of a lifecycle phase.  Has
@@ -272,13 +288,6 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * <p>The render kit identifier of the {@link javax.faces.render.RenderKit} associated
-     * wth this view.</p>
-     */
-    private String renderKitId = null;
-
-
-    /**
      * <p>Return the render kit identifier of the {@link
      * javax.faces.render.RenderKit} associated with this view.  Unless
      * explicitly set, as in {@link
@@ -287,30 +296,8 @@ public class UIViewRoot extends UIComponentBase {
      */
     public String getRenderKitId() {
 
-        String result;
-        if (null != renderKitId) {
-            result = this.renderKitId;
-        } else {
-            ValueExpression vb = getValueExpression("renderKitId");
-            FacesContext context = getFacesContext();
-            if (vb != null) {
-                try {
-                    result = (String) vb.getValue(context.getELContext());
-                }
-                catch (ELException e) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                   "severe.component.unable_to_process_expression",
-                                   new Object[]{vb.getExpressionString(),
-                                                "renderKitId"});
-                    }
-                    result = null;
-                }
-            } else {
-                result = null;
-            }
-        }
-        return result;
+        return (String) getStateHelper().eval(PropertyKeys.renderKitId);
+
     }
 
 
@@ -327,19 +314,15 @@ public class UIViewRoot extends UIComponentBase {
      */
     public void setRenderKitId(String renderKitId) {
 
-        this.renderKitId = renderKitId;
+        getStateHelper().put(PropertyKeys.renderKitId, renderKitId);
 
     }
-
-
-    /** <p>The view identifier of this view.</p> */
-    private String viewId = null;
 
 
     /** <p>Return the view identifier for this view.</p> */
     public String getViewId() {
 
-        return (this.viewId);
+        return (String) getStateHelper().get(PropertyKeys.viewId);
 
     }
 
@@ -351,14 +334,12 @@ public class UIViewRoot extends UIComponentBase {
      */
     public void setViewId(String viewId) {
 
-        this.viewId = viewId;
+        getStateHelper().put(PropertyKeys.viewId, viewId);
 
     }
 
     // ------------------------------------------------ Event Management Methods
 
-    private MethodExpression beforePhase = null;
-    private MethodExpression afterPhase = null;
 
     /**
      * <p>Return the {@link MethodExpression} that will be invoked
@@ -369,7 +350,8 @@ public class UIViewRoot extends UIComponentBase {
      * @since 1.2
      */
     public MethodExpression getBeforePhaseListener() {
-        return beforePhase;
+
+        return (MethodExpression) getStateHelper().get(PropertyKeys.beforePhase);
     }
 
     /**
@@ -388,7 +370,7 @@ public class UIViewRoot extends UIComponentBase {
      * @since 1.2
      */
     public void setBeforePhaseListener(MethodExpression newBeforePhase) {
-        beforePhase = newBeforePhase;
+        getStateHelper().put(PropertyKeys.beforePhase, newBeforePhase);
     }
 
     /**
@@ -401,7 +383,7 @@ public class UIViewRoot extends UIComponentBase {
      * @since 1.2
      */
     public MethodExpression getAfterPhaseListener() {
-        return afterPhase;
+        return (MethodExpression) getStateHelper().get(PropertyKeys.afterPhase);
     }
 
     /**
@@ -421,10 +403,9 @@ public class UIViewRoot extends UIComponentBase {
      * @since 1.2
      */
     public void setAfterPhaseListener(MethodExpression newAfterPhase) {
-        afterPhase = newAfterPhase;
+        getStateHelper().put(PropertyKeys.afterPhase, newAfterPhase);
     }
 
-    private List<PhaseListener> phaseListeners = null;
 
     /**
      * <p>If the argument <code>toRemove</code> is in the list of {@link
@@ -434,9 +415,8 @@ public class UIViewRoot extends UIComponentBase {
      * @since 1.2
      */
     public void removePhaseListener(PhaseListener toRemove) {
-        if (null != phaseListeners) {
-            phaseListeners.remove(toRemove);
-        }
+
+        getStateHelper().remove(PropertyKeys.phaseListeners, toRemove);
     }
 
     /**
@@ -448,11 +428,9 @@ public class UIViewRoot extends UIComponentBase {
      * @since 1.2
      */
     public void addPhaseListener(PhaseListener newPhaseListener) {
-        if (null == phaseListeners) {
-            //noinspection CollectionWithoutInitialCapacity
-            phaseListeners = new ArrayList<PhaseListener>();
-        }
-        phaseListeners.add(newPhaseListener);
+
+        getStateHelper().add(PropertyKeys.phaseListeners, newPhaseListener);
+
     }
 
     
@@ -466,15 +444,12 @@ public class UIViewRoot extends UIComponentBase {
      */
     public List<PhaseListener> getPhaseListeners() {
 
-        List<PhaseListener> result;
+        List<PhaseListener> result = (List<PhaseListener>)
+              getStateHelper().get(PropertyKeys.phaseListeners);
 
-        if (null == phaseListeners) {
-            result = Collections.unmodifiableList(Collections.<PhaseListener>emptyList());
-        } else {
-            result = Collections.unmodifiableList(phaseListeners);
-        }
-        
-        return result;
+        return ((result != null)
+                ? Collections.unmodifiableList(result)
+                : Collections.unmodifiableList(Collections.<PhaseListener>emptyList()));
 
     }
 
@@ -831,14 +806,16 @@ public class UIViewRoot extends UIComponentBase {
     private void initState() {
         skipPhase = false;
         beforeMethodException = false;
+        List<PhaseListener> listeners =
+              (List<PhaseListener>) getStateHelper().get(PropertyKeys.phaseListeners);
         phaseListenerIterator =
-              ((phaseListeners != null) ? phaseListeners.listIterator() : null);
+              ((listeners != null) ? listeners.listIterator() : null);
     }
 
     // avoid creating the PhaseEvent if possible by doing redundant
     // null checks.
     private void notifyBefore(FacesContext context, PhaseId phaseId) {
-        if (null != beforePhase || null != phaseListenerIterator) {
+        if (getBeforePhaseListener() != null || phaseListenerIterator != null) {
             notifyPhaseListeners(context, phaseId, true);
         }
     }
@@ -846,7 +823,7 @@ public class UIViewRoot extends UIComponentBase {
     // avoid creating the PhaseEvent if possible by doing redundant
     // null checks.
     private void notifyAfter(FacesContext context, PhaseId phaseId) {
-        if (null != afterPhase || null != phaseListenerIterator) {
+        if (getAfterPhaseListener() != null || phaseListenerIterator != null) {
             notifyPhaseListeners(context, phaseId, false);
         }
     }
@@ -1060,6 +1037,8 @@ public class UIViewRoot extends UIComponentBase {
                                       boolean isBefore) {
         PhaseEvent event = createPhaseEvent(context, phaseId);
 
+        MethodExpression beforePhase = getBeforePhaseListener();
+        MethodExpression afterPhase = getAfterPhaseListener();
         boolean hasPhaseMethodExpression =
               (isBefore && (null != beforePhase)) ||
               (!isBefore && (null != afterPhase) && !beforeMethodException);
@@ -1306,13 +1285,26 @@ public class UIViewRoot extends UIComponentBase {
      * this UIViewRoot.</p>
      */
     public String createUniqueId() {
-        return UNIQUE_ID_PREFIX + lastId++;
+        return createUniqueId(getFacesContext(), null);
     }
 
-    /*
-    * <p>The locale for this view.</p>
-    */
-    private Locale locale = null;
+    /**<p>Generate an identifier for a component. The identifier
+     * will be prefixed with UNIQUE_ID_PREFIX, and will be unique
+     * within this UIViewRoot. Optionally, a unique seed value can
+     * be supplied by component creators which should be
+     * included in the generated unique id.</p>
+     *
+     * @param context FacesContext
+     * @param seed an optional seed value - e.g. based on the position of the component in the PDL-template
+     * @return a unique-id in this component-container
+     */
+    public String createUniqueId(FacesContext context, String seed) {
+        Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
+        int lastId = ((i != null) ? i : 0);
+        getStateHelper().put(PropertyKeys.lastId,  ++lastId);
+        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
+    }
+
 
     /**
      * <p>Return the <code>Locale</code> to be used in localizing the
@@ -1334,42 +1326,22 @@ public class UIViewRoot extends UIComponentBase {
      *         above algorithm.
      */
     public Locale getLocale() {
-        Locale result = null;
-        if (null != locale) {
-            result = this.locale;
-        } else {
-            ValueExpression vb = getValueExpression("locale");
-            FacesContext context = getFacesContext();
-            if (vb != null) {
-                Object resultLocale = null;
 
-                try {
-                    resultLocale = vb.getValue(context.getELContext());
-                }
-                catch (ELException e) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                   "severe.component.unable_to_process_expression",
-                                   new Object[]{vb.getExpressionString(), "locale"});
-                    }
-                }
+        Object result = getStateHelper().eval(PropertyKeys.locale);
 
-                if (null == resultLocale) {
-                    result =
-                          context.getApplication().getViewHandler()
-                                .calculateLocale(context);
-                } else if (resultLocale instanceof Locale) {
-                    result = (Locale) resultLocale;
-                } else if (resultLocale instanceof String) {
-                    result = getLocaleFromString((String) resultLocale);
-                }
-            } else {
-                result =
-                      context.getApplication().getViewHandler()
-                            .calculateLocale(context);
+        if (result != null) {
+            Locale locale = null;
+            if (result instanceof Locale) {
+                    locale = (Locale) result;
+            } else if (result instanceof String) {
+                   locale = getLocaleFromString((String) result);
             }
+            return locale;
+        } else {
+            FacesContext context = getFacesContext();
+            return context.getApplication().getViewHandler().calculateLocale(context);
         }
-        return result;
+
     }
 
 
@@ -1480,9 +1452,11 @@ public class UIViewRoot extends UIComponentBase {
      * @param locale The new localization Locale
      */
     public void setLocale(Locale locale) {
-        this.locale = locale;
+
+        getStateHelper().put(PropertyKeys.locale, locale);
         // Make sure to appraise the EL of this switch in Locale.
         FacesContext.getCurrentInstance().getELContext().setLocale(locale);
+
     }
     
     private Map<String, Object> viewScope = null;
@@ -1578,24 +1552,18 @@ public class UIViewRoot extends UIComponentBase {
     // ----------------------------------------------------- StateHolder Methods
 
 
+
     private Object[] values;
 
     @Override
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[9];
+            values = new Object[2];
         }
 
         values[0] = super.saveState(context);
-        values[1] = renderKitId;
-        values[2] = viewId;
-        values[3] = locale;
-        values[4] = lastId;
-        values[5] = saveAttachedState(context, beforePhase);
-        values[6] = saveAttachedState(context, afterPhase);
-        values[7] = saveAttachedState(context, phaseListeners);
-        values[8] = saveAttachedState(context, viewScope);
+        values[1] = saveAttachedState(context, viewScope);
         return (values);
 
     }
@@ -1605,19 +1573,8 @@ public class UIViewRoot extends UIComponentBase {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        renderKitId = (String) values[1];
-        viewId = (String) values[2];
-        locale = (Locale) values[3];
-        lastId = ((Integer) values[4]).intValue();
-        beforePhase =
-              (MethodExpression) restoreAttachedState(context, values[5]);
-        afterPhase =
-              (MethodExpression) restoreAttachedState(context, values[6]);
-        phaseListeners = TypedCollections.dynamicallyCastList((List)
-              restoreAttachedState(context, values[7]), PhaseListener.class);
-        //noinspection unchecked
-        viewScope =
-              (Map<String, Object>) restoreAttachedState(context, values[8]);
+        viewScope = (Map<String,Object>) restoreAttachedState(context, values[1]);
+        
     }
 
 
@@ -1645,6 +1602,7 @@ public class UIViewRoot extends UIComponentBase {
         UIComponent facet = getFacet(location);
         if (facet == null && create) {
             facet = context.getApplication().createComponent("javax.faces.Panel");
+            facet.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
             facet.setId(location);
             getFacets().put(location, facet);
         }

@@ -63,6 +63,7 @@ import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.FastWriter;
+import javax.faces.component.UniqueIdVendor;
 
 /**
  * @author Adam Winer
@@ -135,8 +136,16 @@ final class UIInstructionHandler extends AbstractUIHandler {
 
                 c = new UIInstructions(txt, applied);
                 // mark it owned by a facelet instance
-                c.setId(ComponentSupport
-                      .getViewRoot(ctx, parent).createUniqueId());
+                String uid;
+                UIComponent ancestorNamingContainer = parent.getNamingContainer();
+                if (null != ancestorNamingContainer &&
+                        ancestorNamingContainer instanceof UniqueIdVendor) {
+                    uid = ((UniqueIdVendor) ancestorNamingContainer).createUniqueId(ctx.getFacesContext(), id);
+                } else {
+                    uid = ComponentSupport.getViewRoot(ctx, parent).createUniqueId();
+                }
+                
+                c.setId(uid);
                 c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
             }
             // finish cleaning up orphaned children

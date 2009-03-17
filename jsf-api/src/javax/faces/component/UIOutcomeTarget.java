@@ -73,6 +73,12 @@ public class UIOutcomeTarget extends UIOutput {
     public static final String COMPONENT_FAMILY = "javax.faces.OutcomeTarget";
 
 
+    enum PropertyKeys {
+        includeViewParams,
+        outcome
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -86,13 +92,6 @@ public class UIOutcomeTarget extends UIOutput {
 
     }
 
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    private Boolean includeViewParams;
-    private String outcome;
-    private String fragment;
 
     // -------------------------------------------------------------- Properties
 
@@ -111,21 +110,7 @@ public class UIOutcomeTarget extends UIOutput {
      */
     public boolean isIncludeViewParams() {
 
-        if (this.includeViewParams != null) {
-            return this.includeViewParams;
-        }
-
-        ValueExpression ve = getValueExpression("includeViewParams");
-        if (ve != null) {
-            try {
-                return Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext()));
-            } catch (ELException e) {
-                throw new FacesException(e);
-            }
-
-        } else {
-            return false;
-        }
+        return (Boolean) getStateHelper().eval(PropertyKeys.includeViewParams, false);
 
     }
 
@@ -140,7 +125,7 @@ public class UIOutcomeTarget extends UIOutput {
      */
     public void setIncludeViewParams(boolean includeViewParams) {
 
-        this.includeViewParams = includeViewParams;
+        getStateHelper().put(PropertyKeys.includeViewParams, includeViewParams);
 
     }
 
@@ -155,21 +140,8 @@ public class UIOutcomeTarget extends UIOutput {
      */
     public String getOutcome() {
 
-        if (this.outcome != null) {
-            return this.outcome;
-        }
+        return (String) getStateHelper().eval(PropertyKeys.outcome);
 
-        ValueExpression ve = getValueExpression("outcome");
-        if (ve != null) {
-            try {
-                return (String) ve.getValue(getFacesContext().getELContext());
-            } catch (ELException e) {
-                throw new FacesException(e);
-            }
-
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -184,39 +156,9 @@ public class UIOutcomeTarget extends UIOutput {
      */
     public void setOutcome(String outcome) {
 
-        this.outcome = outcome;
+        getStateHelper().put(PropertyKeys.outcome, outcome);
 
     }
 
-
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    private Object[] values;
-
-    @Override
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[3];
-        }
-
-        values[0] = super.saveState(context);
-        values[1] = includeViewParams;
-        values[2] = outcome;
-        return values;
-
-    }
-
-
-    @Override
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        includeViewParams = (Boolean) values[1];
-        outcome = (String) values[2];
-
-    }
 
 }

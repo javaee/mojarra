@@ -41,8 +41,8 @@
 package javax.faces.convert;
 
 
-import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.PartialStateHolder;
 import javax.faces.context.FacesContext;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -109,7 +109,7 @@ import java.util.TimeZone;
  * </ul>
  */
 
-public class DateTimeConverter implements Converter, StateHolder {
+public class DateTimeConverter implements Converter, PartialStateHolder {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -216,6 +216,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      */
     public void setDateStyle(String dateStyle) {
 
+        initialState = false;
         this.dateStyle = dateStyle;
 
     }
@@ -248,6 +249,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      */
     public void setLocale(Locale locale) {
 
+        initialState = false;
         this.locale = locale;
 
     }
@@ -275,6 +277,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      */
     public void setPattern(String pattern) {
 
+        initialState = false;
         this.pattern = pattern;
 
     }
@@ -302,6 +305,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      */
     public void setTimeStyle(String timeStyle) {
 
+        initialState = false;
         this.timeStyle = timeStyle;
 
     }
@@ -326,6 +330,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      */
     public void setTimeZone(TimeZone timeZone) {
 
+        initialState = false;
         this.timeZone = timeZone;
 
     }
@@ -354,6 +359,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      */
     public void setType(String type) {
 
+        initialState = false;
         this.type = type;
 
     }
@@ -554,27 +560,32 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[6];
-        values[0] = dateStyle;
-        values[1] = locale;
-        values[2] = pattern;
-        values[3] = timeStyle;
-        values[4] = timeZone;
-        values[5] = type;
-        return (values);
+        if (!initialState) {
+            Object values[] = new Object[6];
+            values[0] = dateStyle;
+            values[1] = locale;
+            values[2] = pattern;
+            values[3] = timeStyle;
+            values[4] = timeZone;
+            values[5] = type;
+            return (values);
+        }
+        return null;
 
     }
 
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
-        dateStyle = (String) values[0];
-        locale = (Locale) values[1];
-        pattern = (String) values[2];
-        timeStyle = (String) values[3];
-        timeZone = (TimeZone) values[4];
-        type = (String) values[5];
+        if (state != null) {
+            Object values[] = (Object[]) state;
+            dateStyle = (String) values[0];
+            locale = (Locale) values[1];
+            pattern = (String) values[2];
+            timeStyle = (String) values[3];
+            timeZone = (TimeZone) values[4];
+            type = (String) values[5];
+        }
 
     }
 
@@ -591,4 +602,13 @@ public class DateTimeConverter implements Converter, StateHolder {
         this.transientFlag = transientFlag;
     }
 
+    private boolean initialState;
+
+    public void markInitialState() {
+        initialState = true;
+    }
+
+    public boolean initialStateMarked() {
+        return initialState;
+    }
 }

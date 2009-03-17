@@ -163,6 +163,7 @@
                 test.component01,
                 test.composite,
                 test.navigation,
+                test.state,
                 test.resourceBundleELResolver,
                 test.tlvalidator,
                 test.standard,
@@ -176,6 +177,10 @@
                 test.misc,
                 test.regressions"
             />
+<!-- 139-StateSaving 
+                test.ajax,
+                test.facelets,
+-->
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
@@ -598,6 +603,20 @@
 
     </target>
 
+    <target name="test.state"
+            description="Test new state manager">
+        
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/state/*TestCase.class"/>
+            </tests>
+        </jsf.junit>  
+
+    </target>
+
     <target name="test.tlvalidator"
             description="Test the RI Tag Library Validator">
 
@@ -828,7 +847,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/ajax/*TestCase.class"/>
+                         includes="com/sun/faces/ajax/*TestCase.class"                         />
             </tests>
         </jsf.junit>
     </target>
@@ -841,7 +860,10 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/render/*TestCase.class"/>
+                         includes="com/sun/faces/render/*TestCase.class"
+excludes="com/sun/faces/render/CommandButtonTestCase.class"
+                         />
+<!-- 139-StateSaving -->
             </tests>
         </jsf.junit>
     </target>
@@ -850,6 +872,7 @@
             description="Test Component creation facility">
 
         <!-- Test Component creation -->
+
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/component.jsp"
@@ -873,7 +896,10 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/component/*TestCase.class"/>
+                         includes="com/sun/faces/component/*TestCase.class"
+                         excludes="com/sun/faces/component/GetClientIdELTestCase.class"
+                         />
+<!-- 139-StateSaving edburns remove excludes -->
             </tests>
         </jsf.junit>
         
@@ -930,7 +956,6 @@
         <jsf.tester
             request="${context.path}/faces/standard/pgridcolumnclasses.jsp"
             golden="${golden.path}/standard/pgridcolumnclasses.txt"/>
-        
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">

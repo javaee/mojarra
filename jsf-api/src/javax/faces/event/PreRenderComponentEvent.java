@@ -14,9 +14,9 @@ import javax.faces.component.UIComponent;
  * ComponentSystemEventListener#processEvent}, the listener
  * implementation may assume that the <code>source</code> of this event
  * instance is the {@link UIComponent} instance that is about to be
- * rendered just added to its parent and that it is safe to call {@link
+ * rendered and that it is safe to call {@link
  * UIComponent#getParent}, {@link UIComponent#getClientId}, and other
- * methods that depend upon the component instance being added into the
+ * methods that depend upon the component instance being in the
  * view.</p>
  *
  * @since 2.0

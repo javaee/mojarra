@@ -102,6 +102,12 @@ public class UIOutput extends UIComponentBase
     public static final String COMPONENT_FAMILY = "javax.faces.Output";
 
 
+    enum PropertyKeys {
+        converter,
+        value
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -115,14 +121,6 @@ public class UIOutput extends UIComponentBase
         setRendererType("javax.faces.Text");
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    private Converter converter = null;
-    private Object value = null;
-
 
 
     // -------------------------------------------------------------- Properties
@@ -140,92 +138,56 @@ public class UIOutput extends UIComponentBase
 
     public Converter getConverter() {
 
-	if (this.converter != null) {
-	    return (this.converter);
-	}
-	ValueExpression ve = getValueExpression("converter");
-	if (ve != null) {
-	    try {
-		return ((Converter) ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return (Converter) getStateHelper().eval(PropertyKeys.converter);
 
     }
 
 
     public void setConverter(Converter converter) {
 
-        this.converter = converter;
+        getStateHelper().put(PropertyKeys.converter, converter);
 
     }
 
 
     public Object getLocalValue() {
 
-	return (this.value);
+        return getStateHelper().get(PropertyKeys.value);
 
     }
 
 
     public Object getValue() {
 
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueExpression ve = getValueExpression("value");
-	if (ve != null) {
-	    try {
-		return (ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
 
     public void setValue(Object value) {
 
-        this.value = value;
+        getStateHelper().put(PropertyKeys.value, value);
 
     }
 
 
-    // ----------------------------------------------------- StateHolder Methods
+    /**
+     * <p>
+     * In addition to the actions taken in {@link UIComponentBase}
+     * when {@link PartialStateHolder#markInitialState()} is called,
+     * check if the installed {@link Converter} is a PartialStateHolder and
+     * if it is, call {@link javax.faces.component.PartialStateHolder#markInitialState()}
+     * on it.
+     * </p>
+     */
+    @Override
+    public void markInitialState() {
 
-
-    private Object[] values;
-
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[3];
+        super.markInitialState();
+        Converter c = getConverter();
+        if (c != null && c instanceof PartialStateHolder) {
+            ((PartialStateHolder) c).markInitialState();
         }
-       
-        values[0] = super.saveState(context);
-        values[1] = saveAttachedState(context, converter);
-        values[2] = value;
-        return (values);
 
     }
-
-
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        converter = (Converter) restoreAttachedState(context, values[1]);
-        value = values[2];
-
-    }
-
-
 }

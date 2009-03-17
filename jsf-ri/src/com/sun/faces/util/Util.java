@@ -536,7 +536,7 @@ public class Util {
         }
         
         if (!foundMatch) {
-            return pathInfoViewId;
+            requestViewId = null;
         }
 
         return requestViewId;

@@ -115,6 +115,7 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
                 Throwable t = context.getException();
                 if (isRethrown(t)) {
                     handled = event;
+                    t.printStackTrace();
                     Throwable unwrapped = getRootCause(t);
                     if (unwrapped != null) {
                         handlePartialResponseError(context.getContext(), unwrapped); 

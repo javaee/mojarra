@@ -36,7 +36,6 @@
 
 package javax.faces.component;
 
-import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
@@ -63,7 +62,6 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
@@ -90,7 +88,7 @@ import java.util.Iterator;
  */
 
 public class UIData extends UIComponentBase
-      implements NamingContainer {
+      implements NamingContainer, UniqueIdVendor {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -124,9 +122,51 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>The first row number (zero-relative) to be displayed.</p>
+     * Properties that are tracked by state saving.
      */
-    private Integer first;
+    enum PropertyKeys {
+        /**
+         * <p>The first row number (zero-relative) to be displayed.</p>
+         */
+        first,
+
+        /**
+         * <p>The zero-relative index of the current row number, or -1 for no
+         * current row association.</p>
+         */
+        rowIndex,
+
+        /**
+         * <p>The number of rows to display, or zero for all remaining rows in the
+         * table.</p>
+         */
+        rows,
+
+        /**
+         * <p>This map contains <code>SavedState</code> instances for each
+         * descendant component, keyed by the client identifier of the descendant.
+         * Because descendant client identifiers will contain the
+         * <code>rowIndex</code> value of the parent, per-row state information is
+         * actually preserved.</p>
+         */
+        saved,
+
+        /**
+         * <p>The local value of this {@link UIComponent}.</p>
+         */
+        value,
+
+        /**
+         * <p>The request scope attribute under which the data object for the
+         * current row will be exposed when iterating.</p>
+         */
+        var,
+
+        /**
+         * <p>Last id vended by {@link UIData#createUniqueId(javax.faces.context.FacesContext, String)}.</p>
+         */
+        lastId
+    }
 
 
     /**
@@ -143,44 +183,6 @@ public class UIData extends UIComponentBase
      * is complete, this value is restored to the request map.
      */
     private Object oldVar;
-
-
-    /**
-     * <p>The zero-relative index of the current row number, or -1 for no
-     * current row association.</p>
-     */
-    private int rowIndex = -1;
-
-
-    /**
-     * <p>The number of rows to display, or zero for all remaining rows in the
-     * table.</p>
-     */
-    private Integer rows;
-
-
-    /**
-     * <p>This map contains <code>SavedState</code> instances for each
-     * descendant component, keyed by the client identifier of the descendant.
-     * Because descendant client identifiers will contain the
-     * <code>rowIndex</code> value of the parent, per-row state information is
-     * actually preserved.</p>
-     */
-    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
-    private Map<String, SavedState> saved = new HashMap<String, SavedState>();
-
-
-    /**
-     * <p>The local value of this {@link UIComponent}.</p>
-     */
-    private Object value = null;
-
-
-    /**
-     * <p>The request scope attribute under which the data object for the
-     * current row will be exposed when iterating.</p>
-     */
-    private String var = null;
 
 
     /**
@@ -216,7 +218,7 @@ public class UIData extends UIComponentBase
      * <p>This is not part of the component state.</p>
      */
     private Boolean isNested = null;
-    
+
 
     // -------------------------------------------------------------- Properties
 
@@ -234,25 +236,7 @@ public class UIData extends UIComponentBase
      */
     public int getFirst() {
 
-        if (this.first != null) {
-            return (this.first);
-        }
-        ValueExpression ve = getValueExpression("first");
-        if (ve != null) {
-            Integer value;
-            try {
-                value = (Integer) ve.getValue(getFacesContext().getELContext());
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-            if (null == value) {
-                return first;
-            }
-            return (value.intValue());
-        } else {
-            return (0);
-        }
+        return (Integer) getStateHelper().eval(PropertyKeys.first, 0);
 
     }
 
@@ -270,7 +254,7 @@ public class UIData extends UIComponentBase
         if (first < 0) {
             throw new IllegalArgumentException(String.valueOf(first));
         }
-        this.first = first;
+        getStateHelper().put(PropertyKeys.first, first);
 
     }
 
@@ -378,7 +362,7 @@ public class UIData extends UIComponentBase
      */
     public int getRowIndex() {
 
-        return (this.rowIndex);
+        return (Integer) getStateHelper().eval(PropertyKeys.rowIndex, -1);
 
     }
 
@@ -455,7 +439,8 @@ public class UIData extends UIComponentBase
         saveDescendantState();
 
         // Update to the new row index        
-        this.rowIndex = rowIndex;
+        //this.rowIndex = rowIndex;
+        getStateHelper().put(PropertyKeys.rowIndex, rowIndex);
         DataModel localModel = getDataModel();
         localModel.setRowIndex(rowIndex);
         
@@ -465,6 +450,7 @@ public class UIData extends UIComponentBase
         }
         
         // Clear or expose the current row data as a request scope attribute
+        String var = (String) getStateHelper().get(PropertyKeys.var);
         if (var != null) {
             Map<String, Object> requestMap =
                   getFacesContext().getExternalContext().getRequestMap();
@@ -493,26 +479,8 @@ public class UIData extends UIComponentBase
      */
     public int getRows() {
 
-        if (this.rows != null) {
-            return (this.rows);
-        }
-        ValueExpression ve = getValueExpression("rows");
-        if (ve != null) {
-            Integer value;
-            try {
-                value = (Integer) ve.getValue(getFacesContext().getELContext());
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
 
-            if (null == value) {
-                return rows;
-            }
-            return (value.intValue());
-        } else {
-            return (0);
-        }
+        return (Integer) getStateHelper().eval(PropertyKeys.rows, 0);
 
     }
 
@@ -530,7 +498,7 @@ public class UIData extends UIComponentBase
         if (rows < 0) {
             throw new IllegalArgumentException(String.valueOf(rows));
         }
-        this.rows = rows;
+        getStateHelper().put(PropertyKeys.rows, rows);
 
     }
 
@@ -542,7 +510,7 @@ public class UIData extends UIComponentBase
      */
     public String getVar() {
 
-        return (this.var);
+        return (String) getStateHelper().get(PropertyKeys.var);
 
     }
 
@@ -555,46 +523,13 @@ public class UIData extends UIComponentBase
      */
     public void setVar(String var) {
 
-        this.var = var;
+        getStateHelper().put(PropertyKeys.var, var);
 
     }
 
     // ----------------------------------------------------- StateHolder Methods
 
 
-    private Object[] values;
-
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-            values = new Object[7];
-        }
-
-        values[0] = super.saveState(context);
-        values[1] = first;
-        values[2] = rowIndex;
-        values[3] = rows;
-        values[4] = saved;
-        values[5] = value;
-        values[6] = var;
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        first = (Integer) values[1];
-        rowIndex = (Integer) values[2];
-        rows = (Integer) values[3];
-        saved = TypedCollections
-              .dynamicallyCastMap((Map) values[4], String.class, SavedState.class);
-        value = values[5];
-        var = (String) values[6];
-
-    }
 
 
     /**
@@ -613,21 +548,7 @@ public class UIData extends UIComponentBase
      */
     public Object getValue() {
 
-        if (this.value != null) {
-            return (this.value);
-        }
-        ValueExpression ve = getValueExpression("value");
-        if (ve != null) {
-            try {
-                return (ve.getValue(getFacesContext().getELContext()));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-
-        } else {
-            return (null);
-        }
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
@@ -641,7 +562,7 @@ public class UIData extends UIComponentBase
      */
     public void setValue(Object value) {
         setDataModel(null);
-        this.value = value;
+        getStateHelper().put(PropertyKeys.value, value);
 
     }
 
@@ -743,6 +664,7 @@ public class UIData extends UIComponentBase
                 clientIdBuilder = new StringBuilder();
             }
         }
+        int rowIndex = getRowIndex();
         if (rowIndex >= 0) {
             String cid;
             if (!isNestedWithinUIData()) {
@@ -1113,6 +1035,13 @@ public class UIData extends UIComponentBase
 
     }
 
+    public String createUniqueId(FacesContext context, String seed) {
+        Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
+        int lastId = ((i != null) ? i : 0);
+        getStateHelper().put(PropertyKeys.lastId,  ++lastId);
+        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
+    }
+
     /**
      * @see UIComponent#visitTree
      */
@@ -1243,9 +1172,11 @@ public class UIData extends UIComponentBase
     // (ie. processDecodes()) or during a tree visit (ie. visitTree()).
     private void preDecode(FacesContext context) {
         setDataModel(null); // Re-evaluate even with server-side state saving
+        Map<String, SavedState> saved =
+              (Map<String, SavedState>) getStateHelper().get(PropertyKeys.saved);
         if (null == saved || !keepSaved(context)) {
             //noinspection CollectionWithoutInitialCapacity
-            saved = new HashMap<String, SavedState>(); // We don't need saved state here
+            getStateHelper().remove(PropertyKeys.saved);
         }
     }
 
@@ -1273,8 +1204,9 @@ public class UIData extends UIComponentBase
     private void preEncode(FacesContext context) {
         setDataModel(null); // re-evaluate even with server-side state saving
         if (!keepSaved(context)) {
-            //noinspection CollectionWithoutInitialCapacity
-            saved = new HashMap<String, SavedState>();
+            ////noinspection CollectionWithoutInitialCapacity
+            //saved = new HashMap<String, SavedState>();
+            getStateHelper().remove(PropertyKeys.saved);
         }
     }
 
@@ -1582,11 +1514,13 @@ public class UIData extends UIComponentBase
         // Reset the client identifier for this component
         String id = component.getId();
         component.setId(id); // Forces client id to be reset
-
+        Map<String, SavedState> saved = (Map<String,SavedState>)
+            getStateHelper().get(PropertyKeys.saved);
         // Restore state for this component (if it is a EditableValueHolder)
         if (component instanceof EditableValueHolder) {
             EditableValueHolder input = (EditableValueHolder) component;
             String clientId = component.getClientId(context);
+
             SavedState state = saved.get(clientId);
             if (state == null) {
                 state = new SavedState();
@@ -1654,13 +1588,23 @@ public class UIData extends UIComponentBase
                                      FacesContext context) {
 
         // Save state for this component (if it is a EditableValueHolder)
+        Map<String, SavedState> saved = (Map<String, SavedState>)
+              getStateHelper().get(PropertyKeys.saved);
         if (component instanceof EditableValueHolder) {
             EditableValueHolder input = (EditableValueHolder) component;
+            SavedState state = null;
             String clientId = component.getClientId(context);
-            SavedState state = saved.get(clientId);
-            if (state == null) {
+            if (saved == null) {
                 state = new SavedState();
-                saved.put(clientId, state);
+                getStateHelper().put(PropertyKeys.saved, clientId, state);
+            }
+            if (state == null) {
+                state = saved.get(clientId);
+                if (state == null) {
+                    state = new SavedState();
+                    //saved.put(clientId, state);
+                    getStateHelper().put(PropertyKeys.saved, clientId, state);
+                }
             }
             state.setValue(input.getLocalValue());
             state.setValid(input.isValid());
@@ -1669,10 +1613,18 @@ public class UIData extends UIComponentBase
         } else if (component instanceof UIForm) {
             UIForm form = (UIForm) component;
             String clientId = component.getClientId(context);
-            SavedState state = saved.get(clientId);
-            if (state == null) {
+            SavedState state = null;
+            if (saved == null) {
                 state = new SavedState();
-                saved.put(clientId, state);
+                getStateHelper().put(PropertyKeys.saved, clientId, state);
+            }
+            if (state == null) {
+                state = saved.get(clientId);
+                if (state == null) {
+                    state = new SavedState();
+                    //saved.put(clientId, state);
+                    getStateHelper().put(PropertyKeys.saved, clientId, state);
+                }
             }
             state.setSubmitted(form.isSubmitted());
         }

@@ -12,9 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.FacesException;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PostValidateEvent;
-import javax.faces.event.PreRenderComponentEvent;
 import javax.faces.event.PreValidateEvent;
 import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.PreRenderComponentEvent;
 import javax.faces.event.PreRenderViewEvent;
 import javax.faces.event.SystemEvent;
 

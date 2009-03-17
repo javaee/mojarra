@@ -51,11 +51,7 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.component.ActionSource;
-import javax.faces.component.EditableValueHolder;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.ValueHolder;
+import javax.faces.component.*;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
@@ -104,7 +100,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      * spec.
      * <ol>
      * <li>First determines this UIComponent's id by calling
-     * {@link #getId(FaceletContext) getId(FaceletContext)}.</li>
+     * {@link javax.faces.webapp.pdl.facelets.tag.ComponentHandler#getTagId()}.</li>
      * <li>Search the parent for an existing UIComponent of the id we just
      * grabbed</li>
      * <li>If found, {@link com.sun.faces.facelets.tag.jsf.ComponentSupport#markForDeletion(javax.faces.component.UIComponent) mark}
@@ -169,9 +165,19 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             } else {
                 UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
                 if (root != null) {
-                    String uid = root.createUniqueId();
+                    String uid;
+                    UIComponent ancestorNamingContainer = parent
+                          .getNamingContainer();
+                    if (null != ancestorNamingContainer &&
+                        ancestorNamingContainer instanceof UniqueIdVendor) {
+                        uid = ((UniqueIdVendor) ancestorNamingContainer)
+                              .createUniqueId(ctx.getFacesContext(), id);
+                    } else {
+                        uid = root.createUniqueId(ctx.getFacesContext(), id);
+                    }
                     c.setId(uid);
                 }
+
             }
             
             if (this.rendererType != null) {
@@ -198,13 +204,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         this.privateOnComponentPopulated(ctx, c, parent);
         owner.onComponentPopulated(ctx, c, parent);
-
         // add to the tree afterwards
         // this allows children to determine if it's
         // been part of the tree or not yet
         ComponentSupport.addComponent(ctx, parent, c);
         c.popComponentFromEL(ctx.getFacesContext());
-        
+        c.markInitialState();
         
     }
 

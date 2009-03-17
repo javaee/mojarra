@@ -63,7 +63,7 @@ public abstract class AbstractUIHandler implements FaceletHandler, TextHandler {
     public void addComponent(FaceletContext ctx,
                              UIComponent parent,
                              UIComponent c) {
-		ComponentSupport.addComponent(ctx, parent, c);
+        ComponentSupport.addComponent(ctx, parent, c);
     }
 
 }

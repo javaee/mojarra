@@ -315,6 +315,9 @@
         <copy file="${tools.dir}/template-src/TypedCollections.java"
               todir="${build.generate.dir}/javax/faces/component"
               filtering="true"/>
+        <copy file="${tools.dir}/template-src/StateHolderSaver.java"
+              todir="${build.generate.dir}/javax/faces/component"
+              filtering="true"/>
         <copy todir="${build.generate.dir}/javax/faces/component"
               filtering="true">
             <fileset dir="${basedir}/template-src">
@@ -359,6 +362,11 @@
               file="${build.generate.dir}/javax/faces/component/ValueBindingValueExpressionAdapter.java"
               token="@serialVersionUID@"
               value="-8015491904782686906L"/>
+
+        <replace
+              file="${build.generate.dir}/javax/faces/component/StateHolderSaver.java"
+              token="@serialVersionUID@"
+              value="6470180891722042701L"/>
 
     </target>
 
@@ -484,7 +492,8 @@ javax.faces.level=ALL
                    logging.config.file="${api.test.results.dir}/test-logging.properties">
             <tests>
                 <fileset dir="${build.test.dir}"
-                         includes="javax/faces/component/*TestCase.class"/>
+                         includes="javax/faces/component/*TestCase.class"
+                         excludes="javax/faces/component/UIDataTestCase.class,javax/faces/component/UIFormTestCase.class"/>
             </tests>
         </jsf.junit>
     </target>

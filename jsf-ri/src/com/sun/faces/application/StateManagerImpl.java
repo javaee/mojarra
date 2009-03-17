@@ -67,6 +67,8 @@ import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import javax.faces.render.ResponseStateManager;
+import javax.faces.webapp.pdl.StateManagementStrategy;
 
 /**
  * <p>
@@ -121,18 +123,34 @@ public class StateManagerImpl extends StateManager {
         if (viewRoot.isTransient()) {
             return null;
         }
+        
+        Object result = null;
+        String viewId = context.getViewRoot().getViewId();
+        StateManagementStrategy strategy = null;
+        try {
+             strategy = context.getApplication().getViewHandler().
+                getPageDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
+        } catch (UnsupportedOperationException uoe) {
+        }
+        
 
-        // honor the requirement to check for id uniqueness
-        checkIdUniqueness(context,
-                          viewRoot,
-                          new HashSet<String>(viewRoot.getChildCount() << 1));
+        if (null != strategy) {
+            result = strategy.saveView(context);
+        } else {
+            // honor the requirement to check for id uniqueness
+            checkIdUniqueness(context,
+                    viewRoot,
+                    new HashSet<String>(viewRoot.getChildCount() << 1));
 
-        List<TreeNode> treeList = new ArrayList<TreeNode>(32);
-        Object state = viewRoot.processSaveState(context);
-        captureChild(treeList, 0, viewRoot);
-        Object[] tree = treeList.toArray();
+            List<TreeNode> treeList = new ArrayList<TreeNode>(32);
+            Object state = viewRoot.processSaveState(context);
+            captureChild(treeList, 0, viewRoot);
+            Object[] tree = treeList.toArray();
 
-        return new Object[]{ tree, state };
+            result = new Object[]{tree, state};
+        }
+        
+        return result;
 
     }
 
@@ -157,25 +175,37 @@ public class StateManagerImpl extends StateManager {
     public UIViewRoot restoreView(FacesContext context,
                                   String viewId,
                                   String renderKitId) {
-
-        ResponseStateManager rsm =
-              RenderKitUtils.getResponseStateManager(context, renderKitId);
-        Object[] state = (Object[]) rsm.getState(context, viewId);
-
-        if (state != null) {
-            // We need to clone the tree, otherwise we run the risk
-            // of being left in a state where the restored
-            // UIComponent instances are in the session instead
-            // of the TreeNode instances.  This is a problem
-            // for servers that persist session data since
-            // UIComponent instances are not serializable.
-            UIViewRoot viewRoot = restoreTree(renderKitId,
-                                              ((Object[]) state[0]).clone());
-            viewRoot.processRestoreState(context, state[1]);
-            return viewRoot;
+        UIViewRoot result = null;
+        StateManagementStrategy strategy = null;
+        
+        try {
+             strategy = context.getApplication().getViewHandler().
+                getPageDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
+        } catch (UnsupportedOperationException uoe) {
         }
 
-        return null;
+        if (null != strategy) {
+            result = strategy.restoreView(context, viewId, renderKitId);
+        } else {
+            ResponseStateManager rsm =
+                    RenderKitUtils.getResponseStateManager(context, renderKitId);
+            Object[] state = (Object[]) rsm.getState(context, viewId);
+
+            if (state != null) {
+                // We need to clone the tree, otherwise we run the risk
+                // of being left in a state where the restored
+                // UIComponent instances are in the session instead
+                // of the TreeNode instances.  This is a problem
+                // for servers that persist session data since
+                // UIComponent instances are not serializable.
+                UIViewRoot viewRoot = restoreTree(renderKitId,
+                        ((Object[]) state[0]).clone());
+                viewRoot.processRestoreState(context, state[1]);
+                result = viewRoot;
+            }
+        }
+
+        return result;
 
     }
 

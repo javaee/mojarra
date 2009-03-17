@@ -3,11 +3,11 @@
     <type>org.netbeans.modules.ant.freeform</type>
     <configuration>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
-            <name>Mojarra 2.0</name>
+            <name>State Saving</name>
         </general-data>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/2">
             <!-- Do not use Project Properties customizer when editing this file manually. -->
-            <name>Mojarra 2.0</name>
+            <name>State Saving</name>
             <properties/>
             <folders>
                 <source-folder>
@@ -61,6 +61,12 @@
                     <label>jsf-ri/systest/src</label>
                     <type>java</type>
                     <location>jsf-ri/systest/src</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-flash</label>
+                    <type>java</type>
+                    <location>jsf-ri/systest-per-webapp/flash/src/java</location>
                     <encoding>UTF-8</encoding>
                 </source-folder>
             </folders>
@@ -120,6 +126,10 @@
                     <source-folder style="packages">
                         <label>jsf-ri/systest/src</label>
                         <location>jsf-ri/systest/src</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>jsf-flash</label>
+                        <location>jsf-ri/systest-per-webapp/flash/src/java</location>
                     </source-folder>
                     <source-file>
                         <location>build.xml</location>

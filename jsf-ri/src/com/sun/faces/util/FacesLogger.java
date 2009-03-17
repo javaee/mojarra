@@ -50,6 +50,7 @@ import java.util.logging.Logger;
 public enum FacesLogger {
 
     APPLICATION("application"),
+    APPLICATION_VIEW("application.view"),
     RESOURCE("resource"),
     CONFIG("config"),
     CONTEXT("context"),

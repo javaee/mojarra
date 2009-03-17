@@ -41,8 +41,8 @@
 package javax.faces.convert;
 
 
-import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.PartialStateHolder;
 import javax.faces.context.FacesContext;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
@@ -129,7 +129,7 @@ import java.util.Locale;
  * </ul>
  */
 
-public class NumberConverter implements Converter, StateHolder {
+public class NumberConverter implements Converter, PartialStateHolder {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -254,6 +254,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setCurrencyCode(String currencyCode) {
 
+        initialState = false;
         this.currencyCode = currencyCode;
 
     }
@@ -279,6 +280,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setCurrencySymbol(String currencySymbol) {
 
+        initialState = false;
         this.currencySymbol = currencySymbol;
 
     }
@@ -304,6 +306,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setGroupingUsed(boolean groupingUsed) {
 
+        initialState = false;
         this.groupingUsed = groupingUsed;
 
     }
@@ -329,6 +332,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setIntegerOnly(boolean integerOnly) {
 
+        initialState = false;
         this.integerOnly = integerOnly;
 
     }
@@ -354,6 +358,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setMaxFractionDigits(int maxFractionDigits) {
 
+        initialState = false;
         this.maxFractionDigits = maxFractionDigits;
 
     }
@@ -379,6 +384,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setMaxIntegerDigits(int maxIntegerDigits) {
 
+        initialState = false;
         this.maxIntegerDigits = maxIntegerDigits;
 
     }
@@ -404,6 +410,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setMinFractionDigits(int minFractionDigits) {
 
+        initialState = false;
         this.minFractionDigits = minFractionDigits;
 
     }
@@ -429,6 +436,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setMinIntegerDigits(int minIntegerDigits) {
 
+        initialState = false;
         this.minIntegerDigits = minIntegerDigits;
 
     }
@@ -461,6 +469,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setLocale(Locale locale) {
 
+        initialState = false;
         this.locale = locale;
 
     }
@@ -488,6 +497,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setPattern(String pattern) {
 
+        initialState = false;
         this.pattern = pattern;
 
     }
@@ -515,6 +525,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public void setType(String type) {
 
+        initialState = false;
         this.type = type;
 
     }
@@ -889,37 +900,42 @@ public class NumberConverter implements Converter, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[11];
-        values[0] = currencyCode;
-        values[1] = currencySymbol;
-        values[2] = groupingUsed;
-        values[3] = integerOnly;
-        values[4] = maxFractionDigits;
-        values[5] = maxIntegerDigits;
-        values[6] = minFractionDigits;
-        values[7] = minIntegerDigits;
-        values[8] = locale;
-        values[9] = pattern;
-        values[10] = type;
-        return (values);
+        if (!initialState) {
+            Object values[] = new Object[11];
+            values[0] = currencyCode;
+            values[1] = currencySymbol;
+            values[2] = groupingUsed;
+            values[3] = integerOnly;
+            values[4] = maxFractionDigits;
+            values[5] = maxIntegerDigits;
+            values[6] = minFractionDigits;
+            values[7] = minIntegerDigits;
+            values[8] = locale;
+            values[9] = pattern;
+            values[10] = type;
+            return (values);
+        }
+        return null;
 
     }
 
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
-        currencyCode = (String) values[0];
-        currencySymbol = (String) values[1];
-        groupingUsed = (Boolean) values[2];
-        integerOnly = (Boolean) values[3];
-        maxFractionDigits = (Integer) values[4];
-        maxIntegerDigits = (Integer) values[5];
-        minFractionDigits = (Integer) values[6];
-        minIntegerDigits = (Integer) values[7];
-        locale = (Locale) values[8];
-        pattern = (String) values[9];
-        type = (String) values[10];
+        if (state != null) {
+            Object values[] = (Object[]) state;
+            currencyCode = (String) values[0];
+            currencySymbol = (String) values[1];
+            groupingUsed = (Boolean) values[2];
+            integerOnly = (Boolean) values[3];
+            maxFractionDigits = (Integer) values[4];
+            maxIntegerDigits = (Integer) values[5];
+            minFractionDigits = (Integer) values[6];
+            minIntegerDigits = (Integer) values[7];
+            locale = (Locale) values[8];
+            pattern = (String) values[9];
+            type = (String) values[10];
+        }
 
     }
 
@@ -934,6 +950,17 @@ public class NumberConverter implements Converter, StateHolder {
 
     public void setTransient(boolean transientFlag) {
         this.transientFlag = transientFlag;
+    }
+
+
+    private boolean initialState;
+
+    public void markInitialState() {
+        initialState = true;
+    }
+
+    public boolean initialStateMarked() {
+        return initialState;
     }
 
 }

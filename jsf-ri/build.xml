@@ -127,6 +127,10 @@
         <copy file="${tools.dir}/template-src/TypedCollections.java"
               todir="${build.generate.dir}/com/sun/faces/util"
               filtering="true"/>
+        <filter token="package" value="com.sun.faces.application.view"/>
+        <copy file="${tools.dir}/template-src/StateHolderSaver.java"
+              todir="${build.generate.dir}/com/sun/faces/application/view"
+              filtering="true"/>
 
         <filter token="protection" value="public"/>
 
@@ -157,6 +161,10 @@
               file="${build.generate.dir}/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
               token="@serialVersionUID@"
               value="7410146713650507654L"/>
+        <replace
+              file="${build.generate.dir}/com/sun/faces/application/view/StateHolderSaver.java"
+              token="@serialVersionUID@"
+              value="4866548262845392093L"/>
     </target>
 
     <target name="check.taglib.generation.necessity">

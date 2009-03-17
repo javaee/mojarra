@@ -47,7 +47,7 @@ import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.StateHolder;
+import javax.faces.component.PartialStateHolder;
 import javax.validation.ConstraintDescriptor;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
@@ -61,7 +61,7 @@ import javax.validation.groups.Default;
  * of the bean property to the Bean Validation API.</p>
  * @since 2.0
  */
-public class BeanValidator implements Validator, StateHolder {
+public class BeanValidator implements Validator, PartialStateHolder {
 
     private String validationGroups;
 
@@ -115,6 +115,8 @@ public class BeanValidator implements Validator, StateHolder {
      */
 
     public void setValidationGroups(String validationGroups) {
+
+        initialState = false;
         // treat empty list as null
         if (validationGroups != null && validationGroups.matches(EMPTY_VALIDATION_GROUPS_PATTERN)) {
             validationGroups = null;
@@ -384,14 +386,28 @@ public class BeanValidator implements Validator, StateHolder {
     // ----------------------------------------------------- StateHolder Methods
 
     public Object saveState(FacesContext context) {
-        Object values[] = new Object[1];
-        values[0] = validationGroups;
-        return values;
+        if (!initialState) {
+            Object values[] = new Object[1];
+            values[0] = validationGroups;
+            return values;
+        }
+        return null;
     }
 
     public void restoreState(FacesContext context, Object state) {
-        Object values[] = (Object[]) state;
-        validationGroups = (String) values[0];
+        if (state != null) {
+            Object values[] = (Object[]) state;
+            validationGroups = (String) values[0];
+        }
+    }
+
+    private boolean initialState;
+    public void markInitialState() {
+        initialState = true;
+    }
+
+    public boolean initialStateMarked() {
+        return initialState;
     }
 
     private boolean transientValue = false;

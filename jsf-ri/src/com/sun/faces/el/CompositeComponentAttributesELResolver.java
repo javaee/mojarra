@@ -42,9 +42,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
 
 import javax.el.ELResolver;
@@ -287,57 +284,22 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
 
 
         public int size() {
-
-            int count = 0;
-            for (Map.Entry<String,Object> entry : attributesMap.entrySet()) {
-                if (entry.getValue() instanceof ValueExpression) {
-                    count++;
-                }
-            }
-            return count;
-
+            throw new UnsupportedOperationException();
         }
 
         public boolean isEmpty() {
-
-            for (Map.Entry<String,Object> entry : attributesMap.entrySet()) {
-                if (entry.getValue() instanceof ValueExpression) {
-                    return false;
-                }
-            }
-            return true;
-
+            throw new UnsupportedOperationException();
         }
 
         public boolean containsKey(Object key) {
-
-            return ((attributesMap.get(key) instanceof ValueExpression));
-
+            throw new UnsupportedOperationException();
         }
 
         public boolean containsValue(Object value) {
-
-            ELContext elCtx = ctx.getELContext();
-            for (Map.Entry<String,Object> entry : attributesMap.entrySet()) {
-                if (entry.getValue() instanceof ValueExpression) {
-                    Object result = ((ValueExpression) entry.getValue()).getValue(elCtx);
-                    if (value == null && result != null) {
-                        continue;
-                    }
-                    if (result == null && value == null) {
-                        return true;
-                    }
-                    if (value.equals(result)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-
+            throw new UnsupportedOperationException();
         }
 
         public Object get(Object key) {
-
             Object v = attributesMap.get(key);
             if (v != null && v instanceof ValueExpression) {
                 return (((ValueExpression) v).getValue(ctx.getELContext()));
@@ -346,21 +308,14 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
                 return v;
             }
             return null;
-
         }
 
         public Object put(String key, Object value) {
-
             Object v = attributesMap.get(key);
             if (v != null && v instanceof ValueExpression) {
-                ELContext elCtx = ctx.getELContext();
-                ValueExpression ve = (ValueExpression) v;
-                Object old = ve.getValue(elCtx);
-                ve.setValue(elCtx, value);
-                return old;
+                ((ValueExpression) v).setValue(ctx.getELContext(), value);
             }
             return null;
-
         }
 
         public Object remove(Object key) {
@@ -372,95 +327,19 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         }
 
         public void clear() {
-            // no-op
+            throw new UnsupportedOperationException();
         }
-
 
         public Set<String> keySet() {
-
-            Set<String> keySet = new HashSet<String>();
-            for (Map.Entry<String,Object> entry : attributesMap.entrySet()) {
-                if (entry.getValue() instanceof ValueExpression) {
-                    keySet.add(entry.getKey());
-                }
-            }
-            return Collections.unmodifiableSet(keySet);
-
+            throw new UnsupportedOperationException();
         }
-
 
         public Collection<Object> values() {
-
-            List<Object> values = new ArrayList<Object>();
-            ELContext elCtx = ctx.getELContext();
-            for (Map.Entry<String,Object> entry : attributesMap.entrySet()) {
-                if (entry.getValue() instanceof ValueExpression) {
-                    values.add(((ValueExpression) entry.getValue()).getValue(elCtx));
-                }
-            }
-            return Collections.unmodifiableCollection(values);
-
+            throw new UnsupportedOperationException();
         }
 
-        
         public Set<Map.Entry<String,Object>> entrySet() {
-
-            Set<Map.Entry<String,Object>> entries = new HashSet<Map.Entry<String,Object>>();
-            for (Map.Entry<String,Object> entry : attributesMap.entrySet()) {
-                if (entry.getValue() instanceof ValueExpression) {
-                    entries.add(new CCMapEntry(ctx,
-                                               entry.getKey(),
-                                               (ValueExpression) entry.getValue()));
-                }
-            }
-            return Collections.unmodifiableSet(entries);
-
-        }
-
-
-        // ------------------------------------------------------ Nested Classes
-
-
-        private static final class CCMapEntry implements Map.Entry<String,Object> {
-
-            String key;
-            ValueExpression ve;
-            FacesContext ctx;
-
-            CCMapEntry(FacesContext ctx, String key, ValueExpression ve) {
-
-                this.ctx = ctx;
-                this.key = key;
-                this.ve = ve;
-
-
-            }
-
-
-            // ------------------------------------------ Methods from Map.Entry
-
-
-            public String getKey() {
-
-                return key;
-
-            }
-
-            public Object getValue() {
-
-                return ve.getValue(FacesContext.getCurrentInstance().getELContext());
-
-            }
-
-            public Object setValue(Object value) {
-
-                ELContext elCtx = ctx.getELContext();
-                Object old = ve.getValue(elCtx);
-                ve.setValue(elCtx, value);
-                return old;
-
-            }
-
+            throw new UnsupportedOperationException();
         }
     }
 }

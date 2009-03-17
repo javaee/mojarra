@@ -107,7 +107,7 @@ import javax.faces.render.Renderer;
 
  */
 
-public abstract class UIComponent implements StateHolder, SystemEventListenerHolder, 
+public abstract class UIComponent implements PartialStateHolder, SystemEventListenerHolder,
         ComponentSystemEventListener {
     
     /**
@@ -143,6 +143,18 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * @since 2.0
      */
     public static final String BEANINFO_KEY = "javax.faces.component.BEANINFO_KEY";
+
+    /**
+     * <p class="changed_added_2_0">The value of this constant is used as the key in the
+     * component attribute map, the value for which is a
+     * <code>Boolean</code> indicating that this component instance
+     * was added into the tree by the a PDL, rather than programmatically.
+     * The absense of an entry for this key indicates that the component
+     * was not added by a PDL.</p>
+     *
+     * @since 2.0
+     */
+    public static final String ADDED_BY_PDL_KEY = "javax.faces.component.ADDED_BY_PDL_KEY";
 
     /**
      * <p class="changed_added_2_0">The value of this constant is used as the key
@@ -182,14 +194,25 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * @since 2.0
      */
     public static final String COMPOSITE_FACET_NAME = "javax.faces.component.COMPOSITE_FACET_NAME";
-    
+
+    enum PropertyKeysPrivate {
+        attributesThatAreSet
+    }
 
     /**
-     * Components within this base package are considered optimizable
-     * with respect to attributes processing.
+     * Properties that are tracked by state saving.
      */
-    private static final String OPTIMIZED_PACKAGE = "javax.faces.component.";
-
+    enum PropertyKeys {
+        rendered,
+        attributes,
+        bindings,
+        clientId,
+        id,
+        rendererType,
+        listeners,
+        systemEventListeners,
+        behaviors
+    }
 
     /**
      * List of attributes that have been set on the component (this
@@ -199,6 +222,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * on what has been set.
      */
     List<String> attributesThatAreSet;
+    StateHelper stateHelper = null;
 
 
     // -------------------------------------------------------------- Attributes
@@ -289,6 +313,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     // name This collection is lazily instantiated
     // The set of ValueExpressions for this component, keyed by property
     // name This collection is lazily instantiated
+    @Deprecated
     protected Map<String,ValueExpression> bindings = null;
 
     /**
@@ -308,26 +333,14 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *
      */
     public ValueExpression getValueExpression(String name) {
-        ValueExpression result = null;
 
         if (name == null) {
             throw new NullPointerException();
         }
-        if (bindings == null) {
-            if (!isUIComponentBase()) {
-                ValueBinding binding = getValueBinding(name);
-                if (null != binding) {
-                    result = new ValueExpressionValueBindingAdapter(binding);
-                    // Cache this for future reference.
-                    //noinspection CollectionWithoutInitialCapacity
-                    bindings = new HashMap<String, ValueExpression>();
-                    bindings.put(name, result);
-                }
-            }
-            return (result);
-        } else {
-            return (bindings.get(name));
-        }
+
+        Map<String,ValueExpression> map = (Map<String,ValueExpression>)
+              getStateHelper().get(UIComponentBase.PropertyKeys.bindings);
+        return ((map != null) ? map.get(name) : null);
 
     }
 
@@ -373,19 +386,28 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
         } else if ("id".equals(name) || "parent".equals(name)) {
             throw new IllegalArgumentException();
         }
+
         if (binding != null) {
             if (!binding.isLiteralText()) {
-                if (bindings == null) {
-                    //noinspection CollectionWithoutInitialCapacity
-                    bindings = new HashMap<String, ValueExpression>();
-                }
+                //if (bindings == null) {
+                //    //noinspection CollectionWithoutInitialCapacity
+                //    bindings = new HashMap<String, ValueExpression>();
+                //}
                 // add this binding name to the 'attributesThatAreSet' list
-                List<String> sProperties = getAttributesThatAreSet(true);
-                if (sProperties != null && !sProperties.contains(name)) {
-                    sProperties.add(name);
-                }
+                //List<String> sProperties = (List<String>)
+                //      getStateHelper().get(PropertyKeysPrivate.attributesThatAreSet);
 
-                bindings.put(name, binding);
+                 List<String> sProperties =
+                      (List<String>) getStateHelper().get(PropertyKeysPrivate.attributesThatAreSet);
+                if (sProperties == null) {
+                    getStateHelper().add(PropertyKeysPrivate.attributesThatAreSet, name);
+                } else if (!sProperties.contains(name)) {
+                    getStateHelper().add(PropertyKeysPrivate.attributesThatAreSet, name);
+                }
+                getStateHelper().put(UIComponentBase.PropertyKeys.bindings,
+                                     name,
+                                     binding);
+                //bindings.put(name, binding);
             } else {
                 ELContext context =
                     FacesContext.getCurrentInstance().getELContext();
@@ -396,22 +418,68 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
                 }
             }
         } else {
-            if (bindings != null) {
+            //if (bindings != null) {
                 // remove this binding name from the 'attributesThatAreSet' list
-                List<String> sProperties = getAttributesThatAreSet(false);
-                if (sProperties != null) {
-                    sProperties.remove(name);
-                }
-                bindings.remove(name);
-                if (bindings.isEmpty()) {
-                    bindings = null;
-                }
+//                List<String> sProperties = getAttributesThatAreSet(false);
+//                if (sProperties != null) {
+//                    sProperties.remove(name);
+//                }
+                getStateHelper().remove(PropertyKeysPrivate.attributesThatAreSet,
+                                        name);
+                getStateHelper().remove(UIComponentBase.PropertyKeys.bindings, name);
+                //bindings.remove(name);
+               // if (bindings.isEmpty()) {
+               //     bindings = null;
+               // }
             }
-        }
+       // }
 
     }
 
     // -------------------------------------------------------------- Properties
+
+    boolean initialState;
+
+    /**
+     * RELEASE_PENDING (docs)
+     */
+    public void markInitialState() {
+        initialState = true;
+    }
+
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
+    public boolean initialStateMarked() {
+        return initialState;
+    }
+
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
+    protected StateHelper getStateHelper() {
+        return getStateHelper(true);
+    }
+
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @param create
+     * @return
+     */
+    protected StateHelper getStateHelper(boolean create) {
+
+        if (create && stateHelper == null) {
+            stateHelper = new ComponentStateHelper(this);
+        }
+        return stateHelper;
+
+    }
+
 
     private boolean isInView;
 
@@ -1835,7 +1903,7 @@ private void doFind(FacesContext context, String clientId) {
      * @throws <code>NullPointerException</code> if any of the
      * arguments are <code>null</code>.
      *
-     * @since 2.0
+     * @since 2.0                                             
      */
     public void subscribeToEvent(Class<? extends SystemEvent> eventClass,
                                  ComponentSystemEventListener componentListener) {
@@ -1847,6 +1915,9 @@ private void doFind(FacesContext context, String clientId) {
             throw new NullPointerException();
         }
 
+        if (initialStateMarked()) {
+            initialState = false;
+        }
         if (null == listenersByEventClass) {
             listenersByEventClass = new HashMap<Class<? extends SystemEvent>,
                                                 List<SystemEventListener>>(3, 1.0f);
@@ -1946,6 +2017,23 @@ private void doFind(FacesContext context, String clientId) {
     }
 
 
+    /**
+     * <p class="changed_added_2_0">Starting with "this", return the closest 
+     * component in the ancestry that is a <code>NamingContainer</code>
+     * or <code>null</code> if none can be found.</p>
+     *
+     * @since 2.0
+     */
+    public UIComponent getNamingContainer() {
+        UIComponent namingContainer = this;
+        while (namingContainer != null) {
+            if (namingContainer instanceof NamingContainer) {
+                return namingContainer;
+            }
+            namingContainer = namingContainer.getParent();
+        }
+        return null;
+    }
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
@@ -2161,28 +2249,6 @@ private void doFind(FacesContext context, String clientId) {
 
 
     // --------------------------------------------------------- Package Private
-
-
-    /**
-     * @param create <code>true</code> if the list should be created
-     * @return A List of Strings of all the attributes that have been set
-     *  against this component.  If the component isn't in the default
-     *  javax.faces.component or javax.faces.component.html packages, or
-     *  create is <code>false</code>, this will return null;
-     */
-    List<String> getAttributesThatAreSet(boolean create) {
-
-
-        String name = this.getClass().getName();
-        if (name != null && name.startsWith(OPTIMIZED_PACKAGE)) {
-            if (create && attributesThatAreSet == null) {
-                attributesThatAreSet = new ArrayList<String>(6);
-            }
-        }
-
-        return attributesThatAreSet;
-        
-    }
 
 
     static final class ComponentSystemEventListenerAdapter

@@ -144,8 +144,7 @@ public class ResourceImpl extends Resource implements Externalizable {
         if (isEvaluateExpressions()) {
             result = getExpressionEvaluatingInputStream(ctx);
         } else {
-            ResourceInfo info = getResourceInfo(ctx);
-            result = info.getHelper().getInputStream(info, ctx);
+            result = resourceInfo.getHelper().getInputStream(resourceInfo, ctx);
         }
         return result;
     }
@@ -154,8 +153,8 @@ public class ResourceImpl extends Resource implements Externalizable {
     throws IOException {
 
         InputStream result;
-        ResourceInfo info = getResourceInfo(context);
-        final InputStream inner = info.getHelper().getInputStream(info, context);
+        final InputStream inner = resourceInfo.getHelper().getInputStream(resourceInfo, 
+                context);
         result = new InputStream() {
 
             // Premature optimization is the root of all evil.  Blah blah.
@@ -338,8 +337,7 @@ public class ResourceImpl extends Resource implements Externalizable {
      */
     public URL getURL() {
         FacesContext ctx = FacesContext.getCurrentInstance();
-        ResourceInfo info = getResourceInfo(ctx);
-        return info.getHelper().getURL(info, ctx);
+        return resourceInfo.getHelper().getURL(resourceInfo, ctx);
     }
 
 
@@ -424,18 +422,17 @@ public class ResourceImpl extends Resource implements Externalizable {
             queryStarted = true;
             uri += "?ln=" + getLibraryName();
         }
-        ResourceInfo info = getResourceInfo(context);
         String version = "";
-        if (info.getLibraryInfo() != null && info.getLibraryInfo().getVersion() != null) {
-            version += info.getLibraryInfo().getVersion().toString();
+        if (resourceInfo.getLibraryInfo() != null && resourceInfo.getLibraryInfo().getVersion() != null) {
+            version += resourceInfo.getLibraryInfo().getVersion().toString();
         }
-        if (info.getVersion() != null) {
-            version += info.getVersion().toString();
+        if (resourceInfo.getVersion() != null) {
+            version += resourceInfo.getVersion().toString();
         }
         if (version.length() > 0) {
             uri += ((queryStarted) ? "&v=" : "?v=") + version;
         }
-        String localePrefix = info.getLocalePrefix();
+        String localePrefix = resourceInfo.getLocalePrefix();
         if (localePrefix != null) {
             uri += ((queryStarted) ? "&loc=" : "?loc=") + localePrefix;
         }
@@ -456,15 +453,13 @@ public class ResourceImpl extends Resource implements Externalizable {
         Map<String,String> requestHeaders =
               context.getExternalContext().getRequestHeaderMap();
         return ((!requestHeaders.containsKey("If-Modified-Since"))
-                || (getResourceInfo(context).getHelper()
-                      .getLastModified(getResourceInfo(context), context) > initialTime));
+                || (resourceInfo.getHelper()
+                      .getLastModified(resourceInfo, context) > initialTime));
 
     }
 
 
     // --------------------------------------------- Methods from Externalizable
-
-
     public void writeExternal(ObjectOutput out) throws IOException {
 
         out.writeObject(getResourceName());
@@ -484,28 +479,16 @@ public class ResourceImpl extends Resource implements Externalizable {
         initialTime = in.readLong();
         maxAge = in.readLong();
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        if (ctx != null) {
-            getResourceInfo(ctx);
-        }
-
+        ResourceManager manager =
+              ApplicationAssociate.getInstance(FacesContext.getCurrentInstance().getExternalContext()).getResourceManager();
+        resourceInfo = manager.findResource(getLibraryName(),
+                                            getResourceName(),
+                                            getContentType(),
+                                            FacesContext.getCurrentInstance());
     }
 
     // --------------------------------------------------------- Private Methods
 
-
-    private ResourceInfo getResourceInfo(FacesContext ctx) {
-
-        if (resourceInfo == null) {
-            ResourceManager manager = ApplicationAssociate.getInstance(ctx.getExternalContext()).getResourceManager();
-            resourceInfo = manager.findResource(getLibraryName(),
-                                                getResourceName(),
-                                                getContentType(),
-                                                ctx);
-        }
-        return resourceInfo;
-
-    }
 
     private boolean isResourceRequest() {
 

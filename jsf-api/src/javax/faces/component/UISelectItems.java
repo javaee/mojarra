@@ -40,10 +40,6 @@
 
 package javax.faces.component;
 
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 
@@ -92,6 +88,10 @@ public class UISelectItems extends UIComponentBase {
     public static final String COMPONENT_FAMILY = "javax.faces.SelectItems";
 
 
+    enum PropertyKeys {
+        value
+    }
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -105,12 +105,6 @@ public class UISelectItems extends UIComponentBase {
         setRendererType(null);
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    private Object value = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -132,20 +126,7 @@ public class UISelectItems extends UIComponentBase {
      */
     public Object getValue() {
 
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueExpression ve = getValueExpression("value");
-	if (ve != null) {
-	    try {
-		return (ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
@@ -158,38 +139,9 @@ public class UISelectItems extends UIComponentBase {
      */
     public void setValue(Object value) {
 
-        this.value = value;
+        getStateHelper().put(PropertyKeys.value, value);
 
     }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    private Object[] values;
-
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[2];
-        }
-      
-        values[0] = super.saveState(context);
-        values[1] = value;
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        value = values[1];
-
-    }
-
-
 
 
 }

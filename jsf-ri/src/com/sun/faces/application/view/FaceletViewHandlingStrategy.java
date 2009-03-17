@@ -52,6 +52,10 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
+import javax.faces.webapp.pdl.StateManagementStrategy;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
@@ -96,6 +100,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
 
+    private StateManagementStrategy stateManagementStrategy;
+    
     // ------------------------------------------------------------ Constructors
 
 
@@ -105,10 +111,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
-
     // ------------------------------------ Methods from PageDeclarationLanguage
-    
 
+     @Override
+     public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
+         return stateManagementStrategy;
+     }
+    
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, 
             Resource compositeComponentResource) {
@@ -292,8 +301,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             return root;
         }
 
-        return super.createView(ctx, viewId);
-
+        UIViewRoot root = super.createView(ctx, viewId);
+        root.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
+        return root;
+        
     }
     
 
@@ -419,6 +430,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         this.initializeMappings();
+        this.stateManagementStrategy = new StateManagementStrategyImpl(this);
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Initialization Successful");

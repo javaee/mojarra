@@ -55,7 +55,7 @@ import javax.faces.context.FacesContext;
  */
 
 public class UINamingContainer extends UIComponentBase
-      implements NamingContainer {
+      implements NamingContainer, UniqueIdVendor, StateHolder {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -81,6 +81,12 @@ public class UINamingContainer extends UIComponentBase
     public static final String SEPARATOR_CHAR_PARAM_NAME =
           "javax.faces.SEPARATOR_CHAR";
 
+
+    enum PropertyKeys {
+           lastId
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -94,6 +100,7 @@ public class UINamingContainer extends UIComponentBase
         setRendererType(null);
 
     }
+    
 
     // -------------------------------------------------------------- Properties
 
@@ -175,5 +182,13 @@ public class UINamingContainer extends UIComponentBase
         // visit to continue.
         return false;
     }
+
+     public String createUniqueId(FacesContext context, String seed) {
+        Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
+        int lastId = ((i != null) ? i : 0);
+        getStateHelper().put(PropertyKeys.lastId,  ++lastId);
+        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
+     }
+
 }
 

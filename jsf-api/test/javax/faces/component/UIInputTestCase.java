@@ -628,6 +628,7 @@ public class UIInputTestCase extends UIOutputTestCase {
     protected UIComponent createComponent() {
         UIComponent component = new UIInput();
         component.setRendererType(null);
+        component.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         return (component);
     }
 

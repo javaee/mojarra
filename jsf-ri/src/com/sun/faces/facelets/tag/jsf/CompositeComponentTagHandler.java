@@ -215,6 +215,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             facetComponent = (UIPanel)
              facesContext.getApplication().createComponent("javax.faces.Panel");
             facetComponent.setRendererType("javax.faces.Group");
+            facetComponent.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
             c.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
         }
         else {

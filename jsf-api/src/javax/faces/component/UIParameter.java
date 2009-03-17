@@ -84,6 +84,13 @@ public class UIParameter extends UIComponentBase {
     public static final String COMPONENT_FAMILY = "javax.faces.Parameter";
 
 
+    enum PropertyKeys {
+        name,
+        value,
+        disble
+    }
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -97,14 +104,6 @@ public class UIParameter extends UIComponentBase {
         setRendererType(null);
 
     }
-
-
-    // ------------------------------------------------------ Instance Variables
-
-
-    private String name = null;
-    private Object value = null;
-    private Boolean disable = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -122,20 +121,7 @@ public class UIParameter extends UIComponentBase {
      */
     public String getName() {
 
-	if (this.name != null) {
-	    return (this.name);
-	}
-	ValueExpression ve = getValueExpression("name");
-	if (ve != null) {
-	    try {
-		return ((String) ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return (String) getStateHelper().eval(PropertyKeys.name);
 
     }
 
@@ -148,7 +134,7 @@ public class UIParameter extends UIComponentBase {
      */
     public void setName(String name) {
 
-        this.name = name;
+        getStateHelper().put(PropertyKeys.name, name);
 
     }
 
@@ -160,24 +146,7 @@ public class UIParameter extends UIComponentBase {
      */
     public Object getValue() {
 
-    if (isDisable()) {
-        return null;
-    }
-    
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueExpression ve = getValueExpression("value");
-	if (ve != null) {
-	    try {
-		return (ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	} else {
-	    return (null);
-	}
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
@@ -190,7 +159,7 @@ public class UIParameter extends UIComponentBase {
      */
     public void setValue(Object value) {
 
-        this.value = value;
+        getStateHelper().put(PropertyKeys.value, value);
 
     }
 
@@ -201,19 +170,9 @@ public class UIParameter extends UIComponentBase {
      * If true, the <code>value</code> set on this component is ignored.</p>
      */
     public boolean isDisable() {
-        if (disable != null) {
-            return (this.disable);
-        }
-        ValueExpression ve = getValueExpression("disable");
-        if (ve != null) {
-            try {
-                return Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext()));
-            } catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return false;
-        }
+
+        return (Boolean) getStateHelper().eval(PropertyKeys.disble, false);
+
     }
 
     /**
@@ -221,36 +180,8 @@ public class UIParameter extends UIComponentBase {
      * @param disable
      */
     public void setDisable(boolean disable) {
-        this.disable = disable;
-    }
 
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    private Object[] values;
-
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[4];
-        }
-     
-        values[0] = super.saveState(context);
-        values[1] = name;
-        values[2] = value;
-        values[3] = disable;
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        name = (String) values[1];
-        value = values[2];
-        disable = (Boolean) values[3];
+        getStateHelper().put(PropertyKeys.disble, disable);
 
     }
 

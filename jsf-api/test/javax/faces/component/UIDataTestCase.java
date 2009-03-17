@@ -1877,6 +1877,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     protected UIComponent createComponent() {
         UIComponent component = new UIData();
         component.setRendererType(null);
+        component.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         return (component);
     }
 

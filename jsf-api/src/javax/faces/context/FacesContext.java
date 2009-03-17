@@ -260,9 +260,9 @@ public abstract class FacesContext {
 
         if (defaultFacesContext != null) {
             defaultFacesContext.setExceptionHandler(exceptionHandler);
-        } else {
-            throw new UnsupportedOperationException();
         }
+
+        throw new UnsupportedOperationException();
         
     }
 
@@ -330,12 +330,10 @@ public abstract class FacesContext {
      */ 
 
     public List<FacesMessage> getMessageList() {
-
         if (defaultFacesContext != null) {
             return defaultFacesContext.getMessageList();
         }
         throw new UnsupportedOperationException();
-
     }
 
     /**
@@ -360,13 +358,10 @@ public abstract class FacesContext {
      */ 
 
     public List<FacesMessage> getMessageList(String clientId) {
-
         if (defaultFacesContext != null) {
             return defaultFacesContext.getMessageList(clientId);
         }
-        
         throw new UnsupportedOperationException();
-
     }
 
 
@@ -615,7 +610,7 @@ public abstract class FacesContext {
     public boolean isPostback() {
 
         if (defaultFacesContext != null) {
-            return defaultFacesContext.isPostback();
+            defaultFacesContext.isPostback();
         }
 
         throw new UnsupportedOperationException();

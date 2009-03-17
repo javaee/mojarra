@@ -208,12 +208,9 @@ information is saved.</p>
     <body-content>JSP</body-content>
     <attribute>
         <description>
-
-<p>Name of the variable to hold the value specified in the action. The
-type of the scoped variable is whatever type the value expression
-evaluates to.</p>
-
-
+Name of the exported scoped variable to hold the value
+specified in the action. The type of the scoped variable is
+whatever type the value expression evaluates to.
         </description>
         <name>var</name>
         <required>false</required>

@@ -56,7 +56,7 @@ import javax.faces.validator.FacesValidator;
  * Additionally, this Validator is a <code>ComponentSystemEventListener</code>,
  * and as such when it's processed by the <code>ClientSideValidatorHandler</code>,
  * this Validator will be registered as a listener to its associated input
- * component listening for <code>PreRenderComponentEvents</code>.  When the event
+ * component listening for <code>BeforeRenderEvents</code>.  When the event
  * is triggered and this listener is invoked, the validator will add an
  * <code>onmouseout</code> event to be rendered by the output component.</p>
  */

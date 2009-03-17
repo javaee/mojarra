@@ -45,7 +45,19 @@ import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import javax.faces.event.*;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.BehaviorEvent;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PostAddToViewEvent;
+import javax.faces.event.PostAddToViewNonPDLEvent;
+import javax.faces.event.PostValidateEvent;
+import javax.faces.event.PreRemoveFromViewEvent;
+import javax.faces.event.PreRenderComponentEvent;
+import javax.faces.event.PreValidateEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.render.Renderer;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -56,7 +68,20 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -261,7 +286,9 @@ public abstract class UIComponentBase extends UIComponent {
 
         // if the clientId is not yet set
         if (this.clientId == null) {
-            UIComponent parent = this.getNamingContainer();
+            UIComponent namingContainerAncestor =
+                    this.getNamingContainerAncestor();
+            UIComponent parent = namingContainerAncestor;
             String parentId = null;
 
             // give the parent the opportunity to first
@@ -273,7 +300,15 @@ public abstract class UIComponentBase extends UIComponent {
             // now resolve our own client id
             this.clientId = getId();
             if (this.clientId == null) {
-                setId(context.getViewRoot().createUniqueId());
+                String generatedId;
+                if (null != namingContainerAncestor &&
+                    namingContainerAncestor instanceof UniqueIdVendor) {
+                    generatedId = ((UniqueIdVendor)namingContainerAncestor).createUniqueId(context, null);
+                }
+                else {
+                    generatedId = context.getViewRoot().createUniqueId();
+                }
+                setId(generatedId);
                 this.clientId = getId();
             }
             if (parentId != null) {
@@ -296,26 +331,6 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     /**
-     * <p>Private utilitity method for finding this
-     * <code>UIComponent</code>'s parent <code>NamingContainer</code>.
-     * This method may return <code>null</code> if there is not a
-     * parent <code>NamingContainer</code></p>
-     *
-     * @return the parent <code>NamingContainer</code>
-     */
-    private UIComponent getNamingContainer() {
-        UIComponent namingContainer = this.getParent();
-        while (namingContainer != null) {
-            if (namingContainer instanceof NamingContainer) {
-                return namingContainer;
-            }
-            namingContainer = namingContainer.getParent();
-        }
-        return null;
-    }
-
-
-    /**
      * <p>The component identifier for this component.</p>
      */
     private String id = null;
@@ -325,6 +340,17 @@ public abstract class UIComponentBase extends UIComponent {
 
         return (id);
 
+    }
+
+    private UIComponent getNamingContainerAncestor() {
+	UIComponent namingContainer = this.getParent();
+        while (namingContainer != null) {
+            if (namingContainer instanceof NamingContainer) {
+                return namingContainer;
+            }
+            namingContainer = namingContainer.getParent();
+        }
+        return null;
     }
 
 
@@ -361,7 +387,6 @@ public abstract class UIComponentBase extends UIComponent {
     public void setParent(UIComponent parent) {
 
         this.parent = parent;
-
         if (this.parent == null) {
             disconnectFromView(this);
         } else {
@@ -381,69 +406,29 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
-    /**
-     * <p>The "should this component be rendered" flag.</p>
-     */
-    private boolean rendered = true;
-    private boolean renderedSet = false;
 
     public boolean isRendered() {
 
-        if (renderedSet) {
-            return (rendered);
-        }
-        ValueExpression ve = getValueExpression("rendered");
-        if (ve != null) {
-            try {
-                return (!Boolean.FALSE.equals(ve.getValue(getFacesContext().getELContext())));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return (this.rendered);
-        }
-
+        return (Boolean) getStateHelper().eval(PropertyKeys.rendered, Boolean.TRUE);
+        
     }
 
 
     public void setRendered(boolean rendered) {
-
-        this.rendered = rendered;
-        this.renderedSet = true;
-
+        getStateHelper().put(PropertyKeys.rendered, rendered);
     }
-
-
-    /**
-     * <p>The renderer type for this component.</p>
-     */
-    private String rendererType = null;
 
 
     public String getRendererType() {
 
-        if (this.rendererType != null) {
-            return (this.rendererType);
-        }
-        ValueExpression ve = getValueExpression("rendererType");
-        if (ve != null) {
-            try {
-                return ((String) ve.getValue(getFacesContext().getELContext()));
-            }
-            catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return (null);
-        }
-
+        return (String) getStateHelper().eval(PropertyKeys.rendererType);
+        
     }
 
 
     public void setRendererType(String rendererType) {
 
-        this.rendererType = rendererType;
+        getStateHelper().put(PropertyKeys.rendererType, rendererType);
 
     }
 
@@ -763,7 +748,7 @@ public abstract class UIComponentBase extends UIComponent {
      * @throws IllegalStateException    {@inheritDoc}
      * @throws NullPointerException     {@inheritDoc}
      */
-    public void broadcast(FacesEvent event) 
+    public void broadcast(FacesEvent event)
         throws AbortProcessingException {
 
         if (event == null) {
@@ -774,6 +759,9 @@ public abstract class UIComponentBase extends UIComponent {
             Behavior behavior = behaviorEvent.getBehavior();
             behavior.broadcast(behaviorEvent);
         }
+        List<FacesListener> listeners =
+              (List<FacesListener>) getStateHelper().get(PropertyKeys.listeners);
+
         if (listeners == null) {
             return;
         }
@@ -897,13 +885,6 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
-     * <p>Our {@link javax.faces.event.FacesListener}s.  This data
-     * structure is lazily instantiated as necessary.</p>
-     */
-    private List<FacesListener> listeners;
-
-
-    /**
      * <p>Add the specified {@link FacesListener} to the set of listeners
      * registered to receive event notifications from this {@link UIComponent}.
      * It is expected that {@link UIComponent} classes acting as event sources
@@ -947,11 +928,8 @@ public abstract class UIComponentBase extends UIComponent {
         if (listener == null) {
             throw new NullPointerException();
         }
-        if (listeners == null) {
-            //noinspection CollectionWithoutInitialCapacity
-            listeners = new ArrayList<FacesListener>();
-        }
-        listeners.add(listener);
+
+        getStateHelper().add(PropertyKeys.listeners, listener);
 
     }
 
@@ -967,13 +945,15 @@ public abstract class UIComponentBase extends UIComponent {
         if (!FacesListener.class.isAssignableFrom(clazz)) {
             throw new IllegalArgumentException();
         }
+
+        List<FacesListener> listeners =
+              (List<FacesListener>) getStateHelper().get(PropertyKeys.listeners);
         if (listeners == null) {
             return ((FacesListener[])
                     java.lang.reflect.Array.newInstance(clazz, 0));
         }
 
-        //noinspection CollectionWithoutInitialCapacity
-        List<FacesListener> results = new ArrayList<FacesListener>();
+        List<FacesListener> results = new ArrayList<FacesListener>(listeners.size());
         for (FacesListener listener : listeners) {
             if (((Class<?>) clazz).isAssignableFrom(listener.getClass())) {
                 results.add(listener);
@@ -1000,10 +980,9 @@ public abstract class UIComponentBase extends UIComponent {
         if (listener == null) {
             throw new NullPointerException();
         }
-        if (listeners == null) {
-            return;
-        }
-        listeners.remove(listener);
+
+        getStateHelper().remove(PropertyKeys.listeners, listener);
+
     }
 
     /**
@@ -1289,31 +1268,57 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
-    // ----------------------------------------------------- StateHolder Methods
+    // ---------------------------------------------- PartialStateHolder Methods
+
+    @Override
+    public void markInitialState() {
+        super.markInitialState();
+        List<FacesListener> listeners =
+                    (List<FacesListener>)
+                               getStateHelper().get(PropertyKeys.listeners);
+        if (listeners != null) {
+            for (FacesListener listener : listeners) {
+                if (listener instanceof PartialStateHolder) {
+                    ((PartialStateHolder) listener).markInitialState();
+                }
+            }
+        }
+        if (listenersByEventClass != null) {
+            for (List<SystemEventListener> listener : listenersByEventClass.values()) {
+                if (listener instanceof PartialStateHolder) {
+                    ((PartialStateHolder) listener).markInitialState();
+                }
+            }
+        }
+        if (behaviors != null) {
+            for (Entry<String, List<ClientBehavior>> entry : behaviors.entrySet()) {
+                for (ClientBehavior behavior : entry.getValue()) {
+                    if (behavior instanceof PartialStateHolder) {
+                        ((PartialStateHolder) behavior).markInitialState();
+                    }
+                }
+            }
+        }
+    }
+
     private Object[] values;
 
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[11];
+            values = new Object[6];
         }
 
-        if (attributes != null) {
-            Map backing = attributes.getBackingAttributes();
-            if (backing != null && !backing.isEmpty()) {
-                values[0] = backing;
-            }
+        values[0] = clientId;
+        values[1] = id;
+        values[2] = saveSystemEventListeners(context);
+        values[3] = saveBehaviorsState(context);
+        if (bindings != null) {
+            values[4] = saveBindingsState(context);
         }
-        values[1] = saveBindingsState(context);
-        values[2] = clientId;
-        values[3] = id;
-        values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = rendererType;
-        values[7] = saveAttachedState(context, listeners);
-        values[8] = attributesThatAreSet;
-        values[9] = saveSystemEventListeners(context);
-        values[10] = saveBehaviorsState(context);
+        if(stateHelper != null) {
+            values[5] = stateHelper.saveState(getFacesContext());
+        }
         assert (!transientFlag);
 
         return (values);
@@ -1322,42 +1327,27 @@ public abstract class UIComponentBase extends UIComponent {
 
     public void restoreState(FacesContext context, Object state) {
 
+        if (state == null) {
+            return;
+        }
         values = (Object[]) state;
-        // we need to get the map that knows how to handle attribute/property
-        // transparency before we restore its values.
-        if (values[0] != null) {
-            attributes = new AttributesMap(this,
-                    (Map) TypedCollections.dynamicallyCastMap((Map) values[0],
-                            String.class,
-                            Object.class));
-        }
-        bindings = restoreBindingsState(context, values[1]);
-        clientId = (String) values[2];
-        id = (String) values[3];
-        rendered = ((Boolean) values[4]).booleanValue();
-        renderedSet = ((Boolean) values[5]).booleanValue();
-        rendererType = (String) values[6];
+        clientId = (String) values[0];
+        id = (String) values[1];
         List<FacesListener> restoredListeners;
-        if (null != (restoredListeners = TypedCollections.dynamicallyCastList((List)
-                restoreAttachedState(context, values[7]), FacesListener.class))) {
-            // if there were some listeners registered prior to this
-            // method being invoked, merge them with the list to be
-            // restored.
-            if (null != listeners) {
-                listeners.addAll(restoredListeners);
-            } else {
-                listeners = restoredListeners;
-            }
-        }
-        Map m = restoreSystemEventListeners(context, values[9]);
+        Map m = restoreSystemEventListeners(context, values[2]);
         if (listenersByEventClass != null) {
             listenersByEventClass.putAll(m);
         } else {
             listenersByEventClass = m;
         }
-        //noinspection unchecked
-        attributesThatAreSet = (List<String>) values[8];
-        behaviors = restoreBehaviorsState(context, values[10]);
+        behaviors = restoreBehaviorsState(context, values[3]);
+        if (values[4] != null) {
+            bindings = restoreBindingsState(context, values[4]);
+        }
+        if(values[5] != null) {
+            getStateHelper().restoreState(getFacesContext(), values[5]);
+        }
+
     }
 
 
@@ -1587,14 +1577,20 @@ public abstract class UIComponentBase extends UIComponent {
 
         if (!isPostbackAndRestoreView(context)) {
             if (parent.isInView()) {
-                publishAfterViewEvents(context.getApplication(), added);
+                publishAfterViewEvents(context, context.getApplication(), added);
             }
 
         }
 
     }
-    
-    //------------------------------------------------------------- ClientBehaviorHolder stub methods.
+
+    private static void doPreRemoveProcessing(FacesContext context,
+            UIComponent toRemove) {
+        context.getApplication().publishEvent(PreRemoveFromViewEvent.class,
+                toRemove);
+    }
+
+    //------------------------------------------------------------- BehaviorHolder stub methods.
 
     /**
      * behaviors associated with this component.
@@ -1603,21 +1599,21 @@ public abstract class UIComponentBase extends UIComponent {
 
     /**
      * <p class="changed_added_2_0">This is a default implementation of
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder#addClientBehavior}.  
-     * <code>UIComponent</code> does not implement the 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} interface, 
-     * but provides default implementations for the methods defined by 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} to simplify 
-     * subclass implementations.   Subclasses that wish to support the 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} contract must 
-     * declare that the subclass implements 
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder#addClientBehavior}.
+     * <code>UIComponent</code> does not implement the
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} interface,
+     * but provides default implementations for the methods defined by
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} to simplify
+     * subclass implementations.   Subclasses that wish to support the
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} contract must
+     * declare that the subclass implements
      * {@link javax.faces.component.behavior.ClientBehaviorHolder}, and must provide
-     * an implementation of 
+     * an implementation of
      * {@link javax.faces.component.behavior.ClientBehaviorHolder#getEventNames}.</p>
      *
      * @param eventName the logical name of the client-side event to attach
      *        the behavior to.
-     * param  behavior the {@link javax.faces.component.behavior.Behavior} 
+     * @param  behavior the {@link javax.faces.component.behavior.Behavior} 
      * instance to attach for the specified event name.
      *
      * @since 2.0
@@ -1638,9 +1634,12 @@ public abstract class UIComponentBase extends UIComponent {
                 "that does not support any event types. "     +
                   "getEventTypes() must return a non-null Set.");
         }
-        
+
         if (eventNames.contains(eventName)) {
 
+            if (initialStateMarked()) {
+                initialState = false;
+            }
             // We've got an event that we support, create our Map
             // if necessary
 
@@ -1648,7 +1647,7 @@ public abstract class UIComponentBase extends UIComponent {
                 // Typically we only have a small number of behaviors for
                 // any component - in most cases only 1.  Using a very small
                 // initial capacity so that we keep the footprint to a minimum.
-                Map<String, List<ClientBehavior>> modifiableMap = 
+                Map<String, List<ClientBehavior>> modifiableMap =
                     new HashMap<String, List<ClientBehavior>>(5,1.0f);
                 behaviors = new BehaviorsMap(modifiableMap);
             }
@@ -1668,16 +1667,16 @@ public abstract class UIComponentBase extends UIComponent {
 
     /**
      * <p class="changed_added_2_0">This is a default implementation of
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder#getEventNames}.  
-     * <code>UIComponent</code> does not implement the 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} interface, 
-     * but provides default implementations for the methods defined by 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} to simplify 
-     * subclass implementations.   Subclasses that wish to support the 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} contract 
-     * must declare that the subclass implements 
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder#getEventNames}.
+     * <code>UIComponent</code> does not implement the
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} interface,
+     * but provides default implementations for the methods defined by
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} to simplify
+     * subclass implementations.   Subclasses that wish to support the
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} contract
+     * must declare that the subclass implements
      * {@link javax.faces.component.behavior.ClientBehaviorHolder}, and must
-     * override this method to return a non-Empty <code>Collection</code> 
+     * override this method to return a non-Empty <code>Collection</code>
      * of the client event names that the component supports.</p>
      *
      * @since 2.0
@@ -1694,16 +1693,16 @@ public abstract class UIComponentBase extends UIComponent {
 
     /**
      * <p class="changed_added_2_0">This is a default implementation of
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder#getClientBehaviors}.  
-     * <code>UIComponent</code> does not implement the 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} interface, 
-     * but provides default implementations for the methods defined by 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} to simplify 
-     * subclass implementations.   Subclasses that wish to support the 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} contract 
-     * must declare that the subclass implements 
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder#getClientBehaviors}.
+     * <code>UIComponent</code> does not implement the
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} interface,
+     * but provides default implementations for the methods defined by
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} to simplify
+     * subclass implementations.   Subclasses that wish to support the
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} contract
+     * must declare that the subclass implements
      * {@link javax.faces.component.behavior.ClientBehaviorHolder}, and must add
-     * an implementation of 
+     * an implementation of
      * {@link javax.faces.component.behavior.ClientBehaviorHolder#getEventNames}.</p>
      *
      * @since 2.0
@@ -1718,16 +1717,16 @@ public abstract class UIComponentBase extends UIComponent {
 
     /**
      * <p class="changed_added_2_0">This is a default implementation of
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder#getDefaultEventName}.  
-     * <code>UIComponent</code> does not implement the 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} interface, 
-     * but provides default implementations for the methods defined by 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} to simplify 
-     * subclass implementations.   Subclasses that wish to support the 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder} contract 
-     * must declare that the subclass implements 
-     * {@link javax.faces.component.behavior.ClientBehaviorHolder}, and must 
-     * provide an implementation of 
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder#getDefaultEventName}.
+     * <code>UIComponent</code> does not implement the
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} interface,
+     * but provides default implementations for the methods defined by
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} to simplify
+     * subclass implementations.   Subclasses that wish to support the
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder} contract
+     * must declare that the subclass implements
+     * {@link javax.faces.component.behavior.ClientBehaviorHolder}, and must
+     * provide an implementation of
      * {@link javax.faces.component.behavior.ClientBehaviorHolder#getEventNames}.</p>
      */
     public String getDefaultEventName() {
@@ -1741,7 +1740,7 @@ public abstract class UIComponentBase extends UIComponent {
      * {@link UIComponentBase} has stub methods from the {@link ClientBehaviorHolder} interface,
      * but these method should be used only with componets that really implement holder interface.
      * For an any other classes this method throws {@link IllegalStateException}
-     * @throws IllegalStateException 
+     * @throws IllegalStateException
      */
     private void assertClientBehaviorHolder() {
         if (!isClientBehaviorHolder()) {
@@ -1762,7 +1761,7 @@ public abstract class UIComponentBase extends UIComponent {
     /**
      * Save state of the behaviors map.
      * @param context the {@link FacesContext} for this request.
-     * @return map converted to the array of <code>Object</code> or null if no behaviors have been set. 
+     * @return map converted to the array of <code>Object</code> or null if no behaviors have been set.
      */
     private Object saveBehaviorsState(FacesContext context){
         Object state = null;
@@ -1811,19 +1810,26 @@ public abstract class UIComponentBase extends UIComponent {
         return null;
     }
 
-    private static void publishAfterViewEvents(Application application,
-        UIComponent component) {
+    private static void publishAfterViewEvents(FacesContext context,
+            Application application,
+            UIComponent component) {
 
         component.setInView(true);
-        application.publishEvent(PostAddToViewEvent.class, component);
+        // If the component was added by PDL, use the normal PostAddtoViewEvent.
+        // If the component was added by something other than PDL, use the PostAddToViewNonPDLEvent
+        Class<? extends SystemEvent> eventClass =
+              component.getAttributes().containsKey(UIComponent.ADDED_BY_PDL_KEY)
+                                                      ? PostAddToViewEvent.class
+                                                      : PostAddToViewNonPDLEvent.class;
+        application.publishEvent(eventClass, component);
         if (component.getChildCount() > 0) {
             for (UIComponent c : component.getChildren()) {
-                publishAfterViewEvents(application, c);
+                publishAfterViewEvents(context, application, c);
             }
         }
         if (component.getFacetCount() > 0) {
             for (UIComponent c : component.getFacets().values()) {
-                publishAfterViewEvents(application, c);
+                publishAfterViewEvents(context, application, c);
             }
         }
 
@@ -1897,7 +1903,7 @@ public abstract class UIComponentBase extends UIComponent {
         private static final String ATTRIBUTES_THAT_ARE_SET_KEY =
                 UIComponentBase.class.getName() + ".attributesThatAreSet";
 
-        private Map<String, Object> attributes;
+        //private Map<String, Object> attributes;
         private transient Map<String, PropertyDescriptor> pdMap;
         private transient UIComponent component;
         private static final long serialVersionUID = -6773035086539772945L;
@@ -1911,13 +1917,6 @@ public abstract class UIComponentBase extends UIComponent {
 
         }
 
-        private AttributesMap(UIComponent component,
-                              Map<String, Object> attributes) {
-            this(component);
-            this.attributes = attributes;
-
-        }
-
         public boolean containsKey(Object keyObj) {
             if (ATTRIBUTES_THAT_ARE_SET_KEY.equals(keyObj)) {
                 return true;
@@ -1926,6 +1925,8 @@ public abstract class UIComponentBase extends UIComponent {
             PropertyDescriptor pd =
                     getPropertyDescriptor(key);
             if (pd == null) {
+                Map<String,Object> attributes = (Map<String,Object>)
+                      component.getStateHelper().get(PropertyKeys.attributes);
                 if (attributes != null) {
                     return attributes.containsKey(key);
                 } else {
@@ -1943,8 +1944,10 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             }
             if (ATTRIBUTES_THAT_ARE_SET_KEY.equals(key)) {
-                result = component.getAttributesThatAreSet(false);
+                result = component.getStateHelper().get(UIComponent.PropertyKeysPrivate.attributesThatAreSet);
             }
+            Map<String,Object> attributes = (Map<String,Object>)
+                  component.getStateHelper().get(PropertyKeys.attributes);
             if (null == result) {
                 PropertyDescriptor pd =
                         getPropertyDescriptor(key);
@@ -1990,9 +1993,8 @@ public abstract class UIComponentBase extends UIComponent {
             if (ATTRIBUTES_THAT_ARE_SET_KEY.equals(keyValue)) {
                 if (component.attributesThatAreSet == null) {
                     if (value instanceof List) {
-                        //noinspection unchecked
-                        component.attributesThatAreSet = (List<String>) value;
-                        return component.attributesThatAreSet;
+                        component.getStateHelper().put(UIComponent.PropertyKeysPrivate.attributesThatAreSet,
+                                                       value);
                     }
                 }
                 return null;
@@ -2027,14 +2029,15 @@ public abstract class UIComponentBase extends UIComponent {
                 if (value == null) {
                     throw new NullPointerException();
                 }
-                if (attributes == null) {
-                    initMap();
+
+                List<String> sProperties =
+                      (List<String>) component.getStateHelper().get(PropertyKeysPrivate.attributesThatAreSet);
+                if (sProperties == null) {
+                    component.getStateHelper().add(PropertyKeysPrivate.attributesThatAreSet, keyValue);
+                } else if (!sProperties.contains(keyValue)) {
+                    component.getStateHelper().add(PropertyKeysPrivate.attributesThatAreSet, keyValue);
                 }
-                List<String> sProperties = component.getAttributesThatAreSet(true);
-                if (sProperties != null && !sProperties.contains(keyValue)) {
-                    sProperties.add(keyValue);
-                }
-                return (attributes.put(keyValue, value));
+                return putAttribute(keyValue, value);
             }
         }
 
@@ -2061,12 +2064,12 @@ public abstract class UIComponentBase extends UIComponent {
             if (pd != null) {
                 throw new IllegalArgumentException(key);
             } else {
+                Map<String,Object> attributes = getAttributes();
                 if (attributes != null) {
-                    List<String> sProperties = component.getAttributesThatAreSet(false);
-                    if (sProperties != null) {
-                        sProperties.remove(key);
-                    }
-                    return (attributes.remove(key));
+                    component.getStateHelper().remove(UIComponent.PropertyKeysPrivate.attributesThatAreSet,
+                                                      key);
+                    return (component.getStateHelper().remove(PropertyKeys.attributes,
+                                                              key));
                 } else {
                     return null;
                 }
@@ -2075,43 +2078,44 @@ public abstract class UIComponentBase extends UIComponent {
 
 
         public int size() {
+            Map attributes = getAttributes();
             return (attributes != null ? attributes.size() : 0);
         }
 
         public boolean isEmpty() {
+            Map attributes = getAttributes();
             return (attributes == null || attributes.isEmpty());
         }
 
         public boolean containsValue(java.lang.Object value) {
+            Map attributes= getAttributes();
             return (attributes != null && attributes.containsValue(value));
         }
 
         public void clear() {
-            if (attributes != null) {
-                attributes.clear();
-            }
+            component.getStateHelper().remove(PropertyKeys.attributes);
+            component.getStateHelper().remove(PropertyKeysPrivate.attributesThatAreSet);
         }
 
         public Set<String> keySet() {
+            Map<String,Object> attributes = getAttributes();
             if (attributes != null)
-                return attributes.keySet();
+                return Collections.unmodifiableSet(attributes.keySet());
             return Collections.emptySet();
         }
 
         public Collection<Object> values() {
+            Map<String,Object> attributes = getAttributes();
             if (attributes != null)
-                return attributes.values();
+                return Collections.unmodifiableCollection(attributes.values());
             return Collections.emptyList();
         }
 
         public Set<Entry<String, Object>> entrySet() {
+            Map<String,Object> attributes = getAttributes();
             if (attributes != null)
-                return attributes.entrySet();
+                return Collections.unmodifiableSet(attributes.entrySet());
             return Collections.emptySet();
-        }
-
-        Map getBackingAttributes() {
-            return attributes;
         }
 
         public boolean equals(Object o) {
@@ -2160,9 +2164,17 @@ public abstract class UIComponentBase extends UIComponent {
             return h;
         }
 
-        private void initMap() {
-            attributes = new HashMap<String, Object>(8);
+        private Map<String,Object> getAttributes() {
+            return (Map<String,Object>) component.getStateHelper().get(
+                  PropertyKeys.attributes);
         }
+
+        private Object putAttribute(String key, Object value) {
+            return component.getStateHelper().put(PropertyKeys.attributes,
+                                                  key,
+                                                  value);
+        }
+
 
         /**
          * <p>Return the <code>PropertyDescriptor</code> for the specified
@@ -2187,12 +2199,6 @@ public abstract class UIComponentBase extends UIComponent {
         // purely to be good citizens.
 
         private void writeObject(ObjectOutputStream out) throws IOException {
-            if (attributes == null) {
-                out.writeObject(new HashMap(1, 1.0f));
-            } else {
-                //noinspection NonSerializableObjectPassedToObjectStream
-                out.writeObject(attributes);
-            }
             out.writeObject(component.getClass());
             //noinspection NonSerializableObjectPassedToObjectStream
             out.writeObject(component.saveState(FacesContext.getCurrentInstance()));
@@ -2200,11 +2206,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         private void readObject(ObjectInputStream in)
                 throws IOException, ClassNotFoundException {
-            attributes = null;
-            pdMap = null;
-            component = null;
             //noinspection unchecked
-            attributes = (HashMap) in.readObject();
             Class clazz = (Class) in.readObject();
             try {
                 component = (UIComponent) clazz.newInstance();
@@ -2320,6 +2322,8 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             }
 
+            UIComponentBase.doPreRemoveProcessing(FacesContext.getCurrentInstance(),
+                    element);
             if (super.remove(element)) {
                 element.setParent(null);
                 return (true);
@@ -2959,7 +2963,7 @@ public abstract class UIComponentBase extends UIComponent {
     // Note that this Map must be unmodifiable to the external world,
     // but UIComponentBase itself needs to be able to write to the Map.
     // We solve these requirements wrapping the underlying modifiable
-    // Map inside of a unmodifiable map and providing private access to 
+    // Map inside of a unmodifiable map and providing private access to
     // the underlying (modifable) Map
     private static class BehaviorsMap extends AbstractMap<String, List<ClientBehavior>>{
         private Map<String, List<ClientBehavior>> unmodifiableMap;

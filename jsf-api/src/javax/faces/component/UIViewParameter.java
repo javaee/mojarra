@@ -37,9 +37,7 @@
 package javax.faces.component;
 
 import java.io.IOException;
-import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -89,9 +87,15 @@ public class UIViewParameter extends UIInput {
      */
     public static final String COMPONENT_FAMILY = "javax.faces.ViewParameter";
 
+
+    enum PropertyKeys {
+        name,
+        submittedValue
+    }
+
     // ------------------------------------------------------ Instance Variables
 
-    private transient Renderer inputTextRenderer = null;
+    private Renderer inputTextRenderer = null;
     
     // ------------------------------------------------------------ Constructors
 
@@ -111,8 +115,6 @@ public class UIViewParameter extends UIInput {
     // ------------------------------------------------------ Instance Variables
 
 
-    private String name;
-
     /**
      * <p>The raw value is the "implicit" binding for this view parameter. This property
      * maintains the submitted value of the view parameter for the duration of the request.
@@ -120,7 +122,7 @@ public class UIViewParameter extends UIInput {
      * request ends, this value is stored with the state of this component to use as the
      * submitted value on an ensuing postback.</p>
      */
-    private transient String rawValue;
+    private String rawValue;
 
 
     // -------------------------------------------------------------- Properties
@@ -140,20 +142,7 @@ public class UIViewParameter extends UIInput {
      */
     public String getName() {
 
-        if (this.name != null) {
-            return this.name;
-        }
-
-        ValueExpression ve = getValueExpression("name");
-        if (ve != null) {
-            try {
-                return ((String) ve.getValue(getFacesContext().getELContext()));
-            } catch (ELException e) {
-                throw new FacesException(e);
-            }
-        } else {
-            return null;
-        }
+        return (String) getStateHelper().eval(PropertyKeys.name);
 
     }
 
@@ -167,7 +156,7 @@ public class UIViewParameter extends UIInput {
      */
     public void setName(String name) {
 
-        this.name = name;
+        getStateHelper().put(PropertyKeys.name, name);
 
     }
 
@@ -189,7 +178,16 @@ public class UIViewParameter extends UIInput {
      */
     @Override
     public String getSubmittedValue() {
-        return (String) super.getSubmittedValue();
+        return (String) getStateHelper().get(PropertyKeys.submittedValue);
+    }
+
+    /**
+     * PENDING (docs)  Interesting that submitted value isn't saved by the parent
+     * @param submittedValue The new submitted value
+     */
+    @Override
+    public void setSubmittedValue(Object submittedValue) {
+        getStateHelper().put(PropertyKeys.submittedValue, submittedValue);
     }
 
     // ----------------------------------------------------- UIComponent Methods
@@ -412,36 +410,7 @@ public class UIViewParameter extends UIInput {
         return null != getValueExpression("value");
     }
 
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    private Object[] values;
-
-    @Override
-    public Object saveState(FacesContext context) {
-
-        if (values == null) {
-             values = new Object[3];
-        }
-
-        values[0] = super.saveState(context);
-        values[1] = name;
-        values[2] = getSubmittedValue();
-        return (values);
-
-    }
-
-
-    @Override
-    public void restoreState(FacesContext context, Object state) {
-
-        values = (Object[]) state;
-        super.restoreState(context, values[0]);
-        name = (String) values[1];
-        setSubmittedValue(values[2]);
-
-    }
-
+    
     /**
      * <p class="changed_added_2_0">Inner class to encapsulate a
      * <code>UIViewParameter</code> instance so that it may be safely

@@ -180,6 +180,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         comp1.getChildren().add(comp4);
 
         comp1.encodeChildren(facesContext);
+        System.out.println("Actual:   " + TestComponent.trace());
+        System.out.println("Expected: " + "/eC-one/eB-two/eE-two/eB-three/eE-three/eB-four/eE-four");
         assertEquals("/eC-one/eB-two/eE-two/eB-three/eE-three/eB-four/eE-four", TestComponent.trace());
 
     }
@@ -363,8 +365,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         UIComponent facet2 = createComponent();
         facet2.setId("facet2");
         preSave.getFacets().put("facet2 key", facet2);
-        populateComponent(preSave);
         parent.getChildren().add(preSave);
+        populateComponent(preSave);
         UIComponent postSave = createComponent();
 
         // Save and restore state and compare the results

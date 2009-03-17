@@ -136,6 +136,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
 
         this.onerror = onerror;
 
+        clearInitialState();
     }
 
     /**
@@ -165,6 +166,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
 
         this.onevent = onevent;
 
+        clearInitialState();
    }
 
     /**
@@ -198,6 +200,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
 
         this.execute = copyToList(execute);
 
+        clearInitialState();
     }
 
     /**
@@ -232,6 +235,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
         // See setExecute() for comment on the lack of a defensive copy.
         this.execute = copyToList(execute);
 
+        clearInitialState();
     }
 
     /**
@@ -255,6 +259,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
 
         this.disabled = disabled;
 
+        clearInitialState();
     }
 
     /**
@@ -279,6 +284,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
 
         this.immediate = immediate;
 
+        clearInitialState();
     }
 
     /**
@@ -362,6 +368,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
             }
         }
 
+        clearInitialState();
     }
 
     /**
@@ -399,16 +406,28 @@ public class AjaxBehavior extends ClientBehaviorBase {
     @Override
     public Object saveState(FacesContext context) {
 
-        Object[] values = new Object[8];
+        Object[] values;
+
+        Object superState = super.saveState(context);
+
+        if (initialStateMarked()) {
+            if (superState == null) {
+                values = null;
+            } else {
+                values = new Object[] { superState };
+            }
+        } else {
+            values = new Object[8];
       
-        values[0] = super.saveState(context);
-        values[1] = onerror;
-        values[2] = onevent;
-        values[3] = disabled;
-        values[4] = immediate;
-        values[5] = saveList(execute);
-        values[6] = saveList(render);
-        values[7] = saveBindings(context, bindings);
+            values[0] = superState;
+            values[1] = onerror;
+            values[2] = onevent;
+            values[3] = disabled;
+            values[4] = immediate;
+            values[5] = saveList(execute);
+            values[6] = saveList(render);
+            values[7] = saveBindings(context, bindings);
+        }
 
         return values;
     }
@@ -416,16 +435,24 @@ public class AjaxBehavior extends ClientBehaviorBase {
     @Override
     public void restoreState(FacesContext context, Object state) {
 
-        Object[] values = (Object[]) state;
-        super.restoreState(context, values[0]);
+        if (state != null) {
 
-        onerror = (String)values[1];
-        onevent = (String)values[2];
-        disabled = (Boolean)values[3];
-        immediate = (Boolean)values[4];
-        execute = restoreList(EXECUTE, values[5]);
-        render = restoreList(RENDER, values[6]);
-        bindings = restoreBindings(context, values[7]);
+            Object[] values = (Object[]) state;
+            super.restoreState(context, values[0]);
+
+            if (values.length != 1) {
+                onerror = (String)values[1];
+                onevent = (String)values[2];
+                disabled = (Boolean)values[3];
+                immediate = (Boolean)values[4];
+                execute = restoreList(EXECUTE, values[5]);
+                render = restoreList(RENDER, values[6]);
+                bindings = restoreBindings(context, values[7]);
+
+                // If we saved state last time, save state again next time.
+                clearInitialState();
+            }
+        }
     }
 
 
