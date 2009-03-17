@@ -640,6 +640,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void markInitialState() {
 
         super.markInitialState();
+
+        // add default validators now...
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (isBeansValidationAvailable(context) && !defaultValidatorsProcessed) {
+            addDefaultValidators(context);
+        }
+
         Validator[] validators = getValidators();
         if (validators != null) {
             for (Validator v : validators) {
@@ -648,6 +655,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 }
             }
         }
+
 
     }
 
@@ -738,9 +746,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
         // QUESTION is there another dependable way to perform this only once?
-        if (isBeansValidationAvailable(context) && !defaultValidatorsProcessed) {
-            addDefaultValidators(context);
-        }
+
     }
 
     /**
