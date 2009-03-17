@@ -643,7 +643,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
             return Collections.unmodifiableList(Arrays.asList(values));
         }
 
-        // RELEASE_PENDING  i18n ;
+        // i18n ;
         throw new FacesException(expression.toString()
                                  + " : '"
                                  + propertyName
@@ -671,7 +671,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
             } else if (NONE.equals(value)) {
                 list = NONE_LIST;
             } else {
-                // RELEASE_PENDING  i18n ;
+                // i18n ;
                 throw new FacesException(value.toString()
                                      + " : Invalid id keyword specified for '"
                                      + propertyName
