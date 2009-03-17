@@ -156,8 +156,7 @@ public class BehaviorBase implements Behavior, PartialStateHolder {
      * {@link javax.faces.component.PartialStateHolder#markInitialState}.
      */
     public void markInitialState() {
-        // temporary 'fix' until we can correct behavior save/restore
-        initialState = false;
+        initialState = true;
     }
 
     /**

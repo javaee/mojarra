@@ -1770,9 +1770,16 @@ public abstract class UIComponentBase extends UIComponent {
             Object[] attachedBehaviors = new Object[behaviors.size()];
             int i = 0;
             for (List<ClientBehavior> eventBehaviors : behaviors.values()) {
+                // we need to take different action depending on whether
+                // or not markInitialState() was called.  If it's not called,
+                // assume JSF 1.2 style state saving and call through to
+                // saveAttachedState(), otherwise, call saveState() on the
+                // behaviors directly.
                 Object[] attachedEventBehaviors = new Object[eventBehaviors.size()];
                 for (int j = 0; j < attachedEventBehaviors.length; j++) {
-                    attachedEventBehaviors[j]= saveAttachedState(context, eventBehaviors.get(j));
+                    attachedEventBehaviors[j] = ((initialStateMarked())
+                                                 ? saveBehavior(context, eventBehaviors.get(j))
+                                                 : saveAttachedState(context, eventBehaviors.get(j)));
                 }
                 attachedBehaviors[i++] = attachedEventBehaviors;
             }
@@ -1792,23 +1799,73 @@ public abstract class UIComponentBase extends UIComponent {
             Object[] values = (Object[]) state;
             String[] names = (String[])values[0];
             Object[] attachedBehaviors = (Object[]) values[1];
+            // we need to take different action depending on whether
+            // or not markInitialState() was called.  If it's not called,
+            // assume JSF 1.2 style state saving and call through to
+            // restoreAttachedState(), otherwise, call restoreState() on the
+            // behaviors directly.
+            if (!initialStateMarked()) {
+                Map<String, List<ClientBehavior>> modifiableMap = new HashMap<String, List<ClientBehavior>>(
+                      names.length,
+                      1.0f);
+                for (int i = 0; i < attachedBehaviors.length; i++) {
+                    Object[] attachedEventBehaviors = (Object[]) attachedBehaviors[i];
+                    ArrayList<ClientBehavior> eventBehaviors =
+                          new ArrayList<ClientBehavior>(attachedBehaviors.length);
+                    for (int j = 0; j < attachedEventBehaviors.length; j++) {
+                        eventBehaviors.add((ClientBehavior) restoreAttachedState(context,
+                                                                                 attachedEventBehaviors[j]));
+                    }
 
-            Map<String, List<ClientBehavior>> modifiableMap = new HashMap<String, List<ClientBehavior>>(names.length,1.0f);
-            for (int i = 0; i < attachedBehaviors.length; i++) {
-                Object[] attachedEventBehaviors = (Object[]) attachedBehaviors[i];
-                ArrayList<ClientBehavior> eventBehaviors = new ArrayList<ClientBehavior>(attachedBehaviors.length);
-                for (int j = 0; j < attachedEventBehaviors.length; j++) {
-                    eventBehaviors.add((ClientBehavior) restoreAttachedState(context, attachedEventBehaviors[j]));
+                    modifiableMap.put(names[i], eventBehaviors);
                 }
 
-                modifiableMap.put(names[i], eventBehaviors);
+                return new BehaviorsMap(modifiableMap);
+            } else {
+                for (int i = 0, len = names.length; i < len; i++) {
+                    // assume the behaviors have already been populated by
+                    // execution of the template.  Process the state in the
+                    // same order that the names were saved.
+                    List<ClientBehavior> existingBehaviors =
+                          behaviors.get(names[i]);
+                    restoreBehaviors(context, existingBehaviors, (Object[]) attachedBehaviors[i]);
+                }
+                return behaviors;
             }
-
-            return new BehaviorsMap(modifiableMap);
         }
-
         return null;
     }
+
+    private Object saveBehavior(FacesContext ctx, ClientBehavior behavior) {
+
+        // if the Behavior isn't a StateHolder, do nothing as it will be
+        // added to the BehaviorMap when the template is re-executed.
+        return ((behavior instanceof StateHolder)
+                ? ((StateHolder) behavior).saveState(ctx)
+                : null);
+
+    }
+
+
+    private void restoreBehaviors(FacesContext ctx, List<ClientBehavior> existingBehaviors, Object[] state) {
+
+        // this method assumes a one to one correspondence in both length and
+        // order.
+        for (int i = 0, len = state.length; i < len; i++) {
+            ClientBehavior behavior = existingBehaviors.get(i);
+            if (state[i] == null) {
+                // nothing to do...move on
+                continue;
+            }
+            // if the Behavior is a StateHolder, invoke restoreState
+            // passing in the current state.  If it's not, just ignore
+            // it and move along.
+            if (behavior instanceof StateHolder) {
+                ((StateHolder) behavior).restoreState(ctx, state[i]);
+            }
+        }
+    }
+
 
     private static void publishAfterViewEvents(FacesContext context,
             Application application,
