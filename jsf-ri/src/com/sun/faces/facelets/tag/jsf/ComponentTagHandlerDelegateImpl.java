@@ -52,11 +52,9 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.*;
-import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.event.InitialStateEvent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
@@ -67,8 +65,6 @@ import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
 
 public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
-    
-    private static final String INITIAL_STATE_EVENT_KEY = "facelets.tag.InitialStateEvent";
     
     private ComponentHandler owner;
     
@@ -199,8 +195,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 parent.getChildren().remove(c);
             }
         }
-        
-        c.processEvent(getInitialStateEvent(ctx.getFacesContext(), c));
 
         this.privateOnComponentPopulated(ctx, c, parent);
         owner.onComponentPopulated(ctx, c, parent);
@@ -339,22 +333,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         return (AjaxBehaviors)attrs.get(AjaxBehaviors.AJAX_BEHAVIORS);
     }
-    
-    private static InitialStateEvent getInitialStateEvent(FacesContext context,
-            UIComponent source) {
-        InitialStateEvent ise = null;
-        Map<Object,Object> attrs = context.getAttributes();
-        if (null == (ise = (InitialStateEvent) attrs.get(INITIAL_STATE_EVENT_KEY))) {
-            ise = new InitialStateEvent(source);
-            attrs.put(INITIAL_STATE_EVENT_KEY, ise);
-        }
-        else {
-            ise.setComponent(source);
-        }
 
-        return ise;
-    }
-    
     
     interface CreateComponentDelegate {
 

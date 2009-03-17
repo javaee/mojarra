@@ -70,16 +70,14 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 	  will cause the component to be populated with children.
 	  </p></li>
 
-	  <li><p>{@link UIComponent#processEvent} is called, passing an
-	  instance of {@link javax.faces.event.InitialStateEvent}.
-	  </p></li>
-
 	  <li><p>The component is added to its parent in the view.
 	  </p></li>
 
 	  <li><p>{@link UIComponent#popComponentFromEL} is called on the
 	  newly created component.</p></li>
 
+   // RELEASE_PENDING (edburns,rogerk) add docs about PartialStateHolder.markInitialState()
+   //   being called at the end of apply().
 
  * </ol>
  *
