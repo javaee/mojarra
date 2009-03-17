@@ -1270,6 +1270,10 @@ public abstract class UIComponentBase extends UIComponent {
 
     // ---------------------------------------------- PartialStateHolder Methods
 
+    /**
+     * RELEASE_PENDING (docs)
+     * Docs - call markInitialState() on any PartialStateHolder attached objects.
+     */
     @Override
     public void markInitialState() {
         super.markInitialState();
@@ -1295,6 +1299,42 @@ public abstract class UIComponentBase extends UIComponent {
                 for (ClientBehavior behavior : entry.getValue()) {
                     if (behavior instanceof PartialStateHolder) {
                         ((PartialStateHolder) behavior).markInitialState();
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * RELEASE_PENDING (docs)
+     * Docs - call clearInitialState() on all attached objects
+     */
+    @Override
+    public void clearInitialState() {
+        super.clearInitialState();
+        List<FacesListener> listeners =
+                    (List<FacesListener>)
+                               getStateHelper().get(PropertyKeys.listeners);
+        if (listeners != null) {
+            for (FacesListener listener : listeners) {
+                if (listener instanceof PartialStateHolder) {
+                    ((PartialStateHolder) listener).clearInitialState();
+                }
+            }
+        }
+        if (listenersByEventClass != null) {
+            for (List<SystemEventListener> listener : listenersByEventClass.values()) {
+                if (listener instanceof PartialStateHolder) {
+                    ((PartialStateHolder) listener).clearInitialState();
+                }
+            }
+        }
+        if (behaviors != null) {
+            for (Entry<String, List<ClientBehavior>> entry : behaviors.entrySet()) {
+                for (ClientBehavior behavior : entry.getValue()) {
+                    if (behavior instanceof PartialStateHolder) {
+                        ((PartialStateHolder) behavior).clearInitialState();
                     }
                 }
             }
@@ -1638,7 +1678,18 @@ public abstract class UIComponentBase extends UIComponent {
         if (eventNames.contains(eventName)) {
 
             if (initialStateMarked()) {
-                initialState = false;
+                // a Behavior has been added dynamically.  Update existing
+                // Behaviors, if any, to save their full state.
+                if (behaviors != null) {
+                    for (Entry<String, List<ClientBehavior>> entry : behaviors
+                          .entrySet()) {
+                        for (ClientBehavior b : entry.getValue()) {
+                            if (b instanceof PartialStateHolder) {
+                                ((PartialStateHolder) behavior).clearInitialState();
+                            }
+                        }
+                    }
+                }
             }
             // We've got an event that we support, create our Map
             // if necessary

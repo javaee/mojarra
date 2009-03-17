@@ -230,7 +230,7 @@ public class EnumConverter implements Converter, PartialStateHolder {
     }
 
     public Object saveState(FacesContext facesContext) {
-        if (!initialState) {
+        if (!initialStateMarked()) {
             return this.targetClass;
         }
         return null;
@@ -254,5 +254,9 @@ public class EnumConverter implements Converter, PartialStateHolder {
 
     public boolean initialStateMarked() {
         return initialState;
+    }
+
+    public void clearInitialState() {
+        initialState = false;
     }
 }

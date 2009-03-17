@@ -116,7 +116,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
 
     public void setValidationGroups(String validationGroups) {
 
-        initialState = false;
+        clearInitialState();
         // treat empty list as null
         if (validationGroups != null && validationGroups.matches(EMPTY_VALIDATION_GROUPS_PATTERN)) {
             validationGroups = null;
@@ -386,7 +386,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
     // ----------------------------------------------------- StateHolder Methods
 
     public Object saveState(FacesContext context) {
-        if (!initialState) {
+        if (!initialStateMarked()) {
             Object values[] = new Object[1];
             values[0] = validationGroups;
             return values;
@@ -408,6 +408,10 @@ public class BeanValidator implements Validator, PartialStateHolder {
 
     public boolean initialStateMarked() {
         return initialState;
+    }
+
+    public void clearInitialState() {
+        initialState = false;
     }
 
     private boolean transientValue = false;

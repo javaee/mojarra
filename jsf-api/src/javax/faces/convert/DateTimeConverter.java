@@ -216,7 +216,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      */
     public void setDateStyle(String dateStyle) {
 
-        initialState = false;
+        clearInitialState();
         this.dateStyle = dateStyle;
 
     }
@@ -249,7 +249,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      */
     public void setLocale(Locale locale) {
 
-        initialState = false;
+        clearInitialState();
         this.locale = locale;
 
     }
@@ -277,7 +277,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      */
     public void setPattern(String pattern) {
 
-        initialState = false;
+        clearInitialState();
         this.pattern = pattern;
 
     }
@@ -305,7 +305,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      */
     public void setTimeStyle(String timeStyle) {
 
-        initialState = false;
+        clearInitialState();
         this.timeStyle = timeStyle;
 
     }
@@ -330,7 +330,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      */
     public void setTimeZone(TimeZone timeZone) {
 
-        initialState = false;
+        clearInitialState();
         this.timeZone = timeZone;
 
     }
@@ -359,7 +359,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
      */
     public void setType(String type) {
 
-        initialState = false;
+        clearInitialState();
         this.type = type;
 
     }
@@ -560,7 +560,7 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
 
     public Object saveState(FacesContext context) {
 
-        if (!initialState) {
+        if (!initialStateMarked()) {
             Object values[] = new Object[6];
             values[0] = dateStyle;
             values[1] = locale;
@@ -610,5 +610,9 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
 
     public boolean initialStateMarked() {
         return initialState;
+    }
+
+    public void clearInitialState() {
+        initialState = false;
     }
 }

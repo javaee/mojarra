@@ -459,6 +459,14 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 
     /**
      * RELEASE_PENDING (docs)
+     */
+    public void clearInitialState() {
+        initialState = false;
+    }
+
+
+    /**
+     * RELEASE_PENDING (docs)
      * @return
      */
     protected StateHelper getStateHelper() {

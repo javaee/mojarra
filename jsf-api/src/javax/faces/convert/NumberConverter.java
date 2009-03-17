@@ -254,7 +254,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setCurrencyCode(String currencyCode) {
 
-        initialState = false;
+        clearInitialState();
         this.currencyCode = currencyCode;
 
     }
@@ -280,7 +280,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setCurrencySymbol(String currencySymbol) {
 
-        initialState = false;
+        clearInitialState();
         this.currencySymbol = currencySymbol;
 
     }
@@ -306,7 +306,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setGroupingUsed(boolean groupingUsed) {
 
-        initialState = false;
+        clearInitialState();
         this.groupingUsed = groupingUsed;
 
     }
@@ -332,7 +332,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setIntegerOnly(boolean integerOnly) {
 
-        initialState = false;
+        clearInitialState();
         this.integerOnly = integerOnly;
 
     }
@@ -358,7 +358,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setMaxFractionDigits(int maxFractionDigits) {
 
-        initialState = false;
+        clearInitialState();
         this.maxFractionDigits = maxFractionDigits;
 
     }
@@ -384,7 +384,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setMaxIntegerDigits(int maxIntegerDigits) {
 
-        initialState = false;
+        clearInitialState();
         this.maxIntegerDigits = maxIntegerDigits;
 
     }
@@ -410,7 +410,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setMinFractionDigits(int minFractionDigits) {
 
-        initialState = false;
+        clearInitialState();
         this.minFractionDigits = minFractionDigits;
 
     }
@@ -436,7 +436,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setMinIntegerDigits(int minIntegerDigits) {
 
-        initialState = false;
+        clearInitialState();
         this.minIntegerDigits = minIntegerDigits;
 
     }
@@ -469,7 +469,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setLocale(Locale locale) {
 
-        initialState = false;
+        clearInitialState();
         this.locale = locale;
 
     }
@@ -497,7 +497,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setPattern(String pattern) {
 
-        initialState = false;
+        clearInitialState();
         this.pattern = pattern;
 
     }
@@ -525,7 +525,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
      */
     public void setType(String type) {
 
-        initialState = false;
+        clearInitialState();
         this.type = type;
 
     }
@@ -900,7 +900,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
 
     public Object saveState(FacesContext context) {
 
-        if (!initialState) {
+        if (!initialStateMarked()) {
             Object values[] = new Object[11];
             values[0] = currencyCode;
             values[1] = currencySymbol;
@@ -963,4 +963,7 @@ public class NumberConverter implements Converter, PartialStateHolder {
         return initialState;
     }
 
+    public void clearInitialState() {
+        initialState = false;
+    }
 }

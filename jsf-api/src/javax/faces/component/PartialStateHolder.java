@@ -80,4 +80,11 @@ public interface PartialStateHolder extends StateHolder {
      *  otherwise <code>false</code>
      */
     boolean initialStateMarked();
+
+
+    /**
+     * Reset the PartialStateHolder to a non-delta tracking state.
+     */
+    void clearInitialState();
+
 }

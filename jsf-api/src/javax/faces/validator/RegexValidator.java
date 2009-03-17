@@ -60,7 +60,7 @@ public class RegexValidator implements Validator, PartialStateHolder {
      * @param pattern a regular expression pattern
      */
     public void setPattern(String pattern) {
-        initialState = false;
+        clearInitialState();
         this.regex = pattern;
     }
 
@@ -125,7 +125,7 @@ public class RegexValidator implements Validator, PartialStateHolder {
 
     public Object saveState(FacesContext context) {
 
-        if (!initialState) {
+        if (!initialStateMarked()) {
             Object values[] = new Object[1];
             values[0] = regex;
 
@@ -172,5 +172,8 @@ public class RegexValidator implements Validator, PartialStateHolder {
     public boolean initialStateMarked() {
         return initialState;
     }
-    
+
+    public void clearInitialState() {
+        initialState = false;
+    }
 }

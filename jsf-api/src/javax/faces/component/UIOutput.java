@@ -145,6 +145,7 @@ public class UIOutput extends UIComponentBase
 
     public void setConverter(Converter converter) {
 
+        clearInitialState();
         getStateHelper().put(PropertyKeys.converter, converter);
 
     }
@@ -187,6 +188,18 @@ public class UIOutput extends UIComponentBase
         Converter c = getConverter();
         if (c != null && c instanceof PartialStateHolder) {
             ((PartialStateHolder) c).markInitialState();
+        }
+
+    }
+
+
+    @Override
+    public void clearInitialState() {
+        
+        super.clearInitialState();
+        Converter c = getConverter();
+        if (c != null && c instanceof PartialStateHolder) {
+            ((PartialStateHolder) c).clearInitialState();
         }
 
     }

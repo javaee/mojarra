@@ -652,6 +652,21 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    @Override
+    public void clearInitialState() {
+
+        super.clearInitialState();
+        Validator[] validators = getValidators();
+        if (validators != null) {
+            for (Validator v : validators) {
+                if (v instanceof PartialStateHolder) {
+                    ((PartialStateHolder) v).clearInitialState();
+                }
+            }
+        }
+        
+    }
+
     /**
      * <p class="changed_added_2_0">Override the default superclass
      * behavior to provide conditional support for Beans Validation behavior.  
@@ -1333,7 +1348,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         if (validator == null) {
             throw new NullPointerException();
         }
-
+        clearInitialState();
         getStateHelper().add(PropertyKeys.validators, validator);
 
     }
@@ -1366,6 +1381,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     public void removeValidator(Validator validator) {
 
+        if (validator == null) {
+            return;
+        }
+        clearInitialState();
         getStateHelper().remove(PropertyKeys.validators, validator);
 
     }

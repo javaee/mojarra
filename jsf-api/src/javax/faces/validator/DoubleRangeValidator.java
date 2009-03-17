@@ -214,7 +214,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
      */
     public void setMaximum(double maximum) {
 
-        initialState = false;
+        clearInitialState();
         this.maximum = maximum;
 
     }
@@ -242,7 +242,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
      */
     public void setMinimum(double minimum) {
 
-        initialState = false;
+        clearInitialState();
         this.minimum = minimum;
 
     }
@@ -380,7 +380,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
 
     public Object saveState(FacesContext context) {
 
-        if (!initialState) {
+        if (!initialStateMarked()) {
             Object values[] = new Object[2];
             values[0] = maximum;
             values[1] = minimum;
@@ -428,4 +428,7 @@ public class DoubleRangeValidator implements Validator, PartialStateHolder {
         return initialState;
     }
 
+    public void clearInitialState() {
+        initialState = false;
+    }
 }

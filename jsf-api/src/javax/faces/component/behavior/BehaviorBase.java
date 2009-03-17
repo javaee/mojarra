@@ -171,7 +171,7 @@ public class BehaviorBase implements Behavior, PartialStateHolder {
      * <p class="changed_added_2_0">Clears the initial state flag, causing
      * the behavior to revert from partial to full state saving.</p>
      */
-    protected void clearInitialState() {
+    public void clearInitialState() {
         initialState = false;
     }
 
