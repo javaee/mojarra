@@ -508,7 +508,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         public void write(int c) throws IOException {
 
 
-            // RELEASE_PENDING add buffer for lookahead
+            // add buffer for lookahead
             if (inCdata) {
                 if (c == CLOSEBRACKET) {
                     inCdata = false;
@@ -555,8 +555,8 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
 
         }
 
-        // RELEASE_PENDING Consider changing from returning a String to returning a char array
-        // RELEASE_PENDING Add a character array buffer, as well as unwinding the final Strings into char[]
+        // Consider changing from returning a String to returning a char array
+        // Add a character array buffer, as well as unwinding the final Strings into char[]
         /*
          *  Method to escape all CDATA instances in a character array.
          */
@@ -581,7 +581,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
                 }
             }
             // if we didn't look at the last, look at it now
-            // RELEASE_PENDING consider buffering the last character, in this case
+            // consider buffering the last character, in this case
             if (!last) {
                 if (cbuf[cbuf.length - 1] == '<') {
                     builder.append(ESCAPEDLT);
