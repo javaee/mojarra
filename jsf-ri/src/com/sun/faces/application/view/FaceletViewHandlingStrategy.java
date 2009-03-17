@@ -42,6 +42,7 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,8 +54,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.webapp.pdl.StateManagementStrategy;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.facelets.Facelet;
@@ -74,11 +73,11 @@ import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.webapp.pdl.ViewMetadata;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -101,6 +100,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     
 
     private StateManagementStrategy stateManagementStrategy;
+    private Map<String,Boolean> partialState = new ConcurrentHashMap<String,Boolean>();
     
     // ------------------------------------------------------------ Constructors
 
@@ -115,7 +115,22 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
      @Override
      public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
-         return stateManagementStrategy;
+         if (context.getViewRoot() == null) {
+             if (Boolean.TRUE.equals(partialState.get(viewId))) {
+                 return stateManagementStrategy;
+             }
+         } else {
+             Object result = context.getViewRoot().getAttributes().get(StateManager.PARTIAL_STATE_SAVING_PARAM_NAME);
+             if (result == null || Boolean.TRUE.equals(result)) {
+                 partialState.put(viewId, true);
+                 return stateManagementStrategy;
+             } else {
+                 partialState.put(viewId, false);
+             }
+
+         }
+         // 'null' return here means we're defaulting to the 1.2 style state saving.
+         return null;
      }
     
     @Override

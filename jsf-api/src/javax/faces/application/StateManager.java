@@ -85,6 +85,19 @@ public abstract class StateManager {
 
 
     /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * For applications versioned at 1.2 where the internal Facelets implementation
+     * is disabled, this value will default to false.  If the application is
+     * versioned at 2.0, the default value is true.
+     *
+     * Note that this can be configured on a per-view basis as well
+     * by setting the partialStateSaving parameter on the UIViewRoot.
+     */
+    public static final String PARTIAL_STATE_SAVING_PARAM_NAME =
+          "javax.faces.PARTIAL_STATE_SAVING_PARAM_NAME";
+
+
+    /**
      * <p>Constant value for the initialization parameter named by
      * the <code>STATE_SAVING_METHOD_PARAM_NAME</code> that indicates
      * state saving should take place on the client.</p>
