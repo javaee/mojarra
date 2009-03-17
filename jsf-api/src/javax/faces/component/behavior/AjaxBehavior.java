@@ -55,13 +55,9 @@ import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorListener;
-import javax.faces.event.BehaviorEvent;
-import javax.faces.event.FacesEvent;
 
 
 /**
@@ -232,8 +228,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
      */
     public void setRender(Collection<String> render) {
 
-        // See setExecute() for comment on the lack of a defensive copy.
-        this.execute = copyToList(execute);
+        this.render = copyToList(render);
 
         clearInitialState();
     }
