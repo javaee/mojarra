@@ -640,13 +640,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void markInitialState() {
 
         super.markInitialState();
-
-        // add default validators now...
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (isBeansValidationAvailable(context) && !defaultValidatorsProcessed) {
-            addDefaultValidators(context);
-        }
-
         Validator[] validators = getValidators();
         if (validators != null) {
             for (Validator v : validators) {
@@ -655,7 +648,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 }
             }
         }
-
 
     }
 
@@ -672,12 +664,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 }
             }
         }
-        
+
     }
 
     /**
      * <p class="changed_added_2_0">Override the default superclass
-     * behavior to provide conditional support for Beans Validation behavior.  
+     * behavior to provide conditional support for Beans Validation behavior.
      * If Beans Validation is not available in the current environment,
      * this method must take no action.  After
      * encoding the component, add any default validators. Putting the
@@ -746,7 +738,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
         // QUESTION is there another dependable way to perform this only once?
-
+        if (isBeansValidationAvailable(context) && !defaultValidatorsProcessed) {
+            addDefaultValidators(context);
+        }
     }
 
     /**
