@@ -426,6 +426,12 @@ class InitFacesContext extends FacesContext {
         public void addResponseHeader(String name, String value) {
         }
 
+        @Override
+        public String encodePartialActionURL(String url) {
+            return null; 
+        }
+
+
     } // END ServletContextAdapter
 
 }

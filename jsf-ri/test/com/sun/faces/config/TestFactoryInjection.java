@@ -473,6 +473,10 @@ public class TestFactoryInjection extends ServletFacesTestCase {
             return null;
         }
 
+        public String encodePartialActionURL(String viewId) {
+            return null;
+        }
+
         public String encodeResourceURL(String url) {
             return null;
         }

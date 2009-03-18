@@ -889,9 +889,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              *  overview summary</a></li>
              * <li>Set the request header with the name: <code>Faces-Request and the
              * value: <code>partial/ajax</code>.</li>
+             * <li>Determine the <code>posting URL</code> as follows: If the hidden field
+             * <code>javax.faces.encodedURL</code> is present in the submitting form, use its
+             * value as the <code>posting URL</code>.  Otherwise, use the <code>action</code> 
+             * property of the <code>form</code> element as the <code>URL</code>.</li>
              * <li>Send the request as an <code>asynchronous POST</code> using the
-             * <code>action</code> property of the <code>form</code> element as the
-             * <code>url</code>.</li>
+             * <code>posting URL</code> that was determined in the previous step.</li>
              * </ul>
              * Before the request is sent it must be put into a queue to ensure requests
              * are sent in the same order as when they were initiated.  The request callback function
@@ -1064,7 +1067,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 args["javax.faces.partial.ajax"] = "true";
                 args["method"] = "POST";
-                args["url"] = form.action;
+
+                // Determine the posting url
+
+                var encodedUrlField = form.elements["javax.faces.encodedURL"];
+                if (typeof encodedUrlField == 'undefined') {
+                    args["url"] = form.action;
+                } else {
+                    args["url"] = encodedUrlField.value;
+                }
 
                 var ajaxEngine = new AjaxEngine();
                 ajaxEngine.setupArguments(args);

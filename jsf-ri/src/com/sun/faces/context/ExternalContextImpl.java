@@ -857,6 +857,15 @@ public class ExternalContextImpl extends ExternalContext {
         
     }
 
+    /**
+     * @see javax.faces.context.ExternalContext#encodePartialActionURL(String)
+     * @return
+     */
+    @Override
+    public String encodePartialActionURL(String url) {
+        UrlBuilder builder = new UrlBuilder(url, getResponseCharacterEncoding());
+        return ((HttpServletResponse) response).encodeURL(builder.createUrl());
+    }
 
     // ----------------------------------------------------------- Inner Classes
 

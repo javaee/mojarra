@@ -101,6 +101,9 @@ public class StoreServletContext extends Object {
             return null;
         }
 
+        public String encodePartialActionURL(String viewId) {
+            return null;
+        }
 
         public String encodeResourceURL(String url) {
             return null;

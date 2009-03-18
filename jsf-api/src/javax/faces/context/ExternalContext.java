@@ -1801,5 +1801,31 @@ public abstract class ExternalContext {
 
     }
 
+    /**
+     * <p class="changed_added_2_0">Return the input URL, after performing
+     * any rewriting needed to ensure that it can be used in a partial page
+     * submission (ajax request) to correctly identify an addressable action
+     * in the current application.</p>
+     *
+     * <div class="changed_added_2_0">
+     *
+     * <p><p>
+     *
+     * <p><em>Servlet:</em>Returns the same encoded URL as the
+     * {@link #encodeActionURL(String url)} method.</p>
+     *
+     * <p><em>Portlet:</em>Returns an encoded URL that, upon HTTP POST, will
+     * invoke the RESOURCE_PHASE of the portlet lifecycle.</p>
+     *
+     * </div>
+     *
+     * @param url The input URL to be encoded
+     *
+     * @throws NullPointerException if <code>url</code>
+     *  is <code>null</code>
+     *
+     * @since 2.0
+     */
+    public abstract String encodePartialActionURL(String url);
 
 }

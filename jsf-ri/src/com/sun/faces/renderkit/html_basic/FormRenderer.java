@@ -50,6 +50,7 @@ import java.util.logging.Level;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -161,6 +162,24 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.writeAttribute("value", clientId, "value");
         writer.endElement("input");
         writer.write('\n');
+
+        // Write out special hhidden field for partial submits
+        String viewId = context.getViewRoot().getViewId();
+        String actionURL =
+            context.getApplication().getViewHandler().getActionURL(context, viewId);
+        ExternalContext externalContext = context.getExternalContext();
+        String encodedActionURL = externalContext.encodeActionURL(actionURL);
+        String encodedPartialActionURL = externalContext.encodePartialActionURL(actionURL);
+        if (encodedPartialActionURL != null) {
+            if (!encodedPartialActionURL.equals(encodedActionURL)) {
+                writer.startElement("input", component);
+                writer.writeAttribute("type", "hidden", "type");
+                writer.writeAttribute("name", "javax.faces.encodedURL", null);
+                writer.writeAttribute("value", encodedPartialActionURL, "value");
+                writer.endElement("input");
+                writer.write('\n');
+            }
+        }
 
         if (!writeStateAtEnd) {
             context.getApplication().getViewHandler().writeState(context);
