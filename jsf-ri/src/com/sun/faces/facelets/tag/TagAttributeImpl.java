@@ -188,14 +188,14 @@ public final class TagAttributeImpl extends TagAttribute {
     public MethodExpression getMethodExpression(FaceletContext ctx, Class type,
             Class[] paramTypes) {
         MethodExpression result = null;
-        final String specialPrefix = "#{compositeComponent.";
-        final int specialPrefixLen = specialPrefix.length();
+
         try {
             ExpressionFactory f = ctx.getExpressionFactory();
             // Determine if this is a composite component attribute lookup.
             // If so, look for a MethodExpression under the attribute key
-            if (this.value.startsWith(specialPrefix) && this.value.contains(".attrs.")) {
-                // Make sure this is *only* an attribute lookup
+            CompositeComponentExpressionHelper helper =
+                  new CompositeComponentExpressionHelper(this.value);
+            if (helper.isValidCCExpression() && helper.isLookup()) {
                 result = new AttributeLookupMethodExpression(getValueExpression(ctx, MethodExpression.class));
             }
             if (null == result) {
@@ -430,6 +430,42 @@ public final class TagAttributeImpl extends TagAttribute {
                     + "\"";
         }
         return this.string;
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    private static class CompositeComponentExpressionHelper {
+
+        private boolean valid;
+        private boolean lookup;
+
+        CompositeComponentExpressionHelper(String expression) {
+
+            if (expression.startsWith("#{compositeComponent.")) {
+                String[] parts = Util.split(expression, "\\.");
+                int len = parts.length;
+                if (len <= 2) {
+                    valid = false;
+                } else {
+                    valid = true;
+                    if ("attrs".equals(parts[len - 2])) {
+                        lookup = true;
+                    }
+                }
+            }
+        }
+
+
+        boolean isValidCCExpression() {
+            return valid;
+        }
+
+        boolean isLookup() {
+            return lookup;
+        }
+
     }
 
 }

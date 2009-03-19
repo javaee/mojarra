@@ -1067,8 +1067,9 @@ public abstract class UIComponentBase extends UIComponent {
             app.publishEvent(PreValidateEvent.class, kid);
             kid.processValidators(context);
             app.publishEvent(PostValidateEvent.class, kid);
-            popComponentFromEL(context);
+
         }
+        popComponentFromEL(context);
     }
 
 
@@ -1093,8 +1094,10 @@ public abstract class UIComponentBase extends UIComponent {
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             kid.processUpdates(context);
-            popComponentFromEL(context);
+
         }
+        popComponentFromEL(context);
+        
     }
 
     private static final int MY_STATE = 0;
