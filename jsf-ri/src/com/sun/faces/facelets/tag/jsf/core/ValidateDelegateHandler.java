@@ -74,9 +74,7 @@ public final class ValidateDelegateHandler extends ValidatorHandler {
 
     public ValidateDelegateHandler(ValidatorConfig config) {
         super(config);
-        // FIXME this attribute need not be required since we can reflect on the class of the
-        // object resolved from the binding to get the value of the VALIDATOR_ID field
-        this.validatorId = this.getRequiredAttribute("validatorId");
+        this.validatorId = this.getAttribute("validatorId");
     }
 
     /**
@@ -87,7 +85,7 @@ public final class ValidateDelegateHandler extends ValidatorHandler {
      * @see com.sun.faces.facelets.tag.jsf.ValidatorHandler#getValidator(com.sun.faces.facelets.FaceletContext)
      */
     protected String getValidator(FaceletContext ctx) {
-        return this.validatorId.getValue(ctx);
+        return ((validatorId != null) ? this.validatorId.getValue(ctx) : null);
     }
 
     protected MetaRuleset createMetaRuleset(Class type) {
