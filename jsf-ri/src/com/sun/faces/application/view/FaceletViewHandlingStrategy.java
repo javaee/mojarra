@@ -405,7 +405,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      */
     protected static boolean isViewPopulated(FacesContext ctx, UIViewRoot viewToRender) {
 
-        return ctx.getAttributes().containsKey(viewToRender.getViewId());
+        return ctx.getAttributes().containsKey(viewToRender);
 
     }
 
@@ -420,7 +420,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     protected static void setViewPopulated(FacesContext ctx,
                                            UIViewRoot viewToRender) {
 
-        ctx.getAttributes().put(viewToRender.getViewId(), Boolean.TRUE);
+        ctx.getAttributes().put(viewToRender, Boolean.TRUE);
 
     }
 
