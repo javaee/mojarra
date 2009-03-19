@@ -51,6 +51,7 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.application.StateManager;
 import javax.faces.component.*;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
@@ -203,7 +204,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // been part of the tree or not yet
         ComponentSupport.addComponent(ctx, parent, c);
         c.popComponentFromEL(ctx.getFacesContext());
-        c.markInitialState();
+
+
+        if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))) {
+            c.markInitialState();
+        }
         
     }
 

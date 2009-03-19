@@ -39,10 +39,7 @@ package com.sun.faces.application.view;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,6 +62,9 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
@@ -73,7 +73,6 @@ import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
-import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.webapp.pdl.ViewMetadata;
@@ -98,9 +97,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public static final String IS_BUILDING_METADATA =
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
-
     private StateManagementStrategy stateManagementStrategy;
-    private Map<String,Boolean> partialState = new ConcurrentHashMap<String,Boolean>();
+
+     private boolean partialStateSaving;
+    private Set<String> fullStateViewIds;
     
     // ------------------------------------------------------------ Constructors
 
@@ -115,22 +115,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
      @Override
      public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
-         if (context.getViewRoot() == null) {
-             if (Boolean.TRUE.equals(partialState.get(viewId))) {
-                 return stateManagementStrategy;
-             }
-         } else {
-             Object result = context.getViewRoot().getAttributes().get(StateManager.PARTIAL_STATE_SAVING_PARAM_NAME);
-             if (result == null || Boolean.TRUE.equals(result)) {
-                 partialState.put(viewId, true);
-                 return stateManagementStrategy;
-             } else {
-                 partialState.put(viewId, false);
-             }
 
-         }
          // 'null' return here means we're defaulting to the 1.2 style state saving.
-         return null;
+         return (context.getAttributes().containsKey("partialStateSaving") ? stateManagementStrategy : null);
+
      }
     
     @Override
@@ -292,6 +280,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public UIViewRoot restoreView(FacesContext ctx,
                                   String viewId) {
 
+        updateStateSavingType(ctx, viewId);
         if (UIDebug.debugRequest(ctx)) {
             ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
         }
@@ -371,21 +360,22 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     /**
      * Build the view.
      * @param ctx the {@link FacesContext} for the current request
-     * @param viewToRender the {@link UIViewRoot} to populate based
+     * @param view the {@link UIViewRoot} to populate based
      *  of the Facelet template
      * @throws IOException if an error occurs building the view.
      */
     @Override
-    public void buildView(FacesContext ctx, UIViewRoot viewToRender)
+    public void buildView(FacesContext ctx, UIViewRoot view)
     throws IOException {
 
-        if (isViewPopulated(ctx, viewToRender)) {
+        if (isViewPopulated(ctx, view)) {
             return;
         }
-        viewToRender.setViewId(viewToRender.getViewId());
+        updateStateSavingType(ctx, view.getViewId());
+        view.setViewId(view.getViewId());
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("Building View: " + viewToRender.getViewId());
+            LOGGER.fine("Building View: " + view.getViewId());
         }
         if (faceletFactory == null) {
             ApplicationAssociate associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
@@ -395,11 +385,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         RequestStateManager.set(ctx,
                                 RequestStateManager.FACELET_FACTORY,
                                 faceletFactory);
-        Facelet f = faceletFactory.getFacelet(viewToRender.getViewId());
+        Facelet f = faceletFactory.getFacelet(view.getViewId());
 
         // populate UIViewRoot
-        f.apply(ctx, viewToRender);
-        setViewPopulated(ctx, viewToRender);
+        f.apply(ctx, view);
+        setViewPopulated(ctx, view);
 
     }
 
@@ -446,6 +436,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         this.initializeMappings();
         this.stateManagementStrategy = new StateManagementStrategyImpl(this);
+        WebConfiguration config = WebConfiguration.getInstance();
+        partialStateSaving = config.isOptionEnabled(PartialStateSaving);
+        if (partialStateSaving) {
+            String[] viewIds = config.getOptionValue(FullStateSavingViewIds, ",");
+            fullStateViewIds = new HashSet<String>(viewIds.length, 1.0f);
+            fullStateViewIds.addAll(Arrays.asList(viewIds));
+        }
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Initialization Successful");
@@ -691,6 +688,20 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         return contentType;
+
+    }
+
+     private void updateStateSavingType(FacesContext ctx, String viewId) {
+
+        if (!ctx.getAttributes().containsKey("partialStateSaving")) {
+            if (partialStateSaving) {
+                ctx.getAttributes().put("partialStateSaving",
+                                        !fullStateViewIds.contains(viewId));
+            } else {
+                ctx.getAttributes().put("partialStateSaving",
+                                       false);
+            }
+        }
 
     }
 

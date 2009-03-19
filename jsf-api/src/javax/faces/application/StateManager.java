@@ -92,16 +92,28 @@ public abstract class StateManager {
      *
      * Note that this can be configured on a per-view basis as well
      * by setting the partialStateSaving parameter on the UIViewRoot.
+     *
+     * @since 2.0
      */
     public static final String PARTIAL_STATE_SAVING_PARAM_NAME =
-          "javax.faces.PARTIAL_STATE_SAVING_PARAM_NAME";
+          "javax.faces.PARTIAL_STATE_SAVING";
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * The value of this parameters is a comma separated list of view IDs
+     * that will not have their state saved using partial state saving and
+     * instead will be saved using the JSF 1.2 state saving mechanism. 
+     */
+    public static final String FULL_STATE_SAVING_VIEW_IDS_PARAM_NAME =
+          "javax.faces.FULL_STATE_SAVING_VIEW_IDS";
 
 
     /**
      * <p>Constant value for the initialization parameter named by
      * the <code>STATE_SAVING_METHOD_PARAM_NAME</code> that indicates
      * state saving should take place on the client.</p>
-     */
+     */                                   
     public static final String STATE_SAVING_METHOD_CLIENT = "client";
 
 

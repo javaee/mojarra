@@ -2336,25 +2336,6 @@ will not pass validation.</p> ]]>
       </deferred-method>
     </attribute>
 
-        <attribute>
-            <description>
-                RELEASE_PENDING (docs)
-                If the value is 'true', partial state saving will be enabled
-                for this view, otherwise, if the value is 'false', JSF 1.2-style
-                state saving will be used for this view.
-
-                If no value is specified, the value of the javax.faces.PARTIAL_STATE_SAVING
-                context initialization parameter will be inspected and applied as
-                above.  If no value is specified, partial state saving will be
-                enabled by default.
-            </description>
-            <name>partialStateSaving</name>
-            <required>false</required>
-            <deferred-value>
-                <type>boolean</type>
-            </deferred-value>
-        </attribute>
-
     </tag>
 
 

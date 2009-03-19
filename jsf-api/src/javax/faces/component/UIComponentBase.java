@@ -1345,23 +1345,54 @@ public abstract class UIComponentBase extends UIComponent {
 
     public Object saveState(FacesContext context) {
 
-        if (values == null) {
-            values = new Object[6];
-        }
-
-        values[0] = clientId;
-        values[1] = id;
-        values[2] = saveSystemEventListeners(context);
-        values[3] = saveBehaviorsState(context);
-        if (bindings != null) {
-            values[4] = saveBindingsState(context);
-        }
-        if(stateHelper != null) {
-            values[5] = stateHelper.saveState(getFacesContext());
-        }
         assert (!transientFlag);
+        if (initialStateMarked()) {
+            Object savedSysEventListeners = saveSystemEventListeners(context);
+            Object savedBehaviors = saveBehaviorsState(context);
+            Object savedBindings = null;
+            if (bindings != null) {
+                savedBindings = saveBindingsState(context);
+            }
+            Object savedHelper = null;
+            if (stateHelper != null) {
+                savedHelper = stateHelper.saveState(getFacesContext());
+            }
+            if (savedSysEventListeners == null
+                  && savedBehaviors == null
+                  && savedBindings == null
+                  && savedHelper == null) {
+                return null;
+            } else {
+                if (values == null) {
+                    values = new Object[4];
+                }
 
-        return (values);
+                // since we're saving partial state, skip id and clientId
+                // as this will be reconstructed from the template execution
+                // when the view is restored
+                values[0] = savedSysEventListeners;
+                values[1] = savedBehaviors;
+                values[2] = savedBindings;
+                values[3] = savedHelper;
+                return values;
+            }
+        } else {
+            if (values == null) {
+                values = new Object[5];
+            }
+
+            values[0] = saveSystemEventListeners(context);
+            values[1] = saveBehaviorsState(context);
+            if (bindings != null) {
+                values[2] = saveBindingsState(context);
+            }
+            if (stateHelper != null) {
+                values[3] = stateHelper.saveState(getFacesContext());
+            }
+            values[4] = id;
+
+            return (values);
+        }
     }
 
 
@@ -1371,21 +1402,30 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
         values = (Object[]) state;
-        clientId = (String) values[0];
-        id = (String) values[1];
-        List<FacesListener> restoredListeners;
-        Map m = restoreSystemEventListeners(context, values[2]);
-        if (listenersByEventClass != null) {
-            listenersByEventClass.putAll(m);
-        } else {
-            listenersByEventClass = m;
+
+        if (values[0] != null) {
+            Map m = restoreSystemEventListeners(context, values[0]);
+            if (listenersByEventClass != null) {
+                listenersByEventClass.putAll(m);
+            } else {
+                listenersByEventClass = m;
+            }
         }
-        behaviors = restoreBehaviorsState(context, values[3]);
-        if (values[4] != null) {
-            bindings = restoreBindingsState(context, values[4]);
+        if (values[1] != null) {
+            behaviors = restoreBehaviorsState(context, values[1]);
         }
-        if(values[5] != null) {
-            getStateHelper().restoreState(getFacesContext(), values[5]);
+        if (values[2] != null) {
+            bindings = restoreBindingsState(context, values[2]);
+        }
+        if(values[3] != null) {
+            getStateHelper().restoreState(getFacesContext(), values[3]);
+        }
+        if (values.length == 5) {
+            // this means we've saved full state and need to do a little more
+            // work to finish the job
+            if (values[4] != null) {
+                id = (String) values[4];
+            }
         }
 
     }
@@ -1817,7 +1857,7 @@ public abstract class UIComponentBase extends UIComponent {
     private Object saveBehaviorsState(FacesContext context){
         Object state = null;
         if (null != behaviors && behaviors.size() >0){
-            behaviors.keySet().toArray(new String[behaviors.size()]);
+            boolean stateWritten = false;
             Object[] attachedBehaviors = new Object[behaviors.size()];
             int i = 0;
             for (List<ClientBehavior> eventBehaviors : behaviors.values()) {
@@ -1831,10 +1871,15 @@ public abstract class UIComponentBase extends UIComponent {
                     attachedEventBehaviors[j] = ((initialStateMarked())
                                                  ? saveBehavior(context, eventBehaviors.get(j))
                                                  : saveAttachedState(context, eventBehaviors.get(j)));
+                    if (!stateWritten) {
+                        stateWritten = (attachedEventBehaviors[j] != null);
+                    }
                 }
                 attachedBehaviors[i++] = attachedEventBehaviors;
             }
-            state = new Object[]{behaviors.keySet().toArray(new String[behaviors.size()]),attachedBehaviors};
+            if (stateWritten) {
+                state = new Object[]{behaviors.keySet().toArray(new String[behaviors.size()]),attachedBehaviors};
+            }
         }
         return state;
     }

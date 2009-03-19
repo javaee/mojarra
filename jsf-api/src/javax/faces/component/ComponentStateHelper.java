@@ -280,18 +280,27 @@ class ComponentStateHelper implements StateHelper {
      */
     public Object saveState(FacesContext context) {
         if(component.initialStateMarked()) {
-            return saveMap(deltaMap);
+            return saveMap(context, deltaMap);
         }
         else {
-            return saveMap(defaultMap);
+            return saveMap(context, defaultMap);
         }
     }
 
-    private Object saveMap(Map<Serializable, Object> map) {
+    private Object saveMap(FacesContext context, Map<Serializable, Object> map) {
 
-        FacesContext fc = FacesContext.getCurrentInstance();
+        if (map.isEmpty()) {
+            if (!component.initialStateMarked()) {
+                // only need to propagate the component's delta status when
+                // delta tracking has been disabled.  We're assuming that
+                // the PDL will reset the status when the view is reconstructed,
+                // so no need to save the state if the saved state is the default.
+                return new Object[] { component.initialStateMarked() };
+            }
+            return null;
+        }
 
-        Object[] savedState = new Object[map.size()*2+1];
+        Object[] savedState = new Object[map.size() * 2 + 1];
 
         int i=0;
 
@@ -302,13 +311,16 @@ class ComponentStateHelper implements StateHelper {
             }
             savedState[i * 2] = entry.getKey();
             if (value instanceof Collection) {
-                value = saveAttachedState(fc,value);
+                value = saveAttachedState(context,value);
             }
-            savedState[i * 2 + 1] = value instanceof Serializable?value:saveAttachedState(fc, value);
+            savedState[i * 2 + 1] = value instanceof Serializable?value:saveAttachedState(context, value);
             i++;
         }
-        savedState[savedState.length - 1] = component.initialStateMarked();
+        if (!component.initialStateMarked()) {
+            savedState[savedState.length - 1] = component.initialStateMarked();
+        }
         return savedState;
+
     }
 
     /**One and only implementation of
@@ -319,9 +331,14 @@ class ComponentStateHelper implements StateHelper {
      * @param state the state to be restored.
      */
     public void restoreState(FacesContext context, Object state) {
-        FacesContext fc = FacesContext.getCurrentInstance();
+
+        if (state == null) {
+            return;
+        }
         Object[] savedState = (Object[]) state;
-        component.initialState = (Boolean) savedState[savedState.length - 1];
+        if (savedState[savedState.length - 1] != null) {
+            component.initialState = (Boolean) savedState[savedState.length - 1];
+        }
         int length = (savedState.length-1)/2;
         for (int i = 0; i < length; i++) {
            Object value = savedState[i * 2 + 1];
@@ -331,13 +348,13 @@ class ComponentStateHelper implements StateHelper {
             Serializable serializable = (Serializable) savedState[i * 2];
             if (value != null) {
                 if (value instanceof Collection) {
-                    value = restoreAttachedState(fc, value);
+                    value = restoreAttachedState(context, value);
                 } else if (value instanceof StateHolderSaver) {
                     value = ((StateHolderSaver) value).restore(context);
                 } else {
                     value = (value instanceof Serializable
                              ? value
-                             : restoreAttachedState(fc, value));
+                             : restoreAttachedState(context, value));
                 }
             }
             if (value instanceof Map) {

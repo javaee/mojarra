@@ -94,9 +94,6 @@ public final class ViewHandler extends TagHandlerImpl {
 
     private final TagAttribute afterPhase;
 
-    private final TagAttribute partialStateSaving;
-
-
     /**
      * @param config
      */
@@ -112,7 +109,6 @@ public final class ViewHandler extends TagHandlerImpl {
         testForNull = this.getAttribute("afterPhase");
         this.afterPhase = (null == testForNull) ?
                          this.getAttribute("afterPhaseListener") : testForNull;
-        this.partialStateSaving = this.getAttribute("partialStateSaving");
     }
 
     /**
@@ -123,6 +119,7 @@ public final class ViewHandler extends TagHandlerImpl {
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
         UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
+        Object partialStateSavingVal = null;
         if (root != null) {
             if (this.locale != null) {
                 root.setLocale(ComponentSupport.getLocale(ctx,
@@ -150,16 +147,9 @@ public final class ViewHandler extends TagHandlerImpl {
                         .getMethodExpression(ctx, null, LISTENER_SIG);
                 root.setAfterPhaseListener(m);
             }
-            if (this.partialStateSaving != null) {
-                ValueExpression ve = partialStateSaving.getValueExpression(ctx, Boolean.TYPE);
-                root.getAttributes().put(StateManager.PARTIAL_STATE_SAVING_PARAM_NAME,
-                                         ve.getValue(ctx.getFacesContext().getELContext()));
-            } else {
-                String paramValue = ctx.getFacesContext().getExternalContext().getInitParameter(StateManager.PARTIAL_STATE_SAVING_PARAM_NAME);
-                root.getAttributes().put(StateManager.PARTIAL_STATE_SAVING_PARAM_NAME,
-                                         ((paramValue == null) ? Boolean.TRUE : Boolean.valueOf(paramValue)));
+            if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))) {
+                root.markInitialState();
             }
-            root.markInitialState();
         }
 
         this.nextHandler.apply(ctx, parent);

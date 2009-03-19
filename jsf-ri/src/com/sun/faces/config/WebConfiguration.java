@@ -47,6 +47,7 @@ import java.util.regex.Pattern;
 
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.StateManager;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.naming.Context;
@@ -776,6 +777,10 @@ public class WebConfiguration {
         ValidateEmptyFields(
               UIInput.VALIDATE_EMPTY_FIELDS_PARAM_NAME,
               "auto"
+        ),
+        FullStateSavingViewIds(
+              StateManager.FULL_STATE_SAVING_VIEW_IDS_PARAM_NAME,
+              ""
         );
 
 
@@ -973,6 +978,10 @@ public class WebConfiguration {
         FaceletsSkipComments(
               "facelets.SKIP_COMMENTS",
               false
+        ),
+        PartialStateSaving(
+              StateManager.PARTIAL_STATE_SAVING_PARAM_NAME,
+              true
         );
 
         private BooleanWebContextInitParameter alternate;
