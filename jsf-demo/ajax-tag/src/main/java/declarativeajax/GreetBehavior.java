@@ -36,10 +36,8 @@
 
 package declarativeajax;
 
-import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.ClientBehaviorBase;
 import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.FacesBehavior;
@@ -52,7 +50,7 @@ import javax.faces.component.behavior.FacesBehavior;
 @FacesBehavior(value="custom.behavior.Greet")
 public class GreetBehavior extends ClientBehaviorBase {
 
-    public GreetBehavior() {};
+    public GreetBehavior() {}
 
     public String getName() {
         return name;
@@ -77,22 +75,36 @@ public class GreetBehavior extends ClientBehaviorBase {
     @Override
     public Object saveState(FacesContext context) {
 
-        Object[] values = new Object[2];
+        if (initialStateMarked()) {
+            Object superState = super.saveState(context);
+            if (superState == null) {
+                return null;
+            } else {
+                return new Object[] { superState };
+            }
+        } else {
+            Object[] values = new Object[2];
       
-        values[0] = super.saveState(context);
-        values[1] = name;
+            values[0] = super.saveState(context);
+            values[1] = name;
 
-        return values;
+            return values;
+        }
+
     }
 
 
     @Override
     public void restoreState(FacesContext context, Object state) {
 
+        if (state == null) {
+            return;
+        }
         Object[] values = (Object[]) state;
         super.restoreState(context, values[0]);
-
-        name = (String)values[1];
+        if (values.length == 2) {
+            name = (String)values[1];
+        }
 
     }
 
