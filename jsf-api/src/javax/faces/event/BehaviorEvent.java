@@ -60,8 +60,11 @@ public abstract class BehaviorEvent extends FacesEvent {
      * <p class="changed_added_2_0">Construct a new event object 
      * from the specified source component and <code>behavior</code>.</p>
      *
-     * @param component
-     * @param behavior 
+     * @param component Source {@link UIComponent} for this event
+     * @param behavior {@link Behavior} that sent this event
+     *
+     * @throws IllegalArgumentException if <code>component</code> or 
+     * <code>behavior</code> is <code>null</code>
      *
      * @since 2.0
      */
