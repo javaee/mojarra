@@ -89,11 +89,11 @@ public class CatchExceptionServlet implements Servlet {
     }
 
     public String getServletInfo() {
-        return wrapped.getServletInfo();
+        return ((wrapped != null) ? wrapped.getServletInfo() : null);
     }
 
     public ServletConfig getServletConfig() {
-        return wrapped.getServletConfig();
+        return ((wrapped != null) ? wrapped.getServletConfig() : null);
     }
     
 
