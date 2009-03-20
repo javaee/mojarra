@@ -911,4 +911,32 @@ public class Util {
     }
 
 
+    /**
+     * @param ctx the {@link FacesContext} for the current request
+     * @param viewToRender the {@link UIViewRoot} to check
+     * @return <code>true</code> if the {@link FacesContext} attributes map
+     *  contains a reference to the {@link UIViewRoot}'s view ID
+     */
+    public static boolean isViewPopulated(FacesContext ctx, UIViewRoot viewToRender) {
+
+        return ctx.getAttributes().containsKey(viewToRender);
+
+    }
+
+
+    /**
+     * <p>
+     * Flag the specified {@link UIViewRoot} as populated.
+     * </p>
+     * @param ctx the {@link FacesContext} for the current request
+     * @param viewToRender the {@link UIViewRoot} to mark as populated
+     */
+    public static void setViewPopulated(FacesContext ctx,
+                                        UIViewRoot viewToRender) {
+
+        ctx.getAttributes().put(viewToRender, Boolean.TRUE);
+
+    }
+
+
 } // end of class Util

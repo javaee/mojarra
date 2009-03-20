@@ -201,6 +201,10 @@ public class StateManagerImpl extends StateManager {
                 UIViewRoot viewRoot = restoreTree(renderKitId,
                         ((Object[]) state[0]).clone());
                 viewRoot.processRestoreState(context, state[1]);
+
+                // mark the view as populated to prevent the view from
+                // being built again during RenderResponse
+                Util.setViewPopulated(context, viewRoot);
                 result = viewRoot;
             }
         }
