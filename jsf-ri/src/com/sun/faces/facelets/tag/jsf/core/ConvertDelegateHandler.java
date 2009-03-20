@@ -80,7 +80,7 @@ public final class ConvertDelegateHandler extends ConverterHandler {
      */
     public ConvertDelegateHandler(ConverterConfig config) {
         super(config);
-        this.converterId = this.getRequiredAttribute("converterId");
+        this.converterId = this.getAttribute("converterId");
     }
 
     /**
