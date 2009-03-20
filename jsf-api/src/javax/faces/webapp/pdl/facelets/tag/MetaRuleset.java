@@ -62,15 +62,45 @@ package javax.faces.webapp.pdl.facelets.tag;
  */
 public abstract class MetaRuleset {
 
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @param attribute
+     * @return
+     */
     public abstract MetaRuleset ignore(String attribute);
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
     public abstract MetaRuleset ignoreAll();
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param attribute
+     * @param property
+     * @return
+     */
     public abstract MetaRuleset alias(String attribute, String property);
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param mapper
+     * @return
+     */
     public abstract MetaRuleset add(Metadata mapper);
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param rule
+     * @return
+     */
     public abstract MetaRuleset addRule(MetaRule rule);
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
     public abstract Metadata finish();
 }
