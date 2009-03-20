@@ -210,7 +210,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // has a composite component parent under the assumption that
         // the CompositeComponentTagHandler will take care of it.
         if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))
-              && UIComponent.getCurrentComponent(ctx.getFacesContext()) == null) {
+              && UIComponent.getCurrentCompositeComponent(ctx.getFacesContext()) == null) {
             c.markInitialState();
         }
         
