@@ -46,6 +46,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.application.FacesMessage;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
+import javax.faces.convert.Converter;
 
 @ManagedBean
 @RequestScoped
@@ -77,6 +78,13 @@ public class CompositeBean {
     }
 
 
+    public Converter getConverter() {
+
+        return new TestConverter();
+        
+    }
+
+
     // ---------------------------------------------------------- Nested Classes
 
 
@@ -90,6 +98,23 @@ public class CompositeBean {
                                new FacesMessage(FacesMessage.SEVERITY_INFO,
                                                 "Validator Invoked : " + cid,
                                                 "Validator Invoked : " + cid));
+        }
+    }
+
+
+    public static class TestConverter implements Converter {
+
+        public Object getAsObject(FacesContext context, UIComponent component, String value) {
+            return value;
+        }
+
+        public String getAsString(FacesContext context, UIComponent component, Object value) {
+            String cid = component.getClientId(context);
+            context.addMessage(cid,
+                               new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                                "Converter Invoked : " + cid,
+                                                "Converter Invoked : " + cid));
+            return value.toString();
         }
     }
 

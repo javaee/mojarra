@@ -86,7 +86,7 @@ public class ConverterTagHandlerDelegateImpl extends TagHandlerDelegate implemen
             }
             // Allow the composite component to know about the target
             // component.
-            CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(this);
+            CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(owner);
         } else {
             throw new TagException(owner.getTag(),
                     "Parent not an instance of ValueHolder: " + parent);

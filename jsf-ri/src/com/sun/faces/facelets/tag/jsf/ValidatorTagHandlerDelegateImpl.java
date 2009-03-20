@@ -67,8 +67,8 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
     private SetValidatorDefaultsOnParentDelegate 
             setValidatorDefaultsOnParentDelegate;
 
-    public ValidatorTagHandlerDelegateImpl(MetaTagHandler owner) {
-        this.owner = (ValidatorHandler) owner;
+    public ValidatorTagHandlerDelegateImpl(ValidatorHandler owner) {
+        this.owner = owner;
     }
     
     public void setSetValidatorDefaultsOnParentDelegate(SetValidatorDefaultsOnParentDelegate delegate) {

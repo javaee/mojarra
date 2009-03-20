@@ -184,9 +184,8 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     /**
      * <p>
-     *  Maps Validator to a inputText within a composite/validator1.xhtml
-     *  which is nested within composite/validator3.xhtml. Using the same ID
-     *  in the nesting.
+     *   Maps Validator to inputText within composite/validator2.xhtml using
+     *   name and target attributes.
      * </p>
      */
     public void testValidator3() throws Exception {
@@ -218,6 +217,48 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
+    /**
+     * <p>
+     *  Maps Converter to inputText within composite/validator1.xhtml using
+     *   only the name attribute.
+     * </p>
+     *
+     * <p>
+     *   Maps Converter to inputText within composite/validator2.xhtml using
+     *   name and target attributes.
+     * </p>
+     *
+     * <p>
+     *   Maps Converter to inputText within composite/validator2.xhtml using
+     *   name and target attributes.
+     * </p>
+     *
+     * <p>
+     *  Ensure validators are properly re-targeted when the
+     *  target of the validator is nested within another naming
+     *  container.  Note that the value of the 'for' attribute doesn't
+     *  mimic the NamingContainer hierarchy, that's handled by the
+     *  'targets' attribute within the composite:implementation section
+     *  of validator4.xhtml.
+     * </p>
+     */
+    public void testConverters() throws Exception {
+
+        String[] messageSuffixes = new String[] {
+              "form:converter1:input",
+              "form2:converter2:it2",
+              "form3:converter3:input:input",
+              "form4:converter4:naming:input"
+        };
+
+        HtmlPage page = getPage("/faces/composite/attachedconverter.xhtml");
+        validateConverterMessages(page, messageSuffixes);
+        page = pushButton(page, "cf:clear");
+        validateConverterMessages(page, messageSuffixes);
+
+    }
+
+    
     // --------------------------------------------------------- Private Methods
 
 
@@ -235,6 +276,34 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
         page = pushButton(page, commandId);
         validateMessage(page, "Validator Invoked", inputId);
+
+    }
+
+
+    private void validateConverterMessages(HtmlPage page, String[] messageSuffixes) {
+
+        List<HtmlUnorderedList> list = new ArrayList<HtmlUnorderedList>();
+        getAllElementsOfGivenClass(page, list, HtmlUnorderedList.class);
+        HtmlUnorderedList ulist = list.get(0);
+        assertEquals("messages", ulist.getId());
+        int count = 0;
+
+        for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+            if (count > messageSuffixes.length) {
+                fail("Expected only four message to be displayed");
+            }
+            String message = ("Converter Invoked : " + messageSuffixes[count]);
+            count++;
+            assertTrue(e instanceof HtmlListItem);
+            assertEquals(message, message, e.asText());
+        }
+
+        if (list.size() == 2) {
+            ulist = list.get(1);
+            for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+                fail("Messages have been redisplayed");
+            }
+        }
 
     }
 
