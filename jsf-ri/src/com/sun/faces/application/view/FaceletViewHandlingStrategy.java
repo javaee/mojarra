@@ -222,7 +222,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         WriteBehindStateWriter stateWriter = null;
         try {
             // Only build the view if this view has not yet been built.
-            if (!isViewPopulated(ctx, viewToRender)) {
+            if (!Util.isViewPopulated(ctx, viewToRender)) {
                 this.buildView(ctx, viewToRender);
             }
 
@@ -368,7 +368,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public void buildView(FacesContext ctx, UIViewRoot view)
     throws IOException {
 
-        if (isViewPopulated(ctx, view)) {
+        if (Util.isViewPopulated(ctx, view)) {
             return;
         }
         updateStateSavingType(ctx, view.getViewId());
@@ -389,7 +389,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         // populate UIViewRoot
         f.apply(ctx, view);
-        setViewPopulated(ctx, view);
+        Util.setViewPopulated(ctx, view);
 
     }
 
@@ -397,32 +397,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     // ------------------------------------------------------- Protected Methods
 
 
-    /**
-     * @param ctx the {@link FacesContext} for the current request
-     * @param viewToRender the {@link UIViewRoot} to check
-     * @return <code>true</code> if the {@link FacesContext} attributes map
-     *  contains a reference to the {@link UIViewRoot}'s view ID
-     */
-    protected static boolean isViewPopulated(FacesContext ctx, UIViewRoot viewToRender) {
 
-        return ctx.getAttributes().containsKey(viewToRender);
-
-    }
-
-
-    /**
-     * <p>
-     * Flag the specified {@link UIViewRoot} as populated.
-     * </p>
-     * @param ctx the {@link FacesContext} for the current request
-     * @param viewToRender the {@link UIViewRoot} to mark as populated
-     */
-    protected static void setViewPopulated(FacesContext ctx,
-                                           UIViewRoot viewToRender) {
-
-        ctx.getAttributes().put(viewToRender, Boolean.TRUE);
-
-    }
 
 
     /**
@@ -435,10 +410,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         this.initializeMappings();
-        this.stateManagementStrategy = new StateManagementStrategyImpl(this);
         WebConfiguration config = WebConfiguration.getInstance();
         partialStateSaving = config.isOptionEnabled(PartialStateSaving);
+        
         if (partialStateSaving) {
+            this.stateManagementStrategy = new StateManagementStrategyImpl(this);
             String[] viewIds = config.getOptionValue(FullStateSavingViewIds, ",");
             fullStateViewIds = new HashSet<String>(viewIds.length, 1.0f);
             fullStateViewIds.addAll(Arrays.asList(viewIds));
