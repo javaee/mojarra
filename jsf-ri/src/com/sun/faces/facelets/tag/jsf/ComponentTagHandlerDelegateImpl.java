@@ -297,32 +297,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      */
     private void privateOnComponentPopulated(FaceletContext ctx, UIComponent c, UIComponent parent) {
 
-        if (!(c instanceof ClientBehaviorHolder)) {
-            return;
-        }
-
-        ClientBehaviorHolder bHolder = (ClientBehaviorHolder)c;
-        AjaxBehaviors ajaxBehaviors = getAjaxBehaviors(ctx);
-        if (ajaxBehaviors != null) {
-            AjaxBehaviors.BehaviorInfo behaviorInfo = ajaxBehaviors.getCurrentBehavior();
-            if (behaviorInfo != null) {
-                String event = bHolder.getDefaultEventName();
-
-                if (null != behaviorInfo.getEventName()) {
-                    event = behaviorInfo.getEventName();
-                }
-                Collection eventNames = bHolder.getEventNames();
-                if (eventNames.contains(event)) {
-
-                    // We only add the AjaxBehavior if the BehaviorHolder does
-                    // not already contain a Behavior for the event.
-                    Map<String, List<ClientBehavior>> behaviors = bHolder.getClientBehaviors();
-                    List<ClientBehavior> behaviorsForEvent =  behaviors.get(event);
-                    if ((null == behaviorsForEvent) || behaviorsForEvent.isEmpty()) {
-
-                        bHolder.addClientBehavior(event, behaviorInfo.getBehavior());
-                    }
-                }
+        if (c instanceof ClientBehaviorHolder) {
+            FacesContext context = ctx.getFacesContext();
+            AjaxBehaviors ajaxBehaviors = AjaxBehaviors.getAjaxBehaviors(context, false);
+            if (ajaxBehaviors != null) {
+                ajaxBehaviors.addBehaviors(context, (ClientBehaviorHolder)c);
             }
         }
     }
@@ -336,14 +315,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         return (String) parent.getAttributes().get(FacetHandler.KEY);
     }
 
-    // Returns the AjaxBehaviors instance, if one exists.
-    private static AjaxBehaviors getAjaxBehaviors(FaceletContext ctx) {
-        Map<Object, Object> attrs = ctx.getFacesContext().getAttributes();
-
-        return (AjaxBehaviors)attrs.get(AjaxBehaviors.AJAX_BEHAVIORS);
-    }
-
-    
     interface CreateComponentDelegate {
 
         public UIComponent createComponent(FaceletContext ctx);

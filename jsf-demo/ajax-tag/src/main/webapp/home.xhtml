@@ -720,6 +720,22 @@
            <h:outputText value="Panel Grid with Both Click And Double Click Greet And User Handlers"/>
        </h:panelGrid>
 
+       <h:panelGrid columns="3">
+           <f:ajax event="action" listener="#{bean.processBehavior}">
+               <f:ajax event="valueChange" listener="#{bean.processBehavior}">
+                   <h:commandButton id="wrappingAjax" 
+                                    value="Wrapping Ajax"
+                                    actionListener="#{bean.processAction}"/>
+                   <h:commandLink id="wrappingAjaxLink" 
+                                  value="Wrapping Ajax"
+                                  actionListener="#{bean.processAction}"/>
+                   <h:inputText id="wrappingAjaxInput"
+                                value="WrappingAjax"
+                                valueChangeListener="#{bean.processValueChange}"/>
+               </f:ajax>
+           </f:ajax>
+       </h:panelGrid>
+
        <h:outputText id="out"/>
 
        <h:dataTable value="#{bean.statusMessages}" 

@@ -196,8 +196,9 @@ public final class AjaxHandler extends TagHandlerImpl {
         // We leverage AjaxBehaviors to support the wrapping case.  We
         // push/pop the AjaxBehavior instance on AjaxBehaviors so that
         // child tags will have access to it.
-        AjaxBehaviors ajaxBehaviors = getNonNullAjaxBehaviors(ctx);
-        ajaxBehaviors.pushBehavior(ajaxBehavior, eventName); 
+        FacesContext context = ctx.getFacesContext();
+        AjaxBehaviors ajaxBehaviors = AjaxBehaviors.getAjaxBehaviors(context, true);
+        ajaxBehaviors.pushBehavior(context, ajaxBehavior, eventName); 
 
         nextHandler.apply(ctx, parent);
 
@@ -271,21 +272,6 @@ public final class AjaxHandler extends TagHandlerImpl {
             behavior.setValueExpression(attr.getLocalName(),
                                         attr.getValueExpression(ctx, type));
         }    
-    }
-
-    // Returns the AjaxBehaviors instance, creating it if necessary.
-    private AjaxBehaviors getNonNullAjaxBehaviors(FaceletContext ctx) {
-
-        Map<Object, Object> attrs = ctx.getFacesContext().getAttributes();
-        final String key = AjaxBehaviors.AJAX_BEHAVIORS;
-        AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)attrs.get(key);
-
-        if (ajaxBehaviors == null) {
-            ajaxBehaviors = new AjaxBehaviors();
-            attrs.put(key, ajaxBehaviors);
-        }
-
-        return ajaxBehaviors;
     }
 
     // Only install the Ajax resource if it doesn't exist.

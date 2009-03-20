@@ -41,9 +41,17 @@
 package com.sun.faces.component.behavior;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.faces.application.Application;
+import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
+import javax.faces.component.behavior.ClientBehaviorHint;
+import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 
 /**
@@ -54,13 +62,48 @@ import javax.faces.context.FacesContext;
  */
 public class AjaxBehaviors implements Serializable {
 
-    public static final String AJAX_BEHAVIORS = "javax.faces.component.AjaxBehaviors";
+    private static final String AJAX_BEHAVIORS = "javax.faces.component.AjaxBehaviors";
 
-    private LinkedList<BehaviorInfo> ajaxBehaviors = null;
+    private LinkedList<BehaviorInfo> behaviorStack = null;
 
     public AjaxBehaviors() {
-        ajaxBehaviors = new LinkedList<BehaviorInfo>();
+        behaviorStack = new LinkedList<BehaviorInfo>();
     }
+
+    // Returns the AjaxBehaviors instance, creating it if necessary.
+    public static AjaxBehaviors getAjaxBehaviors(FacesContext context,
+                                                 boolean createIfNull) {
+
+        Map<Object, Object> attrs = context.getAttributes();
+        AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)attrs.get(AJAX_BEHAVIORS);
+
+        if ((ajaxBehaviors == null) && createIfNull) {
+            ajaxBehaviors = new AjaxBehaviors();
+            attrs.put(AJAX_BEHAVIORS, ajaxBehaviors);
+        }
+
+        return ajaxBehaviors;
+    }
+
+    // Adds AjaxBehaviors to the specified ClientBehaviorHolder
+    public void addBehaviors(FacesContext context,
+                             ClientBehaviorHolder behaviorHolder) {
+
+        if ((behaviorStack == null) || behaviorStack.isEmpty()){
+            return;
+        }
+
+        // Loop over pushed Behaviors and add to the ClientBehaviorHolder.
+        // Note that we add most recently pushed behaviors first.  That
+        // way the nearest behaviors take precedence.  Behaviors that were
+        // pushed earlier won't be added since we'll already have a 
+        // submitting behavior attached.
+        int count = behaviorStack.size();
+        for (int i = count - 1; i >= 0; i--) {
+            behaviorStack.get(i).addBehavior(context, behaviorHolder);
+        }
+    }
+
 
     /**
      * <p>Push the {@link AjaxBehavior} into scope making it available 
@@ -72,8 +115,10 @@ public class AjaxBehaviors implements Serializable {
      *
      * @since 2.0
      */ 
-    public void pushBehavior(ClientBehavior ajaxBehavior, String eventName) {
-        ajaxBehaviors.add(new BehaviorInfo(ajaxBehavior, eventName));
+    public void pushBehavior(FacesContext context,
+                             AjaxBehavior ajaxBehavior,
+                             String eventName) {
+        behaviorStack.add(new BehaviorInfo(context, ajaxBehavior, eventName));
     }
 
     /**
@@ -83,47 +128,92 @@ public class AjaxBehaviors implements Serializable {
      * @since 2.0
      */
     public void popBehavior() {
-         if (ajaxBehaviors.size() > 0) {
-             ajaxBehaviors.removeLast();
+         if (behaviorStack.size() > 0) {
+             behaviorStack.removeLast();
          }
     }   
 
-    /**
-     * <p>Return the current {@link AjaxBehavior} instance from 
-     * the <code>List</code> of {@link AjaxBehavior} instances. 
-     * This will be the last instance added to the 
-     * <code>List</code>.  Return <code>null</code>
-     * if no {@link AjaxBehavior} is available.<p>
-     *
-     * @return the last (most current) {@link AjaxBehavior} 
-     *
-     * @since 2.0
-     */
-    public BehaviorInfo getCurrentBehavior() {
-        BehaviorInfo ajaxBehavior  = null;
-        if (ajaxBehaviors.size() > 0) {
-            ajaxBehavior = ajaxBehaviors.getLast();
-        }
-        return ajaxBehavior;
-    }
-
-    // Little value holder class that holds onto an AjaxBehavior
-    // and its event.
+    // Helper class for storing and creating/applying inherited
+    // AjaxBehaviors
     public static class BehaviorInfo {
-        private ClientBehavior behavior;
         private String eventName;
+        private Object behaviorState;
 
-        public BehaviorInfo(ClientBehavior behavior, String eventName) {
-            this.behavior = behavior;
+        public BehaviorInfo(FacesContext context,
+                            AjaxBehavior ajaxBehavior,
+                            String eventName) {
             this.eventName = eventName;
+
+            // We don't actually need the AjaxBehavior - just
+            // its state.
+            behaviorState = ajaxBehavior.saveState(context);
         }
 
-        public ClientBehavior getBehavior() {
+        public void addBehavior(FacesContext context,
+                                ClientBehaviorHolder behaviorHolder) {
+
+            String eventName = this.eventName;
+            if (eventName == null) {
+                eventName = behaviorHolder.getDefaultEventName();
+
+                // No event name, default or otherwise - we're done
+                if (eventName == null) {
+                    return;
+                }
+            }
+
+            // We only add the 
+            if (shouldAddBehavior(behaviorHolder, eventName)) {
+                ClientBehavior behavior = createBehavior(context);
+                behaviorHolder.addClientBehavior(eventName, behavior);
+            }
+
+        }
+
+        // Tests whether we should add an AjaxBehavior to the specified
+        // ClientBehaviorHolder/event name.
+        private boolean shouldAddBehavior(ClientBehaviorHolder behaviorHolder,
+                                          String eventName) {
+
+            // First need to make sure that this ClientBehaviorHolder
+            // supports the specified event type.
+            if (!behaviorHolder.getEventNames().contains(eventName)) {
+                return false;
+            }
+
+            // Check for a submitting behavior already attached.
+            // If we've already got one, we don't add another.
+            Map<String,List<ClientBehavior>> allBehaviors =
+                behaviorHolder.getClientBehaviors();
+            List<ClientBehavior> eventBehaviors = allBehaviors.get(eventName);
+
+            if ((eventBehaviors == null) || (eventBehaviors.isEmpty())) {
+                return true;
+            }
+
+            for (ClientBehavior behavior : eventBehaviors) {
+                Set<ClientBehaviorHint> hints = behavior.getHints();
+
+                if (hints.contains(ClientBehaviorHint.SUBMITTING)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Creates the AjaxBehavior
+        private ClientBehavior createBehavior(FacesContext context) {
+            Application application = context.getApplication();
+
+            // Re-create the instance via the Application
+            AjaxBehavior behavior = (AjaxBehavior)application.createBehavior(
+                                                    AjaxBehavior.BEHAVIOR_ID);
+
+            // And re-initialize its state
+            behavior.restoreState(context, behaviorState);
+
             return behavior;
-        }
-
-        public String getEventName() {
-            return eventName;
         }
 
         private BehaviorInfo() {
