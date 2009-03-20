@@ -39,8 +39,10 @@ package com.sun.faces.composite;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.AbstractTestCase;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.*;
+
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Unit tests for Composite Components.
@@ -147,17 +149,133 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         
     }
 
+
+    /**
+     * <p>
+     *  Maps Validator to inputText within composite/validator1.xhtml using
+     *   only the name attribute.
+     * </p>
+     */
+    public void testValidator1() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
+        validateValidatorMessagePresent(page,
+                                        "form:s1",
+                                        "form:validator1:input");
+
+    }
+
+
+    /**
+     * <p>
+     *   Maps Validator to inputText within composite/validator2.xhtml using
+     *   name and target attributes.
+     * </p>
+     */
+    public void testValidator2() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
+        validateValidatorMessagePresent(page,
+                                        "form2:s2",
+                                        "form2:validator2:it2");
+
+    }
+
+
+    /**
+     * <p>
+     *  Maps Validator to a inputText within a composite/validator1.xhtml
+     *  which is nested within composite/validator3.xhtml. Using the same ID
+     *  in the nesting.
+     * </p>
+     */
+    public void testValidator3() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
+        validateValidatorMessagePresent(page,
+                                        "form3:s3",
+                                        "form3:validator3:input:input");
+
+    }
+
+
+    /**
+     * <p>
+     *  Ensure validators are properly re-targeted when the
+     *  target of the validator is nested within another naming
+     *  container.  Note that the value of the 'for' attribute doesn't
+     *  mimic the NamingContainer hierarchy, that's handled by the
+     *  'targets' attribute within the composite:implementation section
+     *  of validator4.xhtml.
+     * </p>
+     */
+    public void testValidator4() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/attachedvalidator.xhtml");
+        validateValidatorMessagePresent(page,
+                                        "form4:s4",
+                                        "form4:validator4:naming:input");
+
+    }
+
     // --------------------------------------------------------- Private Methods
 
 
     private void validateActionMessagePresent(HtmlPage page, String commandId)
     throws Exception {
 
+        page = pushButton(page, commandId);
+        validateMessage(page, "Action Invoked", commandId);
+
+    }
+
+
+    private void validateValidatorMessagePresent(HtmlPage page, String commandId, String inputId)
+    throws Exception {
+
+        page = pushButton(page, commandId);
+        validateMessage(page, "Validator Invoked", inputId);
+
+    }
+
+
+    private HtmlPage pushButton(HtmlPage page, String commandId)
+    throws Exception {
+
         HtmlSubmitInput input = (HtmlSubmitInput)
               getInputContainingGivenId(page, commandId);
         assertNotNull(input);
-        page = input.click();
-        assertTrue(page.asText().contains("Action Invoked : " + commandId));
+        return (HtmlPage) input.click();
+
+    }
+
+
+    private void validateMessage(HtmlPage page,
+                                 String messagePrefix,
+                                 String messageSuffix) {
+
+        List<HtmlUnorderedList> list = new ArrayList<HtmlUnorderedList>();
+        getAllElementsOfGivenClass(page, list, HtmlUnorderedList.class);
+        HtmlUnorderedList ulist = list.get(0);
+        assertEquals("messages", ulist.getId());
+        int count = 0;
+        String message = (messagePrefix + " : " + messageSuffix);
+        for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+            if (count > 1) {
+                fail("Expected only one message to be displayed");
+            }
+            count++;
+            assertTrue(e instanceof HtmlListItem);
+            assertEquals(message, message, e.asText());
+        }
+
+        if (list.size() == 2) {
+            ulist = list.get(1);
+            for (HtmlElement e : ulist.getAllHtmlChildElements()) {
+                fail("Messages have been redisplayed");
+            }
+        }
+
 
     }
 }

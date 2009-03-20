@@ -205,8 +205,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         ComponentSupport.addComponent(ctx, parent, c);
         c.popComponentFromEL(ctx.getFacesContext());
 
-
-        if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))) {
+        // RELEASE_PENDING - this is *ugly*.  We need to *not*
+        // call PartialStateHolder.markInitialState() if the component
+        // has a composite component parent under the assumption that
+        // the CompositeComponentTagHandler will take care of it.
+        if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))
+              && UIComponent.getCurrentComponent(ctx.getFacesContext()) == null) {
             c.markInitialState();
         }
         

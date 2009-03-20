@@ -209,7 +209,7 @@ public class UIMessages extends UIComponentBase {
      */
     public void setRedisplay(boolean redisplay) {
 
-        getStateHelper().eval(PropertyKeys.redisplay, redisplay);
+        getStateHelper().put(PropertyKeys.redisplay, redisplay);
 
     }
 

@@ -38,64 +38,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:ez="http://java.sun.com/jsf/composite/composite">
-<h:head>
-<title>actionSource1</title>
-</h:head>
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:naming="http://mojarra.dev.java.net/source1">
+<head>
 
-<h:body>
+<title>Not present in rendered output</title>
 
-  <ui:debug hotkey="p" rendered="true"/>
+</head>
 
-<h:form id="form">
-   
-    <p>
-        Maps ActionListener to commandButton within composite/actionSource1.xhtml using
-        only the name attribute.
-    </p>
-    <ez:actionSource1 id="actionsource1">
-        <f:actionListener for="command" binding="#{compositeBean.actionListener}"/>
-    </ez:actionSource1>
+<body>
 
-    <p>
-        Maps ActionListener to commandButton within composite/actionSource2.xhtml using
-        name and target attributes.
-    </p>
-    <ez:actionSource2 id="actionsource2">
-        <f:actionListener for="command" binding="#{compositeBean.actionListener}"/>
-    </ez:actionSource2>
-    
-    <p>
-        Maps ActionListener to a commandButton within a composite/actionSource1.xhtml
-        which is nested within composite/actionSource3.xhtml. Using the same ID
-        in the nesting.
-    </p>
-    <ez:actionSource3 id="actionsource3">
-        <f:actionListener for="command" binding="#{compositeBean.actionListener}"/>
-    </ez:actionSource3>
+<composite:interface>
+    <composite:editableValueHolder name="input" targets="naming:input"/>
+</composite:interface>
 
-    <p>
-        Ensure actionListeners are properly re-targeted when the
-        target of the actionListener is nested within another naming
-        container.  Note that the value of the 'for' attribute doesn't
-        mimic the NamingContainer hierarchy, that's handled by the
-        'targets' attribute within the composite:implementation section
-        of actionSource4.xhtml.
-    </p>
-    <ez:actionSource4 id="actionsource4">
-        <f:actionListener for="command" binding="#{compositeBean.actionListener}"/>
-    </ez:actionSource4>
+<composite:implementation>
+    <naming:naming id="naming">
+        <h:inputText id="input" value="Input4"/>
+    </naming:naming>
+</composite:implementation>
 
-
-    <p />
-    <h:commandButton id="clear" value="Clear Messages"/>
-
-</h:form>
- <h:messages id="messages"/>
-
-
-</h:body>
+</body>
 
 </html>

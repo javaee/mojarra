@@ -192,6 +192,14 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             viewHandler.retargetAttachedObjects(context, c,
                     getAttachedObjectHandlers(c, false));
             viewHandler.retargetMethodExpressions(context, c);
+
+            // RELEASE_PENDING This is *ugly*.  See my comments in
+            // ComponentTagHandlerDelegateImpl at the end of the apply()
+            // method
+            if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))) {
+                markInitialState(c);
+            }
+
         }
 
     }
@@ -268,6 +276,14 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             }
         }
         return result;
+    }
+
+
+    private void markInitialState(UIComponent c) {
+        c.markInitialState();
+        for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext(); ) {
+            markInitialState(i.next());
+        }
     }
 
 

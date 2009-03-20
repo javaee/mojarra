@@ -44,6 +44,8 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.application.FacesMessage;
+import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
 
 @ManagedBean
 @RequestScoped
@@ -66,4 +68,29 @@ public class CompositeBean {
         };
         
     }
+
+
+    public Validator getValidator() {
+
+        return new TestValidator();
+
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    public static class TestValidator implements Validator {
+
+        public void validate(FacesContext context, UIComponent component, Object value)
+              throws ValidatorException {
+
+            String cid = component.getClientId(context);
+            context.addMessage(cid,
+                               new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                                "Validator Invoked : " + cid,
+                                                "Validator Invoked : " + cid));
+        }
+    }
+
 }
