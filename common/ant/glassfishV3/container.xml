@@ -146,10 +146,23 @@
                 <container.stop/>
             </then>
         </if>
+        <delete>
+                <fileset dir="${container.home}/lib">
+                   <include name="hibernate-validator*.jar"/>
+                </fileset>
+        </delete>
+
+        <copy todir="${container.home}/lib" file="${validations-ri.jar}"/>
 
         <copy file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api.jar"/>
         <copy file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/modules/jsf-impl.jar"/>
 
+        <antcall target="validation.add.osgi" />
+        <copy overwrite="true" 
+              file="${validation.root.build.dir}/dist/validation-api-${validation-api.version}.jar" toFile="${container.home}/modules/validation-api.jar"/>
+        <copy overwrite="true"
+              file="${validation.root.build.dir}/dist/validation-ri-${validation-api.version}.jar" toFile="${container.home}/modules/validation-ri.jar"/>
+        <antcall target="validation.clean.osgi" />
         <if>
             <os family="windows"/>
             <then>
