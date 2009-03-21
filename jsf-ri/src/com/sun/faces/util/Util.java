@@ -44,6 +44,7 @@ package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
 
+import com.sun.faces.application.view.MultiViewHandler;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import javax.el.ELResolver;
@@ -530,6 +531,11 @@ public class Util {
                     // RELEASE_PENDING (rlubke,driscoll) cache the lookup
                     requestViewId = candidateViewId;
                     foundMatch = true;
+                } else {
+                    if (!(Util.getViewHandler(context) instanceof MultiViewHandler)) {
+                        requestViewId = candidateViewId;
+                        foundMatch = true;
+                    }
                 }
             } catch (MalformedURLException e) {
             }
