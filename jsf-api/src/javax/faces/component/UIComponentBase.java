@@ -409,18 +409,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     public boolean isRendered() {
         
-        Object objResult = getStateHelper().eval(PropertyKeys.rendered, Boolean.TRUE);
-        boolean result = true;
-        if (objResult instanceof Boolean) {
-            result = (Boolean) objResult;
-        } else {
-            if (null != objResult) {
-                result = Boolean.valueOf(objResult.toString());
-            }
-        }
-
-        return result;
-        
+	return Boolean.valueOf(getStateHelper().eval(PropertyKeys.rendered, Boolean.TRUE).toString());        
     }
 
 
