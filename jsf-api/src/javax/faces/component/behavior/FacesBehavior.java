@@ -49,7 +49,10 @@ import java.lang.annotation.Target;
 /**
  * <p class="changed_added_2_0">The presence of this annotation on a
  * class automatically registers the class with the runtime as a {@link
- * Behavior}.</p>
+ * Behavior}.  The value of this annotation attribute is taken to be the 
+ * <em>behavior-id</em> with which instances of this class of behavior 
+ * can be instantiated by calling {@link
+ * javax.faces.application.Application#createBehavior(java.lang.String)}</p>
  *
  * @since 2.0
  */
