@@ -62,14 +62,12 @@
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.5.5"/>
     <property name="el.version" value="1.0"/>
-    <property name="validation-api.version" value="1.0.Beta3"/>
-    <property name="validations.ri.version" value="4.0.0.Alpha1"/>
-    <property name="slf4j-api.version" value="1.4.2" />
     <property name="maven.repository.importer.version" value="1.2"/>
 
     <property name="redhat.maven2" value="http://repository.jboss.org/maven2"/>
     <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
     <property name="java.net.maven" value="https://maven-repository.dev.java.net/nonav/repository/"/>
+    <property name="java.net.maven2" value="http://download.java.net/maven/2"/>
     <property name="codehaus.maven" value="http://repository.codehaus.org"/>
     <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
 
@@ -101,11 +99,7 @@
     <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging-api.jar"/>
     <property name="portlet.jar"                   value="${dependency.jar.dir}/portlet-api-${portlet.api.version}.jar"/>
     <property name="groovy.jar"                    value="${dependency.jar.dir}/groovy-all-${groovy.version}.jar"/>
-    <property name="validation-api.jar"            value="${dependency.jar.dir}/validation-api-${validation-api.version}.jar"/>
-    <property name="slf4j-api.jar"                 value="${dependency.jar.dir}/slf4j-api-${slf4j-api.version}.jar"/>
-    <property name="slf4j-jdk14.jar"                 value="${dependency.jar.dir}/slf4j-jdk14-${slf4j-api.version}.jar"/>
-    <property name="validations-ri.jar"            value="${dependency.jar.dir}/hibernate-validator-${validations.ri.version}.jar"/>
-
+    <property name="validation-api.jar"            value="${dependency.jar.dir}/bean-validator.jar"/>
     <property name="glassfish.download.url"        value="http://download.java.net/javaee5/v2ur1/promoted/" />
     <property name="glassfish.installer.jar"       value="glassfish-installer-v2ur1-b09d-"/>    
 
@@ -136,52 +130,6 @@
                      usetimestamp="true"/>
             </then>
         </if>
-        <!-- beans validation API and Impl -->
-
-        <if>
-            <not>
-                <available file="${validation-api.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${redhat.maven2}/javax/validation/validation-api/${validation-api.version}/validation-api-${validation-api.version}.jar"
-                     dest="${validation-api.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-
-        <if>
-            <not>
-                <available file="${validations-ri.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${redhat.maven2}/org/hibernate/hibernate-validator/${validations.ri.version}/hibernate-validator-${validations.ri.version}.jar"
-                     dest="${validations-ri.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-
-        <if>
-            <not>
-                <available file="${slf4j-api.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${maven2.mirror}/org/slf4j/slf4j-api/${slf4j-api.version}/slf4j-api-${slf4j-api.version}.jar"
-                     dest="${slf4j-api.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-
-        <if>
-            <not>
-                <available file="${slf4j-jdk14.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${maven2.mirror}/org/slf4j/slf4j-jdk14/${slf4j-api.version}/slf4j-jdk14-${slf4j-api.version}.jar"
-                     dest="${slf4j-jdk14.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-
 
         <!-- HTMLUNIT -->
         <!--
@@ -356,6 +304,18 @@
             <then>
                 <get src="${codehaus.maven}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
                      dest="${groovy.jar}"
+                     usetimestamp="true"/>
+            </then>
+        </if>
+
+        <!-- JSR 303 -->
+        <if>
+            <not>
+                <available file="${validation-api.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${java.net.maven2}/org/glassfish/extras/bean-validator/4.0.0.Alpha3/bean-validator-4.0.0.Alpha3.jar"
+                     dest="${validation-api.jar}"
                      usetimestamp="true"/>
             </then>
         </if>

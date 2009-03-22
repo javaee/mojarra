@@ -1588,6 +1588,13 @@ public class ApplicationImpl extends Application {
         try {
             result = clazz.newInstance();
         } catch (Throwable t) {
+            Throwable previousT = null;
+            do {
+                previousT = t;
+                LOGGER.log(Level.SEVERE, "Unable to load class: ", t);
+            } while (null != (t = t.getCause()));
+            t = previousT;
+            
             throw new FacesException((MessageUtils.getExceptionMessageString(
                   MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
                   clazz.getName())), t);

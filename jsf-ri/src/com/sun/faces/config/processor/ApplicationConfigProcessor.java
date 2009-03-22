@@ -74,6 +74,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 
 import org.w3c.dom.Document;
@@ -343,7 +344,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     private void registerDefaultValidatorIds(Application application, LinkedHashSet<String> defaultValidatorIds) {
         if (defaultValidatorIds == null) {
             defaultValidatorIds = new LinkedHashSet<String>();
-            if (beanValidationAvailable()) {
+            if (isBeanValidatorAvailable()) {
                 defaultValidatorIds.add("javax.faces.Bean");
             }
         }
@@ -359,17 +360,27 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
     }
 
-    private boolean beanValidationAvailable() {
-        try {
+    static boolean isBeanValidatorAvailable() {
+        boolean result = false;
+        final String beansValidationAvailabilityCacheKey = 
+                "javax.faces.BEANS_VALIDATION_AVAILABLE";
+        Map<String,Object> appMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+        
+        if (appMap.containsKey(beansValidationAvailabilityCacheKey)) {
+            result = (Boolean) appMap.get(beansValidationAvailabilityCacheKey);
+        } else {
             try {
-                Thread.currentThread().getContextClassLoader().loadClass("javax.validation.Validation");
-            } catch (ClassNotFoundException e) {
-                Class.forName("javax.validation.Validation");
+                Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
+                appMap.put(beansValidationAvailabilityCacheKey, result = true);
+            } catch (Throwable t) {
+                do {
+                    LOGGER.log(Level.SEVERE, "Unable to load Bean Validation", t);
+                } while (null != (t = t.getCause()));
+                appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
             }
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
         }
+
+        return result;
     }
 
     private void setMessageBundle(Application application,

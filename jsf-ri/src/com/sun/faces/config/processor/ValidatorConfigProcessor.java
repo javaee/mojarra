@@ -177,7 +177,7 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
                 
                 boolean doAdd = true;
                 if (validatorId.equals(BeanValidator.VALIDATOR_ID)) {
-                    doAdd = isBeansValidationAvailable(FacesContext.getCurrentInstance());
+                    doAdd = ApplicationConfigProcessor.isBeanValidatorAvailable();
                 }
                 
                 if (doAdd) {
@@ -192,27 +192,5 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
 
         }
     }
-    
-    private boolean isBeansValidationAvailable(FacesContext context) {
-        boolean result = false;
-        final String beansValidationAvailabilityCacheKey = 
-                "javax.faces.BEANS_VALIDATION_AVAILABLE";
-        Map<String,Object> appMap = context.getExternalContext().getApplicationMap();
-        
-        if (appMap.containsKey(beansValidationAvailabilityCacheKey)) {
-            result = (Boolean) appMap.get(beansValidationAvailabilityCacheKey);
-        } else {
-            try {
-                new BeanValidator();
-                appMap.put(beansValidationAvailabilityCacheKey, result = true);
-            } catch (Throwable t) {
-                appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
-            }
-        }
-
-        return result;
-    }
-
-    
     
 }

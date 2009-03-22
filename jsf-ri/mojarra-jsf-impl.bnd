@@ -45,6 +45,7 @@ Extension-Name: @extension.name@
 # BND/OSGI Properties
 Export-Package: com.sun.faces.*;version=2.0
 Import-Package: javax.faces.*,javax.servlet.*,javax.el.*,javax.annotation.*,javax.crypto.*,\
+  javax.validation.*;resolution:=optional, \
   javax.xml.*,org.w3c.dom.*, \
   com.sun.enterprise.*;resolution:=optional, \
   groovy.*;resolution:=optional,\

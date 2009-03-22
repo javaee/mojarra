@@ -42,6 +42,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
@@ -62,6 +64,9 @@ import javax.validation.groups.Default;
  * @since 2.0
  */
 public class BeanValidator implements Validator, PartialStateHolder {
+    
+    private static final Logger LOGGER =
+         Logger.getLogger("javax.faces.validator", "javax.faces.LogStrings");
 
     private String validationGroups;
 
@@ -101,6 +106,11 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * identifies an empty list of validation groups.</p>
      */
     public static final String EMPTY_VALIDATION_GROUPS_PATTERN = "^[\\W" + VALIDATION_GROUPS_DELIMITER + "]*$";
+    
+    public BeanValidator() {
+        LOGGER.log(Level.INFO, "Validator for id " + VALIDATOR_ID + " instantiated.");
+        
+    }
 
     /**
      * <p class="changed_added_2_0">A comma-separated list of validation
@@ -201,7 +211,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * ConstraintViolation}&gt;</code> is non-empty, for each element in
      * the <code>Set</code>, create a {@link FacesMessage} where the
      * summary and detail are the return from calling {@link
-     * ConstraintViolation#getInterpolatedMessage}.  Capture all such
+     * ConstraintViolation#getMessage}.  Capture all such
      * <code>FacesMessage</code> instances into a
      * <code>Collection</code> and pass them to {@link
      * ValidatorException#ValidatorException(java.util.Collection)},
@@ -271,14 +281,15 @@ public class BeanValidator implements Validator, PartialStateHolder {
         if (!violations.isEmpty()) {
             ValidatorException toThrow = null;
             if (1 == violations.size()) {
+                ConstraintViolation violation = violations.iterator().next();
                 toThrow = new ValidatorException(getMessage(context, component, 
-                 violations.iterator().next().getInterpolatedMessage(), value));
+                 violation.getMessage(), value));
             } else {
                 Set<FacesMessage> messages = new HashSet<FacesMessage>(violations.size());
                 Iterator<ConstraintViolation> iter = violations.iterator();
                 while (iter.hasNext()) {
                     messages.add(getMessage(context, component, 
-                            iter.next().getInterpolatedMessage(), value));
+                            iter.next().getMessage(), value));
                 }
                 toThrow = new ValidatorException(messages);
             }
