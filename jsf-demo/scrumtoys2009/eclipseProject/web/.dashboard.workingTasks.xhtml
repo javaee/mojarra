@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<ui:composition>
+	<h2>#{i18n['label.working']}</h2>
+	<h:panelGroup>
+		#{fn:length(dashboardMB.workingTasks)} #{i18n['label.tasks']}
+	</h:panelGroup>
+    <ui:repeat  var="task" value="#{dashboardMB.dmWorkingTasks}">
+    <div class="#{task.finished?'closedTask':'openedTask'}">
+    	<span style="font-size: 10px">#{i18n['label.code']} #{task.code}</span>
+    	<br/>
+    	<span style="font-size: 14px">#{task.name}</span>
+    	<br/>
+    	<span style="font-size: 10px">#{task.story.name}</span>
+    	<br/>
+    	<span style="font-size: 10px">#{task.status.single}</span>
+    	<br/>
+    	<h:commandButton action="#{dashboardMB.finishTask}" value="#{i18n['label.toFinish']}" rendered="#{not empty task.startedAt}" />
+    	<h:commandButton action="#{dashboardMB.removeWorkingTask}" value="#{i18n['label.toRemove']}"  />
+    	<br/>
+    	#{i18n['label.startedAt']}
+        <h:outputText value="#{task.startedAt}">
+  	 		<f:convertDateTime pattern="dd/MM/yyyy" timeZone="-3"/>
+     	</h:outputText>    	
+    </div>
+    </ui:repeat>
+
+	</ui:composition>
+
+</html>

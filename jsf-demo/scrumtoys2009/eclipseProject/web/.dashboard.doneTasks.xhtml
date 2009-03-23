@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<ui:composition>
+	<h2>#{i18n['label.done']}</h2>
+	<h:panelGroup>
+		#{fn:length(dashboardMB.doneTasks)} #{i18n['label.tasks']}
+	</h:panelGroup>
+	<h:panelGroup>
+			<h:outputLabel value="#{i18n['label.gainedPoints']}:" for="otGainedPoints" style="font-weight: bold" />
+			<h:outputText id="otGainedPoints" value="#{dashboardMB.selectedSprint.gainedStoryPoints}" />
+	</h:panelGroup>
+    <ui:repeat  var="task" value="#{dashboardMB.dmDoneTasks}">
+    <div class="#{task.finished?'closedTask':'openedTask'}">
+    	<span style="font-size: 10px">#{i18n['label.code']} #{task.code}</span>
+    	<br/>
+    	<span style="font-size: 14px">#{task.name}</span>
+    	<br/>
+    	<span style="font-size: 10px">#{task.story.name}</span>
+    	<br/>
+    	<span style="font-size: 10px">#{task.status.single}</span>
+    	<br/>
+        <h:outputText value="#{task.startedAt}">
+    		<f:convertDateTime pattern="dd/MM/yyyy"/>
+    	</h:outputText>
+    	#{i18n['label.to']}
+    	<h:outputText value="#{task.finishedAt}">
+    		<f:convertDateTime pattern="dd/MM/yyyy"/>
+    	</h:outputText>
+    </div>
+    </ui:repeat>
+
+	</ui:composition>
+
+</html>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"  
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+<h:head>
+    <title>#{i18n['menuitem.label.sprints']}</title>
+    <h:outputStylesheet library="css/1_1" name="app.css"/>
+</h:head>
+<h:body>
+	<h:messages globalOnly="true" showDetail="true" tooltip="true" errorClass="errorMsgs" infoClass="infoMsgs" />
+	<div style="float: right">
+    	<img src="#{resource['images/logo.gif']}" width="100px"/>
+    </div>
+    <h:form id="frmNew">
+	    <h:commandLink action="home" value="#{'go home'}" immediate="true" />
+    	<h2>New Sprint</h2>
+		<h:panelGrid columns="3" style="width: 300px">
+				<h:outputLabel value="#{i18n['sprints.label.name']}:" for="itName" style="font-weight: bold" />
+				<h:inputText id="itName" value="#{sprintsMB.toSave.name}" required="true" requiredMessage="Type the short name" />
+				<h:message for="itName" />
+				
+				<h:outputLabel value="#{i18n['sprints.label.goals']}:" for="itGoals" style="font-weight: bold" />
+				<h:inputText id="itGoals" value="#{sprintsMB.toSave.goals}" required="true" requiredMessage="Describe the goals" />
+				<h:message for="itGoals" />
+				
+				<h:outputLabel value="#{i18n['sprints.label.iterationScope']}:" for="itIterationScope" style="font-weight: bold" />
+				<h:inputText id="itIterationScope" value="#{sprintsMB.toSave.iterationScope}" required="true" cols="50" rows="4" requiredMessage="Type the scope" />
+				<h:message for="itIterationScope" />
+				
+				<h:outputLabel value="#{i18n['sprints.label.startedAt']}:" for="itStartedAt" style="font-weight: bold" />
+				<h:inputText id="itStartedAt" value="#{sprintsMB.toSave.startedAt}" required="true" requiredMessage="Type when this sprint start" />
+				<h:message for="itStartedAt" />
+				
+				<h:outputLabel value="#{i18n['sprints.label.dailyMeetingTime']}:" for="itDailyMeetingTime" style="font-weight: bold" />
+				<h:inputText id="itDailyMeetingTime" value="#{sprintsMB.toSave.dailyMeetingTime}" required="true" requiredMessage="Type the estimation (story points)" />
+				<h:message for="itDailyMeetingTime" />
+				
+				<f:verbatim></f:verbatim>
+				<f:verbatim></f:verbatim>
+				<h:commandButton action="#{sprintsMB.save}" value="save" />
+		</h:panelGrid>
+    </h:form>
+    <h:form id="frmList">
+    	<h2>Sprints</h2>
+		<h:panelGrid columns="3" style="width: 300px">
+				<h:outputLabel value="Not exist sprints" style="color: orange"  rendered="#{sprintsMB.dm.rowCount eq 0}"/>
+		</h:panelGrid>
+		<h:dataTable value="#{sprintsMB.dm}" var="sprint" width="100%" rendered="#{sprintsMB.dm.rowCount > 0}">
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="#" /></f:facet>
+				<h:outputText value="#{sprintsMB.dm.rowIndex + 1}" />
+				<f:facet name="footer">#{""}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="name" /></f:facet>
+				<h:outputText value="#{sprint.name}" />
+				<f:facet name="footer">#{sprintsMB.dm.rowCount}#{" sprints"}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="goals" /></f:facet>
+				<h:outputText value="#{sprint.goals}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="started at" /></f:facet>
+				<h:outputText value="#{sprint.startedAt}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column headerClass="textColumn">
+				<f:facet name="header"><h:outputLabel value="daily meeting time" /></f:facet>
+				<h:outputText value="#{sprint.dailyMeetingTime}" />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+			<h:column>
+				<f:facet name="header"><h:outputLabel value="actions" /></f:facet>
+				<h:commandButton action="#{sprintsMB.edit}" value="edit ..."  />
+				<h:commandButton action="#{sprintsMB.remove}" value="remove"  />
+				<h:commandButton action="#{sprintsMB.showStories}" value="stories ..."  />
+				<h:commandButton action="#{sprintsMB.showDashboard}" value="dashboard ..."  />
+				<f:facet name="footer">#{" "}</f:facet>
+			</h:column>
+		</h:dataTable>
+    </h:form>
+</h:body>
+</html>  
