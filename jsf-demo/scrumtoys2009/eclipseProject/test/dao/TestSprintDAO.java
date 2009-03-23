@@ -25,6 +25,12 @@ public class TestSprintDAO extends TestCase {
 				}//for
 			}//for
 		}//for
+		assertEquals(2, sprints.size());
+	}
+	
+	public void testFindAllOrderByStartedAt() throws DAOException {
+		List<Sprint> sprintsOrderByStartedAt = this.sprintDAO.findAllOrderBy("startedAt");
+		assertEquals(2, sprintsOrderByStartedAt.size());
 	}
 	
 	public void testSave() throws DAOException{

@@ -39,4 +39,12 @@ public class SprintDAOMemory extends GenericDAOMemory<Sprint> implements SprintD
 		}//for
 	}
 
+
+	@Override
+	public List<Sprint> findAllOrderBy(String... $properties)
+			throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
