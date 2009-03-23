@@ -70,6 +70,7 @@ import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.MethodExpressionValidator;
 import javax.faces.webapp.pdl.*;
+import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
 
 /**
  * This {@link ViewHandler} implementation handles both JSP-based and
@@ -227,6 +228,16 @@ public class MultiViewHandler extends ViewHandler {
                         }
                         break;
                     }
+                } else if(curHandler instanceof BehaviorHandler && 
+                		curTarget instanceof BehaviorHolderAttachedObjectTarget) {
+                	BehaviorHolderAttachedObjectHandler behaviorHandler = (BehaviorHolderAttachedObjectHandler) curHandler;
+                	BehaviorHolderAttachedObjectTarget behaviorTarget = (BehaviorHolderAttachedObjectTarget) curTarget;
+                	String eventName = behaviorHandler.getEventName();
+					if((null !=eventName && eventName.equals(curTargetName))||(null ==eventName && behaviorTarget.isDefaultEvent())){
+                        for (UIComponent curTargetComponent : targetComponents) {
+                            retargetHandler(context, curHandler, curTargetComponent);
+                        }
+                	}
                 }
 
 

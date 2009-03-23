@@ -38,48 +38,42 @@
  * holder.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package com.sun.faces.facelets.tag.composite;
 
-import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler;
+import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
-public class BehaviorHandler extends FaceletsAttachedObjectHandler implements BehaviorHolderAttachedObjectHandler {
+/**
+ * <p class="changed_added_2_0"></p>
+ * @author asmirnov@exadel.com
+ *
+ */
+public class BehaviorHolderAttachedObjectTargetHandler extends
+		AttachedObjectTargetHandler {
 
-    private final TagAttribute event;
-    
-    private String behaviorId;
-	
-    private TagHandlerDelegate helper;
+	public BehaviorHolderAttachedObjectTargetHandler(TagConfig config) {
+		super(config);
+	}
 
-    public BehaviorHandler(BehaviorConfig config) {
-        super(config);
-        this.behaviorId = config.getBehaviorId();
-        this.event = this.getAttribute("event");
-        if (null != event && !event.isLiteral()){
-            throw new TagException(this.tag, "The 'event' attribute for behavior tag have to be literal");
-        }
-    }
-    
-    public TagAttribute getEvent() {
-        return this.event;
-    }
-    
-    public String getEventName() {
-    	if(null != getEvent()){
-    		return getEvent().getValue();
-    	}
-    	return null;
-    }
-    
-    @Override
-    protected TagHandlerDelegate getTagHandlerHelper() {
-        if (null == helper) {
-            helper = helperFactory.createBehaviorHandlerDelegate(this);
-        }
-        return helper;
-    }
-
-    public String getBehaviorId() {
-        return behaviorId;
-    }
+	/* (non-Javadoc)
+	 * @see com.sun.faces.facelets.tag.composite.AttachedObjectTargetHandler#newAttachedObjectTargetImpl()
+	 */
+	@Override
+	AttachedObjectTargetImpl newAttachedObjectTargetImpl() {
+		BehaviorHolderAttachedObjectTargetImpl target = new BehaviorHolderAttachedObjectTargetImpl();
+		TagAttribute event = this.getAttribute("event");
+		if(null != event){
+			target.setEvent(event.getValue());
+		}
+		TagAttribute defaultAttr = this.getAttribute("default");
+		if(null != defaultAttr){
+			FacesContext facesContext = FacesContext.getCurrentInstance();
+	        FaceletContext ctx = (FaceletContext) facesContext.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+			target.setDefaultEvent(defaultAttr.getBoolean(ctx));
+		}
+		return target;
+	}
 
 }

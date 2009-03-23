@@ -80,6 +80,7 @@ public final class CompositeLibrary extends AbstractTagLibrary {
         this.addTagHandler("editableValueHolder", EditableValueHolderAttachedObjectTargetHandler.class);
         this.addTagHandler("actionSource", ActionSource2AttachedObjectTargetHandler.class);
         this.addTagHandler("valueHolder", ValueHolderAttachedObjectTargetHandler.class);
+        this.addTagHandler("clientBehavior", BehaviorHolderAttachedObjectTargetHandler.class);
         this.addTagHandler("facet", DeclareFacetHandler.class);
         
         // The implementation section

@@ -38,48 +38,15 @@
  * holder.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl;
 
-import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler;
+/**
+ * <p class="changed_added_2_0"></p>
+ * @author asmirnov@exadel.com
+ *
+ */
+public interface BehaviorHolderAttachedObjectTarget extends AttachedObjectTarget {
 
-public class BehaviorHandler extends FaceletsAttachedObjectHandler implements BehaviorHolderAttachedObjectHandler {
-
-    private final TagAttribute event;
-    
-    private String behaviorId;
-	
-    private TagHandlerDelegate helper;
-
-    public BehaviorHandler(BehaviorConfig config) {
-        super(config);
-        this.behaviorId = config.getBehaviorId();
-        this.event = this.getAttribute("event");
-        if (null != event && !event.isLiteral()){
-            throw new TagException(this.tag, "The 'event' attribute for behavior tag have to be literal");
-        }
-    }
-    
-    public TagAttribute getEvent() {
-        return this.event;
-    }
-    
-    public String getEventName() {
-    	if(null != getEvent()){
-    		return getEvent().getValue();
-    	}
-    	return null;
-    }
-    
-    @Override
-    protected TagHandlerDelegate getTagHandlerHelper() {
-        if (null == helper) {
-            helper = helperFactory.createBehaviorHandlerDelegate(this);
-        }
-        return helper;
-    }
-
-    public String getBehaviorId() {
-        return behaviorId;
-    }
+	public abstract boolean isDefaultEvent();
 
 }

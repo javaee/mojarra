@@ -61,6 +61,7 @@ import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
@@ -70,6 +71,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.AjaxBehaviorListener;
+import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 
@@ -81,6 +83,10 @@ import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 import com.sun.faces.RIConstants;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+//import com.sun.faces.facelets.tag.composite.CompositeBehaviors;
+import com.sun.faces.facelets.tag.jsf.AttachedBehaviors;
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
+
 import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
 
 
@@ -121,7 +127,7 @@ import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
  * </p>
  * @version $Id: AjaxHandler.java 5369 2008-09-08 19:53:45Z rogerk $
  */
-public final class AjaxHandler extends TagHandlerImpl {
+public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderAttachedObjectHandler {
 
     private final TagAttribute event;
     private final TagAttribute execute;
@@ -160,7 +166,7 @@ public final class AjaxHandler extends TagHandlerImpl {
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException, FacesException, FaceletException, ELException {
 
-        String eventName = (this.event != null) ? this.event.getValue() : null;
+        String eventName = getEventName();
 
         if (this.wrapping) {
             applyWrapping(ctx, parent, eventName);
@@ -168,8 +174,27 @@ public final class AjaxHandler extends TagHandlerImpl {
             applyNested(ctx, parent, eventName);
         }
     }
+    
+    public void applyAttachedObject(FacesContext context, UIComponent parent) {
+        FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+    	applyAttachedObject(ctx, parent, getEventName());    	
+    }
 
-    // Tests whether the <f:ajax> is wrapping other tags.
+    /* (non-Javadoc)
+     * @see javax.faces.webapp.pdl.AttachedObjectHandler#getFor()
+     */
+    public String getFor() {
+		return null;
+	}
+    
+    /* (non-Javadoc)
+     * @see javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler#getEventName()
+     */
+    public String getEventName() {
+			return (this.event != null) ? this.event.getValue() : null;
+	}
+
+	// Tests whether the <f:ajax> is wrapping other tags.
     private boolean isWrapping() {
 
         // Would be nice if there was some easy way to determine whether
@@ -215,30 +240,48 @@ public final class AjaxHandler extends TagHandlerImpl {
             return;
         }
 
-        if (!(parent instanceof ClientBehaviorHolder)) {
-            throw new TagException(this.tag,
-                    "Unable to attach <f:ajax> to non-ClientBehaviorHolder parent");
-        }
+        	// Composite component case
+		if (UIComponent.isCompositeComponent(parent)) {
+			CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(
+					this);
+		} else if (parent instanceof ClientBehaviorHolder) {
+			applyAttachedObject(ctx, parent, eventName);
+		} else {
+			throw new TagException(this.tag,
+					"Unable to attach <f:ajax> to non-ClientBehaviorHolder parent");
+		}
 
-        ClientBehaviorHolder bHolder = (ClientBehaviorHolder)parent;
-
-        if (null == eventName) {
-            eventName = bHolder.getDefaultEventName();
-            if (null == eventName) {
-                throw new TagException(this.tag,
-                    "Event attribute could not be determined: " + eventName);
-            }
-        } else {
-            if (!bHolder.getEventNames().contains(eventName)) {
-                throw new TagException(this.tag,
-                    "Event attribute could not be determined: " + eventName);
-            }               
-        }
-
-        AjaxBehavior ajaxBehavior = createAjaxBehavior(ctx, eventName);
-        bHolder.addClientBehavior(eventName, ajaxBehavior);
-        installAjaxResourceIfNecessary();
     }
+
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @param ctx
+	 * @param parent
+	 * @param eventName
+	 */
+	private void applyAttachedObject(FaceletContext ctx, UIComponent parent,
+			String eventName) {
+		ClientBehaviorHolder bHolder = (ClientBehaviorHolder) parent;
+
+		if (null == eventName) {
+			eventName = bHolder.getDefaultEventName();
+			if (null == eventName) {
+				throw new TagException(this.tag,
+						"Event attribute could not be determined: "
+								+ eventName);
+			}
+		} else {
+			if (!bHolder.getEventNames().contains(eventName)) {
+				throw new TagException(this.tag,
+						"Event attribute could not be determined: "
+								+ eventName);
+			}
+		}
+
+		AjaxBehavior ajaxBehavior = createAjaxBehavior(ctx, eventName);
+		bHolder.addClientBehavior(eventName, ajaxBehavior);
+		installAjaxResourceIfNecessary();
+	}
 
     // Construct our AjaxBehavior from tag parameters.
     private AjaxBehavior createAjaxBehavior(FaceletContext ctx, String eventName) {

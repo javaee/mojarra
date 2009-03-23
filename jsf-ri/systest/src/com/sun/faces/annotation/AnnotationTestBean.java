@@ -37,23 +37,25 @@
 package com.sun.faces.annotation;
 
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.faces.context.FacesContext;
+import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
+import javax.faces.component.behavior.Behavior;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.validator.Validator;
-import javax.faces.render.RenderKitFactory;
+import javax.faces.render.ClientBehaviorRenderer;
 import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
-import javax.faces.FactoryFinder;
+import javax.faces.validator.Validator;
 import javax.servlet.http.HttpServletRequest;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.BeanBuilder;
+import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
 
 
@@ -93,6 +95,10 @@ public class AnnotationTestBean {
         Validator v = app.createValidator("AnnotatedValidator");
         assertNotNull(v);
         assertTrue(v instanceof AnnotatedValidator);
+        
+        Behavior b = app.createBehavior("AnnotatedBehavior");
+        assertNotNull(b);
+        assertTrue(b instanceof AnnotatedBehavior);
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder
               .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
@@ -104,6 +110,9 @@ public class AnnotationTestBean {
         assertNotNull(r);
         assertTrue(r instanceof AnnotatedRenderer);
 
+        ClientBehaviorRenderer br = rk.getClientBehaviorRenderer("AnnotatedBehaviorRenderer");
+        assertNotNull(br);
+        assertTrue(br instanceof AnnotatedBehaviorRenderer);
         // validate class annotated with @ManagedBean
         ApplicationAssociate associate =
               ApplicationAssociate.getInstance(ctx.getExternalContext());

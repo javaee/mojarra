@@ -1,0 +1,15 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<f:view contentType="text/html" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ezb="http://java.sun.com/jsf/composite/ezbehaviors"
+      xmlns:b="http://mojarra.dev.java.net/composite-behavior">
+      <h:form id="form">
+        <ezb:compositeTest commandAction="#{testBean.doAction}">
+              	<b:behavior event="ok"/>        
+                <f:validateLength for="input" minimum="3" />
+        </ezb:compositeTest>
+        <h:commandButton action="refresh" value="refresh" id="refresh" />
+      </h:form>
+</f:view>

@@ -37,6 +37,7 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
+//import com.sun.faces.facelets.tag.composite.CompositeBehaviors;
 import com.sun.faces.util.Util;
 import java.io.IOException;
 import javax.el.ELException;
@@ -76,17 +77,26 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
         if (parent == null || !(parent.getParent() == null)) {
             return;
         }
-        if (parent instanceof ClientBehaviorHolder) {
+        if (parent.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+//            String eventName;
+//        	CompositeBehaviors behaviors = CompositeBehaviors.getCompositeBehaviors(parent);
+//            if (null != owner.getEvent()){
+//                eventName = owner.getEvent().getValue();
+//                if(!behaviors.containsEvent(eventName)){
+//                    throw new TagException(owner.getTag(), "Parent composite component does not define event: " + eventName);            		                	
+//                }
+//            } else {
+//            	eventName = behaviors.getDefaultEventName();
+//            	if(null == eventName){
+//                    throw new TagException(owner.getTag(), "Never Parent composite component defines default event nor behavior tag has event name: " + parent);            		
+//            	}
+//            }
+//            AttachedBehaviors.getAttachedBehaviorsHandler(parent).add(eventName,owner);
+            CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(owner);
+
+        } else if (parent instanceof ClientBehaviorHolder) {
             owner.applyAttachedObject(ctx.getFacesContext(), parent);
-        } else if (parent.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
-            if (null == owner.getFor()) {
-                // PENDING(): I18N
-                throw new TagException(owner.getTag(),
-                    "behavior tags nested within composite components must have a non-null \"for\" attribute");
-            }
-            // Allow the composite component to know about the target component.
-            CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(this);
-        } else {
+        }  else {
             throw new TagException(owner.getTag(), "Parent not an instance of ClientBehaviorHolder: " + parent);
         }
 

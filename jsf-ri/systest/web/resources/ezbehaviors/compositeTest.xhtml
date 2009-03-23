@@ -1,0 +1,46 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	<head>
+
+		<title>Not present in rendered output</title>
+
+	</head>
+	<composite:interface name="composite"
+		displayName="BehaviorHandler composite component test">
+		<composite:attribute name="commandAction"
+			method-signature="String f1()" targets="command">
+		</composite:attribute>
+		<composite:attribute name="defferedAction">
+			<composite:deferred-method>
+				<composite:method-signature>
+					java.lang.Object action()
+        </composite:method-signature>
+			</composite:deferred-method>
+		</composite:attribute>
+		<composite:attribute name="value" targets="input"/>
+		<composite:editableValueHolder name="input" />
+		<composite:clientBehavior name="ok" default="true" event="action" targets="command cancel"/>
+	</composite:interface>
+
+	<composite:implementation>
+       <p>
+			<h:inputText id="input" value="#{compositeComponent.attrs.value}">
+			</h:inputText>
+			<h:commandButton id="cancel" value="Cancel" />
+			<f:subview id="sub">
+			<h:panelGroup id="group" >
+			<h:commandButton id="command" value="Ok"
+				action="#{compositeComponent.attrs.commandAction}" >
+				</h:commandButton>
+				</h:panelGroup>
+			</f:subview>
+		</p>
+
+
+	</composite:implementation>
+
+	<body>
+	</body>
+</html>

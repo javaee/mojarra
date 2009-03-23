@@ -49,4 +49,6 @@ import javax.faces.webapp.pdl.AttachedObjectHandler;
  */
 public interface BehaviorHolderAttachedObjectHandler extends AttachedObjectHandler {
 
+	public String getEventName();
+
 }

@@ -38,48 +38,46 @@
  * holder.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-public class BehaviorHandler extends FaceletsAttachedObjectHandler implements BehaviorHolderAttachedObjectHandler {
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 
-    private final TagAttribute event;
-    
-    private String behaviorId;
+
+/**
+ * <p class="changed_added_2_0">This class holds collection of {@link BehaviorHandler} instances, attached to the composite component.
+ *  Descendant components from that composite uses that collection to substitute actual instance</p>
+ * @author asmirnov@exadel.com
+ *
+ */
+@SuppressWarnings("serial")
+public class AttachedBehaviors implements Serializable {
 	
-    private TagHandlerDelegate helper;
+	private Map<String, TagHandler> behaviors = new HashMap<String, TagHandler>();
+	public static final String COMPOSITE_BEHAVIORS_KEY = "javax.faces.webapp.pdl.ClientBehaviors";
+	
+	public void add(String eventName, TagHandler owner){
+		behaviors.put(eventName, owner);
+	}
 
-    public BehaviorHandler(BehaviorConfig config) {
-        super(config);
-        this.behaviorId = config.getBehaviorId();
-        this.event = this.getAttribute("event");
-        if (null != event && !event.isLiteral()){
-            throw new TagException(this.tag, "The 'event' attribute for behavior tag have to be literal");
-        }
-    }
-    
-    public TagAttribute getEvent() {
-        return this.event;
-    }
-    
-    public String getEventName() {
-    	if(null != getEvent()){
-    		return getEvent().getValue();
-    	}
-    	return null;
-    }
-    
-    @Override
-    protected TagHandlerDelegate getTagHandlerHelper() {
-        if (null == helper) {
-            helper = helperFactory.createBehaviorHandlerDelegate(this);
-        }
-        return helper;
-    }
+	public TagHandler get(String value) {
+		return behaviors.get(value);		
+	}
 
-    public String getBehaviorId() {
-        return behaviorId;
-    }
+	public static AttachedBehaviors getAttachedBehaviorsHandler(UIComponent component) {
+		Map<String, Object> attributes = component.getAttributes();
+		AttachedBehaviors handler = (AttachedBehaviors) attributes.get(AttachedBehaviors.COMPOSITE_BEHAVIORS_KEY);
+		if(null == handler){
+			handler = new AttachedBehaviors();
+			attributes.put(AttachedBehaviors.COMPOSITE_BEHAVIORS_KEY, handler);
+		}
+		return handler;
+	}
 
 }

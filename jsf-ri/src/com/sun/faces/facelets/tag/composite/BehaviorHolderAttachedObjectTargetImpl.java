@@ -38,48 +38,68 @@
  * holder.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package com.sun.faces.facelets.tag.composite;
 
-import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BehaviorHandler extends FaceletsAttachedObjectHandler implements BehaviorHolderAttachedObjectHandler {
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectTarget;
 
-    private final TagAttribute event;
-    
-    private String behaviorId;
+/**
+ * <p class="changed_added_2_0"></p>
+ * @author asmirnov@exadel.com
+ *
+ */
+public class BehaviorHolderAttachedObjectTargetImpl extends
+		AttachedObjectTargetImpl implements BehaviorHolderAttachedObjectTarget {
+
+	private String event;
 	
-    private TagHandlerDelegate helper;
-
-    public BehaviorHandler(BehaviorConfig config) {
-        super(config);
-        this.behaviorId = config.getBehaviorId();
-        this.event = this.getAttribute("event");
-        if (null != event && !event.isLiteral()){
-            throw new TagException(this.tag, "The 'event' attribute for behavior tag have to be literal");
-        }
-    }
-    
-    public TagAttribute getEvent() {
-        return this.event;
-    }
-    
-    public String getEventName() {
-    	if(null != getEvent()){
-    		return getEvent().getValue();
-    	}
-    	return null;
-    }
-    
-    @Override
-    protected TagHandlerDelegate getTagHandlerHelper() {
-        if (null == helper) {
-            helper = helperFactory.createBehaviorHandlerDelegate(this);
-        }
-        return helper;
-    }
-
-    public String getBehaviorId() {
-        return behaviorId;
-    }
+	private boolean defaultEvent;
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 */
+	public BehaviorHolderAttachedObjectTargetImpl() {
+		
+	}
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @return the event
+	 */
+	public String getEvent() {
+		return event;
+	}
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @param event the event to set
+	 */
+	public void setEvent(String event) {
+		this.event = event;
+	}
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @return the defaultEvent
+	 */
+	public boolean isDefaultEvent() {
+		return defaultEvent;
+	}
+	/**
+	 * <p class="changed_added_2_0"></p>
+	 * @param defaultEvent the defaultEvent to set
+	 */
+	public void setDefaultEvent(boolean defaultEvent) {
+		this.defaultEvent = defaultEvent;
+	}
+	
+	@Override
+	public List<UIComponent> getTargets(UIComponent topLevelComponent) {
+		List<UIComponent> targets = super.getTargets(topLevelComponent);
+		List<UIComponent> wrappedTargets = new ArrayList<UIComponent>(targets.size());
+		for (UIComponent component : targets) {
+			wrappedTargets.add(new BehaviorHolderWrapper(component,getName(),getEvent()));
+		}
+		return wrappedTargets;
+	}
 
 }
