@@ -32,6 +32,18 @@ public class GenericDAOJPA<PK,E extends AbstractEntity> {
 		return this.find(jpaQL, -1);
 	}
 
+	public List<E> findAllOrderBy(String[] $properties) throws DAOException {
+		StringBuilder orderByList = new StringBuilder();
+		int counter = 0;
+		for (String property: $properties){
+			String str = counter == 0?"m."+property:",m."+property;
+			orderByList.append(str);
+			counter++;
+		}//for
+		String jpaQL = String.format("SELECT m FROM %s AS m ORDER BY %s", this.clazz.getSimpleName(), orderByList);
+		return this.find(jpaQL, -1);
+	}
+	
  	public List<E> findByProperty(String $propertyName, Object $value) throws DAOException {  
     	String nomeDoParametro = "valor";
 		String jpaQL = String.format("SELECT m FROM %s AS m where m.%s = %s", this.clazz.getSimpleName(),$propertyName, ":"+nomeDoParametro);

@@ -10,7 +10,11 @@
 		</h:outputLink>
 		<h:outputText value=" | " />
 		<h:outputLink value="#{i18n['menuitem.path.allInOne']}">
-			<h:outputText value="#{i18n['menuitem.label.allInOne']} #{'COMMING'}" />
+			<h:outputText value="#{i18n['menuitem.label.allInOne']} #{i18n['menuitem.developing']}" />
+		</h:outputLink>
+		<h:outputText value=" | " />
+		<h:outputLink value="#{i18n['menuitem.path.burndown']}">
+			<h:outputText value="#{i18n['menuitem.label.burndown']}" />
 		</h:outputLink>
 		<h:outputText value=" | " />
 		<h:outputLink value="#{i18n['menuitem.path.sprints']}">

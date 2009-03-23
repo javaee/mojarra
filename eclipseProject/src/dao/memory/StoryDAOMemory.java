@@ -27,4 +27,11 @@ public class StoryDAOMemory extends GenericDAOMemory<Story> implements StoryDAO 
 		return Sprint.class.getName()+".out";
 	}
 
+	@Override
+	public List<Story> findAllOrderBy(String... $properties)
+			throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

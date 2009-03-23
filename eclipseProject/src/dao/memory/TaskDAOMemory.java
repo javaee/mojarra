@@ -26,5 +26,11 @@ public class TaskDAOMemory extends GenericDAOMemory<Task> implements TaskDAO {
 	public String getPersistenceFileName() {
 		return Sprint.class.getName()+".out";
 	}
+
+	@Override
+	public List<Task> findAllOrderBy(String... $properties) throws DAOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
