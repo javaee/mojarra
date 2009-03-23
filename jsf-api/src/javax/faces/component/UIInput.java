@@ -640,6 +640,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void markInitialState() {
 
         super.markInitialState();
+        addDefaultValidators(FacesContext.getCurrentInstance());
         Validator[] validators = getValidators();
         if (validators != null) {
             for (Validator v : validators) {
@@ -738,9 +739,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
         // QUESTION is there another dependable way to perform this only once?
-        if (isBeansValidationAvailable(context) && !defaultValidatorsProcessed) {
-            addDefaultValidators(context);
-        }
+        addDefaultValidators(context);
     }
 
     /**
@@ -1580,36 +1579,42 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      */
     private void addDefaultValidators(FacesContext context) {
-        
-        Set<String> exclusions;
-        Validator[] validators = getValidators();
-        if (validators.length != 0) {
-            exclusions = new HashSet<String>(validators.length, 1.0f);
-            for (Validator v : validators) {
-                exclusions.add(v.getClass().getName());
-            }
-        } else {
-            exclusions = Collections.emptySet();
-        }
 
-        // first add the registered default validators and then turn them off based on switches in tree
-        List<String> defaultValidatorIds = new ArrayList<String>();
-        Map<String,String> defaultValidatorInfo = context.getApplication().getDefaultValidatorInfo();
-        if (!defaultValidatorInfo.isEmpty()) {
-            for (Map.Entry<String,String> valInfo : defaultValidatorInfo.entrySet()) {
-                defaultValidatorIds.add(valInfo.getKey());
-            }
-        }
+        if (isBeansValidationAvailable(context) && !defaultValidatorsProcessed) {
 
-        collectDefaultValidatorIds(defaultValidatorIds, this);
-
-        for (String validatorId : defaultValidatorIds) {
-            String defaultValClassName = defaultValidatorInfo.get(validatorId);
-            if (exclusions.contains(defaultValClassName)) {
-                continue;
+            Set<String> exclusions;
+            Validator[] validators = getValidators();
+            if (validators.length != 0) {
+                exclusions = new HashSet<String>(validators.length, 1.0f);
+                for (Validator v : validators) {
+                    exclusions.add(v.getClass().getName());
+                }
+            } else {
+                exclusions = Collections.emptySet();
             }
 
-            addValidator(context.getApplication().createValidator(validatorId));
+            // first add the registered default validators and then turn them off based on switches in tree
+            List<String> defaultValidatorIds = new ArrayList<String>();
+            Map<String, String> defaultValidatorInfo = context.getApplication()
+                  .getDefaultValidatorInfo();
+            if (!defaultValidatorInfo.isEmpty()) {
+                for (Map.Entry<String, String> valInfo : defaultValidatorInfo.entrySet()) {
+                    defaultValidatorIds.add(valInfo.getKey());
+                }
+            }
+
+            collectDefaultValidatorIds(defaultValidatorIds, this);
+
+            for (String validatorId : defaultValidatorIds) {
+                String defaultValClassName = defaultValidatorInfo .get(validatorId);
+                if (exclusions.contains(defaultValClassName)) {
+                    continue;
+                }
+
+                addValidator(context.getApplication().createValidator(
+                      validatorId));
+            }
+            defaultValidatorsProcessed = true;
         }
     }
 

@@ -172,8 +172,10 @@ grant {
             </jar>
             <copy overwrite="true" todir="${container.home}/lib"
                   file="${dist.dir}/jsf-impl.jar"/>
+            <!--
             <copy overwrite="true" todir="${container.home}/lib"
                   file="${validation-api.jar}"/>
+            -->
             <if>
                 <os family="windows"/>
                 <then>
