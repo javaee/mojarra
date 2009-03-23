@@ -147,12 +147,12 @@ public class ConverterTagHandlerDelegateImpl extends TagHandlerDelegate implemen
      * @return Converter instance, cannot be null
      */
     private Converter createConverter(FaceletContext ctx) {
-        if (owner.getConverterId() == null) {
+        if (owner.getConverterId(ctx) == null) {
             throw new TagException(
                     owner.getTag(),
                     "Default behavior invoked of requiring a converter-id passed in the constructor, must override ConvertHandler(ConverterConfig)");
         }
-        return ctx.getFacesContext().getApplication().createConverter(owner.getConverterId());
+        return ctx.getFacesContext().getApplication().createConverter(owner.getConverterId(ctx));
     }
 
     

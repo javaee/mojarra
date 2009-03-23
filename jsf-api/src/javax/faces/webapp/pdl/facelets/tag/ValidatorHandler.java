@@ -95,6 +95,14 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
      * though technically the validatorId is always required, even when using a binding</p>
      */
     public String getValidatorId(FaceletContext ctx) {
+        if (validatorId == null) {
+            TagAttribute idAttr = getAttribute("validatorId");
+            if (idAttr == null) {
+                return null;
+            } else {
+                return idAttr.getValue(ctx);
+            }
+        }
         return validatorId;
     }
 

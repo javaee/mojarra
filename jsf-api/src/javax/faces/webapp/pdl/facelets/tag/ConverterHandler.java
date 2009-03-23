@@ -56,6 +56,7 @@ import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
  * Handles setting a Converter instance on a ValueHolder. Will wire all
@@ -92,7 +93,15 @@ public class ConverterHandler extends FaceletsAttachedObjectHandler implements V
 
     }
 
-    public String getConverterId() {
+    public String getConverterId(FaceletContext ctx) {
+        if (converterId == null) {
+            TagAttribute idAttr = getAttribute("converterId");
+            if (idAttr == null) {
+                return null;
+            } else {
+                return idAttr.getValue(ctx);
+            }
+        }
         return converterId;
     }
     
