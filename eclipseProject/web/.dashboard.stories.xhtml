@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<ui:composition>
+	<h2>#{i18n['label.stories']}</h2>
+	<h:panelGroup>
+		#{fn:length(dashboardMB.selectedSprint.stories)} #{i18n['label.stories']}
+	</h:panelGroup>
+	<h:panelGroup>
+			<h:outputLabel value="#{i18n['label.scope']}:" for="" style="font-weight: bold" />
+			<h:outputText value="#{dashboardMB.selectedSprint.iterationScope}" />
+	</h:panelGroup>
+    <ui:repeat value="#{dashboardMB.dmStories}" var="story">
+    <div class="#{story.finished?'closedStory':'openedStory'}">
+    	<span style="font-size: 10px">#{i18n['label.code']} #{story.code}</span>
+    	<br />
+    	<span style="font-size: 14px">#{story.name}</span>
+    	<br />
+    	<span style="font-size: 10px">#{story.estimation} #{"story points"}</span>
+    	<br />
+        <img src="#{resource['images/checklist7.jpg']}" alt="#{story.acceptance}" title="#{story.acceptance}" />
+    	<br />
+    	<span style="font-size: 10px">#{story.status}</span>
+    	<br/>
+    	<h:commandButton action="#{dashboardMB.startStory}" value="#{i18n['label.toStart']}" rendered="#{empty story.startedAt}" />
+    	<h:commandButton action="#{dashboardMB.finishStory}" value="#{i18n['label.toFinish']}" rendered="#{not empty story.startedAt and empty story.finishedAt}" />
+    	<br/>
+        <h:outputText value="#{story.startedAt}" />
+    	<h:outputLabel value=" #{i18n['label.to']} " rendered="#{not empty story.finishedAt}"/>
+    	<h:outputText value="#{story.finishedAt}">
+    		<f:convertDateTime pattern="dd/MM/yyyy"/>
+    	</h:outputText>
+    </div>
+    </ui:repeat>
+
+	</ui:composition>
+
+</html>

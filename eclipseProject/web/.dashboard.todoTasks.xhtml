@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"  
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+      xmlns:appez="http://java.sun.com/jsf/composite/components">
+
+	<ui:composition>
+	<h2>#{i18n['label.todo']}</h2>
+	<h:panelGroup>
+		#{fn:length(dashboardMB.todoTasks)} #{i18n['label.tasks']}
+	</h:panelGroup>
+    <ui:repeat  var="task" value="#{dashboardMB.dmTodoTasks}">
+    <div class="#{task.finished?'closedTask':'openedTask'}">
+    	<span style="font-size: 10px">#{i18n['label.code']} #{task.code}</span>
+    	<br/>
+    	<span style="font-size: 14px">#{task.name}</span>
+    	<br/>
+    	<span style="font-size: 10px">#{task.story.name}</span>
+    	<br/>
+    	<span style="font-size: 10px">#{task.status.single}</span>
+    	<br/>
+    	<h:commandButton action="#{dashboardMB.startTask}" value="#{i18n['label.toStart']}" rendered="#{not empty task.story.startedAt}" />
+    	<h:commandButton action="#{dashboardMB.removeTodoTask}" value="#{i18n['label.toRemove']}"  />
+    </div>
+    </ui:repeat>
+
+	</ui:composition>
+
+</html>

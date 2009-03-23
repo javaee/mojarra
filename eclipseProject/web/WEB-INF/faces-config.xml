@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+	version="2.0">
+
+	<application>
+		<resource-bundle>
+			<base-name>i18n</base-name>
+			<var>i18n</var>
+		</resource-bundle>
+		<message-bundle>i18n</message-bundle>		
+	</application>
+
+	<component>
+		<component-type>BURNDOWN_OUTPUT</component-type>
+		<component-class>jsf.component.BurndownComponent</component-class>
+	</component>
+	<render-kit>
+		<renderer>
+			<component-family>SCRUMTOYS_COMPONENT_FAMILY</component-family>
+			<renderer-type>BURNDOWN_RENDERER</renderer-type>
+			<renderer-class>jsf.renderer.BurndownRenderer</renderer-class>
+		</renderer>
+	</render-kit>
+<!-- you also can use @ManagedBean at DashboardMB.java file -->
+ 	<managed-bean>
+  		<managed-bean-name>dashboardMB</managed-bean-name>
+  		<managed-bean-class>jsf.mb.DashboardMB</managed-bean-class>
+  		<managed-bean-scope>view</managed-bean-scope>
+ 	</managed-bean>
+ 
+ 	<converter>
+		<converter-for-class>java.util.Date</converter-for-class>
+		<converter-class>jsf.converter.AppDateTimeConverter</converter-class>
+	</converter>
+
+	<navigation-rule>
+		<description>
+			global navigation rules
+        </description>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<description>
+				see menu
+            </description>
+			<from-outcome>home</from-outcome>
+			<to-view-id>/home.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<description>
+				see sprints
+            </description>
+			<from-outcome>sprints</from-outcome>
+			<to-view-id>/sprints.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<description>
+				see stories
+            </description>
+			<from-outcome>stories</from-outcome>
+			<to-view-id>/stories.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<description>
+				see tasks
+            </description>
+			<from-outcome>tasks</from-outcome>
+			<to-view-id>/tasks.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<description>
+				see dashboard
+            </description>
+			<from-outcome>dashboard</from-outcome>
+			<to-view-id>/dashboard.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<description>
+				see all in one
+            </description>
+			<from-outcome>allInOne</from-outcome>
+			<to-view-id>/allInOne.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<description>
+			dashboard navigation rules
+        </description>
+		<from-view-id>/dashboard.xhtml</from-view-id>
+		<navigation-case>
+			<description>
+				see burndown
+            </description>
+			<from-outcome>burndown</from-outcome>
+			<to-view-id>/burndown.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+</faces-config>
