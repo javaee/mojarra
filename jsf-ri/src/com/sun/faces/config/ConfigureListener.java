@@ -90,6 +90,7 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.WebappLifecycleListener;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceLoadFacesConfigFiles;
 import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
@@ -160,22 +161,22 @@ public class ConfigureListener implements ServletRequestListener,
         // Check to see if the FacesServlet is present in the
         // web.xml.   If it is, perform faces configuration as normal,
         // otherwise, simply return.
-        //if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles)) {
         WebXmlProcessor webXmlProcessor = new WebXmlProcessor(context);
         if (!webXmlProcessor.isFacesServletPresent()) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "No FacesServlet found in deployment descriptor - bypassing configuration");
+            if (!webConfig.isOptionEnabled(ForceLoadFacesConfigFiles)) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
+                               "No FacesServlet found in deployment descriptor - bypassing configuration");
+                }
+                WebConfiguration.clear(context);
+                return;
             }
-            WebConfiguration.clear(context);
-            return;
         } else {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            "FacesServlet found in deployment descriptor - processing configuration.");
             }
         }
-        //}
 
 
         // bootstrap of faces required
