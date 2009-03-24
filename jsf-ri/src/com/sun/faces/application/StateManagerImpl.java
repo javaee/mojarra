@@ -236,13 +236,16 @@ public class StateManagerImpl extends StateManager {
                     LOGGER.log(Level.SEVERE,
                                "jsf.duplicate_component_id_error",
                                id);
+
+
+                    FastStringWriter writer = new FastStringWriter(128);
+                    DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
+                    LOGGER.severe(writer.toString());
                 }
-                FastStringWriter writer = new FastStringWriter(128);
-                DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
-                String message = MessageUtils.getExceptionMessageString(
-                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id)
-                      + '\n'
-                      + writer.toString();
+
+                String message =
+                      MessageUtils.getExceptionMessageString(
+                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id);
                 throw new IllegalStateException(message);
             }
         }

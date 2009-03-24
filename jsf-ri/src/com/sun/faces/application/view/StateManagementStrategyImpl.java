@@ -412,7 +412,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
     // ------------------------------------------------------- Protected Methods
 
-
+    // RELEASE_PENDING (this is duplicated in StateManagerImpl...
     protected void checkIdUniqueness(FacesContext context,
                                      UIComponent component,
                                      Set<String> componentIds)
@@ -432,13 +432,16 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     LOGGER.log(Level.SEVERE,
                                "jsf.duplicate_component_id_error",
                                id);
+
+
+                    FastStringWriter writer = new FastStringWriter(128);
+                    DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
+                    LOGGER.severe(writer.toString());
                 }
-                FastStringWriter writer = new FastStringWriter(128);
-                DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
-                String message = MessageUtils.getExceptionMessageString(
-                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id)
-                      + '\n'
-                      + writer.toString();
+
+                String message =
+                      MessageUtils.getExceptionMessageString(
+                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id);
                 throw new IllegalStateException(message);
             }
         }
