@@ -54,18 +54,27 @@ package javax.faces.webapp.pdl.facelets.tag;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
- * <p class="changed_added_2_0">External information on how to wire
- * dynamic or literal state to the passed Object instance.</p>
- *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
+ * <p class="changed_added_2_0">There are concrete subclasses within the
+ * implementation that map concepts in the Facelet PDL page to JSF Java
+ * API calls the appropriate instances.  For example, the
+ * &#8220;<code>validator</code>&#8221; attribute on an input component
+ * is specified to point to a <code>MethodExpression</code> that
+ * references a method that performs the validation.  There is a
+ * concrete subclass of <code>Metadata</code> to perform this action
+ * when that attribute appears in a Facelet PDL page.</p>
  *
  * @since 2.0
  */
 public abstract class Metadata {
 
     /**
-     * @param ctx
-     * @param instance
+     * <p class="changed_added_2_0">Take the action prescribed in the
+     * JSF specification for this particular PDL element attribute.</p>
+     * 
+     * @param ctx The FaceletContext for this request.
+     * @param instance The instance from the JSF Java API on which the
+     * action should be taken.  For example, an instance of {@link
+     * javax.faces.component.EditableValueHolder}.
      */
     public abstract void applyMetadata(FaceletContext ctx, Object instance);
 

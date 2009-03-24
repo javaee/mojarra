@@ -55,8 +55,6 @@ package javax.faces.webapp.pdl.facelets.tag;
  * <p class="changed_added_2_0">An object that represents the Location
  * of a Tag or TagAttribute in a Facelet file.</p>
  *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
- *
  * @since 2.0
  * 
  */
@@ -75,37 +73,31 @@ public final class Location {
     }
 
     /**
-     * Estimated character column
+     * <p class="changed_added_2_0">Return the estimated character column.</p>
      * 
-     * @return character column
      */
     public int getColumn() {
         return column;
     }
 
     /**
-     * Line this is located at
+     * <p class="changed_added_2_0">Return the line number in the page
+     * for this location.</p>
      * 
-     * @return link this is located at
      */
     public int getLine() {
         return line;
     }
 
     /**
-     * File path to this location
+     * <p class="changed_added_2_0">Return the file path to the page
+     * represented by this location.</p>
      * 
-     * @return file path
      */
     public String getPath() {
         return path;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     public String toString() {
         return path + " @" + this.line + "," + this.column;
     }

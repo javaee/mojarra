@@ -39,51 +39,45 @@ package javax.faces.component;
 
 import java.io.Serializable;
 
-/**This interface is implemented
- * by StateHolders which can save
- * a partial state between requests.
- *
- * This interface extends from
- * StateHolder as implementations
- * are expected to also provide
- * implementations of restoreState/saveState.
- * However, these implementations should
- * return a partial state only if applicable.
- *
- * The partial state is the state which
- * has been changed after notifyStoreState
- * has been called. It will be returned only
- * if notifyStoreState has been called - if it
- * has not been called, the full state will be
- * returned.
- *
- * For components created from a PDL-template, notifyStoreState
- * should be called, for dynamically
- * created components (in Java), notifyStoreState
- * should not be called.
- *
- * RELEASE_PENDING (edburns,rogerk) docs
+/**
+ * <p class="changed_added_2_0">Components that want to leverage the
+ * partial state saving feature must implement this interface instead of
+ * implementing {@link StateHolder}, from which this interface
+ * inherits.</p>
+ * @since 2.0
  */
 public interface PartialStateHolder extends StateHolder {
 
 
-    /**Notify this state-holder that it
-     * a) should start collecting delta-state
-     * b) should return the delta-state only from now own if
-     * save-state gets called.
-     *
+    /**
+     * <p class="changed_added_2_0">The runtime must ensure that the
+     * {@link #markInitialState} method is called on each instance of
+     * this interface in the view at the appropriate time to indicate
+     * the component is in its initial state.  The implementor of the
+     * interface must ensure that {@link #initialStateMarked} returns
+     * <code>true</code> from the time <code>markInitialState()</code>
+     * is called until {@link #clearInitialState} is called, after which
+     * time <code>initialStateMarked()</code> must return
+     * <code>false</code>.  Also, during the time that the instance
+     * returns <code>true</code> from <code>initialStateMarked()</code>,
+     * the implementation must return only the state that has changed in
+     * its implementation of {@link StateHolder#saveState}.</p>
+     * @since 2.0
      */
     void markInitialState();
 
     /**
-     * @return <code>true</code> if delta state changes are being tracked,
-     *  otherwise <code>false</code>
+     * <p class="changed_added_2_0">Return <code>true</code> if delta
+     * state changes are being tracked, otherwise <code>false</code></p>
+     * @since 2.0
      */
     boolean initialStateMarked();
 
 
     /**
-     * Reset the PartialStateHolder to a non-delta tracking state.
+     * <p class="changed_added_2_0">Reset the PartialStateHolder to a
+     * non-delta tracking state.</p>
+     * @since 2.0
      */
     void clearInitialState();
 

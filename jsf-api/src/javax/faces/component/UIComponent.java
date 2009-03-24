@@ -439,7 +439,11 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
     boolean initialState;
 
     /**
-     * RELEASE_PENDING (docs)
+     * <p class="changed_added_2_0">An implementation of {@link
+     * PartialStateHolder#markInitialState}, this method is called by
+     * the runtime to indicate that the instance should start tracking
+     * changes to its state.</p>
+     * @since 2.0
      */
     public void markInitialState() {
         initialState = true;
@@ -447,8 +451,11 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * @return
+     * <p class="changed_added_2_0">An implementation of {@link
+     * PartialStateHolder#initialStateMarked}, this method is called by
+     * the runtime to test if the {@llink
+     * PartialStateHolder#markInitialState} method was called.</p>
+     * @since 2.0
      */
     public boolean initialStateMarked() {
         return initialState;
@@ -456,7 +463,11 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 
 
     /**
-     * RELEASE_PENDING (docs)
+     * <p class="changed_added_2_0">An implementation of {@link
+     * PartialStateHolder#clearInitialState}, this method is called by
+     * the runtime to tell the instance to stop tracking state
+     * changes.</p>
+     * @since 2.0
      */
     public void clearInitialState() {
         initialState = false;
@@ -464,8 +475,10 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * @return
+     * <p class="changed_added_2_0">Return the {@link StateHelper}
+     * instance used to help this component implement {@link
+     * PartialStateHolder}.</p>
+     * @since 2.0
      */
     protected StateHelper getStateHelper() {
         return getStateHelper(true);
@@ -473,9 +486,15 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param create
-     * @return
+     * <p class="changed_added_2_0">Like {@link #getStateHelper()}, but
+     * only create a state helper instance if the argument
+     * <code>creat</code> is <code>true</code>.</p>
+     * @param create if <code>true</code>, a new {@link StateHelper}
+     * instance will be created if it does not exist already.  If
+     * <code>false</code>, and there is no existing
+     * <code>StateHelper</code> instance, one will not be created and
+     * <code>null</code> will be returned.
+     * @since 2.0
      */
     protected StateHelper getStateHelper(boolean create) {
 

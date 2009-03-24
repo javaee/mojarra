@@ -1273,8 +1273,10 @@ public abstract class UIComponentBase extends UIComponent {
     // ---------------------------------------------- PartialStateHolder Methods
 
     /**
-     * RELEASE_PENDING (docs)
-     * Docs - call markInitialState() on any PartialStateHolder attached objects.
+     * <p class="changed_added_2_0">For each of the attached objects on
+     * this instance that implement {@link PartialStateHolder}, call
+     * {@link PartialStateHolder#markInitialState} on the attached object.</p> 
+     * @since 2.0
      */
     @Override
     public void markInitialState() {
@@ -1309,8 +1311,10 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * Docs - call clearInitialState() on all attached objects
+     * <p class="changed_added_2_0">For each of the attached objects on
+     * this instance that implement {@link PartialStateHolder}, call
+     * {@link PartialStateHolder#clearInitialState} on the attached object.</p> 
+     * @since 2.0
      */
     @Override
     public void clearInitialState() {

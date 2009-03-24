@@ -55,8 +55,8 @@ import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 /**
  * <p class="changed_added_2_0">A Facelet version of the JSP {@link
- * javax.faces.webapp.ConverterTag}.  PENDING(edburns): better
- * specification.</p>
+ * javax.faces.webapp.ConverterTag}.  All the attributes specified in
+ * the documentation for the converter tags are valid attributes.</p>
  *
  * @since 2.0
  * 

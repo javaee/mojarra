@@ -54,53 +54,61 @@ package javax.faces.webapp.pdl.facelets.tag;
 /**
  * <p class="changed_added_2_0">A mutable set of rules to be used in
  * auto-wiring state to a particular object instance. Rules assigned to
- * this object will be composed into a single Metadata instance.</p>
+ * this object will be composed into a single Metadata instance which
+ * will encapsulate the ruleset.</p>
  *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
- * 
  * @since 2.0
  */
 public abstract class MetaRuleset {
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param attribute
-     * @return
+     * <p class="changed_added_2_0">Customize this
+     * <code>MetaRuleset</code> instance to advise it to ignore the
+     * attribute named by the <code>attribute</code> argument, returning
+     * <code>this</code>.</p>
+     * @param attribute the name of the attribute to ignore.
+     * 
+     * @since 2.0
      */
     public abstract MetaRuleset ignore(String attribute);
 
     /**
-     * RELEASE_PENDING (docs)
-     * @return
+     * <p class="changed_added_2_0">Customize this
+     * <code>MetaRuleset</code> instance to advise it to ignore all
+     * attributes, returning
+     * <code>this</code>.</p>
+     * @since 2.0
      */
     public abstract MetaRuleset ignoreAll();
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param attribute
-     * @param property
-     * @return
+     * <p class="changed_added_2_0">Customize this
+     * <code>MetaRuleset</code> by removing the attribute named by
+     * argument <code>attribute</code> and re-adding it under the name
+     * given by the argument <code>property</code>, returning
+     * <code>this</code>.</p>
+     * @since 2.0
      */
     public abstract MetaRuleset alias(String attribute, String property);
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param mapper
-     * @return
+     * <p class="changed_added_2_0">Add another {@link Metadata} to this
+     * ruleset, returning <code>this</code>.</p>
+     * @since 2.0
      */
     public abstract MetaRuleset add(Metadata mapper);
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param rule
-     * @return
+     * <p class="changed_added_2_0">Add another {@link MetaRule} to this
+     * ruleset, returning <code>this</code>.</p>
+     * @since 2.0
      */
     public abstract MetaRuleset addRule(MetaRule rule);
 
     /**
-     * RELEASE_PENDING (docs)
-     * @return
+     * <p class="changed_added_2_0">RELEASE_PENDING</p>
+     * 
      */
     public abstract Metadata finish();
 }

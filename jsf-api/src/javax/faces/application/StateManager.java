@@ -83,27 +83,49 @@ public abstract class StateManager {
     public static final String STATE_SAVING_METHOD_PARAM_NAME =
           "javax.faces.STATE_SAVING_METHOD";
 
-
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * For applications versioned at 1.2 where the internal Facelets implementation
-     * is disabled, this value will default to false.  If the application is
-     * versioned at 2.0, the default value is true.
+     * <p class="changed_added_2_0">The <code>ServletContext</code> init
+     * parameter consulted by the runtime to determine if the partial
+     * state saving mechanism should be used.</p>
+
+     * <div class="changed_added_2_0">
+
+     * <p>If undefined, the runtime must determine the version level of
+     * the application.</p>
      *
-     * Note that this can be configured on a per-view basis as well
-     * by setting the partialStateSaving parameter on the UIViewRoot.
+     * <ul>
+
+     * <li><p>For applications versioned at 1.2 and under, the runtime
+     * must not use the partial state saving mechanism.</li><p>
+
+     * <li><p>For applications versioned at 2.0 and above, the runtime
+     * must use the partial state saving mechanism.</p></li>
+
+     * </ul>
+
+     * <p>If this parameter is defined, and the application is versioned
+     * at 1.2 and under, the runtime must not use the partial state
+     * saving mechanism.  Otherwise, If this param is defined, and
+     * calling <code>toLowerCase().equals("true")</code> on a
+     * <code>String</code> representation of its value returns
+     * <code>true</code>, the runtime must use partial state mechanism.
+     * Otherwise the partial state saving mechanism must not be
+     * used.</p>
+
+     * </div>
      *
      * @since 2.0
      */
+   
     public static final String PARTIAL_STATE_SAVING_PARAM_NAME =
           "javax.faces.PARTIAL_STATE_SAVING";
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * The value of this parameters is a comma separated list of view IDs
-     * that will not have their state saved using partial state saving and
-     * instead will be saved using the JSF 1.2 state saving mechanism. 
+     * <p class="changed_added_2_0">The runtime must interpret the value
+     * of this parameter as a comma separated list of view IDs, each of
+     * which must have their state saved using the state saving
+     * mechanism specified in JSF 1.2.</p>
      */
     public static final String FULL_STATE_SAVING_VIEW_IDS_PARAM_NAME =
           "javax.faces.FULL_STATE_SAVING_VIEW_IDS";

@@ -56,15 +56,40 @@ import javax.faces.webapp.pdl.facelets.tag.Metadata;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 
 /**
- * <p class="changed_added_2_0">A potential rule for Metadata on the
- * passed MetadataTarget.</p>
+ * <p class="changed_added_2_0">The root class of the abstraction that
+ * dictates how attributes in on an element in a Facelets PDL page are
+ * wired to the component instance associated with that element.  There
+ * are implementation of specific concrete subclasses of this class for
+ * all the basic kinds of elements that appear in Facelets PDL pages:
+ * components, non-components, and attached objects.</p>
  *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
- * 
+ * <p class="changed_added_2_0">Instances of this class are grouped
+ * together into a {@link MetaRuleSet}, and each rule in the set has its
+ * {@link #applyRule} method called when {@link MetaRuleSet#finish} is
+ * called.</p>
+ *
  * @since 2.0
  */
 public abstract class MetaRule {
 
+    
+    /**
+     * <p class="changed_added_2_0">Return an abstraction that takes
+     * appropriate action given the kind of rule represented by the
+     * argument <code>name</code>, in the context of this particular
+     * concrete subclass of <code>MetaRule</code>.  The abstraction must
+     * encapsulate the value from the argument
+     * <code>attribute</code>.</p>
+     * @since 2.0
+     * @param name the name for this rule.  This will generally be the
+     * name of a tag attribute in the PDL.
+     * @param attribute the name/value pair for this attribute on this
+     * particular instance of an element in the page.
+     * @param meta the <code>MetadataTarged</code> that can be used to
+     * discern what kind of action to encapsulate within the abstraction
+     * to be returned.
+
+     */
     public abstract Metadata applyRule(String name, TagAttribute attribute,
             MetadataTarget meta);
 

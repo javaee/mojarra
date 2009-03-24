@@ -76,8 +76,8 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 	  <li><p>{@link UIComponent#popComponentFromEL} is called on the
 	  newly created component.</p></li>
 
-   // RELEASE_PENDING (edburns,rogerk) add docs about PartialStateHolder.markInitialState()
-   //   being called at the end of apply().
+	  <li><p>Call {@link UIComponent#markInitialState}.
+	  </p></li>
 
  * </ol>
  *

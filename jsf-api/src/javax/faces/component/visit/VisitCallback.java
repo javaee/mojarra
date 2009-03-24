@@ -44,8 +44,6 @@ import javax.faces.component.UIComponent;
  * taking action on a specific UIComponent (either facet or child) during 
  * a component tree visit.</p>
  * 
- * RELEASE_PENDING
- *
  * @see UIComponent#visitTree UIComponent.visitTree()
  *
  * @since 2.0
