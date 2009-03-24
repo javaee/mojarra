@@ -97,7 +97,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public static final String IS_BUILDING_METADATA =
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
-    private StateManagementStrategy stateManagementStrategy;
+    private StateManagementStrategyImpl stateManagementStrategy;
 
      private boolean partialStateSaving;
     private Set<String> fullStateViewIds;
@@ -305,9 +305,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             return root;
         }
 
-        UIViewRoot root = super.createView(ctx, viewId);
-        root.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
-        return root;
+        return super.createView(ctx, viewId);
         
     }
     
@@ -389,6 +387,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         // populate UIViewRoot
         f.apply(ctx, view);
+        doPostBuildActions(view);
         Util.setViewPopulated(ctx, view);
 
     }
@@ -414,10 +413,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         partialStateSaving = config.isOptionEnabled(PartialStateSaving);
         
         if (partialStateSaving) {
-            this.stateManagementStrategy = new StateManagementStrategyImpl(this);
             String[] viewIds = config.getOptionValue(FullStateSavingViewIds, ",");
             fullStateViewIds = new HashSet<String>(viewIds.length, 1.0f);
             fullStateViewIds.addAll(Arrays.asList(viewIds));
+            this.stateManagementStrategy = new StateManagementStrategyImpl(this, fullStateViewIds);
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -670,15 +669,20 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      private void updateStateSavingType(FacesContext ctx, String viewId) {
 
         if (!ctx.getAttributes().containsKey("partialStateSaving")) {
-            if (partialStateSaving) {
-                ctx.getAttributes().put("partialStateSaving",
-                                        !fullStateViewIds.contains(viewId));
-            } else {
-                ctx.getAttributes().put("partialStateSaving",
-                                       false);
-            }
+            ctx.getAttributes().put("partialStateSaving",
+                                    usePartialSaving(viewId));
         }
 
+    }
+
+    private boolean usePartialSaving(String viewId) {
+        return (partialStateSaving || !fullStateViewIds.contains(viewId));
+    }
+
+    private void doPostBuildActions(UIViewRoot root) {
+        if (usePartialSaving(root.getViewId())) {
+            stateManagementStrategy.notifyTrackChanges(root);    
+        }
     }
 
 

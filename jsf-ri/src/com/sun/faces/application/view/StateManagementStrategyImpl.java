@@ -47,8 +47,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.SystemEvent;
 import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.io.FastStringWriter;
@@ -60,17 +58,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
-import javax.faces.application.Application;
 import javax.faces.application.StateManager;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponentBase;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
-import javax.faces.event.PostAddToViewNonPDLEvent;
-import javax.faces.event.PreRemoveFromViewEvent;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.SystemEventListener;
+import javax.faces.event.*;
 import javax.faces.webapp.pdl.StateManagementStrategy;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.FacesException;
@@ -92,14 +85,17 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
 
     private final PageDeclarationLanguage pdl;
-    private AddRemoveListener removeListener;
-    
+
     private static final String CLIENTIDS_TO_REMOVE_NAME = 
             "com.sun.faces.application.view.CLIENTIDS_TO_REMOVE";
     private static final String CLIENTIDS_TO_ADD_NAME = 
             "com.sun.faces.application.view.CLIENTIDS_TO_ADD";
     private static final String IGNORE_REMOVE_EVENT_NAME = 
             "com.sun.faces.application.view.IGNORE_REMOVE_EVENT";
+    private static final String DYNAMIC_COMPONENT =
+            "com.sun.faces.application.view.DYNAMIC_COMPONENT";
+
+    private Set<String> fullStateViewIds;
 
     // ------------------------------------------------------------ Constructors
 
@@ -107,13 +103,9 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     /**
      * Create a new <code>StateManagerImpl</code> instance.
      */
-    public StateManagementStrategyImpl(PageDeclarationLanguage pdl) {
+    public StateManagementStrategyImpl(PageDeclarationLanguage pdl, Set<String> fullStateViewIds) {
         this.pdl = pdl;
-        removeListener = new AddRemoveListener(this);
-        Application app = FacesContext.getCurrentInstance().getApplication();
-        app.subscribeToEvent(PostAddToViewNonPDLEvent.class, removeListener);
-        app.subscribeToEvent(PreRemoveFromViewEvent.class, removeListener);
-
+        this.fullStateViewIds = fullStateViewIds;
     }
 
     private List<String> getClientIdsToRemove(FacesContext context) {
@@ -162,14 +154,14 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         
     }
     
-    private List<ComponentStruct> getClientIdsToAdd(FacesContext context) {
+    private Map<String,ComponentStruct> getClientIdsToAdd(FacesContext context) {
         return this.getClientIdsToAdd(context, false);
     }
 
-    private List<ComponentStruct> getClientIdsToAdd(FacesContext context, boolean create) {
-        List<ComponentStruct> result = null;
-        if ((null == (result = (List<ComponentStruct>) context.getAttributes().get(CLIENTIDS_TO_ADD_NAME))) && create) {
-            result = new ArrayList<ComponentStruct>();
+    private Map<String,ComponentStruct> getClientIdsToAdd(FacesContext context, boolean create) {
+        Map<String,ComponentStruct> result = null;
+        if ((null == (result = (Map<String,ComponentStruct>) context.getAttributes().get(CLIENTIDS_TO_ADD_NAME))) && create) {
+            result = new HashMap<String,ComponentStruct>();
             context.getAttributes().put(CLIENTIDS_TO_ADD_NAME, result);
         }
         return result;
@@ -181,9 +173,9 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         idsToRemove.add(event.getComponent().getClientId(context));
     }
     
-    private void handleAddEvent(PostAddToViewNonPDLEvent event) {
+    private void handleAddEvent(PostAddToViewEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
-        List<ComponentStruct> idsToAdd = getClientIdsToAdd(context, true);
+        Map<String,ComponentStruct> idsToAdd = getClientIdsToAdd(context, true);
         ComponentStruct toAdd = new ComponentStruct();
         UIComponent 
                 parent,
@@ -203,7 +195,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         } else {
             toAdd.indexOfChildInParent = parent.getChildren().indexOf(added);
         }
-        idsToAdd.add(toAdd);
+        added.getAttributes().put(DYNAMIC_COMPONENT, Boolean.TRUE);
+        idsToAdd.put(toAdd.clientId, toAdd);
     
     }
     
@@ -245,6 +238,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             return null;
         }
 
+
         // honor the requirement to check for id uniqueness
         checkIdUniqueness(context,
                           viewRoot,
@@ -259,7 +253,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 VisitResult result = VisitResult.ACCEPT;
                 Object stateObj = null;
                 if (!target.isTransient()) {
-                    if (!target.getAttributes().containsKey(UIComponent.ADDED_BY_PDL_KEY)) {
+                    if (target.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
                         stateObj = new StateHolderSaver(finalContext, target);
                     } else {
                         stateObj = target.saveState(context.getFacesContext());
@@ -282,14 +276,13 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         if (null != removeList && !removeList.isEmpty()) {
             stateMap.put(CLIENTIDS_TO_REMOVE_NAME, removeList);
         }
-        List<ComponentStruct> addList = getClientIdsToAdd(context);
+        Map<String,ComponentStruct> addList = getClientIdsToAdd(context);
         if (null != addList && !addList.isEmpty()) {
-            Object [] savedAddList = new Object[addList.size()];
-            for (int i = 0; i < savedAddList.length; i++) {
-                // Save the state of the added component
-                savedAddList[i] = addList.get(i).saveState(context);
+            List<Object> savedAddList = new ArrayList<Object>(addList.size());
+            for (ComponentStruct s : addList.values()) {
+                savedAddList.add(s.saveState(context));
             }
-            stateMap.put(CLIENTIDS_TO_ADD_NAME, savedAddList);
+            stateMap.put(CLIENTIDS_TO_ADD_NAME, savedAddList.toArray());
         }
         //return stateMap;
         return new Object[] { null, stateMap };
@@ -334,7 +327,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 public VisitResult visit(VisitContext context, UIComponent target) {
                     VisitResult result = VisitResult.ACCEPT;
                     Object stateObj = state.get(target.getClientId(context.getFacesContext()));
-                    if (stateObj != null && target.getAttributes().containsKey(UIComponent.ADDED_BY_PDL_KEY)) {
+                    if (stateObj != null && !target.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
                         target.restoreState(context.getFacesContext(),
                                 stateObj);
                     }
@@ -402,12 +395,19 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
     }
 
-    @Override
-    public boolean isPdlDeliversInitialStateEvent(FacesContext context) {
-        return true;
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void notifyTrackChanges(UIViewRoot root) {
+
+        SystemEventListener listener = new AddRemoveListener(this);
+        root.subscribeToViewEvent(PostAddToViewEvent.class, listener);
+        root.subscribeToViewEvent(PreRemoveFromViewEvent.class, listener);
+
     }
-    
-    
+
+
 
 
     // ------------------------------------------------------- Protected Methods
@@ -447,8 +447,10 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         }
 
     }
+
+
     
-    private class AddRemoveListener extends UIComponentBase implements SystemEventListener, ComponentSystemEventListener {
+    public static class AddRemoveListener implements SystemEventListener {
 
         private StateManagementStrategyImpl owner;
         
@@ -456,29 +458,22 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             this.owner = owner;
         }
 
-        @Override
-        public String getFamily() {
-            return "com.sun.faces.application.view.StateManagementStrategyImpl";
-        }
-
-        public boolean isListenerForSource(Object source) {
-            return (source instanceof UIComponent);
-        }
-
-        public void processEvent(SystemEvent event) throws AbortProcessingException {
+        public void processEvent(SystemEvent event)
+              throws AbortProcessingException {
             FacesContext context = FacesContext.getCurrentInstance();
             if (event instanceof PreRemoveFromViewEvent) {
                 if (!owner.isIgnoreRemoveEvent(context)) {
                     owner.handleRemoveEvent((PreRemoveFromViewEvent) event);
                 }
             } else {
-                owner.handleAddEvent((PostAddToViewNonPDLEvent) event);
+                owner.handleAddEvent((PostAddToViewEvent) event);
             }
         }
-        
-        
-        
 
+        public boolean isListenerForSource(Object source) {
+            return (source instanceof UIComponent);
+        }
+        
     }
 
 } 

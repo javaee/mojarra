@@ -51,7 +51,6 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PostAddToViewEvent;
-import javax.faces.event.PostAddToViewNonPDLEvent;
 import javax.faces.event.PostValidateEvent;
 import javax.faces.event.PreRemoveFromViewEvent;
 import javax.faces.event.PreRenderComponentEvent;
@@ -1974,13 +1973,7 @@ public abstract class UIComponentBase extends UIComponent {
             UIComponent component) {
 
         component.setInView(true);
-        // If the component was added by PDL, use the normal PostAddtoViewEvent.
-        // If the component was added by something other than PDL, use the PostAddToViewNonPDLEvent
-        Class<? extends SystemEvent> eventClass =
-              component.getAttributes().containsKey(UIComponent.ADDED_BY_PDL_KEY)
-                                                      ? PostAddToViewEvent.class
-                                                      : PostAddToViewNonPDLEvent.class;
-        application.publishEvent(eventClass, component);
+        application.publishEvent(PostAddToViewEvent.class, component);
         if (component.getChildCount() > 0) {
             for (UIComponent c : component.getChildren()) {
                 publishAfterViewEvents(context, application, c);

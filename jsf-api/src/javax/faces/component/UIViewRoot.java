@@ -47,11 +47,6 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.webapp.FacesServlet;
@@ -70,11 +65,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
-import javax.faces.event.PostRestoreStateEvent;
-import javax.faces.event.PostConstructViewMapEvent;
-import javax.faces.event.PreDestroyViewMapEvent;
-import javax.faces.event.ExceptionQueuedEvent;
-import javax.faces.event.ExceptionQueuedEventContext;
+import javax.faces.event.*;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.webapp.pdl.ViewMetadata;
 
@@ -497,6 +488,10 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
      * <li><p>Call {@link #getComponentResources} to obtain the child
      * list for the given target.</p></li>
+     *
+     * <li><p>If the component ID of <code>componentResource</code> matches the
+     * the ID of a resource that has allready been added, remove the old
+     * resource.</p></li>
 
      * <li><p>Add the <code>component</code> resource to the
      * list.</p></li>
@@ -524,6 +519,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         List<UIComponent> facetChildren = getComponentResources(context,
                                                                 target,
                                                                 true);
+        String id = componentResource.getId();
+        if (id != null) {
+            for (UIComponent c : facetChildren) {
+                if (id.equals(c.getId())) {
+                    facetChildren.remove(c);
+                }
+            }
+        }
         // add the resource to the facet
         facetChildren.add(componentResource);
     }
@@ -1514,7 +1517,121 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         return viewScope;
         
     }
+
+    Map<Class<? extends SystemEvent>,List<SystemEventListener>> viewListeners;
+
+
+    /**
+     * RELEASE_PENDING
+     * <p class="changed_added_2_0">Install the listener instance
+     * referenced by argument <code>listener</code> into the <code>UIViewRoot</code>
+     * as a listener for events of type <code>systemEventClass</code>.</p>
+     *
+     * <p>Note that installed listeners are not maintained as part of the
+     * <code>UIViewRoot</code>'s state.</p>
+     *
+     * @param systemEvent the <code>Class</code> of event for which
+     *  <code>listener</code> must be fired.
+     * @param listener the implementation of {@link
+     *  javax.faces.event.SystemEventListener} whose {@link
+     *  javax.faces.event.SystemEventListener#processEvent} method must
+     *  be called when events of type <code>systemEventClass</code> are
+     *  fired.
+     *
+     * @throws <code>NullPointerException</code> if <code>systemEventClass</code>
+     *  or <code>listener</code> are <code>null</code>.
+     *
+     * @since 2.0
+     */
+    public void subscribeToViewEvent(Class<? extends SystemEvent> systemEvent,
+                                     SystemEventListener listener) {
+
+        if (systemEvent == null) {
+            throw new NullPointerException();
+        }
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+        
+        if (viewListeners == null) {
+            viewListeners = new HashMap<Class<? extends SystemEvent>, List<SystemEventListener>>(4, 1.0f);
+        }
+        List<SystemEventListener> listeners = viewListeners.get(systemEvent);
+        if (listeners == null) {
+            listeners = new ArrayList<SystemEventListener>(2);
+            viewListeners.put(systemEvent, listeners);
+        }
+        listeners.add(listener);
+
+    }
+
+
+    /**
+     * RELEASE_PENDING
+     * <p class="changed_added_2_0">Remove the listener instance
+     * referenced by argument <code>listener</code> from the <code>UIViewRoot</code>
+     * as a listener for events of type <code>systemEventClass</code>.
+     *
+     * @param systemEvent the <code>Class</code> of event for which
+     *  <code>listener</code> must be fired.
+     * @param listener the implementation of {@link
+     *  javax.faces.event.SystemEventListener} whose {@link
+     *  javax.faces.event.SystemEventListener#processEvent} method must
+     *  be called when events of type <code>systemEventClass</code> are
+     *  fired.
+     *
+     * @throws <code>NullPointerException</code> if <code>systemEventClass</code>
+     *  or <code>listener</code> are <code>null</code>.
+     *
+     * @since 2.0
+     */
+    public void unsubscribeFromViewEvent(Class<? extends SystemEvent> systemEvent,
+                                         SystemEventListener listener) {
+
+        if (systemEvent == null) {
+            throw new NullPointerException();
+        }
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+
+        if (viewListeners != null) {
+            List<SystemEventListener> listeners = viewListeners.get(systemEvent);
+            if (listeners != null) {
+                listeners.remove(listener);
+            }
+        }
+
+    }
+
+
+    /**
+     * RELEASE_PENDING
+     * <p class="changed_added_2_0">Return the
+     * <code>SystemEventListener</code> instances registered on this
+     * <code>UIComponent</code> instance that are interested in events
+     * of type <code>eventClass</code>.</p>
+     *
+     * @param systemEvent the <code>Class</code> of event for which the
+     * listeners must be returned.
+
+     * @throws NullPointerException if argument <code>systemEvent</code> is <code>null</code>.
+     *
+     * @since 2.0
+     */
+    public List<SystemEventListener> getViewListenersForEventClass(Class<? extends SystemEvent> systemEvent) {
+
+        if (systemEvent == null) {
+            throw new NullPointerException();
+        }
+        if (viewListeners != null) {
+            return viewListeners.get(systemEvent);
+        }
+        return null;
+        
+    }
     
+
     private void encodeViewParameters(FacesContext context) {
         PageDeclarationLanguage pdl = null;
         
@@ -1602,7 +1719,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         UIComponent facet = getFacet(location);
         if (facet == null && create) {
             facet = context.getApplication().createComponent("javax.faces.Panel");
-            facet.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
             facet.setId(location);
             getFacets().put(location, facet);
         }

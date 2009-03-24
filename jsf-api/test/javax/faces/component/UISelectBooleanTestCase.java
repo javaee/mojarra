@@ -213,7 +213,6 @@ public class UISelectBooleanTestCase extends UIInputTestCase {
     protected UIComponent createComponent() {
         UIComponent component = new UISelectBoolean();
         component.setRendererType(null);
-        component.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         return (component);
     }
 

@@ -230,7 +230,6 @@ public class UIParameterTestCase extends UIComponentBaseTestCase {
     protected UIComponent createComponent() {
         UIComponent component = new UIParameter();
         component.setRendererType(null);
-        component.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
         return (component);
     }
 

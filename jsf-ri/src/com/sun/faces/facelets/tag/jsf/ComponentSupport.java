@@ -342,7 +342,6 @@ public final class ComponentSupport {
      */
     public final static void addComponent(FaceletContext ctx, UIComponent parent, UIComponent child) {
         // RELEASE_PENDING (edburns,rogerk) doc ADDED_BY_PDL_KEY HERE
-        child.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);        
         String facetName = getFacetName(parent);
         if (facetName == null) {
             parent.getChildren().add(child);
@@ -354,7 +353,6 @@ public final class ComponentSupport {
                     UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
                     panelGroup.setId(getViewRoot(ctx.getFacesContext(), parent).createUniqueId());
                     panelGroup.getAttributes().put(ComponentSupport.IMPLICIT_PANEL, true);
-                    panelGroup.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
                     panelGroup.getChildren().add(existing);
                     // the panel group becomes the facet
                     parent.getFacets().put(facetName, panelGroup);

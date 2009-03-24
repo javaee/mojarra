@@ -94,7 +94,6 @@ public class MetadataHandler extends TagHandlerImpl {
             if (!(facetComponent instanceof UIPanel)) {
                 UIComponent panelGroup = ctx.getFacesContext().getApplication()
                       .createComponent(UIPanel.COMPONENT_TYPE);
-                panelGroup.getAttributes().put(UIComponent.ADDED_BY_PDL_KEY, Boolean.TRUE);
                 panelGroup.getChildren().add(facetComponent);
                 parent.getFacets()
                       .put(UIViewRoot.METADATA_FACET_NAME, panelGroup);

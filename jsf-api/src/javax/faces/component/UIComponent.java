@@ -144,17 +144,6 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      */
     public static final String BEANINFO_KEY = "javax.faces.component.BEANINFO_KEY";
 
-    /**
-     * <p class="changed_added_2_0">The value of this constant is used as the key in the
-     * component attribute map, the value for which is a
-     * <code>Boolean</code> indicating that this component instance
-     * was added into the tree by the a PDL, rather than programmatically.
-     * The absense of an entry for this key indicates that the component
-     * was not added by a PDL.</p>
-     *
-     * @since 2.0
-     */
-    public static final String ADDED_BY_PDL_KEY = "javax.faces.component.ADDED_BY_PDL_KEY";
 
     /**
      * <p class="changed_added_2_0">The value of this constant is used as the key
@@ -2314,7 +2303,11 @@ private void doFind(FacesContext context, String clientId) {
 
         public boolean isListenerForSource(Object component) {
 
-            return instanceClass.isAssignableFrom(component.getClass());
+            if (wrapped instanceof SystemEventListener) {
+                return ((SystemEventListener) wrapped).isListenerForSource(component);
+            } else {
+                return instanceClass.isAssignableFrom(component.getClass());
+            }
 
         }
 

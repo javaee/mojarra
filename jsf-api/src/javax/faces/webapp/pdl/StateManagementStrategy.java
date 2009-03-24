@@ -164,12 +164,5 @@ public abstract class StateManagementStrategy {
     public abstract UIViewRoot restoreView(FacesContext context, String viewId,
                                            String renderKitId);
 
-    /**
-     * <p class="changed_added_2_0">Return <code>true</code> if this PDL
-     * implementation takes responsibility for delivering the initial
-     * state event.  Value must not change during application lifetime.
-     * Safe to cache.</p>
-     */
-    public abstract boolean isPdlDeliversInitialStateEvent(FacesContext context);
     
 }

@@ -80,6 +80,7 @@ import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -281,6 +282,9 @@ public class ApplicationImpl extends Application {
 
             // Look for and invoke any listeners stored on the source instance.
             event = invokeComponentListenersFor(systemEventClass, source);
+
+            // Look for and invoke any 'view' listeners 
+            event = invokeViewListenersFor(systemEventClass, event, source);
 
             // look for and invoke any listeners stored on the application
             // using source type.
@@ -1485,7 +1489,7 @@ public class ApplicationImpl extends Application {
     }
 
     /**
-     * @see javax.faces.application.Application#getDefaultValidatorIds()
+     * @see javax.faces.application.Application#getDefaultValidatorInfo() 
      */
     public Map<String,String> getDefaultValidatorInfo() {
 
@@ -1857,6 +1861,26 @@ public class ApplicationImpl extends Application {
         }
 
         return listeners;
+
+    }
+
+    private SystemEvent invokeViewListenersFor(Class<? extends SystemEvent> systemEventClass,
+                                               SystemEvent event,
+                                               Object source) {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        UIViewRoot root = ctx.getViewRoot();
+        if (root != null) {
+            EventInfo rootEventInfo =
+                  systemEventHelper.getEventInfo(systemEventClass,
+                                                 UIViewRoot.class);
+            // process view listeners
+            return processListeners(root.getViewListenersForEventClass(systemEventClass),
+                                                                       event,
+                                                                       source,
+                                                                       rootEventInfo);
+        }
+        return event;
 
     }
 

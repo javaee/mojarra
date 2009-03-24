@@ -1591,6 +1591,8 @@ public abstract class Application {
      *  <code>source</code> is <code>null</code>
      *
      * @since 2.0
+     *
+     * RELEASE_PENDING (edburns) update algorithm to include view events
      */
     public void publishEvent(Class<? extends SystemEvent> systemEventClass,
                              Object source) {
@@ -1630,6 +1632,8 @@ public abstract class Application {
      *
      * @throws NullPointerException if either <code>systemEventClass</code> or
      *  <code>source</code> is <code>null</code>
+     *
+     * RELEASE_PENDING (edburns) update algorithm to include view events
      *
      * @since 2.0
      */
