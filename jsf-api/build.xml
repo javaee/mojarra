@@ -65,6 +65,7 @@
     <property name="build.test.dir" value="${build.dir}/test"/>
     <property name="build.generate.dir" value="${build.dir}/generate"/>
     <property name="build.javadocs.dir" value="${build.dir}/javadocs"/>
+    <property name="build.managed-bean-javadocs.dir" value="${build.javadocs.dir}/../managed-bean-javadocs"/>
     <property name="build.renderkitdoc.dirs"
               value="${build.dir}/renderkitdocs"/>
     <property name="build.mifdocs.dir" value="${build.dir}/mifdocs"/>
@@ -106,6 +107,7 @@
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.lib.dir}"/>
         <mkdir dir="${build.javadocs.dir}"/>
+        <mkdir dir="${build.managed-bean-javadocs.dir}"/>
         <mkdir dir="${build.generate.dir}"/>
         <mkdir dir="${build.resources.dir}"/>
     </target>
@@ -701,6 +703,12 @@ javax.faces.level=ALL
            </fileset>
         </copy>
 
+        <copy todir="${build.managed-bean-javadocs.dir}/">
+           <fileset dir="${doc.dir}">
+             <include name="changed*.png" />
+           </fileset>
+        </copy>
+
     </target>
 
 
@@ -715,12 +723,44 @@ javax.faces.level=ALL
                  stylesheetfile="${src.dir}/jsf-api.css"
                  source="1.5"
                  doctitle="${DocName} (${spec.version})"
-                 bottom="Copyright &#169; 2002-2008 Sun Microsystems, Inc. All Rights Reserved.">
+                 bottom="Copyright &#169; 2002-2009 Sun Microsystems, Inc. All Rights Reserved.">
             <fileset dir="${src.dir}">
                 <include name="**/*.java"/>
+                <exclude name="**/ApplicationScoped.java" />
+                <exclude name="**/CustomScoped.java" />
+                <exclude name="**/ManagedBean.java" />
+                <exclude name="**/ManagedProperty.java" />
+                <exclude name="**/NoneScoped.java" />
+                <exclude name="**/RequestScoped.java" />
+                <exclude name="**/SessionScoped.java" />
+                <exclude name="**/ViewScoped.java" />
             </fileset>
             <fileset dir="${build.generate.dir}">
                 <include name="**/*.java"/>
+            </fileset>
+            <classpath refid="compile.classpath"/>
+        </javadoc>
+
+        <javadoc packagenames="javax.*"
+                 destdir="${build.managed-bean-javadocs.dir}"
+                 Overview="${src.dir}/managed-bean-overview.html"
+                 private="${javadoc.private}"
+                 link="http://java.sun.com/javase/6/docs/api/"
+                 protected="${javadoc.protected}"
+                 windowtitle="Faces Managed Bean Annotation Specification (${spec.version})"
+                 stylesheetfile="${src.dir}/jsf-api.css"
+                 source="1.5"
+                 doctitle="${DocName} (${spec.version})"
+                 bottom="Copyright &#169; 2002-2009 Sun Microsystems, Inc. All Rights Reserved.">
+            <fileset dir="${src.dir}">
+                <include name="**/ApplicationScoped.java" />
+                <include name="**/CustomScoped.java" />
+                <include name="**/ManagedBean.java" />
+                <include name="**/ManagedProperty.java" />
+                <include name="**/NoneScoped.java" />
+                <include name="**/RequestScoped.java" />
+                <include name="**/SessionScoped.java" />
+                <include name="**/ViewScoped.java" />
             </fileset>
             <classpath refid="compile.classpath"/>
         </javadoc>
