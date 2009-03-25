@@ -95,7 +95,7 @@ import java.util.Map;
  *
  * <p>The implementation must allow the user to access the flash via the
  * EL implicit object <code>flash</code> and also via {@link
- * javax.faces.context.FacesContext#getFlash}.  The implementation must
+ * javax.faces.context.ExternalContext#getFlash}.  The implementation must
  * ensure that the flash is usable from both JSP and from Facelets for
  * JSF 2.  In addition to exposing the <code>Map</code> interface, there
  * are several features exposed as methods on the <code>Flash</code>

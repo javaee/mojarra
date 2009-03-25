@@ -97,8 +97,8 @@ import java.lang.annotation.Inherited;
  *
  * <p>A class tagged with this annotation must have a public
  * zero-argument constructor.  If such a constructor is not defined on
- * the class, a {@link javax.faces.FacesException} must be thrown and
- * the application must not be placed in service.</p>
+ * the class, a <code>FacesException</code> must be thrown and the
+ * application must not be placed in service.</p>
  *
  * </div>
  * @since 2.0

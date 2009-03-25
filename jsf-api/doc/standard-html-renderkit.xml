@@ -30479,7 +30479,9 @@ the literal string "<code>head</code>" as the last argument.</p>
 
       <ul>
 
-<p>Render the starting <code>&lt;head&gt;</code> element tag.  Just before rendering the
+<p>Render the starting <code>&lt;head&gt;</code> element tag.  Any attributes declared on the element must be passed through
+unmodified to the rendered output.  
+Just before rendering the
       closing <code>&lt;/head&gt;</code> element tag, render any resources that have been targeted
       for this "head" element:
       <ul>
@@ -30489,6 +30491,10 @@ the literal string "<code>head</code>" as the last argument.</p>
       with the <code>String "head"</code> as the argument.</li>
       <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
       and call <code>encodeAll</code> on each <code>UIComponent</code> instance. 
+
+<p>Any attributes declared on the element must be passed through
+unmodified to the rendered output.</p>
+
       </ul>
       Render the ending <code>&lt;/head&gt;</code> element tag.</p>
 
@@ -30525,13 +30531,16 @@ the literal string "<code>head</code>" as the last argument.</p>
       for this "body" element:
       <ul>
       <li>Obtain a <code>UIViewRoot</code> instance.</li>
+
       <li>Obtain a <code>List</code> of component resources targeted for
-      this "body" element with a call to <code>UIViewRoot.getComponentResources()</code>
-      with the <code>String "body"</code> as the argument.</li>
+      this "body" element with a call to
+      <code>UIViewRoot.getComponentResources()</code> with the
+      <code>String "body"</code> as the argument.  Render the ending
+      <code>&lt;/body&gt;</code> element tag.</li>
+
       <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
       and call <code>encodeAll</code> on each <code>UIComponent</code> instance.
       </ul>
-      Render the ending <code>&lt;/body&gt;</code> element tag.</p>
 
 <p>Any attributes declared on the element must be passed through
 unmodified to the rendered output.</p>

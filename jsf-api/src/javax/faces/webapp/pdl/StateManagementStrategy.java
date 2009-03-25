@@ -109,11 +109,14 @@ public abstract class StateManagementStrategy {
 
      * 	<ol>
 
-	  <li><p>Build the view from the markup.  This view will not
-	  contain any components programmatically added during the
-	  previous lifecycle run, and it <b>will</b> contain components
-	  that were programmatically deleted on the previous lifecycle
-	  run.  Both of these cases must be handled.</p></li>
+	  <li><p>Build the view from the markup.  For all components in
+	  the view that do not have an explicitly assigned id in the
+	  markup, the values of those ids must be the same as on an
+	  initial request for this view.  This view will not contain
+	  any components programmatically added during the previous
+	  lifecycle run, and it <b>will</b> contain components that were
+	  programmatically deleted on the previous lifecycle run.  Both
+	  of these cases must be handled.</p></li>
 
 	  <li><p>Call {@link
 	  javax.faces.render.ResponseStateManager#getState} to obtain
