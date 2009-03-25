@@ -73,10 +73,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import javax.faces.webapp.pdl.facelets.tag.Location;
-import javax.faces.webapp.pdl.facelets.tag.Tag;
-import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.Location;
+import javax.faces.webapp.pdl.facelets.Tag;
+import javax.faces.webapp.pdl.facelets.TagAttributes;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
 
 import com.sun.faces.facelets.tag.TagAttributeImpl;
 import com.sun.faces.facelets.tag.TagAttributesImpl;

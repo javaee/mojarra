@@ -51,9 +51,9 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagHandler;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
-import javax.faces.webapp.pdl.facelets.tag.Tag;
+import javax.faces.webapp.pdl.facelets.TagHandler;
+import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.webapp.pdl.facelets.Tag;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -67,14 +67,14 @@ import javax.faces.FacesException;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
-import javax.faces.webapp.pdl.facelets.tag.BehaviorConfig;
-import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
-import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
-import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
-import javax.faces.webapp.pdl.facelets.tag.ConverterConfig;
-import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
-import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
-import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.BehaviorConfig;
+import javax.faces.webapp.pdl.facelets.BehaviorHandler;
+import javax.faces.webapp.pdl.facelets.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.ConverterHandler;
+import javax.faces.webapp.pdl.facelets.ConverterConfig;
+import javax.faces.webapp.pdl.facelets.ValidatorHandler;
+import javax.faces.webapp.pdl.facelets.ValidatorConfig;
+import javax.faces.webapp.pdl.facelets.ComponentHandler;
 
 /**
  * Base class for defining TagLibraries in Java

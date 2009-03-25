@@ -44,8 +44,8 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
-import javax.faces.webapp.pdl.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagHandler;
 
 /**
  *

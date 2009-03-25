@@ -48,29 +48,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
+package javax.faces.webapp.pdl.facelets;
 
 /**
- * <p class="changed_added_2_0">An interface that allows other code 
- * to identify FaceletHandlers that may provide text (String) content.</p>
+ * <p class="changed_added_2_0">An object that represents the Location
+ * of a Tag or TagAttribute in a Facelet file.</p>
  *
  * @since 2.0
+ * 
  */
-public interface TextHandler {
+public final class Location {
+
+    private final String path;
+
+    private final int line;
+
+    private final int column;
+
+    public Location(String path, int line, int column) {
+        this.path = path;
+        this.line = line;
+        this.column = column;
+    }
 
     /**
-     * <p class="changed_added_2_0">Returns the literal String value of the 
-     * contained text.</p>
+     * <p class="changed_added_2_0">Return the estimated character column.</p>
+     * 
      */
-    public String getText();
-    
+    public int getColumn() {
+        return column;
+    }
+
     /**
-     * <p class="changed_added_2_0">Returns the resolved literal String value 
-     * of the contained text after evaluating EL.</p>
-     *
-     * @param ctx the <code>FaceletContext</code> for this view execution
+     * <p class="changed_added_2_0">Return the line number in the page
+     * for this location.</p>
+     * 
      */
-    public String getText(FaceletContext ctx);
+    public int getLine() {
+        return line;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Return the file path to the page
+     * represented by this location.</p>
+     * 
+     */
+    public String getPath() {
+        return path;
+    }
+
+    public String toString() {
+        return path + " @" + this.line + "," + this.column;
+    }
 }

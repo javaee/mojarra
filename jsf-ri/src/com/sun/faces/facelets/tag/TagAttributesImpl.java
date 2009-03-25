@@ -56,8 +56,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagAttributes;
 
 /**
  * A set of TagAttributesImpl, usually representing all attributes on a Tag.

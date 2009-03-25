@@ -45,9 +45,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.BehaviorHandler;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagHandler;
 
 
 /**

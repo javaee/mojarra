@@ -49,92 +49,56 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
+
+import java.io.IOException;
+
+import javax.el.ELException;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
- * <p class="changed_added_2_0">Representation of a Tag in the Facelet
- * definition</p>
- * 
- * <p class="changed_added_2_0">PENDING correct documentation</p>
+ * A FaceletHandler that is derived of 1 or more, inner FaceletHandlers. This
+ * class would be found if the next FaceletHandler is structually, a body
+ * with multiple child elements as defined in XML.
  *
- * @since 2.0
+ * @author Jacob Hookom
+ * @version $Id: CompositeFaceletHandler.java 6739 2009-02-27 23:18:02Z rlubke $
  */
-public final class Tag {
-    private final TagAttributes attributes;
+public final class CompositeFaceletHandler implements FaceletHandler {
 
-    private final Location location;
+    private final FaceletHandler[] children;
+    private final int len;
 
-    private final String namespace;
-
-    private final String localName;
-
-    private final String qName;
-
-    public Tag(Location location, String namespace, String localName,
-            String qName, TagAttributes attributes) {
-        this.location = location;
-        this.namespace = namespace;
-        this.localName = localName;
-        this.qName = qName;
-        this.attributes = attributes;
-    }
-
-    public Tag(Tag orig, TagAttributes attributes) {
-        this(orig.getLocation(), orig.getNamespace(), orig.getLocalName(), orig
-                .getQName(), attributes);
+    public CompositeFaceletHandler(FaceletHandler[] children) {
+        this.children = children;
+        this.len = children.length;
     }
 
     /**
-     * All TagAttributes specified
-     * 
-     * @return all TagAttributes specified
+     * <p class="changed_added_2_0">Calls apply on any child handlers.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
+     *
+     * @param parent the parent <code>UIComponent</code> of the
+     * component represented by this element instance.
+     * @since 2.0
      */
-    public TagAttributes getAttributes() {
-        return attributes;
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+        for (int i = 0; i < len; i++) {
+            this.children[i].apply(ctx, parent);
+        }
     }
 
     /**
-     * Local name of the tag &lt;my:tag /> would be "tag"
-     * 
-     * @return local name of the tag
+     * <p class="changed_added_2_0">Returns the array of child
+     * handlers contained by this handler.</p>
      */
-    public String getLocalName() {
-        return localName;
-    }
-
-    /**
-     * Location of the Tag in the Facelet file
-     * 
-     * @return location of the Tag in the Facelet file
-     */
-    public Location getLocation() {
-        return location;
-    }
-
-    /**
-     * The resolved Namespace for this tag
-     * 
-     * @return the resolved namespace for this tag
-     */
-    public String getNamespace() {
-        return namespace;
-    }
-
-    /**
-     * Get the qualified name for this tag &lt;my:tag /> would be "my:tag"
-     * 
-     * @return qualified name of the tag
-     */
-    public String getQName() {
-        return qName;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
-        return this.location + " <" + this.qName + ">";
+    public FaceletHandler[] getHandlers() {
+        return this.children;
     }
 }

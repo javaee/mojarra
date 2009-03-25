@@ -79,15 +79,15 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.FacesLogger;
 
 import javax.el.MethodExpression;
 import javax.faces.application.ViewHandler;
-import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
-import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.ComponentHandler;
 
 /**
  * RELEASE_PENDING (rlubke,driscoll) document

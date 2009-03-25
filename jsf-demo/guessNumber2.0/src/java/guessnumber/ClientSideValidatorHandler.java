@@ -51,8 +51,8 @@ import javax.faces.event.PreRenderComponentEvent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.ValidatorConfig;
-import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
+import javax.faces.webapp.pdl.facelets.ValidatorConfig;
+import javax.faces.webapp.pdl.facelets.ValidatorHandler;
 
 
 /**

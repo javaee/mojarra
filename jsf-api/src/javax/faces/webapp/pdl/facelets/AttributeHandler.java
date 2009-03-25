@@ -48,7 +48,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;

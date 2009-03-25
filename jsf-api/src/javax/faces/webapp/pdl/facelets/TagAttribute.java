@@ -49,7 +49,7 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
 
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;

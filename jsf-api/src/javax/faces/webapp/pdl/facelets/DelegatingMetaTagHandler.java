@@ -34,7 +34,7 @@
  * holder.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
 
 import java.io.IOException;
 import javax.el.ELException;

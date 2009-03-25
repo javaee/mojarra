@@ -49,60 +49,60 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
+
+
+import javax.faces.component.ValueHolder;
+import javax.faces.convert.Converter;
+
+import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
- * <p class="changed_added_2_0">A set of TagAttributes, usually
- * representing all attributes on a Tag.</p>
- *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
- *
- * @since 2.0
+ * Handles setting a Converter instance on a ValueHolder. Will wire all
+ * attributes set to the Converter instance created/fetched. Uses the "binding"
+ * attribute for grabbing instances to apply attributes to. <p/> Will only
+ * set/create Converter is the passed UIComponent's parent is null, signifying
+ * that it wasn't restored from an existing tree.
+ * 
+ * @see javax.faces.webapp.ConverterELTag
+ * @see javax.faces.convert.Converter
+ * @see javax.faces.component.ValueHolder
+ * @author Jacob Hookom
+ * @version $Id: ConverterHandler.java 6118 2008-12-16 03:56:08Z edburns $
  */
-public abstract class TagAttributes {
+public class ConverterHandler extends FaceletsAttachedObjectHandler implements ValueHolderAttachedObjectHandler {
 
-    /**
-     * Return an array of all TagAttributes in this set
-     * 
-     * @return a non-null array of TagAttributes
-     */
-    public abstract TagAttribute[] getAll();
+    
+    private String converterId;
+    
+    
+    private TagHandlerDelegate helper;
 
-    /**
-     * Using no namespace, find the TagAttribute
-     * 
-     * @see #get(String, String)
-     * @param localName
-     *            tag attribute name
-     * @return the TagAttribute found, otherwise null
-     */
-    public abstract TagAttribute get(String localName);
+    public ConverterHandler(ConverterConfig config) {
+        super(config);
+        this.converterId = config.getConverterId();
+    }
 
-    /**
-     * Find a TagAttribute that matches the passed namespace and local name.
-     * 
-     * @param ns
-     *            namespace of the desired attribute
-     * @param localName
-     *            local name of the attribute
-     * @return a TagAttribute found, otherwise null
-     */
-    public abstract TagAttribute get(String ns, String localName);
+    @Override
+    protected TagHandlerDelegate getTagHandlerHelper() {
+        if (null == helper) {
+            helper = helperFactory.createConverterHandlerDelegate(this);
+        }
+        return helper;
 
-    /**
-     * Get all TagAttributes for the passed namespace
-     * 
-     * @param namespace
-     *            namespace to search
-     * @return a non-null array of TagAttributes
-     */
-    public abstract TagAttribute[] getAll(String namespace);
+    }
 
-    /**
-     * A list of Namespaces found in this set
-     * 
-     * @return a list of Namespaces found in this set
-     */
-    public abstract String[] getNamespaces();
-
+    public String getConverterId(FaceletContext ctx) {
+        if (converterId == null) {
+            TagAttribute idAttr = getAttribute("converterId");
+            if (idAttr == null) {
+                return null;
+            } else {
+                return idAttr.getValue(ctx);
+            }
+        }
+        return converterId;
+    }
+    
 }

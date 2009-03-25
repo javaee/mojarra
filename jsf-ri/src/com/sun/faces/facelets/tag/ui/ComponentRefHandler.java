@@ -51,8 +51,8 @@
 
 package com.sun.faces.facelets.tag.ui;
 
-import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
-import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.ComponentHandler;
 
 public final class ComponentRefHandler extends ComponentHandler {
 

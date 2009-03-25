@@ -55,9 +55,9 @@ import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
-import javax.faces.webapp.pdl.facelets.tag.TagException;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagException;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.io.IOException;
@@ -67,7 +67,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
-import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.ComponentHandler;
 
 
 public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {

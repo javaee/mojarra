@@ -54,9 +54,9 @@ package com.sun.faces.facelets.tag.composite;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
-import javax.faces.webapp.pdl.facelets.tag.TagException;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagException;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
@@ -66,7 +66,7 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.ComponentHandler;
 
 
 public class AttributeHandler extends TagHandlerImpl {

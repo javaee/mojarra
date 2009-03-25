@@ -49,32 +49,23 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
 
-
-import javax.faces.component.UIComponent;
-
-import javax.faces.context.FacesContext;
-import javax.faces.webapp.pdl.AttachedObjectHandler;
 
 /**
+ * <p class="changed_added_2_0">Used in creating <code>ValidatorHandler</code>
+ * and all implementations.</p>
+ *
+ * @since 2.0
+ * 
  */
-public abstract class FaceletsAttachedObjectHandler extends DelegatingMetaTagHandler implements AttachedObjectHandler {
+public interface ValidatorConfig extends TagConfig {
 
-    public FaceletsAttachedObjectHandler(TagConfig config) {
-        super(config);
-    }
-    
-    protected final AttachedObjectHandler getAttachedObjectHandlerHelper() {
-        return (AttachedObjectHandler) this.getTagHandlerHelper();
-    }
-
-    public final void applyAttachedObject(FacesContext ctx, UIComponent parent) {
-        getAttachedObjectHandlerHelper().applyAttachedObject(ctx, parent);
-    }
-    
-    public final String getFor() {
-        return getAttachedObjectHandlerHelper().getFor();
-    }
+    /**
+     * <p class="changed_added_2_0">Return the validator-id associated with a 
+     * particular validator in your faces-config</p>
+     * @since 2.0
+     */
+    public String getValidatorId();
     
 }

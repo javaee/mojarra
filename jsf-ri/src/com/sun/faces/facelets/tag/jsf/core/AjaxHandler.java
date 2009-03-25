@@ -75,11 +75,11 @@ import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 
-import javax.faces.webapp.pdl.facelets.tag.CompositeFaceletHandler;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
-import javax.faces.webapp.pdl.facelets.tag.TagException;
-import javax.faces.webapp.pdl.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.CompositeFaceletHandler;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.webapp.pdl.facelets.TagHandler;
 import com.sun.faces.RIConstants;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
@@ -87,7 +87,7 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.AttachedBehaviors;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 
-import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.ComponentHandler;
 
 
 /**

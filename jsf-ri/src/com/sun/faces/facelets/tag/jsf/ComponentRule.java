@@ -60,10 +60,10 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyValueBinding;
 import com.sun.faces.util.FacesLogger;
 
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.Metadata;
-import javax.faces.webapp.pdl.facelets.tag.MetaRule;
-import javax.faces.webapp.pdl.facelets.tag.MetadataTarget;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.Metadata;
+import javax.faces.webapp.pdl.facelets.MetaRule;
+import javax.faces.webapp.pdl.facelets.MetadataTarget;
 
 /**
  * 

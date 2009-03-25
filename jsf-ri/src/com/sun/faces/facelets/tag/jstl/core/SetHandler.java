@@ -52,7 +52,7 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import javax.faces.webapp.pdl.facelets.tag.TextHandler;
+import javax.faces.webapp.pdl.facelets.TextHandler;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -64,9 +64,9 @@ import javax.faces.component.UIComponent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
-import javax.faces.webapp.pdl.facelets.tag.TagException;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagException;
 
 /**
  * Simplified implementation of c:set

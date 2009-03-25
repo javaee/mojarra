@@ -51,9 +51,9 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
-import javax.faces.webapp.pdl.facelets.tag.MetaTagHandler;
+import javax.faces.webapp.pdl.facelets.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.webapp.pdl.facelets.MetaTagHandler;
 import com.sun.faces.util.Util;
 
 /**

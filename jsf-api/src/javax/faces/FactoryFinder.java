@@ -637,7 +637,7 @@ public final class FactoryFinder {
             factoryClasses.put(PAGE_DECLARATION_LANGUAGE_FACTORY,
                  javax.faces.webapp.pdl.PageDeclarationLanguageFactory.class);
             factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
-                 javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegateFactory.class);
+                 javax.faces.webapp.pdl.facelets.TagHandlerDelegateFactory.class);
         }
         return factoryClasses.get(factoryClassName);
 

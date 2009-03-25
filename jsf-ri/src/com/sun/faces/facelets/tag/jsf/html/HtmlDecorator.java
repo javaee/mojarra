@@ -51,9 +51,9 @@
 
 package com.sun.faces.facelets.tag.jsf.html;
 
-import javax.faces.webapp.pdl.facelets.tag.Tag;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
+import javax.faces.webapp.pdl.facelets.Tag;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagAttributes;
 import com.sun.faces.facelets.tag.TagDecorator;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
 

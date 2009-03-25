@@ -59,10 +59,10 @@ import javax.el.ELException;
 
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.el.ELText;
-import javax.faces.webapp.pdl.facelets.tag.CompositeFaceletHandler;
-import javax.faces.webapp.pdl.facelets.tag.Tag;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagException;
+import javax.faces.webapp.pdl.facelets.CompositeFaceletHandler;
+import javax.faces.webapp.pdl.facelets.Tag;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagException;
 
 /**
  * 

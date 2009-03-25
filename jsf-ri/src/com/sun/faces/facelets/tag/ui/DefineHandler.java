@@ -60,9 +60,9 @@ import javax.faces.component.UIComponent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagAttributeException;
+import javax.faces.webapp.pdl.facelets.TagConfig;
 
 /**
  * @author Jacob Hookom

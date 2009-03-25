@@ -36,7 +36,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
+import javax.faces.webapp.pdl.facelets.ValidatorHandler;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.util.Util;
 import java.io.IOException;
@@ -54,11 +54,11 @@ import javax.faces.validator.Validator;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import javax.faces.webapp.pdl.facelets.tag.MetaTagHandler;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagException;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
+import javax.faces.webapp.pdl.facelets.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.MetaTagHandler;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.webapp.pdl.facelets.TagHandlerDelegate;
 
 public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implements AttachedObjectHandler {
 

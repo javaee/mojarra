@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.tag.composite;
 
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagConfig;
 
 public class ActionSource2AttachedObjectTargetHandler extends AttachedObjectTargetHandler {
     

@@ -49,33 +49,92 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
-
-import javax.faces.webapp.pdl.facelets.FaceletContext;
+package javax.faces.webapp.pdl.facelets;
 
 /**
- * <p class="changed_added_2_0">There are concrete subclasses within the
- * implementation that map concepts in the Facelet PDL page to JSF Java
- * API calls the appropriate instances.  For example, the
- * &#8220;<code>validator</code>&#8221; attribute on an input component
- * is specified to point to a <code>MethodExpression</code> that
- * references a method that performs the validation.  There is a
- * concrete subclass of <code>Metadata</code> to perform this action
- * when that attribute appears in a Facelet PDL page.</p>
+ * <p class="changed_added_2_0">Representation of a Tag in the Facelet
+ * definition</p>
+ * 
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
  *
  * @since 2.0
  */
-public abstract class Metadata {
+public final class Tag {
+    private final TagAttributes attributes;
+
+    private final Location location;
+
+    private final String namespace;
+
+    private final String localName;
+
+    private final String qName;
+
+    public Tag(Location location, String namespace, String localName,
+            String qName, TagAttributes attributes) {
+        this.location = location;
+        this.namespace = namespace;
+        this.localName = localName;
+        this.qName = qName;
+        this.attributes = attributes;
+    }
+
+    public Tag(Tag orig, TagAttributes attributes) {
+        this(orig.getLocation(), orig.getNamespace(), orig.getLocalName(), orig
+                .getQName(), attributes);
+    }
 
     /**
-     * <p class="changed_added_2_0">Take the action prescribed in the
-     * JSF specification for this particular PDL element attribute.</p>
+     * All TagAttributes specified
      * 
-     * @param ctx The FaceletContext for this request.
-     * @param instance The instance from the JSF Java API on which the
-     * action should be taken.  For example, an instance of {@link
-     * javax.faces.component.EditableValueHolder}.
+     * @return all TagAttributes specified
      */
-    public abstract void applyMetadata(FaceletContext ctx, Object instance);
+    public TagAttributes getAttributes() {
+        return attributes;
+    }
 
+    /**
+     * Local name of the tag &lt;my:tag /> would be "tag"
+     * 
+     * @return local name of the tag
+     */
+    public String getLocalName() {
+        return localName;
+    }
+
+    /**
+     * Location of the Tag in the Facelet file
+     * 
+     * @return location of the Tag in the Facelet file
+     */
+    public Location getLocation() {
+        return location;
+    }
+
+    /**
+     * The resolved Namespace for this tag
+     * 
+     * @return the resolved namespace for this tag
+     */
+    public String getNamespace() {
+        return namespace;
+    }
+
+    /**
+     * Get the qualified name for this tag &lt;my:tag /> would be "my:tag"
+     * 
+     * @return qualified name of the tag
+     */
+    public String getQName() {
+        return qName;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return this.location + " <" + this.qName + ">";
+    }
 }

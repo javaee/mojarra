@@ -49,66 +49,24 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
+
+import javax.faces.webapp.pdl.facelets.TagConfig;
 
 /**
- * <p class="changed_added_2_0">A mutable set of rules to be used in
- * auto-wiring state to a particular object instance. Rules assigned to
- * this object will be composed into a single Metadata instance which
- * will encapsulate the ruleset.</p>
+ * <p class="changed_added_2_0">A Facelet version of the JSP {@link
+ * javax.faces.webapp.ConverterTag}.  All the attributes specified in
+ * the documentation for the converter tags are valid attributes.</p>
  *
  * @since 2.0
+ * 
  */
-public abstract class MetaRuleset {
-
-
-    /**
-     * <p class="changed_added_2_0">Customize this
-     * <code>MetaRuleset</code> instance to advise it to ignore the
-     * attribute named by the <code>attribute</code> argument, returning
-     * <code>this</code>.</p>
-     * @param attribute the name of the attribute to ignore.
-     * 
-     * @since 2.0
-     */
-    public abstract MetaRuleset ignore(String attribute);
+public interface ConverterConfig extends TagConfig {
 
     /**
-     * <p class="changed_added_2_0">Customize this
-     * <code>MetaRuleset</code> instance to advise it to ignore all
-     * attributes, returning
-     * <code>this</code>.</p>
-     * @since 2.0
+     * <p class="changed_added_2_0">Return the converter id to be used
+     * in instantiating this converter</p>
      */
-    public abstract MetaRuleset ignoreAll();
-
-    /**
-     * <p class="changed_added_2_0">Customize this
-     * <code>MetaRuleset</code> by removing the attribute named by
-     * argument <code>attribute</code> and re-adding it under the name
-     * given by the argument <code>property</code>, returning
-     * <code>this</code>.</p>
-     * @since 2.0
-     */
-    public abstract MetaRuleset alias(String attribute, String property);
-
-    /**
-     * <p class="changed_added_2_0">Add another {@link Metadata} to this
-     * ruleset, returning <code>this</code>.</p>
-     * @since 2.0
-     */
-    public abstract MetaRuleset add(Metadata mapper);
-
-    /**
-     * <p class="changed_added_2_0">Add another {@link MetaRule} to this
-     * ruleset, returning <code>this</code>.</p>
-     * @since 2.0
-     */
-    public abstract MetaRuleset addRule(MetaRule rule);
-
-    /**
-     * <p class="changed_added_2_0">RELEASE_PENDING</p>
-     * 
-     */
-    public abstract Metadata finish();
+    public String getConverterId();
+    
 }

@@ -49,60 +49,66 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
-
-
-import javax.faces.component.ValueHolder;
-import javax.faces.convert.Converter;
-
-import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
+package javax.faces.webapp.pdl.facelets;
 
 /**
- * Handles setting a Converter instance on a ValueHolder. Will wire all
- * attributes set to the Converter instance created/fetched. Uses the "binding"
- * attribute for grabbing instances to apply attributes to. <p/> Will only
- * set/create Converter is the passed UIComponent's parent is null, signifying
- * that it wasn't restored from an existing tree.
- * 
- * @see javax.faces.webapp.ConverterELTag
- * @see javax.faces.convert.Converter
- * @see javax.faces.component.ValueHolder
- * @author Jacob Hookom
- * @version $Id: ConverterHandler.java 6118 2008-12-16 03:56:08Z edburns $
+ * <p class="changed_added_2_0">A mutable set of rules to be used in
+ * auto-wiring state to a particular object instance. Rules assigned to
+ * this object will be composed into a single Metadata instance which
+ * will encapsulate the ruleset.</p>
+ *
+ * @since 2.0
  */
-public class ConverterHandler extends FaceletsAttachedObjectHandler implements ValueHolderAttachedObjectHandler {
+public abstract class MetaRuleset {
 
-    
-    private String converterId;
-    
-    
-    private TagHandlerDelegate helper;
 
-    public ConverterHandler(ConverterConfig config) {
-        super(config);
-        this.converterId = config.getConverterId();
-    }
+    /**
+     * <p class="changed_added_2_0">Customize this
+     * <code>MetaRuleset</code> instance to advise it to ignore the
+     * attribute named by the <code>attribute</code> argument, returning
+     * <code>this</code>.</p>
+     * @param attribute the name of the attribute to ignore.
+     * 
+     * @since 2.0
+     */
+    public abstract MetaRuleset ignore(String attribute);
 
-    @Override
-    protected TagHandlerDelegate getTagHandlerHelper() {
-        if (null == helper) {
-            helper = helperFactory.createConverterHandlerDelegate(this);
-        }
-        return helper;
+    /**
+     * <p class="changed_added_2_0">Customize this
+     * <code>MetaRuleset</code> instance to advise it to ignore all
+     * attributes, returning
+     * <code>this</code>.</p>
+     * @since 2.0
+     */
+    public abstract MetaRuleset ignoreAll();
 
-    }
+    /**
+     * <p class="changed_added_2_0">Customize this
+     * <code>MetaRuleset</code> by removing the attribute named by
+     * argument <code>attribute</code> and re-adding it under the name
+     * given by the argument <code>property</code>, returning
+     * <code>this</code>.</p>
+     * @since 2.0
+     */
+    public abstract MetaRuleset alias(String attribute, String property);
 
-    public String getConverterId(FaceletContext ctx) {
-        if (converterId == null) {
-            TagAttribute idAttr = getAttribute("converterId");
-            if (idAttr == null) {
-                return null;
-            } else {
-                return idAttr.getValue(ctx);
-            }
-        }
-        return converterId;
-    }
-    
+    /**
+     * <p class="changed_added_2_0">Add another {@link Metadata} to this
+     * ruleset, returning <code>this</code>.</p>
+     * @since 2.0
+     */
+    public abstract MetaRuleset add(Metadata mapper);
+
+    /**
+     * <p class="changed_added_2_0">Add another {@link MetaRule} to this
+     * ruleset, returning <code>this</code>.</p>
+     * @since 2.0
+     */
+    public abstract MetaRuleset addRule(MetaRule rule);
+
+    /**
+     * <p class="changed_added_2_0">RELEASE_PENDING</p>
+     * 
+     */
+    public abstract Metadata finish();
 }

@@ -52,11 +52,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
-import javax.faces.webapp.pdl.facelets.tag.MetaRuleset;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagException;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
+import javax.faces.webapp.pdl.facelets.BehaviorHandler;
+import javax.faces.webapp.pdl.facelets.MetaRuleset;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.webapp.pdl.facelets.TagHandlerDelegate;
 
 /**
  *

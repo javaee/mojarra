@@ -49,9 +49,9 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
 
-import javax.faces.webapp.pdl.facelets.tag.Tag;
+import javax.faces.webapp.pdl.facelets.Tag;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**

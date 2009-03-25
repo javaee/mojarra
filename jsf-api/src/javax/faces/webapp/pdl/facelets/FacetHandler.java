@@ -48,53 +48,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package javax.faces.webapp.pdl.facelets;
 
-package javax.faces.webapp.pdl.facelets.tag;
-
-import javax.faces.webapp.pdl.facelets.tag.Tag;
-import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
- * <p class="changed_added_2_0">An Exception caused by a Tag</p>
- * 
- * <p class="changed_added_2_0">PENDING correct documentation</p>
+ * <p class="changed_added_2_0">An interface that allows other code 
+ * to identify FaceletHandlers that correspond to component facets.</p>
  *
  * @since 2.0
  */
-public final class TagException extends FaceletException {
+public interface FacetHandler {
 
     /**
-     * 
+     * <p class="changed_added_2_0">Returns the resolved literal String value 
+     * of the facet name after evaluating EL.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
      */
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 
-     */
-    public TagException(Tag tag) {
-        super(tag.toString());
-    }
-
-    /**
-     * @param message
-     */
-    public TagException(Tag tag, String message) {
-        super(tag + " " + message);
-    }
-
-    /**
-     * @param cause
-     */
-    public TagException(Tag tag, Throwable cause) {
-        super(tag.toString(), cause);
-    }
-
-    /**
-     * @param message
-     * @param cause
-     */
-    public TagException(Tag tag, String message, Throwable cause) {
-        super(tag + " " + message, cause);
-    }
-
+    public String getFacetName(FaceletContext ctx);
 }

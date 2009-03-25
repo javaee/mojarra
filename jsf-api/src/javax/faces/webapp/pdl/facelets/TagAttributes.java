@@ -48,24 +48,61 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javax.faces.webapp.pdl.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
+package javax.faces.webapp.pdl.facelets;
 
 /**
- * <p class="changed_added_2_0">An interface that allows other code 
- * to identify FaceletHandlers that correspond to component facets.</p>
+ * <p class="changed_added_2_0">A set of TagAttributes, usually
+ * representing all attributes on a Tag.</p>
+ *
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
  *
  * @since 2.0
  */
-public interface FacetHandler {
+public abstract class TagAttributes {
 
     /**
-     * <p class="changed_added_2_0">Returns the resolved literal String value 
-     * of the facet name after evaluating EL.</p>
-     *
-     * @param ctx the <code>FaceletContext</code> for this view execution
+     * Return an array of all TagAttributes in this set
+     * 
+     * @return a non-null array of TagAttributes
      */
-    public String getFacetName(FaceletContext ctx);
+    public abstract TagAttribute[] getAll();
+
+    /**
+     * Using no namespace, find the TagAttribute
+     * 
+     * @see #get(String, String)
+     * @param localName
+     *            tag attribute name
+     * @return the TagAttribute found, otherwise null
+     */
+    public abstract TagAttribute get(String localName);
+
+    /**
+     * Find a TagAttribute that matches the passed namespace and local name.
+     * 
+     * @param ns
+     *            namespace of the desired attribute
+     * @param localName
+     *            local name of the attribute
+     * @return a TagAttribute found, otherwise null
+     */
+    public abstract TagAttribute get(String ns, String localName);
+
+    /**
+     * Get all TagAttributes for the passed namespace
+     * 
+     * @param namespace
+     *            namespace to search
+     * @return a non-null array of TagAttributes
+     */
+    public abstract TagAttribute[] getAll(String namespace);
+
+    /**
+     * A list of Namespaces found in this set
+     * 
+     * @return a list of Namespaces found in this set
+     */
+    public abstract String[] getNamespaces();
+
 }

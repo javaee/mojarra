@@ -55,8 +55,8 @@ import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagConfig;
 import java.beans.BeanDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ import javax.faces.webapp.pdl.AttachedObjectTarget;
 import javax.faces.application.Resource;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
-import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.ComponentHandler;
 
 public class InterfaceHandler extends TagHandlerImpl {
 

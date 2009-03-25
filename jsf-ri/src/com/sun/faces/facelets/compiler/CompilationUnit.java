@@ -62,7 +62,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import javax.faces.webapp.pdl.facelets.tag.CompositeFaceletHandler;
+import javax.faces.webapp.pdl.facelets.CompositeFaceletHandler;
 
 /**
  * 

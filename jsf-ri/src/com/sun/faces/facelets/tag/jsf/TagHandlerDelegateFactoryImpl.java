@@ -36,12 +36,12 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.webapp.pdl.facelets.tag.BehaviorHandler;
-import javax.faces.webapp.pdl.facelets.tag.ComponentHandler;
-import javax.faces.webapp.pdl.facelets.tag.ConverterHandler;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegate;
-import javax.faces.webapp.pdl.facelets.tag.TagHandlerDelegateFactory;
-import javax.faces.webapp.pdl.facelets.tag.ValidatorHandler;
+import javax.faces.webapp.pdl.facelets.BehaviorHandler;
+import javax.faces.webapp.pdl.facelets.ComponentHandler;
+import javax.faces.webapp.pdl.facelets.ConverterHandler;
+import javax.faces.webapp.pdl.facelets.TagHandlerDelegate;
+import javax.faces.webapp.pdl.facelets.TagHandlerDelegateFactory;
+import javax.faces.webapp.pdl.facelets.ValidatorHandler;
 
 public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
 

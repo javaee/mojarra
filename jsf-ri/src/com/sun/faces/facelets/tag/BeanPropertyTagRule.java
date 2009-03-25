@@ -51,15 +51,15 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.MetaRule;
-import javax.faces.webapp.pdl.facelets.tag.MetadataTarget;
-import javax.faces.webapp.pdl.facelets.tag.Metadata;
-import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
+import javax.faces.webapp.pdl.facelets.MetaRule;
+import javax.faces.webapp.pdl.facelets.MetadataTarget;
+import javax.faces.webapp.pdl.facelets.Metadata;
+import javax.faces.webapp.pdl.facelets.TagAttributeException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
 
 /**
  * 

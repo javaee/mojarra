@@ -51,12 +51,12 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagHandler;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagHandler;
+import javax.faces.webapp.pdl.facelets.TagConfig;
 import java.lang.reflect.Method;
 
 import javax.faces.FacesException;
-import javax.faces.webapp.pdl.facelets.tag.Tag;
+import javax.faces.webapp.pdl.facelets.Tag;
 
 /**
  * A library of Tags associated with one or more namespaces.

@@ -49,51 +49,32 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-
+import javax.faces.webapp.pdl.facelets.TagConfig;
 
 /**
- * <p class="changed_added_2_0">A base tag for wiring state to an object
- * instance based on rules populated at the time of creating a
- * MetaRuleset.</p>
- * 
- * <p class="changed_added_2_0">RELEASE_PENDING correct documentation</p>
+ * <p class="changed_added_2_0">Passed to the constructor of {@link
+ * ComponentHandler}.  Represents a component-type/renderer-type
+ * pair.</p>
+ *
  * @since 2.0
+ * 
  */
-public abstract class MetaTagHandler extends TagHandler {
-
-    private Class lastType = Object.class;
-
-    private Metadata mapper;
-
-    public MetaTagHandler(TagConfig config) {
-        super(config);
-    }
+public interface ComponentConfig extends TagConfig {
+    /**
+     * <p class="changed_added_2_0">ComponentType to pass to the
+     * <code>Application</code>. Cannot be <code>null</code>.
+     * 
+     * @since 2.0
+     */
+    public String getComponentType();
 
     /**
-     * Extend this method in order to add your own rules.
-     * 
-     * @param type
+     * <p class="changed_added_2_0">RendererType to set on created
+     * <code>UIComponent</code> instances.
+     *
+     * @since 2.0
      */
-    protected abstract MetaRuleset createMetaRuleset(Class type);
-
-    /**
-     * Invoking/extending this method will cause the results of the created
-     * MetaRuleset to auto-wire state to the passed instance.
-     * 
-     * @param ctx
-     * @param instance
-     */
-    protected void setAttributes(FaceletContext ctx, Object instance) {
-        if (instance != null) {
-            Class type = instance.getClass();
-            if (mapper == null || !this.lastType.equals(type)) {
-                this.lastType = type;
-                this.mapper = this.createMetaRuleset(type).finish();
-            }
-            this.mapper.applyMetadata(ctx, instance);
-        }
-    }
+    public String getRendererType();
 }

@@ -51,8 +51,8 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
-import javax.faces.webapp.pdl.facelets.tag.Location;
+import javax.faces.webapp.pdl.facelets.TagAttributeException;
+import javax.faces.webapp.pdl.facelets.Location;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ExpressionFactory;
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.TagAttribute;
 import javax.faces.FacesException;
 
 /**

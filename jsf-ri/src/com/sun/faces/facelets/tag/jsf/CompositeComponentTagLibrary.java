@@ -51,8 +51,8 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.webapp.pdl.facelets.tag.TagHandler;
-import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.TagHandler;
+import javax.faces.webapp.pdl.facelets.TagConfig;
 import com.sun.faces.facelets.tag.*;
 import com.sun.faces.util.FacesLogger;
 
@@ -64,7 +64,7 @@ import javax.faces.FacesException;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
-import javax.faces.webapp.pdl.facelets.tag.ComponentConfig;
+import javax.faces.webapp.pdl.facelets.ComponentConfig;
 
 
 public class CompositeComponentTagLibrary extends TagLibraryImpl {

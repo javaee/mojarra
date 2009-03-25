@@ -49,56 +49,75 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
 
-import java.io.IOException;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
-import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
- * A FaceletHandler that is derived of 1 or more, inner FaceletHandlers. This
- * class would be found if the next FaceletHandler is structually, a body
- * with multiple child elements as defined in XML.
+ * <p class="changed_added_2_0">An Exception caused by a
+ * TagAttribute</p>
  *
- * @author Jacob Hookom
- * @version $Id: CompositeFaceletHandler.java 6739 2009-02-27 23:18:02Z rlubke $
+ * <p class="changed_added_2_0">PENDING correct documentation</p>
+ *
+ * @since 2.0
  */
-public final class CompositeFaceletHandler implements FaceletHandler {
+public final class TagAttributeException extends FaceletException {
 
-    private final FaceletHandler[] children;
-    private final int len;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-    public CompositeFaceletHandler(FaceletHandler[] children) {
-        this.children = children;
-        this.len = children.length;
+    public TagAttributeException(TagAttribute attr) {
+        super(attr.toString());
+    }
+
+    public TagAttributeException(TagAttribute attr, String message) {
+        super(attr + " " + message);
+    }
+
+    public TagAttributeException(TagAttribute attr, Throwable cause) {
+        super(attr + " " + cause.getMessage(), cause);
+    }
+
+    public TagAttributeException(TagAttribute attr, String message,
+            Throwable cause) {
+        super(attr + " " + message, cause);
     }
 
     /**
-     * <p class="changed_added_2_0">Calls apply on any child handlers.</p>
-     *
-     * @param ctx the <code>FaceletContext</code> for this view execution
-     *
-     * @param parent the parent <code>UIComponent</code> of the
-     * component represented by this element instance.
-     * @since 2.0
+     * 
      */
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
-        for (int i = 0; i < len; i++) {
-            this.children[i].apply(ctx, parent);
-        }
+    public TagAttributeException(Tag tag, TagAttribute attr) {
+        super(print(tag, attr));
+    }
+
+    private final static String print(Tag tag, TagAttribute attr) {
+        return tag.getLocation() + " <" + tag.getQName() + " " + attr.getQName()
+                + "=\"" + attr.getValue() + "\">";
     }
 
     /**
-     * <p class="changed_added_2_0">Returns the array of child
-     * handlers contained by this handler.</p>
+     * @param message
      */
-    public FaceletHandler[] getHandlers() {
-        return this.children;
+    public TagAttributeException(Tag tag, TagAttribute attr, String message) {
+        super(print(tag, attr) + " " + message);
     }
+
+    /**
+     * @param cause
+     */
+    public TagAttributeException(Tag tag, TagAttribute attr, Throwable cause) {
+        super(print(tag, attr) + " " + cause.getMessage(), cause);
+    }
+
+    /**
+     * @param message
+     * @param cause
+     */
+    public TagAttributeException(Tag tag, TagAttribute attr, String message,
+            Throwable cause) {
+        super(print(tag, attr) + " " + message, cause);
+    }
+
 }

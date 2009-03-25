@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.tag.Tag;
+import javax.faces.webapp.pdl.facelets.Tag;
 
 /**
  * Provides the ability to completely change the Tag before it's processed for

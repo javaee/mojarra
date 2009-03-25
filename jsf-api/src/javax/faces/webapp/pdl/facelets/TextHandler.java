@@ -48,24 +48,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package javax.faces.webapp.pdl.facelets;
 
-package javax.faces.webapp.pdl.facelets.tag;
-
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
- * <p class="changed_added_2_0">Used in creating <code>ValidatorHandler</code>
- * and all implementations.</p>
+ * <p class="changed_added_2_0">An interface that allows other code 
+ * to identify FaceletHandlers that may provide text (String) content.</p>
  *
  * @since 2.0
- * 
  */
-public interface ValidatorConfig extends TagConfig {
+public interface TextHandler {
 
     /**
-     * <p class="changed_added_2_0">Return the validator-id associated with a 
-     * particular validator in your faces-config</p>
-     * @since 2.0
+     * <p class="changed_added_2_0">Returns the literal String value of the 
+     * contained text.</p>
      */
-    public String getValidatorId();
+    public String getText();
     
+    /**
+     * <p class="changed_added_2_0">Returns the resolved literal String value 
+     * of the contained text after evaluating EL.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
+     */
+    public String getText(FaceletContext ctx);
 }

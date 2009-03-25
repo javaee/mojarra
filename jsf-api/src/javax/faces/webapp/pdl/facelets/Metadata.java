@@ -49,56 +49,33 @@
  * limitations under the License.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
+
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
- * <p class="changed_added_2_0">An object that represents the Location
- * of a Tag or TagAttribute in a Facelet file.</p>
+ * <p class="changed_added_2_0">There are concrete subclasses within the
+ * implementation that map concepts in the Facelet PDL page to JSF Java
+ * API calls the appropriate instances.  For example, the
+ * &#8220;<code>validator</code>&#8221; attribute on an input component
+ * is specified to point to a <code>MethodExpression</code> that
+ * references a method that performs the validation.  There is a
+ * concrete subclass of <code>Metadata</code> to perform this action
+ * when that attribute appears in a Facelet PDL page.</p>
  *
  * @since 2.0
- * 
  */
-public final class Location {
-
-    private final String path;
-
-    private final int line;
-
-    private final int column;
-
-    public Location(String path, int line, int column) {
-        this.path = path;
-        this.line = line;
-        this.column = column;
-    }
+public abstract class Metadata {
 
     /**
-     * <p class="changed_added_2_0">Return the estimated character column.</p>
+     * <p class="changed_added_2_0">Take the action prescribed in the
+     * JSF specification for this particular PDL element attribute.</p>
      * 
+     * @param ctx The FaceletContext for this request.
+     * @param instance The instance from the JSF Java API on which the
+     * action should be taken.  For example, an instance of {@link
+     * javax.faces.component.EditableValueHolder}.
      */
-    public int getColumn() {
-        return column;
-    }
+    public abstract void applyMetadata(FaceletContext ctx, Object instance);
 
-    /**
-     * <p class="changed_added_2_0">Return the line number in the page
-     * for this location.</p>
-     * 
-     */
-    public int getLine() {
-        return line;
-    }
-
-    /**
-     * <p class="changed_added_2_0">Return the file path to the page
-     * represented by this location.</p>
-     * 
-     */
-    public String getPath() {
-        return path;
-    }
-
-    public String toString() {
-        return path + " @" + this.line + "," + this.column;
-    }
 }

@@ -34,7 +34,7 @@
  * holder.
  */
 
-package javax.faces.webapp.pdl.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
 
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
