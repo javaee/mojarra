@@ -177,24 +177,24 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
     
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-    	applyAttachedObject(ctx, parent, getEventName());    	
+        applyAttachedObject(ctx, parent, getEventName());
     }
 
     /* (non-Javadoc)
      * @see javax.faces.webapp.pdl.AttachedObjectHandler#getFor()
      */
     public String getFor() {
-		return null;
-	}
+        return null;
+    }
     
     /* (non-Javadoc)
      * @see javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler#getEventName()
      */
     public String getEventName() {
-			return (this.event != null) ? this.event.getValue() : null;
-	}
+        return (this.event != null) ? this.event.getValue() : null;
+    }
 
-	// Tests whether the <f:ajax> is wrapping other tags.
+    // Tests whether the <f:ajax> is wrapping other tags.
     private boolean isWrapping() {
 
         // Would be nice if there was some easy way to determine whether
@@ -240,48 +240,48 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
             return;
         }
 
-        	// Composite component case
-		if (UIComponent.isCompositeComponent(parent)) {
-			CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(
-					this);
-		} else if (parent instanceof ClientBehaviorHolder) {
-			applyAttachedObject(ctx, parent, eventName);
-		} else {
-			throw new TagException(this.tag,
-					"Unable to attach <f:ajax> to non-ClientBehaviorHolder parent");
-		}
+        // Composite component case
+        if (UIComponent.isCompositeComponent(parent)) {
+            CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(this);
+        } else if (parent instanceof ClientBehaviorHolder) {
+            applyAttachedObject(ctx, parent, eventName);
+        } else {
+            throw new TagException(this.tag,
+                                   "Unable to attach <f:ajax> to non-ClientBehaviorHolder parent");
+        }
 
     }
 
-	/**
-	 * <p class="changed_added_2_0"></p>
-	 * @param ctx
-	 * @param parent
-	 * @param eventName
-	 */
-	private void applyAttachedObject(FaceletContext ctx, UIComponent parent,
-			String eventName) {
-		ClientBehaviorHolder bHolder = (ClientBehaviorHolder) parent;
+    /**
+     * <p class="changed_added_2_0"></p>
+     * @param ctx
+     * @param parent
+     * @param eventName
+     */
+    private void applyAttachedObject(FaceletContext ctx,
+                                     UIComponent parent,
+                                     String eventName) {
+        ClientBehaviorHolder bHolder = (ClientBehaviorHolder) parent;
 
-		if (null == eventName) {
-			eventName = bHolder.getDefaultEventName();
-			if (null == eventName) {
-				throw new TagException(this.tag,
-						"Event attribute could not be determined: "
-								+ eventName);
-			}
-		} else {
-			if (!bHolder.getEventNames().contains(eventName)) {
-				throw new TagException(this.tag,
-						"Event attribute could not be determined: "
-								+ eventName);
-			}
-		}
+        if (null == eventName) {
+            eventName = bHolder.getDefaultEventName();
+            if (null == eventName) {
+                throw new TagException(this.tag,
+                    "Event attribute could not be determined: "
+                        + eventName);
+            }
+        } else {
+            if (!bHolder.getEventNames().contains(eventName)) {
+                throw new TagException(this.tag,
+                        "Event attribute could not be determined: "
+                                + eventName);
+            }
+        }
 
-		AjaxBehavior ajaxBehavior = createAjaxBehavior(ctx, eventName);
-		bHolder.addClientBehavior(eventName, ajaxBehavior);
-		installAjaxResourceIfNecessary();
-	}
+        AjaxBehavior ajaxBehavior = createAjaxBehavior(ctx, eventName);
+        bHolder.addClientBehavior(eventName, ajaxBehavior);
+        installAjaxResourceIfNecessary();
+    }
 
     // Construct our AjaxBehavior from tag parameters.
     private AjaxBehavior createAjaxBehavior(FaceletContext ctx, String eventName) {
