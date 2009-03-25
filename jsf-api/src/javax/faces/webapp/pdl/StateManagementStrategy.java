@@ -42,14 +42,17 @@ import javax.faces.context.FacesContext;
 /**
  * <p class="changed_added_2_0">Encapsulate the saving and restoring of
  * the view to enable the PDL to take over the responsibility for
- * handling this feature.</p>
+ * handling this feature. Because {@link
+ * PageDeclarationLanguage#getStateManagementStrategy} is required to
+ * return <code>null</code> for JSP views and non-<code>null</code> for
+ * views authored in Facelets for JSF 2, this specification only applys
+ * to Facelets for JSF 2.</p>
  *
  * @since 2.0
  */
 public abstract class StateManagementStrategy {
 
     
-    // PENDING(edburns): move into pdf document.
     /**
      * <p class="changed_added_2_0">Return the state of the current view
      * in an <code>Object</code> that implements
@@ -73,19 +76,9 @@ public abstract class StateManagementStrategy {
 	  call {@link javax.faces.component.UIComponent#saveState},
 	  saving the returned <code>Object</code> in a way such that it
 	  can be restored given only its client id.  Special care must
-	  be taken to handle the case of components that were added
-	  programmatically during this lifecycle traversal, rather than
-	  by the PDL.  The {@link
-	  javax.faces.event.AfterNonRestoreViewAddToViewEvent} is sent so that
-	  implementations may be aware of such additions and take
-	  appropriate action.</p></li>
-
-	  <li><p>Care must be taken to handle the case of components
-	  that were programmatically deleted during this lifecycle
-	  traversal.  The {@link
-	  javax.faces.event.PreRemoveFromViewEvent} is sent so that
-	  implementations may be aware of such additions and take
-	  appropriate action.</p></li>
+	  be taken to handle the case of components that were added or
+	  deleted programmatically during this lifecycle traversal,
+	  rather than by the PDL.  </p></li>
 
 	</ol>
 
@@ -100,14 +93,13 @@ public abstract class StateManagementStrategy {
 
      * </div>
 
-     * context the <code>FacesContext</code> for this request.
+     * @param context the <code>FacesContext</code> for this request.
      *
      * @since 2.0
      */
 
     public abstract Object saveView(FacesContext context);
     
-    // PENDING(edburns): move into pdf document.
     /**
      * <p class="changed_added_2_0">Restore the state of the view with
      * information in the request.  The default implementation must
@@ -117,9 +109,7 @@ public abstract class StateManagementStrategy {
 
      * 	<ol>
 
-	  <li><p>Call {@link
-	  javax.faces.application.ViewHandler#createView}.  This will
-	  cause the view to be built from the PDL.  This view will not
+	  <li><p>Build the view from the markup.  This view will not
 	  contain any components programmatically added during the
 	  previous lifecycle run, and it <b>will</b> contain components
 	  that were programmatically deleted on the previous lifecycle

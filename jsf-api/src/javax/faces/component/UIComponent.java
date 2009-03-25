@@ -442,7 +442,7 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
     /**
      * <p class="changed_added_2_0">An implementation of {@link
      * PartialStateHolder#initialStateMarked}, this method is called by
-     * the runtime to test if the {@llink
+     * the runtime to test if the {@link
      * PartialStateHolder#markInitialState} method was called.</p>
      * @since 2.0
      */

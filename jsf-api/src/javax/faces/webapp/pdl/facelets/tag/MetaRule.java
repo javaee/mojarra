@@ -64,8 +64,8 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
  * components, non-components, and attached objects.</p>
  *
  * <p class="changed_added_2_0">Instances of this class are grouped
- * together into a {@link MetaRuleSet}, and each rule in the set has its
- * {@link #applyRule} method called when {@link MetaRuleSet#finish} is
+ * together into a {@link MetaRuleset}, and each rule in the set has its
+ * {@link #applyRule} method called when {@link MetaRuleset#finish} is
  * called.</p>
  *
  * @since 2.0

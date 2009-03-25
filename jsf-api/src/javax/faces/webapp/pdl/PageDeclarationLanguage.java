@@ -45,15 +45,14 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">The contract that a page declaration
- * language must implement to interact with the JSF runtime. 
- * An implementation
- * of this class must be thread-safe.</p>
+ * language must implement to interact with the JSF runtime.  An
+ * implementation of this class must be thread-safe.</p>
  *
  * <div class="changed_added_2_0">
  * 
  * <p>Instances of this class are application scoped and must be
  * obtained from the {@link PageDeclarationLanguageFactory}.</p>
- * 
+
  * </div>
  * 
  * @since 2.0
@@ -66,7 +65,8 @@ public abstract class PageDeclarationLanguage {
      * metadata for the composite component represented by the argument
      * <code>componentResource</code>, or <code>null</code> if the
      * metadata cannot be found.  See section JSF.7.6.2 for the
-     * specification of the default implementation.</p>
+     * specification of the default implementation. JSP implementations
+     * must throw <code>UnsupportedOperationException</code>.</p>
      *
      * @param context The <code>FacesContext</code> for this request.
      * @param componentResource The <code>Resource</code> that represents the component.
@@ -77,6 +77,9 @@ public abstract class PageDeclarationLanguage {
      *
      * @throws javax.faces.FacesException if there is an error in
      * obtaining the metadata
+     *
+     * @throws UnsupportedOperationException if this is a JSP PDL
+     * implementation.
      */
     public abstract BeanInfo getComponentMetadata(FacesContext context, Resource componentResource);
 
@@ -84,9 +87,11 @@ public abstract class PageDeclarationLanguage {
     /**
      * <p class="changed_added_2_0">Return a reference to the view
      * metadata for the view represented by the argument
-     * <code>viewId</code>, or <code>null</code> if the
-     * metadata cannot be found.  See section JSF.7.6.2 for the
-     * specification of the default implementation.</p>
+     * <code>viewId</code>, or <code>null</code> if the metadata cannot
+     * be found.  See section JSF.7.6.2 for the specification of the
+     * default implementation.  Facelets for JSF 2 implementation must
+     * return non-<code>null</code>. JSP implementations must return
+     * <code>null</code>.</p>
      *
      * @param context The <code>FacesContext</code> for this request.
      * @param viewId the view id from whith to extract the metadata
@@ -105,7 +110,8 @@ public abstract class PageDeclarationLanguage {
      * <p class="changed_added_2_0">Take implementation specific action
      * to discover a <code>Resource</code> given the argument
      * <code>componentResource</code>.  See section JSF.7.6.2 for the
-     * specification of the default implementation.</p>
+     * specification of the default implementation.  JSP implementations
+     * must throw <code>UnsupportedOperationException</code>.</p>
      *
      * @param context The <code>FacesContext</code> for this request.
      * @param componentResource The <code>Resource</code> that represents the component.
@@ -116,7 +122,8 @@ public abstract class PageDeclarationLanguage {
      *
      * @throws javax.faces.FacesException if there is an error in
      * obtaining the script component resource
-     *
+     * @throws UnsupportedOperationException if this is a JSP PDL
+     * implementation.
      */
     public abstract Resource getScriptComponentResource(FacesContext context,
                                                         Resource componentResource);
@@ -161,10 +168,35 @@ public abstract class PageDeclarationLanguage {
      * which must have been created via a call to {@link #createView},
      * to be populated with children.</p>
 
-     * <p class="changed_added_2_0">The implementation must take no
-     * action if the argument <code>root</code> already has non-metadata
-     * children.  See section JSF.7.6.2.3 for the view metadata
-     * specification.</p>
+     * <div class="changed_added_2_0">
+
+     * <p>The Facelets implementation must insure that markup comprising
+     * the view must be executed, with the {@link
+     * javax.faces.component.UIComponent} instances in the view being
+     * encountered in the same depth-first order as in other lifecycle
+     * methods defined on <code>UIComponent</code>, and added to the
+     * view (but not rendered) during the traversal. The runtime must
+     * guarantee that the view must be fully populated before any of the
+     * following happen.</p>
+
+     * <ul>
+     *
+     * <li><p>The {@link javax.faces.event.PhaseListener#afterPhase}
+     * method of any <code>PhaseListener</code>s attached to the
+     * application is called</p></li>
+
+     * <li><p>The {@link javax.faces.component.UIViewRoot} phase
+     * listener installed via {@link
+     * javax.faces.component.UIViewRoot#setAfterPhaseListener} or {@link
+     * javax.faces.component.UIViewRoot#addPhaseListener} are called.</p></li>
+     *
+     * </ul>
+
+     * <p>The implementation must take no action if the argument
+     * <code>root</code> already has non-metadata children.  See section
+     * JSF.7.6.2.3 for the view metadata specification.</p>
+
+     * </div>
 
      * @param context the <code>FacesContext</code> for this request
 

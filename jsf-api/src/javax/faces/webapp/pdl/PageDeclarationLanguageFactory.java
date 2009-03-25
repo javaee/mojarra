@@ -81,7 +81,7 @@ public abstract class PageDeclarationLanguageFactory implements FacesWrapper<Pag
      * handling the PDL contained in the page referenced by the argument
      * <code>viewId</code>.  The default implementation must return a
      * valid <code>PageDeclarationLanguage</code> instance for views
-     * written in either JSP or Facelets.</p>
+     * written in either JSP or Facelets for JSF 2.</p>
      * 
      * @param viewId the viewId to be inspected for an appropriate 
      * <code>PageDeclarationLanguage</code> implementation for the PDL used

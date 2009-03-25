@@ -46,12 +46,12 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * RELEASE_PENDING (edburns,rogerk) review docs
- *
- * <p class="changed_added_2_0"/>
- * <code>ViewMetadata</code> is reponsible for extracting and providing
- * view parameter metadata from PDL views.
- * </p>
+ * <p class="changed_added_2_0"/> <code>ViewMetadata</code> is
+ * reponsible for extracting and providing view parameter metadata from
+ * PDL views.  Because {@link PageDeclarationLanguage#getViewMetadata}
+ * is required to return <code>null</code> for JSP views and
+ * non-<code>null</code> for views authored in Facelets for JSF 2, this
+ * specification only applys to Facelets for JSF 2.  </p>
  *
  * @since 2.0
  */
@@ -82,15 +82,15 @@ public abstract class ViewMetadata {
 
 
     /**
-     * <p class="changed_added_2_0">
-     * Utility method to extract view metadata from the provided {@link UIViewRoot}.
-     * </p>
+     * <p class="changed_added_2_0"> Utility method to extract view
+     * metadata from the provided {@link UIViewRoot}.  </p>
      *
-     * @param root the {@link UIViewRoot} from which the metadata will be extracted
-     *  from
+     * @param root the {@link UIViewRoot} from which the metadata will
+     * be extracted from
      *
-     * @return a <code>Collection</code> of {@link UIViewParameter} instances.  If
-     *  the view has no metadata, the collection will be empty.
+     * @return a <code>Collection</code> of {@link UIViewParameter}
+     * instances.  If the view has no metadata, the collection will be
+     * empty.
      */
     public static Collection<UIViewParameter> getViewParameters(UIViewRoot root) {
 
