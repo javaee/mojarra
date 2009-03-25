@@ -186,6 +186,7 @@
                    demo-name="mojarra_ext"
                    tests="mojarra_ext"
                    context-path="${mojarra_ext.context.path}"/>
+         -->
 
     </target>
 
