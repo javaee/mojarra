@@ -38,8 +38,8 @@ package com.sun.faces.facelets;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 @ManagedBean
 @RequestScoped

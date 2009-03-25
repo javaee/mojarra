@@ -1,7 +1,7 @@
 package com.sun.faces.systest.model.ajax;
 
-import javax.faces.model.ManagedBean;
-import javax.faces.model.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 @ManagedBean(name="ajaxerror")
 @SessionScoped

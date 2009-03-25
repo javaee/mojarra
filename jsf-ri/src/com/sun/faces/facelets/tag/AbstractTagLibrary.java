@@ -156,7 +156,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		/**
 		 * <p class="changed_added_2_0"></p>
 		 * @return
-		 * @see javax.faces.webapp.pdl.facelets.tag.TagConfig#getNextHandler()
+		 * @see javax.faces.webapp.pdl.facelets.TagConfig#getNextHandler()
 		 */
 		public FaceletHandler getNextHandler() {
 			return parent.getNextHandler();
@@ -164,7 +164,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		/**
 		 * <p class="changed_added_2_0"></p>
 		 * @return
-		 * @see javax.faces.webapp.pdl.facelets.tag.TagConfig#getTag()
+		 * @see javax.faces.webapp.pdl.facelets.TagConfig#getTag()
 		 */
 		public Tag getTag() {
 			return parent.getTag();
@@ -172,7 +172,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		/**
 		 * <p class="changed_added_2_0"></p>
 		 * @return
-		 * @see javax.faces.webapp.pdl.facelets.tag.TagConfig#getTagId()
+		 * @see javax.faces.webapp.pdl.facelets.TagConfig#getTagId()
 		 */
 		public String getTagId() {
 			return parent.getTagId();
@@ -651,7 +651,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.tag.TagLibrary#containsNamespace(java.lang.String)
+     * @see com.sun.facelets.TagLibrary#containsNamespace(java.lang.String)
      */
     public boolean containsNamespace(String ns, Tag t) {
         return this.namespace.equals(ns);
@@ -660,7 +660,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.tag.TagLibrary#containsTagHandler(java.lang.String,
+     * @see com.sun.facelets.TagLibrary#containsTagHandler(java.lang.String,
      *      java.lang.String)
      */
     public boolean containsTagHandler(String ns, String localName) {
@@ -675,8 +675,8 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.tag.TagLibrary#createTagHandler(java.lang.String,
-     *      java.lang.String, com.sun.facelets.tag.TagConfig)
+     * @see com.sun.facelets.TagLibrary#createTagHandler(java.lang.String,
+     *      java.lang.String, com.sun.facelets.TagConfig)
      */
     public TagHandler createTagHandler(String ns, String localName,
             TagConfig tag) throws FacesException {
@@ -693,7 +693,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.tag.TagLibrary#containsFunction(java.lang.String,
+     * @see com.sun.facelets.TagLibrary#containsFunction(java.lang.String,
      *      java.lang.String)
      */
     public boolean containsFunction(String ns, String name) {
@@ -706,7 +706,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.tag.TagLibrary#createFunction(java.lang.String,
+     * @see com.sun.facelets.TagLibrary#createFunction(java.lang.String,
      *      java.lang.String)
      */
     public Method createFunction(String ns, String name) {

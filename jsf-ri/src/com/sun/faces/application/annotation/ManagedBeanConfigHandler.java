@@ -45,13 +45,13 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.faces.model.ManagedBean;
-import javax.faces.model.ManagedProperty;
-import javax.faces.model.RequestScoped;
-import javax.faces.model.ViewScoped;
-import javax.faces.model.SessionScoped;
-import javax.faces.model.ApplicationScoped;
-import javax.faces.model.NoneScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.NoneScoped;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.application.ApplicationAssociate;

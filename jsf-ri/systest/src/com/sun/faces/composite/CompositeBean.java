@@ -36,8 +36,8 @@
 
 package com.sun.faces.composite;
 
-import javax.faces.model.ManagedBean;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AbortProcessingException;

@@ -38,7 +38,7 @@
  * holder.
  */
 
-package javax.faces.model;
+package javax.faces.bean;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -37,7 +37,7 @@
 package ajaxqueue;
 
 import javax.faces.event.ActionEvent;
-import javax.faces.model.ManagedBean;
+import javax.faces.bean.ManagedBean;
 
 import java.util.Random;
 

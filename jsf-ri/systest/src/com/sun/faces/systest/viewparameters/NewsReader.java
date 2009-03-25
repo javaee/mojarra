@@ -5,9 +5,9 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.ManagedProperty;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 
 /**
  * @author Dan Allen

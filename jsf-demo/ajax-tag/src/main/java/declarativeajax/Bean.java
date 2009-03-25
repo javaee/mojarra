@@ -51,8 +51,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import java.io.Serializable;
 import java.util.Arrays;

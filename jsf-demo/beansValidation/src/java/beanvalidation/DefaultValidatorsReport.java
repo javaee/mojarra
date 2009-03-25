@@ -7,8 +7,8 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 /**
  * @author Dan Allen

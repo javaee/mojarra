@@ -36,8 +36,8 @@
 
 package com.sun.faces.systest.model;
 
-import javax.faces.model.ManagedBean;
-import javax.faces.model.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Serializable;

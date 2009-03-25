@@ -5,8 +5,8 @@ import beanvalidation.constraints.Email;
 import beanvalidation.groups.Order;
 import beanvalidation.groups.Personal;
 import java.io.Serializable;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 

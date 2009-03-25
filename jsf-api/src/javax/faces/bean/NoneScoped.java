@@ -1,4 +1,4 @@
-package javax.faces.model;
+package javax.faces.bean;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

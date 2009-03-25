@@ -1,7 +1,7 @@
 package jsf.mb;
 
-import javax.faces.model.ManagedBean;
-import javax.faces.model.ViewScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 
 import jsf.util.FacesUtil;
 import services.SprintService;

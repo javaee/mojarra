@@ -32,8 +32,8 @@ package com.sun.faces.systest.model;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 @ManagedBean(name="bean")
 @RequestScoped

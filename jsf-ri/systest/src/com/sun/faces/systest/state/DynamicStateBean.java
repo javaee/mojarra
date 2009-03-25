@@ -42,8 +42,8 @@ import javax.faces.component.UINamingContainer;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.validator.ValidatorException;
 
 @ManagedBean

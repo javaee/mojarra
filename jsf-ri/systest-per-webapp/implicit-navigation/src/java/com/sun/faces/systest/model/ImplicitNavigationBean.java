@@ -41,8 +41,8 @@ import java.net.URL;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 @ManagedBean
 @RequestScoped

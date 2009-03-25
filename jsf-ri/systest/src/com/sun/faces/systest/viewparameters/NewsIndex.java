@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.PostConstruct;
-import javax.faces.model.ApplicationScoped;
-import javax.faces.model.ManagedBean;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
 
 /**
  * @author Dan Allen

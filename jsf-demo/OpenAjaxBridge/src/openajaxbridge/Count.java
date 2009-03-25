@@ -36,8 +36,8 @@
 package openajaxbridge;
 
 import javax.faces.event.ActionEvent;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 @ManagedBean(name = "openajaxcount")
 @SessionScoped

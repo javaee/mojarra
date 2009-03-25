@@ -63,7 +63,7 @@ import javax.faces.component.FacesComponent;
 import javax.faces.component.behavior.FacesBehavior;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.NamedEvent;
-import javax.faces.model.ManagedBean;
+import javax.faces.bean.ManagedBean;
 import javax.faces.render.FacesBehaviorRenderer;
 import javax.faces.render.FacesRenderer;
 import javax.faces.validator.FacesValidator;
@@ -83,7 +83,7 @@ import com.sun.faces.util.Util;
  *  <li>javax.faces.convert.FacesConverter</li>
  *  <li>javax.faces.validator.FacesValidator</li>
  *  <li>javax.faces.render.FacesRenderer</li>
- *  <li>javax.faces.model.ManagedBean</li>
+ *  <li>javax.faces.bean.ManagedBean</li>
  *  <li>javax.faces.event.NamedEvent</li>
  * </ul>
  */
@@ -105,7 +105,7 @@ public class AnnotationScanner {
                            "Ljavax/faces/convert/FacesConverter;",
                            "Ljavax/faces/validator/FacesValidator;",
                            "Ljavax/faces/render/FacesRenderer;",
-                           "Ljavax/faces/model/ManagedBean;",
+                           "Ljavax/faces/bean/ManagedBean;",
                            "Ljavax/faces/event/NamedEvent;",
                            "Ljavax/faces/component/behavior/FacesBehavior;",
                            "Ljavax/faces/render/FacesBehaviorRenderer;");

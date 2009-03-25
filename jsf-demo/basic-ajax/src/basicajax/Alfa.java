@@ -1,8 +1,8 @@
 package basicajax;
 
 import javax.faces.event.ActionEvent;
-import javax.faces.model.ManagedBean;
-import javax.faces.model.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.el.ValueExpression;
 import java.util.TreeMap;
 import java.util.Collection;

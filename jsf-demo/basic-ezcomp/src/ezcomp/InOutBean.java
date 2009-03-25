@@ -40,8 +40,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.Serializable;
 
-import javax.faces.model.ManagedBean;
-import javax.faces.model.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 /**
  * Managed Bean for the inout composite component demo.

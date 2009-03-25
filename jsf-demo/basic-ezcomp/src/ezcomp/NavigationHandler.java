@@ -1,7 +1,7 @@
 package ezcomp;
 
-import javax.faces.model.ManagedBean;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 
 @ManagedBean(name="navigation")

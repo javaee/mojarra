@@ -36,9 +36,9 @@
 
 package com.sun.faces.annotation;
 
-import javax.faces.model.ManagedBean;
-import javax.faces.model.ManagedProperty;
-import javax.faces.model.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 
 @ManagedBean
 @RequestScoped
