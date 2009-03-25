@@ -3268,6 +3268,9 @@ the literal string "<code>head</code>" as the last argument.</p>
       </ul>
       Render the ending <code>&lt;/body&gt;</code> element tag.</p>
 
+<p>Any attributes declared on the element must be passed through
+unmodified to the rendered output.</p>
+
 </div>]]></description>
             <component-family>javax.faces.Output</component-family>
             <renderer-type>javax.faces.Body</renderer-type>
