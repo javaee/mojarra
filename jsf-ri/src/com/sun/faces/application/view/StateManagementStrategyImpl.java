@@ -84,7 +84,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
 
-    private final PageDeclarationLanguage pdl;
+    private final FaceletViewHandlingStrategy pdl;
 
     private static final String CLIENTIDS_TO_REMOVE_NAME = 
             "com.sun.faces.application.view.CLIENTIDS_TO_REMOVE";
@@ -103,7 +103,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     /**
      * Create a new <code>StateManagerImpl</code> instance.
      */
-    public StateManagementStrategyImpl(PageDeclarationLanguage pdl, Set<String> fullStateViewIds) {
+    public StateManagementStrategyImpl(FaceletViewHandlingStrategy pdl,
+                                       Set<String> fullStateViewIds) {
         this.pdl = pdl;
         this.fullStateViewIds = fullStateViewIds;
     }
