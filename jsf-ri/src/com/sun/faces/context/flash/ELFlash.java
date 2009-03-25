@@ -438,7 +438,7 @@ public class ELFlash extends Flash {
     
     private Map<String,Object> getMapForCookie(FacesContext context) {
         String cookieName = 
-                FlashPhaseListener.getCookieValue(context.getExternalContext());
+                getCookieValue(context.getExternalContext());
         Map<String,Object> result = null;
         
         if (null != cookieName) {
@@ -450,7 +450,7 @@ public class ELFlash extends Flash {
     
     
     /**
-     * <p>Called by the {@link FlashPhaseListener#afterPhase} for the 
+     * <p>Called by the {@link #doPostPhaseActions(javax.faces.context.FacesContext)} for the 
      * render-response phase to clear out the flash for the appropriate
      * sequence.
      */
@@ -694,6 +694,196 @@ public class ELFlash extends Flash {
 
     public java.util.Set<String> keySet() {
         return getPhaseMap().keySet();
+    }
+
+
+    /**
+     * <p>Perform actions that need to happen on the
+     * <code>afterPhase</code> event.</p>
+     *
+     * <p>For after restore-view, if this is a postback, we extract the
+     * sequenceId from the request and store it in the request
+     * scope.</p>
+     *
+     * <p>For after render-response, we clear out the flash for the
+     * postback, while leaving the current one intact. </p>
+     */
+    @Override
+    public void doPostPhaseActions(FacesContext context) {
+
+        ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> requestMap = extContext.getRequestMap();
+        Object request = extContext.getRequest(), response = extContext.getResponse();
+        ELFlash elFlash = ELFlash.getELFlash();
+
+        if (PhaseId.RENDER_RESPONSE.equals(context.getCurrentPhaseId())) {
+            expireEntries(context);
+        }
+
+        // If this requset is ending normally...
+        if (PhaseId.RENDER_RESPONSE.equals(context.getCurrentPhaseId())) {
+            // and the user requested we save all request scoped data...
+            if (null != elFlash && elFlash.isKeepMessages()) {
+                // save it all.
+                elFlash.saveAllMessages(context);
+            }
+        }
+        // Otherwise, if this request is ending early...
+        else if ((context.getResponseComplete() ||
+                  context.getRenderResponse()) &&
+                  elFlash.isRedirect()) {
+            // and the user requested we save all request scoped data...
+            if (null != elFlash && elFlash.isKeepMessages()) {
+                // save it all.
+                addCookie(extContext, elFlash);
+                elFlash.saveAllMessages(context);
+            }
+        }
+    }
+
+    /**
+     * <p>Perform actions that need to happen on the
+     * <code>beforePhase</code> event.</p>
+     *
+     * <p>For all phases, store the current phaseId in request scope.</p>
+     *
+     * <p>For before restore-view, create a sequenceId for this request
+     * and store it in request scope.</p>
+     *
+     * <p>For before render-response, store the sequenceId for this
+     * request in the response.</p>
+     *
+     */
+
+    public void doPrePhaseActions(FacesContext context) {
+        ExternalContext extContext = context.getExternalContext();
+        Object response = extContext.getResponse();
+        Map<String, Object> requestMap = extContext.getRequestMap();
+        String thisRequestSequenceString = null;
+        String postbackSequenceString = null;
+        ELFlash elFlash = (ELFlash) ELFlash.getFlash(extContext, true);
+
+        // If we're on before-restore-view...
+        if (PhaseId.RESTORE_VIEW.equals(context.getCurrentPhaseId())) {
+            thisRequestSequenceString = Long.toString(getSequenceNumber());
+            // Put the sequence number for the request/response pair
+            // that is starting with *this particular request* in the request scope
+            // so the ELFlash can access it.
+            requestMap.put(Constants.FLASH_THIS_REQUEST_ATTRIBUTE_NAME,
+                    thisRequestSequenceString);
+
+            // Make sure to restore all request scoped data
+            if (null != elFlash && elFlash.isKeepMessages()) {
+                elFlash.restoreAllMessages(context);
+            }
+
+            if (context.isPostback()) {
+                // to a servlet JSF app...
+                if (response instanceof HttpServletResponse) {
+                    // extract the sequence number from the cookie or portletSession
+                    // for the request/response pair for which this request is a postback.
+                    postbackSequenceString = getCookieValue(extContext);
+                } else {
+                    /******
+                     * PortletRequest portletRequest = null;
+                     * portletRequest = (PortletRequest) request;
+                     * // You can't retrieve a cookie in portlet.
+                     * // http://wiki.java.net/bin/view/Portlet/JSR168FAQ#How_can_I_set_retrieve_a_cookie
+                     * postbackSequenceString = (String)
+                     * portletRequest.getPortletSession().
+                     * getAttribute(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
+                     * PortletSession.PORTLET_SCOPE);
+                     *******/
+                }
+                if (null != postbackSequenceString) {
+                    // Store the sequenceNumber in the request so the
+                    // after-render-response event can flush the flash
+                    // of entries from that sequence
+                    requestMap.put(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
+                            postbackSequenceString);
+                }
+            }
+
+        }
+        if (PhaseId.RENDER_RESPONSE.equals(context.getCurrentPhaseId())) {
+            // Set the REQUEST_ID cookie to be the sequence number
+            addCookie(extContext, elFlash);
+        }
+
+    }
+
+
+    // ------------------------------------- Methods from old PhaseListener Impl
+
+
+     private long sequenceNumber = 0;
+    private synchronized long getSequenceNumber() {
+        if (Long.MAX_VALUE == ++sequenceNumber) {
+            sequenceNumber = 0;
+        }
+        return sequenceNumber;
+    }
+
+    static String getCookieValue(ExternalContext extContext) {
+        String result = null;
+        Cookie cookie = (Cookie)
+        extContext.getRequestCookieMap().
+                get(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME);
+        if (null != cookie) {
+            result = cookie.getValue();
+        }
+
+        return result;
+    }
+
+    private void addCookie(ExternalContext extContext, Flash flash) {
+        // Do not update the cookie if redirect after post
+        if (flash.isRedirect()) {
+            return;
+        }
+
+        String thisRequestSequenceString = null;
+        HttpServletResponse servletResponse = null;
+        //PortletRequest portletRequest = null;
+        Object thisRequestSequenceStringObj, response = extContext.getResponse();
+
+        thisRequestSequenceStringObj = extContext.getRequestMap().
+                get(Constants.FLASH_THIS_REQUEST_ATTRIBUTE_NAME);
+        if (null == thisRequestSequenceStringObj) {
+            return;
+        }
+        thisRequestSequenceString = thisRequestSequenceStringObj.toString();
+
+        if (response instanceof HttpServletResponse) {
+            servletResponse = (HttpServletResponse) response;
+            Cookie cookie = new Cookie(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
+                    thisRequestSequenceString);
+            cookie.setMaxAge(-1);
+            servletResponse.addCookie(cookie);
+        } else {
+            /*****
+             * portletRequest = (PortletRequest) request;
+             * // You can't add a cookie in portlet.
+             * // http://wiki.java.net/bin/view/Portlet/JSR168FAQ#How_can_I_set_retrieve_a_cookie
+             * portletRequest.getPortletSession().setAttribute(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME,
+             * thisRequestSequenceString, PortletSession.PORTLET_SCOPE);
+             *********/
+        }
+    }
+
+    private void expireEntries(FacesContext context) {
+        ExternalContext extContext = context.getExternalContext();
+        String postbackSequenceString = null;
+        // Clear out the flash for the postback.
+        if (null != (postbackSequenceString = (String)
+        extContext.getRequestMap().
+                get(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME))) {
+            ELFlash flash = (ELFlash)ELFlash.getFlash(extContext, false);
+            if (null != flash) {
+                flash.expireEntriesForSequence(postbackSequenceString);
+            }
+        }
+
     }
 
 

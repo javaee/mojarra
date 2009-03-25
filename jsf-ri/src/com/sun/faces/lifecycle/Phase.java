@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
@@ -169,7 +170,9 @@ public abstract class Phase {
     protected void handleAfterPhase(FacesContext context,
                                     ListIterator<PhaseListener> listenersIterator,
                                     PhaseEvent event) {
-               
+
+        Flash flash = context.getExternalContext().getFlash();
+        flash.doPostPhaseActions(context);
         while (listenersIterator.hasPrevious()) {
             PhaseListener listener = listenersIterator.previous();
             if (this.getId().equals(listener.getPhaseId()) ||
@@ -199,6 +202,8 @@ public abstract class Phase {
                                       ListIterator<PhaseListener> listenersIterator,
                                       PhaseEvent event) {
 
+         Flash flash = context.getExternalContext().getFlash();
+         flash.doPrePhaseActions(context);
          while (listenersIterator.hasNext()) {
              PhaseListener listener = listenersIterator.next();
              if (this.getId().equals(listener.getPhaseId()) ||

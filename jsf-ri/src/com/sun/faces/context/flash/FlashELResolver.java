@@ -135,8 +135,6 @@ import javax.faces.context.FacesContext;
  *
  *  <li><p>{@link ELFlash}</p></li>
  * 
- *  <li><p>{@link FlashPhaseListener}</p></li>
- * 
  *  </code></ul>
  *
  */

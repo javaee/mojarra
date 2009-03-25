@@ -314,6 +314,18 @@ public abstract class Flash implements Map<String, Object> {
      */
     
     public abstract void keep(String key);
+
+
+    /**
+     * RELEASE_PENDING (docs)
+     */
+    public abstract void doPrePhaseActions(FacesContext ctx);
+
+
+    /**
+     * RELEASE_PENDING (docs)
+     */
+    public abstract void doPostPhaseActions(FacesContext ctx);
     
 
 }
