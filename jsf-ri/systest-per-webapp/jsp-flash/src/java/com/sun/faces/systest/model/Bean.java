@@ -54,7 +54,7 @@ public class Bean {
                     "test that this persists across the redirect", 
                     "This message must persist across the redirect");
             context.addMessage(null, message);
-            context.getFlash().setKeepMessages(true);
+            context.getExternalContext().getFlash().setKeepMessages(true);
         }
     }
 

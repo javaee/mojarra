@@ -254,13 +254,6 @@ public class FacesContextImpl extends FacesContext {
         return elContext;
     }
 
-    @Override
-    public Flash getFlash() {
-        return ELFlash.getFlash(this, true);
-    }
-    
-    
-
 
     /**
      * @see javax.faces.context.FacesContext#getClientIdsWithMessages()

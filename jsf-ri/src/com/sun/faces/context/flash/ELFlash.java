@@ -90,12 +90,12 @@ public class ELFlash extends Flash {
     
     public static Map<String,Object> getFlash() {
         FacesContext context = FacesContext.getCurrentInstance();
-        return getFlash(context, true);
+        return getFlash(context.getExternalContext(), true);
     }
 
     /**
      *
-     * @param context the <code>FacesContext</code> for this request.
+     * @param extContext the <code>ExternalContext</code> for this request.
      *
      * @param create <code>true</code> to create a new instance for this request if 
      * necessary; <code>false</code> to return <code>null</code> if there's no 
@@ -104,9 +104,8 @@ public class ELFlash extends Flash {
      * @return The flash <code>Map</code> for this session.
      */
     
-    public static Flash getFlash(FacesContext context, boolean create) {
-        Map<String, Object> appMap = context.getExternalContext().
-                getApplicationMap();
+    public static Flash getFlash(ExternalContext extContext, boolean create) {
+        Map<String, Object> appMap = extContext.getApplicationMap();
         ELFlash flash = (ELFlash) 
             appMap.get(Constants.FLASH_ATTRIBUTE_NAME);
         if (null == flash && create) {

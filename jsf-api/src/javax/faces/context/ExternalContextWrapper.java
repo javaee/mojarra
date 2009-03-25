@@ -838,5 +838,18 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
     public String encodeRedirectURL(String baseUrl, Map<String, List<String>> parameters) {
         return getWrapped().encodeRedirectURL(baseUrl, parameters);
     }
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExternalContext#getFlash()} on the wrapped {@link ExternalContext}
+     * object.</p?
+     *
+     * @see javax.faces.context.ExternalContext#getFlash()
+     */
+    @Override
+    public Flash getFlash() {
+        return getWrapped().getFlash();
+    }
     
 }

@@ -223,16 +223,6 @@ public abstract class FacesContext {
 
     }
 
-    // PENDING(rlubke): remove this, moved to ExternalContext    
-    public Flash getFlash() {
-
-        if (defaultFacesContext != null) {
-            return defaultFacesContext.getFlash();
-        }
-
-        throw new UnsupportedOperationException();
-
-    }    
 
     /**
      * <p class="changed_added_2_0">Return the {@link ExceptionHandler}

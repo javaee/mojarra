@@ -321,17 +321,6 @@ public abstract class FacesContextWrapper extends FacesContext implements FacesW
         return getWrapped().getELContext();
     }
 
-    /**
-     * <p>The default behavior of this method is to
-     * call {@link FacesContext#getFlash()}
-     * on the wrapped {@link FacesContext} object.</p>
-     *
-     * @see javax.faces.context.FacesContext#getFlash()
-     */
-    @Override
-    public Flash getFlash() {
-        return getWrapped().getFlash();
-    }
 
     /**
      * <p>The default behavior of this method is to

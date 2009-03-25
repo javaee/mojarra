@@ -40,6 +40,7 @@ import java.io.OutputStream;
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -64,6 +65,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 import com.sun.faces.context.UrlBuilder;
+import com.sun.faces.context.flash.ELFlash;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
@@ -866,6 +868,12 @@ public class ExternalContextImpl extends ExternalContext {
         UrlBuilder builder = new UrlBuilder(url, getResponseCharacterEncoding());
         return ((HttpServletResponse) response).encodeURL(builder.createUrl());
     }
+
+    @Override
+    public Flash getFlash() {
+        return ELFlash.getFlash(this, true);
+    }
+
 
     // ----------------------------------------------------------- Inner Classes
 

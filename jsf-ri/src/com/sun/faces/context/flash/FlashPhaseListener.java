@@ -118,7 +118,7 @@ public class FlashPhaseListener extends Object implements PhaseListener {
         if (null != (postbackSequenceString = (String)
         extContext.getRequestMap().
                 get(Constants.FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME))) {
-            ELFlash flash = (ELFlash)ELFlash.getFlash(context, false);
+            ELFlash flash = (ELFlash)ELFlash.getFlash(extContext, false);
             if (null != flash) {
                 flash.expireEntriesForSequence(postbackSequenceString);
             }
@@ -191,7 +191,7 @@ public class FlashPhaseListener extends Object implements PhaseListener {
         Map<String, Object> requestMap = extContext.getRequestMap();
         String thisRequestSequenceString = null;
         String postbackSequenceString = null;
-        ELFlash elFlash = (ELFlash) ELFlash.getFlash(context, true);
+        ELFlash elFlash = (ELFlash) ELFlash.getFlash(extContext, true);
         
         // If we're on before-restore-view...
         if (e.getPhaseId().equals(PhaseId.RESTORE_VIEW)) {

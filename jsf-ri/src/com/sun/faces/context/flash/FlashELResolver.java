@@ -199,7 +199,7 @@ public class FlashELResolver extends ELResolver {
             (FacesContext) elContext.getContext(FacesContext.class);
         ExternalContext extCtx = facesContext.getExternalContext();
         // try to get the flash from the session.
-        flash = ELFlash.getFlash(facesContext, false);
+        flash = ELFlash.getFlash(extCtx, false);
         
         // Deal with getValue(null, "flash").
         if (null == base) {
@@ -208,7 +208,7 @@ public class FlashELResolver extends ELResolver {
                 elContext.setPropertyResolved(true);
                 if (null == flash) {
                     // create a new one and store it in the session.
-                    flash = ELFlash.getFlash(facesContext, true);
+                    flash = ELFlash.getFlash(extCtx, true);
                     extCtx.getSessionMap().put(Constants.FLASH_ATTRIBUTE_NAME,
 					       flash);
                 }
