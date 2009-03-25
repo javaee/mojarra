@@ -786,7 +786,7 @@ public abstract class ExternalContextWrapper extends ExternalContext implements 
      */
     @Override
     public void setResponseStatus(int statusCode) {
-        super.setResponseStatus(statusCode);    
+        getWrapped().setResponseStatus(statusCode);    
     }
 
     /**
