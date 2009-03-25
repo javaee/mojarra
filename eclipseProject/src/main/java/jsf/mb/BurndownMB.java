@@ -6,9 +6,9 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
-import javax.faces.model.ManagedBean;
+import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
-import javax.faces.model.ViewScoped;
+import javax.faces.bean.ViewScoped;
 
 import jsf.util.FacesUtil;
 import services.BurndownService;
