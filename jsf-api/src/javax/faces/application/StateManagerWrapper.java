@@ -227,4 +227,19 @@ public abstract class StateManagerWrapper extends StateManager implements FacesW
         return getWrapped().isSavingStateInClient(context);
 
     }
+
+
+    /**
+     * <p class="changed_added_2_0">The default behavior of this method
+     * is to call {@link StateManager#getViewState(javax.faces.context.FacesContext)} on the
+     * wrapped {@link StateManager} object.</p>
+     *
+     * @since 2.0
+     */
+    @Override
+    public String getViewState(FacesContext context) {
+
+        return getWrapped().getViewState(context);
+
+    }
 }

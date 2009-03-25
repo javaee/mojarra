@@ -405,5 +405,61 @@ public abstract class FacesContextWrapper extends FacesContext implements FacesW
     public void setCurrentPhaseId(PhaseId currentPhaseId) {
         getWrapped().setCurrentPhaseId(currentPhaseId);
     }
-    
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.FacesContext#getValidationFailed()}
+     * on the wrapped {@link FacesContext} object.</p>
+     *
+     * @see FacesContext#getValidationFailed()
+     */
+    @Override
+    public boolean getValidationFailed() {
+
+        return getWrapped().getValidationFailed();
+
+    }
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.FacesContext#validationFailed()}
+     * on the wrapped {@link FacesContext} object.</p>
+     *
+     * @see FacesContext#validationFailed()
+     */
+    @Override
+    public void validationFailed() {
+
+        getWrapped().validationFailed();
+
+    }
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link FacesContext#setProcessingEvents(boolean)}
+     * on the wrapped {@link FacesContext} object.</p>
+     *
+     * @see javax.faces.context.FacesContext#setProcessingEvents(boolean)
+     */
+    @Override
+    public void setProcessingEvents(boolean processingEvents) {
+        getWrapped().setProcessingEvents(processingEvents);
+    }
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.FacesContext#isProcessingEvents()}
+     * on the wrapped {@link FacesContext} object.</p>
+     *
+     * @see FacesContext#isProcessingEvents()
+     */
+    @Override
+    public boolean isProcessingEvents() {
+        return getWrapped().isProcessingEvents();
+    }
+
 }

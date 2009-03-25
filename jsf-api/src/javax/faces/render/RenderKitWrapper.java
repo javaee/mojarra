@@ -58,56 +58,140 @@ import javax.faces.context.ResponseWriter;
  */
 public abstract class RenderKitWrapper extends RenderKit implements FacesWrapper<RenderKit> {
 
+    /**
+     * @return the wrapped {@link RenderKit} instance
+     * @see javax.faces.FacesWrapper#getWrapped()
+     */
+    public abstract RenderKit getWrapped();
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link RenderKit#addRenderer(String, String, Renderer)}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see RenderKit#addRenderer(String, String, Renderer)
+     */
     @Override
     public void addRenderer(String family, String rendererType, Renderer renderer) {
         getWrapped().addRenderer(family, rendererType, renderer);
     }
 
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link RenderKit#createResponseStream(java.io.OutputStream)}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see RenderKit#createResponseStream(java.io.OutputStream)  
+     */
     @Override
     public ResponseStream createResponseStream(OutputStream out) {
         return getWrapped().createResponseStream(out);
     }
 
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link RenderKit#createResponseWriter(java.io.Writer, String, String)}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see RenderKit#createResponseWriter(java.io.Writer, String, String)
+     */
     @Override
     public ResponseWriter createResponseWriter(Writer writer, String contentTypeList, String characterEncoding) {
         return getWrapped().createResponseWriter(writer, contentTypeList, characterEncoding);
     }
 
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link RenderKit#getRenderer(String, String)}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see RenderKit#getRenderer(String, String)
+     */
     @Override
     public Renderer getRenderer(String family, String rendererType) {
         return getWrapped().getRenderer(family, rendererType);
     }
 
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.render.RenderKit#getResponseStateManager()}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see javax.faces.render.RenderKit#getResponseStateManager()
+     */
     @Override
     public ResponseStateManager getResponseStateManager() {
         return getWrapped().getResponseStateManager();
     }
 
-    public abstract RenderKit getWrapped();
 
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.render.RenderKit#getComponentFamilies()}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see javax.faces.render.RenderKit#getComponentFamilies()
+     */
     @Override
     public Iterator<String> getComponentFamilies() {
         return getWrapped().getComponentFamilies();
     }
 
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link RenderKit#getRendererTypes(String)}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see RenderKit#getRendererTypes(String)
+     */
     @Override
     public Iterator<String> getRendererTypes(String componentFamily) {
         return getWrapped().getRendererTypes(componentFamily);
     }
 
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link RenderKit#addClientBehaviorRenderer(String, ClientBehaviorRenderer)}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see RenderKit#addClientBehaviorRenderer(String, ClientBehaviorRenderer)
+     */
     @Override
     public void addClientBehaviorRenderer(String type, ClientBehaviorRenderer renderer) {
-    	getWrapped().addClientBehaviorRenderer(type, renderer);
+        getWrapped().addClientBehaviorRenderer(type, renderer);
     }
     
 
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link RenderKit#getClientBehaviorRenderer(String)}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see RenderKit#getClientBehaviorRenderer(String)
+     */
     @Override
     public ClientBehaviorRenderer getClientBehaviorRenderer(String type) {
-    	return getWrapped().getClientBehaviorRenderer(type);
+        return getWrapped().getClientBehaviorRenderer(type);
     }
-    
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.render.RenderKit#getClientBehaviorRendererTypes()}
+     * on the wrapped {@link RenderKit} object.</p>
+     *
+     * @see javax.faces.render.RenderKit#getClientBehaviorRendererTypes()
+     */
     @Override
     public Iterator<String> getClientBehaviorRendererTypes() {
-    	return getWrapped().getClientBehaviorRendererTypes();
+        return getWrapped().getClientBehaviorRendererTypes();
     }
+
 }

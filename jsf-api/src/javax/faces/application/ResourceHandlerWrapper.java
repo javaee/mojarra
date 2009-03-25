@@ -131,4 +131,29 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler implements 
         return getWrapped().isResourceRequest(context);
 
     }
+
+
+    /**
+     * <p class="changed_added_2_0">The default behavior of this method
+     * is to call {@link ResourceHandler#libraryExists(String)} on the
+     * wrapped {@link ResourceHandler} object.</p>
+     */
+    public boolean libraryExists(String libraryName) {
+
+        return getWrapped().libraryExists(libraryName);
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">The default behavior of this method
+     * is to call {@link ResourceHandler#getRendererTypeForResourceName(String)} on the
+     * wrapped {@link ResourceHandler} object.</p>
+     */
+    public String getRendererTypeForResourceName(String resourceName) {
+
+        return getWrapped().getRendererTypeForResourceName(resourceName);
+
+    }
+    
 }
