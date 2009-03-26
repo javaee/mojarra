@@ -188,6 +188,12 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * inspect <em>valueExpression</em> and derive values for
      * <em>valueBaseClass</em> and <em>valueProperty</em>.</p>
 
+     * <p>If no <code>ValueReference</code> can be obtained, take no
+     * action and return.</p>
+
+     * <p>If <code>ValueReference.getBase()</code> return
+     * <code>null</code>, take no action and return.</p>
+
      * <p>Obtain the {@link ValidatorContext} from the {@link
      * ValidatorFactory}.</p>
 
@@ -200,6 +206,11 @@ public class BeanValidator implements Validator, PartialStateHolder {
 
      * <p>Obtain the {@link javax.validation.Validator} instance from
      * the <code>validatorContext</code>.</p>
+
+     * <p>Obtain a <code>javax.validation.BeanDescriptor</code> from the
+     * <code>javax.validation.Validator</code>.  If
+     * <code>hasConstraints()</code> on the <code>BeanDescriptor</code>
+     * returns false, take no action and return.  Otherwise proceed.</p>
 
      * <p>Call {@link javax.validation.Validator#validateValue}, passing
      * <em>valueBaseClass</em>, <em>valueProperty</em>, the
