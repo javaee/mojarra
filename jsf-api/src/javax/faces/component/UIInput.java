@@ -639,8 +639,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     @Override
     public void markInitialState() {
 
-        super.markInitialState();
         addDefaultValidators(FacesContext.getCurrentInstance());
+        super.markInitialState();
         Validator[] validators = getValidators();
         if (validators != null) {
             for (Validator v : validators) {
@@ -656,12 +656,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     @Override
     public void clearInitialState() {
 
-        super.clearInitialState();
-        Validator[] validators = getValidators();
-        if (validators != null) {
-            for (Validator v : validators) {
-                if (v instanceof PartialStateHolder) {
-                    ((PartialStateHolder) v).clearInitialState();
+        if (initialStateMarked()) {
+            super.clearInitialState();
+            Validator[] validators = getValidators();
+            if (validators != null) {
+                for (Validator v : validators) {
+                    if (v instanceof PartialStateHolder) {
+                        ((PartialStateHolder) v).clearInitialState();
+                    }
                 }
             }
         }

@@ -128,7 +128,7 @@ class ComponentStateHelper implements StateHelper {
     public Object put(Serializable key, String mapKey, Object value) {
 
         Object ret = null;
-        if (component.initialStateMarked() || value instanceof PartialStateHolder) {
+        if (component.initialStateMarked()) {
             Map<String,Object> dMap = (Map<String,Object>) deltaMap.get(key);
             if (dMap == null) {
                 dMap = new HashMap<String,Object>(5);
@@ -188,7 +188,7 @@ class ComponentStateHelper implements StateHelper {
 
     public void add(Serializable key, Object value) {
 
-        if (component.initialStateMarked() || value instanceof PartialStateHolder) {
+        if (component.initialStateMarked()) {
             List<Object> deltaList = (List<Object>) deltaMap.get(key);
             if (deltaList == null) {
                 deltaList = new ArrayList<Object>(4);
@@ -387,4 +387,6 @@ class ComponentStateHelper implements StateHelper {
     public void setTransient(boolean newTransientValue) {
         isTransient = newTransientValue;
     }
+
+
 }

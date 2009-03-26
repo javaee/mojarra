@@ -195,11 +195,13 @@ public class UIOutput extends UIComponentBase
 
     @Override
     public void clearInitialState() {
-        
-        super.clearInitialState();
-        Converter c = getConverter();
-        if (c != null && c instanceof PartialStateHolder) {
-            ((PartialStateHolder) c).clearInitialState();
+
+        if (initialStateMarked()) {
+            super.clearInitialState();
+            Converter c = getConverter();
+            if (c != null && c instanceof PartialStateHolder) {
+                ((PartialStateHolder) c).clearInitialState();
+            }
         }
 
     }
