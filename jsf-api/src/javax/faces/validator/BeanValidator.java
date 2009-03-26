@@ -107,10 +107,6 @@ public class BeanValidator implements Validator, PartialStateHolder {
      */
     public static final String EMPTY_VALIDATION_GROUPS_PATTERN = "^[\\W" + VALIDATION_GROUPS_DELIMITER + "]*$";
     
-    public BeanValidator() {
-        LOGGER.log(Level.INFO, "Validator for id " + VALIDATOR_ID + " instantiated.");
-        
-    }
 
     /**
      * <p class="changed_added_2_0">A comma-separated list of validation
