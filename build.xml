@@ -138,6 +138,7 @@
                                   **/build.properties/**,
                                   **/CVS/**,
                                   **/build/javadocs/**,
+                                  **/build/managed-bean-javadocs/**,
                                   **/build/classes/**,
                                   **/build/lib/**,
                                   **/build/generate/facesdoc/**,
@@ -209,6 +210,7 @@
 
    <target name="deploy.spec.locally" if="spec-eg-dir-available">
 
+     <delete dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot" />
      <mkdir dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot" />
      <unzip src="${dist.dir}/jsf-spec-${spec.version}-${build.number}.zip"
             dest="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot"

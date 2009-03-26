@@ -304,7 +304,7 @@
         <delete dir="${dist.home}/javadocs"/>
     </target>
 
-    <target name="api.javadocs" unless="build.wspack">
+    <target name="api.javadocs">
 
         <echo>Build the API Javadocs</echo>
         <ant dir="${api.dir}"
@@ -314,8 +314,12 @@
         <copy todir="${dist.home}/javadocs" filtering="true">
             <fileset dir="${api.dir}/build/javadocs"/>
         </copy>
+        <copy todir="${dist.home}/managed-bean-javadocs" filtering="true">
+            <fileset dir="${api.dir}/build/managed-bean-javadocs"/>
+        </copy>
         <zip zipfile="${dist.home}/docs/javadocs-${impl.version}.zip">
            <fileset dir="${dist.home}" includes="javadocs/**"/>
+           <fileset dir="${dist.home}" includes="managed-bean-javadocs/**"/>
         </zip>
 
     </target>
