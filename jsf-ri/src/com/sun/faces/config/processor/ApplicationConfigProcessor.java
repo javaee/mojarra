@@ -372,10 +372,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             try {
                 Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
                 appMap.put(beansValidationAvailabilityCacheKey, result = true);
-            } catch (Throwable t) {
-                do {
-                    LOGGER.log(Level.SEVERE, "Unable to load Bean Validation", t);
-                } while (null != (t = t.getCause()));
+            } catch (ClassNotFoundException cnfe) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Unable to load Beans Validation");
+                }
                 appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
             }
         }
