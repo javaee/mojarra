@@ -36,13 +36,16 @@
 
 package javax.faces.validator;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -269,30 +272,80 @@ public class BeanValidator implements Validator, PartialStateHolder {
         
         ValueReference valueReference = expressionAnalyzer.getReference(context.getELContext());
 
-        Set<ConstraintViolation> violations = 
-            beanValidator.validateValue(valueReference.getBaseClass(), 
-                                        valueReference.getProperty(), 
-                                        value, validationGroupsArray);
-
-        if (!violations.isEmpty()) {
-            ValidatorException toThrow = null;
-            if (1 == violations.size()) {
-                ConstraintViolation violation = violations.iterator().next();
-                toThrow = new ValidatorException(getMessage(context, component, 
-                 violation.getMessage(), value));
-            } else {
-                Set<FacesMessage> messages = new HashSet<FacesMessage>(violations.size());
-                Iterator<ConstraintViolation> iter = violations.iterator();
-                while (iter.hasNext()) {
-                    messages.add(getMessage(context, component, 
-                            iter.next().getMessage(), value));
-                }
-                toThrow = new ValidatorException(messages);
+        if (isResolvable(valueReference, valueExpression)) {
+            Set<ConstraintViolation> violations = Collections.EMPTY_SET;
+            try {
+                violations =
+                        beanValidator.validateValue(valueReference.getBaseClass(),
+                        valueReference.getProperty(),
+                        value, validationGroupsArray);
+            } catch (IllegalArgumentException iae) {
+                String failureMessage = "Unable to validate expression " +
+                        valueExpression.getExpressionString() +
+               " using Bean Validation.  Unable to get value of expression. "+
+                        " Message from Bean Validation: " + iae.getMessage();
+                LOGGER.fine(failureMessage);
             }
-            throw toThrow;
-        }
-    }
 
+            if (!violations.isEmpty()) {
+                ValidatorException toThrow = null;
+                if (1 == violations.size()) {
+                    ConstraintViolation violation = violations.iterator().next();
+                    toThrow = new ValidatorException(getMessage(context, component,
+                            violation.getMessage(), value));
+                } else {
+                    Set<FacesMessage> messages = new HashSet<FacesMessage>(violations.size());
+                    Iterator<ConstraintViolation> iter = violations.iterator();
+                    while (iter.hasNext()) {
+                        messages.add(getMessage(context, component,
+                                iter.next().getMessage(), value));
+                    }
+                    toThrow = new ValidatorException(messages);
+                }
+                throw toThrow;
+            }
+        } else {
+        }
+        
+    }
+    
+    private boolean isResolvable(ValueReference ref, 
+            ValueExpression valueExpression) {
+        Boolean result = null;
+        String failureMessage = null;
+        
+        if (null == valueExpression) {
+            failureMessage = "Unable to validate expression using Bean "+ 
+                    "Validation.  Expression must not be null.";
+            result = false;
+        } else if (null == ref) {
+            failureMessage = "Unable to validate expression " + 
+                    valueExpression.getExpressionString() +
+                    " using Bean Validation.  Unable to get value of expression.";
+            result = false;
+        } else {
+            Class baseClass = ref.getBaseClass();
+
+            // case 1, base classes of Map, List, or Array are not resolvable
+            if (null != baseClass) {
+                if (Map.class.isAssignableFrom(baseClass) ||
+                        Collection.class.isAssignableFrom(baseClass) ||
+                        Array.class.isAssignableFrom(baseClass)) {
+                    failureMessage = "Unable to validate expression " + valueExpression.getExpressionString() +
+                            " using Bean Validation.  Expression evaluates to a Map, List or array.";
+                    result = false;
+                }
+            }
+        }
+
+        result = ((null != result) ? result : true);
+        if (!result) {
+            LOGGER.fine(failureMessage);
+        }
+
+        return result;
+    }
+    
     /**
      * If no validation groups are defined on this validator, search
      * upwards in the component tree to find a branch that defines

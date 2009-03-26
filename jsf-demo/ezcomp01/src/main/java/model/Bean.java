@@ -59,6 +59,18 @@ public class Bean implements ActionListener, ValueChangeListener {
         return requestKey;
     }
 
+    @NotEmpty
+    private String fieldValue;
+
+    public void setFieldValue(String message) {
+        this.fieldValue = message;
+    }
+    
+    public String getFieldValue() {
+        return fieldValue;
+    }
+
+
     private String actionListenerKey = "actionListenerCalled";
 
     public void setActionListenerKey(String message) {
