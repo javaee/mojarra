@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectTarget;
+import javax.faces.view.BehaviorHolderAttachedObjectTarget;
 
 /**
  * <p class="changed_added_2_0"></p>

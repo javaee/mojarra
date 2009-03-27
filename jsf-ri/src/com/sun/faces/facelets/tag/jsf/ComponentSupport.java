@@ -64,9 +64,9 @@ import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagAttributeException;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagAttributeException;
 
 /**
  * 

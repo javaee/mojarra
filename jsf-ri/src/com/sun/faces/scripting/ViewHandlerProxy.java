@@ -42,8 +42,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.FacesException;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
-import javax.faces.webapp.pdl.AttachedObjectHandler;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.AttachedObjectHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;

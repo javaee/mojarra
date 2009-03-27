@@ -73,8 +73,8 @@ import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
-import javax.faces.webapp.pdl.ViewMetadata;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewMetadata;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as

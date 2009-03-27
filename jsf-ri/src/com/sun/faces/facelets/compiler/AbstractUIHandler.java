@@ -53,9 +53,9 @@ package com.sun.faces.facelets.compiler;
 
 import javax.faces.component.UIComponent;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import javax.faces.webapp.pdl.facelets.TextHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.view.facelets.TextHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 public abstract class AbstractUIHandler implements FaceletHandler, TextHandler {

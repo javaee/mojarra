@@ -1,0 +1,71 @@
+<html>
+<head>
+<title>Package Description for "javax.faces.view.facelets"</title>
+</head>
+<body bgcolor="white">
+
+<p class="changed_added_2_0">This package contains public classes for
+the Java code API of Facelets.  The vast majority of Facelets users have
+no need to access the Java API and can get all their work done using the
+tag-level API.  These classes are provided for users that have a need
+for a Java API that allows participation in the execution of a Facelets
+View, which happens as a result of the runtime calling <a
+href="../PageDeclarationLanguage.html#buildView(javax.faces.context.FacesContext,
+javax.faces.component.UIViewRoot)"><code>PageDeclarationLanguage.buildView()</code></a>.
+The most common usecase for participating in the execution of a Facelets
+View is providing a custom tag handler.
+    </p>
+
+<h2>Sequence of events in the compilation and execution of a Facelets
+PDL Page</h2>
+
+<h3>Startup Time</h3>
+
+During the initialization of the impl's Application instance, an
+instance of SAXCompiler is created and the standard tag libraries are
+added to it.  The instance is kept as an ivar of the Application.
+
+An instance of DefaultResourceResolver() is created and stuck into a new
+instance of DefaultFaceletFactory(), which is kept as an ivar of
+Application.  DefaultFaceletFactory uses the resolver to get the baseUrl
+for all the pages in the app.
+
+Any taglibs that are declared in the faces-config are added here as
+well.
+
+<h3>Compilation</h3>
+
+<code><pre>
+
+PENDING(edburns): complete this.
+
+RenderResponse.execute calls PDL.buildView().
+
+This get the DefaultFaceletFactory from the application and calls
+getFacelet() on it, passing the viewId.
+
+This checks a cache of compiled views and determines if one needs to be
+compiled.  In this case, a compiled view is not available, so the
+compiler is invoked on the physical file corresponding to the viewId.
+
+The SAXCompiler (extends Compiler) has a root CompilationManager, and a
+SAX Handler called CompilationHandler (extends DefaultHandler).
+
+A CompilationManager is created for each physical file in the tree of
+physical files that can make up a Facelets PDL view.  The
+CompilationManager keeps a stack of CompilationUnit instances.  This
+handler is the bridge between the SAX XML engine and the Facelet
+implementation.
+
+The CompilationManager keeps a stack of Tags.  Each tag has a location,
+localname, and a collection of attributes.  Each attribute has a
+location, a name, and a value.
+
+The compiler builds a tree of Tag instances.  Each Tag has an XML
+namespace in which it belongs, the localName by which it is used in this
+page, a qualified Name, and a collection of attributes.
+
+</pre></code>
+
+</body>
+</html>

@@ -51,8 +51,8 @@
 
 package com.sun.faces.facelets.impl;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletContextImplBase;

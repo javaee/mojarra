@@ -43,17 +43,17 @@ import com.sun.faces.application.ApplicationAssociate;
 import java.util.Collection;
 
 import java.io.IOException;
-import javax.faces.webapp.pdl.ViewMetadata;
+import javax.faces.view.ViewMetadata;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIViewParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextWrapper;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.FacesException;
 
 
 /**
- * @see javax.faces.webapp.pdl.ViewMetadata
+ * @see javax.faces.view.ViewMetadata
  */
 public class ViewMetadataImpl extends ViewMetadata {
 
@@ -77,7 +77,7 @@ public class ViewMetadataImpl extends ViewMetadata {
 
 
     /**
-     * @see javax.faces.webapp.pdl.ViewMetadata#getViewId()
+     * @see javax.faces.view.ViewMetadata#getViewId()
      */
     @Override
     public String getViewId() {
@@ -87,7 +87,7 @@ public class ViewMetadataImpl extends ViewMetadata {
     }
 
     /**
-     * @see javax.faces.webapp.pdl.ViewMetadata#createMetadataView(javax.faces.context.FacesContext)
+     * @see javax.faces.view.ViewMetadata#createMetadataView(javax.faces.context.FacesContext)
      */
     @Override
     public UIViewRoot createMetadataView(FacesContext context) {

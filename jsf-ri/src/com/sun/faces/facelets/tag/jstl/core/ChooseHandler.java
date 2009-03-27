@@ -52,8 +52,8 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import javax.faces.webapp.pdl.facelets.TagConfig;
-import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,8 +65,8 @@ import javax.faces.FacesException;
 
 import javax.faces.component.UIComponent;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
 
 /**
  * @author Jacob Hookom

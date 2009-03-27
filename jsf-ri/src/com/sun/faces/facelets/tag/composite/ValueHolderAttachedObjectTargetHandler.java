@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.tag.composite;
 
-import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.view.facelets.TagConfig;
 
 public class ValueHolderAttachedObjectTargetHandler extends AttachedObjectTargetHandler {
     

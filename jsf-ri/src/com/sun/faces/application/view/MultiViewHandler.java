@@ -69,8 +69,8 @@ import javax.faces.event.MethodExpressionActionListener;
 import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.MethodExpressionValidator;
-import javax.faces.webapp.pdl.*;
-import javax.faces.webapp.pdl.facelets.BehaviorHandler;
+import javax.faces.view.*;
+import javax.faces.view.facelets.BehaviorHandler;
 
 /**
  * This {@link ViewHandler} implementation handles both JSP-based and

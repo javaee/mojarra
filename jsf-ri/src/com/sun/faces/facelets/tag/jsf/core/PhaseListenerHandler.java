@@ -66,15 +66,15 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagAttributeException;
-import javax.faces.webapp.pdl.facelets.TagConfig;
-import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagAttributeException;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.ReflectionUtil;
-import javax.faces.webapp.pdl.facelets.ComponentHandler;
+import javax.faces.view.facelets.ComponentHandler;
 
 public class PhaseListenerHandler extends TagHandlerImpl {
 

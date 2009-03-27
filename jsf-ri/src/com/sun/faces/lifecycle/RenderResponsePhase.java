@@ -44,7 +44,7 @@ package com.sun.faces.lifecycle;
 
 
 import javax.faces.FacesException;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;

@@ -53,15 +53,15 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.webapp.pdl.ActionSource2AttachedObjectHandler;
-import javax.faces.webapp.pdl.ActionSource2AttachedObjectTarget;
-import javax.faces.webapp.pdl.AttachedObjectHandler;
-import javax.faces.webapp.pdl.AttachedObjectTarget;
-import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
-import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectTarget;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
-import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
-import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
+import javax.faces.view.ActionSource2AttachedObjectHandler;
+import javax.faces.view.ActionSource2AttachedObjectTarget;
+import javax.faces.view.AttachedObjectHandler;
+import javax.faces.view.AttachedObjectTarget;
+import javax.faces.view.EditableValueHolderAttachedObjectHandler;
+import javax.faces.view.EditableValueHolderAttachedObjectTarget;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ValueHolderAttachedObjectHandler;
+import javax.faces.view.ValueHolderAttachedObjectTarget;
 
 
 
@@ -465,7 +465,7 @@ public abstract class ViewHandler {
      * <div class="changed_added_2_0">
      * 
      * <p>The default implementation must use {@link
-     * javax.faces.webapp.pdl.PageDeclarationLanguageFactory#getPageDeclarationLanguage}
+     * javax.faces.view.PageDeclarationLanguageFactory#getPageDeclarationLanguage}
      * to obtain the appropriate <code>ViewDeclarationLanguage</code>
      * implementation for the argument <code>viewId</code>.  Any
      * exceptions thrown as a result of invoking that method must not be

@@ -58,12 +58,12 @@ import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.MethodExpressionValidator;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyMethodBinding;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.Metadata;
-import javax.faces.webapp.pdl.facelets.MetaRule;
-import javax.faces.webapp.pdl.facelets.MetadataTarget;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.Metadata;
+import javax.faces.view.facelets.MetaRule;
+import javax.faces.view.facelets.MetadataTarget;
 
 /**
  * 

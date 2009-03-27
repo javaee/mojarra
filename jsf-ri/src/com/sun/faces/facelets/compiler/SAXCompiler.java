@@ -71,12 +71,12 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import javax.faces.webapp.pdl.facelets.Location;
-import javax.faces.webapp.pdl.facelets.Tag;
-import javax.faces.webapp.pdl.facelets.TagAttributes;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.view.facelets.Location;
+import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.TagAttributes;
+import javax.faces.view.facelets.TagAttribute;
 
 import com.sun.faces.facelets.tag.TagAttributeImpl;
 import com.sun.faces.facelets.tag.TagAttributesImpl;

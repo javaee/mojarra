@@ -58,10 +58,10 @@ import java.util.Map;
 
 import javax.faces.FacesException;
 
-import javax.faces.webapp.pdl.facelets.TagConfig;
-import javax.faces.webapp.pdl.facelets.TagHandler;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagHandler;
 import com.sun.faces.facelets.tag.TagLibrary;
-import javax.faces.webapp.pdl.facelets.Tag;
+import javax.faces.view.facelets.Tag;
 
 /**
  * Library for JSTL Functions

@@ -58,11 +58,11 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagConfig;
-import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 
 /**
  * Register a named facet on the UIComponent associated with the closest parent
@@ -74,7 +74,7 @@ import javax.faces.webapp.pdl.facelets.TagException;
  * @version $Id$
  */
 public final class FacetHandler extends TagHandlerImpl
-    implements javax.faces.webapp.pdl.facelets.FacetHandler {
+    implements javax.faces.view.facelets.FacetHandler {
 
     public static final String KEY = "facelets.FACET_NAME";
 
@@ -104,7 +104,7 @@ public final class FacetHandler extends TagHandlerImpl
         }
     }
 
-    // javax.faces.webapp.pdl.facelets.tag.FacetHandler.getFacetName()
+    // javax.faces.view.facelets.tag.FacetHandler.getFacetName()
     // implementation
     public String getFacetName(FaceletContext ctxt) {
         return this.name.getValue(ctxt);

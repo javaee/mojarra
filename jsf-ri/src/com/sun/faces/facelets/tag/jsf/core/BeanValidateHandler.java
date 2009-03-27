@@ -35,12 +35,12 @@
  */
 package com.sun.faces.facelets.tag.jsf.core;
 
-import javax.faces.webapp.pdl.facelets.ValidatorHandler;
+import javax.faces.view.facelets.ValidatorHandler;
 import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerDelegateImpl;
-import javax.faces.webapp.pdl.facelets.ValidatorConfig;
+import javax.faces.view.facelets.ValidatorConfig;
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagAttribute;
 import javax.faces.validator.BeanValidator;
 
 import com.sun.faces.facelets.tag.jsf.ValidatorTagHandlerDelegateImpl.SetValidatorDefaultsOnParentDelegate;

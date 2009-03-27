@@ -50,8 +50,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.io.IOException;
 import javax.faces.FacesWrapper;
-import javax.faces.webapp.pdl.AttachedObjectHandler;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
+import javax.faces.view.AttachedObjectHandler;
+import javax.faces.view.ViewDeclarationLanguage;
 
 /**
  * <p>Provides a simple implementation of {@link ViewHandler} that can

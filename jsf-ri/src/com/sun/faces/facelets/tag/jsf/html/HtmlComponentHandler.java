@@ -51,9 +51,9 @@
 
 package com.sun.faces.facelets.tag.jsf.html;
 
-import javax.faces.webapp.pdl.facelets.MetaRuleset;
-import javax.faces.webapp.pdl.facelets.ComponentConfig;
-import javax.faces.webapp.pdl.facelets.ComponentHandler;
+import javax.faces.view.facelets.MetaRuleset;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
 
 /**
  * @author Jacob Hookom

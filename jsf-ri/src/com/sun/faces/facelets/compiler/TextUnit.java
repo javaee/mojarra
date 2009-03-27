@@ -57,12 +57,12 @@ import java.util.Stack;
 
 import javax.el.ELException;
 
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
+import javax.faces.view.facelets.FaceletHandler;
 import com.sun.faces.facelets.el.ELText;
-import javax.faces.webapp.pdl.facelets.CompositeFaceletHandler;
-import javax.faces.webapp.pdl.facelets.Tag;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.view.facelets.CompositeFaceletHandler;
+import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagException;
 
 /**
  * 

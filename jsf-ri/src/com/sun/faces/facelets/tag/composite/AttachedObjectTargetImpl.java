@@ -57,7 +57,7 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
-import javax.faces.webapp.pdl.AttachedObjectTarget;
+import javax.faces.view.AttachedObjectTarget;
 
 import com.sun.faces.util.Util;
 

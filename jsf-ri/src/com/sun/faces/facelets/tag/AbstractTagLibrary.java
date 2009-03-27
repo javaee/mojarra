@@ -51,9 +51,9 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.TagHandler;
-import javax.faces.webapp.pdl.facelets.TagConfig;
-import javax.faces.webapp.pdl.facelets.Tag;
+import javax.faces.view.facelets.TagHandler;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.Tag;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -64,17 +64,17 @@ import java.util.Map;
 import javax.el.ELException;
 import javax.faces.FacesException;
 
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.FaceletHandler;
 
-import javax.faces.webapp.pdl.facelets.BehaviorConfig;
-import javax.faces.webapp.pdl.facelets.BehaviorHandler;
-import javax.faces.webapp.pdl.facelets.ComponentConfig;
-import javax.faces.webapp.pdl.facelets.ConverterHandler;
-import javax.faces.webapp.pdl.facelets.ConverterConfig;
-import javax.faces.webapp.pdl.facelets.ValidatorHandler;
-import javax.faces.webapp.pdl.facelets.ValidatorConfig;
-import javax.faces.webapp.pdl.facelets.ComponentHandler;
+import javax.faces.view.facelets.BehaviorConfig;
+import javax.faces.view.facelets.BehaviorHandler;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ConverterHandler;
+import javax.faces.view.facelets.ConverterConfig;
+import javax.faces.view.facelets.ValidatorHandler;
+import javax.faces.view.facelets.ValidatorConfig;
+import javax.faces.view.facelets.ComponentHandler;
 
 /**
  * Base class for defining TagLibraries in Java
@@ -156,7 +156,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		/**
 		 * <p class="changed_added_2_0"></p>
 		 * @return
-		 * @see javax.faces.webapp.pdl.facelets.TagConfig#getNextHandler()
+		 * @see javax.faces.view.facelets.TagConfig#getNextHandler()
 		 */
 		public FaceletHandler getNextHandler() {
 			return parent.getNextHandler();
@@ -164,7 +164,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		/**
 		 * <p class="changed_added_2_0"></p>
 		 * @return
-		 * @see javax.faces.webapp.pdl.facelets.TagConfig#getTag()
+		 * @see javax.faces.view.facelets.TagConfig#getTag()
 		 */
 		public Tag getTag() {
 			return parent.getTag();
@@ -172,7 +172,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 		/**
 		 * <p class="changed_added_2_0"></p>
 		 * @return
-		 * @see javax.faces.webapp.pdl.facelets.TagConfig#getTagId()
+		 * @see javax.faces.view.facelets.TagConfig#getTagId()
 		 */
 		public String getTagId() {
 			return parent.getTagId();

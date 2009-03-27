@@ -52,11 +52,11 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagAttributeException;
-import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagAttributeException;
+import javax.faces.view.facelets.TagConfig;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;

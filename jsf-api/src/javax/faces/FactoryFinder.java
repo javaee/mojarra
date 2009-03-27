@@ -208,17 +208,17 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
-     * {@link javax.faces.webapp.pdl.ViewDeclarationLanguage} class name.</p>
+     * {@link javax.faces.view.ViewDeclarationLanguage} class name.</p>
      */
     public final static String VIEW_DECLARATION_LANGUAGE_FACTORY =
-         "javax.faces.webapp.pdl.ViewDeclarationLanguageFactory";
+         "javax.faces.view.ViewDeclarationLanguageFactory";
 
     /**
      * <p>The property name for the
-     * {@link javax.faces.webapp.pdl.facelets.TagHandlerDelegate} class name.</p>
+     * {@link javax.faces.view.facelets.TagHandlerDelegate} class name.</p>
      */
     public final static String TAG_HANDLER_DELEGATE_FACTORY =
-         "javax.faces.webapp.pdl.facelets.TagHandlerDelegateFactory";
+         "javax.faces.view.facelets.TagHandlerDelegateFactory";
 
     // ------------------------------------------------------- Static Variables
 
@@ -636,9 +636,9 @@ public final class FactoryFinder {
             factoryClasses.put(RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
             factoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY,
-                 javax.faces.webapp.pdl.ViewDeclarationLanguageFactory.class);
+                 javax.faces.view.ViewDeclarationLanguageFactory.class);
             factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
-                 javax.faces.webapp.pdl.facelets.TagHandlerDelegateFactory.class);
+                 javax.faces.view.facelets.TagHandlerDelegateFactory.class);
         }
         return factoryClasses.get(factoryClassName);
 

@@ -71,15 +71,15 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.AjaxBehaviorListener;
-import javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.view.BehaviorHolderAttachedObjectHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
 
-import javax.faces.webapp.pdl.facelets.CompositeFaceletHandler;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagConfig;
-import javax.faces.webapp.pdl.facelets.TagException;
-import javax.faces.webapp.pdl.facelets.TagHandler;
+import javax.faces.view.facelets.CompositeFaceletHandler;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
+import javax.faces.view.facelets.TagHandler;
 import com.sun.faces.RIConstants;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
@@ -87,7 +87,7 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.AttachedBehaviors;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 
-import javax.faces.webapp.pdl.facelets.ComponentHandler;
+import javax.faces.view.facelets.ComponentHandler;
 
 
 /**
@@ -181,14 +181,14 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
     }
 
     /* (non-Javadoc)
-     * @see javax.faces.webapp.pdl.AttachedObjectHandler#getFor()
+     * @see javax.faces.view.AttachedObjectHandler#getFor()
      */
     public String getFor() {
         return null;
     }
     
     /* (non-Javadoc)
-     * @see javax.faces.webapp.pdl.BehaviorHolderAttachedObjectHandler#getEventName()
+     * @see javax.faces.view.BehaviorHolderAttachedObjectHandler#getEventName()
      */
     public String getEventName() {
         return (this.event != null) ? this.event.getValue() : null;

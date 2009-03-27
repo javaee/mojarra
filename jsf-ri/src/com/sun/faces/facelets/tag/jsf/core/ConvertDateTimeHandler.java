@@ -58,14 +58,14 @@ import javax.faces.FacesException;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.MetaRuleset;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagAttributeException;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.MetaRuleset;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagAttributeException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import javax.faces.webapp.pdl.facelets.ConverterHandler;
-import javax.faces.webapp.pdl.facelets.ConverterConfig;
+import javax.faces.view.facelets.ConverterHandler;
+import javax.faces.view.facelets.ConverterConfig;
 
 /**
  * Register a DateTimeConverter instance on the UIComponent associated with the

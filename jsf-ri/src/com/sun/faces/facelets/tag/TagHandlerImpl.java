@@ -39,10 +39,10 @@ package com.sun.faces.facelets.tag;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import javax.faces.webapp.pdl.facelets.CompositeFaceletHandler;
-import javax.faces.webapp.pdl.facelets.TagConfig;
-import javax.faces.webapp.pdl.facelets.TagHandler;
+import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.view.facelets.CompositeFaceletHandler;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagHandler;
 
 /**
  *

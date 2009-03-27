@@ -65,9 +65,9 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 
 import com.sun.faces.facelets.Facelet;
-import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.view.facelets.FaceletException;
 import com.sun.faces.facelets.FaceletFactory;
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
+import javax.faces.view.facelets.FaceletHandler;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;

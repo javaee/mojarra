@@ -63,7 +63,7 @@ import javax.el.MethodInfo;
 import javax.el.MethodNotFoundException;
 import javax.el.PropertyNotFoundException;
 
-import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.view.facelets.TagAttribute;
 
 /**
  * 

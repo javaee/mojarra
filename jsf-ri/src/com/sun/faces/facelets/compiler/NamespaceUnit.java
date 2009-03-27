@@ -54,7 +54,7 @@ package com.sun.faces.facelets.compiler;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
+import javax.faces.view.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.TagLibrary;
 
 /**

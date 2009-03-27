@@ -52,8 +52,8 @@
 package com.sun.faces.facelets.tag;
 
 import com.sun.faces.facelets.compiler.CompilationMessageHolder;
-import javax.faces.webapp.pdl.facelets.TagHandler;
-import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.view.facelets.TagHandler;
+import javax.faces.view.facelets.TagConfig;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagLibrary;
 import java.lang.reflect.Method;
 
@@ -67,7 +67,7 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
-import javax.faces.webapp.pdl.facelets.Tag;
+import javax.faces.view.facelets.Tag;
 
 /**
  * A TagLibrary that is composed of 1 or more TagLibrary children. Uses the

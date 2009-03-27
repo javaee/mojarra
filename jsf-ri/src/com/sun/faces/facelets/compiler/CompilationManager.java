@@ -57,12 +57,12 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import javax.faces.webapp.pdl.facelets.Tag;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagAttributeException;
+import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagAttributeException;
 import com.sun.faces.facelets.tag.TagDecorator;
-import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.view.facelets.TagException;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;

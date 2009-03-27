@@ -68,7 +68,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import javax.faces.render.ResponseStateManager;
-import javax.faces.webapp.pdl.StateManagementStrategy;
+import javax.faces.view.StateManagementStrategy;
 
 /**
  * <p>

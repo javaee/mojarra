@@ -58,11 +58,11 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagConfig;
-import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 
 /**
  * Sets the specified name and attribute on the parent UIComponent. If the
@@ -80,7 +80,7 @@ import javax.faces.webapp.pdl.facelets.TagException;
  * @version $Id$
  */
 public final class AttributeHandler extends TagHandlerImpl 
-    implements javax.faces.webapp.pdl.facelets.AttributeHandler {
+    implements javax.faces.view.facelets.AttributeHandler {
 
     private final TagAttribute name;
 
@@ -121,7 +121,7 @@ public final class AttributeHandler extends TagHandlerImpl
     }
 
 
-    // javax.faces.webapp.pdl.facelets.tag.AttributeHandler.getAttributeName()
+    // javax.faces.view.facelets.tag.AttributeHandler.getAttributeName()
     // implementation.
     public String getAttributeName(FaceletContext ctxt) {
         return this.name.getValue(ctxt);

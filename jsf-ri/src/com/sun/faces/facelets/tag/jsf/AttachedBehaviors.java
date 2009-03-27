@@ -45,9 +45,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.facelets.BehaviorHandler;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagHandler;
+import javax.faces.view.facelets.BehaviorHandler;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagHandler;
 
 
 /**
@@ -60,7 +60,7 @@ import javax.faces.webapp.pdl.facelets.TagHandler;
 public class AttachedBehaviors implements Serializable {
 	
 	private Map<String, TagHandler> behaviors = new HashMap<String, TagHandler>();
-	public static final String COMPOSITE_BEHAVIORS_KEY = "javax.faces.webapp.pdl.ClientBehaviors";
+	public static final String COMPOSITE_BEHAVIORS_KEY = "javax.faces.view.ClientBehaviors";
 	
 	public void add(String eventName, TagHandler owner){
 		behaviors.put(eventName, owner);

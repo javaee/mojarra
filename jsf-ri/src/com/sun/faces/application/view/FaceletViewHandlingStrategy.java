@@ -66,9 +66,9 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
-import javax.faces.webapp.pdl.StateManagementStrategy;
-import javax.faces.webapp.pdl.ViewMetadata;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.view.StateManagementStrategy;
+import javax.faces.view.ViewMetadata;
+import javax.faces.view.facelets.FaceletContext;
 import javax.servlet.http.HttpServletResponse;
 import java.beans.BeanInfo;
 import java.io.FileNotFoundException;
@@ -183,7 +183,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
     
     /**
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     * @see javax.faces.view.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
     public Resource getScriptComponentResource(FacesContext context,
             Resource componentResource) {
@@ -207,7 +207,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     /**
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     * @see javax.faces.view.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
     public void renderView(FacesContext ctx,
                            UIViewRoot viewToRender)
@@ -279,7 +279,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * If {@link UIDebug#debugRequest(javax.faces.context.FacesContext)}} is <code>true</code>,
      * simply return a new UIViewRoot(), otherwise, call the default logic.
      * </p>
-     * @see {@link javax.faces.webapp.pdl.PageDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}
+     * @see {@link javax.faces.view.PageDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}
      */
     @Override
     public UIViewRoot restoreView(FacesContext ctx,
@@ -296,7 +296,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     /**
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
+     * @see javax.faces.view.PageDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
      * @return
      */
     @Override

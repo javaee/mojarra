@@ -60,7 +60,7 @@ import javax.faces.component.UIViewRoot;
  * javax.faces.application.ViewHandler#createView}, and that the view is
  * fully populated with the children to be traversed during render.  The
  * listener implementation may call {@link
- * javax.faces.webapp.pdl.PageDeclarationLanguage#buildView} to populate
+ * javax.faces.view.PageDeclarationLanguage#buildView} to populate
  * the <code>UIViewRoot</code>.</p>
  *
  * </div>

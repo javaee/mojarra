@@ -64,8 +64,8 @@ import javax.faces.component.StateHolder;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.event.*;
-import javax.faces.webapp.pdl.StateManagementStrategy;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
+import javax.faces.view.StateManagementStrategy;
+import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.FacesException;
 
 /**

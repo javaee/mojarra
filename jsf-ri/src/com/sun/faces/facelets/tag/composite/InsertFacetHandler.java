@@ -51,12 +51,12 @@
 
 package com.sun.faces.facelets.tag.composite;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagAttribute;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.pdl.facelets.ComponentConfig;
-import javax.faces.webapp.pdl.facelets.ComponentHandler;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
 
 
 public class InsertFacetHandler extends ComponentHandler {

@@ -49,14 +49,14 @@ import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.webapp.pdl.AttachedObjectHandler;
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.BehaviorHandler;
-import javax.faces.webapp.pdl.facelets.MetaRuleset;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagException;
-import javax.faces.webapp.pdl.facelets.TagHandlerDelegate;
+import javax.faces.view.AttachedObjectHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.BehaviorHandler;
+import javax.faces.view.facelets.MetaRuleset;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagException;
+import javax.faces.view.facelets.TagHandlerDelegate;
 
 /**
  *

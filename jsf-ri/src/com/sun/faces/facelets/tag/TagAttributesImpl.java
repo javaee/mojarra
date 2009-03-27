@@ -56,14 +56,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagAttributes;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagAttributes;
 
 /**
  * A set of TagAttributesImpl, usually representing all attributes on a Tag.
  * 
  * @see com.sun.faces.facelets.tag.Tag
- * @see javax.faces.webapp.pdl.facelets.TagAttribute
+ * @see javax.faces.view.facelets.TagAttribute
  * @author Jacob Hookom
  * @version $Id$
  */

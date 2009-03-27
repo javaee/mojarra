@@ -49,10 +49,10 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.PreRenderComponentEvent;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.ValidatorConfig;
-import javax.faces.webapp.pdl.facelets.ValidatorHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.ValidatorConfig;
+import javax.faces.view.facelets.ValidatorHandler;
 
 
 /**

@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.webapp.pdl.ViewMetadata;
+import javax.faces.view.ViewMetadata;
 import javax.faces.application.Resource;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -59,7 +59,7 @@ import com.sun.faces.application.ViewHandlerResponseWrapper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.RequestStateManager;
-import javax.faces.webapp.pdl.StateManagementStrategy;
+import javax.faces.view.StateManagementStrategy;
 
 /**
  * This {@link ViewHandlingStrategy} handles JSP-based views.
@@ -77,7 +77,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * Not supported in JSP-based views.
      * </p>
      *
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getComponentMetadata(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     * @see javax.faces.view.PageDeclarationLanguage#getComponentMetadata(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, Resource componentResource) {
@@ -89,7 +89,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * Not supported in JSP-based views.
      * </p>
      *
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)
+     * @see javax.faces.view.PageDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)
      */
     @Override
     public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
@@ -102,7 +102,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * Not supported in JSP-based views.
      * </p>
      *
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     * @see javax.faces.view.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
     @Override
     public Resource getScriptComponentResource(FacesContext context, Resource componentResource) {
@@ -111,7 +111,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     /**
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#buildView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     * @see javax.faces.view.PageDeclarationLanguage#buildView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      * @param context
      * @param view
      * @throws IOException
@@ -139,7 +139,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
     /**
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     * @see javax.faces.view.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
     public void renderView(FacesContext context,
                            UIViewRoot view)

@@ -122,7 +122,7 @@ import java.util.LinkedHashMap;
 
 import javax.el.ValueExpression;
 import javax.faces.application.Resource;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguage;
 
 
 /**

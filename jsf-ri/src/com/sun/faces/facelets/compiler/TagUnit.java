@@ -51,9 +51,9 @@
 
 package com.sun.faces.facelets.compiler;
 
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import javax.faces.webapp.pdl.facelets.Tag;
-import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.TagConfig;
 import com.sun.faces.facelets.tag.TagLibrary;
 
 /**

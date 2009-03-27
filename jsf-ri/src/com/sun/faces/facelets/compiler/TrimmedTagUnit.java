@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.compiler;
 
-import javax.faces.webapp.pdl.facelets.Tag;
+import javax.faces.view.facelets.Tag;
 import com.sun.faces.facelets.tag.TagLibrary;
 
 class TrimmedTagUnit extends TagUnit {

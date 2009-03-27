@@ -46,7 +46,7 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguage;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;

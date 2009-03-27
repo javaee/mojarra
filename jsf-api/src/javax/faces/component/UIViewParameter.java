@@ -54,7 +54,7 @@ import javax.faces.render.Renderer;
  *
  * <div class="changed_added_2_0">
 
- * <p>The {@link javax.faces.webapp.pdl.PageDeclarationLanguage}
+ * <p>The {@link javax.faces.view.PageDeclarationLanguage}
  * implementation must cause an instance of this component to appear in
  * the view for each occurrence of an <code>&lt;f:viewParam /&gt;</code>
  * element placed inside of an <code>&lt;f:metadata /&gt;</code>

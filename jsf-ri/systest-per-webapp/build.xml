@@ -127,7 +127,7 @@
                 <contains string="${applications-for-v3-only}"
                           substring="@{appname}" />
                 <not>
-                  <equals arg1="${container.name}" arg2="glassfishv3" />
+                  <equals arg1="${container.name}" arg2="glassfishV3" />
                 </not>
               </and>
               <then>
@@ -177,7 +177,7 @@
               <contains string="${applications-for-v3-only}"
                         substring="@{appname}" />
               <not>
-                <equals arg1="${container.name}" arg2="glassfishv3" />
+                <equals arg1="${container.name}" arg2="glassfishV3" />
               </not>
             </and>
             <then>
@@ -244,7 +244,7 @@
                   <contains string="${applications-for-v3-only}"
                             substring="@{app}" />
                   <not>
-                    <equals arg1="${container.name}" arg2="glassfishv3" />
+                    <equals arg1="${container.name}" arg2="glassfishV3" />
                   </not>
                 </and>
                 <then>

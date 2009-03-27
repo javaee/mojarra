@@ -56,10 +56,10 @@ import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.TextHandler;
-import javax.faces.webapp.pdl.facelets.ComponentConfig;
-import javax.faces.webapp.pdl.facelets.ComponentHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TextHandler;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
 
 /**
  * Handler for f:verbatim

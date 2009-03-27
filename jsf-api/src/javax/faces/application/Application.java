@@ -68,7 +68,7 @@ import javax.el.ELResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.validator.Validator;
-import javax.faces.webapp.pdl.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguage;
 
 
 /**

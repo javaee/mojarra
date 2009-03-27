@@ -65,17 +65,17 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
-import javax.faces.webapp.pdl.facelets.TagAttributeException;
-import javax.faces.webapp.pdl.facelets.TagConfig;
-import javax.faces.webapp.pdl.facelets.TagException;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagAttributeException;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import javax.faces.application.Resource;
-import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
-import javax.faces.webapp.pdl.facelets.ComponentHandler;
+import javax.faces.view.EditableValueHolderAttachedObjectHandler;
+import javax.faces.view.facelets.ComponentHandler;
 
 /**
  * Register an ValueChangeListener instance on the UIComponent associated with

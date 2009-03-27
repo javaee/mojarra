@@ -51,8 +51,8 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.webapp.pdl.facelets.TagException;
-import javax.faces.webapp.pdl.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
+import javax.faces.view.facelets.TagConfig;
 import com.sun.faces.facelets.FaceletContextImplBase;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -66,9 +66,9 @@ import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.TagAttribute;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.TagAttribute;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.ui.DefineHandler;
