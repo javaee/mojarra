@@ -112,7 +112,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
     
     /**
      * <p class="changed_added_2_0">If this param is defined, and
-     * calling <code>toLowerCase().equals(&#8220;true&#8221;) on a 
+     * calling <code>toLowerCase().equals(&#8220;true&#8221;)</code> on a 
      * <code>String</code> representation of its value returns 
      * <code>true</code>, the runtime must not automatically add the
      * validator with validator-id equal to the value of the symbolic
