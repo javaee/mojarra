@@ -155,11 +155,16 @@
         <for list="${applications}" param="app" trim="true">
             <sequential>
 	      <if>
-		<contains string="${applications-using-maven}"
-			  substring="@{app}" />
-		<then>
-                  <jsf.mvn goals="test" dir="@{app}" skipTests="false"/>
-		</then>
+                <and>
+                  <contains string="${applications-for-v3-only}"
+                            substring="@{app}" />
+                  <not>
+                    <equals arg1="${container.name}" arg2="glassfishv3" />
+                  </not>
+                </and>
+                <then>
+                  <echo message="Skipping @{app}.  That one runs on v3 only, and our current container is ${container.name}" />
+                </then>
 		<else>
 		  <propertycopy name="test.name"
 				from="@{app}"

@@ -63,8 +63,8 @@
         <path refid="htmlunit.compile.classpath"/>
     </path>
 
-    <property name="applications-using-maven"
-              value="" />
+    <property name="applications-for-v3-only"
+              value="disable-bean-validator" />
 
     <!-- Property containing all of the currenly running systests.  
          This property list *must* match the one defined in the
@@ -123,10 +123,15 @@
         <attribute name="appname"/>
         <sequential>
             <if>
-              <contains string="${applications-using-maven}"
-                        substring="@{appname}" />
+              <and>
+                <contains string="${applications-for-v3-only}"
+                          substring="@{appname}" />
+                <not>
+                  <equals arg1="${container.name}" arg2="glassfishv3" />
+                </not>
+              </and>
               <then>
-                <jsf.mvn goals="install" dir="@{base-app-dir}" />
+                <echo message="Skipping @{appname}.  That one runs on v3 only, and our current container is ${container.name}" />
               </then>
               <else>
                 <mkdir dir="@{base-app-dir}/build/classes"/>
@@ -168,12 +173,15 @@
         <attribute name="appname"/>
         <sequential>
           <if>
-            <contains string="${applications-using-maven}"
-                      substring="@{appname}" />
+            <and>
+              <contains string="${applications-for-v3-only}"
+                        substring="@{appname}" />
+              <not>
+                <equals arg1="${container.name}" arg2="glassfishv3" />
+              </not>
+            </and>
             <then>
-              <deploy.artifact
-                    artifact="@{base-app-dir}/target/jsf-@{appname}.war"
-                    appName="jsf-@{appname}"/>
+              <echo message="Skipping @{appname}.  That one runs on v3 only, and our current container is ${container.name}" />
             </then>
             <else>
               <deploy.artifact
@@ -231,7 +239,21 @@
         
         <for list="${applications}" param="app" trim="true">
             <sequential>
-                <undeploy.app appname="@{app}"/>              
+              <if>
+                <and>
+                  <contains string="${applications-for-v3-only}"
+                            substring="@{app}" />
+                  <not>
+                    <equals arg1="${container.name}" arg2="glassfishv3" />
+                  </not>
+                </and>
+                <then>
+                  <echo message="Skipping @{app}.  That one runs on v3 only, and our current container is ${container.name}" />
+                </then>
+                <else>
+                  <undeploy.app appname="@{app}"/>              
+                </else>
+              </if>
             </sequential>
         </for>
         
@@ -268,8 +290,9 @@
 
         <ant antfile="build-tests.xml" target="test">
           <property name="applications" value="${applications}" />
-          <property name="applications-using-maven" 
-                    value="${applications-using-maven}" />
+          <property name="applications-for-v3-only" 
+                    value="${applications-for-v3-only}" />
+          <property name="container.name" value="${container.name}" />
         </ant>
 
     </target>    
