@@ -100,7 +100,16 @@ public class AjaxBehavior extends ClientBehaviorBase {
     }
 
 
-    @Override
+    /**
+     * <p class="changed_added_2_0">
+     * This method returns an unmodifiable <code>Set</code> containing
+     * the {@link ClientBehaviorHint} <code>SUBMITTING</code>.</p> 
+     *
+     * @return unmodifiable set containing the hint {@link ClientBehaviorHint}
+     * <code>SUBMITTING</code>.
+     *
+     * @since 2.0
+     */
     public Set<ClientBehaviorHint> getHints() {
         return HINTS;
     }
