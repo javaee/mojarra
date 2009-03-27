@@ -32,7 +32,7 @@ $Id: web.xml,v 1.2 2005/12/23 19:17:05 edburns Exp $ -->
   <display-name>jsf-disable-bean-validator</display-name>
 
     <context-param>
-        <param-name>javax.faces.validator.DISABLE_BEAN_VALIDATOR</param-name>
+        <param-name>javax.faces.validator.DISABLE_DEFAULT_BEAN_VALIDATOR</param-name>
         <param-value>true</param-value>
     </context-param>
 

@@ -128,6 +128,8 @@ public class DisableBeanValidatorTestCase extends AbstractTestCase {
     public void testDisableBeanValidator() throws Exception {
 	HtmlPage page = getPage("/faces/index.xhtml");
 	assertTrue(-1 == page.asText().indexOf("javax.faces.validator.BeanValidator"));
+	page = getPage("/faces/enable.xhtml");
+	assertTrue(-1 != page.asText().indexOf("javax.faces.validator.BeanValidator"));
     }
 
 }

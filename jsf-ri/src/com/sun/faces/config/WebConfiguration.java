@@ -971,8 +971,8 @@ public class WebConfiguration {
               "javax.faces.DISABLE_FACELET_JSF_VIEWHANDLER",
               false
         ),
-        DisableBeanValidator(
-                BeanValidator.DISABLE_BEAN_VALIDATOR_PARAM_NAME,
+        DisableDefaultBeanValidator(
+                BeanValidator.DISABLE_DEFAULT_BEAN_VALIDATOR_PARAM_NAME,
                 false),
         DateTimeConverterUsesSystemTimezone(
               "javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE",

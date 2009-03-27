@@ -345,7 +345,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         if (defaultValidatorIds == null) {
             defaultValidatorIds = new LinkedHashSet<String>();
             if (isBeanValidatorAvailable()) {
-                defaultValidatorIds.add("javax.faces.Bean");
+                WebConfiguration webConfig = WebConfiguration.getInstance();
+                if (!webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableDefaultBeanValidator)) {
+                    defaultValidatorIds.add("javax.faces.Bean");
+                }
             }
         }
 
@@ -361,7 +364,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
     static boolean isBeanValidatorAvailable() {
-        WebConfiguration webConfig = WebConfiguration.getInstance();
         
         boolean result = false;
         final String beansValidationAvailabilityCacheKey = 
@@ -371,17 +373,13 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         if (appMap.containsKey(beansValidationAvailabilityCacheKey)) {
             result = (Boolean) appMap.get(beansValidationAvailabilityCacheKey);
         } else {
-            if (!webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableBeanValidator)) {
-                try {
-                    Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
-                    appMap.put(beansValidationAvailabilityCacheKey, result = true);
-                } catch (ClassNotFoundException cnfe) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine("Unable to load Beans Validation");
-                    }
-                    appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
+            try {
+                Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
+                appMap.put(beansValidationAvailabilityCacheKey, result = true);
+            } catch (ClassNotFoundException cnfe) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Unable to load Beans Validation");
                 }
-            } else {
                 appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
             }
         }

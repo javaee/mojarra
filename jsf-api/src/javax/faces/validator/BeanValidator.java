@@ -114,16 +114,17 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * <p class="changed_added_2_0">If this param is defined, and
      * calling <code>toLowerCase().equals(&#8220;true&#8221;) on a 
      * <code>String</code> representation of its value returns 
-     * <code>true</code>, the runtime must behave as if the
+     * <code>true</code>, the runtime must not automatically add the
      * validator with validator-id equal to the value of the symbolic
-     * constant {@link #VALIDATOR_ID} is not available.  Setting this
-     * parameter to true will have the effect of disabling the default 
-     * application of Bean Validation to every input component in 
-     * every view in the application.</p>
+     * constant {@link #VALIDATOR_ID} to the list of default validators.  
+     * Setting this parameter to <code>true</code> will have the effect 
+     * of disabling the automatic installation of Bean Validation to 
+     * every input component in every view in the application, though 
+     * manual installation is still possible.</p>
      * 
      */
-    public static final String DISABLE_BEAN_VALIDATOR_PARAM_NAME =
-            "javax.faces.validator.DISABLE_BEAN_VALIDATOR";
+    public static final String DISABLE_DEFAULT_BEAN_VALIDATOR_PARAM_NAME =
+            "javax.faces.validator.DISABLE_DEFAULT_BEAN_VALIDATOR";
 
     /**
      * <p class="changed_added_2_0">A comma-separated list of validation
