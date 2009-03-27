@@ -56,7 +56,7 @@ import java.util.Map;
 public interface ClientBehaviorHolder {
 
     /**
-     * <p class="changed_added_2_0">Attaches a (@link ClientBehavior} to 
+     * <p class="changed_added_2_0">Attaches a {@link ClientBehavior} to 
      * the component implementing this interface for the specified event.
      * Valid event names for a UIComponent implementation are defined by 
      * {@code ClientBehaviorHolder.getEventNames()}.</p>
