@@ -78,7 +78,8 @@
                    write-attribute-script-enabled,
                    wcag-datatable,
                    flash,
-                   jsp-flash"/>
+                   jsp-flash,
+                   disable-bean-validator"/>
     <!--
        EXCLUDED APPLICATIONS:
           view-expired
@@ -132,6 +133,8 @@
               value="com/sun/faces/systest/UnicodeTestCase.class"/>
     <property name="wcag-datatable"
               value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
+    <property name="disable-bean-validator"
+              value="com/sun/faces/systest/DisableBeanValidatorTestCase.class"/>
 
     <!--
         EXCLUDED APPLICATIONS:

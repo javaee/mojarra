@@ -361,6 +361,8 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
     static boolean isBeanValidatorAvailable() {
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        
         boolean result = false;
         final String beansValidationAvailabilityCacheKey = 
                 "javax.faces.BEANS_VALIDATION_AVAILABLE";
@@ -369,13 +371,17 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         if (appMap.containsKey(beansValidationAvailabilityCacheKey)) {
             result = (Boolean) appMap.get(beansValidationAvailabilityCacheKey);
         } else {
-            try {
-                Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
-                appMap.put(beansValidationAvailabilityCacheKey, result = true);
-            } catch (ClassNotFoundException cnfe) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("Unable to load Beans Validation");
+            if (!webConfig.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableBeanValidator)) {
+                try {
+                    Thread.currentThread().getContextClassLoader().loadClass("javax.validation.MessageInterpolator");
+                    appMap.put(beansValidationAvailabilityCacheKey, result = true);
+                } catch (ClassNotFoundException cnfe) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("Unable to load Beans Validation");
+                    }
+                    appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
                 }
+            } else {
                 appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
             }
         }

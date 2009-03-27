@@ -110,6 +110,20 @@ public class BeanValidator implements Validator, PartialStateHolder {
      */
     public static final String EMPTY_VALIDATION_GROUPS_PATTERN = "^[\\W" + VALIDATION_GROUPS_DELIMITER + "]*$";
     
+    /**
+     * <p class="changed_added_2_0">If this param is defined, and
+     * calling <code>toLowerCase().equals(&#8220;true&#8221;) on a 
+     * <code>String</code> representation of its value returns 
+     * <code>true</code>, the runtime must behave as if the
+     * validator with validator-id equal to the value of the symbolic
+     * constant {@link #VALIDATOR_ID} is not available.  Setting this
+     * parameter to true will have the effect of disabling the default 
+     * application of Bean Validation to every input component in 
+     * every view in the application.</p>
+     * 
+     */
+    public static final String DISABLE_BEAN_VALIDATOR_PARAM_NAME =
+            "javax.faces.validator.DISABLE_BEAN_VALIDATOR";
 
     /**
      * <p class="changed_added_2_0">A comma-separated list of validation

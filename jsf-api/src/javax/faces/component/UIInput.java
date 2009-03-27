@@ -1582,7 +1582,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     private void addDefaultValidators(FacesContext context) {
 
-        if (isBeansValidationAvailable(context) && !defaultValidatorsProcessed) {
+        if (!defaultValidatorsProcessed) {
 
             Set<String> exclusions;
             Validator[] validators = getValidators();

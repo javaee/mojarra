@@ -91,7 +91,8 @@
                    write-attribute-script-enabled,
                    wcag-datatable,
                    flash,
-                   jsp-flash"/>
+                   jsp-flash,
+                   disable-bean-validator"/>
     <!-- 
 
        EXCLUDED APPLICATIONS:
