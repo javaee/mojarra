@@ -41,8 +41,15 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
+
+/**
+ * <p class="changed_added_2_0">Enable the JSF implementation to provide
+ * the appropriate behavior for the kind of {@link MetaTagHandler}
+ * subclass for each kind of element in the view, while providing a
+ * base-class from which those wanting to make a Java language custom
+ * tag handler can inherit.  The JSF runtime provides the implementation
+ * of {@link #getTagHandlerDelegate} for the appropriate subclass.</p>
+ */
 
 public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
     
@@ -50,17 +57,17 @@ public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
 
     private final TagAttribute disabled;
     
-    protected TagHandlerDelegateFactory helperFactory;
+    protected TagHandlerDelegateFactory delegateFactory;
     
     public DelegatingMetaTagHandler(TagConfig config) {
         super(config);
         this.binding = this.getAttribute("binding");
         this.disabled = this.getAttribute("disabled");
-        helperFactory = (TagHandlerDelegateFactory)
+        delegateFactory = (TagHandlerDelegateFactory)
                 FactoryFinder.getFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY);
     }
     
-    protected abstract TagHandlerDelegate getTagHandlerHelper();
+    protected abstract TagHandlerDelegate getTagHandlerDelegate();
     
     // Properties ----------------------------------------
 
@@ -105,7 +112,7 @@ public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
 
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
-        getTagHandlerHelper().apply(ctx, parent);
+        getTagHandlerDelegate().apply(ctx, parent);
     }
     
     public void applyNextHandler(FaceletContext ctx, UIComponent c) 
@@ -127,7 +134,7 @@ public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
 
     @Override
     protected MetaRuleset createMetaRuleset(Class type) {
-        return getTagHandlerHelper().createMetaRuleset(type);
+        return getTagHandlerDelegate().createMetaRuleset(type);
     }
     
 }

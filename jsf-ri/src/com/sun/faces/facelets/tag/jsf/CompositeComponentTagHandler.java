@@ -124,7 +124,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             ComponentConfig config) {
         super(config);
         this.compositeComponentResource = compositeComponentResource;
-        ((ComponentTagHandlerDelegateImpl)this.getTagHandlerHelper()).setCreateComponentDelegate(this);
+        ((ComponentTagHandlerDelegateImpl)this.getTagHandlerDelegate()).setCreateComponentDelegate(this);
     }
     
     private void copyTagAttributesIntoComponentAttributes(FaceletContext ctx,

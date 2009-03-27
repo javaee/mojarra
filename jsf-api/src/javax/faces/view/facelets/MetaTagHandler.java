@@ -55,11 +55,10 @@ import javax.faces.view.facelets.FaceletContext;
 
 
 /**
- * <p class="changed_added_2_0">A base tag for wiring state to an object
- * instance based on rules populated at the time of creating a
- * MetaRuleset.</p>
+ * <p class="changed_added_2_0">Infrastructure abstraction to enable a
+ * rule based method for directing how different kinds of elements take
+ * different kinds of actions in the JSF Java API.</p>
  * 
- * <p class="changed_added_2_0">RELEASE_PENDING correct documentation</p>
  * @since 2.0
  */
 public abstract class MetaTagHandler extends TagHandler {

@@ -57,14 +57,17 @@ import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.EditableValueHolderAttachedObjectHandler;
 
 /**
- * Handles setting a Validator instance on a EditableValueHolder. Will wire all
- * attributes set to the Validator instance created/fetched. Uses the "binding"
- * attribute for grabbing instances to apply attributes to. <p/> Will only
- * set/create Validator is the passed UIComponent's parent is null, signifying
- * that it wasn't restored from an existing tree.
- * 
- * @author Jacob Hookom
- * @version $Id: ValidatorHandler.java 6760 2009-03-04 19:57:28Z edburns $
+ * <p class="changed_added_2_0">Handles setting a {@link
+ * javax.faces.validator.Validator} instance on an {@link
+ * javax.faces.component.EditableValueHolder} parent. Will wire all
+ * attributes set to the <code>Validator</code> instance
+ * created/fetched. Uses the "binding" attribute for grabbing instances
+ * to apply attributes to.</p> 
+
+ * <p>Will only set/create Validator is the passed UIComponent's parent
+ * is null, signifying that it wasn't restored from an existing
+ * tree.</p>
+
  */
 public class ValidatorHandler extends FaceletsAttachedObjectHandler implements EditableValueHolderAttachedObjectHandler {
 
@@ -78,9 +81,9 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
     }
 
     @Override
-    protected TagHandlerDelegate getTagHandlerHelper() {
+    protected TagHandlerDelegate getTagHandlerDelegate() {
         if (null == helper) {
-            helper = helperFactory.createValidatorHandlerDelegate(this);
+            helper = delegateFactory.createValidatorHandlerDelegate(this);
         }
         return helper;
     }

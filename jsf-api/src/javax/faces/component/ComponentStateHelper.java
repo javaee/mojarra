@@ -293,7 +293,7 @@ class ComponentStateHelper implements StateHelper {
             if (!component.initialStateMarked()) {
                 // only need to propagate the component's delta status when
                 // delta tracking has been disabled.  We're assuming that
-                // the PDL will reset the status when the view is reconstructed,
+                // the VDL will reset the status when the view is reconstructed,
                 // so no need to save the state if the saved state is the default.
                 return new Object[] { component.initialStateMarked() };
             }

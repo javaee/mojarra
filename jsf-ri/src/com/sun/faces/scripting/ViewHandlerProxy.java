@@ -133,8 +133,8 @@ public class ViewHandlerProxy extends ViewHandler {
     }
 
     @Override
-    public ViewDeclarationLanguage getPageDeclarationLanguage(FacesContext context, String viewId) {
-        return getGroovyDelegate().getPageDeclarationLanguage(context, viewId);
+    public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context, String viewId) {
+        return getGroovyDelegate().getViewDeclarationLanguage(context, viewId);
     }
 
     @Override

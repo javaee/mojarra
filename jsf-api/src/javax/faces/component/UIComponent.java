@@ -178,7 +178,7 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      * returned from {@link #getFacets}.  In this case, it refers to the actual
      * facet that is the {@link javax.faces.component.UIPanel} that is the parent of the all
      * of the components in the <code>&lt;composite:implementation&gt;</code>
-     * section of the <em>composite component PDL file</em>.</p>
+     * section of the <em>composite component VDL file</em>.</p>
      *
      * @since 2.0
      */

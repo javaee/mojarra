@@ -60,6 +60,10 @@ import javax.faces.view.facelets.FaceletContext;
 	  <li><p>The rendererType property of the component is set properly.
 	  </p></li>
 
+	  <li><p>Each attribute specified in the markup is correctly
+	  applied to the component instance, as specified in the VDLDocs
+	  for this element.  </p></li>
+
 	  <li><p>{@link #onComponentCreated} is called.
 	  </p></li>
 
@@ -104,9 +108,9 @@ public class ComponentHandler extends DelegatingMetaTagHandler {
     }
     
     @Override
-    protected TagHandlerDelegate getTagHandlerHelper() {
+    protected TagHandlerDelegate getTagHandlerDelegate() {
         if (null == helper) {
-            helper = helperFactory.createComponentHandlerDelegate(this);
+            helper = delegateFactory.createComponentHandlerDelegate(this);
         }
         return helper;
     }

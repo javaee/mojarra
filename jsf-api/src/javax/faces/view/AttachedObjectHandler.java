@@ -42,7 +42,7 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">The abstract base interface for a
- * handler representing an <em>attached object</em> in a PDL page.
+ * handler representing an <em>attached object</em> in a VDL page.
  * Subinterfaces are provided for the common attached objects that
  * expose {@link javax.faces.convert.Converter}s, {@link
  * javax.faces.validator.Validator}s, {@link

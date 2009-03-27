@@ -54,10 +54,8 @@ package javax.faces.view.facelets;
 import javax.faces.view.facelets.FaceletException;
 
 /**
- * <p class="changed_added_2_0">An Exception caused by a
- * TagAttribute</p>
- *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
+ * <p class="changed_added_2_0">An Exception caused by a {@link
+ * TagAttribute}</p>
  *
  * @since 2.0
  */

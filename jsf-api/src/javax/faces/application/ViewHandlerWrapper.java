@@ -231,16 +231,16 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ViewHandler#getPageDeclarationLanguage}
+     * call {@link ViewHandler#getViewDeclarationLanguage}
      * on the wrapped {@link ViewHandler} object.</p>
      *
      * @since 2.0
      */
     @Override
-    public ViewDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
+    public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context,
                                                               String viewId) {
 
-        return getWrapped().getPageDeclarationLanguage(context, viewId);
+        return getWrapped().getViewDeclarationLanguage(context, viewId);
         
     }
     

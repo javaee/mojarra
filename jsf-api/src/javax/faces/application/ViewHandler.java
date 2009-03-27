@@ -82,15 +82,15 @@ import javax.faces.view.ValueHolderAttachedObjectTarget;
  * <code>ViewHandler</code> interacts the {@link StateManager}. </p>
 
  * <p class="changed_added_2_0">Version 2 of the specification formally
- * introduced the concept of <em>Page Declaration Language</em>.  A Page
- * Declaration Language (PDL) is a syntax used to declare user
+ * introduced the concept of <em>View Declaration Language</em>.  A View
+ * Declaration Language (VDL) is a syntax used to declare user
  * interfaces comprised of instances of JSF {@link UIComponent}s.  Any
  * of the responsibilities of the <code>ViewHandler</code> that
- * specifically deal with the PDL sub-system are now the domain of the
- * PDL implementation. These responsibilities are defined on the {@link
+ * specifically deal with the VDL sub-system are now the domain of the
+ * VDL implementation. These responsibilities are defined on the {@link
  * ViewDeclarationLanguage} class.  The <code>ViewHandler</code>
- * provides {@link #getPageDeclarationLanguage} as a convenience method
- * to access the PDL implementation given a <code>viewId</code>.</p>
+ * provides {@link #getViewDeclarationLanguage} as a convenience method
+ * to access the VDL implementation given a <code>viewId</code>.</p>
  *
  */
 
@@ -465,7 +465,7 @@ public abstract class ViewHandler {
      * <div class="changed_added_2_0">
      * 
      * <p>The default implementation must use {@link
-     * javax.faces.view.PageDeclarationLanguageFactory#getPageDeclarationLanguage}
+     * javax.faces.view.ViewDeclarationLanguageFactory#getViewDeclarationLanguage}
      * to obtain the appropriate <code>ViewDeclarationLanguage</code>
      * implementation for the argument <code>viewId</code>.  Any
      * exceptions thrown as a result of invoking that method must not be
@@ -480,7 +480,7 @@ public abstract class ViewHandler {
 
      * @since 2.0
      */
-    public ViewDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
+    public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context,
                                                               String viewId) {
 
         throw new UnsupportedOperationException();

@@ -42,6 +42,18 @@ package javax.faces.view.facelets;
 
 import javax.faces.view.BehaviorHolderAttachedObjectHandler;
 
+/**
+ * <p class="changed_added_2_0">The {@link FaceletHandler} that
+ * corresponds to attached objects that represent an instance of {@link
+ * javax.faces.component.behavior.ClientBehavior} that must be added to
+ * the parent component, which must implement {@link
+ * javax.faces.component.behavior.ClientBehaviorHolder}, with a call to
+ * {@link
+ * javax.faces.component.behavior.ClientBehaviorHolder#addClientBehavior}.
+ * The current specification defines one Facelet element for this sort
+ * of attached object, <code>&lt;f:ajax&gt;</code>.</p>
+ */ 
+
 public class BehaviorHandler extends FaceletsAttachedObjectHandler implements BehaviorHolderAttachedObjectHandler {
 
     private final TagAttribute event;
@@ -71,9 +83,9 @@ public class BehaviorHandler extends FaceletsAttachedObjectHandler implements Be
     }
     
     @Override
-    protected TagHandlerDelegate getTagHandlerHelper() {
+    protected TagHandlerDelegate getTagHandlerDelegate() {
         if (null == helper) {
-            helper = helperFactory.createBehaviorHandlerDelegate(this);
+            helper = delegateFactory.createBehaviorHandlerDelegate(this);
         }
         return helper;
     }

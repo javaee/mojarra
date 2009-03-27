@@ -129,7 +129,7 @@ public class StateManagerImpl extends StateManager {
         StateManagementStrategy strategy = null;
         try {
              strategy = context.getApplication().getViewHandler().
-                getPageDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
+                getViewDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
         } catch (UnsupportedOperationException uoe) {
         }
         
@@ -180,7 +180,7 @@ public class StateManagerImpl extends StateManager {
         
         try {
              strategy = context.getApplication().getViewHandler().
-                getPageDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
+                getViewDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
         } catch (UnsupportedOperationException uoe) {
         }
 

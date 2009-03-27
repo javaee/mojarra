@@ -38,7 +38,7 @@
 package javax.faces.view;
 
 /**
- * <p class="changed_added_2_0">A marker interface for PDL tags that
+ * <p class="changed_added_2_0">A marker interface for VDL tags that
  * represent <code>&lt;composite:valueHolder/&gt;</code> for use by the
  * <em>composite component page author</em>.</p>
  *

@@ -101,7 +101,7 @@ public class RenderResponsePhase extends Phase {
 
             try {
                 ViewDeclarationLanguage pdl =
-                      vh.getPageDeclarationLanguage(facesContext,
+                      vh.getViewDeclarationLanguage(facesContext,
                                                     facesContext.getViewRoot().getViewId());
                 pdl.buildView(facesContext, facesContext.getViewRoot());
             } catch (UnsupportedOperationException uoe) {

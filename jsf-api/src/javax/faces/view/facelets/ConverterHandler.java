@@ -59,17 +59,18 @@ import javax.faces.view.ValueHolderAttachedObjectHandler;
 import javax.faces.view.facelets.FaceletContext;
 
 /**
- * Handles setting a Converter instance on a ValueHolder. Will wire all
- * attributes set to the Converter instance created/fetched. Uses the "binding"
- * attribute for grabbing instances to apply attributes to. <p/> Will only
- * set/create Converter is the passed UIComponent's parent is null, signifying
- * that it wasn't restored from an existing tree.
+ * <p class="changed_added_2_0">Handles setting a {@link
+ * javax.faces.convert.Converter} instance on a {@link
+ * javax.faces.component.ValueHolder} parent. Will wire all attributes
+ * set to the <code>Converter</code> instance created/fetched. Uses the
+ * "binding" attribute for grabbing instances to apply attributes
+ * to. </p>
+ *
+ * <p class="changed_added_2_0">Will only set/create
+ * <code>Converter</code> if the passed <code>UIComponent</code>'s
+ * <code>parent</code> is <code>null</code>, signifying that it wasn't
+ * restored from an existing tree.</p>
  * 
- * @see javax.faces.webapp.ConverterELTag
- * @see javax.faces.convert.Converter
- * @see javax.faces.component.ValueHolder
- * @author Jacob Hookom
- * @version $Id: ConverterHandler.java 6118 2008-12-16 03:56:08Z edburns $
  */
 public class ConverterHandler extends FaceletsAttachedObjectHandler implements ValueHolderAttachedObjectHandler {
 
@@ -85,9 +86,9 @@ public class ConverterHandler extends FaceletsAttachedObjectHandler implements V
     }
 
     @Override
-    protected TagHandlerDelegate getTagHandlerHelper() {
+    protected TagHandlerDelegate getTagHandlerDelegate() {
         if (null == helper) {
-            helper = helperFactory.createConverterHandlerDelegate(this);
+            helper = delegateFactory.createConverterHandlerDelegate(this);
         }
         return helper;
 

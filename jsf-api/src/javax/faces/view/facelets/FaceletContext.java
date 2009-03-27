@@ -65,7 +65,8 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">Context representative of a single
- * request from a Facelet</p>
+ * request from a Facelet.  This instance is passed to nearly every
+ * method call in this API.</p>
  *
  * @since 2.0
  */

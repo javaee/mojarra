@@ -41,7 +41,7 @@ import javax.faces.FacesWrapper;
 /**
  * <p class="changed_added_2_0"><strong>ViewDeclarationLanguageFactory</strong>
  * is a factory object that creates (if needed) and returns a new {@link
- * ViewDeclarationLanguage} instance based on the PDL found in a specific
+ * ViewDeclarationLanguage} instance based on the VDL found in a specific
  * view.</p>
  *
  * <div class="changed_added_2_0">
@@ -52,7 +52,7 @@ import javax.faces.FacesWrapper;
  *
  * <pre><code>
  *   ViewDeclarationLanguageFactory factory = (ViewDeclarationLanguageFactory)
- *    FactoryFinder.getFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY);
+ *    FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
  * </code></pre>
  *
 
@@ -78,13 +78,13 @@ public abstract class ViewDeclarationLanguageFactory implements FacesWrapper<Vie
     /**
      * <p class="changed_added_2_0">Return the
      * <code>ViewDeclarationLanguage</code> instance suitable for
-     * handling the PDL contained in the page referenced by the argument
+     * handling the VDL contained in the page referenced by the argument
      * <code>viewId</code>.  The default implementation must return a
      * valid <code>ViewDeclarationLanguage</code> instance for views
      * written in either JSP or Facelets for JSF 2.</p>
      * 
      * @param viewId the viewId to be inspected for an appropriate 
-     * <code>ViewDeclarationLanguage</code> implementation for the PDL used
+     * <code>ViewDeclarationLanguage</code> implementation for the VDL used
      * in the view.
      * 
      * @since 2.0
@@ -95,6 +95,6 @@ public abstract class ViewDeclarationLanguageFactory implements FacesWrapper<Vie
      * <code>ViewDeclarationLanguage</code> implementation.
      * 
      */
-    public abstract ViewDeclarationLanguage getPageDeclarationLanguage(String viewId);
+    public abstract ViewDeclarationLanguage getViewDeclarationLanguage(String viewId);
     
 }

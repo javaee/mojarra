@@ -952,7 +952,7 @@ public abstract class Application {
 
 	  <li><p>Obtain a reference to the {@link
 	  ViewDeclarationLanguage} for this <code>Application</code>
-	  instance by calling {@link ViewHandler#getPageDeclarationLanguage},
+	  instance by calling {@link ViewHandler#getViewDeclarationLanguage},
      *    passing the <code>viewId</code> found by calling 
      *    {@link javax.faces.component.UIViewRoot#getViewId} on the 
      *    {@link javax.faces.component.UIViewRoot} in the argument 

@@ -47,7 +47,7 @@ import javax.faces.component.UIComponent;
  * semantics of an inner component to the <em>page author</em> without
  * exposing the rendering or implementation details of the <em>inner
  * component</em>.  See {@link
- * PageDeclarationLanguage#getComponentMetadata} for the context in
+ * ViewDeclarationLanguage#getComponentMetadata} for the context in
  * which implementations of this interface are used.</p>
  * 
  * <p class="changed_added_2_0">The implementation must ensure that 
@@ -59,7 +59,7 @@ import javax.faces.component.UIComponent;
  * <p>Subinterfaces are provided for the common behavioral interfaces:
  * {@link javax.faces.component.ValueHolder}, {@link
  * javax.faces.component.EditableValueHolder} and {@link
- * javax.faces.component.ActionSource2}.  The default PDL implementation
+ * javax.faces.component.ActionSource2}.  The default VDL implementation
  * must provide a corresponding Facelets tag handler for each of the
  * subinterfaces of this interface.  </p>
 

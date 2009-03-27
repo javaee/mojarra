@@ -41,9 +41,9 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">Encapsulate the saving and restoring of
- * the view to enable the PDL to take over the responsibility for
+ * the view to enable the VDL to take over the responsibility for
  * handling this feature. Because {@link
- * PageDeclarationLanguage#getStateManagementStrategy} is required to
+ * ViewDeclarationLanguage#getStateManagementStrategy} is required to
  * return <code>null</code> for JSP views and non-<code>null</code> for
  * views authored in Facelets for JSF 2, this specification only applys
  * to Facelets for JSF 2.</p>
@@ -78,7 +78,7 @@ public abstract class StateManagementStrategy {
 	  can be restored given only its client id.  Special care must
 	  be taken to handle the case of components that were added or
 	  deleted programmatically during this lifecycle traversal,
-	  rather than by the PDL.  </p></li>
+	  rather than by the VDL.  </p></li>
 
 	</ol>
 

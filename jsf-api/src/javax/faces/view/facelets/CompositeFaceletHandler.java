@@ -62,12 +62,11 @@ import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.FaceletHandler;
 
 /**
- * A FaceletHandler that is derived of 1 or more, inner FaceletHandlers. This
- * class would be found if the next FaceletHandler is structually, a body
- * with multiple child elements as defined in XML.
+ * <p class="changed_added_2_0">A FaceletHandler that is derived of 1 or
+ * more, inner FaceletHandlers. This class would be found if the next
+ * FaceletHandler is structually, a body with multiple child elements as
+ * defined in XML.</p>
  *
- * @author Jacob Hookom
- * @version $Id: CompositeFaceletHandler.java 6739 2009-02-27 23:18:02Z rlubke $
  */
 public final class CompositeFaceletHandler implements FaceletHandler {
 

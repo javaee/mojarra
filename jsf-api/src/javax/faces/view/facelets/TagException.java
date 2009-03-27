@@ -55,10 +55,8 @@ import javax.faces.view.facelets.Tag;
 import javax.faces.view.facelets.FaceletException;
 
 /**
- * <p class="changed_added_2_0">An Exception caused by a Tag</p>
+ * <p class="changed_added_2_0">An Exception caused by a {@link Tag}</p>
  * 
- * <p class="changed_added_2_0">PENDING correct documentation</p>
- *
  * @since 2.0
  */
 public final class TagException extends FaceletException {

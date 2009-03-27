@@ -55,34 +55,30 @@ import javax.faces.view.facelets.Tag;
 import javax.faces.view.facelets.FaceletHandler;
 
 /**
- * <p class="changed_added_2_0">Passed to the constructor of TagHandler,
- * it defines the document definition of the handler we are
- * instantiating</p>
- *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
+ * <p class="changed_added_2_0">Passed to the constructor of {@link
+ * TagHandler} subclass}, it defines the document definition of the
+ * handler we are instantiating.</p>
  *
  * @since 2.0
  */
 public interface TagConfig {
 
     /**
-     * A Tag representing this handler
-     * 
-     * @return a tag representing this handler
+     * <p class="changed_added_2_0">Return the <code>Tag</code>
+     * representing this handler.</p>
      */
     public Tag getTag();
 
     /**
-     * The next FaceletHandler (child or children) to be applied
-     * 
-     * @return next FaceletHandler, never null
+     * <p class="changed_added_2_0">The next {@link FaceletHandler}
+     * (child or children) to be applied.  This must never be
+     * <code>null</code>.</p>
      */
     public FaceletHandler getNextHandler();
 
     /**
-     * A document-unique id, follows the convention "_tagId##"
-     * 
-     * @return a document-unique id
+     * <p class="changed_added_2_0">A document-unique id, follows the
+     * convention "_tagId##"</p>
      */
     public String getTagId();
 }

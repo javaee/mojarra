@@ -44,14 +44,14 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0">The contract that a page declaration
+ * <p class="changed_added_2_0">The contract that a view declaration
  * language must implement to interact with the JSF runtime.  An
  * implementation of this class must be thread-safe.</p>
  *
  * <div class="changed_added_2_0">
  * 
  * <p>Instances of this class are application scoped and must be
- * obtained from the {@link PageDeclarationLanguageFactory}.</p>
+ * obtained from the {@link ViewDeclarationLanguageFactory}.</p>
 
  * </div>
  * 
@@ -78,7 +78,7 @@ public abstract class ViewDeclarationLanguage {
      * @throws javax.faces.FacesException if there is an error in
      * obtaining the metadata
      *
-     * @throws UnsupportedOperationException if this is a JSP PDL
+     * @throws UnsupportedOperationException if this is a JSP VDL
      * implementation.
      */
     public abstract BeanInfo getComponentMetadata(FacesContext context, Resource componentResource);
@@ -122,7 +122,7 @@ public abstract class ViewDeclarationLanguage {
      *
      * @throws javax.faces.FacesException if there is an error in
      * obtaining the script component resource
-     * @throws UnsupportedOperationException if this is a JSP PDL
+     * @throws UnsupportedOperationException if this is a JSP VDL
      * implementation.
      */
     public abstract Resource getScriptComponentResource(FacesContext context,
@@ -131,12 +131,12 @@ public abstract class ViewDeclarationLanguage {
     
     /**
      * <p class="changed_added_2_0">Create a <code>UIViewRoot</code>
-     * from the PDL contained in the artifact referenced by the argument
+     * from the VDL contained in the artifact referenced by the argument
      * <code>viewId</code>.  See section JSF.7.6.2 for the specification of
      * the default implementation.</p>
      *
      * @param context the <code>FacesContext</code> for this request.
-     * @param viewId the identifier of an artifact that contains the PDL
+     * @param viewId the identifier of an artifact that contains the VDL
      * syntax that describes this view.
      *
      * @throws NullPointerException if any of the arguments are
@@ -164,7 +164,7 @@ public abstract class ViewDeclarationLanguage {
 
     /**
      * <p class="changed_added_2_0">Take any actions specific to this
-     * PDL implementation to cause the argument <code>UIViewRoot</code>
+     * VDL implementation to cause the argument <code>UIViewRoot</code>
      * which must have been created via a call to {@link #createView},
      * to be populated with children.</p>
 
@@ -201,7 +201,7 @@ public abstract class ViewDeclarationLanguage {
      * @param context the <code>FacesContext</code> for this request
 
      * @param root the <code>UIViewRoot</code> to populate with children
-     * using techniques specific to this PDL implementation.
+     * using techniques specific to this VDL implementation.
      */
     public abstract void buildView(FacesContext context, UIViewRoot root)
     throws IOException;
@@ -229,7 +229,7 @@ public abstract class ViewDeclarationLanguage {
      * {@link StateManagementStrategy} allows them to do so.  Returning
      * <code>null</code> indicates that the implementation wishes the
      * runtime to handle the state saving and restoring.
-     * Implementations that provide the PDL for Facelets for JSF 2.0 and
+     * Implementations that provide the VDL for Facelets for JSF 2.0 and
      * later must return non-<code>null</code> from this method.</p>
      *
      *

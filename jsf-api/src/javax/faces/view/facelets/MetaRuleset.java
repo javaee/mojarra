@@ -107,7 +107,7 @@ public abstract class MetaRuleset {
     public abstract MetaRuleset addRule(MetaRule rule);
 
     /**
-     * <p class="changed_added_2_0">RELEASE_PENDING</p>
+     * <p class="changed_added_2_0">Take actions to apply the rule.</p>
      * 
      */
     public abstract Metadata finish();

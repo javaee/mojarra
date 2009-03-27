@@ -55,7 +55,7 @@ public class ViewDeclarationLanguageFactoryImpl extends ViewDeclarationLanguageF
      * @see javax.faces.view.ViewDeclarationLanguageFactory#getPageDeclarationLanguage(String)
      */
     @Override
-    public ViewDeclarationLanguage getPageDeclarationLanguage(String viewId) {
+    public ViewDeclarationLanguage getViewDeclarationLanguage(String viewId) {
 
         return getViewHandlingStrategyManager().getStrategy(viewId);
 

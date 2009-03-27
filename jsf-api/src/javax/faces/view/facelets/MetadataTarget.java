@@ -55,10 +55,8 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 /**
- * <p class="changed_added_2_0">Information used with MetaRule for
- * determining how and what Metadata should be wired.</p>
- *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
+ * <p class="changed_added_2_0">Information used with {@link MetaRule}
+ * for determining how and what {@link Metadata} should be wired.</p>
  *
  * @since 2.0
  */

@@ -54,7 +54,7 @@ package javax.faces.view.facelets;
 import javax.faces.FacesException;
 
 /**
- * <p class="changed_added_2_0">An Exception from Facelet
+ * <p class="changed_added_2_0">An Exception from the Facelet
  * implementation</p>
  * 
  * @since 2.0

@@ -51,17 +51,11 @@
 
 package javax.faces.view.facelets;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.faces.view.facelets.FaceletHandler;
 
 /**
  * <p class="changed_added_2_0">Foundation class for FaceletHandlers
  * associated with markup in a Facelet document.</p>
  * 
- * <p class="changed_added_2_0">PENDING correct documentation</p>
  *
  * @since 2.0
  */

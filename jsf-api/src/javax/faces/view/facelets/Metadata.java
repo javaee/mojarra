@@ -55,13 +55,13 @@ import javax.faces.view.facelets.FaceletContext;
 
 /**
  * <p class="changed_added_2_0">There are concrete subclasses within the
- * implementation that map concepts in the Facelet PDL page to JSF Java
+ * implementation that map concepts in the Facelet VDL page to JSF Java
  * API calls the appropriate instances.  For example, the
  * &#8220;<code>validator</code>&#8221; attribute on an input component
  * is specified to point to a <code>MethodExpression</code> that
  * references a method that performs the validation.  There is a
  * concrete subclass of <code>Metadata</code> to perform this action
- * when that attribute appears in a Facelet PDL page.</p>
+ * when that attribute appears in a Facelet VDL page.</p>
  *
  * @since 2.0
  */
@@ -69,7 +69,7 @@ public abstract class Metadata {
 
     /**
      * <p class="changed_added_2_0">Take the action prescribed in the
-     * JSF specification for this particular PDL element attribute.</p>
+     * JSF specification for this particular VDL element attribute.</p>
      * 
      * @param ctx The FaceletContext for this request.
      * @param instance The instance from the JSF Java API on which the

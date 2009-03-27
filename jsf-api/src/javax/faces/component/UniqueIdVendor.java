@@ -58,7 +58,7 @@ public interface UniqueIdVendor {
      * included in the generated unique id.</p>
      *
      * @param context FacesContext
-     * @param seed an optional seed value - e.g. based on the position of the component in the PDL-template
+     * @param seed an optional seed value - e.g. based on the position of the component in the VDL-template
      * @return a unique-id in this component-container
      */
     public String createUniqueId(FacesContext context, String seed);

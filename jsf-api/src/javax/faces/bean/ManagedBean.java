@@ -92,7 +92,7 @@ import java.lang.annotation.Inherited;
  *
  * <p>When the runtime processes this annotation, if a managed bean
  * exists whose name is equal to the derived <em>managed-bean-name</em>,
- * a {@link javax.faces.FacesException} must be thrown and the
+ * a <code>FacesException</code> must be thrown and the
  * application must not be placed in service.</p>
  *
  * <p>A class tagged with this annotation must have a public

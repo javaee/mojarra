@@ -59,7 +59,7 @@ public class BeanValidateHandler extends ValidatorHandler implements SetValidato
     public BeanValidateHandler(ValidatorConfig config) {
         super(config);
         validationGroups = getAttribute("validationGroups");
-        ((ValidatorTagHandlerDelegateImpl)this.getTagHandlerHelper()).setSetValidatorDefaultsOnParentDelegate(this);
+        ((ValidatorTagHandlerDelegateImpl)this.getTagHandlerDelegate()).setSetValidatorDefaultsOnParentDelegate(this);
     }
 
     protected String getValidationGroups(FaceletContext ctx) {

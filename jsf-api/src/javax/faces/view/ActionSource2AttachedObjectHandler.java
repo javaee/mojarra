@@ -37,7 +37,7 @@
 package javax.faces.view;
 
 /**
- * <p class="changed_added_2_0">A PDL handler that exposes {@link
+ * <p class="changed_added_2_0">A VDL handler that exposes {@link
  * javax.faces.event.ActionListener} to a <em>page author</em>.  The
  * default implementation of Facelets must provide an implemention of
  * this in the handler for the <code>&lt;f:actionListener&gt;</code>

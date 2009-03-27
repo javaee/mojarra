@@ -921,7 +921,7 @@ public class ApplicationImpl extends Application {
         // overriden methods
         Application app = context.getApplication();
 
-        ViewDeclarationLanguage pdl = app.getViewHandler().getPageDeclarationLanguage(context, context.getViewRoot().getViewId());
+        ViewDeclarationLanguage pdl = app.getViewHandler().getViewDeclarationLanguage(context, context.getViewRoot().getViewId());
         BeanInfo componentMetadata = pdl.getComponentMetadata(context,
                                                               componentResource);
         if (null != componentMetadata){

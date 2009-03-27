@@ -135,7 +135,7 @@ public class MultiViewHandler extends ViewHandler {
         Util.notNull("context", context);
         Util.notNull("viewToRender", viewToRender);
 
-        pdlFactory.getPageDeclarationLanguage(viewToRender.getViewId())
+        pdlFactory.getViewDeclarationLanguage(viewToRender.getViewId())
               .renderView(context, viewToRender);
 
     }
@@ -151,7 +151,7 @@ public class MultiViewHandler extends ViewHandler {
     public UIViewRoot restoreView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
-        return pdlFactory.getPageDeclarationLanguage(viewId)
+        return pdlFactory.getViewDeclarationLanguage(viewId)
               .restoreView(context, viewId);
 
     }
@@ -466,7 +466,7 @@ public class MultiViewHandler extends ViewHandler {
     public UIViewRoot createView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
-        return pdlFactory.getPageDeclarationLanguage(viewId).createView(context,
+        return pdlFactory.getViewDeclarationLanguage(viewId).createView(context,
                                                                    viewId);
 
     }
@@ -691,10 +691,10 @@ public class MultiViewHandler extends ViewHandler {
      * @see ViewHandler#getPageDeclarationLanguage(javax.faces.context.FacesContext, String) 
      */
     @Override
-    public ViewDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
+    public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context,
                                                               String viewId) {
 
-        return pdlFactory.getPageDeclarationLanguage(viewId);
+        return pdlFactory.getViewDeclarationLanguage(viewId);
 
     }
     
@@ -730,7 +730,7 @@ public class MultiViewHandler extends ViewHandler {
         boolean currentIsSameAsNew = false;
         String targetViewId = extractViewId(viewId);
 
-        pdl = getPageDeclarationLanguage(ctx, currentViewId);
+        pdl = getViewDeclarationLanguage(ctx, currentViewId);
         currentViewParams = ViewMetadata.getViewParameters(currentRoot);
 
         if (currentViewId.equals(targetViewId)) {
@@ -738,7 +738,7 @@ public class MultiViewHandler extends ViewHandler {
             toViewParams = currentViewParams;
         }
         else {
-            pdl = getPageDeclarationLanguage(ctx, targetViewId);
+            pdl = getViewDeclarationLanguage(ctx, targetViewId);
             ViewMetadata viewMetadata = pdl.getViewMetadata(ctx, targetViewId);
             UIViewRoot root = viewMetadata.createMetadataView(ctx);
             toViewParams = ViewMetadata.getViewParameters(root);

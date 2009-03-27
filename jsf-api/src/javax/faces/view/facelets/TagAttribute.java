@@ -58,11 +58,9 @@ import javax.el.ValueExpression;
 import javax.faces.view.facelets.FaceletContext;
 
 /**
- * <p class="changed_added_2_0">Representation of a Tag's attribute in a
- * Facelet File</p>
+ * <p class="changed_added_2_0">Representation an individual name=value
+ * pair on an XML element in a Facelet file.</p>
  * 
- * <p class="changed_added_2_0">PENDING correct documentation</p>
- *
  * @since 2.0
  */
 public abstract class TagAttribute {

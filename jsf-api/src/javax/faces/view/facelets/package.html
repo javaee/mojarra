@@ -10,14 +10,13 @@ no need to access the Java API and can get all their work done using the
 tag-level API.  These classes are provided for users that have a need
 for a Java API that allows participation in the execution of a Facelets
 View, which happens as a result of the runtime calling <a
-href="../PageDeclarationLanguage.html#buildView(javax.faces.context.FacesContext,
-javax.faces.component.UIViewRoot)"><code>PageDeclarationLanguage.buildView()</code></a>.
+href="../ViewDeclarationLanguage.html#buildView(javax.faces.context.FacesContext,%20javax.faces.component.UIViewRoot)"><code>ViewDeclarationLanguage.buildView()</code></a>.
 The most common usecase for participating in the execution of a Facelets
 View is providing a custom tag handler.
     </p>
 
 <h2>Sequence of events in the compilation and execution of a Facelets
-PDL Page</h2>
+VDL View</h2>
 
 <h3>Startup Time</h3>
 
@@ -39,7 +38,7 @@ well.
 
 PENDING(edburns): complete this.
 
-RenderResponse.execute calls PDL.buildView().
+RenderResponse.execute calls VDL.buildView().
 
 This get the DefaultFaceletFactory from the application and calls
 getFacelet() on it, passing the viewId.
@@ -52,7 +51,7 @@ The SAXCompiler (extends Compiler) has a root CompilationManager, and a
 SAX Handler called CompilationHandler (extends DefaultHandler).
 
 A CompilationManager is created for each physical file in the tree of
-physical files that can make up a Facelets PDL view.  The
+physical files that can make up a Facelets VDL view.  The
 CompilationManager keeps a stack of CompilationUnit instances.  This
 handler is the bridge between the SAX XML engine and the Facelet
 implementation.

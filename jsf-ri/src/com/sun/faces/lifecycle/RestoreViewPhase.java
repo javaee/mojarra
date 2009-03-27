@@ -210,7 +210,7 @@ public class RestoreViewPhase extends Phase {
 
             try {
                 // try to get the PDL
-                pdl = facesContext.getApplication().getViewHandler().getPageDeclarationLanguage(facesContext, viewId);
+                pdl = facesContext.getApplication().getViewHandler().getViewDeclarationLanguage(facesContext, viewId);
             } catch (UnsupportedOperationException uoe) {
 
             }

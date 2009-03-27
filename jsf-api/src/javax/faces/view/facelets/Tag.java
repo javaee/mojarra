@@ -52,11 +52,12 @@
 package javax.faces.view.facelets;
 
 /**
- * <p class="changed_added_2_0">Representation of a Tag in the Facelet
- * definition</p>
+ * <p class="changed_added_2_0">The runtime must create an instance of
+ * this class for each element in the Facelets XHTML view. A {@link
+ * TagConfig} subinterface instance is responsible for providing an
+ * instance of <code>Tag</code> to the {@link TagHandler} instance that
+ * is passed the <code>TagConfig</code> in its constructor.</p>
  * 
- * <p class="changed_added_2_0">PENDING correct documentation</p>
- *
  * @since 2.0
  */
 public final class Tag {
@@ -85,55 +86,48 @@ public final class Tag {
     }
 
     /**
-     * All TagAttributes specified
+     * <p class="changed_added_2_0">Return an object encapsulating the
+     * {@link TagAttributes} specified on this element in the view.</p>
      * 
-     * @return all TagAttributes specified
      */
     public TagAttributes getAttributes() {
         return attributes;
     }
 
     /**
-     * Local name of the tag &lt;my:tag /> would be "tag"
+     * <p class="changed_added_2_0">Return the XML local name of the
+     * tag. For example, &lt;my:tag /&gt; would be "tag".</p>
      * 
-     * @return local name of the tag
      */
     public String getLocalName() {
         return localName;
     }
 
     /**
-     * Location of the Tag in the Facelet file
-     * 
-     * @return location of the Tag in the Facelet file
+     * <p class="changed_added_2_0">Return the {@link Location} of this
+     * <code>Tag</code> instance in the Facelet view.</p>
      */
     public Location getLocation() {
         return location;
     }
 
     /**
-     * The resolved Namespace for this tag
-     * 
-     * @return the resolved namespace for this tag
+     * <p class="changed_added_2_0">Return the resolved XML Namespace
+     * for this tag in the Facelets view.</p>
      */
     public String getNamespace() {
         return namespace;
     }
 
     /**
-     * Get the qualified name for this tag &lt;my:tag /> would be "my:tag"
+     * <p class="changed_added_2_0">Return the XML qualified name for
+     * this tag.  For example, &lt;my:tag /&gt; would be "my:tag".
      * 
-     * @return qualified name of the tag
      */
     public String getQName() {
         return qName;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
     public String toString() {
         return this.location + " <" + this.qName + ">";
     }

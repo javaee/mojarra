@@ -55,8 +55,6 @@ package javax.faces.view.facelets;
  * <p class="changed_added_2_0">A set of TagAttributes, usually
  * representing all attributes on a Tag.</p>
  *
- * <p class="changed_added_2_0">PENDING correct documentation</p>
- *
  * @since 2.0
  */
 public abstract class TagAttributes {
