@@ -1,19 +1,23 @@
 package com.sun.faces.scripting;
 
-import java.lang.reflect.Constructor;
+import com.sun.faces.util.Util;
 
-import java.net.URL;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
-
-import com.sun.faces.util.Util;
+import java.lang.reflect.Constructor;
+import java.net.URL;
 
 /**
  * Base class for interfacing with Groovy.
  */
 public abstract class GroovyHelper {
 
+    public static boolean isGroovyAvailable(FacesContext ctx) {
+
+        return (ctx.getExternalContext().getApplicationMap().get("com.sun.faces.groovyhelper") != null);
+        
+    }
 
     public static GroovyHelper getCurrentInstance(FacesContext ctx) {
 

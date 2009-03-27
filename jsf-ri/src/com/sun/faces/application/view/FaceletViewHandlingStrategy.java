@@ -36,47 +36,47 @@
 
 package com.sun.faces.application.view;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
+import com.sun.faces.facelets.Facelet;
+import com.sun.faces.facelets.FaceletFactory;
+import com.sun.faces.facelets.compiler.Compiler;
+import com.sun.faces.facelets.compiler.SAXCompiler;
+import com.sun.faces.facelets.el.VariableMapperWrapper;
+import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
+import com.sun.faces.facelets.tag.ui.UIDebug;
+import com.sun.faces.scripting.GroovyHelper;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
 
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
 import javax.faces.FacesException;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 import javax.faces.application.ViewHandler;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.webapp.pdl.StateManagementStrategy;
-import javax.servlet.http.HttpServletResponse;
-
-import com.sun.faces.facelets.Facelet;
-import com.sun.faces.facelets.FaceletFactory;
-import com.sun.faces.facelets.compiler.Compiler;
-import com.sun.faces.facelets.compiler.SAXCompiler;
-import com.sun.faces.facelets.tag.ui.UIDebug;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.facelets.el.VariableMapperWrapper;
-import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
-import java.beans.BeanInfo;
-import javax.el.ValueExpression;
-import javax.el.VariableMapper;
-import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
 import javax.faces.webapp.pdl.ViewMetadata;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.servlet.http.HttpServletResponse;
+import java.beans.BeanInfo;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -99,8 +99,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     
     private StateManagementStrategyImpl stateManagementStrategy;
 
-     private boolean partialStateSaving;
+    private boolean partialStateSaving;
     private Set<String> fullStateViewIds;
+    private boolean groovyAvailable;
     
     // ------------------------------------------------------------ Constructors
 
@@ -186,8 +187,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      */
     public Resource getScriptComponentResource(FacesContext context,
             Resource componentResource) {
+
+        if (!groovyAvailable) {
+            return null;
+        }
         Resource result = null;
-        
+
         String resourceName = componentResource.getResourceName();
         if (resourceName.endsWith(".xhtml")) {
             resourceName = resourceName.substring(0, 
@@ -418,6 +423,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             fullStateViewIds.addAll(Arrays.asList(viewIds));
             this.stateManagementStrategy = new StateManagementStrategyImpl(this, fullStateViewIds);
         }
+
+        groovyAvailable = GroovyHelper.isGroovyAvailable(FacesContext.getCurrentInstance());
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Initialization Successful");

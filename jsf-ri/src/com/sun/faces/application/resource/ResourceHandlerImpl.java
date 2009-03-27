@@ -37,6 +37,19 @@
 
 package com.sun.faces.application.resource;
 
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
+
+import javax.faces.application.ProjectStage;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -49,22 +62,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
-import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.ProjectStage;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
-
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.DefaultResourceMaxAge;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceExcludes;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceBufferSize;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.application.ApplicationAssociate;
 
 /**
  * This is the default implementation of {@link ResourceHandler}.
@@ -136,13 +133,17 @@ public class ResourceHandlerImpl extends ResourceHandler {
         String ctype = ((contentType != null)
                         ? contentType
                         : getContentType(resourceName));
+        FacesContext ctx = FacesContext.getCurrentInstance();
         ResourceInfo info = manager.findResource(libraryName,
                                                  resourceName,
                                                  ctype,
-                                                 FacesContext.getCurrentInstance());
-        return ((info != null)
-                ? new ResourceImpl(info, ctype, creationTime, maxAge)
-                : null);
+                                                 ctx);
+        if (info == null) {
+            logMissingResource(ctx, resourceName, libraryName, null);
+            return null;
+        } else {
+            return new ResourceImpl(info, ctype, creationTime, maxAge);
+        }
 
     }
 
@@ -239,7 +240,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
                 try {
                     InputStream in = resource.getInputStream();
                     if (in == null) {
-                        send404(context, resourceName, libraryName);
+                        send404(context, resourceName, libraryName, true);
                         return;
                     }
                     resourceChannel =
@@ -270,7 +271,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
                     extContext.setResponseContentLength(size);
 
                 } catch (IOException ioe) {
-                    send404(context, resourceName, libraryName, ioe);
+                    send404(context, resourceName, libraryName, ioe, true);
                 } finally {
                     if (out != null) {
                         out.close();
@@ -280,58 +281,49 @@ public class ResourceHandlerImpl extends ResourceHandler {
                     }
                 }
             } else {
-                extContext.setResponseStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                send304(context);
             }
 
         } else {
-            send404(context, resourceName, libraryName);
+            // already logged elsewhere
+            send404(context, resourceName, libraryName, false);
         }
 
     }
 
-    private void send404(FacesContext ctx,
-                         String resourceName,
-                         String libraryName) {
-
-        send404(ctx, resourceName, libraryName, null);
-
-    }
 
     private void send404(FacesContext ctx,
                          String resourceName,
                          String libraryName,
-                         Throwable t) {
+                         boolean logMessage) {
 
-        ctx.getExternalContext().setResponseStatus(HttpServletResponse.SC_NOT_FOUND);
-        Level level;
-        
-        if (ctx.getApplication().getProjectStage() != ProjectStage.Production) {
-            level = Level.WARNING;
-        } else {
-            level = ((t != null) ? Level.WARNING : Level.FINE);
-        }
-
-        if (libraryName != null) {
-            if (LOGGER.isLoggable(level)) {
-                LOGGER.log(level,
-                           "jsf.application.resource.unable_to_serve_from_library",
-                           new Object[]{resourceName, libraryName});
-                if (t != null) {
-                    LOGGER.log(level, "", t);
-                }
-            }
-        } else {
-            if (LOGGER.isLoggable(level)) {
-                LOGGER.log(level,
-                           "jsf.application.resource.unable_to_serve",
-                           new Object[]{resourceName});
-                if (t != null) {
-                    LOGGER.log(level, "", t);
-                }
-            }
-        }
+        send404(ctx, resourceName, libraryName, null, logMessage);
 
     }
+
+
+    private void send404(FacesContext ctx,
+                         String resourceName,
+                         String libraryName,
+                         Throwable t,
+                         boolean logMessage) {
+
+        ctx.getExternalContext().setResponseStatus(HttpServletResponse.SC_NOT_FOUND);
+        if (logMessage) {
+            logMissingResource(ctx, resourceName, libraryName, t);
+        }
+
+
+    }
+
+
+    private void send304(FacesContext ctx) {
+
+        ctx.getExternalContext().setResponseStatus(HttpServletResponse.SC_NOT_MODIFIED);
+
+    }
+
+
 
     // ------------------------------------------------- Package Private Methods
 
@@ -374,6 +366,51 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     
     // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * Log a message indicating a particular resource (reference by name and/or
+     * library) could not be found.  If this was due to an exception, the exception
+     * provided will be logged as well.
+     *
+     * @param ctx the {@link FacesContext} for the current request
+     * @param resourceName the resource name
+     * @param libraryName the resource library
+     * @param t the exception caught when attempting to find the resource
+     */
+    private void logMissingResource(FacesContext ctx,
+                                    String resourceName,
+                                    String libraryName,
+                                    Throwable t) {
+
+        Level level;
+        if (ctx.getApplication().getProjectStage() != ProjectStage.Production) {
+            level = Level.WARNING;
+        } else {
+            level = ((t != null) ? Level.WARNING : Level.FINE);
+        }
+
+        if (libraryName != null) {
+            if (LOGGER.isLoggable(level)) {
+                LOGGER.log(level,
+                           "jsf.application.resource.unable_to_serve_from_library",
+                           new Object[]{resourceName, libraryName});
+                if (t != null) {
+                    LOGGER.log(level, "", t);
+                }
+            }
+        } else {
+            if (LOGGER.isLoggable(level)) {
+                LOGGER.log(level,
+                           "jsf.application.resource.unable_to_serve",
+                           new Object[]{resourceName});
+                if (t != null) {
+                    LOGGER.log(level, "", t);
+                }
+            }
+        }
+
+    }
 
 
     /**
