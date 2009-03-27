@@ -122,7 +122,7 @@ import java.util.LinkedHashMap;
 
 import javax.el.ValueExpression;
 import javax.faces.application.Resource;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 
 
 /**
@@ -921,7 +921,7 @@ public class ApplicationImpl extends Application {
         // overriden methods
         Application app = context.getApplication();
 
-        PageDeclarationLanguage pdl = app.getViewHandler().getPageDeclarationLanguage(context, context.getViewRoot().getViewId());
+        ViewDeclarationLanguage pdl = app.getViewHandler().getPageDeclarationLanguage(context, context.getViewRoot().getViewId());
         BeanInfo componentMetadata = pdl.getComponentMetadata(context,
                                                               componentResource);
         if (null != componentMetadata){

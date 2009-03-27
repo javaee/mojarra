@@ -59,7 +59,7 @@ import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectTarget;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
 
@@ -88,7 +88,7 @@ import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
  * of the responsibilities of the <code>ViewHandler</code> that
  * specifically deal with the PDL sub-system are now the domain of the
  * PDL implementation. These responsibilities are defined on the {@link
- * PageDeclarationLanguage} class.  The <code>ViewHandler</code>
+ * ViewDeclarationLanguage} class.  The <code>ViewHandler</code>
  * provides {@link #getPageDeclarationLanguage} as a convenience method
  * to access the PDL implementation given a <code>viewId</code>.</p>
  *
@@ -459,14 +459,14 @@ public abstract class ViewHandler {
 
     /**
      * <p class="changed_added_2_0">Return the {@link
-     * PageDeclarationLanguage} instance used for this <code>ViewHandler</code>
+     * ViewDeclarationLanguage} instance used for this <code>ViewHandler</code>
      * instance.</p>
      * 
      * <div class="changed_added_2_0">
      * 
      * <p>The default implementation must use {@link
      * javax.faces.webapp.pdl.PageDeclarationLanguageFactory#getPageDeclarationLanguage}
-     * to obtain the appropriate <code>PageDeclarationLanguage</code>
+     * to obtain the appropriate <code>ViewDeclarationLanguage</code>
      * implementation for the argument <code>viewId</code>.  Any
      * exceptions thrown as a result of invoking that method must not be
      * swallowed.</p>
@@ -480,7 +480,7 @@ public abstract class ViewHandler {
 
      * @since 2.0
      */
-    public PageDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
+    public ViewDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
                                                               String viewId) {
 
         throw new UnsupportedOperationException();
@@ -540,9 +540,9 @@ public abstract class ViewHandler {
 
      * <p class="changed_added_2_0">Otherwise, the default
      * implementation must obtain a reference to the {@link
-     * PageDeclarationLanguage} for the <code>viewId</code> of the
+     * ViewDeclarationLanguage} for the <code>viewId</code> of the
      * argument <code>viewToRender</code> and call its {@link
-     * PageDeclarationLanguage#renderView} method, returning the result
+     * ViewDeclarationLanguage#renderView} method, returning the result
      * and not swallowing any exceptions thrown by that method.</p>
      *
      * @param context {@link FacesContext} for the current request
@@ -567,9 +567,9 @@ public abstract class ViewHandler {
      * <code>viewId</code>, return <code>null</code>.</p>
 
      * <p class="changed_added_2_0">Otherwise, the default implementation
-     * must obtain a reference to the {@link PageDeclarationLanguage}
+     * must obtain a reference to the {@link ViewDeclarationLanguage}
      * for this <code>viewId</code> and call its {@link
-     * PageDeclarationLanguage#restoreView} method, returning the result
+     * ViewDeclarationLanguage#restoreView} method, returning the result
      * and not swallowing any exceptions thrown by that method.</p>
 
      * @param context {@link FacesContext} for the current request
@@ -586,12 +586,12 @@ public abstract class ViewHandler {
      * <p class="changed_added_2_0">Assuming the component metadata for
      * argument <code>topLevelComponent</code> has been made available
      * by an earlier call to {@link
-     * PageDeclarationLanguage#getComponentMetadata}, leverage the
+     * ViewDeclarationLanguage#getComponentMetadata}, leverage the
      * component metadata for the purpose of re-targeting attached
      * objects from the top level composite component to the individual
      * {@link AttachedObjectTarget} instances inside the composite
      * component.  This method must be called by the {@link
-     * PageDeclarationLanguage} implementation when creating the
+     * ViewDeclarationLanguage} implementation when creating the
      * <code>UIComponent</code> tree when a composite component usage is
      * encountered.</p>
      *
@@ -695,7 +695,7 @@ public abstract class ViewHandler {
      * <p class="changed_added_2_0">Assuming the component metadata for
      * argument <code>topLevelComponent</code> has been made available
      * by an earlier call to {@link
-     * PageDeclarationLanguage#getComponentMetadata}, leverage the
+     * ViewDeclarationLanguage#getComponentMetadata}, leverage the
      * component metadata for the purpose of re-targeting any method
      * expressions from the top level component to the appropriate inner
      * component.  For each attribute that is a

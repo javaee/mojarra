@@ -208,10 +208,10 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
-     * {@link javax.faces.webapp.pdl.PageDeclarationLanguage} class name.</p>
+     * {@link javax.faces.webapp.pdl.ViewDeclarationLanguage} class name.</p>
      */
-    public final static String PAGE_DECLARATION_LANGUAGE_FACTORY =
-         "javax.faces.webapp.pdl.PageDeclarationLanguageFactory";
+    public final static String VIEW_DECLARATION_LANGUAGE_FACTORY =
+         "javax.faces.webapp.pdl.ViewDeclarationLanguageFactory";
 
     /**
      * <p>The property name for the
@@ -239,10 +239,11 @@ public final class FactoryFinder {
          EXTERNAL_CONTEXT_FACTORY,
          FACES_CONTEXT_FACTORY,
          LIFECYCLE_FACTORY,
-         PAGE_DECLARATION_LANGUAGE_FACTORY,
+         VIEW_DECLARATION_LANGUAGE_FACTORY,
          PARTIAL_VIEW_CONTEXT_FACTORY,
          RENDER_KIT_FACTORY,
          TAG_HANDLER_DELEGATE_FACTORY
+    
     };
 
     /**
@@ -634,8 +635,8 @@ public final class FactoryFinder {
                  javax.faces.context.PartialViewContextFactory.class);
             factoryClasses.put(RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
-            factoryClasses.put(PAGE_DECLARATION_LANGUAGE_FACTORY,
-                 javax.faces.webapp.pdl.PageDeclarationLanguageFactory.class);
+            factoryClasses.put(VIEW_DECLARATION_LANGUAGE_FACTORY,
+                 javax.faces.webapp.pdl.ViewDeclarationLanguageFactory.class);
             factoryClasses.put(TAG_HANDLER_DELEGATE_FACTORY,
                  javax.faces.webapp.pdl.facelets.TagHandlerDelegateFactory.class);
         }

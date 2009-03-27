@@ -66,7 +66,7 @@ import java.util.logging.Logger;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.event.*;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 import javax.faces.webapp.pdl.ViewMetadata;
 
 
@@ -994,7 +994,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * must be logged and swallowed.  If the current view has view
      * parameters, as indicated by a non-empty and
      * non-<code>UnsupportedOperationException</code> throwing return
-     * from {@link javax.faces.webapp.pdl.PageDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)},
+     * from {@link javax.faces.webapp.pdl.ViewDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)},
      * call {@link UIViewParameter#encodeAll} on each parameter.  If
      * calling <code>getViewParameters()</code> causes
      * <code>UnsupportedOperationException</code> to be thrown, the
@@ -1633,7 +1633,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     
 
     private void encodeViewParameters(FacesContext context) {
-        PageDeclarationLanguage pdl = null;
+        ViewDeclarationLanguage pdl = null;
         
         try {
             pdl = context.getApplication().getViewHandler().

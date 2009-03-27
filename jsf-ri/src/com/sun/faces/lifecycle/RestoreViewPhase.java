@@ -73,7 +73,7 @@ import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PostRestoreStateEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 import javax.faces.webapp.pdl.ViewMetadata;
 
 /**
@@ -164,7 +164,7 @@ public class RestoreViewPhase extends Phase {
             return;
         }
         ViewHandler viewHandler = Util.getViewHandler(facesContext);
-        PageDeclarationLanguage pdl = null;
+        ViewDeclarationLanguage pdl = null;
 
         String viewId = null;
 

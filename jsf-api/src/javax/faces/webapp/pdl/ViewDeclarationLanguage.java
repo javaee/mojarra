@@ -58,7 +58,7 @@ import javax.faces.context.FacesContext;
  * @since 2.0
  * 
  */
-public abstract class PageDeclarationLanguage {
+public abstract class ViewDeclarationLanguage {
 
     /**
      * <p class="changed_added_2_0">Return a reference to the component

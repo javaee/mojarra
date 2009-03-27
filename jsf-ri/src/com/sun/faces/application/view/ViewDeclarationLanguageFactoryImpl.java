@@ -36,26 +36,26 @@
 
 package com.sun.faces.application.view;
 
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
-import javax.faces.webapp.pdl.PageDeclarationLanguageFactory;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguageFactory;
 
 /**
  *
  */
-public class PageDeclarationLanguageFactoryImpl extends PageDeclarationLanguageFactory {
+public class ViewDeclarationLanguageFactoryImpl extends ViewDeclarationLanguageFactory {
 
     
     private ViewHandlingStrategyManager viewHandlingStrategy;
 
 
-    // ------------------------------------ Methods from PageDeclarationLanguage
+    // ------------------------------------ Methods from ViewDeclarationLanguage
 
 
     /**
-     * @see javax.faces.webapp.pdl.PageDeclarationLanguageFactory#getPageDeclarationLanguage(String)
+     * @see javax.faces.webapp.pdl.ViewDeclarationLanguageFactory#getPageDeclarationLanguage(String)
      */
     @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage(String viewId) {
+    public ViewDeclarationLanguage getPageDeclarationLanguage(String viewId) {
 
         return getViewHandlingStrategyManager().getStrategy(viewId);
 

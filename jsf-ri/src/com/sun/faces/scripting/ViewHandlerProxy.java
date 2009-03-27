@@ -42,7 +42,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.FacesException;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
@@ -133,7 +133,7 @@ public class ViewHandlerProxy extends ViewHandler {
     }
 
     @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage(FacesContext context, String viewId) {
+    public ViewDeclarationLanguage getPageDeclarationLanguage(FacesContext context, String viewId) {
         return getGroovyDelegate().getPageDeclarationLanguage(context, viewId);
     }
 

@@ -48,7 +48,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIViewParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextWrapper;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 import javax.faces.FacesException;
 
 
@@ -58,14 +58,14 @@ import javax.faces.FacesException;
 public class ViewMetadataImpl extends ViewMetadata {
 
     private String viewId;
-    private PageDeclarationLanguage pdl;
+    private ViewDeclarationLanguage pdl;
     private FaceletFactory faceletFactory;
     
 
     // ------------------------------------------------------------ Constructors
 
 
-    public ViewMetadataImpl(PageDeclarationLanguage pdl, String viewId) {
+    public ViewMetadataImpl(ViewDeclarationLanguage pdl, String viewId) {
 
         this.pdl = pdl;
         this.viewId = viewId;

@@ -44,7 +44,7 @@ package com.sun.faces.lifecycle;
 
 
 import javax.faces.FacesException;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
@@ -100,7 +100,7 @@ public class RenderResponsePhase extends Phase {
             ViewHandler vh = facesContext.getApplication().getViewHandler();
 
             try {
-                PageDeclarationLanguage pdl =
+                ViewDeclarationLanguage pdl =
                       vh.getPageDeclarationLanguage(facesContext,
                                                     facesContext.getViewRoot().getViewId());
                 pdl.buildView(facesContext, facesContext.getViewRoot());

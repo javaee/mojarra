@@ -39,19 +39,19 @@ package javax.faces.webapp.pdl;
 import javax.faces.FacesWrapper;
 
 /**
- * <p class="changed_added_2_0"><strong>PageDeclarationLanguageFactory</strong>
+ * <p class="changed_added_2_0"><strong>ViewDeclarationLanguageFactory</strong>
  * is a factory object that creates (if needed) and returns a new {@link
- * PageDeclarationLanguage} instance based on the PDL found in a specific
+ * ViewDeclarationLanguage} instance based on the PDL found in a specific
  * view.</p>
  *
  * <div class="changed_added_2_0">
  * 
- * <p>There must be one <code>PageDeclarationLanguageFactory</code> instance per web
+ * <p>There must be one <code>ViewDeclarationLanguageFactory</code> instance per web
  * application that is utilizing JavaServer Faces.  This instance can be
  * acquired, in a portable manner, by calling:</p>
  *
  * <pre><code>
- *   PageDeclarationLanguageFactory factory = (PageDeclarationLanguageFactory)
+ *   ViewDeclarationLanguageFactory factory = (ViewDeclarationLanguageFactory)
  *    FactoryFinder.getFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY);
  * </code></pre>
  *
@@ -61,7 +61,7 @@ import javax.faces.FacesWrapper;
  * @since 2.0
  */
 
-public abstract class PageDeclarationLanguageFactory implements FacesWrapper<PageDeclarationLanguageFactory> {
+public abstract class ViewDeclarationLanguageFactory implements FacesWrapper<ViewDeclarationLanguageFactory> {
 
 
     /**
@@ -70,21 +70,21 @@ public abstract class PageDeclarationLanguageFactory implements FacesWrapper<Pag
      * access to the implementation being wrapped.  A default implementation
      * is provided that returns <code>null</code>.</p>
      */
-    public PageDeclarationLanguageFactory getWrapped() {
+    public ViewDeclarationLanguageFactory getWrapped() {
         return null;
     }
 
     
     /**
      * <p class="changed_added_2_0">Return the
-     * <code>PageDeclarationLanguage</code> instance suitable for
+     * <code>ViewDeclarationLanguage</code> instance suitable for
      * handling the PDL contained in the page referenced by the argument
      * <code>viewId</code>.  The default implementation must return a
-     * valid <code>PageDeclarationLanguage</code> instance for views
+     * valid <code>ViewDeclarationLanguage</code> instance for views
      * written in either JSP or Facelets for JSF 2.</p>
      * 
      * @param viewId the viewId to be inspected for an appropriate 
-     * <code>PageDeclarationLanguage</code> implementation for the PDL used
+     * <code>ViewDeclarationLanguage</code> implementation for the PDL used
      * in the view.
      * 
      * @since 2.0
@@ -92,9 +92,9 @@ public abstract class PageDeclarationLanguageFactory implements FacesWrapper<Pag
      * @throws NullPointerException if <code>viewId</code> is null.
      * 
      * @throws ClassNotFoundException if unable to locate a suitable
-     * <code>PageDeclarationLanguage</code> implementation.
+     * <code>ViewDeclarationLanguage</code> implementation.
      * 
      */
-    public abstract PageDeclarationLanguage getPageDeclarationLanguage(String viewId);
+    public abstract ViewDeclarationLanguage getPageDeclarationLanguage(String viewId);
     
 }

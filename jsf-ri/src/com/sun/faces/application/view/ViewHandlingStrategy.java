@@ -46,7 +46,7 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;
@@ -59,7 +59,7 @@ import com.sun.faces.util.Util;
  * is to be rendered/restored.
  * <p>
  */
-public abstract class ViewHandlingStrategy extends PageDeclarationLanguage {
+public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
 
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
 
@@ -95,7 +95,7 @@ public abstract class ViewHandlingStrategy extends PageDeclarationLanguage {
 
 
     /**
-     * @see PageDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)
+     * @see ViewDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)
      */
     @Override
     public UIViewRoot restoreView(FacesContext ctx,
@@ -138,7 +138,7 @@ public abstract class ViewHandlingStrategy extends PageDeclarationLanguage {
 
     
     /**
-     * @see PageDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
+     * @see ViewDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
      */
     @Override
     public UIViewRoot createView(FacesContext ctx,

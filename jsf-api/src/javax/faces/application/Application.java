@@ -68,7 +68,7 @@ import javax.el.ELResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.validator.Validator;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 
 
 /**
@@ -951,7 +951,7 @@ public abstract class Application {
      * 	<ul>
 
 	  <li><p>Obtain a reference to the {@link
-	  PageDeclarationLanguage} for this <code>Application</code>
+	  ViewDeclarationLanguage} for this <code>Application</code>
 	  instance by calling {@link ViewHandler#getPageDeclarationLanguage},
      *    passing the <code>viewId</code> found by calling 
      *    {@link javax.faces.component.UIViewRoot#getViewId} on the 
@@ -961,7 +961,7 @@ public abstract class Application {
 
 	  <li><p>Obtain a reference to the <em>composite component
 	  metadata</em> for this composite component by calling {@link
-	  PageDeclarationLanguage#getComponentMetadata}, passing the
+	  ViewDeclarationLanguage#getComponentMetadata}, passing the
 	  <code>facesContext</code> and <code>componentResource</code>
 	  arguments to this method.  This version of JSF specification
 	  uses JavaBeans as the API to the component metadata.</p></li>
@@ -980,7 +980,7 @@ public abstract class Application {
 
 	  <li><p>Otherwise, determine if a script based component for
 	  this <code>Resource</code> can be found by calling {@link
-	  PageDeclarationLanguage#getScriptComponentResource}.  If the
+	  ViewDeclarationLanguage#getScriptComponentResource}.  If the
 	  result is non-<code>null</code>, and is a script written in
 	  one of the languages listed in JSF.4.3 of the specification prose
 	  document, create a <code>UIComponent</code> instance from the
@@ -1057,7 +1057,7 @@ public abstract class Application {
      * <code>null</code>
      * 
      * @throws NullPointerException if unable, for any reason, to obtain a 
-     * <code>PageDeclarationLanguage</code> instance as described above.
+     * <code>ViewDeclarationLanguage</code> instance as described above.
      *
      * @since 2.0
      */

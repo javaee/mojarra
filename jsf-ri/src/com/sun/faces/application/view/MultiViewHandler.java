@@ -83,7 +83,7 @@ public class MultiViewHandler extends ViewHandler {
 
     private String[] configuredExtensions;
     
-    private PageDeclarationLanguageFactory pdlFactory;
+    private ViewDeclarationLanguageFactory pdlFactory;
 
 
     // ------------------------------------------------------------ Constructors
@@ -95,8 +95,8 @@ public class MultiViewHandler extends ViewHandler {
         String defaultSuffixConfig =
               config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         configuredExtensions = Util.split(defaultSuffixConfig, " ");
-        pdlFactory = (PageDeclarationLanguageFactory) 
-                FactoryFinder.getFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY);
+        pdlFactory = (ViewDeclarationLanguageFactory) 
+                FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
 
     }
 
@@ -123,7 +123,7 @@ public class MultiViewHandler extends ViewHandler {
 
     /**
      * <p>
-     * Call {@link PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)}
+     * Call {@link ViewDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)}
      * if the view can be rendered.
      * </p>
      *
@@ -143,7 +143,7 @@ public class MultiViewHandler extends ViewHandler {
 
     /**
      * <p>
-     * Call {@link PageDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}.
+     * Call {@link ViewDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}.
      * </p>
      *
      * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)   
@@ -458,7 +458,7 @@ public class MultiViewHandler extends ViewHandler {
     /**
      * <p>
      * Derive the actual view ID (i.e. the physical resource) and call
-     * call {@link PageDeclarationLanguage#createView(javax.faces.context.FacesContext, String)}.
+     * call {@link ViewDeclarationLanguage#createView(javax.faces.context.FacesContext, String)}.
      * </p>
      *
      * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)
@@ -691,7 +691,7 @@ public class MultiViewHandler extends ViewHandler {
      * @see ViewHandler#getPageDeclarationLanguage(javax.faces.context.FacesContext, String) 
      */
     @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
+    public ViewDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
                                                               String viewId) {
 
         return pdlFactory.getPageDeclarationLanguage(viewId);
@@ -724,7 +724,7 @@ public class MultiViewHandler extends ViewHandler {
 
         UIViewRoot currentRoot = ctx.getViewRoot();
         String currentViewId = extractViewId(currentRoot.getViewId());
-        PageDeclarationLanguage pdl = null;
+        ViewDeclarationLanguage pdl = null;
         Collection<UIViewParameter> toViewParams;
         Collection<UIViewParameter> currentViewParams;
         boolean currentIsSameAsNew = false;

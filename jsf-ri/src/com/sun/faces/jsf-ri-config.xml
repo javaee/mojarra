@@ -68,9 +68,9 @@
     <render-kit-factory>
       com.sun.faces.renderkit.RenderKitFactoryImpl
     </render-kit-factory>
-    <page-declaration-language-factory>
-      com.sun.faces.application.view.PageDeclarationLanguageFactoryImpl
-    </page-declaration-language-factory>
+    <view-declaration-language-factory>
+      com.sun.faces.application.view.ViewDeclarationLanguageFactoryImpl
+    </view-declaration-language-factory>
     <tag-handler-delegate-factory>
       com.sun.faces.facelets.tag.jsf.TagHandlerDelegateFactoryImpl
     </tag-handler-delegate-factory>

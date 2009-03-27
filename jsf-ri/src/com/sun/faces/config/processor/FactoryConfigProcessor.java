@@ -89,9 +89,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String VISIT_CONTEXT_FACTORY = "visit-context-factory";
 
     /**
-     * <code>/faces-config/factory/page-declaration-language-factory</code>
+     * <code>/faces-config/factory/view-declaration-language-factory</code>
      */
-    private static final String PAGE_DECLARATION_LANGUAGE_FACTORY = "page-declaration-language-factory";
+    private static final String VIEW_DECLARATION_LANGUAGE_FACTORY = "view-declaration-language-factory";
 
     /**
      * <code>/faces-config/factory/tag-handler-helper-factory</code>
@@ -132,11 +132,12 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
           FactoryFinder.FACES_CONTEXT_FACTORY,
           FactoryFinder.LIFECYCLE_FACTORY,
-          FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
+          FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
           FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
           FactoryFinder.RENDER_KIT_FACTORY,
           FactoryFinder.VISIT_CONTEXT_FACTORY,
           FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY
+    
     };
 
     private boolean validateFactories = true;
@@ -255,8 +256,8 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 } else if (RENDER_KIT_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.RENDER_KIT_FACTORY,
                                getNodeText(n));
-                } else if (PAGE_DECLARATION_LANGUAGE_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
+                } else if (VIEW_DECLARATION_LANGUAGE_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY,
                                getNodeText(n));
                 } else if (TAG_HANDLER_DELEGATE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,

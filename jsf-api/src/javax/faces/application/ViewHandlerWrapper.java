@@ -51,7 +51,7 @@ import java.util.Map;
 import java.io.IOException;
 import javax.faces.FacesWrapper;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
-import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.ViewDeclarationLanguage;
 
 /**
  * <p>Provides a simple implementation of {@link ViewHandler} that can
@@ -237,7 +237,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 2.0
      */
     @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
+    public ViewDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
                                                               String viewId) {
 
         return getWrapped().getPageDeclarationLanguage(context, viewId);
