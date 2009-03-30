@@ -41,9 +41,6 @@
 package javax.faces.component;
 
 
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
@@ -103,9 +100,11 @@ public class UIOutput extends UIComponentBase
 
 
     enum PropertyKeys {
-        converter,
-        value
+        value,
+        converter
     }
+
+    private Converter converter;
 
 
     // ------------------------------------------------------------ Constructors
@@ -138,6 +137,9 @@ public class UIOutput extends UIComponentBase
 
     public Converter getConverter() {
 
+        if (this.converter != null) {
+            return (this.converter);
+        }
         return (Converter) getStateHelper().eval(PropertyKeys.converter);
 
     }
@@ -146,7 +148,10 @@ public class UIOutput extends UIComponentBase
     public void setConverter(Converter converter) {
 
         clearInitialState();
-        getStateHelper().put(PropertyKeys.converter, converter);
+        // we don't push the converter to the StateHelper
+        // if it's been explicitly set (i.e. it's not a ValueExpression
+        // reference
+        this.converter = converter;
 
     }
 
@@ -201,6 +206,55 @@ public class UIOutput extends UIComponentBase
             Converter c = getConverter();
             if (c != null && c instanceof PartialStateHolder) {
                 ((PartialStateHolder) c).clearInitialState();
+            }
+        }
+
+    }
+
+
+    @Override
+    public Object saveState(FacesContext context) {
+
+        Object[] values = (Object[]) super.saveState(context);
+        Object converterState = null;
+        if (converter != null) {
+            if (!initialStateMarked()) {
+                // we saving the full state
+                converterState = saveAttachedState(context, converter);
+            } else {
+                if (converter instanceof StateHolder) {
+                    converterState = ((StateHolder) converter).saveState(context);
+                }
+            }
+        }
+        if (converterState != null || values != null) {
+            return new Object[] { values, converterState };
+        }
+        return values;
+
+    }
+
+    
+    @Override
+    public void restoreState(FacesContext context, Object state) {
+
+        if (state == null) {
+            return;
+        }
+        Object[] values = (Object[]) state;
+        super.restoreState(context, values[0]);
+        Object converterState = values[1];
+        if (converterState instanceof StateHolderSaver) {
+            // this means full state was saved and as such
+            // overwrite any existing converter with the saved
+            // converter
+            converter = (Converter) restoreAttachedState(context,
+                                                         converterState);
+        } else {
+            // apply any saved state to the existing converter
+            if (converterState != null && converter instanceof StateHolder) {
+                ((StateHolder) converter)
+                      .restoreState(context, converterState);
             }
         }
 

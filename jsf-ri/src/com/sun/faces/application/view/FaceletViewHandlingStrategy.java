@@ -683,7 +683,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
     private boolean usePartialSaving(String viewId) {
-        return (partialStateSaving || !fullStateViewIds.contains(viewId));
+        return (partialStateSaving && !fullStateViewIds.contains(viewId));
     }
 
     private void doPostBuildActions(UIViewRoot root) {

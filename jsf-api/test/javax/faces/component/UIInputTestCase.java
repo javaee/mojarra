@@ -41,24 +41,18 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import javax.faces.TestUtil;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.el.MethodBinding;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.validator.Validator;
-import javax.faces.validator.DoubleRangeValidator;
-import javax.faces.validator.LengthValidator;
-import javax.faces.validator.LongRangeValidator;
-import javax.faces.application.Application;
-import javax.faces.el.MethodBinding;
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import java.util.Iterator;
 
 
 /**
@@ -583,6 +577,11 @@ public class UIInputTestCase extends UIOutputTestCase {
 	assertEquals(2, listeners.length);
 	TestValueChangeListener [] taListeners = (TestValueChangeListener [])
 	    command.getFacesListeners(TestValueChangeListener.class);
+    }
+
+    @Override
+    public void testConverterState() {
+        // PENDING
     }
 
 

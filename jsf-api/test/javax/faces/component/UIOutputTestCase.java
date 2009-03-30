@@ -41,20 +41,13 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.component.StateHolder;
-import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
-import javax.faces.convert.LongConverter;
-import javax.faces.convert.ShortConverter;
-import javax.faces.TestUtil;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import javax.faces.convert.Converter;
+import javax.faces.convert.DateTimeConverter;
+import javax.faces.convert.LongConverter;
+import javax.faces.convert.ShortConverter;
 
 
 /**
@@ -180,6 +173,93 @@ public class UIOutputTestCase extends ValueHolderTestCaseBase {
 	test.setValueBinding("value", null);
 	assertNull(test.getValueBinding("value"));
 	assertNull(test.getValue());
+
+    }
+
+
+    
+
+
+    public void testConverterState() {
+
+        UIOutput output = (UIOutput) createComponent();
+        DateTimeConverter converter = new DateTimeConverter();
+        converter.setPattern("MM-dd-yy");
+        output.setConverter(converter);
+        output.markInitialState();
+        assertTrue(output.initialStateMarked());
+        assertTrue(converter.initialStateMarked());
+
+        Object result = output.saveState(facesContext);
+        // initial state has been marked an no changes
+        // have occurred, we should have null state.
+        assertNull(result);
+
+        // setup the scenario again, but this time,
+        // update the converter pattern.
+        output = (UIOutput) createComponent();
+        converter = new DateTimeConverter();
+        converter.setPattern("MM-dd-yy");
+        output.setConverter(converter);
+        output.markInitialState();
+        assertTrue(output.initialStateMarked());
+        assertTrue(converter.initialStateMarked());
+
+        // now tweak the converter
+        converter.setPattern("dd-MM-yy");
+        result = output.saveState(facesContext);
+        assertTrue(result instanceof Object[]);
+        Object[] state = (Object[]) result;
+
+        // state should have a lenght of 2.  The first element
+        // is the state from UIComponentBase, where the second
+        // is the converter state.  The first element in this
+        // case should be null
+        assertTrue(state.length == 2);
+        assertTrue(state[0] == null);
+        assertTrue(state[1] != null);
+
+        output = (UIOutput) createComponent();
+        converter = new DateTimeConverter();
+        output.setConverter(converter);
+
+        // now validate what we've restored
+        // first, ensure converter is null.  This will
+        // be the case when initialState has been marked
+        // for the component.
+        output.restoreState(facesContext, state);
+        assertTrue(output.getConverter() != null);
+        assertTrue("dd-MM-yy".equals(converter.getPattern()));
+
+        // now validate the case where UIOutput has some event
+        // that adds a converter *after* initial state has been
+        // marked.  This will cause the component to save full
+        // state.
+        output = (UIOutput) createComponent();
+        output.markInitialState();
+        output.setConverter(converter);
+        assertTrue(!output.initialStateMarked());
+        assertTrue(!converter.initialStateMarked());
+
+        result = output.saveState(facesContext);
+        assertNotNull(result);
+
+        // this time, both elements in the state array will not
+        // be null.  If we call retoreState() on a new component instance
+        // without setting a converter, we should have a new DateTimeConverter
+        // *with* the expected pattern.
+        assertTrue(result instanceof Object[]);
+        state = (Object[]) result;
+        assertTrue(state.length == 2);
+        assertTrue(state[1] instanceof StateHolderSaver);
+        output = (UIOutput) createComponent();
+        assertNull(output.getConverter());
+        output.restoreState(facesContext, state);
+        Converter c = output.getConverter();
+        assertNotNull(c);
+        assertTrue(c instanceof DateTimeConverter);
+        converter = (DateTimeConverter) c;
+        assertTrue("dd-MM-yy".equals(converter.getPattern()));
 
     }
 

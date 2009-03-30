@@ -36,20 +36,12 @@
 
 package com.sun.faces.application;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.DebugUtil;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -60,15 +52,16 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.ResponseStateManager;
-
-import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.DebugUtil;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>
@@ -204,7 +197,7 @@ public class StateManagerImpl extends StateManager {
 
                 // mark the view as populated to prevent the view from
                 // being built again during RenderResponse
-                Util.setViewPopulated(context, viewRoot);
+                // Util.setViewPopulated(context, viewRoot);
                 result = viewRoot;
             }
         }
