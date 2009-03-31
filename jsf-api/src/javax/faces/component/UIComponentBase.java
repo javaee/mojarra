@@ -2014,6 +2014,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     private static boolean isPostbackAndRestoreView(FacesContext context) {
 
+        if (context == null) {
+            throw new IllegalStateException("FacesContext cannot be null");
+        }
         return (context.isPostback() && context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW));
 
     }
