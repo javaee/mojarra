@@ -198,7 +198,7 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
             eventName = holder.getDefaultEventName();
         }
         if (null == eventName){
-            throw new TagException(owner.getTag(), "The event name is not defined");			
+            throw new TagException(owner.getTag(), "The event name is not defined");
         }
         return eventName;
     }
