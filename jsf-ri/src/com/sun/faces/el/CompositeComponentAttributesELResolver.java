@@ -50,6 +50,7 @@ import javax.el.ValueExpression;
 import javax.el.MethodExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.el.CompositeComponentExpressionHolder;
 
 import com.sun.faces.util.Util;
 
@@ -263,7 +264,8 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
      * Simple Map implementation to evaluate any <code>ValueExpression</code>
      * stored directly within the provided attributes map.
      */
-    private static final class ExpressionEvalMap implements Map<String,Object> {
+    private static final class ExpressionEvalMap
+    implements Map<String,Object>, CompositeComponentExpressionHolder {
 
         private Map<String,Object> attributesMap;
         private FacesContext ctx;
@@ -277,6 +279,15 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             this.attributesMap = attributesMap;
             this.ctx = ctx;
 
+        }
+
+
+        // --------------------- Methods from CompositeComponentExpressionHolder
+
+
+        public ValueExpression getExpression(String name) {
+            Object ve = attributesMap.get(name);
+            return ((ve instanceof ValueExpression) ? (ValueExpression) ve : null);
         }
 
 
@@ -298,6 +309,8 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         public boolean containsValue(Object value) {
             throw new UnsupportedOperationException();
         }
+
+
 
         public Object get(Object key) {
             Object v = attributesMap.get(key);

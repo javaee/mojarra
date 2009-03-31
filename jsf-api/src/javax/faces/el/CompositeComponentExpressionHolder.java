@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
+ * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -34,26 +34,26 @@
  * holder.
  */
 
-package javax.faces.validator;
+package javax.faces.el;
 
-class ValueReference {
-    private Object base;
-    private String property;
+import javax.el.ValueExpression;
 
-    public ValueReference(Object base, String property) {
-        this.base = base;
-        this.property = property;
-    }
+/**
+ * This interface <em>must</em> be implemented by the Map returned
+ * by the composite component <code>ELResolver</code>, described in
+ * section 5.6.2.2 of the specification, when evaluating
+ * <code>#{compositeComponent.attrs}</code> epressions.
+ *
+ * @since 2.0
+ */
+public interface CompositeComponentExpressionHolder {
 
-    public Class getBaseClass() {
-        return base.getClass();
-    }
-
-    public Object getBase() {
-        return base;
-    }
-
-    public String getProperty() {
-        return property;
-    }
+    /**
+     * @param name that attribute name which may be assocated
+     *  with a <code>ValueExpression</code>
+     * @return the <code>ValueExpression</code> associated with </code>name</code>
+     *  otherwise return <code>null</code>
+     */
+    ValueExpression getExpression(String name);
+    
 }

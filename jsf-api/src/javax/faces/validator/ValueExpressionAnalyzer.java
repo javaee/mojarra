@@ -44,6 +44,7 @@ import javax.el.ELResolver;
 import javax.el.FunctionMapper;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
+import javax.faces.el.CompositeComponentExpressionHolder;
 
 /**
  * Analyzes a {@link ValueExpression} and provides access to the base object and property
@@ -59,7 +60,18 @@ class ValueExpressionAnalyzer {
     public ValueReference getReference(ELContext elContext) {
         InterceptingResolver resolver = new InterceptingResolver(elContext.getELResolver());
         expression.setValue(decorateELContext(elContext, resolver), null);
-        return resolver.getValueReference();
+        ValueReference reference = resolver.getValueReference();
+        if (reference != null) {
+            Object base = reference.getBase();
+            if (base instanceof CompositeComponentExpressionHolder) {
+                ValueExpression ve = ((CompositeComponentExpressionHolder) base).getExpression(reference.getProperty());
+                if (ve != null) {
+                    this.expression = ve;
+                    reference = getReference(elContext);
+                }
+            }
+        }
+        return reference;
     }
 
     private ELContext decorateELContext(final ELContext context, final ELResolver resolver) {

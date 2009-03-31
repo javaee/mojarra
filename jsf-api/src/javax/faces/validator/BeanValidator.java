@@ -297,7 +297,9 @@ public class BeanValidator implements Validator, PartialStateHolder {
                 new ValueExpressionAnalyzer(valueExpression);
         
         ValueReference valueReference = expressionAnalyzer.getReference(context.getELContext());
-
+        if (valueReference == null) {
+            return;
+        }
         if (isResolvable(valueReference, valueExpression)) {
             Set<ConstraintViolation> violations = Collections.EMPTY_SET;
             try {
