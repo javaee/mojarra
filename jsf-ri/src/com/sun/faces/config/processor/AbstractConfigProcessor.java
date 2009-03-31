@@ -60,7 +60,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 import javax.faces.FactoryFinder;
-import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseListener;
@@ -203,6 +202,26 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
     }
 
+    protected Class<?> findRootType(String source,
+                                    Node sourceNode,
+                                    Class<?>[] ctorArguments) {
+
+        try {
+            Class<?> sourceClass = loadClass(source, this, null);
+            for (Class<?> ctorArg : ctorArguments) {
+                if (ReflectionUtils.lookupConstructor(sourceClass, ctorArg) != null) {
+                    return ctorArg;
+                }
+            }
+        } catch (ClassNotFoundException cnfe) {
+            throw new ConfigurationException(
+                      buildMessage(MessageFormat.format("Unable to find class ''{0}''",
+                                                        source), sourceNode));
+        }
+
+        return null;
+    }
+
 
     protected Object createInstance(String className, Node source) {
         return createInstance(className, null, null, source);
@@ -216,7 +235,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         Object returnObject = null;
         if (className != null) {
             try {
-                clazz = loadClass(className, returnObject, rootType);
+                clazz = loadClass(className, returnObject, null);
                 if (clazz != null) {
                     if (isDevModeEnabled()) {
                         Class<?>[] interfaces = clazz.getInterfaces();

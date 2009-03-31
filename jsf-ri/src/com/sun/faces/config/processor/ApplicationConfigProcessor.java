@@ -53,6 +53,7 @@ import java.util.logging.Logger;
 
 import javax.el.ELResolver;
 import javax.faces.application.Application;
+import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
@@ -458,8 +459,14 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
             String handler = getNodeText(navigationHandler);
             if (handler != null) {
+                Class<?> rootType = findRootType(handler,
+                                                 navigationHandler,
+                                                 new Class[] {
+                                                       ConfigurableNavigationHandler.class,
+                                                       NavigationHandler.class
+                                                     });
                 Object instance = createInstance(handler,
-                                                 NavigationHandler.class,
+                                                 ((rootType != null) ? rootType : NavigationHandler.class),
                                                  application.getNavigationHandler(),
                                                  navigationHandler);
                 if (instance != null) {
