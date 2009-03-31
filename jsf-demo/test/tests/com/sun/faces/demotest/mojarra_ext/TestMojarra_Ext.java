@@ -43,10 +43,7 @@ import javax.faces.component.NamingContainer;
 
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.demotest.HtmlUnitTestCase;
 
 public class TestMojarra_Ext extends HtmlUnitTestCase {
@@ -92,9 +89,10 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
         input.setValueAttribute(incorrectValue);
 
         // "click" the submit button to send the value
-        HtmlPage resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
-        assertTrue(resultPage != null);
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(greetingPage,
+                                                                             formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        assertNotNull(submit);
+        HtmlPage resultPage = submit.click();
 
         assertTrue(resultPage.getTitleText().equals(welcomeTitle));
 
@@ -112,11 +110,13 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
         assertTrue(validatorMessage[1].equals("t.*"));
 
         // Set a correct value
+        input = (HtmlTextInput) getInputContainingGivenId(resultPage, formName + NamingContainer.SEPARATOR_CHAR + inputName);
         input.setValueAttribute(correctValue);
 
         // "click" the submit button to send the value
-        resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        submit = (HtmlSubmitInput) getInputContainingGivenId(resultPage,
+                                                             formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        resultPage = submit.click();
         assertTrue(resultPage != null);
 
         assertTrue(resultPage.getTitleText().equals(secondTitle));
@@ -161,8 +161,9 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
         input.setValueAttribute(incorrectValue1);
 
         // "click" the submit button to send the value
-        HtmlPage resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(greetingPage,
+                                                                             formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        HtmlPage resultPage = submit.click();
         assertTrue(resultPage != null);
 
         assertTrue(resultPage.getTitleText().equals(welcomeTitle));
@@ -176,12 +177,14 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
 
         assertTrue(validationElement.asText().contains(incorrectError1));
 
+        input = (HtmlTextInput) getInputContainingGivenId(resultPage,  formName + NamingContainer.SEPARATOR_CHAR + inputName);
         // Set second incorrect value
         input.setValueAttribute(incorrectValue2);
 
         // "click" the submit button to send the value
-        resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        submit = (HtmlSubmitInput) getInputContainingGivenId(resultPage,
+                                                             formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        resultPage = submit.click();
         assertTrue(resultPage != null);
 
         assertTrue(resultPage.getTitleText().equals(welcomeTitle));
@@ -194,13 +197,14 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
 
         assertTrue(validationElement.asText().contains(incorrectError2));
         
-
+        input = (HtmlTextInput) getInputContainingGivenId(resultPage,  formName + NamingContainer.SEPARATOR_CHAR + inputName);
         // Set a correct value
         input.setValueAttribute(correctValue);
 
         // "click" the submit button to send the value
-        resultPage = (HtmlPage) form.submit(
-                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        submit = (HtmlSubmitInput) getInputContainingGivenId(resultPage,
+                                                             formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        resultPage = submit.click();
         assertTrue(resultPage != null);
 
         assertTrue(resultPage.getTitleText().equals(secondTitle));

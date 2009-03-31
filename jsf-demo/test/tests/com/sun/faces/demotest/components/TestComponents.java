@@ -91,12 +91,13 @@ public class TestComponents extends HtmlUnitTestCase {
         for (int i = 0, len = welcomeTexts.length; i < len; i++) {
 
             area = (HtmlArea) map.getHtmlElementsByTagName("area").get(i);
-            onClick = area.getOnClickAttribute();
-            result = mapPage.executeJavaScriptIfPossible(onClick,
-                                                         onClick,
-                                                         false,
-                                                         area);
-            mapPage = (HtmlPage) result.getNewPage();
+            mapPage = area.click();
+            //onClick = area.getOnClickAttribute();
+            //result = mapPage.executeJavaScriptIfPossible(onClick,
+            //                                             onClick,
+            //                                             false,
+            //                                             area);
+            //mapPage = (HtmlPage) result.getNewPage();
 
             assertTrue(
                   -1 != getImageMapWelcomeText(mapPage)
@@ -141,7 +142,7 @@ public class TestComponents extends HtmlUnitTestCase {
         //tab 2
         page = executeTabbedPane(page, "j_id_id19:j_id_id47");
         //tab3
-        page = executeTabbedPane(page, "j_id_id19:j_id_id29");
+        page = executeTabbedPane(page, "j_id_id19:j_id_id89");
     }
 
 
@@ -161,7 +162,7 @@ public class TestComponents extends HtmlUnitTestCase {
                                                        treeNum);
         assertNotNull(hidden);
         hidden.setValueAttribute("/File");
-        page = (HtmlPage) form.submit();
+        page = (HtmlPage) form.submit(null);
 
         // verify the "File " + treeNum menu disappears
         try {
@@ -180,7 +181,7 @@ public class TestComponents extends HtmlUnitTestCase {
                                                        treeNum);
         assertNotNull(hidden);
         hidden.setValueAttribute("/File");
-        page = (HtmlPage) form.submit();
+        page = (HtmlPage) form.submit(null);
 
         // verify the "File " + treeNum menu re-appears
         anchor = page.getFirstAnchorByText("New " + treeNum);
@@ -207,7 +208,7 @@ public class TestComponents extends HtmlUnitTestCase {
                                                        treeNum);
         assertNotNull(hidden);
         hidden.setValueAttribute("/Edit");
-        page = (HtmlPage) form.submit();
+        page = (HtmlPage) form.submit(null);
 
         // verify the expected elements
         try {
@@ -253,7 +254,7 @@ public class TestComponents extends HtmlUnitTestCase {
               (HtmlHiddenInput) form.getInputByName("j_id_id20:j_id_id65_action");
         assertNotNull(hidden2);
         hidden2.setValueAttribute(newListNum);
-        page = (HtmlPage) form.submit();
+        page = (HtmlPage) form.submit(null);
 
         // If we've pressed the "next" link
         if (newListNum.equals("-1")) {
@@ -303,8 +304,7 @@ public class TestComponents extends HtmlUnitTestCase {
 
     private String getImageMapWelcomeText(HtmlPage page) {
         String result = null;
-        for (Iterator i = page.getAllHtmlChildElements(); i.hasNext();) {
-            HtmlElement element = (HtmlElement) i.next();
+        for (HtmlElement element : page.getAllHtmlChildElements()) {
             if (element instanceof HtmlTable) {
                 HtmlTable table = (HtmlTable) element;
                 result = table.getCellAt(0, 0).asText().trim();

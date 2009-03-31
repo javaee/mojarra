@@ -45,10 +45,7 @@ import javax.faces.component.NamingContainer;
 import java.util.Iterator;
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.demotest.HtmlUnitTestCase;
 
 public class TestGuessNumber extends HtmlUnitTestCase {
@@ -69,9 +66,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
 
             assertTrue(greetingPage.getTitleText().equals("Hello"));
             boolean foundImage = false;
-            for (Iterator iter = greetingPage.getAllHtmlChildElements();
-                 iter.hasNext();) {
-                HtmlElement element = (HtmlElement) iter.next();
+            for (HtmlElement element : greetingPage.getAllHtmlChildElements()) {
                 if (element.getTagName().equalsIgnoreCase("img")) {
                     if (element.getAttributeValue("id").equals(
                           "helloForm" +
@@ -103,16 +98,15 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             input.setValueAttribute(Integer.toString(i));
 
             // "click" the submit button to send our guess
-            HtmlPage resultPage = (HtmlPage) form.submit(
-                  "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+            HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(greetingPage,
+                                                                                 "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+            HtmlPage resultPage = submit.click();
             assertTrue(resultPage != null);
 
             assertTrue(resultPage.getTitleText().equals("Guess The Number"));
 
             foundImage = false;
-            for (Iterator iter = resultPage.getAllHtmlChildElements();
-                 iter.hasNext();) {
-                HtmlElement element = (HtmlElement) iter.next();
+            for (HtmlElement element : resultPage.getAllHtmlChildElements()) {
 
                 // check to see if we guessed correctly or not
                 if (element.getTagName().equalsIgnoreCase("h2")) {
@@ -151,12 +145,9 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             assertTrue(stripJsessionInfo(back.getActionAttribute()).equals(
                   "/jsf-guessNumber/guess/response.jsp"));
 
-            greetingPage =
-                  (HtmlPage) back.submit(
-                        "responseForm"
-                        + NamingContainer
-                              .SEPARATOR_CHAR
-                        + "back");
+            submit = (HtmlSubmitInput) getInputContainingGivenId(resultPage,
+                                                                 "responseForm" + NamingContainer.SEPARATOR_CHAR + "back");
+            greetingPage = submit.click();
             assertTrue(greetingPage != null);
         }
         // ensure that there was only one correct guess through the progession 
@@ -175,13 +166,11 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         HtmlForm guessForm = (HtmlForm) greetingPage.getForms().get(0);
         assertTrue(guessForm != null);
 
-        HtmlPage resultPage = (HtmlPage) guessForm.submit(
-              "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(greetingPage,
+                                                                                 "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        HtmlPage resultPage = submit.click();
         assertTrue(resultPage != null);
-
-        for (Iterator iter = resultPage.getAllHtmlChildElements();
-             iter.hasNext();) {
-            HtmlElement element = (HtmlElement) iter.next();
+        for (HtmlElement element : resultPage.getAllHtmlChildElements()) {
             if (element.asText().trim()
                   .equals("Sorry, null is incorrect. Try a larger number.")) {
                 numberFound++;
@@ -209,14 +198,12 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         assertTrue(input != null);
 
         input.setValueAttribute(Integer.toString(-1234));
-
-        HtmlPage failed = (HtmlPage) guessForm.submit(
-              "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+         HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(greetingPage,
+                                                                                 "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        HtmlPage failed = submit.click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();)
-        {
-            HtmlElement element = (HtmlElement) iter.next();
+        for (HtmlElement element : failed.getAllHtmlChildElements()) {
             if (element.getTagName().equalsIgnoreCase("span")) {
                 if (element.getAttributeValue("id").equals("helloForm" +
                     NamingContainer.SEPARATOR_CHAR + "errors1")) {
@@ -241,15 +228,12 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         assertTrue(input != null);
 
         input.setValueAttribute(Integer.toString(11));
-
-        failed =
-              (HtmlPage) guessForm.submit(
-                    "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(failed,
+                                                             "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        failed = submit.click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();)
-        {
-            HtmlElement element = (HtmlElement) iter.next();
+        for (HtmlElement element : failed.getAllHtmlChildElements()) {
             if (element.getTagName().equalsIgnoreCase("span")) {
                 if (element.getAttributeValue("id").equals("helloForm" +
                     NamingContainer.SEPARATOR_CHAR + "errors1")) {

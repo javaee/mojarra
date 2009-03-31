@@ -47,10 +47,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.demotest.HtmlUnitTestCase;
 
 public class TestMapping extends HtmlUnitTestCase {
@@ -72,9 +69,7 @@ public class TestMapping extends HtmlUnitTestCase {
         for (int i = 0; i < 11; i++) {
 
             assertTrue(greetingPage.getTitleText().equals("Hello"));
-            for (Iterator iter = greetingPage.getAllHtmlChildElements();
-                 iter.hasNext();) {
-                HtmlElement element = (HtmlElement) iter.next();
+            for (HtmlElement element : greetingPage.getAllHtmlChildElements()) {
                 if (element.getTagName().equalsIgnoreCase("img")) {
                     assertTrue(element.getAttributeValue("id").equals(
                           "helloForm" +
@@ -108,15 +103,14 @@ public class TestMapping extends HtmlUnitTestCase {
             input.setValueAttribute(Integer.toString(i));
 
             // "click" the submit button to send our guess
-            HtmlPage resultPage = (HtmlPage) form.submit(
-                  "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+             HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(greetingPage,
+                                                                                 "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+            HtmlPage resultPage = submit.click();
             assertTrue(resultPage != null);
 
             assertTrue(resultPage.getTitleText().equals("Guess The Number"));
 
-            for (Iterator iter = resultPage.getAllHtmlChildElements();
-                 iter.hasNext();) {
-                HtmlElement element = (HtmlElement) iter.next();
+            for (HtmlElement element : resultPage.getAllHtmlChildElements()) {
 
                 // check to see if we guessed correctly or not
                 if (element.getTagName().equalsIgnoreCase("h2")) {
@@ -157,12 +151,9 @@ public class TestMapping extends HtmlUnitTestCase {
                       context + "/response.faces"));
             }
 
-            greetingPage =
-                  (HtmlPage) back.submit(
-                        "responseForm"
-                        + NamingContainer
-                              .SEPARATOR_CHAR
-                        + "back");
+            submit = (HtmlSubmitInput) getInputContainingGivenId(resultPage,
+                                                                 "responseForm" + NamingContainer.SEPARATOR_CHAR + "back");
+            greetingPage = submit.click();
             assertTrue(greetingPage != null);
         }
         // ensure that there was only one correct guess through the progession 
@@ -181,13 +172,11 @@ public class TestMapping extends HtmlUnitTestCase {
         HtmlForm guessForm = (HtmlForm) greetingPage.getForms().get(0);
         assertTrue(guessForm != null);
 
-        HtmlPage resultPage = (HtmlPage) guessForm.submit(
-              "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(greetingPage,
+                                                                             "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        HtmlPage resultPage = submit.click();
         assertTrue(resultPage != null);
-
-        for (Iterator iter = resultPage.getAllHtmlChildElements();
-             iter.hasNext();) {
-            HtmlElement element = (HtmlElement) iter.next();
+        for (HtmlElement element : resultPage.getAllHtmlChildElements()) {
             if (element.asText().trim().equals("Sorry, null is incorrect.")) {
                 numberFound++;
                 System.out.println("Incorrect guess 'null'.");
@@ -214,13 +203,12 @@ public class TestMapping extends HtmlUnitTestCase {
 
         input.setValueAttribute(Integer.toString(-1));
 
-        HtmlPage failed = (HtmlPage) guessForm.submit(
-              "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+         HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(greetingPage,
+                                                                                 "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        HtmlPage failed = submit.click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();)
-        {
-            HtmlElement element = (HtmlElement) iter.next();
+        for (HtmlElement element : failed.getAllHtmlChildElements()) {
             if (element.getTagName().equalsIgnoreCase("span")) {
                 testFailed = true;
                 assertTrue(element.getAttributeValue("style").startsWith(
@@ -242,15 +230,12 @@ public class TestMapping extends HtmlUnitTestCase {
         assertTrue(input != null);
 
         input.setValueAttribute(Integer.toString(11));
-
-        failed =
-              (HtmlPage) guessForm.submit(
-                    "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(failed,
+                                                                              "helloForm" + NamingContainer.SEPARATOR_CHAR + "submit");
+        failed = submit.click();
         assertTrue(failed != null);
         assertTrue(failed.getTitleText().equals("Hello"));
-        for (Iterator iter = failed.getAllHtmlChildElements(); iter.hasNext();)
-        {
-            HtmlElement element = (HtmlElement) iter.next();
+        for (HtmlElement element : failed.getAllHtmlChildElements()) {
             if (element.getTagName().equalsIgnoreCase("span")) {
                 testFailed = true;
                 assertTrue(element.getAttributeValue("style").startsWith(

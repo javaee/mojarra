@@ -49,6 +49,7 @@ import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import junit.framework.TestCase;
 
 
@@ -189,17 +190,14 @@ public class HtmlUnitTestCase extends TestCase {
      */
     protected List getAllElementsOfGivenClass(HtmlElement root, List list,
                                               Class matchClass) {
-        Iterator iter = null;
         if (null == root) {
             return list;
         }
         if (null == list) {
             list = new ArrayList();
         }
-        iter = root.getAllHtmlChildElements();
-        while (iter.hasNext()) {
-            getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
-                                       matchClass);
+        for (HtmlElement element : root.getAllHtmlChildElements()) {
+            getAllElementsOfGivenClass(element, list, matchClass);
         }
         if (matchClass.isInstance(root)) {
             if (!list.contains(root)) {
@@ -209,5 +207,22 @@ public class HtmlUnitTestCase extends TestCase {
         return list;
     }
 
+    protected HtmlInput getInputContainingGivenId(HtmlPage root,
+                                                  String id) {
+        List list;
+        int i;
+        HtmlInput result = null;
+
+        list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
+        for (i = 0; i < list.size(); i++) {
+            result = (HtmlInput) list.get(i);
+            if (-1 != result.getIdAttribute().indexOf(id)) {
+                break;
+            }
+            result = null;
+        }
+        return result;
+
+    }
 
 }
