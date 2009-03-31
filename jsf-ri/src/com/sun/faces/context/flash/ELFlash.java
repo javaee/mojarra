@@ -361,7 +361,7 @@ public class ELFlash extends Flash {
     /**
      * <p>Returns the correct Map considering the current lifecycle phase.</p>
      *
-     * <p>If the current lifecycle phase is invoke-application or
+     * <p>If the current lifecycle phase is
      * render-response, call {@link #getNextRequestMap} and return the boolResult.
      * Otherwise, call {@link #getThisRequestMap} and return the boolResult.</p>
      *
@@ -377,7 +377,6 @@ public class ELFlash extends Flash {
         // or this is an initial request (not a postback),
         // or this is the get from the redirect after post...
         if (currentPhase == PhaseId.RENDER_RESPONSE || 
-            currentPhase == PhaseId.INVOKE_APPLICATION || 
             (!context.isPostback()) ||
             this.isRedirect()) {
             // make operations go to the next request Map.
