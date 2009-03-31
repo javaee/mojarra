@@ -59,7 +59,7 @@ public class BehaviorHandler extends FaceletsAttachedObjectHandler implements Be
     private final TagAttribute event;
     
     private String behaviorId;
-	
+
     private TagHandlerDelegate helper;
 
     public BehaviorHandler(BehaviorConfig config) {
@@ -76,10 +76,10 @@ public class BehaviorHandler extends FaceletsAttachedObjectHandler implements Be
     }
     
     public String getEventName() {
-    	if(null != getEvent()){
-    		return getEvent().getValue();
-    	}
-    	return null;
+        if (null != getEvent()) {
+            return getEvent().getValue();
+        }
+        return null;
     }
     
     @Override
