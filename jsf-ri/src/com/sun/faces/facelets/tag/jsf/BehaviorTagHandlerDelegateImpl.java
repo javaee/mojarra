@@ -175,7 +175,7 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
     public MetaRuleset createMetaRuleset(Class type) {
         Util.notNull("type", type);
         MetaRuleset m = new MetaRulesetImpl(owner.getTag(), type);
-
+        m = m.ignore("event");
         return m.ignore("binding");
     }
     
