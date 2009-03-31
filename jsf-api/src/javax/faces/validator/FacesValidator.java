@@ -86,7 +86,7 @@ public @interface FacesValidator {
      * javax.faces.application.Application#addDefaultValidatorId}.</p>
      */ 
 
-    boolean isDefault() default true;
+    boolean isDefault() default false;
 
 
 }

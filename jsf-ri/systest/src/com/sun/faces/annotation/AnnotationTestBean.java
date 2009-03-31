@@ -37,6 +37,7 @@
 package com.sun.faces.annotation;
 
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,6 +96,12 @@ public class AnnotationTestBean {
         Validator v = app.createValidator("AnnotatedValidator");
         assertNotNull(v);
         assertTrue(v instanceof AnnotatedValidator);
+        Set<String> defaultValidatorIds = app.getDefaultValidatorInfo().keySet();
+        assertFalse(defaultValidatorIds.contains("AnnotatedValidator"));
+
+        // AnnotatedValidatorDefault has isDefault set to true.  Make sure
+        // it's present in the default validator info obtained above.
+        assertTrue(defaultValidatorIds.contains("AnnotatedValidatorDefault"));
         
         Behavior b = app.createBehavior("AnnotatedBehavior");
         assertNotNull(b);
@@ -164,6 +171,8 @@ public class AnnotationTestBean {
         Validator v = app.createValidator("AnnotatedValidator2");
         assertNotNull(v);
         assertTrue(v.getClass().getName().endsWith("AnnotatedValidator2"));
+        Set<String> defaultValidatorIds = app.getDefaultValidatorInfo().keySet();
+        assertFalse(defaultValidatorIds.contains("AnnotatedValidator2"));
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder
               .getFactory(FactoryFinder.RENDER_KIT_FACTORY);

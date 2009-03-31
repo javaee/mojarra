@@ -63,7 +63,7 @@ public class ValidatorConfigHandler implements ConfigAnnotationHandler {
         HANDLES = Collections.unmodifiableCollection(handles);
     }
 
-    private Map<String,String> validators;
+    private Map<ValidatorInfo,String> validators;
 
 
     // ------------------------------------- Methods from ComponentConfigHandler
@@ -85,9 +85,11 @@ public class ValidatorConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (validators == null) {
-            validators = new HashMap<String,String>();
+            validators = new HashMap<ValidatorInfo,String>();
         }
-        validators.put(((FacesValidator) annotation).value(), target.getName());
+        FacesValidator validatorAnnotation = (FacesValidator) annotation;
+        ValidatorInfo info = new ValidatorInfo(validatorAnnotation.value(), validatorAnnotation.isDefault());
+        validators.put(info, target.getName());
 
     }
 
@@ -99,9 +101,28 @@ public class ValidatorConfigHandler implements ConfigAnnotationHandler {
 
         if (validators != null) {
             Application app = ctx.getApplication();
-            for (Map.Entry<String,String> entry : validators.entrySet()) {
-                app.addValidator(entry.getKey(), entry.getValue());
+            for (Map.Entry<ValidatorInfo,String> entry : validators.entrySet()) {
+                app.addValidator(entry.getKey().validatorId, entry.getValue());
+                if (entry.getKey().isDefault) {
+                    app.addDefaultValidatorId(entry.getKey().validatorId);
+                }
             }
+        }
+
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    private static class ValidatorInfo {
+
+        final String validatorId;
+        final boolean isDefault;
+
+        ValidatorInfo(String validatorId, boolean isDefault) {
+            this.validatorId = validatorId;
+            this.isDefault = isDefault;
         }
 
     }
