@@ -141,6 +141,11 @@ public class ResourceCache {
         shutdown = false;
         long checkPeriod = getCheckPeriod(config);
         resourceCache = new MultiKeyConcurrentHashMap<String,ResourceInfo>(30);
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE,
+                       "ResourceCache constructed for {0}.  Check period is {1} minutes.",
+                       new Object[] { contextName, checkPeriod });
+        }
         if (checkPeriod >= 1) {
             initExecutor((checkPeriod * 1000L * 60L));
             initMonitors(sc);
