@@ -285,16 +285,16 @@ class InitFacesContext extends FacesContext {
         }
 
         public Map<String,Object> getRequestCookieMap() {
-            return null;
+            return Collections.unmodifiableMap(Collections.<String,Object>emptyMap());
         }
 
         public Map<String,String> getRequestHeaderMap() {
-            return null;
+            return Collections.unmodifiableMap(Collections.<String,String>emptyMap());
         }
 
 
         public Map<String,String[]> getRequestHeaderValuesMap() {
-            return null;
+            return Collections.unmodifiableMap(Collections.<String,String[]>emptyMap());
         }
 
 
@@ -308,22 +308,22 @@ class InitFacesContext extends FacesContext {
 
 
         public Map<String,Object> getRequestMap() {
-            return null;
+            return Collections.emptyMap();
         }
 
 
         public Map<String,String> getRequestParameterMap() {
-            return null;
+            return Collections.unmodifiableMap(Collections.<String,String>emptyMap());
         }
 
 
         public Iterator<String> getRequestParameterNames() {
-            return null;
+            return Collections.<String>emptyList().iterator();
         }
 
 
         public Map<String,String[]> getRequestParameterValuesMap() {
-            return null;
+            return Collections.unmodifiableMap(Collections.<String,String[]>emptyMap());
         }
 
 
@@ -377,7 +377,7 @@ class InitFacesContext extends FacesContext {
         }
 
         public Map<String,Object> getSessionMap() {
-            return null;
+            return Collections.emptyMap();
         }
 
         public java.security.Principal getUserPrincipal() {

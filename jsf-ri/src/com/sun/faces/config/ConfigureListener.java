@@ -282,14 +282,16 @@ public class ConfigureListener implements ServletRequestListener,
                    "ConfigureListener.contextDestroyed({0})",
                    context.getServletContextName());
 
-        FacesContext initContext = new InitFacesContext(context);
+        InitFacesContext initContext = new InitFacesContext(context);
+
         try {
+            ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
+            elctx.putContext(FacesContext.class, initContext);
+            initContext.setELContext(elctx);
             Application app = initContext.getApplication();
             app.publishEvent(PreDestroyApplicationEvent.class,
                              Application.class,
                              app);
-            // Release any allocated application resources
-            FactoryFinder.releaseFactories();
             if (webResourcePool != null) {
                 webResourcePool.shutdownNow();
             }
@@ -300,6 +302,7 @@ public class ConfigureListener implements ServletRequestListener,
                            e);
             }
         } finally {
+            FactoryFinder.releaseFactories();
             ApplicationAssociate
                   .clearInstance(initContext.getExternalContext());
             ApplicationAssociate.setCurrentInstance(null);
