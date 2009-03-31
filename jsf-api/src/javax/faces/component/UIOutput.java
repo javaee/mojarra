@@ -223,7 +223,10 @@ public class UIOutput extends UIComponentBase
                 converterState = saveAttachedState(context, converter);
             } else {
                 if (converter instanceof StateHolder) {
-                    converterState = ((StateHolder) converter).saveState(context);
+                    StateHolder sh = (StateHolder) converter;
+                    if (!sh.isTransient()) {
+                        converterState = ((StateHolder) converter).saveState(context);
+                    }
                 }
             }
         }

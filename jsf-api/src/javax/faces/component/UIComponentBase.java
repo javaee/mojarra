@@ -67,6 +67,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Array;
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -757,14 +758,12 @@ public abstract class UIComponentBase extends UIComponent {
             Behavior behavior = behaviorEvent.getBehavior();
             behavior.broadcast(behaviorEvent);
         }
-        List<FacesListener> listeners =
-              (List<FacesListener>) getStateHelper().get(PropertyKeys.listeners);
 
         if (listeners == null) {
             return;
         }
 
-        for (FacesListener listener : listeners) {
+        for (FacesListener listener : listeners.asArray(FacesListener.class)) {
             if (event.isAppropriateListener(listener)) {
                 event.processListener(listener);
             }
@@ -881,6 +880,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     // -------------------------------------------------- Event Listener Methods
 
+    private AttachedObjectListHolder<FacesListener> listeners;
 
     /**
      * <p>Add the specified {@link FacesListener} to the set of listeners
@@ -927,7 +927,11 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
-        getStateHelper().add(PropertyKeys.listeners, listener);
+        if (listeners == null) {
+            listeners = new AttachedObjectListHolder<FacesListener>();
+        }
+
+        listeners.add(listener);
 
     }
 
@@ -937,6 +941,7 @@ public abstract class UIComponentBase extends UIComponent {
      * @throws NullPointerException     {@inheritDoc}
      */
     protected FacesListener[] getFacesListeners(Class clazz) {
+
         if (clazz == null) {
             throw new NullPointerException();
         }
@@ -944,14 +949,15 @@ public abstract class UIComponentBase extends UIComponent {
             throw new IllegalArgumentException();
         }
 
-        List<FacesListener> listeners =
-              (List<FacesListener>) getStateHelper().get(PropertyKeys.listeners);
-        if (listeners == null) {
-            return ((FacesListener[])
-                    java.lang.reflect.Array.newInstance(clazz, 0));
+        if (this.listeners == null) {
+            return (FacesListener[]) Array.newInstance(clazz, 0);
+        }
+        FacesListener[] listeners = this.listeners.asArray(FacesListener.class);
+        if (listeners.length == 0) {
+            return (FacesListener[]) Array.newInstance(clazz, 0);
         }
 
-        List<FacesListener> results = new ArrayList<FacesListener>(listeners.size());
+        List<FacesListener> results = new ArrayList<FacesListener>(listeners.length);
         for (FacesListener listener : listeners) {
             if (((Class<?>) clazz).isAssignableFrom(listener.getClass())) {
                 results.add(listener);
@@ -959,7 +965,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         return (results.toArray
-                ((FacesListener[]) java.lang.reflect.Array.newInstance(clazz,
+                ((FacesListener[]) Array.newInstance(clazz,
                         results.size())));
 
     }
@@ -979,7 +985,9 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
-        getStateHelper().remove(PropertyKeys.listeners, listener);
+        if (listeners != null) {
+            listeners.remove(listener);
+        }
 
     }
 
@@ -1280,15 +1288,9 @@ public abstract class UIComponentBase extends UIComponent {
     @Override
     public void markInitialState() {
         super.markInitialState();
-        List<FacesListener> listeners =
-                    (List<FacesListener>)
-                               getStateHelper().get(PropertyKeys.listeners);
+
         if (listeners != null) {
-            for (FacesListener listener : listeners) {
-                if (listener instanceof PartialStateHolder) {
-                    ((PartialStateHolder) listener).markInitialState();
-                }
-            }
+            listeners.markInitialState();
         }
         if (listenersByEventClass != null) {
             for (List<SystemEventListener> listener : listenersByEventClass.values()) {
@@ -1318,15 +1320,8 @@ public abstract class UIComponentBase extends UIComponent {
     @Override
     public void clearInitialState() {
         super.clearInitialState();
-        List<FacesListener> listeners =
-                    (List<FacesListener>)
-                               getStateHelper().get(PropertyKeys.listeners);
         if (listeners != null) {
-            for (FacesListener listener : listeners) {
-                if (listener instanceof PartialStateHolder) {
-                    ((PartialStateHolder) listener).clearInitialState();
-                }
-            }
+            listeners.clearInitialState();
         }
         if (listenersByEventClass != null) {
             for (List<SystemEventListener> listener : listenersByEventClass.values()) {
@@ -1352,6 +1347,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         assert (!transientFlag);
         if (initialStateMarked()) {
+            Object savedFacesListeners = ((listeners != null) ? listeners.saveState(context) : null);
             Object savedSysEventListeners = saveSystemEventListeners(context);
             Object savedBehaviors = saveBehaviorsState(context);
             Object savedBindings = null;
@@ -1362,39 +1358,42 @@ public abstract class UIComponentBase extends UIComponent {
             if (stateHelper != null) {
                 savedHelper = stateHelper.saveState(getFacesContext());
             }
-            if (savedSysEventListeners == null
+            if (savedFacesListeners == null
+                  && savedSysEventListeners == null
                   && savedBehaviors == null
                   && savedBindings == null
                   && savedHelper == null) {
                 return null;
             } else {
                 if (values == null) {
-                    values = new Object[4];
+                    values = new Object[5];
                 }
 
                 // since we're saving partial state, skip id and clientId
                 // as this will be reconstructed from the template execution
                 // when the view is restored
-                values[0] = savedSysEventListeners;
-                values[1] = savedBehaviors;
-                values[2] = savedBindings;
-                values[3] = savedHelper;
+                values[0] = savedFacesListeners;
+                values[1] = savedSysEventListeners;
+                values[2] = savedBehaviors;
+                values[3] = savedBindings;
+                values[4] = savedHelper;
                 return values;
             }
         } else {
             if (values == null) {
-                values = new Object[5];
+                values = new Object[6];
             }
 
-            values[0] = saveSystemEventListeners(context);
-            values[1] = saveBehaviorsState(context);
+            values[0] = ((listeners != null) ? listeners.saveState(context) : null);
+            values[1] = saveSystemEventListeners(context);
+            values[2] = saveBehaviorsState(context);
             if (bindings != null) {
-                values[2] = saveBindingsState(context);
+                values[3] = saveBindingsState(context);
             }
             if (stateHelper != null) {
-                values[3] = stateHelper.saveState(getFacesContext());
+                values[4] = stateHelper.saveState(getFacesContext());
             }
-            values[4] = id;
+            values[5] = id;
 
             return (values);
         }
@@ -1409,27 +1408,33 @@ public abstract class UIComponentBase extends UIComponent {
         values = (Object[]) state;
 
         if (values[0] != null) {
-            Map m = restoreSystemEventListeners(context, values[0]);
+            if (listeners == null) {
+                listeners = new AttachedObjectListHolder<FacesListener>();
+            }
+            listeners.restoreState(context, values[0]);
+        }
+        if (values[1] != null) {
+            Map m = restoreSystemEventListeners(context, values[1]);
             if (listenersByEventClass != null) {
                 listenersByEventClass.putAll(m);
             } else {
                 listenersByEventClass = m;
             }
         }
-        if (values[1] != null) {
-            behaviors = restoreBehaviorsState(context, values[1]);
-        }
         if (values[2] != null) {
-            bindings = restoreBindingsState(context, values[2]);
+            behaviors = restoreBehaviorsState(context, values[2]);
         }
-        if(values[3] != null) {
-            getStateHelper().restoreState(getFacesContext(), values[3]);
+        if (values[3] != null) {
+            bindings = restoreBindingsState(context, values[3]);
         }
-        if (values.length == 5) {
+        if(values[4] != null) {
+            getStateHelper().restoreState(getFacesContext(), values[4]);
+        }
+        if (values.length == 6) {
             // this means we've saved full state and need to do a little more
             // work to finish the job
-            if (values[4] != null) {
-                id = (String) values[4];
+            if (values[5] != null) {
+                id = (String) values[5];
             }
         }
 
@@ -3134,4 +3139,5 @@ public abstract class UIComponentBase extends UIComponent {
             return modifiableMap;
         }
     }
+
 }

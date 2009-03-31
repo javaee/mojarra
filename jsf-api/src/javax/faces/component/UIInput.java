@@ -239,11 +239,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
          */
         immediate,
 
-        /**
-         * <p>List of validators associated with this component.</p>
-         */
-        validators,
-
     }
 
     // ------------------------------------------------------------ Constructors
@@ -641,13 +636,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         addDefaultValidators(FacesContext.getCurrentInstance());
         super.markInitialState();
-        Validator[] validators = getValidators();
         if (validators != null) {
-            for (Validator v : validators) {
-                if (v instanceof PartialStateHolder) {
-                    ((PartialStateHolder) v).markInitialState();
-                }
-            }
+            validators.markInitialState();
         }
 
     }
@@ -658,13 +648,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         if (initialStateMarked()) {
             super.clearInitialState();
-            Validator[] validators = getValidators();
             if (validators != null) {
-                for (Validator v : validators) {
-                    if (v instanceof PartialStateHolder) {
-                        ((PartialStateHolder) v).clearInitialState();
-                    }
-                }
+                validators.clearInitialState();
             }
         }
 
@@ -1230,8 +1215,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         // If our value is valid and not empty or empty w/ validate empty fields enabled, call all validators
         if (isValid() && (!isEmpty(newValue) || validateEmptyFields(context))) {
-            List<Validator> validators = (List<Validator>) getStateHelper().get(PropertyKeys.validators);
             if (validators != null) {
+                Validator[] validators = this.validators.asArray(Validator.class);
                 for (Validator validator : validators) {
                     try {
                         validator.validate(context, this, newValue);
@@ -1333,7 +1318,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <p>The set of {@link Validator}s associated with this
      * <code>UIComponent</code>.</p>
      */
-    //List<Validator> validators = null;
+    AttachedObjectListHolder<Validator> validators;
 
 
     /**
@@ -1349,8 +1334,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         if (validator == null) {
             throw new NullPointerException();
         }
-        clearInitialState();
-        getStateHelper().add(PropertyKeys.validators, validator);
+
+        if (validators == null) {
+            validators = new AttachedObjectListHolder<Validator>();
+        }
+        validators.add(validator);
 
     }
     
@@ -1362,13 +1350,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     public Validator[] getValidators() {
 
-        List<Validator> validators = (List<Validator>)
-              getStateHelper().get(PropertyKeys.validators);
-        if (validators == null) {
-            return EMPTY_VALIDATOR;
-        } else {
-            return (validators.toArray(new Validator[validators.size()]));
-        }
+        return ((validators != null) ? validators.asArray(Validator.class) : EMPTY_VALIDATOR);
 
     }
 
@@ -1385,8 +1367,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         if (validator == null) {
             return;
         }
-        clearInitialState();
-        getStateHelper().remove(PropertyKeys.validators, validator);
+
+        if (validators != null) {
+            validators.remove(validator);
+        }
 
     }
 
@@ -1443,13 +1427,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[4];
+            values = new Object[5];
         }
 
         values[0] = super.saveState(context);
         values[1] = emptyStringIsNull;
         values[2] = validateEmptyFields;
         values[3] = defaultValidatorsProcessed;
+        values[4] = ((validators != null) ? validators.saveState(context) : null);
         return (values);
 
     }
@@ -1462,6 +1447,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         emptyStringIsNull = (Boolean) values[1];
         validateEmptyFields = (Boolean) values[2];
         defaultValidatorsProcessed = (Boolean) values[3];
+        if (values[4] != null) {
+            if (validators == null) {
+                validators = new AttachedObjectListHolder<Validator>();
+            }
+            validators.restoreState(context, values[4]);
+        }
 
     }
 

@@ -579,11 +579,6 @@ public class UIInputTestCase extends UIOutputTestCase {
 	    command.getFacesListeners(TestValueChangeListener.class);
     }
 
-    @Override
-    public void testConverterState() {
-        // PENDING
-    }
-
 
     // --------------------------------------------------------- Support Methods
 

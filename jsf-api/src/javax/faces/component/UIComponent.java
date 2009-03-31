@@ -196,7 +196,6 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
         attributes,
         bindings,
         rendererType,
-        listeners,
         systemEventListeners,
         behaviors
     }
