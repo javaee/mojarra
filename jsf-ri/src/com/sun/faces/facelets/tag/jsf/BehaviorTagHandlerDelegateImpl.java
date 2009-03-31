@@ -39,7 +39,12 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 //import com.sun.faces.facelets.tag.composite.CompositeBehaviors;
 import com.sun.faces.util.Util;
+
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
 import java.io.IOException;
+import java.util.List;
+
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -50,6 +55,8 @@ import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.view.AttachedObjectHandler;
+import javax.faces.view.AttachedObjectTarget;
+import javax.faces.view.BehaviorHolderAttachedObjectTarget;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.BehaviorHandler;
@@ -77,22 +84,52 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
         if (parent == null || !(parent.getParent() == null)) {
             return;
         }
-        if (parent.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
-//            String eventName;
-//        	CompositeBehaviors behaviors = CompositeBehaviors.getCompositeBehaviors(parent);
-//            if (null != owner.getEvent()){
-//                eventName = owner.getEvent().getValue();
-//                if(!behaviors.containsEvent(eventName)){
-//                    throw new TagException(owner.getTag(), "Parent composite component does not define event: " + eventName);            		                	
-//                }
-//            } else {
-//            	eventName = behaviors.getDefaultEventName();
-//            	if(null == eventName){
-//                    throw new TagException(owner.getTag(), "Never Parent composite component defines default event nor behavior tag has event name: " + parent);            		
-//            	}
-//            }
-//            AttachedBehaviors.getAttachedBehaviorsHandler(parent).add(eventName,owner);
-            CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(owner);
+        if (parent.getAttributes()
+              .containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+            // Check composite component event name:
+            BeanInfo componentBeanInfo = (BeanInfo) parent.getAttributes().get(
+                  UIComponent.BEANINFO_KEY);
+            if (null == componentBeanInfo) {
+                throw new TagException(
+                      owner.getTag(),
+                      "Error: enclosing composite component does not have BeanInfo attribute");
+            }
+            BeanDescriptor componentDescriptor = componentBeanInfo
+                  .getBeanDescriptor();
+            if (null == componentDescriptor) {
+                throw new TagException(
+                      owner.getTag(),
+                      "Error: enclosing composite component BeanInfo does not have BeanDescriptor");
+            }
+            List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
+                  componentDescriptor
+                        .getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
+            if (null == targetList) {
+                throw new TagException(
+                      owner.getTag(),
+                      "Error: enclosing composite component does not support behavior events");
+            }
+            String eventName = owner.getEventName();
+            boolean supportedEvent = false;
+            for (AttachedObjectTarget target : targetList) {
+                if (target instanceof BehaviorHolderAttachedObjectTarget) {
+                    BehaviorHolderAttachedObjectTarget behaviorTarget = (BehaviorHolderAttachedObjectTarget) target;
+                    if ((null != eventName && eventName.equals(behaviorTarget.getName()))
+                        || (null == eventName && behaviorTarget.isDefaultEvent())) {
+                        supportedEvent = true;
+                        break;
+                    }
+                }
+            }
+            if (supportedEvent) {
+                CompositeComponentTagHandler.getAttachedObjectHandlers(parent)
+                      .add(owner);
+            } else {
+                throw new TagException(
+                      owner.getTag(),
+                      "Error: enclosing composite component does not support event "
+                      + eventName);
+            }
 
         } else if (parent instanceof ClientBehaviorHolder) {
             owner.applyAttachedObject(ctx.getFacesContext(), parent);

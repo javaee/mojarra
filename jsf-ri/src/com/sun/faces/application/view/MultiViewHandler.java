@@ -228,16 +228,16 @@ public class MultiViewHandler extends ViewHandler {
                         }
                         break;
                     }
-                } else if(curHandler instanceof BehaviorHandler && 
-                		curTarget instanceof BehaviorHolderAttachedObjectTarget) {
-                	BehaviorHolderAttachedObjectHandler behaviorHandler = (BehaviorHolderAttachedObjectHandler) curHandler;
-                	BehaviorHolderAttachedObjectTarget behaviorTarget = (BehaviorHolderAttachedObjectTarget) curTarget;
-                	String eventName = behaviorHandler.getEventName();
-					if((null !=eventName && eventName.equals(curTargetName))||(null ==eventName && behaviorTarget.isDefaultEvent())){
+                } else if(curHandler instanceof BehaviorHolderAttachedObjectHandler && 
+                        curTarget instanceof BehaviorHolderAttachedObjectTarget) {
+                    BehaviorHolderAttachedObjectHandler behaviorHandler = (BehaviorHolderAttachedObjectHandler) curHandler;
+                    BehaviorHolderAttachedObjectTarget behaviorTarget = (BehaviorHolderAttachedObjectTarget) curTarget;
+                    String eventName = behaviorHandler.getEventName();
+                    if((null !=eventName && eventName.equals(curTargetName))||(null ==eventName && behaviorTarget.isDefaultEvent())){
                         for (UIComponent curTargetComponent : targetComponents) {
                             retargetHandler(context, curHandler, curTargetComponent);
                         }
-                	}
+                    }
                 }
 
 

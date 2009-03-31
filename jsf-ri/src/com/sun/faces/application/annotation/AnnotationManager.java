@@ -19,8 +19,11 @@ import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.component.behavior.ClientBehaviorBase;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.render.ClientBehaviorRenderer;
+import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
@@ -41,6 +44,13 @@ public class AnnotationManager {
      * {@link Scanner} instances to be used against {@link Behavior} classes.
      */
     private static final Scanner[] BEHAVIOR_SCANNERS = {
+          RESOURCE_DEPENDENCY_SCANNER
+    };
+
+    /**
+     * {@link Scanner} instances to be used against {@link ClientBehaviorRenderer} classes.
+     */
+    private static final Scanner[] CLIENT_BEHAVIOR_RENDERER_SCANNERS = {
           RESOURCE_DEPENDENCY_SCANNER
     };
 
@@ -84,6 +94,7 @@ public class AnnotationManager {
      */
     private enum ProcessingTarget {
         Behavior(BEHAVIOR_SCANNERS),
+        ClientBehaviorRenderer(CLIENT_BEHAVIOR_RENDERER_SCANNERS),
         UIComponent(UICOMPONENT_SCANNERS),
         Validator(VALIDATOR_SCANNERS),
         Converter(CONVERTER_SCANNERS),
@@ -159,9 +170,31 @@ public class AnnotationManager {
     public void applyBehaviorAnnotations(FacesContext ctx, Behavior b) {
 
         applyAnnotations(ctx, b.getClass(), ProcessingTarget.Behavior, b);
+        if (b instanceof ClientBehaviorBase) {
+            ClientBehaviorBase clientBehavior = (ClientBehaviorBase) b;
+            String rendererType = clientBehavior.getRendererType();
+            RenderKit renderKit = ctx.getRenderKit();
+            if( null != rendererType && null != renderKit){
+                ClientBehaviorRenderer behaviorRenderer = renderKit.getClientBehaviorRenderer(rendererType);
+                if(null != behaviorRenderer){
+                    applyClientBehaviorRendererAnnotations(ctx, behaviorRenderer);
+                }
+            }
+        }
 
     }
 
+    /**
+     * Apply annotations relevant to {@link javax.faces.render.ClientBehaviorRenderer} instances.
+     * @param ctx the {@link javax.faces.context.FacesContext} for the current request
+     * @param b the target <code>ClientBehaviorRenderer</code> to process
+     */
+    public void applyClientBehaviorRendererAnnotations(FacesContext ctx, ClientBehaviorRenderer b) {
+
+        applyAnnotations(ctx, b.getClass(), ProcessingTarget.ClientBehaviorRenderer, b);
+
+    }
+    
     /**
      * Apply annotations relevant to {@link javax.faces.component.UIComponent} instances.
      * @param ctx the {@link javax.faces.context.FacesContext} for the current request

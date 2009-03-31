@@ -51,6 +51,8 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -61,7 +63,6 @@ import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
@@ -71,7 +72,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.AjaxBehaviorListener;
+import javax.faces.view.AttachedObjectTarget;
 import javax.faces.view.BehaviorHolderAttachedObjectHandler;
+import javax.faces.view.BehaviorHolderAttachedObjectTarget;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.FaceletException;
 
@@ -83,8 +86,6 @@ import javax.faces.view.facelets.TagHandler;
 import com.sun.faces.RIConstants;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-//import com.sun.faces.facelets.tag.composite.CompositeBehaviors;
-import com.sun.faces.facelets.tag.jsf.AttachedBehaviors;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 
 import javax.faces.view.facelets.ComponentHandler;
@@ -93,7 +94,7 @@ import javax.faces.view.facelets.ComponentHandler;
 /**
  * <p class="changed_added_2_0">Enable one or more components in the view
  * to perform Ajax operations.  This tag handler must create an instance
- * of {@link javax.faces.component.AjaxBehavior} using the tag attribute 
+ * of {@link javax.faces.component.behavior.AjaxBehavior} using the tag attribute
  * values.  If this tag is nested within a single 
  * {@link ClientBehaviorHolder} component:
  * <ul>
@@ -242,7 +243,48 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
 
         // Composite component case
         if (UIComponent.isCompositeComponent(parent)) {
-            CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(this);
+            // Check composite component event name:
+            BeanInfo componentBeanInfo = (BeanInfo) parent.getAttributes().get(
+                  UIComponent.BEANINFO_KEY);
+            if (null == componentBeanInfo) {
+                throw new TagException(
+                      tag,
+                      "Error: enclosing composite component does not have BeanInfo attribute");
+            }
+            BeanDescriptor componentDescriptor = componentBeanInfo.getBeanDescriptor();
+            if (null == componentDescriptor) {
+                throw new TagException(
+                      tag,
+                      "Error: enclosing composite component BeanInfo does not have BeanDescriptor");
+            }
+            List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
+                  componentDescriptor
+                        .getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
+            if (null == targetList) {
+                throw new TagException(
+                      tag,
+                      "Error: enclosing composite component does not support behavior events");
+            }
+            boolean supportedEvent = false;
+            for (AttachedObjectTarget target : targetList) {
+                if (target instanceof BehaviorHolderAttachedObjectTarget) {
+                    BehaviorHolderAttachedObjectTarget behaviorTarget = (BehaviorHolderAttachedObjectTarget) target;
+                    if ((null != eventName && eventName.equals(behaviorTarget.getName()))
+                        || (null == eventName && behaviorTarget.isDefaultEvent())) {
+                        supportedEvent = true;
+                        break;
+                    }
+                }
+            }
+            if (supportedEvent) {
+                CompositeComponentTagHandler.getAttachedObjectHandlers(parent)
+                      .add(this);
+            } else {
+                throw new TagException(
+                      tag,
+                      "Error: enclosing composite component does not support event "
+                      + eventName);
+            }
         } else if (parent instanceof ClientBehaviorHolder) {
             applyAttachedObject(ctx, parent, eventName);
         } else {
