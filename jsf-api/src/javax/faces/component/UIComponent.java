@@ -1657,7 +1657,7 @@ private void doFind(FacesContext context, String clientId) {
         if (contextMap != null) {
             previouslyPushed = (UIComponent) contextMap.put(CURRENT_COMPONENT, component);
             // If this is a composite component...
-            if (component.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+            if (UIComponent.isCompositeComponent(component)) {
                 // make it so #{compositeComponent} resolves to this composite 
                 // component, preserving the previous value if present
                 previouslyPushedCompositeComponent = 
@@ -1690,18 +1690,12 @@ private void doFind(FacesContext context, String clientId) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
-            UIComponent c = (UIComponent) contextMap.remove(CURRENT_COMPONENT);
-            if (c != null && c != this) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "warning.component.pop_component_from_el_sync_issue",
-                               new Object[] { this.getClass().getName(),
-                                              c.getClass().getName() });
-                    return;
-                }
-            }
+            UIComponent c;
+            
             if (previouslyPushed != null) {
-                contextMap.put(CURRENT_COMPONENT, previouslyPushed);
+                c = (UIComponent) contextMap.put(CURRENT_COMPONENT, previouslyPushed);
+            } else {
+                c = (UIComponent) contextMap.remove(CURRENT_COMPONENT);
             }
 
             if (c != null && UIComponent.isCompositeComponent(c)) {
