@@ -767,9 +767,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                             compositeParent = getCompositeComponentParent(source);
                         }
                         if (compositeParent != null) {
-                            pushComponentToEL(context, compositeParent);
+                            source.pushComponentToEL(context, compositeParent);
                         }
-                        pushComponentToEL(context, source);
+                        source.pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException ape) {
                         // A "return" here would abort remaining events too
@@ -780,9 +780,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                                                                                         phaseId));
                     }
                     finally {
-                        popComponentFromEL(context);
+                        source.popComponentFromEL(context);
                         if (compositeParent != null) {
-                            popComponentFromEL(context);
+                            source.popComponentFromEL(context);
                         }
                     }
                     eventsForPhaseId.remove(0); // Stay at current position
