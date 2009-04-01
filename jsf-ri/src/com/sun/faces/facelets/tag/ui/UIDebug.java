@@ -58,6 +58,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIComponentBase;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.servlet.http.HttpServletResponse;
@@ -103,6 +104,7 @@ public final class UIDebug extends UIComponentBase {
 
     public void encodeBegin(FacesContext faces) throws IOException {
 
+        pushComponentToEL(faces, this);
         String actionId = faces.getApplication().getViewHandler().getActionURL(faces, faces.getViewRoot().getViewId());
         
         StringBuffer sb = new StringBuffer(512);

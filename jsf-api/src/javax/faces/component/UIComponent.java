@@ -109,6 +109,9 @@ import javax.faces.render.Renderer;
 
 public abstract class UIComponent implements PartialStateHolder, SystemEventListenerHolder,
         ComponentSystemEventListener {
+
+    private static Logger LOGGER = Logger.getLogger("javax.faces.component",
+            "javax.faces.LogStrings");
     
     /**
      * <p class="changed_added_2_0">The key to which the
@@ -1687,11 +1690,18 @@ private void doFind(FacesContext context, String clientId) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
-            UIComponent c;
+            UIComponent c = (UIComponent) contextMap.remove(CURRENT_COMPONENT);
+            if (c != null && c != this) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "warning.component.pop_component_from_el_sync_issue",
+                               new Object[] { this.getClass().getName(),
+                                              c.getClass().getName() });
+                    return;
+                }
+            }
             if (previouslyPushed != null) {
-                c = (UIComponent) contextMap.put(CURRENT_COMPONENT, previouslyPushed);
-            } else {
-                c = (UIComponent) contextMap.remove(CURRENT_COMPONENT);
+                contextMap.put(CURRENT_COMPONENT, previouslyPushed);
             }
 
             if (c != null && UIComponent.isCompositeComponent(c)) {
