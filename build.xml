@@ -117,17 +117,16 @@
         </trycatch>
     </target>
 
-    <target name="build.and.deploy" depends="clean, main"
-            description="Clean, build, and deploy, without running tests">
+    <target name="build.and.debug" depends="clean, main"
+            description="Clean, build, and deploy, restarting in debug mode">
         <trycatch>
                 <try>
                     <container.stop/>
                     <antcall target="container.deploy"/>
-                    <container.start/>
+                    <container.debug/>
                 </try>
         </trycatch>
     </target>
-
 
     <!-- Create the source distribution -->
     <target name="jsf.source">                

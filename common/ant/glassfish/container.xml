@@ -190,6 +190,12 @@ grant {
             description="Start the GlassFish container">
         <container.start/>
     </target>
+
+    <target name="container.debug"
+            description="Start the GlassFish container in debug mode">
+        <container.debug/>
+    </target>
+
     <target name="container.stop"
             description="Stop the GlassFish container">
         <container.stop/>
@@ -249,6 +255,43 @@ grant {
             </if>
         </sequential>
     </macrodef>
+
+    <macrodef name="debug.domain">
+        <sequential>
+            <echo>
+
+"------------ Starting ${glassfish.domain} in debug mode ------------"
+
+            </echo>
+            <if>
+                <os family="unix"/>
+                <then>
+                    <exec executable="${container.home}/bin/asadmin"
+                          failonerror="true">
+                        <arg line="start-domain"/>
+                        <arg line="--debug"/>
+                        <arg line="--user ${glassfish.admin.user}"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </then>
+                <else>
+                    <exec executable="${container.home}/bin/asadmin.bat"
+                          spawn="true">
+                        <arg line="start-domain"/>
+                        <arg line="--debug"/>
+                        <arg line="--user ${glassfish.admin.user}"/>
+                        <arg line="${glassfish.domain}"/>
+                    </exec>
+                    <waitfor>
+                        <http url="http://${container.host}:${container.port}"/>
+                    </waitfor>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>    
 
     <macrodef name="stop.domain">
         <sequential>

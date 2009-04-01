@@ -104,7 +104,7 @@
         <sequential>
             <echo message="Provide 'config.container' implementation"/>
         </sequential>
-    </macrodef>
+    </target>
 
     <!--
          Display/Validate any property information necessary to build 
@@ -145,7 +145,17 @@
             <echo message="Provide 'container.start' implementation"/>
         </sequential>
     </macrodef>
-    
+
+    <!--
+        OPTIONAL
+          Start the container in debug mode
+    -->
+    <macrodef name="container.debug"
+            description="Start the target container in debug mode.">
+        <sequential>
+            <echo message="Provide 'container.debug' implementation"/>
+        </sequential>
+    </macrodef>
     <!--
        OPTIONAL
           Stop the container
