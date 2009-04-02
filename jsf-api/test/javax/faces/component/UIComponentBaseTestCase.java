@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.io.IOException;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -149,6 +150,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     public void testComponentToFromEL() {
+
         final String key = UIComponent.CURRENT_COMPONENT;
         TestComponent c = new TestComponent();
         facesContext.getAttributes().clear();
@@ -165,6 +167,81 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(facesContext.getAttributes().get(key) == c);
         c.popComponentFromEL(facesContext);
         assertTrue(facesContext.getAttributes().get(key) == c1);
+
+    }
+
+
+    public void testComponentToFromEL2() throws Exception {
+
+        final String key = UIComponent.CURRENT_COMPONENT;
+        final FacesContext ctx = facesContext;
+        TestComponent c = new TestComponent();
+        TestComponent c2 = new TestComponent();
+        UIComponent eeo = new UIComponentOverrideEncodeEnd();
+        TestComponent c3 = new TestComponent();
+        UIComponent ebo = new UIComponentOverrideEncodeBegin();
+
+        c.encodeBegin(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), c);
+        c2.encodeBegin(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), c2);
+        c2.encodeEnd(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), c);
+        c.encodeEnd(ctx);
+        assertNull(UIComponent.getCurrentComponent(ctx));
+
+        // sanity check for the case where a component overrides
+        // encodeBegin() without calling super or pushComponentToEL
+        c.encodeBegin(ctx);
+        c2.encodeBegin(ctx);
+        ebo.encodeBegin(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), c2);
+        ebo.encodeEnd(ctx); // if the component wasn't pushed
+                            // it shouldn't be popped.
+        assertEquals(UIComponent.getCurrentComponent(ctx), c2);
+        c2.encodeEnd(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), c);
+        c.encodeEnd(ctx);
+        assertNull(UIComponent.getCurrentComponent(ctx));
+
+
+        // sanity check for the case where a component overrides
+        // encodeEnd() without calling super or popComponentFromEL
+        c.encodeBegin(ctx);
+        c2.encodeBegin(ctx);
+        eeo.encodeBegin(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), eeo);
+        eeo.encodeEnd(ctx);
+        // this is ugly.  Because of a component not doing calling
+        // super() or popComponentFromEL, c2 won't be visible
+        // as the current component.
+        assertEquals(UIComponent.getCurrentComponent(ctx), eeo);
+        c2.encodeEnd(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), c);
+        c.encodeEnd(ctx);
+        assertNull(UIComponent.getCurrentComponent(ctx));
+
+        UIComponent eeo2 = new UIComponentOverrideEncodeEnd();
+        c.encodeBegin(ctx);
+        c2.encodeBegin(ctx);
+        eeo.encodeBegin(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), eeo);
+        c3.encodeBegin(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), c3);
+        eeo2.encodeBegin(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), eeo2);
+        eeo2.encodeEnd(ctx);
+        // this is ugly.
+        assertEquals(UIComponent.getCurrentComponent(ctx), eeo2);
+        c3.encodeEnd(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), eeo);
+        eeo.encodeEnd(ctx);
+        // this is ugly.
+        assertEquals(UIComponent.getCurrentComponent(ctx), eeo);
+        c2.encodeEnd(ctx);
+        assertEquals(UIComponent.getCurrentComponent(ctx), c);
+        c.encodeEnd(ctx);
+        assertNull(UIComponent.getCurrentComponent(ctx));
 
     }
 
@@ -1751,5 +1828,33 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         }
 
     }
+
+
+    public static final class UIComponentOverrideEncodeBegin extends UIComponentBase {
+
+        public String getFamily() {
+            return "UIComponentOverrideEncodeBegin";
+        }
+
+        @Override
+        public void encodeBegin(FacesContext context) throws IOException {
+            // no-op
+        }
+
+    }
+
+
+    public static final class UIComponentOverrideEncodeEnd extends UIComponentBase {
+
+        public String getFamily() {
+            return "UIComponentOverrideEncodeEnd";
+        }
+
+        @Override
+        public void encodeEnd(FacesContext context) throws IOException {
+            // no-op
+        }
+    }
+
 
 }

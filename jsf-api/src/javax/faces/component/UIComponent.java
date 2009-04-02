@@ -1610,6 +1610,7 @@ private void doFind(FacesContext context, String clientId) {
 
     private UIComponent previouslyPushed = null;
     private UIComponent previouslyPushedCompositeComponent = null;
+    private boolean pushed;
 
     /**
      * <p class="changed_added_2_0">Push the current
@@ -1655,6 +1656,7 @@ private void doFind(FacesContext context, String clientId) {
             component = this;
         }
         if (contextMap != null) {
+            pushed = true;
             previouslyPushed = (UIComponent) contextMap.put(CURRENT_COMPONENT, component);
             // If this is a composite component...
             if (UIComponent.isCompositeComponent(component)) {
@@ -1690,8 +1692,12 @@ private void doFind(FacesContext context, String clientId) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
+
+            if (!pushed) {
+                return;
+            }
             UIComponent c;
-            
+            pushed = false;
             if (previouslyPushed != null) {
                 c = (UIComponent) contextMap.put(CURRENT_COMPONENT, previouslyPushed);
             } else {
