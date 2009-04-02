@@ -841,18 +841,5 @@ javax.faces.level=ALL
   <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${impl.version}" goals="deploy" />
 </target>
 
-<target name="diffapis">
-
-  <difftrees treeA="${src.dir}" treeB="/Users/edburns/Documents/Projects/JavaEE/workareas/jsf-trunk/jsf-api/src" />
-
-</target>
-
-
-<target name="edburns">
-
-  <echo message="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar" />
-
-</target>
-
 
 </project>

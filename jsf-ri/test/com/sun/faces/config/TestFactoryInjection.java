@@ -735,7 +735,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         boolean validationFailed;
 
         @Override
-        public boolean getValidationFailed() {
+        public boolean isValidationFailed() {
             return validationFailed;
         }
 

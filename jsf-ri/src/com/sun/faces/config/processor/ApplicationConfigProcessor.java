@@ -382,6 +382,11 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     LOGGER.fine("Unable to load Beans Validation");
                 }
                 appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
+            } catch (Throwable t) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Unable to load Beans Validation");
+                }
+                appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
             }
         }
 

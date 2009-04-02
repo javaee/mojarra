@@ -46,11 +46,11 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong class="changed_added_2_0">UISelectOne</strong> is a {@link
- * UIComponent} that represents the user's choice of zero or one items
- * from among a discrete set of available options.  The user can modify
- * the selected value.  Optionally, the component can be preconfigured
- * with a currently selected item, by storing it as the
+ * <p><strong class="changed_modified_2_0">UISelectOne</strong> is a
+ * {@link UIComponent} that represents the user's choice of zero or one
+ * items from among a discrete set of available options.  The user can
+ * modify the selected value.  Optionally, the component can be
+ * preconfigured with a currently selected item, by storing it as the
  * <code>value</code> property of the component.</p>
  *
  * <p>This component is generally rendered as a select box or a group of

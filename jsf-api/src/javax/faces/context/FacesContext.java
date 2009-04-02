@@ -417,9 +417,9 @@ public abstract class FacesContext {
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
-    public boolean getValidationFailed() {
+    public boolean isValidationFailed() {
         if (defaultFacesContext != null) {
-            return defaultFacesContext.getValidationFailed();
+            return defaultFacesContext.isValidationFailed();
         }
 
         throw new UnsupportedOperationException();
@@ -623,7 +623,7 @@ public abstract class FacesContext {
      * <p class="changed_added_2_0">Sets a flag which indicates that a conversion or
      * validation error occurred while processing the inputs. Inputs consist of
      * either page parameters or form bindings. This flag can be read using
-     * the getValidationFailed() method.</p>
+     * {@link #isValidationFailed}.</p>
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released

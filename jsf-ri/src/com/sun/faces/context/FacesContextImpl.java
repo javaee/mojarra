@@ -610,7 +610,7 @@ public class FacesContextImpl extends FacesContext {
     /**
      * @see javax.faces.context.FacesContext#getValidationFailed()
      */
-    public boolean getValidationFailed() {
+    public boolean isValidationFailed() {
         assertNotReleased();
         return validationFailed;
     }

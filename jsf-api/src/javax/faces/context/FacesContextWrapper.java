@@ -409,15 +409,15 @@ public abstract class FacesContextWrapper extends FacesContext implements FacesW
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link javax.faces.context.FacesContext#getValidationFailed()}
+     * call {@link javax.faces.context.FacesContext#isValidationFailed}
      * on the wrapped {@link FacesContext} object.</p>
      *
-     * @see FacesContext#getValidationFailed()
+     * @see FacesContext#isValidationFailed
      */
     @Override
-    public boolean getValidationFailed() {
+    public boolean isValidationFailed() {
 
-        return getWrapped().getValidationFailed();
+        return getWrapped().isValidationFailed();
 
     }
 

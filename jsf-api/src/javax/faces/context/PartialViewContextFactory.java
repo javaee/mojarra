@@ -39,10 +39,11 @@ package javax.faces.context;
 import javax.faces.FacesWrapper;
 
 /**
- /**
- * <p><strong class="changed_modified_2_0">PartialViewContextFactory</strong>
- * is a factory object that creates
- * (if needed) and returns new {@link PartialViewContext} instances.</p>
+ * <p class="changed_modified_2_0">PartialViewContextFactory is a
+ * factory object that creates (if needed) and returns new {@link
+ * PartialViewContext} instances.</p>
+ *
+ * <div class="changed_added_2_0">
  *
  * <p>There must be one <code>PartialViewContextFactory</code> instance per web
  * application that is utilizing JavaServer Faces.  This instance can be
@@ -51,6 +52,8 @@ import javax.faces.FacesWrapper;
  *   PartialViewContextFactory factory = (PartialViewContextFactory)
  *    FactoryFinder.getFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY);
  * </pre>
+ *
+ * </div>
  *
  * @since 2.0
  */

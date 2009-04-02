@@ -33,7 +33,7 @@ public class NewsReader {
     }
 
     public void loadStory() {
-        if (!facesContext.getValidationFailed()) {
+        if (!facesContext.isValidationFailed()) {
             NewsStory story = newsIndex.getStory(selectedStoryId);
             if (story != null) {
                 selectedStory = story;

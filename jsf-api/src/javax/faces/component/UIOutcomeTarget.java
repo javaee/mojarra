@@ -49,7 +49,7 @@ import javax.faces.context.FacesContext;
 /**
  * <p class="changed_added_2_0">This component is paired with the
  * <code>javax.faces.Button</code> or <code>javax.faces.Link</code>
- * renderers and uncapsulates properties relating to the rendering of
+ * renderers and encapsulates properties relating to the rendering of
  * outcomes directly to the response.  This enables bookmarkability in
  * JSF applications.</p>
  *

@@ -47,7 +47,7 @@ import javax.faces.component.UISelectOne;
 
 
 /**
- * <p><strong class="changed_added_2_0">SelectItem</strong> represents a
+ * <p><strong class="changed_modified_2_0">SelectItem</strong> represents a
  * single <em>item</em> in the list of supported <em>items</em>
  * associated with a {@link UISelectMany} or {@link UISelectOne}
  * component.</p>

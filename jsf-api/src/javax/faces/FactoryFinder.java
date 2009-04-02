@@ -158,15 +158,15 @@ public final class FactoryFinder {
          "javax.faces.application.ApplicationFactory";
 
     /**
-     * <p>The property name for the {@link
+     * <p class="changed_added_2_0">The property name for the {@link
      * javax.faces.context.ExceptionHandlerFactory} class name.</p>
      */
     public final static String EXCEPTION_HANDLER_FACTORY =
          "javax.faces.context.ExceptionHandlerFactory";
 
     /**
-     * <p>The property name for the
-     * {@link javax.faces.context.ExternalContextFactory} class name.</p>
+     * <p class="changed_added_2_0">The property name for the {@link
+     * javax.faces.context.ExternalContextFactory} class name.</p>
      */
     public final static String EXTERNAL_CONTEXT_FACTORY =
          "javax.faces.context.ExternalContextFactory";
@@ -179,15 +179,15 @@ public final class FactoryFinder {
          "javax.faces.context.FacesContextFactory";
 
     /**
-     * <p>The property name for the
-     * {@link javax.faces.context.PartialViewContextFactory} class name.</p>
+     * <p class="changed_added_2_0">The property name for the {@link
+     * javax.faces.context.PartialViewContextFactory} class name.</p>
      */
     public final static String PARTIAL_VIEW_CONTEXT_FACTORY =
           "javax.faces.context.PartialViewContextFactory";
 
     /**
-     * <p>The property name for the
-     * {@link javax.faces.component.visit.VisitContextFactory} class name.</p>
+     * <p class="changed_added_2_0">The property name for the {@link
+     * javax.faces.component.visit.VisitContextFactory} class name.</p>
      */
     public final static String VISIT_CONTEXT_FACTORY =
          "javax.faces.component.visit.VisitContextFactory";
@@ -207,15 +207,15 @@ public final class FactoryFinder {
          "javax.faces.render.RenderKitFactory";
 
     /**
-     * <p>The property name for the
-     * {@link javax.faces.view.ViewDeclarationLanguage} class name.</p>
+     * <p class="changed_added_2_0">The property name for the {@link
+     * javax.faces.view.ViewDeclarationLanguage} class name.</p>
      */
     public final static String VIEW_DECLARATION_LANGUAGE_FACTORY =
          "javax.faces.view.ViewDeclarationLanguageFactory";
 
     /**
-     * <p>The property name for the
-     * {@link javax.faces.view.facelets.TagHandlerDelegate} class name.</p>
+     * <p class="changed_added_2_0">The property name for the {@link
+     * javax.faces.view.facelets.TagHandlerDelegate} class name.</p>
      */
     public final static String TAG_HANDLER_DELEGATE_FACTORY =
          "javax.faces.view.facelets.TagHandlerDelegateFactory";

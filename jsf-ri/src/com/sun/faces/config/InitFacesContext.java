@@ -151,7 +151,7 @@ class InitFacesContext extends FacesContext {
     }
 
     @Override
-    public boolean getValidationFailed() {
+    public boolean isValidationFailed() {
         return false;
     }
 

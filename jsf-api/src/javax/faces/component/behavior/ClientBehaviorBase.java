@@ -50,11 +50,16 @@ import javax.faces.render.RenderKit;
  * <p class="changed_added_2_0"><strong>ClientBehaviorBase</strong> is a
  * convenience base class that implements the default concrete behavior
  * of all methods defined by {@link ClientBehavior}.</p>
+ *
+ * <div  class="changed_added_2_0">
+ *
  * <p>Subclasses should either override getRendererType() to identify
  * the {@link ClientBehaviorRenderer} to delegate to, or they should override 
  * <code>getScript()</code> to locally generate the desired Behavior 
  * script, and <code>decode()</code>.
  * </p>
+ *
+ * </div>
  *
  * @since 2.0
  */
@@ -65,17 +70,17 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
     "javax.faces.LogStrings");
 
     /**
-     * <p class="changed_added_2_0">Default implementation of 
-     * of {@link ClientBehavior#getScript}.  If a {@link ClientBehaviorRenderer} 
-     * is available for the specified behavior renderer type, this method
-     * delegates to the {@link ClientBehaviorRenderer#getScript} method.  
-     * Otherwise, this method returns null.
-     * </p>
+     * <p class="changed_added_2_0">Default implementation of of {@link
+     * ClientBehavior#getScript}.  If a {@link ClientBehaviorRenderer}
+     * is available for the specified behavior renderer type, this
+     * method delegates to the {@link ClientBehaviorRenderer#getScript}
+     * method.  Otherwise, this method returns null.  </p>
      *
      * @param behaviorContext the {@link ClientBehaviorContext}
      *
-     * @return the script provided by the associated ClientBehaviorRenderer, or
-     * null if no ClientBehaviorRenderer is available.
+     * @return the script provided by the associated
+     * ClientBehaviorRenderer, or null if no ClientBehaviorRenderer is
+     * available.
      *
      * @throws NullPointerException if <code>behaviorContext</code> is 
      * <code>null</code>
@@ -156,10 +161,11 @@ public class ClientBehaviorBase extends BehaviorBase implements ClientBehavior {
     }
 
     /**
-     * <p class="changed_added_2_0">Convenience method to return the {@link ClientBehaviorRenderer} 
-     * instance associated with this {@link ClientBehavior}, if any; otherwise, return
-     * <code>null</code>.
-     * </p>
+     * <p class="changed_added_2_0">Convenience method to return the
+     * {@link ClientBehaviorRenderer} instance associated with this
+     * {@link ClientBehavior}, if any; otherwise, return
+     * <code>null</code>.  </p>
+
      * @param context {@link FacesContext} for the request we are processing
      * @return {@link ClientBehaviorRenderer} instance from the current {@link RenderKit} or null.
      *

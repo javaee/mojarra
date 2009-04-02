@@ -52,6 +52,11 @@
     </context-param>
 
     <context-param>
+        <param-name>javax.faces.validator.DISABLE_DEFAULT_BEAN_VALIDATOR</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
         <param-name>com.sun.faces.enableGroovyScripting</param-name>
         <param-value>true</param-value>
     </context-param>

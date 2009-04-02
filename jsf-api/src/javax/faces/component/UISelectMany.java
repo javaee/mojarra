@@ -60,7 +60,7 @@ import javax.faces.convert.Converter;
  * more items from among a discrete set of available options.  The user
  * can modify the selected values.  Optionally, the component can be
  * preconfigured with zero or more currently selected items, by storing
- * them as an array <span class="changed_modified_2_0">or
+ * them as an array <span class="changed_added_2_0">or
  * <code>Collection</code></span> in the <code>value</code> property of
  * the component.</p>
  *
@@ -96,7 +96,7 @@ import javax.faces.convert.Converter;
  * javax.faces.convert.Converter} for the underlying element
  * type.</p></li> 
 
- * <li class="changed_modified_2_0"><p>A <code>java.util.Collection</code>.
+ * <li class="changed_added_2_0"><p>A <code>java.util.Collection</code>.
  * Do not convert the values.</p></li>
 
  * </ul>
@@ -108,13 +108,13 @@ import javax.faces.convert.Converter;
 
  * <p>Use the selected {@link javax.faces.convert.Converter} (if any) to
  * convert each element in the values array from the request to the
- * proper type, <span class="changed_modified_2_0">and store the result of
+ * proper type, <span class="changed_added_2_0">and store the result of
  * each conversion in a data structure, called
  * <em>targetForConvertedValues</em> for discussion.  Create
  * <em>targetForConvertedValues</em> using the following
  * algorithm.</span></p>
 
- * <div class="changed_modified_2_0">
+ * <div class="changed_added_2_0">
 
  * <ul>
 

@@ -1712,9 +1712,11 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
+     * <p class="changed_added_2_0">Return <code>true</code> if
+     * <code>component</code> is a composite component, otherwise
+     * <code>false</code>.</p>
+     *
      * @param component the {@link UIComponent} to test
-     * @return <code>true</code> if <code>component</code> is a composite component,
-     *  otherwise <code>false</code>
      *
      * @throws NullPointerException if <code>component</code> is <code>null</code>
      * @since 2.0
