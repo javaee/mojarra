@@ -240,10 +240,17 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
     private void throwIt(FacesContext ctx, FacesException fe) {
 
-        if (ProjectStage.Development.equals(ctx.getApplication().getProjectStage()) && !errorPagePresent) {
+        boolean isDevelopment = ProjectStage.Development.equals(ctx.getApplication().getProjectStage());
+        if (isDevelopment && !errorPagePresent) {
             // RELEASE_PENDING what about other device types?
             RenderKitUtils.renderHtmlErrorPage(ctx, fe);
         } else {
+            if (isDevelopment) {
+                // store the view root where the exception occurred into the
+                // request scope so that the error page can display that component
+                // tree and not the one rendering the errorpage
+                ctx.getExternalContext().getRequestMap().put("com.sun.faces.error.view", ctx.getViewRoot());
+            }
             throw fe;
         }
     }

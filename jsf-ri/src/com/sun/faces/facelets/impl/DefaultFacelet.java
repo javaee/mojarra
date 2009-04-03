@@ -70,6 +70,7 @@ import java.util.logging.Logger;
 import javax.el.ELException;
 import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -79,6 +80,7 @@ import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * Default Facelet implementation.
@@ -91,6 +93,7 @@ final class DefaultFacelet extends Facelet {
     private static final Logger log = FacesLogger.FACELETS_FACELET.getLogger();
 
     private final static String APPLIED_KEY = "com.sun.faces.facelets.APPLIED";
+    private static final String JAVAX_FACES_ERROR_XHTML = "javax.faces.error.xhtml";
 
     private final String alias;
 
@@ -107,6 +110,7 @@ final class DefaultFacelet extends Facelet {
     private final FaceletHandler root;
 
     private final URL src;
+
 
     public DefaultFacelet(DefaultFaceletFactory factory, ExpressionFactory el,
             URL src, String alias, FaceletHandler root) {
@@ -306,7 +310,20 @@ final class DefaultFacelet extends Facelet {
      */
     public void include(DefaultFaceletContext ctx, UIComponent parent, String path)
             throws IOException, FacesException, FaceletException, ELException {
-        URL url = this.getRelativePath(path);
+        URL url;
+        if (path.equals(JAVAX_FACES_ERROR_XHTML)) {
+            if (isDevelopment(ctx)) {
+                // try using this class' ClassLoader
+                url = getErrorFacelet(DefaultFacelet.class.getClassLoader());
+                if (url == null) {
+                    url = getErrorFacelet(Util.getCurrentLoader(this));
+                }
+            } else {
+                return;
+            }
+        } else {
+            url = this.getRelativePath(path);
+        }
         this.include(ctx, parent, url);
     }
 
@@ -358,5 +375,22 @@ final class DefaultFacelet extends Facelet {
 
     public String toString() {
         return this.alias;
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private boolean isDevelopment(FaceletContext ctx) {
+
+        return ProjectStage.Development.equals(ctx.getFacesContext().getApplication().getProjectStage());
+
+    }
+
+
+    private URL getErrorFacelet(ClassLoader loader) {
+
+        return loader.getResource("META-INF/error-include.xhtml");
+
     }
 }

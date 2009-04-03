@@ -339,6 +339,7 @@
                 <include name="mojarra_ext.tld"/>
                 <include name="mojarra_ext.taglib.xml"/>
                 <include name="facelet-dev*.xml"/>
+                <include name="error-include.xhtml"/>
             </fileset>
         </copy>
 

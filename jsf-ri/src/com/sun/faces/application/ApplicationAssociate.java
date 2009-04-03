@@ -52,11 +52,13 @@ import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.tag.TagDecorator;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
 import com.sun.faces.facelets.tag.jstl.core.JstlCoreLibrary;
-import com.sun.faces.facelets.tag.jstl.fn.JstlFnLibrary;
+import com.sun.faces.facelets.tag.jstl.fn.JstlFunction;
 import com.sun.faces.facelets.tag.ui.UILibrary;
 import com.sun.faces.facelets.tag.jsf.core.CoreLibrary;
 import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
 import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.facelets.util.FunctionLibrary;
+import com.sun.faces.facelets.util.DevTools;
 import com.sun.faces.facelets.impl.ResourceResolver;
 import com.sun.faces.facelets.impl.DefaultResourceResolver;
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
@@ -90,7 +92,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.util.logging.Level;
@@ -655,7 +656,10 @@ public class ApplicationAssociate {
         c.addTagLibrary(new HtmlLibrary());
         c.addTagLibrary(new UILibrary());
         c.addTagLibrary(new JstlCoreLibrary());
-        c.addTagLibrary(new JstlFnLibrary());
+        c.addTagLibrary(new FunctionLibrary(JstlFunction.class, "http://java.sun.com/jsp/jstl/functions"));
+        if (isDevModeEnabled()) {
+            c.addTagLibrary(new FunctionLibrary(DevTools.class, "http://java.sun.com/mojarra/private/functions"));
+        }
         c.addTagLibrary(new CompositeLibrary());
 
         return c;
