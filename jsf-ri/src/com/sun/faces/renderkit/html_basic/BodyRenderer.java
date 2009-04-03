@@ -46,6 +46,8 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.Attribute;
+import com.sun.faces.renderkit.AttributeManager;
 
 /**
  * <p>This <code>Renderer</code> is responsible for rendering
@@ -53,6 +55,10 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * that should be output before the <code>body</code> tag is closed.</p>
  */
 public class BodyRenderer extends Renderer {
+
+    private static final Attribute[] BODY_ATTRIBUTES =
+             AttributeManager.getAttributes(AttributeManager.Key.OUTPUTBODY);
+
 
     @Override
     public void decode(FacesContext context, UIComponent component) {
@@ -64,6 +70,14 @@ public class BodyRenderer extends Renderer {
           throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("body", component);
+        String styleClass = (String) component.getAttributes().get("styleClass");
+        if (styleClass != null && styleClass.length() != 0) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
+                                                component,
+                                                BODY_ATTRIBUTES);
     }
 
     @Override

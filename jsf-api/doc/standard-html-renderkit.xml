@@ -19988,6 +19988,295 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
+<!--
+         the following components are here merely for AttributeManager
+         generation.
+    -->
+  <component>
+    <description>NONE</description>
+    <display-name>head</display-name>
+    <component-type>javax.faces.OutputHead</component-type>
+    <component-class>javax.faces.component.html.HtmlHead</component-class>
+
+    <property>
+      <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+      <display-name>Direction</display-name>
+      <icon/>
+      <property-name>dir</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+      <display-name>Language Code</display-name>
+      <icon/>
+      <property-name>lang</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+    <component-extension>
+      <base-component-type>javax.faces.Output</base-component-type>
+      <renderer-type>javax.faces.Head</renderer-type>
+      <ignore>true</ignore>
+    </component-extension>
+  </component>
+  <component>
+    <description>NONE</description>
+    <display-name>body</display-name>
+    <component-type>javax.faces.OutputBody</component-type>
+    <component-class>javax.faces.component.html.HtmlBody</component-class>
+
+    <property>
+      <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+      <display-name>Direction</display-name>
+      <icon/>
+      <property-name>dir</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+      <display-name>Language Code</display-name>
+      <icon/>
+      <property-name>lang</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+      <display-name>CSS Styles</display-name>
+      <icon/>
+      <property-name>style</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+      <display-name>CSS Style Classes</display-name>
+      <icon/>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+      <display-name>Advisory Title</display-name>
+      <icon/>
+      <property-name>title</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+      <display-name>Double Click Script</display-name>
+      <icon/>
+      <property-name>ondblclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+      <display-name>Mouse Down Script</display-name>
+      <icon/>
+      <property-name>onmousedown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+      <display-name>Mouse Up Script</display-name>
+      <icon/>
+      <property-name>onmouseup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+      <display-name>Mouse Over Script</display-name>
+      <icon/>
+      <property-name>onmouseover</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+      <display-name>Mouse Move Script</display-name>
+      <icon/>
+      <property-name>onmousemove</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+      <display-name>Mouse Out Script</display-name>
+      <icon/>
+      <property-name>onmouseout</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+      <display-name>Key Press Script</display-name>
+      <icon/>
+      <property-name>onkeypress</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+      <display-name>Key Down Script</display-name>
+      <icon/>
+      <property-name>onkeydown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+      <display-name>Key Up Script</display-name>
+      <icon/>
+      <property-name>onkeyup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+
+    <property>
+      <description>
+            </description>
+      <display-name/>
+      <icon/>
+      <property-name>onload</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+            </description>
+      <display-name/>
+      <icon/>
+      <property-name>onunload</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <component-extension>
+      <base-component-type>javax.faces.Output</base-component-type>
+      <renderer-type>javax.faces.Body</renderer-type>
+      <ignore>true</ignore>
+    </component-extension>
+  </component>
 <!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
@@ -30504,6 +30793,34 @@ unmodified to the rendered output.</p>
       <renderer-class>
         com.sun.faces.renderkit.html_basic.HeadRenderer
     </renderer-class>
+
+      <attribute>
+        <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+        <display-name>Direction</display-name>
+        <icon/>
+        <attribute-name>dir</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+        <display-name>Language Code</display-name>
+        <icon/>
+        <attribute-name>lang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
         <tag-name>head</tag-name>
@@ -30551,6 +30868,245 @@ unmodified to the rendered output.</p>
       <renderer-class>
         com.sun.faces.renderkit.html_basic.BodyRenderer
     </renderer-class>
+
+      <attribute>
+        <description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+        <display-name>CSS Styles</display-name>
+        <icon/>
+        <attribute-name>style</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+        <display-name>CSS Style Classes</display-name>
+        <icon/>
+        <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+        <display-name>Advisory Title</display-name>
+        <icon/>
+        <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+        <display-name>Direction</display-name>
+        <icon/>
+        <attribute-name>dir</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+        <display-name>Language Code</display-name>
+        <icon/>
+        <attribute-name>lang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+        <display-name>Button Click Script</display-name>
+        <icon/>
+        <attribute-name>onclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+        <display-name>Double Click Script</display-name>
+        <icon/>
+        <attribute-name>ondblclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+        <display-name>Mouse Down Script</display-name>
+        <icon/>
+        <attribute-name>onmousedown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+        <display-name>Mouse Up Script</display-name>
+        <icon/>
+        <attribute-name>onmouseup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+        <display-name>Mouse Over Script</display-name>
+        <icon/>
+        <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+        <display-name>Mouse Move Script</display-name>
+        <icon/>
+        <attribute-name>onmousemove</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+        <display-name>Mouse Out Script</display-name>
+        <icon/>
+        <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+        <display-name>Key Press Script</display-name>
+        <icon/>
+        <attribute-name>onkeypress</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+        <display-name>Key Down Script</display-name>
+        <icon/>
+        <attribute-name>onkeydown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+        <display-name>Key Up Script</display-name>
+        <icon/>
+        <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+
+      <attribute>
+        <description>
+                   Javascript code executed when the user agent finishes loading
+                   a window or all frames within a frameset.
+               </description>
+        <display-name>Body Onload Script</display-name>
+        <icon/>
+        <attribute-name>onload</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+                   Javascript code executed when the user agent removes 
+                   a document from a window or frame. 
+               </description>
+        <display-name>Body Onunload Script</display-name>
+        <icon/>
+        <attribute-name>onunload</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+          <behavior/>
+        </attribute-extension>
+      </attribute>
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
         <tag-name>body</tag-name>

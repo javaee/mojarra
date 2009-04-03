@@ -36,6 +36,10 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.Attribute;
+import com.sun.faces.renderkit.AttributeManager;
+
 import java.io.IOException;
 import java.util.ListIterator;
 
@@ -53,6 +57,9 @@ import javax.faces.render.Renderer;
  */
 public class HeadRenderer extends Renderer {
 
+    private static final Attribute[] HEAD_ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.OUTPUTHEAD);
+
     @Override
     public void decode(FacesContext context, UIComponent component) {
         // no-op
@@ -63,6 +70,10 @@ public class HeadRenderer extends Renderer {
           throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("head", component);
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
+                                                component,
+                                                HEAD_ATTRIBUTES);
     }
 
     @Override

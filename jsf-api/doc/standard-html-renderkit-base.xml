@@ -982,6 +982,69 @@
 
     </component>
 
+    <!--
+         the following components are here merely for AttributeManager
+         generation.
+    -->
+
+    <component>
+        <description>NONE</description>
+        <display-name>head</display-name>
+        <component-type>javax.faces.OutputHead</component-type>
+        <component-class>javax.faces.component.html.HtmlHead</component-class>
+
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Head</renderer-type>
+            <ignore>true</ignore>
+        </component-extension>
+    </component>
+
+    <component>
+        <description>NONE</description>
+        <display-name>body</display-name>
+        <component-type>javax.faces.OutputBody</component-type>
+        <component-class>javax.faces.component.html.HtmlBody</component-class>
+
+        <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <property>
+            <description>
+            </description>
+            <display-name></display-name>
+            <icon></icon>
+            <property-name>onload</property-name>
+            <property-class>java.lang.String</property-class>
+            <property-extension>
+                <pass-through>true</pass-through>
+                <behavior/>
+            </property-extension>
+        </property>
+
+        <property>
+            <description>
+            </description>
+            <display-name></display-name>
+            <icon></icon>
+            <property-name>onunload</property-name>
+            <property-class>java.lang.String</property-class>
+            <property-extension>
+                <pass-through>true</pass-through>
+                <behavior/>
+            </property-extension>
+        </property>
+
+        <component-extension>
+            <base-component-type>javax.faces.Output</base-component-type>
+            <renderer-type>javax.faces.Body</renderer-type>
+            <ignore>true</ignore>
+        </component-extension>
+    </component>
+
+
     <!-- Standard HTML Renderkit -->
 
     <render-kit>
@@ -3238,6 +3301,9 @@ unmodified to the rendered output.</p>
             <renderer-class>
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-head-renderer-class/text())"/>
             </renderer-class>
+
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+
             <renderer-extension>
                 <jsp-ignore>true</jsp-ignore>
                 <tag-name>head</tag-name>
@@ -3286,6 +3352,41 @@ unmodified to the rendered output.</p>
             <renderer-class>
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-body-renderer-class/text())"/>
             </renderer-class>
+ 
+            <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
+
+            <attribute>
+               <description>
+                   Javascript code executed when the user agent finishes loading
+                   a window or all frames within a frameset.
+               </description>
+               <display-name>Body Onload Script</display-name>
+               <icon></icon>
+               <attribute-name>onload</attribute-name>
+               <attribute-class>java.lang.String</attribute-class>
+               <attribute-extension>
+                   <pass-through>true</pass-through>
+                   <behavior/>
+               </attribute-extension>
+            </attribute> 
+
+            <attribute>
+               <description>
+                   Javascript code executed when the user agent removes 
+                   a document from a window or frame. 
+               </description>
+               <display-name>Body Onunload Script</display-name>
+               <icon></icon>
+               <attribute-name>onunload</attribute-name>
+               <attribute-class>java.lang.String</attribute-class>
+               <attribute-extension>
+                   <pass-through>true</pass-through>
+                   <behavior/>
+               </attribute-extension>
+            </attribute> 
+
             <renderer-extension>
                 <jsp-ignore>true</jsp-ignore>
                 <tag-name>body</tag-name>

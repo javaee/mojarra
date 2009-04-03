@@ -94,6 +94,10 @@ public class ComponentBean extends FeatureBean
     public void setRendererType(String rendererType)
     { this.rendererType = rendererType; }
 
+    private boolean ignore;
+    public boolean isIgnore() { return ignore; }
+    public void setIgnore(boolean ignore) { this.ignore = ignore; }
+
 
     // ------------------------------------------------- AttributeHolder Methods
 

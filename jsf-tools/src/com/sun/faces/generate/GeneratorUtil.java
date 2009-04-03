@@ -185,6 +185,9 @@ public class GeneratorUtil {
             if (component == null) {
                 throw new IllegalStateException("No Components Found");
             }
+            if (component.isIgnore()) {
+                continue;
+            }
             if (component.getBaseComponentType() != null) {
                 continue;
             }

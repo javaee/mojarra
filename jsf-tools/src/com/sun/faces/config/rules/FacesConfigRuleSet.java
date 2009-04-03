@@ -182,6 +182,9 @@ public class FacesConfigRuleSet extends RuleSetBase {
             digester.addCallMethod
                 ("faces-config/component/component-extension/component-family",
                  "setComponentFamily", 0);
+            digester.addCallMethod(
+                  "faces-config/component/component-extension/ignore",
+                  "setIgnore", 0, new String[] { "java.lang.Boolean" });
         }
 
         // faces-config/converter

@@ -144,7 +144,9 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             File.separatorChar + packagePath);
         ComponentBean[] cbs = configBean.getComponents();
         for (ComponentBean cb1 : cbs) {
-
+            if (cb1.isIgnore()) {
+                continue;
+            }
             String componentClass = cb1.getComponentClass();
             if (componentClass.startsWith(compPackage)) {
                 cb = cb1;

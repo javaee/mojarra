@@ -232,80 +232,82 @@ public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
 
                 PropertyBean[] properties = component.getProperties();
                 PropertyBean property;
-
-                for (int i = 0, len = properties.length; i < len; i++) {
-                    if (null == (property = properties[i])) {
-                        continue;
-                    }
-                    if (!property.isTagAttribute()) {
-                        continue;
-                    }
-
-                    writer.startElement("attribute");
-
-                    description = property.getDescription("");
-                    if (description != null) {
-                        String descriptionText =
-                        description.getDescription().trim();
-
-                        if (descriptionText != null) {
-                            writer.startElement("description");
-                            StringBuffer sb = new StringBuffer();
-                            sb.append("<![CDATA[");
-                            sb.append(descriptionText);
-                            sb.append("]]>\n");
-                            writer.writeText(sb.toString());
-                            writer.closeElement();
+                if (component.isIgnore()) {
+                    for (int i = 0, len = properties.length; i < len; i++) {
+                        if (null == (property = properties[i])) {
+                            continue;
                         }
-                    }
+                        if (!property.isTagAttribute()) {
+                            continue;
+                        }
 
-                    String propertyName = property.getPropertyName();
+                        writer.startElement("attribute");
 
-                    writer.startElement("name");
-                    writer.writeText(propertyName);
-                    writer.closeElement();
+                        description = property.getDescription("");
+                        if (description != null) {
+                            String descriptionText =
+                                  description.getDescription().trim();
 
-                    writer.startElement("required");
-                    writer.writeText(property.isRequired() ?
-                                     Boolean.TRUE.toString() :
-                                     Boolean.FALSE.toString());
-                    writer.closeElement();
+                            if (descriptionText != null) {
+                                writer.startElement("description");
+                                StringBuffer sb = new StringBuffer();
+                                sb.append("<![CDATA[");
+                                sb.append(descriptionText);
+                                sb.append("]]>\n");
+                                writer.writeText(sb.toString());
+                                writer.closeElement();
+                            }
+                        }
 
-                    if (!"id".equals(propertyName)) {
+                        String propertyName = property.getPropertyName();
 
-                        if (property.isMethodExpressionEnabled()) {
-                            writer.startElement("deferred-method");
-                            writer.startElement("method-signature");
-                            writer.writeText(
-                                property.getMethodSignature());
-                            writer.closeElement(2);
-                        } else if (property.isValueExpressionEnabled()) {
-                            // PENDING FIX ME
-                            String type = property.getPropertyClass();
+                        writer.startElement("name");
+                        writer.writeText(propertyName);
+                        writer.closeElement();
+
+                        writer.startElement("required");
+                        writer.writeText(property.isRequired() ?
+                                         Boolean.TRUE.toString() :
+                                         Boolean.FALSE.toString());
+                        writer.closeElement();
+
+                        if (!"id".equals(propertyName)) {
+
+                            if (property.isMethodExpressionEnabled()) {
+                                writer.startElement("deferred-method");
+                                writer.startElement("method-signature");
+                                writer.writeText(
+                                      property.getMethodSignature());
+                                writer.closeElement(2);
+                            } else if (property.isValueExpressionEnabled()) {
+                                // PENDING FIX ME
+                                String type = property.getPropertyClass();
 //                            String wrapperType = (String)
 //                                GeneratorUtil.convertToPrimitive(type);
 //                            if (wrapperType != null) {
 //                                type = wrapperType;
 //                            }
-                            writer.startElement("deferred-value");
-                            writer.startElement("type");
-                            writer.writeText(type);
-                            writer.closeElement(2);
+                                writer.startElement("deferred-value");
+                                writer.startElement("type");
+                                writer.writeText(type);
+                                writer.closeElement(2);
+                            } else {
+                                writer.startElement("rtexprvalue");
+                                writer.writeText(getRtexprvalue(tagName,
+                                                                propertyName));
+                                writer.closeElement();
+                            }
                         } else {
                             writer.startElement("rtexprvalue");
-                            writer.writeText(getRtexprvalue(tagName, propertyName));
+                            writer.writeText(getRtexprvalue(tagName,
+                                                            propertyName));
                             writer.closeElement();
                         }
-                    } else {
-                        writer.startElement("rtexprvalue");
-                        writer.writeText(getRtexprvalue(tagName, propertyName));
-                        writer.closeElement();
-                    }
 
-                    writer.closeElement(); // closes attribute element above
+                        writer.closeElement(); // closes attribute element above
 
-                } // END property FOR loop
-
+                    } // END property FOR loop
+                }
 
                 // Renderer Attributes Next...
                 //
