@@ -125,7 +125,7 @@
                 <available file="${junit.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${maven2.mirror}/junit/junit/${junit.version}/junit-${junit.version}.jar"
+                <get src="${java.net.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
                      dest="${junit.jar}"
                      usetimestamp="true"/>
             </then>
