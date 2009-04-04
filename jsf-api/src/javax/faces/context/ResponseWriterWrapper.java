@@ -46,7 +46,8 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * <p>Provides a simple implementation of {@link ResponseWriter} that
+ * <p><span class="changed_modified_2_0">Provides</span> a simple implementation
+ * of {@link ResponseWriter} that
  * can be subclassed by developers wishing to provide specialized
  * behavior to an existing {@link ResponseWriter} instance.  The default
  * implementation of all methods is to call through to the wrapped
@@ -61,7 +62,8 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
 
 
     /**
-     * @return the instance that we are wrapping.
+     * <p class="changed_modified_2_0">Return the instance that we are wrapping.
+     * As of version 2, this method is public.</p>
      */
 
     public abstract ResponseWriter getWrapped();

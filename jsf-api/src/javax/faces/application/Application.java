@@ -659,8 +659,10 @@ public abstract class Application {
      *  
      * @since 2.0
      */
-    public abstract void addBehavior(String behaviorId, 
-        String behaviorClass);
+    public void addBehavior(String behaviorId, 
+        String behaviorClass) {
+        
+    }
     
     /**
      * <p><span class="changed_added_2_0">Instantiate</span> and
@@ -676,14 +678,18 @@ public abstract class Application {
      * @throws NullPointerException if <code>behaviorId</code>
      *  is <code>null</code> 
      */
-    public abstract Behavior createBehavior(String behaviorId)
-    	throws FacesException;
+    public Behavior createBehavior(String behaviorId)
+    	throws FacesException {
+        return null;
+    }
 
     /**
      * <p>Return an <code>Iterator</code> over the set of currently registered
      * behavior ids for this <code>Application</code>.</p>
      */
-    public abstract Iterator<String> getBehaviorIds();
+    public Iterator<String> getBehaviorIds() {
+        return Collections.EMPTY_LIST.iterator();
+    }
 
     /**
      * <p>Register a new mapping of component type to the name of the
