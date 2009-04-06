@@ -47,8 +47,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.logging.Level;
@@ -91,8 +90,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * Flag indicated the current mode.
      */
     private boolean development;
-    private static final Pattern REDIRECT_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(faces-redirect=true(&|$))");
-    private static final Pattern INCLUDE_VIEW_PARAMS_EQUALS_TRUE = Pattern.compile("(?:\\?|&)(includeViewParams=true(&|$))");
+    private static final Pattern REDIRECT_EQUALS_TRUE = Pattern.compile("(?:\\?|&amp;|&)(faces-redirect=true(&|$))");
+    private static final Pattern INCLUDE_VIEW_PARAMS_EQUALS_TRUE = Pattern.compile("(?:\\?|&amp;|&)(includeViewParams=true(&|$))");
 
 
     // ------------------------------------------------------------ Constructors
@@ -174,7 +173,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 String redirectUrl =
                       viewHandler.getRedirectURL(context,
                                                  caseStruct.viewId,
-                                                 null,
+                                                 caseStruct.navCase.getParameters(),
                                                  caseStruct.navCase.isIncludeViewParams());
                 try {
                     if (logger.isLoggable(Level.FINE)) {
@@ -247,8 +246,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
         
         // If the navigation rules do not have a match...
-        if (caseStruct == null && outcome != null) {
-            caseStruct = findImplicitMatch(ctx, root, fromAction, outcome);
+        if (caseStruct == null && outcome != null && viewId != null) {
+            caseStruct = findImplicitMatch(ctx, viewId, fromAction, outcome);
         }
 
         // no navigation case fo
@@ -416,20 +415,21 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * </p>
      *
      * @param context the {@link FacesContext} for the current request
-     * @param root the {@link UIViewRoot} for the current request
+     * @param viewId of the {@link UIViewRoot} for the current request
      * @param fromAction the navigation action
      * @param outcome the navigation outcome
      * @return a CaseStruct representing the the navigation result based
      *  on the provided input
      */
     private CaseStruct findImplicitMatch(FacesContext context,
-                                         UIViewRoot root,
+                                         String viewId,
                                          String fromAction,
                                          String outcome) {
 
         // look for an implicit match.
         String viewIdToTest = outcome;
-        String currentViewId = root.getViewId();
+        String currentViewId = viewId;
+        Map<String, List<String>> parameters = null;
         boolean isRedirect = false;
         boolean isIncludeViewParams = false;
 
@@ -451,12 +451,28 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                 }
             }
 
-            // clean off dust
-            if (queryString.endsWith("&")) {
-                queryString =
-                      queryString.substring(0, queryString.length() - 1);
+            if (queryString != null && queryString.length() > 0) {
+                queryString = queryString.substring(1);
+                String[] queryElements = Util.split(queryString, "&amp;|&");
+                for (int i = 0, len = queryElements.length; i < len; i ++) {
+                    String[] elements = Util.split(queryElements[i], "=");
+                    if (elements.length == 2) {
+                        if (parameters == null) {
+                            parameters = new LinkedHashMap<String,List<String>>(len / 2, 1.0f);
+                            List<String> values = new ArrayList<String>(2);
+                            values.add(elements[1]);
+                            parameters.put(elements[0], values);
+                        } else {
+                            List<String> values = parameters.get(elements[0]);
+                            if (values == null) {
+                                values = new ArrayList<String>(2);
+                                parameters.put(elements[0], values);
+                            }
+                            values.add(elements[1]);
+                        }
+                    }
+                }
             }
-
         }
 
         // If the viewIdToTest needs an extension, take one from the currentViewId.
@@ -486,19 +502,15 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
         if (null != viewIdToTest) {
             CaseStruct caseStruct = new CaseStruct();
-            // bookmarkable links need query string even when not isRedirect()
-            if (queryString != null) {
-                // Tack back on the query string
-                viewIdToTest = viewIdToTest + queryString;
-            }
             caseStruct.viewId = viewIdToTest;
             caseStruct.navCase = new NavigationCase(currentViewId,
-                    fromAction,
-                    outcome,
-                    null,
-                    viewIdToTest,
-                    isRedirect,
-                    isIncludeViewParams);
+                                                    fromAction,
+                                                    outcome,
+                                                    null,
+                                                    viewIdToTest,
+                                                    parameters,
+                                                    isRedirect,
+                                                    isIncludeViewParams);
             return caseStruct;
         }
 

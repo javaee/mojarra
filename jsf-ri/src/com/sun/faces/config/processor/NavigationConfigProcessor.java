@@ -48,12 +48,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathExpressionException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.MessageFormat;
-import javax.faces.application.NavigationCase;
 
 import com.sun.faces.el.ELUtils;
 
@@ -107,6 +105,21 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
      * <p>/faces-config/navigation-rule/navigation-case/redirect</p>
      */
     private static final String REDIRECT = "redirect";
+
+    /**
+     * <p>/faces-confg/navigation-rule/navigation-case/redirect/view-param</p>
+     */
+    private static final String VIEW_PARAM = "view-param";
+
+    /**
+     * <p>/faces-confg/navigation-rule/navigation-case/redirect/view-param/name</p>
+     */
+    private static final String VIEW_PARAM_NAME = "name";
+
+    /**
+     * <p>/faces-confg/navigation-rule/navigation-case/redirect/view-param/value</p>
+     */
+    private static final String VIEW_PARAM_VALUE = "value";
 
     /**
      * <p>/faces-config/navigation-rule/navigation-case/redirect[@include-page-params]</p>
@@ -217,6 +230,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                 String action = null;
                 String condition = null;
                 String toViewId = null;
+                Map<String,List<String>> parameters = null;
                 boolean redirect = false;
                 boolean includeViewParams = false;
                 for (int i = 0, size = children.getLength(); i < size; i++) {
@@ -252,20 +266,22 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                                 toViewId = toViewIdString;
                             }
                         } else if (REDIRECT.equals(n.getLocalName())) {
+                            parameters = processParameters(n.getChildNodes());
+                            includeViewParams = isIncludeViewParams(n);
                             redirect = true;
-                            includeViewParams = Boolean.valueOf(getNodeText(n.getAttributes().getNamedItem(INCLUDE_VIEW_PARAMS_ATTRIBUTE)));
                         }
                     }
                 }
 
                 NavigationCase cnc =
                      new NavigationCase(fromViewId,
-                                              action,
-                                              outcome,
-                                              condition,
-                                              toViewId,
-                                              redirect,
-                                              includeViewParams);
+                                        action,
+                                        outcome,
+                                        condition,
+                                        toViewId,
+                                        parameters,
+                                        redirect,
+                                        includeViewParams);
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                MessageFormat.format("Adding NavigationCase: {0}",
@@ -278,7 +294,60 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                 //  to continue adding the cases to the associate as well
                 associate.addNavigationCase(cnc);
             }
+
+
         }
+
+    }
+
+
+    private Map<String,List<String>> processParameters(NodeList children) {
+
+        Map<String,List<String>> parameters = null;
+
+        if (children.getLength() > 0) {
+            parameters = new LinkedHashMap<String,List<String>>(4, 1.0f);
+            for (int i = 0, size = children.getLength(); i < size; i++) {
+                Node n = children.item(i);
+                if (n.getNodeType() == Node.ELEMENT_NODE) {
+                    if (VIEW_PARAM.equals(n.getLocalName())) {
+                        String name = null;
+                        String value = null;
+                        NodeList params = n.getChildNodes();
+                        for (int j = 0, jsize = params.getLength(); j < jsize; j++) {
+                            Node pn = params.item(j);
+                            if (pn.getNodeType() == Node.ELEMENT_NODE) {
+                                if (VIEW_PARAM_NAME.equals(pn.getLocalName())) {
+                                    name = getNodeText(pn);
+                                }
+                                if (VIEW_PARAM_VALUE.equals(pn.getLocalName())) {
+                                    value = getNodeText(pn);
+                                }
+                            }
+                        }
+                        if (name != null) {
+                            List<String> values = parameters.get(name);
+                            if (values == null && value != null) {
+                                values = new ArrayList<String>(2);
+                                parameters.put(name, values);
+                            }
+                            if (values != null) {
+                                values.add(value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return parameters;
+
+    }
+
+
+    private boolean isIncludeViewParams(Node n) {
+
+        return Boolean.valueOf(getNodeText(n.getAttributes().getNamedItem(INCLUDE_VIEW_PARAMS_ATTRIBUTE)));
+
     }
 
 }

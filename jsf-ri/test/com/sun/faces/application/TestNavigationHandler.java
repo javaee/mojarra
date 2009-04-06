@@ -42,7 +42,6 @@
 
 package com.sun.faces.application;
 
-import javax.faces.application.NavigationCase;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.DbfFactory;
@@ -52,9 +51,7 @@ import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PreDestroyViewMapEvent;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.NavigationHandler;
+import javax.faces.application.*;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -295,6 +292,62 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         }
         assertTrue(cnt == 6);
     }
+
+
+    public void testRedirectParameters() {
+        Application app = getFacesContext().getApplication();
+        UIViewRoot root = (UIViewRoot) app.createComponent(UIViewRoot.COMPONENT_TYPE);
+        root.setViewId("/page1.xhtml");
+        getFacesContext().setViewRoot(root);
+        ConfigurableNavigationHandler cnh =
+              (ConfigurableNavigationHandler) getFacesContext().getApplication().getNavigationHandler();
+        NavigationCase c1 = cnh.getNavigationCase(getFacesContext(),
+                                                  null,
+                                                  "redirectOutcome1");
+        Map<String,List<String>> parameters = c1.getParameters();
+        assertNotNull(parameters);
+        assertEquals(2, parameters.size());
+        List<String> fooParams = parameters.get("foo");
+        assertNotNull(fooParams);
+        assertEquals(2, fooParams.size());
+        assertEquals("bar", fooParams.get(0));
+        assertEquals("bar2", fooParams.get(1));
+        List<String> foo2Params = parameters.get("foo2");
+        assertEquals(1, foo2Params.size());
+        assertEquals("bar3", foo2Params.get(0));
+        assertTrue(c1.isIncludeViewParams());
+
+        NavigationCase c2 = cnh.getNavigationCase(getFacesContext(),
+                                                  null,
+                                                  "redirectOutcome2");
+        parameters = c2.getParameters();
+        assertNull(parameters);
+        assertFalse(c2.isIncludeViewParams());
+
+        // ensure implicit navigation outcomes that include query strings
+        // are properly parsed.
+
+        NavigationCase c3 = cnh.getNavigationCase(getFacesContext(),
+                                                  null,
+                                                  "test?foo=rab&amp;foo=rab2&foo2=rab3&amp;faces-redirect=true&includeViewParams=true&");
+        assertNotNull(c3);
+        parameters = c3.getParameters();
+        assertNotNull(parameters);
+        assertTrue(c3.isRedirect());
+        assertTrue(c3.isIncludeViewParams());
+        assertEquals(2, parameters.size());
+        fooParams = parameters.get("foo");
+        assertNotNull(fooParams);
+        assertEquals(2, fooParams.size());
+        assertEquals("rab", fooParams.get(0));
+        assertEquals("rab2", fooParams.get(1));
+        foo2Params = parameters.get("foo2");
+        assertEquals(1, foo2Params.size());
+        assertEquals("rab3", foo2Params.get(0));
+        
+    }
+
+    // ---------------------------------------------------------- Nested Classes
 
 
     class TestResult extends Object {

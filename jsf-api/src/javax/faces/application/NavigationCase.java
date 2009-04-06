@@ -42,6 +42,8 @@ package javax.faces.application;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
+import java.util.List;
 import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
 import javax.faces.context.ExternalContext;
@@ -62,6 +64,7 @@ public class NavigationCase {
     private final String fromOutcome;
     private final String condition;
     private final String toViewId;
+    private final Map<String,List<String>> parameters;
     private final boolean redirect;
     private final boolean includeViewParams;
 
@@ -87,6 +90,7 @@ public class NavigationCase {
      * @param condition the condition that must be satisifed in order for
      *  navigation to occur
      * @param toViewId the view id to be navigated to
+     * @param parameters parameters that may be included during a redirect
      * @param redirect <code>true</code> if the new view should be navigated
      *  to via a {@link javax.faces.context.ExternalContext#redirect(String)}
      * @param includeViewParams  <code>true</code> if the view parametets should
@@ -97,6 +101,7 @@ public class NavigationCase {
                           String fromOutcome,
                           String condition,
                           String toViewId,
+                          Map<String,List<String>> parameters,
                           boolean redirect,
                           boolean includeViewParams) {
 
@@ -105,6 +110,7 @@ public class NavigationCase {
         this.fromOutcome = fromOutcome;
         this.condition = condition;
         this.toViewId = toViewId;
+        this.parameters = parameters;
         this.redirect = redirect;
         this.includeViewParams = includeViewParams;
 
@@ -128,14 +134,14 @@ public class NavigationCase {
      */
 
     public URL getActionURL() throws MalformedURLException {
+
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
-        URL result = null;
-        result = new URL(extContext.getRequestScheme(),
+        return new URL(extContext.getRequestScheme(),
                 extContext.getRequestServerName(),
                 extContext.getRequestServerPort(),
                 context.getApplication().getViewHandler().getActionURL(context, getToViewId(context)));
-        return result;
+        
     }
 
     /**
@@ -153,15 +159,15 @@ public class NavigationCase {
      */
 
     public URL getResourceURL() throws MalformedURLException {
+        
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
-        URL result = null;
-        result = new URL(extContext.getRequestScheme(),
+
+        return new URL(extContext.getRequestScheme(),
                 extContext.getRequestServerName(),
                 extContext.getRequestServerPort(),
                 context.getApplication().getViewHandler().getResourceURL(context, getToViewId(context)));
 
-        return result;
     }
 
     
@@ -269,7 +275,16 @@ public class NavigationCase {
 
     }
 
+    /**
+     * <p class="changed_added_2_0">Return the parameters to be included
+     * for navigation cases requiring a redirect.  If no parameters are
+     * defined, <code>null</code> will be returned.</p>
+     */
+    public Map<String, List<String>> getParameters() {
 
+        return parameters;
+
+    }
 
     /**
      * <p class="changed_added_2_0">Return the <code>&lt;redirect&gt;</code>
