@@ -62,7 +62,6 @@ import com.sun.faces.config.processor.ValidatorConfigProcessor;
 import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import javax.faces.FacesException;
@@ -102,8 +101,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.annotation.Annotation;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Node;
+import org.w3c.dom.*;
 
 /**
  * <p>
@@ -164,7 +162,7 @@ public class ConfigManager {
      * {@link Document} instance as a representation of
      * <code>/WEB-INF/faces-config.xml</code>.
      */
-    private static final String WEB_INF_MARKER = "com.sun.faces.webinf";
+    public static final String WEB_INF_MARKER = "com.sun.faces.webinf";
 
 
     /**
@@ -296,18 +294,18 @@ public class ConfigManager {
                                          executor,
                                          validating);
 
-                Document webinfFacesConfig =
-                      facesDocuments[facesDocuments.length - 1];
+                WebInfFacesConfigInfo facesConfigInfo =
+                      new WebInfFacesConfigInfo(facesDocuments[facesDocuments.length - 1]);
                 boolean isFaceletsDisabled =
-                      isFaceletsDisabled(webConfig, webinfFacesConfig);
-                if (!isMetadataComplete(webinfFacesConfig)) {
+                      isFaceletsDisabled(webConfig, facesConfigInfo);
+                if (!facesConfigInfo.isMetadataComplete()) {
                     // execute the Task responsible for finding annotation classes
                     Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan =
                           executor.submit(new AnnotationScanTask(sc));
                     pushTaskToContext(sc, annotationScan);
                 }
 
-                sortDocuments(facesDocuments);
+                sortDocuments(facesDocuments, facesConfigInfo.exists());
 
                 // process the ordered documents
                 FACES_CONFIG_PROCESSOR_CHAIN.process(facesDocuments);
@@ -403,10 +401,10 @@ public class ConfigManager {
      * @param facesDocuments an array of <em>all</em> <code>faces-config</code>
      *  documents
      */
-    private void sortDocuments(Document[] facesDocuments) {
+    private void sortDocuments(Document[] facesDocuments, boolean facesConfigPresent) {
 
 
-        int len = ((isWebinfFacesConfig(facesDocuments[facesDocuments.length - 1]))
+        int len = (facesConfigPresent
                      ? facesDocuments.length - 1
                      : facesDocuments.length);
 
@@ -446,46 +444,20 @@ public class ConfigManager {
      * </p>
      *
      * @param webconfig configuration for this application
-     * @param webinfFacesConfig the document representing WEB-INF/faces-config.xml
+     * @param facesConfigInfo object representing WEB-INF/faces-config.xml
      * @return <code>true</code> if Facelets should be disabled
      */
     private boolean isFaceletsDisabled(WebConfiguration webconfig,
-                                  Document webinfFacesConfig) {
+                                       WebInfFacesConfigInfo facesConfigInfo) {
 
         boolean isFaceletsDisabled = webconfig.isOptionEnabled(DisableFaceletJSFViewHandler);
         if (!isFaceletsDisabled) {
             // if not explicitly disabled, make a sanity check against
             // /WEB-INF/faces-config.xml
-            isFaceletsDisabled = !isFacesApp20(webinfFacesConfig);
+            isFaceletsDisabled = !facesConfigInfo.isVersionGreaterOrEqual(2.0);
             webconfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, isFaceletsDisabled);
         }
         return isFaceletsDisabled;
-
-    }
-
-
-    /**
-     * @param webinfFacesConfig the <code>Document</code> representing
-     *  <code>WEB-INF/faces-config.xml</code>
-     * @return <code>true</code> if the document is versioned at 2.0 and
-     *  the <code>metadata-complete</code> attribute is specified with a value
-     *  of <code>true</code> otherwise return <code>false</code>
-     */
-    private boolean isMetadataComplete(Document webinfFacesConfig) {
-
-        if (isWebinfFacesConfig(webinfFacesConfig)) {
-            if (isFacesApp20(webinfFacesConfig)) {
-                            String metadataComplete = webinfFacesConfig.getDocumentElement()
-                  .getAttributeNS(webinfFacesConfig.getNamespaceURI(), "metadata-complete");
-                return ((metadataComplete) != null ? Boolean.valueOf(metadataComplete) : false);
-            } else {
-                // not a 2.0 application, so annotation processing will not occur
-                return true;
-            }
-        }
-
-        // no faces-config.xml so assume it's not metadata-complete; process annotations
-        return false;
 
     }
 
@@ -621,43 +593,6 @@ public class ConfigManager {
                            ignored);
             }
         }
-    }
-
-
-    /**
-     *
-     * @param document document representing <code>WEB-INF/faces-config.xml</code>
-     * @return <code>true</code> if the faces-config.xml is versioned at 2.0,
-     *  or there is no <code>WEB-INF/faces-config.xml</code>
-     */
-    private boolean isFacesApp20(Document document) {
-
-        if (isWebinfFacesConfig(document)) {
-            String version = document.getDocumentElement()
-                  .getAttributeNS(document.getNamespaceURI(), "version");
-            if (version != null && version.length() > 0) {
-                Double v = Double.parseDouble(version);
-                Double twoOh = 2.0d;
-                return !(v.compareTo(twoOh) < 0);
-            } else {
-                return false;
-            }
-        }
-
-        return true;  // no faces-config.xml or version so assume 2.0
-
-    }
-
-
-    /**
-     * @param document the <code>Document</code> to inspect
-     * @return <code>true</code> if the document represents the
-     *  <code>/WEB-INF/faces-config.xml</code>
-     */
-    private boolean isWebinfFacesConfig(Document document) {
-
-        return (document.getDocumentElement().getAttribute(WEB_INF_MARKER) != null);
-
     }
 
 
@@ -976,4 +911,6 @@ public class ConfigManager {
         }
 
     } // END URLTask
+
+
 }

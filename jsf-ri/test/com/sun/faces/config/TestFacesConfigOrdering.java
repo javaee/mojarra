@@ -43,10 +43,13 @@ import java.util.Arrays;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.faces.context.FacesContext;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Attr;
 
 /**
  * Test cases to validate faces-config ordering.
@@ -461,6 +464,47 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
     }
 
 
+    public void testAbsoluteDocumentOrderingAPI() throws Exception {
+        Document d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute1.xml");
+        WebInfFacesConfigInfo info = new WebInfFacesConfigInfo(d);
+        assertTrue(info.exists());
+        assertTrue(info.isVersionGreaterOrEqual(2.0));
+        assertFalse(info.isMetadataComplete());
+        List<String> ordering = info.getAbsoluteOrdering();
+        assertNotNull(ordering);
+        assertEquals(3, ordering.size());
+        assertEquals("a", ordering.get(0));
+        assertEquals("b", ordering.get(1));
+        assertEquals("c", ordering.get(2));
+
+        d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute2.xml");
+        info = new WebInfFacesConfigInfo(d);
+        assertTrue(info.exists());
+        assertTrue(info.isVersionGreaterOrEqual(2.0));
+        assertTrue(info.isMetadataComplete());
+        ordering = info.getAbsoluteOrdering();
+        assertNotNull(ordering);
+        assertEquals(4, ordering.size());
+        assertEquals("a", ordering.get(0));
+        assertEquals("b", ordering.get(1));
+        assertEquals("others", ordering.get(2));
+        assertEquals("c", ordering.get(3));
+
+        d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute3.xml");
+        info = new WebInfFacesConfigInfo(d);
+        assertTrue(info.exists());
+        assertFalse(info.isVersionGreaterOrEqual(2.0));
+        assertTrue(info.isMetadataComplete());
+        ordering = info.getAbsoluteOrdering();
+        assertNull(ordering);
+
+        d = parseDocument(getFacesContext(), "/WEB-INF/webinfAbsolute1.xml");
+        info = new WebInfFacesConfigInfo(d);
+        assertFalse(info.exists());
+
+    }
+
+
     // ---------------------------------------------------------- Helper Methods
 
 
@@ -469,6 +513,27 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         for (int i = 0; i < wrappers.length; i++) {
             assertEquals("Expected ID " + ids[i] + " at index " + i + ", but received " + wrappers[i].getDocumentId(), ids[i], wrappers[i].getDocumentId());
         }
+
+    }
+
+
+    private Document parseDocument(FacesContext ctx, String path) throws Exception {
+
+        DocumentBuilderFactory factory = DbfFactory.getFactory();
+        factory.setValidating(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(ctx.getExternalContext().getResourceAsStream(path));
+
+    }
+
+
+    private Document parseDocumentAsWebInfFacesConfig(FacesContext ctx, String path) throws Exception {
+
+        Document d = parseDocument(ctx, path);
+        Attr webInf = d.createAttribute(ConfigManager.WEB_INF_MARKER);
+        webInf.setValue("true");
+        d.getDocumentElement().getAttributes().setNamedItem(webInf);
+        return d;
 
     }
     

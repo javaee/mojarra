@@ -223,7 +223,9 @@
             <xsd:element name="ordering"
                          type="javaee:faces-config-orderingType"/>
             <xsd:element name="absolute-ordering"
-                         type="javaee:faces-config-absoluteOrderingType"/>
+                         type="javaee:faces-config-absoluteOrderingType"
+                         minOccurs="0"
+                         maxOccurs="1"/>
             <xsd:element name="factory"
                          type="javaee:faces-config-factoryType"/>
             <xsd:element name="component"
