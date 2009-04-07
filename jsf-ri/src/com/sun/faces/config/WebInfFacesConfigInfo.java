@@ -58,7 +58,7 @@ public class WebInfFacesConfigInfo {
     private static final String NAME = "name";
     private static final String OTHERS = "others";
 
-    private double version;
+    private double version = 2.0;
     private boolean exists;
     private boolean metadataComplete;
     private List<String> absoluteOrdering;
