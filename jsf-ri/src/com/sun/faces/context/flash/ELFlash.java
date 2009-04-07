@@ -373,7 +373,7 @@ public class ELFlash extends Flash {
         FacesContext context = FacesContext.getCurrentInstance();
         PhaseId currentPhase = (PhaseId)
                 context.getCurrentPhaseId();
-        // If we're in invoke-application or render-response phase..., 
+        // If we're in render-response phase..., 
         // or this is an initial request (not a postback),
         // or this is the get from the redirect after post...
         if (currentPhase == PhaseId.RENDER_RESPONSE || 
