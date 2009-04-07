@@ -237,12 +237,7 @@ public class ConfigureListener implements ServletRequestListener,
                         manager.create(name, initContext);
                     }
                 }
-                if (webXmlProcessor.isErrorPagePresent()) {
-                    context.setAttribute("com.sun.faces.errorPagePresent", Boolean.TRUE);
-                    associate.setErrorPagePresent(true);
-                } else {
-                    context.setAttribute("com.sun.faces.errorPagePresent", Boolean.FALSE);
-                }
+                associate.setErrorPagePresent(webXmlProcessor.isErrorPagePresent());
             }
             Application app = initContext.getApplication();
             app.subscribeToEvent(PostConstructViewMapEvent.class,
