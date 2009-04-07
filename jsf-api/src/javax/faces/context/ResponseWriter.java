@@ -187,6 +187,21 @@ public abstract class ResponseWriter extends Writer {
                                            String property)
             throws IOException;
 
+    //RELEASE_PENDING rogerk, edburns - need real english description
+    /**
+     * <p>Open a CDATA block.  Nested CDATA blocks are not allowed.
+     * @throws IOException if input/output error occures
+     */
+    public abstract void startCDATA() throws IOException ;
+
+
+    //RELEASE_PENDING rogerk, edburns - need real english description
+    /**
+     * <p>Close a CDATA block.
+     * @throws IOException if input/output error occures
+     */
+    public abstract void endCDATA() throws IOException;
+
 
     /**
      * <p>Write a comment containing the specified text, after converting

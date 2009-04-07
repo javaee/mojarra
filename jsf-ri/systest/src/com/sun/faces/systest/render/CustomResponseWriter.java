@@ -500,6 +500,14 @@ public class CustomResponseWriter extends ResponseWriter {
     }
 
 
+    // PENDING - Do we need to implement these for this test?
+    public void startCDATA() {
+        throw new IllegalStateException();
+    }
+    public void endCDATA() {
+        throw new IllegalStateException();
+    }
+
     /**
      * <p>Create a new instance of this <code>ResponseWriter</code> using
      * a different <code>Writer</code>.

@@ -63,11 +63,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
     //
     private boolean inInsertAfter = false;
 
-    CDataEscapingResponseWriter writer;
-
-    // convenience strings for start end end of cdata blocks
-    private static final String STARTCDATA = "<![CDATA[";
-    private static final String ENDCDATA = "]]>";
+    ResponseWriter writer;
 
     /**
      * <p class="changed_added_2_0">Reserved ID value to indicate
@@ -92,7 +88,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public PartialResponseWriter(ResponseWriter writer) {
-        this.writer = new CDataEscapingResponseWriter(writer);
+        this.writer = writer;
     }
 
     /**
@@ -143,8 +139,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         writer.startElement("insert", null);
         writer.startElement("before", null);
         writer.writeAttribute("id", targetId, null);
-        writer.write(STARTCDATA);
-        writer.setInCdata(true);
+        writer.startCDATA();
     }
 
     /**
@@ -162,8 +157,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         writer.startElement("insert", null);
         writer.startElement("after", null);
         writer.writeAttribute("id", targetId, null);
-        writer.write(STARTCDATA);
-        writer.setInCdata(true);
+        writer.startCDATA();
     }
 
     /**
@@ -173,7 +167,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endInsert() throws IOException {
-        writer.endElement("CDATA");
+        writer.endCDATA();
         if (inInsertBefore) {
             writer.endElement("before");
             inInsertBefore = false;
@@ -195,8 +189,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         startChangesIfNecessary();
         writer.startElement("update", null);
         writer.writeAttribute("id", targetId, null);
-        writer.write(STARTCDATA);
-        writer.setInCdata(true);
+        writer.startCDATA();
     }
 
     /**
@@ -206,8 +199,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endUpdate() throws IOException {
-        writer.setInCdata(false);
-        writer.write(ENDCDATA);
+        writer.endCDATA();
         writer.endElement("update");
     }
 
@@ -270,8 +262,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
     public void startEval() throws IOException {
         startChangesIfNecessary();
         writer.startElement("eval", null);
-        writer.write(STARTCDATA);
-        writer.setInCdata(true);
+        writer.startCDATA();
     }
 
     /**
@@ -281,8 +272,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endEval() throws IOException {
-        writer.setInCdata(false);
-        writer.write(ENDCDATA);
+        writer.endCDATA();
         writer.endElement("eval");
     }
 
@@ -327,8 +317,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
         writer.write(errorName);
         writer.endElement("error-name");
         writer.startElement("error-message", null);
-        writer.write(STARTCDATA);
-        writer.setInCdata(true);
+        writer.startCDATA();
     }
 
     /**
@@ -338,8 +327,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endError() throws IOException {
-        writer.setInCdata(false);
-        writer.write(ENDCDATA);
+        writer.endCDATA();
         writer.endElement("error-message");
         writer.endElement("error");
     }
@@ -356,245 +344,6 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
             writer.endElement("changes");
             inChanges = false;
         }
-    }
-
-    /*
-     *  Private class to handle cdata escaping.
-     *  if the passed text contains either "]]" or "<!", then the CDATA block
-     *  needs to be split into two cdata blocks - for example,
-     *  "]]" will become "]]]><![CDATA[]", splitting the two brackets.
-     *
-     *  Also, we'll be keeping track of whether we're in a cdata block.
-     *
-     *  if we are in a cdata block, bypass all writeText methods, so no
-     *  transformation is done on the passed data - it's a literal block,
-     *  after all.
-     *
-     */
-    private static class CDataEscapingResponseWriter extends ResponseWriterWrapper {
-
-        private static final String BREAKCDATA = "]]><![CDATA[";
-        private static final String ESCAPEDSINGLEBRACKET = "]" + BREAKCDATA;
-        private static final String ESCAPEDLT = "&lt;" + BREAKCDATA;
-        private static final String ESCAPEDSTART = "&lt;" + BREAKCDATA + "!";
-        private static final String ESCAPEDEND = "]" + BREAKCDATA + "]";
-
-        private static final int CLOSEBRACKET = (int) ']';
-        private static final int LT = (int) '<';
-
-        private boolean inCdata = false;
-
-        // Writer to wrap
-        ResponseWriter writer;
-
-        private CDataEscapingResponseWriter(ResponseWriter writer) {
-            this.writer = writer;
-        }
-
-        public ResponseWriter getWrapped() {
-            return writer;
-        }
-
-        public void setInCdata(boolean inCdata) {
-            this.inCdata = inCdata;
-        }
-
-        /**
-         * <p>The default behavior of this method is to
-         * call {@link ResponseWriter#writeText(Object, String)}
-         * on the wrapped {@link ResponseWriter} object.</p>
-         *
-         * @see ResponseWriter#writeText(Object, String)
-         * @since 1.2
-         */
-        public void writeText(Object text, String property) throws IOException {
-
-            if (text == null) {  // if null, passthru for error generation
-                getWrapped().writeText(text, property);
-                return;
-            }
-            if (inCdata) {
-                getWrapped().write(escapeArray(text.toString().toCharArray()));
-            } else {  // not in cdata, just passthru
-                getWrapped().writeText(text, property);
-            }
-        }
-
-        /**
-         * <p>The default behavior of this method is to
-         * call {@link ResponseWriter#writeText(Object, javax.faces.component.UIComponent , String)}
-         * on the wrapped {@link ResponseWriter} object.</p>
-         *
-         * @see ResponseWriter#writeText(Object, String)
-         * @since 1.2
-         */
-        public void writeText(Object text, UIComponent component, String property)
-                throws IOException {
-            if (text == null) {  // if null, passthru for error generation
-                getWrapped().writeText(text, component, property);
-                return;
-            }
-            if (inCdata) {
-                getWrapped().write(escapeArray(text.toString().toCharArray()));
-            } else {  // not in cdata, just passthru
-                getWrapped().writeText(text, component, property);
-            }
-        }
-
-
-        /**
-         * <p>The default behavior of this method is to
-         * call {@link ResponseWriter#writeText(char[], int, int)}
-         * on the wrapped {@link ResponseWriter} object.</p>
-         *
-         * @see ResponseWriter#writeText(char[], int, int)
-         * @since 1.2
-         */
-        public void writeText(char[] text, int off, int len) throws IOException {
-
-            if (off < 0 || len < 0 || off + len > text.length) {
-                throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > text.length");
-            }
-
-            if (inCdata) {
-                char[] cbuf = new char[off + len];
-                for (int i = off, j = 0; j < len; i++, j++) {
-                    cbuf[j] = text[i];
-                }
-                getWrapped().write(escapeArray(cbuf));
-            } else {
-                getWrapped().writeText(text, off, len);
-            }
-
-        }
-
-        /**
-         * <p>The default behavior of this method is to
-         * call {@link ResponseWriter#write(char[], int, int)}
-         * on the wrapped {@link ResponseWriter} object.</p>
-         *
-         * @see ResponseWriter#write(char[], int, int)
-         * @since 1.2
-         */
-        public void write(char[] cbuf, int off, int len) throws IOException {
-
-            if (off < 0 || len < 0 || off + len > cbuf.length) {
-                throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > cbuf.length");
-            }
-
-            if (inCdata) {
-                char[] nbuf = new char[off + len];
-                for (int i = off, j = 0; j < len; i++, j++) {
-                    nbuf[j] = cbuf[i];
-                }
-                getWrapped().write(escapeArray(nbuf));
-            } else {
-                getWrapped().write(cbuf, off, len);
-            }
-
-        }
-
-        @Override
-        public void write(char[] cbuf) throws IOException {
-
-            if (inCdata) {
-                getWrapped().write(escapeArray(cbuf));
-            } else {
-                getWrapped().write(cbuf);
-            }
-        }
-
-        @Override
-        public void write(int c) throws IOException {
-
-
-            // RELEASE_PENDING add buffer for lookahead
-            if (inCdata) {
-                if (c == CLOSEBRACKET) {
-                    inCdata = false;
-                    getWrapped().write(ESCAPEDSINGLEBRACKET);
-                    inCdata = true;
-                } else if (c == LT) {
-                    getWrapped().write(ESCAPEDLT);
-                } else {
-                    getWrapped().write(c);
-                }
-            } else {  // not in cdata, just passthru
-                getWrapped().write(c);
-            }
-
-        }
-
-        @Override
-        public void write(String str) throws IOException {
-
-            if (str == null) {  // if null, passthru for error generation
-                getWrapped().write(str);
-                return;
-            }
-
-            if (inCdata) {
-                write(str.toCharArray());
-            } else {  // not in cdata, just passthru
-                getWrapped().write(str);
-            }
-        }
-
-        @Override
-        public void write(String str, int off, int len) throws IOException {
-
-            if (off < 0 || len < 0 || off + len > str.length()) {
-                throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > str.length()");
-            }
-
-            if (inCdata) {
-                write(str.substring(off, off + len).toCharArray());
-            } else {
-                getWrapped().write(str, off, len);
-            }
-
-        }
-
-        // RELEASE_PENDING Consider changing from returning a String to returning a char array
-        // RELEASE_PENDING Add a character array buffer, as well as unwinding the final Strings into char[]
-        /*
-         *  Method to escape all CDATA instances in a character array.
-         */
-        private String escapeArray(char cbuf[]) {
-            if (cbuf == null || cbuf.length == 0) {
-                return "";
-            }
-            boolean last = false;
-            StringBuilder builder = new StringBuilder(cbuf.length);
-            for (int i = 0; i < cbuf.length - 1; i++) {
-                if (cbuf[i] == '<' && cbuf[i + 1] == '!') {
-                    builder.append(ESCAPEDSTART);
-                    i++;
-                } else if (cbuf[i] == ']' && cbuf[i + 1] == ']') {
-                    builder.append(ESCAPEDEND);
-                    i++;
-                } else {
-                    builder.append(cbuf[i]);
-                }
-                if (i == cbuf.length - 1) {
-                    last = true;
-                }
-            }
-            // if we didn't look at the last, look at it now
-            // RELEASE_PENDING consider buffering the last character, in this case
-            if (!last) {
-                if (cbuf[cbuf.length - 1] == '<') {
-                    builder.append(ESCAPEDLT);
-                } else if (cbuf[cbuf.length - 1] == '[') {
-                    builder.append(ESCAPEDSINGLEBRACKET);
-                } else {
-                    builder.append(cbuf[cbuf.length - 1]);
-                }
-            }
-
-            return builder.toString();
-        }
-
     }
 
 }

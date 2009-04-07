@@ -228,6 +228,11 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
             public void writeComment(Object text) {
             }
 
+            public void startCDATA() {
+            }
+
+            public void endCDATA() {
+            }
 
             public void writeURIAttribute(String name, Object value) {
             }

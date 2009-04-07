@@ -161,6 +161,32 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
 
     }
 
+    // RELEASE_PENDING rogerk, edburns - check this description.
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ResponseWriter#startCDATA()}
+     * on the wrapped {@link ResponseWriter} object.</p>
+     * @since 2.0
+     * @throws IOException on any read/write error
+     */
+    public void startCDATA() throws IOException {
+        getWrapped().startCDATA();
+    }
+
+    // RELEASE_PENDING rogerk, edburns - check this description.
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ResponseWriter#endCDATA()}
+     * on the wrapped {@link ResponseWriter} object.</p>
+     * @since 2.0
+     * @throws IOException on any read/write error
+     */
+    public void endCDATA() throws IOException {
+        getWrapped().endCDATA();
+    }
+
 
     /**
      * <p>The default behavior of this method is to
@@ -169,6 +195,7 @@ public abstract class ResponseWriterWrapper extends ResponseWriter implements Fa
      *
      * @see ResponseWriter#endElement(String)
      * @since 1.2
+     * @throws IOException on any read/write error
      */
     public void endElement(String name) throws IOException {
 

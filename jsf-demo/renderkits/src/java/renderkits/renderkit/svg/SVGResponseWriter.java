@@ -194,6 +194,18 @@ public class SVGResponseWriter extends ResponseWriter {
     }
 
 
+    // PENDING - This is a very naive implementaiton
+
+        public void startCDATA() throws IOException {
+            dontEscape = true;
+            writer.write("!<CDATA[[");
+        }
+        public void endCDATA() throws IOException {
+            writer.write("]]>");
+            dontEscape = false;
+        }
+
+    
     /**
      * <p>Write the end of an element. This method will first
      * close any open element created by a call to

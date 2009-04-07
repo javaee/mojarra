@@ -57,6 +57,7 @@ import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.PartialResponseWriter;
 
 
 /**
@@ -150,6 +151,16 @@ public class HtmlResponseWriter extends ResponseWriter {
     private char[] textBuffer = new char[128];
 
     private char[] charHolder = new char[1];
+
+
+    private static final String BREAKCDATA = "]]><![CDATA[";
+    private static final String ESCAPEDSINGLEBRACKET = "]"+BREAKCDATA;
+    private static final String ESCAPEDLT= "&lt;"+BREAKCDATA;
+    private static final String ESCAPEDSTART= "&lt;"+BREAKCDATA+"!";
+    private static final String ESCAPEDEND= "]"+BREAKCDATA+"]";
+
+    private static final int CLOSEBRACKET = (int)']';
+    private static final int LT = (int)'<';
 
     static final Pattern CDATA_START_SLASH_SLASH;
 
@@ -497,10 +508,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         isScript = false;
         isStyle = false;
         if ("cdata".equalsIgnoreCase(name)) {
-            writer.write("]]>");
-            writingCdata = false;
-            isCdata = false;
-            dontEscape = false;
+            endCDATA();
             return;
         }
         // See if we need to close the start of the last element
@@ -579,10 +587,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         scriptOrStyleSrc = false;
         if ("cdata".equalsIgnoreCase(name)) {
             isCdata = true;
-            writingCdata = true;
-            dontEscape = true;
-            writer.write("<![CDATA[");
-            closeStart = false;
+            startCDATA();
             return;
         } else if (writingCdata) {
             // starting an element within a cdata section,
@@ -598,11 +603,49 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     }
 
+
+    /**
+     * Starts a CDATA block.  Nested blocks are not allowed.
+     * RELEASE_PENDING edburns, rogerk - need to expand on this description.
+     * @since 2.0
+     * @throws IOException on a read/write error
+     * @throws IllegalStateException If startCDATA is called a second time before endCDATA.
+     */
+    public void startCDATA() throws IOException {
+        if (writingCdata) {
+            throw new IllegalStateException("CDATA tags may not nest");
+        }
+        closeStartIfNecessary();        
+        writingCdata = true;
+        dontEscape = true;
+        writer.write("<![CDATA[");
+        closeStart = false;
+        return;
+    }
+
+    /**
+     * Closes the CDATA block.
+     * RELEASE_PENDING edburns, rogerk - need to expand on this description.
+     * @since 2.0
+     * @throws IOException
+     */
+    public void endCDATA() throws IOException {
+        closeStartIfNecessary();
+        writer.write("]]>");
+        writingCdata = false;
+        dontEscape = false;
+    }
+
     @Override
     public void write(char[] cbuf) throws IOException {
 
         closeStartIfNecessary();
-        writer.write(cbuf);
+
+        if (writingCdata) {
+            writer.write(escapeArray(cbuf));
+        } else {
+            writer.write(cbuf);
+        }
 
     }
 
@@ -610,7 +653,19 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void write(int c) throws IOException {
 
         closeStartIfNecessary();
-        writer.write(c);
+
+        // RELEASE_PENDING add buffer for lookahead
+        if (writingCdata) {
+            if (c == CLOSEBRACKET) {
+                writer.write(ESCAPEDSINGLEBRACKET);
+            } else if (c == LT) {
+                writer.write(ESCAPEDLT);
+            } else {
+                writer.write(c);
+            }
+        } else {  // not in cdata, just passthru
+            writer.write(c);
+        }
 
     }
 
@@ -618,24 +673,58 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void write(String str) throws IOException {
 
         closeStartIfNecessary();
-        writer.write(str);
 
+        if (str == null) {  // if null, passthru for error generation
+            writer.write(str);
+            return;
+        }
+
+        if (writingCdata) {
+            write(str.toCharArray());
+        } else {  // not in cdata, just passthru
+            writer.write(str);
+        }
     }
 
 
     public void write(char[] cbuf, int off, int len) throws IOException {
 
         closeStartIfNecessary();
-        writer.write(cbuf, off, len);
 
+        if (off < 0 || len < 0 || off + len > cbuf.length ) {
+            throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > cbuf.length");
+        }
+
+        // RELEASE_PENDING
+        //Might take a page from the HtmlUtils book and if the content being written
+        // is more than 16 chars, then use an existing buffer and copy the contents
+        // to said buffer.  If 16 or less, then just iterate over the string using charAt()
+
+        if (writingCdata) {
+            char[] nbuf = new char[off+len];
+
+            System.arraycopy(cbuf, off, nbuf, 0, len);
+
+            writer.write(escapeArray(nbuf));
+        } else {
+            writer.write(cbuf, off, len);
+        }
     }
 
     @Override
     public void write(String str, int off, int len) throws IOException {
 
         closeStartIfNecessary();
-        writer.write(str, off, len);
+        
+        if (off < 0 || len < 0 || off + len > str.length() ) {
+            throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > str.length()");
+        }
 
+        if (writingCdata) {
+            write(str.substring(off, off+len).toCharArray());
+        } else {
+            writer.write(str, off, len);
+        }
     }
 
 
@@ -828,7 +917,9 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "text"));
         }
         closeStartIfNecessary();
-        if (dontEscape) {
+        if (writingCdata) {
+            writer.write(escapeArray(text.toString().toCharArray()));
+        } else if (dontEscape) {
             writer.write(text.toString());
         } else {
             String val = text.toString();
@@ -840,7 +931,6 @@ public class HtmlResponseWriter extends ResponseWriter {
                                 val,
                                 textBuffer);
         }
-
     }
 
 
@@ -874,7 +964,18 @@ public class HtmlResponseWriter extends ResponseWriter {
             throw new IndexOutOfBoundsException();
         }
         closeStartIfNecessary();
-        if (dontEscape) {
+        if (writingCdata) {
+
+            // RELEASE_PENDING
+            //Might take a page from the HtmlUtils book and if the content being written
+            // is more than 16 chars, then use an existing buffer and copy the contents
+            // to said buffer.  If 16 or less, then just iterate over the string using charAt()
+
+            char[] cbuf = new char[off+len];
+            System.arraycopy(text, off, cbuf, 0, len);
+
+            writer.write(escapeArray(cbuf));
+        } else  if (dontEscape) {
             writer.write(text, off, len);
         } else {
             HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text, off, len);
@@ -1045,5 +1146,46 @@ public class HtmlResponseWriter extends ResponseWriter {
     private boolean isScriptOrStyle() {
         return (isScript || isStyle);
     }
+
+// RELEASE_PENDING Consider changing from returning a String to returning a char array
+// RELEASE_PENDING Add a character array buffer, as well as unwinding the final Strings into char[]
+/*
+ *  Method to escape all CDATA instances in a character array.
+ */
+    private String escapeArray(char cbuf[]) {
+        if (cbuf == null || cbuf.length == 0) {
+            return "";
+        }
+        boolean last = false;
+        StringBuilder builder = new StringBuilder(cbuf.length);
+        for (int i = 0; i < cbuf.length-1; i++) {
+            if (cbuf[i] == '<' && cbuf[i+1] == '!') {
+                builder.append(ESCAPEDSTART);
+                i++;
+            } else if (cbuf[i] == ']' && cbuf[i+1] == ']') {
+                builder.append(ESCAPEDEND);
+                i++;
+            } else {
+                builder.append(cbuf[i]);
+            }
+            if (i == cbuf.length - 1) {
+                    last = true;
+            }
+        }
+        // if we didn't look at the last, look at it now
+        // RELEASE_PENDING consider buffering the last character, in this case
+        if (!last) {
+            if (cbuf[cbuf.length-1] == '<') {
+                builder.append(ESCAPEDLT);
+            } else if (cbuf[cbuf.length-1] == '[') {
+                builder.append(ESCAPEDSINGLEBRACKET);
+            } else {
+                builder.append(cbuf[cbuf.length-1]);
+            }
+        }
+
+        return builder.toString();
+    }
+
 
 }

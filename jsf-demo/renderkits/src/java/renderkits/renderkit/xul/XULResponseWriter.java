@@ -226,6 +226,16 @@ public class XULResponseWriter extends ResponseWriter {
         writer.write(">");
     }
 
+    // PENDING - This is a very naive implementaiton
+
+    public void startCDATA() throws IOException {
+        dontEscape = true;
+        writer.write("!<CDATA[[");
+    }
+    public void endCDATA() throws IOException {
+        writer.write("]]>");
+        dontEscape = false;
+    }
 
     /**
      * <p>Write a properly escaped attribute name and the corresponding
