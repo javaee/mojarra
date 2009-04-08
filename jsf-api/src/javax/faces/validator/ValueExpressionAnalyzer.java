@@ -39,11 +39,7 @@ package javax.faces.validator;
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
 import java.util.Locale;
-import javax.el.ELContext;
-import javax.el.ELResolver;
-import javax.el.FunctionMapper;
-import javax.el.ValueExpression;
-import javax.el.VariableMapper;
+import javax.el.*;
 import javax.faces.el.CompositeComponentExpressionHolder;
 
 /**
@@ -59,7 +55,11 @@ class ValueExpressionAnalyzer {
 
     public ValueReference getReference(ELContext elContext) {
         InterceptingResolver resolver = new InterceptingResolver(elContext.getELResolver());
-        expression.setValue(decorateELContext(elContext, resolver), null);
+        try {
+            expression.setValue(decorateELContext(elContext, resolver), null);
+        } catch (ELException ele) {
+            return null;
+        }
         ValueReference reference = resolver.getValueReference();
         if (reference != null) {
             Object base = reference.getBase();
