@@ -36,10 +36,8 @@
 
 package com.sun.faces.config;
 
-import java.util.Comparator;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.text.MessageFormat;
@@ -277,6 +275,61 @@ public class DocumentOrderingWrapper {
                + (afterIds == null ? null : Arrays.asList(afterIds))
                +
                '}';
+    }
+
+
+    /**
+     * Sort the provided array of <code>Document</code>s per the order specified
+     * in the List represented by absoluteOrder.
+     * @param documents Documents to sort
+     * @param absoluteOrder the absolute order as specified in the /WEB-INF/faces-config.xml
+     * @return an array of DocumentOrderingWrappers that may be smaller than the
+     *  input array of wrappers.
+     */
+    public static DocumentOrderingWrapper[] sort(DocumentOrderingWrapper[] documents,
+                                                 List<String> absoluteOrder) {
+
+        List<DocumentOrderingWrapper> sourceList = new CopyOnWriteArrayList<DocumentOrderingWrapper>();
+        sourceList.addAll(Arrays.asList(documents));
+
+        List<DocumentOrderingWrapper> targetList = new ArrayList<DocumentOrderingWrapper>();
+        for (String name : absoluteOrder) {
+            if ("others".equals(name)) {
+                continue;
+            }
+            boolean found = false;
+            for (DocumentOrderingWrapper wrapper : sourceList) {
+                if (!found && name.equals(wrapper.getDocumentId())) {
+                    found = true;
+                    targetList.add(wrapper);
+                    sourceList.remove(wrapper);
+                } else if (found && name.equals(wrapper.getDocumentId())){
+                    // we've already processed a document with this name
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "Multiple documents named {0} found while processing absolute ordering.  Processing the first named document only.",
+                                   new Object[] { name });
+                    }
+                    // only log this once
+                    break;
+                }
+            }
+            if (!found) {
+                throw new ConfigurationException("Unable to find document named '" + name + "' while performing absolute ordering.");
+            }
+        }
+
+        int othersIndex = absoluteOrder.indexOf("others");
+        if (othersIndex != -1) {
+            // any wrappers left in sourceList are considered others.
+            // start pushing them into targetList at the index
+            for (DocumentOrderingWrapper wrapper : sourceList) {
+                targetList.add(othersIndex, wrapper);
+            }
+        }
+
+        return targetList.toArray(new DocumentOrderingWrapper[targetList.size()]);
+        
     }
 
 

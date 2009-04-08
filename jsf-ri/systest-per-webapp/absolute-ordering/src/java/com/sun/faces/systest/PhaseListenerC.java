@@ -34,46 +34,28 @@
  * holder.
  */
 
-package com.sun.faces.systest.model;
+package com.sun.faces.systest;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.FactoryFinder;
 import javax.faces.event.PhaseListener;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
 
-@ManagedBean
-public class OrderingBean {
+/**
+ * Created by IntelliJ IDEA. User: rlubke Date: Dec 2, 2008 Time: 2:00:51 PM To
+ * change this template use File | Settings | File Templates.
+ */
+public class PhaseListenerC implements PhaseListener {
 
-    public boolean isOrderCorrect() {
-
-        LifecycleFactory factory = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        Lifecycle l = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-        PhaseListener[] listeners = l.getPhaseListeners();
-        List<PhaseListener> list = new ArrayList<PhaseListener>();
-        for (PhaseListener listener : listeners) {
-            if (listener.getClass().getName().contains("com.sun.faces.systest.PhaseListener")) {
-                list.add(listener);
-            }
-        }
-        listeners = list.toArray(new PhaseListener[list.size()]);
-        String[] suffixes = { "C", "B", "A", "D"};
-        if (listeners.length != 4) {
-            System.out.println("INCORRECT LISTENER COUNT");
-            return false;
-        }
-        for (int i = 0; i < listeners.length; i++) {
-            if (!listeners[i].getClass().getName().endsWith(suffixes[i])) {
-                System.out.println("INCORRECT DOCUMENT ORDERING: " + Arrays.toString(listeners));
-                return false;
-            }
-        }
-
-        return true;
-
+    public void afterPhase(PhaseEvent event) {
+        // no-op
     }
+
+    public void beforePhase(PhaseEvent event) {
+        // no-op
+    }
+
+    public PhaseId getPhaseId() {
+        return PhaseId.ANY_PHASE;
+    }
+
 }

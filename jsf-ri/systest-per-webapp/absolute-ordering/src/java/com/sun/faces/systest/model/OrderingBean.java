@@ -61,7 +61,7 @@ public class OrderingBean {
             }
         }
         listeners = list.toArray(new PhaseListener[list.size()]);
-        String[] suffixes = { "C", "B", "A", "D"};
+        String[] suffixes = { "B", "C", "A", "D"};
         if (listeners.length != 4) {
             System.out.println("INCORRECT LISTENER COUNT");
             return false;

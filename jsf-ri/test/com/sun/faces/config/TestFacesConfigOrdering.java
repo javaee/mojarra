@@ -465,6 +465,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
 
 
     public void testAbsoluteDocumentOrderingAPI() throws Exception {
+
         Document d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute1.xml");
         WebInfFacesConfigInfo info = new WebInfFacesConfigInfo(d);
         assertTrue(info.exists());
@@ -502,6 +503,50 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         info = new WebInfFacesConfigInfo(d);
         assertFalse(info.exists());
 
+    }
+
+
+    public void testAbsoluteOrderingProcessing() throws Exception {
+
+        Document docA = createDocument("a", null, null);
+        Document docB = createDocument("b", null, null);
+        Document docC = createDocument("c", null, null);
+        Document docD = createDocument("d", null, null);
+        Document docE = createDocument("e", null, null);
+        Document docF = createDocument("f", null, null);
+        List<DocumentOrderingWrapper> wrappers = new ArrayList<DocumentOrderingWrapper>();
+        Collections.addAll(wrappers,
+                           new DocumentOrderingWrapper(docF),
+                           new DocumentOrderingWrapper(docE),
+                           new DocumentOrderingWrapper(docD),
+                           new DocumentOrderingWrapper(docC),
+                           new DocumentOrderingWrapper(docB),
+                           new DocumentOrderingWrapper(docA));
+        DocumentOrderingWrapper[] documentWrappers =
+              wrappers.toArray(new DocumentOrderingWrapper[wrappers.size()]);
+
+        Document d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute1.xml");
+        WebInfFacesConfigInfo info = new WebInfFacesConfigInfo(d);
+        List<String> ordering = info.getAbsoluteOrdering();
+        DocumentOrderingWrapper[] result =
+              DocumentOrderingWrapper.sort(documentWrappers, ordering);
+        assertEquals(3, result.length);
+        assertEquals("a", result[0].getDocumentId());
+        assertEquals("b", result[1].getDocumentId());
+        assertEquals("c", result[2].getDocumentId());
+
+        d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute2.xml");
+        info = new WebInfFacesConfigInfo(d);
+        ordering = info.getAbsoluteOrdering();
+        result =
+              DocumentOrderingWrapper.sort(documentWrappers, ordering);
+        assertEquals(6, result.length);
+        assertEquals("a", result[0].getDocumentId());
+        assertEquals("b", result[1].getDocumentId());
+        assertEquals("d", result[2].getDocumentId());
+        assertEquals("e", result[3].getDocumentId());
+        assertEquals("f", result[4].getDocumentId());
+        assertEquals("c", result[5].getDocumentId());
     }
 
 

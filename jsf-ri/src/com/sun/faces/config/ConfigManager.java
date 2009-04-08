@@ -296,6 +296,9 @@ public class ConfigManager {
 
                 WebInfFacesConfigInfo facesConfigInfo =
                       new WebInfFacesConfigInfo(facesDocuments[facesDocuments.length - 1]);
+
+                facesDocuments = sortDocuments(facesDocuments, facesConfigInfo);
+
                 boolean isFaceletsDisabled =
                       isFaceletsDisabled(webConfig, facesConfigInfo);
                 if (!facesConfigInfo.isMetadataComplete()) {
@@ -304,8 +307,6 @@ public class ConfigManager {
                           executor.submit(new AnnotationScanTask(sc));
                     pushTaskToContext(sc, annotationScan);
                 }
-
-                sortDocuments(facesDocuments, facesConfigInfo.exists());
 
                 // process the ordered documents
                 FACES_CONFIG_PROCESSOR_CHAIN.process(facesDocuments);
@@ -400,13 +401,19 @@ public class ConfigManager {
      *
      * @param facesDocuments an array of <em>all</em> <code>faces-config</code>
      *  documents
+     * @param facesConfig WebInfoFacesConfigInfo for this app
+     *
+     * @return the sorted documents
      */
-    private void sortDocuments(Document[] facesDocuments, boolean facesConfigPresent) {
+    private Document[] sortDocuments(Document[] facesDocuments,
+                                     WebInfFacesConfigInfo facesConfig) {
 
 
-        int len = (facesConfigPresent
+        int len = (facesConfig.exists()
                      ? facesDocuments.length - 1
                      : facesDocuments.length);
+
+        List<String> absoluteOrdering = facesConfig.getAbsoluteOrdering();
 
         if (len > 1) {
             List<DocumentOrderingWrapper> list =
@@ -416,14 +423,32 @@ public class ConfigManager {
             }
             DocumentOrderingWrapper[] ordering =
                   list.toArray(new DocumentOrderingWrapper[list.size()]);
-            DocumentOrderingWrapper.sort(ordering);
-            // sorting complete, now update the appropriate locations within
-            // the original array with the sorted documentation.
-            for (int i = 1; i < len; i++) {
-                facesDocuments[i] = ordering[i - 1].getDocument();
+            if (absoluteOrdering == null) {
+                DocumentOrderingWrapper.sort(ordering);
+                // sorting complete, now update the appropriate locations within
+                // the original array with the sorted documentation.
+                for (int i = 1; i < len; i++) {
+                    facesDocuments[i] = ordering[i - 1].getDocument();
+                }
+                return facesDocuments;
+            } else {
+                DocumentOrderingWrapper[] result =
+                      DocumentOrderingWrapper.sort(ordering, absoluteOrdering);
+                Document[] ret = new Document[((facesConfig.exists()) ? (result.length + 2) : (result.length + 1))];
+                for (int i = 1; i < len; i++) {
+                    ret[i] = result[i - 1].getDocument();
+                }
+                // add the impl specific config file
+                ret[0] = facesDocuments[0];
+                // add the WEB-INF if necessary
+                if (facesConfig.exists()) {
+                    ret[ret.length - 1] = facesDocuments[facesDocuments.length - 1];
+                }
+                return ret;
             }
         }
 
+        return facesDocuments;
     }
 
 

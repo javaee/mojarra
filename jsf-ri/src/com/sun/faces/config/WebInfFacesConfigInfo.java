@@ -44,6 +44,10 @@ import org.w3c.dom.Node;
 import java.util.List;
 import java.util.Collections;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
@@ -53,8 +57,10 @@ import java.util.ArrayList;
 */
 public class WebInfFacesConfigInfo {
 
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     private static final String ABSOLUTE_ORDERING = "absolute-ordering";
+    private static final String ORDERING = "ordering";
     private static final String NAME = "name";
     private static final String OTHERS = "others";
 
@@ -202,14 +208,22 @@ public class WebInfFacesConfigInfo {
         String namespace = documentElement.getNamespaceURI();
 
         NodeList orderingElements =
+              documentElement.getElementsByTagNameNS(namespace, ORDERING);
+        if (orderingElements.getLength() > 0) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning("/WEB-INF/faces-config.xml contains <ordering> elements.  These will be ignored.");
+            }
+        }
+        
+        NodeList absoluteOrderingElements =
               documentElement.getElementsByTagNameNS(namespace, ABSOLUTE_ORDERING);
 
-        if (orderingElements.getLength() > 0) {
+        if (absoluteOrderingElements.getLength() > 0) {
             // according to the schema there, should be only one
-            if (orderingElements.getLength() > 1) {
+            if (absoluteOrderingElements.getLength() > 1) {
                 throw new IllegalStateException("Multiple 'absolute-ordering' elements found within WEB-INF/faces-config.xml");
             }
-            Node absoluteOrderingNode = orderingElements.item(0);
+            Node absoluteOrderingNode = absoluteOrderingElements.item(0);
             NodeList children = absoluteOrderingNode.getChildNodes();
             absoluteOrdering = new ArrayList<String>(children.getLength());
             for (int i = 0, len = children.getLength(); i < len; i++) {
