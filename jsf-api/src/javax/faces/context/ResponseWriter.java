@@ -195,7 +195,7 @@ public abstract class ResponseWriter extends Writer {
      * @throws IOException if input/output error occures
      */
     public void startCDATA() throws IOException {
-        // no-op
+        throw new UnsupportedOperationException();
     }
 
 
@@ -207,7 +207,7 @@ public abstract class ResponseWriter extends Writer {
      * @throws IOException if input/output error occures
      */
     public void endCDATA() throws IOException {
-        // no-op
+        throw new UnsupportedOperationException();
     }
 
 
