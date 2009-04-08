@@ -189,18 +189,26 @@ public abstract class ResponseWriter extends Writer {
 
     //RELEASE_PENDING rogerk, edburns - need real english description
     /**
-     * <p>Open a CDATA block.  Nested CDATA blocks are not allowed.
+     * <p>Open a CDATA block.  Nested CDATA blocks are not allowed.</p>
+     * <p>The default implementation of this method takes no action
+     *  when invoked.</p>
      * @throws IOException if input/output error occures
      */
-    public abstract void startCDATA() throws IOException ;
+    public void startCDATA() throws IOException {
+        // no-op
+    }
 
 
     //RELEASE_PENDING rogerk, edburns - need real english description
     /**
-     * <p>Close a CDATA block.
+     * <p>Close a CDATA block.</p>
+     * <p>The default implementation of this method takes no action
+     *  when invoked.</p>
      * @throws IOException if input/output error occures
      */
-    public abstract void endCDATA() throws IOException;
+    public void endCDATA() throws IOException {
+        // no-op
+    }
 
 
     /**
