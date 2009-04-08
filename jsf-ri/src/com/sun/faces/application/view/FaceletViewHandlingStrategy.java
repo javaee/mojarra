@@ -183,7 +183,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
     
     /**
-     * @see javax.faces.view.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     * @see javax.faces.view.ViewDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
     public Resource getScriptComponentResource(FacesContext context,
             Resource componentResource) {
@@ -207,7 +207,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     /**
-     * @see javax.faces.view.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     * @see javax.faces.view.ViewDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
     public void renderView(FacesContext ctx,
                            UIViewRoot viewToRender)
@@ -261,7 +261,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         } catch (FileNotFoundException fnfe) {
             this.handleFaceletNotFound(ctx,
-                                       multiViewHandler,
                                        viewToRender.getViewId(),
                                        fnfe.getMessage());
         } catch (Exception e) {
@@ -279,7 +278,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * If {@link UIDebug#debugRequest(javax.faces.context.FacesContext)}} is <code>true</code>,
      * simply return a new UIViewRoot(), otherwise, call the default logic.
      * </p>
-     * @see {@link javax.faces.view.PageDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}
+     * @see {@link javax.faces.view.ViewDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}
      */
     @Override
     public UIViewRoot restoreView(FacesContext ctx,
@@ -296,7 +295,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     /**
-     * @see javax.faces.view.PageDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
+     * @see javax.faces.view.ViewDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
      * @return
      */
     @Override
@@ -569,21 +568,18 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * Handles the case where a Facelet cannot be found.
      *
      * @param context the {@link FacesContext} for the current request
-     * @param vh the {@link ViewHandler} handling this view
      * @param viewId the view ID that was to be mapped to a Facelet
      * @param message optional message to include in the 404
      * @throws IOException if an error occurs sending the 404 to the client
      */
     protected void handleFaceletNotFound(FacesContext context,
-                                         ViewHandler vh,
                                          String viewId,
                                          String message)
     throws IOException {
 
-        String actualId = vh.getActionURL(context, viewId);
         context.getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND,  ((message != null)
-                                                                  ? (actualId + ": " + message)
-                                                                  : actualId));
+                                                                  ? (viewId + ": " + message)
+                                                                  : viewId));
         context.responseComplete();
 
     }

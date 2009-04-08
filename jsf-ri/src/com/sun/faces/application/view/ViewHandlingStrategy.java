@@ -67,7 +67,6 @@ public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
     protected int responseBufferSize;
     protected ApplicationAssociate associate;
     protected WebConfiguration webConfig;
-    protected MultiViewHandler multiViewHandler;
 
 
     // ------------------------------------------------------------ Constructors

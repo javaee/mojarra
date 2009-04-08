@@ -77,7 +77,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * Not supported in JSP-based views.
      * </p>
      *
-     * @see javax.faces.view.PageDeclarationLanguage#getComponentMetadata(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     * @see javax.faces.view.ViewDeclarationLanguage#getComponentMetadata(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, Resource componentResource) {
@@ -89,7 +89,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * Not supported in JSP-based views.
      * </p>
      *
-     * @see javax.faces.view.PageDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)
+     * @see javax.faces.view.ViewDeclarationLanguage#getViewMetadata(javax.faces.context.FacesContext, String)
      */
     @Override
     public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
@@ -102,7 +102,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * Not supported in JSP-based views.
      * </p>
      *
-     * @see javax.faces.view.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     * @see javax.faces.view.ViewDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
     @Override
     public Resource getScriptComponentResource(FacesContext context, Resource componentResource) {
@@ -111,7 +111,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     /**
-     * @see javax.faces.view.PageDeclarationLanguage#buildView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     * @see javax.faces.view.ViewDeclarationLanguage#buildView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      * @param context
      * @param view
      * @throws IOException
@@ -139,7 +139,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
     /**
-     * @see javax.faces.view.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
+     * @see javax.faces.view.ViewDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
     public void renderView(FacesContext context,
                            UIViewRoot view)
