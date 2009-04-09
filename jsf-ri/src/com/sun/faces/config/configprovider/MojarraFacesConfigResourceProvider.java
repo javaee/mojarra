@@ -40,6 +40,8 @@
 
 package com.sun.faces.config.configprovider;
 
+import com.sun.faces.spi.ConfigurationResourceProvider;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,7 +52,8 @@ import javax.servlet.ServletContext;
 /**
  *
  */
-public class MojarraFacesConfigResourceProvider implements ConfigurationResourceProvider {
+public class MojarraFacesConfigResourceProvider implements
+      ConfigurationResourceProvider {
 
     private static final String JSF_RI_CONFIG =
          "com/sun/faces/jsf-ri-runtime.xml";

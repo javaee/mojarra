@@ -43,6 +43,7 @@ package com.sun.faces.config.configprovider;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.util.Classpath;
+import com.sun.faces.spi.ConfigurationResourceProvider;
 
 import javax.faces.FacesException;
 import javax.servlet.ServletContext;
@@ -58,15 +59,14 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 /**
  *
  */
-public class MetaInfFacesConfigResourceProvider implements ConfigurationResourceProvider {
+public class MetaInfFacesConfigResourceProvider implements
+      ConfigurationResourceProvider {
 
     /**
      * <p>This <code>Pattern</code> will pick the the JAR file name if present
@@ -86,7 +86,7 @@ public class MetaInfFacesConfigResourceProvider implements ConfigurationResource
 
 
     /**
-     * @see ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
+     * @see com.sun.faces.spi.ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
      */
     public Collection<URL> getResources(ServletContext context) {
 

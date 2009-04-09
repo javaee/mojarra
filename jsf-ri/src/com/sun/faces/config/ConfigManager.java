@@ -42,7 +42,10 @@ package com.sun.faces.config;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
-import com.sun.faces.config.configprovider.ConfigurationResourceProvider;
+import com.sun.faces.spi.ConfigurationResourceProvider;
+import com.sun.faces.spi.ConfigurationResourceProviderFactory;
+import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.*;
+import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.FaceletConfig;
 import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
 import com.sun.faces.config.configprovider.MojarraFacesConfigResourceProvider;
 import com.sun.faces.config.configprovider.WebFacesConfigResourceProvider;
@@ -84,12 +87,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Collection;
-import java.util.Set;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
@@ -290,7 +288,7 @@ public class ConfigManager {
 
                 Document[] facesDocuments =
                       getConfigDocuments(sc,
-                                         FACES_CONFIG_RESOURCE_PROVIDERS,
+                                         getFacesConfigResourceProviders(),
                                          executor,
                                          validating);
 
@@ -313,7 +311,7 @@ public class ConfigManager {
                 if (!isFaceletsDisabled) {
                     FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN.process(
                           getConfigDocuments(sc,
-                                             FACELET_TAGLIBRARY_RESOURCE_PROVIDERS,
+                                             getFaceletConfigResourceProviders(),
                                              executor,
                                              validating));
                 }
@@ -390,6 +388,38 @@ public class ConfigManager {
 
 
     // --------------------------------------------------------- Private Methods
+
+    private List<ConfigurationResourceProvider> getFacesConfigResourceProviders() {
+
+        return getConfigurationResourceProviders(FACES_CONFIG_RESOURCE_PROVIDERS,
+                                                 FacesConfig);
+
+    }
+
+
+    private List<ConfigurationResourceProvider> getFaceletConfigResourceProviders() {
+
+        return getConfigurationResourceProviders(FACELET_TAGLIBRARY_RESOURCE_PROVIDERS,
+                                                 FaceletConfig);
+
+    }
+
+
+    private List<ConfigurationResourceProvider> getConfigurationResourceProviders(List<ConfigurationResourceProvider> defaultProviders,
+                                                                                  ConfigurationResourceProviderFactory.ProviderType providerType) {
+
+         ConfigurationResourceProvider[] custom =
+              ConfigurationResourceProviderFactory.createProviders(providerType);
+        if (custom.length == 0) {
+            return defaultProviders;
+        } else {
+            List<ConfigurationResourceProvider> list = new ArrayList<ConfigurationResourceProvider>();
+            list.addAll(defaultProviders);
+            list.addAll(Arrays.asList(custom));
+            return Collections.unmodifiableList(list);
+        }
+
+    }
 
 
     /**

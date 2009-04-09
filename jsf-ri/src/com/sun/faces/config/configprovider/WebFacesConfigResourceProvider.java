@@ -69,7 +69,7 @@ public class WebFacesConfigResourceProvider extends BaseWebConfigResourceProvide
 
 
     /**
-     * @see ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
+     * @see com.sun.faces.spi.ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
      */
     public Collection<URL> getResources(ServletContext context) {
 

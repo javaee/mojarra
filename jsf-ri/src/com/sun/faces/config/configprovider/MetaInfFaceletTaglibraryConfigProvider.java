@@ -38,11 +38,9 @@ package com.sun.faces.config.configprovider;
 
 import java.net.URL;
 import java.util.Collection;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.IOException;
 
@@ -52,11 +50,13 @@ import javax.faces.FacesException;
 import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import com.sun.faces.spi.ConfigurationResourceProvider;
 
 /**
  *
  */
-public class MetaInfFaceletTaglibraryConfigProvider implements ConfigurationResourceProvider {
+public class MetaInfFaceletTaglibraryConfigProvider implements
+      ConfigurationResourceProvider {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
     private static final String SUFFIX = ".taglib.xml";

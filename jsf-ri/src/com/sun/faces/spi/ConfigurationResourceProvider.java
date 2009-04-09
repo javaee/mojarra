@@ -34,7 +34,7 @@
  * holder.
  */
 
-package com.sun.faces.config.configprovider;
+package com.sun.faces.spi;
 
 import javax.servlet.ServletContext;
 
@@ -43,8 +43,11 @@ import java.util.Collection;
 
 /**
  * <p> Classes that implement this interface return zero or more
- * <code>URL</code>s which refer to application configuration resources (i.e.
- * documents conforming the faces-config DTDs or Schema). </p>
+ * <code>URL</code>s which refer to application configuration resources.
+ * </p>
+ *
+ * @see FacesConfigResourceProvider
+ * @see FaceletConfigResourceProvider
  */
 public interface ConfigurationResourceProvider {
 

@@ -53,11 +53,13 @@ import static com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesConfigFiles;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.spi.ConfigurationResourceProvider;
 
 /**
  * 
  */
-public abstract class BaseWebConfigResourceProvider implements ConfigurationResourceProvider {
+public abstract class BaseWebConfigResourceProvider implements
+      ConfigurationResourceProvider {
 
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();

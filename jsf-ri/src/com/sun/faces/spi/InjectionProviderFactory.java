@@ -387,7 +387,10 @@ public class InjectionProviderFactory {
                 } catch (Exception e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE,
-                                   "jsf.spi.injection.provider.cannot_read_service",
+                                   "jsf.spi.provider.cannot_read_service",
+                                   new Object[] { INJECTION_SERVICE });
+                        LOGGER.log(Level.SEVERE,
+                                   e.toString(),
                                    e);
                     }
                 } finally {
