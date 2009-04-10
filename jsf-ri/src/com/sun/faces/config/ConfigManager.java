@@ -415,7 +415,9 @@ public class ConfigManager {
         } else {
             List<ConfigurationResourceProvider> list = new ArrayList<ConfigurationResourceProvider>();
             list.addAll(defaultProviders);
-            list.addAll(Arrays.asList(custom));
+            // insert the custom providers after the META-INF providers and
+            // before those that scan /WEB-INF
+            list.addAll((defaultProviders.size() - 1), Arrays.asList(custom));
             return Collections.unmodifiableList(list);
         }
 
