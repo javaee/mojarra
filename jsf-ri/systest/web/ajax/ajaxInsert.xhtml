@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Ajax Insert</title>
+</h:head>
+<h:body>
+    <h:form id="form1">
+        <h:commandButton id="before" value="Before" action="#{insertBean.insertBefore}">
+              <f:ajax execute="@this" render="@none"/>
+        </h:commandButton>
+        <h:commandButton id="after" value="After" action="#{insertBean.insertAfter}">
+            <f:ajax execute="@this" render="@none" />
+        </h:commandButton>
+    </h:form>
+    <br/>
+    <hr id="hr" />
+</h:body>
+</html>

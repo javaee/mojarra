@@ -345,7 +345,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 target = target.nextSibling;
             }  // otherwise, this is a 'before' element
             parent.insertBefore(tempElement.firstChild, target);
-            document.removeChild(tempElement);
+            // RELEASE_PENDING what do we do with the span we've just inserted?
         };
 
         /**
