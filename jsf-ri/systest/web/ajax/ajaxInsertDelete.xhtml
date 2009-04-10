@@ -11,11 +11,17 @@
 </h:head>
 <h:body>
     <h:form id="form1">
-        <h:commandButton id="before" value="Before" action="#{insertBean.insertBefore}">
+        <h:commandButton id="before" value="Add Before" action="#{insertDeleteBean.insertBefore}">
               <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
-        <h:commandButton id="after" value="After" action="#{insertBean.insertAfter}">
+        <h:commandButton id="removeBefore" value="Remove Before" action="#{insertDeleteBean.removeBefore}">
+            <f:ajax execute="@this" render="@none"/>
+        </h:commandButton>
+        <h:commandButton id="after" value="Add After" action="#{insertDeleteBean.insertAfter}">
             <f:ajax execute="@this" render="@none" />
+        </h:commandButton>
+         <h:commandButton id="removeAfter" value="Remove After" action="#{insertDeleteBean.removeAfter}">
+            <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
     </h:form>
     <br/>
