@@ -1086,7 +1086,7 @@ public class UIData extends UIComponentBase
                     return true;
 
                 // And finally, visit rows
-                if (visitRows(context, callback))
+                if (visitColumnsAndRows(context, callback))
                     return true;
             }
         }
@@ -1389,8 +1389,8 @@ public class UIData extends UIComponentBase
         return false;
     }
 
-    // Visit each row
-    private boolean visitRows(VisitContext context,  VisitCallback callback) {
+    // Visit each column and row
+    private boolean visitColumnsAndRows(VisitContext context,  VisitCallback callback) {
 
         // Iterate over our UIColumn children, once per row
         int processed = 0;
@@ -1410,19 +1410,15 @@ public class UIData extends UIComponentBase
                 break; // Scrolled past the last row
             }
 
-            // Visit as required on the *children* of the UIColumn 
+            // Visit as required on the *children* of the UIColumn, as well as columns themselves
             // (facets have been done a single time with rowIndex=-1 already)
             if (getChildCount() > 0) {
                 for (UIComponent kid : getChildren()) {
                     if (!(kid instanceof UIColumn)) {
                         continue;
                     }
-                    if (kid.getChildCount() > 0) {
-                        for (UIComponent grandkid : kid.getChildren()) {
-
-                            if (grandkid.visitTree(context, callback))
-                                return true;
-                        }
+                    if (kid.visitTree(context, callback)) {
+                        return true;
                     }
                 }
             }
