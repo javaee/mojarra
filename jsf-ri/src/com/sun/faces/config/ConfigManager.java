@@ -408,7 +408,7 @@ public class ConfigManager {
     private List<ConfigurationResourceProvider> getConfigurationResourceProviders(List<ConfigurationResourceProvider> defaultProviders,
                                                                                   ConfigurationResourceProviderFactory.ProviderType providerType) {
 
-         ConfigurationResourceProvider[] custom =
+        ConfigurationResourceProvider[] custom =
               ConfigurationResourceProviderFactory.createProviders(providerType);
         if (custom.length == 0) {
             return defaultProviders;
