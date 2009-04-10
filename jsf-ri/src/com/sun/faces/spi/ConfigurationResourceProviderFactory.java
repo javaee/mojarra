@@ -66,6 +66,15 @@ public class ConfigurationResourceProviderFactory {
                 ConfigurationResourceProvider provider =
                       getProviderFromEntry(serviceEntry);
                 if (provider != null) {
+                    if (ProviderType.FacesConfig == providerType) {
+                        if (!(provider instanceof FacesConfigResourceProvider)) {
+                            throw new IllegalStateException("Expected ConfigurationResourceProvider type to be an instance of FacesConfigResourceProvider");
+                        }
+                    } else {
+                        if (!(provider instanceof FaceletConfigResourceProvider)) {
+                            throw new IllegalStateException("Expected ConfigurationResourceProvider type to be an instance of FaceletConfigResourceProvider");
+                        }
+                    }
                     providers.add(provider);
                 }
             }
@@ -87,12 +96,7 @@ public class ConfigurationResourceProviderFactory {
 
         try {
             Class<?> clazz = Util.loadClass(entry, null);
-            ConfigurationResourceProvider provider = (ConfigurationResourceProvider) clazz.newInstance();
-            if (!(provider instanceof FaceletConfigResourceProvider)
-                  || !(provider instanceof FacesConfigResourceProvider)) {
-                throw new IllegalStateException("ConfigurationResourceProvider must be either of type FaceletConfigResourceProvider or FacesConfigResourceProvider.");
-            }
-            return provider;
+            return (ConfigurationResourceProvider) clazz.newInstance();
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);

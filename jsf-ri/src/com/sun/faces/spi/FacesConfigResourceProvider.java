@@ -21,6 +21,16 @@ package com.sun.faces.spi;
  * contains a single line which represents the fully qualified class name
  * of the concrete <code>FacesConfigResourceProvider</code>.
  * </p>
+ *
+ * <p>
+ * The <code>FacesConfigResourceProvider</code> instances that are found
+ * will be inserted into a List of existing <code>ConfigurationResourceProviders</code>
+ * <em>after</em> those that process <code>faces-config.xml</code> files in <code>META-INF</code>
+ * but <em>before</em> those that process <code>faces-config.xml</code> files in the
+ * web application.  If the documents returned by this <code>ConfigurationResourceProvider</code>
+ * instance require specific ordering semantics, then use the partial or absolute ordering
+ * feature provided by the JavaServer Faces 2.0 specification.
+ * </p>
  */
 public interface FacesConfigResourceProvider extends ConfigurationResourceProvider {
 
