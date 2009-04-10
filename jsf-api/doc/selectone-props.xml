@@ -36,7 +36,8 @@
  holder.
 -->
 
-<!-- ========== UISelectMany Properties ==================================== -->
+
+<!-- ========== SelectOne+Radio Properties ================================= -->
 
 
 <!-- template
@@ -53,22 +54,6 @@
 -->
 <root>
     <property>
-        <description><![CDATA[<p class="changed_modified_2_0"> Optional
-        attribute that is a literal string that is the fully qualified
-        class name of a concrete class that implements
-        <code>java.util.Collection</code>, or an EL expression that
-        evaluates to either 1. such a String, or 2. the
-        <code>Class</code> object itself. </p>]]>
-        </description>
-        <display-name>Collection Type</display-name>
-        <icon></icon>
-        <property-name>collectionType</property-name>
-        <property-class>java.lang.String</property-class>
-        <property-extension>
-            <required>false</required>
-        </property-extension>
-    </property>
-    <property>
         <description><![CDATA[<p class="changed_modified_2_0">
           Flag indicating that, if this component is activated by the user,
           The "no selection option", if any, must be hidden.</p>]]>
@@ -82,6 +67,4 @@
             <jsp-ignore>true</jsp-ignore>
         </property-extension>
     </property>
-
 </root>
-

@@ -1,0 +1,123 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Test select* with noselection</title>
+</h:head>
+<h:body>
+    <h:form prependId="false">
+
+<h1>SelectOneListbox</h1>
+
+<p>
+
+       <h:selectOneListbox id="selectOneListbox" required="true" hideNoSelectionOption="true">
+
+         <f:selectItem noSelectionOption="true" itemLabel="No selection" itemValue="noSelection"/>
+         <f:selectItem itemLabel="Apple" itemValue="Apple"/>
+         <f:selectItem itemLabel="Orange" itemValue="Orange" />
+         <f:selectItem itemLabel="Pear" itemValue="Pear" />
+         <f:selectItem itemLabel="Peach" itemValue="Peach"/>
+
+       </h:selectOneListbox>
+
+</p>
+
+<h1>SelectOneMenu</h1>
+
+<p>
+
+       <h:selectOneMenu id="selectOneMenu" required="true" hideNoSelectionOption="true">
+
+         <f:selectItem noSelectionOption="true" itemLabel="No selection" itemValue="noSelection"/>
+         <f:selectItem itemLabel="Apple" itemValue="Apple"/>
+         <f:selectItem itemLabel="Orange" itemValue="Orange" />
+         <f:selectItem itemLabel="Pear" itemValue="Pear" />
+         <f:selectItem itemLabel="Peach" itemValue="Peach"/>
+
+       </h:selectOneMenu>
+
+</p>
+
+<h1>SelectOneRadio</h1>
+
+<p>
+
+       <h:selectOneRadio id="selectOneRadio" required="true" hideNoSelectionOption="true">
+
+         <f:selectItem noSelectionOption="true" itemLabel="No selection" itemValue="noSelection"/>
+         <f:selectItem itemLabel="Apple" itemValue="Apple"/>
+         <f:selectItem itemLabel="Orange" itemValue="Orange" />
+         <f:selectItem itemLabel="Pear" itemValue="Pear" />
+         <f:selectItem itemLabel="Peach" itemValue="Peach"/>
+
+       </h:selectOneRadio>
+
+</p>
+
+<h1>SelectManyCheckbox</h1>
+
+<p>
+
+       <h:selectManyCheckbox id="selectManyCheckbox" required="true" hideNoSelectionOption="true">
+
+         <f:selectItem noSelectionOption="true" itemLabel="No selection" itemValue="noSelection"/>
+         <f:selectItem itemLabel="Apple" itemValue="Apple"/>
+         <f:selectItem itemLabel="Orange" itemValue="Orange" />
+         <f:selectItem itemLabel="Pear" itemValue="Pear" />
+         <f:selectItem itemLabel="Peach" itemValue="Peach"/>
+
+       </h:selectManyCheckbox>
+
+</p>
+
+<h1>SelectManyListbox</h1>
+
+<p>
+
+       <h:selectManyListbox id="selectManyListbox" required="true" hideNoSelectionOption="true">
+
+         <f:selectItem noSelectionOption="true" itemLabel="No selection" itemValue="noSelection"/>
+         <f:selectItem itemLabel="Apple" itemValue="Apple"/>
+         <f:selectItem itemLabel="Orange" itemValue="Orange" />
+         <f:selectItem itemLabel="Pear" itemValue="Pear" />
+         <f:selectItem itemLabel="Peach" itemValue="Peach"/>
+
+       </h:selectManyListbox>
+
+</p>
+
+<h1>SelectManyMenu</h1>
+
+<p>
+
+       <h:selectManyMenu id="selectManyMenu" required="true" hideNoSelectionOption="true">
+
+         <f:selectItem noSelectionOption="true" itemLabel="No selection" itemValue="noSelection"/>
+         <f:selectItem itemLabel="Apple" itemValue="Apple"/>
+         <f:selectItem itemLabel="Orange" itemValue="Orange" />
+         <f:selectItem itemLabel="Pear" itemValue="Pear" />
+         <f:selectItem itemLabel="Peach" itemValue="Peach"/>
+
+       </h:selectManyMenu>
+
+</p>
+
+
+
+<p>
+
+       <h:commandButton value="submit" />
+
+</p>
+
+       <p> messages: <h:messages /> </p>
+
+
+
+    </h:form>
+</h:body>
+</html>

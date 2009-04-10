@@ -80,7 +80,7 @@ public class SelectStarTestCase extends AbstractTestCase {
 
         // Check SelectManyListbox
         HtmlSelect selectManyListbox = (HtmlSelect) lastpage.getHtmlElementById("selectManyListbox");
-        List<HtmlOption> selectManyListOptions = selectOneMenu.getOptions();
+        List<HtmlOption> selectManyListOptions = selectManyListbox.getOptions();
         assertTrue(selectManyListOptions.size() == 5);
         selectOption = selectManyListOptions.get(0);
         assertTrue(selectOption.getValueAttribute().equals("noSelection"));
@@ -91,7 +91,7 @@ public class SelectStarTestCase extends AbstractTestCase {
 
         // Check SelectManyMenu
         HtmlSelect selectManyMenu = (HtmlSelect) lastpage.getHtmlElementById("selectManyMenu");
-        List<HtmlOption> selectManyMenuOptions = selectOneMenu.getOptions();
+        List<HtmlOption> selectManyMenuOptions = selectManyMenu.getOptions();
         assertTrue(selectManyMenuOptions.size() == 5);
         selectOption = selectManyMenuOptions.get(0);
         assertTrue(selectOption.getValueAttribute().equals("noSelection"));
@@ -144,7 +144,7 @@ public class SelectStarTestCase extends AbstractTestCase {
 
         // Check SelectManyListbox
         HtmlSelect selectManyListbox = (HtmlSelect) lastpage.getHtmlElementById("selectManyListbox");
-        List<HtmlOption> selectManyListOptions = selectOneMenu.getOptions();
+        List<HtmlOption> selectManyListOptions = selectManyListbox.getOptions();
         assertTrue(selectManyListOptions.size() == 5);
         selectOption = selectManyListOptions.get(0);
         assertTrue(selectOption.getValueAttribute().equals("noSelection"));
@@ -155,7 +155,7 @@ public class SelectStarTestCase extends AbstractTestCase {
 
         // Check SelectManyMenu
         HtmlSelect selectManyMenu = (HtmlSelect) lastpage.getHtmlElementById("selectManyMenu");
-        List<HtmlOption> selectManyMenuOptions = selectOneMenu.getOptions();
+        List<HtmlOption> selectManyMenuOptions = selectManyMenu.getOptions();
         assertTrue(selectManyMenuOptions.size() == 5);
         selectOption = selectManyMenuOptions.get(0);
         assertTrue(selectOption.getValueAttribute().equals("noSelection"));
@@ -165,5 +165,54 @@ public class SelectStarTestCase extends AbstractTestCase {
         assertTrue(selectOption.asText().equals("Apple"));
 
     }
+
+    public void testSelectStarXhtmlHide() throws Exception {
+        String failMsg;
+
+        getPage("/faces/render/selectStarNoSelectionHide.xhtml");
+        System.out.println("Start select star test case - facelets");
+
+        // Check SelectManyListbox
+        HtmlSelect selectOneList = (HtmlSelect) lastpage.getHtmlElementById("selectOneListbox");
+        List<HtmlOption> selectOneListOptions = selectOneList.getOptions();
+        failMsg = "Wrong number of options for SelectManyListbox, expected 4, got "+selectOneListOptions.size();
+        assertTrue(failMsg,selectOneListOptions.size() == 4);
+        HtmlOption selectOption = selectOneListOptions.get(0);
+        assertTrue(selectOption.getValueAttribute().equals("Apple"));
+        assertTrue(selectOption.asText().equals("Apple"));
+
+        // Check SelectOneListbox
+        HtmlSelect selectOneMenu = (HtmlSelect) lastpage.getHtmlElementById("selectOneMenu");
+        List<HtmlOption> selectOneMenuOptions = selectOneMenu.getOptions();
+        assertTrue(selectOneMenuOptions.size() == 4);
+        selectOption = selectOneMenuOptions.get(0);
+        assertTrue(selectOption.getValueAttribute().equals("Apple"));
+        assertTrue(selectOption.asText().equals("Apple"));
+
+        // Check SelectOneRadio
+        HtmlInput selectOneRadio0 = (HtmlInput) lastpage.getHtmlElementById("selectOneRadio:0");
+        assertTrue(selectOneRadio0.getValueAttribute().equals("Apple"));
+
+        // Check SelectManyCheckbox
+        HtmlInput selectManyCheckbox0 = (HtmlInput) lastpage.getHtmlElementById("selectManyCheckbox:0");
+        assertTrue(selectManyCheckbox0.getValueAttribute().equals("Apple"));
+
+        // Check SelectManyListbox
+        HtmlSelect selectManyListbox = (HtmlSelect) lastpage.getHtmlElementById("selectManyListbox");
+        List<HtmlOption> selectManyListOptions = selectManyListbox.getOptions();
+        assertTrue(selectManyListOptions.size() == 4);
+        selectOption = selectManyListOptions.get(0);
+        assertTrue(selectOption.getValueAttribute().equals("Apple"));
+        assertTrue(selectOption.asText().equals("Apple"));
+
+        // Check SelectManyMenu
+        HtmlSelect selectManyMenu = (HtmlSelect) lastpage.getHtmlElementById("selectManyMenu");
+        List<HtmlOption> selectManyMenuOptions = selectManyMenu.getOptions();
+        assertTrue(selectManyMenuOptions.size() == 4);
+        selectOption = selectManyMenuOptions.get(0);
+        assertTrue(selectOption.getValueAttribute().equals("Apple"));
+        assertTrue(selectOption.asText().equals("Apple"));
+    }
+
 
 }

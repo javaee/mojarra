@@ -53,7 +53,6 @@ import java.lang.reflect.Array;
 import javax.faces.model.SelectItem;
 import javax.faces.context.FacesContext;
 import javax.el.ValueExpression;
-import javax.el.ELContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
@@ -81,6 +80,11 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      *  processed
      */
     public SelectItemsIterator(FacesContext ctx, UIComponent parent) {
+
+        Boolean hide = (Boolean) parent.getAttributes().get("hideNoSelectionOption");
+        if (hide != null && hide) {
+            hideNoSelection = true;
+        }
 
         kids = parent.getChildren().listIterator();
         this.ctx = ctx;
@@ -117,6 +121,10 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      */
     private FacesContext ctx;
 
+    /**
+     * Whether to hide the select item that's marked with noselectoption.
+     */
+    private boolean hideNoSelection = false;
 
     // -------------------------------------------------------- Iterator Methods
 
@@ -225,11 +233,36 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      */
     private Object findNextValidChild() {
 
+        boolean hide = false;
+
         if (kids.hasNext()) {
             Object next = kids.next();
-            while (kids.hasNext() && !(next instanceof UISelectItem || next instanceof UISelectItems)) {
-                next = kids.next();
+            // While there exists a next kid, and
+            // that kid is not a SelectItem or a SelectItems component and
+            // that kid, if a SelectItem, has noSelectionOption set, with hiding of those enabled, then
+            // get the next kid.  Otherwise, continue.
+            if (next instanceof UISelectItem && hideNoSelection) {
+                UISelectItem item = (UISelectItem) next;
+                Boolean option = (Boolean) item.getAttributes().get("noSelectionOption");
+                if (option != null && option) {
+                    hide = true;
+                } else {
+                    hide = false;
+                }
             }
+            while (kids.hasNext() && !((next instanceof UISelectItem && !hide) || next instanceof UISelectItems)) {
+                next = kids.next();
+                if (next instanceof UISelectItem && hideNoSelection) {
+                    UISelectItem item = (UISelectItem) next;
+                    Boolean option = (Boolean) item.getAttributes().get("noSelectionOption");
+                    if (option != null && option) {
+                        hide = true;
+                    } else {
+                        hide = false;
+                    }
+                }
+            }
+
             if (next instanceof UISelectItem || next instanceof UISelectItems) {
                 return next;
             }

@@ -974,7 +974,6 @@
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="selectone-radio-props.xml" xpointer="xpointer(/root/*)"/>
-
         <component-extension>
             <base-component-type>javax.faces.SelectOne</base-component-type>
             <renderer-type>javax.faces.Radio</renderer-type>
@@ -2752,20 +2751,7 @@
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="listbox-attrs.xml" xpointer="xpointer(/root/*)"/>
-	    <attribute>
-		<description>
-		  Flag indicating that, if this component is activated by the user,
-		  The "no selection option", if any, must be hidden.
-		</description>
-		<display-name>Hide "No Selection" Option</display-name>
-		<icon></icon>
-		<attribute-name>hideNoSelectionOption</attribute-name>
-		<attribute-class>boolean</attribute-class>
-		<attribute-extension>
-		    <value-expression-enabled>true</value-expression-enabled>
-		    <jsp-ignore>true</jsp-ignore>
-		</attribute-extension>
-	    </attribute>
+            <xi:include href="selectone-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
                 <renders-children>true</renders-children>
@@ -2817,20 +2803,7 @@
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="menu-attrs.xml" xpointer="xpointer(/root/*)"/>
-	    <attribute>
-		<description>
-		  Flag indicating that, if this component is activated by the user,
-		  The "no selection option", if any, must be hidden.
-		</description>
-		<display-name>Hide "No Selection" Option</display-name>
-		<icon></icon>
-		<attribute-name>hideNoSelectionOption</attribute-name>
-		<attribute-class>boolean</attribute-class>
-		<attribute-extension>
-		    <value-expression-enabled>true</value-expression-enabled>
-		    <jsp-ignore>true</jsp-ignore>
-		</attribute-extension>
-	    </attribute>
+            <xi:include href="selectone-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>
                 <renders-children>true</renders-children>
@@ -2910,6 +2883,7 @@
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <xi:include href="selectone-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="selectone-radio-attrs.xml" xpointer="xpointer(/root/*)"/>
 
             <renderer-extension>

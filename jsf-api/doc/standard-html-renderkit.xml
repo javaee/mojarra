@@ -19968,20 +19968,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>layout</property-name>
       <property-class>java.lang.String</property-class>
     </property>
-    <property>
-      <description>
-          Flag indicating that, if this component is activated by the user,
-          The "no selection option", if any, must be hidden.
-        </description>
-      <display-name>Hide "No Selection" Option</display-name>
-      <icon/>
-      <property-name>hideNoSelectionOption</property-name>
-      <property-class>boolean</property-class>
-      <property-extension>
-        <value-expression-enabled>true</value-expression-enabled>
-        <jsp-ignore>true</jsp-ignore>
-      </property-extension>
-    </property>
 
     <component-extension>
       <base-component-type>javax.faces.SelectOne</base-component-type>
@@ -27958,10 +27944,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         </attribute-extension>
       </attribute>
       <attribute>
-        <description>
+        <description><![CDATA[<p class="changed_modified_2_0">
           Flag indicating that, if this component is activated by the user,
-          The "no selection option", if any, must be hidden.
-        </description>
+          The "no selection option", if any, must be hidden.</p>]]></description>
         <display-name>Hide "No Selection" Option</display-name>
         <icon/>
         <attribute-name>hideNoSelectionOption</attribute-name>
@@ -28509,10 +28494,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         </attribute-extension>
       </attribute>
       <attribute>
-        <description>
+        <description><![CDATA[<p class="changed_modified_2_0">
           Flag indicating that, if this component is activated by the user,
-          The "no selection option", if any, must be hidden.
-        </description>
+          The "no selection option", if any, must be hidden.</p>]]></description>
         <display-name>Hide "No Selection" Option</display-name>
         <icon/>
         <attribute-name>hideNoSelectionOption</attribute-name>
@@ -28944,10 +28928,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         </attribute-extension>
       </attribute>
       <attribute>
-        <description>
+        <description><![CDATA[<p class="changed_modified_2_0">
           Flag indicating that, if this component is activated by the user,
-          The "no selection option", if any, must be hidden.
-        </description>
+          The "no selection option", if any, must be hidden.</p>]]></description>
         <display-name>Hide "No Selection" Option</display-name>
         <icon/>
         <attribute-name>hideNoSelectionOption</attribute-name>
@@ -29370,11 +29353,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>int</attribute-class>
       </attribute>
 
+
       <attribute>
-        <description>
-		  Flag indicating that, if this component is activated by the user,
-		  The "no selection option", if any, must be hidden.
-		</description>
+        <description><![CDATA[<p class="changed_modified_2_0">
+          Flag indicating that, if this component is activated by the user,
+          The "no selection option", if any, must be hidden.</p>]]></description>
         <display-name>Hide "No Selection" Option</display-name>
         <icon/>
         <attribute-name>hideNoSelectionOption</attribute-name>
@@ -29384,6 +29367,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <jsp-ignore>true</jsp-ignore>
         </attribute-extension>
       </attribute>
+
       <renderer-extension>
         <renders-children>true</renders-children>
       </renderer-extension>
@@ -29786,11 +29770,11 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+
       <attribute>
-        <description>
-		  Flag indicating that, if this component is activated by the user,
-		  The "no selection option", if any, must be hidden.
-		</description>
+        <description><![CDATA[<p class="changed_modified_2_0">
+          Flag indicating that, if this component is activated by the user,
+          The "no selection option", if any, must be hidden.</p>]]></description>
         <display-name>Hide "No Selection" Option</display-name>
         <icon/>
         <attribute-name>hideNoSelectionOption</attribute-name>
@@ -29800,6 +29784,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <jsp-ignore>true</jsp-ignore>
         </attribute-extension>
       </attribute>
+
       <renderer-extension>
         <renders-children>true</renders-children>
       </renderer-extension>
@@ -30285,6 +30270,21 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
 
       <attribute>
+        <description><![CDATA[<p class="changed_modified_2_0">
+          Flag indicating that, if this component is activated by the user,
+          The "no selection option", if any, must be hidden.</p>]]></description>
+        <display-name>Hide "No Selection" Option</display-name>
+        <icon/>
+        <attribute-name>hideNoSelectionOption</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <value-expression-enabled>true</value-expression-enabled>
+          <jsp-ignore>true</jsp-ignore>
+        </attribute-extension>
+      </attribute>
+
+
+      <attribute>
         <description>
           Width (in pixels) of the border to be drawn
           around the table containing the options list.
@@ -30329,20 +30329,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <icon/>
         <attribute-name>layout</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      <attribute>
-        <description>
-          Flag indicating that, if this component is activated by the user,
-          The "no selection option", if any, must be hidden.
-        </description>
-        <display-name>Hide "No Selection" Option</display-name>
-        <icon/>
-        <attribute-name>hideNoSelectionOption</attribute-name>
-        <attribute-class>boolean</attribute-class>
-        <attribute-extension>
-          <value-expression-enabled>true</value-expression-enabled>
-          <jsp-ignore>true</jsp-ignore>
-        </attribute-extension>
       </attribute>
 
       <renderer-extension>

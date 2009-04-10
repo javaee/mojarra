@@ -860,9 +860,8 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/render/*TestCase.class"
-excludes="com/sun/faces/render/CommandButtonTestCase.class"
-                         />
+                         includes="com/sun/faces/render/*TestCase.class" />
+                         <!-- excludes="com/sun/faces/render/CommandButtonTestCase.class" /> -->
 <!-- 139-StateSaving -->
             </tests>
         </jsf.junit>

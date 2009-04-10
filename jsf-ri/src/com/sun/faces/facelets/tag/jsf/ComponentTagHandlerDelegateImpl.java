@@ -42,18 +42,13 @@ import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.application.StateManager;
 import javax.faces.component.*;
-import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
@@ -97,7 +92,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      * spec.
      * <ol>
      * <li>First determines this UIComponent's id by calling
-     * {@link javax.faces.view.facelets.tag.ComponentHandler#getTagId()}.</li>
+     * {@link javax.faces.view.facelets.ComponentHandler#getTagId()}.</li>
      * <li>Search the parent for an existing UIComponent of the id we just
      * grabbed</li>
      * <li>If found, {@link com.sun.faces.facelets.tag.jsf.ComponentSupport#markForDeletion(javax.faces.component.UIComponent) mark}
@@ -117,9 +112,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      * <li>Lastly, if the UIComponent already existed (found), then
      * {@link ComponentSupport#finalizeForDeletion(UIComponent) finalize} for deletion.</li>
      * </ol>
-     * 
-     * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
-     * 
+     *
      * @throws TagException
      *             if the UIComponent parent is null
      */
@@ -242,6 +235,11 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 m.ignore("valid");
                 m.addRule(EditableValueHolderRule.Instance);
             }
+        }
+
+        // if it's a selectone or selectmany
+        if (UISelectOne.class.isAssignableFrom(type) || UISelectMany.class.isAssignableFrom(type)) {
+            m.addRule(RenderPropertyRule.Instance);
         }
         
         return m;

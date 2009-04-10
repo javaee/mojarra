@@ -102,20 +102,4 @@
         <property-name>layout</property-name>
         <property-class>java.lang.String</property-class>
     </property>
-    <property>
-        <description>
-          Flag indicating that, if this component is activated by the user,
-          The "no selection option", if any, must be hidden.
-        </description>
-        <display-name>Hide "No Selection" Option</display-name>
-        <icon></icon>
-        <property-name>hideNoSelectionOption</property-name>
-        <property-class>boolean</property-class>
-        <property-extension>
-            <value-expression-enabled>true</value-expression-enabled>
-            <jsp-ignore>true</jsp-ignore>
-        </property-extension>
-    </property>
-
-
 </root>
