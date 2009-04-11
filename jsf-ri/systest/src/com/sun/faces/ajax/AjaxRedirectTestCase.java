@@ -34,83 +34,65 @@
  * holder.
  */
 
-package com.sun.faces.systest.model.ajax;
+package com.sun.faces.ajax;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import com.sun.faces.htmlunit.AbstractTestCase;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 
-@ManagedBean(name="ajaxrequest")
-@SessionScoped
-public class AjaxRequestBean {
-    private Integer count = 0;
+import java.util.ArrayList;
+import java.util.List;
 
-    private String echo = "echo";
-    private String echo1 = "";
-    private String echo2 = "";
-    private String echo3 = "";
-    private String echo4 = "";
+public class AjaxRedirectTestCase extends AbstractTestCase {
 
-    public String getEcho1() {
-        return echo1;
+    public AjaxRedirectTestCase(String name) {
+        super(name);
     }
 
-    public void setEcho1(String echo1) {
-        this.echo1 = echo1;
+    /*
+     * Set up instance variables required by this test case.
+     */
+    public void setUp() throws Exception {
+        super.setUp();
     }
 
-    public String getEcho2() {
-        return echo2;
+
+    /*
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(AjaxRedirectTestCase.class));
     }
 
-    public void setEcho2(String echo2) {
-        this.echo2 = echo2;
+
+    /*
+     * Tear down instance variables required by this test case.
+     */
+    public void tearDown() {
+        super.tearDown();
     }
 
-    public String getEcho3() {
-        return echo3;
-    }
 
-    public void setEcho3(String echo3) {
-        this.echo3 = echo3;
-    }
+    // ------------------------------------------------------------ Test Methods
 
-    public String getEcho4() {
-        return echo4;
-    }
 
-    public void setEcho4(String echo4) {
-        this.echo4 = echo4;
-    }
+    public void testAjaxRedirect() throws Exception {
 
-    public String getEcho() {
-        return echo;
-    }
+        HtmlPage page = getPage("/faces/ajax/ajaxRedirect.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:redirect");
+        assertNotNull(button);
 
-    public void setEcho(String echo) {
-        this.echo = echo;
-    }
+        page = button.click();
 
-    public void echoValue(ValueChangeEvent event) {
-        String str = (String)event.getNewValue();
-        echo = str;
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(1);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(1, spans.size());
+        HtmlSpan span = spans.get(0);
+        assertEquals("Redirect Target", span.asText());
+        
     }
-
-    public void resetEcho(ActionEvent ae) {
-        echo = "reset";
-        echo1 = "reset";
-        echo2 = "reset";
-        echo3 = "reset";
-        echo4 = "reset";
-    }
-
-    public Integer getCount() {
-        return count++;
-    }
-
-    public void resetCount(ActionEvent ae) {
-        count = 0;
-    }
-
 }

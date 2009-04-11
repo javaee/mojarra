@@ -36,6 +36,7 @@
   holder.
 
 -->
+
 <!DOCTYPE html
       PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -43,25 +44,10 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-<h:head>
-    <title>Ajax Insert/Delete</title>
-</h:head>
-<h:body>
-    <h:form id="form1">
-        <h:commandButton id="before" value="Add Before" action="#{insertDeleteBean.insertBefore}">
-              <f:ajax execute="@this" render="@none"/>
-        </h:commandButton>
-        <h:commandButton id="removeBefore" value="Remove Before" action="#{insertDeleteBean.removeBefore}">
-            <f:ajax execute="@this" render="@none"/>
-        </h:commandButton>
-        <h:commandButton id="after" value="Add After" action="#{insertDeleteBean.insertAfter}">
-            <f:ajax execute="@this" render="@none" />
-        </h:commandButton>
-         <h:commandButton id="removeAfter" value="Remove After" action="#{insertDeleteBean.removeAfter}">
-            <f:ajax execute="@this" render="@none"/>
-        </h:commandButton>
-    </h:form>
-    <br/>
-    <hr id="hr" />
-</h:body>
+<head>
+    <title>Redirect Target</title>
+</head>
+<body>
+<h:outputText id="redirect" value="Redirect Target"/>
+</body>
 </html>

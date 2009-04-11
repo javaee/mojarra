@@ -36,81 +36,38 @@
 
 package com.sun.faces.systest.model.ajax;
 
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.PartialResponseWriter;
+import javax.faces.FacesException;
 
-@ManagedBean(name="ajaxrequest")
-@SessionScoped
-public class AjaxRequestBean {
-    private Integer count = 0;
+@ManagedBean
+@RequestScoped
+public class RedirectBean {
 
-    private String echo = "echo";
-    private String echo1 = "";
-    private String echo2 = "";
-    private String echo3 = "";
-    private String echo4 = "";
+    public String redirect() {
 
-    public String getEcho1() {
-        return echo1;
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, "/ajax/redirecttarget.xhtml"));
+                writer.redirect(url);
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+
     }
-
-    public void setEcho1(String echo1) {
-        this.echo1 = echo1;
-    }
-
-    public String getEcho2() {
-        return echo2;
-    }
-
-    public void setEcho2(String echo2) {
-        this.echo2 = echo2;
-    }
-
-    public String getEcho3() {
-        return echo3;
-    }
-
-    public void setEcho3(String echo3) {
-        this.echo3 = echo3;
-    }
-
-    public String getEcho4() {
-        return echo4;
-    }
-
-    public void setEcho4(String echo4) {
-        this.echo4 = echo4;
-    }
-
-    public String getEcho() {
-        return echo;
-    }
-
-    public void setEcho(String echo) {
-        this.echo = echo;
-    }
-
-    public void echoValue(ValueChangeEvent event) {
-        String str = (String)event.getNewValue();
-        echo = str;
-    }
-
-    public void resetEcho(ActionEvent ae) {
-        echo = "reset";
-        echo1 = "reset";
-        echo2 = "reset";
-        echo3 = "reset";
-        echo4 = "reset";
-    }
-
-    public Integer getCount() {
-        return count++;
-    }
-
-    public void resetCount(ActionEvent ae) {
-        count = 0;
-    }
-
 }

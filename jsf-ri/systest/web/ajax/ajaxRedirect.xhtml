@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+      <!--
 
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
@@ -44,24 +44,13 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-    <title>Ajax Insert/Delete</title>
+    <title>Ajax Redirect</title>
 </h:head>
 <h:body>
-    <h:form id="form1">
-        <h:commandButton id="before" value="Add Before" action="#{insertDeleteBean.insertBefore}">
-              <f:ajax execute="@this" render="@none"/>
-        </h:commandButton>
-        <h:commandButton id="removeBefore" value="Remove Before" action="#{insertDeleteBean.removeBefore}">
-            <f:ajax execute="@this" render="@none"/>
-        </h:commandButton>
-        <h:commandButton id="after" value="Add After" action="#{insertDeleteBean.insertAfter}">
-            <f:ajax execute="@this" render="@none" />
-        </h:commandButton>
-         <h:commandButton id="removeAfter" value="Remove After" action="#{insertDeleteBean.removeAfter}">
-            <f:ajax execute="@this" render="@none"/>
+    <h:form id="form">
+        <h:commandButton id="redirect" value="Redirect" action="#{redirectBean.redirect}">
+             <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
     </h:form>
-    <br/>
-    <hr id="hr" />
 </h:body>
 </html>
