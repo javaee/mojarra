@@ -13,7 +13,14 @@ import java.lang.annotation.Inherited;
  * element was declared for the corresponding managed bean, where VALUE
  * is the value of the {@link #value} attribute, which must be an EL
  * expression that evaluates to a <code>Map</code>.</p>
- *
+
+ * <p class="changed_added_2_0">Developers must take care when using
+ * custom scopes to ensure that any object references made to or from a
+ * custom scoped bean consider the necessary scope lifetimes.  The
+ * runtime is not required to perform any validations for such
+ * considerations.</p>
+
+
  * @since 2.0
  */
 @Retention(RetentionPolicy.RUNTIME)
