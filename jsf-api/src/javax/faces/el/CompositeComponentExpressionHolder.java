@@ -39,6 +39,7 @@ package javax.faces.el;
 import javax.el.ValueExpression;
 
 /**
+ * RELEASE_PENDING (edburns,rogerk)
  * This interface <em>must</em> be implemented by the Map returned
  * by the composite component <code>ELResolver</code>, described in
  * section 5.6.2.2 of the specification, when evaluating
