@@ -53,12 +53,12 @@ import java.util.logging.Logger;
 
 
 /**
- * <p><strong>ResponseStateManager</strong> is the helper class to
- * {@link javax.faces.application.StateManager} that knows the specific
- * rendering technology being used to generate the response.  It is a
- * singleton abstract class, vended by the {@link RenderKit}.  This
- * class knows the mechanics of saving state, whether it be in hidden
- * fields, session, or some combination of the two.</p>
+ * <p><strong class="changed_modified_2_0">ResponseStateManager</strong>
+ * is the helper class to {@link javax.faces.application.StateManager}
+ * that knows the specific rendering technology being used to generate
+ * the response.  It is a singleton abstract class, vended by the {@link
+ * RenderKit}.  This class knows the mechanics of saving state, whether
+ * it be in hidden fields, session, or some combination of the two.</p>
  */
 
 public abstract class ResponseStateManager {
@@ -75,8 +75,14 @@ public abstract class ResponseStateManager {
             "javax.faces.RenderKitId";
             
     /**
-     * <p>Implementations must use this value as the name and id of the client
-     * parameter in which to save the state between requests.</p>
+     * <p><span class="changed_modified_2_0">Implementations</span> must
+     * use this value as the name and id of the client parameter in
+     * which to save the state between requests.</p>
+
+     * <p class="changed_added_2_0">It is strongly recommend that
+     * implementations guard against cross site scripting attacks by at
+     * least making the value of this parameter difficult to
+     * predict.</p>
      *
      * @since 1.2
      */
