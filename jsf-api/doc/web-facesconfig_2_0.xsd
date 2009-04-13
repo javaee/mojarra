@@ -807,7 +807,7 @@
                             
                         The "tag-handler-delegate-factory" element contains 
                         the fully qualified class name of the concrete 
-                        PageDeclarationLanguageFactory
+                        ViewDeclarationLanguageFactory
                         implementation class that will be called when
                         FactoryFinder.getFactory(TAG_HANDLER_DELEGATE_FACTORY) is called.
                             
