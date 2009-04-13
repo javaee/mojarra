@@ -276,6 +276,7 @@ public class NavigationCase {
     }
 
     /**
+     * RELEASE_PENDING
      * <p class="changed_added_2_0">Return the parameters to be included
      * for navigation cases requiring a redirect.  If no parameters are
      * defined, <code>null</code> will be returned.</p>
