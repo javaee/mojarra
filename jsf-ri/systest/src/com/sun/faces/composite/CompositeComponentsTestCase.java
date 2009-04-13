@@ -258,6 +258,42 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
+
+    public void testNesting01() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/nesting01.xhtml");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(2);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(2, spans.size());
+        HtmlSpan span = spans.get(0);
+        assertEquals("Should have a value:Hello World", span.asText());
+        span = spans.get(1);
+        assertEquals("Shouldn't have a value:", span.asText());
+
+    }
+
+
+    public void testNesting02() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/nesting02.xhtml");
+        HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "commandButton");
+        assertNotNull(input);
+        page = input.click();
+        assertEquals("Navigation Result", page.getTitleText());
+
+    }
+
+
+    public void testNesting03() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/nesting03.xhtml");
+        HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "commandButton");
+        assertNotNull(input);
+        page = input.click();
+        assertEquals("Navigation Result", page.getTitleText());
+
+    }
+
     
     // --------------------------------------------------------- Private Methods
 

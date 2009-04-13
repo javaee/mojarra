@@ -85,6 +85,13 @@ public class CompositeBean {
     }
 
 
+    public String doNav() {
+
+        return "nestingNav";
+        
+    }
+
+
     // ---------------------------------------------------------- Nested Classes
 
 
