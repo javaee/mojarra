@@ -170,8 +170,6 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      */
     public static final String VIEW_LOCATION_KEY = "javax.faces.component.VIEW_LOCATION_KEY";
     
-    
-    
     /**
      * <p class="changed_added_2_0">The value of this constant is used as the key
      * in the <em>composite component BeanDescriptor</em> for a 
