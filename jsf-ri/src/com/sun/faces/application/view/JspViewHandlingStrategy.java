@@ -69,7 +69,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
 
-    // ------------------------------------ Methods from PageDeclarationLanguage
+    // ------------------------------------ Methods from ViewDeclarationLanguage
     
 
     /**

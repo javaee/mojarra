@@ -112,7 +112,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
-    // ------------------------------------ Methods from PageDeclarationLanguage
+    // ------------------------------------ Methods from ViewDeclarationLanguage
 
      @Override
      public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {

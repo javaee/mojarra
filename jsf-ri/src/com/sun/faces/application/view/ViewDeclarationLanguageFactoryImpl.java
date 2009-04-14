@@ -52,7 +52,7 @@ public class ViewDeclarationLanguageFactoryImpl extends ViewDeclarationLanguageF
 
 
     /**
-     * @see javax.faces.view.ViewDeclarationLanguageFactory#getPageDeclarationLanguage(String)
+     * @see javax.faces.view.ViewDeclarationLanguageFactory#getViewDeclarationLanguage(String)
      */
     @Override
     public ViewDeclarationLanguage getViewDeclarationLanguage(String viewId) {

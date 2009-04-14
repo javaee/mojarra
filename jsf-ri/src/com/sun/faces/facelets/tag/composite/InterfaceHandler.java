@@ -110,7 +110,7 @@ public class InterfaceHandler extends TagHandlerImpl {
             attrs.put(UIComponent.BEANINFO_KEY, componentBeanInfo);
             BeanDescriptor componentDescriptor = new BeanDescriptor(parent.getClass());
             // PENDING(edburns): Make sure attributeNames() returns the right content
-            // per the javadocs for PageDeclarationLanguage.getComponentMetadata()
+            // per the javadocs for ViewDeclarationLanguage.getComponentMetadata()
             componentBeanInfo.setBeanDescriptor(componentDescriptor);
             TagAttribute attr = null;
             ValueExpression ve = null;

@@ -78,6 +78,7 @@ public class NavigationCase {
 
 
     /**
+     * RELEASE_PENDING (edburns,rogerk) review parameters docs
      * <p>
      * Construct a new <code>NavigationCase<code> based on the provided
      * arguments.
@@ -119,23 +120,20 @@ public class NavigationCase {
 
     // ---------------------------------------------------------- Public Methods
 
+
     /**
      * <p class="changed_added_2_0">Construct an absolute URL to this
      * <code>NavigationCase</code> instance using {@link
      * javax.faces.application.ViewHandler#getActionURL} on the path
-     * portion of the url.  The default implementation of this method
-     * return <code>null</code>.  Implementations must override this
-     * method to perform the correct action as specified.</p>
+     * portion of the url.</p>
      *
-     * @since 2.0
+     * @param context the {@link FacesContext} for the current request
      *
      * @throws MalformedURLException if the process of constructing the
      * URL causes this exception to be thrown.
      */
+    public URL getActionURL(FacesContext context) throws MalformedURLException {
 
-    public URL getActionURL() throws MalformedURLException {
-
-        FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
         return new URL(extContext.getRequestScheme(),
                 extContext.getRequestServerName(),
@@ -144,23 +142,20 @@ public class NavigationCase {
         
     }
 
+
     /**
      * <p class="changed_added_2_0">Construct an absolute URL to this
      * <code>NavigationCase</code> instance using {@link
      * javax.faces.application.ViewHandler#getResourceURL} on the path
-     * portion of the url.  The default implementation of this method
-     * return <code>null</code>.  Implementations must override this
-     * method to perform the correct action as specified.</p>
+     * portion of the url.</p>
      *
-     * @since 2.0
+     * @param context the {@link FacesContext} for the current request
      *
      * @throws MalformedURLException if the process of constructing the
      * URL causes this exception to be thrown.
      */
-
-    public URL getResourceURL() throws MalformedURLException {
+    public URL getResourceURL(FacesContext context) throws MalformedURLException {
         
-        FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
 
         return new URL(extContext.getRequestScheme(),
@@ -170,7 +165,58 @@ public class NavigationCase {
 
     }
 
-    
+
+    /**
+     * RELEASE_PENDING
+     * <p class="changed_added_2_0">Construct an absolute URL suitable for a
+     * redirect to this <code>NavigationCase</code> instance using {@link
+     * javax.faces.application.ViewHandler#getRedirectURL} on the path
+     * portion of the url.</p>
+     *
+     * @param context the {@link FacesContext} for the current request
+     *
+     * @throws MalformedURLException if the process of constructing the
+     * URL causes this exception to be thrown.
+     */
+    public URL getRedirectURL(FacesContext context) throws MalformedURLException {
+
+        ExternalContext extContext = context.getExternalContext();
+
+        return new URL(extContext.getRequestScheme(),
+                extContext.getRequestServerName(),
+                extContext.getRequestServerPort(),
+                context.getApplication().getViewHandler().getRedirectURL(context,
+                                                                         getToViewId(context),
+                                                                         getParameters(),
+                                                                         isIncludeViewParams()));
+
+    }
+
+
+    /**
+     * RELEASE_PENDING
+     * <p class="changed_added_2_0">Construct an absolute URL suitable for a
+     * bokkmarkable link to this <code>NavigationCase</code> instance using {@link
+     * javax.faces.application.ViewHandler#getBookmarkableURL} on the path
+     * portion of the url.</p>
+     *
+     * @param context the {@link FacesContext} for the current request
+     *
+     * @throws MalformedURLException if the process of constructing the
+     * URL causes this exception to be thrown.
+     */
+    public URL getBookmarkableURL(FacesContext context) throws MalformedURLException {
+
+        ExternalContext extContext = context.getExternalContext();
+        return new URL(extContext.getRequestScheme(),
+                extContext.getRequestServerName(),
+                extContext.getRequestServerPort(),
+                context.getApplication().getViewHandler().getBookmarkableURL(context,
+                                                                             getToViewId(context),
+                                                                             getParameters(),
+                                                                             isIncludeViewParams()));
+    }
+
     
     /**
      * <p class="changed_added_2_0">Return the
@@ -275,6 +321,7 @@ public class NavigationCase {
 
     }
 
+
     /**
      * RELEASE_PENDING
      * <p class="changed_added_2_0">Return the parameters to be included
@@ -287,6 +334,7 @@ public class NavigationCase {
 
     }
 
+
     /**
      * <p class="changed_added_2_0">Return the <code>&lt;redirect&gt;</code>
      * value for this <code>&lt;navigation-case&gt;</code></p>
@@ -296,6 +344,7 @@ public class NavigationCase {
         return redirect;
 
     }
+
 
     /**
      * <p class="changed_added_2_0">Return the <code>&lt;redirect&gt;</code>
@@ -335,7 +384,10 @@ public class NavigationCase {
                     : that.fromViewId != null)
                && !(toViewId != null
                     ? !toViewId.equals(that.toViewId)
-                    : that.toViewId != null));
+                    : that.toViewId != null)
+               && !(parameters != null
+                    ? !parameters.equals(that.parameters)
+                    : that.parameters != null));
 
     }
 
@@ -356,6 +408,7 @@ public class NavigationCase {
                                     : 0);
             result = 31 * result + (toViewId != null ? toViewId.hashCode() : 0);
             result = 31 * result + (redirect ? 1 : 0);
+            result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
             hashCode = result;
         }
         return hashCode;
@@ -376,6 +429,7 @@ public class NavigationCase {
             sb.append(", toViewId='").append(toViewId).append('\'');
             sb.append(", faces-redirect=").append(redirect);
             sb.append(", includeViewParams=").append(includeViewParams).append('\'');
+            sb.append(", parameters=").append(((parameters != null) ? parameters.toString() : ""));
             sb.append('}');
             toString = sb.toString();
         }
