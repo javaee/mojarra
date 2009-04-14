@@ -181,7 +181,7 @@ public class FlashELResolver extends ELResolver {
 
     public Object getValue(ELContext elContext, Object base, Object property) {
         Object result = null;
-        Map<String, Object> flash = null;
+        Map<String, Object> flash;
 
         if (null == property) {
             // take no action.
@@ -211,7 +211,6 @@ public class FlashELResolver extends ELResolver {
         }
         // If the base argument is the flash itself...
         else if (base == flash) {
-            Object val = null;
             // and the property argument is "keep"...
             if (property.toString().equals(FLASH_KEEP_VARIABLE_NAME)) {
                 elContext.setPropertyResolved(true);
@@ -238,17 +237,17 @@ public class FlashELResolver extends ELResolver {
     }
 
     /**
-     * <p>The <code>ThreadLocal</code> variable used to record the
-     * {@link FacesContext} instance for each processing thread.</p>
+     * <p>The <code>ThreadLocal</code> variable used to record
+     * whether we're keeping results, from having FLASH_KEEP_VARIABLE_NAME set..</p>
      */
-    private static ThreadLocal instance = new ThreadLocal() {
-        protected Object initialValue() {
-            return (Boolean.FALSE);
+    private static ThreadLocal <Boolean> instance = new ThreadLocal<Boolean>() {
+        protected Boolean initialValue() {
+            return Boolean.FALSE;
         }
     };
 
     static boolean isDoKeep() {
-        return ((Boolean) instance.get()).booleanValue();
+        return instance.get();
     }
 
     static void setDoKeep(boolean newValue) {
@@ -357,18 +356,19 @@ public class FlashELResolver extends ELResolver {
         if (null != base) {
             return null;
         }
-        Iterator result = null;
-        Map flash = null;
+        Iterator<FeatureDescriptor> result = null;
+        Map<String, Object> flash;
         FacesContext facesContext =
                 (FacesContext) elContext.getContext(FacesContext.class);
         ExternalContext extCtx = facesContext.getExternalContext();
 
-        if (null != (flash = (Map)
+        //noinspection unchecked
+        if (null != (flash = (Map<String, Object>)
                 extCtx.getSessionMap().get(Constants.FLASH_ATTRIBUTE_NAME))) {
             Iterator<Map.Entry<String, Object>> iter = flash.entrySet().iterator();
-            Map.Entry<String, Object> cur = null;
-            ArrayList<FeatureDescriptor> fds = null;
-            FeatureDescriptor fd = null;
+            Map.Entry<String, Object> cur;
+            ArrayList<FeatureDescriptor> fds;
+            FeatureDescriptor fd;
             if (iter.hasNext()) {
                 fds = new ArrayList<FeatureDescriptor>(flash.size());
                 while (iter.hasNext()) {

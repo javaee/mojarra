@@ -31,24 +31,20 @@
 
 package com.sun.faces.context.flash;
 
-/**
- *
- * @author edburns
- */
-public class Constants {
+class Constants {
     
     private Constants() {
     }
     
     // PENDING(edburns): consider making this an enum.
 
-    public static final String PREFIX = "com.sun.faces.extensions.flash";
+    static final String PREFIX = "com.sun.faces.context.flash";
 
-    public static final String FLASH_ATTRIBUTE_NAME = PREFIX + ".FLASH";
+    static final String FLASH_ATTRIBUTE_NAME = PREFIX + ".FLASH";
 
-    public static final String FLASH_THIS_REQUEST_ATTRIBUTE_NAME = PREFIX + ".ThisRequest";
+    static final String FLASH_THIS_REQUEST_ATTRIBUTE_NAME = PREFIX + ".ThisRequest";
 
-    public static final String FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME = PREFIX + ".PostbackRequest";
+    static final String FLASH_POSTBACK_REQUEST_ATTRIBUTE_NAME = PREFIX + ".PostbackRequest";
 
     static final String FLASH_KEEP_ALL_REQUEST_SCOPED_DATA_ATTRIBUTE = 
             PREFIX + ".KeepAllRequestScopedData";

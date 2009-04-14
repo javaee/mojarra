@@ -37,8 +37,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
@@ -109,7 +109,7 @@ public class ELFlash extends Flash {
         ELFlash flash = (ELFlash) 
             appMap.get(Constants.FLASH_ATTRIBUTE_NAME);
         if (null == flash && create) {
-            synchronized (appMap) {
+            synchronized (extContext.getContext()) {
                 if (null == (flash = (ELFlash)
                     appMap.get(Constants.FLASH_ATTRIBUTE_NAME))) {
                     flash = new ELFlash();
@@ -121,9 +121,7 @@ public class ELFlash extends Flash {
     }
     
     public static ELFlash getELFlash() {
-        ELFlash result = (ELFlash) getFlash();
-        
-        return result;
+        return (ELFlash) getFlash();
     }
 
     public boolean isKeepMessages() {
@@ -150,7 +148,7 @@ public class ELFlash extends Flash {
             }
         }
         
-        return (null != value && value.booleanValue());
+        return (value != null  && value);
     }
     
     public void setKeepMessages(boolean newValue) {
@@ -162,10 +160,10 @@ public class ELFlash extends Flash {
 
         // If the value changed from null to true or from false to true,
         // set a cookie
-        if ((null == oldBoolean && true == newValue) ||
-            (Boolean.FALSE == oldBoolean && true == newValue)) {
+        if ((null == oldBoolean && newValue) ||
+            (Boolean.FALSE == oldBoolean && newValue)) {
             ExternalContext extContext = context.getExternalContext();
-            HttpServletResponse servletResponse = null;
+            HttpServletResponse servletResponse;
             //PortletRequest portletRequest = null;
             Object response = extContext.getResponse();
             if (response instanceof HttpServletResponse) {
@@ -190,14 +188,14 @@ public class ELFlash extends Flash {
     }
     
     public boolean isRedirect() {
-        boolean result = false;
+        boolean result;
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
         Map<String, Object> requestMap = extContext.getRequestMap();
         Map<String, Object> cookieMap = extContext.getRequestCookieMap();
         Object response = extContext.getResponse();
         Boolean value = (Boolean) requestMap.get(Constants.REDIRECT_AFTER_POST_ATTRIBUTE_NAME);
-        if (null == value) {
+        if (value == null) {
             if (response instanceof HttpServletResponse) {
                 Cookie redirectCookie = (Cookie) cookieMap.get(Constants.REDIRECT_AFTER_POST_ATTRIBUTE_NAME);
                 if (null != redirectCookie) {
@@ -213,7 +211,7 @@ public class ELFlash extends Flash {
                 
             }
         }
-        result = (null != value && value.booleanValue());
+        result = (value != null && value);
         return result;
     }
     
@@ -226,10 +224,10 @@ public class ELFlash extends Flash {
         
         // If the value changed from null to true or from false to true,
         // set a cookie
-        if ((null == oldBoolean && true == newValue) ||
-            (Boolean.FALSE == oldBoolean && true == newValue)) {
+        if ((null == oldBoolean && newValue) ||
+            (Boolean.FALSE == oldBoolean && newValue)) {
             ExternalContext extContext = context.getExternalContext();
-            HttpServletResponse servletResponse = null;
+            HttpServletResponse servletResponse;
             //PortletRequest portletRequest = null;
             Object response = extContext.getResponse();
             if (response instanceof HttpServletResponse) {
@@ -266,23 +264,24 @@ public class ELFlash extends Flash {
      *   <code>FacesContext</code></p></li>
      *
      * </ul>
+     * @param context Context for request
      */
     
     void saveAllMessages(FacesContext context) {
         ExternalContext extContext = context.getExternalContext();
         Map<String, Object> requestMap = extContext.getRequestMap();
-        Boolean thisRequestIsGetAfterRedirectAfterPost = Boolean.FALSE;
+        Boolean thisRequestIsGetAfterRedirectAfterPost;
 
         if (null != (thisRequestIsGetAfterRedirectAfterPost = (Boolean)
                      requestMap.get(Constants.THIS_REQUEST_IS_GET_AFTER_REDIRECT_AFTER_POST_ATTRIBUTE_NAME))
-            && thisRequestIsGetAfterRedirectAfterPost.booleanValue()) {
+            && thisRequestIsGetAfterRedirectAfterPost) {
             return;
         }
                 
         Iterator<String> messageClientIds = context.getClientIdsWithMessages();
-        List<FacesMessage> facesMessages = null;
+        List<FacesMessage> facesMessages;
         Map<String, List<FacesMessage>> allFacesMessages = null;
-        Iterator<FacesMessage> messageIter = null;
+        Iterator<FacesMessage> messageIter;
         String curMessageId;
         
         // Save all the FacesMessages into a Map, which we store in the flash.
@@ -336,12 +335,12 @@ public class ELFlash extends Flash {
     void restoreAllMessages(FacesContext context) {
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
         
-        Map<String, List<FacesMessage>> allFacesMessages = null;
-        List<FacesMessage> facesMessages = null;
-        UIViewRoot savedRoot = null;
-        
-        Map<String,Object> map = null;
+        Map<String, List<FacesMessage>> allFacesMessages;
+        List<FacesMessage> facesMessages;
+        Map<String,Object> map;
+
         if (null != (map = getMapForCookie(context))) {
+            //noinspection unchecked
             if (null != (allFacesMessages = (Map<String, List<FacesMessage>>)
                          map.get(Constants.FACES_MESSAGES_ATTRIBUTE_NAME))) {
                 for (Map.Entry<String, List<FacesMessage>> cur : allFacesMessages.entrySet()) {
@@ -369,10 +368,9 @@ public class ELFlash extends Flash {
      */
     
     protected Map<String,Object> getPhaseMap() {
-        Map<String,Object> result = null;
+        Map<String,Object> result;
         FacesContext context = FacesContext.getCurrentInstance();
-        PhaseId currentPhase = (PhaseId)
-                context.getCurrentPhaseId();
+        PhaseId currentPhase = context.getCurrentPhaseId();
         // If we're in render-response phase..., 
         // or this is an initial request (not a postback),
         // or this is the get from the redirect after post...
@@ -390,10 +388,12 @@ public class ELFlash extends Flash {
     }
     
     /**
+     * @param context for the request
      * @return the Map flash for the next postback.  This Map is used by the
      * flash for all operations during the render-response lifecycle phase.  
      * During all other lifecycle phases, operations go instead to the Map
      * returned by {@link #getThisRequestMap}.
+     *
      */
     private Map<String,Object> getNextRequestMap(FacesContext context) {
         return getMapForSequenceId(context, 
@@ -401,6 +401,7 @@ public class ELFlash extends Flash {
     }
     
     /**
+     * @param context for the request
      * @return the Map flash for this postback.  This Map is used by the flash
      * for all operations during all lifecycle phases except render-response.
      * During render-response, any flash operations go instead to the Map returned
@@ -414,6 +415,9 @@ public class ELFlash extends Flash {
     /**
      * <p>This is a private helper method for {@link #getNextRequestMap} and 
      * {@link #getThisRequestMap}.
+     *
+     * @param context Context of the request
+     * @param attrName Name of the attribute to get the sequence for.
      *
      * @return the sequence Map given the sequence identifier.
      */
@@ -431,7 +435,6 @@ public class ELFlash extends Flash {
             innerMap.put(sequenceId.toString(), result);
         }
         
-        assert(null != result);
         return result;
     }
     
@@ -452,6 +455,7 @@ public class ELFlash extends Flash {
      * <p>Called by the {@link #doPostPhaseActions(javax.faces.context.FacesContext)} for the 
      * render-response phase to clear out the flash for the appropriate
      * sequence.
+     * @param sequence Sequence to clear
      */
         
     void expireEntriesForSequence(String sequence) {
@@ -495,7 +499,7 @@ public class ELFlash extends Flash {
      */
 
     public boolean equals(Object obj) {
-        return getPhaseMap().equals(obj);
+        return obj instanceof Map && getPhaseMap().equals(obj);
     }
     
     /**
@@ -514,8 +518,8 @@ public class ELFlash extends Flash {
     public Object get(Object key) {
         FacesContext context = FacesContext.getCurrentInstance();        
         Map<String,Object> map = this.isRedirect() ? getMapForCookie(context) : getThisRequestMap(context);
-        Object requestValue = null, result = null;
-        Boolean boolResult = null;
+        Object requestValue;
+        Object result = null;
 
         if (null != key) {
             if (key.equals("keepMessages")) {
@@ -568,7 +572,7 @@ public class ELFlash extends Flash {
      * it.</p>
      */
 
-    public void putAll(Map<? extends String, ? extends Object> t) {
+    public void putAll(Map<? extends String, ?> t) {
         getPhaseMap().putAll(t);
     }
 
@@ -579,7 +583,7 @@ public class ELFlash extends Flash {
 
     public Object put(String key, Object value) {
         Boolean boolResult = null;
-        Object result = null;
+        Object result;
         if (null != key) {
             if (key.equals("keepMessages")) {
                 if (null != value && value.toString().equals("true")) {
@@ -608,6 +612,9 @@ public class ELFlash extends Flash {
     /**
      * <p>Get the correct map as descibed above and perform this operation on
      * it.</p>
+     * @param key key to put
+     * @param value value to put
+     * @return object put
      */
 
     public Object putNext(String key, Object value) {
@@ -655,6 +662,7 @@ public class ELFlash extends Flash {
      * @throws CloneNotSupportedException
      */
 
+    @SuppressWarnings({"CloneDoesntCallSuperClone"})
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
     }
@@ -711,8 +719,6 @@ public class ELFlash extends Flash {
     public void doPostPhaseActions(FacesContext context) {
 
         ExternalContext extContext = context.getExternalContext();
-        Map<String, Object> requestMap = extContext.getRequestMap();
-        Object request = extContext.getRequest(), response = extContext.getResponse();
         ELFlash elFlash = ELFlash.getELFlash();
 
         if (PhaseId.RENDER_RESPONSE.equals(context.getCurrentPhaseId())) {
@@ -722,7 +728,7 @@ public class ELFlash extends Flash {
         // If this requset is ending normally...
         if (PhaseId.RENDER_RESPONSE.equals(context.getCurrentPhaseId())) {
             // and the user requested we save all request scoped data...
-            if (null != elFlash && elFlash.isKeepMessages()) {
+            if (elFlash != null && elFlash.isKeepMessages()) {
                 // save it all.
                 elFlash.saveAllMessages(context);
             }
@@ -732,7 +738,7 @@ public class ELFlash extends Flash {
                   context.getRenderResponse()) &&
                   elFlash.isRedirect()) {
             // and the user requested we save all request scoped data...
-            if (null != elFlash && elFlash.isKeepMessages()) {
+            if (elFlash.isKeepMessages()) {
                 // save it all.
                 addCookie(extContext, elFlash);
                 elFlash.saveAllMessages(context);
@@ -758,13 +764,13 @@ public class ELFlash extends Flash {
         ExternalContext extContext = context.getExternalContext();
         Object response = extContext.getResponse();
         Map<String, Object> requestMap = extContext.getRequestMap();
-        String thisRequestSequenceString = null;
+        String thisRequestSequenceString;
         String postbackSequenceString = null;
         ELFlash elFlash = (ELFlash) ELFlash.getFlash(extContext, true);
 
         // If we're on before-restore-view...
         if (PhaseId.RESTORE_VIEW.equals(context.getCurrentPhaseId())) {
-            thisRequestSequenceString = Long.toString(getSequenceNumber());
+            thisRequestSequenceString = Long.toString(sequenceNumber.incrementAndGet());
             // Put the sequence number for the request/response pair
             // that is starting with *this particular request* in the request scope
             // so the ELFlash can access it.
@@ -815,13 +821,7 @@ public class ELFlash extends Flash {
     // ------------------------------------- Methods from old PhaseListener Impl
 
 
-     private long sequenceNumber = 0;
-    private synchronized long getSequenceNumber() {
-        if (Long.MAX_VALUE == ++sequenceNumber) {
-            sequenceNumber = 0;
-        }
-        return sequenceNumber;
-    }
+    private static final AtomicInteger sequenceNumber = new AtomicInteger(0);
 
     static String getCookieValue(ExternalContext extContext) {
         String result = null;
@@ -841,9 +841,9 @@ public class ELFlash extends Flash {
             return;
         }
 
-        String thisRequestSequenceString = null;
-        HttpServletResponse servletResponse = null;
-        //PortletRequest portletRequest = null;
+        String thisRequestSequenceString;
+        HttpServletResponse servletResponse;
+        //PortletRequest portletRequest;
         Object thisRequestSequenceStringObj, response = extContext.getResponse();
 
         thisRequestSequenceStringObj = extContext.getRequestMap().
@@ -872,7 +872,7 @@ public class ELFlash extends Flash {
 
     private void expireEntries(FacesContext context) {
         ExternalContext extContext = context.getExternalContext();
-        String postbackSequenceString = null;
+        String postbackSequenceString;
         // Clear out the flash for the postback.
         if (null != (postbackSequenceString = (String)
         extContext.getRequestMap().
