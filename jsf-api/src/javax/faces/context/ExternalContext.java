@@ -1827,6 +1827,11 @@ public abstract class ExternalContext {
      *
      * @since 2.0
      */
-    public abstract String encodePartialActionURL(String url);
+    public String encodePartialActionURL(String url) {
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.encodePartialActionURL(url);
+        }
+        throw new UnsupportedOperationException();
+    }
 
 }

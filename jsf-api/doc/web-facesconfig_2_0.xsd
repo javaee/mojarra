@@ -2084,7 +2084,8 @@
                         The "referenced-bean-name" element represents the 
                         attribute name under which the corresponding 
                         referenced bean may be assumed to be stored, in one 
-                        of 'request', 'session', or 'application' scopes.
+                        of 'request', 'session', 'view', 'application' 
+                        or a custom scope.
                         
                     </xsd:documentation>
                 </xsd:annotation>
