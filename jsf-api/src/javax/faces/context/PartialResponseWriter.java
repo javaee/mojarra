@@ -36,7 +36,6 @@
 
 package javax.faces.context;
 
-import javax.faces.component.UIComponent;
 import java.io.IOException;
 import java.util.Map;
 
