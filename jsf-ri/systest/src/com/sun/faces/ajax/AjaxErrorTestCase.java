@@ -99,4 +99,25 @@ public class AjaxErrorTestCase extends AbstractTestCase {
         assertEquals("serverError: errorName Error Message", collectedAlerts.get(0));
         
     }
+
+
+    public void testAjaxServerError() throws Exception {
+
+        List<String> collectedAlerts = new ArrayList<String>(1);
+        client.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
+
+        HtmlPage page = getPage("/faces/ajax/ajaxError.xhtml");
+
+        HtmlSubmitInput button = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:eval");
+        assertNotNull(button);
+
+        button.click();
+
+        assertEquals(1, collectedAlerts.size());
+        String serverError = "serverError: class javax.faces.el.MethodNotFoundException /ajax/ajaxError.xhtml @51,76 action=\"#{evalBean.error}\": Method not found: com.sun.faces.systest.model.ajax.EvalBean@2bc3d6f3.error()";
+        assertEquals(serverError.substring(0,165), collectedAlerts.get(0).substring(0,165));
+
+    }
+
 }

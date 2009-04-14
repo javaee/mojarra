@@ -45,12 +45,7 @@ import java.util.logging.Level;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.context.ExceptionHandler;
-import javax.faces.context.ExceptionHandlerWrapper;
-import javax.faces.context.FacesContext;
-import javax.faces.context.PartialResponseWriter;
-import javax.faces.context.PartialViewContext;
-import javax.faces.context.ResponseWriter;
+import javax.faces.context.*;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.SystemEvent;
@@ -185,7 +180,12 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
 
      private void handlePartialResponseError(FacesContext context, Throwable t) {
          try {
+
+             ExternalContext extContext = context.getExternalContext();
+             extContext.setResponseContentType("text/xml");
+             extContext.addResponseHeader("Cache-Control", "no-cache");
              PartialResponseWriter writer = context.getPartialViewContext().getPartialResponseWriter();
+
              writer.startDocument();
              writer.startError(t.getClass().toString());
              if (t.getCause() != null) {
