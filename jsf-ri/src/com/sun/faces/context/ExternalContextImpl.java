@@ -64,7 +64,6 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
-import com.sun.faces.context.UrlBuilder;
 import com.sun.faces.context.flash.ELFlash;
 
 /**
