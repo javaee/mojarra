@@ -49,13 +49,14 @@
  * limitations under the License.
  */
 
-package javax.faces.view.facelets;
+package javax.faces.view;
 
 import java.io.Serializable;
 
 /**
  * <p class="changed_added_2_0">An object that represents the Location
- * of a Tag or TagAttribute in a Facelet file.</p>
+ * of a tag or attribute of a tag in a View Declaration Language
+ * file.</p>
  *
  * @since 2.0
  * 

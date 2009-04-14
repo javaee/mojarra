@@ -73,7 +73,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.FaceletHandler;
-import javax.faces.view.facelets.Location;
+import javax.faces.view.Location;
 import javax.faces.view.facelets.Tag;
 import javax.faces.view.facelets.TagAttributes;
 import javax.faces.view.facelets.TagAttribute;

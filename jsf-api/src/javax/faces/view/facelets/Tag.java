@@ -51,6 +51,8 @@
 
 package javax.faces.view.facelets;
 
+import javax.faces.view.Location;
+
 /**
  * <p class="changed_added_2_0">The runtime must create an instance of
  * this class for each element in the Facelets XHTML view. A {@link

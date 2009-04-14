@@ -57,12 +57,29 @@ import javax.faces.view.facelets.FaceletContext;
  * 	  element is created with the appropriate
  * 	  <code>Application.createComponent()</code> method.  </p></li>
 
-	  <li><p>The rendererType property of the component is set properly.
-	  </p></li>
-
 	  <li><p>Each attribute specified in the markup is correctly
 	  applied to the component instance, as specified in the VDLDocs
 	  for this element.  </p></li>
+
+	  <li><p>Put the {@link javax.faces.view.Location} for this
+	  element into the component attribute <code>Map</code> under
+	  the key given by the value of the symbolic constant {@link
+	  javax.faces.component.UIComponent#VIEW_LOCATION_KEY}.
+	  </p></li>
+
+	  <li><p>Set the id of the component.  If the id is specified
+	  manually by the page author, that value must be set as the id.
+	  Otherwise, the closest ancestor component that is an instance
+	  of {@link javax.faces.component.UniqueIdVendor} must be
+	  located and its {@link
+	  javax.faces.component.UniqueIdVendor#createUniqueId} method
+	  must be called to derive the id.  If no such instance can be
+	  found, call {@link
+	  javax.faces.component.UIViewRoot#createUniqueId} to derive the
+	  id.</p></li>
+
+	  <li><p>The rendererType property of the component is set properly.
+	  </p></li>
 
 	  <li><p>{@link #onComponentCreated} is called.
 	  </p></li>

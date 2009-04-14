@@ -52,7 +52,7 @@
 package com.sun.faces.facelets.tag;
 
 import javax.faces.view.facelets.TagAttributeException;
-import javax.faces.view.facelets.Location;
+import javax.faces.view.Location;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ExpressionFactory;
