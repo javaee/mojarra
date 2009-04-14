@@ -148,6 +148,10 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             
             // mark it owned by a facelet instance
             c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
+
+            // inject the location into the component
+            c.getAttributes().put(UIComponent.VIEW_LOCATION_KEY,
+                                  owner.getTag().getLocation());
             
             // assign our unique id
             if (this.id != null) {
