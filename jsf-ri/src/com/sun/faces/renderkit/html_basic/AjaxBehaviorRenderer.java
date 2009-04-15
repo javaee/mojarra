@@ -43,7 +43,6 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.FacesLogger;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -108,7 +107,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
             return;
         }        
 
-        component.queueEvent(createEvent(context, component, ajaxBehavior));
+        component.queueEvent(createEvent(component, ajaxBehavior));
 
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("This command resulted in form submission " +
@@ -121,8 +120,7 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     }
 
     // Creates an AjaxBehaviorEvent for the specified component/behavior
-    private static AjaxBehaviorEvent createEvent(FacesContext context,
-                                                 UIComponent component,
+    private static AjaxBehaviorEvent createEvent(UIComponent component,
                                                  AjaxBehavior ajaxBehavior) {
 
         AjaxBehaviorEvent event = new AjaxBehaviorEvent(component, ajaxBehavior);
@@ -157,8 +155,6 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     }
     private static String buildAjaxCommand(ClientBehaviorContext behaviorContext,
                                            AjaxBehavior ajaxBehavior) {
-
-        FacesContext context = behaviorContext.getFacesContext();
 
         // First things first - if AjaxBehavior is disabled, we are done.
         if (ajaxBehavior.isDisabled()) {
@@ -272,16 +268,20 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
      * Attempt to find the component assuming the ID is relative to the
      * nearest naming container.  If not found, then search for the component
      * using an absolute component expression.
+     *
+     * @param component Root component of the search tree
+     * @param expr Search expression identifying the UIComponent  to be returned
+     * @return the found UIComponent, or <code>null</code> if the component was not found.
      */
     private static UIComponent findComponent(UIComponent component,
-                                             String exe) {
+                                             String expr) {
 
         // RELEASE_PENDING - perhaps only enable ID validation if ProjectStage
         // is development
-        UIComponent resolvedComponent = component.findComponent(exe);
+        UIComponent resolvedComponent = component.findComponent(expr);
         if (resolvedComponent == null) {
             // not found using a relative search, try an absolute search
-            resolvedComponent = component.findComponent(':' + exe);
+            resolvedComponent = component.findComponent(':' + expr);
         }
         return resolvedComponent;
 
