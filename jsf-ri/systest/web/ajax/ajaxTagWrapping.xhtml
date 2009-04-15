@@ -61,11 +61,6 @@
             </h:inputText>
         <h:outputText id="outtext" value="#{ajaxtag.text}"/>
         <br/>
-<!--        <h:selectBooleanCheckbox id="checkbox" value="#{ajaxtag.checked}"
-                                 onchange="jsf.ajax.request(this,event,{render:'checkedvalue2'});" />
-        <h:outputText id="checkedvalue" value="#{ajaxtag.checked}"/>
-        <br/>
-        -->
         <h:selectBooleanCheckbox id="checkbox" value="#{ajaxtag.checked}">
             <f:ajax render="checkedvalue"/>
             </h:selectBooleanCheckbox>
