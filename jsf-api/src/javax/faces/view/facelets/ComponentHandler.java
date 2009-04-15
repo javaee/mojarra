@@ -37,7 +37,6 @@
 package javax.faces.view.facelets;
 
 import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
 
 
 /**
@@ -61,7 +60,8 @@ import javax.faces.view.facelets.FaceletContext;
 	  applied to the component instance, as specified in the VDLDocs
 	  for this element.  </p></li>
 
-	  <li><p>Put the {@link javax.faces.view.Location} for this
+	  <li><p>If project stage is #{@link javax.faces.application.ProjectStage#Development},
+      Put the {@link javax.faces.view.Location} for this
 	  element into the component attribute <code>Map</code> under
 	  the key given by the value of the symbolic constant {@link
 	  javax.faces.component.UIComponent#VIEW_LOCATION_KEY}.

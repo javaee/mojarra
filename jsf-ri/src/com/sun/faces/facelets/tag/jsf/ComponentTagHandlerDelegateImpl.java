@@ -48,6 +48,7 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.*;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
@@ -149,9 +150,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             // mark it owned by a facelet instance
             c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
 
-            // inject the location into the component
-            c.getAttributes().put(UIComponent.VIEW_LOCATION_KEY,
-                                  owner.getTag().getLocation());
+            if (ProjectStage.Development.equals(ctx.getFacesContext()
+                  .getApplication().getProjectStage())) {
+                // inject the location into the component
+                c.getAttributes().put(UIComponent.VIEW_LOCATION_KEY,
+                                      owner.getTag().getLocation());
+            }
             
             // assign our unique id
             if (this.id != null) {
