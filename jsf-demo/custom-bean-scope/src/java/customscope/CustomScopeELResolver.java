@@ -40,6 +40,10 @@ import javax.el.ELResolver;
 import javax.el.ELContext;
 import javax.el.PropertyNotFoundException;
 import javax.faces.context.FacesContext;
+import javax.faces.application.Application;
+import javax.faces.event.ScopeContext;
+import javax.faces.event.PostConstructCustomScopeEvent;
+import javax.faces.event.PreDestroyCustomScopeEvent;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Collections;
@@ -64,17 +68,14 @@ public class CustomScopeELResolver extends ELResolver {
         }
         if (base == null && SCOPE_NAME.equals(property.toString())) {
             // explicit scope lookup request
-            Map<String,Object> customScope = getScope(elContext);
+            CustomScope customScope = getScope(elContext);
             elContext.setPropertyResolved(true);
             return customScope;
-        } else if (base != null
-                   && base instanceof Map
-                   && ((Map) base).containsKey(SCOPE_NAME)) {
+        } else if (base != null && base instanceof CustomScope) {
             // We're dealing with the custom scope that has been explicity referenced
             // by an expression.  'property' will be the name of some entity
             // within the scope.
-            //noinspection unchecked
-            return lookup(elContext, (Map<String,Object>) base, property.toString());
+            return lookup(elContext, (CustomScope) base, property.toString());
         } else if (base == null) {
             // bean may have already been created and is in scope.
             // check to see if the bean is present
@@ -107,19 +108,30 @@ public class CustomScopeELResolver extends ELResolver {
     }
 
 
+    // ---------------------------------------------------------- Public Methods
+
+
+    public static void destroyScope(FacesContext ctx) {
+
+        Map<String,Object> sessionMap = ctx.getExternalContext().getSessionMap();
+        CustomScope customScope = (CustomScope) sessionMap.remove(SCOPE_NAME);
+        customScope.notifyDestroy();
+
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
-    private Map<String,Object> getScope(ELContext elContext) {
+    private CustomScope getScope(ELContext elContext) {
 
         FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
         Map<String,Object> sessionMap = ctx.getExternalContext().getSessionMap();
-        @SuppressWarnings({"unchecked"})
-        Map<String,Object> customScope = (Map<String,Object>) sessionMap.get(SCOPE_NAME);
+        CustomScope customScope = (CustomScope) sessionMap.get(SCOPE_NAME);
         if (customScope == null) {
-            customScope = new ConcurrentHashMap<String,Object>();
-            customScope.put(SCOPE_NAME, SCOPE_NAME);
+            customScope = new CustomScope(ctx.getApplication());
             sessionMap.put(SCOPE_NAME, customScope);
+            customScope.notifyCreate();
         }
         return customScope;
 
@@ -127,12 +139,59 @@ public class CustomScopeELResolver extends ELResolver {
 
     
     private Object lookup(ELContext elContext,
-                          Map<String,Object> scope,
+                          CustomScope scope,
                           String key) {
 
         Object value = scope.get(key);
         elContext.setPropertyResolved(value != null);
         return value;
+
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+    private static final class CustomScope extends ConcurrentHashMap<String,Object> {
+
+        private Application application;
+
+        // -------------------------------------------------------- Constructors
+
+
+        private CustomScope(Application application) {
+            this.application = application;
+        }
+
+
+        // ------------------------------------------------------ Public Methods
+
+
+        /**
+         * Publishes <code>PostConstructCustomScopeEvent</code> to notify
+         * interested parties that this scope is now available.
+         */
+        public void notifyCreate() {
+
+            ScopeContext context = new ScopeContext(SCOPE_NAME, this);
+            application.publishEvent(PostConstructCustomScopeEvent.class, context);
+
+        }
+
+
+        /**
+         * Publishes <code>PreDestroyCustomScopeEvent</code> to notify
+         * interested parties that this scope is being destroyed.
+         */
+        public void notifyDestroy() {
+
+            // notify interested parties that this scope is being
+            // destroyed
+            ScopeContext scopeContext = new ScopeContext(SCOPE_NAME,
+                                                         this);
+            application.publishEvent(PreDestroyCustomScopeEvent.class,
+                                     scopeContext);
+
+        }
 
     }
 }

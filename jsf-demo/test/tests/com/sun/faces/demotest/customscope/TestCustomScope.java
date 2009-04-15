@@ -37,8 +37,7 @@
 package com.sun.faces.demotest.customscope;
 
 import com.sun.faces.demotest.HtmlUnitTestCase;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSpan;
+import com.gargoylesoftware.htmlunit.html.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -49,9 +48,65 @@ public class TestCustomScope extends HtmlUnitTestCase {
 
         HtmlPage page = getPage("/custom.xhtml");
         assertNotNull(page);
+        validateSpanContent(page);
+        validateTableStatus(page, true, false);
+
+        HtmlSubmitInput reload = getReloadButton(page);
+        page = reload.click();
+        validateSpanContent(page);
+        validateTableStatus(page, false, false);
+
+        HtmlSubmitInput destroyScope = getDestoryScopeButton(page);
+        page = destroyScope.click();
+        validateSpanContent(page);
+        validateTableStatus(page, true, true);
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private HtmlSubmitInput getReloadButton(HtmlPage page) {
+
+        HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "form:reload");
+        assertNotNull(input);
+        return input;
+
+    }
+
+
+    private HtmlSubmitInput getDestoryScopeButton(HtmlPage page) {
+
+        HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "form:destroy");
+        assertNotNull(input);
+        return input;
+
+    }
+
+
+    private void validateTableStatus(HtmlPage page,
+                                     boolean postConstructStatus,
+                                     boolean preDestroyStatus) {
+
+        HtmlTable table = (HtmlTable) page.getElementById("grid");
+        assertNotNull(table);
+        HtmlTableRow pcRow = table.getRow(1);
+        HtmlTableCell pcStatus = pcRow.getCell(1);
+        assertTrue(((postConstructStatus)
+                    ? "Invoked".equals(pcStatus.asText())
+                    : pcStatus.asText().length() == 0));
+        HtmlTableRow pdRow = table.getRow(2);
+        HtmlTableCell pdStatus = pdRow.getCell(1);
+        assertTrue(((preDestroyStatus) ? "Invoked".equals(pdStatus.asText()) : pdStatus.asText().length() == 0));
+        
+    }
+
+
+    private void validateSpanContent(HtmlPage page) {
+
         List<HtmlSpan> spans = new ArrayList<HtmlSpan>(3);
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
-        assertEquals(3, spans.size());
         HtmlSpan span = spans.get(0);
         assertEquals("create", span.getId());
         assertEquals("Resolved", span.asText());
@@ -61,5 +116,6 @@ public class TestCustomScope extends HtmlUnitTestCase {
         span = spans.get(2);
         assertEquals("nonCreate", span.getId());
         assertEquals("Resolved", span.asText());
+
     }
 }

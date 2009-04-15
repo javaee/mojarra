@@ -34,41 +34,33 @@
  * holder.
  */
 
-package customscope;
+package javax.faces.event;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.CustomScoped;
-import javax.faces.context.FacesContext;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import java.util.Map;
 
 /**
- * Simple bean that lives in <code>customScope</code>.
+ * Release Pending (docs)
+ *
+ * @since 2.0
  */
-@ManagedBean
-@CustomScoped(value="#{customScope}")
-public class Bean {
+public class ScopeContext {
 
-    public String getValue() { return "Resolved"; }
-
-
-    // ------------------------------------------------------- Lifecycle Methods
+    private String scopeName;
+    private Map<String,Object> scope;
 
 
-    @PostConstruct
-    public void postConstruct() {
-
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        ctx.getExternalContext().getRequestMap().put("postConstructStatus", "Invoked");
-
-    }
+    // ------------------------------------------------------------ Constructors
 
 
-    @PreDestroy
-    public void preDestroy() {
+    /**
+     * RELEASE_PENDING (docs)
+     * @param scopeName
+     * @param scope
+     */
+    public ScopeContext(String scopeName, Map<String, Object> scope) {
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        ctx.getExternalContext().getRequestMap().put("preDestroyStatus", "Invoked");
+        this.scopeName = scopeName;
+        this.scope = scope;
 
     }
 
@@ -76,13 +68,27 @@ public class Bean {
     // ---------------------------------------------------------- Public Methods
 
 
-    public String destroyScope() {
+    /**
+     * RELEASE_PENDING (docs)
+     *
+     * @return
+     */
+    public String getScopeName() {
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        CustomScopeELResolver.destroyScope(ctx);
-        return null;
+        return scopeName;
 
     }
 
-    
+
+    /**
+     * RELEASE_PENDING (docs)
+     *
+     * @return
+     */
+    public Map<String, Object> getScope() {
+
+        return scope;
+        
+    }
+
 }

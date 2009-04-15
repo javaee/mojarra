@@ -377,6 +377,7 @@
 
 
     <target name="main" depends="update,prepare.build">
+        <ant dir="${basedir}/custom-bean-scope" inheritAll="false" />
         <ant dir="${basedir}/components" inheritAll="false" />
         <ant dir="${basedir}/carstore" inheritAll="false" />
         <ant dir="${basedir}/mojarra_ext" inheritAll="false" />

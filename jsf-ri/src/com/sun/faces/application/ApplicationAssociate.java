@@ -82,6 +82,8 @@ import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.application.ProjectStage;
 import javax.faces.FacesException;
+import javax.faces.event.PreDestroyCustomScopeEvent;
+import javax.faces.event.ScopeContext;
 import javax.servlet.ServletContext;
 
 import java.util.Collections;
@@ -207,6 +209,11 @@ public class ApplicationAssociate {
         beanManager = new BeanManager(injectionProvider,
                                       webConfig.isOptionEnabled(
                                            EnableLazyBeanValidation));
+        // install the bean manager as a system event listener for custom
+        // scopes being destoryed.
+        app.subscribeToEvent(PreDestroyCustomScopeEvent.class,
+                             ScopeContext.class,
+                             beanManager);
         annotationManager = new AnnotationManager();
 
         groovyHelper = GroovyHelper.getCurrentInstance();

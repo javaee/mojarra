@@ -37,7 +37,9 @@
 <!DOCTYPE html
       PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
 <head>
     <title>Custom Scope Example</title>
 </head>
@@ -45,12 +47,47 @@
     <p>
         Result of expression evaluation referencing the custom scoped bean (\#{bean.value}): <span id="create" style="color:red">#{bean.value}</span>
     </p>
+    
     <p>
         Result of expression evaluation with the custom scope explicity referenced (\#{customScope.bean.value}): <span id="scopeReference" style="color:red">#{customScope.bean.value}</span>
     </p>
+
     <p>
-        Prove that \#{bean.value} is still referencable after the bean has been created: <span id="nonCreate" style="color:red">#{bean.value}</span>
+        Show that \#{bean.value} is still referencable after the bean has been created: <span id="nonCreate" style="color:red">#{bean.value}</span>
     </p>
+
+    <p>
+        <h:form id="form">
+            <h:commandButton id="reload" value="Reload" />
+            <h:commandButton id="destroy" value="Destroy Custom Scope" action="#{bean.destroyScope}"/>
+        </h:form>
+    </p>
+    <h:panelGrid id="grid" columns="2" style="border-style:solid">
+        <f:facet name="header">
+            <h:outputText value="PostConstruct/PreDestory Invocation Status" />
+        </f:facet>
+        <h:outputText value="PostConstruct" />
+        <h:outputText value="#{requestScope.postConstructStatus}"/>
+        <h:outputText value="PreDestroy" />
+        <h:outputText value="#{requestScope.preDestroyStatus}"/>
+    </h:panelGrid>
+
+<hr />
+<p>
+    Demo Notes
+</p>
+    <ul>
+        <li>In all cases, the three expressions above should show the expression
+            as <span style="Color:red">Resolved</span></li>
+        <li>On the initial render, the <em>PostConstruct</em> status show show a
+            value. However, since this scope is tied to the session, clicking
+            the reload button should clear that status
+        </li>
+        <li>If the destroy button pushed, both the <em>PostConstruct</em> and
+            <em>PreDestroy</em> status should have a value. This is because the
+            scope is destroyed, and then recreated when the view is re-rendered.
+        </li>
+    </ul>
 
 </body>
 </html>

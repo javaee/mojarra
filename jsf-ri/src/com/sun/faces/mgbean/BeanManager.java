@@ -50,6 +50,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.*;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 
@@ -61,7 +62,7 @@ import com.sun.faces.util.MessageUtils;
 /**
  * <p>Main interface for dealing with JSF managed beans</p>
  */
-public class BeanManager {
+public class BeanManager implements SystemEventListener {
 
     private static final Logger LOGGER = FacesLogger.MANAGEDBEAN.getLogger();
 
@@ -91,6 +92,45 @@ public class BeanManager {
 
         this(injectionProvider, lazyBeanValidation);
         this.managedBeans = managedBeans;
+
+    }
+
+
+    // ---------------------------------------- Methods from SystemEventListener
+
+
+    /**
+     * <p>
+     * Invoke PreDestroy methods on any managed beans within the provided scope.
+     * </p>
+     *
+     * @param event the {@link ScopeContext}
+     *
+     * @throws AbortProcessingException
+     */
+    public void processEvent(SystemEvent event)
+    throws AbortProcessingException {
+
+        ScopeContext scopeContext = ((PreDestroyCustomScopeEvent) event).getContext();
+        Map<String,Object> scope = scopeContext.getScope();
+        for (Map.Entry<String,Object> entry : scope.entrySet()) {
+            String name = entry.getKey();
+            if (isManaged(name)) {
+                BeanBuilder builder = getBuilder(name);
+                builder.destroy(injectionProvider, entry.getValue());
+            }
+        }
+
+
+    }
+
+
+    /**
+     * @see SystemEventListener#isListenerForSource(Object)
+     */
+    public boolean isListenerForSource(Object source) {
+
+        return (source instanceof ScopeContext);
 
     }
 

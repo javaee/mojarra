@@ -34,55 +34,40 @@
  * holder.
  */
 
-package customscope;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.CustomScoped;
-import javax.faces.context.FacesContext;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+package javax.faces.event;
 
 /**
- * Simple bean that lives in <code>customScope</code>.
+ * RELEASE_PENDING
+ *
+ * @since 2.0
  */
-@ManagedBean
-@CustomScoped(value="#{customScope}")
-public class Bean {
-
-    public String getValue() { return "Resolved"; }
+public class PostConstructCustomScopeEvent extends SystemEvent {
 
 
-    // ------------------------------------------------------- Lifecycle Methods
+    // ------------------------------------------------------------ Constructors
 
+    /**
+     * RELEASE_PENDING docs
+     * @param scopeContext
+     */
+    public PostConstructCustomScopeEvent(ScopeContext scopeContext) {
 
-    @PostConstruct
-    public void postConstruct() {
-
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        ctx.getExternalContext().getRequestMap().put("postConstructStatus", "Invoked");
-
-    }
-
-
-    @PreDestroy
-    public void preDestroy() {
-
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        ctx.getExternalContext().getRequestMap().put("preDestroyStatus", "Invoked");
-
+        super(scopeContext);
+        
     }
 
 
     // ---------------------------------------------------------- Public Methods
 
 
-    public String destroyScope() {
+    /**
+     * RELEASE_PENDING docs
+     * @return
+     */
+    public ScopeContext getContext() {
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        CustomScopeELResolver.destroyScope(ctx);
-        return null;
+        return (ScopeContext) getSource();
 
     }
 
-    
 }
