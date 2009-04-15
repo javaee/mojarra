@@ -585,4 +585,61 @@ public class AjaxTagTestCase extends AbstractTestCase {
         checkTrue("out2","1");
 
     }
+
+    public void testAjaxTagKeywords() throws Exception {
+        getPage("/faces/ajax/ajaxTagKeywords.xhtml");
+        System.out.println("Start ajax tag Keyword test");
+
+        checkTrue("out1","0");
+        checkTrue("out2","1");
+        checkTrue("button3","2");
+        checkTrue("out3","3");
+
+        // Submit the ajax request
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("button1");
+        lastpage = (HtmlPage) button1.click();
+
+
+        checkTrue("out1","4");
+        checkTrue("out2","5");
+        checkTrue("button3","6");
+        checkTrue("out3","7");
+
+        // Submit the ajax request
+        HtmlSubmitInput button2 = (HtmlSubmitInput) lastpage.getHtmlElementById("button2");
+        lastpage = (HtmlPage) button2.click();
+
+        checkTrue("out1","8");
+        checkTrue("out2","9");
+        checkTrue("button3","10");
+        checkTrue("out3","7");
+
+        // Submit the ajax request
+        HtmlSubmitInput button3 = (HtmlSubmitInput) lastpage.getHtmlElementById("button3");
+        lastpage = (HtmlPage) button3.click();
+
+        checkTrue("out1","8");
+        checkTrue("out2","9");
+        checkTrue("button3","11");
+        checkTrue("out3","7");
+
+        // Submit the ajax request
+        HtmlSubmitInput button4 = (HtmlSubmitInput) lastpage.getHtmlElementById("button4");
+        lastpage = (HtmlPage) button4.click();
+
+        checkTrue("out1","8");
+        checkTrue("out2","9");
+        checkTrue("button3","11");
+        checkTrue("out3","7");
+
+        // Submit the ajax request
+        HtmlSubmitInput button5 = (HtmlSubmitInput) lastpage.getHtmlElementById("button5");
+        lastpage = (HtmlPage) button5.click();
+
+        checkTrue("out1","8");
+        checkTrue("out2","12");
+        checkTrue("button3","11");
+        checkTrue("out3","7");
+        
+    }
 }
