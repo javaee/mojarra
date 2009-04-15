@@ -112,6 +112,9 @@
                 <include name="*properties"/>
             </fileset>
         </copy>
+        <copy todir="${build}/${example}/WEB-INF/classes">
+            <fileset dir="src/java"/>
+        </copy>
 
         <jsf.war basedir="${build}"
                  archive-name="${example}"
