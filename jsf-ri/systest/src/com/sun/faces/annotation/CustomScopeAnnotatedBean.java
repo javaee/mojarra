@@ -36,17 +36,13 @@
 
 package com.sun.faces.annotation;
 
-import javax.faces.component.UIComponent;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.NamedEvent;
+import javax.faces.bean.CustomScoped;
+import javax.faces.bean.ManagedBean;
 
-/**
- *
- */
-@NamedEvent(shortName="explicitEventName")
-public class AnotherAnnotatedComponentSystemEvent  extends ComponentSystemEvent {
-    public AnotherAnnotatedComponentSystemEvent(UIComponent component) {
-        super(component);
-    }
+@ManagedBean
+@CustomScoped(value="#{facesContext.externalContext.requestMap}")
+public class CustomScopeAnnotatedBean {
 
+    public String getGreeting() { return "Hello"; }
+    
 }

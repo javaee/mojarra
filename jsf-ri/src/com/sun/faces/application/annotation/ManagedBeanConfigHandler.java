@@ -45,13 +45,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.ViewScoped;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.NoneScoped;
+import javax.faces.bean.*;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.application.ApplicationAssociate;
@@ -71,7 +65,8 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
           ViewScoped.class,
           SessionScoped.class,
           ApplicationScoped.class,
-          NoneScoped.class
+          NoneScoped.class,
+          CustomScoped.class
     };
 
     private static final Collection<Class<? extends Annotation>> HANDLES;
@@ -197,6 +192,8 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                     return "application";
                 } else if (a instanceof NoneScoped) {
                     return "none";
+                } else if (a instanceof CustomScoped) {
+                    return ((CustomScoped) a).value();
                 }
             }
         }

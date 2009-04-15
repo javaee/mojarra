@@ -481,7 +481,7 @@ public class ConfigureListener implements ServletRequestListener,
                 for (Map.Entry<String,BeanBuilder> entry : manager.getRegisteredBeans().entrySet()) {
                     String name = entry.getKey();
                     BeanBuilder bean = entry.getValue();
-                    if (bean.getScope() == ELUtils.Scope.APPLICATION) {
+                    if (ELUtils.Scope.APPLICATION.toString().equals(bean.getScope())) {
                         if (LOGGER.isLoggable(Level.INFO)) {
                             LOGGER.log(Level.INFO,
                                        "Removing application scoped managed bean: {0}",

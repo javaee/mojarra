@@ -451,6 +451,12 @@
   <managed-bean-scope>request</managed-bean-scope>
 </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>customScopeBean</managed-bean-name>
+        <managed-bean-class>com.sun.faces.TestBean</managed-bean-class>
+        <managed-bean-scope>#{facesContext.externalContext.requestMap}</managed-bean-scope>
+    </managed-bean>
+
      <component>
     <component-type>DefaultComponent</component-type>
     <component-class>com.sun.faces.config.TestComponent</component-class>

@@ -208,6 +208,8 @@ public class MessageUtils {
          "com.sun.faces.MANAGED_BEAN_UNKNOWN_PROCESSING_ERROR";
     public static final String MANAGED_BEAN_PROPERTY_UNKNOWN_PROCESSING_ERROR_ID =
          "com.sun.faces.MANAGED_BEAN_PROPERTY_UNKNOWN_PROCESSING_ERROR";
+    public static final String MANAGED_BEAN_INVALID_SCOPE_ERROR_ID =
+          "com.sun.faces.MANAGED_BEAN_INVALID_SCOPE";
     public static final String MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID =
           "com.sun.faces.MAXIMUM_EVENTS_REACHED";
     public static final String MISSING_CLASS_ERROR_MESSAGE_ID =

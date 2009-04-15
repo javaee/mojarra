@@ -53,6 +53,8 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 import javax.servlet.http.HttpServletRequest;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanBuilder;
@@ -151,6 +153,15 @@ public class AnnotationTestBean {
         assertEquals(33, bean1Instance.getAge());
         assertNotNull(request.getAttribute("annotatedBean"));
         request.removeAttribute("annotatedBean");
+
+        // custom scope
+        ExpressionFactory factory = ctx.getApplication().getExpressionFactory();
+        ValueExpression ve = factory.createValueExpression(ctx.getELContext(),
+                                                           "#{customScopeAnnotatedBean.greeting}",
+                                                           String.class);
+        String greeting = (String) ve.getValue(ctx.getELContext());
+        assertEquals("Hello", greeting);
+        assertTrue(ctx.getExternalContext().getRequestMap().get("customScopeAnnotatedBean") instanceof CustomScopeAnnotatedBean);
 
     }
 

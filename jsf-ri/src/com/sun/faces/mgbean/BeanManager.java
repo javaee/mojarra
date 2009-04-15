@@ -41,15 +41,17 @@
 package com.sun.faces.mgbean;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.spi.InjectionProvider;
@@ -185,21 +187,9 @@ public class BeanManager {
 
     public boolean isBeanInScope(String name, FacesContext context) {
 
-        ELUtils.Scope scope = this.getBuilder(name).getScope();
-        ExternalContext externalContext = context.getExternalContext();
-        // check to see if the bean is already in scope
-        switch (scope) {
-            case REQUEST:
-                return (externalContext.getRequestMap().containsKey(name));
-            case VIEW:
-                return (context.getViewRoot().getViewMap().containsKey(name));
-            case SESSION:
-                return (externalContext.getSessionMap().containsKey(name));
-            case APPLICATION:
-                return (externalContext.getApplicationMap().containsKey(name));
-        }
-        return false;
-        
+        String scope = this.getBuilder(name).getScope();
+        return ScopeManager.isInScope(name, scope, context);
+
     }
 
 
@@ -221,43 +211,7 @@ public class BeanManager {
                                                                     builder.getMessages(),
                                                                     true));
             } else {
-                ELUtils.Scope scope = builder.getScope();
-                Object bean;
-                switch (scope) {
-                    case APPLICATION:
-                        synchronized (facesContext.getExternalContext()
-                             .getContext()) {
-                            bean = createAndPush(name,
-                                                 builder,
-                                                 scope,
-                                                 facesContext);
-                        }
-                        break;
-                    case SESSION:
-                        synchronized(facesContext.getExternalContext().getSession(true)) {
-                            bean = createAndPush(name,
-                                                 builder,
-                                                 scope,
-                                                 facesContext);
-                        }
-                        break;
-                    case VIEW:
-                        synchronized(facesContext.getViewRoot().getViewMap()) {
-                            bean = createAndPush(name,
-                                                 builder,
-                                                 scope,
-                                                 facesContext);
-                        }
-                        break;
-                    case REQUEST:
-                    default:
-                        bean = createAndPush(name,
-                                             builder,
-                                             scope,
-                                             facesContext);
-                }
-
-                return bean;
+                return createAndPush(name, builder, facesContext);
             }
         }
 
@@ -300,8 +254,8 @@ public class BeanManager {
                         StringBuilder sb = new StringBuilder(64);
                         String[] ra =
                              references.toArray(new String[references.size()]);
-                        for (int i = 0; i < ra.length; i++) {
-                            sb.append(ra[i]);
+                        for (String reference : ra) {
+                            sb.append(reference);
                             sb.append(" -> ");
                         }
                         sb.append(ref);
@@ -386,11 +340,10 @@ public class BeanManager {
 
     private Object createAndPush(String name,
                                  BeanBuilder builder,
-                                 ELUtils.Scope scope,
                                  FacesContext facesContext) {
 
         Object bean = builder.build(injectionProvider, facesContext);
-        ScopeManager.pushToScope(name, bean, scope, facesContext);
+        ScopeManager.pushToScope(name, bean, builder.getScope(), facesContext);
         return bean;
 
     }
@@ -420,33 +373,72 @@ public class BeanManager {
 
     private static class ScopeManager {
 
-        private static final EnumMap<ELUtils.Scope,ScopeHandler> handlerMap =
-             new EnumMap<ELUtils.Scope,ScopeHandler>(ELUtils.Scope.class);
-
+        private static final ConcurrentMap<String,ScopeHandler> handlerMap =
+             new ConcurrentHashMap<String,ScopeHandler>(5);
         
         static {
-            handlerMap.put(ELUtils.Scope.REQUEST, new RequestScopeHandler());
-            handlerMap.put(ELUtils.Scope.VIEW, new ViewScopeHandler());
-            handlerMap.put(ELUtils.Scope.SESSION, new SessionScopeHandler());
-            handlerMap.put(ELUtils.Scope.APPLICATION, new ApplicationScopeHandler());
+            handlerMap.put(ELUtils.Scope.REQUEST.toString(), new RequestScopeHandler());
+            handlerMap.put(ELUtils.Scope.VIEW.toString(), new ViewScopeHandler());
+            handlerMap.put(ELUtils.Scope.SESSION.toString(), new SessionScopeHandler());
+            handlerMap.put(ELUtils.Scope.APPLICATION.toString(), new ApplicationScopeHandler());
+            handlerMap.put(ELUtils.Scope.NONE.toString(), new NoneScopeHandler());
         }
 
 
         static void pushToScope(String name,
                                 Object bean,
-                                ELUtils.Scope scope,
+                                String customScope,
                                 FacesContext context) {
 
-            ScopeHandler handler = handlerMap.get(scope);
-            if (handler != null) {
-                handler.handle(name, bean, context);
+            ScopeHandler handler = getScopeHandler(customScope, context);
+            handler.handle(name, bean, context);
+
+        }
+
+
+        static boolean isInScope(String name,
+                                 String customScope,
+                                 FacesContext context) {
+
+            ScopeHandler handler = getScopeHandler(customScope, context);
+            return handler.isInScope(name, context);
+
+        }
+
+        private static ScopeHandler getScopeHandler(String customScope,
+                                                    FacesContext context) {
+
+            ScopeHandler handler = handlerMap.get(customScope);
+            if (handler == null) {
+                ExpressionFactory factory = context.getApplication().getExpressionFactory();
+                ValueExpression ve =
+                    factory.createValueExpression(context.getELContext(),
+                                                  customScope,
+                                                  Map.class);
+                handler = new CustomScopeHandler(ve);
+                handlerMap.putIfAbsent(customScope, handler);
             }
-            
+            return handler;
+
         }
 
         private interface ScopeHandler {
 
             void handle(String name, Object bean, FacesContext context);
+
+            boolean isInScope(String name, FacesContext context);
+
+        }
+
+        private static class NoneScopeHandler implements ScopeHandler {
+
+            public void handle(String name, Object bean, FacesContext context) {
+                // no-op
+            }
+
+            public boolean isInScope(String name, FacesContext context) {
+                return false;
+            }
 
         }
 
@@ -458,8 +450,15 @@ public class BeanManager {
 
             }
 
-        }
-        
+            public boolean isInScope(String name, FacesContext context) {
+
+                return context.getExternalContext().getRequestMap().containsKey(name);
+
+            }
+
+        } // END RequestScopeHandler
+
+
         private static class ViewScopeHandler implements ScopeHandler {
 
             public void handle(String name, Object bean, FacesContext context) {
@@ -468,28 +467,97 @@ public class BeanManager {
 
             }
 
-        }
+            public boolean isInScope(String name, FacesContext context) {
+
+                Map<String,Object> viewMap = context.getViewRoot().getViewMap(false);
+                return ((viewMap != null) && viewMap.containsKey(name));
+
+            }
+
+        } // END ViewScopeHandler
         
 
         private static class SessionScopeHandler implements ScopeHandler  {
 
             public void handle(String name, Object bean, FacesContext context) {
 
-                context.getExternalContext().getSessionMap().put(name, bean);
+                synchronized (context.getExternalContext().getSession(true)) {
+                    context.getExternalContext().getSessionMap().put(name, bean);
+                }
 
             }
 
-        }
+            public boolean isInScope(String name, FacesContext context) {
+
+                return context.getExternalContext().getSessionMap().containsKey(name);
+
+            }
+
+        } // END SessionScopeHandler
+
 
         private static class ApplicationScopeHandler implements ScopeHandler {
 
             public void handle(String name, Object bean, FacesContext context) {
 
-                context.getExternalContext().getApplicationMap().put(name, bean);
+                synchronized (context.getExternalContext().getContext()) {
+                    context.getExternalContext().getApplicationMap().put(name, bean);
+                }
 
             }
 
-        }
+            public boolean isInScope(String name, FacesContext context) {
+
+                return context.getExternalContext().getApplicationMap().containsKey(name);
+
+            }
+
+        } // END ApplicationScopeHandler
+
+
+        private static class CustomScopeHandler implements ScopeHandler {
+
+            private ValueExpression scope;
+
+            CustomScopeHandler(ValueExpression scope) {
+                this.scope = scope;
+            }
+
+            public void handle(String name, Object bean, FacesContext context) {
+
+                Map scopeMap = (Map) scope.getValue(context.getELContext());
+                if (scopeMap != null) {
+                    synchronized (this) {
+                        //noinspection unchecked
+                        scopeMap.put(name, bean);
+                    }
+                } else {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "Custom scope ''{0}'' evaluated to null.  Managed bean was not pushed.",
+                                   new Object[] { scope.getExpressionString() });
+                    }
+                }
+            }
+
+            public boolean isInScope(String name, FacesContext context) {
+
+                Map scopeMap = (Map) scope.getValue(context.getELContext());
+                if (scopeMap != null) {
+                    return scopeMap.containsKey(name);
+                } else {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "Custom scope ''{0}'' evaluated to null.  Unable to determine if managed bean exists.",
+                                   new Object[] { scope.getExpressionString() });
+                    }
+                    // since the scope evaluated to null, return true to prevent
+                    // the managed bean from being needlessly created
+                    return true;
+                }
+            }
+
+        } // END CustomScopeHandler
     }
 
 }

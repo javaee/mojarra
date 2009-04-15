@@ -119,7 +119,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         beanManager.register(bean);
         assertNotNull(beanManager.create(beanName, getFacesContext()));
         BeanBuilder builder = beanManager.getBuilder(beanName);
-        assertTrue(builder.getScope() == ELUtils.Scope.SESSION);
+        assertTrue(ELUtils.Scope.SESSION.toString().equals(builder.getScope()));
     }
 
 
@@ -153,7 +153,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure scope is stored properly
         BeanBuilder builder = beanManager.getBuilder(beanName);
-        assertTrue(builder.getScope() == ELUtils.Scope.SESSION);
+        assertTrue(ELUtils.Scope.SESSION.toString().equals(builder.getScope()));
     }
 
 
@@ -254,7 +254,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure scope is stored properly
         BeanBuilder builder = beanManager.getBuilder(beanName);
-        assertTrue(builder.getScope() == ELUtils.Scope.SESSION);
+        assertTrue(ELUtils.Scope.SESSION.toString().equals(builder.getScope()));
     }
     
     public void testSimpleNumericProperty() throws Exception {
@@ -399,7 +399,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure scope is stored properly
         BeanBuilder builder = beanManager.getBuilder(beanName);
-        assertTrue(builder.getScope() == ELUtils.Scope.REQUEST);
+        assertTrue(ELUtils.Scope.REQUEST.toString().equals(builder.getScope()));
     }
 
 
@@ -460,7 +460,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure scope is stored properly
         BeanBuilder builder = beanManager.getBuilder(beanName);
-        assertTrue(builder.getScope() == ELUtils.Scope.REQUEST);
+        assertTrue(ELUtils.Scope.REQUEST.toString().equals(builder.getScope()));
     }
 
 
@@ -836,7 +836,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
             ELUtils.createValueExpression(
                 "#{threeBeanSaladPositive.prop}");
         assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext().getELContext()));
-    } 
+    }
 
 
     public void testConstructorException() {
@@ -945,6 +945,48 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         testBean = (TestBean) beanManager.create(beanName, getFacesContext());
         assertTrue("this is a String", "this is a String".equals(testBean.getModelLabel()));
 
+    }
+
+
+    public void testManagedBeanCustomScope() throws Exception {
+
+        BeanManager beanManager =
+              ApplicationAssociate.getCurrentInstance().getBeanManager();
+        testBean = (TestBean) beanManager.create("customScopeBean", getFacesContext());
+        Map<String,Object> requestMap = getFacesContext().getExternalContext().getRequestMap();
+        assertTrue(testBean == requestMap.get("customScopeBean"));
+
+        // invalid scope sanity check
+        ManagedBeanInfo bean = new ManagedBeanInfo(beanName,
+                                                   beanName,
+                                                   "#{myScope",
+                                                   null,
+                                                   null,
+                                                   null,
+                                                   null);
+        beanManager.register(bean);
+        try {
+            beanManager.create(beanName, getFacesContext());
+            fail();
+        } catch (Exception e) {
+
+        }
+
+        bean = new ManagedBeanInfo(beanName,
+                                   beanName,
+                                   "myScope",
+                                   null,
+                                   null,
+                                   null,
+                                   null);
+        beanManager.register(bean);
+        try {
+            beanManager.create(beanName, getFacesContext());
+            fail();
+        } catch (Exception e) {
+
+        }
+        
     }
 
 

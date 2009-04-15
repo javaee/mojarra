@@ -74,7 +74,6 @@ public abstract class BeanBuilder {
 
     private List<String> messages;
     private List<String> references;
-    private ELUtils.Scope scope;
     private boolean isInjectible;
     private boolean baked;
 
@@ -92,7 +91,6 @@ public abstract class BeanBuilder {
     public BeanBuilder(ManagedBeanInfo beanInfo) {
 
         this.beanInfo = beanInfo;
-        initScope();
         
     }
 
@@ -141,9 +139,9 @@ public abstract class BeanBuilder {
 
     }
 
-    public ELUtils.Scope getScope() {
+    public String getScope() {
 
-        return scope;
+        return beanInfo.getScope();
 
     }
 
@@ -382,6 +380,7 @@ public abstract class BeanBuilder {
     void bake() {
 
         loadBeanClass();
+        validateScope();
 
     }
 
@@ -458,19 +457,19 @@ public abstract class BeanBuilder {
     }
 
 
-    private void initScope() {
+    private void validateScope() {
+
         String scope = beanInfo.getScope();
-        if ("request".equals(scope)) {
-            this.scope = ELUtils.Scope.REQUEST;
-        } else if ("view".equals(scope)) {
-            this.scope = ELUtils.Scope.VIEW;
-        } else if ("session".equals(scope)) {
-            this.scope = ELUtils.Scope.SESSION;
-        } else if ("application".equals(scope)) {
-            this.scope = ELUtils.Scope.APPLICATION;
-        } else if ("none".equals(scope)) {
-           this.scope = ELUtils.Scope.NONE; 
+        if (!ELUtils.isScopeValid(scope)) {
+            // custom scope - make sure it's valid
+            if (!ELUtils.isExpression(scope)) {
+                String message = MessageUtils.getExceptionMessageString(
+                         MessageUtils.MANAGED_BEAN_INVALID_SCOPE_ERROR_ID,
+                         beanInfo.getName());
+                throw new ManagedBeanPreProcessingException(message);
+            }
         }
+
     }
 
 
@@ -544,13 +543,17 @@ public abstract class BeanBuilder {
                         segment[0] = null;
                     }
                 }
-                ELUtils.Scope expressionScope = ELUtils.getNarrowestScopeFromExpression(this.expressionString);
-                if (expressionScope != null) {
-                    // expression scope isn't null which means we have enough
-                    // information to statically validate.
-                    validateLifespan(expressionScope, validateLifespanRuntime);
-                } else {
-                    validateLifespanRuntime = true;
+                if (!ELUtils.isExpression(beanInfo.getScope())) {
+                    ELUtils.Scope expressionScope = ELUtils
+                          .getNarrowestScopeFromExpression(this.expressionString);
+                    if (expressionScope != null) {
+                        // expression scope isn't null which means we have enough
+                        // information to statically validate.
+                        validateLifespan(expressionScope,
+                                         validateLifespanRuntime);
+                    } else {
+                        validateLifespanRuntime = true;
+                    }
                 }
             } else {
                 if (this.expressionString != null) {
@@ -594,21 +597,24 @@ public abstract class BeanBuilder {
 
 
         private void validateLifespan(ELUtils.Scope expressionScope, boolean runtime) {
-            if (!ELUtils.hasValidLifespan(expressionScope,
-                                          scope)) {
-                String message = MessageUtils.getExceptionMessageString(
-                     MessageUtils.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID,
-                     this.expressionString,
-                     expressionScope,
-                     beanInfo.getName(),
-                     scope.toString());
-                if (runtime) {
-                    throw new ManagedBeanCreationException(message);
-                } else {
-                    queueMessage(message);
+            if (ELUtils.isScopeValid(beanInfo.getScope())) {
+                if (!ELUtils.hasValidLifespan(expressionScope,
+                                              ELUtils.getScope(beanInfo.getScope()))) {
+                    String message = MessageUtils.getExceptionMessageString(
+                          MessageUtils.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID,
+                          this.expressionString,
+                          expressionScope,
+                          beanInfo.getName(),
+                          beanInfo.getScope());
+                    if (runtime) {
+                        throw new ManagedBeanCreationException(message);
+                    } else {
+                        queueMessage(message);
+                    }
                 }
             }
-        }      
+
+        }
 
     } // END Expression
 }

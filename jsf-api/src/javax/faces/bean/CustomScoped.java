@@ -28,5 +28,5 @@ import java.lang.annotation.Inherited;
 @Inherited
 public @interface CustomScoped {
 
-    public String value() default "";
+    public String value();
 }

@@ -100,6 +100,7 @@ public class ELUtils {
         public String toString() {
             return scope;
         }
+
     }
 
     public static final ArrayELResolver ARRAY_RESOLVER = new ArrayELResolver();
@@ -473,6 +474,18 @@ public class ELUtils {
     }
 
 
+    public static Scope getScope(String scope) {
+
+        for (Scope s : Scope.values()) {
+            if (s.toString().equals(scope)) {
+                return s;
+            }
+        }
+        return null;
+        
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -605,7 +618,7 @@ public class ELUtils {
 
     @SuppressWarnings("deprecation")
     public static boolean hasValidLifespan(Scope expressionScope, Scope beanScope)
-         throws EvaluationException, ReferenceSyntaxException {
+         throws EvaluationException {
 
         //if the managed bean's scope is "none" but the scope of the
         //referenced object is not "none", scope is invalid
@@ -651,7 +664,7 @@ public class ELUtils {
 
     @SuppressWarnings("deprecation")
     public static ELUtils.Scope getScopeForSingleExpression(String value)
-         throws ReferenceSyntaxException, EvaluationException {
+         throws EvaluationException {
         String[] firstSegment = new String[1];
         ELUtils.Scope valueScope = ELUtils.getScope(value, firstSegment);
 
@@ -663,7 +676,7 @@ public class ELUtils {
                      ApplicationAssociate.getCurrentInstance().getBeanManager();
 
                 if (manager.isManaged(firstSegment[0])) {
-                    valueScope = manager.getBuilder(firstSegment[0]).getScope();
+                    valueScope = ELUtils.getScope(manager.getBuilder(firstSegment[0]).getScope());
                 }
             } else {
                 // we are referring to a bean that doesn't exist in the
