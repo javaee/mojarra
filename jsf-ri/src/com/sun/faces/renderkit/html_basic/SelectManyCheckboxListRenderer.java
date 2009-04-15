@@ -50,7 +50,6 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UINamingContainer;
@@ -348,9 +347,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             }
             labelClass.append(style);
         }
-        if (labelClass != null) {
-            writer.writeAttribute("class", labelClass.toString(), "labelClass");
-        }
+        writer.writeAttribute("class", labelClass.toString(), "labelClass");
         String itemLabel = curItem.getLabel();
         if (itemLabel != null) {
             writer.writeText(" ", component, null);
