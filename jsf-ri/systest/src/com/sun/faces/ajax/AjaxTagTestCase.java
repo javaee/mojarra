@@ -39,10 +39,7 @@ package com.sun.faces.ajax;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.*;
 
 public class AjaxTagTestCase extends AbstractTestCase {
 
@@ -531,6 +528,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         assertTrue(check(out3,"echo"));
 
     }
+
     public void testAjaxTagEvent() throws Exception {
         getPage("/faces/ajax/ajaxTagEvent.xhtml");
         System.out.println("Start ajax tag event test");
@@ -541,7 +539,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
         assertTrue(check("countForm:out1","2"));
@@ -556,5 +554,35 @@ public class AjaxTagTestCase extends AbstractTestCase {
         //System.out.println(statusArea);
         //System.out.println(getText("statusArea"));
         assertTrue(check("statusArea",statusArea));
+    }
+
+    public void testAjaxTagDisabled() throws Exception {
+        getPage("/faces/ajax/ajaxTagDisabled.xhtml");
+        System.out.println("Start ajax tag Disabled test");
+
+        // First we'll check the first page was output correctly
+        assertTrue(check("countForm:out1","0"));
+        assertTrue(check("out2","1"));
+
+        // Submit the ajax request
+        HtmlButtonInput button1 = (HtmlButtonInput) lastpage.getHtmlElementById("countForm:button1");
+        lastpage = (HtmlPage) button1.click();
+
+        // Check that the button does nothing
+        assertTrue(check("countForm:out1","0"));
+
+        // Check that the request did NOT update the rest of the page.
+        assertTrue(check("out2","1"));
+
+        // Submit the ajax request
+        HtmlButtonInput button2 = (HtmlButtonInput) lastpage.getHtmlElementById("countForm:button2");
+        lastpage = (HtmlPage) button2.click();
+
+        // Check that the request succeeds
+        assertTrue(check("countForm:out1","2"));
+
+        // Check that the request did NOT update the rest of the page.
+        assertTrue(check("out2","1"));
+
     }
 }
