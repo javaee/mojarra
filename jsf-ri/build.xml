@@ -615,35 +615,48 @@
         <delete file="${basedir}/merged.xml"/>
     </target>
 
-    <!--
-         ===================================================================
-           Temporary Testing Targets
-         ===================================================================
-    -->
-
-<target name="push-to-maven-prepare" depends="jars">
-
-  <mkdir dir="${target.dir}/classes" />
-  <unjar src="${build.dir}/lib/${name}.jar" overwrite="yes" 
-         dest="${target.dir}/classes"/>
-  <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${impl.version}" goals="install" />
-
-</target>
-
-<target name="push-to-maven" depends="push-to-maven-prepare">
-  <tstamp />
-  <echo>deploying to maven repo</echo>
-  <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${impl.version}" goals="deploy" />
-</target>
 
     <target name="passthru">
         <ant antfile="build-tests.xml" target="passthru"/>
     </target>
 
+     <!--
+       USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO YOUR LOCAL
+       M2 REPOSITORY
+    -->
 
-<!-- scratch
+    <target name="mvn.deploy.snapshot.local">
+        <mvn.deploy.snapshot.local type="impl"/>
+    </target>
 
-ant -emacs -Dbuild.generate.tld.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/jsf-ri/build/generate/conf/share  -Dbuild.dir=/Users/edburns/Documents/Projects/JavaEE/workareas/javaserverfaces-spec-eg/javadocs/spec-snapshot/pdldocs/facelets/ facelets.tlddocs   
--->
+
+    <target name="mvn.deploy.promoted.local">
+        <mvn.deploy.promoted.local type="impl"/>
+    </target>
+
+
+    <target name="mvn.deploy.release.local">
+        <mvn.deploy.release.local type="impl"/>
+    </target>
+
+
+    <!--
+       USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO THE
+       JAVA.NET M2 REPOSITORY
+    -->
+     <target name="mvn.deploy.snapshot">
+        <mvn.deploy.snapshot type="impl"/>
+    </target>
+
+
+    <target name="mvn.deploy.promoted">
+        <mvn.deploy.promoted type="impl"/>
+    </target>
+
+
+    <target name="mvn.deploy.release">
+        <mvn.deploy.release type="impl"/>
+    </target>
+
     
 </project>

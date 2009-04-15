@@ -40,6 +40,7 @@
 
     <import file="${jsf.build.home}/common/ant/${container.name}/container.xml"/>
     <import file="${jsf.build.home}/common/ant/dependencies.xml"/>
+    <import file="${jsf.build.home}/common/ant/maven.xml"/>
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
             <pathelement
@@ -343,48 +344,6 @@
             </generateComponents>
         </sequential>
     </macrodef>
-
-   <!-- Convenience macro for invoking mvn -->
-   <macrodef name="jsf.mvn">        
-        <attribute name="pomFile" default="pom.xml"/>
-        <attribute name="mvnSpecVersion" default="${impl.version}"/>
-        <attribute name="goals"/>
-        <attribute name="dir" default="${basedir}" />
-        <attribute name="skipTests" default="true" />
-        <sequential>           
-            <if>
-              <equals arg1="@{skipTests}" arg2="false" />
-              <then>
-                <property name="testSkipProperty" value="" />
-              </then>
-              <else>
-                <property name="testSkipProperty" 
-                          value="-Dmaven.test.skip=true" />
-              </else>
-            </if>
-            <exec os="SunOS" dir="@{dir}" failonerror="yes" 
-                             executable="mvn">
-              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
-            </exec>
-            <exec os="Linux" dir="@{dir}" failonerror="yes" 
-                             executable="mvn">
-              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
-            </exec>
-            <exec os="Windows 2000" dir="@{dir}" executable="mvn.exe" 
-                             failonerror="yes">
-              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
-            </exec>
-            <exec os="Windows XP" dir="@{dir}" executable="mvn.exe" 
-                             failonerror="yes">
-              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
-            </exec>
-            <exec os="Mac OS X" dir="@{dir}" executable="mvn" 
-                             failonerror="yes">
-              <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
-            </exec>
-        </sequential>           
-   </macrodef>        
-
 
     <!-- Change bundle target(s) -->
 

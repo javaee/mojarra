@@ -300,7 +300,10 @@
                                    fromFile="${dist.dir}/mojarra-${impl.version}-source.zip"
                                    fileDescription="Mojarra ${impl.version.number} nightly source bundle."
                                    overwrite="yes"/>
-
+                    <echo message="Deploying jsf-api.jar snapshot to the java.net M2 repository..."/>
+                    <ant antfile="${api.dir}/build.xml" target="mvn.deploy.snapshot"/>
+                    <echo message="Deploying jsf-impl.jar snapshot to the java.net M2 repository..."/>
+                    <ant antfile="${impl.dir}/build.xml" target="mvn.deploy.snapshot"/>
                 </sequential>
             </then>
             <else>

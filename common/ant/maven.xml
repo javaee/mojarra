@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in complicomance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+
+ Contributor(s):
+
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+<project name="JSF Common" basedir=".">
+
+    <property name="current.dir" value="${jsf.build.home}/common/ant"/>
+
+    <!-- ======================== SNAPSHOT ============================ -->
+
+    <macrodef name="mvn.deploy.snapshot.local">
+        <attribute name="type"/>
+        <sequential>
+            <do.mvn type="@{type}" goal="install" version="${snapshot.version}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mvn.deploy.snapshot">
+        <attribute name="type"/>
+        <sequential>
+            <sequential>
+                <do.mvn type="@{type}" goal="deploy" version="${snapshot.version}"/>
+            </sequential>
+        </sequential>
+    </macrodef>
+
+    <!-- ======================== PROMOTED BUILD =========================== -->
+
+    <macrodef name="mvn.deploy.promoted.local">
+        <attribute name="type"/>
+        <sequential>
+            <do.mvn type="@{type}" goal="install" version="${impl.version.number}-${build.number}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mvn.deploy.promoted">
+        <attribute name="type"/>
+        <sequential>
+            <do.mvn type="@{type}" goal="deploy" version="${impl.version.number}-${build.number}"/>
+        </sequential>
+    </macrodef>
+
+    <!-- ========================= RELEASE BUILD =========================== -->
+
+    <macrodef name="mvn.deploy.release.local">
+        <attribute name="type"/>
+        <sequential>
+            <do.mvn type="@{type}" goal="install" version="${impl.version.number}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="mvn.deploy.release">
+        <attribute name="type"/>
+        <sequential>
+            <do.mvn type="@{type}" goal="deploy" version="${impl.version.number}"/>
+        </sequential>
+    </macrodef>
+
+    <!-- ============================== HELPER MACROS ====================== -->
+
+    <macrodef name="create.pom">
+        <attribute name="template.file"/>
+        <attribute name="output.file"/>
+        <attribute name="version"/>
+        <sequential>
+            <copy file="@{template.file}" tofile="@{output.file}"/>
+            <replace file="@{output.file}"
+                     token="@version@"
+                     value="@{version}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="do.mvn">
+        <attribute name="type"/>
+        <attribute name="version"/>
+        <attribute name="goal"/>
+        <sequential>
+            <if>
+                <equals arg1="@{type}" arg2="api"/>
+                <then>
+                    <create.pom
+                          template.file="${current.dir}/template/jsf-api-pom-template.xml"
+                          output.file="${api.dir}/jsf-api-pom.xml"
+                          version="@{version}"/>
+                    <mkdir dir="${api.dir}/target/classes"/>
+                    <unjar src="${api.dir}/build/lib/jsf-api.jar"
+                           overwrite="yes"
+                           dest="${api.dir}/target/classes"/>
+                    <jsf.mvn pomFile="${api.dir}/jsf-api-pom.xml"
+                             mvnSpecVersion="@{version}"
+                             dir="${api.dir}"
+                             goals="@{goal}"/>
+                    <delete dir="${api.dir}/target"/>
+                    <delete file="${api.dir}/jsf-api-pom.xml"/>
+                </then>
+                <else>
+                     <create.pom
+                          template.file="${current.dir}/template/jsf-impl-pom-template.xml"
+                          output.file="${impl.dir}/jsf-impl-pom.xml"
+                          version="@{version}"/>
+                    <mkdir dir="${impl.dir}/target/classes"/>
+                    <unjar src="${impl.dir}/build/lib/jsf-impl.jar"
+                           overwrite="yes"
+                           dest="${impl.dir}/target/classes"/>
+                    <jsf.mvn pomFile="${impl.dir}/jsf-impl-pom.xml"
+                             mvnSpecVersion="@{version}"
+                             dir="${impl.dir}"
+                             goals="@{goal}"/>
+                    <delete dir="${impl.dir}/target"/>
+                    <delete file="${impl.dir}/jsf-impl-pom.xml"/>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="jsf.mvn">
+        <attribute name="pomFile" default="pom.xml"/>
+        <attribute name="mvnSpecVersion" default="${impl.version}"/>
+        <attribute name="goals"/>
+        <attribute name="dir"/>
+        <attribute name="skipTests" default="true"/>
+        <sequential>
+            <if>
+                <equals arg1="@{skipTests}" arg2="false"/>
+                <then>
+                    <property name="testSkipProperty" value=""/>
+                </then>
+                <else>
+                    <property name="testSkipProperty"
+                              value="-Dmaven.test.skip=true"/>
+                </else>
+            </if>
+            <exec os="SunOS" dir="@{dir}" failonerror="yes"
+                  executable="mvn">
+                <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+            </exec>
+            <exec os="Linux" dir="@{dir}" failonerror="yes"
+                  executable="mvn">
+                <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+            </exec>
+            <exec os="Windows 2000" dir="@{dir}" executable="mvn.exe"
+                  failonerror="yes">
+                <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+            </exec>
+            <exec os="Windows XP" dir="@{dir}" executable="mvn.exe"
+                  failonerror="yes">
+                <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+            </exec>
+            <exec os="Mac OS X" dir="@{dir}" executable="mvn"
+                  failonerror="yes">
+                <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+
+</project>

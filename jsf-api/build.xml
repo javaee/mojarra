@@ -828,20 +828,43 @@ javax.faces.level=ALL
 
     </target>
 
-<target name="push-to-maven-prepare" depends="jars">
 
-  <mkdir dir="${target.dir}/classes" />
-  <unjar src="${build.lib.dir}/${name}.jar" overwrite="yes" 
-         dest="${target.dir}/classes"/>
-  <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${impl.version}" goals="install" />
+    <!--
+       USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO YOUR LOCAL
+       M2 REPOSITORY
+    -->
 
-</target>
+    <target name="mvn.deploy.snapshot.local">
+        <mvn.deploy.snapshot.local type="api"/>
+    </target>
 
-<target name="push-to-maven" depends="push-to-maven-prepare">
-  <tstamp />
-  <echo>deploying to maven repo</echo>
-  <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${impl.version}" goals="deploy" />
-</target>
 
+    <target name="mvn.deploy.promoted.local">
+        <mvn.deploy.promoted.local type="api"/>
+    </target>
+
+
+    <target name="mvn.deploy.release.local">
+        <mvn.deploy.release.local type="api"/>
+    </target>
+
+
+    <!--
+       USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO THE
+       JAVA.NET M2 REPOSITORY
+    -->
+     <target name="mvn.deploy.snapshot">
+        <mvn.deploy.snapshot type="api"/>
+    </target>
+
+
+    <target name="mvn.deploy.promoted">
+        <mvn.deploy.promoted type="api"/>
+    </target>
+
+
+    <target name="mvn.deploy.release">
+        <mvn.deploy.release type="api"/>
+    </target>
 
 </project>
