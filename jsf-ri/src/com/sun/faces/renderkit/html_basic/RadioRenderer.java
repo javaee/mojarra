@@ -45,7 +45,6 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 
 import javax.el.ELException;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UINamingContainer;
