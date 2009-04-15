@@ -167,9 +167,8 @@ public class NavigationCase {
 
 
     /**
-     * RELEASE_PENDING
      * <p class="changed_added_2_0">Construct an absolute URL suitable for a
-     * redirect to this <code>NavigationCase</code> instance using {@link
+     * "redirect" to this <code>NavigationCase</code> instance using {@link
      * javax.faces.application.ViewHandler#getRedirectURL} on the path
      * portion of the url.</p>
      *
@@ -194,11 +193,11 @@ public class NavigationCase {
 
 
     /**
-     * RELEASE_PENDING
      * <p class="changed_added_2_0">Construct an absolute URL suitable for a
-     * bokkmarkable link to this <code>NavigationCase</code> instance using {@link
+     * bookmarkable link to this <code>NavigationCase</code> instance using {@link
      * javax.faces.application.ViewHandler#getBookmarkableURL} on the path
-     * portion of the url.</p>
+     * portion of the url.  This URL may include view parameters specified
+     * as metadata within the view.</p>
      *
      * @param context the {@link FacesContext} for the current request
      *
