@@ -55,7 +55,7 @@ public class AjaxTagEventWrappingTestCase extends AbstractTestCase {
     }
 
 
-    /**
+    /*
      * Return the tests included in this test suite.
      */
     public static Test suite() {
@@ -76,42 +76,42 @@ public class AjaxTagEventWrappingTestCase extends AbstractTestCase {
         System.out.println("Start ajax tag event wrapping test");
 
         // Check initial values
-        assertTrue(check("out1","0"));
-        assertTrue(check("say","init"));
-        assertTrue(check("paramOut",""));
-        assertTrue(check("out2","1"));
+        checkTrue("out1","0");
+        checkTrue("say","init");
+        checkTrue("paramOut","");
+        checkTrue("out2","1");
 
         // Press Count
         HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById("button1");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("out1","2"));
-        assertTrue(check("out2","1"));
+        checkTrue("out1","2");
+        checkTrue("out2","1");
 
         // Press Say
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("button2");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("say","1"));
-        assertTrue(check("out1","2"));
-        assertTrue(check("out2","1"));
+        checkTrue("say","1");
+        checkTrue("out1","2");
+        checkTrue("out2","1");
 
         // Press Count and Say
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("button3");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("say","2"));
-        assertTrue(check("out1","3"));
-        assertTrue(check("out2","1"));
+        checkTrue("say","2");
+        checkTrue("out1","3");
+        checkTrue("out2","1");
 
         // Press Param
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("button4");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("say","init"));
-        assertTrue(check("out1","4"));
-        assertTrue(check("out2","5"));
-        assertTrue(check("paramOut","testval"));
+        checkTrue("say","init");
+        checkTrue("out1","4");
+        checkTrue("out2","5");
+        checkTrue("paramOut","testval");
 
         // Reset Page
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("reset");
@@ -120,19 +120,19 @@ public class AjaxTagEventWrappingTestCase extends AbstractTestCase {
         lastpage = (HtmlPage) button.click();
 
         // Check initial values
-        assertTrue(check("out1","0"));
-        assertTrue(check("say","init"));
-        assertTrue(check("paramOut",""));
-        assertTrue(check("out2","1"));
+        checkTrue("out1","0");
+        checkTrue("say","init");
+        checkTrue("paramOut","");
+        checkTrue("out2","1");
 
         // Press Count and Param
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("button5");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("out1","2"));
-        assertTrue(check("say","init"));
-        assertTrue(check("paramOut","testval"));
-        assertTrue(check("out2","1"));
+        checkTrue("out1","2");
+        checkTrue("say","init");
+        checkTrue("paramOut","testval");
+        checkTrue("out2","1");
 
         // Reset Page
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("reset");
@@ -141,19 +141,19 @@ public class AjaxTagEventWrappingTestCase extends AbstractTestCase {
         lastpage = (HtmlPage) button.click();
 
         // Check initial values
-        assertTrue(check("out1","0"));
-        assertTrue(check("say","init"));
-        assertTrue(check("paramOut",""));
-        assertTrue(check("out2","1"));
+        checkTrue("out1","0");
+        checkTrue("say","init");
+        checkTrue("paramOut","");
+        checkTrue("out2","1");
 
         // Press Count and Say and Param
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("button6");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("out1","2"));
-        assertTrue(check("say","1"));
-        assertTrue(check("paramOut","testval"));
-        assertTrue(check("out2","1"));
+        checkTrue("out1","2");
+        checkTrue("say","1");
+        checkTrue("paramOut","testval");
+        checkTrue("out2","1");
 
         // leaving out button 7
 
@@ -164,10 +164,10 @@ public class AjaxTagEventWrappingTestCase extends AbstractTestCase {
         lastpage = (HtmlPage) button.click();
 
         // Check initial values
-        assertTrue(check("out1","0"));
-        assertTrue(check("say","init"));
-        assertTrue(check("paramOut",""));
-        assertTrue(check("out2","1"));
+        checkTrue("out1","0");
+        checkTrue("say","init");
+        checkTrue("paramOut","");
+        checkTrue("out2","1");
 
 
         // Check ajax checkbox
@@ -175,24 +175,24 @@ public class AjaxTagEventWrappingTestCase extends AbstractTestCase {
         lastpage = (HtmlPage)checked.setChecked(true);
 
         System.out.println(getText("checkedvalue1"));
-        assertTrue(check("checkedvalue1","true"));
-        assertTrue(check("out2","1"));
+        checkTrue("checkedvalue1","true");
+        checkTrue("out2","1");
 
         // Check ajax + userwrap checkbox
         checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox2"));
         lastpage = (HtmlPage)checked.setChecked(true);
 
-        assertTrue(check("checkedvalue2","true"));
-        assertTrue(check("say","1"));
-        assertTrue(check("out2","1"));
+        checkTrue("checkedvalue2","true");
+        checkTrue("say","1");
+        checkTrue("out2","1");
 
         // Check user onchange checkbox
         checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox3"));
         lastpage = (HtmlPage)checked.setChecked(true);
 
-        assertTrue(check("checkedvalue3","false"));
-        assertTrue(check("say","2"));
-        assertTrue(check("out2","1"));
+        checkTrue("checkedvalue3","false");
+        checkTrue("say","2");
+        checkTrue("out2","1");
 
     }
 

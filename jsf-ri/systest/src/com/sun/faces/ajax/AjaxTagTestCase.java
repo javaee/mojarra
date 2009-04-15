@@ -55,7 +55,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
     }
 
 
-    /**
+    /*
      * Return the tests included in this test suite.
      */
     public static Test suite() {
@@ -75,75 +75,75 @@ public class AjaxTagTestCase extends AbstractTestCase {
         getPage("/faces/ajax/ajaxTagCount.xhtml");
         System.out.println("Start ajax count test");
         // First we'll check the first page was output correctly
-        assertTrue(check("countForm:out1","0"));
-        assertTrue(check("out2","1"));
+        checkTrue("countForm:out1","0");
+        checkTrue("out2","1");
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
-        assertTrue(check("countForm:out1","2"));
+        checkTrue("countForm:out1","2");
 
         // Check that the request did NOT update the rest of the page.
-        assertTrue(check("out2","1"));
+        checkTrue("out2","1");
     }
 
     public void testAjaxTagMulti() throws Exception {
         getPage("/faces/ajax/ajaxTagMulti.xhtml");
         System.out.println("Start ajax tag multi test");
         // First we'll check the first page was output correctly
-        assertTrue(check("countForm:out1","0"));
-        assertTrue(check("countForm:out2","1"));
-        assertTrue(check("countForm:out3","2"));
-        assertTrue(check("outside","3"));
+        checkTrue("countForm:out1","0");
+        checkTrue("countForm:out2","1");
+        checkTrue("countForm:out3","2");
+        checkTrue("outside","3");
 
         // Press Count 1
         HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button1");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("countForm:out1","4"));
+        checkTrue("countForm:out1","4");
 
         // Press Count 2
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button2");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("countForm:out1","5"));
-        assertTrue(check("countForm:out2","6"));
+        checkTrue("countForm:out1","5");
+        checkTrue("countForm:out2","6");
 
         // Press Count all 3
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button3");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("countForm:out1","7"));
-        assertTrue(check("countForm:out2","8"));
-        assertTrue(check("countForm:out3","9"));
+        checkTrue("countForm:out1","7");
+        checkTrue("countForm:out2","8");
+        checkTrue("countForm:out3","9");
 
         // Check that the request did NOT update the rest of the page.
-        assertTrue(check("outside","3"));
+        checkTrue("outside","3");
 
         // Press Count form
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button4");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("countForm:out1","10"));
-        assertTrue(check("countForm:out2","11"));
-        assertTrue(check("countForm:out3","12"));
+        checkTrue("countForm:out1","10");
+        checkTrue("countForm:out2","11");
+        checkTrue("countForm:out3","12");
 
         // Check that the request did NOT update the rest of the page.
-        assertTrue(check("outside","3"));
+        checkTrue("outside","3");
 
         // Press Refresh form
         button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:reset");
         lastpage = (HtmlPage) button.click();
 
-        assertTrue(check("countForm:out1","0"));
-        assertTrue(check("countForm:out2","1"));
-        assertTrue(check("countForm:out3","2"));
+        checkTrue("countForm:out1","0");
+        checkTrue("countForm:out2","1");
+        checkTrue("countForm:out3","2");
 
 
         // Check that the request did NOT update the rest of the page.
-        assertTrue(check("outside","3"));
+        checkTrue("outside","3");
     }
 
     public void testAjaxTagDefaultsButton() throws Exception {
@@ -161,95 +161,95 @@ public class AjaxTagTestCase extends AbstractTestCase {
         String reset4 = "form1:reset4";
 
         // First, we'll test to make sure the initial values come out right
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"1"));
-        assertTrue(check(out3,"2"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"1");
+        checkTrue(out3,"2");
 
         // Reload the page
         HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"3"));
-        assertTrue(check(out2,"4"));
-        assertTrue(check(out3,"5"));
+        checkTrue(out1,"3");
+        checkTrue(out2,"4");
+        checkTrue(out3,"5");
 
         // Now, make the Ajax call to first reset button
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reset1);
         lastpage = (HtmlPage) button.click();
 
         // Check that the ajax request succeeds
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"4"));
-        assertTrue(check(out3,"5"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"4");
+        checkTrue(out3,"5");
 
         // Reload the page
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"1"));
-        assertTrue(check(out2,"2"));
-        assertTrue(check(out3,"3"));
+        checkTrue(out1,"1");
+        checkTrue(out2,"2");
+        checkTrue(out3,"3");
 
         // Now, make the Ajax call to second reset button
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reset2);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"2"));
-        assertTrue(check(out3,"3"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"2");
+        checkTrue(out3,"3");
 
         // Reload the page
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"1"));
-        assertTrue(check(out2,"2"));
-        assertTrue(check(out3,"3"));
+        checkTrue(out1,"1");
+        checkTrue(out2,"2");
+        checkTrue(out3,"3");
 
         // Now, make the Ajax call to third reset button
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reset3);
         lastpage = (HtmlPage) button.click();
 
         // Check the page did *not* update
-        assertTrue(check(out1,"1"));
-        assertTrue(check(out2,"2"));
-        assertTrue(check(out3,"3"));
+        checkTrue(out1,"1");
+        checkTrue(out2,"2");
+        checkTrue(out3,"3");
 
         // Now, Reload the page, to check that reset3 actually executed
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"1"));
-        assertTrue(check(out3,"2"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"1");
+        checkTrue(out3,"2");
 
         // Reload the page
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"3"));
-        assertTrue(check(out2,"4"));
-        assertTrue(check(out3,"5"));
+        checkTrue(out1,"3");
+        checkTrue(out2,"4");
+        checkTrue(out3,"5");
 
         // Now, make the Ajax call to fourth reset button
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reset4);
         lastpage = (HtmlPage) button.click();
 
         // Check the page did *not* update
-        assertTrue(check(out1,"3"));
-        assertTrue(check(out2,"4"));
-        assertTrue(check(out3,"5"));
+        checkTrue(out1,"3");
+        checkTrue(out2,"4");
+        checkTrue(out3,"5");
 
         // Now, Reload the page, to check that reset4 actually executed
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"1"));
-        assertTrue(check(out3,"2"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"1");
+        checkTrue(out3,"2");
     }
 
     public void testAjaxTagDefaultsButtonNoPrepend() throws Exception {
@@ -268,95 +268,95 @@ public class AjaxTagTestCase extends AbstractTestCase {
 
 
         // First, we'll test to make sure the initial values come out right
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"1"));
-        assertTrue(check(out3,"2"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"1");
+        checkTrue(out3,"2");
 
         // Reload the page
         HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"3"));
-        assertTrue(check(out2,"4"));
-        assertTrue(check(out3,"5"));
+        checkTrue(out1,"3");
+        checkTrue(out2,"4");
+        checkTrue(out3,"5");
 
         // Now, make the Ajax call to first reset button
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reset1);
         lastpage = (HtmlPage) button.click();
 
         // Check that the ajax request succeeds
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"4"));
-        assertTrue(check(out3,"5"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"4");
+        checkTrue(out3,"5");
 
         // Reload the page
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"1"));
-        assertTrue(check(out2,"2"));
-        assertTrue(check(out3,"3"));
+        checkTrue(out1,"1");
+        checkTrue(out2,"2");
+        checkTrue(out3,"3");
 
         // Now, make the Ajax call to second reset button
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reset2);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"2"));
-        assertTrue(check(out3,"3"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"2");
+        checkTrue(out3,"3");
 
         // Reload the page
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"1"));
-        assertTrue(check(out2,"2"));
-        assertTrue(check(out3,"3"));
+        checkTrue(out1,"1");
+        checkTrue(out2,"2");
+        checkTrue(out3,"3");
 
         // Now, make the Ajax call to third reset button
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reset3);
         lastpage = (HtmlPage) button.click();
 
         // Check the page did *not* update
-        assertTrue(check(out1,"1"));
-        assertTrue(check(out2,"2"));
-        assertTrue(check(out3,"3"));
+        checkTrue(out1,"1");
+        checkTrue(out2,"2");
+        checkTrue(out3,"3");
 
         // Now, Reload the page, to check that reset3 actually executed
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"1"));
-        assertTrue(check(out3,"2"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"1");
+        checkTrue(out3,"2");
 
         // Reload the page
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        assertTrue(check(out1,"3"));
-        assertTrue(check(out2,"4"));
-        assertTrue(check(out3,"5"));
+        checkTrue(out1,"3");
+        checkTrue(out2,"4");
+        checkTrue(out3,"5");
 
         // Now, make the Ajax call to fourth reset button
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reset4);
         lastpage = (HtmlPage) button.click();
 
         // Check the page did *not* update
-        assertTrue(check(out1,"3"));
-        assertTrue(check(out2,"4"));
-        assertTrue(check(out3,"5"));
+        checkTrue(out1,"3");
+        checkTrue(out2,"4");
+        checkTrue(out3,"5");
 
         // Now, Reload the page, to check that reset4 actually executed
         button = (HtmlSubmitInput) lastpage.getHtmlElementById(reload);
         lastpage = (HtmlPage) button.click();
-        assertTrue(check(out1,"0"));
-        assertTrue(check(out2,"1"));
-        assertTrue(check(out3,"2"));
+        checkTrue(out1,"0");
+        checkTrue(out2,"1");
+        checkTrue(out3,"2");
     }
 
     public void testAjaxTagDefaultsEdit() throws Exception {
@@ -378,13 +378,13 @@ public class AjaxTagTestCase extends AbstractTestCase {
         String refresh = "form1:refresh";
 
         // First, we'll test to make sure the initial values come out right
-        assertTrue(check(out1,"echo"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
-        assertTrue(check(echo1Out,""));
-        assertTrue(check(echo2Out,""));
-        assertTrue(check(echo3Out,""));
-        assertTrue(check(echo4Out,""));
+        checkTrue(out1,"echo");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
+        checkTrue(echo1Out,"");
+        checkTrue(echo2Out,"");
+        checkTrue(echo3Out,"");
+        checkTrue(echo4Out,"");
 
         // Next, enter data into first field
         HtmlTextInput echo1 = ((HtmlTextInput)lastpage.getHtmlElementById(edit1));
@@ -395,10 +395,10 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Refresh the panel to check the listener fired
         HtmlSubmitInput button = lastpage.getHtmlElementById(refresh);
         button.click();
-        assertTrue(check(echo1Out,"test1"));
-        assertTrue(check(out1,"test1"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
+        checkTrue(echo1Out,"test1");
+        checkTrue(out1,"test1");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
 
         // Next, enter data into second field
         HtmlTextInput echo2 = ((HtmlTextInput)lastpage.getHtmlElementById(edit2));
@@ -409,10 +409,10 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Refresh the panel to check the listener fired
         button = lastpage.getHtmlElementById(refresh);
         button.click();
-        assertTrue(check(echo2Out,"test2"));
-        assertTrue(check(out1,"test2"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
+        checkTrue(echo2Out,"test2");
+        checkTrue(out1,"test2");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
 
         // Next, enter data into third field
         HtmlTextInput echo3 = ((HtmlTextInput)lastpage.getHtmlElementById(edit3));
@@ -423,10 +423,10 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Refresh the panel to check the listener fired
         button = lastpage.getHtmlElementById(refresh);
         button.click();
-        assertTrue(check(echo3Out,"test3"));
-        assertTrue(check(out1,"test3"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
+        checkTrue(echo3Out,"test3");
+        checkTrue(out1,"test3");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
 
         // Next, enter data into the fourth field
         HtmlTextInput echo4 = ((HtmlTextInput)lastpage.getHtmlElementById(edit4));
@@ -437,10 +437,10 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Refresh the panel to check the listener fired
         button = lastpage.getHtmlElementById(refresh);
         button.click();
-        assertTrue(check(echo4Out,"test4"));
-        assertTrue(check(out1,"test4"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
+        checkTrue(echo4Out,"test4");
+        checkTrue(out1,"test4");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
 
 
     }
@@ -463,13 +463,13 @@ public class AjaxTagTestCase extends AbstractTestCase {
         String refresh = "refresh";
 
         // First, we'll test to make sure the initial values come out right
-        assertTrue(check(out1,"echo"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
-        assertTrue(check(echo1Out,""));
-        assertTrue(check(echo2Out,""));
-        assertTrue(check(echo3Out,""));
-        assertTrue(check(echo4Out,""));
+        checkTrue(out1,"echo");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
+        checkTrue(echo1Out,"");
+        checkTrue(echo2Out,"");
+        checkTrue(echo3Out,"");
+        checkTrue(echo4Out,"");
 
         // Next, enter data into first field
         HtmlTextInput echo1 = ((HtmlTextInput)lastpage.getHtmlElementById(edit1));
@@ -480,10 +480,10 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Refresh the panel to check the listener fired
         HtmlSubmitInput button = lastpage.getHtmlElementById(refresh);
         button.click();
-        assertTrue(check(echo1Out,"test1"));
-        assertTrue(check(out1,"test1"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
+        checkTrue(echo1Out,"test1");
+        checkTrue(out1,"test1");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
 
         // Next, enter data into second field
         HtmlTextInput echo2 = ((HtmlTextInput)lastpage.getHtmlElementById(edit2));
@@ -494,10 +494,10 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Refresh the panel to check the listener fired
         button = lastpage.getHtmlElementById(refresh);
         button.click();
-        assertTrue(check(echo2Out,"test2"));
-        assertTrue(check(out1,"test2"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
+        checkTrue(echo2Out,"test2");
+        checkTrue(out1,"test2");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
 
         // Next, enter data into third field
         HtmlTextInput echo3 = ((HtmlTextInput)lastpage.getHtmlElementById(edit3));
@@ -508,10 +508,10 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Refresh the panel to check the listener fired
         button = lastpage.getHtmlElementById(refresh);
         button.click();
-        assertTrue(check(echo3Out,"test3"));
-        assertTrue(check(out1,"test3"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
+        checkTrue(echo3Out,"test3");
+        checkTrue(out1,"test3");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
 
         // Next, enter data into the fourth field
         HtmlTextInput echo4 = ((HtmlTextInput)lastpage.getHtmlElementById(edit4));
@@ -522,10 +522,10 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Refresh the panel to check the listener fired
         button = lastpage.getHtmlElementById(refresh);
         button.click();
-        assertTrue(check(echo4Out,"test4"));
-        assertTrue(check(out1,"test4"));
-        assertTrue(check(out2,"echo"));
-        assertTrue(check(out3,"echo"));
+        checkTrue(echo4Out,"test4");
+        checkTrue(out1,"test4");
+        checkTrue(out2,"echo");
+        checkTrue(out3,"echo");
 
     }
 
@@ -534,26 +534,26 @@ public class AjaxTagTestCase extends AbstractTestCase {
         System.out.println("Start ajax tag event test");
 
         // First we'll check the first page was output correctly
-        assertTrue(check("countForm:out1","0"));
-        assertTrue(check("out2","1"));
+        checkTrue("countForm:out1","0");
+        checkTrue("out2","1");
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button1");
         lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
-        assertTrue(check("countForm:out1","2"));
+        checkTrue("countForm:out1","2");
 
         // Check that the request did NOT update the rest of the page.
-        assertTrue(check("out2","1"));
+        checkTrue("out2","1");
 
         // Check that events were written to the page.
         String statusArea = "Name: countForm:button1 Event: begin ";
         statusArea = statusArea + "Name: countForm:button1 Event: complete " ;
         statusArea = statusArea + "Name: countForm:button1 Event: success " ;
         //System.out.println(statusArea);
-        //System.out.println(getText("statusArea"));
-        assertTrue(check("statusArea",statusArea));
+        //System.out.println(getText("statusArea");
+        checkTrue("statusArea",statusArea);
     }
 
     public void testAjaxTagDisabled() throws Exception {
@@ -561,28 +561,28 @@ public class AjaxTagTestCase extends AbstractTestCase {
         System.out.println("Start ajax tag Disabled test");
 
         // First we'll check the first page was output correctly
-        assertTrue(check("countForm:out1","0"));
-        assertTrue(check("out2","1"));
+        checkTrue("countForm:out1","0");
+        checkTrue("out2","1");
 
         // Submit the ajax request
         HtmlButtonInput button1 = (HtmlButtonInput) lastpage.getHtmlElementById("countForm:button1");
         lastpage = (HtmlPage) button1.click();
 
         // Check that the button does nothing
-        assertTrue(check("countForm:out1","0"));
+        checkTrue("countForm:out1","0");
 
         // Check that the request did NOT update the rest of the page.
-        assertTrue(check("out2","1"));
+        checkTrue("out2","1");
 
         // Submit the ajax request
         HtmlButtonInput button2 = (HtmlButtonInput) lastpage.getHtmlElementById("countForm:button2");
         lastpage = (HtmlPage) button2.click();
 
         // Check that the request succeeds
-        assertTrue(check("countForm:out1","2"));
+        checkTrue("countForm:out1","2");
 
         // Check that the request did NOT update the rest of the page.
-        assertTrue(check("out2","1"));
+        checkTrue("out2","1");
 
     }
 }
