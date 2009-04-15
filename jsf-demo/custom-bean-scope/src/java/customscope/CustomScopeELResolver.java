@@ -76,7 +76,7 @@ public class CustomScopeELResolver extends ELResolver {
             //noinspection unchecked
             return lookup(elContext, (Map<String,Object>) base, property.toString());
         } else if (base == null) {
-            // bean has already been created and is in scope.
+            // bean may have already been created and is in scope.
             // check to see if the bean is present
             return lookup(elContext, getScope(elContext), property.toString());
         }
