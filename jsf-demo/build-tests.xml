@@ -42,6 +42,7 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <property name="build" value="${basedir}/test/build"/>
+    <property name="customscope.context.path" value="/custom-bean-scope"/>
     <property name="guessNumber.context.path" value="/jsf-guessNumber"/>
     <property name="components.context.path" value="/jsf-components"/>
     <property name="cardemo.context.path" value="/jsf-cardemo"/>
@@ -55,6 +56,8 @@
 
 
     <!-- Demo WAR files -->
+    <property name="custom-bean-scope.war"
+              value="${basedir}/custom-bean-scope/build/custom-bean-scope.war"/>
     <property name="components.war"
               value="${basedir}/components/build/jsf-components.war"/>
     <property name="guessNumber.war"
@@ -189,6 +192,11 @@
                    demo-name="mojarra_ext"
                    tests="mojarra_ext"
                    context-path="${mojarra_ext.context.path}"/>
+
+        <run-tests demo-war="${custom-bean-scope.war}"
+                   demo-name="custom-bean-scope"
+                   tests="customscope"
+                   context-path="${customscope.context.path}"/>
 
 
     </target>

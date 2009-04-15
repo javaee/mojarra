@@ -90,6 +90,7 @@
         <delete dir="${dist.home}"/>
         <delete dir="${basedir}/test/build"/>
 
+        <ant target="clean" dir="custom-bean-scope"/>
         <ant target="clean" dir="guessNumber"/>
         <ant target="clean" dir="guessNumber2.0"/>
         <ant target="clean" dir="basic-ezcomp"/>
@@ -136,6 +137,8 @@
               file="${basedir}/ajax-queue/build/ajax-queue.war"/>
         <copy todir="${dist.home}/samples"
               file="${basedir}/ifnavigation/build/ifnavigation.war"/>
+         <copy todir="${dist.home}/samples"
+              file="${basedir}/custom-bean-scope/build/custom-bean-scope.war"/>
 
         <!-- RELEASE_PENDING need to clean up this build -->
 
@@ -182,6 +185,9 @@
          </copy>
          <copy todir="${dist.home}/samples/ajax-queue" includeEmptyDirs="false">
             <fileset dir="${basedir}/ajax-queue" excludes="build.xml"/>
+         </copy>
+         <copy todir="${dist.home}/samples/custom-bean-scope" includeEmptyDirs="false">
+            <fileset dir="${basedir}/custom-bean-scope" excludes="build.xml"/>
          </copy>
         <!--
          <copy todir="${dist.home}/samples/ezcomp00" includeEmptyDirs="false">
