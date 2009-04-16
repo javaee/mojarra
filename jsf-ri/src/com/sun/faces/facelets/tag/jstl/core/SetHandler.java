@@ -168,7 +168,7 @@ public class SetHandler extends TagHandlerImpl {
                 ctx.getVariableMapper().setVariable(varStr, veObj);
             }
         } else  {
-            assert(null == this.var);
+           
             // Otherwise, target, property and value must be set
             if ((null == this.target || null == this.target.getValue() ||
                  this.target.getValue().length() <= 0) ||
