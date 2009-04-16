@@ -36,7 +36,7 @@
  holder.
 -->
 
-<project name="JSF Common" basedir=".">
+<project name="JSF Maven" basedir=".">
 
     <property name="current.dir" value="${jsf.build.home}/common/ant"/>
 
