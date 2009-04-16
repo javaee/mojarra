@@ -52,6 +52,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
@@ -91,9 +93,13 @@ public class AnnotationScanner {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
+    private static final Pattern FACES_CONFIG_PATTERN =
+          Pattern.compile("^META-INF/[a-zA-Z_0-9-]+\\.faces-config.xml");
+
     private static final String WEB_INF_CLASSES = "/WEB-INF/classes/";
     private static final String WEB_INF_LIB = "/WEB-INF/lib/";
     private static final String FACES_CONFIG_XML = "META-INF/faces-config.xml";
+    private static final String META_INF_PREFIX = "META-INF/";
 
     private static final Set<String> FACES_ANNOTATIONS;
     private static final Set<Class<? extends Annotation>> FACES_ANNOTATION_TYPE;
@@ -324,8 +330,9 @@ public class AnnotationScanner {
         if (entries != null && !entries.isEmpty()) {
             for (String entry : entries) {
                 if (entry.endsWith(".jar")) {
+                    URL url = null;
                     try {
-                        URL url = sc.getResource(entry);
+                        url = sc.getResource(entry);
                         StringBuilder sb = new StringBuilder(32);
                         sb.append("jar:").append(url.toString()).append("!/");
                         url = new URL(sb.toString());
@@ -337,6 +344,23 @@ public class AnnotationScanner {
                                 jars = new ArrayList<JarFile>();
                             }
                             jars.add(jarFile);
+                        } else {
+                            // search the jar for files in META-INF ending
+                            // with .faces-config.xml.
+                            for (Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements(); ) {
+                                JarEntry ent = e.nextElement();
+                                String entryName = ent.getName();
+                                if (entryName.startsWith(META_INF_PREFIX)) {
+                                    Matcher m = FACES_CONFIG_PATTERN.matcher(entryName);
+                                    if (m.matches()) {
+                                        if (jars == null) {
+                                            jars = new ArrayList<JarFile>();
+                                        }
+                                        jars.add(jarFile);
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     } catch (Exception e) {
                         throw new FacesException(e);

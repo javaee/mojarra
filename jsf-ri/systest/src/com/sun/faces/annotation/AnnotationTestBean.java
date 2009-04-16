@@ -207,6 +207,12 @@ public class AnnotationTestBean {
         assertNotNull(ApplicationAssociate.getInstance(ctx.getExternalContext())
               .getNamedEventManager().getNamedEvent("explicitEventName"));
 
+        Object bean = ctx.getApplication().evaluateExpressionGet(ctx,
+                                                                 "#{annotatedBean4}",
+                                                                 Object.class);
+        assertNotNull(bean);
+        assertEquals("com.sun.faces.annotation.AnnotatedBean4", bean.getClass().getName());
+
     }
 
     private void assertNotNull(Object v) {
