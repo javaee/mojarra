@@ -200,8 +200,6 @@ public class RenderKitImpl extends RenderKit {
             throw new NullPointerException(message);
         }   
         
-        assert(behaviorRenderers != null);
-        
         return ((behaviorRenderers != null) ? behaviorRenderers.get(behaviorRendererType) : null);
             
     }   
