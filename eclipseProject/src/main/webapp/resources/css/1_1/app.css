@@ -1,0 +1,82 @@
+body {
+	background-color: white;
+	color: navy;
+	font-size: medium;
+}
+
+span.error {
+    color: white;
+	font-size: medium;
+}
+
+
+h1 {
+	font-family: Arial, sanserif;
+	color: orange;
+	font-size: x-large;
+}
+
+h2 {
+	font-family: Arial, sanserif;
+	color: orange;
+	font-size: large;
+}
+
+.errorMsgs {
+	color: red;
+}
+
+.infoMsgs {
+	color: blue;
+}
+
+.closedStory, .openedStory {
+	width:300px;
+	height:150px;
+	border:1px solid gray;
+	text-align: center;
+	padding: 10px;
+	margin: 10px;
+}
+
+.closedStory {
+	background-color: lightgray;	
+}
+
+.openedStory {
+	background-color: lightyellow;	
+}
+
+.closedTask, .openedTask {
+	width:300px;
+	height:100px;
+	border:1px solid gray;
+	text-align: center;	
+	padding: 10px;
+	margin: 10px;
+	overflow: auto;
+}
+
+.closedTask {
+	background-color: lightgray;	
+}
+
+.openedTask {
+	background-color: lightyellow;
+}
+
+.numericColumn, .textColumn, .componentColumn {
+	width: 200px;
+}
+
+.numericColumn {
+	text-align: right;
+}
+
+.textColumn {
+	text-align: left;
+}
+
+.componentColumn {
+	text-align: center;
+}

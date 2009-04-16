@@ -1,0 +1,13 @@
+body {
+	background-color: orange;
+}
+
+span.error {
+    color: red;
+    font-size: 22px;
+}
+
+h1 {
+	font-family: serif;
+	color: white;
+}
