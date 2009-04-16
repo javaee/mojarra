@@ -46,7 +46,6 @@ public class NamedEventManager {
     }
 
     public Class<? extends SystemEvent> getNamedEvent(String name) {
-        String foo = namedEvents.toString();
         Class<? extends SystemEvent> namedEvent = namedEvents.get(name);
         if (namedEvent == null) {
             try {
