@@ -512,7 +512,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
         this.transientValue = transientValue;
     }
 
-    class JsfAwareMessageInterpolator implements MessageInterpolator {
+    static class JsfAwareMessageInterpolator implements MessageInterpolator {
 
         private FacesContext context;
         private MessageInterpolator delegate;

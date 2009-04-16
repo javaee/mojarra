@@ -127,7 +127,7 @@ class ValueExpressionAnalyzer {
         };
     }
 
-    private class InterceptingResolver extends ELResolver {
+    private static class InterceptingResolver extends ELResolver {
 
         private ELResolver delegate;
         private ValueReference valueReference;
