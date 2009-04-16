@@ -669,7 +669,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
         if (value.charAt(0) == '@') {
             // These are very common, so we use shared copies
             // of these collections instead of re-creating.
-            List<String> list = null;
+            List<String> list;
 
             if (ALL.equals(value)) {
                 list = ALL_LIST;
@@ -681,7 +681,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
                 list = NONE_LIST;
             } else {
                 // RELEASE_PENDING i18n ;
-                throw new FacesException(value.toString()
+                throw new FacesException(value
                                      + " : Invalid id keyword specified for '"
                                      + propertyName
                                      + "' attribute");
