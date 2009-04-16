@@ -95,7 +95,7 @@ public class TasksMB extends AppMB {
 	 */
 	public String edit() {
 		this.taskToSave = (Task) this.dmTasks.getRowData();
-		getFacesUtil().addGlobalInfoMessage("Edite a tarefa selecionada.", String.format("Edite a tarefa %s. Clique no botão %s para terminar.", this.taskToSave.getName(),"save"));
+		getFacesUtil().addGlobalInfoMessage("Edite a tarefa selecionada.", String.format("Edite a tarefa %s. Clique no botï¿½o %s para terminar.", this.taskToSave.getName(),"save"));
 		return OUTCOME.SAME_PAGE.getValue();
 	}
 
