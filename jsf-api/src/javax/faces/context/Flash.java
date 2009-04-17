@@ -317,13 +317,23 @@ public abstract class Flash implements Map<String, Object> {
 
 
     /**
-     * RELEASE_PENDING (docs)
+     * <p class="changed_added_2_0">Called before the execution of every
+     * lifecycle phase, this method allows implementations to take the
+     * necessary actions to provide the Flash scope contract as it
+     * applies to the request procesing lifecycle. </p>
+     *
+     * @param ctx the <code>FacesContext</code> for this request.
      */
     public abstract void doPrePhaseActions(FacesContext ctx);
 
 
     /**
-     * RELEASE_PENDING (docs)
+     * <p class="changed_added_2_0">Called after the execution of every
+     * lifecycle phase, this method allows implementations to take the
+     * necessary actions to provide the Flash scope contract as it
+     * applies to the request procesing lifecycle. </p>
+     *
+     * @param ctx the <code>FacesContext</code> for this request.
      */
     public abstract void doPostPhaseActions(FacesContext ctx);
     
