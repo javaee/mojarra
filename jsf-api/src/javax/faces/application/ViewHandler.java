@@ -278,7 +278,10 @@ public abstract class ViewHandler {
      * values of the  <code>locale</code> and <code>renderKitId</code>,
      * proeprties, respectively, of the newly created
      * <code>UIViewRoot</code>.</p>
-
+     *
+     * RELEASE_PENDING (edburns) document that it's the responsibility
+     * of create view to set the view ID in the viewroot
+     *
      * <p class="changed_added_2_0">If the view is written using
      * Facelets, the markup comprising the view must be executed, with
      * the UIComponent instances in the view being encountered in the
@@ -306,19 +309,26 @@ public abstract class ViewHandler {
     /**
      * <p class="changed_added_2_0">Derive and return the viewId from
      * the current request, or the argument input by following the
-     * @since 2.0
      * algorithm defined in specification section JSF.7.5.2.</p>
      *
-     * @param context the <code>FacesContext</code> for this request
-
-     * @param input the input candidate <code>viewId</code> to derive,
-     * or <code>null</code> to use the information in the current
-     * request to derive the <code>viewId</code>.
+     * RELEASE_PENDING (if a view ID cannot be derived this method should
+     *  return null to signify such)
      *
+     * <p>The default implementation of this method simply returns
+     * rawViewId unchanged.</p>
+     *
+     * @param context the <code>FacesContext</code> for this request
+     *
+     * @param rawViewId the <code>viewId</code> to derive,
+     *
+     * @since 2.0
      */
-    public String deriveViewId(FacesContext context, String input) {
-        throw new UnsupportedOperationException("The default implementation must override this method");
+    public String deriveViewId(FacesContext context, String rawViewId) {
+
+        return rawViewId;
+
     }
+    
 
     /**
      * <p class="changed_modified_2_0">If the value returned from this
@@ -471,10 +481,7 @@ public abstract class ViewHandler {
      * exceptions thrown as a result of invoking that method must not be
      * swallowed.</p>
      * 
-     * <p>An implementation is provided that will throw
-     * <code>UnsupportedOperationException</code>.  A Faces implementation
-     * compliant with version 2.0 and beyond of the specification must 
-     * override this method.</p>
+     * <p>The default implementation of this method returns null.</p>
      * 
      * </div>
 
@@ -483,7 +490,7 @@ public abstract class ViewHandler {
     public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context,
                                                               String viewId) {
 
-        throw new UnsupportedOperationException();
+        return null;
 
     }
 

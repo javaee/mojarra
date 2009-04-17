@@ -99,27 +99,21 @@ public class RenderResponsePhase extends Phase {
 
             ViewHandler vh = facesContext.getApplication().getViewHandler();
 
-            try {
-                ViewDeclarationLanguage pdl =
-                      vh.getViewDeclarationLanguage(facesContext,
+            ViewDeclarationLanguage vdl =
+                  vh.getViewDeclarationLanguage(facesContext,
                                                     facesContext.getViewRoot().getViewId());
-                pdl.buildView(facesContext, facesContext.getViewRoot());
-            } catch (UnsupportedOperationException uoe) {
-                // if no PDL is available assume the older VH has handled things
-                // appropriately
+            if (vdl != null) {
+                vdl.buildView(facesContext, facesContext.getViewRoot());
             }
 
-            boolean viewIdsUnchanged = false;
-            String 
-                    beforePublishViewId = null, 
-                    afterPublishViewId = null;
+            boolean viewIdsUnchanged;
             do {
-                beforePublishViewId = facesContext.getViewRoot().getViewId();
+                String beforePublishViewId = facesContext.getViewRoot().getViewId();
                 // the before render event on the view root is a special case to keep door open for navigation
                 // this must be called *after* PDL.buildView() and before VH.renderView()
                 facesContext.getApplication().publishEvent(PreRenderViewEvent.class,
                         facesContext.getViewRoot());
-                afterPublishViewId = facesContext.getViewRoot().getViewId();
+                String afterPublishViewId = facesContext.getViewRoot().getViewId();
                 viewIdsUnchanged = beforePublishViewId == null && afterPublishViewId == null ||
                         (beforePublishViewId != null && afterPublishViewId != null) &&
                         beforePublishViewId.equals(afterPublishViewId);

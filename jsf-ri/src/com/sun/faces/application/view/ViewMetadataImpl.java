@@ -40,16 +40,13 @@ import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.application.ApplicationAssociate;
 
-import java.util.Collection;
 
 import java.io.IOException;
 import javax.faces.view.ViewMetadata;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIViewParameter;
 import javax.faces.context.FacesContext;
-import javax.faces.context.FacesContextWrapper;
-import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.FacesException;
+import javax.faces.application.ViewHandler;
 
 
 /**
@@ -58,16 +55,14 @@ import javax.faces.FacesException;
 public class ViewMetadataImpl extends ViewMetadata {
 
     private String viewId;
-    private ViewDeclarationLanguage pdl;
     private FaceletFactory faceletFactory;
     
 
     // ------------------------------------------------------------ Constructors
 
 
-    public ViewMetadataImpl(ViewDeclarationLanguage pdl, String viewId) {
+    public ViewMetadataImpl(String viewId) {
 
-        this.pdl = pdl;
         this.viewId = viewId;
 
     }
@@ -102,8 +97,10 @@ public class ViewMetadataImpl extends ViewMetadata {
                 faceletFactory = associate.getFaceletFactory();
                 assert (faceletFactory != null);
             }
-            Facelet f = faceletFactory.getMetadataFacelet(viewId);
-            result = pdl.createView(context, viewId);
+            ViewHandler vh = context.getApplication().getViewHandler();
+            result = vh.createView(context, viewId);
+            Facelet f = faceletFactory.getMetadataFacelet(result.getViewId());
+
             f.apply(context, result);
         } catch (IOException ioe) {
             throw new FacesException(ioe);

@@ -53,6 +53,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.ResponseStateManager;
 import javax.faces.view.StateManagementStrategy;
+import javax.faces.view.ViewDeclarationLanguage;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -117,15 +118,15 @@ public class StateManagerImpl extends StateManager {
             return null;
         }
         
-        Object result = null;
+        Object result;
         String viewId = context.getViewRoot().getViewId();
         StateManagementStrategy strategy = null;
-        try {
-             strategy = context.getApplication().getViewHandler().
-                getViewDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
-        } catch (UnsupportedOperationException uoe) {
+        ViewDeclarationLanguage vdl =
+              context.getApplication().getViewHandler().
+                    getViewDeclarationLanguage(context, viewId);
+        if (vdl != null) {
+            strategy = vdl.getStateManagementStrategy(context, viewId);
         }
-        
 
         if (null != strategy) {
             result = strategy.saveView(context);
@@ -171,10 +172,11 @@ public class StateManagerImpl extends StateManager {
         UIViewRoot result = null;
         StateManagementStrategy strategy = null;
         
-        try {
-             strategy = context.getApplication().getViewHandler().
-                getViewDeclarationLanguage(context, viewId).getStateManagementStrategy(context, viewId);
-        } catch (UnsupportedOperationException uoe) {
+        ViewDeclarationLanguage vdl =
+              context.getApplication().getViewHandler().
+                    getViewDeclarationLanguage(context, viewId);
+        if (vdl != null) {
+            strategy = vdl.getStateManagementStrategy(context, viewId);
         }
 
         if (null != strategy) {

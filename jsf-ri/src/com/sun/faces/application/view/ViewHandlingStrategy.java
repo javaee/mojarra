@@ -116,7 +116,9 @@ public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.log(Level.FINE, "Response Complete for" + viewId);
                 }
-                extContext.redirect(extContext.getRequestContextPath());
+                if (!extContext.isResponseCommitted()) {
+                    extContext.redirect(extContext.getRequestContextPath());
+                }
             } catch (IOException ioe) {
                 throw new FacesException(ioe);
             }

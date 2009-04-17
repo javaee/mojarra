@@ -40,6 +40,7 @@ import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.net.MalformedURLException;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -59,6 +60,8 @@ import com.sun.faces.application.ViewHandlerResponseWrapper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
+
 import javax.faces.view.StateManagementStrategy;
 
 /**
@@ -119,6 +122,9 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
     public void buildView(FacesContext context, UIViewRoot view)
     throws IOException {
 
+        if (Util.isViewPopulated(context, view)) {
+            return;
+        }
         try {
             if (executePageToBuildView(context, view)) {
                 context.getExternalContext().responseFlushBuffer();
@@ -135,6 +141,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
             LOGGER.log(Level.FINE, "Completed building view for : \n" +
                                    view.getViewId());
         }
+        Util.setViewPopulated(context, view);
 
     }
 
@@ -153,7 +160,9 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
         ExternalContext extContext = context.getExternalContext();
 
-        //buildView(context, view);
+        if (!Util.isViewPopulated(context, view)) {
+            buildView(context, view);
+        }
 
         // set up the ResponseWriter
 
@@ -273,6 +282,21 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         String requestURI = viewToExecute.getViewId();
+
+        try {
+            if (extContext.getResource(requestURI) == null) {
+                extContext.responseSendError(404, requestURI + " not found");
+                return true;
+            }
+        } catch (MalformedURLException mue) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           mue.toString(),
+                           mue);
+            }
+            extContext.responseSendError(404, requestURI + " not found");
+            return true;
+        }
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("About to execute view " + requestURI);

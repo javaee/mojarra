@@ -64,10 +64,9 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 import javax.faces.component.UIViewParameter;
 import javax.faces.component.visit.VisitCallback;
-import javax.faces.context.PartialViewContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PostRestoreStateEvent;
@@ -163,16 +162,36 @@ public class RestoreViewPhase extends Phase {
             }
             return;
         }
-        ViewHandler viewHandler = Util.getViewHandler(facesContext);
-        ViewDeclarationLanguage pdl = null;
 
-        String viewId = null;
-
-        try {
-            viewId = viewHandler.deriveViewId(facesContext, null);
-        } catch (UnsupportedOperationException e) {
-            viewId = Util.deriveViewId(facesContext, null);
+        // Reconstitute or create the request tree
+        Map requestMap = facesContext.getExternalContext().getRequestMap();
+        String viewId = (String)
+              requestMap.get("javax.servlet.include.path_info");
+        if (viewId == null) {
+            viewId = facesContext.getExternalContext().getRequestPathInfo();
         }
+
+        // It could be that this request was mapped using
+        // a prefix mapping in which case there would be no
+        // path_info.  Query the servlet path.
+        if (viewId == null) {
+            viewId = (String)
+                  requestMap.get("javax.servlet.include.servlet_path");
+        }
+
+        if (viewId == null) {
+            viewId = facesContext.getExternalContext().getRequestServletPath();
+        }
+
+        if (viewId == null) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning("viewId is null");
+            }
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                  MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+        }
+
+        ViewHandler viewHandler = Util.getViewHandler(facesContext);
 
         boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
         if (isPostBack) {
@@ -208,16 +227,11 @@ public class RestoreViewPhase extends Phase {
                 LOGGER.fine("New request: creating a view for " + viewId);
             }
 
-            try {
-                // try to get the PDL
-                pdl = facesContext.getApplication().getViewHandler().getViewDeclarationLanguage(facesContext, viewId);
-            } catch (UnsupportedOperationException uoe) {
+            ViewDeclarationLanguage vdl = facesContext.getApplication().getViewHandler().getViewDeclarationLanguage(facesContext, viewId);
 
-            }
-
-            if (null != pdl) {
+            if (vdl != null) {
                 // If we have one, get the ViewMetadata...
-                ViewMetadata metadata = pdl.getViewMetadata(facesContext, viewId);
+                ViewMetadata metadata = vdl.getViewMetadata(facesContext, viewId);
 
                 if (metadata != null) { // perhaps it's not supported
                     // and use it to create the ViewRoot.  This will have, at most
@@ -226,7 +240,7 @@ public class RestoreViewPhase extends Phase {
 
                     // Only skip to render response if there are no view parameters
                     Collection<UIViewParameter> params =
-                          metadata.getViewParameters(viewRoot);
+                          ViewMetadata.getViewParameters(viewRoot);
                     if (params.isEmpty()) {
                         facesContext.renderResponse();
                     }

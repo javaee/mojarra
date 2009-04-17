@@ -59,6 +59,7 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
 import java.util.*;
+import java.net.MalformedURLException;
 
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
@@ -70,7 +71,6 @@ import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.MethodExpressionValidator;
 import javax.faces.view.*;
-import javax.faces.view.facelets.BehaviorHandler;
 
 /**
  * This {@link ViewHandler} implementation handles both JSP-based and
@@ -83,7 +83,7 @@ public class MultiViewHandler extends ViewHandler {
 
     private String[] configuredExtensions;
     
-    private ViewDeclarationLanguageFactory pdlFactory;
+    private ViewDeclarationLanguageFactory vdlFactory;
 
 
     // ------------------------------------------------------------ Constructors
@@ -95,7 +95,7 @@ public class MultiViewHandler extends ViewHandler {
         String defaultSuffixConfig =
               config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         configuredExtensions = Util.split(defaultSuffixConfig, " ");
-        pdlFactory = (ViewDeclarationLanguageFactory) 
+        vdlFactory = (ViewDeclarationLanguageFactory)
                 FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
 
     }
@@ -135,7 +135,7 @@ public class MultiViewHandler extends ViewHandler {
         Util.notNull("context", context);
         Util.notNull("viewToRender", viewToRender);
 
-        pdlFactory.getViewDeclarationLanguage(viewToRender.getViewId())
+        vdlFactory.getViewDeclarationLanguage(viewToRender.getViewId())
               .renderView(context, viewToRender);
 
     }
@@ -151,8 +151,9 @@ public class MultiViewHandler extends ViewHandler {
     public UIViewRoot restoreView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
-        return pdlFactory.getViewDeclarationLanguage(viewId)
-              .restoreView(context, viewId);
+        String actualViewId = derivePhysicalViewId(context, viewId, false);
+        return vdlFactory.getViewDeclarationLanguage(actualViewId)
+              .restoreView(context, actualViewId);
 
     }
 
@@ -466,21 +467,11 @@ public class MultiViewHandler extends ViewHandler {
     public UIViewRoot createView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
-        return pdlFactory.getViewDeclarationLanguage(viewId).createView(context,
-                                                                   viewId);
+        String actualViewId = derivePhysicalViewId(context, viewId, false);
+        return vdlFactory.getViewDeclarationLanguage(actualViewId).createView(context,
+                                                                               actualViewId);
 
     }
-
-    @Override
-    public String deriveViewId(FacesContext facesContext, String input) {
-        String viewId = null;
-        
-        viewId = Util.deriveViewId(facesContext, input);
-        
-        return viewId;
-    }
-    
-    
 
 
     /**
@@ -694,12 +685,149 @@ public class MultiViewHandler extends ViewHandler {
     public ViewDeclarationLanguage getViewDeclarationLanguage(FacesContext context,
                                                               String viewId) {
 
-        return pdlFactory.getViewDeclarationLanguage(viewId);
+        String actualViewId = derivePhysicalViewId(context, viewId, false);
+        return vdlFactory.getViewDeclarationLanguage(actualViewId);
 
     }
-    
+
+    @Override
+    public String deriveViewId(FacesContext context, String rawViewId) {
+
+        return derivePhysicalViewId(context, rawViewId, true);
+
+    }
+
 
     // ------------------------------------------------------- Protected Methods
+
+
+        /**
+     * <p>if the specified mapping is a prefix mapping, and the provided
+     * request URI (usually the value from <code>ExternalContext.getRequestServletPath()</code>)
+     * starts with <code>mapping + '/'</code>, prune the mapping from the
+     * URI and return it, otherwise, return the original URI.
+     * @param uri the servlet request path
+     * @param mapping the FacesServlet mapping used for this request
+     * @return the URI without additional FacesServlet mappings
+     * @since 1.2
+     */
+    protected String normalizeRequestURI(String uri, String mapping) {
+
+        if (mapping == null || !Util.isPrefixMapped(mapping)) {
+            return uri;
+        } else {
+            int length = mapping.length() + 1;
+            StringBuilder builder = new StringBuilder(length);
+            builder.append(mapping).append('/');
+            String mappingMod = builder.toString();
+            boolean logged = false;
+            while (uri.startsWith(mappingMod)) {
+                if (!logged && logger.isLoggable(Level.WARNING)) {
+                    logged = true;
+                    logger.log(Level.WARNING,
+                               "jsf.viewhandler.requestpath.recursion",
+                               new Object[] {uri, mapping});
+                }
+                uri = uri.substring(length - 1);
+            }
+            return uri;
+        }
+
+    }
+
+
+
+
+    /**
+     * <p>Adjust the viewID per the requirements of {@link #renderView}.</p>
+     *
+     * @param context current {@link javax.faces.context.FacesContext}
+     * @param viewId  incoming view ID
+     * @return the view ID with an altered suffix mapping (if necessary)
+     */
+    protected String convertViewId(FacesContext context, String viewId) {
+
+        // if the viewId doesn't already use the above suffix,
+        // replace or append.
+        StringBuilder buffer = new StringBuilder(viewId);
+        for (String ext : configuredExtensions) {
+            if (viewId.endsWith(ext)) {
+                return viewId;
+            }
+            int extIdx = viewId.lastIndexOf('.');
+            if (extIdx != -1) {
+                buffer.replace(extIdx, viewId.length(), ext);
+            } else {
+                // no extension in the provided viewId, append the suffix
+                buffer.append(ext);
+            }
+            String convertedViewId = buffer.toString();
+            try {
+                if (context.getExternalContext().getResource(convertedViewId) != null) {
+                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                    return convertedViewId;
+                } else {
+                    // reset the buffer to check for the next extension
+                    buffer.setLength(0);
+                    buffer.append(viewId);
+                }
+            } catch (MalformedURLException e) {
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE,
+                               e.toString(),
+                               e);
+                }
+            }
+        }
+
+        // unable to find any resource match that the default ViewHandler
+        // can deal with.  Return the viewId as it was passed.  There is
+        // probably another ViewHandler in the stack that will handle this.
+        return viewId;
+
+    }
+
+
+    protected String derivePhysicalViewId(FacesContext ctx,
+                                          String rawViewId,
+                                          boolean checkPhysical) {
+        if (rawViewId != null) {
+            String mapping = Util.getFacesMapping(ctx);
+            String viewId;
+            if (mapping != null) {
+                if (!Util.isPrefixMapped(mapping)) {
+                    viewId = convertViewId(ctx, rawViewId);
+                } else {
+                    viewId = normalizeRequestURI(rawViewId, mapping);
+                    if (viewId.equals(mapping)) {
+                        // The request was to the FacesServlet only - no
+                        // path info
+                        // on some containers this causes a recursion in the
+                        // RequestDispatcher and the request appears to hang.
+                        // If this is detected, return status 404
+                        send404Error(ctx);
+                    }
+
+                }
+                try {
+                    if (checkPhysical) {
+                        return ((ctx.getExternalContext().getResource(viewId) != null) ? viewId : null);
+                    } else {
+                        return viewId;
+                    }
+                } catch (MalformedURLException mue) {
+                    if (logger.isLoggable(Level.SEVERE)) {
+                        logger.log(Level.SEVERE,
+                                   mue.toString(),
+                                   mue);
+                    }
+                    return null;
+                }
+            }
+
+        }
+        return rawViewId;
+    }
 
 
     protected Map<String,List<String>> getFullParameterList(FacesContext ctx,

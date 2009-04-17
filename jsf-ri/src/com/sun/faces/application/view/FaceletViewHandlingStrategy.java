@@ -178,7 +178,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
 
-        return new ViewMetadataImpl(this, viewId);
+        return new ViewMetadataImpl(viewId);
 
     }
     

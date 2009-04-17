@@ -494,11 +494,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
 
         ViewHandler viewHandler = Util.getViewHandler(context);
-        try {
-            viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
-        } catch (UnsupportedOperationException e) {
-            viewIdToTest = Util.deriveViewId(context, viewIdToTest);
-        }
+        viewIdToTest = viewHandler.deriveViewId(context, viewIdToTest);
 
         if (null != viewIdToTest) {
             CaseStruct caseStruct = new CaseStruct();
