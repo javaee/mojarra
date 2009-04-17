@@ -57,16 +57,43 @@ import javax.faces.view.facelets.TagAttribute;
 
 /**
  * <p class="changed_added_2_0">The root class of the abstraction that
- * dictates how attributes in on an element in a Facelets VDL page are
- * wired to the component instance associated with that element.  There
- * are implementation of specific concrete subclasses of this class for
- * all the basic kinds of elements that appear in Facelets VDL pages:
- * components, non-components, and attached objects.</p>
+ * dictates how attributes on a markup element in a Facelets VDL page
+ * are wired to the JSF API object instance associated with that
+ * element.  The single method on this interface, {@link #applyRule},
+ * returns an encapsulation of the behavior that actually does the work
+ * of handling the attribute and its value.  There are implementations of
+ * specific concrete subclasses of this class for all the basic kinds of
+ * elements that appear in Facelets VDL pages: components,
+ * non-components, and attached objects.</p>
  *
- * <p class="changed_added_2_0">Instances of this class are grouped
- * together into a {@link MetaRuleset}, and each rule in the set has its
- * {@link #applyRule} method called when {@link MetaRuleset#finish} is
- * called.</p>
+ * <div class="changed_added_2_0">
+
+ * <p>For example, consider this markup:</p>
+
+<code><pre>&lt;h:inputText value="#{user.userid}" 
+                valueChangeListener="#{user.newUserId}" /&gt;</pre></code>
+
+ * Two <code>MetaRule</code> instances are involved in this example.</p>
+
+ * <ol>
+ *
+ * <li><p>The first has
+ * an <code>applyRule()</code> method that returns a {@link MetaData}
+ * instance that, when its <code>applyMetada()</code> method is called,
+ * dictates how the "value" attribute is processed: calling {@link
+ * javax.faces.component.UIComponent#setValueExpression} on the
+ * <code>UIComponent</code> instance associated with the
+ * <code>&lt;h:inputText&gt;</code> element.</p></li>
+
+ * <li><p>The second has an <code>applyRule()</code> method that returns
+ * a {@link MetaData} instance that, when its
+ * <code>applyMetadata()</code> method is called, dictates how the
+ * "valueChangeListener" attribute is processed: calling {@link
+ * javax.faces.component.EditableValueHolder#addValueChangeListener}.</p></li>
+
+ * </ol>
+
+ * </div>
  *
  * @since 2.0
  */

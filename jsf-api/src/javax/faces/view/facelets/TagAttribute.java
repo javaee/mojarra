@@ -59,8 +59,8 @@ import javax.el.ValueExpression;
 import javax.faces.view.facelets.FaceletContext;
 
 /**
- * <p class="changed_added_2_0">Representation an individual name=value
- * pair on an XML element in a Facelet file.</p>
+ * <p class="changed_added_2_0">Representation of an XML attribute
+ * name=value pair on an XML element in a Facelet file.</p>
  * 
  * @since 2.0
  */

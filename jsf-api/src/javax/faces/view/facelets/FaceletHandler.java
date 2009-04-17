@@ -58,9 +58,30 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
 /**
- * <p class="changed_added_2_0">A participant in UIComponent tree
- * building.</p>
+ * <p class="changed_added_2_0">This is the root class for markup
+ * elements in Facelets VDL.  Facelets is XHTML, and XHTML is XML, and
+ * the root unit of abstraction in XML is the element.  A
+ * <code>FaceletHandler</code> instance represents an XML element at
+ * runtime.  Two direct implementations exist to embody the contract for
+ * more specific behavior.</p>
  *
+ * <div class="changed_added_2_0">
+
+ * <dl>
+
+ * <dt>{@link CompositeFaceletHandler}</dt>
+
+ * <dd>A container for other <code>FaceletHandler</code>s</dd>
+
+ * <dt>{@link TagHandler}</dt>
+
+ * <dd>The foundation class for <code>FaceletHandler</code>s associated
+ * with markup in a Facelet document.</dd>
+
+ * </dl>
+
+ * </div>
+
  * @since 2.0
  */
 public interface FaceletHandler {

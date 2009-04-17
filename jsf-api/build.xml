@@ -697,6 +697,9 @@ javax.faces.level=ALL
         <copy todir="${build.javadocs.dir}/javax/faces/event"
               file="${src.dir}/javax/faces/event/EventHierarchy.jpg"/>
 
+        <copy todir="${build.javadocs.dir}/javax/faces/view/facelets"
+              file="${src.dir}/javax/faces/view/facelets/Facelets.jpg"/>
+
         <copy todir="${build.javadocs.dir}/">
            <fileset dir="${doc.dir}">
              <include name="changed*.png" />

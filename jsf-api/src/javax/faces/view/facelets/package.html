@@ -11,60 +11,27 @@ tag-level API.  These classes are provided for users that have a need
 for a Java API that allows participation in the execution of a Facelets
 View, which happens as a result of the runtime calling <a
 href="../ViewDeclarationLanguage.html#buildView(javax.faces.context.FacesContext,%20javax.faces.component.UIViewRoot)"><code>ViewDeclarationLanguage.buildView()</code></a>.
-The most common usecase for participating in the execution of a Facelets
-View is providing a custom tag handler.
     </p>
 
-<h2>Sequence of events in the compilation and execution of a Facelets
-VDL View</h2>
+<div class="changed_added_2_0">
 
-<h3>Startup Time</h3>
+<p>
 
-During the initialization of the impl's Application instance, an
-instance of SAXCompiler is created and the standard tag libraries are
-added to it.  The instance is kept as an ivar of the Application.
+<img src="Facelets.jpg" alt="UML Class Diagram of classes in this package" />
 
-An instance of DefaultResourceResolver() is created and stuck into a new
-instance of DefaultFaceletFactory(), which is kept as an ivar of
-Application.  DefaultFaceletFactory uses the resolver to get the baseUrl
-for all the pages in the app.
+</p>
 
-Any taglibs that are declared in the faces-config are added here as
-well.
+<p>The most common usecase for participating in the execution of a
+Facelets View is to provide a custom tag handler in those cases when the
+non-Java API methods for doing so is not sufficient.  In such cases,
+Java classes may extend from <code><a
+href="ComponentHandler.html">ComponentHandler</a></code>, <code><a
+href="BehaviorHandler.html">BehaviorHandler</a></code>, <code><a
+href="ConverterHandler.html">ConverterHandler</a></code>, or <code><a
+href="ValidatorHandler.html">ValidatorHandler</a></code> depending upon
+the kind of JSF Java API artifact they want to represent in the Facelets
+VDL page.</p>
 
-<h3>Compilation</h3>
+</div>
 
-<code><pre>
-
-PENDING(edburns): complete this.
-
-RenderResponse.execute calls VDL.buildView().
-
-This get the DefaultFaceletFactory from the application and calls
-getFacelet() on it, passing the viewId.
-
-This checks a cache of compiled views and determines if one needs to be
-compiled.  In this case, a compiled view is not available, so the
-compiler is invoked on the physical file corresponding to the viewId.
-
-The SAXCompiler (extends Compiler) has a root CompilationManager, and a
-SAX Handler called CompilationHandler (extends DefaultHandler).
-
-A CompilationManager is created for each physical file in the tree of
-physical files that can make up a Facelets VDL view.  The
-CompilationManager keeps a stack of CompilationUnit instances.  This
-handler is the bridge between the SAX XML engine and the Facelet
-implementation.
-
-The CompilationManager keeps a stack of Tags.  Each tag has a location,
-localname, and a collection of attributes.  Each attribute has a
-location, a name, and a value.
-
-The compiler builds a tree of Tag instances.  Each Tag has an XML
-namespace in which it belongs, the localName by which it is used in this
-page, a qualified Name, and a collection of attributes.
-
-</pre></code>
-
-</body>
-</html>
+</body> </html>

@@ -53,8 +53,12 @@ package javax.faces.view.facelets;
 
 
 /**
- * <p class="changed_added_2_0">Foundation class for FaceletHandlers
- * associated with markup in a Facelet document.</p>
+ * <p class="changed_added_2_0">Foundation class for
+ * <code>FaceletHandler</code>s associated with a markup element in a
+ * Facelet document.  This class introduces the concept of <a
+ * href="TagAttribute.html">XML attributes</a> to Facelets.  See the <a
+ * href="#TagHandler(javax.faces.view.facelets.TagConfig)">constructor</a>
+ * documentation for more details.</p>
  * 
  *
  * @since 2.0
@@ -66,6 +70,21 @@ public abstract class TagHandler implements FaceletHandler {
     protected final Tag tag;
 
     protected final FaceletHandler nextHandler;
+
+    /**
+     * <p class="changed_added_2_0">Every <code>TagHandler</code>
+     * instance is associated with a {@link Tag}.  Each <code>Tag</code>
+     * instance has a {@link TagAttributes} property, which is simply a
+     * collection of {@link TagAttribute} instances.  Extract and save
+     * as protected instance variables the {@link TagConfig#getTagId},
+     * {@link TagConfig#getTag} and {@link TagConfig#getNextHandler}
+     * returns from the argument <code>TagConfig</code>.  This
+     * constructor is only called when the Facelets View is compiled.
+     * </p>
+     *
+     * @param config The structure that contains useful to the operation
+     * of this instance.
+     */
 
     public TagHandler(TagConfig config) {
         this.tagId = config.getTagId();
