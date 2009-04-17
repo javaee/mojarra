@@ -372,10 +372,11 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p class="changed_added_2_0">Return the threadsafe flash for this
-     * application.</p>
+     * <p class="changed_added_2_0">Return the threadsafe {@link Flash}
+     * for this application.  The default implementation will throw
+     * <code>UnsupportedOperationException</code>.  Compliant JSF
+     * runtimes must provide an implementation of this method.</p>
      *
-     * RELEASE_PENDING should we have a boolean argument version?
      * @since 2.0
      */ 
 
