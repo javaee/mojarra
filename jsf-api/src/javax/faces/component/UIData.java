@@ -1043,7 +1043,96 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * @see UIComponent#visitTree
+     * <p class="changed_added_2_0">Override the behavior in {@link
+     * UIComponent#visitTree} to handle iteration correctly.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p>If the {@link UIComponent#isVisitable} method of this instance
+     * returns <code>false</code>, take no action and return.</p>
+
+     * <p>Otherwise, save aside the result of a call to {@link
+     * #getRowIndex}.  Call {@link UIComponent#pushComponentToEL} and
+     * invoke the visit callback on this <code>UIData</code> instance as
+     * described in {@link UIComponent#visitTree}.  Let the result of
+     * the invoctaion be <em>visitResult</em>.  If <em>visitResult</em>
+     * is {@link VisitResult#COMPLETE}, take no further action and
+     * return <code>true</code>.  Otherwise, determine if we need to
+     * visit our children.  The default implementation calls {@link
+     * VisitContext#getSubtreeIdsToVisit} passing <code>this</code> as
+     * the argument.  If the result of that call is non-empty, let
+     * <em>doVisitChildren</em> be <code>true</code>.  If
+     * <em>doVisitChildren</em> is <code>true</code> and
+     * <em>visitResult</em> is {@link VisitResult#ACCEPT}, take the
+     * following action.<p>
+
+     * <ul>
+
+     * 	  <li><p>If this component has facets, call {@link
+     * 	  UIComponent#getFacets} on this instance and invoke the
+     * 	  <code>values()</code> method.  For each
+     * 	  <code>UIComponent</code> in the returned <code>Map</code>,
+     * 	  call {@link UIComponent#visitTree}.</p></li>
+
+     * 	  <li><p>If this component has children, for each child
+     * 	  <code>UIComponent</code> retured from calling {@link
+     * 	  getChildren} on this instance, if the child has facets, call
+     * 	  {@link UIComponent#getFacets} on the child instance and invoke
+     * 	  the <code>values()</code> method.  For each
+     * 	  <code>UIComponent</code> in the returned <code>Map</code>,
+     * 	  call {@link UIComponent#visitTree}.</p></li>
+
+     * 	  <li><p>Iterate over the columns an rows.</p>
+
+     * <ul>
+
+     * 	  <li><p>Let <em>rowsToProcess</em> be the return from {@link
+     * 	  #getRows}.  </p></li>
+
+     * 	  <li><p>Let <em>rowIndex</em> be the return from {@link
+     * 	  #getFirst} - 1.</p></li>
+
+     * 	  <li><p>While the number of rows processed is less than
+     * 	  <em>rowsToProcess</em>, take the following actions.</p>
+
+     * <p>Call {@link #setRowIndex}, passing the current row index.</p>
+
+     * <p>If {@link #isRowAvailable} returns <code>false</code>, take no
+     * further action and return <code>false</code>.</p>
+
+     * <p>For each child component of this <code>UIData</code> that is
+     * also an instance of {@link UIColumn}, call {@link
+     * UIComponent#visitTree} on the child.  If such a call returns
+     * <code>true</code>, terminate iteration and return
+     * <code>true</code>.  Take no action on non <code>UIColumn</code>
+     * children.</p>
+
+     *     </li>
+
+     * </ul>
+
+     *    </li>
+
+     * </ul>
+
+     * <p>Call {@link #popComponentFromEL} and restore the saved row
+     * index with a call to {@link #setRowIndex}.</p>
+
+     * <p>Return <code>false</code> to allow the visiting to
+     * continue.</p>
+
+     * </div>
+     *
+     * @param context the <code>VisitContext</code> that provides
+     * context for performing the visit.
+     *
+     * @param callback the callback to be invoked for each node
+     * encountered in the visit.
+
+     * @throws NullPointerException if any of the parameters are
+     * <code>null</code>.
+
+     * 
      */
     @Override
     public boolean visitTree(VisitContext context, 
