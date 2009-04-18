@@ -43,10 +43,10 @@ pkg = {
                        "pkg:/glassfish-common" : { "type" : "require" }
                       },
     "attributes"    : { 
-                        "pkg.summary" : "JSF 2.0 EDR2 implementation",
-                        "pkg.description" : "Updated JSF 2.0 implementation.  \
-Current version supports EDR2.  This version replaces the default version \
-of JSF that ships with Glassfish.  This software is beta quality, please \
+                        "pkg.summary" : "Mojarra 2.0.0 BETA2 implementation",
+                        "pkg.description" : "Updated Mojarra 2.0.0 implementation.  \
+Current version supports JSF 2.0 PFD.  This version replaces the default version \
+of Mojarra that ships with Glassfish.  This software is beta quality, please \
 see release notes.",
                         "info.classification" : "Application Servers"
                       },
