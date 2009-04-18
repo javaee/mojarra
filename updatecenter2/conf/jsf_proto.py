@@ -43,7 +43,7 @@ pkg = {
                        "pkg:/glassfish-common" : { "type" : "require" }
                       },
     "attributes"    : { 
-                        "pkg.summary" : "Mojarra 2.0.0 BETA2 implementation",
+                        "pkg.summary" : "JSF 2.0 - Project Mojarra 2.0.0 Beta1",
                         "pkg.description" : "Updated Mojarra 2.0.0 implementation.  \
 Current version supports JSF 2.0 PFD.  This version replaces the default version \
 of Mojarra that ships with Glassfish.  This software is beta quality, please \
