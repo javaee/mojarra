@@ -22732,17 +22732,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
           <tag-attribute>true</tag-attribute>
         </attribute-extension>
       </attribute>
-      <attribute>
-        <description><![CDATA[<div class="changed_added_2_0"><p>The <em>target</em> area for which this resource will be rendered.  For example, <em>target="head"</em> would cause the resource to be rendered within the <em>head</em> element.</p></div>]]></description>
-        <display-name>Target</display-name>
-        <icon/>
-        <attribute-name>target</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <required>false</required>
-          <tag-attribute>true</tag-attribute>
-        </attribute-extension>
-      </attribute>
 
       <renderer-extension>
         <renders-children>true</renders-children>
@@ -30622,6 +30611,7 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
           <tag-attribute>true</tag-attribute>
         </attribute-extension>
       </attribute>
+
       <attribute>
         <description><![CDATA[<div class="changed_added_2_0"><p>The <em>target</em> area for which this resource will be rendered.  For example, <em>target="head"</em> would cause the resource to be rendered within the <em>head</em> element.</p></div>]]></description>
         <display-name>Target</display-name>
@@ -30633,7 +30623,6 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
           <tag-attribute>true</tag-attribute>
         </attribute-extension>
       </attribute>
-
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
         <renders-children>true</renders-children>
@@ -30714,17 +30703,6 @@ the literal string "<code>head</code>" as the last argument.</p>
         <display-name>Library Name</display-name>
         <icon/>
         <attribute-name>library</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <required>false</required>
-          <tag-attribute>true</tag-attribute>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description><![CDATA[<div class="changed_added_2_0"><p>The <em>target</em> area for which this resource will be rendered.  For example, <em>target="head"</em> would cause the resource to be rendered within the <em>head</em> element.</p></div>]]></description>
-        <display-name>Target</display-name>
-        <icon/>
-        <attribute-name>target</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <required>false</required>
