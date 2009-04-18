@@ -268,7 +268,9 @@ public class ConfigureListener implements ServletRequestListener,
             webAppListener = null;
         }
         ServletContext context = sce.getServletContext();
-       
+        if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
+            return;
+        }
         GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
         if (helper != null) {
             helper.setClassLoader();
