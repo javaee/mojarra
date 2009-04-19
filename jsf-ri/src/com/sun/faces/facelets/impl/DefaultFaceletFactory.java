@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.impl;
 
+import javax.faces.view.facelets.ResourceResolver;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;

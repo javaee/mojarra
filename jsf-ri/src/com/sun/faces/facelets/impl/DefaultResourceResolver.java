@@ -50,6 +50,7 @@
  */
 package com.sun.faces.facelets.impl;
 
+import javax.faces.view.facelets.ResourceResolver;
 import java.io.IOException;
 import java.net.URL;
 
@@ -58,7 +59,7 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.facelets.util.Resource;
 
-public class DefaultResourceResolver implements ResourceResolver {
+public class DefaultResourceResolver extends ResourceResolver {
 
     public DefaultResourceResolver() {
         super();
@@ -73,6 +74,7 @@ public class DefaultResourceResolver implements ResourceResolver {
         }
     }
 
+    @Override
     public String toString() {
         return "DefaultResourceResolver";
     }

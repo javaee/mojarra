@@ -59,6 +59,7 @@ import com.sun.faces.util.FacesLogger;
 import java.util.HashMap;
 import javax.faces.component.UIInput;
 import javax.faces.validator.BeanValidator;
+import javax.faces.view.facelets.ResourceResolver;
 
 
 /** Class Documentation */
@@ -743,8 +744,14 @@ public class WebConfiguration {
               "2"
         ),
         FaceletsResourceResolver(
-              "facelets.RESOURCE_RESOLVER",
+              ResourceResolver.FACELETS_RESOURCE_RESOLVER_PARAM_NAME,
               ""
+        ),
+        FaceletsResourceResolverDeprecated(
+              "facelets.RESOURCE_RESOLVER",
+              "",
+              true,
+              FaceletsResourceResolver
         ),
          FaceletsViewMappings(
               ViewHandler.FACELETS_VIEW_MAPPINGS_PARAM_NAME,

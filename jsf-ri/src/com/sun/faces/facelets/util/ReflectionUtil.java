@@ -51,10 +51,19 @@
 
 package com.sun.faces.facelets.util;
 
+import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.util.ReflectionUtils;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+
+import com.sun.faces.util.Util;
+import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
+import javax.faces.view.facelets.ResourceResolver;
 
 public class ReflectionUtil {
 
@@ -183,4 +192,113 @@ public class ReflectionUtil {
         }
         return null;
     }
+    
+    public static Object decorateInstance(String className,
+                                    Class rootType,
+                                    Object root) {
+        Class clazz;
+        Object returnObject = null;
+        if (className != null) {
+            try {
+                clazz = loadClass(className, returnObject, null);
+                if (clazz != null) {
+                    if (isDevModeEnabled()) {
+                        Class<?>[] interfaces = clazz.getInterfaces();
+                        if (interfaces != null) {
+                            for (Class<?> c : interfaces) {
+                                if ("groovy.lang.GroovyObject"
+                                      .equals(c.getName())) {
+                                    // all groovy classes will implement this interface
+                                    returnObject =
+                                          createScriptProxy(rootType, className, root);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (returnObject == null) {
+                        // Look for an adapter constructor if we've got
+                        // an object to adapt
+                        if ((rootType != null) && (root != null)) {
+                            Constructor construct =
+                                  ReflectionUtils.lookupConstructor(
+                                        clazz,
+                                        rootType);
+                            if (construct != null) {
+                                returnObject = construct.newInstance(root);
+                            }
+                        }
+                    }
+                    if (clazz != null && returnObject == null) {
+                        returnObject = clazz.newInstance();
+                    }
+                }
+
+            } catch (ClassNotFoundException cnfe) {
+                throw new ConfigurationException(
+                      buildMessage(MessageFormat.format("Unable to find class ''{0}''",
+                                                        className)));
+            } catch (NoClassDefFoundError ncdfe) {
+                throw new ConfigurationException(
+                      buildMessage(MessageFormat.format("Class ''{0}'' is missing a runtime dependency: {1}",
+                                                        className,
+                                                        ncdfe.toString())));
+            } catch (ClassCastException cce) {
+                throw new ConfigurationException(
+                      buildMessage(MessageFormat.format("Class ''{0}'' is not an instance of ''{1}''",
+                                                        className,
+                                                        rootType)));
+            } catch (Exception e) {
+                throw new ConfigurationException(
+                      buildMessage(MessageFormat.format("Unable to create a new instance of ''{0}'': {1}",
+                                                        className,
+                                                        e.toString())), e);
+            }
+        }
+
+        return returnObject;
+        
+    }
+    
+    // --------------------------------------------------------- Private Methods
+
+
+    private static String buildMessage(String cause) {
+
+        return MessageFormat.format("\n  Source Document: {0}\n  Cause: {1}",
+                                    "web.xml",
+                                    cause);
+
+    }
+    
+    
+    private static Class<?> loadClass(String className,
+                                 Object fallback,
+                                 Class<?> expectedType)
+    throws ClassNotFoundException {
+
+        Class<?> clazz = Util.loadClass(className, fallback);
+        if (expectedType != null && !expectedType.isAssignableFrom(clazz)) {
+                throw new ClassCastException();
+        }
+        return clazz;
+        
+    }
+    
+    private static boolean isDevModeEnabled() {
+        WebConfiguration webconfig = WebConfiguration.getInstance();
+        return (webconfig != null
+                  && "Development".equals(webconfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage)));
+    }
+    
+    private static Object createScriptProxy(Class<?> artifactType,
+                                     String scriptName,
+                                     Object root) {
+        if (ResourceResolver.class.equals(artifactType)) {
+            return new ResourceResolverProxy(scriptName, (ResourceResolver) root);
+        }
+        return null;
+    }
+    
+    
 }

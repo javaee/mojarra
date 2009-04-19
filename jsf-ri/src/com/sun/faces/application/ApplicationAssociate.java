@@ -59,7 +59,7 @@ import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.facelets.util.FunctionLibrary;
 import com.sun.faces.facelets.util.DevTools;
-import com.sun.faces.facelets.impl.ResourceResolver;
+import javax.faces.view.facelets.ResourceResolver;
 import com.sun.faces.facelets.impl.DefaultResourceResolver;
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.mgbean.BeanManager;
@@ -607,13 +607,9 @@ public class ApplicationAssociate {
         String resolverName = webConfig
               .getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsResourceResolver);
         if (resolverName != null && resolverName.length() > 0) {
-            try {
-                resolver = (ResourceResolver) ReflectionUtil.forName(resolverName)
-                        .newInstance();
-            } catch (Exception e) {
-                throw new FacesException("Error Initializing ResourceResolver["
-                        + resolverName + "]", e);
-            }
+            resolver = (ResourceResolver) 
+                    com.sun.faces.facelets.util.ReflectionUtil.
+                    decorateInstance(resolverName, ResourceResolver.class, resolver);
         }
 
         // Resource.getResourceUrl(ctx,"/")
