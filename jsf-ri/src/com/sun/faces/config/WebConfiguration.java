@@ -785,7 +785,6 @@ public class WebConfiguration {
               true,
               FaceletsLibraries
         ),
-        // RELESE_PENDING (edburns,rogerk) Need a standard parameter for DECORATORS
         FaceletsDecorators(
               "javax.faces.FACELETS_DECORATORS",
               ""
@@ -1003,7 +1002,6 @@ public class WebConfiguration {
               "javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE",
               false
         ),
-        // RELEASE_PENDING (edburns, rogerk) do we need a standard ?  Bug 981
         FaceletsSkipComments(
               "javax.faces.FACELETS_SKIP_COMMENTS",
               false
