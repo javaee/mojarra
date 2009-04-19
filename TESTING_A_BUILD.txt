@@ -31,21 +31,26 @@ ant main container.deploy # make sure that you'll actually test the changes
 ant test
 
 
+Testing V3 Trunk without relying on an RE build
+----------------------------------------------------------
 
-If you want to test locally without having to rely on an RE build, here is what you can do.
+${MOJARRA_2.0_REPO} -> directory in which the Mojarra 2.0.x sources are checked out
+${BUILD.NUMBER}     -> the build number that RE would use for the promotion
+${BUILD.TYPE}       -> the build type RE would use for the promotion
+
 
 cd ${MOJARRA_2.0_REPO}
-ant -Dbuild.number=b10 -Dbuild.type=BETA1 clean main
-cd jsf-api && ant -Dbuild.number=b10 -Dbuild.type=BETA1 mvn.deploy.promoted.local && cd ..
-cd jsf-ri && ant -Dbuild.number=b10 -Dbuild.type=BETA1 mvn.deploy.promoted.local && cd ..
+ant -Dbuild.number=${BUILD.NUMBER} -Dbuild.type=${BUILD.TYPE} clean main
+cd jsf-api && ant -Dbuild.number=${BUILD.NUMBER} -Dbuild.type=${BUILD.TYPE} mvn.deploy.promoted.local && cd ..
+cd jsf-ri && ant -Dbuild.number=${BUILD.NUMBER} -Dbuild.type=${BUILD.TYPE} mvn.deploy.promoted.local && cd ..
 
 This will produce the same result as what RE would produce so that the version strings, etc
 can all be verified.
 
 After running these steps you should be able to ls:
 
-    ~/.m2/repository/com/sun/faces/jsf-api/2.0.0-b10/jsf-api-2.0.0-b10.jar
-    ~/.m2/repository/com/sun/faces/jsf-impl/2.0.0-b10/jsf-impl-2.0.0-b10.jar
+    ~/.m2/repository/com/sun/faces/jsf-api/2.0.0-${BUILD.NUMBER}/jsf-api-2.0.0-${BUILD.NUBMER}.jar
+    ~/.m2/repository/com/sun/faces/jsf-impl/2.0.0-${BUILD.NUMBER}/jsf-impl-2.0.0-${BUILD.NUMBER}.jar
 
 
 Update your v3/pom.xml to refer to the new build.
