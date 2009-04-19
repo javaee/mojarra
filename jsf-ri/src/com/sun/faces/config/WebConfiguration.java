@@ -702,10 +702,16 @@ public class WebConfiguration {
               "1024"
         ),
         FaceletsBufferSize(
-              "facelets.BUFFER_SIZE",
+              "javax.faces.FACELETS_BUFFER_SIZE",
               "1024",
               true,
               ResponseBufferSize
+        ),
+        FaceletsBufferSizeDeprecated(
+              "facelets.BUFFER_SIZE",
+              "1024",
+              true,
+              FaceletsBufferSize
         ),
         ClientStateWriteBufferSize(
               "com.sun.faces.clientStateWriteBufferSize",
@@ -740,8 +746,14 @@ public class WebConfiguration {
             "false"
         ),
         FaceletsDefaultRefreshPeriod(
-              "facelets.REFRESH_PERIOD",
+              "javax.faces.FACELETS_REFRESH_PERIOD",
               "2"
+        ),
+        FaceletsDefaultRefreshPeriodDeprecated(
+              "facelets.REFRESH_PERIOD",
+              "2",
+              true,
+              FaceletsDefaultRefreshPeriod
         ),
         FaceletsResourceResolver(
               ResourceResolver.FACELETS_RESOURCE_RESOLVER_PARAM_NAME,
@@ -775,8 +787,14 @@ public class WebConfiguration {
         ),
         // RELESE_PENDING (edburns,rogerk) Need a standard parameter for DECORATORS
         FaceletsDecorators(
-              "facelets.DECORATORS",
+              "javax.faces.FACELETS_DECORATORS",
               ""
+        ),
+        FaceletsDecoratorsDeprecated(
+              "facelets.DECORATORS",
+              "",
+              true,
+              FaceletsDecorators
         ),
         DuplicateJARPattern(
             "com.sun.faces.duplicateJARPattern",
@@ -987,9 +1005,14 @@ public class WebConfiguration {
         ),
         // RELEASE_PENDING (edburns, rogerk) do we need a standard ?  Bug 981
         FaceletsSkipComments(
-              "facelets.SKIP_COMMENTS",
+              "javax.faces.FACELETS_SKIP_COMMENTS",
               false
         ),
+        FaceletsSkipCommentsDeprecated(
+              "facelets.SKIP_COMMENTS",
+              false,
+              true, 
+              FaceletsSkipComments),
         PartialStateSaving(
               StateManager.PARTIAL_STATE_SAVING_PARAM_NAME,
               true
