@@ -31,3 +31,23 @@ ant main container.deploy # make sure that you'll actually test the changes
 ant test
 
 
+
+If you want to test locally without having to rely on an RE build, here is what you can do.
+
+cd ${MOJARRA_2.0_REPO}
+ant -Dbuild.number=b10 -Dbuild.type=BETA1 clean main
+cd jsf-api && ant -Dbuild.number=b10 -Dbuild.type=BETA1 mvn.deploy.promoted.local && cd ..
+cd jsf-ri && ant -Dbuild.number=b10 -Dbuild.type=BETA1 mvn.deploy.promoted.local && cd ..
+
+This will produce the same result as what RE would produce so that the version strings, etc
+can all be verified.
+
+After running these steps you should be able to ls:
+
+    ~/.m2/repository/com/sun/faces/jsf-api/2.0.0-b10/jsf-api-2.0.0-b10.jar
+    ~/.m2/repository/com/sun/faces/jsf-impl/2.0.0-b10/jsf-impl-2.0.0-b10.jar
+
+
+Update your v3/pom.xml to refer to the new build.
+Build V3, and unpack the glassfish distribution (i.e. distributions/target/glassfish).
+Run the quicklook tests per usual.
