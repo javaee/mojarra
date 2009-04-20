@@ -39,6 +39,8 @@
 <project name="JSF Maven" basedir=".">
 
     <property name="current.dir" value="${jsf.build.home}/common/ant"/>
+    <property environment="myenv"/>
+    <property name="mvn.home" value="${myenv.M2_HOME}"/>
 
     <!-- ======================== SNAPSHOT ============================ -->
 
@@ -154,6 +156,16 @@
         <attribute name="dir"/>
         <attribute name="skipTests" default="true"/>
         <sequential>
+            <if>
+                <equals arg1="${mvn.home}" arg2="$${myenv.M2_HOME}"/>
+                <then>
+                    <property name="mvn.cmd" value="mvn"/>
+                </then>
+                <else>
+                    <property name="mvn.cmd" value="${mvn.home}/bin/mvn"/>
+                </else>
+            </if>
+
             <if>
                 <equals arg1="@{skipTests}" arg2="false"/>
                 <then>
