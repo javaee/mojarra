@@ -39,6 +39,8 @@
 <project name="JSF Maven" basedir=".">
 
     <property name="current.dir" value="${jsf.build.home}/common/ant"/>
+    <property environment="myenv"/>
+    <property name="mvn.home" value="${myenv.M2_HOME}"/>
 
     <!-- ======================== SNAPSHOT ============================ -->
 
@@ -155,6 +157,32 @@
         <attribute name="skipTests" default="true"/>
         <sequential>
             <if>
+                <equals arg1="${mvn.home}" arg2="$${myenv.M2_HOME}"/>
+                <then>
+                    <if>
+                        <os family="windows"/>
+                        <then>
+                            <property name="mvn.cmd" value="mvn.exe"/>
+                        </then>
+                        <else>
+                            <property name="mvn.cmd" value="mvn"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <if>
+                        <os family="windows"/>
+                        <then>
+                            <property name="mvn.cmd" value="${mvn.home}/bin/mvn.exe"/>
+                        </then>
+                        <else>
+                            <property name="mvn.cmd" value="${mvn.home}/bin/mvn"/>
+                        </else>
+                    </if>
+                </else>
+            </if>
+
+            <if>
                 <equals arg1="@{skipTests}" arg2="false"/>
                 <then>
                     <property name="testSkipProperty" value=""/>
@@ -165,22 +193,22 @@
                 </else>
             </if>
             <exec os="SunOS" dir="@{dir}" failonerror="yes"
-                  executable="mvn">
+                  executable="${mvn.cmd}">
                 <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
             <exec os="Linux" dir="@{dir}" failonerror="yes"
-                  executable="mvn">
+                  executable="${mvn.cmd}">
                 <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
-            <exec os="Windows 2000" dir="@{dir}" executable="mvn.exe"
+            <exec os="Windows 2000" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
                 <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
-            <exec os="Windows XP" dir="@{dir}" executable="mvn.exe"
+            <exec os="Windows XP" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
                 <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
-            <exec os="Mac OS X" dir="@{dir}" executable="mvn"
+            <exec os="Mac OS X" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
                 <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
