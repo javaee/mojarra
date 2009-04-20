@@ -54,5 +54,5 @@ After running these steps you should be able to ls:
 
 
 Update your v3/pom.xml to refer to the new build.
-Build V3, and unpack the glassfish distribution (i.e. distributions/target/glassfish).
+Build V3, and unpack the glassfish distribution (i.e. distributions/glassfish/target).
 Run the quicklook tests per usual.
