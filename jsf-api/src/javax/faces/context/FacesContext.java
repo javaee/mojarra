@@ -694,8 +694,8 @@ public abstract class FacesContext {
 
 
     /**
-     * <p class="chaged_added_2_0">Returns a flag indicating whether or not the
-     * runtime should publish events when asked to do so.</p>
+     * <p class="changed_added_2_0">Returns a flag indicating whether or
+     * not the runtime should publish events when asked to do so.</p>
      * @return <code>true</code> if events should be published, otherwise
      *  <code>false</code>
      */

@@ -566,6 +566,25 @@ public class BeanManager implements SystemEventListener {
             public void handle(String name, Object bean, FacesContext context) {
 
                 Map scopeMap = (Map) scope.getValue(context.getELContext());
+                
+                // IMPLEMENTATION PENDING.  I've added this to the Frame doc:
+                
+                /**
+                 * The runtime must must allow the value of this element to be 
+                 * an EL ValueExpression. If so, and the expression evaluates to
+                 * null, an informative error message including the expression 
+                 * string and the name of the bean must be logged. If the
+                 * expression evaluates to a Map, that Map is used as the
+                 * scope into which the bean will be stored. If storing the 
+                 * bean into the Map causes an Exception, the exception is 
+                 * allowed to flow up to the ExceptionHandler. If the 
+                 * ValueExpression does not evaluate to a Map, a
+                 * FacesException must be thrown with a message that includes 
+                 * the expression string, the toString() of the value, and 
+                 * the type of the value.
+                 * 
+                 */
+                
                 if (scopeMap != null) {
                     synchronized (this) {
                         //noinspection unchecked

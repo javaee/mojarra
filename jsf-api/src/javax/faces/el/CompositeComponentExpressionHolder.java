@@ -39,19 +39,18 @@ package javax.faces.el;
 import javax.el.ValueExpression;
 
 /**
- * RELEASE_PENDING (edburns,rogerk)
- * This interface <em>must</em> be implemented by the Map returned
- * by the composite component <code>ELResolver</code>, described in
- * section 5.6.2.2 of the specification, when evaluating
- * <code>#{compositeComponent.attrs}</code> epressions.
+ * This interface <em>must</em> be implemented by the <code>Map</code>
+ * returned by the composite component <code>ELResolver</code>,
+ * described in section JSF.5.6.2.2 of the specification, when
+ * evaluating <code>#{compositeComponent.attrs}</code> epressions.
  *
  * @since 2.0
  */
 public interface CompositeComponentExpressionHolder {
 
     /**
-     * @param name that attribute name which may be assocated
-     *  with a <code>ValueExpression</code>
+     * @param name that attribute name which may be assocated with a
+     * <code>ValueExpression</code>
      * @return the <code>ValueExpression</code> associated with </code>name</code>
      *  otherwise return <code>null</code>
      */

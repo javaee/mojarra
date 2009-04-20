@@ -49,7 +49,7 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag;
+package javax.faces.view.facelets;
 
 import javax.faces.view.facelets.Tag;
 

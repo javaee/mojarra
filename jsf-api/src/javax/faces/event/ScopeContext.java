@@ -39,7 +39,9 @@ package javax.faces.event;
 import java.util.Map;
 
 /**
- * Release Pending (docs)
+ * <p class="changed_added_2_0">A structure that contains the name of
+ * the scope and the scope itself exposed as a <code>Map&lt;String,
+ * Object&gt;</code>.</p>
  *
  * @since 2.0
  */
@@ -53,9 +55,10 @@ public class ScopeContext {
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param scopeName
-     * @param scope
+     * <p class="changed_added_2_0">Construct this structure with the
+     * supplied arguments.</p>
+     * @param scopeName the name of the scope
+     * @param scope the scope itself
      */
     public ScopeContext(String scopeName, Map<String, Object> scope) {
 
@@ -69,9 +72,8 @@ public class ScopeContext {
 
 
     /**
-     * RELEASE_PENDING (docs)
-     *
-     * @return
+     * <p class="changed_added_2_0">Return the name of this custom
+     * scope.</p>
      */
     public String getScopeName() {
 
@@ -81,9 +83,8 @@ public class ScopeContext {
 
 
     /**
-     * RELEASE_PENDING (docs)
-     *
-     * @return
+     * <p class="changed_modified_2_0">Return the scope itself, exposed
+     * as a <code>Map</code>.</p>
      */
     public Map<String, Object> getScope() {
 

@@ -1522,16 +1522,17 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
 
     /**
-     * RELEASE_PENDING
      * <p class="changed_added_2_0">Install the listener instance
-     * referenced by argument <code>listener</code> into the <code>UIViewRoot</code>
-     * as a listener for events of type <code>systemEventClass</code>.</p>
+     * referenced by argument <code>listener</code> into the
+     * <code>UIViewRoot</code> as a listener for events of type
+     * <code>systemEventClass</code>.</p>
      *
      * <p>Note that installed listeners are not maintained as part of the
      * <code>UIViewRoot</code>'s state.</p>
      *
      * @param systemEvent the <code>Class</code> of event for which
      *  <code>listener</code> must be fired.
+
      * @param listener the implementation of {@link
      *  javax.faces.event.SystemEventListener} whose {@link
      *  javax.faces.event.SystemEventListener#processEvent} method must
@@ -1567,10 +1568,10 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
 
     /**
-     * RELEASE_PENDING
      * <p class="changed_added_2_0">Remove the listener instance
-     * referenced by argument <code>listener</code> from the <code>UIViewRoot</code>
-     * as a listener for events of type <code>systemEventClass</code>.
+     * referenced by argument <code>listener</code> from the
+     * <code>UIViewRoot</code> as a listener for events of type
+     * <code>systemEventClass</code>.
      *
      * @param systemEvent the <code>Class</code> of event for which
      *  <code>listener</code> must be fired.
@@ -1580,8 +1581,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      *  be called when events of type <code>systemEventClass</code> are
      *  fired.
      *
-     * @throws <code>NullPointerException</code> if <code>systemEventClass</code>
-     *  or <code>listener</code> are <code>null</code>.
+     * @throws <code>NullPointerException</code> if
+     * <code>systemEventClass</code> or <code>listener</code> are
+     * <code>null</code>.
      *
      * @since 2.0
      */
@@ -1606,7 +1608,6 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
 
     /**
-     * RELEASE_PENDING
      * <p class="changed_added_2_0">Return the
      * <code>SystemEventListener</code> instances registered on this
      * <code>UIComponent</code> instance that are interested in events
@@ -1615,7 +1616,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @param systemEvent the <code>Class</code> of event for which the
      * listeners must be returned.
 
-     * @throws NullPointerException if argument <code>systemEvent</code> is <code>null</code>.
+     * @throws NullPointerException if argument <code>systemEvent</code>
+     * is <code>null</code>.
      *
      * @since 2.0
      */

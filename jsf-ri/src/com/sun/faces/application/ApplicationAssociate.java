@@ -49,7 +49,7 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
 import com.sun.faces.facelets.FaceletFactory;
-import com.sun.faces.facelets.tag.TagDecorator;
+import javax.faces.view.facelets.TagDecorator;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
 import com.sun.faces.facelets.tag.jstl.core.JstlCoreLibrary;
 import com.sun.faces.facelets.tag.jstl.fn.JstlFunction;

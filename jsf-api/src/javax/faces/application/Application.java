@@ -1532,7 +1532,14 @@ public abstract class Application {
      * on it, passing the <code>systemEventClass</code> argument.  If
      * the list is not empty, perform algorithm
      * <em>traverseListenerList</em> on the list.</p></li>
-     *
+
+     * <li><p>If any <em>view</em> level listeners have been installed
+     * by previous calls to {@link #subscribeToEvent(Class, Class,
+     * javax.faces.event.SystemEventListener)} on the {@link
+     * javax.faces.component.UIViewRoot}, perform algorithm
+     * <em>traverseListenerList</em> on the list of listeners for that
+     * event installed on the <code>UIViewRoot</code>.</p></li>
+
      * <li><p>If any <code>Application</code> level listeners have
      * been installed by previous calls to {@link
      * #subscribeToEvent(Class, Class,
@@ -1598,7 +1605,6 @@ public abstract class Application {
      *
      * @since 2.0
      *
-     * RELEASE_PENDING (edburns) update algorithm to include view events
      */
     public void publishEvent(Class<? extends SystemEvent> systemEventClass,
                              Object source) {
@@ -1638,8 +1644,6 @@ public abstract class Application {
      *
      * @throws NullPointerException if either <code>systemEventClass</code> or
      *  <code>source</code> is <code>null</code>
-     *
-     * RELEASE_PENDING (edburns) update algorithm to include view events
      *
      * @since 2.0
      */

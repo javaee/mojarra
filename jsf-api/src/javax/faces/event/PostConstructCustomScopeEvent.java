@@ -37,7 +37,20 @@
 package javax.faces.event;
 
 /**
- * RELEASE_PENDING
+ * <p class="changed_added_2_0">This class is provided to allow custom
+ * scopes to publish a "post construct" event in the same way that other
+ * scopes do to let the application become aware of the beginning of the
+ * scope.  The runtime must listen for this event and invoke any
+ * <code>PostConstruct</code> annotated methods on any of the beans in
+ * this scope as appropriate.  The following code can be used as a
+ * template for publishing such an event.</p> <code><pre>
+
+Map&lt;String, Object&gt; myScope = getMyScope(); 
+ScopeContext scopeContext = new ScopeContext("myScope", myScope);
+applicationPublishEvent(PostConstructCustomScopeEvent.class, scopeContext);
+</pre></code>
+
+ * <p></p>
  *
  * @since 2.0
  */
@@ -47,8 +60,14 @@ public class PostConstructCustomScopeEvent extends SystemEvent {
     // ------------------------------------------------------------ Constructors
 
     /**
-     * RELEASE_PENDING docs
-     * @param scopeContext
+     * <p class="changed_added_2_0">An instance of this event indicates
+     * that the custom scope enclosed within the argument
+     * <code>scopeContext</code> was just created.</p>
+
+     * @param scopeContext A structure that contains the name of the
+     * scope and the scope itself exposed as a <code>Map&lt;String,
+     * Object&gt;</code>.
+
      */
     public PostConstructCustomScopeEvent(ScopeContext scopeContext) {
 
@@ -61,8 +80,8 @@ public class PostConstructCustomScopeEvent extends SystemEvent {
 
 
     /**
-     * RELEASE_PENDING docs
-     * @return
+     * <p class="changed_added_2_0">Return the <code>ScopeContext</code>
+     * for this event.</p>
      */
     public ScopeContext getContext() {
 

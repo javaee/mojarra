@@ -68,7 +68,7 @@ import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.CompositeTagDecorator;
 import com.sun.faces.facelets.tag.CompositeTagLibrary;
-import com.sun.faces.facelets.tag.TagDecorator;
+import javax.faces.view.facelets.TagDecorator;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.util.Util;

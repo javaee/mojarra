@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.view.facelets.TagDecorator;
 import javax.faces.view.facelets.Tag;
 import com.sun.faces.util.Util;
 

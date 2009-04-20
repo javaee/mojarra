@@ -268,39 +268,15 @@ public abstract class ViewHandler {
      * <p><strong class="changed_modified_2_0">Create</strong> and
      * return a new {@link UIViewRoot} instance initialized with
      * information from the argument <code>FacesContext</code> and
-     * <code>viewId</code>.</p>
-     *
-     * <p>If there is an existing <code>ViewRoot</code> available on the
-     * {@link FacesContext}, this method must copy its
-     * <code>locale</code> and <code>renderKitId</code> to this new view
-     * root.  If not, this method must call {@link #calculateLocale} and
-     * {@link #calculateRenderKitId}, and store the results as the
-     * values of the  <code>locale</code> and <code>renderKitId</code>,
-     * proeprties, respectively, of the newly created
-     * <code>UIViewRoot</code>.</p>
-     *
-     * RELEASE_PENDING (edburns) document that it's the responsibility
-     * of create view to set the view ID in the viewroot
-     *
-     * <p class="changed_added_2_0">If the view is written using
-     * Facelets, the markup comprising the view must be executed, with
-     * the UIComponent instances in the view being encountered in the
-     * same depth-first order as in other lifecycle methods defined on
-     * {@link javax.faces.component.UIComponent}, and added to the view
-     * (but not rendered) during the traversal.  The runtime must
-     * guarantee that the view must be fully populated before the
-     * <code>afterPhase()</code> method of any {@link
-     * javax.faces.event.PhaseListener}s attached to the application or
-     * to the <code>UIViewRoot</code> (via {@link
-     * UIViewRoot#setAfterPhaseListener} or {@link
-     * UIViewRoot#addPhaseListener}) are called.  IMPORTANT: the new
-     * <code>UIViewRoot</code> instance must be passed to {@link
-     * javax.faces.context.FacesContext#setViewRoot}
-     * <strong>before</strong> the execution of the Facelets view
-     * resulting in tree creation.  This enables the broadest possible
-     * range of implementations for how tree creation is actually
-     * implemented.</p>
-     *
+     * <code>viewId</code>.  <span class="changed_modified_2_0">Locate
+     * the {@link ViewDeclarationLanguage} implementation for the VDL
+     * used in the view.  The argument <code>viewId</code> must be
+     * converted to a physical <code>viewId</code> that can refer to an
+     * actual resource suitable for use by the
+     * <code>ViewDeclarationLanguage</code> {@link
+     * ViewDeclarationLanguage#createViewId}, which must be called by
+     * this method.</span>
+
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
@@ -310,9 +286,6 @@ public abstract class ViewHandler {
      * <p class="changed_added_2_0">Derive and return the viewId from
      * the current request, or the argument input by following the
      * algorithm defined in specification section JSF.7.5.2.</p>
-     *
-     * RELEASE_PENDING (if a view ID cannot be derived this method should
-     *  return null to signify such)
      *
      * <p>The default implementation of this method simply returns
      * rawViewId unchanged.</p>
@@ -375,34 +348,40 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p class="changed_added_2_0">
-     * Return a JSF action URL derived from the <code>viewId</code> argument that
-     * is suitable to be used by the {@link NavigationHandler} to issue a redirect request to the URL using a
-     * NonFaces request. The requirements for how to build the JSF action URL are described below.
-     * </p>
+     * <p class="changed_added_2_0"> Return a JSF action URL derived
+     * from the <code>viewId</code> argument that is suitable to be used
+     * by the {@link NavigationHandler} to issue a redirect request to
+     * the URL using a NonFaces request. The requirements for how to
+     * build the JSF action URL are described below.  </p>
      *
-     * <p>
-     * To build the JSF action URL the value of the viewId argument should be
-     * fed through the {@link #getActionURL(FacesContext, String)} method to produce a URL; 
-     * this URL may include parameters which are passed untouched to {@link ExternalContext#encodeRedirectURL}
-     * as part of the baseURL. The additional parameters, represented as a <code>Map</code> of
-     * parameter names to one or more values, are collected as follows. If the <code>includeViewParams</code> 
-     * argument is <code>true</code>, the view parameters (i.e., {@link javax.faces.component.UIViewParameter} 
-     * components) are read from the target page. The value of the each page parameter is retrieved by calling
-     * {@link javax.faces.component.UIViewParameter#getStringValue(FacesContext)} and forming a parameter. 
-     * The view parameters, if included, are merged with the <code>parameters</code> argument.  When a parameter 
-     * is contributed by more than one of the previously mentioned source, the parameter with the highest 
-     * precendence is used, replacing all parameters with the same name from the lower precendence source. The
-     * order of precendence for parameters, from lowest to highest, is view parameters, the
-     * parameters argument (parameter overrides).
-     * The parameters are encoded into the query string of the URL by delegating to the method
-     * {@link ExternalContext#encodeRedirectURL(String, java.util.Map)} .  Finally, the result
-     * is encoded by calling {@link ExternalContext#encodeActionURL(String)}.
-     * </p>
+     * <p> To build the JSF action URL the value of the viewId argument
+     * should be fed through the {@link #getActionURL(FacesContext,
+     * String)} method to produce a URL; this URL may include parameters
+     * which are passed untouched to {@link
+     * ExternalContext#encodeRedirectURL} as part of the baseURL. The
+     * additional parameters, represented as a <code>Map</code> of
+     * parameter names to one or more values, are collected as
+     * follows. If the <code>includeViewParams</code> argument is
+     * <code>true</code>, the view parameters (i.e., {@link
+     * javax.faces.component.UIViewParameter} components) are read from
+     * the target page. The value of the each page parameter is
+     * retrieved by calling {@link
+     * javax.faces.component.UIViewParameter#getStringValue(FacesContext)}
+     * and forming a parameter.  The view parameters, if included, are
+     * merged with the <code>parameters</code> argument.  When a
+     * parameter is contributed by more than one of the previously
+     * mentioned source, the parameter with the highest precendence is
+     * used, replacing all parameters with the same name from the lower
+     * precendence source. The order of precendence for parameters, from
+     * lowest to highest, is view parameters, the parameters argument
+     * (parameter overrides).  The parameters are encoded into the query
+     * string of the URL by delegating to the method {@link
+     * ExternalContext#encodeRedirectURL(String, java.util.Map)} .
+     * Finally, the result is encoded by calling {@link
+     * ExternalContext#encodeActionURL(String)}.  </p>
      *
-     * <p>
-     *  The default implementation returns the result of {@link #getActionURL(javax.faces.context.FacesContext, String)}.
-     * </p>
+     * <p> The default implementation returns the result of {@link
+     * #getActionURL(javax.faces.context.FacesContext, String)}.  </p>
      *
      * @param context           The FacesContext processing this request
      * @param viewId            The view identifier of the target page

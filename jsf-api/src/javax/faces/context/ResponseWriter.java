@@ -187,23 +187,25 @@ public abstract class ResponseWriter extends Writer {
                                            String property)
             throws IOException;
 
-    //RELEASE_PENDING rogerk, edburns - need real english description
     /**
-     * <p>Open a CDATA block.  Nested CDATA blocks are not allowed.</p>
-     * <p>The default implementation of this method takes no action
-     *  when invoked.</p>
+     * <p class="changed_added_2_0">Open an XML <code>CDATA</code>
+     * block.  Note that XML does not allow nested <code>CDATA</code>
+     * blocks, though this method does not enforce that constraint.  The
+     * default implementation of this method takes no action when
+     * invoked.</p>
      * @throws IOException if input/output error occures
      */
     public void startCDATA() throws IOException {
-        throw new UnsupportedOperationException();
+
     }
 
 
-    //RELEASE_PENDING rogerk, edburns - need real english description
     /**
-     * <p>Close a CDATA block.</p>
-     * <p>The default implementation of this method takes no action
-     *  when invoked.</p>
+
+     * <p class="changed_added_2_0">Close an XML <code>CDATA</code>
+     * block.  The default implementation of this method takes no action
+     * when invoked.</p>
+
      * @throws IOException if input/output error occures
      */
     public void endCDATA() throws IOException {

@@ -78,24 +78,20 @@ public class NavigationCase {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review parameters docs
-     * <p>
-     * Construct a new <code>NavigationCase<code> based on the provided
-     * arguments.
-     * </p>
+     * <p class="changed_added_2_0"> Construct a new
+     * <code>NavigationCase</code> based on the provided arguments.  See
+     * section JSF.7.4.2 for how a <code>NavigationCase</code> is used
+     * by the standard {@link COnfigurableNavigationHandler}</p>
      *
-     * @param fromViewId the view id being navigated from
-     * @param fromAction the expression string of the invoked action that
-     *  triggered the navigation
-     * @param fromOutcome the outcome of action (if any)
-     * @param condition the condition that must be satisifed in order for
-     *  navigation to occur
-     * @param toViewId the view id to be navigated to
-     * @param parameters parameters that may be included during a redirect
-     * @param redirect <code>true</code> if the new view should be navigated
-     *  to via a {@link javax.faces.context.ExternalContext#redirect(String)}
-     * @param includeViewParams  <code>true</code> if the view parametets should
-     *  be encoded into the redirect URL (only applies to redirect case)
+     * @param fromViewId return from {@link #getViewId}
+     * @param fromAction return from {@link #getFromAction}
+     * @param fromOutcome return from {@link #getFromOutcome}
+     * @param condition A string to be interpreted as a
+     * <code>ValueExpression</code> by a call to {@link #getCondition}
+     * @param toViewId return from {@link #getToViewId}
+     * @param return from {@link #getParameters}
+     * @param redirect return from {@link #isRedirect}
+     * @param includeViewParams return {@link #isIncludeViewParams}
      */
     public NavigationCase(String fromViewId,
                           String fromAction,
@@ -295,14 +291,21 @@ public class NavigationCase {
 
 
     /**
-     * <p class="changed_added_2_0">Evaluates the <code>&lt;if&gt;</code> for
-     * this <code>&lt;navigation-case&gt;</code>, if any.</p>
+     * <p class="changed_added_2_0">Evaluates the
+     * <code>&lt;if&gt;</code> for this
+     * <code>&lt;navigation-case&gt;</code>, if any.  The expression to
+     * be evaluated is passed into the constructor as a string.  When
+     * the expression is evaluated, its value must be coerced into a
+     * <code>boolean</code> per the normail EL coercion rules.</p>
      *
      * @param context the {@link FacesContext} for the current request
      *
      * @return <code>null</code> if there is no <code>&lt;if&gt;</code> element
      *  associated with this <code>&lt;navigation-case&gt;</code>, otherwise
      *  return the evaluation result of the condition
+     *
+     * @throws any exceptions encountered during the process of
+     * evaluating the expression or obtaining its value.
      */
     public Boolean getCondition(FacesContext context) {
 
@@ -322,10 +325,12 @@ public class NavigationCase {
 
 
     /**
-     * RELEASE_PENDING
      * <p class="changed_added_2_0">Return the parameters to be included
      * for navigation cases requiring a redirect.  If no parameters are
-     * defined, <code>null</code> will be returned.</p>
+     * defined, <code>null</code> will be returned.  The keys in the
+     * <code>Map</code> are parameter names.  For each key, the
+     * corresponding value is a <code>List</code> of unconverted
+     * values.</p>
      */
     public Map<String, List<String>> getParameters() {
 
@@ -335,8 +340,11 @@ public class NavigationCase {
 
 
     /**
-     * <p class="changed_added_2_0">Return the <code>&lt;redirect&gt;</code>
-     * value for this <code>&lt;navigation-case&gt;</code></p>
+     * <p class="changed_added_2_0">Return the
+     * <code>&lt;redirect&gt;</code> value for this
+     * <code>&lt;navigation-case&gt;</code>.  This will be
+     * <code>true</code> if the new view should be navigated to via a
+     * {@link javax.faces.context.ExternalContext#redirect(String)}</p>
      */
     public boolean isRedirect() {
 
@@ -346,8 +354,11 @@ public class NavigationCase {
 
 
     /**
-     * <p class="changed_added_2_0">Return the <code>&lt;redirect&gt;</code>
-     * value for this <code>&lt;navigation-case&gt;</code></p>
+     * <p class="changed_added_2_0">Return the
+     * <code>&lt;redirect&gt;</code> value for this
+     * <code>&lt;navigation-case&gt;</code>.  This will be
+     * <code>true</code> if the view parametets should be encoded into
+     * the redirect URL (only applies to redirect case)</p>
      */
     public boolean isIncludeViewParams() {
 
