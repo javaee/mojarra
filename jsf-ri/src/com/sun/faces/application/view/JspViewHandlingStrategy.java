@@ -285,7 +285,9 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
         try {
             if (extContext.getResource(requestURI) == null) {
-                extContext.responseSendError(404, requestURI + " not found");
+                if (!extContext.isResponseCommitted()) {
+                    extContext.responseSendError(404, requestURI + " not found");
+                }
                 return true;
             }
         } catch (MalformedURLException mue) {
@@ -294,7 +296,9 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
                            mue.toString(),
                            mue);
             }
-            extContext.responseSendError(404, requestURI + " not found");
+            if (!extContext.isResponseCommitted()) {
+                extContext.responseSendError(404, requestURI + " not found");
+            }
             return true;
         }
 
