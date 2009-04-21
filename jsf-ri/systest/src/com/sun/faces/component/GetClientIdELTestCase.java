@@ -75,7 +75,7 @@ public class GetClientIdELTestCase extends AbstractTestCase {
 
     /**
      * Added for issue 501
-     * Verify #{component.clientId} and #{compositeComponent.clientId} work
+     * Verify #{component.clientId} and #{cc.clientId} work
      * properly
      *
      * @throws Exception

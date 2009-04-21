@@ -42,7 +42,7 @@ import javax.el.ValueExpression;
  * This interface <em>must</em> be implemented by the <code>Map</code>
  * returned by the composite component <code>ELResolver</code>,
  * described in section JSF.5.6.2.2 of the specification, when
- * evaluating <code>#{compositeComponent.attrs}</code> epressions.
+ * evaluating <code>#{cc.attrs}</code> epressions.
  *
  * @since 2.0
  */

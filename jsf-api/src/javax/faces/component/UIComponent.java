@@ -543,7 +543,7 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
     /**
      * <p class="changed_added_2_0">Enable EL to access the <code>clientId</code>
      * of a component.  This is particularly useful in combination with the 
-     * <code>component</code> and <code>compositeComponent</code> implicit
+     * <code>component</code> and <code>cc</code> implicit
      * objects.  A default implementation is provided that simply calls
      * {@link FacesContext#getCurrentInstance} and then calls through to
      * {@link #getClientId(FacesContext)}.</p>
@@ -805,15 +805,15 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
             // ResourceBundle as a Resource
             if (null == resourceBundle) {
                 if (this.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
-                    Resource compositeComponentResource = (Resource)
+                    Resource ccResource = (Resource)
                             this.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
-                    if (null != compositeComponentResource) {
-                        if (null != (compositeComponentResource = 
+                    if (null != ccResource) {
+                        if (null != (ccResource = 
                                 findComponentResourceBundleLocaleMatch(context, 
-                                compositeComponentResource.getResourceName(), 
-                                compositeComponentResource.getLibraryName()))) {
+                                ccResource.getResourceName(), 
+                                ccResource.getLibraryName()))) {
                             try {
-                                InputStream propertiesInputStream = compositeComponentResource.getInputStream();
+                                InputStream propertiesInputStream = ccResource.getInputStream();
                                 resourceBundle = new PropertyResourceBundle(propertiesInputStream);
                             } catch (IOException ex) {
                                 Logger.getLogger(UIComponent.class.getName()).log(Level.SEVERE, null, ex);
@@ -1670,7 +1670,7 @@ private void doFind(FacesContext context, String clientId) {
             previouslyPushed = (UIComponent) contextMap.put(CURRENT_COMPONENT, component);
             // If this is a composite component...
             if (UIComponent.isCompositeComponent(component)) {
-                // make it so #{compositeComponent} resolves to this composite 
+                // make it so #{cc} resolves to this composite 
                 // component, preserving the previous value if present
                 previouslyPushedCompositeComponent = 
                         (UIComponent) contextMap.put(CURRENT_COMPOSITE_COMPONENT, component);

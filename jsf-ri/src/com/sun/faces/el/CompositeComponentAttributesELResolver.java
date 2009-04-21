@@ -63,12 +63,12 @@ import com.sun.faces.util.Util;
 public class CompositeComponentAttributesELResolver extends ELResolver {
 
     /**
-     * Implicit object related only to the compositeComponent implicitObject.
+     * Implicit object related only to the cc implicitObject.
      */
     private static final String COMPOSITE_COMPONENT_ATTRIBUTES_NAME = "attrs";
 
     /**
-     * Implicit object related only to the compositeComponent implicit object
+     * Implicit object related only to the cc implicit object
      * and refers to the composite component parent (if any).
      */
     private static final String COMPOSITE_COMPONENT_PARENT_NAME = "parent";

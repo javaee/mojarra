@@ -50,16 +50,16 @@
 <composite:implementation>
     <script type="text/javascript">
         function changeNumber(amount) {
-            var increment = Number("#{compositeComponent.attrs.increment}");
+            var increment = Number("#{cc.attrs.increment}");
             if (isNaN(increment) || increment == 0 ) {
                 increment = 1;
             }
-            var entry = document.getElementById("#{compositeComponent.clientId}"+":"+"number");
+            var entry = document.getElementById("#{cc.clientId}"+":"+"number");
             entry.value = Number(entry.value) + (amount * increment);
             return false;
         }
     </script>
-    <h:inputText id="number" value="#{compositeComponent.attrs.value}"/>
+    <h:inputText id="number" value="#{cc.attrs.value}"/>
     <h:commandButton id="bigback" value="&lt;&lt;" onclick="return changeNumber(-10);"/>
     <h:commandButton id="back" value="&lt;" onclick="return changeNumber(-1);"/>
     <h:commandButton id="forward" value="&gt;" onclick="return changeNumber(1);"/>

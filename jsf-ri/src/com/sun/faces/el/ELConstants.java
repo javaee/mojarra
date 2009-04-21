@@ -47,9 +47,9 @@ public interface ELConstants {
 
     public static final int APPLICATION_SCOPE = 1;
 
-    public static final int COMPONENT = 2;
+    public static final int COMPOSITE_COMPONENT = 2;
 
-    public static final int COMPOSITE_COMPONENT = 3;
+    public static final int COMPONENT = 3;
 
     public static final int COOKIE = 4;
 

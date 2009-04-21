@@ -135,7 +135,7 @@ would make that file accessible like this.</p>
 <li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;p&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp;</div></li>
 <li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;h:commandButton <span class="kw3">id</span>=<span class="st0">&quot;loginEvent&quot;</span> </div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="kw3">value</span>=<span class="st0">&quot;#{compositeComponent.attrs.loginButtonLabel}&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="kw3">value</span>=<span class="st0">&quot;#{cc.attrs.loginButtonLabel}&quot;</span><span class="kw2">&gt;</span></span></div></li>
 <li class="li2"><div class="de2">&nbsp;</div></li>
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/h:commandButton&gt;</span></div></li>
 <li class="li2"><div class="de2">&nbsp;</div></li>
@@ -144,7 +144,7 @@ would make that file accessible like this.</p>
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/h:commandButton&gt;</span></div></li>
 <li class="li2"><div class="de2">&nbsp;</div></li>
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;special:validateUserButton </div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; validateUser=<span class="st0">&quot;#{compositeComponent.attrs.specialMethodExpression}&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; validateUser=<span class="st0">&quot;#{cc.attrs.specialMethodExpression}&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp;</div></li>
 <li class="li2"><div class="de2">&nbsp;</div></li>
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;/p&gt;</span></span></div></li>
@@ -169,7 +169,7 @@ the resource library <code>ezcomp</code>.  The
 <code>shortDescription</code> element could be changed to be:</p>
 
 <pre><code>
-&lt;composite:interface shortDescription="#{compositeComponent.resourceBundleMap.shortDescription}" &gt;
+&lt;composite:interface shortDescription="#{cc.resourceBundleMap.shortDescription}" &gt;
 </code></pre>
 
 <p>In this case, In the same <code>ezcomp</code> directory as
@@ -260,7 +260,7 @@ apply.</p>
           in the usage contract and those parameters are referred to in
           the <code>&lt;composite:implementation&gt;</code> section
           using EL expressions like
-          <code>#{compositeComponent.attrs.usernameLabel}</code>,
+          <code>#{cc.attrs.usernameLabel}</code>,
           assuming <code>usernameLabel</code> is the <code>name</code>
           of one of the <code>&lt;composite:attribute&gt;</code>
           elements in the usage contract.</p>

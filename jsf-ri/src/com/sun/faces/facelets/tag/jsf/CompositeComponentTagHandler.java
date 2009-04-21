@@ -120,15 +120,15 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         }
     }
     
-    CompositeComponentTagHandler(Resource compositeComponentResource,
+    CompositeComponentTagHandler(Resource ccResource,
             ComponentConfig config) {
         super(config);
-        this.compositeComponentResource = compositeComponentResource;
+        this.ccResource = ccResource;
         ((ComponentTagHandlerDelegateImpl)this.getTagHandlerDelegate()).setCreateComponentDelegate(this);
     }
     
     private void copyTagAttributesIntoComponentAttributes(FaceletContext ctx,
-                                                          UIComponent compositeComponent) {
+                                                          UIComponent cc) {
         
         TagAttributes tagAttributes = this.tag.getAttributes();
         TagAttribute attrs[] = tagAttributes.getAll();
@@ -145,7 +145,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     // on postback, yet it is.  In lieu of a real fix, I'll
                     // make sure I'm not overwriting a MethodExpression with a 
                     // ValueExpression.
-                    Map<String, Object> map = compositeComponent
+                    Map<String, Object> map = cc
                           .getAttributes();
                     boolean doPut = true;
                     if (map.containsKey(name)) {
@@ -163,13 +163,13 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         
     }
     
-    private Resource compositeComponentResource;
+    private Resource ccResource;
     
     
 
     public UIComponent createComponent(FaceletContext ctx) {
         FacesContext context = ctx.getFacesContext();
-        UIComponent result = context.getApplication().createComponent(context, compositeComponentResource);
+        UIComponent result = context.getApplication().createComponent(context, ccResource);
         result.subscribeToEvent(PostAddToViewEvent.class,
                                 new CompositeAttributesCopyListener());
 
@@ -232,7 +232,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         assert(null != facetComponent);
         
         try {
-            Facelet f = factory.getFacelet(compositeComponentResource.getURL());
+            Facelet f = factory.getFacelet(ccResource.getURL());
             copyTagAttributesIntoComponentAttributes(ctx, c);
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 
@@ -300,11 +300,11 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
          public void processEvent(ComponentSystemEvent event)
                throws AbortProcessingException {
 
-             UIComponent compositeComponent = event.getComponent();
+             UIComponent cc = event.getComponent();
              UIComponent compositeParent =
-                   UIComponent.getCompositeComponentParent(compositeComponent);
+                   UIComponent.getCompositeComponentParent(cc);
              if (compositeParent != null) {
-                 for (Map.Entry<String, Object> entry : compositeComponent
+                 for (Map.Entry<String, Object> entry : cc
                        .getAttributes().entrySet()) {
                      if (entry.getValue() instanceof Expression) {
                          Expression expr = (Expression) entry.getValue();
@@ -312,7 +312,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                              String exprString = expr
                                    .getExpressionString();
                              if (exprString.startsWith(
-                                   "#{compositeComponent.attrs.")) {
+                                   "#{cc.attrs.")) {
                                  int lastDot = exprString
                                        .lastIndexOf('.');
                                  if (lastDot != -1) {
@@ -330,7 +330,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                                            .getAttributes()
                                            .get(attrName);
                                      if (parentExpr instanceof Expression) {
-                                         compositeComponent.getAttributes()
+                                         cc.getAttributes()
                                                .put(entry.getKey(), parentExpr);
                                      }
 

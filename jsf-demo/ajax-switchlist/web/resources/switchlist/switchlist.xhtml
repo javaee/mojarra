@@ -60,15 +60,15 @@
 
 <composite:implementation>
     <h:outputStylesheet name="switchlist/switchlist.css"/>
-    <h:selectManyListbox value="#{compositeComponent.attrs.selected1}" styleClass="switchlist">
-        <f:selectItems value="#{compositeComponent.attrs.items1}"/>
+    <h:selectManyListbox value="#{cc.attrs.selected1}" styleClass="switchlist">
+        <f:selectItems value="#{cc.attrs.items1}"/>
     </h:selectManyListbox>
     <h:panelGroup id="buttonGroup" styleClass="switchlistButtons">    
-    <h:commandButton id="move1to2" value="&gt;&gt;" actionListener="#{compositeComponent.attrs.move1to2}" styleClass="switchlistButton"/>
-    <h:commandButton id="move2to1" value="&lt;&lt;" actionListener="#{compositeComponent.attrs.move2to1}" styleClass="switchlistButton"/>
+    <h:commandButton id="move1to2" value="&gt;&gt;" actionListener="#{cc.attrs.move1to2}" styleClass="switchlistButton"/>
+    <h:commandButton id="move2to1" value="&lt;&lt;" actionListener="#{cc.attrs.move2to1}" styleClass="switchlistButton"/>
     </h:panelGroup>
-    <h:selectManyListbox value="#{compositeComponent.attrs.selected2}" styleClass="switchlist">
-        <f:selectItems value="#{compositeComponent.attrs.items2}"/>
+    <h:selectManyListbox value="#{cc.attrs.selected2}" styleClass="switchlist">
+        <f:selectItems value="#{cc.attrs.items2}"/>
     </h:selectManyListbox>
 </composite:implementation>
 </body>

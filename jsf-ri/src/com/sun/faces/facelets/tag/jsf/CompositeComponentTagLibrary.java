@@ -98,13 +98,13 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
     public boolean containsTagHandler(String ns, String localName) {
         boolean result = false;
 
-        Resource compositeComponentResource = null;
+        Resource ccResource = null;
                         
-        if (null != (compositeComponentResource = 
+        if (null != (ccResource = 
                 getCompositeComponentResource(ns, localName))) {
             InputStream componentStream = null;
             try {
-                componentStream = compositeComponentResource.getInputStream();
+                componentStream = ccResource.getInputStream();
             } catch (IOException ex) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE, ex.toString(), ex);
@@ -116,19 +116,19 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
     }
     
     private Resource getCompositeComponentResource(String ns, String localName) {
-        Resource compositeComponentResource = null;
+        Resource ccResource = null;
         if (ns.equals(this.ns)) {
             FacesContext context = FacesContext.getCurrentInstance();
             String libraryName = getCompositeComponentLibraryName(this.ns);
             if (null != libraryName) {
-                String compositeComponentName = localName + ".xhtml";
+                String ccName = localName + ".xhtml";
                 // PENDING: there has to be a cheaper way to test for existence
                 ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
-                compositeComponentResource = resourceHandler.
-                        createResource(compositeComponentName, libraryName);
+                ccResource = resourceHandler.
+                        createResource(ccName, libraryName);
             }
         }
-        return compositeComponentResource;
+        return ccResource;
     }
 
 

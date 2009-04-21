@@ -58,20 +58,20 @@
     <h:outputScript name="jsf.js" library="javax.faces" target="head"/>
     <h:outputScript name="editText/editText.js" target="head" />
     <script type="text/javascript">
-        init("#{compositeComponent.clientId}", "#{compositeComponent.attrs.value}");
+        init("#{cc.clientId}", "#{cc.attrs.value}");
     </script>
     <h:outputStylesheet name="editText/styles.css"/>
     <h:panelGroup id="edit1">
         <h:outputLink id="editLink" title="Click to edit" styleClass="editLink"
-                      onclick="return linkClick('#{compositeComponent.clientId}');"
-                >#{compositeComponent.attrs.value}</h:outputLink>
+                      onclick="return linkClick('#{cc.clientId}');"
+                >#{cc.attrs.value}</h:outputLink>
     </h:panelGroup>
     <h:panelGroup id="edit2" style="display:none;">
-        <h:inputText id="editInput" value="#{compositeComponent.attrs.value}" styleClass="editInput"/>
+        <h:inputText id="editInput" value="#{cc.attrs.value}" styleClass="editInput"/>
         <h:commandButton value="Submit" id="submit"
-                         onclick="return submitButton('#{compositeComponent.clientId}', event);"/>
+                         onclick="return submitButton('#{cc.clientId}', event);"/>
         <h:commandButton value="Cancel" id="cancel"
-                         onclick="return cancelButton('#{compositeComponent.clientId}');"/>
+                         onclick="return cancelButton('#{cc.clientId}');"/>
     </h:panelGroup>
 </composite:implementation>
 

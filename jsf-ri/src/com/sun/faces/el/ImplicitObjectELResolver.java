@@ -60,8 +60,8 @@ import com.sun.faces.util.MessageUtils;
 
 public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
-    static final String[] IMPLICIT_OBJECTS = new String[] {
-        "application", "applicationScope", "component", "compositeComponent", "cookie", "facesContext",
+    static String[] IMPLICIT_OBJECTS = new String[] {
+        "application", "applicationScope", "cc", "component", "cookie", "facesContext",
         "header", "headerValues", "initParam", "param", "paramValues",
         "request", "requestScope", "resource", "session", "sessionScope", 
         "view", "viewScope" };
@@ -71,6 +71,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
     public Object getValue(ELContext context,Object base, Object property)
             throws ELException {
+        Arrays.sort(IMPLICIT_OBJECTS);
         // variable resolution is a special case of property resolution
         // where the base is null.
         if (base != null) {
@@ -96,14 +97,14 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                 case APPLICATION_SCOPE:
                     context.setPropertyResolved(true);
                     return extCtx.getApplicationMap();
-                case COMPONENT:
-                    UIComponent c = UIComponent.getCurrentComponent(facesContext);
-                    context.setPropertyResolved(c != null);
-                    return c;
                 case COMPOSITE_COMPONENT:
                     Object o = facesContext.getAttributes().get(UIComponent.CURRENT_COMPOSITE_COMPONENT);
                     context.setPropertyResolved(o != null);
                     return o;
+                case COMPONENT:
+                    UIComponent c = UIComponent.getCurrentComponent(facesContext);
+                    context.setPropertyResolved(c != null);
+                    return c;
                 case COOKIE:
                     context.setPropertyResolved(true);
                     return extCtx.getRequestCookieMap();
