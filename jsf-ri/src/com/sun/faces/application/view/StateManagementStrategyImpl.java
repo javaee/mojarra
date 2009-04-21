@@ -122,7 +122,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         return result;
     }
     
-    private class ComponentStruct implements StateHolder {
+    private static class ComponentStruct implements StateHolder {
         String parentClientId;
         String clientId;
         int indexOfChildInParent = -1;
@@ -170,19 +170,25 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     
     private void handleRemoveEvent(PreRemoveFromViewEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
+        UIComponent removed = event.getComponent();
+        if (removed.isTransient()) {
+            return;
+        }
         List<String> idsToRemove = getClientIdsToRemove(context, true);
         idsToRemove.add(event.getComponent().getClientId(context));
     }
     
     private void handleAddEvent(PostAddToViewEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
+        UIComponent added = event.getComponent();
+        if (added.isTransient()) {
+            return;
+        }
         Map<String,ComponentStruct> idsToAdd = getClientIdsToAdd(context, true);
         ComponentStruct toAdd = new ComponentStruct();
-        UIComponent 
-                parent,
-                added = event.getComponent();
+        UIComponent parent = added.getParent();
         toAdd.clientId = added.getClientId(context);
-        toAdd.parentClientId = (parent = added.getParent()).getClientId(context);
+        toAdd.parentClientId = parent.getClientId(context);
         // this needs work
         int idx = parent.getChildren().indexOf(added);
         if (idx == -1) {
@@ -382,7 +388,21 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                                 parent.getFacets().put(finalCur.facetName, toAdd);
                             } else {
                                 // add the child to the parent at correct index
-                                parent.getChildren().add(finalCur.indexOfChildInParent, toAdd);
+                                try {
+                                    parent.getChildren().add(finalCur.indexOfChildInParent, toAdd);
+                                } catch (IndexOutOfBoundsException ioobe) {
+                                    // the indexing within the parent list is off during the restore.
+                                    // This is most likely due to a transient component added during
+                                    // RENDER_REPONSE phase.
+                                    if (LOGGER.isLoggable(Level.FINE)) {
+                                        LOGGER.log(Level.FINE,
+                                                   "Unable to insert child with client ID {0} into parent with client ID {1} into list at index {2}.",
+                                                   new Object[] { finalCur.clientId,
+                                                                  finalCur.parentClientId,
+                                                                  finalCur.indexOfChildInParent});
+                                    }
+                                    parent.getChildren().add(toAdd);
+                                }
                             }
                         }
                     });
