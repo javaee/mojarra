@@ -170,7 +170,7 @@
         <delete dir="${basedir}/srctemp"/>
     </target>
 
-   <target name="prepare.build.java.net" description="Build distribution files"
+   <target name="dist" description="Build distribution files"
            depends="main">
         
         <mkdir dir="${dist.dir}" />
@@ -225,7 +225,7 @@
    </target>
 
 
-   <target name="build.spec.snapshot" depends="prepare.build.java.net">
+   <target name="build.spec.snapshot" depends="dist">
 
        <available type="dir" file="${javaserverfaces-spec-eg.dir}"
                   property="spec-eg-dir-available" />
@@ -269,7 +269,7 @@
   </target>
 
     <target name="build.java.net"
-            depends="prepare.build.java.net"/>
+            depends="dist"/>
 
     <target name="nightly" depends="build.java.net"
             description="update nightly build">
