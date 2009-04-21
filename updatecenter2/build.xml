@@ -21,7 +21,7 @@
     </target>
 
     <target name="repo" depends="dist">
-        <exec command="/bin/sh bin/makepkgs ${pkg.dir}" failonerror="true"/>
+        <exec command="/bin/sh bin/makepkgs.sh ${pkg.dir}" failonerror="true"/>
     </target>
 
     <target name="updatecenter2.clean" depends="cleanall"/>
