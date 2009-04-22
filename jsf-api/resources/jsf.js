@@ -1299,31 +1299,35 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 var changes = responseType.childNodes;
 
-
-                for (var i = 0; i < changes.length; i++) {
-                    switch (changes[i].nodeName) {
-                        case "update":
-                            doUpdate(changes[i]);
-                            break;
-                        case "delete":
-                            doDelete(changes[i]);
-                            break;
-                        case "insert":
-                            doInsert(changes[i]);
-                            break;
-                        case "attributes":
-                            doAttributes(changes[i]);
-                            break;
-                        case "eval":
-                            doEval(changes[i]);
-                            break;
-                        case "extension":
-                        // RELEASE_PENDING no action?
-                            break;
-                        default:
-                            sendError(request, context, "malformedXML");
-                            return;
+                try {
+                    for (var i = 0; i < changes.length; i++) {
+                        switch (changes[i].nodeName) {
+                            case "update":
+                                doUpdate(changes[i]);
+                                break;
+                            case "delete":
+                                doDelete(changes[i]);
+                                break;
+                            case "insert":
+                                doInsert(changes[i]);
+                                break;
+                            case "attributes":
+                                doAttributes(changes[i]);
+                                break;
+                            case "eval":
+                                doEval(changes[i]);
+                                break;
+                            case "extension":
+                            // RELEASE_PENDING no action?
+                                break;
+                            default:
+                                sendError(request, context, "malformedXML");
+                                return;
+                        }
                     }
+                } catch (ex) {
+                    sendError(request, context, "malformedXML");
+                    return;
                 }
                 sendEvent(request, context, "success");
 
