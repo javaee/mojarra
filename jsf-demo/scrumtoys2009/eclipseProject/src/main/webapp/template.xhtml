@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+    <h:head>
+        <h:outputStylesheet library="css/1_1" name="app.css"/>
+        <h:outputStylesheet library="css/1_1" name="menu.css"/>
+        <h:outputStylesheet library="css/1_1" name="appSelectedColor.css"/>
+        <h:outputScript     library="js" name="menu.js" target="head"/>
+        <h:outputScript     name="jsf.js" library="javax.faces"/>
+        <title><ui:insert name="pageTitle">
+                <h:outputText value="TITULO need i18n"></h:outputText>
+            </ui:insert>
+        </title>
+
+    </h:head>
+    <h:body>
+        <h:panelGrid>
+            <f:facet name="header">
+                <ui:include src="./menu.xhtml" />
+            </f:facet>
+            <ui:insert name="content"/>
+            <f:facet name="footer">
+                <ui:include src="./footer.xhtml" />
+            </f:facet>
+
+        </h:panelGrid>
+    </h:body>
+</html>  
