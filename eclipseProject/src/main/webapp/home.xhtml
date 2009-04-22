@@ -1,25 +1,55 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
 
-	<ui:composition>
-		<h:outputLink value="#{i18n['menuitem.path.dashboard']}">
-			<h:outputText value="#{i18n['menuitem.label.dashboard']}" />
-		</h:outputLink>
-		<h:outputText value=" | " />
-		<h:outputLink value="#{i18n['menuitem.path.allInOne']}">
-			<h:outputText value="#{i18n['menuitem.label.allInOne']} #{i18n['menuitem.developing']}" />
-		</h:outputLink>
-		<h:outputText value=" | " />
-		<h:outputLink value="#{i18n['menuitem.path.burndown']}">
-			<h:outputText value="#{i18n['menuitem.label.burndown']}" />
-		</h:outputLink>
-		<h:outputText value=" | " />
-		<h:outputLink value="#{i18n['menuitem.path.sprints']}">
-			<h:outputText value="#{i18n['menuitem.label.sprints']}" />
-		</h:outputLink>
-	</ui:composition>
+    <ui:composition template="template.xhtml">
+        <ui:define name="pageTitle">
+            <h:outputText value="HOME needs i18n"></h:outputText>
+        </ui:define>
 
+        <ui:define name="content">
+
+
+            <h:panelGrid styleClass="whiteboard">
+                <f:facet name="header">
+                    <h:outputText value=""></h:outputText>
+                </f:facet>
+                <h:panelGrid  columns="6" align="center" styleClass="postit-6colunas">
+                    <f:facet name="header">
+                        <h:outputText value="Welcome to Scrum Dashboard - JSF 2.0 Demo application"></h:outputText>
+                    </f:facet>
+
+                    <h:outputText value="Creat New Sprint"></h:outputText>
+                    <h:outputText value="Edit  Sprint data"></h:outputText>
+                    <h:outputText value="View list of Stories for a Sprint"></h:outputText>
+                    <h:outputText value="Delete a Sprint "></h:outputText>
+                    <h:outputText value="Add a new story to the Sprint"></h:outputText>
+                    <h:outputText value="Remove a story from the Sprint"></h:outputText>
+                    <h:outputText value="Edit Story data"></h:outputText>
+                    <h:outputText value="View List of Task for a Story"></h:outputText>
+                    <h:outputText value="Edit a Task"></h:outputText>
+                    <h:outputText value="Remove a Task from a Story"></h:outputText>
+                    <h:outputText value="Add a new Task to the Story"></h:outputText>
+                    <h:outputText value="View your Scrum Dashboard"></h:outputText>
+                    <h:outputText value="Mais..."></h:outputText>
+                    <h:outputText value="Mais..."></h:outputText>
+                    <h:outputText value="Mais..."></h:outputText>
+                    <h:outputText value="Mais..."></h:outputText>
+                    <h:outputText value="Mais..."></h:outputText>
+                    <h:outputText value="Mais..."></h:outputText>
+                </h:panelGrid>
+                <f:facet name="footer">
+                    <h:outputText value=" "></h:outputText>
+                </f:facet>
+            </h:panelGrid>
+
+
+        </ui:define>
+    </ui:composition>
 </html>
+
