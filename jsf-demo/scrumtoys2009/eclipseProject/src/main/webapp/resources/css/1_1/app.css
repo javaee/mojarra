@@ -70,10 +70,10 @@ span.error {
 body {
 	font-family: Arial, Helvetica, sans-serif ;
     font-size: 10px;
-    background-color: white;
+    background-color: #000;
 	color: black;
 	font-size: 10pt;
-    font-family: Arial, Helvetica, sans-serif;
+    background-image:url("../resources/images/postits/postit_quad_amar_150x145.png;");
 
 }
 
