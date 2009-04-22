@@ -1,28 +1,29 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"  
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:appez="http://java.sun.com/jsf/composite/components" >
-<h:head>
-    <title>#{dashboardMB.selectedSprint.name}</title>
-    <h:outputStylesheet library="css/1_1" name="app.css"/>
-</h:head>
-<h:body>
-    <h:outputScript library="javax.faces" name="ajax.js" target="head"/>
-	<h:messages errorClass="errorMsgs" infoClass="infoMsgs" />
-	<appez:title id="tituloDashboard" text="#{dashboardMB.selectedSprint.name}">
+
+<ui:composition template="template.xhtml">
+<ui:define name="pageTitle">
+    <h:outputText value="HOME needs i18n"></h:outputText>
+</ui:define>
+
+<ui:define name="content">
+
+
+    <h:outputScript library="javax.faces" name="ajax.js" target="head"></h:outputScript>
+    <h:messages errorClass="errorMsgs" infoClass="infoMsgs" />
+    <appez:title id="tituloDashboard" text="#{dashboardMB.selectedSprint.name}">
 		<h:panelGroup>
 			<h:outputLabel value="#{i18n['label.goal']}:" for="" style="font-weight: bold" />
 			<h:outputText value="#{dashboardMB.selectedSprint.goals}" />
 		</h:panelGroup>
 	</appez:title>
-	<div style="float: right">
-    <img src="#{resource['images/logo.gif']}" width="100px"/>
-    </div>
-	<h:panelGrid columns="4" style="float: left">
+	<h:panelGrid columns="2" style="float: left">
 			<h:outputLabel value="#{i18n['label.estimatives']}:" for="" style="font-weight: bold" />
 			<h:outputText value="#{dashboardMB.selectedSprint.meetings.estimation.date}">
 				<f:convertDateTime pattern="dd/MM/yyyy" />
@@ -35,7 +36,7 @@
 			<h:outputText value="#{dashboardMB.selectedSprint.meetings.sprintPlanningII.date}"/>
 			<h:outputLabel value="#{i18n['label.dailyMeeting']}:" for="" style="font-weight: bold" />
 			<h:panelGroup>
-			<h:outputText value="às ${dashboard2MB.selectedSprint.dailyMeetingTime}">
+			<h:outputText value="#{dashboard2MB.selectedSprint.dailyMeetingTime}">
 			</h:outputText>
 			</h:panelGroup>
 			<h:outputLabel value="#{i18n['label.revision']}:" for="" style="font-weight: bold" />
@@ -71,5 +72,6 @@
     </td>
     </tr>
     </table>
-</h:body>
+</ui:define>
+</ui:composition>
 </html>  
