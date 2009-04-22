@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -36,22 +35,35 @@
  holder.
 
 -->
-<!DOCTYPE html
-      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:ez="http://java.sun.com/jsf/composite/composite">
-<head>
-    <title>Should Not Be Displayed</title>
-</head>
-<body>
-    <composite:interface />
-    <composite:implementation>
-        <composite:insertChildren />
-    </composite:implementation>
-</body>
+<h:head>
+<title>Children and Facets</title>
+</h:head>
+
+<h:body>
+
+<h:form id="form">
+
+   <ez:childrenAndFacets id="cf">
+       <f:facet name="header">
+           <h:outputText id="outheader" style="color:blue" value="Inserted"/>
+       </f:facet>
+       <f:facet name="header2">
+           <h:outputText id="outheader2" style="color:red" value="Rendered"/>
+       </f:facet>
+       <h:outputText id="out1" value="v1"/>
+       <h:outputText id="out2" value="v2"/>
+   </ez:childrenAndFacets>
+   <h:commandButton id="submit" value="Reload"/>
+</h:form>
+<h:messages id="messages"/>
+
+
+</h:body>
+
 </html>

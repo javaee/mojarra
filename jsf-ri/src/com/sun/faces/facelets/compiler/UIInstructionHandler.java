@@ -142,7 +142,7 @@ final class UIInstructionHandler extends AbstractUIHandler {
                         ancestorNamingContainer instanceof UniqueIdVendor) {
                     uid = ((UniqueIdVendor) ancestorNamingContainer).createUniqueId(ctx.getFacesContext(), id);
                 } else {
-                    uid = ComponentSupport.getViewRoot(ctx, parent).createUniqueId();
+                    uid = ComponentSupport.getViewRoot(ctx, parent).createUniqueId(ctx.getFacesContext(), id);
                 }
                 
                 c.setId(uid);

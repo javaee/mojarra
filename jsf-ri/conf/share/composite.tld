@@ -1114,7 +1114,7 @@ for this key must be the evaluated value of the "name" attribute.</p>
 </div>]]>
         </description>
         <name>
-            insertFacet
+            renderFacet
         </name>
         <body-content>
             JSP
@@ -1518,5 +1518,57 @@ metadata into a composite component.</p>
   </tag>
 
 
+    <tag>
+        <description>
+            RELEASE_PENDING (description)
+        </description>
+        <name>
+            insertFacet
+        </name>
+        <tag-class></tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                RELEASE_PENDING (description)
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                RELEASE_PENDING (description)
+            </description>
+            <name>required</name>
+            <required>false</required>
+            <deferred-value>
+                <type>boolean</type>
+            </deferred-value>
+        </attribute>
+    </tag>
+
+
+     <tag>
+        <description>
+            RELEASE_PENDING (description)
+        </description>
+        <name>
+            insertChildren
+        </name>
+        <tag-class></tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>
+                RELEASE_PENDING (description)
+            </description>
+            <name>required</name>
+            <required>false</required>
+            <deferred-value>
+                <type>boolean</type>
+            </deferred-value>
+        </attribute>
+    </tag>
 
 </taglib>

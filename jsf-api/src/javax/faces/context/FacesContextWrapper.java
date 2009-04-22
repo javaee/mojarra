@@ -46,6 +46,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.render.RenderKit;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ProjectStage;
 import javax.el.ELContext;
 
 /**
@@ -462,4 +463,9 @@ public abstract class FacesContextWrapper extends FacesContext implements FacesW
         return getWrapped().isProcessingEvents();
     }
 
+
+    @Override
+    public boolean isProjectStage(ProjectStage stage) {
+        return getWrapped().isProjectStage(stage);    
+    }
 }

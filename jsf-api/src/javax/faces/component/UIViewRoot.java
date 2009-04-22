@@ -435,6 +435,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      */
     public List<PhaseListener> getPhaseListeners() {
 
+        //noinspection unchecked
         List<PhaseListener> result = (List<PhaseListener>)
               getStateHelper().get(PropertyKeys.phaseListeners);
 
@@ -809,6 +810,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     private void initState() {
         skipPhase = false;
         beforeMethodException = false;
+        //noinspection unchecked
         List<PhaseListener> listeners =
               (List<PhaseListener>) getStateHelper().get(PropertyKeys.phaseListeners);
         phaseListenerIterator =
@@ -868,6 +870,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                     public VisitResult visit(VisitContext context, UIComponent target) {
                         event.setComponent(target);
                         target.processEvent(event);
+                        //noinspection ReturnInsideFinallyBlock
                         return VisitResult.ACCEPT;
                     }
                 });
@@ -1302,10 +1305,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @return a unique-id in this component-container
      */
     public String createUniqueId(FacesContext context, String seed) {
-        Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
-        int lastId = ((i != null) ? i : 0);
-        getStateHelper().put(PropertyKeys.lastId,  ++lastId);
-        return UIViewRoot.UNIQUE_ID_PREFIX + (seed == null ? lastId : seed);
+        if (seed != null) {
+            return UIViewRoot.UNIQUE_ID_PREFIX + seed;
+        } else {
+            Integer i = (Integer) getStateHelper().get(PropertyKeys.lastId);
+            int lastId = ((i != null) ? i : 0);
+            getStateHelper().put(PropertyKeys.lastId,  ++lastId);
+            return UIViewRoot.UNIQUE_ID_PREFIX + lastId;
+        }
     }
 
 
@@ -1635,22 +1642,17 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     
 
     private void encodeViewParameters(FacesContext context) {
-        ViewDeclarationLanguage pdl = null;
-        
-        try {
-            pdl = context.getApplication().getViewHandler().
+
+        ViewDeclarationLanguage vdl = context.getApplication().getViewHandler().
                     getViewDeclarationLanguage(context, getViewId());
-        } catch (UnsupportedOperationException uoe) {
-            
-        }
-        
-        if (null == pdl) {
+
+        if (vdl == null) {
             return;
         }
-        ViewMetadata metadata = pdl.getViewMetadata(context, getViewId());
+        ViewMetadata metadata = vdl.getViewMetadata(context, getViewId());
         if (metadata != null) { // perhaps it's not supported
             Collection<UIViewParameter> params =
-                  metadata.getViewParameters(this);
+                  ViewMetadata.getViewParameters(this);
             if (params.isEmpty()) {
                 return;
             }
@@ -1692,6 +1694,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
+        //noinspection unchecked
         viewScope = (Map<String,Object>) restoreAttachedState(context, values[1]);
         
     }

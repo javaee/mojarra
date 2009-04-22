@@ -420,7 +420,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             String[] viewIds = config.getOptionValue(FullStateSavingViewIds, ",");
             fullStateViewIds = new HashSet<String>(viewIds.length, 1.0f);
             fullStateViewIds.addAll(Arrays.asList(viewIds));
-            this.stateManagementStrategy = new StateManagementStrategyImpl(this, fullStateViewIds);
+            this.stateManagementStrategy = new StateManagementStrategyImpl(this);
         }
 
         groovyAvailable = GroovyHelper.isGroovyAvailable(FacesContext.getCurrentInstance());

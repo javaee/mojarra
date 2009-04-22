@@ -43,6 +43,8 @@ import com.gargoylesoftware.htmlunit.html.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * Unit tests for Composite Components.
@@ -294,8 +296,52 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
+
+    public void testChildrenAndFacets() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/childrenfacets.xhtml");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(6);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        validateChildrenAndFacets(spans);
+        page = pushButton(page, "form:submit");
+        validateChildrenAndFacets(spans);
+        
+    }
+
     
     // --------------------------------------------------------- Private Methods
+
+
+    private void validateChildrenAndFacets(List<HtmlSpan> spans) throws Exception {
+
+        String[] ids = new String[] {
+            "form:cf:outheader2",
+                  "form:cf:outheader",
+                  "form:cf:out1",
+                  "form:cf:out2",
+                  "ccCount",
+                  "header2Facet",
+                  "header1Facet"
+
+        };
+        String[] values = new String[] {
+              "Rendered",
+              "Inserted",
+              "v1",
+              "v2",
+              "0",
+              "true",
+              "true"
+        };
+
+        assertEquals(ids.length, spans.size());
+        for (int i = 0, len = ids.length; i < len; i++) {
+            HtmlSpan span = spans.get(i);
+            assertEquals(ids[i], span.getId());
+            assertEquals(values[i], span.asText());
+        }
+       
+    }
 
 
     private void validateActionMessagePresent(HtmlPage page, String commandId)

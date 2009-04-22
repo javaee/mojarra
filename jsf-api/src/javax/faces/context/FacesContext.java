@@ -47,6 +47,7 @@ import java.util.Map;
 
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ProjectStage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -701,6 +702,16 @@ public abstract class FacesContext {
      */
     public boolean isProcessingEvents() {
         return this.processingEvents;
+    }
+
+
+    public boolean isProjectStage(ProjectStage stage) {
+
+        if (stage == null) {
+            throw new NullPointerException();
+        }
+        return stage.equals(getApplication().getProjectStage());
+
     }
 
     // ---------------------------------------------------------- Static Methods

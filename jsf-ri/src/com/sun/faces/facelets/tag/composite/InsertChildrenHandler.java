@@ -34,6 +34,7 @@
  * holder.
  */
 
+
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
@@ -43,36 +44,28 @@ import javax.faces.component.UIComponent;
 import javax.faces.FacesException;
 import javax.el.ELException;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 /**
- * This <code>TagHandler</code> is responsible for relocating Facets
+ * This <code>TagHandler</code> is responsible for relocating children
  * defined within a composite component to a component within the
  * composite component's <code>composite:implementation</code> section.
  */
-public class InsertFacetHandler extends TagHandlerImpl {
+public class InsertChildrenHandler extends TagHandlerImpl {
 
-    // Supported attribute names
-    private static final String NAME_ATTRIBUTE = "name";
     private static final String REQUIRED_ATTRIBUTE = "required";
-
-    // Attributes
-
-    // This attribute is required.
-    TagAttribute name;
 
     // This attribute is not required.  If not defined, then assume the facet
     // isn't necessary.
     TagAttribute required;
 
-
+    
     // ------------------------------------------------------------ Constructors
 
 
-    public InsertFacetHandler(TagConfig config) {
+    public InsertChildrenHandler(TagConfig config) {
 
         super(config);
-        name = getRequiredAttribute(NAME_ATTRIBUTE);
         required = getAttribute(REQUIRED_ATTRIBUTE);
 
     }
@@ -90,23 +83,16 @@ public class InsertFacetHandler extends TagHandlerImpl {
             return;
         }
 
-        Map<String,UIComponent> facets = compositeParent.getFacets();
-        String name = this.name.getValue(ctx);
         boolean required =
               ((this.required != null) && this.required.getBoolean(ctx));
 
-        if (compositeParent.getFacetCount() == 0 && required) {
+        if (compositeParent.getChildCount() == 0 && required) {
             throwRequiredException(ctx, compositeParent);
         }
 
-        UIComponent facet = facets.remove(name);
-        if (facet != null) {
-            parent.getFacets().put(name, facet);
-        } else {
-            if (required) {
-                throwRequiredException(ctx, compositeParent);
-            }
-        }
+        List<UIComponent> compositeChildren = compositeParent.getChildren();
+        List<UIComponent> parentChildren = parent.getChildren();
+        parentChildren.addAll(compositeChildren);
 
     }
 
@@ -118,12 +104,10 @@ public class InsertFacetHandler extends TagHandlerImpl {
                                         UIComponent compositeParent) {
 
         throw new TagException(this.tag,
-                               "Unable to find facet named '"
-                               + name
-                               + "' in parent composite component with id '"
+                               "Unable to find any children components "
+                               + "nested within parent composite component with id '"
                                + compositeParent .getClientId(ctx.getFacesContext())
                                + '\'');
 
     }
-
 }

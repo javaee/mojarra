@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -36,22 +35,39 @@
  holder.
 
 -->
-<!DOCTYPE html
-      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite"
-      xmlns:ez="http://java.sun.com/jsf/composite/composite">
+      xmlns:composite="http://java.sun.com/jsf/composite">
 <head>
-    <title>Should Not Be Displayed</title>
+
+<title>Not present in rendered output</title>
+
 </head>
+
 <body>
-    <composite:interface />
-    <composite:implementation>
+
+<composite:interface>
+</composite:interface>
+
+<composite:implementation>
+    <composite:renderFacet name="header2"/>
+    <h:panelGrid id="grid1" style="border-style:solid">
+        <composite:insertFacet name="header"/>
         <composite:insertChildren />
-    </composite:implementation>
+    </h:panelGrid>
+    <br/>
+    <h:panelGrid id="grid2" style="border-style:solid">
+        <composite:insertFacet name="header"/> <!-- should be ignored -->
+        <composite:insertChildren /> <!-- should be ignored -->
+    </h:panelGrid>
+    <br/>
+    <br/>
+    Composite Parent Children Count:                   <span id="ccCount">#{cc.childCount}</span><br/>
+    Composite Parent contains facet 'header2':         <span id="header2Facet">#{cc.facets['header2'] != null}</span><br/>
+    Composite Parent does not contain facet 'header':  <span id="header1Facet">#{cc.facets['header1'] == null}</span><br/>
+</composite:implementation>
+
 </body>
+
 </html>
