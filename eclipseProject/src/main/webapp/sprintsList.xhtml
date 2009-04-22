@@ -8,58 +8,80 @@
       xmlns:appez="http://java.sun.com/jsf/composite/components" >
 
 
-     <ui:composition template="template.xhtml">
+    <ui:composition template="template.xhtml">
         <ui:define name="pageTitle">
             <h:outputText value="#{i18n['menuitem.label.sprints']}"></h:outputText>
         </ui:define>
 
         <ui:define name="content">
-    
 
-    <h:form id="frmList">
-            
-            <h:outputText value="#{i18n['label.dailyMeeting']}:"></h:outputText>
-        
-            <h:dataTable value="#{sprintsMB.dm}" var="sprint"
-                         rendered="#{sprintsMB.dm.rowCount > 0}"
-                         title="Whiteboard with all Sprints"
-                         summary="Whiteboard with all Sprints" 
-                         footerClass="tableFooter"
-                         headerClass="tableHeader"
-                         styleClass="postit-1coluna"
-                         border="0">
-                <f:facet name="header">
-                    <h:outputText value=" " />
-                </f:facet>
 
-                <h:column>
-                    
-                    <h:graphicImage value="./resources/images/refresh.png"/>
-                    <h:outputText value="#{sprintsMB.dm.rowIndex + 1}" />
-                    <h:outputText value=" #{sprint.name} " /><br/>
-                    <h:outputText value=" #{sprint.goals} " /><br/>
-                    <h:outputText value=" #{i18n['label.startedAt']}: "/>
-                    <h:outputText value=" #{sprint.startedAt} " /><br/>
-                    <h:graphicImage value="./resources/images/clock.png"/>
-                    <h:outputText value=" #{i18n['label.dailyMeeting']}: " />
-                    <h:outputText value=" #{sprint.dailyMeetingTime} " /><br/> 
-                    
-                    <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.edit}" value="#{i18n['button.edit']}"  />
-                    <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.remove}" value="#{i18n['button.delete']}" />
-                    <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.showStories}" value="#{i18n['button.stories']}"  />
-                    <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.showDashboard}" value="#{i18n['button.dashboard']}"  />
-                    
-                </h:column>
+            <h:form id="frmList">
+
+                <br/><br/>
                 
-                <f:facet name="footer">
-                    <h:outputText value="" />
-                </f:facet>
+                <br/>
+                
+                <h:dataTable value="#{sprintsMB.dm}" var="sprint"
+                             rendered="#{sprintsMB.dm.rowCount > 0}"
+                             title="Whiteboard with all Sprints"
+                             summary="Whiteboard with all Sprints"                             
+                             border="0"
+                             headerClass="datatableHeader"
+                             rowClasses="datatableRow,datatableRow2"
+                             columnClasses="dataTableFirstColumn"
+                             styleClass="datatable">
+                    
 
-            </h:dataTable>
-            
-           
+                    <h:column>
+                        <f:facet name="header">
+                        #
+                        </f:facet>
+                        <h:outputText value="#{sprintsMB.dm.rowIndex + 1}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['label.name']}" />
+                        </f:facet>
+                        <h:outputText value="#{sprint.name}" />
+                    </h:column>
+                    <h:column>
+                          <f:facet name="header">
+                            <h:outputText value="#{i18n['label.goals']}" />
+                        </f:facet>
+                        <h:outputText value="#{sprint.goals}" />
+                    </h:column>
+                    <h:column>
+                          <f:facet name="header">
+                            <h:outputText value="#{i18n['label.startedAt']}"/>
+                        </f:facet>
+                        <h:outputText value="#{sprint.startedAt}" />
+                    </h:column>
+                    <h:column>
+                          <f:facet name="header">
+                            
+                            <h:outputText value="#{i18n['label.dailyMeeting']}" />
+                            </f:facet>
+                                <h:outputText value=" #{sprint.dailyMeetingTime}" />
+                                <h:outputText value=" Nao esta salvando" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['label.actions']}"/>
+                        </f:facet>
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.edit}" value="#{i18n['button.edit']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.remove}" value="#{i18n['button.delete']}" />
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.showStories}" value="#{i18n['button.stories']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.showDashboard}" value="#{i18n['button.dashboard']}"  />
+                    </h:column>
 
-    </h:form>
+
+
+                </h:dataTable>
+
+
+
+            </h:form>
         </ui:define>
     </ui:composition>
 </html>
