@@ -1,41 +1,39 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"  
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:appez="http://java.sun.com/jsf/composite/components" >
-<h:head>
-    <title>#{i18n['menuitem.label.sprints']}</title>
-    <h:outputStylesheet library="css/1_1" name="app.css"/>
-</h:head>
-<h:body>
-	<h:messages globalOnly="true" showDetail="true" tooltip="true" errorClass="errorMsgs" infoClass="infoMsgs" />
-	<div style="float: right">
-    	<img src="#{resource['images/logo.gif']}" width="100px"/>
-    </div>
-    <h:form id="frmNew">
-	    <h:commandLink action="home" value="#{'go home'}" />
+
+<ui:composition template="template.xhtml">
+<ui:define name="pageTitle">
+    <h:outputText value="HOME needs i18n"></h:outputText>
+</ui:define>
+
+<ui:define name="content">
+	<h:messages globalOnly="true" showDetail="true" tooltip="true" errorClass="errorMsgs" infoClass="infoMsgs" />	
+    <h:form id="frmNew">	    
     	<h2>New Sprint</h2>
 		<h:panelGrid columns="3" style="width: 300px">
-				<h:outputLabel value="#{i18n['sprints.label.name']}:" for="itName" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['sprints.label.name']}:" for="itName"  />
 				<h:inputText id="itName" value="#{allInOneMB.sprintsMB.toSave.name}" required="true" requiredMessage="Type the short name" />
 				<h:message for="itName" />
 				
-				<h:outputLabel value="#{i18n['sprints.label.goals']}:" for="itGoals" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['sprints.label.goals']}:" for="itGoals"  />
 				<h:inputText id="itGoals" value="#{allInOneMB.sprintsMB.toSave.goals}" required="true" requiredMessage="Describe the goals" />
 				<h:message for="itGoals" />
 				
-				<h:outputLabel value="#{i18n['sprints.label.iterationScope']}:" for="itIterationScope" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['sprints.label.iterationScope']}:" for="itIterationScope"  />
 				<h:inputText id="itIterationScope" value="#{allInOneMB.sprintsMB.toSave.iterationScope}" required="true" cols="50" rows="4" requiredMessage="Type the scope" />
 				<h:message for="itIterationScope" />
 				
-				<h:outputLabel value="#{i18n['sprints.label.startedAt']}:" for="itStartedAt" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['sprints.label.startedAt']}:" for="itStartedAt"  />
 				<h:inputText id="itStartedAt" value="#{allInOneMB.sprintsMB.toSave.startedAt}" required="true" requiredMessage="Type when this sprint start" />
 				<h:message for="itStartedAt" />
 				
-				<h:outputLabel value="#{i18n['sprints.label.dailyMeetingTime']}:" for="itDailyMeetingTime" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['sprints.label.dailyMeetingTime']}:" for="itDailyMeetingTime"  />
 				<h:inputText id="itDailyMeetingTime" value="#{allInOneMB.sprintsMB.toSave.dailyMeetingTime}" required="true" requiredMessage="Type the estimation (story points)" />
 				<h:message for="itDailyMeetingTime" />
 				
@@ -93,19 +91,19 @@
     <h:form id="frmNewStory">
     	<h2>New Story</h2>
 		<h:panelGrid columns="3" style="width: 300px">
-				<h:outputLabel value="#{i18n['stories.label.sprint']}:" for="otSprint" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['stories.label.sprint']}:" for="otSprint"  />
 				<h:outputText id="otSprint" value="#{storiesMB.toSave.sprint.name}"  />
 				<h:message for="otSprint" />
-				<h:outputLabel value="#{i18n['stories.label.name']}:" for="itName" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['stories.label.name']}:" for="itName"  />
 				<h:inputText id="itName" value="#{storiesMB.toSave.name}" required="true" requiredMessage="Describe the story" />
 				<h:message for="itName" />
-				<h:outputLabel value="#{i18n['stories.label.acceptance']}:" for="itAcceptance" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['stories.label.acceptance']}:" for="itAcceptance"  />
 				<h:inputTextarea id="itAcceptance" value="#{storiesMB.toSave.acceptance}" required="true" cols="50" rows="4" requiredMessage="Describe the acceptance" />
 				<h:message for="itAcceptance" />
-				<h:outputLabel value="#{i18n['stories.label.priority']}:" for="selPriority" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['stories.label.priority']}:" for="selPriority"  />
 				<h:inputText id="selPriority" value="#{storiesMB.toSave.priority}" required="true" requiredMessage="Type the priority (sequence to do)" />
 				<h:message for="selPriority" />
-				<h:outputLabel value="#{i18n['stories.label.estimation']}:" for="itEstimation" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['stories.label.estimation']}:" for="itEstimation"  />
 				<h:inputText id="itEstimation" value="#{storiesMB.toSave.estimation}" required="true" requiredMessage="Type the estimation (story points)" />
 				<h:message for="itEstimation" />
 				<f:verbatim></f:verbatim>
@@ -115,8 +113,8 @@
     </h:form>
     <h:form id="frmStories">
     	<h2>Stories</h2>
-		<h:panelGrid columns="3" style="width: 300px">
-				<h:outputLabel value="No exist stories for this sprint" style="color: orange"  rendered="#{storiesMB.dm.rowCount eq 0}"/>
+		<h:panelGrid columns="3" >
+				<h:outputLabel value="No exist stories for this sprint"  rendered="#{storiesMB.dm.rowCount eq 0}"/>
 		</h:panelGrid>
 		<h:dataTable value="#{storiesMB.dm}" var="story" width="100%" rendered="#{storiesMB.dm.rowCount > 0}">
 			<h:column headerClass="textColumn">
@@ -157,10 +155,10 @@
 	    <h:commandLink action="stories" value="#{'go back stories'}" immediate="true" />
     	<h2>New Task</h2>
 		<h:panelGrid columns="3" style="width: 300px">
-				<h:outputLabel value="#{i18n['tasks.label.story']}:" for="otStory" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['tasks.label.story']}:" for="otStory"  />
 				<h:outputText id="otStory" value="#{tasksMB.taskToSave.story.name}" />
 				<h:message for="otStory" />
-				<h:outputLabel value="#{i18n['tasks.label.name']}:" for="itName" style="font-weight: bold" />
+				<h:outputLabel value="#{i18n['tasks.label.name']}:" for="itName"  />
 				<h:inputText id="itName" value="#{tasksMB.taskToSave.name}" required="true" requiredMessage="Descreva a tarefa" />
 				<h:message for="itName" />
 				<f:verbatim></f:verbatim>
@@ -171,7 +169,7 @@
     <h:form id="frmTasks">
     	<h2>Tasks</h2>
 		<h:panelGrid columns="3" style="width: 300px">
-				<h:outputLabel value="Não há tarefas para esta estória" style="color: orange"  rendered="#{tasksMB.dmTasks.rowCount eq 0}"/>
+				<h:outputLabel value="Nao ha tarefas para esta estoria" style="color: orange"  rendered="#{tasksMB.dmTasks.rowCount eq 0}"/>
 		</h:panelGrid>
 		<h:dataTable value="#{tasksMB.dmTasks}" var="task" width="300px" rendered="#{tasksMB.dmTasks.rowCount > 0}">
 			<h:column headerClass="textColumn">
@@ -192,6 +190,6 @@
 			</h:column>
 		</h:dataTable>
     </h:form>
-    
-</h:body>
+</ui:define>
+</ui:composition>
 </html>  
