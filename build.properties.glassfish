@@ -106,6 +106,7 @@ glassfish.domain=domain1
 # Directory for pkg tools, downloaded from
 # http://wiki.updatecenter.java.net/Wiki.jsp?page=Download
 # Used for updatecenter2
+# Note: 2.1RR is the minimum required version
 # Be sure to specify the "pkg" directory under the distro
 # For example:
 # pkg.dir=/home/username/pkg/pkg
