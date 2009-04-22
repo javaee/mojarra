@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+
+
+     <ui:composition template="template.xhtml">
+        <ui:define name="pageTitle">
+            <h:outputText value="#{i18n['menuitem.label.sprints']}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+    
+
+    <h:form id="frmList">
+            
+            <h:outputText value="#{i18n['label.dailyMeeting']}:"></h:outputText>
+        
+            <h:dataTable value="#{sprintsMB.dm}" var="sprint"
+                         rendered="#{sprintsMB.dm.rowCount > 0}"
+                         title="Whiteboard with all Sprints"
+                         summary="Whiteboard with all Sprints" 
+                         footerClass="tableFooter"
+                         headerClass="tableHeader"
+                         styleClass="postit-1coluna"
+                         border="0">
+                <f:facet name="header">
+                    <h:outputText value=" " />
+                </f:facet>
+
+                <h:column>
+                    
+                    <h:graphicImage value="./resources/images/refresh.png"/>
+                    <h:outputText value="#{sprintsMB.dm.rowIndex + 1}" />
+                    <h:outputText value=" #{sprint.name} " /><br/>
+                    <h:outputText value=" #{sprint.goals} " /><br/>
+                    <h:outputText value=" #{i18n['label.startedAt']}: "/>
+                    <h:outputText value=" #{sprint.startedAt} " /><br/>
+                    <h:graphicImage value="./resources/images/clock.png"/>
+                    <h:outputText value=" #{i18n['label.dailyMeeting']}: " />
+                    <h:outputText value=" #{sprint.dailyMeetingTime} " /><br/> 
+                    
+                    <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.edit}" value="#{i18n['button.edit']}"  />
+                    <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.remove}" value="#{i18n['button.delete']}" />
+                    <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.showStories}" value="#{i18n['button.stories']}"  />
+                    <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.showDashboard}" value="#{i18n['button.dashboard']}"  />
+                    
+                </h:column>
+                
+                <f:facet name="footer">
+                    <h:outputText value="" />
+                </f:facet>
+
+            </h:dataTable>
+            
+           
+
+    </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

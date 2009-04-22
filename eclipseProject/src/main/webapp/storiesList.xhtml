@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+
+
+    <h:form id="frmListStories">
+
+        <h:panelGrid columns="3">
+            <h:outputLabel value="No exist stories for this sprint" rendered="#{storiesMB.dm.rowCount eq 0}"/>
+        </h:panelGrid>
+        
+        <h:dataTable value="#{storiesMB.dm}" var="story" width="100%" rendered="#{storiesMB.dm.rowCount > 0}">
+            <f:facet name="header">
+                <h:outputText>List of Stories</h:outputText>
+            </f:facet>
+            <h:column headerClass="textColumn">
+                <f:facet name="header"><h:outputLabel value="#" /></f:facet>
+                <h:outputText value="#{storiesMB.dm.rowIndex + 1}" />
+                <f:facet name="footer">#{""}</f:facet>
+            </h:column>
+            <h:column headerClass="textColumn">
+                <f:facet name="header"><h:outputLabel value="name" /></f:facet>
+                <h:outputText value="#{story.name}" />
+                <f:facet name="footer">#{storiesMB.dm.rowCount}#{" stories"}</f:facet>
+            </h:column>
+            <h:column headerClass="textColumn">
+                <f:facet name="header"><h:outputLabel value="priority" /></f:facet>
+                <h:outputText value="#{story.priority}" />
+                <f:facet name="footer">#{" "}</f:facet>
+            </h:column>
+            <h:column headerClass="textColumn">
+                <f:facet name="header"><h:outputLabel value="estimation (sp)" /></f:facet>
+                <h:outputText value="#{story.estimation}" />
+                <f:facet name="footer">#{" "}</f:facet>
+            </h:column>
+            <h:column headerClass="textColumn">
+                <f:facet name="header"><h:outputLabel value="acceptance" /></f:facet>
+                <h:outputText value="#{story.acceptance}" />
+                <f:facet name="footer">#{" "}</f:facet>
+            </h:column>
+            <h:column>
+                <f:facet name="header"><h:outputLabel value="actions" /></f:facet>
+                <h:commandButton action="#{storiesMB.edit}" value="edit ..." immediate="true" />
+                <h:commandButton action="#{storiesMB.remove}" value="remove" immediate="true" />
+                <h:commandButton action="#{storiesMB.showTasks}" value="tasks" immediate="true" />
+                <f:facet name="footer">#{" "}</f:facet>
+            </h:column>
+        </h:dataTable>
+    </h:form>
+</html>
