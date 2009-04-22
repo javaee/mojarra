@@ -25,7 +25,7 @@ cd {mojarra-sources-home}
 ant updatecenter2   # copies latest jsf jars to updatecenter2/lib
 # or, you could just do this manually
 cd updatecenter2
-ant updatecenter2.main  # creates the dist directory
+ant main  # creates the dist directory
 mkdir repo  # create repo dir
 pkg.depotd -d `pwd`/repo -p 10000 &  # start repo
 ant updatecenter2.repo  # installs into repository
