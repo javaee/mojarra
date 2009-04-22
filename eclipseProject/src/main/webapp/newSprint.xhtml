@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+
+
+
+    <ui:composition template="template.xhtml">
+
+        <ui:define name="pageTitle">
+            <h:outputText value="#{i18n['menuitem.label.sprints']}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+
+
+
+            <h:outputText value="#{i18n['menuitem.label.newsprint']}:" styleClass="tituloForm"/>
+
+
+            <h:form styleClass="scrumForm" id="frmNew" title="#{i18n['menuitem.label.newsprint']}:">
+
+                <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
+
+                    <h:outputLabel value="#{i18n['sprints.label.name']}:" for="itName"/>
+                    <h:inputText id="itName" value="#{sprintsMB.toSave.name}" required="true" requiredMessage="Type the short name" maxLenght="30" size="30"/>
+                    <h:message for="itName" />
+
+                    <h:outputLabel value="#{i18n['sprints.label.goals']}:" for="itGoals"  />
+                    <h:inputTextarea id="itGoals" value="#{sprintsMB.toSave.goals}" required="true" cols="31" rows="3" requiredMessage="Describe the goals" />
+                    <h:message for="itGoals" />
+
+                    <h:outputLabel value="#{i18n['sprints.label.iterationScope']}:" for="itIterationScope"  />
+                    <h:inputText id="itIterationScope" value="#{sprintsMB.toSave.iterationScope}" required="true" cols="50" rows="4" requiredMessage="Type the scope" />
+                    <h:message for="itIterationScope" />
+
+                    <h:outputLabel value="#{i18n['sprints.label.startedAt']}:" for="itStartedAt"  />
+                    <h:inputText id="itStartedAt" value="#{sprintsMB.toSave.startedAt}" required="true" requiredMessage="Type when this sprint start" />
+                    <h:message for="itStartedAt" />
+
+                    <h:outputLabel value="#{i18n['sprints.label.dailyMeetingTime']}:" for="itDailyMeetingTime"  />
+                    <h:inputText id="itDailyMeetingTime" value="#{sprintsMB.toSave.dailyMeetingTime}" required="true" requiredMessage="Type the estimation (story points)" />
+                    <h:message for="itDailyMeetingTime" />
+                    <h:outputText value=""/>
+                    <h:commandButton id="btnSave" action="#{sprintsMB.save}" value="save" onclick="jsf.ajax.request(this, event, {execute: 'frmNew:itName frmNew:itGoals frmNew:itIterationScope frmNew:itStartedAt frmNew:itDailyMeetingTime frmNew:btnSave', render: 'frmList:olSprints frmList:dtSprints'});return false;"/>
+
+                </h:panelGrid>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+</html>

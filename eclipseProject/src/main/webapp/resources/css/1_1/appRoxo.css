@@ -1,0 +1,164 @@
+table.whiteboard {
+    width:1024px;
+    border-collapse:collapse;
+}
+
+.tableHeader, table.whiteboard thead tr th{
+    background-image:url("../resources/images/lousaNova/quadroNegro_r1_c1.png");
+    background-repeat:no-repeat;
+    height:42px;
+    width:1024px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.tableBody, table.whiteboard tbody tr td {
+  width:1024px;
+  background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
+  height:200px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.tableFooter, table.whiteboard tfoot tr td{
+    width:1024px;
+    background-image:url("../resources/images/lousaNova/quadroNegro_r3_c1.png");
+    background-repeat:no-repeat;
+    height:45px;
+}
+
+
+table.postit-6colunas {
+    width:100%;
+    padding:25pt;
+    border-spacing:5pt;
+
+}
+
+table.postit-6colunas thead tr th{
+    font-family: Arial, Helvetica, sans-serif ;
+	color: white;
+    background-image:none;
+
+}
+table.postit-6colunas tbody tr td {
+
+	font-family: Arial, Helvetica, sans-serif ;
+	color: white;
+    text-align:center;
+    width:150px;
+    height:145px;
+    background-image:url("../resources/images/postits/postit_quad_roxo_150x145.png");
+    background-repeat:no-repeat;
+    background-position:center;
+    padding:30px;
+
+}
+
+table.postit-1coluna {
+    /* width must be 100% because of the column background - whiteboard*/
+    width:100%;
+    border-spacing:5pt;
+    border-collapse:collapse;
+}
+
+table.postit-1coluna thead tr th{
+    background-image:url("../resources/images/lousaNova/quadroNegro_r1_c1.png;");
+}
+
+table.postit-1coluna tbody tr{
+    background-image:url("../resources/images/postits/postit_roxo_300x145.png;");
+    background-repeat:no-repeat;
+    background-position:center;
+}
+
+table.postit-1coluna tbody tr td {
+
+    /* cor da fonte post it*/
+	color: white;
+    /* necess‡rio para o espacamento do post it padding-left:100px;*/
+    padding-left:380px;
+    padding-right:380px;
+    padding-bottom:30px;
+    height:160px;
+    background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
+    text-align:left;
+
+}
+
+table.postit-1coluna tfoot tr td{
+    background-image:url("../resources/images/lousaNova/quadroNegro_r3_c1.png;");
+}
+
+input.botaoPostIt{
+    font-size: 8pt;
+    color: navy;
+    font-weight:bold;
+    background-color:white;
+}
+
+label,input, select {
+  font-size: 10pt;
+  color: #858495;
+  text-align: left;
+}
+
+.menu li{
+    list-style-type: none;
+    margin: 2px;
+    padding: 2px;
+    width: 150px;
+    display: block;
+    text-indent: 0pt;
+
+    /* Varia com a cor selecionada*/
+    border: 2px solid purple;
+    background-image:url("../resources/images/botoes/fundoMenuRoxo.png");
+    background-position:right;
+    background-repeat:no-repeat;
+}
+.menu a{
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif ;
+    font-size: 12px;
+    /* Varia com a cor selecionada*/
+    color: black;
+}
+.menu ul{
+    padding: 0pt ;
+    margin: 0pt;
+    text-indent: 0pt;
+}
+.menu {
+    display:none;
+    position:absolute;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+
+    margin: 0px;
+    padding: 0px;
+    /* Varia com a cor selecionada*/
+    background-color: white;
+}
+
+.menuhandler {
+
+    padding:2px;
+    text-decoration:none;
+    display: block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    width: 140px;
+    text-align: left;
+    font-weight: bold;
+
+    /* Varia com a cor selecionada*/
+    background-image:url("../resources/images/botoes/fundoMenuRoxo.png");
+    background-position:right;
+    background-repeat:no-repeat;
+    color:black;
+    border:2px solid purple;
+    padding:10px;
+    margin:2px;
+}
