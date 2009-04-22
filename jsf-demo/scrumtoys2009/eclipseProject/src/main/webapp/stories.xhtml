@@ -3,81 +3,18 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"  
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:appez="http://java.sun.com/jsf/composite/components" >
-<h:head>
-    <title>#{i18n['menuitem.label.stories']}</title>
-    <h:outputStylesheet library="css/1_1" name="app.css"/>
-</h:head>
-<h:body>
-	<h:messages globalOnly="true" showDetail="true" tooltip="true" errorClass="errorMsgs" infoClass="infoMsgs" />
-	<div style="float: right">
-    	<img src="#{resource['images/logo.gif']}" width="100px"/>
-    </div>
-    <h:form id="frmNew">
-	    <h:commandLink action="sprints" value="#{'go back sprints'}" immediate="true" />
-    	<h2>New Story</h2>
-		<h:panelGrid columns="3" style="width: 300px">
-				<h:outputLabel value="#{i18n['stories.label.sprint']}:" for="otSprint" style="font-weight: bold" />
-				<h:outputText id="otSprint" value="#{storiesMB.toSave.sprint.name}"  />
-				<h:message for="otSprint" />
-				<h:outputLabel value="#{i18n['stories.label.name']}:" for="itName" style="font-weight: bold" />
-				<h:inputText id="itName" value="#{storiesMB.toSave.name}" required="true" requiredMessage="Describe the story" />
-				<h:message for="itName" />
-				<h:outputLabel value="#{i18n['stories.label.acceptance']}:" for="itAcceptance" style="font-weight: bold" />
-				<h:inputTextarea id="itAcceptance" value="#{storiesMB.toSave.acceptance}" required="true" cols="50" rows="4" requiredMessage="Describe the acceptance" />
-				<h:message for="itAcceptance" />
-				<h:outputLabel value="#{i18n['stories.label.priority']}:" for="selPriority" style="font-weight: bold" />
-				<h:inputText id="selPriority" value="#{storiesMB.toSave.priority}" required="true" requiredMessage="Type the priority (sequence to do)" />
-				<h:message for="selPriority" />
-				<h:outputLabel value="#{i18n['stories.label.estimation']}:" for="itEstimation" style="font-weight: bold" />
-				<h:inputText id="itEstimation" value="#{storiesMB.toSave.estimation}" required="true" requiredMessage="Type the estimation (story points)" />
-				<h:message for="itEstimation" />
-				<f:verbatim></f:verbatim>
-				<f:verbatim></f:verbatim>
-				<h:commandButton action="#{storiesMB.save}" value="save" />
-		</h:panelGrid>
-    </h:form>
-    <h:form id="frmList">
-    	<h2>Stories</h2>
-		<h:panelGrid columns="3" style="width: 300px">
-				<h:outputLabel value="No exist stories for this sprint" style="color: orange"  rendered="#{storiesMB.dm.rowCount eq 0}"/>
-		</h:panelGrid>
-		<h:dataTable value="#{storiesMB.dm}" var="story" width="100%" rendered="#{storiesMB.dm.rowCount > 0}">
-			<h:column headerClass="textColumn">
-				<f:facet name="header"><h:outputLabel value="#" /></f:facet>
-				<h:outputText value="#{storiesMB.dm.rowIndex + 1}" />
-				<f:facet name="footer">#{""}</f:facet>
-			</h:column>
-			<h:column headerClass="textColumn">
-				<f:facet name="header"><h:outputLabel value="name" /></f:facet>
-				<h:outputText value="#{story.name}" />
-				<f:facet name="footer">#{storiesMB.dm.rowCount}#{" stories"}</f:facet>
-			</h:column>
-			<h:column headerClass="textColumn">
-				<f:facet name="header"><h:outputLabel value="priority" /></f:facet>
-				<h:outputText value="#{story.priority}" />
-				<f:facet name="footer">#{" "}</f:facet>
-			</h:column>
-			<h:column headerClass="textColumn">
-				<f:facet name="header"><h:outputLabel value="estimation (sp)" /></f:facet>
-				<h:outputText value="#{story.estimation}" />
-				<f:facet name="footer">#{" "}</f:facet>
-			</h:column>
-			<h:column headerClass="textColumn">
-				<f:facet name="header"><h:outputLabel value="acceptance" /></f:facet>
-				<h:outputText value="#{story.acceptance}" />
-				<f:facet name="footer">#{" "}</f:facet>
-			</h:column>
-			<h:column>
-				<f:facet name="header"><h:outputLabel value="actions" /></f:facet>
-				<h:commandButton action="#{storiesMB.edit}" value="edit ..." immediate="true" />
-				<h:commandButton action="#{storiesMB.remove}" value="remove" immediate="true" />
-				<h:commandButton action="#{storiesMB.showTasks}" value="tasks" immediate="true" />
-				<f:facet name="footer">#{" "}</f:facet>
-			</h:column>
-		</h:dataTable>
-    </h:form>
-</h:body>
+
+    <ui:composition template="template.xhtml">
+        <ui:define name="pageTitle">
+            <h:outputText value="#{i18n['menuitem.label.sprints']}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+             <ui:include src="./newStory.xhtml"></ui:include>
+            <ui:include src="./storiesList.xhtml"/>
+        </ui:define>
+    </ui:composition>
 </html>  

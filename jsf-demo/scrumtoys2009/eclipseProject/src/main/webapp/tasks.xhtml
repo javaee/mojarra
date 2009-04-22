@@ -3,56 +3,60 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"  
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:appez="http://java.sun.com/jsf/composite/components" >
-<h:head>
-    <title>#{i18n['menuitem.label.tasks']}</title>
-    <h:outputStylesheet library="css/1_1" name="app.css"/>
-</h:head>
-<h:body>
-	<h:messages globalOnly="true" showDetail="true" tooltip="true" errorClass="errorMsgs" infoClass="infoMsgs" />
-	<div style="float: right">
-    	<img src="#{resource['images/logo.gif']}" width="100px"/>
-    </div>
-    <h:form id="frmNewTask">
-	    <h:commandLink action="stories" value="#{'go back stories'}" immediate="true" />
-    	<h2>New Task</h2>
-		<h:panelGrid columns="3" style="width: 300px">
-				<h:outputLabel value="#{i18n['tasks.label.story']}:" for="otStory" style="font-weight: bold" />
-				<h:outputText id="otStory" value="#{tasksMB.taskToSave.story.name}" />
-				<h:message for="otStory" />
-				<h:outputLabel value="#{i18n['tasks.label.name']}:" for="itName" style="font-weight: bold" />
-				<h:inputText id="itName" value="#{tasksMB.taskToSave.name}" required="true" requiredMessage="Descreva a tarefa" />
-				<h:message for="itName" />
-				<f:verbatim></f:verbatim>
-				<f:verbatim></f:verbatim>
-				<h:commandButton action="#{tasksMB.save}" value="save" />
-		</h:panelGrid>
-    </h:form>
-    <h:form id="frmTasks">
-    	<h2>Tasks</h2>
-		<h:panelGrid columns="3" style="width: 300px">
-				<h:outputLabel value="Não há tarefas para esta estória" style="color: orange"  rendered="#{tasksMB.dmTasks.rowCount eq 0}"/>
-		</h:panelGrid>
-		<h:dataTable value="#{tasksMB.dmTasks}" var="task" width="300px" rendered="#{tasksMB.dmTasks.rowCount > 0}">
-			<h:column headerClass="textColumn">
-				<f:facet name="header"><h:outputLabel value="#" /></f:facet>
-				<h:outputText value="#{tasksMB.dmTasks.rowIndex + 1}" />
-				<f:facet name="footer">#{""}</f:facet>
-			</h:column>
-			<h:column headerClass="textColumn">
-				<f:facet name="header"><h:outputLabel value="name" /></f:facet>
-				<h:outputText value="#{task.name}" />
-				<f:facet name="footer">#{tasksMB.dmTasks.rowCount}#{" tasks"}</f:facet>
-			</h:column>
-			<h:column>
-				<f:facet name="header"><h:outputLabel value="actions" /></f:facet>
-				<h:commandButton action="#{tasksMB.edit}" value="edit ..." immediate="true" />
-				<h:commandButton action="#{tasksMB.remove}" value="remove" immediate="true" />
-				<f:facet name="footer">#{" "}</f:facet>
-			</h:column>
-		</h:dataTable>
-    </h:form>
-</h:body>
+
+    <ui:composition template="template.xhtml">
+        <ui:define name="pageTitle">
+            <h:outputText value="#{i18n['menuitem.label.tasks']}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+
+            <h:messages globalOnly="true" showDetail="true" tooltip="true" errorClass="errorMsgs" infoClass="infoMsgs" />
+            <div style="float: right">
+                <img src="#{resource['images/logo.gif']}" width="100px"/>
+            </div>
+            <h:form id="frmNewTask">
+                <h:commandLink action="stories" value="#{'go back stories'}" immediate="true" />
+                <h2>New Task</h2>
+                <h:panelGrid columns="3" style="width: 300px">
+                    <h:outputLabel value="#{i18n['tasks.label.story']}:" for="otStory" style="font-weight: bold" />
+                    <h:outputText id="otStory" value="#{tasksMB.taskToSave.story.name}" />
+                    <h:message for="otStory" />
+                    <h:outputLabel value="#{i18n['tasks.label.name']}:" for="itName" style="font-weight: bold" />
+                    <h:inputText id="itName" value="#{tasksMB.taskToSave.name}" required="true" requiredMessage="Descreva a tarefa" />
+                    <h:message for="itName" />
+                    <f:verbatim></f:verbatim>
+                    <f:verbatim></f:verbatim>
+                    <h:commandButton action="#{tasksMB.save}" value="save" />
+                </h:panelGrid>
+            </h:form>
+            <h:form id="frmTasks">
+                <h2>Tasks</h2>
+                <h:panelGrid columns="3" style="width: 300px">
+                    <h:outputLabel value="Não há tarefas para esta estória" style="color: orange"  rendered="#{tasksMB.dmTasks.rowCount eq 0}"/>
+                </h:panelGrid>
+                <h:dataTable value="#{tasksMB.dmTasks}" var="task" width="300px" rendered="#{tasksMB.dmTasks.rowCount > 0}">
+                    <h:column headerClass="textColumn">
+                        <f:facet name="header"><h:outputLabel value="#" /></f:facet>
+                        <h:outputText value="#{tasksMB.dmTasks.rowIndex + 1}" />
+                        <f:facet name="footer">#{""}</f:facet>
+                    </h:column>
+                    <h:column headerClass="textColumn">
+                        <f:facet name="header"><h:outputLabel value="name" /></f:facet>
+                        <h:outputText value="#{task.name}" />
+                        <f:facet name="footer">#{tasksMB.dmTasks.rowCount}#{" tasks"}</f:facet>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"><h:outputLabel value="actions" /></f:facet>
+                        <h:commandButton action="#{tasksMB.edit}" value="edit ..." immediate="true" />
+                        <h:commandButton action="#{tasksMB.remove}" value="remove" immediate="true" />
+                        <f:facet name="footer">#{" "}</f:facet>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </ui:define>
+    </ui:composition>
 </html>  
