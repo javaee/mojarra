@@ -46,7 +46,7 @@
                     <h:inputText id="itDailyMeetingTime" value="#{sprintsMB.toSave.dailyMeetingTime}" required="true" requiredMessage="Type the estimation (story points)" />
                     <h:message for="itDailyMeetingTime" />
                     <h:outputText value=""/>
-                    <h:commandButton id="btnSave" action="#{sprintsMB.save}" value="save" onclick="jsf.ajax.request(this, event, {execute: 'frmNew:itName frmNew:itGoals frmNew:itIterationScope frmNew:itStartedAt frmNew:itDailyMeetingTime frmNew:btnSave', render: 'frmList:olSprints frmList:dtSprints'});return false;"/>
+                    <h:commandButton id="btnSave" action="#{sprintsMB.save}" value="#{i18n['sprints.label.startedAt']}:" />
 
                 </h:panelGrid>
             </h:form>
