@@ -315,7 +315,11 @@ public class DocumentOrderingWrapper {
                 }
             }
             if (!found) {
-                throw new ConfigurationException("Unable to find document named '" + name + "' while performing absolute ordering.");
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "Unable to find document named ''{0}'' while performing absolut ordering processing.",
+                               new Object[] { name });
+                }
             }
         }
 
