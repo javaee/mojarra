@@ -1,8 +1,3 @@
-body {
-	background-color: white;
-	color: navy;
-	font-size: medium;
-}
 
 span.error {
     color: white;
@@ -10,24 +5,14 @@ span.error {
 }
 
 
-h1 {
-	font-family: Arial, sanserif;
-	color: orange;
-	font-size: x-large;
-}
 
-h2 {
-	font-family: Arial, sanserif;
-	color: orange;
-	font-size: large;
-}
 
 .errorMsgs {
 	color: red;
 }
 
 .infoMsgs {
-	color: blue;
+	color: black;
 }
 
 .closedStory, .openedStory {
@@ -40,25 +25,25 @@ h2 {
 }
 
 .closedStory {
-	background-color: lightgray;	
+	background-color: lightgray;
 }
 
 .openedStory {
-	background-color: lightyellow;	
+	background-color: lightyellow;
 }
 
 .closedTask, .openedTask {
 	width:300px;
 	height:100px;
 	border:1px solid gray;
-	text-align: center;	
+	text-align: center;
 	padding: 10px;
 	margin: 10px;
 	overflow: auto;
 }
 
 .closedTask {
-	background-color: lightgray;	
+	background-color: lightgray;
 }
 
 .openedTask {
@@ -80,3 +65,61 @@ h2 {
 .componentColumn {
 	text-align: center;
 }
+
+
+body {
+	font-family: Arial, Helvetica, sans-serif ;
+    font-size: 10px;
+    background-color: white;
+	color: black;
+	font-size: 10pt;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+th{
+    font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #656297;
+    text-align: left;
+    padding: 0px;
+    margin: 0px;
+}
+
+
+td{
+  /*Essencial para nao ficar um espao entre a clula e a borda*/
+  font-size: 10pt;
+  color: #858495;
+  margin: 0px;
+  padding: 0px;
+  text-align: left;
+}
+
+
+
+td.formLabel label{
+    margin-left:15pt;
+    
+}
+
+td.formLabel {
+    width:20%;
+    text-align: right;    
+    background-position: left;
+    background-repeat:no-repeat;
+    
+
+}
+
+td.formLabel error{
+    color: red;
+}
+
+td.formInput{
+    
+    
+}
+
+
+/* Amarelo 20% - #FDEAC0 vermelho    - #F8C6C7  laranja     - #FCDEBC   roxo        - #CDC5DD  azul        - #B3D4E7  vinho       - #C8B9C0 */

@@ -15,21 +15,21 @@
       </composite:interface>
       
       <composite:implementation>
-      	  <h:panelGrid columns="1" rendered="#{not empty cc.facets.header}">
+      	  <h:panelGrid columns="1" rendered="#{not empty compositeComponent.facets.header}">
      	  	<composite:insertFacet name="header" />
       	  </h:panelGrid>	
 	      <h:panelGroup>
 	      	  <h1>
-	      	  <h:outputText id="otTitle" value="#{cc.attrs.text}" />
-		      <span style="font-size: small; color: gray; font-family: serif"><h:outputLabel value="#{fn:toLowerCase(cc.resourceBundleMap.version)}" /></span>
+	      	  <h:outputText id="otTitle" value="#{compositeComponent.attrs.text}" />
+		      <span style="font-size: small; color: gray; font-family: serif"><h:outputLabel value="#{fn:toLowerCase(compositeComponent.resourceBundleMap.version)}" /></span>
 	      	  </h1>
 		  </h:panelGroup>
-      	  <h:panelGroup rendered="#{not empty cc.children}">
+      	  <h:panelGroup rendered="#{not empty compositeComponent.children}">
       	  		<div style="border: 1px dotted gray; padding: 10px; margin: 10px">
 		      	  	<composite:renderUsingPageChildren />
       	  		</div>
 		  </h:panelGroup>
-      	  <h:panelGrid columns="1" rendered="#{not empty cc.facets.footer}">
+      	  <h:panelGrid columns="1" rendered="#{not empty compositeComponent.facets.footer}">
      	  	<composite:insertFacet name="footer" />
       	  </h:panelGrid>	
       </composite:implementation> 
