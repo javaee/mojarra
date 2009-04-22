@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
@@ -20,6 +21,7 @@ import javax.faces.component.UIViewRoot;
 
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SerializeServerState;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.GenerateUniqueServerStateIds;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.LRUMap;
@@ -28,6 +30,7 @@ import com.sun.faces.util.RequestStateManager;
 
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfLogicalViews;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.NumberOfViews;
+import com.sun.faces.config.WebConfiguration;
 
 /**
  * <p>
@@ -65,6 +68,18 @@ public class ServerSideStateHelper extends StateHelper {
     protected final Integer numberOfViews;
 
 
+    /**
+     * Flag determining how server state IDs are generated.
+     */
+    protected boolean generateUniqueStateIds;
+
+
+    /**
+     * Used to generate unique server state IDs.
+     */
+    protected final Random random;
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -75,6 +90,14 @@ public class ServerSideStateHelper extends StateHelper {
 
         numberOfLogicalViews = getIntegerConfigValue(NumberOfLogicalViews);
         numberOfViews = getIntegerConfigValue(NumberOfViews);
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        generateUniqueStateIds =
+              webConfig.isOptionEnabled(GenerateUniqueServerStateIds);
+        if (generateUniqueStateIds) {
+            random = new Random(System.nanoTime() + webConfig.getServletContext().hashCode());
+        } else {
+            random = null;
+        }
 
     }
 
@@ -121,12 +144,20 @@ public class ServerSideStateHelper extends StateHelper {
                 logicalMap = new LRUMap<String, Map>(numberOfLogicalViews);
                 sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
             }
+
+            Object structure = stateToWrite[0];
+            Object savedState = handleSaveState(stateToWrite[1]);
+
             String idInLogicalMap = (String)
                       RequestStateManager.get(ctx, RequestStateManager.LOGICAL_VIEW_MAP);
             if (idInLogicalMap == null) {
-                idInLogicalMap = createUniqueRequestId(ctx);
+                idInLogicalMap = ((generateUniqueStateIds)
+                                      ? createRandomId()
+                                      : createIncrementalRequestId(ctx));
             }
-            String idInActualMap = createUniqueRequestId(ctx);
+            String idInActualMap = ((generateUniqueStateIds)
+                                       ? createRandomId()
+                                       : createIncrementalRequestId(ctx));
 
             Map<String, Object[]> actualMap =
                   TypedCollections.dynamicallyCastMap(
@@ -137,14 +168,14 @@ public class ServerSideStateHelper extends StateHelper {
             }
 
             String id = idInLogicalMap + ':' + idInActualMap;
+
             Object[] stateArray = actualMap.get(idInActualMap);
             // reuse the array if possible
             if (stateArray != null) {
-                stateArray[0] = stateToWrite[0];
-                stateArray[1] = handleSaveState(stateToWrite[1]);
+                stateArray[0] = structure;
+                stateArray[1] = savedState;
             } else {
-                actualMap.put(idInActualMap, new Object[]{stateToWrite[0],
-                                                          handleSaveState(stateToWrite[1])});
+                actualMap.put(idInActualMap, new Object[]{ structure, savedState });
             }
 
             // always call put/setAttribute as we may be in a clustered environment.
@@ -327,12 +358,12 @@ public class ServerSideStateHelper extends StateHelper {
     }
 
 
-    /**
+     /**
      * @param ctx the <code>FacesContext</code> for the current request
      * @return a unique ID for building the keys used to store
      *  views within a session
      */
-    private String createUniqueRequestId(FacesContext ctx) {
+    private String createIncrementalRequestId(FacesContext ctx) {
 
         Map<String, Object> sm = ctx.getExternalContext().getSessionMap();
         AtomicInteger idgen =
@@ -340,11 +371,19 @@ public class ServerSideStateHelper extends StateHelper {
         if (idgen == null) {
             idgen = new AtomicInteger(1);
         }
-        
+
         // always call put/setAttribute as we may be in a clustered environment.
         sm.put(STATEMANAGED_SERIAL_ID_KEY, idgen);
         return (UIViewRoot.UNIQUE_ID_PREFIX + idgen.getAndIncrement());
 
     }
-    
+
+
+    private String createRandomId() {
+
+        return Long.valueOf(random.nextLong()).toString();
+
+    }
+
+
 }

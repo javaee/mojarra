@@ -1014,6 +1014,10 @@ public class WebConfiguration {
         PartialStateSaving(
               StateManager.PARTIAL_STATE_SAVING_PARAM_NAME,
               true
+        ),
+        GenerateUniqueServerStateIds(
+              "com.sun.faces.generateUniqueServerStateIds",
+              true
         );
 
         private BooleanWebContextInitParameter alternate;
