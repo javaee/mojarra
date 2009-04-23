@@ -64,7 +64,7 @@ public class CompositeFacetRenderer extends Renderer {
        String facetName = (String)
                component.getAttributes().get(UIComponent.FACETS_KEY);
        if (null == facetName) {
-           throw new IOException("PENDING_I18N Unable to find facet name to insert facet into composite component");
+           return;
        }
        
        UIComponent currentCompositeComponent = UIComponent.getCurrentCompositeComponent(context);

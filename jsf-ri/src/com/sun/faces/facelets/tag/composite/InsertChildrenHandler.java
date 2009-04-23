@@ -53,13 +53,20 @@ import java.util.List;
  */
 public class InsertChildrenHandler extends TagHandlerImpl {
 
+    private static final String REQUIRED_ATTRIBUTE = "required";
 
+    // This attribute is not required.  If not defined, then assume the facet
+    // isn't necessary.
+    TagAttribute required;
+
+    
     // ------------------------------------------------------------ Constructors
 
 
     public InsertChildrenHandler(TagConfig config) {
 
         super(config);
+        required = getAttribute(REQUIRED_ATTRIBUTE);
 
     }
 
@@ -76,8 +83,11 @@ public class InsertChildrenHandler extends TagHandlerImpl {
             return;
         }
 
-        if (compositeParent.getChildCount() == 0) {
-            return;
+        boolean required =
+              ((this.required != null) && this.required.getBoolean(ctx));
+
+        if (compositeParent.getChildCount() == 0 && required) {
+            throwRequiredException(ctx, compositeParent);
         }
 
         List<UIComponent> compositeChildren = compositeParent.getChildren();
@@ -87,4 +97,17 @@ public class InsertChildrenHandler extends TagHandlerImpl {
     }
 
 
+    // --------------------------------------------------------- Private Methods
+
+
+    private void throwRequiredException(FaceletContext ctx,
+                                        UIComponent compositeParent) {
+
+        throw new TagException(this.tag,
+                               "Unable to find any children components "
+                               + "nested within parent composite component with id '"
+                               + compositeParent .getClientId(ctx.getFacesContext())
+                               + '\'');
+
+    }
 }

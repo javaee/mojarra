@@ -1141,6 +1141,28 @@ component tag</em> in the <em>using page</em>.</p></div>]]>
                 </type>
             </deferred-value>
         </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>The value of the name attribute as it must appear on an
+<code>&lt;f:facet&gt;</code> tag nested within the <em>composite
+component tag</em> in the <em>using page</em>.</p></div>]]>
+
+            </description>
+            <name>
+                required
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
   </tag>
 
   <tag>
@@ -1537,6 +1559,16 @@ metadata into a composite component.</p>
                 <type>java.lang.String</type>
             </deferred-value>
         </attribute>
+        <attribute>
+            <description>
+                RELEASE_PENDING (description)
+            </description>
+            <name>required</name>
+            <required>false</required>
+            <deferred-value>
+                <type>boolean</type>
+            </deferred-value>
+        </attribute>
     </tag>
 
 
@@ -1549,6 +1581,16 @@ metadata into a composite component.</p>
         </name>
         <tag-class></tag-class>
         <body-content>empty</body-content>
+        <attribute>
+            <description>
+                RELEASE_PENDING (description)
+            </description>
+            <name>required</name>
+            <required>false</required>
+            <deferred-value>
+                <type>boolean</type>
+            </deferred-value>
+        </attribute>
     </tag>
 
 </taglib>

@@ -38,36 +38,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:composite="http://java.sun.com/jsf/composite">
-<head>
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ez="http://java.sun.com/jsf/composite/composite">
+<h:head>
+<title>Render Facet Required 02</title>
+</h:head>
 
-<title>Not present in rendered output</title>
+<h:body>
 
-</head>
-
-<body>
-
-<composite:interface>
-</composite:interface>
-
-<composite:implementation>
-    <composite:renderFacet name="header2"/>
-    <h:panelGrid id="grid1" style="border-style:solid">
-        <composite:insertFacet required="true" name="header"/>
-        <composite:insertChildren />
-    </h:panelGrid>
-    <br/>
-    <h:panelGrid id="grid2" style="border-style:solid">
-        <composite:insertFacet name="header"/> <!-- should be ignored -->
-        <composite:insertChildren /> <!-- should be ignored -->
-    </h:panelGrid>
-    <br/>
-    <br/>
-    Composite Parent Children Count:                   <span id="ccCount">#{cc.childCount}</span><br/>
-    Composite Parent contains facet 'header2':         <span id="header2Facet">#{cc.facets['header2'] != null}</span><br/>
-    Composite Parent does not contain facet 'header':  <span id="header1Facet">#{cc.facets['header1'] == null}</span><br/>
-</composite:implementation>
-
-</body>
+   <ez:renderFacetRequiredTrue>
+       <f:facet name="NotWhatIsExpected">
+           <h:outputText value="Should Not Be Rendered"/>
+       </f:facet>
+   </ez:renderFacetRequiredTrue>
+</h:body>
 
 </html>

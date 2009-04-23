@@ -55,10 +55,17 @@ public class InsertFacetHandler extends TagHandlerImpl {
     // Supported attribute names
     private static final String NAME_ATTRIBUTE = "name";
 
+    private static final String REQUIRED_ATTRIBUTE = "required";
+
     // Attributes
 
     // This attribute is required.
     private TagAttribute name;
+
+    // This attribute is not required.  If it's not defined or false,
+    // then the facet associated with name need not be present in the
+    // using page.
+    private TagAttribute required;
 
 
     // ------------------------------------------------------------ Constructors
@@ -68,6 +75,7 @@ public class InsertFacetHandler extends TagHandlerImpl {
 
         super(config);
         name = getRequiredAttribute(NAME_ATTRIBUTE);
+        required = getAttribute(REQUIRED_ATTRIBUTE);
 
     }
 
@@ -84,18 +92,41 @@ public class InsertFacetHandler extends TagHandlerImpl {
             return;
         }
 
-        if (compositeParent.getFacetCount() == 0) {
-            return;
+        String name = this.name.getValue(ctx);
+        boolean required =
+              (this.required != null && this.required.getBoolean(ctx));
+
+        if (compositeParent.getFacetCount() == 0 && required) {
+            throwRequiredException(ctx, name, compositeParent);
         }
 
-        String name = this.name.getValue(ctx);
         Map<String,UIComponent> facets = compositeParent.getFacets();
         UIComponent facet = facets.remove(name);
         if (facet != null) {
             parent.getFacets().put(name, facet);
+        } else {
+            if (required) {
+                throwRequiredException(ctx, name, compositeParent);
+            }
         }
 
     }
 
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void throwRequiredException(FaceletContext ctx,
+                                        String facetName,
+                                        UIComponent compositeParent) {
+
+        throw new TagException(this.tag,
+                               "Unable to find facet named '"
+                                + facetName
+                                + "' in parent composite component with id '"
+                                + compositeParent .getClientId(ctx.getFacesContext())
+                                + '\'');
+
+    }
 
 }

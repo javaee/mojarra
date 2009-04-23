@@ -308,6 +308,96 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         
     }
 
+
+    public void testInsertFacetRequired01() throws Exception {
+
+        // facet required but not present
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/insertfacetrequired01.xhtml");
+        assertTrue(page.asText().contains("Unable to find facet named 'header'"));
+
+    }
+
+
+    public void testInsertFacetRequired02() throws Exception {
+
+        // facet required but not present
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/insertfacetrequired02.xhtml");
+        assertTrue(page.asText().contains("Unable to find facet named 'header'"));
+
+    }
+
+
+    public void testInsertFacetRequired03() throws Exception {
+
+        // facet not required and not present
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/insertfacetrequired03.xhtml");
+        assertTrue(!page.asText().contains("Unable to find facet named 'header'"));
+
+    }
+    
+    
+    public void testRenderFacetRequired01() throws Exception {
+
+        // facet required but not present
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/renderfacetrequired01.xhtml");
+        assertTrue(page.asText().contains("Unable to find facet named 'header'"));
+
+    }
+
+
+    public void testRenderFacetRequired02() throws Exception {
+
+        // facet required but not present
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/renderfacetrequired02.xhtml");
+        assertTrue(page.asText().contains("Unable to find facet named 'header'"));
+
+    }
+
+
+    public void testRenderFacetRequired03() throws Exception {
+
+        // facet not required and not present
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/renderfacetrequired03.xhtml");
+        assertTrue(!page.asText().contains("Unable to find facet named 'header'"));
+
+    }
+    
+    
+    public void testInsertChildrenRequired01() throws Exception {
+
+        // facet required but not present
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/insertchildrenrequired01.xhtml");
+        assertTrue(page.asText().contains("Unable to find any children components nested within parent composite component"));
+
+    }
+
+
+    public void testInsertChildrenRequired02() throws Exception {
+
+        // facet required but not present
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/insertchildrenrequired02.xhtml");
+        assertTrue(page.asText().contains("Unable to find any children components nested within parent composite component"));
+
+    }
+
+
+    public void testInsertChildrenRequired03() throws Exception {
+
+        // facet not required and not present
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/insertchildrenrequired03.xhtml");
+        assertTrue(!page.asText().contains("Unable to find any children components nested within parent composite component"));
+
+    }
+
     
     // --------------------------------------------------------- Private Methods
 
