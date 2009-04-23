@@ -19,23 +19,22 @@
             <h:form id="frmList">
 
                 <br/><br/>
-                
+
                 <br/>
-                
+
                 <h:dataTable value="#{sprintsMB.dm}" var="sprint"
                              rendered="#{sprintsMB.dm.rowCount > 0}"
                              title="Whiteboard with all Sprints"
-                             summary="Whiteboard with all Sprints"                             
+                             summary="Whiteboard with all Sprints"
                              border="0"
                              headerClass="datatableHeader"
                              rowClasses="datatableRow,datatableRow2"
                              columnClasses="dataTableFirstColumn"
                              styleClass="datatable">
-                    
 
                     <h:column>
                         <f:facet name="header">
-                        #
+                            #
                         </f:facet>
                         <h:outputText value="#{sprintsMB.dm.rowIndex + 1}" />
                     </h:column>
@@ -46,24 +45,23 @@
                         <h:outputText value="#{sprint.name}" />
                     </h:column>
                     <h:column>
-                          <f:facet name="header">
+                        <f:facet name="header">
                             <h:outputText value="#{i18n['label.goals']}" />
                         </f:facet>
                         <h:outputText value="#{sprint.goals}" />
                     </h:column>
                     <h:column>
-                          <f:facet name="header">
+                        <f:facet name="header">
                             <h:outputText value="#{i18n['label.startedAt']}"/>
                         </f:facet>
                         <h:outputText value="#{sprint.startedAt}" />
                     </h:column>
                     <h:column>
-                          <f:facet name="header">
-                            
+                        <f:facet name="header">
                             <h:outputText value="#{i18n['label.dailyMeeting']}" />
-                            </f:facet>
-                                <h:outputText value=" #{sprint.dailyMeetingTime}" />
-                                <h:outputText value=" Nao esta salvando" />
+                        </f:facet>
+                        <h:outputText value=" #{sprint.dailyMeetingTime}" />
+                        <h:outputText value=" Nao esta salvando" />
                     </h:column>
                     <h:column>
                         <f:facet name="header">
@@ -75,11 +73,7 @@
                         <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.showDashboard}" value="#{i18n['button.dashboard']}"  />
                     </h:column>
 
-
-
                 </h:dataTable>
-
-
 
             </h:form>
         </ui:define>
