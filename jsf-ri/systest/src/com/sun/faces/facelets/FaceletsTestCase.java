@@ -152,7 +152,7 @@ public class FaceletsTestCase extends AbstractTestCase {
 
 
     /*
-     * Verify #{component} and #{compositeComponent} expressions evaluate
+     * Verify #{component} and #{cc} expressions evaluate
      * at build time.
      * @throws Exception
      */

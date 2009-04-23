@@ -29,13 +29,13 @@
 
 <composite:implementation>
     <p>
-        <h:inputText id="input" value="#{compositeComponent.attrs.value}">
+        <h:inputText id="input" value="#{cc.attrs.value}">
         </h:inputText>
         <h:commandButton id="cancel" value="Cancel"/>
         <f:subview id="sub">
             <h:panelGroup id="group">
                 <h:commandButton id="command" value="Ok"
-                                 action="#{compositeComponent.attrs.commandAction}">
+                                 action="#{cc.attrs.commandAction}">
                 </h:commandButton>
             </h:panelGroup>
         </f:subview>

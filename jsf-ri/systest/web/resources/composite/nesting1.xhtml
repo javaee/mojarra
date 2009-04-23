@@ -54,9 +54,9 @@
     </composite:interface>
     <composite:implementation>
         <ez:wrapper>
-            <span id="value">Should have a value: <h:outputText value="#{compositeComponent.parent.attrs.value}" /></span>
+            <span id="value">Should have a value: <h:outputText value="#{cc.parent.attrs.value}" /></span>
             <br />
-            <span id="novalue">Shouldn't have a value: <h:outputText value="#{compositeComponent.attrs.value}" /></span>
+            <span id="novalue">Shouldn't have a value: <h:outputText value="#{cc.attrs.value}" /></span>
         </ez:wrapper>
     </composite:implementation>
 </body>

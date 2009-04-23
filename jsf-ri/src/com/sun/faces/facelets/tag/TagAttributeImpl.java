@@ -443,7 +443,7 @@ public final class TagAttributeImpl extends TagAttribute {
 
         CompositeComponentExpressionHelper(String expression) {
 
-            if (expression.startsWith("#{compositeComponent.")) {
+            if (expression.startsWith("#{cc.")) {
                 String[] parts = Util.split(expression, "\\.");
                 int len = parts.length;
                 if (len <= 2) {

@@ -52,14 +52,14 @@
     <h:outputScript name="jsf.js" library="javax.faces" target="head"/>
     <h:outputScript name="spinnerFinal/spinner.js" target="head" />
     <script type="text/javascript">
-        init("#{compositeComponent.clientId}","#{compositeComponent.attrs.increment}");
+        init("#{cc.clientId}","#{cc.attrs.increment}");
     </script>
-    <h:inputText id="number" value="#{compositeComponent.attrs.value}" styleClass="spinnerText"/>
+    <h:inputText id="number" value="#{cc.attrs.value}" styleClass="spinnerText"/>
     <h:panelGroup id="spinnerButtonPanel" styleClass="spinnerButtons">
         <h:commandButton id="forward"  value="&#652;" styleClass="spinnerButton"
-                         onclick="return changeNumber('#{compositeComponent.clientId}',1);" />
+                         onclick="return changeNumber('#{cc.clientId}',1);" />
         <h:commandButton id="back" value="v" styleClass="spinnerButton"
-                         onclick="return changeNumber('#{compositeComponent.clientId}',-1);" />
+                         onclick="return changeNumber('#{cc.clientId}',-1);" />
     </h:panelGroup>
 </composite:implementation>
 </body>

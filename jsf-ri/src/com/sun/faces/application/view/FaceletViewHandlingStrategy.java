@@ -124,7 +124,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, 
-            Resource compositeComponentResource) {
+            Resource ccResource) {
         // PENDING this implementation is terribly wasteful.
         // Must find a better way.
         CompositeComponentBeanInfo result;
@@ -141,12 +141,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         // We have to put the resource in here just so the classes that eventually
         // get called by facelets have access to it.
         tmp.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
-                compositeComponentResource);
+                ccResource);
         
         Facelet f;
 
         try {
-            f = factory.getFacelet(compositeComponentResource.getURL());
+            f = factory.getFacelet(ccResource.getURL());
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 
                 @Override
