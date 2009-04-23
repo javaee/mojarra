@@ -52,9 +52,14 @@ package com.sun.faces.facelets.tag.jsf;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.beans.PropertyDescriptor;
 import java.beans.Introspector;
 
@@ -82,7 +87,6 @@ import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComp
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.util.FacesLogger;
 
 import javax.el.MethodExpression;
 import javax.faces.application.ViewHandler;
@@ -93,8 +97,6 @@ import javax.faces.view.facelets.ComponentHandler;
  * RELEASE_PENDING (rlubke,driscoll) document
  */
 public class CompositeComponentTagHandler extends ComponentHandler implements CreateComponentDelegate {
-
-    private static final Logger LOGGER = FacesLogger.FACELETS_COMPONENT.getLogger();
 
      private static String[] EXCLUDED_COPY_ATTRIBUTES;
 
@@ -212,7 +214,9 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         
     }
     
-    private void applyCompositeComponent(FaceletContext ctx, UIComponent c) {
+    private void applyCompositeComponent(FaceletContext ctx, UIComponent c)
+    throws IOException {
+
         FacesContext facesContext = ctx.getFacesContext();
         FaceletFactory factory = (FaceletFactory)
               RequestStateManager.get(facesContext, RequestStateManager.FACELET_FACTORY);
@@ -244,10 +248,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             };
             ctx.setVariableMapper(wrapper);
             f.apply(facesContext, facetComponent);
-        } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, e.toString(), e);
-            }
         } finally {
             ctx.setVariableMapper(orig);
         }

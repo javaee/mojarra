@@ -61,22 +61,31 @@ import javax.faces.view.facelets.ComponentHandler;
 
 public class RenderFacetHandler extends ComponentHandler {
 
-    private TagAttribute name = null;
+    // Supported attribute names
+    private static final String NAME_ATTRIBUTE = "name";
+
+    // Attributes
+
+    // This attribute is required.
+    private TagAttribute name;
+
+
+    // ------------------------------------------------------------ Constructors
+
 
     public RenderFacetHandler(ComponentConfig config) {
         super(config);
         this.name = this.getRequiredAttribute("name");
     }
 
+
+    // ------------------------------------------- Methods from ComponentHandler
+
+
     @Override
     public void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
-        ValueExpression ve = null;
-        String strValue = null;
-        // Get the value of required the name propertyDescriptor
-        ve = name.getValueExpression(ctx, String.class);
-        strValue = (String) ve.getValue(ctx);
-        
-        c.getAttributes().put(UIComponent.FACETS_KEY, strValue);
+
+        c.getAttributes().put(UIComponent.FACETS_KEY, name.getValue(ctx));
         
     }
 

@@ -54,16 +54,11 @@ public class InsertFacetHandler extends TagHandlerImpl {
 
     // Supported attribute names
     private static final String NAME_ATTRIBUTE = "name";
-    private static final String REQUIRED_ATTRIBUTE = "required";
 
     // Attributes
 
     // This attribute is required.
-    TagAttribute name;
-
-    // This attribute is not required.  If not defined, then assume the facet
-    // isn't necessary.
-    TagAttribute required;
+    private TagAttribute name;
 
 
     // ------------------------------------------------------------ Constructors
@@ -73,7 +68,6 @@ public class InsertFacetHandler extends TagHandlerImpl {
 
         super(config);
         name = getRequiredAttribute(NAME_ATTRIBUTE);
-        required = getAttribute(REQUIRED_ATTRIBUTE);
 
     }
 
@@ -90,40 +84,18 @@ public class InsertFacetHandler extends TagHandlerImpl {
             return;
         }
 
-        Map<String,UIComponent> facets = compositeParent.getFacets();
-        String name = this.name.getValue(ctx);
-        boolean required =
-              ((this.required != null) && this.required.getBoolean(ctx));
-
-        if (compositeParent.getFacetCount() == 0 && required) {
-            throwRequiredException(ctx, compositeParent);
+        if (compositeParent.getFacetCount() == 0) {
+            return;
         }
 
+        String name = this.name.getValue(ctx);
+        Map<String,UIComponent> facets = compositeParent.getFacets();
         UIComponent facet = facets.remove(name);
         if (facet != null) {
             parent.getFacets().put(name, facet);
-        } else {
-            if (required) {
-                throwRequiredException(ctx, compositeParent);
-            }
         }
 
     }
 
-
-    // --------------------------------------------------------- Private Methods
-
-
-    private void throwRequiredException(FaceletContext ctx,
-                                        UIComponent compositeParent) {
-
-        throw new TagException(this.tag,
-                               "Unable to find facet named '"
-                               + name
-                               + "' in parent composite component with id '"
-                               + compositeParent .getClientId(ctx.getFacesContext())
-                               + '\'');
-
-    }
 
 }

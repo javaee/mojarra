@@ -72,8 +72,7 @@ public class CompositeFacetRenderer extends Renderer {
            UIComponent facet = currentCompositeComponent.getFacet(facetName);
            if (null != facet) {
                facet.encodeAll(context);
-           }
-           else {
+           } else {
                if (logger.isLoggable(Level.FINE)) {
                    logger.log(Level.FINE,
                            "Could not find facet named {0}",

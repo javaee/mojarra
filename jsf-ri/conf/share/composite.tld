@@ -1537,16 +1537,6 @@ metadata into a composite component.</p>
                 <type>java.lang.String</type>
             </deferred-value>
         </attribute>
-        <attribute>
-            <description>
-                RELEASE_PENDING (description)
-            </description>
-            <name>required</name>
-            <required>false</required>
-            <deferred-value>
-                <type>boolean</type>
-            </deferred-value>
-        </attribute>
     </tag>
 
 
@@ -1559,16 +1549,6 @@ metadata into a composite component.</p>
         </name>
         <tag-class></tag-class>
         <body-content>empty</body-content>
-        <attribute>
-            <description>
-                RELEASE_PENDING (description)
-            </description>
-            <name>required</name>
-            <required>false</required>
-            <deferred-value>
-                <type>boolean</type>
-            </deferred-value>
-        </attribute>
     </tag>
 
 </taglib>
