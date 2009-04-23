@@ -7,13 +7,13 @@ table.whiteboard {
     background-image:url("../resources/images/lousaNova/quadroNegro_r1_c1.png");
     background-repeat:no-repeat;
     height:42px;
-    width:1024px;
+    width:100%;
     margin: 0px;
     padding: 0px;
 }
 
 .tableBody, table.whiteboard tbody tr td {
-  width:1024px;
+  width:100%;
   background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
   height:200px;
   margin: 0px;
@@ -21,7 +21,7 @@ table.whiteboard {
 }
 
 .tableFooter, table.whiteboard tfoot tr td{
-    width:1024px;
+    width:100%;
     background-image:url("../resources/images/lousaNova/quadroNegro_r3_c1.png");
     background-repeat:no-repeat;
     height:45px;
@@ -46,10 +46,11 @@ table.postit-6colunas tbody tr td {
 	font-family: Arial, Helvetica, sans-serif ;
 	color: black;
     text-align:center;
-    width:150px;
-    height:145px;
+
     /*atualizar*/
     background-image:url("../resources/images/postits/postit_quad_amar_150x145.png;");
+    width:150px;
+    height:145px;
     background-repeat:no-repeat;
     background-position:center;
     padding:30px;
@@ -95,11 +96,6 @@ table.postit-1coluna tfoot tr td{
 atualizar
 */
 
-table.postItFormTable {
-       
-              
-       
-}
 
 .tituloForm {
     font-size: 14pt;
@@ -161,6 +157,11 @@ input, select,textarea {
 
 }
 
+.navigationLink{
+    text-decoration:none;
+    text-align:right;
+    color:orange;
+}
 .datatable {    
     border-collapse:collapse;
 }
@@ -178,65 +179,85 @@ input, select,textarea {
 .dataTableFirstColumn{
     font-weight:bold;
 }
-.menu li{
-    list-style-type: none;        
-    padding: 2px;
-    width: 150px;
-    display: block;
-    text-indent: 0pt;
-    
-    /* Varia com a cor selecionada*/
-    
-    border-bottom:none;
-    background-image:url("../resources/images/botoes/fundoMenuOrange.png");
-    background-position:right;
-    background-repeat:no-repeat;
-    text-indent:6pt;
-    font-weight:normal;
+
+table.menuTable{
+    border-collapse:collapse;
+    vertical-align:middle;
+    text-align: left;    
+       
 }
+
+table.menuTable tr td{
+    vertical-align:middle;
+    padding-bottom:0px;
+    width:168px;
+    background-image:url("..resources/images/menu/bt_preto03_165x35.png");
+}
+
 .menu a{
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif ;
     font-size: 12px;
-    /* Varia com a cor selecionada*/
-    color: black;
+    /* Varia com a cor selecionada*/    
+    color: orange;
+    padding: 10px;    
 }
-.menu ul{
-    padding: 0pt ;    
-    margin: 0pt;    
-    text-indent: 0pt;    
+
+/* menuItem and menu spacing */
+.menu ul{           
+    text-align:left;
+    padding:0pt;
+    margin:0pt;
+    
+
 }
-.menu {
+/* submenu div */
+.menu{    
     display:none;
     position:absolute;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: bold;        
     
-    margin: 0px;
-    padding: 0px;
-    /* Varia com a cor selecionada*/
-    background-color: white;
+    /* Varia com a cor selecionada*/    
 }
 
+/* submenu item*/
+.menu li{
+    /* white background for avoiding transparency on submenu item */
+    background-color:white;
+    list-style-type: none;    
+    width: 142px;
+    /* altura do submenu */
+
+    display: block;
+    /* Varia com a cor selecionada*/   
+    
+    border:1px solid orange;
+
+    border-top:none;
+    font-weight:bold;
+    padding:10px;
+    background-image:url("..resources/images/menu/bt_preto03_165x35.png");
+    background-repeat:no-repeat;
+}
+
+
 .menuhandler {
-        
+    border:1px solid gray;    
     text-decoration:none;
     display: block;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;    
-    width: 140px;
+    width: 141px;
+    vertical-align:middle;
     text-align: left;
     font-weight: bold;
-
-    /* Varia com a cor selecionada*/
-    background-image:url("../resources/images/botoes/fundoMenu.png");
-    background-position:right;
-    background-repeat:no-repeat;
-    color:black;    
-    border:1px solid  #FCDEBC;
+    /* Varia com a cor selecionada*/    
+    color:gray;
     padding:10px;
-       
+    
+
 }
 
      
