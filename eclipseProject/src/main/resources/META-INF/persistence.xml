@@ -5,6 +5,10 @@
 	<persistence-unit name="scrumtoysPU">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>entities.Sprint</class>
+        <class>jsf2.demo.scrum.model.entities.Project</class>
+        <class>jsf2.demo.scrum.model.entities.Sprint</class>
+        <class>jsf2.demo.scrum.model.entities.Story</class>
+        <class>jsf2.demo.scrum.model.entities.Task</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect" />
 			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
