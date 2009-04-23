@@ -6,37 +6,38 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:appez="http://java.sun.com/jsf/composite/components" >
- 
-            <h:outputText value="#{i18n['stories.label.newstory']}:" styleClass="tituloForm"/>
 
-            <h:form styleClass="scrumForm"  id="frmNewStory" title="#{i18n['stories.label.newstory']}:">
-                  <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
-                      
-                    <f:facet name="header">
-                        <h:outputText value=""></h:outputText>
-                    </f:facet>
-                    <h:outputLabel value="#{i18n['stories.label.sprint']}:" for="otSprint"  />
-                    <h:outputText id="otSprint" value="Corrigir nao mostra #{storiesMB.toSave.sprint.name}"  />
-                    <h:message for="otSprint" />
+    <ui:composition>
+        <h:outputText value="#{i18n['stories.label.newstory']}: showAddNewStoryForm=#{sprintsMB.showAddNewStoryForm}" styleClass="tituloForm"/>
 
-                    <h:outputLabel value="#{i18n['stories.label.name']}:" for="itName" />
-                    <h:inputText id="itName" value="#{storiesMB.toSave.name}" required="true" requiredMessage="Describe the story" maxLenght="30" size="30"/>
-                    <h:message for="itName" />
+        <h:form styleClass="scrumForm"  id="frmNewStory" title="#{i18n['stories.label.newstory']}:" >
+            <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable" id="TABELATESTE">
 
-                    <h:outputLabel value="#{i18n['stories.label.acceptance']}:" for="itAcceptance" />
-                    <h:inputTextarea id="itAcceptance" value="#{storiesMB.toSave.acceptance}" required="true" cols="30" rows="3" requiredMessage="Describe the acceptance" />
-                    <h:message for="itAcceptance" />
+                <f:facet name="header">
+                    <h:outputText value=""></h:outputText>
+                </f:facet>
+                <h:outputLabel value="#{i18n['stories.label.sprint']}:" for="otSprint"  />
+                <h:outputText id="otSprint" value=" #{storiesMB.toSave.sprint.name}"  />
+                <h:message for="otSprint" />
 
-                    <h:outputLabel value="#{i18n['stories.label.priority']}:" for="selPriority" />
-                    <h:inputText id="selPriority" value="#{storiesMB.toSave.priority}" required="true" requiredMessage="Type the priority (sequence to do)" />
-                    <h:message for="selPriority" />
+                <h:outputLabel value="#{i18n['stories.label.name']}:" for="itName" />
+                <h:inputText id="itName" value="#{storiesMB.toSave.name}" required="true" requiredMessage="Describe the story" maxLenght="30" size="30"/>
+                <h:message for="itName" />
 
-                    <h:outputLabel value="#{i18n['stories.label.estimation']}:" for="itEstimation" />
-                    <h:inputText id="itEstimation" value="#{storiesMB.toSave.estimation}" required="true" requiredMessage="Type the estimation (story points)" />
-                    <h:message for="itEstimation" />
-                    <h:outputText value=""/>
-                    <h:commandButton action="#{storiesMB.save}" value="save" styleClass="botao" />
-                </h:panelGrid>
-            </h:form>
- 
+                <h:outputLabel value="#{i18n['stories.label.acceptance']}:" for="itAcceptance" />
+                <h:inputTextarea id="itAcceptance" value="#{storiesMB.toSave.acceptance}" required="true" cols="30" rows="3" requiredMessage="Describe the acceptance" />
+                <h:message for="itAcceptance" />
+
+                <h:outputLabel value="#{i18n['stories.label.priority']}:" for="selPriority" />
+                <h:inputText id="selPriority" value="#{storiesMB.toSave.priority}" required="true" requiredMessage="Type the priority (sequence to do)" />
+                <h:message for="selPriority" />
+
+                <h:outputLabel value="#{i18n['stories.label.estimation']}:" for="itEstimation" />
+                <h:inputText id="itEstimation" value="#{storiesMB.toSave.estimation}" required="true" requiredMessage="Type the estimation (story points)" />
+                <h:message for="itEstimation" />
+                <h:outputText value=""/>
+                <h:commandButton action="#{storiesMB.save}" value="save" styleClass="botao" />
+            </h:panelGrid>
+        </h:form>
+    </ui:composition>
 </html>  
