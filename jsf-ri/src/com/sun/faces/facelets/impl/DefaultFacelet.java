@@ -383,7 +383,7 @@ final class DefaultFacelet extends Facelet {
 
     private boolean isDevelopment(FaceletContext ctx) {
 
-        return ProjectStage.Development.equals(ctx.getFacesContext().getApplication().getProjectStage());
+        return ctx.getFacesContext().isProjectStage(ProjectStage.Development);
 
     }
 

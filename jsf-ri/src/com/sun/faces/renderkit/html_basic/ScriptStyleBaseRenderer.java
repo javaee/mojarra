@@ -118,7 +118,7 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
             // and no child content...
             if (0 == childCount) {
                 // this is user error, so put up a message if desired
-                if (ProjectStage.Production != context.getApplication().getProjectStage()) {
+                if (context.isProjectStage(ProjectStage.Development)) {
                     FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
                             "outputScript with no library, no name, and no body content",
                             "Is body content intended?");

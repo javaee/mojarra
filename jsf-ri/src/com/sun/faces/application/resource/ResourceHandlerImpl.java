@@ -384,7 +384,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
                                     Throwable t) {
 
         Level level;
-        if (ctx.getApplication().getProjectStage() != ProjectStage.Production) {
+        if (!ctx.isProjectStage(ProjectStage.Production)) {
             level = Level.WARNING;
         } else {
             level = ((t != null) ? Level.WARNING : Level.FINE);

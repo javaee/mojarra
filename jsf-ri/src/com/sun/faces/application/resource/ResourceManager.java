@@ -428,7 +428,7 @@ public class ResourceManager {
     private boolean isCompressable(String contentType, FacesContext ctx) {
 
         // No compression when developing.
-        if (contentType == null || ctx.getApplication().getProjectStage() == ProjectStage.Development) {
+        if (contentType == null || ctx.isProjectStage(ProjectStage.Development)) {
             return false;
         } else {
             if (compressableTypes != null && !compressableTypes.isEmpty()) {

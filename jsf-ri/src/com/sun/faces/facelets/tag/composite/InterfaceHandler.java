@@ -117,7 +117,7 @@ public class InterfaceHandler extends TagHandlerImpl {
             String strValue = null;
             boolean booleanValue = false;
 
-            if (ctx.getFacesContext().getApplication().getProjectStage() == ProjectStage.Development) {
+            if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
 
                 if (null != (attr = this.getAttribute("displayName"))) {
                     ve = attr.getValueExpression(ctx, String.class);

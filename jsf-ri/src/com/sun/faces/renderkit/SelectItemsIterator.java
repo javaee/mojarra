@@ -209,19 +209,21 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         } else if (kid instanceof UISelectItems) {
             UISelectItems ui = (UISelectItems) kid;
             Object value = ui.getValue();
-            if (value instanceof SelectItem) {
-                updateSingeItemIterator((SelectItem) value);
-                items = singleItemIterator;
-            } else if (value.getClass().isArray()) {
-                items = new ArrayIterator(ctx, (UISelectItems) kid, value);
-            } else if (value instanceof Iterable) {
-                items = new IterableItemIterator(ctx,
-                                                 (UISelectItems) kid,
-                                                 (Iterable<?>) value);
-            } else if (value instanceof Map) {
-                items = new MapIterator((Map) value);
-            } else {
-                throw new IllegalArgumentException();
+            if (value != null) {
+                if (value instanceof SelectItem) {
+                    updateSingeItemIterator((SelectItem) value);
+                    items = singleItemIterator;
+                } else if (value.getClass().isArray()) {
+                    items = new ArrayIterator(ctx, (UISelectItems) kid, value);
+                } else if (value instanceof Iterable) {
+                    items = new IterableItemIterator(ctx,
+                                                     (UISelectItems) kid,
+                                                     (Iterable<?>) value);
+                } else if (value instanceof Map) {
+                    items = new MapIterator((Map) value);
+                } else {
+                    throw new IllegalArgumentException();
+                }
             }
         } 
 

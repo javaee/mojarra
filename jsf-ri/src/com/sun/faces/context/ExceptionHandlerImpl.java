@@ -240,7 +240,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
     private void throwIt(FacesContext ctx, FacesException fe) {
 
-        boolean isDevelopment = ProjectStage.Development.equals(ctx.getApplication().getProjectStage());
+        boolean isDevelopment = ctx.isProjectStage(ProjectStage.Development);
         if (isDevelopment && !errorPagePresent) {
             // RELEASE_PENDING what about other device types?
             RenderKitUtils.renderHtmlErrorPage(ctx, fe);

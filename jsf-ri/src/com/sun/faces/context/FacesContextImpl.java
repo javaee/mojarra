@@ -40,16 +40,11 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.context.flash.ELFlash;
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.context.ExceptionHandler;
-import javax.faces.context.Flash;
 import javax.faces.event.PhaseId;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.FacesMessage;
-import javax.faces.application.ViewHandler;
+import javax.faces.application.*;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -161,9 +156,6 @@ public class FacesContextImpl extends FacesContext {
     }
 
 
-    
-
-
     /**
      * @see javax.faces.context.FacesContext#getExceptionHandler()
      */
@@ -220,7 +212,7 @@ public class FacesContextImpl extends FacesContext {
             this.getAttributes().put(POST_BACK_MARKER, postback);
         }
 
-        return postback.booleanValue();
+        return postback;
 
     }
 
@@ -611,7 +603,7 @@ public class FacesContextImpl extends FacesContext {
     }
 
     /**
-     * @see javax.faces.context.FacesContext#getValidationFailed()
+     * @see javax.faces.context.FacesContext#isValidationFailed()
      */
     public boolean isValidationFailed() {
         assertNotReleased();

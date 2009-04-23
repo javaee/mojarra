@@ -136,7 +136,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
             ResourceHandler handler = context.getApplication().getResourceHandler();
             Resource res = handler.createResource(resName, libName);
             if (res == null) {
-                if (ProjectStage.Development.equals(context.getApplication().getProjectStage())) {
+                if (context.isProjectStage(ProjectStage.Development)) {
                     String msg = "Unable to find resource " + resName;
                     context.addMessage(component.getClientId(context),
                                        new FacesMessage(FacesMessage.SEVERITY_ERROR,

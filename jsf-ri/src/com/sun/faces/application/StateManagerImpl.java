@@ -44,7 +44,6 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
-import javax.faces.application.Application;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
@@ -91,8 +90,7 @@ public class StateManagerImpl extends StateManager {
      */
     public StateManagerImpl() {
 
-        Application app = FacesContext.getCurrentInstance().getApplication();
-        isDevelopmentMode = (app.getProjectStage() == ProjectStage.Development);
+        isDevelopmentMode = FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Development);
         classMap = new ConcurrentHashMap<String,Class<?>>(32);
 
     }

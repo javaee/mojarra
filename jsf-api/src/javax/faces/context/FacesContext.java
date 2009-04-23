@@ -705,14 +705,27 @@ public abstract class FacesContext {
     }
 
 
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * @param stage the {@link ProjectStage} to check
+     *
+     * @return <code>true</code> if the current {@link ProjectStage} as returned
+     *  by the {@link Application} instance is equal to <code>stage</code>,
+     *  otherwise return <code>false</code>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     * @throws NullPointerException if <code>stage</code> is <code>null</code>
+     */
     public boolean isProjectStage(ProjectStage stage) {
 
         if (stage == null) {
             throw new NullPointerException();
         }
-        return stage.equals(getApplication().getProjectStage());
+        return (stage.equals(getApplication().getProjectStage()));
 
     }
+    
 
     // ---------------------------------------------------------- Static Methods
 

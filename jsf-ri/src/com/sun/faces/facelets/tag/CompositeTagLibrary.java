@@ -120,7 +120,7 @@ public final class CompositeTagLibrary implements TagLibrary {
         }
         else {
             FacesContext context = FacesContext.getCurrentInstance();
-            if (ProjectStage.Development == context.getApplication().getProjectStage()) {
+            if (context.isProjectStage(ProjectStage.Development)) {
                 if (null != t &&
                     !ns.equals("http://www.w3.org/1999/xhtml")) {
                     // messageHolder will only be null in the case of the private 

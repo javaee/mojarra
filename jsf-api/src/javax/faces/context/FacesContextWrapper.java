@@ -464,6 +464,13 @@ public abstract class FacesContextWrapper extends FacesContext implements FacesW
     }
 
 
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.FacesContext#isProjectStage(javax.faces.application.ProjectStage)}
+     * on the wrapped {@link FacesContext} object.</p>
+     *
+     * @see FacesContext#isProjectStage(javax.faces.application.ProjectStage) 
+     */
     @Override
     public boolean isProjectStage(ProjectStage stage) {
         return getWrapped().isProjectStage(stage);    

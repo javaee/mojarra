@@ -81,7 +81,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.application.ProjectStage;
-import javax.faces.FacesException;
 import javax.faces.event.PreDestroyCustomScopeEvent;
 import javax.faces.event.ScopeContext;
 import javax.servlet.ServletContext;

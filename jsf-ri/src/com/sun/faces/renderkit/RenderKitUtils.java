@@ -1007,8 +1007,8 @@ public class RenderKitUtils {
 
     public static void renderUnhandledMessages(FacesContext ctx) {
 
-        Application app = ctx.getApplication();
-        if (ProjectStage.Development.equals(app.getProjectStage())) {
+        if (ctx.isProjectStage(ProjectStage.Development)) {
+            Application app = ctx.getApplication();
             HtmlMessages messages = (HtmlMessages) app.createComponent(HtmlMessages.COMPONENT_TYPE);
             messages.setId("javax_faces_developmentstage_messages");
             Renderer messagesRenderer = ctx.getRenderKit().getRenderer(HtmlMessages.COMPONENT_FAMILY, "javax.faces.Messages");
@@ -1507,7 +1507,7 @@ public class RenderKitUtils {
      *        scripts.
      * @param handlerName the name of the handler attribute to render (eg.
      *        "onclick" or "ommouseover")
-     * @param handerValue the user-specified value for the handler attribute
+     * @param handlerValue the user-specified value for the handler attribute
      * @param behaviorEventName the name of the behavior event that corresponds
      *        to this handler (eg. "action" or "mouseover").
      * @param needsSubmit indicates whether the mojarra.jsfcljs() 

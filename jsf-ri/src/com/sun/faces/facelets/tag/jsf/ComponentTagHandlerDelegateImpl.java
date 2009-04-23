@@ -150,8 +150,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             // mark it owned by a facelet instance
             c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
 
-            if (ProjectStage.Development.equals(ctx.getFacesContext()
-                  .getApplication().getProjectStage())) {
+            if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
                 // inject the location into the component
                 c.getAttributes().put(UIComponent.VIEW_LOCATION_KEY,
                                       owner.getTag().getLocation());

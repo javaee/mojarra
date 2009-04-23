@@ -44,6 +44,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ProjectStage;
 import javax.faces.FactoryFinder;
 import javax.faces.render.RenderKit;
 import javax.servlet.ServletContext;
@@ -137,6 +138,13 @@ class InitFacesContext extends FacesContext {
     }
 
 
+    @Override
+    public boolean isProjectStage(ProjectStage stage) {
+        if (stage == null) {
+            throw new NullPointerException();
+        }
+        return stage.equals(getApplication().getProjectStage());
+    }
 
     public RenderKit getRenderKit() {
         return null;
