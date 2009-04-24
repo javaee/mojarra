@@ -25,10 +25,35 @@
                     <h:outputText id="otSprintStartDate" value="mostrar a data de inicio do sprint"  />
                     <br/><br/>
                 </h:panelGroup>
-                <h:commandLink styleClass="navigationLink">
-                    <h:outputText value="+ Add Story"/>
-                </h:commandLink>
             </h:panelGrid>
+
+            <h:form id="testeForm">
+
+
+                <h:commandLink tyleClass="navigationLink" id="showButton" action="#{sprintsMB.showForm}"
+                               value="+ Add Story to this Sprint"
+
+                               onclick="jsf.ajax.request(this, event,
+                                   {execute:'testeForm:showButton',
+                                       render: 'testeForm:testeShowHidePG testeForm:testeShowHidePG:newStoryPG'});
+                                   return false;" >
+
+                </h:commandLink>
+
+
+                <h:panelGrid columns="1" border="0" id="testeShowHidePG">
+
+                    <h:panelGrid columns="1" border="0" id="newStoryPG" rendered="#{sprintsMB.showAddNewStoryForm}">
+                        <ui:include src="./newStory.xhtml"></ui:include>
+                        
+
+                    </h:panelGrid>
+                </h:panelGrid>
+
+
+
+
+            </h:form>
             <h:form id="frmListStories">
 
                 <h:dataTable value="#{storiesMB.dm}" var="story" rendered="#{storiesMB.dm.rowCount > 0}"
@@ -44,9 +69,8 @@
                     <h:column>
                         <f:facet name="header"><h:outputText value="#" /></f:facet>
                         <h:outputText value="#{storiesMB.dm.rowIndex + 1}" />
-
                     </h:column>
-                    <h:column >
+                    <h:column>
                         <f:facet name="header"><h:outputText value="#{i18n['stories.label.name']}" /></f:facet>
                         <h:outputText value="#{story.name}" />
 
@@ -77,33 +101,7 @@
                 </h:dataTable>
             </h:form>
 
-            <h:form id="testeForm">
 
-                <h:outputText value="Teste de AJAX com rendered - NAO FUNCIONOU "/>
-                <h:commandButton id="showButton" action="#{sprintsMB.showForm}"
-                                 value="Show"
-                                 onclick="jsf.ajax.request(this, event,
-                                         {execute:'testeForm:showButton',
-                                         render: 'testeForm:testeShowHidePG testeForm:testeShowHidePG:newStoryPG'});
-                                         return false;" />
-                <h:commandButton id="hideButton" action="#{sprintsMB.hideForm}"
-                                 value="Hide"
-                                 onclick="jsf.ajax.request(this, event, {
-                                         execute:'testeForm:hideButton ',
-                                         render: 'testeForm:testeShowHidePG testeForm:testeShowHidePG:newStoryPG'});
-                                         return false;" />
-
-                
-                <h:panelGrid columns="1" border="1" id="testeShowHidePG">
-                    <h:outputText  id="testeShowHideOT" value="#{sprintsMB.showAddNewStoryForm}" rendered="#{sprintsMB.showAddNewStoryForm}" />
-                    <h:panelGrid columns="1" border="1" id="newStoryPG" rendered="#{sprintsMB.showAddNewStoryForm}">
-                        <ui:include src="./newStory.xhtml"></ui:include>
-                    </h:panelGrid>
-                </h:panelGrid>
-                
-
-                
-            </h:form>
         </h:panelGrid>
 
     </ui:composition>
