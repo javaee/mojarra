@@ -192,6 +192,7 @@ table.menuTable tr td{
     padding-bottom:0px;
     width:168px;
     background-image:url("..resources/images/menu/bt_preto03_165x35.png");
+   
 }
 
 .menu a{
@@ -200,16 +201,15 @@ table.menuTable tr td{
     font-size: 12px;
     /* Varia com a cor selecionada*/    
     color: orange;
-    padding: 10px;    
+    padding: 10px
+    
 }
 
 /* menuItem and menu spacing */
 .menu ul{           
     text-align:left;
     padding:0pt;
-    margin:0pt;
-    
-
+    margin:0pt;     
 }
 /* submenu div */
 .menu{    
