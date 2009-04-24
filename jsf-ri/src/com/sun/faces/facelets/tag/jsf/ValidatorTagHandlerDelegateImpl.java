@@ -45,7 +45,6 @@ import java.util.Map;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.application.Resource;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -55,7 +54,6 @@ import javax.faces.view.AttachedObjectHandler;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.MetaRuleset;
-import javax.faces.view.facelets.MetaTagHandler;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagException;
 import javax.faces.view.facelets.TagHandlerDelegate;
@@ -67,16 +65,29 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
     private SetValidatorDefaultsOnParentDelegate 
             setValidatorDefaultsOnParentDelegate;
 
+
+    // ------------------------------------------------------------ Constructors
+
+
     public ValidatorTagHandlerDelegateImpl(ValidatorHandler owner) {
+
         this.owner = owner;
+
     }
     
     public void setSetValidatorDefaultsOnParentDelegate(SetValidatorDefaultsOnParentDelegate delegate) {
+
         this.setValidatorDefaultsOnParentDelegate = delegate;
+
     }
 
+
+    // ----------------------------------------- Methods from TagHandlerDelegate
+
+
     @Override
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent)
+    throws IOException, FacesException, FaceletException, ELException {
 
         // only process if it's been created
         if (parent == null || !(parent.getParent() == null)) {
@@ -85,7 +96,7 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
 
         if (parent instanceof EditableValueHolder) {
             applyAttachedObject(ctx.getFacesContext(), parent);
-        } else if (parent.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+        } else if (UIComponent.isCompositeComponent(parent)) {
             if (null == owner.getFor()) {
                 // PENDING(): I18N
                 throw new TagException(owner.getTag(),
@@ -103,16 +114,23 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
 
     }
 
+
     @Override
     public MetaRuleset createMetaRuleset(Class type) {
+
         Util.notNull("type", type);
         MetaRuleset m = new MetaRulesetImpl(owner.getTag(), type);
         
         return m.ignore("binding").ignore("disabled");
+
     }
     
-    
+
+    // -------------------------------------- Methods from AttachedObjectHandler
+
+
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
+
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
 
         if (owner.isDisabled(ctx)) {
@@ -139,9 +157,12 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
         }
         owner.setAttributes(ctx, v);
         evh.addValidator(v);
+
     }
 
+
     public String getFor() {
+
         String result = null;
         TagAttribute attr = owner.getTagAttribute("for");
         
@@ -151,6 +172,10 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
         return result;
         
     }
+
+
+    // --------------------------------------------------------- Private Methods
+
     
     /**
      * Template method for creating a Validator instance
@@ -160,6 +185,7 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
      * @return a new Validator instance
      */
     private Validator createValidator(FaceletContext ctx) {
+
         String id = owner.getValidatorId(ctx);
         if (id == null) {
             throw new TagException(
@@ -167,42 +193,53 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
                     "A validator id was not specified. Typically the validator id is set in the constructor ValidateHandler(ValidatorConfig)");
         }
         return ctx.getFacesContext().getApplication().createValidator(id);
+
     }
 
-    
-    
-    
+
     /**
      * <p>As this parent is not an EditableValueHolder or composite component, take this opportunity to set
      * properties on the parent component that can be shared by validators used in this branch of the
      * component tree. The most common use of this method is to enable or disable a default validator.</p>
      */
-    private void setValidatorDefaultsOnParent(FaceletContext ctx, UIComponent parent, boolean disabled) {
+    private void setValidatorDefaultsOnParent(FaceletContext ctx,
+                                              UIComponent parent,
+                                              boolean disabled) {
+
         setDefaultValidatorIdStateForBranch(ctx, parent, !disabled);
         if (null != setValidatorDefaultsOnParentDelegate) {
             this.setValidatorDefaultsOnParentDelegate.setValidatorDefaultsOnParent(ctx, parent, disabled);
         }
+
     }
+
 
     /**
      * <p>Enable or disable a default validator for this branch of the component tree. This method will first
      * resolve the validator id and if it is non-null, it will delegate to a method which assigns the state
      * to the parent component.</p>
      */
-    private void setDefaultValidatorIdStateForBranch(FaceletContext ctx, UIComponent parent, boolean state) {
+    private void setDefaultValidatorIdStateForBranch(FaceletContext ctx,
+                                                     UIComponent parent,
+                                                     boolean state) {
+
          String id = owner.getValidatorId(ctx);
          // NOTE technically the validatorId should never be null
          if (id != null) {
              setDefaultValidatorIdStateForBranch(id, parent, state);
          }
+
     }
+
 
     /**
      * <p>Enable or disable a default validator for this branch of the component tree. This method uses the
      * supplied validator id to create an entry in the default validator id map in the attributes of the parent
      * component.</p>
      */
+    @SuppressWarnings({"unchecked"})
     private void setDefaultValidatorIdStateForBranch(String validatorId, UIComponent parent, boolean state) {
+
         Map<String, Boolean> defaultValidatorIds = (Map<String, Boolean>) parent.getAttributes().get(UIInput.DEFAULT_VALIDATOR_IDS_KEY);
         if (defaultValidatorIds == null) {
             defaultValidatorIds = new LinkedHashMap<String, Boolean>();
@@ -210,10 +247,14 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
         }
 
         defaultValidatorIds.put(validatorId, state);
+
     }
-    
+
+
     public interface SetValidatorDefaultsOnParentDelegate {
-        public void setValidatorDefaultsOnParent(FaceletContext ctx, UIComponent parent, boolean disabled);
-    }
+
+        void setValidatorDefaultsOnParent(FaceletContext ctx, UIComponent parent, boolean disabled);
+
+    } // END SetValidatorDefaultsOnParentDelegate
 
 }

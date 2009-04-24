@@ -37,7 +37,6 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
-//import com.sun.faces.facelets.tag.composite.CompositeBehaviors;
 import com.sun.faces.util.Util;
 
 import java.beans.BeanDescriptor;
@@ -48,7 +47,6 @@ import java.util.List;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.ClientBehavior;
@@ -84,8 +82,7 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
         if (parent == null || !(parent.getParent() == null)) {
             return;
         }
-        if (parent.getAttributes()
-              .containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+        if (UIComponent.isCompositeComponent(parent)) {
             // Check composite component event name:
             BeanInfo componentBeanInfo = (BeanInfo) parent.getAttributes().get(
                   UIComponent.BEANINFO_KEY);
