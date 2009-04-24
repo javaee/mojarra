@@ -21,7 +21,7 @@ import entities.Sprint;
 public class SprintsMB extends AppCrudMB<SprintDAO, SprintService, Sprint> {
 
     private static final long serialVersionUID = -1094408292080760267L;
-    private boolean showAddNewStoryForm = false;
+    private boolean showAddNewStoryForm = true;
 
     @Override
     public String getEntitiesLabel() {
