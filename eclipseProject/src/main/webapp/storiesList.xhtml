@@ -15,22 +15,22 @@
             <h:outputLabel value="#{i18n['stories.label.nostory']}" rendered="#{storiesMB.dm.rowCount eq 0}"/>
 
             <br/><br/>
-             <h:panelGrid columns="1" align="right">
-                    <h:panelGroup>
-                        <h:outputLabel value="#{i18n['stories.label.sprint']}: " for="otSprint"  />
-                        <h:outputText id="otSprint" value="Mostrar o nome do Sprint com link para o Sprint" />
-                    </h:panelGroup>
-                    <h:panelGroup>
-                        <h:outputLabel value="#{i18n['label.startedAt']}: " for="otSprintStartDate"/>
-                        <h:outputText id="otSprintStartDate" value="mostrar a data de inicio do sprint"  />
-                        <br/><br/>
-                    </h:panelGroup>
-                    <h:commandLink styleClass="navigationLink">
-                        <h:outputText value="+ Add Story"/>
-                    </h:commandLink>
-                </h:panelGrid>
+            <h:panelGrid columns="1" align="right">
+                <h:panelGroup>
+                    <h:outputLabel value="#{i18n['stories.label.sprint']}: " for="otSprint"  />
+                    <h:outputText id="otSprint" value="Mostrar o nome do Sprint com link para o Sprint" />
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:outputLabel value="#{i18n['label.startedAt']}: " for="otSprintStartDate"/>
+                    <h:outputText id="otSprintStartDate" value="mostrar a data de inicio do sprint"  />
+                    <br/><br/>
+                </h:panelGroup>
+                <h:commandLink styleClass="navigationLink">
+                    <h:outputText value="+ Add Story"/>
+                </h:commandLink>
+            </h:panelGrid>
             <h:form id="frmListStories">
-               
+
                 <h:dataTable value="#{storiesMB.dm}" var="story" rendered="#{storiesMB.dm.rowCount > 0}"
                              title="#{i18n['stories.table.title']}"
                              summary="#{i18n['stories.table.title']}"
@@ -70,7 +70,7 @@
                         <f:facet name="header"><h:outputText value="#{i18n['label.actions']}" /></f:facet>
                         <h:commandButton styleClass="botaoPostIt" action="#{storiesMB.edit}" value="#{i18n['button.edit']}" immediate="true" />
 
-                    
+
                         <h:commandButton styleClass="botaoPostIt" action="#{storiesMB.remove}" value="#{i18n['button.delete']}" immediate="true" />
                         <h:commandButton styleClass="botaoPostIt" action="#{storiesMB.showTasks}" value="#{i18n['button.tasks']}" immediate="true" />
                     </h:column>
@@ -82,15 +82,27 @@
                 <h:outputText value="Teste de AJAX com rendered - NAO FUNCIONOU "/>
                 <h:commandButton id="showButton" action="#{sprintsMB.showForm}"
                                  value="Show"
-                                 onclick="jsf.ajax.request(this, event, {execute:'testeForm:testeShowHideOT', render: 'testeForm:testeShowHideOT'});return false;" />
+                                 onclick="jsf.ajax.request(this, event,
+                                         {execute:'testeForm:showButton',
+                                         render: 'testeForm:testeShowHidePG testeForm:testeShowHidePG:newStoryPG'});
+                                         return false;" />
                 <h:commandButton id="hideButton" action="#{sprintsMB.hideForm}"
                                  value="Hide"
-                                 onclick="jsf.ajax.request(this, event, {execute:'testeForm:testeShowHideOT', render: 'testeForm:testeShowHideOT'});return false;" />
+                                 onclick="jsf.ajax.request(this, event, {
+                                         execute:'testeForm:hideButton ',
+                                         render: 'testeForm:testeShowHidePG testeForm:testeShowHidePG:newStoryPG'});
+                                         return false;" />
 
-                <h:outputText id="testeShowHideOT" value="#{sprintsMB.showAddNewStoryForm}"/>
+                
+                <h:panelGrid columns="1" border="1" id="testeShowHidePG">
+                    <h:outputText  id="testeShowHideOT" value="#{sprintsMB.showAddNewStoryForm}" rendered="#{sprintsMB.showAddNewStoryForm}" />
+                    <h:panelGrid columns="1" border="1" id="newStoryPG" rendered="#{sprintsMB.showAddNewStoryForm}">
+                        <ui:include src="./newStory.xhtml"></ui:include>
+                    </h:panelGrid>
+                </h:panelGrid>
+                
 
-
-
+                
             </h:form>
         </h:panelGrid>
 
