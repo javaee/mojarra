@@ -25,15 +25,15 @@
                 <h:message for="itName" />
 
                 <h:outputLabel value="#{i18n['stories.label.acceptance']}:" for="itAcceptance" />
-                <h:inputTextarea id="itAcceptance" value="#{storiesMB.toSave.acceptance}" required="true" cols="30" rows="3" requiredMessage="Describe the acceptance" />
+                <h:inputTextarea id="itAcceptance" value="#{storiesMB.toSave.acceptance}" required="true" cols="30" rows="3" requiredMessage="#{i18n['stories.label.acceptance.required']}" />
                 <h:message for="itAcceptance" />
 
                 <h:outputLabel value="#{i18n['stories.label.priority']}:" for="selPriority" />
-                <h:inputText id="selPriority" value="#{storiesMB.toSave.priority}" required="true" requiredMessage="Type the priority (sequence to do)" />
+                <h:inputText id="selPriority" value="#{storiesMB.toSave.priority}" required="true" requiredMessage="#{i18n['stories.label.priority.required']}" />
                 <h:message for="selPriority" />
 
                 <h:outputLabel value="#{i18n['stories.label.estimation']}:" for="itEstimation" />
-                <h:inputText id="itEstimation" value="#{storiesMB.toSave.estimation}" required="true" requiredMessage="Type the estimation (story points)" />
+                <h:inputText id="itEstimation" value="#{storiesMB.toSave.estimation}" required="true" requiredMessage="#{i18n['stories.label.storypoints.required']}" />
                 <h:message for="itEstimation" />
                 <h:outputText value=""/>
                 <h:commandButton action="#{storiesMB.save}" value="save" styleClass="botao" />
