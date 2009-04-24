@@ -5,12 +5,13 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+      xmlns:menu="http://java.sun.com/jsf/composite/components">
+      
     <h:head>
         <h:outputStylesheet library="css/1_1" name="appSelectedColor.css"/>
         <h:outputStylesheet library="css/1_1" name="menu.css"/>
         <h:outputScript     library="js" name="menu.js" target="head"/>
-        <h:outputScript     name="jsf.js" library="javax.faces"/>
+        <h:outputScript     library="javax.faces" name="jsf.js"/>
         <title><ui:insert name="pageTitle">
             <h:outputText value="TITULO need i18n"></h:outputText>
         </ui:insert>
@@ -22,7 +23,11 @@
         <table align="center" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="center">
-                    <ui:include src="./menu.xhtml" />                    
+            <menu:menu>
+                <ui:param name="image" value="/resources/images/duque_Top_990x150.png"></ui:param>
+                <ui:param name="position" value="bottom"></ui:param>
+            </menu:menu>
+            
                 </td>
             </tr>
             <tr>

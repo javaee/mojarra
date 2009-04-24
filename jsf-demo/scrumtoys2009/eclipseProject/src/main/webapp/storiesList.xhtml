@@ -12,11 +12,10 @@
 
 
         <h:panelGrid columns="1" border="0">
-            <h:outputLabel value="There is no stories for this sprint" rendered="#{storiesMB.dm.rowCount eq 0}"/>
+            <h:outputLabel value="#{i18n['stories.label.nostory']}" rendered="#{storiesMB.dm.rowCount eq 0}"/>
 
             <br/><br/>
-            <h:form id="frmListStories">
-                <h:panelGrid columns="1" align="right">
+             <h:panelGrid columns="1" align="right">
                     <h:panelGroup>
                         <h:outputLabel value="#{i18n['stories.label.sprint']}: " for="otSprint"  />
                         <h:outputText id="otSprint" value="Mostrar o nome do Sprint com link para o Sprint" />
@@ -30,10 +29,13 @@
                         <h:outputText value="+ Add Story"/>
                     </h:commandLink>
                 </h:panelGrid>
+            <h:form id="frmListStories">
+               
                 <h:dataTable value="#{storiesMB.dm}" var="story" rendered="#{storiesMB.dm.rowCount > 0}"
-                             title="Whiteboard with all Stories"
-                             summary="Whiteboard with all Stories"
+                             title="#{i18n['stories.table.title']}"
+                             summary="#{i18n['stories.table.title']}"
                              border="0"
+                             id="dtStories"
                              headerClass="datatableHeader"
                              rowClasses="datatableRow,datatableRow2"
                              columnClasses="dataTableFirstColumn"
@@ -67,6 +69,8 @@
                     <h:column>
                         <f:facet name="header"><h:outputText value="#{i18n['label.actions']}" /></f:facet>
                         <h:commandButton styleClass="botaoPostIt" action="#{storiesMB.edit}" value="#{i18n['button.edit']}" immediate="true" />
+
+                    
                         <h:commandButton styleClass="botaoPostIt" action="#{storiesMB.remove}" value="#{i18n['button.delete']}" immediate="true" />
                         <h:commandButton styleClass="botaoPostIt" action="#{storiesMB.showTasks}" value="#{i18n['button.tasks']}" immediate="true" />
                     </h:column>

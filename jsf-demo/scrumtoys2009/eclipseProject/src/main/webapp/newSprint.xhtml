@@ -27,23 +27,23 @@
                 <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
 
                     <h:outputLabel value="#{i18n['sprints.label.name']}:" for="itName"/>
-                    <h:inputText id="itName" value="#{sprintsMB.toSave.name}" required="true" requiredMessage="Type the short name" maxLenght="30" size="30"/>
+                    <h:inputText id="itName" value="#{sprintsMB.toSave.name}" required="true" requiredMessage="#{i18n['sprints.label.name.required']}" maxLenght="30" size="30"/>
                     <h:message for="itName" />
 
                     <h:outputLabel value="#{i18n['sprints.label.goals']}:" for="itGoals"  />
-                    <h:inputTextarea id="itGoals" value="#{sprintsMB.toSave.goals}" required="true" cols="31" rows="3" requiredMessage="Describe the goals" />
+                    <h:inputTextarea id="itGoals" value="#{sprintsMB.toSave.goals}" required="true" cols="31" rows="3" requiredMessage="#{i18n['sprints.label.goals.required']}" />
                     <h:message for="itGoals" />
 
                     <h:outputLabel value="#{i18n['sprints.label.iterationScope']}:" for="itIterationScope"  />
-                    <h:inputText id="itIterationScope" value="#{sprintsMB.toSave.iterationScope}" required="true" cols="50" rows="4" requiredMessage="Type the scope" />
+                    <h:inputText id="itIterationScope" value="#{sprintsMB.toSave.iterationScope}" required="true" cols="50" rows="4" requiredMessage="#{i18n['sprints.storypoints.name.required']}" />
                     <h:message for="itIterationScope" />
 
                     <h:outputLabel value="#{i18n['sprints.label.startedAt']}:" for="itStartedAt"  />
-                    <h:inputText id="itStartedAt" value="#{sprintsMB.toSave.startedAt}" required="true" requiredMessage="Type when this sprint start" />
+                    <h:inputText id="itStartedAt" value="#{sprintsMB.toSave.startedAt}" required="true" requiredMessage="#{i18n['sprints.label.startdate.required']}" />
                     <h:message for="itStartedAt" />
 
                     <h:outputLabel value="#{i18n['sprints.label.dailyMeetingTime']}:" for="itDailyMeetingTime"  />
-                    <h:inputText id="itDailyMeetingTime" value="#{sprintsMB.toSave.dailyMeetingTime}" required="true" requiredMessage="Type the estimation (story points)" />
+                    <h:inputText id="itDailyMeetingTime" value="#{sprintsMB.toSave.dailyMeetingTime}" required="true" requiredMessage="#{i18n['sprints.label.dailingmeeting.required']}" />
                     <h:message for="itDailyMeetingTime" />
                     <h:outputText value=""/>
                     <h:commandButton id="btnSave" action="#{sprintsMB.save}" value="#{i18n['button.save']}" />
