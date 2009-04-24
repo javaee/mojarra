@@ -16,7 +16,7 @@
         <ui:define name="content">
 
 
-            <h:form id="frmList">
+            <h:form id="frmListSprints">
 
                 <br/><br/>
 
@@ -24,13 +24,14 @@
 
                 <h:dataTable value="#{sprintsMB.dm}" var="sprint"
                              rendered="#{sprintsMB.dm.rowCount > 0}"
-                             title="Whiteboard with all Sprints"
-                             summary="Whiteboard with all Sprints"
+                             title="#{i18n['sprints.table.title']}"
+                             summary="#{i18n['sprints.table.title']}"
                              border="0"
                              headerClass="datatableHeader"
                              rowClasses="datatableRow,datatableRow2"
                              columnClasses="dataTableFirstColumn"
-                             styleClass="datatable">
+                             styleClass="datatable"
+                             id="dtSprints">
 
                     <h:column>
                         <f:facet name="header">
@@ -67,8 +68,12 @@
                         <f:facet name="header">
                             <h:outputText value="#{i18n['label.actions']}"/>
                         </f:facet>
-                        <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.edit}" value="#{i18n['button.edit']}"  />
-                        <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.remove}" value="#{i18n['button.delete']}" />
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.edit}" value="#{i18n['button.edit']}s"  />
+                        
+                        <h:commandButton id="btnDeleteSprint" styleClass="botaoPostIt" action="#{sprintsMB.remove}" value="#{i18n['button.delete']} AJAX"
+                                         onclick="jsf.ajax.request(this, event, {execute: 'frmListSprints:btnDeleteSprint',
+                                                                                 render: 'frmListSprints:dtSprints'}); return false;" />
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.remove}" value="#{i18n['button.delete']}"  />
                         <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.showStories}" value="#{i18n['button.stories']}"  />
                         <h:commandButton styleClass="botaoPostIt" action="#{sprintsMB.showDashboard}" value="#{i18n['button.dashboard']}"  />
                     </h:column>
