@@ -63,7 +63,7 @@ import javax.faces.event.SystemEventListener;
  * are caught and re-thrown.</p>
  *
  *         <p>This approach allows the <code>ExceptionHandler</code>
- *         facility specified in section JSF.12.3 to operate on the
+ *         facility specified in section JSF.6.2 to operate on the
  *         <code>Exception</code>.</p>
  *
  *         </li>
@@ -99,7 +99,7 @@ import javax.faces.event.SystemEventListener;
  * <p>With either approach, any <code>ExceptionQueuedEvent</code> instances
  * that are published in this way are accessible to the {@link #handle}
  * method, which is called at the end of each lifecycle phase, as
- * specified in section JSF.12.3.</p>
+ * specified in section JSF.6.2.</p>
 
  * <p>Instances of this class are request scoped and are created by
  * virtue of {@link FacesContextFactory#getFacesContext} calling {@link
