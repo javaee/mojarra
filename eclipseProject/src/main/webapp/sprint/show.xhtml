@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="pageTitle">
+            <h:outputText value="#{i18n['sprint.show.title']}"></h:outputText>
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="frmListSprints">
+
+                <br/><br/>
+
+                <h:outputText value="#{i18n['sprint.show.table.label.empty']}"
+                    rendered="#{sprintManager.sprints.rowCount eq 0}" />
+
+                <br/>
+
+                <h:dataTable value="#{sprintManager.sprints}" var="sprint"
+                             rendered="#{sprintManager.sprints.rowCount > 0}"
+                             title="#{i18n['sprint.show.table.title']}"
+                             summary="#{i18n['sprint.show.table.title']}"
+                             border="0"
+                             headerClass="datatableHeader"
+                             rowClasses="datatableRow,datatableRow2"
+                             columnClasses="dataTableFirstColumn"
+                             styleClass="datatable"
+                             id="dtSprints">
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#" />
+                        </f:facet>
+                        <h:outputText value="#{sprintManager.sprints.rowIndex + 1}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['sprint.show.table.header.name']}" />
+                        </f:facet>
+                        <h:outputText value="#{sprint.name}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['sprint.show.table.header.goals']}" />
+                        </f:facet>
+                        <h:outputText value="#{sprint.goals}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['sprint.show.table.header.startDate']}"/>
+                        </f:facet>
+                        <h:outputText value="#{sprint.startDate}">
+                            <f:convertDateTime pattern="#{i18n['sprint.show.table.header.startDate.pattern']}" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['sprint.show.table.header.dailyMeetingTime']}" />
+                        </f:facet>
+                        <h:outputText value="#{sprint.dailyMeetingTime}">
+                            <f:convertDateTime pattern="#{i18n['sprint.show.table.header.dailyMeetingTime.pattern']}" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['sprint.show.table.header.actions']}"/>
+                        </f:facet>
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.edit}" value="#{i18n['sprint.show.button.edit']}"  />
+
+                        <h:commandButton id="btnDeleteSprint" styleClass="botaoPostIt" action="#{sprintManager.remove}" value="#{i18n['sprint.show.button.delete']} AJAX"
+                                         onclick="jsf.ajax.request(this, event, {execute: 'frmListSprints:btnDeleteSprint',
+                                             render: 'frmListSprints:dtSprints'}); return false;" />
+
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.remove}" value="#{i18n['sprint.show.button.delete']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.showStories}" value="#{i18n['sprint.show.button.showStories']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.showDashboard}" value="#{i18n['sprint.show.button.showDashboard']}"  />
+                    </h:column>
+
+                </h:dataTable>
+
+                <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.create}" value="#{i18n['sprint.show.button.newSprint']}"  />
+                <h:commandButton styleClass="botaoPostIt" action="home" value="#{i18n['sprint.show.button.home']}"  />
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

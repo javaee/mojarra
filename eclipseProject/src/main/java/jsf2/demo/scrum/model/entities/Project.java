@@ -21,8 +21,8 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "projects")
-@NamedQueries({@NamedQuery(name = "project.getAll", query = "from Project"),
-    @NamedQuery(name = "project.getAllOpen", query = "from Project where endDate is null")})
+@NamedQueries({@NamedQuery(name = "project.getAll", query = "select p from Project as p"),
+    @NamedQuery(name = "project.getAllOpen", query = "select p from Project as p where p.endDate is null")})
 public class Project extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -89,6 +89,14 @@ public class Project extends AbstractEntity implements Serializable {
             return true;
         }
         return false;
+    }
+
+    public boolean removeSpring(Sprint sprint) {
+        if (sprints != null && !sprints.isEmpty()) {
+            return sprints.remove(sprint);
+        } else {
+            return false;
+        }
     }
 
     @Override

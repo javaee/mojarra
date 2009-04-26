@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+
+    <ui:composition>
+        <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
+
+            <h:outputLabel value="#{i18n['sprint.form.label.project.name']}:" for="itProjectName" />
+            <h:inputText id="itProjectName" value="#{sprintManager.project.name}" size="30" disabled="true"/>
+            <h:message for="itProjectName" />
+
+            <h:outputLabel value="#{i18n['sprint.form.label.name']}:" for="itName"/>
+            <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true" requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLenght="30" size="30"/>
+            <h:message for="itName" />
+
+            <h:outputLabel value="#{i18n['sprint.form.label.goals']}:" for="itGoals"  />
+            <h:inputTextarea id="itGoals" value="#{sprintManager.currentSprint.goals}" required="true" cols="31" rows="3" requiredMessage="#{i18n['sprint.form.label.goals.required']}" />
+            <h:message for="itGoals" />
+
+            <h:outputLabel value="#{i18n['sprint.form.label.iterationScope']}:" for="itIterationScope"  />
+            <h:inputText id="itIterationScope" value="#{sprintManager.currentSprint.iterationScope}" required="true" cols="50" rows="4" requiredMessage="#{i18n['sprint.form.label.iterationScope.required']}" />
+            <h:message for="itIterationScope" />
+
+            <h:outputLabel value="#{i18n['sprint.form.label.startDate']}:" for="itStartedDate"  />
+            <h:panelGroup>
+                <h:inputText id="itStartedDate" value="#{sprintManager.currentSprint.startDate}" required="true" requiredMessage="#{i18n['sprint.form.label.startDate.required']}">
+                    <f:convertDateTime pattern="#{i18n['sprint.form.label.startDate.pattern']}" />
+                </h:inputText>
+                <h:outputText value="(#{i18n['sprint.form.label.startDate.pattern']})" />
+            </h:panelGroup>
+            <h:message for="itStartedDate" />
+
+            <h:outputLabel value="#{i18n['sprint.form.label.dailyMeetingTime']}:" for="itDailyMeetingTime"  />
+            <h:panelGroup>
+                <h:inputText id="itDailyMeetingTime" value="#{sprintManager.currentSprint.dailyMeetingTime}" required="true" requiredMessage="#{i18n['sprint.form.label.dailyMeetingTime.required']}">
+                    <f:convertDateTime pattern="#{i18n['sprint.form.label.dailyMeetingTime.pattern']}" />
+                </h:inputText>
+                <h:outputText value="(#{i18n['sprint.form.label.dailyMeetingTime.pattern']})" />
+            </h:panelGroup>
+            <h:message for="itDailyMeetingTime" />
+
+        </h:panelGrid>
+    </ui:composition>
+
+</html>

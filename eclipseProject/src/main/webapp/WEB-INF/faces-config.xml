@@ -13,29 +13,6 @@
 		<message-bundle>i18n</message-bundle>		
 	</application>
 
-	<component>
-		<component-type>BURNDOWN_OUTPUT</component-type>
-		<component-class>jsf.component.BurndownComponent</component-class>
-	</component>
-	<render-kit>
-		<renderer>
-			<component-family>SCRUMTOYS_COMPONENT_FAMILY</component-family>
-			<renderer-type>BURNDOWN_RENDERER</renderer-type>
-			<renderer-class>jsf.renderer.BurndownRenderer</renderer-class>
-		</renderer>
-	</render-kit>
-<!-- you also can use @ManagedBean at DashboardMB.java file -->
- 	<managed-bean>
-  		<managed-bean-name>dashboardMB</managed-bean-name>
-  		<managed-bean-class>jsf.mb.DashboardMB</managed-bean-class>
-  		<managed-bean-scope>view</managed-bean-scope>
- 	</managed-bean>
- 
- 	<converter>
-		<converter-for-class>java.util.Date</converter-for-class>
-		<converter-class>jsf.converter.AppDateTimeConverter</converter-class>
-	</converter>
-
 	<navigation-rule>
 		<description>
 			global navigation rules
@@ -47,27 +24,6 @@
             </description>
 			<from-outcome>home</from-outcome>
 			<to-view-id>/home.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<description>
-				see sprints
-            </description>
-			<from-outcome>sprints</from-outcome>
-			<to-view-id>/sprints.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<description>
-				see stories
-            </description>
-			<from-outcome>stories</from-outcome>
-			<to-view-id>/stories.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<description>
-				see tasks
-            </description>
-			<from-outcome>tasks</from-outcome>
-			<to-view-id>/tasks.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<description>
@@ -98,5 +54,57 @@
 			<to-view-id>/burndown.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
+	<navigation-rule>
+		<description>
+			project navigation rules
+        </description>
+		<from-view-id>/project/show.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>showSprints</from-outcome>
+			<to-view-id>/sprint/show.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<description>
+			sprint navigation rules
+        </description>
+		<from-view-id>/sprint/show.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>showStories</from-outcome>
+			<to-view-id>/story/show.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>showDashboard</from-outcome>
+			<to-view-id>/dashboard/show.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<description>
+			story navigation rules
+        </description>
+		<from-view-id>/story/show.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>showTasks</from-outcome>
+			<to-view-id>/task/show.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>showSprints</from-outcome>
+			<to-view-id>/sprint/show.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<description>
+			task navigation rules
+        </description>
+		<from-view-id>/task/show.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>showStories</from-outcome>
+			<to-view-id>/story/show.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
 </faces-config>

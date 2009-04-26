@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+
+    <ui:composition>
+        <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
+
+            <h:outputLabel value="#{i18n['project.form.label.name']}:" for="itName"/>
+            <h:inputText id="itName" value="#{projectManager.currentProject.name}" required="true" requiredMessage="#{i18n['project.form.label.name.required']}" maxLenght="30" size="30"/>
+            <h:message for="itName" />
+
+            <h:outputLabel value="#{i18n['project.form.label.startDate']}:" for="itStartedDate"  />
+            <h:panelGroup>
+                <h:inputText id="itStartedDate" value="#{projectManager.currentProject.startDate}" required="true" requiredMessage="#{i18n['project.form.label.startDate.required']}">
+                    <f:convertDateTime pattern="#{i18n['project.form.label.startDate.pattern']}" />
+                </h:inputText>
+                <h:outputText value="(#{i18n['project.form.label.startDate.pattern']})" />
+            </h:panelGroup>
+            <h:message for="itStartedDate" />
+
+            <h:outputLabel value="#{i18n['project.form.label.endDate']}:" for="itEndDate"  />
+            <h:panelGroup>
+                <h:inputText id="itEndDate" value="#{projectManager.currentProject.endDate}" required="false" requiredMessage="#{i18n['project.form.label.endDate.required']}">
+                    <f:convertDateTime pattern="#{i18n['project.form.label.endDate.pattern']}" />
+                </h:inputText>
+                <h:outputText value="(#{i18n['project.form.label.endDate.pattern']})" />
+            </h:panelGroup>
+            <h:message for="itEndDate" />
+
+        </h:panelGrid>
+    </ui:composition>
+
+</html>

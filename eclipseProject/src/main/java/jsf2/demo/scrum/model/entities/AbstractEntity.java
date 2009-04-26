@@ -4,7 +4,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 
 /**
  *
@@ -17,9 +16,6 @@ public abstract class AbstractEntity implements PersistentEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Version
-    private Integer version;
-
     public Long getId() {
         return this.id;
     }
