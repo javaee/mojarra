@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:jc="http://java.sun.com/jsp/jstl/core"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="pageTitle">
+            <h:outputText value="#{i18n['task.show.title']}"></h:outputText>
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="frmListTasks">
+
+                <br/><br/>
+
+                <h:outputText value="#{i18n['task.show.table.label.empty']}"
+                    rendered="#{taskManager.tasks.rowCount eq 0}" />
+
+                <br/>
+
+                <h:dataTable value="#{taskManager.tasks}" var="task"
+                             rendered="#{taskManager.tasks.rowCount > 0}"
+                             title="#{i18n['task.show.table.title']}"
+                             summary="#{i18n['task.show.table.title']}"
+                             border="0"
+                             headerClass="datatableHeader"
+                             rowClasses="datatableRow,datatableRow2"
+                             columnClasses="dataTableFirstColumn"
+                             styleClass="datatable"
+                             id="dtTasks">
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#" />
+                        </f:facet>
+                        <h:outputText value="#{taskManager.tasks.rowIndex + 1}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['task.show.table.header.name']}" />
+                        </f:facet>
+                        <h:outputText value="#{task.name}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['task.show.table.header.startDate']}"/>
+                        </f:facet>
+                        <h:outputText value="#{task.startDate}">
+                            <f:convertDateTime pattern="#{i18n['task.show.table.header.startDate.pattern']}" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['task.show.table.header.endDate']}"/>
+                        </f:facet>
+                        <h:outputText value="#{task.endDate}">
+                            <f:convertDateTime pattern="#{i18n['task.show.table.header.endDate.pattern']}" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['task.show.table.header.status']}" />
+                        </f:facet>
+                        <jc:set var="statusKey" value="task.show.table.header.status.#{task.status}" />
+                        <h:outputText value="#{i18n[statusKey]}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{i18n['task.show.table.header.actions']}"/>
+                        </f:facet>
+                        <h:commandButton styleClass="botaoPostIt" action="#{taskManager.edit}" value="#{i18n['task.show.button.edit']}"  />
+
+                        <h:commandButton id="btnDeleteTask" styleClass="botaoPostIt" action="#{taskManager.remove}" value="#{i18n['task.show.button.delete']} AJAX"
+                                         onclick="jsf.ajax.request(this, event, {execute: 'frmListTasks:btnDeleteTask',
+                                             render: 'frmListTasks:dtTasks'}); return false;" />
+
+                        <h:commandButton styleClass="botaoPostIt" action="#{taskManager.remove}" value="#{i18n['task.show.button.delete']}"  />
+                    </h:column>
+
+                </h:dataTable>
+
+                <h:commandButton styleClass="botaoPostIt" action="#{taskManager.create}" value="#{i18n['task.show.button.newTask']}"  />
+                <h:commandButton styleClass="botaoPostIt" action="showStories" value="#{i18n['task.show.button.showStories']}"  />
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

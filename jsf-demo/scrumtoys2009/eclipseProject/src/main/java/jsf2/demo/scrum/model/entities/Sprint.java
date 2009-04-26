@@ -24,8 +24,8 @@ import javax.persistence.UniqueConstraint;
  *
  * @author Dr. Spock (spock at dev.java.net)
  */
-@Entity(name = "temp_sprint") // TODO: remove the entity name
-@Table(name = "new_sprints", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "project_id"}))
+@Entity
+@Table(name = "sprints", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "project_id"}))
 public class Sprint extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -135,6 +135,14 @@ public class Sprint extends AbstractEntity implements Serializable {
             return true;
         }
         return false;
+    }
+
+    public boolean removeStory(Story story) {
+        if (stories != null && !stories.isEmpty()) {
+            return stories.remove(story);
+        } else {
+            return false;
+        }
     }
 
     public Project getProject() {

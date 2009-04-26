@@ -17,15 +17,15 @@ import javax.persistence.UniqueConstraint;
  *
  * @author Dr. Spock (spock at dev.java.net)
  */
-@Entity(name = "temp_task")  // TODO: remove the entity name
-@Table(name = "new_tasks", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "story_id"}))
+@Entity
+@Table(name = "tasks", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "story_id"}))
 public class Task extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Column(nullable = false)
     private String name;
     @Temporal(TemporalType.DATE)
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
     private Date startDate;
     @Temporal(TemporalType.DATE)
     @Column(name = "end_date")
@@ -37,7 +37,6 @@ public class Task extends AbstractEntity implements Serializable {
     private Story story;
 
     public Task() {
-        this.startDate = new Date();
         this.status = TaskStatus.TODO;
     }
 

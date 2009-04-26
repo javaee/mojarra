@@ -14,7 +14,14 @@
 
         <ui:define name="content">
 
-
+            <h:form>
+                <h:outputLabel for="prjCombo" value="#{i18n['home.project.combo.label']}" styleClass="formLabel" />
+                <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput"
+                    onchange="jsf.ajax.request(this, event, {execute: 'prjCombo', render: 'prjCombo'});">
+                    <f:selectItems value="#{projectManager.projectItems}" />
+                </h:selectOneMenu>
+            </h:form>
+            
             <h:panelGrid styleClass="whiteboard">
                 <f:facet name="header">
                     <h:outputText value=""></h:outputText>
@@ -35,7 +42,7 @@
                     <h:outputText value="Edit a Task"></h:outputText>
                     <h:outputText value="Remove a Task from a Story"></h:outputText>
                     <h:outputText value="Add a new Task to the Story"></h:outputText>
-                    <h:outputText value="View your Scrum Dashboard"></h:outputText>        
+                    <h:outputText value="View your Scrum Dashboard"></h:outputText>
                 </h:panelGrid>
                 <f:facet name="footer">
                     <h:outputText value=" "></h:outputText>

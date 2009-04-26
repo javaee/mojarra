@@ -2,22 +2,16 @@
 <persistence version="1.0"
 	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
-	<persistence-unit name="scrumtoysPU">
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>entities.Sprint</class>
+	<persistence-unit name="scrumtoysPU" transaction-type="JTA">
+		<provider>oracle.toplink.essentials.ejb.cmp3.EntityManagerFactoryProvider</provider>
+        <jta-data-source>jdbc/jsf2/demo/scrumDS</jta-data-source>
         <class>jsf2.demo.scrum.model.entities.Project</class>
         <class>jsf2.demo.scrum.model.entities.Sprint</class>
         <class>jsf2.demo.scrum.model.entities.Story</class>
         <class>jsf2.demo.scrum.model.entities.Task</class>
 		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect" />
-			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/scrumtoys" />
-			<property name="hibernate.connection.username" value="scrumtoys" />
-			<property name="hibernate.connection.password" value="scrumtoys" />
-			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider" />
-			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.show_sql" value="true" />
+            <property name="toplink.target-database" value="MySQL4"/>
+            <property name="toplink.ddl-generation" value="create-tables"/>
 		</properties>
 	</persistence-unit>
 </persistence>

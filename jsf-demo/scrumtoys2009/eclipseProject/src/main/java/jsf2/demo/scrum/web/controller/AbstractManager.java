@@ -1,11 +1,19 @@
 package jsf2.demo.scrum.web.controller;
 
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -14,24 +22,49 @@ import javax.persistence.PersistenceContext;
 public abstract class AbstractManager {
 
     @PersistenceContext
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
+    @Resource
+    private UserTransaction userTransaction;
 
-    protected final Object doInTransaction(PersistenceAction action) throws ManagerException {
-        EntityTransaction tx = entityManager.getTransaction();
-        tx.begin();
+    protected final <T> T doInTransaction(PersistenceAction<T> action) throws ManagerException {
         try {
-            Object result = action.execute(entityManager);
-            tx.commit();
+            userTransaction.begin();
+            T result = action.execute(entityManager);
+            userTransaction.commit();
             return result;
         } catch (Exception e) {
-            tx.rollback();
+            try {
+                userTransaction.rollback();
+            } catch (Exception ex) {
+                Logger.getLogger(AbstractManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
             throw new ManagerException(e);
         }
     }
 
-    protected static interface PersistenceAction {
+    protected final void doInTransaction(PersistenceActionWithoutResult action) throws ManagerException {
+        try {
+            userTransaction.begin();
+            action.execute(entityManager);
+            userTransaction.commit();
+        } catch (Exception e) {
+            try {
+                userTransaction.rollback();
+            } catch (Exception ex) {
+                Logger.getLogger(AbstractManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            throw new ManagerException(e);
+        }
+    }
 
-        Object execute(EntityManager em);
+    protected static interface PersistenceAction<T> {
+
+        T execute(EntityManager em);
+    }
+
+    protected static interface PersistenceActionWithoutResult {
+
+        void execute(EntityManager em);
     }
 
     protected void addMessage(String message) {
@@ -48,5 +81,26 @@ public abstract class AbstractManager {
 
     protected void addMessage(String componentId, String message, Severity severity) {
         FacesContext.getCurrentInstance().addMessage(componentId, new FacesMessage(severity, message, message));
+    }
+
+    protected Logger getLogger(Class<?> clazz) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("Class for logger is required.");
+        }
+        return Logger.getLogger(clazz.getName());
+    }
+
+    protected void publishEvent(Class<? extends SystemEvent> eventClass, Object source) {
+        if (source != null) {
+            FacesContext.getCurrentInstance().getApplication().publishEvent(eventClass, source);
+        }
+    }
+
+    protected void subscribeToEvent(Class<? extends SystemEvent> eventClass, SystemEventListener listener) {
+        FacesContext.getCurrentInstance().getApplication().subscribeToEvent(eventClass, listener);
+    }
+
+    protected void unsubscribeFromEvent(Class<? extends SystemEvent> eventClass, SystemEventListener listener) {
+        FacesContext.getCurrentInstance().getApplication().unsubscribeFromEvent(eventClass, listener);
     }
 }
