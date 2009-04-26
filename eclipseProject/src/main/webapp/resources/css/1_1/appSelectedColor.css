@@ -1,38 +1,114 @@
 table.whiteboard {
     width:1024px;
     border-collapse:collapse;
+    margin:0px;
+    padding:0px;
 }
 
-.tableHeader, table.whiteboard thead tr th{
+table.whiteboard tr td{
+    margin:0px;
+    padding:0px;
+}
+
+.tableHeader{
     background-image:url("../resources/images/lousaNova/quadroNegro_r1_c1.png");
     background-repeat:no-repeat;
     height:42px;
     width:100%;
     margin: 0px;
     padding: 0px;
+    
 }
 
-.tableBody, table.whiteboard tbody tr td {
+table.tableBody{
   width:100%;
-  background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
-  height:200px;
+  background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");  
   margin: 0px;
-  padding: 0px;
+  padding: 0px;  
+  border-collapse:collapse;
+  border-spacing:0pt;
+  
+
 }
 
-.tableFooter, table.whiteboard tfoot tr td{
+table.tableBody tr td{
+    /* important to make content aligned inside the table*/
+    text-align:center;
+}
+
+
+
+.tableFooter{
     width:100%;
     background-image:url("../resources/images/lousaNova/quadroNegro_r3_c1.png");
     background-repeat:no-repeat;
-    height:45px;
+    height:45px;    
+    margin:0px;
+    padding:0px;
+    font-family: Arial, Helvetica, sans-serif ;
+	color: black;
+    
 }
 
+td.postItYellow {
+    background-image:url("../resources/images/postits/novos/postit_amar_150x145.png");
+    background-position:center;
+    background-repeat:no-repeat;
+    height:200px;
+    width:25%;    
+}
+td.postItYellow a {
+    color:black;
+    text-decoration:none;
+}
 
+td.postItOrange {
+    background-image:url("../resources/images/postits/novos/postit_lara_150x145.png");
+    background-position:center;
+    background-repeat:no-repeat;
+    height:200px;
+    width:25%;
+}
+
+td.postItOrange a {
+    color:black;
+    text-decoration:none;
+}
+
+td.postItRed {
+    background-image:url("../resources/images/postits/novos/postit_verm_150x145.png");
+    background-position:center;
+    background-repeat:no-repeat;
+    height:200px;
+    width:25%;
+}
+td.postItRed a {
+    color:white;
+    text-decoration:none;
+}
+
+td.postItBlue {
+    background-image:url("../resources/images/postits/novos/postit_azul_150x145.png");
+    background-position:center;
+    background-repeat:no-repeat;
+    height:200px;
+    width:25%;
+}
+
+td.postItBlue a {
+    color:white;
+    text-decoration:none;
+}
 table.postit-6colunas {
     width:100%;
     padding:25pt;
     border-spacing:5pt;
 
+  background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
+  margin: 0px;
+  padding: 0px;
+  border-collapse:collapse;
+  border-spacing:0pt;
 }
 
 table.postit-6colunas thead tr th{
@@ -48,7 +124,7 @@ table.postit-6colunas tbody tr td {
     text-align:center;
 
     /*atualizar*/
-    background-image:url("../resources/images/postits/postit_quad_amar_150x145.png;");
+    background-image:url("../resources/images/postits/postit_lara_150x145-06.png;");
     width:150px;
     height:145px;
     background-repeat:no-repeat;
@@ -195,6 +271,11 @@ table.menuTable tr td{
    
 }
 
+.noImageBackground tbody tr td{
+    background-color:red;
+    background-image:none;
+    width:25%;
+}
 .menu a{
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif ;
@@ -225,7 +306,8 @@ table.menuTable tr td{
 /* submenu item*/
 .menu li{
     /* white background for avoiding transparency on submenu item */
-    background-color:white;
+    /*background-color:white;*/
+    
     list-style-type: none;    
     width: 142px;
     /* altura do submenu */
