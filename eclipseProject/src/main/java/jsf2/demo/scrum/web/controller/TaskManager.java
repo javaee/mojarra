@@ -162,7 +162,7 @@ public class TaskManager extends AbstractManager implements Serializable {
         this.story = story;
     }
 
-    private class StoryChangeListener implements SystemEventListener {
+    private class StoryChangeListener implements SystemEventListener, Serializable {
 
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             story = (Story) event.getSource();

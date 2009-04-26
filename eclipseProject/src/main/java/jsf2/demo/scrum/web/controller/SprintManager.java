@@ -171,7 +171,7 @@ public class SprintManager extends AbstractManager implements Serializable {
         this.project = project;
     }
 
-    private class ProjectChangeListener implements SystemEventListener {
+    private class ProjectChangeListener implements SystemEventListener, Serializable {
 
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             project = (Project) event.getSource();

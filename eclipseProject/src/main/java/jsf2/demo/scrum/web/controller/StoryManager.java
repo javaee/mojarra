@@ -167,7 +167,7 @@ public class StoryManager extends AbstractManager implements Serializable {
         this.sprint = sprint;
     }
 
-    private class SprintChangeListener implements SystemEventListener {
+    private class SprintChangeListener implements SystemEventListener, Serializable {
 
         public void processEvent(SystemEvent event) throws AbortProcessingException {
             sprint = (Sprint) event.getSource();
