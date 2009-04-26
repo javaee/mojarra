@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+
+    <ui:composition>
+
+
+
+        <h:panelGrid columns="1" border="0">
+            <h:outputLabel value="#{i18n['stories.label.nostory']}" rendered="#{storiesMB.dm.rowCount eq 0}"/>
+
+            <br/><br/>
+            <h:panelGrid columns="1" align="right">
+                <h:panelGroup>
+                    <h:outputLabel value="#{i18n['stories.label.sprint']}: " for="otSprint"  />
+                    <h:outputText id="otSprint" value="Mostrar o nome do Sprint com link para o Sprint" />
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:outputLabel value="#{i18n['label.startedAt']}: " for="otSprintStartDate"/>
+                    <h:outputText id="otSprintStartDate" value="mostrar a data de inicio do sprint"  />
+                    <br/><br/>
+                </h:panelGroup>
+            </h:panelGrid>
+
+            <h:form id="testeForm">
+
+
+                <h:commandLink tyleClass="navigationLink" id="showButton" action="#{sprintsMB.showForm}"
+                               value="+ Add Story to this Sprint"
+
+                               onclick="jsf.ajax.request(this, event,
+                                   {execute:'testeForm:showButton',
+                                       render: 'testeForm:testeShowHidePG testeForm:testeShowHidePG:newStoryPG'});
+                                   return false;" >
+
+                </h:commandLink>
+
+
+                <h:panelGrid columns="1" border="0" id="testeShowHidePG">
+
+                    <h:panelGrid columns="1" border="0" id="newStoryPG" rendered="#{sprintsMB.showAddNewStoryForm}">
+                        <ui:include src="./newStory.xhtml"></ui:include>                        
+                    </h:panelGrid>
+                </h:panelGrid>
+
+
+
+
+            </h:form>
+            <h:form id="frmListStories">
+
+                <h:dataTable value="#{storiesMB.dm}" var="story" rendered="#{storiesMB.dm.rowCount > 0}"
+                             title="#{i18n['stories.table.title']}"
+                             summary="#{i18n['stories.table.title']}"
+                             border="0"
+                             id="dtStories"
+                             headerClass="datatableHeader"
+                             rowClasses="datatableRow,datatableRow2"
+                             columnClasses="dataTableFirstColumn"
+                             styleClass="datatable">
+
+                    <h:column>
+                        <f:facet name="header"><h:outputText value="#" /></f:facet>
+                        <h:outputText value="#{storiesMB.dm.rowIndex + 1}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"><h:outputText value="#{i18n['stories.label.name']}" /></f:facet>
+                        <h:outputText value="#{story.name}" />
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"><h:outputText value="#{i18n['stories.label.priority']}" /></f:facet>
+                        <h:outputText value="#{story.priority}" />
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"><h:outputText value="#{i18n['stories.label.estimation']}" /></f:facet>
+                        <h:outputText value="#{story.estimation}" />
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"><h:outputText value="#{i18n['stories.label.acceptance']}"/></f:facet>
+                        <h:outputText value="#{story.acceptance}" />
+
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"><h:outputText value="#{i18n['label.actions']}" /></f:facet>
+                        <h:commandButton styleClass="botaoPostIt" action="#{storiesMB.edit}" value="#{i18n['button.edit']}" immediate="true" />
+
+
+                        <h:commandButton styleClass="botaoPostIt" action="#{storiesMB.remove}" value="#{i18n['button.delete']}" immediate="true" />
+                        <h:commandButton styleClass="botaoPostIt" action="#{storiesMB.showTasks}" value="#{i18n['button.tasks']}" immediate="true" />
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+
+
+        </h:panelGrid>
+
+    </ui:composition>
+</html>
