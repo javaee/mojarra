@@ -8,7 +8,7 @@
       xmlns:menu="http://java.sun.com/jsf/composite/components">
       
     <h:head>
-        <h:outputStylesheet library="css/1_1" name="appSelectedColor.css"/>
+        <h:outputStylesheet library="css/1_1" name="#{skinManager.selectedSkin}"/>
         <h:outputStylesheet library="css/1_1" name="menu.css"/>
         <h:outputScript     library="js" name="menu.js" target="head"/>
         <h:outputScript     library="javax.faces" name="jsf.js"/>
@@ -24,7 +24,7 @@
             <tr>
                 <td align="center">
             <menu:menu>
-                <ui:param name="image" value="/resources/images/duque_Top_990x150.png"></ui:param>
+                <ui:param name="image" value="/resources/images/menu/barraSuperior-04.png"></ui:param>
                 <ui:param name="position" value="bottom"></ui:param>
             </menu:menu>
             
