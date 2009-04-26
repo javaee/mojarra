@@ -17,17 +17,17 @@ table.whiteboard tr td{
     width:100%;
     margin: 0px;
     padding: 0px;
-    
+
 }
 
 table.tableBody{
   width:100%;
-  background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");  
+  background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
   margin: 0px;
-  padding: 0px;  
+  padding: 0px;
   border-collapse:collapse;
   border-spacing:0pt;
-  
+
 
 }
 
@@ -42,12 +42,12 @@ table.tableBody tr td{
     width:100%;
     background-image:url("../resources/images/lousaNova/quadroNegro_r3_c1.png");
     background-repeat:no-repeat;
-    height:45px;    
+    height:45px;
     margin:0px;
     padding:0px;
     font-family: Arial, Helvetica, sans-serif ;
 	color: black;
-    
+
 }
 
 td.postItYellow {
@@ -55,7 +55,7 @@ td.postItYellow {
     background-position:center;
     background-repeat:no-repeat;
     height:200px;
-    width:25%;    
+    width:25%;
 }
 td.postItYellow a {
     color:black;
@@ -103,12 +103,11 @@ table.postit-6colunas {
     width:100%;
     padding:25pt;
     border-spacing:5pt;
-
-  background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
-  margin: 0px;
-  padding: 0px;
-  border-collapse:collapse;
-  border-spacing:0pt;
+    background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
+    margin: 0px;
+    padding: 0px;
+    border-collapse:collapse;
+    border-spacing:0pt;
 }
 
 table.postit-6colunas thead tr th{
@@ -124,7 +123,7 @@ table.postit-6colunas tbody tr td {
     text-align:center;
 
     /*atualizar*/
-    background-image:url("../resources/images/postits/postit_lara_150x145-06.png;");
+    background-image:url("../resources/images/postits/novos/postit_azul_150x145.png");
     width:150px;
     height:145px;
     background-repeat:no-repeat;
@@ -168,63 +167,69 @@ table.postit-1coluna tfoot tr td{
     background-image:url("../resources/images/lousaNova/quadroNegro_r3_c1.png;");
 }
 
-/*
-atualizar
-*/
 
 
 .tituloForm {
     font-size: 14pt;
-    color: orange;;
+    /* Yellow 100%*/
+    color: #FDBB30;;
     font-weight:bold;
     padding:11px;
     margin:11px;
 }
 input.botaoPostIt{
     font-size: 8pt;
-    color: maroon;
+    /* Yellow 100%*/
+    color: #FDBB30;
     font-weight:bold;
     background-color:white;
+
 }
 
-/* atualizar */
+
 label {
-  font-size: 10pt;  
-  color: gray;
+  font-size: 10pt;
+  /* Yellow 100%*/
+  color: #FDBB30;
   text-align: left;
   border:none;
+
 }
 
 td{
     font-family: Arial, Helvetica, sans-serif;
 }
-/* atualizar */
+
 input, select,textarea {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 12pt;
-  color: orange;
-  text-align: left;  
+  font-size: 12px;
+  /* Yellow 100% */
+  color: #FDBB30;
+  text-align: left;
   background-color:white;
   border-style:ridge;
-  border:1px solid #F8C6C7;
+  /*lightgray*/
+  border:1px solid lightgray;
   padding:4px;
   margin:4px;
   margin-bottom:4px;
-  font-weight:normal;  
+  font-weight:normal;
 }
 
 .datatableHeader{
-    background-color:orange;
-    font-size:14px;
-    font-weight:normal;
+    /* Yellow 100% */
+    background-color:#FDBB30;
     color:white;
+
+    font-size:12pt;
+    font-weight:normal;
     padding:10px;
     margin:10px;
 }
 
 .datatableRow2{
-
-    background-color:#FFF5E5;
+    /* Yellow 20% */
+    background-color:#FDEAC0;
     font-size:12px;
     color:black;
     padding:15px;
@@ -236,20 +241,22 @@ input, select,textarea {
 .navigationLink{
     text-decoration:none;
     text-align:right;
-    color:orange;
+    /* Yellow 100% */
+    color:#FDBB30;
 }
-.datatable {    
+.datatable {
     border-collapse:collapse;
 }
 .datatable tr td{
     padding:5px;
     margin:5px;
 }
-.datatableRow{
 
+/*Diferent datatable lines / oposite*/
+.datatableRow{
     background-color:white;
+    color:black;
     font-size:12px;
-    color:black;    
     text-align:center;
 }
 .dataTableFirstColumn{
@@ -257,89 +264,86 @@ input, select,textarea {
 }
 
 table.menuTable{
+    /* it seems its not necessary */
     border-collapse:collapse;
     vertical-align:middle;
-    text-align: left;    
-       
+    text-align: left;
 }
 
 table.menuTable tr td{
     vertical-align:middle;
     padding-bottom:0px;
     width:168px;
-    background-image:url("..resources/images/menu/bt_preto03_165x35.png");
-   
 }
 
-.noImageBackground tbody tr td{
-    background-color:red;
-    background-image:none;
-    width:25%;
-}
 .menu a{
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif ;
     font-size: 12px;
-    /* Varia com a cor selecionada*/    
-    color: orange;
-    padding: 10px
-    
+    padding: 10px;
+    /* Yellow 100% */
+    color: #FDBB30;
 }
 
 /* menuItem and menu spacing */
-.menu ul{           
+.menu ul{
     text-align:left;
     padding:0pt;
-    margin:0pt;     
+    margin:0pt;
+    /* sub menu item background */
+    background-color:white;
+
+    /* fundo transparente
+    background-image:url("../resources/images/menu/Transparency.png;");
+    */
 }
 /* submenu div */
-.menu{    
+.menu{
     display:none;
     position:absolute;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-    font-weight: bold;        
-    
-    /* Varia com a cor selecionada*/    
+    font-weight: bold;
+
 }
 
 /* submenu item*/
 .menu li{
     /* white background for avoiding transparency on submenu item */
     /*background-color:white;*/
-    
-    list-style-type: none;    
-    width: 142px;
-    /* altura do submenu */
 
+    list-style-type: none;
     display: block;
-    /* Varia com a cor selecionada*/   
-    
-    border:1px solid orange;
-
+    padding:10px;
+    /* altura do submenu */
+    width: 142px;
+    /* Yellow 100% */
+    border:1px solid #FDBB30;
     border-top:none;
     font-weight:bold;
-    padding:10px;
-    background-image:url("..resources/images/menu/bt_preto03_165x35.png");
-    background-repeat:no-repeat;
+
 }
 
 
 .menuhandler {
-    border:1px solid gray;    
+    /* Yellow 100% */
+    border:1px solid #FDBB30;
+    color:white;
+
     text-decoration:none;
     display: block;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;    
+    font-size: 12px;
     width: 141px;
     vertical-align:middle;
     text-align: left;
     font-weight: bold;
-    /* Varia com a cor selecionada*/    
-    color:gray;
     padding:10px;
-    
-
+    background-color:#FDBB30;
+    /* fundo transparente
+    background-image:url("../resources/images/menu/Transparency.png;");
+    color:white;
+    */
 }
 
      
