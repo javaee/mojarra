@@ -40,7 +40,7 @@ public class Sprint extends AbstractEntity implements Serializable {
     private Date endDate;
     @Column(name = "iteration_scope")
     private int iterationScope;
-    @Column(name = "grained_story_points")
+    @Column(name = "gained_story_points")
     private int gainedStoryPoints;
     @Temporal(TemporalType.TIME)
     @Column(name = "daily_meeting_time")
