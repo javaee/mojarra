@@ -12,14 +12,11 @@
 
     <ui:composition>
         <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
-
-           
-
             <h:outputLabel value="#{i18n['task.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{taskManager.currentTask.name}" required="true"
                 requiredMessage="#{i18n['task.form.label.name.required']}" maxLenght="30" size="30"
                 validator="#{taskManager.checkUniqueTaskName}" />
-            <h:message for="itName" />
+            <h:message for="itName" styleClass="errorMessage"/>
 
         </h:panelGrid>
     </ui:composition>

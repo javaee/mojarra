@@ -26,14 +26,10 @@
                     </menu:postit>
                     <ui:include src="form.xhtml" />
                     <f:facet name="footer">
-                    <h:panelGroup>                        
-                        <h:panelGroup>
-                            <h:commandButton id="btnCreate" action="#{sprintManager.save}" value="#{i18n['sprint.create.button.create']}" styleClass="formInput" />
-                            <h:commandButton id="btnCancel" action="show" value="#{i18n['sprint.create.button.cancel']}" styleClass="formInput" immediate="true" />
-                        </h:panelGroup>
-                    </h:panelGroup>
+                        <h:commandButton id="btnCreate" action="#{sprintManager.save}" value="#{i18n['sprint.create.button.create']}" styleClass="formInput" />
+                        <h:commandButton id="btnCancel" action="show" value="#{i18n['sprint.create.button.cancel']}" styleClass="formInput" immediate="true" />
                     </f:facet>
-                   
+
                 </h:panelGrid>
             </h:form>
         </ui:define>

@@ -20,10 +20,9 @@
                 <br/><br/>
 
                 <h:outputText value="#{i18n['sprint.show.table.label.empty']}"
-                    rendered="#{sprintManager.sprints.rowCount eq 0}" />
+                              rendered="#{sprintManager.sprints.rowCount eq 0}" />
 
-                <br/>
-
+                <h:outputText value="#{i18n['sprints.table.title']}" styleClass="tituloForm"/><br/><br/>
                 <h:dataTable value="#{sprintManager.sprints}" var="sprint"
                              rendered="#{sprintManager.sprints.rowCount > 0}"
                              title="#{i18n['sprint.show.table.title']}"
@@ -33,7 +32,7 @@
                              rowClasses="datatableRow,datatableRow2"
                              columnClasses="dataTableFirstColumn"
                              styleClass="datatable"
-                             id="dtSprints">
+                             id="dtSprints"> 
 
                     <h:column>
                         <f:facet name="header">
@@ -81,13 +80,12 @@
 
                         <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.remove}" value="#{i18n['sprint.show.button.delete']}"  />
                         <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.showStories}" value="#{i18n['sprint.show.button.showStories']}"  />
-                        <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.showDashboard}" value="#{i18n['sprint.show.button.showDashboard']}"  />
                     </h:column>
-
+                    
                 </h:dataTable>
 
-                <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.create}" value="#{i18n['sprint.show.button.newSprint']}"  />
-                <h:commandButton styleClass="botaoPostIt" action="home" value="#{i18n['sprint.show.button.home']}"  />
+                <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.create}" value="#{i18n['sprint.show.button.newSprint']}" />
+                <h:commandButton styleClass="botaoPostIt" action="home" value="#{i18n['sprint.show.button.home']}" />
 
             </h:form>
         </ui:define>

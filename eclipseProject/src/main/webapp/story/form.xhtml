@@ -13,34 +13,32 @@
     <ui:composition>
         <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
 
-           
-
             <h:outputLabel value="#{i18n['story.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{storyManager.currentStory.name}" required="true"
-                requiredMessage="#{i18n['story.form.label.name.required']}" maxLenght="30" size="30"
-                validator="#{storyManager.checkUniqueStoryName}" />
-            <h:message for="itName" />
+                         requiredMessage="#{i18n['story.form.label.name.required']}" size="40" maxLength="40"
+                         validator="#{storyManager.checkUniqueStoryName}" />
+            <h:message for="itName" styleClass="errorMessage"/>
 
             <h:outputLabel value="#{i18n['story.form.label.startDate']}:" for="itStartedDate"  />
             <h:panelGroup>
-                <h:inputText id="itStartedDate" value="#{storyManager.currentStory.startDate}" required="true" requiredMessage="#{i18n['story.form.label.startDate.required']}">
+                <h:inputText id="itStartedDate" value="#{storyManager.currentStory.startDate}" required="true" requiredMessage="#{i18n['story.form.label.startDate.required']}" size="10" maxLength="10">
                     <f:convertDateTime pattern="#{i18n['story.form.label.startDate.pattern']}" />
                 </h:inputText>
-                <h:outputText value="(#{i18n['story.form.label.startDate.pattern']})" />
+                <h:outputText value="(#{i18n['story.form.label.startDate.pattern']})" styleClass="inputPattern" />
             </h:panelGroup>
-            <h:message for="itStartedDate" />
+            <h:message for="itStartedDate" styleClass="errorMessage" />
 
             <h:outputLabel value="#{i18n['story.form.label.priority']}:" for="itPriority"  />
             <h:inputText id="itPriority" value="#{storyManager.currentStory.priority}" required="true" requiredMessage="#{i18n['story.form.label.priority.required']}" />
-            <h:message for="itPriority" />
+            <h:message for="itPriority" styleClass="errorMessage"/>
 
             <h:outputLabel value="#{i18n['story.form.label.estimation']}:" for="itEstimation"  />
             <h:inputText id="itEstimation" value="#{storyManager.currentStory.estimation}" required="true" requiredMessage="#{i18n['story.form.label.estimation.required']}" />
-            <h:message for="itEstimation" />
+            <h:message for="itEstimation" styleClass="errorMessage"/>
 
             <h:outputLabel value="#{i18n['story.form.label.acceptance']}:" for="itAcceptance"  />
-            <h:inputText id="itAcceptance" value="#{storyManager.currentStory.acceptance}" required="true" requiredMessage="#{i18n['story.form.label.acceptance.required']}" />
-            <h:message for="itAcceptance" />
+            <h:inputText id="itAcceptance" value="#{storyManager.currentStory.acceptance}" required="true" requiredMessage="#{i18n['story.form.label.acceptance.required']}" size="40" maxLength="40" />
+            <h:message for="itAcceptance" styleClass="errorMessage" />
 
         </h:panelGrid>
     </ui:composition>
