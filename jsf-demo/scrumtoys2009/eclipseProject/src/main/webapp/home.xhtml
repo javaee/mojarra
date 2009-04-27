@@ -14,40 +14,9 @@
 
         <ui:define name="content">
 
-            <h:form>
-                <h:outputLabel for="prjCombo" value="#{i18n['home.project.combo.label']}" styleClass="formLabel" />
-                <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput"
-                    onchange="jsf.ajax.request(this, event, {execute: 'prjCombo', render: 'prjCombo'});">
-                    <f:selectItems value="#{projectManager.projectItems}" />
-                </h:selectOneMenu>
-            </h:form>
             
-            <h:panelGrid styleClass="whiteboard">
-                <f:facet name="header">
-                    <h:outputText value=""></h:outputText>
-                </f:facet>
-                <h:panelGrid  columns="6" align="center" styleClass="postit-6colunas">
-                    <f:facet name="header">
-                        <h:outputText value="Welcome to Scrum Dashboard - JSF 2.0 Demo application"></h:outputText>
-                    </f:facet>
-
-                    <h:outputText value="Creat New Sprint"></h:outputText>
-                    <h:outputText value="Edit  Sprint data"></h:outputText>
-                    <h:outputText value="View list of Stories for a Sprint"></h:outputText>
-                    <h:outputText value="Delete a Sprint "></h:outputText>
-                    <h:outputText value="Add a new story to the Sprint"></h:outputText>
-                    <h:outputText value="Remove a story from the Sprint"></h:outputText>
-                    <h:outputText value="Edit Story data"></h:outputText>
-                    <h:outputText value="View List of Task for a Story"></h:outputText>
-                    <h:outputText value="Edit a Task"></h:outputText>
-                    <h:outputText value="Remove a Task from a Story"></h:outputText>
-                    <h:outputText value="Add a new Task to the Story"></h:outputText>
-                    <h:outputText value="View your Scrum Dashboard"></h:outputText>
-                </h:panelGrid>
-                <f:facet name="footer">
-                    <h:outputText value=" "></h:outputText>
-                </f:facet>
-            </h:panelGrid>
+            
+            <h:graphicImage  value="/resources/images/JSFScrumWhiteBoard.png"></h:graphicImage><br/>
 
 
         </ui:define>
