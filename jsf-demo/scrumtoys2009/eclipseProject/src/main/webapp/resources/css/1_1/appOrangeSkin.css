@@ -272,7 +272,9 @@ table.menuTable{
 table.menuTable tr td{
     vertical-align:middle;
     padding-bottom:0px;
+    /*space between menu itens */
     width:168px;
+    
 }
 
 .menu a{
@@ -318,7 +320,7 @@ table.menuTable tr td{
     width: 142px;
     /* Orange 100% */
     border:1px solid #F78E1E;
-    border-top:none;
+    
     font-weight:bold;
 
 }
@@ -345,11 +347,11 @@ table.menuTable tr td{
     */
 }
 .selectProject{
-    vertical-align:middle;
+    vertical-align:bottom;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: bold;
     text-align:center;
-    padding:3pt;
+    
 }
      
