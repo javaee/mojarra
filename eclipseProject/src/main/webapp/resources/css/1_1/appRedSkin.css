@@ -336,10 +336,20 @@ table.menuTable tr td{
     text-align: left;
     font-weight: bold;
     padding:10px;
-background-color:#EF3E42;
+    background-color:#EF3E42;
     /* fundo transparente
     background-image:url("../resources/images/menu/Transparency.png;");
     color:white;
     */
+
+
 }
 
+.selectProject{
+    vertical-align:middle;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-align:center;
+    padding:3pt;
+}
