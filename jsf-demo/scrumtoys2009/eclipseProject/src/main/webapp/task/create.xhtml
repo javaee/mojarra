@@ -8,7 +8,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+      xmlns:menu="http://java.sun.com/jsf/composite/components" >
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
@@ -16,12 +16,25 @@
         </ui:define>
         <ui:define name="content">
             <h:form styleClass="scrumForm" id="createForm">
-                <h:panelGrid columns="1">
+                <h:panelGrid columns="2">
+                    <h:panelGroup>
+
+                    <menu:postit>
+                        <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}:"></ui:param>
+                        <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
+                    </menu:postit>
+                    <menu:postit>
+                        <ui:param name="postitLabel" value="#{i18n['task.form.label.story.name']}:"></ui:param>
+                        <ui:param name="postitText" value="#{taskManager.story.name}"></ui:param>
+                    </menu:postit>
+                    </h:panelGroup>
+                    <h:panelGroup>
                     <h:outputText value="#{i18n['task.create.form.title']}:" styleClass="tituloForm" />
                     <ui:include src="form.xhtml" />
                     <h:panelGroup>
                         <h:commandButton id="btnCreate" action="#{taskManager.save}" value="#{i18n['task.create.button.create']}" styleClass="formInput" />
                         <h:commandButton id="btnCancel" action="show" value="#{i18n['task.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                    </h:panelGroup>
                     </h:panelGroup>
                 </h:panelGrid>
             </h:form>
