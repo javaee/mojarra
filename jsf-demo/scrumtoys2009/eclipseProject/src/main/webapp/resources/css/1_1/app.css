@@ -99,28 +99,7 @@ td{
 
 
 
-td.formLabel label{
-    margin-left:15pt;
-    
-}
 
-td.formLabel {
-    width:20%;
-    text-align: right;    
-    background-position: left;
-    background-repeat:no-repeat;
-    
-
-}
-
-td.formLabel error{
-    color: red;
-}
-
-td.formInput{
-    
-    
-}
 
 
 /* Amarelo 20% - #FDEAC0 vermelho    - #F8C6C7  laranja     - #FCDEBC   roxo        - #CDC5DD  azul        - #B3D4E7  vinho       - #C8B9C0 */
