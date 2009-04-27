@@ -22,7 +22,7 @@
                 <h:outputText value="#{i18n['project.show.table.label.empty']}"
                     rendered="#{projectManager.projects.rowCount eq 0}" />
 
-                <br/>
+                <h:outputText value="#{i18n['project.show.title']}" styleClass="tituloForm" /><br/><br/>
 
                 <h:dataTable value="#{projectManager.projects}" var="project"
                              rendered="#{projectManager.projects.rowCount > 0}"
