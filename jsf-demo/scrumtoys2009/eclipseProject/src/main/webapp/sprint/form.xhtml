@@ -19,33 +19,33 @@
             <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true"
                 requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLenght="30" size="30"
                 validator="#{sprintManager.checkUniqueSprintName}" />
-            <h:message for="itName" />
+            <h:message for="itName" styleClass="errorMessage" />
 
             <h:outputLabel value="#{i18n['sprint.form.label.goals']}:" for="itGoals"  />
             <h:inputTextarea id="itGoals" value="#{sprintManager.currentSprint.goals}" required="true" cols="31" rows="3" requiredMessage="#{i18n['sprint.form.label.goals.required']}" />
-            <h:message for="itGoals" />
+            <h:message for="itGoals" styleClass="errorMessage"/>
 
             <h:outputLabel value="#{i18n['sprint.form.label.iterationScope']}:" for="itIterationScope"  />
             <h:inputText id="itIterationScope" value="#{sprintManager.currentSprint.iterationScope}" required="true" cols="50" rows="4" requiredMessage="#{i18n['sprint.form.label.iterationScope.required']}" />
-            <h:message for="itIterationScope" />
+            <h:message for="itIterationScope" styleClass="errorMessage"/>
 
             <h:outputLabel value="#{i18n['sprint.form.label.startDate']}:" for="itStartedDate"  />
             <h:panelGroup>
                 <h:inputText id="itStartedDate" value="#{sprintManager.currentSprint.startDate}" required="true" requiredMessage="#{i18n['sprint.form.label.startDate.required']}">
                     <f:convertDateTime pattern="#{i18n['sprint.form.label.startDate.pattern']}" />
                 </h:inputText>
-                <h:outputText value="(#{i18n['sprint.form.label.startDate.pattern']})" />
+                <h:outputText value="(#{i18n['sprint.form.label.startDate.pattern']})" styleClass="inputPattern" />
             </h:panelGroup>
-            <h:message for="itStartedDate" />
+            <h:message for="itStartedDate" styleClass="errorMessage" />
 
             <h:outputLabel value="#{i18n['sprint.form.label.dailyMeetingTime']}:" for="itDailyMeetingTime"  />
             <h:panelGroup>
                 <h:inputText id="itDailyMeetingTime" value="#{sprintManager.currentSprint.dailyMeetingTime}" required="true" requiredMessage="#{i18n['sprint.form.label.dailyMeetingTime.required']}">
                     <f:convertDateTime pattern="#{i18n['sprint.form.label.dailyMeetingTime.pattern']}" />
                 </h:inputText>
-                <h:outputText value="(#{i18n['sprint.form.label.dailyMeetingTime.pattern']})" />
+                <h:outputText value="(#{i18n['sprint.form.label.dailyMeetingTime.pattern']})" styleClass="inputPattern"/>
             </h:panelGroup>
-            <h:message for="itDailyMeetingTime" />
+            <h:message for="itDailyMeetingTime" styleClass="errorMessage"/>
 
         </h:panelGrid>
     </ui:composition>
