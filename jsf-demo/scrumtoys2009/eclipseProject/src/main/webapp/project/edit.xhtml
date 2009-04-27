@@ -16,13 +16,17 @@
         </ui:define>
         <ui:define name="content">
             <h:form styleClass="scrumForm" id="editForm">
-                <h:panelGrid columns="1">
-                    <h:outputText value="#{i18n['project.edit.form.title']}:" styleClass="tituloForm" />
+                <h:panelGrid columns="1" headerClass="tituloForm" footerClass="footerForm">
+                     <f:facet name="header">
+                        <h:outputText value="#{i18n['project.edit.form.title']}:" styleClass="tituloForm" />
+                    </f:facet>
                     <ui:include src="form.xhtml" />
+                    <f:facet name="footer">
                     <h:panelGroup>
                         <h:commandButton id="btnEditUpdate" action="#{projectManager.save}" value="#{i18n['project.edit.button.update']}" styleClass="formInput" />
                         <h:commandButton id="btnEditCancel" action="#{projectManager.cancelEdit}" immediate="true" value="#{i18n['project.edit.button.cancel']}" styleClass="formInput" />
                     </h:panelGroup>
+                    </f:facet>
                 </h:panelGrid>
             </h:form>
         </ui:define>
