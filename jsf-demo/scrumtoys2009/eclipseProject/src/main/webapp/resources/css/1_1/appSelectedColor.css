@@ -187,6 +187,31 @@ input.botaoPostIt{
 }
 
 
+td.formLabel, label{
+    margin-left:15pt;
+
+}
+
+.formLabel {
+    width:30%;
+    text-align: right;
+    background-position: left;
+    background-repeat:no-repeat;
+
+}
+
+.formLabel error{
+    color: red;
+}
+
+.formInput{
+    font-size: 12px;
+}
+
+.inputPattern {
+    /* Yellow 20%*/
+  color: #FDEAC0
+}
 label {
   font-size: 10pt;
   /* Yellow 100%*/
@@ -273,7 +298,10 @@ table.menuTable{
 table.menuTable tr td{
     vertical-align:middle;
     padding-bottom:0px;
+    /*space between menu itens */
     width:168px;
+
+
 }
 
 .menu a{
@@ -319,7 +347,7 @@ table.menuTable tr td{
     width: 142px;
     /* Yellow 100% */
     border:1px solid #FDBB30;
-    border-top:none;
+
     font-weight:bold;
 
 }
@@ -346,11 +374,33 @@ table.menuTable tr td{
     */
 }
 
- .selectProject{
+   .selectProject{
     vertical-align:middle;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: bold;
     text-align:center;
     padding:3pt;
+}
+
+.postitComponent{
+        background-image:url("../resources/images/postits/novos/postit_amar_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:white;
+}
+
+.postitComponent tr td{
+
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+
+}
+
+.postitLabel{
+    font-weight:bold;
+     font-size:16px;
 }
