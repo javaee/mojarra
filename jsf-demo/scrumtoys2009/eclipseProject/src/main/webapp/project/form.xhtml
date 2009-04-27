@@ -14,7 +14,9 @@
         <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
 
             <h:outputLabel value="#{i18n['project.form.label.name']}:" for="itName"/>
-            <h:inputText id="itName" value="#{projectManager.currentProject.name}" required="true" requiredMessage="#{i18n['project.form.label.name.required']}" maxLenght="30" size="30"/>
+            <h:inputText id="itName" value="#{projectManager.currentProject.name}" required="true" 
+                requiredMessage="#{i18n['project.form.label.name.required']}" maxLenght="30" size="30"
+                validator="#{projectManager.checkUniqueProjectName}" />
             <h:message for="itName" />
 
             <h:outputLabel value="#{i18n['project.form.label.startDate']}:" for="itStartedDate"  />

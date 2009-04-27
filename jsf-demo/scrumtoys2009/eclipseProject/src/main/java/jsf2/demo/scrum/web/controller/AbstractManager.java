@@ -1,5 +1,6 @@
 package jsf2.demo.scrum.web.controller;
 
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -78,6 +79,16 @@ public abstract class AbstractManager {
 
     protected void addMessage(String componentId, String message, Severity severity) {
         FacesContext.getCurrentInstance().addMessage(componentId, new FacesMessage(severity, message, message));
+    }
+
+    protected String getMessageForKey(String key) {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ResourceBundle rb = ctx.getApplication().getResourceBundle(ctx, "i18n");
+        return rb.getString(key);
+    }
+
+    protected FacesMessage getFacesMessageForKey(String key) {
+        return new FacesMessage(getMessageForKey(key));
     }
 
     protected Logger getLogger(Class<?> clazz) {

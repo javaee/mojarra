@@ -18,7 +18,9 @@
             <h:message for="itSprintName" />
 
             <h:outputLabel value="#{i18n['story.form.label.name']}:" for="itName"/>
-            <h:inputText id="itName" value="#{storyManager.currentStory.name}" required="true" requiredMessage="#{i18n['story.form.label.name.required']}" maxLenght="30" size="30"/>
+            <h:inputText id="itName" value="#{storyManager.currentStory.name}" required="true"
+                requiredMessage="#{i18n['story.form.label.name.required']}" maxLenght="30" size="30"
+                validator="#{storyManager.checkUniqueStoryName}" />
             <h:message for="itName" />
 
             <h:outputLabel value="#{i18n['story.form.label.startDate']}:" for="itStartedDate"  />

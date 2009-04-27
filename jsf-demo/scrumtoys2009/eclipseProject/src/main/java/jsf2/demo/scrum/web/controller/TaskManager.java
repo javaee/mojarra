@@ -5,18 +5,23 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import jsf2.demo.scrum.model.entities.Story;
 import jsf2.demo.scrum.model.entities.Task;
 import jsf2.demo.scrum.web.event.CurrentStoryChangeEvent;
@@ -131,6 +136,29 @@ public class TaskManager extends AbstractManager implements Serializable {
             }
         }
         return "show";
+    }
+
+    public void checkUniqueTaskName(FacesContext context, UIComponent component, Object newValue) {
+        final String newName = (String) newValue;
+        try {
+            Long count = doInTransaction(new PersistenceAction<Long>() {
+
+                public Long execute(EntityManager em) {
+                    Query query = em.createNamedQuery((currentTask.isNew()) ? "task.new.countByNameAndStory" : "task.countByNameAndStory");
+                    query.setParameter("name", newName);
+                    query.setParameter("story", story);
+                    if (!currentTask.isNew()) {
+                        query.setParameter("currentTask", (!currentTask.isNew()) ? currentTask : null);
+                    }
+                    return (Long) query.getSingleResult();
+                }
+            });
+            if (count != null && count > 0) {
+                throw new ValidatorException(getFacesMessageForKey("task.form.label.name.unique"));
+            }
+        } catch (ManagerException ex) {
+            Logger.getLogger(TaskManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String cancelEdit() {

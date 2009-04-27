@@ -22,7 +22,8 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "projects")
 @NamedQueries({@NamedQuery(name = "project.getAll", query = "select p from Project as p"),
-    @NamedQuery(name = "project.getAllOpen", query = "select p from Project as p where p.endDate is null")})
+    @NamedQuery(name = "project.getAllOpen", query = "select p from Project as p where p.endDate is null"),
+    @NamedQuery(name = "project.countByName", query = "select count(p) from Project as p where p.name = :name")})
 public class Project extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
