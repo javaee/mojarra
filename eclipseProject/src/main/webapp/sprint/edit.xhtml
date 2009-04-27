@@ -8,7 +8,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+      xmlns:menu="http://java.sun.com/jsf/composite/components" >
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
@@ -16,12 +16,18 @@
         </ui:define>
         <ui:define name="content">
             <h:form styleClass="scrumForm" id="editForm">
-                <h:panelGrid columns="1">
+                <h:panelGrid columns="2">
+                     <menu:postit>
+                        <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
+                        <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                    </menu:postit>
+                    <h:panelGroup>
                     <h:outputText value="#{i18n['sprint.edit.form.title']}:" styleClass="tituloForm" />
                     <ui:include src="form.xhtml" />
                     <h:panelGroup>
                         <h:commandButton id="btnEditUpdate" action="#{sprintManager.save}" value="#{i18n['sprint.edit.button.update']}" styleClass="formInput" />
                         <h:commandButton id="btnEditCancel" action="#{sprintManager.cancelEdit}" immediate="true" value="#{i18n['sprint.edit.button.cancel']}" styleClass="formInput" />
+                    </h:panelGroup>
                     </h:panelGroup>
                 </h:panelGrid>
             </h:form>
