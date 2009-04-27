@@ -56,8 +56,7 @@ public class ProjectManager extends AbstractManager implements Serializable {
             Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         projectItems = new LinkedList<SelectItem>();
-        // Default item.
-        projectItems.add(new SelectItem("", "-- Select one project --"));
+        projectItems.add(new SelectItem(new Project(), "-- Select one project --"));
         if (projectList != null) {
             projects = new ListDataModel<Project>(projectList);
             for (Project p : projectList) {
