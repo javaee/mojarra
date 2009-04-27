@@ -15,27 +15,27 @@
 
             <h:outputLabel value="#{i18n['project.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{projectManager.currentProject.name}" required="true" 
-                requiredMessage="#{i18n['project.form.label.name.required']}" maxLenght="30" size="30"
+                requiredMessage="#{i18n['project.form.label.name.required']}" maxLenght="40" size="40"
                 validator="#{projectManager.checkUniqueProjectName}" />
-            <h:message for="itName" />
+            <h:message for="itName" styleClass="errorMessage" />
 
             <h:outputLabel value="#{i18n['project.form.label.startDate']}:" for="itStartedDate"  />
             <h:panelGroup>
                 <h:inputText id="itStartedDate" value="#{projectManager.currentProject.startDate}" required="true" requiredMessage="#{i18n['project.form.label.startDate.required']}">
                     <f:convertDateTime pattern="#{i18n['project.form.label.startDate.pattern']}" />
                 </h:inputText>
-                <h:outputText value="(#{i18n['project.form.label.startDate.pattern']})" />
+                <h:outputText value="(#{i18n['project.form.label.startDate.pattern']})" styleClass="inputPattern" />
             </h:panelGroup>
-            <h:message for="itStartedDate" />
+            <h:message for="itStartedDate" styleClass="errorMessage"/>
 
             <h:outputLabel value="#{i18n['project.form.label.endDate']}:" for="itEndDate"  />
             <h:panelGroup>
                 <h:inputText id="itEndDate" value="#{projectManager.currentProject.endDate}" required="false" requiredMessage="#{i18n['project.form.label.endDate.required']}">
                     <f:convertDateTime pattern="#{i18n['project.form.label.endDate.pattern']}" />
                 </h:inputText>
-                <h:outputText value="(#{i18n['project.form.label.endDate.pattern']})" />
+                <h:outputText value="(#{i18n['project.form.label.endDate.pattern']})"  styleClass="inputPattern"/>
             </h:panelGroup>
-            <h:message for="itEndDate" />
+            <h:message for="itEndDate" styleClass="errorMessage" />
 
         </h:panelGrid>
     </ui:composition>
