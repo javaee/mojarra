@@ -38,10 +38,14 @@ package basicajax;
 import javax.faces.event.ActionEvent;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 
 @ManagedBean(name = "count")
 @SessionScoped
-public class Count {
+public class Count implements Serializable {
+
+    private static final long serialVersionUID = 6499154494910177344L;    
+
     Integer count = 0;
 
     public Integer getCount() {
