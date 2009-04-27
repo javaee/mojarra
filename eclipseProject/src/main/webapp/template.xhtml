@@ -9,13 +9,13 @@
       
     <h:head>
         <h:outputStylesheet library="css/1_1" name="#{skinManager.selectedSkin}"/>
-        <h:outputStylesheet library="css/1_1" name="menu.css"/>
         <h:outputScript     library="js" name="menu.js" target="head"/>
         <h:outputScript     library="javax.faces" name="jsf.js"/>
         <title>
         <ui:insert name="pageTitle">
             <h:outputText value="#{i18n['template.title']}"></h:outputText>
-        </ui:insert>        
+        </ui:insert>
+        
         </title>
 
     </h:head>
