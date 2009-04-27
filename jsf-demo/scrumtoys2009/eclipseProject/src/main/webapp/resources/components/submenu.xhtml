@@ -1,21 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:composite="http://java.sun.com/jsf/composite"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      >
+    <ui:composition>
     <composite:interface>
-        <composite:valueHolder name="label"  />
-        <composite:valueHolder name="destination" />
-        <composite:valueHolder name="menuid" />
+       <composite:valueHolder name="menuid" />
     </composite:interface>
 
     <composite:implementation>
-       <div class="menu" id="menu4">
-              <ul>
-                    
+       <div class="menu" id="#{menuid}">
+              <ul>                  
+                   <composite:insertChildren></composite:insertChildren>                  
               </ul>
        </div>
      </composite:implementation>
+    </ui:composition>
 </html>
