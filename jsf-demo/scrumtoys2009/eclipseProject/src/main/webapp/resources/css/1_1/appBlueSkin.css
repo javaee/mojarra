@@ -132,42 +132,15 @@ table.postit-6colunas tbody tr td {
 
 }
 
-table.postit-1coluna {
-    /* width must be 100% because of the column background - whiteboard*/
-    width:100%;
-    border-spacing:5pt;
-    border-collapse:collapse;
+td.footerForm{
+    text-align:center;
+    
 }
 
-table.postit-1coluna thead tr th{
-    background-image:url("../resources/images/lousaNova/quadroNegro_r1_c1.png;");
+.errorMessage{
+  color: red;
+  font-size: 12px;
 }
-
-table.postit-1coluna tbody tr{
-    background-image:url("../resources/images/postits/claras/postit_20_amar_450x145.png;");
-    background-repeat:no-repeat;
-    background-position:center;
-}
-
-table.postit-1coluna tbody tr td {
-
-    /* cor da fonte post it*/
-	color: black;
-    /* necess‡rio para o espacamento do post it padding-left:100px;*/
-    padding-left:380px;
-    padding-right:380px;
-    padding-bottom:30px;
-    height:145px;
-    background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
-    text-align:left;
-
-}
-
-table.postit-1coluna tfoot tr td{
-    background-image:url("../resources/images/lousaNova/quadroNegro_r3_c1.png;");
-}
-
-
 
 .tituloForm {
     font-size: 14pt;
@@ -200,10 +173,6 @@ td.formLabel, label{
 
 }
 
-.formLabel error{
-    color: red;
-}
-
 .formInput{    
     font-size: 12px;
 }
@@ -212,6 +181,8 @@ td.formLabel, label{
     /* blue 20%*/
   color: #B3D4E7;
 }
+
+
 
 label {
   font-size: 12px;
