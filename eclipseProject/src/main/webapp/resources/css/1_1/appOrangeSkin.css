@@ -379,4 +379,25 @@ table.menuTable tr td{
     text-align:center;
     
 }
-     
+
+.postitComponent{
+        background-image:url("../resources/images/postits/novos/postit_lara_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:white;
+}
+
+.postitComponent tr td{
+
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+
+}
+
+.postitLabel{
+    font-weight:bold;
+     font-size:16px;
+}
