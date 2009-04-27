@@ -187,13 +187,38 @@ input.botaoPostIt{
 }
 
 
+td.formLabel, label{
+    margin-left:15pt;
+
+}
+
+.formLabel {
+    width:30%;
+    text-align: right;
+    background-position: left;
+    background-repeat:no-repeat;
+
+}
+
+.formLabel error{
+    color: red;
+}
+
+.formInput{    
+    font-size: 12px;
+}
+
+.inputPattern{
+    /* blue 20%*/
+  color: #B3D4E7;
+}
+
 label {
-  font-size: 10pt;
+  font-size: 12px;
   /* blue 100%*/
   color: #0069AA;
   text-align: left;
-  border:none;
-  
+  border:none;  
 }
 
 td{
@@ -215,6 +240,7 @@ input, select,textarea {
   margin-bottom:4px;
   font-weight:normal;  
 }
+
 
 .datatableHeader{
     /* blue 100% */

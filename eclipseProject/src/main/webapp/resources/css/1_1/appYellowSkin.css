@@ -187,6 +187,31 @@ input.botaoPostIt{
 }
 
 
+td.formLabel, label{
+    margin-left:15pt;
+
+}
+
+.formLabel {
+    width:30%;
+    text-align: right;
+    background-position: left;
+    background-repeat:no-repeat;
+
+}
+
+.formLabel error{
+    color: red;
+}
+
+.formInput{
+    font-size: 12px;
+}
+
+.inputPattern {
+    /* Yellow 20%*/
+  color: #FDEAC0
+}
 label {
   font-size: 10pt;
   /* Yellow 100%*/
