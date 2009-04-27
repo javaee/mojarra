@@ -145,8 +145,11 @@ public class ProjectManager extends AbstractManager implements Serializable {
             Long count = doInTransaction(new PersistenceAction<Long>() {
 
                 public Long execute(EntityManager em) {
-                    Query query = em.createNamedQuery("project.countByName");
+                    Query query = em.createNamedQuery((currentProject.isNew()) ? "project.new.countByName" : "project.countByName");
                     query.setParameter("name", newName);
+                    if (!currentProject.isNew()) {
+                        query.setParameter("currentProject", currentProject);
+                    }
                     return (Long) query.getSingleResult();
                 }
             });
