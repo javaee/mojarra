@@ -22,7 +22,7 @@
                 <h:outputText value="#{i18n['story.show.table.label.empty']}"
                               rendered="#{storyManager.stories.rowCount eq 0}" />
 
-                <br/>
+                <h:outputText value="#{i18n['stories.table.title']}" styleClass="tituloForm" /><br/><br/>
 
                 <h:dataTable value="#{storyManager.stories}" var="story"
                              rendered="#{storyManager.stories.rowCount > 0}"

@@ -23,7 +23,7 @@
                 <h:outputText value="#{i18n['task.show.table.label.empty']}"
                     rendered="#{taskManager.tasks.rowCount eq 0}" />
 
-                <br/>
+               <h:outputText value="#{i18n['task.show.table.title']}" styleClass="tituloForm"/><br/><br/>
 
                 <h:dataTable value="#{taskManager.tasks}" var="task"
                              rendered="#{taskManager.tasks.rowCount > 0}"

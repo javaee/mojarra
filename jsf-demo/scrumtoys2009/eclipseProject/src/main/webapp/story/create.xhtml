@@ -15,25 +15,26 @@
             <h:outputText value="#{i18n['story.create.title']}"></h:outputText>
         </ui:define>
         <ui:define name="content">
-            <h:form styleClass="scrumForm" id="createForm">                
-                <h:panelGrid columns="2">
-                    <h:panelGroup> <menu:postit>
-                        <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
-                        <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-                    </menu:postit>
-                    <menu:postit>
-                        <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}:"></ui:param>
-                        <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
-                    </menu:postit>
-                    </h:panelGroup>
+            <h:form styleClass="scrumForm" id="createForm">
+                <h:panelGrid columns="2"  headerClass="tituloForm" footerClass="footerForm">
+                    <f:facet name="header">
+                        <h:outputText value="#{i18n['story.create.form.title']}" styleClass="tituloForm" />
+                    </f:facet>
                     <h:panelGroup>
-                        <h:outputText value="#{i18n['story.create.form.title']}:" styleClass="tituloForm" />
-                        <ui:include src="form.xhtml" />
-                        <h:panelGroup>
-                            <h:commandButton id="btnCreate" action="#{storyManager.save}" value="#{i18n['story.create.button.create']}" styleClass="formInput" />
-                            <h:commandButton id="btnCancel" action="show" value="#{i18n['story.create.button.cancel']}" styleClass="formInput" immediate="true" />
-                        </h:panelGroup>
+                        <menu:postit>
+                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                        </menu:postit>
+                        <menu:postit>
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
+                        </menu:postit>
                     </h:panelGroup>
+                    <ui:include src="form.xhtml" />
+                   <f:facet name="footer">
+                        <h:commandButton id="btnCreate" action="#{storyManager.save}" value="#{i18n['story.create.button.create']}" styleClass="formInput" />
+                        <h:commandButton id="btnCancel" action="show" value="#{i18n['story.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                    </f:facet>
                 </h:panelGrid>
             </h:form>
         </ui:define>
