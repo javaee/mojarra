@@ -15,14 +15,16 @@
             <h:outputText value="#{i18n['project.create.title']}"></h:outputText>
         </ui:define>
         <ui:define name="content">
-            <h:form styleClass="scrumForm" id="createForm">
-                <h:panelGrid columns="1">
-                    <h:outputText value="#{i18n['project.create.form.title']}:" styleClass="tituloForm" />
+            <h:form id="createForm">
+                <h:panelGrid columns="1" headerClass="tituloForm" footerClass="footerForm">
+                    <f:facet name="header">
+                    <h:outputText value="#{i18n['project.create.form.title']}"  />
+                    </f:facet>
                     <ui:include src="form.xhtml" />
-                    <h:panelGroup>
+                    <f:facet name="footer">
                         <h:commandButton id="btnCreate" action="#{projectManager.save}" value="#{i18n['project.create.button.create']}" styleClass="formInput" />
                         <h:commandButton id="btnCancel" action="show" value="#{i18n['project.create.button.cancel']}" styleClass="formInput" immediate="true" />
-                    </h:panelGroup>
+                    </f:facet>
                 </h:panelGrid>
             </h:form>
         </ui:define>
