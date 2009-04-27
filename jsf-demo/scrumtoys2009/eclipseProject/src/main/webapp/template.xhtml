@@ -12,9 +12,10 @@
         <h:outputStylesheet library="css/1_1" name="menu.css"/>
         <h:outputScript     library="js" name="menu.js" target="head"/>
         <h:outputScript     library="javax.faces" name="jsf.js"/>
-        <title><ui:insert name="pageTitle">
-            <h:outputText value="TITULO need i18n"></h:outputText>
-        </ui:insert>
+        <title>
+        <ui:insert name="pageTitle">
+            <h:outputText value="#{i18n['template.title']}"></h:outputText>
+        </ui:insert>        
         </title>
 
     </h:head>
@@ -34,11 +35,9 @@
                     <br/><br/>
                     <ui:insert name="content">
                         
-                        <table align="center"><tr>
-                            <td valign="top" align="center">
-                            Welcome
-                        </td></tr>
-                        </table>
+                        
+                            <h:graphicImage  value="/resources/images/JSFScrumWhiteBoard.png"></h:graphicImage><br/>
+                        
                     </ui:insert>
                 </td>
             </tr>
