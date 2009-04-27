@@ -273,7 +273,10 @@ table.menuTable{
 table.menuTable tr td{
     vertical-align:middle;
     padding-bottom:0px;
+    /*space between menu itens */
     width:168px;
+    
+    
 }
 
 .menu a{
@@ -319,7 +322,7 @@ table.menuTable tr td{
     width: 142px;
     /* Yellow 100% */
     border:1px solid #FDBB30;
-    border-top:none;
+    
     font-weight:bold;
 
 }

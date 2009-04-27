@@ -270,6 +270,7 @@ table.menuTable{
 table.menuTable tr td{
     vertical-align:middle;
     padding-bottom:0px;
+    /*space between menu itens */
     width:168px;
 }
 
@@ -315,8 +316,7 @@ table.menuTable tr td{
     /* altura do submenu */
     width: 142px;
     /* Red 100% */
-    border:1px solid #EF3E42;
-    border-top:none;
+    border:1px solid #EF3E42;    
     font-weight:bold;
 
 }
@@ -346,10 +346,10 @@ table.menuTable tr td{
 }
 
 .selectProject{
-    vertical-align:middle;
+    vertical-align:middle;        
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: bold;
     text-align:center;
-    padding:3pt;
+    
 }
