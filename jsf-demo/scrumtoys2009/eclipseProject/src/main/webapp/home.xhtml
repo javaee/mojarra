@@ -8,17 +8,12 @@
       xmlns:appez="http://java.sun.com/jsf/composite/components" >
 
     <ui:composition template="template.xhtml">
-        <ui:define name="pageTitle">
-            <h:outputText value="HOME needs i18n"></h:outputText>
-        </ui:define>
+        <ui:insert name="pageTitle">
+            <h:outputText value="#{i18n['template.title']}"></h:outputText>
+        </ui:insert>    
 
         <ui:define name="content">
-
-            
-            
             <h:graphicImage  value="/resources/images/JSFScrumWhiteBoard.png"></h:graphicImage><br/>
-
-
         </ui:define>
     </ui:composition>
 </html>
