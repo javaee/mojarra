@@ -13,9 +13,7 @@
     <ui:composition>
         <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
 
-            <h:outputLabel value="#{i18n['task.form.label.story.name']}:" for="itStoryName" />
-            <h:inputText id="itStoryName" value="#{taskManager.story.name}" size="30" disabled="true"/>
-            <h:message for="itStoryName" />
+           
 
             <h:outputLabel value="#{i18n['task.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{taskManager.currentTask.name}" required="true"

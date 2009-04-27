@@ -13,9 +13,7 @@
     <ui:composition>
         <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
 
-            <h:outputLabel value="#{i18n['sprint.form.label.project.name']}:" for="itProjectName" />
-            <h:inputText id="itProjectName" value="#{sprintManager.project.name}" size="30" disabled="true"/>
-            <h:message for="itProjectName" />
+            
 
             <h:outputLabel value="#{i18n['sprint.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true"
