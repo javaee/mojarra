@@ -5,18 +5,23 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import jsf2.demo.scrum.model.entities.Sprint;
 import jsf2.demo.scrum.model.entities.Story;
 import jsf2.demo.scrum.web.event.CurrentSprintChangeEvent;
@@ -131,6 +136,29 @@ public class StoryManager extends AbstractManager implements Serializable {
             }
         }
         return "show";
+    }
+
+    public void checkUniqueStoryName(FacesContext context, UIComponent component, Object newValue) {
+        final String newName = (String) newValue;
+        try {
+            Long count = doInTransaction(new PersistenceAction<Long>() {
+
+                public Long execute(EntityManager em) {
+                    Query query = em.createNamedQuery((currentStory.isNew()) ? "story.new.countByNameAndSprint" : "story.countByNameAndSprint");
+                    query.setParameter("name", newName);
+                    query.setParameter("sprint", sprint);
+                    if (!currentStory.isNew()) {
+                        query.setParameter("currentStory", currentStory);
+                    }
+                    return (Long) query.getSingleResult();
+                }
+            });
+            if (count != null && count > 0) {
+                throw new ValidatorException(getFacesMessageForKey("story.form.label.name.unique"));
+            }
+        } catch (ManagerException ex) {
+            Logger.getLogger(StoryManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String cancelEdit() {

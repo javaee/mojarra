@@ -18,7 +18,9 @@
             <h:message for="itProjectName" />
 
             <h:outputLabel value="#{i18n['sprint.form.label.name']}:" for="itName"/>
-            <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true" requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLenght="30" size="30"/>
+            <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true"
+                requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLenght="30" size="30"
+                validator="#{sprintManager.checkUniqueSprintName}" />
             <h:message for="itName" />
 
             <h:outputLabel value="#{i18n['sprint.form.label.goals']}:" for="itGoals"  />

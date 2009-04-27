@@ -3,6 +3,7 @@ package jsf2.demo.scrum.web.controller;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -10,9 +11,12 @@ import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
+import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import jsf2.demo.scrum.model.entities.Project;
@@ -133,6 +137,25 @@ public class ProjectManager extends AbstractManager implements Serializable {
         }
         init();
         return "show";
+    }
+
+    public void checkUniqueProjectName(FacesContext context, UIComponent component, Object newValue) {
+        final String newName = (String) newValue;
+        try {
+            Long count = doInTransaction(new PersistenceAction<Long>() {
+
+                public Long execute(EntityManager em) {
+                    Query query = em.createNamedQuery("project.countByName");
+                    query.setParameter("name", newName);
+                    return (Long) query.getSingleResult();
+                }
+            });
+            if (count != null && count > 0) {
+                throw new ValidatorException(getFacesMessageForKey("project.form.label.name.unique"));
+            }
+        } catch (ManagerException ex) {
+            Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String cancelEdit() {
