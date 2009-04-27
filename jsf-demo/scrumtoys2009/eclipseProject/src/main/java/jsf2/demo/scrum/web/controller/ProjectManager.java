@@ -48,7 +48,7 @@ public class ProjectManager extends AbstractManager implements Serializable {
             projectList = doInTransaction(new PersistenceAction<List<Project>>() {
 
                 public List<Project> execute(EntityManager em) {
-                    Query query = em.createNamedQuery("project.getAllOpen");
+                    Query query = em.createNamedQuery("project.getAll");
                     return (List<Project>) query.getResultList();
                 }
             });
