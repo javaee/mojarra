@@ -19,21 +19,23 @@
         </title>
 
     </h:head>
-
+    
     <h:body>
-        <h:panelGrid>
-            <menu:menu>
-                <ui:param name="image" value="/resources/images/menu/barraSuperior-04.png"></ui:param>
-            </menu:menu>
-            <h:panelGroup id="bodyContent" >
-                
+        <div align="center">
+            <h:panelGrid border="1" width="1024">
+                <menu:menu>
+                    <ui:param name="image" value="/resources/images/menu/barraSuperior-04.png"></ui:param>
+                </menu:menu>
+                <h:panelGroup id="bodyContent" styleClass="tableBody">
+                    <div align="center">
+                        <ui:insert name="content">
+                            <h:graphicImage  value="/resources/images/JSFScrumWhiteBoard.png"></h:graphicImage><br/>
+                        </ui:insert>
+                    </div>
+                </h:panelGroup>
+                <ui:include src="./footer.xhtml" />
 
-                <ui:insert name="content">
-                    <h:graphicImage  value="/resources/images/JSFScrumWhiteBoard.png"></h:graphicImage><br/>
-                </ui:insert>
-            </h:panelGroup>
-            <ui:include src="./footer.xhtml" />
-
-        </h:panelGrid>
+            </h:panelGrid>
+        </div>
     </h:body>
 </html>  
