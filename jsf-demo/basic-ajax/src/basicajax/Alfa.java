@@ -7,11 +7,14 @@ import javax.el.ValueExpression;
 import java.util.TreeMap;
 import java.util.Collection;
 import java.util.Random;
+import java.io.Serializable;
 
 
 @ManagedBean(name = "alfa")
 @SessionScoped
-public class Alfa {
+public class Alfa implements Serializable {
+
+    private static final long serialVersionUID = 7869093182474067698L;
 
     // The list of the NATO Phonetic Alphabet
     String[] alfa = {"alfa", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel",
@@ -20,6 +23,7 @@ public class Alfa {
 
     // Map to hold values
     TreeMap<String, String> alfaMap= new TreeMap();
+
 
     public Alfa() {
         //initialize map

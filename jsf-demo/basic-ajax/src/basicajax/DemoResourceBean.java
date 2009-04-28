@@ -39,6 +39,7 @@ package basicajax;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ApplicationScoped;
@@ -58,7 +59,10 @@ import org.w3c.dom.Node;
  */
 @ManagedBean(name = "demoBean", eager = true)
 @ApplicationScoped
-public class DemoResourceBean {
+public class DemoResourceBean implements Serializable {
+    
+    private static final long serialVersionUID = 6392120974203756551L;
+
 
     /**
      * The path and filename to the demo metadata descriptor.

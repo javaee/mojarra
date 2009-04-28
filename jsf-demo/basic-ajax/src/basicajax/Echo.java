@@ -43,7 +43,12 @@ import java.io.Serializable;
 @ManagedBean(name = "echo")
 @SessionScoped
 public class Echo implements Serializable {
+
+
+    private static final long serialVersionUID = 8301865434469950945L;
+
     String str = "hello";
+    
 
     public String getStr() {
         return str;

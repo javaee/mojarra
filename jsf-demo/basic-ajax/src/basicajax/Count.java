@@ -52,6 +52,7 @@ public class Count implements Serializable {
         return count++;
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void reset(ActionEvent ae) {
         count = 0;
     }
