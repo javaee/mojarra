@@ -2,11 +2,14 @@ package ezcomp;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import java.io.Serializable;
 
 
 @ManagedBean(name="navigation")
 @RequestScoped
-public class NavigationHandler {
+public class NavigationHandler implements Serializable {
+
+    private static final long serialVersionUID = -3311984234775408121L;
 
     private String target = "index";
 

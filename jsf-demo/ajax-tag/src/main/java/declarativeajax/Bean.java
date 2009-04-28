@@ -77,6 +77,8 @@ import java.util.logging.Logger;
 @SessionScoped
 public class Bean implements Serializable {
     
+    private static final long serialVersionUID = 1962330230278633796L;
+
     private static final Logger LOGGER = Logger.getLogger("declarativeajax");
     
     //

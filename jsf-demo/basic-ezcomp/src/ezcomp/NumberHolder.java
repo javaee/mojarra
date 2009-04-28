@@ -38,10 +38,13 @@ package ezcomp;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 
 @ManagedBean(name="number")
 @SessionScoped
-public class NumberHolder {
+public class NumberHolder implements Serializable {
+
+    private static final long serialVersionUID = -3487327247765235989L;
 
     private Integer i = 0;
 

@@ -38,10 +38,13 @@ package ezcomp;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 
 @ManagedBean(name="multinumber")
 @SessionScoped
-public class MultiNumberHolder {
+public class MultiNumberHolder implements Serializable {
+
+    private static final long serialVersionUID = 6733229187968502934L;
 
     private Integer i1 = 1;
     private Integer i2 = 2;

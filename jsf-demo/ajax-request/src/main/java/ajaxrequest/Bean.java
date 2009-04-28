@@ -54,6 +54,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.Serializable;
 
 /**
  * <p>This bean has the methods that are used to illustrate
@@ -61,8 +62,10 @@ import java.util.logging.Logger;
  *
  */
 
-public class Bean {
-    
+public class Bean implements Serializable {
+
+    private static final long serialVersionUID = 4987827757077958133L;
+
     private static final Logger LOGGER = Logger.getLogger("ajaxrequest");
     
     //
@@ -70,7 +73,7 @@ public class Bean {
     //
     
     private Map<String, String> options = null;
-    
+
     //
     // Constructors
     //

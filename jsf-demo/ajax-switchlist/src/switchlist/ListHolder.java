@@ -41,11 +41,14 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.io.Serializable;
 
 
 @ManagedBean(name="listholder")
 @SessionScoped
-public class ListHolder {
+public class ListHolder implements Serializable {
+
+    private static final long serialVersionUID = -6301210065157592489L;
 
     private Map<String, String> items1 = new LinkedHashMap<String, String>();
     private Map<String, String> items2 = new LinkedHashMap<String, String>();

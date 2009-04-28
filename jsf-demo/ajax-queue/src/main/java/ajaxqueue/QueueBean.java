@@ -40,6 +40,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.bean.ManagedBean;
 
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * <p>This simple bean conains one <code>ActionEvent</code>
@@ -49,7 +50,9 @@ import java.util.Random;
  *
  */
 @ManagedBean(name="queuebean")
-public class QueueBean {
+public class QueueBean implements Serializable {
+
+    private static final long serialVersionUID = 4785983579173204451L;
 
     public void process(ActionEvent ae) {
         Random generator2 = new Random(System.currentTimeMillis());
