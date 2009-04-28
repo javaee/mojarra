@@ -25,15 +25,19 @@
                             <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}"></ui:param>
                             <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
                         </menu:postit>
-                        <menu:postit>
+                       <menu:postit rendered="#{storyManager.sprint.name != null}">
                             <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
-                            <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
+                            <ui:param name="postitText" value="#{storyManager.sprint.name}" rendered="#{storyManager.sprint.name!= null}"></ui:param>
+                        </menu:postit>
+                        <menu:postit rendered="#{storyManager.sprint.name == null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{i18n['stories.show.nosprint']}" rendered="#{storyManager.sprint.name!= null}"></ui:param>
                         </menu:postit>
                     </h:panelGroup>
                     <ui:include src="form.xhtml" />
                    <f:facet name="footer">
-                        <h:commandButton id="btnCreate" action="#{storyManager.save}" value="#{i18n['story.create.button.create']}" styleClass="formInput" />
-                        <h:commandButton id="btnCancel" action="show" value="#{i18n['story.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnCreate" action="#{storyManager.save}" value="#{i18n['story.create.button.create']}" styleClass="formInput" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnCancel" action="show" value="#{i18n['story.create.button.cancel']}" styleClass="formInput" immediate="true" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>
