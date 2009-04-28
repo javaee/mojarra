@@ -6,46 +6,34 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:menu="http://java.sun.com/jsf/composite/components">
-      
+
     <h:head>
         <h:outputStylesheet library="css/1_1" name="#{skinManager.selectedSkin}"/>
         <h:outputScript     library="js" name="menu.js" target="head"/>
         <h:outputScript     library="javax.faces" name="jsf.js"/>
         <title>
-        <ui:insert name="pageTitle">
-            <h:outputText value="#{i18n['template.title']}"></h:outputText>
-        </ui:insert>
-        
+            <ui:insert name="pageTitle">
+                <h:outputText value="#{i18n['template.title']}"></h:outputText>
+            </ui:insert>
+
         </title>
 
     </h:head>
 
     <h:body>
-        <table align="center" cellpadding="0" cellspacing="0">
-            <tr>
-                <td align="center">
+        <h:panelGrid>
             <menu:menu>
-                <ui:param name="image" value="/resources/images/menu/barraSuperior-04.png"></ui:param>                
+                <ui:param name="image" value="/resources/images/menu/barraSuperior-04.png"></ui:param>
             </menu:menu>
-            
-                </td>
-            </tr>
-            <tr>
-                <td align="center">
-                    <br/><br/>
-                    <ui:insert name="content">
-                        
-                        
-                            <h:graphicImage  value="/resources/images/JSFScrumWhiteBoard.png"></h:graphicImage><br/>
-                        
-                    </ui:insert>
-                </td>
-            </tr>
-            <tr>
-                <td align="center">
-                    <ui:include src="./footer.xhtml" />
-                </td>
-            </tr>
-        </table>
+            <h:panelGroup id="bodyContent" >
+                
+
+                <ui:insert name="content">
+                    <h:graphicImage  value="/resources/images/JSFScrumWhiteBoard.png"></h:graphicImage><br/>
+                </ui:insert>
+            </h:panelGroup>
+            <ui:include src="./footer.xhtml" />
+
+        </h:panelGrid>
     </h:body>
 </html>  
