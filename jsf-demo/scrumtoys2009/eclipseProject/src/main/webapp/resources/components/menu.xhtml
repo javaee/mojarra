@@ -46,7 +46,7 @@
                     <h:form>
                         <h:outputLabel for="prjCombo" value="#{i18n['home.project.combo.label']}" styleClass="formLabel" />
                         <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput"
-                                         onchange="jsf.ajax.request(this, event, {execute: 'prjCombo', render: 'prjCombo'});">
+                                         onchange="jsf.ajax.request(this, event, {execute: 'prjCombo', render: 'prjCombo, bodyContent'});">
                             <f:selectItems value="#{projectManager.projectItems}" />
                         </h:selectOneMenu>
                     </h:form>
