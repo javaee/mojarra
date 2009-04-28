@@ -25,16 +25,20 @@
                         <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
                         <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
                     </menu:postit>
-                    <menu:postit>
-                        <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}:"></ui:param>
-                        <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
-                    </menu:postit>
+                  <menu:postit rendered="#{storyManager.sprint.name != null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{storyManager.sprint.name}" rendered="#{storyManager.sprint.name!= null}"></ui:param>
+                        </menu:postit>
+                        <menu:postit rendered="#{storyManager.sprint.name == null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{i18n['stories.show.nosprint']}" rendered="#{storyManager.sprint.name!= null}"></ui:param>
+                        </menu:postit>
                     </h:panelGroup>
                     
                     <ui:include src="form.xhtml" />
                     <f:facet name="footer">
-                        <h:commandButton id="btnEditUpdate" action="#{storyManager.save}" value="#{i18n['story.edit.button.update']}" styleClass="formInput" />
-                        <h:commandButton id="btnEditCancel" action="#{storyManager.cancelEdit}" immediate="true" value="#{i18n['story.edit.button.cancel']}" styleClass="formInput" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditUpdate" action="#{storyManager.save}" value="#{i18n['story.edit.button.update']}" styleClass="formInput" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditCancel" action="#{storyManager.cancelEdit}" immediate="true" value="#{i18n['story.edit.button.cancel']}" styleClass="formInput" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>
