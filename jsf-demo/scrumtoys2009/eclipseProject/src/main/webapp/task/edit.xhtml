@@ -17,23 +17,28 @@
         <ui:define name="content">
             <h:form styleClass="scrumForm" id="editForm">
                  <h:panelGrid columns="2" headerClass="tituloForm" footerClass="footerForm">
-                    <h:panelGroup>
+                     <h:panelGroup>
 
-                    <menu:postit>
+                         <menu:postit>
                         <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}:"></ui:param>
                         <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
                     </menu:postit>
-                    <menu:postit>
-                        <ui:param name="postitLabel" value="#{i18n['task.form.label.story.name']}:"></ui:param>
-                        <ui:param name="postitText" value="#{taskManager.story.name}"></ui:param>
-                    </menu:postit>
+                      <menu:postit rendered="#{storyManager.sprint.name != null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
+                        </menu:postit>
+
+                        <menu:postit rendered="#{storyManager.sprint.name == null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{i18n['tasks.show.nosprint']}"></ui:param>
+                        </menu:postit>
                     </h:panelGroup>
                     <h:panelGroup>
                     <h:outputText value="#{i18n['task.edit.form.title']}:" styleClass="tituloForm" />
                     <ui:include src="form.xhtml" />
                     <h:panelGroup>
-                        <h:commandButton id="btnEditUpdate" action="#{taskManager.save}" value="#{i18n['task.edit.button.update']}" styleClass="formInput" />
-                        <h:commandButton id="btnEditCancel" action="#{taskManager.cancelEdit}" immediate="true" value="#{i18n['task.edit.button.cancel']}" styleClass="formInput" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditUpdate" action="#{taskManager.save}" value="#{i18n['task.edit.button.update']}" styleClass="formInput" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditCancel" action="#{taskManager.cancelEdit}" immediate="true" value="#{i18n['task.edit.button.cancel']}" styleClass="formInput" />
                     </h:panelGroup>
                     </h:panelGroup>
                 </h:panelGrid>
