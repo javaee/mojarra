@@ -19,10 +19,11 @@
 
                 <br/><br/>
 
-                <h:outputText value="#{i18n['sprint.show.table.label.empty']}"
-                              rendered="#{sprintManager.sprints.rowCount eq 0}" />
+                
 
                 <h:outputText value="#{i18n['sprints.table.title']}" styleClass="tituloForm"/><br/><br/>
+                <h:outputText value="#{i18n['sprint.show.table.label.empty']}"
+                              rendered="#{sprintManager.sprints.rowCount eq 0}" />
                 <h:dataTable value="#{sprintManager.sprints}" var="sprint"
                              rendered="#{sprintManager.sprints.rowCount > 0}"
                              title="#{i18n['sprint.show.table.title']}"
