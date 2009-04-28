@@ -38,26 +38,27 @@
                 </menu:menuItem>
                 <menu:menuItem>
                     <ui:param name="label" value="#{i18n['menuitem.label.jsf2']}"></ui:param>
-                    <ui:param name="destination" value="#{i18n['menuitem.path.jsf2']}"></ui:param>
+                    <ui:param name="destination" value=""></ui:param>
                     <ui:param name="menuid" value="5"></ui:param>
                 </menu:menuItem>
 
-                <menu:menuItem>
+                <td>
                     <h:form>
-                        <ui:param name="label" value=""></ui:param>
                         <h:outputLabel for="prjCombo" value="#{i18n['home.project.combo.label']}" styleClass="formLabel" />
                         <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput"
                                          onchange="jsf.ajax.request(this, event, {execute: 'prjCombo', render: 'prjCombo'});">
                             <f:selectItems value="#{projectManager.projectItems}" />
                         </h:selectOneMenu>
                     </h:form>
-                </menu:menuItem>
+                </td>
             </tr>
             <tr>
-                <menu:submenu></menu:submenu>
+                <menu:submenu>
+                    <ui:param name="menuid" value="1"></ui:param>
+                </menu:submenu>
 
                 <menu:submenu>
-                    <ui:param name="menuid" value="menu2"></ui:param>
+                    <ui:param name="menuid" value="2"></ui:param>
                     <menu:submenuItem>
                         <ui:param name="label" value="#{i18n['menuitem.label.createProject']}"></ui:param>
                         <ui:param name="destination" value="#{i18n['menuitem.path.createProject']}"></ui:param>
@@ -70,7 +71,7 @@
                 </menu:submenu>
 
                 <menu:submenu>
-                    <ui:param name="menuid" value="menu3"></ui:param>
+                    <ui:param name="menuid" value="3"></ui:param>
 
                     <menu:submenuItem>
                         <ui:param name="label" value="#{i18n['menuitem.label.newsprint']}"></ui:param>
@@ -82,7 +83,7 @@
                     </menu:submenuItem>
                 </menu:submenu>
                 <menu:submenu>
-                    <ui:param name="menuid" value="menu4"></ui:param>
+                    <ui:param name="menuid" value="4"></ui:param>
 
                     <menu:submenuItem>
                         <ui:param name="label" value="#{i18n['menuitem.label.changeskin']}"></ui:param>
@@ -90,7 +91,7 @@
                     </menu:submenuItem>
                 </menu:submenu>
                 <menu:submenu>
-                    <ui:param name="menuid" value="menu5"></ui:param>
+                    <ui:param name="menuid" value="5"></ui:param>
 
                     <menu:submenuItem>
                         <ui:param name="label" value="JSR 314"></ui:param>
@@ -109,7 +110,9 @@
                         <ui:param name="destination" value="http://www.jcp.org/en/jsr/detail?id=314#"></ui:param>
                     </menu:submenuItem>
                 </menu:submenu>
-                <menu:submenu></menu:submenu>
+                <menu:submenu>
+                    <ui:param name="menuid" value="6"></ui:param>
+                </menu:submenu>
             </tr>
         </table>
         <h:graphicImage  value="#{image}"></h:graphicImage><br/>
