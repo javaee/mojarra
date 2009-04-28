@@ -8,7 +8,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+      xmlns:menu="http://java.sun.com/jsf/composite/components" >
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
@@ -19,75 +19,91 @@
 
                 <br/><br/>
 
-               
+                <h:panelGrid columns="3" headerClass="tituloForm" footerClass="footerForm">
+                    <f:facet name="header">
+                        <h:outputText value="#{i18n['stories.table.title']}" styleClass="tituloForm" /><br/><br/>
+                    </f:facet>
+                    <h:panelGroup>
+                        <menu:postit>
+                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                        </menu:postit>
+                        <menu:postit rendered="#{storyManager.sprint.name != null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{storyManager.sprint.name}" rendered="#{storyManager.sprint.name!= null}"></ui:param>                            
+                        </menu:postit>
+                        <menu:postit rendered="#{storyManager.sprint.name == null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{i18n['stories.show.nosprint']}" rendered="#{storyManager.sprint.name!= null}"></ui:param>
+                        </menu:postit>
+                    </h:panelGroup>
+                    <h:outputText value="#{i18n['story.show.table.label.empty']}"
+                                  rendered="#{storyManager.stories.rowCount eq 0}" />
+                                 
+                    <h:dataTable value="#{storyManager.stories}" var="story"
+                                 rendered="#{storyManager.stories.rowCount > 0}"
+                                 title="#{i18n['story.show.table.title']}"
+                                 summary="#{i18n['story.show.table.title']}"
+                                 border="0"
+                                 headerClass="datatableHeader"
+                                 rowClasses="datatableRow,datatableRow2"
+                                 columnClasses="dataTableFirstColumn"
+                                 styleClass="datatable"
+                                 id="dtStories">
 
-                <h:outputText value="#{i18n['stories.table.title']}" styleClass="tituloForm" /><br/><br/>
-                
-                <h:outputText value="#{i18n['story.show.table.label.empty']}"
-                              rendered="#{storyManager.stories.rowCount eq 0}" />
-                <h:dataTable value="#{storyManager.stories}" var="story"
-                             rendered="#{storyManager.stories.rowCount > 0}"
-                             title="#{i18n['story.show.table.title']}"
-                             summary="#{i18n['story.show.table.title']}"
-                             border="0"
-                             headerClass="datatableHeader"
-                             rowClasses="datatableRow,datatableRow2"
-                             columnClasses="dataTableFirstColumn"
-                             styleClass="datatable"
-                             id="dtStories">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#" />
+                            </f:facet>
+                            <h:outputText value="#{storyManager.stories.rowIndex + 1}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.name']}" />
+                            </f:facet>
+                            <h:outputText value="#{story.name}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.startDate']}"/>
+                            </f:facet>
+                            <h:outputText value="#{story.startDate}">
+                                <f:convertDateTime pattern="#{i18n['story.show.table.header.startDate.pattern']}" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.priority']}" />
+                            </f:facet>
+                            <h:outputText value="#{story.priority}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.estimation']}" />
+                            </f:facet>
+                            <h:outputText value="#{story.estimation}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.acceptance']}" />
+                            </f:facet>
+                            <h:outputText value="#{story.acceptance}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.actions']}"/>
+                            </f:facet>
+                            <h:commandButton styleClass="botaoPostIt" action="#{storyManager.edit}" value="#{i18n['story.show.button.edit']}"  />
+                            <h:commandButton styleClass="botaoPostIt" action="#{storyManager.remove}" value="#{i18n['story.show.button.delete']}"  />
+                            <h:commandButton styleClass="botaoPostIt" action="#{storyManager.showTasks}" value="#{i18n['story.show.button.showTasks']}"  />
+                        </h:column>
 
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#" />
-                        </f:facet>
-                        <h:outputText value="#{storyManager.stories.rowIndex + 1}" />
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['story.show.table.header.name']}" />
-                        </f:facet>
-                        <h:outputText value="#{story.name}" />
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['story.show.table.header.startDate']}"/>
-                        </f:facet>
-                        <h:outputText value="#{story.startDate}">
-                            <f:convertDateTime pattern="#{i18n['story.show.table.header.startDate.pattern']}" />
-                        </h:outputText>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['story.show.table.header.priority']}" />
-                        </f:facet>
-                        <h:outputText value="#{story.priority}" />
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['story.show.table.header.estimation']}" />
-                        </f:facet>
-                        <h:outputText value="#{story.estimation}" />
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['story.show.table.header.acceptance']}" />
-                        </f:facet>
-                        <h:outputText value="#{story.acceptance}" />
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['story.show.table.header.actions']}"/>
-                        </f:facet>
-                        <h:commandButton styleClass="botaoPostIt" action="#{storyManager.edit}" value="#{i18n['story.show.button.edit']}"  />
-                        <h:commandButton styleClass="botaoPostIt" action="#{storyManager.remove}" value="#{i18n['story.show.button.delete']}"  />
-                        <h:commandButton styleClass="botaoPostIt" action="#{storyManager.showTasks}" value="#{i18n['story.show.button.showTasks']}"  />
-                    </h:column>
-
-                </h:dataTable>
-
-                <h:commandButton styleClass="botaoPostIt" action="#{storyManager.create}" value="#{i18n['story.show.button.newStory']}"  />
-                <h:commandButton styleClass="botaoPostIt" action="showSprints" value="#{i18n['story.show.button.showSprints']}"  />
-                
+                    </h:dataTable>
+                    <f:facet name="footer">
+                        <h:commandButton styleClass="botaoPostIt" action="#{storyManager.create}" value="#{i18n['story.show.button.newStory']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="showSprints" value="#{i18n['story.show.button.showSprints']}"  />
+                    </f:facet>
+                </h:panelGrid>
             </h:form>
         </ui:define>
     </ui:composition>
