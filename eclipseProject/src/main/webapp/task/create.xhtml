@@ -25,15 +25,20 @@
                             <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}:"></ui:param>
                             <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
                         </menu:postit>
-                        <menu:postit>
-                            <ui:param name="postitLabel" value="#{i18n['task.form.label.story.name']}:"></ui:param>
-                            <ui:param name="postitText" value="#{taskManager.story.name}"></ui:param>
-                        </menu:postit>                    
+                      <menu:postit rendered="#{storyManager.sprint.name != null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
+                        </menu:postit>
+
+                        <menu:postit rendered="#{storyManager.sprint.name == null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{i18n['tasks.show.nosprint']}"></ui:param>
+                        </menu:postit>
 
                     <ui:include src="form.xhtml" />
                     <f:facet name="footer">
-                        <h:commandButton id="btnCreate" action="#{taskManager.save}" value="#{i18n['task.create.button.create']}" styleClass="formInput" />
-                        <h:commandButton id="btnCancel" action="show" value="#{i18n['task.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnCreate" action="#{taskManager.save}" value="#{i18n['task.create.button.create']}" styleClass="formInput" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnCancel" action="show" value="#{i18n['task.create.button.cancel']}" styleClass="formInput" immediate="true" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>
