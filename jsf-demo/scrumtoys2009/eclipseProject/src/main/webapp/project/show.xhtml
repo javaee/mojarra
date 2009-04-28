@@ -16,13 +16,14 @@
         </ui:define>
         <ui:define name="content">
             <h:form id="frmListProjects">
-
                 <br/><br/>
+
+              
+
+                <h:outputText value="#{i18n['project.show.title']}" styleClass="tituloForm" /><br/><br/>
 
                 <h:outputText value="#{i18n['project.show.table.label.empty']}"
                     rendered="#{projectManager.projects.rowCount eq 0}" />
-
-                <h:outputText value="#{i18n['project.show.title']}" styleClass="tituloForm" /><br/><br/>
 
                 <h:dataTable value="#{projectManager.projects}" var="project"
                              rendered="#{projectManager.projects.rowCount > 0}"
