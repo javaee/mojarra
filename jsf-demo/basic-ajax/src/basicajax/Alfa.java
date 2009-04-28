@@ -3,10 +3,8 @@ package basicajax;
 import javax.faces.event.ActionEvent;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.el.ValueExpression;
 import java.util.TreeMap;
 import java.util.Collection;
-import java.util.Random;
 import java.io.Serializable;
 
 
@@ -22,7 +20,7 @@ public class Alfa implements Serializable {
             "romeo", "sierra", "tango", "uniform", "victor", "whiskey", "xray", "yankee", "zulu"};
 
     // Map to hold values
-    TreeMap<String, String> alfaMap= new TreeMap();
+    TreeMap<String, String> alfaMap= new TreeMap<String,String>();
 
 
     public Alfa() {
@@ -30,7 +28,7 @@ public class Alfa implements Serializable {
         char ch = 'a';
         int i = 0;
         do {
-            Character c = new Character(ch);
+            Character c = ch;
             alfaMap.put(c.toString(),alfa[i]);
             ch++;
             i++;
@@ -41,6 +39,7 @@ public class Alfa implements Serializable {
          return alfaMap.get(alfa);
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void process(ActionEvent ae) {
         // ValueExpression ve = ae.getComponent().getValueExpression("str");
         // ve.getValue();
