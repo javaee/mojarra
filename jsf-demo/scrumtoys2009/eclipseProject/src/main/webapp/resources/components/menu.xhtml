@@ -14,136 +14,105 @@
 
 
         <table width="990" class="menuTable" cellpadding="0" cellspacing="0">
+
             <tr>
-                <td>
-                    <table class="menuTable" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <menu:menuItem>
-                                <ui:param name="label" value="#{i18n['menuitem.label.home']}"></ui:param>
-                                <ui:param name="destination" value="#{i18n['menuitem.path.home']}"></ui:param>
-                                <ui:param name="menuid" value="1"></ui:param>
-                            </menu:menuItem>
-                            <menu:menuItem>
-                                <ui:param name="label" value="#{i18n['menuitem.label.projects']}"></ui:param>
-                                <ui:param name="destination" value="#{i18n['menuitem.path.projects']}"></ui:param>
-                                <ui:param name="menuid" value="2"></ui:param>
-                            </menu:menuItem>
-                            <menu:menuItem>
-                                <ui:param name="label" value="#{i18n['menuitem.label.sprints']}"></ui:param>
-                                <ui:param name="destination" value="#{i18n['menuitem.path.sprints']}"></ui:param>
-                                <ui:param name="menuid" value="3"></ui:param>
-                            </menu:menuItem>
-                            <menu:menuItem>
-                                <ui:param name="label" value="#{i18n['menuitem.label.settings']}"></ui:param>
-                                <ui:param name="destination" value=""></ui:param>
-                                <ui:param name="menuid" value="4"></ui:param>
-                            </menu:menuItem>
-                            <menu:menuItem>
-                                <ui:param name="label" value="#{i18n['menuitem.label.jsf2']}"></ui:param>
-                                <ui:param name="destination" value="#{i18n['menuitem.path.jsf2']}"></ui:param>
-                                <ui:param name="menuid" value="5"></ui:param>
-                            </menu:menuItem>
+                <menu:menuItem>
+                    <ui:param name="label" value="#{i18n['menuitem.label.home']}"></ui:param>
+                    <ui:param name="destination" value="#{i18n['menuitem.path.home']}"></ui:param>
+                    <ui:param name="menuid" value="1"></ui:param>
+                </menu:menuItem>
+                <menu:menuItem>
+                    <ui:param name="label" value="#{i18n['menuitem.label.projects']}"></ui:param>
+                    <ui:param name="destination" value="#{i18n['menuitem.path.projects']}"></ui:param>
+                    <ui:param name="menuid" value="2"></ui:param>
+                </menu:menuItem>
+                <menu:menuItem>
+                    <ui:param name="label" value="#{i18n['menuitem.label.sprints']}"></ui:param>
+                    <ui:param name="destination" value="#{i18n['menuitem.path.sprints']}"></ui:param>
+                    <ui:param name="menuid" value="3"></ui:param>
+                </menu:menuItem>
+                <menu:menuItem>
+                    <ui:param name="label" value="#{i18n['menuitem.label.settings']}"></ui:param>
+                    <ui:param name="destination" value=""></ui:param>
+                    <ui:param name="menuid" value="4"></ui:param>
+                </menu:menuItem>
+                <menu:menuItem>
+                    <ui:param name="label" value="#{i18n['menuitem.label.jsf2']}"></ui:param>
+                    <ui:param name="destination" value="#{i18n['menuitem.path.jsf2']}"></ui:param>
+                    <ui:param name="menuid" value="5"></ui:param>
+                </menu:menuItem>
 
-                            <td class="selectProject">
-
-                                <h:form>
-                                    <h:outputLabel for="prjCombo" value="#{i18n['home.project.combo.label']}" styleClass="formLabel" />
-                                    <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput"
-                                                     onchange="jsf.ajax.request(this, event, {execute: 'prjCombo', render: 'prjCombo'});">
-                                        <f:selectItems value="#{projectManager.projectItems}" />
-                                    </h:selectOneMenu>
-                                </h:form>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>
-                                <div></div>
-                            </td>
-                            <td>
-
-                                <div class="menu" id="menu2">
-                                    <ul>
-                                        <menu:submenuItem>
-                                            <ui:param name="label" value="#{i18n['menuitem.label.createProject']}"></ui:param>
-                                            <ui:param name="destination" value="#{i18n['menuitem.path.createProject']}"></ui:param>
-                                        </menu:submenuItem>
-                                        <menu:submenuItem>
-                                            <ui:param name="label" value="#{i18n['menuitem.label.showProjects']}"></ui:param>
-                                            <ui:param name="destination" value="#{i18n['menuitem.path.showProjects']}"></ui:param>
-                                        </menu:submenuItem>
-                                    </ul>
-                                </div>
-
-                            </td>
-                            <td>
-
-                                <div class="menu" id="menu3">
-                                <ul>
-                                    <ui:param name="menuid" value="menu3"></ui:param>
-                                    <menu:submenuItem>
-                                        <ui:param name="label" value="#{i18n['menuitem.label.newsprint']}"></ui:param>
-                                        <ui:param name="destination" value="#{i18n['menuitem.path.newsprint']}"></ui:param>
-                                    </menu:submenuItem>
-                                    <menu:submenuItem>
-                                        <ui:param name="label" value="#{i18n['menuitem.label.sprintslist']}"></ui:param>
-                                        <ui:param name="destination" value="#{i18n['menuitem.path.sprintslist']}"></ui:param>
-                                    </menu:submenuItem>
-                                </ul></div>
-                            </td>
-                            <td>
-                                <div class="menu" id="menu4">
-                                    <ul>
-                                        <menu:submenuItem>
-                                            <ui:param name="label" value="#{i18n['menuitem.label.changeskin']}"></ui:param>
-                                            <ui:param name="destination" value="#{i18n['menuitem.path.changeskin']}"></ui:param>
-                                        </menu:submenuItem>
-
-                                    </ul>
-
-                                </div>
-                            </td>
-                            <td>
-                                <div class="menu" id="menu5">
-                                    <ul>
-                                        <menu:submenuItem>
-                                            <ui:param name="label" value="JSR 314"></ui:param>
-                                            <ui:param name="destination" value="http://www.jcp.org/en/jsr/detail?id=314#"></ui:param>
-                                        </menu:submenuItem>
-                                        <menu:submenuItem>
-                                            <ui:param name="label" value="IRC"></ui:param>
-                                            <ui:param name="destination" value="http://weblogs.java.net/blog/edburns/archive/2007/01/jsf_irc_channel.html"></ui:param>
-                                        </menu:submenuItem>
-                                        <menu:submenuItem>
-                                            <ui:param name="label" value="Documentation"></ui:param>
-                                            <ui:param name="destination" value="http://java.sun.com/javaee/javaserverfaces/#"></ui:param>
-                                        </menu:submenuItem>
-                                        <menu:submenuItem>
-                                            <ui:param name="label" value="Blogs"></ui:param>
-                                            <ui:param name="destination" value="http://www.jcp.org/en/jsr/detail?id=314#"></ui:param>
-                                        </menu:submenuItem>
-
-                                    </ul>
-                                </div>
-
-                            </td>
-
-                            <td>
-                                <div class="menu" id="menu6" >
-
-                                </div>
-                            </td>
-
-                        </tr>
-                        <tr></tr>
-                    </table>
-                </td>
+                <menu:menuItem>
+                    <h:form>
+                        <ui:param name="label" value=""></ui:param>
+                        <h:outputLabel for="prjCombo" value="#{i18n['home.project.combo.label']}" styleClass="formLabel" />
+                        <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput"
+                                         onchange="jsf.ajax.request(this, event, {execute: 'prjCombo', render: 'prjCombo'});">
+                            <f:selectItems value="#{projectManager.projectItems}" />
+                        </h:selectOneMenu>
+                    </h:form>
+                </menu:menuItem>
             </tr>
             <tr>
-                <td>
-                    <h:graphicImage  value="#{image}"></h:graphicImage><br/>
-                </td>
+                <menu:submenu></menu:submenu>
+
+                <menu:submenu>
+                    <ui:param name="menuid" value="menu2"></ui:param>
+                    <menu:submenuItem>
+                        <ui:param name="label" value="#{i18n['menuitem.label.createProject']}"></ui:param>
+                        <ui:param name="destination" value="#{i18n['menuitem.path.createProject']}"></ui:param>
+                    </menu:submenuItem>
+                    <menu:submenuItem>
+                        <ui:param name="label" value="#{i18n['menuitem.label.showProjects']}"></ui:param>
+                        <ui:param name="destination" value="#{i18n['menuitem.path.showProjects']}"></ui:param>
+                    </menu:submenuItem>
+
+                </menu:submenu>
+
+                <menu:submenu>
+                    <ui:param name="menuid" value="menu3"></ui:param>
+
+                    <menu:submenuItem>
+                        <ui:param name="label" value="#{i18n['menuitem.label.newsprint']}"></ui:param>
+                        <ui:param name="destination" value="#{i18n['menuitem.path.newsprint']}"></ui:param>
+                    </menu:submenuItem>
+                    <menu:submenuItem>
+                        <ui:param name="label" value="#{i18n['menuitem.label.sprintslist']}"></ui:param>
+                        <ui:param name="destination" value="#{i18n['menuitem.path.sprintslist']}"></ui:param>
+                    </menu:submenuItem>
+                </menu:submenu>
+                <menu:submenu>
+                    <ui:param name="menuid" value="menu4"></ui:param>
+
+                    <menu:submenuItem>
+                        <ui:param name="label" value="#{i18n['menuitem.label.changeskin']}"></ui:param>
+                        <ui:param name="destination" value="#{i18n['menuitem.path.changeskin']}"></ui:param>
+                    </menu:submenuItem>
+                </menu:submenu>
+                <menu:submenu>
+                    <ui:param name="menuid" value="menu5"></ui:param>
+
+                    <menu:submenuItem>
+                        <ui:param name="label" value="JSR 314"></ui:param>
+                        <ui:param name="destination" value="http://www.jcp.org/en/jsr/detail?id=314#"></ui:param>
+                    </menu:submenuItem>
+                    <menu:submenuItem>
+                        <ui:param name="label" value="IRC"></ui:param>
+                        <ui:param name="destination" value="http://weblogs.java.net/blog/edburns/archive/2007/01/jsf_irc_channel.html"></ui:param>
+                    </menu:submenuItem>
+                    <menu:submenuItem>
+                        <ui:param name="label" value="Documentation"></ui:param>
+                        <ui:param name="destination" value="http://java.sun.com/javaee/javaserverfaces/#"></ui:param>
+                    </menu:submenuItem>
+                    <menu:submenuItem>
+                        <ui:param name="label" value="Blogs"></ui:param>
+                        <ui:param name="destination" value="http://www.jcp.org/en/jsr/detail?id=314#"></ui:param>
+                    </menu:submenuItem>
+                </menu:submenu>
+                <menu:submenu></menu:submenu>
             </tr>
         </table>
+        <h:graphicImage  value="#{image}"></h:graphicImage><br/>
+
     </composite:implementation>
 </html>

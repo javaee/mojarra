@@ -14,9 +14,11 @@
     <composite:implementation>
 
         <td>
-            <h:outputLink styleClass="menuhandler" value="#{destination}" onmouseover="menuHighlight(#{menuid})">
+            <h:outputLink styleClass="menuhandler" value="#{destination}" onmouseover="menuHighlight(#{menuid})" rendered="#{label!=''}">
                 <h:outputText value="#{label}"/>
             </h:outputLink>
+            <composite:insertChildren rendered="#{label==''}"></composite:insertChildren>
+
         </td>
     </composite:implementation>
 </html>
