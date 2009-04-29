@@ -1717,6 +1717,21 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
+          Client identifier of the component for which to display messages. This
+          attribute is mutually exclusive with globalOnly and take precedence
+          if used.
+        </description>
+      <display-name>Associated Client Id</display-name>
+      <icon/>
+      <property-name>for</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <required>false</required>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           Flag indicating whether the detail portion of displayed messages
           should be included.  Default value is "false".
         </description>
@@ -10888,6 +10903,21 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>boolean</property-class>
       <property-extension>
         <default-value>false</default-value>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Client identifier of the component for which to display messages. This
+          attribute is mutually exclusive with globalOnly and take precedence
+          if used.
+        </description>
+      <display-name>Associated Client Id</display-name>
+      <icon/>
+      <property-name>for</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <required>false</required>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>

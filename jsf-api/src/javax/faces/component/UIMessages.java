@@ -41,9 +41,6 @@
 package javax.faces.component;
 
 import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-import javax.el.ELException;
-import javax.el.ValueExpression;
 
 /**
  * <p>The renderer for this component is responsible for obtaining the
@@ -78,10 +75,24 @@ public class UIMessages extends UIComponentBase {
 
 
     enum PropertyKeys {
+		forValue("for"),
         globalOnly,
         showDetail,
         showSummary,
-        redisplay
+        redisplay;
+
+		String toString;
+
+        PropertyKeys(String toString) {
+            this.toString = toString;
+        }
+
+        PropertyKeys() {
+        }
+
+        public String toString() {
+            return ((this.toString != null) ? this.toString : super.toString());
+        }
     }
 
     // ------------------------------------------------------------ Constructors
@@ -108,11 +119,36 @@ public class UIMessages extends UIComponentBase {
 
     }
 
+	/**
+	 * <p class="changed_added_2_0">Return the client identifier of the
+	 * component for which this component represents associated message(s)
+	 * (if any).</p>
+	 */
+    public String getFor() {
+
+        return (String) getStateHelper().eval(PropertyKeys.forValue);
+
+    }
+
+
+    /**
+     * <p>Set the client identifier of the component for which this
+     * component represents associated message(s) (if any).  This
+     * property must be set before the message is displayed.</p>
+     *
+     * @param newFor The new client id
+     */
+    public void setFor(String newFor) {
+
+        getStateHelper().put(PropertyKeys.forValue, newFor);
+
+    }
 
     /**
      * <p>Return the flag indicating whether only global messages (that
      * is, messages with no associated client identifier) should be
-     * rendered.  Defaults to false.</p>
+     * rendered.  Mutually exclusive with the "for" property which takes
+	 * precedence. Defaults to false.</p>
      */
     public boolean isGlobalOnly() {
 

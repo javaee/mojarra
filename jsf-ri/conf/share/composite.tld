@@ -289,7 +289,7 @@ apply.</p>
 
           <p>In this case, a <code>&lt;composite:facet&gt;</code>
           element is included in the usage contract that refers to the
-          inner <code>&lt;composite:insertFacet&gt;</code> element in
+          inner <code>&lt;composite:renderFacet&gt;</code> element in
           the <code>&lt;composite:implementation&gt;</code> section.
           </p>
 
@@ -1143,24 +1143,21 @@ component tag</em> in the <em>using page</em>.</p></div>]]>
         </attribute>
         <attribute>
             <description>
-
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>The value of the name attribute as it must appear on an
-<code>&lt;f:facet&gt;</code> tag nested within the <em>composite
-component tag</em> in the <em>using page</em>.</p></div>]]>
 
+<p>If <code>true</code>, and there is no such facet present on the top
+level component, a <code>TagException</code> must be thrown, containing
+the <code>Location</code>, the facet name, and a localized descriptive
+error message.</p>
+
+</div>]]>
+                
             </description>
-            <name>
-                required
-            </name>
-            <required>
-                false
-            </required>
+            <name>required</name>
+            <required>false</required>
             <deferred-value>
-                <type>
-                    boolean
-                </type>
+                <type>boolean</type>
             </deferred-value>
         </attribute>
   </tag>
@@ -1174,8 +1171,8 @@ component tag</em> in the <em>using page</em>.</p></div>]]>
 <p>This element is used in the
 <code>&lt;composite:implementation&gt;</code> section.  Any child
 components or template text within the composite component tag in the
-using page will be rendered into the output at the point indicated by
-this tag's placement within the
+using page will be re-parented into the composite component at the point
+indicated by this tag's placement within the
 <code>&lt;composite:implementation&gt;</code> section.  The normal
 use-case for this element is to have only one occurrence within the
 <code>&lt;composite:implementation&gt;</code> section.  Inserting
@@ -1183,16 +1180,10 @@ multiple occurrences may cause duplicate id errors.  The results are
 undefined if there are multiple occurrences of this element in the
 <code>&lt;composite:implementation&gt;</code> section.</p>
 
-            <p>The implementation of this tag handler must insert a
-            component with <code>component-type</code>
-            <code>javax.faces.Output</code> and <code>renderer-type</code>
-            <code>javax.faces.UsingPageChildren</code> as a
-            child at this point in the component tree.</p>
-
 </div>]]>
         </description>
         <name>
-            renderUsingPageChildren
+            insertChildren
         </name>
         <body-content>
             JSP
@@ -1542,7 +1533,17 @@ metadata into a composite component.</p>
 
     <tag>
         <description>
-            RELEASE_PENDING (description)
+                <![CDATA[
+<div class="changed_added_2_0">
+
+<p>The presence of this tag in a
+<code>&lt;composite:implementation&gt;</code> section must cause the
+named facet to be taken from the facet map of the <em>top level
+component</em> and inserted as a facet child of the component in which
+this element is nested.</p>
+
+</div>]]>
+
         </description>
         <name>
             insertFacet
@@ -1551,7 +1552,15 @@ metadata into a composite component.</p>
         <body-content>empty</body-content>
         <attribute>
             <description>
-                RELEASE_PENDING (description)
+                                <![CDATA[
+<div class="changed_added_2_0">
+
+<p>The name of the facet child on the <em>top level component</em> which
+must be inserted as a facet child of the component in which this element
+is nested.</p>
+
+</div>]]>
+
             </description>
             <name>name</name>
             <required>true</required>
@@ -1561,29 +1570,16 @@ metadata into a composite component.</p>
         </attribute>
         <attribute>
             <description>
-                RELEASE_PENDING (description)
-            </description>
-            <name>required</name>
-            <required>false</required>
-            <deferred-value>
-                <type>boolean</type>
-            </deferred-value>
-        </attribute>
-    </tag>
+                <![CDATA[
+<div class="changed_added_2_0">
 
+<p>If <code>true</code>, and there is no such facet present on the top
+level component, a <code>TagException</code> must be thrown, containing
+the <code>Location</code>, the facet name, and a localized descriptive
+error message.</p>
 
-     <tag>
-        <description>
-            RELEASE_PENDING (description)
-        </description>
-        <name>
-            insertChildren
-        </name>
-        <tag-class></tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <description>
-                RELEASE_PENDING (description)
+</div>]]>
+                
             </description>
             <name>required</name>
             <required>false</required>

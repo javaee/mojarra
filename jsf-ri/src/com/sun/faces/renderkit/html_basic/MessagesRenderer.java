@@ -94,8 +94,7 @@ public class MessagesRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
-        // String clientId = ((UIMessages) component).getFor();
-        String clientId = null; // PENDING - "for" is actually gone now
+        String clientId = ((UIMessages) component).getFor();
         // if no clientId was included
         if (clientId == null) {
             // and the author explicitly only wants global messages

@@ -17,7 +17,7 @@
         <ul>
             <ui:repeat var="_story" value="#{newsReader.stories}">
                 <li>
-                    <h:link outcome="page02.xhtml">
+                    <h:link outcome="page02">
                         <f:param name="id" value="#{_story.id}"/>
                         #{_story.headline}
                     </h:link>

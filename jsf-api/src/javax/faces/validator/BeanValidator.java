@@ -40,8 +40,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -80,6 +80,21 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * validator, as defined by the JSF specification.</p>
      */
     public static final String VALIDATOR_ID = "javax.faces.Bean";
+
+	/**
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
+     * a constraint failure is found.  The message format string for
+     * this message may optionally include the following placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the interpolated message from Bean Validation.</li>
+     * <li><code>{1}</code> replaced by a <code>String</code> whose value
+     * is the label of the input component that produced this message.</li>
+     * </ul></p>
+     * <p>The message format string provided by the default implementation should be a the placeholder {0},
+     * thus fully delegating the message handling to Bean Validation. A developer can override this message
+     * format string to make it conform to other JSF validator messages (i.e., by including the component label)</p>
+     */
+    public static final String MESSAGE_ID = "javax.faces.validator.BeanValidator.MESSAGE";
 
     /**
      * <p class="changed_added_2_0">The name of the servlet context
@@ -317,19 +332,23 @@ public class BeanValidator implements Validator, PartialStateHolder {
 
             if (!violations.isEmpty()) {
                 ValidatorException toThrow = null;
-                if (1 == violations.size()) {
-                    ConstraintViolation violation = violations.iterator().next();
-                    toThrow = new ValidatorException(getMessage(context, component,
-                            violation.getMessage(), value));
-                } else {
-                    Set<FacesMessage> messages = new HashSet<FacesMessage>(violations.size());
-                    Iterator<ConstraintViolation> iter = violations.iterator();
-                    while (iter.hasNext()) {
-                        messages.add(getMessage(context, component,
-                                iter.next().getMessage(), value));
-                    }
-                    toThrow = new ValidatorException(messages);
-                }
+				if (1 == violations.size()) {
+					ConstraintViolation violation = violations.iterator().next();
+					toThrow = new ValidatorException(MessageFactory.getMessage(context,
+						MESSAGE_ID,
+						violation.getMessage(),
+						MessageFactory.getLabel(context, component)));
+				} else {
+					Set<FacesMessage> messages = new LinkedHashSet<FacesMessage>(violations.size());
+					Iterator<ConstraintViolation> iter = violations.iterator();
+					while (iter.hasNext()) {
+						messages.add(MessageFactory.getMessage(context,
+							MESSAGE_ID,
+							iter.next().getMessage(),
+							MessageFactory.getLabel(context, component)));
+					}
+					toThrow = new ValidatorException(messages);
+				}
                 throw toThrow;
             }
         } else {
@@ -440,35 +459,6 @@ public class BeanValidator implements Validator, PartialStateHolder {
 
         cachedValidationGroups = validationGroupsList.toArray(new Class[0]);
         return cachedValidationGroups;
-    }
-
-    /**
-     * Return a FacesMessage that uses the message resolved by the Bean Validation API rather than a message key.
-     * This method should likely be moved into MessageFactory.
-     */
-    private FacesMessage getMessage(FacesContext context, UIComponent component, String message, Object invalidValue) {
-        // FIXME move locale lookup to a method in MessageFactory
-        Locale locale;
-        // viewRoot may not have been initialized at this point.
-        if (context.getViewRoot() != null) {
-            locale = context.getViewRoot().getLocale();
-        } else {
-            locale = Locale.getDefault();
-        }
-
-        if (null == locale) {
-            throw new NullPointerException(" locale is null ");
-        }
-
-        // QUESTION should we pass invalid value as message replacement parameter
-        //String invalidValueAsString = (invalidValue == null ? "[null]" : invalidValue.toString());
-
-        // FIXME if a validator message is missing, BindingFacesMessage is going to be confused by {keyword} syntax in message key
-        MessageFactory.BindingFacesMessage facesMessage =
-            new MessageFactory.BindingFacesMessage(locale, message, message,
-            new Object[] { MessageFactory.getLabel(context, component) });
-        facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-        return facesMessage;
     }
 
     // ----------------------------------------------------- StateHolder Methods

@@ -105,6 +105,7 @@ import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Timer;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MojarraThreadFactory;
+import com.sun.faces.RIConstants;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -237,7 +238,11 @@ public class ConfigureListener implements ServletRequestListener,
                         manager.create(name, initContext);
                     }
                 }
-                associate.setErrorPagePresent(webXmlProcessor.isErrorPagePresent());
+		boolean isErrorPagePresent = webXmlProcessor.isErrorPagePresent();
+                associate.setErrorPagePresent(isErrorPagePresent);
+		context.setAttribute(RIConstants.ERROR_PAGE_PRESENT_KEY_NAME, 
+				     isErrorPagePresent);
+
             }
             Application app = initContext.getApplication();
             app.subscribeToEvent(PostConstructViewMapEvent.class,
@@ -531,9 +536,11 @@ public class ConfigureListener implements ServletRequestListener,
             ApplicationAssociate associate =
                   ApplicationAssociate.getInstance(sc);
             if (associate != null) {
-                Boolean errorPagePresent = (Boolean) sc.getAttribute("com.sun.faces.erroPagePresent");
-                associate.setErrorPagePresent(errorPagePresent);
-                associate.setContextName(getServletContextIdentifier(sc));
+                Boolean errorPagePresent = (Boolean) sc.getAttribute(RIConstants.ERROR_PAGE_PRESENT_KEY_NAME);
+                if (null != errorPagePresent) {
+                    associate.setErrorPagePresent(errorPagePresent);
+                    associate.setContextName(getServletContextIdentifier(sc));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
