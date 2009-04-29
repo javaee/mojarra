@@ -87,7 +87,7 @@ public class UIInputAttachedObjectStateTestCase extends TestCase {
 
         Object state = input.saveState(facesContext);
         assertTrue(state instanceof Object[]);
-        assertTrue(((Object[]) state)[4] == null);
+        assertTrue(((Object[]) state)[3] == null);
 
         input = new UIInput();
         l1 = new LengthValidator();
@@ -103,7 +103,7 @@ public class UIInputAttachedObjectStateTestCase extends TestCase {
         assertTrue(!l2.initialStateMarked());
         state = input.saveState(facesContext);
         assertTrue(state instanceof Object[]);
-        Object[] validatorState = (Object[]) ((Object[]) state)[4];
+        Object[] validatorState = (Object[]) ((Object[]) state)[3];
         assertNotNull(validatorState);
         assertNull(validatorState[0]);
         assertNotNull(validatorState[1]);
@@ -134,7 +134,7 @@ public class UIInputAttachedObjectStateTestCase extends TestCase {
         state = input.saveState(facesContext);
         assertNotNull(validatorState);
         assertTrue(state instanceof Object[]);
-        validatorState = (Object[]) ((Object[]) state)[4];
+        validatorState = (Object[]) ((Object[]) state)[3];
         assertNotNull(validatorState);
         assertTrue(validatorState.length == 3);
         assertNotNull(validatorState[0]);

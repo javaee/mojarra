@@ -178,30 +178,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public static final String VALIDATE_EMPTY_FIELDS_PARAM_NAME = 
 	"javax.faces.VALIDATE_EMPTY_FIELDS";
     
-    /**
-
-     * <p class="changed_added_2_0">The value of this constant is used
-     * as the attribute within the attributes <code>Map</code> on the
-     * {@link UIComponent} to hold a <code>Map</code> of default
-     * validators for a subtree of the component tree. Each key in the
-     * <code>Map</code> is a validator id and the value is a
-     * <code>Boolean</code> flag indicating whether the validator is
-     * being activated or deactivated for this branch of the component
-     * tree. Each activated validator gets registered on any {@link
-     * EditableValueHolder} found in this subtree of the component
-     * tree.</p>
-
-     */
-    public static final String DEFAULT_VALIDATOR_IDS_KEY = "javax.faces.component.DEFAULT_VALIDATOR_IDS";
-    
-
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
     private Boolean emptyStringIsNull;
 
     private Boolean validateEmptyFields;
-
-    private boolean defaultValidatorsProcessed;
 
     enum PropertyKeys {
         /**
@@ -634,7 +615,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     @Override
     public void markInitialState() {
 
-        addDefaultValidators(FacesContext.getCurrentInstance());
         super.markInitialState();
         if (validators != null) {
             validators.markInitialState();
@@ -655,79 +635,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     }
 
-    /**
-     * <p class="changed_added_2_0">Override the default superclass
-     * behavior to provide conditional support for Beans Validation behavior.
-     * If Beans Validation is not available in the current environment,
-     * this method must take no action.  After
-     * encoding the component, add any default validators. Putting the
-     * logic in this method allows this service to be provided even for
-     * inputs that are added programmatically because this method is
-     * guaranteed to be called before any validations happen on a
-     * subsequent postback.</p>
-
-     * <div class="changed_added_2_0">
-
-     * <p>Append the default validators after
-     * any locally defined validators.  The validators to be appended
-     * must be discovered in the following manner.  Let <em>toAdd</em>
-     * be a logical list of validatorIds to add.</p>
-
-     * <ul>
-     *
-     * <li><p>Call {@link Application#getDefaultValidatorInfo} and add
-     * each key from the returned <code>Map</code> to
-     * <em>toAdd</em>.</p></li>
-
-     * <li><p>Perform following algorithm
-     * <em>collectDefaultValidatorIds</em> (or its semantic equivalent)
-     * for each ancestor component between <em>this</em> component
-     * instance up to and including the {@link UIViewRoot}.</p>
-
-     * <ul>
-
-     * 	  <li><p>Let <em>defaultValidatiorIds</em> be the value in the
-     * 	  current component's attribute <code>Map</code> under the key
-     * 	  given by the value of the symbolic constant {@link
-     * 	  #DEFAULT_VALIDATOR_IDS_KEY}.</p></li>
-
-     * 	  <li><p>If <em>defaultValidatiorIds</em> is a
-     * 	  <code>List</code>, assume it is a
-     * 	  <code>List&lt;String&gt;</code> and add all of its values to
-     * 	  <em>toAdd</em>.</p></li>
-
-     * 	  <li><p>Perform <em>collectDefaultValidatorIds</em> on the
-     * 	  component's parent, if present.</p></li>
-
-     * 	  <li><p>If <em>defaultValidatiorIds</em> is a <code>Map</code>,
-     * 	  assume it is a <code>Map&lt;String, Boolean&gt;</code> and
-     * 	  interpret the key to be a validatorId, and the value to be a
-     * 	  boolean indicating whether or not the user has flagged this
-     * 	  particular validator instance as enabled or disabled.  For
-     * 	  each entry in the map whose value is enabled, add the
-     * 	  corresponding validatorId to <em>toAdd</em>.</p></li>
-
-     * </ul>
-
-     * </li>
-
-     * <p>For each validatorId in <em>toAdd</em>, the validator is
-     * created in the normal way using the <code>Application</code>
-     * object. If a validator with the same validator id already exists
-     * on the component, then that default validator is skipped.</p>
-
-     * </div>
-
-     * @throws NullPointerException {@inheritDoc}
-     * @throws IOException {@inheritDoc}
-
-     */
-    @Override
-    public void encodeEnd(FacesContext context) throws IOException {
-        super.encodeEnd(context);
-        // QUESTION is there another dependable way to perform this only once?
-        addDefaultValidators(context);
-    }
 
     /**
      * <p>Specialized decode behavior on top of that provided by the
@@ -1427,14 +1334,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[5];
+            values = new Object[4];
         }
 
         values[0] = super.saveState(context);
         values[1] = emptyStringIsNull;
         values[2] = validateEmptyFields;
-        values[3] = defaultValidatorsProcessed;
-        values[4] = ((validators != null) ? validators.saveState(context) : null);
+        values[3] = ((validators != null) ? validators.saveState(context) : null);
         return (values);
 
     }
@@ -1446,12 +1352,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         super.restoreState(context, values[0]);
         emptyStringIsNull = (Boolean) values[1];
         validateEmptyFields = (Boolean) values[2];
-        defaultValidatorsProcessed = (Boolean) values[3];
-        if (values[4] != null) {
+        if (values[3] != null) {
             if (validators == null) {
                 validators = new AttachedObjectListHolder<Validator>();
             }
-            validators.restoreState(context, values[4]);
+            validators.restoreState(context, values[3]);
         }
 
     }
@@ -1567,97 +1472,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         return result;
-    }
-
-    /**
-     */
-    private void addDefaultValidators(FacesContext context) {
-
-        if (!defaultValidatorsProcessed) {
-
-            Set<String> exclusions;
-            Validator[] validators = getValidators();
-            if (validators.length != 0) {
-                exclusions = new HashSet<String>(validators.length, 1.0f);
-                for (Validator v : validators) {
-                    exclusions.add(v.getClass().getName());
-                }
-            } else {
-                exclusions = Collections.emptySet();
-            }
-
-            // first add the registered default validators and then turn them off based on switches in tree
-            List<String> defaultValidatorIds = new ArrayList<String>();
-            Map<String, String> defaultValidatorInfo = context.getApplication()
-                  .getDefaultValidatorInfo();
-            if (!defaultValidatorInfo.isEmpty()) {
-                for (Map.Entry<String, String> valInfo : defaultValidatorInfo.entrySet()) {
-                    defaultValidatorIds.add(valInfo.getKey());
-                }
-            }
-
-            collectDefaultValidatorIds(defaultValidatorIds, this);
-
-            for (String validatorId : defaultValidatorIds) {
-                String defaultValClassName = defaultValidatorInfo .get(validatorId);
-                if (exclusions.contains(defaultValClassName)) {
-                    continue;
-                }
-
-                addValidator(context.getApplication().createValidator(
-                      validatorId));
-            }
-            defaultValidatorsProcessed = true;
-        }
-    }
-
-
-    /**
-     * <p>Work upwards through the component hierarchy and collect any default validators that have been defined.</p>
-     */
-    private void collectDefaultValidatorIds(List<String> defaultValidatorIds, UIComponent component) {
-        Object branchState = component.getAttributes().get(DEFAULT_VALIDATOR_IDS_KEY);
-
-        // check for the "resolved" list for this branch
-        // NOTE we could use a separate key for the resolved list to avoid type hunting
-        if (branchState instanceof List) {
-            if (defaultValidatorIds.isEmpty()) {
-                defaultValidatorIds.addAll((List<String>) branchState);
-            }
-            else {
-                for (String validatorId : (List<String>) branchState) {
-                    if (!defaultValidatorIds.contains(validatorId)) {
-                        defaultValidatorIds.add(0, validatorId);
-                    }
-                }
-            }
-            return;
-        }
-
-        // process parent nodes first
-        if (component.getParent() != null) {
-            collectDefaultValidatorIds(defaultValidatorIds, component.getParent());
-        }
-
-        // collect any default validator ids registered at this branch point
-        if (branchState instanceof Map) {
-            Map<String, Boolean> validatorIdStates = (Map<String, Boolean>) branchState;
-            for (Map.Entry<String, Boolean> e : validatorIdStates.entrySet()) {
-                if (e.getValue()) {
-                    // validators nearer to input component take precendence
-                    // QUESTION if it already present, should we move it to the front?
-                    if (!defaultValidatorIds.contains(e.getKey())) {
-                        defaultValidatorIds.add(0, e.getKey());
-                    }
-                }
-                else {
-                    defaultValidatorIds.remove(e.getKey());
-                }
-            }
-        }
-
-        // make sure we never have to climb the mountain again (could we avoid creating new list if none added at this node?)
-        component.getAttributes().put(DEFAULT_VALIDATOR_IDS_KEY, new ArrayList<String>(defaultValidatorIds));
     }
 
 }
