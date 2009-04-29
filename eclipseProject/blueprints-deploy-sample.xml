@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="scrumtoys" default="default" basedir=".">
+
+  <!-- ant -f blueprints-deploy-sample.xml -Dblueprint.sample=/Users/edburns/Documents/Projects/JavaEE/workareas/glassfish-samples/ws/javaee6/web/jsf/scrumtoys -->
+
+
+  <target name="verify.preconditions" unless="blueprint.sample">
+
+    <fail>
+Property blueprint.sample must be set to the directory to which the sample
+must be copied, in blueprints style.
+    </fail>
+
+  </target>
+
+  <target name="default" depends="verify.preconditions">
+
+    <property name="target" value="${blueprint.sample}" />
+    <echo message="Package this sample as a blueprints sample to ${target}"/>
+    <mkdir dir="${target}/src/java" />
+    <mkdir dir="${target}/src/resources" />
+    <mkdir dir="${target}/web" />
+    <copy includeEmptyDirs="false" todir="${target}/src/java">
+      <fileset dir="src/main/java">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>
+    <copy includeEmptyDirs="false" todir="${target}/web">
+      <fileset dir="src/main/webapp">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>
+    <copy includeEmptyDirs="true" todir="${target}/src/resources">
+      <fileset dir="src/main/resources">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>
+    <copy file="${basedir}/blueprints-build.xml"
+          tofile="${target}/build.xml" />
+
+  </target>
+
+  <target name="clean" depends="verify.preconditions">
+
+    <property name="target"
+              value="${blueprint.sample}" />
+    <echo message="Clean the blueprints version of the sample in ${target}"/>
+    <delete includeEmptyDirs="true">
+      <fileset dir="${target}" includes="**/*" 
+               excludes="CVS/*"/>
+    </delete>
+    
+
+  </target>
+
+</project>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="scrumtoys" default="default" basedir=".">
+    <property name="is.war.module" value="true"/>
+    <property name="javadoc.packagenames" value="jsf2"/>
+    <import file="../../../../bp-project/main.xml"/>
+
+    <target name="all" depends="default,deploy,run"/>
+
+    <target name="-post-compile">
+
+      <echo message="copying resources to ${basedir}/build/classes" />
+      <copy todir="${basedir}/build/classes" overwrite="true">
+
+        <fileset dir="src/resources">
+          <include name="**/*.*" />
+        </fileset>
+      </copy>
+
+    </target>
+
+</project>
