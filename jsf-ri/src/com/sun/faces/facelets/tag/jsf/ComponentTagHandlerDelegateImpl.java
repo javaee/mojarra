@@ -37,6 +37,7 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.component.behavior.AjaxBehaviors;
+import com.sun.faces.component.validator.ComponentValidators;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.FacesLogger;
@@ -277,7 +278,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             return createComponentDelegate.createComponent(ctx);
         }
         
-        UIComponent c = null;
+        UIComponent c;
         FacesContext faces = ctx.getFacesContext();
         Application app = faces.getApplication();
         if (this.binding != null) {
@@ -309,6 +310,29 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 ajaxBehaviors.addBehaviors(context, (ClientBehaviorHolder)c);
             }
         }
+        if (c instanceof EditableValueHolder) {
+            processValidators(ctx.getFacesContext(), (EditableValueHolder) c);
+        }
+    }
+
+
+    /**
+     * Process default validatior/wrapping validation information and install
+     * <code>Validators</code> based off the result.
+     */
+    private void processValidators(FacesContext ctx,
+                                   EditableValueHolder editableValueHolder) {
+
+        ComponentValidators componentValidators =
+              ComponentValidators.getValidators(ctx, false);
+        if (componentValidators != null) {
+            // process any elements on the stack.  
+            componentValidators.addValidators(ctx, editableValueHolder);
+        } else {
+            // no custom handling required, so add the default validators
+            ComponentValidators.addDefaultValidatorsToComponent(ctx, editableValueHolder);
+        }
+
     }
 
     /**

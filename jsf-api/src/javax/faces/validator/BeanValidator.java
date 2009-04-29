@@ -107,13 +107,6 @@ public class BeanValidator implements Validator, PartialStateHolder {
     public static final String VALIDATOR_FACTORY_KEY = "javax.faces.validator.beanValidator.ValidatorFactory";
 
     /**
-     * <p class="changed_added_2_0">The name of the component attribute
-     * which holds the validation groups defined for a branch of the
-     * component tree.</p>
-     */
-    public static final String VALIDATION_GROUPS_KEY = "javax.faces.validator.beanValidator.ValidationGroups";
-    
-    /**
      * <p class="changed_added_2_0">The delimiter that is used to
      * separate the list of fully-qualified group names as strings.</p>
      */
@@ -183,6 +176,13 @@ public class BeanValidator implements Validator, PartialStateHolder {
     }
 
     /**
+     * RELEASE_PENDING (edburns) needs to be updated
+     *   - VALIDATION_GROUPS_KEY is no longer used.  It's the responsibility
+     *     of the view layer to push the group information to the
+     *     validator
+     *   - Since EL 1.3 isn't out yet (I don't believe there's a JSR either),
+     *     I don't think we should be referencing it here.
+     *
      * <p class="changed_added_2_0">Verify that the value is valid
      * according to the Bean Validation constraints.</p>
      *
@@ -275,8 +275,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
         }
 
         ValidatorFactory validatorFactory = null;
-        Object cachedObject = context.getExternalContext().getApplicationMap().
-	    get(VALIDATOR_FACTORY_KEY);
+        Object cachedObject = context.getExternalContext().getApplicationMap().get(VALIDATOR_FACTORY_KEY);
         if (cachedObject instanceof ValidatorFactory) {
             validatorFactory = (ValidatorFactory) cachedObject;
         }
@@ -293,14 +292,10 @@ public class BeanValidator implements Validator, PartialStateHolder {
             context.getExternalContext().getApplicationMap().put(VALIDATOR_FACTORY_KEY, validatorFactory);
         }
 
-        if (validationGroups == null) {
-            inheritValidationGroups(component);
-        }
-
         ValidatorContext validatorContext = validatorFactory.usingContext();
         MessageInterpolator jsfMessageInterpolator = 
                 new JsfAwareMessageInterpolator(context, 
-		                   validatorFactory.getMessageInterpolator());
+                           validatorFactory.getMessageInterpolator());
         validatorContext.messageInterpolator(jsfMessageInterpolator);
         javax.validation.Validator beanValidator = validatorContext.getValidator();
         Class [] validationGroupsArray = parseValidationGroups(getValidationGroups());
@@ -332,23 +327,26 @@ public class BeanValidator implements Validator, PartialStateHolder {
 
             if (!violations.isEmpty()) {
                 ValidatorException toThrow = null;
-				if (1 == violations.size()) {
-					ConstraintViolation violation = violations.iterator().next();
-					toThrow = new ValidatorException(MessageFactory.getMessage(context,
-						MESSAGE_ID,
-						violation.getMessage(),
-						MessageFactory.getLabel(context, component)));
-				} else {
-					Set<FacesMessage> messages = new LinkedHashSet<FacesMessage>(violations.size());
-					Iterator<ConstraintViolation> iter = violations.iterator();
-					while (iter.hasNext()) {
-						messages.add(MessageFactory.getMessage(context,
-							MESSAGE_ID,
-							iter.next().getMessage(),
-							MessageFactory.getLabel(context, component)));
-					}
-					toThrow = new ValidatorException(messages);
-				}
+                if (1 == violations.size()) {
+                    ConstraintViolation violation = violations.iterator().next();
+                    toThrow = new ValidatorException(MessageFactory.getMessage(
+                          context,
+                          MESSAGE_ID,
+                          violation.getMessage(),
+                          MessageFactory.getLabel(context, component)));
+                } else {
+                    Set<FacesMessage> messages = new LinkedHashSet<FacesMessage>(
+                          violations.size());
+                    Iterator<ConstraintViolation> iter = violations.iterator();
+                    while (iter.hasNext()) {
+                        messages.add(MessageFactory.getMessage(context,
+                                                               MESSAGE_ID,
+                                                               iter.next().getMessage(),
+                                                               MessageFactory.getLabel(context,
+                                                                                       component)));
+                    }
+                    toThrow = new ValidatorException(messages);
+                }
                 throw toThrow;
             }
         } else {
@@ -393,35 +391,6 @@ public class BeanValidator implements Validator, PartialStateHolder {
         return result;
     }
     
-    /**
-     * If no validation groups are defined on this validator, search
-     * upwards in the component tree to find a branch that defines
-     * validation groups.
-     */
-    private void inheritValidationGroups(UIComponent component) {
-        UIComponent branch = findNearestBranchWithValidationGroups(component);
-        if (branch != null) {
-            // null check and trimming handled in setter
-            setValidationGroups((String) branch.getAttributes().get(VALIDATION_GROUPS_KEY));
-        }
-
-        // if validation groups is still null, use default to avoid having to do this inheritance check again
-        if (validationGroups == null) {
-            validationGroups = Default.class.getName();
-        }
-    }
-
-    private UIComponent findNearestBranchWithValidationGroups(UIComponent component) {
-        // TODO might want to check that key does not have bogus value
-        if (component.getAttributes().containsKey(VALIDATION_GROUPS_KEY)) {
-            return component;
-        }
-        else if (component.getParent() == null) {
-            return null;
-        }
-
-        return findNearestBranchWithValidationGroups(component.getParent());
-    }
 
     private Class[] parseValidationGroups(String validationGroupsStr) {
         if (cachedValidationGroups != null) {
@@ -502,7 +471,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
         this.transientValue = transientValue;
     }
 
-    static class JsfAwareMessageInterpolator implements MessageInterpolator {
+    private static class JsfAwareMessageInterpolator implements MessageInterpolator {
 
         private FacesContext context;
         private MessageInterpolator delegate;
@@ -525,4 +494,5 @@ public class BeanValidator implements Validator, PartialStateHolder {
         }
 
     }
+
 }

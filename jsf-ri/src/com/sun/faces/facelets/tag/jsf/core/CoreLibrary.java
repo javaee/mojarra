@@ -117,7 +117,7 @@ public final class CoreLibrary extends AbstractTagLibrary {
         
         this.addComponent("subview", "javax.faces.NamingContainer", null);
         
-        this.addValidator("validateBean", BeanValidator.VALIDATOR_ID, BeanValidateHandler.class);
+        this.addValidator("validateBean", BeanValidator.VALIDATOR_ID);
         
         this.addValidator("validateLength", LengthValidator.VALIDATOR_ID);
         

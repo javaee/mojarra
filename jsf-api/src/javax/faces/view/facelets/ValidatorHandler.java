@@ -75,8 +75,11 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
     
     private TagHandlerDelegate helper;
 
+    private ValidatorConfig config;
+
     public ValidatorHandler(ValidatorConfig config) {
         super(config);
+        this.config = config;
         this.validatorId = config.getValidatorId();
     }
 
@@ -107,6 +110,17 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
             }
         }
         return validatorId;
+    }
+
+
+    /**
+     * RELEASE_PENDING docs
+     * @return
+     */
+    public ValidatorConfig getValidatorConfig() {
+
+        return config;
+        
     }
 
 }

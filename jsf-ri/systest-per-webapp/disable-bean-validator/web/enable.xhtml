@@ -37,6 +37,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
     <title>Ensure DISABLE_BEAN_VALIDATOR context-param works</title>
@@ -46,9 +47,11 @@
 
     <p>
 
-      <h:inputText>
+       <h:inputText>
          <f:validateBean />
-         #{component.validators[0]}
+         <ui:repeat var="validator" value="#{component.parent.validators}">
+            #{validator.class.name}<br />
+         </ui:repeat>
       </h:inputText>
 
     </p>
