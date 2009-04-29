@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.-->
+
+<project name="scrumtoys-test" default="runtest" basedir=".">
+
+    <import file="../../../../../bp-project/test.xml"/>
+
+    <target name="runtest" depends="compile">
+        <echo message="Running the sample application..."/>
+        <java classname="org.junit.runner.JUnitCore" fork="on">
+            <arg value="jsf2.ScrumToysTest"/>
+            <classpath refid="classpath"/>
+        </java>
+    </target>
+
+</project>

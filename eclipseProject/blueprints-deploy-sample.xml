@@ -19,7 +19,9 @@ must be copied, in blueprints style.
     <echo message="Package this sample as a blueprints sample to ${target}"/>
     <mkdir dir="${target}/src/java" />
     <mkdir dir="${target}/src/resources" />
+    <mkdir dir="${target}/test/src/java" />
     <mkdir dir="${target}/web" />
+
     <copy includeEmptyDirs="false" todir="${target}/src/java">
       <fileset dir="src/main/java">
         <include name="**/*.*" />
@@ -37,6 +39,16 @@ must be copied, in blueprints style.
     </copy>
     <copy file="${basedir}/blueprints-build.xml"
           tofile="${target}/build.xml" />
+
+    <copy file="${basedir}/blueprints-test-build.xml"
+          tofile="${target}/test/build.xml" />
+    <copy includeEmptyDirs="true" todir="${target}/test/src/java">
+      <fileset dir="src/test/java">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>
+
+   
 
   </target>
 
