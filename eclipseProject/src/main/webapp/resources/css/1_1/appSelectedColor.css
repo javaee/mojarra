@@ -112,16 +112,16 @@ td.footerForm{
 
 .tituloForm {
     font-size: 14pt;
-    /* Yellow 100%*/
-    color: #FDBB30;;
+    /* blue 100%*/
+    color: #0069AA;;
     font-weight:bold;
     padding:11px;
     margin:11px;
 }
 input.botaoPostIt{
     font-size: 8pt;
-    /* Yellow 100%*/
-    color: #FDBB30;
+    /* blue 100%*/
+    color: #0069AA;
     font-weight:bold;
     background-color:white;
 
@@ -145,17 +145,19 @@ td.formLabel, label{
     font-size: 12px;
 }
 
-.inputPattern {
-    /* Yellow 20%*/
-  color: #FDEAC0
+.inputPattern{
+    /* blue 20%*/
+  color: #B3D4E7;
 }
+
+
+
 label {
-  font-size: 10pt;
-  /* Yellow 100%*/
-  color: #FDBB30;
+  font-size: 12px;
+  /* blue 100%*/
+  color: #0069AA;
   text-align: left;
   border:none;
-
 }
 
 td{
@@ -165,8 +167,8 @@ td{
 input, select,textarea {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
-  /* Yellow 100% */
-  color: #FDBB30;
+  /* blue 100% */
+  color: #0069AA;
   text-align: left;
   background-color:white;
   border-style:ridge;
@@ -178,9 +180,10 @@ input, select,textarea {
   font-weight:normal;
 }
 
+
 .datatableHeader{
-    /* Yellow 100% */
-    background-color:#FDBB30;
+    /* blue 100% */
+    background-color:#0069AA;
     color:white;
 
     font-size:12pt;
@@ -190,8 +193,8 @@ input, select,textarea {
 }
 
 .datatableRow2{
-    /* Yellow 20% */
-    background-color:#FDEAC0;
+    /* blue 20% */
+    background-color:#B3D4E7;
     font-size:12px;
     color:black;
     padding:15px;
@@ -203,8 +206,8 @@ input, select,textarea {
 .navigationLink{
     text-decoration:none;
     text-align:right;
-    /* Yellow 100% */
-    color:#FDBB30;
+    /* blue 100% */
+    color:#0069AA;
 }
 .datatable {
     border-collapse:collapse;
@@ -238,7 +241,6 @@ table.menuTable tr td{
     /*space between menu itens */
     width:168px;
 
-
 }
 
 .menu a{
@@ -246,8 +248,8 @@ table.menuTable tr td{
     font-family: Arial, Helvetica, sans-serif ;
     font-size: 12px;
     padding: 10px;
-    /* Yellow 100% */
-    color: #FDBB30;
+    /* Blue 100% */
+    color: #0069AA;
 }
 
 /* menuItem and menu spacing */
@@ -282,8 +284,8 @@ table.menuTable tr td{
     padding:10px;
     /* altura do submenu */
     width: 142px;
-    /* Yellow 100% */
-    border:1px solid #FDBB30;
+    /* Blue 100% */
+    border:1px solid #0069AA;
 
     font-weight:bold;
 
@@ -291,8 +293,8 @@ table.menuTable tr td{
 
 
 .menuhandler {
-    /* Yellow 100% */
-    border:1px solid #FDBB30;
+    /* Blue 100% */
+    border:1px solid #0069AA;
     color:white;
 
     text-decoration:none;
@@ -304,14 +306,13 @@ table.menuTable tr td{
     text-align: left;
     font-weight: bold;
     padding:10px;
-    background-color:#FDBB30;
+    background-color:#0069AA;
     /* fundo transparente
     background-image:url("../resources/images/menu/Transparency.png;");
     color:white;
     */
 }
-
-   .selectProject{
+.selectProject{
     vertical-align:middle;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
@@ -321,7 +322,7 @@ table.menuTable tr td{
 }
 
 .postitComponent{
-        background-image:url("../resources/images/postits/novos/postit_amar_150x145.png");
+        background-image:url("../resources/images/postits/novos/postit_azul_150x145.png");
         width:150px;
         height:145px;
         font-size: 14px;
@@ -338,7 +339,7 @@ table.menuTable tr td{
 }
 
 .bigPostitComponent{
-        background-image:url("../resources/images/postits/novos/postit_amar_315x150.png");
+        background-image:url("../resources/images/postits/novos/postit_azul_315x150.png");
         background-repeat:no-repeat;
         width:315px;
         height:150px;
@@ -364,3 +365,4 @@ table.menuTable tr td{
     width:70%;
     text-align:left;
 }
+
