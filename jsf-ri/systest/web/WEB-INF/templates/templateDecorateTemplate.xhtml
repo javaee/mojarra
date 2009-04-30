@@ -43,15 +43,17 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xml:lang="en" lang="en">
-<head>
-    <title>Should Not Be Displayed</title>
-</head>
-<body>   
-<ui:composition  template="/WEB-INF/templates/templateTestTemplate.xhtml" >
-    <ui:param name="title" value="Template Test"/>
-    <ui:define name="content">
-        <div id="toplevelContent">Inserted Content</div>
-    </ui:define>
-</ui:composition>
+<h:head>
+    <title>Ignored</title>
+</h:head>
+
+<body>
+<div id="container">
+    <ui:composition>
+        <span id="comp">Composition Text</span>
+        <ui:insert name="insert"/>
+    </ui:composition>
+    <span id="templateText">Template text</span>
+</div>
 </body>
 </html>

@@ -209,8 +209,8 @@ public class FaceletsTestCase extends AbstractTestCase {
 
     }
 
-    public void testTemplate() throws Exception {
-        lastpage = getPage("/faces/facelets/templateTest.xhtml");
+    public void testTemplateComp() throws Exception {
+        lastpage = getPage("/faces/facelets/templateComp.xhtml");
 
         assertTrue("Template Test".equals(lastpage.getTitleText()));
 
@@ -219,6 +219,18 @@ public class FaceletsTestCase extends AbstractTestCase {
 
         String toplevelContent = lastpage.getElementById("toplevelContent").getTextContent();
         assertTrue("Inserted Content".equals(toplevelContent));
+    }
+
+    public void testTemplateDecorate() throws Exception {
+        lastpage = getPage("/faces/facelets/templateDecorate.xhtml");
+
+        assertTrue("Decorate Test".equals(lastpage.getTitleText()));
+
+        String templateText = lastpage.getElementById("comp").getTextContent();
+        assertTrue("Composition Text".equals(templateText));
+
+        String toplevelContent = lastpage.getElementById("insert").getTextContent();
+        assertTrue("Inserted Text".equals(toplevelContent));
     }
 
 }
