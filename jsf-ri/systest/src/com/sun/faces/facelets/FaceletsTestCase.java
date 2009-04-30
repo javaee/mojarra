@@ -208,4 +208,17 @@ public class FaceletsTestCase extends AbstractTestCase {
         assertTrue(span.getStyleAttribute().length() == 0);
 
     }
+
+    public void testTemplate() throws Exception {
+        lastpage = getPage("/faces/facelets/templateTest.xhtml");
+
+        assertTrue("Template Test".equals(lastpage.getTitleText()));
+
+        String templateText = lastpage.getElementById("templateText").getTextContent();
+        assertTrue("Template text".equals(templateText));
+
+        String toplevelContent = lastpage.getElementById("toplevelContent").getTextContent();
+        assertTrue("Inserted Content".equals(toplevelContent));
+    }
+
 }
