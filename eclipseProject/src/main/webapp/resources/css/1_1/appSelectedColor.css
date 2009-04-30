@@ -99,38 +99,6 @@ td.postItBlue a {
     color:white;
     text-decoration:none;
 }
-table.postit-6colunas {
-    width:100%;
-    padding:25pt;
-    border-spacing:5pt;
-    background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
-    margin: 0px;
-    padding: 0px;
-    border-collapse:collapse;
-    border-spacing:0pt;
-}
-
-table.postit-6colunas thead tr th{
-    font-family: Arial, Helvetica, sans-serif ;
-	color: black;
-    background-image:none;
-
-}
-table.postit-6colunas tbody tr td {
-
-	font-family: Arial, Helvetica, sans-serif ;
-	color: black;
-    text-align:center;
-
-    /*atualizar*/
-    background-image:url("../resources/images/postits/novos/postit_azul_150x145.png");
-    width:150px;
-    height:145px;
-    background-repeat:no-repeat;
-    background-position:center;
-    padding:30px;
-
-}
 
 td.footerForm{
     text-align:center;
@@ -369,7 +337,30 @@ table.menuTable tr td{
 
 }
 
+.bigPostitComponent{
+        background-image:url("../resources/images/postits/novos/postit_amar_315x150.png");
+        background-repeat:no-repeat;
+        width:315px;
+        height:150px;
+        font-size: 14px;
+        text-align:center;
+        color:white;
+}
+
+.bigPostitComponent tr td{
+
+    padding: 5pt;
+    vertical-align:top;
+
+}
 .postitLabel{
     font-weight:bold;
-     font-size:16px;
+    font-size:16px;
+    text-align:right;
+    width:30%
+}
+
+.postItInfo{
+    width:70%;
+    text-align:left;
 }
