@@ -106,6 +106,13 @@ public abstract class ResponseStateManager {
      * and also be tamper evident.  The reference implementation follows
      * these recommendations.  </p>
      *
+     * <p>If the state saving method for this application is {@link
+     * javax.faces.application.StateManager#STATE_SAVING_METHOD_SERVER},
+     * and the current request is an <code>Ajax</code> request
+     * (@link javax.faces.context.PartialViewContext.isAjaxRequest} returns
+     * <code>true</code>), use the current view state identifier if it is
+     * available (do not generate a new identifier).</p>
+     * 
      * <p>Write out the render kit identifier associated with this 
      * <code>ResponseStateManager</code> implementation with the name
      * as the value of the <code>String</code> constant 
