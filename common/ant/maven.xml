@@ -119,6 +119,23 @@
                           output.file="${mvn.api.dir}/jsf-api-pom.xml"
                           version="@{version}"/>
                     <mkdir dir="${mvn.api.dir}/target/classes"/>
+                    <mkdir dir="${mvn.api.dir}/src/main/java"/>
+                    <copy overwrite="true" 
+                          todir="${mvn.api.dir}/src/main/java">
+                      <fileset dir="${api.dir}/doc">
+                        <include name="*.png" />
+                        <include name="*.xsd" />
+                        <include name="*.dtd" />
+                        <include name="standard-html-renderkit.xml" />
+                        <exclude name="xml.xsd" />
+                        <exclude name="javaee*.xsd" />
+                        <exclude name="XMLSchema.dtd" />
+                        <exclude name="datatypes.dtd" />
+                      </fileset>
+                      <fileset dir="${api.dir}/src" includes="**/*" />
+                      <fileset dir="${api.dir}/build/generate/" 
+                               includes="**/*" excludes="last-generation" />
+                    </copy>
                     <unjar src="${api.dir}/build/lib/jsf-api.jar"
                            overwrite="yes"
                            dest="${mvn.api.dir}/target/classes"/>
@@ -134,6 +151,13 @@
                           output.file="${mvn.impl.dir}/jsf-impl-pom.xml"
                           version="@{version}"/>
                     <mkdir dir="${mvn.impl.dir}/target/classes"/>
+                    <mkdir dir="${mvn.api.dir}/src/main/java"/>
+                    <copy overwrite="true" 
+                          todir="${mvn.impl.dir}/src/main/java">
+                      <fileset dir="${impl.dir}/src" includes="**/*" />
+                      <fileset dir="${impl.dir}/build/generate/" 
+                               includes="**/*" excludes="last-generation,conf/**,**/*.xsd" />
+                    </copy>
                     <unjar src="${impl.dir}/build/lib/jsf-impl.jar"
                            overwrite="yes"
                            dest="${mvn.impl.dir}/target/classes"/>
