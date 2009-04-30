@@ -107,8 +107,8 @@
                             <h:commandButton styleClass="botaoPostIt" action="#{taskManager.edit}" value="#{i18n['task.show.button.edit']}"  />
 
                             <h:commandButton id="btnDeleteTask" styleClass="botaoPostIt" action="#{taskManager.remove}" value="#{i18n['task.show.button.delete']} AJAX"
-                                             onclick="jsf.ajax.request(this, event, {execute: 'frmListTasks:btnDeleteTask',
-                                                 render: 'frmListTasks:dtTasks'}); return false;" />
+                                             onclick="jsf.ajax.request(this, event, {execute: 'frmListTasks',
+                                                 render: 'frmListTasks'}); return false;" />
 
                             <h:commandButton styleClass="botaoPostIt" action="#{taskManager.remove}" value="#{i18n['task.show.button.delete']}"  />
                         </h:column>

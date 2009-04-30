@@ -21,11 +21,12 @@
                         <h:outputText value="#{i18n['task.create.form.title']}" styleClass="tituloForm" />
                     </f:facet>
                                         
+                       <h:panelGroup>
                         <menu:postit>
-                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}:"></ui:param>
-                            <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
+                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
                         </menu:postit>
-                      <menu:postit rendered="#{storyManager.sprint.name != null}">
+                        <menu:postit rendered="#{storyManager.sprint.name != null}">
                             <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
                             <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
                         </menu:postit>
@@ -35,6 +36,19 @@
                             <ui:param name="postitText" value="#{i18n['tasks.show.nosprint']}"></ui:param>
                         </menu:postit>
 
+
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <menu:postit rendered="#{taskManager.story.name != null}">
+                            <ui:param name="postitLabel" value="#{i18n['task.form.label.story.name']}:"></ui:param>
+                            <ui:param name="postitText" value="#{taskManager.story.name}"></ui:param>
+                        </menu:postit>
+
+                        <menu:postit rendered="#{taskManager.story.name == null}">
+                            <ui:param name="postitLabel" value="#{i18n['task.form.label.story.name']}:"></ui:param>
+                            <ui:param name="postitText" value="#{i18n['tasks.show.nostory']}"></ui:param>
+                        </menu:postit>
+                    </h:panelGroup>
                     <ui:include src="form.xhtml" />
                     <f:facet name="footer">
                         <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnCreate" action="#{taskManager.save}" value="#{i18n['task.create.button.create']}" styleClass="formInput" />
