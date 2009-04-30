@@ -846,7 +846,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                                                 toQueue,
                                                 this,
                                                 PhaseId.UPDATE_MODEL_VALUES);
-                context.getApplication().publishEvent(ExceptionQueuedEvent.class,
+                context.getApplication().publishEvent(context,
+                                                      ExceptionQueuedEvent.class,
                                                       eventContext);
                 
             }
@@ -1424,6 +1425,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private boolean considerEmptyStringNull(FacesContext ctx) {
 
         if (emptyStringIsNull == null) {
+            // RELEASE_PENDING (edburns,rogerk) This should have a constant
             String val = ctx.getExternalContext()
               .getInitParameter("javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL");
             emptyStringIsNull = Boolean.valueOf(val);
@@ -1442,10 +1444,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             if (null == val) {
                 val = (String) extCtx.getApplicationMap().get(VALIDATE_EMPTY_FIELDS_PARAM_NAME);
             }
-            if (val == null || val.equals("auto")) {
+            if ("auto".equals(val)) {
                 validateEmptyFields = isBeansValidationAvailable(ctx);
-            }
-            else {
+            } else {
                 validateEmptyFields = Boolean.valueOf(val);
             }
         }
@@ -1456,6 +1457,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     
     private boolean isBeansValidationAvailable(FacesContext context) {
         boolean result = false;
+        // RELEASE_PENDING (edburns,rogerk) this should have a constant
         final String beansValidationAvailabilityCacheKey = 
                 "javax.faces.BEANS_VALIDATION_AVAILABLE";
         Map<String,Object> appMap = context.getExternalContext().getApplicationMap();
