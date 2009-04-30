@@ -13,7 +13,7 @@
     <composite:implementation>
 
 
-        <table width="990" class="menuTable" cellpadding="0" cellspacing="0">
+        <table width="990" class="menuTable" cellpadding="0" cellspacing="0" id="menuTable">
 
             <tr>
                 <menu:menuItem>
@@ -43,7 +43,7 @@
                 </menu:menuItem>
 
                 <td>
-                    <h:form>
+                    <h:form id="menuSelectProjectForm">
                         <h:outputLabel for="prjCombo" value="#{i18n['home.project.combo.label']}" styleClass="formLabel" />
                         <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput"
                                          onchange="jsf.ajax.request(this, event, {execute: 'prjCombo', render: 'prjCombo, bodyContent'});">
