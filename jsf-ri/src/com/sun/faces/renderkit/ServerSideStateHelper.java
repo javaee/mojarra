@@ -155,10 +155,16 @@ public class ServerSideStateHelper extends StateHelper {
                                       ? createRandomId()
                                       : createIncrementalRequestId(ctx));
             }
-            String idInActualMap = ((generateUniqueStateIds)
-                                       ? createRandomId()
-                                       : createIncrementalRequestId(ctx));
-
+            String idInActualMap = null;
+            if(ctx.getPartialViewContext().isAjaxRequest()){
+                // If AJAX request, do not change actual view Id, because page not actually changed.
+                // Otherwise AJAX requests will soon overflow cache with values that would be never used.
+                idInActualMap = (String) RequestStateManager.get(ctx, RequestStateManager.ACTUAL_VIEW_MAP);
+            }
+            if (null == idInActualMap) {
+                    idInActualMap = ((generateUniqueStateIds) ? createRandomId()
+                                                : createIncrementalRequestId(ctx));
+            }
             Map<String, Object[]> actualMap =
                   TypedCollections.dynamicallyCastMap(
                         logicalMap.get(idInLogicalMap), String.class, Object[].class);
@@ -243,6 +249,11 @@ public class ServerSideStateHelper extends StateHelper {
                                             RequestStateManager.LOGICAL_VIEW_MAP,
                                             idInLogicalMap);
                     Object[] state = (Object[]) actualMap.get(idInActualMap);
+                    if(null != state){
+                     RequestStateManager.set(ctx,
+                                RequestStateManager.ACTUAL_VIEW_MAP,
+                                idInActualMap);
+                    }
                     state[1] = handleRestoreState(state[1]);
                     return state;
                 }
