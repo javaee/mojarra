@@ -83,8 +83,8 @@
                             <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.edit}" value="#{i18n['sprint.show.button.edit']}"  />
 
                             <h:commandButton id="btnDeleteSprint" styleClass="botaoPostIt" action="#{sprintManager.remove}" value="#{i18n['sprint.show.button.delete']} AJAX"
-                                             onclick="jsf.ajax.request(this, event, {execute: 'frmListSprints:btnDeleteSprint',
-                                                 render: 'frmListSprints:dtSprints'}); return false;" />
+                                             onclick="jsf.ajax.request(this, event, {execute: 'frmListSprints',
+                                                 render: 'frmListSprints'}); return false;" />
 
                             <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.remove}" value="#{i18n['sprint.show.button.delete']}"  />
                             <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.showStories}" value="#{i18n['sprint.show.button.showStories']}"  />
