@@ -18,17 +18,22 @@
             <h:form id="frmListSprints">
 
                 <br/><br/>
-                
+
 
                 <h:panelGrid columns="2" headerClass="tituloForm" footerClass="footerForm">
                     <f:facet name="header">
                         <h:outputText value="#{i18n['sprints.table.title']}" styleClass="tituloForm"/><br/><br/>
                     </f:facet>
-                    <menu:postit>
-                        <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
-                        <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-                    </menu:postit>
-
+                    <h:panelGroup>
+                        <menu:postit rendered="#{sprintManager.project.name != null}">>
+                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
+                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                        </menu:postit>
+                        <menu:postit rendered="#{sprintManager.project.name == null}">
+                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.noproject']}"></ui:param>
+                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                        </menu:postit>
+                    </h:panelGroup>
                     <h:outputText value="#{i18n['sprint.show.table.label.empty']}"
                                   rendered="#{sprintManager.sprints.rowCount eq 0}" />
                     <h:dataTable value="#{sprintManager.sprints}" var="sprint"
