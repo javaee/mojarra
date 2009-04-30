@@ -708,7 +708,6 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
     public void testComponentAnnotatations() throws Exception {
 
-        getFacesContext().getAttributes().put("javax.faces.IS_POSTBACK_AND_RESTORE_VIEW", Boolean.FALSE);
         Application application = getFacesContext().getApplication();
         application.addComponent("CustomInput", CustomOutput.class.getName());
         CustomOutput c = (CustomOutput) application.createComponent("CustomInput");

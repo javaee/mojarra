@@ -153,7 +153,9 @@ public class RestoreViewPhase extends Phase {
 
                 });
             } catch (AbortProcessingException e) {
-                facesContext.getApplication().publishEvent(ExceptionQueuedEvent.class, new ExceptionQueuedEventContext(facesContext, e));
+                facesContext.getApplication().publishEvent(facesContext,
+                                                           ExceptionQueuedEvent.class,
+                                                           new ExceptionQueuedEventContext(facesContext, e));
             }
 
 
@@ -195,6 +197,7 @@ public class RestoreViewPhase extends Phase {
 
         boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
         if (isPostBack) {
+            facesContext.setProcessingEvents(false);
             // try to restore the view
             viewRoot = viewHandler.restoreView(facesContext, viewId);
             if (viewRoot == null) {
@@ -218,7 +221,7 @@ public class RestoreViewPhase extends Phase {
             }
 
             facesContext.setViewRoot(viewRoot);
-
+            facesContext.setProcessingEvents(true);
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("Postback: restored view for " + viewId);
             }
@@ -255,10 +258,10 @@ public class RestoreViewPhase extends Phase {
             }
             facesContext.setViewRoot(viewRoot);
             assert(null != viewRoot);
-            facesContext.getApplication().publishEvent(PostAddToViewEvent.class,
+            facesContext.getApplication().publishEvent(facesContext,
+                                                       PostAddToViewEvent.class,
                                                        viewRoot);
         }
-
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting RestoreViewPhase");

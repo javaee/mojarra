@@ -7,7 +7,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
@@ -88,7 +87,7 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         // ------------------------------------------------------------- Publish
 
         try {
-            application.publishEvent(null, new UIViewRoot());
+            application.publishEvent(getFacesContext(), null, new UIViewRoot());
             assertTrue(false);
         } catch (NullPointerException ignored) {
         } catch (Exception e) {
@@ -96,7 +95,19 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         }
 
         try {
-            application.publishEvent(TestApplicationEvents.TestSystemEvent.class, null);
+            application.publishEvent(getFacesContext(),
+                                     TestApplicationEvents.TestSystemEvent.class,
+                                     null);
+            assertTrue(false);
+        } catch (NullPointerException ignored) {
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+
+        try {
+            application.publishEvent(null,
+                                     TestApplicationEvents.TestSystemEvent.class,
+                                     new UIViewRoot());
             assertTrue(false);
         } catch (NullPointerException ignored) {
         } catch (Exception e) {
@@ -115,21 +126,24 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         UIInput input = new UIInput();
         input.subscribeToEvent(TestApplicationEvents.TestSystemEvent3.class,
                                listener);
-        application.publishEvent(TestApplicationEvents.TestSystemEvent3.class,
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent3.class,
                                  input);
         assertTrue(listener.getPassedEvent() instanceof TestApplicationEvents.TestSystemEvent3);
 
         // new UIInput without any subs should result in no invocation
         listener.reset();
         UIInput input2 = new UIInput();
-        application.publishEvent(TestApplicationEvents.TestSystemEvent3.class,
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent3.class,
                                  input2);
         assertTrue(!listener.wasProcessEventInvoked());
 
         // unsub'd event should result in no invocations
         input.unsubscribeFromEvent(TestApplicationEvents.TestSystemEvent3.class,
                                    listener);
-        application.publishEvent(TestApplicationEvents.TestSystemEvent3.class,
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent3.class,
                                  input);
         assertTrue(!listener.wasProcessEventInvoked());
         
@@ -145,7 +159,9 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         application.subscribeToEvent(TestApplicationEvents.TestSystemEvent.class,
                                      UIViewRoot.class,
                                      listener);
-        application.publishEvent(TestApplicationEvents.TestSystemEvent.class, getFacesContext().getViewRoot());
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent.class,
+                                 getFacesContext().getViewRoot());
         assertTrue(listener.getPassedSource() == getFacesContext().getViewRoot());
         assertTrue(listener.getPassedSystemEvent() instanceof TestSystemEvent);
         assertTrue(listener.getPassedSystemEvent().getSource() == getFacesContext().getViewRoot());
@@ -154,7 +170,9 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         // trigger the listener
         UIInput input = new UIInput();
         listener.reset();
-        application.publishEvent(TestApplicationEvents.TestSystemEvent.class, input);
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent.class,
+                                 input);
         assertTrue(listener.getPassedSource() == null);
         assertTrue(listener.getPassedSystemEvent() == null);
 
@@ -165,7 +183,9 @@ public class TestApplicationEvents extends ServletFacesTestCase {
          application.subscribeToEvent(TestApplicationEvents.TestSystemEvent.class,
                                      CustomViewRoot.class,
                                      listener);
-        application.publishEvent(TestApplicationEvents.TestSystemEvent.class, root);
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent.class,
+                                 root);
         assertTrue(listener.getPassedSource() == root);
         assertTrue(listener.getPassedSystemEvent() instanceof TestSystemEvent);
         assertTrue(listener.getPassedSystemEvent().getSource() == root);
@@ -175,7 +195,9 @@ public class TestApplicationEvents extends ServletFacesTestCase {
                                          CustomViewRoot.class,
                                          listener);
         listener.reset();
-        application.publishEvent(TestApplicationEvents.TestSystemEvent.class, root);
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent.class,
+                                 root);
         assertTrue(!listener.wasIsListenerForSourceInvoked());
         assertTrue(!listener.wasProcessEventInvoked());
 
@@ -183,7 +205,9 @@ public class TestApplicationEvents extends ServletFacesTestCase {
                                          UIViewRoot.class,
                                          listener);
         listener.reset();
-        application.publishEvent(TestApplicationEvents.TestSystemEvent.class, root);
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent.class,
+                                 root);
         assertTrue(!listener.wasIsListenerForSourceInvoked());
         assertTrue(!listener.wasProcessEventInvoked());
 
@@ -196,12 +220,16 @@ public class TestApplicationEvents extends ServletFacesTestCase {
                                      UIViewRoot.class,
                                      listener);
 
-        application.publishEvent(TestApplicationEvents.TestSystemEvent2.class, getFacesContext().getViewRoot());
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent2.class,
+                                 getFacesContext().getViewRoot());
         assertTrue(listener.getPassedSource() == getFacesContext().getViewRoot());
         assertTrue(listener.getPassedSystemEvent() instanceof TestSystemEvent2);
         assertTrue(listener.getPassedSystemEvent().getSource() == getFacesContext().getViewRoot());
         listener.reset();
-        application.publishEvent(TestApplicationEvents.TestSystemEvent3.class, getFacesContext().getViewRoot());
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent3.class,
+                                 getFacesContext().getViewRoot());
         assertTrue(listener.getPassedSource() == getFacesContext().getViewRoot());
         assertTrue(listener.getPassedSystemEvent() instanceof TestSystemEvent3);
         assertTrue(listener.getPassedSystemEvent().getSource() == getFacesContext().getViewRoot());
@@ -220,7 +248,8 @@ public class TestApplicationEvents extends ServletFacesTestCase {
                                      Application.class,
                                      abstractListener);
         abstractListener.reset();
-        application.publishEvent(PostConstructApplicationEvent.class,
+        application.publishEvent(getFacesContext(),
+                                 PostConstructApplicationEvent.class,
                                  Application.class,
                                  application);
         assertTrue(abstractListener.getPassedSource() == application);
@@ -230,7 +259,8 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         // verify that the event isn't published when the base type isn't
         // provided with publish
         abstractListener.reset();
-        application.publishEvent(PostConstructApplicationEvent.class,
+        application.publishEvent(getFacesContext(),
+                                 PostConstructApplicationEvent.class,
                                  application);
         assertTrue(abstractListener.getPassedSource() == null);
         assertTrue(abstractListener.getPassedSystemEvent() == null);
@@ -251,7 +281,9 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         Application application = getFacesContext().getApplication();
         application.subscribeToEvent(TestApplicationEvents.TestSystemEvent2.class,
                                      listener);
-        application.publishEvent(TestApplicationEvents.TestSystemEvent2.class, getFacesContext().getViewRoot());
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent2.class,
+                                 getFacesContext().getViewRoot());
         assertTrue(listener.getPassedSource() == getFacesContext().getViewRoot());
         assertTrue(listener.getPassedSystemEvent() instanceof TestSystemEvent2);
         assertTrue(listener.getPassedSystemEvent().getSource() == getFacesContext().getViewRoot());
@@ -259,7 +291,8 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         // any UIComponent source should work
         listener.reset();
         UIInput input = new UIInput();
-        application.publishEvent(TestApplicationEvents.TestSystemEvent2.class, input);
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent2.class, input);
         assertTrue(listener.getPassedSource() == input);
         assertTrue(listener.getPassedSystemEvent() instanceof TestSystemEvent2);
         assertTrue(listener.getPassedSystemEvent().getSource() == input);
@@ -268,7 +301,9 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         // listener being used
         listener.reset();
         TestSystemEventListenerHolder holder = new TestSystemEventListenerHolder();
-        application.publishEvent(TestApplicationEvents.TestSystemEvent2.class, holder);
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent2.class,
+                                 holder);
         assertTrue(listener.getPassedSource() == holder);
         assertTrue(!listener.wasProcessEventInvoked());
         assertTrue(listener.getPassedSystemEvent() == null);
@@ -277,7 +312,9 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         // unsubscribe
         listener.reset();
         application.unsubscribeFromEvent(TestApplicationEvents.TestSystemEvent2.class, listener);
-        application.publishEvent(TestApplicationEvents.TestSystemEvent2.class, input);
+        application.publishEvent(getFacesContext(),
+                                 TestApplicationEvents.TestSystemEvent2.class,
+                                 input);
         assertTrue(!listener.wasIsListenerForSourceInvoked());
         assertTrue(!listener.wasProcessEventInvoked());
 
@@ -290,10 +327,14 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         Application app = ctx.getApplication();
         // SystemEventListener1 is only interested in UIOutput sources, while
         // SystemEventListener2 is interested in any events.
-        app.publishEvent(CustomSystemEvent.class, new UIInput());
+        app.publishEvent(getFacesContext(),
+                         CustomSystemEvent.class,
+                         new UIInput());
         assertNull(ctx.getAttributes().remove("SystemEventListener1"));
         assertNotNull(ctx.getAttributes().remove("SystemEventListener2"));
-        app.publishEvent(CustomSystemEvent.class, new UIOutput());
+        app.publishEvent(getFacesContext(),
+                         CustomSystemEvent.class,
+                         new UIOutput());
         assertNotNull(ctx.getAttributes().remove("SystemEventListener1"));
         assertNotNull(ctx.getAttributes().remove("SystemEventListener2"));
 

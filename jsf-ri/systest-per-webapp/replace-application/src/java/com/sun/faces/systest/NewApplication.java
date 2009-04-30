@@ -86,9 +86,10 @@ public class NewApplication extends Application {
     }
 
     @Override
-    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+    public void publishEvent(FacesContext ctx,
+                             Class<? extends SystemEvent> systemEventClass,
                              Object source) {
-        oldApp.publishEvent(systemEventClass, source);
+        oldApp.publishEvent(ctx, systemEventClass, source);
     }
 
     @Override

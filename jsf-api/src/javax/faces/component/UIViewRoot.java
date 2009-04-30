@@ -739,7 +739,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                         source.pushComponentToEL(context, null);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
-                        context.getApplication().publishEvent(ExceptionQueuedEvent.class,
+                        context.getApplication().publishEvent(context,
+                                                              ExceptionQueuedEvent.class,
                                                               new ExceptionQueuedEventContext(context,
                                                                                         e,
                                                                                         source,
@@ -774,7 +775,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                         source.broadcast(event);
                     } catch (AbortProcessingException ape) {
                         // A "return" here would abort remaining events too
-                        context.getApplication().publishEvent(ExceptionQueuedEvent.class,
+                        context.getApplication().publishEvent(context,
+                                                              ExceptionQueuedEvent.class,
                                                               new ExceptionQueuedEventContext(context,
                                                                                         ape,
                                                                                         source,
@@ -875,7 +877,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
                     }
                 });
             } catch (AbortProcessingException e) {
-                context.getApplication().publishEvent(ExceptionQueuedEvent.class,
+                context.getApplication().publishEvent(context,
+                                                      ExceptionQueuedEvent.class,
                                                       new ExceptionQueuedEventContext(context,
                                                                                 e,
                                                                                 null,
@@ -1519,7 +1522,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         if (create && viewScope == null) {
             viewScope = new ViewMap(getFacesContext().getApplication().getProjectStage());
             getFacesContext().getApplication()
-                  .publishEvent(PostConstructViewMapEvent.class, this);
+                  .publishEvent(getFacesContext(),
+                                PostConstructViewMapEvent.class,
+                                this);
         }
         return viewScope;
         
@@ -1759,8 +1764,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         public void clear() {
 
             FacesContext context = FacesContext.getCurrentInstance();
-            context.getApplication()
-                  .publishEvent(PreDestroyViewMapEvent.class, context.getViewRoot());
+            context.getApplication().publishEvent(context,
+                                                  PreDestroyViewMapEvent.class,
+                                                  context.getViewRoot());
             super.clear();
 
         }

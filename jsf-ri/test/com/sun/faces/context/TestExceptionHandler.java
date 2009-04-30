@@ -377,7 +377,9 @@ public class TestExceptionHandler extends ServletFacesTestCase {
 
     private void queueException(ExceptionQueuedEventContext source) {
 
-        getFacesContext().getApplication().publishEvent(ExceptionQueuedEvent.class, source);
+        getFacesContext().getApplication().publishEvent(getFacesContext(),
+                                                        ExceptionQueuedEvent.class,
+                                                        source);
 
     }
 }

@@ -292,7 +292,8 @@ public class ConfigureListener implements ServletRequestListener,
             elctx.putContext(FacesContext.class, initContext);
             initContext.setELContext(elctx);
             Application app = initContext.getApplication();
-            app.publishEvent(PreDestroyApplicationEvent.class,
+            app.publishEvent(initContext,
+                             PreDestroyApplicationEvent.class,
                              Application.class,
                              app);
             if (webResourcePool != null) {

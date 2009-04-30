@@ -173,7 +173,7 @@ public class CustomScopeELResolver extends ELResolver {
         public void notifyCreate() {
 
             ScopeContext context = new ScopeContext(SCOPE_NAME, this);
-            application.publishEvent(PostConstructCustomScopeEvent.class, context);
+            application.publishEvent(FacesContext.getCurrentInstance(), PostConstructCustomScopeEvent.class, context);
 
         }
 
@@ -188,7 +188,7 @@ public class CustomScopeELResolver extends ELResolver {
             // destroyed
             ScopeContext scopeContext = new ScopeContext(SCOPE_NAME,
                                                          this);
-            application.publishEvent(PreDestroyCustomScopeEvent.class,
+            application.publishEvent(FacesContext.getCurrentInstance(), PreDestroyCustomScopeEvent.class,
                                      scopeContext);
 
         }

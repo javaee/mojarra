@@ -808,7 +808,9 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        context.getApplication().publishEvent(PreRenderComponentEvent.class, this);
+        context.getApplication().publishEvent(context,
+                                              PreRenderComponentEvent.class,
+                                              this);
 
         String rendererType = getRendererType();
         if (rendererType != null) {
@@ -1070,9 +1072,9 @@ public abstract class UIComponentBase extends UIComponent {
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             Application app = context.getApplication();
-            app.publishEvent(PreValidateEvent.class, kid);
+            app.publishEvent(context, PreValidateEvent.class, kid);
             kid.processValidators(context);
-            app.publishEvent(PostValidateEvent.class, kid);
+            app.publishEvent(context, PostValidateEvent.class, kid);
 
         }
         popComponentFromEL(context);
@@ -1665,19 +1667,19 @@ public abstract class UIComponentBase extends UIComponent {
 
     private void doPostAddProcessing(FacesContext context, UIComponent added) {
 
-        if (!isPostbackAndRestoreView(context)) {
-            if (parent.isInView()) {
-                publishAfterViewEvents(context, context.getApplication(), added);
-            }
-
+        if (parent.isInView()) {
+            publishAfterViewEvents(context, context.getApplication(), added);
         }
 
     }
 
     private static void doPreRemoveProcessing(FacesContext context,
-            UIComponent toRemove) {
-        context.getApplication().publishEvent(PreRemoveFromViewEvent.class,
-                toRemove);
+                                              UIComponent toRemove) {
+
+        context.getApplication().publishEvent(context,
+                                              PreRemoveFromViewEvent.class,
+                                              toRemove);
+
     }
 
     //------------------------------------------------------------- BehaviorHolder stub methods.
@@ -1978,7 +1980,7 @@ public abstract class UIComponentBase extends UIComponent {
             UIComponent component) {
 
         component.setInView(true);
-        application.publishEvent(PostAddToViewEvent.class, component);
+        application.publishEvent(context, PostAddToViewEvent.class, component);
         if (component.getChildCount() > 0) {
             for (UIComponent c : component.getChildren()) {
                 publishAfterViewEvents(context, application, c);
@@ -2008,16 +2010,6 @@ public abstract class UIComponentBase extends UIComponent {
                 disconnectFromView(c);
             }
         }
-
-    }
-
-
-    private static boolean isPostbackAndRestoreView(FacesContext context) {
-
-        if (context == null) {
-            throw new IllegalStateException("FacesContext cannot be null");
-        }
-        return (context.isPostback() && context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW));
 
     }
 

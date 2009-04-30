@@ -155,7 +155,7 @@ public abstract class Phase {
         if (booleanKey != null) {
             extx.getAttributes().put(booleanKey, Boolean.TRUE);
         }
-        ctx.getApplication().publishEvent(ExceptionQueuedEvent.class, extx);
+        ctx.getApplication().publishEvent(ctx, ExceptionQueuedEvent.class, extx);
 
     }
 

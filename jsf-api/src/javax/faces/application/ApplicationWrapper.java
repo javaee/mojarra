@@ -96,10 +96,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setActionListener} on the
-     * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
+     * is to call {@link Application#setActionListener(javax.faces.event.ActionListener)}
+     * on the wrapped {@link Application} object.</p>
      */
     @Override
     public void setActionListener(ActionListener listener) {
@@ -110,8 +108,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getDefaultLocale} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Locale getDefaultLocale() {
@@ -120,10 +116,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setDefaultLocale} on the
+     * is to call {@link Application#setDefaultLocale(java.util.Locale)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setDefaultLocale(Locale locale) {
@@ -134,8 +128,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getDefaultRenderKitId} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public String getDefaultRenderKitId() {
@@ -144,10 +136,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#addDefaultValidatorId} on the
+     * is to call {@link Application#addDefaultValidatorId(String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void addDefaultValidatorId(String validatorId) {
@@ -158,8 +148,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getDefaultValidatorInfo} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Map<String, String> getDefaultValidatorInfo() {
@@ -168,10 +156,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setDefaultRenderKitId} on the
+     * is to call {@link Application#setDefaultRenderKitId(String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setDefaultRenderKitId(String renderKitId) {
@@ -182,8 +168,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getMessageBundle} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public String getMessageBundle() {
@@ -192,10 +176,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setMessageBundle} on the
+     * is to call {@link Application#setMessageBundle(String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setMessageBundle(String bundle) {
@@ -206,8 +188,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getNavigationHandler} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public NavigationHandler getNavigationHandler() {
@@ -216,10 +196,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setNavigationHandler} on the
+     * is to call {@link Application#setNavigationHandler(NavigationHandler)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setNavigationHandler(NavigationHandler handler) {
@@ -230,8 +208,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getPropertyResolver} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public PropertyResolver getPropertyResolver() {
@@ -240,10 +216,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setPropertyResolver} on the
+     * is to call {@link Application#setPropertyResolver(javax.faces.el.PropertyResolver)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setPropertyResolver(PropertyResolver resolver) {
@@ -254,8 +228,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getVariableResolver} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public VariableResolver getVariableResolver() {
@@ -264,10 +236,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setVariableResolver} on the
+     * is to call {@link Application#setVariableResolver(javax.faces.el.VariableResolver)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setVariableResolver(VariableResolver resolver) {
@@ -278,8 +248,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getViewHandler} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public ViewHandler getViewHandler() {
@@ -288,10 +256,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setViewHandler} on the
+     * is to call {@link Application#setViewHandler(ViewHandler)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setViewHandler(ViewHandler handler) {
@@ -302,8 +268,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getStateManager} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public StateManager getStateManager() {
@@ -312,10 +276,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setStateManager} on the
+     * is to call {@link Application#setStateManager(StateManager)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setStateManager(StateManager manager) {
@@ -324,10 +286,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#addComponent} on the
+     * is to call {@link Application#addComponent(String, String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void addComponent(String componentType, String componentClass) {
@@ -336,10 +296,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createComponent} on the
+     * is to call {@link Application#createComponent(String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public UIComponent createComponent(String componentType)
@@ -349,10 +307,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createComponent} on the
-     * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
+     * is to call {@link Application#createComponent(javax.faces.el.ValueBinding, javax.faces.context.FacesContext, String)}
+     * on the wrapped {@link Application} object.</p>
      */
     @Override
     public UIComponent createComponent(ValueBinding componentBinding,
@@ -368,8 +324,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getComponentTypes} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Iterator<String> getComponentTypes() {
@@ -378,10 +332,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#addConverter} on the
+     * is to call {@link Application#addConverter(String, String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void addConverter(String converterId, String converterClass) {
@@ -390,10 +342,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#addConverter} on the
+     * is to call {@link Application#addConverter(Class, String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void addConverter(Class<?> targetClass, String converterClass) {
@@ -402,10 +352,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createConverter} on the
+     * is to call {@link Application#createConverter(String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Converter createConverter(String converterId) {
@@ -414,10 +362,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createConverter} on the
+     * is to call {@link Application#createConverter(Class)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Converter createConverter(Class<?> targetClass) {
@@ -428,8 +374,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getConverterIds} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Iterator<String> getConverterIds() {
@@ -440,8 +384,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getConverterTypes} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Iterator<Class<?>> getConverterTypes() {
@@ -450,10 +392,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createMethodBinding} on the
+     * is to call {@link Application#createMethodBinding(String, Class[])} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public MethodBinding createMethodBinding(String ref, Class<?>[] params)
@@ -465,8 +405,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getSupportedLocales} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Iterator<Locale> getSupportedLocales() {
@@ -475,10 +413,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setSupportedLocales} on the
+     * is to call {@link Application#setSupportedLocales(java.util.Collection)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setSupportedLocales(Collection<Locale> locales) {
@@ -487,10 +423,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#addBehavior} on the
+     * is to call {@link Application#addBehavior(String, String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void addBehavior(String behaviorId, String behaviorClass) {
@@ -499,10 +433,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createBehavior} on the
+     * is to call {@link Application#createBehavior(String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Behavior createBehavior(String behaviorId) throws FacesException {
@@ -513,8 +445,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getBehaviorIds} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Iterator<String> getBehaviorIds() {
@@ -523,10 +453,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#addValidator} on the
+     * is to call {@link Application#addValidator(String, String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void addValidator(String validatorId, String validatorClass) {
@@ -535,10 +463,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createValidator} on the
+     * is to call {@link Application#createValidator(String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Validator createValidator(String validatorId) throws FacesException {
@@ -549,8 +475,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getValidatorIds} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public Iterator<String> getValidatorIds() {
@@ -559,10 +483,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createValueBinding} on the
+     * is to call {@link Application#createValueBinding(String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public ValueBinding createValueBinding(String ref)
@@ -574,8 +496,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getResourceHandler} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public ResourceHandler getResourceHandler() {
@@ -584,10 +504,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#setResourceHandler} on the
+     * is to call {@link Application#setResourceHandler(ResourceHandler)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void setResourceHandler(ResourceHandler resourceHandler) {
@@ -596,10 +514,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#getResourceBundle} on the
+     * is to call {@link Application#getResourceBundle(javax.faces.context.FacesContext, String)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
@@ -610,8 +526,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getProjectStage} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public ProjectStage getProjectStage() {
@@ -620,10 +534,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#addELResolver} on the
+     * is to call {@link Application#addELResolver(javax.el.ELResolver)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void addELResolver(ELResolver resolver) {
@@ -634,8 +546,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getELResolver} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public ELResolver getELResolver() {
@@ -644,10 +554,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createComponent} on the
-     * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
+     * is to call {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)}
+     * on the wrapped {@link Application} object.</p>
      */
     @Override
     public UIComponent createComponent(ValueExpression componentExpression,
@@ -659,10 +567,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createComponent} on the
-     * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
+     * is to call {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)}
+     * on the wrapped {@link Application} object.</p>
      */
     @Override
     public UIComponent createComponent(ValueExpression componentExpression,
@@ -674,10 +580,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createComponent} on the
-     * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
+     * is to call {@link Application#createComponent(javax.faces.context.FacesContext, String, String)}
+     * on the wrapped {@link Application} object.</p>
      */
     @Override
     public UIComponent createComponent(FacesContext context,
@@ -688,10 +592,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#createComponent} on the
-     * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
+     * is to call {@link Application#createComponent(javax.faces.context.FacesContext, Resource)}
+     * on the wrapped {@link Application} object.</p>
      */
     @Override
     public UIComponent createComponent(FacesContext context,
@@ -703,8 +605,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getExpressionFactory} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public ExpressionFactory getExpressionFactory() {
@@ -713,10 +613,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#evaluateExpressionGet} on the
-     * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
+     * is to call {@link Application#evaluateExpressionGet(javax.faces.context.FacesContext, String, Class)}
+     * on the wrapped {@link Application} object.</p>
      */
     @Override
     public <T> T evaluateExpressionGet(FacesContext context,
@@ -728,10 +626,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#addELContextListener} on the
+     * is to call {@link Application#addELContextListener(javax.el.ELContextListener)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void addELContextListener(ELContextListener listener) {
@@ -740,10 +636,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#removeELContextListener} on the
+     * is to call {@link Application#removeELContextListener(javax.el.ELContextListener)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void removeELContextListener(ELContextListener listener) {
@@ -754,8 +648,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Application#getELContextListeners} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public ELContextListener[] getELContextListeners() {
@@ -764,37 +656,36 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#publishEvent} on the
-     * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
+     * is to call {@link Application#publishEvent(javax.faces.context.FacesContext, Class, Object)}
+     * on the wrapped {@link Application} object.</p>
      */
     @Override
-    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+    public void publishEvent(FacesContext context,
+                             Class<? extends SystemEvent> systemEventClass,
                              Object source) {
-        getWrapped().publishEvent(systemEventClass, source);
+        getWrapped().publishEvent(context, systemEventClass, source);
     }
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#publishEvent} on the
-     * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
+     * is to call {@link Application#publishEvent#publishEvent(javax.faces.context.FacesContext, Class, Class, Object)}
+     * on the wrapped {@link Application} object.</p>
      */
     @Override
-    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+    public void publishEvent(FacesContext context,
+                             Class<? extends SystemEvent> systemEventClass,
                              Class<?> sourceBaseType,
                              Object source) {
-        getWrapped().publishEvent(systemEventClass, sourceBaseType, source);
+        getWrapped().publishEvent(context,
+                                  systemEventClass,
+                                  sourceBaseType,
+                                  source);
     }
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#subscribeToEvent} on the
+     * is to call {@link Application#subscribeToEvent(Class, Class, javax.faces.event.SystemEventListener)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
@@ -805,10 +696,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#subscribeToEvent} on the
+     * is to call {@link Application#subscribeToEvent#subscribeToEvent(Class, javax.faces.event.SystemEventListener)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
@@ -818,10 +707,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#unsubscribeFromEvent} on the
+     * is to call {@link Application#unsubscribeFromEvent#unsubscribeFromEvent(Class, Class, javax.faces.event.SystemEventListener)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
@@ -832,10 +719,8 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#unsubscribeFromEvent} on the
+     * is to call {@link Application#unsubscribeFromEvent#unsubscribeFromEvent(Class, javax.faces.event.SystemEventListener)} on the
      * wrapped {@link Application} object.</p>
-     *
-     * @since 2.0
      */
     @Override
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,

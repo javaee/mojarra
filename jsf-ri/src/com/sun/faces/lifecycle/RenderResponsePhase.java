@@ -111,8 +111,9 @@ public class RenderResponsePhase extends Phase {
                 String beforePublishViewId = facesContext.getViewRoot().getViewId();
                 // the before render event on the view root is a special case to keep door open for navigation
                 // this must be called *after* PDL.buildView() and before VH.renderView()
-                facesContext.getApplication().publishEvent(PreRenderViewEvent.class,
-                        facesContext.getViewRoot());
+                facesContext.getApplication().publishEvent(facesContext,
+                                                           PreRenderViewEvent.class,
+                                                           facesContext.getViewRoot());
                 String afterPublishViewId = facesContext.getViewRoot().getViewId();
                 viewIdsUnchanged = beforePublishViewId == null && afterPublishViewId == null ||
                         (beforePublishViewId != null && afterPublishViewId != null) &&

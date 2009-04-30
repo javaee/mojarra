@@ -235,28 +235,31 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see javax.faces.application.Application#publishEvent(Class, Object)
+     * @see javax.faces.application.Application#publishEvent(FacesContext, Class, Object)
      */
     @Override
-    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+    public void publishEvent(FacesContext context,
+                             Class<? extends SystemEvent> systemEventClass,
                              Object source) {
 
-        publishEvent(systemEventClass, null, source);
+        publishEvent(context, systemEventClass, null, source);
 
     }
 
 
     /**
-     * @see javax.faces.application.Application#publishEvent(Class, Object) 
+     * @see javax.faces.application.Application#publishEvent(FacesContext, Class, Object)
      */
     @Override
-    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+    public void publishEvent(FacesContext context,
+                             Class<? extends SystemEvent> systemEventClass,
                              Class<?> sourceBaseType,
                              Object source) {
 
+        Util.notNull("context", context);
         Util.notNull("systemEventClass", systemEventClass);
         Util.notNull("source", source);
-        if (!FacesContext.getCurrentInstance().isProcessingEvents()) {
+        if (!context.isProcessingEvents()) {
             return;
         }
         // source is not compatible with the provided base type.
@@ -297,9 +300,9 @@ public class ApplicationImpl extends Application {
             // look for and invoke any listeners not specific to the source class
             invokeListenersFor(systemEventClass, event, source, null, false);
         } catch (AbortProcessingException ape) {
-            FacesContext ctx = FacesContext.getCurrentInstance();
-            ctx.getApplication().publishEvent(SystemEvent.class,
-                                              new ExceptionQueuedEventContext(ctx, ape));
+            context.getApplication().publishEvent(context,
+                                                  SystemEvent.class,
+                                                  new ExceptionQueuedEventContext(context, ape));
         }
 
     }

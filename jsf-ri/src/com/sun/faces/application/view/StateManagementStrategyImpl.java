@@ -191,11 +191,12 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         
         // Build the tree to initial state
         UIViewRoot viewRoot;
-
         try {
             viewRoot = pdl.getViewMetadata(context, viewId).createMetadataView(context);
             context.setViewRoot(viewRoot);
+            context.setProcessingEvents(true);
             pdl.buildView(context, viewRoot);
+            context.setProcessingEvents(false);
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         }

@@ -613,7 +613,7 @@ public enum Color { Red, Blue, Green, Orange }
     public void postConstruct() {
         setPostConstructCalled(true);
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getApplication().publishEvent(TestBeanPostConstructEvent.class, this);
+        context.getApplication().publishEvent(context, TestBeanPostConstructEvent.class, this);
     }
 
     @PreDestroy
@@ -621,7 +621,7 @@ public enum Color { Red, Blue, Green, Orange }
         setPreDestroyCalled(true);
         FacesContext context = FacesContext.getCurrentInstance();
         if (null != context) {
-            context.getApplication().publishEvent(TestBeanPreDestroyEvent.class, this);
+            context.getApplication().publishEvent(context, TestBeanPreDestroyEvent.class, this);
         }
     }
 
