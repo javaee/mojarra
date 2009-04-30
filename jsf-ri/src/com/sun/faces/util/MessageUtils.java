@@ -308,6 +308,8 @@ public class MessageUtils {
 		  "com.sun.faces.OUTCOME_TARGET_BUTTON_NO_MATCH";
 	public static final String OUTCOME_TARGET_LINK_NO_MATCH =
 		  "com.sun.faces.OUTCOME_TARGET_LINK_NO_MATCH";
+    public static final String NO_RESOURCE_TARGET_AVAILABLE =
+          "com.sun.faces.RESOURCE_TARGET_NOT_AVAILABLE";
    
     
     public static final String JS_RESOURCE_WRITING_ERROR_ID =

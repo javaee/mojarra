@@ -53,15 +53,24 @@ package com.sun.faces.facelets.compiler;
 
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 
 import javax.faces.context.FacesContext;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
+import javax.faces.application.FacesMessage;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 final class EndElementInstruction implements Instruction {
+
+    private final String HEAD_ELEMENT = "head";
+    private final String BODY_ELEMENT = "body";
+
     private final String element;
 
     public EndElementInstruction(String element) {
@@ -69,7 +78,11 @@ final class EndElementInstruction implements Instruction {
     }
 
     public void write(FacesContext context) throws IOException {
-        if ("body".equalsIgnoreCase(this.element)) {
+        if (HEAD_ELEMENT.equalsIgnoreCase(this.element)) {
+            warnUnhandledResources(context, HEAD_ELEMENT);
+        }
+        if (BODY_ELEMENT.equalsIgnoreCase(this.element)) {
+            warnUnhandledResources(context, BODY_ELEMENT);
             RenderKitUtils.renderUnhandledMessages(context);
         }
         context.getResponseWriter().endElement(this.element);
@@ -81,5 +94,24 @@ final class EndElementInstruction implements Instruction {
 
     public boolean isLiteral() {
         return true;
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+    private void warnUnhandledResources(FacesContext ctx, String target) {
+
+        UIViewRoot root = ctx.getViewRoot();
+        if (root != null) {
+            List<UIComponent> headResources =
+                  root.getComponentResources(ctx, target);
+            if (headResources != null && !headResources.isEmpty()) {
+                FacesMessage m =
+                      MessageUtils.getExceptionMessage(MessageUtils.NO_RESOURCE_TARGET_AVAILABLE,
+                                                       target);
+                ctx.addMessage(null, m);
+            }
+        }
+
     }
 }
