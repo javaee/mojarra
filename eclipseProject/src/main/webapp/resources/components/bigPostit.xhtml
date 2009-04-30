@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <composite:interface>
+        <composite:valueHolder name="postitLabel"/>
+        <composite:valueHolder name="postitText"/>
+        <composite:valueHolder name="postitLabel2"/>
+        <composite:valueHolder name="postitText2"/>
+        <composite:valueHolder name="postitLabel3"/>
+        <composite:valueHolder name="postitText3"/>
+
+    </composite:interface>
+ 
+    <composite:implementation>
+        <h:panelGrid styleClass="bigPostitComponent" columns="2" columnClasses="postitLabel, postItInfo">
+            <f:facet name="header">
+                <h:outputText value=""/>
+                <br></br>
+            </f:facet>
+            <h:outputText value="#{postitLabel}"/>
+            <h:outputText value="#{postitText}"/>            
+            <h:outputText value="#{postitLabel2}"/>
+            <h:outputText value="#{postitText2}"/>
+            <h:outputText value="#{postitLabel3}"/>
+            <h:outputText value="#{postitText3}"/>
+        </h:panelGrid>
+    </composite:implementation>
+</html>
