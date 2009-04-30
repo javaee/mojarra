@@ -100,7 +100,8 @@ public abstract class AbstractManager {
 
     protected void publishEvent(Class<? extends SystemEvent> eventClass, Object source) {
         if (source != null) {
-            FacesContext.getCurrentInstance().getApplication().publishEvent(eventClass, source);
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            ctx.getApplication().publishEvent(ctx, eventClass, source);
         }
     }
 
