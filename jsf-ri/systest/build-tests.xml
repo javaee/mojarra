@@ -128,6 +128,7 @@
     <target name="test"
             description="Execute all tests against installed application"
             depends="test.annotations,
+                test.composite,
                 test.ajax,
                 test.facelets,
                 test.init,
@@ -161,7 +162,6 @@
                 test.valuechange,
                 test.component,
                 test.component01,
-                test.composite,
                 test.navigation,
                 test.state,
                 test.resourceBundleELResolver,

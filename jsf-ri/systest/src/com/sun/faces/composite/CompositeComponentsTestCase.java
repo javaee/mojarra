@@ -398,6 +398,18 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
+    public void testTemplateDecorate() throws Exception {
+        lastpage = getPage("/faces/composite/decorate.xhtml");
+
+        assertTrue("Decorate Test".equals(lastpage.getTitleText()));
+
+        String templateText = lastpage.getElementById("comp").getTextContent();
+        assertTrue("Composition Text".equals(templateText));
+
+        String toplevelContent = lastpage.getElementById("insert").getTextContent();
+        assertTrue("Inserted Text".equals(toplevelContent));
+    }
+
     
     // --------------------------------------------------------- Private Methods
 
