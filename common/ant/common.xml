@@ -68,7 +68,9 @@
 
     <!-- Structural -->
     <property name="api.dir" value="${jsf.build.home}/jsf-api"/>
+    <property name="mvn.api.dir" value="${api.dir}/build/mvn" />
     <property name="impl.dir" value="${jsf.build.home}/jsf-ri"/>
+    <property name="mvn.impl.dir" value="${jsf.build.home}/jsf-ri/build/mvn"/>
     <property name="tools.dir" value="${jsf.build.home}/jsf-tools"/>    
     <property name="demo.dir" value="${jsf.build.home}/jsf-demo"/>
     <property name="spec.snapshot.dir" 

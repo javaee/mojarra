@@ -116,34 +116,32 @@
                 <then>
                     <create.pom
                           template.file="${current.dir}/template/jsf-api-pom-template.xml"
-                          output.file="${api.dir}/jsf-api-pom.xml"
+                          output.file="${mvn.api.dir}/jsf-api-pom.xml"
                           version="@{version}"/>
-                    <mkdir dir="${api.dir}/target/classes"/>
+                    <mkdir dir="${mvn.api.dir}/target/classes"/>
                     <unjar src="${api.dir}/build/lib/jsf-api.jar"
                            overwrite="yes"
-                           dest="${api.dir}/target/classes"/>
-                    <jsf.mvn pomFile="${api.dir}/jsf-api-pom.xml"
+                           dest="${mvn.api.dir}/target/classes"/>
+                    <jsf.mvn pomFile="${mvn.api.dir}/jsf-api-pom.xml"
                              mvnSpecVersion="@{version}"
-                             dir="${api.dir}"
+                             dir="${mvn.api.dir}"
                              goals="@{goal}"/>
-                    <delete dir="${api.dir}/target"/>
-                    <delete file="${api.dir}/jsf-api-pom.xml"/>
+                    <delete dir="${mvn.api.dir}"/>
                 </then>
                 <else>
                      <create.pom
                           template.file="${current.dir}/template/jsf-impl-pom-template.xml"
-                          output.file="${impl.dir}/jsf-impl-pom.xml"
+                          output.file="${mvn.impl.dir}/jsf-impl-pom.xml"
                           version="@{version}"/>
-                    <mkdir dir="${impl.dir}/target/classes"/>
+                    <mkdir dir="${mvn.impl.dir}/target/classes"/>
                     <unjar src="${impl.dir}/build/lib/jsf-impl.jar"
                            overwrite="yes"
-                           dest="${impl.dir}/target/classes"/>
-                    <jsf.mvn pomFile="${impl.dir}/jsf-impl-pom.xml"
+                           dest="${mvn.impl.dir}/target/classes"/>
+                    <jsf.mvn pomFile="${mvn.impl.dir}/jsf-impl-pom.xml"
                              mvnSpecVersion="@{version}"
-                             dir="${impl.dir}"
+                             dir="${mvn.impl.dir}"
                              goals="@{goal}"/>
-                    <delete dir="${impl.dir}/target"/>
-                    <delete file="${impl.dir}/jsf-impl-pom.xml"/>
+                    <delete dir="${mvn.impl.dir}"/>
                 </else>
             </if>
         </sequential>
