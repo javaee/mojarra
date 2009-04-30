@@ -69,11 +69,7 @@
                             <h:outputText value="#{i18n['project.show.table.header.actions']}"/>
                         </f:facet>
                         <h:commandButton styleClass="botaoPostIt" action="#{projectManager.edit}" value="#{i18n['project.show.button.edit']}"  />
-
-                        <h:commandButton id="btnDeleteSprint" styleClass="botaoPostIt" action="#{projectManager.remove}" value="#{i18n['project.show.button.delete']} AJAX"
-                                         onclick="jsf.ajax.request(this, event, {execute: 'frmListProjects',
-                                             render: 'frmListProjects'}); return false;" />
-
+                        
                         <h:commandButton styleClass="botaoPostIt" action="#{projectManager.remove}" value="#{i18n['project.show.button.delete']}"  />
                         <h:commandButton styleClass="botaoPostIt" action="#{projectManager.showSprints}" value="#{i18n['project.show.button.showSprints']}"  />
                     </h:column>
