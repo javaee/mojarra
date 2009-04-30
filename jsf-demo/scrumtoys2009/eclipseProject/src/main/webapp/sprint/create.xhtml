@@ -20,14 +20,21 @@
                     <f:facet name="header">
                         <h:outputText value="#{i18n['sprint.create.form.title']}"  />
                     </f:facet>
-                     <menu:postit>
-                <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
-                <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-            </menu:postit>
+                    <h:panelGroup>
+
+                   <menu:postit rendered="#{sprintManager.project.name != null}">>
+                        <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
+                        <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                    </menu:postit>
+                     <menu:postit rendered="#{sprintManager.project.name == null}">
+                        <ui:param name="postitLabel" value="#{i18n['sprint.form.label.noproject']}"></ui:param>
+                        <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                    </menu:postit>
+                    </h:panelGroup>
                     <ui:include src="form.xhtml" />
                     <f:facet name="footer">
-                        <h:commandButton id="btnCreate" action="#{sprintManager.save}" value="#{i18n['sprint.create.button.create']}" styleClass="formInput" />
-                        <h:commandButton id="btnCancel" action="show" value="#{i18n['sprint.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                        <h:commandButton rendered="#{sprintManager.project.name != null}" id="btnCreate" action="#{sprintManager.save}" value="#{i18n['sprint.create.button.create']}" styleClass="formInput" />
+                        <h:commandButton rendered="#{sprintManager.project.name != null}" id="btnCancel" action="show" value="#{i18n['sprint.create.button.cancel']}" styleClass="formInput" immediate="true" />
                     </f:facet>
 
                 </h:panelGrid>
