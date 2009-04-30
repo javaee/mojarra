@@ -663,7 +663,7 @@ public class ConfigureListener implements ServletRequestListener,
         }
         try {
             ExpressionFactory factory = (ExpressionFactory)
-                  Class.forName(elFactoryType).newInstance();
+                  Util.loadClass(elFactoryType, this).newInstance();
             ApplicationAssociate associate =
                  ApplicationAssociate.getInstance(sc);
             if (associate != null) {
