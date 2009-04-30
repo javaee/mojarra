@@ -15,38 +15,29 @@
             <h:outputText value="#{i18n['task.edit.title']}"></h:outputText>
         </ui:define>
         <ui:define name="content">
-            <h:form styleClass="scrumForm" id="editForm">
+            <h:form styleClass="scrumForm" id="editTaskForm">
                  <h:panelGrid columns="2" headerClass="tituloForm" footerClass="footerForm">
                      <h:panelGroup>
 
                      <h:panelGroup>
-                        <menu:postit>
-                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}"></ui:param>
-                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-                        </menu:postit>
-                        <menu:postit rendered="#{storyManager.sprint.name != null}">
-                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
-                            <ui:param name="postitText" value="#{storyManager.sprint.name}"></ui:param>
-                        </menu:postit>
+                        <menu:bigPostit>
+                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
+                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>                        
+                            <ui:param name="postitLabel2" value="#{i18n['story.form.label.sprint.name']}:"></ui:param>
+                            <ui:param name="postitText2" value="#{storyManager.sprint.name}"></ui:param>
+                            <ui:param name="postitLabel3" value="#{i18n['task.form.label.story.name']}:"></ui:param>
+                            <ui:param name="postitText3" value="#{taskManager.story.name}"></ui:param>
+                        </menu:bigPostit>
 
-                        <menu:postit rendered="#{storyManager.sprint.name == null}">
-                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                       <menu:bigPostit rendered="#{storyManager.sprint.name == null}">
+                            <ui:param name="postitLabel" value="#{i18n['tasks.form.label.sprint.name']}"></ui:param>
                             <ui:param name="postitText" value="#{i18n['tasks.show.nosprint']}"></ui:param>
-                        </menu:postit>
-
-
-                    </h:panelGroup>
-                    <h:panelGroup>
-                        <menu:postit rendered="#{taskManager.story.name != null}">
-                            <ui:param name="postitLabel" value="#{i18n['task.form.label.story.name']}:"></ui:param>
-                            <ui:param name="postitText" value="#{taskManager.story.name}"></ui:param>
-                        </menu:postit>
-
-                        <menu:postit rendered="#{taskManager.story.name == null}">
                             <ui:param name="postitLabel" value="#{i18n['task.form.label.story.name']}:"></ui:param>
                             <ui:param name="postitText" value="#{i18n['tasks.show.nostory']}"></ui:param>
-                        </menu:postit>
+                        </menu:bigPostit>
+
                     </h:panelGroup>
+                    
                     </h:panelGroup>
                     <h:panelGroup>
                     <h:outputText value="#{i18n['task.edit.form.title']}:" styleClass="tituloForm" />
