@@ -95,6 +95,9 @@
                             </f:facet>
                             <h:commandButton styleClass="botaoPostIt" action="#{storyManager.edit}" value="#{i18n['story.show.button.edit']}"  />
                             <h:commandButton styleClass="botaoPostIt" action="#{storyManager.remove}" value="#{i18n['story.show.button.delete']}"  />
+                            <h:commandButton id="btnDeleteStory" styleClass="botaoPostIt" action="#{storyManager.remove}" value="#{i18n['story.show.button.delete']} AJAX"
+                                             onclick="jsf.ajax.request(this, event, {execute: 'frmListStories',
+                                                 render: 'frmListStories'}); return false;" />
                             <h:commandButton styleClass="botaoPostIt" action="#{storyManager.showTasks}" value="#{i18n['story.show.button.showTasks']}"  />
                         </h:column>
 
