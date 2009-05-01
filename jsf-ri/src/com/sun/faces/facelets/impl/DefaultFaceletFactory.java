@@ -86,11 +86,11 @@ public final class DefaultFaceletFactory extends FaceletFactory {
 
     private final Compiler compiler;
 
-    private Map facelets;
+    private Map<String, DefaultFacelet> facelets;
 
-    private Map metadataFacelets;
+    private Map<String, DefaultFacelet> metadataFacelets;
 
-    private Map relativeLocations;
+    private Map<String, URL> relativeLocations;
 
     private final ResourceResolver resolver;
 
@@ -108,9 +108,9 @@ public final class DefaultFaceletFactory extends FaceletFactory {
         Util.notNull("compiler", compiler);
         Util.notNull("resolver", resolver);
         this.compiler = compiler;
-        this.facelets = new HashMap();
-        this.metadataFacelets = new HashMap();
-        this.relativeLocations = new HashMap();
+        this.facelets = new HashMap<String, DefaultFacelet>();
+        this.metadataFacelets = new HashMap<String, DefaultFacelet>();
+        this.relativeLocations = new HashMap<String, URL>();
         this.resolver = resolver;
         this.baseUrl = resolver.resolveUrl("/");
         // this.location = url;
@@ -184,11 +184,11 @@ public final class DefaultFaceletFactory extends FaceletFactory {
                                               FacesException, ELException {
         Util.notNull("url", url);
         String key = url.toString();
-        DefaultFacelet f = (DefaultFacelet) this.facelets.get(key);
+        DefaultFacelet f = this.facelets.get(key);
         if (f == null || this.needsToBeRefreshed(f)) {
             f = this.createFacelet(url);
             if (this.refreshPeriod != 0) {
-                Map newLoc = new HashMap(this.facelets);
+                Map<String, DefaultFacelet> newLoc = new HashMap<String, DefaultFacelet>(this.facelets);
                 newLoc.put(key, f);
                 this.facelets = newLoc;
             }
@@ -200,11 +200,11 @@ public final class DefaultFaceletFactory extends FaceletFactory {
 
         Util.notNull("url", url);
         String key = url.toString();
-        DefaultFacelet f = (DefaultFacelet) this.metadataFacelets.get(key);
+        DefaultFacelet f = this.metadataFacelets.get(key);
         if (f == null || this.needsToBeRefreshed(f)) {
             f = this.createMetadataFacelet(url);
             if (this.refreshPeriod != 0) {
-                Map newLoc = new HashMap(this.metadataFacelets);
+                Map<String, DefaultFacelet> newLoc = new HashMap<String, DefaultFacelet>(this.metadataFacelets);
                 newLoc.put(key, f);
                 this.metadataFacelets = newLoc;
             }
@@ -255,11 +255,11 @@ public final class DefaultFaceletFactory extends FaceletFactory {
 
     private URL resolveURL(String uri) throws IOException {
 
-        URL url = (URL) this.relativeLocations.get(uri);
+        URL url = this.relativeLocations.get(uri);
         if (url == null) {
             url = this.resolveURL(this.baseUrl, uri);
             if (url != null) {
-                Map newLoc = new HashMap(this.relativeLocations);
+                Map<String, URL> newLoc = new HashMap<String, URL>(this.relativeLocations);
                 newLoc.put(uri, url);
                 this.relativeLocations = newLoc;
             } else {
@@ -295,9 +295,11 @@ public final class DefaultFaceletFactory extends FaceletFactory {
                        + url.getFile().replaceFirst(this.baseUrl.getFile(), "");
         try {
             FaceletHandler h = this.compiler.compile(url, alias);
-            DefaultFacelet f = new DefaultFacelet(this, this.compiler
-                  .createExpressionFactory(), url, alias, h);
-            return f;
+            return new DefaultFacelet(this,
+                                      this.compiler.createExpressionFactory(),
+                                      url,
+                                      alias,
+                                      h);
         } catch (FileNotFoundException fnfe) {
             throw new FileNotFoundException("Facelet "
                                             + alias
@@ -315,9 +317,11 @@ public final class DefaultFaceletFactory extends FaceletFactory {
                        + url.getFile().replaceFirst(this.baseUrl.getFile(), "");
         try {
             FaceletHandler h = this.compiler.metadataCompile(url, alias);
-            DefaultFacelet f = new DefaultFacelet(this, this.compiler
-                  .createExpressionFactory(), url, alias, h);
-            return f;
+            return new DefaultFacelet(this,
+                                      this.compiler.createExpressionFactory(),
+                                      url,
+                                      alias,
+                                      h);
         } catch (FileNotFoundException fnfe) {
             throw new FileNotFoundException("Facelet "
                                             + alias
