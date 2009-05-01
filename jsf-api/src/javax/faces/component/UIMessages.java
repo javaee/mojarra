@@ -75,13 +75,13 @@ public class UIMessages extends UIComponentBase {
 
 
     enum PropertyKeys {
-		forValue("for"),
+        forValue("for"),
         globalOnly,
         showDetail,
         showSummary,
         redisplay;
 
-		String toString;
+        String toString;
 
         PropertyKeys(String toString) {
             this.toString = toString;
@@ -119,11 +119,11 @@ public class UIMessages extends UIComponentBase {
 
     }
 
-	/**
-	 * <p class="changed_added_2_0">Return the client identifier of the
-	 * component for which this component represents associated message(s)
-	 * (if any).</p>
-	 */
+    /**
+     * <p class="changed_added_2_0">Return the client identifier of the
+     * component for which this component represents associated message(s)
+     * (if any).</p>
+     */
     public String getFor() {
 
         return (String) getStateHelper().eval(PropertyKeys.forValue);
