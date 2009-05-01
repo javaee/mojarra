@@ -57,9 +57,6 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.FaceletHandler;
 
 /**
  * <p class="changed_added_2_0">A FaceletHandler that is derived of 1 or
@@ -89,7 +86,7 @@ public final class CompositeFaceletHandler implements FaceletHandler {
      * component represented by this element instance.
      * @since 2.0
      */
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         for (int i = 0; i < len; i++) {
             this.children[i].apply(ctx, parent);
         }

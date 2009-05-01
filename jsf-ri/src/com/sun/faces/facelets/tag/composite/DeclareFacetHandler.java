@@ -52,22 +52,16 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
+
+import javax.el.ValueExpression;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.*;
 import java.beans.BeanDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.ComponentHandler;
 
 
 public class DeclareFacetHandler extends TagHandlerImpl {
@@ -83,7 +77,7 @@ public class DeclareFacetHandler extends TagHandlerImpl {
         
     }
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         // only process if it's been created
         if (null == parent || 
             (null == (parent = parent.getParent())) ||

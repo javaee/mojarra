@@ -51,14 +51,13 @@
 
 package com.sun.faces.facelets.el;
 
-import java.io.Serializable;
-
 import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
+import java.io.Serializable;
 
 /**
  * For legacy ActionSources

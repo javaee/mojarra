@@ -52,30 +52,21 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import java.io.Serializable;
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
+import com.sun.faces.facelets.util.ReflectionUtil;
 
-import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
+import javax.faces.application.Resource;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagAttributeException;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
-import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
-import com.sun.faces.facelets.util.ReflectionUtil;
-import javax.faces.application.Resource;
 import javax.faces.view.EditableValueHolderAttachedObjectHandler;
-import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.*;
+import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Register an ValueChangeListener instance on the UIComponent associated with
@@ -167,7 +158,7 @@ public final class ValueChangeListenerHandler extends TagHandlerImpl implements 
      * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         // only process if it's been created
         if (parent == null || !(ComponentHandler.isNew(parent))) {
             return;

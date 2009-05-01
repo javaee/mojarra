@@ -50,8 +50,6 @@
  */
 package javax.faces.view.facelets;
 
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletHandler;
 
 /**
  * <p class="changed_added_2_0">An interface that allows other code 

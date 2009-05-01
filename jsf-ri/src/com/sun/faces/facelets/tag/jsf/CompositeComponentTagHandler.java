@@ -50,48 +50,31 @@
  */
 package com.sun.faces.facelets.tag.jsf;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.beans.PropertyDescriptor;
-import java.beans.Introspector;
-
-import javax.el.ELException;
-import javax.el.Expression;
-import javax.el.ValueExpression;
-import javax.el.VariableMapper;
-import javax.faces.FacesException;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.PostAddToViewEvent;
-import javax.faces.application.Resource;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
-import javax.faces.component.UINamingContainer;
-import javax.faces.context.FacesContext;
-import javax.faces.view.AttachedObjectHandler;
-
 import com.sun.faces.facelets.Facelet;
-import javax.faces.view.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
 
-import javax.el.MethodExpression;
+import javax.el.*;
+import javax.faces.FacesException;
+import javax.faces.application.Resource;
 import javax.faces.application.ViewHandler;
-import javax.faces.view.facelets.ComponentConfig;
-import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
+import javax.faces.component.UIPanel;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.PostAddToViewEvent;
+import javax.faces.view.AttachedObjectHandler;
+import javax.faces.view.facelets.*;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * RELEASE_PENDING (rlubke,driscoll) document

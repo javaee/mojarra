@@ -51,6 +51,16 @@
 
 package com.sun.faces.facelets.impl;
 
+import com.sun.faces.facelets.Facelet;
+import com.sun.faces.facelets.FaceletFactory;
+import com.sun.faces.facelets.compiler.Compiler;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+
+import javax.el.ELException;
+import javax.faces.FacesException;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.FaceletHandler;
 import javax.faces.view.facelets.ResourceResolver;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -61,17 +71,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-
-import com.sun.faces.facelets.Facelet;
-import javax.faces.view.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletFactory;
-import javax.faces.view.facelets.FaceletHandler;
-import com.sun.faces.facelets.compiler.Compiler;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
 
 /**
  * Default FaceletFactory implementation.
@@ -180,8 +179,7 @@ public final class DefaultFaceletFactory extends FaceletFactory {
      * @throws FacesException
      * @throws ELException
      */
-    public Facelet getFacelet(URL url) throws IOException, FaceletException,
-                                              FacesException, ELException {
+    public Facelet getFacelet(URL url) throws IOException {
         Util.notNull("url", url);
         String key = url.toString();
         DefaultFacelet f = this.facelets.get(key);
@@ -284,10 +282,7 @@ public final class DefaultFaceletFactory extends FaceletFactory {
      * @throws FacesException
      * @throws ELException
      */
-    private DefaultFacelet createFacelet(URL url) throws IOException,
-                                                         FaceletException,
-                                                         FacesException,
-                                                         ELException {
+    private DefaultFacelet createFacelet(URL url) throws IOException {
         if (log.isLoggable(Level.FINE)) {
             log.fine("Creating Facelet for: " + url);
         }

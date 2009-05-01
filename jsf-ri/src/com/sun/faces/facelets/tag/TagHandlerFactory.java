@@ -51,10 +51,10 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.view.facelets.TagHandler;
-import javax.faces.view.facelets.TagConfig;
 import javax.el.ELException;
 import javax.faces.FacesException;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagHandler;
 
 /**
  * Delegate class for TagLibraries

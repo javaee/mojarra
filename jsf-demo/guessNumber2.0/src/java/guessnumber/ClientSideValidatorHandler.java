@@ -39,8 +39,6 @@ package guessnumber;
 import java.io.IOException;
 
 import java.io.Serializable;
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -50,7 +48,6 @@ import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.PreRenderComponentEvent;
 
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.ValidatorConfig;
 import javax.faces.view.facelets.ValidatorHandler;
 
@@ -71,14 +68,11 @@ public class ClientSideValidatorHandler extends ValidatorHandler {
 
 
     @Override
-    public void apply(FaceletContext ctx, UIComponent parent)
-          throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         super.apply(ctx, parent);
 
         // only process if it's been created
         if (parent.getParent() == null) {
-            // cast to a ValueHolder
-            EditableValueHolder evh = (EditableValueHolder) parent;
             parent.subscribeToEvent(PreRenderComponentEvent.class,
                                     new PreRenderListener());
         }

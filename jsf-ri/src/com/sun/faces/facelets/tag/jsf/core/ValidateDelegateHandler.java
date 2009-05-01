@@ -51,13 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import javax.faces.validator.Validator;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.MetaRuleset;
-import javax.faces.view.facelets.ValidatorHandler;
-import javax.faces.view.facelets.ValidatorConfig;
+import javax.faces.view.facelets.*;
 
 /**
  * Register a named Validator instance on the UIComponent associated with the

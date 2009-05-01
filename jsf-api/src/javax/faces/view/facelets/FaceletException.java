@@ -61,19 +61,18 @@ import javax.faces.FacesException;
  */
 public class FaceletException extends FacesException {
 
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     * RELEASE_PENDING (docs)
      */
     public FaceletException() {
         super();
     }
 
     /**
+     * RELEASE_PENDING (docs)
      * @param message
      */
     public FaceletException(String message) {
@@ -81,6 +80,7 @@ public class FaceletException extends FacesException {
     }
 
     /**
+     * RELEASE_PENDING (docs)
      * @param cause
      */
     public FaceletException(Throwable cause) {
@@ -88,6 +88,7 @@ public class FaceletException extends FacesException {
     }
 
     /**
+     * RELEASE_PENDING (docs)
      * @param message
      * @param cause
      */

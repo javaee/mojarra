@@ -52,13 +52,11 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+
+import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
 
 public class TypeHandler extends TagHandlerImpl {
 
@@ -66,7 +64,7 @@ public class TypeHandler extends TagHandlerImpl {
         super(config);
     }
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
     }
 
 }

@@ -52,17 +52,13 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagException;
+import java.io.IOException;
 
 /**
  * Sets the specified name and attribute on the parent UIComponent. If the
@@ -102,7 +98,7 @@ public final class AttributeHandler extends TagHandlerImpl
      *      javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         if (parent == null) {
             throw new TagException(this.tag, "Parent UIComponent was null");
         }

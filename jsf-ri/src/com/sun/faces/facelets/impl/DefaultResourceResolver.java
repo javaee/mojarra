@@ -50,14 +50,13 @@
  */
 package com.sun.faces.facelets.impl;
 
-import javax.faces.view.facelets.ResourceResolver;
-import java.io.IOException;
-import java.net.URL;
+import com.sun.faces.facelets.util.Resource;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
-
-import com.sun.faces.facelets.util.Resource;
+import javax.faces.view.facelets.ResourceResolver;
+import java.io.IOException;
+import java.net.URL;
 
 public class DefaultResourceResolver extends ResourceResolver {
 

@@ -51,25 +51,19 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.view.facelets.TagAttributeException;
-import javax.faces.view.Location;
-import javax.el.ELContext;
-import javax.el.ELException;
-import javax.el.ExpressionFactory;
-import javax.el.MethodExpression;
-import javax.el.MethodInfo;
-import javax.el.ValueExpression;
-
-import javax.faces.view.facelets.FaceletContext;
 import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.el.TagMethodExpression;
 import com.sun.faces.facelets.el.TagValueExpression;
 import com.sun.faces.util.Util;
 
+import javax.el.*;
+import javax.faces.FacesException;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
+import javax.faces.view.Location;
+import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
-import javax.faces.FacesException;
+import javax.faces.view.facelets.TagAttributeException;
 
 /**
  * Representation of a Tag's attribute in a Facelet File

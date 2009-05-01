@@ -51,17 +51,13 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
-import javax.faces.component.UISelectBoolean;
-import javax.faces.convert.Converter;
-
-import javax.faces.view.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyValueBinding;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.Metadata;
-import javax.faces.view.facelets.MetaRule;
-import javax.faces.view.facelets.MetadataTarget;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectBoolean;
+import javax.faces.component.ValueHolder;
+import javax.faces.convert.Converter;
+import javax.faces.view.facelets.*;
 
 /**
  * 

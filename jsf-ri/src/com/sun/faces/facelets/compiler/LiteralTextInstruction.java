@@ -51,14 +51,10 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
 
 final class LiteralTextInstruction implements Instruction {
     private final String text;

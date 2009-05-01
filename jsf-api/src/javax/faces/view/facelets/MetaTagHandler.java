@@ -51,7 +51,6 @@
 
 package javax.faces.view.facelets;
 
-import javax.faces.view.facelets.FaceletContext;
 
 
 /**
@@ -80,10 +79,10 @@ import javax.faces.view.facelets.FaceletContext;
  * JSF Java API artifact associated with the markup element.</p>
 
  * <p>Subclasses override the {@link #createMetaRuleset} method to
- * return a {@link RuleSet} instance encapsulating all the strategies
+ * return a {@link MetaRuleset} instance encapsulating all the strategies
  * for all the attributes that make sense for this particular markup
- * element.  The runtime calls the {@link setAttributes} method to cause
- * those rules to be executed and applied.</p>
+ * element.  The runtime calls the {@link #setAttributes(FaceletContext, Object)}
+ * method to cause those rules to be executed and applied.</p>
  *
  * </div>
  * 

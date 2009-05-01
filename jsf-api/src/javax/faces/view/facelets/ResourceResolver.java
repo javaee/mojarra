@@ -83,7 +83,7 @@ import java.net.URL;
 public abstract class ResourceResolver {
 
     public static final String FACELETS_RESOURCE_RESOLVER_PARAM_NAME = 
-	"javax.faces.FACELETS_RESOURCE_RESOLVER";
+        "javax.faces.FACELETS_RESOURCE_RESOLVER";
 
     /**
      * <p class="changed_added_2_0">Returns the <code>URL</code> of a

@@ -51,13 +51,9 @@
 
 package com.sun.faces.facelets.tag;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributes;
+import java.util.*;
 
 /**
  * A set of TagAttributesImpl, usually representing all attributes on a Tag.

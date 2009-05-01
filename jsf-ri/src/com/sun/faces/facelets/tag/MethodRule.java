@@ -50,19 +50,13 @@
  */
 package com.sun.faces.facelets.tag;
 
-import javax.faces.view.facelets.MetaRule;
-import javax.faces.view.facelets.MetadataTarget;
-import javax.faces.view.facelets.Metadata;
-import javax.faces.view.facelets.TagAttributeException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import com.sun.faces.facelets.el.LegacyMethodBinding;
 
 import javax.el.MethodExpression;
 import javax.faces.el.MethodBinding;
-
-import javax.faces.view.facelets.FaceletContext;
-import com.sun.faces.facelets.el.LegacyMethodBinding;
-import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Optional Rule for binding Method[Binding|Expression] properties

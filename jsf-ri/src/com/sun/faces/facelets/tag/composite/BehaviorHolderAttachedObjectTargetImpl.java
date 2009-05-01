@@ -40,11 +40,10 @@
 
 package com.sun.faces.facelets.tag.composite;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.faces.component.UIComponent;
 import javax.faces.view.BehaviorHolderAttachedObjectTarget;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p class="changed_added_2_0"></p>

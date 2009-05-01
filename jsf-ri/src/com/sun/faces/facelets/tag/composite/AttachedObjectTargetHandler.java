@@ -53,21 +53,15 @@ package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
+
+import javax.el.ValueExpression;
+import javax.faces.component.UIComponent;
+import javax.faces.view.AttachedObjectTarget;
+import javax.faces.view.facelets.*;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.List;
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.view.AttachedObjectTarget;
-import javax.faces.view.facelets.ComponentHandler;
 
 
 public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
@@ -83,7 +77,8 @@ public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
     
     abstract AttachedObjectTargetImpl newAttachedObjectTargetImpl();
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent)
+    throws IOException {
 
         assert(ctx.getFacesContext().getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA));
         

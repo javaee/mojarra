@@ -36,19 +36,15 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import java.io.IOException;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIPanel;
-import javax.faces.FacesException;
-import javax.el.ELException;
-
-import com.sun.faces.util.Util;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.util.Util;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIPanel;
+import javax.faces.component.UIViewRoot;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagConfig;
+import java.io.IOException;
 
 /**
  * <p>
@@ -77,7 +73,7 @@ public class MetadataHandler extends TagHandlerImpl {
     // ------------------------------------------------- Methods from TagHandler
 
     public void apply(FaceletContext ctx, UIComponent parent)
-          throws IOException, FacesException, FaceletException, ELException {
+          throws IOException {
 
         Util.notNull("parent", parent);
         UIComponent facetComponent =

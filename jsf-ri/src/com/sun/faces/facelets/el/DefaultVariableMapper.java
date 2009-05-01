@@ -51,11 +51,10 @@
 
 package com.sun.faces.facelets.el;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Default instance of a VariableMapper backed by a Map

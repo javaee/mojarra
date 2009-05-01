@@ -51,9 +51,8 @@
 
 package com.sun.faces.facelets.el;
 
-import java.lang.reflect.Method;
-
 import javax.el.FunctionMapper;
+import java.lang.reflect.Method;
 
 /**
  * Composite FunctionMapper that attempts to load the Method from the first

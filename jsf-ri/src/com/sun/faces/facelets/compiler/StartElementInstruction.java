@@ -52,12 +52,10 @@
 package com.sun.faces.facelets.compiler;
 
 
-import java.io.IOException;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 
 final class StartElementInstruction implements Instruction {
     private final String element;

@@ -51,13 +51,11 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import com.sun.faces.facelets.el.ELText;
 
 import javax.faces.context.FacesContext;
-
-import com.sun.faces.facelets.el.ELText;
+import java.io.IOException;
+import java.util.Arrays;
 
 final class UIInstructions extends UILeaf {
 

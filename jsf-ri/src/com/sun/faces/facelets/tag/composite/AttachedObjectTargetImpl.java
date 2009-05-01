@@ -51,15 +51,15 @@
 
 package com.sun.faces.facelets.tag.composite;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.sun.faces.util.Util;
+
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.view.AttachedObjectTarget;
-
-import com.sun.faces.util.Util;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AttachedObjectTargetImpl implements AttachedObjectTarget {

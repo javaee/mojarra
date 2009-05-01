@@ -51,10 +51,11 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.facelets.tag.TagLibrary;
+
 import javax.faces.view.facelets.FaceletHandler;
 import javax.faces.view.facelets.Tag;
 import javax.faces.view.facelets.TagConfig;
-import com.sun.faces.facelets.tag.TagLibrary;
 
 /**
  * 

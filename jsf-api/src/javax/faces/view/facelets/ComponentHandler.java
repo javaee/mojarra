@@ -183,7 +183,7 @@ public class ComponentHandler extends DelegatingMetaTagHandler {
      * @param component the component you wish to modify
      * @since 2.0
      */
-    public final static boolean isNew(UIComponent component) {
+    public static boolean isNew(UIComponent component) {
         return component != null && component.getParent() == null;
     }
 

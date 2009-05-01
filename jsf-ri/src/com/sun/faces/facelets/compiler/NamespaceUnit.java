@@ -51,11 +51,11 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.sun.faces.facelets.tag.TagLibrary;
 
 import javax.faces.view.facelets.FaceletHandler;
-import com.sun.faces.facelets.tag.TagLibrary;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 

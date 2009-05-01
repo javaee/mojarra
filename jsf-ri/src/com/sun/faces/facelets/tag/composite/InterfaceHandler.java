@@ -53,8 +53,15 @@ package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+
+import javax.el.ValueExpression;
+import javax.faces.application.ProjectStage;
+import javax.faces.application.Resource;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.view.AttachedObjectTarget;
+import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import java.beans.BeanDescriptor;
@@ -62,15 +69,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.view.AttachedObjectTarget;
-import javax.faces.application.Resource;
-import javax.faces.application.ProjectStage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.ComponentHandler;
 
 public class InterfaceHandler extends TagHandlerImpl {
 
@@ -81,7 +79,7 @@ public class InterfaceHandler extends TagHandlerImpl {
         super(config);
     }
     
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         FacesContext context = ctx.getFacesContext();
         // only process if it's been created
         // Do not process if we're simply building metadata

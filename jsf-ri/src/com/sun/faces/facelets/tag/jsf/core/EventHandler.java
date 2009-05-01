@@ -5,27 +5,23 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.NamedEventManager;
-import com.sun.faces.util.Util;
-import java.io.IOException;
-import java.io.Serializable;
 
 import javax.el.ELContext;
-import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagHandler;
+import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * This is the TagHandler for the f:event tag.
@@ -40,7 +36,7 @@ public class EventHandler extends TagHandler {
         this.listener = this.getRequiredAttribute("listener");
     }
 
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         Class<? extends SystemEvent> eventClass = getEventClass(ctx);
         if (eventClass != null) {
             parent.subscribeToEvent(eventClass,

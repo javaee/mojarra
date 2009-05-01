@@ -51,9 +51,6 @@
 
 package javax.faces.view.facelets;
 
-import javax.faces.view.facelets.Tag;
-import javax.faces.view.facelets.FaceletHandler;
-
 /**
  * <p class="changed_added_2_0">Passed to the constructor of {@link
  * TagHandler} subclass, it defines the document definition of the

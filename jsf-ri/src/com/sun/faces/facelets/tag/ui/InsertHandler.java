@@ -52,19 +52,15 @@
 package com.sun.faces.facelets.tag.ui;
 
 import com.sun.faces.facelets.FaceletContextImplBase;
-import java.io.IOException;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.TagConfig;
+import java.io.IOException;
 
 /**
  * @author Jacob Hookom
@@ -97,7 +93,7 @@ public final class InsertHandler extends TagHandlerImpl implements TemplateClien
      *      javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctxObj, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
         
         ctx.extendClient(this);
@@ -112,7 +108,7 @@ public final class InsertHandler extends TagHandlerImpl implements TemplateClien
         }
     }
 
-    public boolean apply(FaceletContext ctx, UIComponent parent, String name) throws IOException, FacesException, FaceletException, ELException {
+    public boolean apply(FaceletContext ctx, UIComponent parent, String name) throws IOException {
         if (this.name != null && this.name.equals(name)) {
             this.nextHandler.apply(ctx, parent);
             return true;

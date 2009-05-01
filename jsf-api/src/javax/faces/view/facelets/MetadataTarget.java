@@ -62,16 +62,45 @@ import java.lang.reflect.Method;
  */
 public abstract class MetadataTarget {
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param name
+     * @return
+     */
     public abstract PropertyDescriptor getProperty(String name);
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param type
+     * @return
+     */
     public abstract boolean isTargetInstanceOf(Class type);
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
     public abstract Class getTargetClass();
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param name
+     * @return
+     */
     public abstract Class getPropertyType(String name);
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param name
+     * @return
+     */
     public abstract Method getWriteMethod(String name);
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param name
+     * @return
+     */
     public abstract Method getReadMethod(String name);
 
 }

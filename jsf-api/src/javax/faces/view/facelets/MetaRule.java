@@ -51,9 +51,6 @@
 
 package javax.faces.view.facelets;
 
-import javax.faces.view.facelets.MetadataTarget;
-import javax.faces.view.facelets.Metadata;
-import javax.faces.view.facelets.TagAttribute;
 
 /**
  * <p class="changed_added_2_0">The root class of the abstraction that
@@ -78,7 +75,7 @@ import javax.faces.view.facelets.TagAttribute;
  * <ol>
  *
  * <li><p>The first has
- * an <code>applyRule()</code> method that returns a {@link MetaData}
+ * an <code>applyRule()</code> method that returns a {@link Metadata}
  * instance that, when its <code>applyMetada()</code> method is called,
  * dictates how the "value" attribute is processed: calling {@link
  * javax.faces.component.UIComponent#setValueExpression} on the
@@ -86,7 +83,7 @@ import javax.faces.view.facelets.TagAttribute;
  * <code>&lt;h:inputText&gt;</code> element.</p></li>
 
  * <li><p>The second has an <code>applyRule()</code> method that returns
- * a {@link MetaData} instance that, when its
+ * a {@link Metadata} instance that, when its
  * <code>applyMetadata()</code> method is called, dictates how the
  * "valueChangeListener" attribute is processed: calling {@link
  * javax.faces.component.EditableValueHolder#addValueChangeListener}.</p></li>

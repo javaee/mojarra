@@ -51,14 +51,12 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.io.IOException;
+import com.sun.faces.facelets.el.ELText;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-
 import javax.faces.context.FacesContext;
-
-import com.sun.faces.facelets.el.ELText;
+import java.io.IOException;
 
 final class CommentInstruction implements Instruction {
     private final ELText text;

@@ -51,10 +51,11 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.view.facelets.MetaRuleset;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.MetaTagHandler;
 import com.sun.faces.util.Util;
+
+import javax.faces.view.facelets.MetaRuleset;
+import javax.faces.view.facelets.MetaTagHandler;
+import javax.faces.view.facelets.TagConfig;
 
 /**
  * A base tag for wiring state to an object instance based on rules populated at

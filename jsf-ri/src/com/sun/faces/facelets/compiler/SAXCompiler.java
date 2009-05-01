@@ -51,36 +51,24 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.facelets.tag.TagAttributeImpl;
+import com.sun.faces.facelets.tag.TagAttributesImpl;
+import org.xml.sax.*;
+import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.DefaultHandler;
+
+import javax.faces.view.Location;
+import javax.faces.view.facelets.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.DefaultHandler;
-
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.FaceletHandler;
-import javax.faces.view.Location;
-import javax.faces.view.facelets.Tag;
-import javax.faces.view.facelets.TagAttributes;
-import javax.faces.view.facelets.TagAttribute;
-
-import com.sun.faces.facelets.tag.TagAttributeImpl;
-import com.sun.faces.facelets.tag.TagAttributesImpl;
-import com.sun.faces.RIConstants;
 
 /**
  * Compiler implementation that uses SAX

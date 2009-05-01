@@ -51,21 +51,10 @@
 
 package com.sun.faces.facelets.impl;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sun.faces.facelets.Facelet;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 import javax.el.ELException;
 import javax.el.ExpressionFactory;
@@ -73,14 +62,19 @@ import javax.faces.FacesException;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-
-import com.sun.faces.facelets.Facelet;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.FaceletHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Default Facelet implementation.
@@ -128,7 +122,7 @@ final class DefaultFacelet extends Facelet {
      * @see com.sun.faces.facelets.Facelet#apply(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
      */
     public void apply(FacesContext facesContext, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+    throws IOException {
         DefaultFaceletContext ctx = new DefaultFaceletContext(facesContext,
                 this);
         this.refresh(parent);
@@ -284,7 +278,7 @@ final class DefaultFacelet extends Facelet {
      * @throws ELException
      */
     private void include(DefaultFaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+    throws IOException  {
         this.refresh(parent);
         this.root.apply(new DefaultFaceletContext(ctx, this), parent);
         this.markApplied(parent);
@@ -309,7 +303,7 @@ final class DefaultFacelet extends Facelet {
      * @throws ELException
      */
     public void include(DefaultFaceletContext ctx, UIComponent parent, String path)
-            throws IOException, FacesException, FaceletException, ELException {
+    throws IOException {
         URL url;
         if (path.equals(JAVAX_FACES_ERROR_XHTML)) {
             if (isDevelopment(ctx)) {
@@ -343,7 +337,7 @@ final class DefaultFacelet extends Facelet {
      * @throws ELException
      */
     public void include(DefaultFaceletContext ctx, UIComponent parent, URL url)
-            throws IOException, FacesException, FaceletException, ELException {
+    throws IOException {
         DefaultFacelet f = (DefaultFacelet) this.factory.getFacelet(url);
         f.include(ctx, parent);
     }

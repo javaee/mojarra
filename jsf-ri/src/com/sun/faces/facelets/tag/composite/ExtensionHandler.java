@@ -38,14 +38,12 @@ package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.compiler.CompilationMessageHolder;
 import com.sun.faces.facelets.compiler.EncodingHandler;
-import java.io.IOException;
-import javax.el.ELException;
-import javax.faces.FacesException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagHandler;
+import java.io.IOException;
 
 /**
  *
@@ -57,7 +55,7 @@ public class ExtensionHandler extends TagHandler {
         super(arg0);
     }
 
-    public void apply(FaceletContext ctx, UIComponent arg1) throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent arg1) throws IOException {
         // extract a prefix from the child content
         if (null != nextHandler) {
             String content = this.nextHandler.toString().trim();

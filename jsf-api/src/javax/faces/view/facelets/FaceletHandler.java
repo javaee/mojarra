@@ -106,5 +106,5 @@ public interface FaceletHandler {
 
      */
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException;
+    throws IOException;
 }

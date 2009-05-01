@@ -38,10 +38,11 @@ package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 
-import javax.faces.view.facelets.*;
 import javax.faces.component.UIComponent;
-import javax.faces.FacesException;
-import javax.el.ELException;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
 import java.io.IOException;
 import java.util.Map;
 
@@ -84,7 +85,7 @@ public class InsertFacetHandler extends TagHandlerImpl {
 
 
     public void apply(FaceletContext ctx, UIComponent parent)
-          throws IOException, FacesException, FaceletException, ELException {
+          throws IOException {
 
         UIComponent compositeParent =
               UIComponent.getCurrentCompositeComponent(ctx.getFacesContext());

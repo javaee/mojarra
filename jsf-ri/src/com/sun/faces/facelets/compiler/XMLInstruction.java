@@ -51,14 +51,13 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.io.IOException;
+import com.sun.faces.facelets.el.ELText;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-
-import com.sun.faces.facelets.el.ELText;
+import java.io.IOException;
 
 public class XMLInstruction implements Instruction {
     

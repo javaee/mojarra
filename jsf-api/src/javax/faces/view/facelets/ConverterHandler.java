@@ -51,12 +51,7 @@
 
 package javax.faces.view.facelets;
 
-
-import javax.faces.component.ValueHolder;
-import javax.faces.convert.Converter;
-
 import javax.faces.view.ValueHolderAttachedObjectHandler;
-import javax.faces.view.facelets.FaceletContext;
 
 /**
  * <p class="changed_added_2_0">Handles setting a {@link

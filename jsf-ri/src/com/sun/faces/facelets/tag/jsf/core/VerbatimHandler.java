@@ -52,14 +52,13 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.TextHandler;
 import javax.faces.view.facelets.ComponentConfig;
 import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TextHandler;
+import java.util.Iterator;
 
 /**
  * Handler for f:verbatim

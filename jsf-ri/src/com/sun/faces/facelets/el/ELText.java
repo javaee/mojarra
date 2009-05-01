@@ -51,19 +51,15 @@
 
 package com.sun.faces.facelets.el;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.faces.context.ResponseWriter;
-
-import com.sun.faces.facelets.util.FastWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Handles parsing EL Strings in accordance with the EL-API Specification. The

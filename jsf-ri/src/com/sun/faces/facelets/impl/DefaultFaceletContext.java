@@ -51,17 +51,16 @@
 
 package com.sun.faces.facelets.impl;
 
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletContextImplBase;
+import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.DefaultVariableMapper;
 
 import javax.el.*;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.FaceletContext;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -335,7 +334,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     }
 
     public boolean includeDefinition(UIComponent parent, String name)
-            throws IOException, FaceletException, FacesException, ELException {
+    throws IOException {
         boolean found = false;
         TemplateManager client;
 
@@ -366,8 +365,8 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
         }
 
         public boolean apply(FaceletContext ctx, UIComponent parent, String name)
-                throws IOException, FacesException, FaceletException,
-                ELException {
+        throws IOException {
+
             String testName = (name != null) ? name : "facelets._NULL_DEF_";
             if (this.names.contains(testName)) {
                 return false;

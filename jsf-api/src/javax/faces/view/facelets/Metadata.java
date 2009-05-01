@@ -51,7 +51,6 @@
 
 package javax.faces.view.facelets;
 
-import javax.faces.view.facelets.FaceletContext;
 
 /**
  * <p class="changed_added_2_0">There are concrete subclasses within the

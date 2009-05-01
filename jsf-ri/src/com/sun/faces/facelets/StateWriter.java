@@ -51,10 +51,10 @@
 
 package com.sun.faces.facelets;
 
+import com.sun.faces.facelets.util.FastWriter;
+
 import java.io.IOException;
 import java.io.Writer;
-
-import com.sun.faces.facelets.util.FastWriter;
 
 /**
  * A class for handling state insertion.  Content is written

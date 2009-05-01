@@ -51,19 +51,13 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyValueBinding;
 import com.sun.faces.util.FacesLogger;
 
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.Metadata;
-import javax.faces.view.facelets.MetaRule;
-import javax.faces.view.facelets.MetadataTarget;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 

@@ -52,34 +52,22 @@
 package com.sun.faces.facelets.component;
 
 import com.sun.faces.facelets.tag.jstl.core.IterationStatus;
-import java.io.IOException;
-import java.io.Serializable;
-import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.ContextCallback;
-import javax.faces.component.EditableValueHolder;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIData;
-import javax.faces.component.UINamingContainer;
+import javax.faces.component.*;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
-import javax.faces.model.ArrayDataModel;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
-import javax.faces.model.ResultSetDataModel;
-import javax.faces.model.ScalarDataModel;
+import javax.faces.model.*;
 import javax.faces.render.Renderer;
+import java.io.IOException;
+import java.io.Serializable;
+import java.sql.ResultSet;
+import java.util.*;
 
 
 public class UIRepeat extends UINamingContainer {

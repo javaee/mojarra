@@ -36,9 +36,9 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import java.util.List;
 
 /*
  * The CompilationManager vends one of these

@@ -51,30 +51,15 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.view.facelets.TagHandler;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.Tag;
+import javax.el.ELException;
+import javax.faces.FacesException;
+import javax.faces.view.facelets.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.FaceletHandler;
-
-import javax.faces.view.facelets.BehaviorConfig;
-import javax.faces.view.facelets.BehaviorHandler;
-import javax.faces.view.facelets.ComponentConfig;
-import javax.faces.view.facelets.ConverterHandler;
-import javax.faces.view.facelets.ConverterConfig;
-import javax.faces.view.facelets.ValidatorHandler;
-import javax.faces.view.facelets.ValidatorConfig;
-import javax.faces.view.facelets.ComponentHandler;
 
 /**
  * Base class for defining TagLibraries in Java

@@ -52,21 +52,12 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import javax.faces.view.facelets.TextHandler;
 
+import javax.el.ValueExpression;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.*;
 import java.io.IOException;
 import java.util.Iterator;
-
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
 
 /**
  * Simplified implementation of c:set
@@ -99,7 +90,7 @@ public class SetHandler extends TagHandlerImpl {
     }
 
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
 
         StringBuilder bodyValue = new StringBuilder();
 

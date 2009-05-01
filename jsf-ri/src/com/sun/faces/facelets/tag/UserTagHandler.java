@@ -51,27 +51,23 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.view.facelets.TagException;
-import javax.faces.view.facelets.TagConfig;
 import com.sun.faces.facelets.FaceletContextImplBase;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.el.ELException;
-import javax.el.VariableMapper;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.TagAttribute;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.ui.DefineHandler;
+
+import javax.el.VariableMapper;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * A Tag that is specified in a FaceletFile. Takes all attributes specified and
@@ -116,10 +112,10 @@ final class UserTagHandler extends TagHandlerImpl implements TemplateClient {
      * 
      * @see TagAttribute#getValueExpression(FaceletContext, Class)
      * @see VariableMapper
-     * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
+     * @see javax.faces.view.facelets.FaceletHandler#apply(javax.faces.view.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctxObj, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+    throws IOException {
         FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
         VariableMapper orig = ctx.getVariableMapper();
         
@@ -147,7 +143,8 @@ final class UserTagHandler extends TagHandlerImpl implements TemplateClient {
         }
     }
 
-    public boolean apply(FaceletContext ctx, UIComponent parent, String name) throws IOException, FacesException, FaceletException, ELException {
+    public boolean apply(FaceletContext ctx, UIComponent parent, String name)
+    throws IOException {
         if (name != null) {
             if (this.handlers == null) {
                 return false;

@@ -51,12 +51,10 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.io.IOException;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 
 interface Instruction {
     public void write(FacesContext context) throws IOException;

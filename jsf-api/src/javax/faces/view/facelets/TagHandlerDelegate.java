@@ -37,11 +37,7 @@
 package javax.faces.view.facelets;
 
 import java.io.IOException;
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 
 
 /**
@@ -81,6 +77,7 @@ public abstract class TagHandlerDelegate {
      * element.
      *
      */
-    public abstract void apply(FaceletContext ctx, UIComponent comp) throws IOException, FacesException, FaceletException, ELException;
+    public abstract void apply(FaceletContext ctx, UIComponent comp)
+    throws IOException;
 
 }

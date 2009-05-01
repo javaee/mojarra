@@ -51,12 +51,12 @@
 
 package com.sun.faces.facelets.compiler;
 
-import javax.faces.component.UIComponent;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
+import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.FaceletHandler;
 import javax.faces.view.facelets.TextHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 public abstract class AbstractUIHandler implements FaceletHandler, TextHandler {
 

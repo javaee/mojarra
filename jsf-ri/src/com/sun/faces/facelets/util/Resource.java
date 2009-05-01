@@ -50,6 +50,11 @@
  */
 package com.sun.faces.facelets.util;
 
+import com.sun.faces.util.FacesLogger;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,12 +64,6 @@ import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
-
-import com.sun.faces.util.FacesLogger;
 
 /**
  * @author Roland Huss

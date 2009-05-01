@@ -52,17 +52,13 @@
 package com.sun.faces.facelets.tag.ui;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
 
-import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
+import java.io.IOException;
 
 /**
  * @author Jacob Hookom
@@ -90,7 +86,7 @@ public class ParamHandler extends TagHandlerImpl {
      *      javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         String nameStr = this.name.getValue(ctx);
         ValueExpression valueVE = this.value.getValueExpression(ctx,
                 Object.class);

@@ -51,6 +51,18 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.facelets.tag.CompositeTagDecorator;
+import com.sun.faces.facelets.tag.CompositeTagLibrary;
+import com.sun.faces.facelets.tag.TagLibrary;
+import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+
+import javax.el.ExpressionFactory;
+import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.view.facelets.TagDecorator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -58,21 +70,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import javax.el.ELException;
-import javax.el.ExpressionFactory;
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.FaceletHandler;
-import com.sun.faces.facelets.tag.CompositeTagDecorator;
-import com.sun.faces.facelets.tag.CompositeTagLibrary;
-import javax.faces.view.facelets.TagDecorator;
-import com.sun.faces.facelets.tag.TagLibrary;
-import com.sun.faces.facelets.util.ReflectionUtil;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
 
 /**
  * A Compiler instance may handle compiling multiple sources

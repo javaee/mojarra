@@ -52,28 +52,17 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.Set;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import javax.faces.view.facelets.TagConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Load a resource bundle localized for the Locale of the current view, and
@@ -221,7 +210,7 @@ public final class LoadBundleHandler extends TagHandlerImpl {
      * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
         ResourceBundle bundle = null;
         try {

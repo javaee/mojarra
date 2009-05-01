@@ -52,30 +52,21 @@
 package com.sun.faces.facelets.tag.ui;
 
 import com.sun.faces.facelets.FaceletContextImplBase;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.el.ELException;
-import javax.el.VariableMapper;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.util.FacesLogger;
 
+import javax.el.VariableMapper;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagAttributeException;
+import javax.faces.view.facelets.TagConfig;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Jacob Hookom
@@ -130,7 +121,7 @@ public final class DecorateHandler extends TagHandlerImpl implements TemplateCli
      *      javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctxObj, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
         VariableMapper orig = ctx.getVariableMapper();
         if (this.params != null) {
@@ -157,7 +148,7 @@ public final class DecorateHandler extends TagHandlerImpl implements TemplateCli
         }
     }
 
-    public boolean apply(FaceletContext ctx, UIComponent parent, String name) throws IOException, FacesException, FaceletException, ELException {
+    public boolean apply(FaceletContext ctx, UIComponent parent, String name) throws IOException {
         if (name != null) {
             DefineHandler handler = (DefineHandler) this.handlers.get(name);
             if (handler != null) {

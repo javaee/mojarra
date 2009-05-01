@@ -51,18 +51,12 @@
 
 package com.sun.faces.facelets.el;
 
+import javax.el.*;
+import javax.faces.view.facelets.TagAttribute;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-
-import javax.el.ELContext;
-import javax.el.ELException;
-import javax.el.PropertyNotFoundException;
-import javax.el.PropertyNotWritableException;
-import javax.el.ValueExpression;
-
-import javax.faces.view.facelets.TagAttribute;
 
 /**
  * 

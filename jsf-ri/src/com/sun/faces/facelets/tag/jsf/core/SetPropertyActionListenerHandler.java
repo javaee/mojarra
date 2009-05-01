@@ -51,14 +51,12 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import java.io.IOException;
-import java.io.Serializable;
+import com.sun.faces.facelets.el.LegacyValueBinding;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 
 import javax.el.ELContext;
-import javax.el.ELException;
-import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
-import javax.faces.FacesException;
+import javax.el.ValueExpression;
 import javax.faces.component.ActionSource;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.UIComponent;
@@ -67,15 +65,9 @@ import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import com.sun.faces.facelets.el.LegacyValueBinding;
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import javax.faces.view.facelets.ComponentHandler;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
+import javax.faces.view.facelets.*;
+import java.io.IOException;
+import java.io.Serializable;
 
 public class SetPropertyActionListenerHandler extends TagHandlerImpl {
 
@@ -90,7 +82,7 @@ public class SetPropertyActionListenerHandler extends TagHandlerImpl {
     }
 
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         if (parent instanceof ActionSource) {
             ActionSource src = (ActionSource) parent;
             if (ComponentHandler.isNew(parent)) {

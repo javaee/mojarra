@@ -41,12 +41,10 @@
 package javax.faces.view;
 
 /**
- * <p class="changed_added_2_0"></p>
- * @author asmirnov@exadel.com
- *
+ * <p class="changed_added_2_0">RELEASE_PENDING DOCS</p>
  */
 public interface BehaviorHolderAttachedObjectTarget extends AttachedObjectTarget {
 
-	public abstract boolean isDefaultEvent();
+    public abstract boolean isDefaultEvent();
 
 }

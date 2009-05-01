@@ -52,22 +52,16 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
-import javax.el.ELException;
 import javax.el.MethodExpression;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.PhaseEvent;
-
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+import java.io.IOException;
 
 /**
  * Container for all JavaServer Faces core and custom component actions used on
@@ -117,7 +111,7 @@ public final class ViewHandler extends TagHandlerImpl {
      * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
         Object partialStateSavingVal = null;
         if (root != null) {

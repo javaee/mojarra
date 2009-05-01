@@ -40,14 +40,12 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.BehaviorHandler;
+import javax.faces.view.facelets.TagHandler;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.BehaviorHandler;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagHandler;
 
 
 /**

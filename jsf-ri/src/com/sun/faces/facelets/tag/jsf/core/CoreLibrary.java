@@ -51,20 +51,15 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.facelets.tag.AbstractTagLibrary;
+
 import javax.faces.component.UIParameter;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
+import javax.faces.component.UIViewParameter;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.convert.NumberConverter;
-import javax.faces.validator.DoubleRangeValidator;
-import javax.faces.validator.LengthValidator;
-import javax.faces.validator.LongRangeValidator;
-
-import com.sun.faces.facelets.tag.AbstractTagLibrary;
-import javax.faces.component.UIViewParameter;
-import javax.faces.validator.BeanValidator;
-import javax.faces.validator.RegexValidator;
-import javax.faces.validator.RequiredValidator;
+import javax.faces.validator.*;
 
 /**
  * For Tag details, see JSF Core <a target="_new"

@@ -51,19 +51,15 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.facelets.el.LegacyMethodBinding;
+
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.MethodExpressionValidator;
-
-import javax.faces.view.facelets.FaceletContext;
-import com.sun.faces.facelets.el.LegacyMethodBinding;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.Metadata;
-import javax.faces.view.facelets.MetaRule;
-import javax.faces.view.facelets.MetadataTarget;
+import javax.faces.view.facelets.*;
 
 /**
  * 

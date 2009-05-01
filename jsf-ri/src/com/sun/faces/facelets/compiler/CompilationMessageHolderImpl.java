@@ -36,13 +36,9 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import java.util.*;
 
 /**
  *

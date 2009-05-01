@@ -42,25 +42,17 @@ import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.el.ELException;
+
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.*;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.ComponentConfig;
-import javax.faces.view.facelets.ComponentHandler;
-import javax.faces.view.facelets.MetaRuleset;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagException;
-import javax.faces.view.facelets.TagHandlerDelegate;
+import javax.faces.view.facelets.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
@@ -120,7 +112,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      */
     
     @Override
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         // make sure our parent is not null
         if (parent == null) {
             throw new TagException(owner.getTag(), "Parent UIComponent was null");

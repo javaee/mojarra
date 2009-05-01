@@ -36,10 +36,10 @@
 
 package com.sun.faces.facelets.tag;
 
-import java.net.URL;
-import java.lang.reflect.Method;
-
 import com.sun.faces.util.Util;
+
+import java.lang.reflect.Method;
+import java.net.URL;
 
 /**
  * RELEASE_PENDING (rlubke,driscoll) docs

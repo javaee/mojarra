@@ -37,9 +37,10 @@
 package com.sun.faces.facelets.util;
 
 import com.sun.faces.scripting.GroovyHelper;
-import java.net.URL;
+
 import javax.faces.FacesException;
 import javax.faces.view.facelets.ResourceResolver;
+import java.net.URL;
 
 /**
  *

@@ -51,18 +51,13 @@
 
 package com.sun.faces.facelets.compiler;
 
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.CompositeFaceletHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletHandler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.FaceletHandler;
-import javax.faces.view.facelets.CompositeFaceletHandler;
 
 /**
  * 
@@ -73,8 +68,7 @@ class CompilationUnit {
 
     protected final static FaceletHandler LEAF = new FaceletHandler() {
         public void apply(FaceletContext ctx, UIComponent parent)
-                throws IOException, FacesException, FaceletException,
-                ELException {
+                throws IOException {
         }
         public String toString() {
             return "FaceletHandler Tail";

@@ -51,20 +51,20 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.view.facelets.TagHandler;
-import javax.faces.view.facelets.TagConfig;
-import com.sun.faces.facelets.tag.*;
+import com.sun.faces.facelets.tag.TagLibraryImpl;
 import com.sun.faces.util.FacesLogger;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagHandler;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class CompositeComponentTagLibrary extends TagLibraryImpl {

@@ -51,15 +51,10 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.io.IOException;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-
 import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.FaceletHandler;
+import java.io.IOException;
 
 public class EncodingHandler implements FaceletHandler {
 
@@ -75,7 +70,7 @@ public class EncodingHandler implements FaceletHandler {
     }
 
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         ctx.getFacesContext().getAttributes().put("facelets.compilationMessages", this.messageHolder);
         this.next.apply(ctx, parent);
         ctx.getFacesContext().getAttributes().remove("facelets.compilationMessages");
@@ -84,11 +79,9 @@ public class EncodingHandler implements FaceletHandler {
     }
     
     public static CompilationMessageHolder getCompilationMessageHolder(FaceletContext ctx) {
-        CompilationMessageHolder result = null;
-        
-        result = (CompilationMessageHolder) ctx.getFacesContext().getAttributes().get("facelets.compilationMessages");
 
-        return result;
+        return (CompilationMessageHolder) ctx.getFacesContext().getAttributes().get("facelets.compilationMessages");
+
     }
 
 }

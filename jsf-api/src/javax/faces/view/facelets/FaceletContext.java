@@ -168,7 +168,7 @@ public abstract class FaceletContext extends ELContext {
      * @since 2.0
      */
     public abstract void includeFacelet(UIComponent parent, String relativePath)
-            throws IOException, FaceletException, FacesException, ELException;
+    throws IOException;
 
     /**
      * <p class="changed_added_2_0">Include another Facelet defined at
@@ -191,6 +191,6 @@ public abstract class FaceletContext extends ELContext {
 
      */
     public abstract void includeFacelet(UIComponent parent, URL absolutePath)
-            throws IOException, FaceletException, FacesException, ELException;
+    throws IOException;
 
 }

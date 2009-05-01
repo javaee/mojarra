@@ -58,21 +58,39 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.AttachedObjectHandler;
 
 /**
+ * RELEASE_PENDING (docs)
  */
 public abstract class FaceletsAttachedObjectHandler extends DelegatingMetaTagHandler implements AttachedObjectHandler {
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param config
+     */
     public FaceletsAttachedObjectHandler(TagConfig config) {
         super(config);
     }
-    
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
     protected final AttachedObjectHandler getAttachedObjectHandlerHelper() {
         return (AttachedObjectHandler) this.getTagHandlerDelegate();
     }
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param ctx
+     * @param parent The <code>UIComponent</code> to which this
+     */
     public final void applyAttachedObject(FacesContext ctx, UIComponent parent) {
         getAttachedObjectHandlerHelper().applyAttachedObject(ctx, parent);
     }
-    
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
     public final String getFor() {
         return getAttachedObjectHandlerHelper().getFor();
     }

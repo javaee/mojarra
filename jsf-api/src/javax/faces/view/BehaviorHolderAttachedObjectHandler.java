@@ -43,12 +43,10 @@ package javax.faces.view;
 import javax.faces.view.AttachedObjectHandler;
 
 /**
- * <p class="changed_added_2_0"></p>
- * @author asmirnov@exadel.com
- *
+ * <p class="changed_added_2_0">RELEASE_PENDING (docs)</p>
  */
 public interface BehaviorHolderAttachedObjectHandler extends AttachedObjectHandler {
 
-	public String getEventName();
+    public String getEventName();
 
 }

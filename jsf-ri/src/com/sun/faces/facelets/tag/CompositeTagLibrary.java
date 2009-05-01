@@ -52,22 +52,18 @@
 package com.sun.faces.facelets.tag;
 
 import com.sun.faces.facelets.compiler.CompilationMessageHolder;
-import javax.faces.view.facelets.TagHandler;
-import javax.faces.view.facelets.TagConfig;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagLibrary;
-import java.lang.reflect.Method;
-
-import javax.faces.FacesException;
-
 import com.sun.faces.util.Util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagHandler;
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * A TagLibrary that is composed of 1 or more TagLibrary children. Uses the

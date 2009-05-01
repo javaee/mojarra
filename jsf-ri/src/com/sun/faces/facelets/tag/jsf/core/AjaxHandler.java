@@ -51,17 +51,14 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import java.beans.BeanDescriptor;
-import java.beans.BeanInfo;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.*;
+import com.sun.faces.RIConstants;
+import com.sun.faces.component.behavior.AjaxBehaviors;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 
-import javax.el.ELException;
 import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
-import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
@@ -75,20 +72,13 @@ import javax.faces.event.AjaxBehaviorListener;
 import javax.faces.view.AttachedObjectTarget;
 import javax.faces.view.BehaviorHolderAttachedObjectHandler;
 import javax.faces.view.BehaviorHolderAttachedObjectTarget;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-
-import javax.faces.view.facelets.CompositeFaceletHandler;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
-import javax.faces.view.facelets.TagHandler;
-import com.sun.faces.RIConstants;
-import com.sun.faces.component.behavior.AjaxBehaviors;
-import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
-
-import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.*;
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
+import java.util.ListIterator;
 
 
 /**
@@ -165,7 +155,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
      *      javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
-          throws IOException, FacesException, FaceletException, ELException {
+          throws IOException {
 
         String eventName = getEventName();
 

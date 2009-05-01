@@ -51,11 +51,10 @@
 
 package com.sun.faces.facelets.tag.jstl.core;
 
-import java.io.Serializable;
-import java.util.Map;
-
 import javax.el.ELContext;
 import javax.el.ValueExpression;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author Jacob Hookom

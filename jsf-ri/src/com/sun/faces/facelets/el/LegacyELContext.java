@@ -51,25 +51,15 @@
 
 package com.sun.faces.facelets.el;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.el.ELContext;
-import javax.el.ELException;
-import javax.el.ELResolver;
-import javax.el.FunctionMapper;
-import javax.el.PropertyNotWritableException;
-import javax.el.VariableMapper;
+import javax.el.*;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * 

@@ -51,12 +51,11 @@
 
 package com.sun.faces.facelets;
 
-import javax.faces.view.facelets.FaceletException;
-import java.io.IOException;
-
-import java.net.URL;
 import javax.el.ELException;
 import javax.faces.FacesException;
+import javax.faces.view.facelets.FaceletException;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * FaceletFactory for producing Facelets relative to the context of the

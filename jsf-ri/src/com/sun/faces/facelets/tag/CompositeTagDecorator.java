@@ -51,9 +51,10 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.view.facelets.TagDecorator;
-import javax.faces.view.facelets.Tag;
 import com.sun.faces.util.Util;
+
+import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.TagDecorator;
 
 /**
  * A TagDecorator that is composed of 1 or more TagDecorator instances. It uses

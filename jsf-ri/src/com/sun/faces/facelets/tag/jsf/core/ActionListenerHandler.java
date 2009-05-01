@@ -52,31 +52,21 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import java.io.Serializable;
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
+import com.sun.faces.facelets.util.ReflectionUtil;
 
-import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
+import javax.faces.application.Resource;
 import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagAttributeException;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
-import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
-import com.sun.faces.facelets.util.ReflectionUtil;
-
-import javax.faces.application.Resource;
 import javax.faces.view.ActionSource2AttachedObjectHandler;
-import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.*;
+import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Register an ActionListener instance on the UIComponent associated with the
@@ -173,7 +163,7 @@ public final class ActionListenerHandler extends TagHandlerImpl
      *      javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
-          throws IOException, FacesException, FaceletException, ELException {
+          throws IOException {
         if (null == parent || !(ComponentHandler.isNew(parent))) {
             return;
         }

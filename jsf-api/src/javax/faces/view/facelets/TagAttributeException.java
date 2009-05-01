@@ -51,8 +51,6 @@
 
 package javax.faces.view.facelets;
 
-import javax.faces.view.facelets.FaceletException;
-
 /**
  * <p class="changed_added_2_0">An Exception caused by a {@link
  * TagAttribute}</p>
@@ -90,7 +88,7 @@ public final class TagAttributeException extends FaceletException {
         super(print(tag, attr));
     }
 
-    private final static String print(Tag tag, TagAttribute attr) {
+    private static String print(Tag tag, TagAttribute attr) {
         return tag.getLocation() + " <" + tag.getQName() + " " + attr.getQName()
                 + "=\"" + attr.getValue() + "\">";
     }

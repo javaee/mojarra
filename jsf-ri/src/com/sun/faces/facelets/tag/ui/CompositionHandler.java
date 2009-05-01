@@ -52,31 +52,21 @@
 package com.sun.faces.facelets.tag.ui;
 
 import com.sun.faces.facelets.FaceletContextImplBase;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.el.ELException;
-import javax.el.VariableMapper;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.util.FacesLogger;
 
+import javax.el.VariableMapper;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagAttributeException;
+import javax.faces.view.facelets.TagConfig;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Jacob Hookom
@@ -139,7 +129,7 @@ public final class CompositionHandler extends TagHandlerImpl implements
      *      javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctxObj, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
 
         if (this.template != null) {
@@ -172,7 +162,7 @@ public final class CompositionHandler extends TagHandlerImpl implements
     }
 
     public boolean apply(FaceletContext ctx, UIComponent parent, String name)
-          throws IOException, FacesException, FaceletException, ELException {
+          throws IOException {
         if (name != null) {
             if (this.handlers == null) {
                 return false;

@@ -51,7 +51,6 @@
 
 package javax.faces.view.facelets;
 
-import javax.faces.view.facelets.TagConfig;
 
 /**
  * <p class="changed_added_2_0">Passed to the constructor of {@link

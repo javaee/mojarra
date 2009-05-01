@@ -51,17 +51,13 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.facelets.el.LegacyMethodBinding;
+
 import javax.faces.component.ActionSource;
 import javax.faces.component.ActionSource2;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.MethodExpressionActionListener;
-
-import javax.faces.view.facelets.FaceletContext;
-import com.sun.faces.facelets.el.LegacyMethodBinding;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.Metadata;
-import javax.faces.view.facelets.MetaRule;
-import javax.faces.view.facelets.MetadataTarget;
+import javax.faces.view.facelets.*;
 
 /**
  * 

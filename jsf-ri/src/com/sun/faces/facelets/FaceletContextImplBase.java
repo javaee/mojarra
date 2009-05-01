@@ -36,12 +36,12 @@
 
 package com.sun.faces.facelets;
 
-import java.io.IOException;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.FaceletException;
+import java.io.IOException;
 
 /**
  *

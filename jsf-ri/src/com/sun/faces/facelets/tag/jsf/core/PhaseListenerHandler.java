@@ -52,12 +52,10 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import java.io.IOException;
-import java.io.Serializable;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+import com.sun.faces.facelets.util.ReflectionUtil;
 
-import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -65,16 +63,9 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagAttributeException;
-import javax.faces.view.facelets.TagConfig;
-import javax.faces.view.facelets.TagException;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import com.sun.faces.facelets.util.ReflectionUtil;
-import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.*;
+import java.io.IOException;
+import java.io.Serializable;
 
 public class PhaseListenerHandler extends TagHandlerImpl {
 
@@ -166,7 +157,7 @@ public class PhaseListenerHandler extends TagHandlerImpl {
     }
 
     public void apply(FaceletContext ctx, UIComponent parent)
-          throws IOException, FacesException, FaceletException, ELException {
+          throws IOException {
         if (ComponentHandler.isNew(parent)) {
             UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
             if (root == null) {

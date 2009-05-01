@@ -51,9 +51,6 @@
 
 package javax.faces.view.facelets;
 
-
-
-import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.EditableValueHolderAttachedObjectHandler;
 
 /**
@@ -77,12 +74,21 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
 
     private ValidatorConfig config;
 
+
+    /**
+     * RELEASE_PENDING (docs)
+     * @param config
+     */
     public ValidatorHandler(ValidatorConfig config) {
         super(config);
         this.config = config;
         this.validatorId = config.getValidatorId();
     }
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @return
+     */
     @Override
     protected TagHandlerDelegate getTagHandlerDelegate() {
         if (null == helper) {
@@ -92,13 +98,12 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
     }
 
     /**
+     * RELEASE_PENDING (review)
      * <p>Retrieve the id of the validator that is to be created an added to the parent <code>EditableValueHolder</code>.
      * All subclasses should override this method because it is important for Facelets to have a unique way of
      * identifying the validators that are added to this <code>EditableValueHolder</code> and allows exclusions
      * to work properly. An exclusion is a validator declaration that has the attribute "disabled" which resolves
      * to false, instructing Facelets not to register a default validator with the same id.</p>
-     * <p>TODO could support binding by evaluating and reflecting its type for the value of the VALIDATOR_ID field,
-     * though technically the validatorId is always required, even when using a binding</p>
      */
     public String getValidatorId(FaceletContext ctx) {
         if (validatorId == null) {

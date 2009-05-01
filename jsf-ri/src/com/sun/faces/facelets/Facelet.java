@@ -51,13 +51,12 @@
 
 package com.sun.faces.facelets;
 
-import javax.faces.view.facelets.FaceletException;
-import java.io.IOException;
-
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.FaceletException;
+import java.io.IOException;
 
 /**
  * The parent or root object in a FaceletHandler composition. The Facelet will
@@ -85,5 +84,5 @@ public abstract class Facelet {
      * @throws ELException
      */
     public abstract void apply(FacesContext facesContext, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException;
+    throws IOException;
 }

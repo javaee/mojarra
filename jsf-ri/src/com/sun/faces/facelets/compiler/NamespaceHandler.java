@@ -51,20 +51,16 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.facelets.el.CompositeFunctionMapper;
+import com.sun.faces.facelets.tag.TagLibrary;
+
+import javax.el.FunctionMapper;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.FaceletHandler;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
-
-import javax.el.ELException;
-import javax.el.FunctionMapper;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.FaceletHandler;
-import com.sun.faces.facelets.el.CompositeFunctionMapper;
-import com.sun.faces.facelets.tag.TagLibrary;
 
 final class NamespaceHandler extends FunctionMapper implements FaceletHandler {
 
@@ -79,7 +75,7 @@ final class NamespaceHandler extends FunctionMapper implements FaceletHandler {
     }
 
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         FunctionMapper orig = ctx.getFunctionMapper();
         ctx.setFunctionMapper(new CompositeFunctionMapper(this, orig));
         try {

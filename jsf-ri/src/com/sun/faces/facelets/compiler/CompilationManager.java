@@ -51,20 +51,8 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.faces.view.facelets.FaceletHandler;
-import javax.faces.view.facelets.Tag;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagAttributeException;
-import javax.faces.view.facelets.TagDecorator;
-import javax.faces.view.facelets.TagException;
-import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
+import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
 import com.sun.faces.facelets.tag.composite.ImplementationHandler;
 import com.sun.faces.facelets.tag.composite.InterfaceHandler;
@@ -72,6 +60,13 @@ import com.sun.faces.facelets.tag.ui.ComponentRefHandler;
 import com.sun.faces.facelets.tag.ui.CompositionHandler;
 import com.sun.faces.facelets.tag.ui.UILibrary;
 import com.sun.faces.util.FacesLogger;
+
+import javax.faces.view.facelets.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Compilation unit for managing the creation of a single FaceletHandler based

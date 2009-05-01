@@ -51,9 +51,6 @@
 
 package javax.faces.view.facelets;
 
-import javax.faces.view.facelets.Tag;
-import javax.faces.view.facelets.FaceletException;
-
 /**
  * <p class="changed_added_2_0">An Exception caused by a {@link Tag}</p>
  * 
@@ -61,19 +58,18 @@ import javax.faces.view.facelets.FaceletException;
  */
 public final class TagException extends FaceletException {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     * RELEASE_PENDING docs
      */
     public TagException(Tag tag) {
         super(tag.toString());
     }
 
     /**
+     * RELEASE_PENDING docs
+     * @param tag
      * @param message
      */
     public TagException(Tag tag, String message) {
@@ -81,6 +77,8 @@ public final class TagException extends FaceletException {
     }
 
     /**
+     * RELEASE_PENDING docs
+     * @param tag
      * @param cause
      */
     public TagException(Tag tag, Throwable cause) {
@@ -88,6 +86,8 @@ public final class TagException extends FaceletException {
     }
 
     /**
+     * RELEASE_PENDING docs
+     * @param tag
      * @param message
      * @param cause
      */

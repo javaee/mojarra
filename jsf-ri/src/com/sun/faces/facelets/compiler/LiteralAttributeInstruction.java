@@ -51,14 +51,10 @@
 
 package com.sun.faces.facelets.compiler;
 
-import java.io.IOException;
-import java.util.List;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
-
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
+import java.io.IOException;
 
 
 final class LiteralAttributeInstruction implements Instruction {

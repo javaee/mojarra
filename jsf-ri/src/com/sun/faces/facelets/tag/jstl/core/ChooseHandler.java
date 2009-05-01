@@ -52,21 +52,15 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-
-import javax.faces.component.UIComponent;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 
 /**
  * @author Jacob Hookom
@@ -99,7 +93,7 @@ public final class ChooseHandler extends TagHandlerImpl {
     }
 
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         for (int i = 0; i < this.when.length; i++) {
             if (this.when[i].isTestTrue(ctx)) {
                 this.when[i].apply(ctx, parent);

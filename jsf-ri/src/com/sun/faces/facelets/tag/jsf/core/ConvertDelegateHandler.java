@@ -54,13 +54,7 @@ package com.sun.faces.facelets.tag.jsf.core;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.convert.Converter;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.MetaRuleset;
-import javax.faces.view.facelets.ConverterHandler;
-import javax.faces.view.facelets.ConverterConfig;
+import javax.faces.view.facelets.*;
 
 /**
  * Register a named Converter instance on the UIComponent associated with the

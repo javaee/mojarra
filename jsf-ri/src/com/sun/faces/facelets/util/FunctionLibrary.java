@@ -3,14 +3,14 @@ package com.sun.faces.facelets.util;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.util.Util;
 
-import javax.faces.view.facelets.Tag;
-import javax.faces.view.facelets.TagHandler;
-import javax.faces.view.facelets.TagConfig;
 import javax.faces.FacesException;
+import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>This <code>TagLibrary</code> exposes the <code>public static</code>

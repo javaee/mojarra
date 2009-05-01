@@ -55,15 +55,15 @@ import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Util;
+
+import javax.faces.view.facelets.ResourceResolver;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-
-import com.sun.faces.util.Util;
-import java.lang.reflect.Constructor;
 import java.text.MessageFormat;
-import javax.faces.view.facelets.ResourceResolver;
+import java.util.Arrays;
 
 public class ReflectionUtil {
 

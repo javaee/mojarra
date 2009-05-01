@@ -51,17 +51,12 @@
 
 package com.sun.faces.facelets.compiler;
 
-import javax.faces.component.UIComponent;
-
-import java.io.IOException;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+
+import javax.faces.component.UIComponent;
 import javax.faces.component.UniqueIdVendor;
+import javax.faces.view.facelets.FaceletContext;
+import java.io.IOException;
 
 final class UILiteralTextHandler extends AbstractUIHandler {
     
@@ -72,7 +67,7 @@ final class UILiteralTextHandler extends AbstractUIHandler {
     }
 
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         if (parent != null) {
             UIComponent c = new UILiteralText(this.txtString);
             String uid;

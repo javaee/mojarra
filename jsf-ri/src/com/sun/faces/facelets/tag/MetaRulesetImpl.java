@@ -51,27 +51,14 @@
 
 package com.sun.faces.facelets.tag;
 
-import javax.faces.view.facelets.MetaRule;
-import javax.faces.view.facelets.MetadataTarget;
-import javax.faces.view.facelets.MetaRuleset;
-import javax.faces.view.facelets.Metadata;
-import javax.faces.view.facelets.TagException;
-import javax.faces.view.facelets.Tag;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+
+import javax.faces.view.facelets.*;
 import java.beans.IntrospectionException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.faces.view.facelets.FaceletContext;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
-
-import javax.faces.view.facelets.TagAttribute;
 
 /**
  * 

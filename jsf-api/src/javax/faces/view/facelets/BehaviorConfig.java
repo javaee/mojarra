@@ -49,11 +49,12 @@ import javax.faces.view.facelets.TagConfig;
  * @since 2.0
  */
 public interface BehaviorConfig extends TagConfig {
-	
-	/**
-	 * <p>Return the value of the behavior-id.</p>
-	 * @since 2.0
-	 */
-	public String getBehaviorId();
+
+    /**
+     * <p>Return the value of the behavior-id.</p>
+     *
+     * @since 2.0
+     */
+    public String getBehaviorId();
 
 }

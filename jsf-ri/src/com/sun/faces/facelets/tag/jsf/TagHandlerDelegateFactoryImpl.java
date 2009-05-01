@@ -36,12 +36,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.view.facelets.BehaviorHandler;
-import javax.faces.view.facelets.ComponentHandler;
-import javax.faces.view.facelets.ConverterHandler;
-import javax.faces.view.facelets.TagHandlerDelegate;
-import javax.faces.view.facelets.TagHandlerDelegateFactory;
-import javax.faces.view.facelets.ValidatorHandler;
+import javax.faces.view.facelets.*;
 
 public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
 

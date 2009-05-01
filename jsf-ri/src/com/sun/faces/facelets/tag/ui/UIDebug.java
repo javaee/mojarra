@@ -51,20 +51,18 @@
 
 package com.sun.faces.facelets.tag.ui;
 
+import com.sun.faces.facelets.util.DevTools;
+import com.sun.faces.facelets.util.FastWriter;
+
+import javax.faces.component.UIComponentBase;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.faces.component.UIComponentBase;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.servlet.http.HttpServletResponse;
-
-import com.sun.faces.facelets.util.DevTools;
-import com.sun.faces.facelets.util.FastWriter;
 
 /**
  * @author Jacob Hookom

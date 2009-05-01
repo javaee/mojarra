@@ -72,7 +72,7 @@ public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
     // Properties ----------------------------------------
 
     public boolean isDisabled(FaceletContext ctx) {
-        return disabled != null ? Boolean.TRUE.equals(disabled.getBoolean(ctx)) : false;
+        return disabled != null && Boolean.TRUE.equals(disabled.getBoolean(ctx));
     }
     
     public TagAttribute getBinding() {
@@ -110,8 +110,7 @@ public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
      * @since 2.0
      */
 
-    public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         getTagHandlerDelegate().apply(ctx, parent);
     }
     

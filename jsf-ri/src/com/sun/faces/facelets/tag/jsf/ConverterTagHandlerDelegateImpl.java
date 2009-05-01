@@ -38,23 +38,16 @@ package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.util.Util;
-import java.io.IOException;
-import javax.el.ELException;
+
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.view.AttachedObjectHandler;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletException;
-import javax.faces.view.facelets.ConverterHandler;
-import javax.faces.view.facelets.MetaRuleset;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagException;
-import javax.faces.view.facelets.TagHandlerDelegate;
+import javax.faces.view.facelets.*;
+import java.io.IOException;
 
 
 /**
@@ -71,7 +64,7 @@ public class ConverterTagHandlerDelegateImpl extends TagHandlerDelegate implemen
     
     @Override
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+            throws IOException {
         // only process if it's been created
         if (parent == null || !(parent.getParent() == null)) {
             return;

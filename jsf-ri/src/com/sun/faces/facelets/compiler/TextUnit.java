@@ -51,18 +51,13 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.facelets.el.ELText;
+
+import javax.el.ELException;
+import javax.faces.view.facelets.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import javax.el.ELException;
-
-import javax.faces.view.facelets.FaceletHandler;
-import com.sun.faces.facelets.el.ELText;
-import javax.faces.view.facelets.CompositeFaceletHandler;
-import javax.faces.view.facelets.Tag;
-import javax.faces.view.facelets.TagAttribute;
-import javax.faces.view.facelets.TagException;
 
 /**
  * 
