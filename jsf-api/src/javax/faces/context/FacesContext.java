@@ -502,13 +502,6 @@ public abstract class FacesContext {
      * only be called by the application handler (or a class that the
      * handler calls), and only during the <em>Invoke Application</em>
      * phase of the request processing lifecycle.</p>
-
-     * <p class="changed_added_2_0">If the current
-     * <code>UIViewRoot</code> is non-<code>null</code>, and calling
-     * <code>equals()</code> on the argument <code>root</code>, passing
-     * the current <code>UIViewRoot</code> returns <code>false</code>,
-     * the <code>clear</code> method must be called on the
-     * <code>Map</code> returned from {@link UIViewRoot#getViewMap}.</p>
      *
      * @param root The new component {@link UIViewRoot} component
      *

@@ -428,13 +428,6 @@ public class FacesContextImpl extends FacesContext {
         assertNotReleased();
         Util.notNull("root", root);
 
-        if (viewRoot != null && !viewRoot.equals(root)) {
-            Map<String, Object> viewMap = viewRoot.getViewMap(false);
-            if (viewMap != null) {
-                viewRoot.getViewMap().clear();
-            }
-        }
-
         viewRoot = root;
     }
 

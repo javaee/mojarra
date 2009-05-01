@@ -167,7 +167,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             ExternalContext extContext = context.getExternalContext();
             ViewHandler viewHandler = Util.getViewHandler(context);
             assert (null != viewHandler);
-
             if (caseStruct.navCase.isRedirect()) {
                 // perform a 302 redirect.
                 String redirectUrl =
@@ -183,6 +182,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     }
                     // encode the redirect to ensure session state
                     // is maintained
+                    clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
                     extContext.getFlash().setRedirect(true);
                     extContext.redirect(redirectUrl);
                 } catch (java.io.IOException ioe) {
@@ -197,6 +197,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                    logger.fine("Response complete for " + caseStruct.viewId);
                }
             } else {
+                clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
                 UIViewRoot newRoot = viewHandler.createView(context,
                                                             caseStruct.viewId);
                 context.setViewRoot(newRoot);
@@ -209,6 +210,22 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     }
 
     // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * Calls <code>clear()</code> on the ViewMap (if available) if the view
+     * ID of the UIViewRoot differs from <code>newId</code>
+     */
+    private void clearViewMapIfNecessary(UIViewRoot root, String newId) {
+
+        if (!root.getViewId().equals(newId)) {
+            Map<String, Object> viewMap = root.getViewMap(false);
+            if (viewMap != null) {
+                viewMap.clear();
+            }
+        }
+
+    }
 
 
     /**
@@ -434,7 +451,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         boolean isIncludeViewParams = false;
 
         int questionMark = viewIdToTest.indexOf('?');
-        String queryString = null;
+        String queryString;
         if (-1 != questionMark) {
             queryString = viewIdToTest.substring(questionMark);
             viewIdToTest = viewIdToTest.substring(0, questionMark);
