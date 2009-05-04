@@ -46,6 +46,7 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -183,6 +184,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                     // encode the redirect to ensure session state
                     // is maintained
                     clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
+                    updateRenderTargets(context, caseStruct.viewId);
                     extContext.getFlash().setRedirect(true);
                     extContext.redirect(redirectUrl);
                 } catch (java.io.IOException ioe) {
@@ -199,6 +201,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             } else {
                 UIViewRoot newRoot = viewHandler.createView(context,
                                                             caseStruct.viewId);
+                updateRenderTargets(context, caseStruct.viewId);
                 context.setViewRoot(newRoot);
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Set new view in FacesContext for " +
@@ -221,6 +224,18 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
             Map<String, Object> viewMap = root.getViewMap(false);
             if (viewMap != null) {
                 viewMap.clear();
+            }
+        }
+
+    }
+
+
+    private void updateRenderTargets(FacesContext ctx, String newId) {
+
+        if (!ctx.getViewRoot().getViewId().equals(newId)) {
+            PartialViewContext pctx = ctx.getPartialViewContext();
+            if (!pctx.isRenderAll()) {
+                pctx.setRenderAll(true);
             }
         }
 

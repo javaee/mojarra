@@ -41,6 +41,8 @@ import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
+import javax.faces.context.PartialResponseWriter;
+import javax.faces.context.ResponseWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -57,7 +59,14 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
@@ -544,8 +553,28 @@ public class ExternalContextImpl extends ExternalContext {
      * @see ExternalContext#redirect(String)
      */
     public void redirect(String requestURI) throws IOException {
-        ((HttpServletResponse) response).sendRedirect(requestURI);
-        FacesContext.getCurrentInstance().responseComplete();
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            PartialResponseWriter pwriter;
+            ResponseWriter writer = ctx.getResponseWriter();
+            if (writer instanceof PartialResponseWriter) {
+                pwriter = (PartialResponseWriter) writer;
+            } else {
+                pwriter = ctx.getPartialViewContext().getPartialResponseWriter();
+            }
+            setResponseContentType("text/xml");
+            setResponseCharacterEncoding("UTF-8");
+            addResponseHeader("Cache-Control", "no-cache");
+            pwriter.startDocument();
+            pwriter.redirect(requestURI);
+            pwriter.endDocument();
+        } else {
+            ((HttpServletResponse) response).sendRedirect(requestURI);
+        }
+        ctx.responseComplete();
+        
     }
 
 

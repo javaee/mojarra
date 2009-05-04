@@ -163,10 +163,12 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isRenderAll() {
 
         assertNotReleased();
-        String render = ctx.
-            getExternalContext().getRequestParameterMap()
-                .get(PARTIAL_RENDER_PARAM_NAME);
-        renderAll = (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(render));
+        if (renderAll == null) {
+            String render = ctx.
+                getExternalContext().getRequestParameterMap()
+                    .get(PARTIAL_RENDER_PARAM_NAME);
+            renderAll = (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(render));
+        }
 
         return renderAll;
 

@@ -40,8 +40,8 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
-import javax.faces.context.PartialResponseWriter;
 import javax.faces.FacesException;
+import java.io.IOException;
 
 @ManagedBean
 @RequestScoped
@@ -51,21 +51,11 @@ public class RedirectBean {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
-        if (ctx.getPartialViewContext().isAjaxRequest()) {
-            try {
-                extContext.setResponseContentType("text/xml");
-                extContext.addResponseHeader("Cache-Control", "no-cache");
-                PartialResponseWriter writer =
-                      ctx.getPartialViewContext().getPartialResponseWriter();
-                writer.startDocument();
-                String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, "/ajax/redirecttarget.xhtml"));
-                writer.redirect(url);
-                writer.endDocument();
-                writer.flush();
-                ctx.responseComplete();
-            } catch (Exception e) {
-                throw new FacesException(e);
-            }
+        String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, "/ajax/redirecttarget.xhtml"));
+        try {
+            extContext.redirect(url);
+        } catch (IOException ioe) {
+            throw new FacesException(ioe);
         }
         return null;
 
