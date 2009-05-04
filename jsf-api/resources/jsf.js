@@ -198,33 +198,38 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Do update.
          * @ignore
          */
-        var doUpdate = function doUpdate(element) {
+        var doUpdate = function doUpdate(element, formid) {
             var id, content, markup, str, state;
             var stateElem;
+            var stateForm;
 
             id = element.getAttribute('id');
             if (id === "javax.faces.ViewState") {
+
                 state = element.firstChild;
 
                 // Now set the view state from the server into the DOM
-                // If there are multiple forms, make sure they all have a
-                // viewState hidden field.
+                // but only for the form that submitted the request.
 
                 stateElem = $("javax.faces.ViewState");
                 if (stateElem) {
                     stateElem.value = state.text || state.data;
                 }
-                var field;
-                for (var k = 0; k < document.forms.length; k++) {
-                    field = document.forms[k].elements["javax.faces.ViewState"];
-                    if (typeof field == 'undefined') {
-                        field = document.createElement("input");
-                        field.type = "hidden";
-                        field.name = "javax.faces.ViewState";
-                        document.forms[k].appendChild(field);
-                    }
-                    field.value = state.text || state.data;
+
+                stateForm = document.getElementById(formid);
+                if (!stateForm) {
+                    // if the form went away for some reason, we're going to just return silently.
+                    return;
                 }
+                var field = stateForm.elements["javax.faces.ViewState"];
+                if (typeof field == 'undefined') {
+                    field = document.createElement("input");
+                    field.type = "hidden";
+                    field.name = "javax.faces.ViewState";
+                    stateForm.appendChild(field);
+                }
+                field.value = state.text || state.data;
+
                 return;
             }
 
@@ -479,9 +484,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var req = {};                  // Request Object
             req.url = null;                // Request URL
             req.context = {};              // Context of request and response
-            req.context.source = null;             // Source of this request
-            req.context.onerror = null;            // Error handler for request
-            req.context.onevent = null;            // Event handler for request
+            req.context.source = null;     // Source of this request
+            req.context.onerror = null;    // Error handler for request
+            req.context.onevent = null;    // Event handler for request
+            req.context.formid = null;     // Form that's the context for this request
             req.xmlReq = null;             // XMLHttpRequest Object
             req.async = true;              // Default - Asynchronous
             req.parameters = {};           // Parameters For GET or POST
@@ -1083,6 +1089,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 ajaxEngine.context.onevent = onevent;
                 ajaxEngine.context.onerror = onerror;
                 ajaxEngine.context.source = element;
+                ajaxEngine.context.formid = form.id;
                 ajaxEngine.sendRequest();
             },
             /**
@@ -1303,7 +1310,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     for (var i = 0; i < changes.length; i++) {
                         switch (changes[i].nodeName) {
                             case "update":
-                                doUpdate(changes[i]);
+                                doUpdate(changes[i], context.formid);
                                 break;
                             case "delete":
                                 doDelete(changes[i]);
