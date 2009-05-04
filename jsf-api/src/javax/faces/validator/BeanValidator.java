@@ -37,15 +37,7 @@
 package javax.faces.validator;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -53,7 +45,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.PartialStateHolder;
-import javax.validation.ConstraintDescriptor;
 import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
@@ -274,15 +265,12 @@ public class BeanValidator implements Validator, PartialStateHolder {
             return;
         }
 
-        ValidatorFactory validatorFactory = null;
+        ValidatorFactory validatorFactory;
         Object cachedObject = context.getExternalContext().getApplicationMap().get(VALIDATOR_FACTORY_KEY);
         if (cachedObject instanceof ValidatorFactory) {
             validatorFactory = (ValidatorFactory) cachedObject;
         }
         else {
-            // TODO throw a FacesException if Validation is not
-            // available on the classpath QUESTION is this the right way
-            // to handle this?
             try {
                 validatorFactory = Validation.buildDefaultValidatorFactory();
             }
@@ -298,7 +286,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
                            validatorFactory.getMessageInterpolator());
         validatorContext.messageInterpolator(jsfMessageInterpolator);
         javax.validation.Validator beanValidator = validatorContext.getValidator();
-        Class [] validationGroupsArray = parseValidationGroups(getValidationGroups());
+        Class[] validationGroupsArray = parseValidationGroups(getValidationGroups());
         
         // PENDING(rlubke, driscoll): When EL 1.3 is present, we won't need
         // this.
@@ -311,12 +299,14 @@ public class BeanValidator implements Validator, PartialStateHolder {
             return;
         }
         if (isResolvable(valueReference, valueExpression)) {
-            Set<ConstraintViolation> violations = Collections.EMPTY_SET;
+            Set<ConstraintViolation> violations = null;
             try {
+                //noinspection unchecked
                 violations =
                         beanValidator.validateValue(valueReference.getBaseClass(),
-                        valueReference.getProperty(),
-                        value, validationGroupsArray);
+                                                    valueReference.getProperty(),
+                                                    value,
+                                                    validationGroupsArray);
             } catch (IllegalArgumentException iae) {
                 String failureMessage = "Unable to validate expression " +
                         valueExpression.getExpressionString() +
@@ -325,8 +315,8 @@ public class BeanValidator implements Validator, PartialStateHolder {
                 LOGGER.fine(failureMessage);
             }
 
-            if (!violations.isEmpty()) {
-                ValidatorException toThrow = null;
+            if (violations != null && !violations.isEmpty()) {
+                ValidatorException toThrow;
                 if (1 == violations.size()) {
                     ConstraintViolation violation = violations.iterator().next();
                     toThrow = new ValidatorException(MessageFactory.getMessage(
@@ -337,13 +327,13 @@ public class BeanValidator implements Validator, PartialStateHolder {
                 } else {
                     Set<FacesMessage> messages = new LinkedHashSet<FacesMessage>(
                           violations.size());
-                    Iterator<ConstraintViolation> iter = violations.iterator();
-                    while (iter.hasNext()) {
+                    for (ConstraintViolation violation : violations) {
                         messages.add(MessageFactory.getMessage(context,
                                                                MESSAGE_ID,
-                                                               iter.next().getMessage(),
-                                                               MessageFactory.getLabel(context,
-                                                                                       component)));
+                                                               violation.getMessage(),
+                                                               MessageFactory.getLabel(
+                                                                     context,
+                                                                     component)));
                     }
                     toThrow = new ValidatorException(messages);
                 }
@@ -426,7 +416,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
             }
         }
 
-        cachedValidationGroups = validationGroupsList.toArray(new Class[0]);
+        cachedValidationGroups = validationGroupsList.toArray(new Class[validationGroupsList.size()]);
         return cachedValidationGroups;
     }
 
@@ -481,16 +471,16 @@ public class BeanValidator implements Validator, PartialStateHolder {
             this.delegate = delegate;
         }
 
-        public String interpolate(String message, ConstraintDescriptor descriptor, Object value) {
-            Locale locale = context.getViewRoot().getLocale();
+        public String interpolate(String message, MessageInterpolator.Context context) {
+            Locale locale = this.context.getViewRoot().getLocale();
             if (locale == null) {
                 locale = Locale.getDefault();
             }
-            return delegate.interpolate(message, descriptor, value, locale);
+            return delegate.interpolate(message, context, locale);
         }
 
-        public String interpolate(String message, ConstraintDescriptor descriptor, Object value, Locale locale) {
-            return delegate.interpolate(message, descriptor, value, locale);
+        public String interpolate(String message, MessageInterpolator.Context context, Locale locale) {
+            return delegate.interpolate(message, context, locale);
         }
 
     }

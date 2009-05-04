@@ -62,6 +62,7 @@
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.5.5"/>
     <property name="el.version" value="1.0"/>
+    <property name="beans.validation.version" value="1.0.CR2"/>
     <property name="maven.repository.importer.version" value="1.2"/>
 
     <property name="redhat.maven2" value="http://repository.jboss.org/maven2"/>
@@ -71,6 +72,7 @@
     <property name="java.net.maven2" value="http://download.java.net/maven/2"/>
     <property name="codehaus.maven" value="http://repository.codehaus.org"/>
     <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
+    <property name="jboss.maven2" value="http://repository.jboss.com/maven2"/>
 
     <property name="junit.home" value="${dependency.base.dir}/junit${junit.version}"/>
     <property name="htmlunit.home" value="${dependency.base.dir}/htmlunit-${htmlunit.version}"/>
@@ -100,7 +102,7 @@
     <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging-api.jar"/>
     <property name="portlet.jar"                   value="${dependency.jar.dir}/portlet-api-${portlet.api.version}.jar"/>
     <property name="groovy.jar"                    value="${dependency.jar.dir}/groovy-all-${groovy.version}.jar"/>
-    <property name="validation-api.jar"            value="${dependency.jar.dir}/bean-validator.jar"/>
+    <property name="validation-api.jar"            value="${dependency.jar.dir}/validation-api-1.0.CR2.jar"/>
     <property name="glassfish.download.url"        value="http://download.java.net/javaee5/v2ur1/promoted/" />
     <property name="glassfish.installer.jar"       value="glassfish-installer-v2ur1-b09d-"/>    
 
@@ -315,7 +317,7 @@
                 <available file="${validation-api.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven2}/org/glassfish/extras/bean-validator/4.0.0.Alpha3/bean-validator-4.0.0.Alpha3.jar"
+                <get src="${jboss.maven2}/javax/validation/validation-api/${beans.validation.version}/validation-api-${beans.validation.version}.jar"
                      dest="${validation-api.jar}"
                      usetimestamp="true"/>
             </then>
