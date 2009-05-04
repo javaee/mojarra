@@ -197,7 +197,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                    logger.fine("Response complete for " + caseStruct.viewId);
                }
             } else {
-                clearViewMapIfNecessary(context.getViewRoot(), caseStruct.viewId);
                 UIViewRoot newRoot = viewHandler.createView(context,
                                                             caseStruct.viewId);
                 context.setViewRoot(newRoot);
