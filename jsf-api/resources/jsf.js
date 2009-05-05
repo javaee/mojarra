@@ -955,6 +955,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             request: function request(source, event, options) {
 
                 var element;
+                var all, none;
 
                 if (typeof source === 'undefined' || source === null) {
                     throw new Error("jsf.ajax.request: source not set");
@@ -1018,9 +1019,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // delimited.
 
                 if (options.execute) {
-                    var none = options.execute.search(/@none/);
+                    none = options.execute.search(/@none/);
                     if (none < 0) {
-                        var all = options.execute.search(/@all/);
+                        all = options.execute.search(/@all/);
                         if (all < 0) {
                             options.execute = options.execute.replace("@this", element.id);
                             options.execute = options.execute.replace("@form", form.id);
@@ -1032,17 +1033,17 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         } else {
                             options.execute = "@all";
                         }
-                        args["javax.faces.partial.execute"] = options.execute
+                        args["javax.faces.partial.execute"] = options.execute;
                     }
                 } else {
                     options.execute = element.id;
-                    args["javax.faces.partial.execute"] = options.execute
+                    args["javax.faces.partial.execute"] = options.execute;
                 }
 
                 if (options.render) {
-                    var none = options.render.search(/@none/);
+                    none = options.render.search(/@none/);
                     if (none < 0) {
-                        var all = options.render.search(/@all/);
+                        all = options.render.search(/@all/);
                         if (all < 0) {
                             options.render = options.render.replace("@this", element.id);
                             options.render = options.render.replace("@form", form.id);
