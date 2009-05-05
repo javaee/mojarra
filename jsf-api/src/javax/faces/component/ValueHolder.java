@@ -95,22 +95,8 @@ public interface ValueHolder {
 
 
     /**
-     * <p><span class="changed_modified_2_0">Set</span> the {@link
-     * Converter} (if any) that is registered for this {@link
-     * UIComponent}.</p>
-     *
-     * <p class="changed_added_2_0">The argument
-     * <code>converter</code> must be inspected for the presence of the
-     * {@link javax.faces.application.ResourceDependency} annotation.
-     * If the <code>ResourceDependency</code> annotation is present,
-     * the action described in <code>ResourceDependency</code> must
-     * be taken.  If the <code>ResourceDependency</code> annotation is
-     * not present, the argument <code>converter</code> must be inspected 
-     * for the presence of the {@link 
-     * javax.faces.application.ResourceDependencies} annotation.
-     * If the <code>ResourceDependencies</code> annotation
-     * is present, the action described in <code>ResourceDependencies</code>
-     * must be taken.</p>
+     * <p>Set the {@link Converter} (if any) that is registered for this
+     * {@link UIComponent}.</p>
      *
      * @param converter New {@link Converter} (or <code>null</code>)
      */

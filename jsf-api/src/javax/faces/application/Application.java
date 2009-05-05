@@ -1134,6 +1134,19 @@ public abstract class Application {
      * javax.faces.convert.DateTimeConverter#setTimeZone} must be
      * called, passing the return from
      * <code>TimeZone.getDefault()</code>.</p>
+
+     * <p class="changed_added_2_0">The argument
+     * <code>converter</code> must be inspected for the presence of the
+     * {@link javax.faces.application.ResourceDependency} annotation.
+     * If the <code>ResourceDependency</code> annotation is present,
+     * the action described in <code>ResourceDependency</code> must
+     * be taken.  If the <code>ResourceDependency</code> annotation is
+     * not present, the argument <code>converter</code> must be inspected 
+     * for the presence of the {@link 
+     * javax.faces.application.ResourceDependencies} annotation.
+     * If the <code>ResourceDependencies</code> annotation
+     * is present, the action described in <code>ResourceDependencies</code>
+     * must be taken.</p>
      *
      * @param converterId The converter id for which to create and
      *  return a new {@link Converter} instance
@@ -1441,10 +1454,24 @@ public abstract class Application {
 
 
     /**
-     * <p>Instantiate and return a new {@link Validator} instance of the
-     * class specified by a previous call to <code>addValidator()</code>
-     * for the specified validator id.</p>
-     *
+     * <p><span class="changed_modified_2_0">Instantiate</span> and
+     * return a new {@link Validator} instance of the class specified by
+     * a previous call to <code>addValidator()</code> for the specified
+     * validator id.</p>
+
+     * <p class="changed_added_2_0">The argument
+     * <code>validator</code> must be inspected for the presence of the
+     * {@link javax.faces.application.ResourceDependency} annotation.
+     * If the <code>ResourceDependency</code> annotation is present,
+     * the action described in <code>ResourceDependency</code> must
+     * be taken.  If the <code>ResourceDependency</code> annotation is
+     * not present, the argument <code>validator</code> must be inspected 
+     * for the presence of the {@link 
+     * javax.faces.application.ResourceDependencies} annotation.
+     * If the <code>ResourceDependencies</code> annotation
+     * is present, the action described in <code>ResourceDependencies</code>
+     * must be taken.</p>
+
      * @param validatorId The validator id for which to create and
      *  return a new {@link Validator} instance
      *
