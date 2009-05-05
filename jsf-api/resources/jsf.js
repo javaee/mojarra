@@ -200,7 +200,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          */
         var doUpdate = function doUpdate(element, formid) {
             var id, content, markup, str, state;
-            var stateElem;
             var stateForm;
 
             id = element.getAttribute('id');
@@ -210,11 +209,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 // Now set the view state from the server into the DOM
                 // but only for the form that submitted the request.
-
-                stateElem = $("javax.faces.ViewState");
-                if (stateElem) {
-                    stateElem.value = state.text || state.data;
-                }
 
                 stateForm = document.getElementById(formid);
                 if (!stateForm) {
