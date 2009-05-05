@@ -10,14 +10,34 @@
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:appez="http://java.sun.com/jsf/composite/components" >
 
-    <ui:composition>
-        <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
-            <h:outputLabel value="#{i18n['task.form.label.name']}:" for="itName"/>
-            <h:inputText id="itName" value="#{taskManager.currentTask.name}" required="true"
-                requiredMessage="#{i18n['task.form.label.name.required']}" maxLenght="30" size="30"
-                validator="#{taskManager.checkUniqueTaskName}" />
-            <h:message for="itName" styleClass="errorMessage"/>
+    <ui:composition id="comp1">
+        <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable" id="pgFormTask">
+            <h:outputLabel value="#{i18n['task.form.label.name']}:" for="itTaskName" id="olName"/>
+            <h:inputText id="itTaskName" value="#{taskManager.currentTask.name}" required="true"
+                         requiredMessage="#{i18n['task.form.label.name.required']}" maxLenght="30" size="30"
+                         validator="#{taskManager.checkUniqueTaskName}" />
+            <h:message for="itTaskName" styleClass="errorMessage" id="emName"/>
 
+            <h:outputLabel value="#{i18n['task.form.label.startDate']}:" for="itTaskName"/>
+            <h:panelGroup>
+                <h:inputText id="itStartedDate" value="#{taskManager.currentTask.startDate}"  maxLenght="10" size="10" >
+                    <f:convertDateTime pattern="#{i18n['task.form.label.startDate.pattern']}" />
+                </h:inputText>
+                <h:outputText value="(#{i18n['task.form.label.startDate.pattern']})" styleClass="inputPattern" />
+            </h:panelGroup>
+            <h:message for="itStartedDate" styleClass="errorMessage"/>
+
+            <h:outputLabel value="#{i18n['task.form.label.startDate']}:" for="itTaskName"/>
+            <h:panelGroup>
+                <h:inputText id="itEndDate" value="#{taskManager.currentTask.endDate}" maxLenght="10" size="10" >
+                    <f:convertDateTime pattern="#{i18n['task.form.label.endDate.pattern']}" />
+                </h:inputText>
+                <h:outputText value="(#{i18n['task.form.label.endDate.pattern']})" styleClass="inputPattern" />
+            </h:panelGroup>
+            <h:message for="itEndDate" styleClass="errorMessage"/>
+            
+            <h:outputLabel value="#{i18n['task.form.label.status']}:" for="itStatus"/>
+            <h:outputText id="itStatus" value="#{taskManager.currentTask.status}"  />
         </h:panelGrid>
     </ui:composition>
 
