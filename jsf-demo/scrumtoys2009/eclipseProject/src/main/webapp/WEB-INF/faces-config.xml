@@ -45,7 +45,11 @@
 		<description>
 			dashboard navigation rules
         </description>
-		<from-view-id>/dashboard.xhtml</from-view-id>
+		<from-view-id>/dashboard/show.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>showSprints</from-outcome>
+			<to-view-id>/sprint/show.xhtml</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<description>
 				see burndown
