@@ -1121,53 +1121,29 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <pre><code>&lt;update id="javax.faces.ViewRoot"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
-             * Update the entire DOM as follows:
-             * <ul>
-             * <li>Extract the <code>CDATA</code> content and trim the &lt;html&gt;
-             * and &lt;/html&gt; from the <code>CDATA</code> content if it is present.</li>
-             * <li>If the <code>CDATA</code> content contains a &lt;head&gt; element,
-             * and the document has a <code>&lt;head&gt;</code> section, extract the
-             * contents of the &lt;head&gt; element from the <code>&lt;update&gt;</code>
-             * element's <code>CDATA</code> content and replace the document's &lt;head&gt;
-             * section with this contents.</li>
-             * <li>If the <code>CDATA</code> content contains a &lt;body&gt; element,
-             * and the document has a <code>&lt;body&gt;</code> section, extract the contents
-             * of the &lt;body&gt; element from the <code>&lt;update&gt;</code>
-             * element's <code>CDATA</code> content and replace the document's &lt;body&gt;
-             * section with this contents.</li>
-             * <li>If the <code>CDATA</code> content does not contain a &lt;body&gt; element,
-             * replace the document's &lt;body&gt; section with the <code>CDATA</code>
-             * contents.</li>
-             * </ul>
+             * Update the entire DOM replacing the appropriate <code>head</code> and/or
+             * <code>body</code> sections with the content from the response.</li> 
              * <li>If an <code>update</code> element is found in the response with the identifier
              * <code>javax.faces.ViewState</code>:
              * <pre><code>&lt;update id="javax.faces.ViewState"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
-             * Include this <code>state</code> in the document as follows:
-             * <ul>
-             * <li>Extract this <code>&lt;update&gt;</code> element's <code>CDATA</code> contents
-             * from the response.</li>
-             * <li>If the document contains an element with the identifier
-             * <code>javax.faces.ViewState</code> replace its contents with the
-             * <code>CDATA</code> contents.</li>
-             * <li>For each <code>&lt;form&gt;</code> element in the document:
-             * <ul>
-             * <li>If the <code>&lt;form&gt;</code> element contains an <code>&lt;input&gt;</code>
-             * element with the identifier <code>javax.faces.ViewState</code>, replace the
-             * <code>&lt;input&gt;</code> element contents with the <code>&lt;update&gt;</code>
-             * element's <code>CDATA</code> contents.</li>
-             * <li>If the <code>&lt;form&gt;</code> element does not contain an element with
-             * the identifier <code>javax.faces.ViewState</code>, create an
-             * <code>&lt;input&gt;</code> element of the type <code>hidden</code>,
-             * with the identifier <code>javax.faces.ViewState</code>, set its contents
-             * to the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents, and
-             * add the <code>&lt;input&gt;</code> element as a child to the
-             * <code>&lt;form&gt;</code> element.</li>
-             * </ul>
-             * </li>
-             * </ul>
-             * </li>
+             * locate and update the submitting form's <code>javax.faces.ViewState</code> value
+             * with the <code>CDATA</code> contents from the response.</li> 
+             * <li>If an <code>update</code> element is found in the response with the identifier
+             * <code>javax.faces.ViewHead</code>:
+             * <pre><code>&lt;update id="javax.faces.ViewHead"&gt;
+             *    &lt;![CDATA[...]]&gt;
+             * &lt;/update&gt;</code></pre>
+             * update the document's <code>head</code> section with the <code>CDATA</code> 
+             * contents from the response.</li>
+             * <li>If an <code>update</code> element is found in the response with the identifier
+             * <code>javax.faces.ViewBody</code>:
+             * <pre><code>&lt;update id="javax.faces.ViewBody"&gt;
+             *    &lt;![CDATA[...]]&gt;
+             * &lt;/update&gt;</code></pre>
+             * update the document's <code>body</code> section with the <code>CDATA</code> 
+             * contents from the response.</li>
              * <li>For any other <code>&lt;update&gt;</code> element:
              * <pre><code>&lt;update id="update id"&gt;
              *    &lt;![CDATA[...]]&gt;
