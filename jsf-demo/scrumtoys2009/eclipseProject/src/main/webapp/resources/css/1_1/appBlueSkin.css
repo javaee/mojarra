@@ -26,14 +26,12 @@ table.tableBody{
   margin: 0px;
   padding: 0px;  
   border-collapse:collapse;
-  border-spacing:0pt;
-  
-
+  border-spacing:0pt; 
 }
 
 table.tableBody tr td{
     /* important to make content aligned inside the table*/
-    text-align:center;
+  vertical-align:top;
 }
 
 
