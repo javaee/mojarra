@@ -71,24 +71,19 @@ import java.lang.annotation.Inherited;
 
  * <p>The scope of the managed bean is declared using one of {@link
  * NoneScoped}, {@link RequestScoped}, {@link ViewScoped}, {@link
- * SessionScoped}, {@link ApplicationScoped} annotations.  If the scope
- * annotations are omitted, the bean must be handled as if the {@link
- * RequestScoped} annotation is present.</p>
+ * SessionScoped}, {@link ApplicationScoped}, or {@link CustomScoped}
+ * annotations.  If the scope annotations are omitted, the bean must be
+ * handled as if the {@link RequestScoped} annotation is present.</p>
 
- * <p>
- * If the value of the {@link #eager} attribute is
- * <code>true</code>, the runtime must instantiate this class when the
- * application starts.  In this case, <em>managed-bean-scope</em> is
- * ignored if its value is "none", "request", or "session", or is
- * unspecified.  In these cases, the value of
- * <em>managed-bean-scope</em> is assumed to be "application".
- * Otherwise, any value of <em>managed-bean-scope</em> supported by the
- * implementation is allowed.  Once instantiated, the bean must be
- * placed in the proper <em>managed-bean-scope</em>.  This instantiation
- * and storing of the instance must happen before any requests are
- * serviced.  If <em>eager</em> is unspecified or <code>false</code>,
- * the default "lazy" instantiation and scoped storage of the managed
- * bean happens.</p>
+ * <p> If the value of the {@link #eager} attribute is
+ * <code>true</code>, and the <code>managed-bean-scop</code> value is
+ * "application", the runtime must instantiate this class when the
+ * application starts.  This instantiation and storing of the instance
+ * must happen before any requests are serviced.  If <em>eager</em> is
+ * unspecified or <code>false</code>, or the
+ * <code>managed-bean-scope</code> is something other than
+ * "application", the default "lazy" instantiation and scoped storage of
+ * the managed bean happens.</p>
  *
  * <p>When the runtime processes this annotation, if a managed bean
  * exists whose name is equal to the derived <em>managed-bean-name</em>,
