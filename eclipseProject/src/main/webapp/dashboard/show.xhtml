@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:menu="http://java.sun.com/jsf/composite/components" >
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="pageTitle">
+            <h:outputText value="#{i18n['story.show.title']}"></h:outputText>
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="frmListStories">
+
+                <br/><br/>
+
+                <h:panelGrid columns="3" headerClass="tituloForm" footerClass="footerForm">
+                    <f:facet name="header">
+                        <h:outputText value="Dashboard" styleClass="tituloForm" /><br/><br/>
+                    </f:facet>
+                    <h:panelGroup>
+                        <menu:postit>
+                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                        </menu:postit>
+                        <menu:postit rendered="#{storyManager.sprint.name != null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{storyManager.sprint.name}" rendered="#{storyManager.sprint.name!= null}"></ui:param>                            
+                        </menu:postit>
+                        <menu:postit rendered="#{storyManager.sprint.name == null}">
+                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
+                            <ui:param name="postitText" value="#{i18n['stories.show.nosprint']}" rendered="#{storyManager.sprint.name!= null}"></ui:param>
+                        </menu:postit>
+                    </h:panelGroup>
+                    <h:outputText value="#{i18n['story.show.table.label.empty']}"
+                                  rendered="#{storyManager.stories.rowCount eq 0}" />
+                                 
+                    <h:dataTable value="#{dashboardManager.stories}" var="story"
+                                 rendered="#{dashboardManager.stories.rowCount > 0}"
+                                 title="#{i18n['story.show.table.title']}"
+                                 summary="#{i18n['story.show.table.title']}"
+                                 border="0"
+                                 headerClass="datatableHeader"
+                                 rowClasses="datatableRow,datatableRow2"
+                                 columnClasses="dataTableFirstColumn"
+                                 styleClass="datatable"
+                                 id="dtStories">
+
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#" />
+                            </f:facet>
+                            <h:outputText value="#{dashboardManager.stories.rowIndex + 1}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.name']}" />
+                            </f:facet>
+                            <h:outputText value="#{story.name}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.startDate']}"/>
+                            </f:facet>
+                            <h:outputText value="#{story.startDate}">
+                                <f:convertDateTime pattern="#{i18n['story.show.table.header.startDate.pattern']}" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.priority']}" />
+                            </f:facet>
+                            <h:outputText value="#{story.priority}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.estimation']}" />
+                            </f:facet>
+                            <h:outputText value="#{story.estimation}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{i18n['story.show.table.header.acceptance']}" />
+                            </f:facet>
+                            <h:outputText value="#{story.acceptance}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Tasks" />
+                            </f:facet>
+                            <h:panelGrid columns="1">
+                                <!-- TODO Tasks -->
+                                <h:dataTable  value="#{story.todoTasks}" var="task" title="Todo Tasks">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Name" />
+                                        </f:facet>
+                                        <h:outputText value="#{task.name}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Start Date" />
+                                        </f:facet>
+                                        <h:outputText value="#{task.startDate}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="End Date" />
+                                        </f:facet>
+                                        <h:outputText value="#{task.endDate}" />
+                                    </h:column>
+                                </h:dataTable>
+                                <!-- Working Tasks -->
+                                <h:dataTable  value="#{story.workingTasks}" var="task" title="Working Tasks">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Name" />
+                                        </f:facet>
+                                        <h:outputText value="#{task.name}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Start Date" />
+                                        </f:facet>
+                                        <h:outputText value="#{task.startDate}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="End Date" />
+                                        </f:facet>
+                                        <h:outputText value="#{task.endDate}" />
+                                    </h:column>
+                                </h:dataTable>
+                                <!-- Done Tasks -->
+                                <h:dataTable  value="#{story.doneTasks}" var="task" title="Done Tasks">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Name" />
+                                        </f:facet>
+                                        <h:outputText value="#{task.name}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Start Date" />
+                                        </f:facet>
+                                        <h:outputText value="#{task.startDate}" />
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="End Date" />
+                                        </f:facet>
+                                        <h:outputText value="#{task.endDate}" />
+                                    </h:column>
+                                </h:dataTable>
+                            </h:panelGrid>
+                        </h:column>
+
+                    </h:dataTable>
+                    <f:facet name="footer">
+                        <h:commandButton styleClass="botaoPostIt" action="showSprints" value="#{i18n['story.show.button.showSprints']}"  />
+                    </f:facet>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

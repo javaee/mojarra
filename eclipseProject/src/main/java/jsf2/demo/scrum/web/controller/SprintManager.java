@@ -172,6 +172,7 @@ public class SprintManager extends AbstractManager implements Serializable {
     }
 
     public String showDashboard() {
+        setCurrentSprint(sprints.getRowData());
         return "showDashboard";
     }
 
