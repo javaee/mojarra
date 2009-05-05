@@ -26,16 +26,21 @@ import javax.persistence.UniqueConstraint;
 public class Task extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Column(nullable = false)
     private String name;
+
     @Temporal(TemporalType.DATE)
-    @Column(name = "start_date")
+    @Column(name = "start_date")  
     private Date startDate;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "end_date")
     private Date endDate;
+
     @Enumerated(EnumType.ORDINAL)
     private TaskStatus status;
+
     @ManyToOne
     @JoinColumn(name = "story_id")
     private Story story;
@@ -62,6 +67,20 @@ public class Task extends AbstractEntity implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+        changeTaskStatus(this.startDate, endDate);
+
+    }
+
+    protected void changeTaskStatus(Date startDate , Date endDate){
+        if (endDate !=null){
+            this.setStatus(status.DONE);
+        }
+        if (endDate ==null && this.startDate!= null){
+            this.setStatus(status.WORKING);
+        }
+        if (endDate  ==null && this.startDate== null){
+            this.setStatus(status.TODO);
+        }
     }
 
     public String getName() {
@@ -72,12 +91,13 @@ public class Task extends AbstractEntity implements Serializable {
         this.name = name;
     }
 
-    public Date getStartDate() {
+    public Date getStartDate() {        
         return startDate;
     }
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+        changeTaskStatus(startDate, this.endDate);
     }
 
     public TaskStatus getStatus() {
@@ -95,6 +115,7 @@ public class Task extends AbstractEntity implements Serializable {
     public void setStory(Story story) {
         this.story = story;
     }
+
 
     @Override
     public boolean equals(Object obj) {
