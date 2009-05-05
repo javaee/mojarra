@@ -61,35 +61,40 @@ public final class TagException extends FaceletException {
     private static final long serialVersionUID = 1L;
 
     /**
-     * RELEASE_PENDING docs
+     * <p class="changed_added_2_0">Wrap the argument <code>tag</code>
+     * so the exception can reference its information.</p>
+     * @param tag the <code>Tag</code> that caused this exception.
      */
     public TagException(Tag tag) {
         super(tag.toString());
     }
 
     /**
-     * RELEASE_PENDING docs
-     * @param tag
-     * @param message
+     * <p class="changed_added_2_0">Wrap the argument <code>tag</code>
+     * so the exception can reference its information.</p>
+     * @param tag the <code>Tag</code> that caused this exception.
+     * @param message a message describing the exception
      */
     public TagException(Tag tag, String message) {
         super(tag + " " + message);
     }
 
     /**
-     * RELEASE_PENDING docs
-     * @param tag
-     * @param cause
+     * <p class="changed_added_2_0">Wrap the argument <code>tag</code>
+     * so the exception can reference its information.</p>
+     * @param tag the <code>Tag</code> that caused this exception.
+     * @param cause the root cause for this exception.
      */
     public TagException(Tag tag, Throwable cause) {
         super(tag.toString(), cause);
     }
 
     /**
-     * RELEASE_PENDING docs
-     * @param tag
-     * @param message
-     * @param cause
+     * <p class="changed_added_2_0">Wrap the argument <code>tag</code>
+     * so the exception can reference its information.</p>
+     * @param tag the <code>Tag</code> that caused this exception.
+     * @param message a message describing the exception
+     * @param cause the root cause for this exception.
      */
     public TagException(Tag tag, String message, Throwable cause) {
         super(tag + " " + message, cause);

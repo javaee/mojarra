@@ -65,32 +65,39 @@ public class FaceletException extends FacesException {
     private static final long serialVersionUID = 1L;
 
     /**
-     * RELEASE_PENDING (docs)
+     * <p class="changed_added_2_0">Create an empty
+     * <code>FaceletException</code>.</p>
      */
     public FaceletException() {
         super();
     }
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param message
+     * <p class="changed_added_2_0">Create a
+     * <code>FaceletException</code> with argument <code>message</code>
+     * as the message.</p>
+     * @param message the textual message to display for the exception.
      */
     public FaceletException(String message) {
         super(message);
     }
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param cause
+     * <p class="changed_added_2_0">Wrap argument <code>cause</code>
+     * within this <code>FaceletException</code> instance.</p>
+     * @param cause the <code>Throwable</code> to wrap
      */
     public FaceletException(Throwable cause) {
         super(cause);
     }
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param message
-     * @param cause
+     * <p class="changed_added_2_0">Wrap argument <code>cause</code> in
+     * a <code>FaceletException</code> instance, with a message given by
+     * the argument <code>message</code>.</p>
+     *  
+     * @param message the message for the <code>FacesException</code>
+     * @param cause the root cause
      */
     public FaceletException(String message, Throwable cause) {
         super(message, cause);

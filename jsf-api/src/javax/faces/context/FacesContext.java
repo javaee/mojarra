@@ -706,12 +706,12 @@ public abstract class FacesContext {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
+     * <p class="changed_added_2_0">Return <code>true</code> if the
+     * current {@link ProjectStage} as returned by the {@link
+     * Application} instance is equal to <code>stage</code>, otherwise
+     * return <code>false</code></p>
+
      * @param stage the {@link ProjectStage} to check
-     *
-     * @return <code>true</code> if the current {@link ProjectStage} as returned
-     *  by the {@link Application} instance is equal to <code>stage</code>,
-     *  otherwise return <code>false</code>
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released

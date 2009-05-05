@@ -43,7 +43,8 @@ package javax.faces.view;
 import javax.faces.view.AttachedObjectHandler;
 
 /**
- * <p class="changed_added_2_0">RELEASE_PENDING (docs)</p>
+ * <p class="changed_added_2_0">Represent an attached object that is a
+ * <code>BehaviorHolder</code> in a VDL page.</p>
  */
 public interface BehaviorHolderAttachedObjectHandler extends AttachedObjectHandler {
 

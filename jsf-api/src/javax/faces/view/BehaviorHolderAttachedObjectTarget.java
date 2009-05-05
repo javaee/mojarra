@@ -41,7 +41,8 @@
 package javax.faces.view;
 
 /**
- * <p class="changed_added_2_0">RELEASE_PENDING DOCS</p>
+ * <p class="changed_added_2_0">Represent a <code>BehaviorHolder</code>
+ * attached object target in a VDL page.</p>
  */
 public interface BehaviorHolderAttachedObjectTarget extends AttachedObjectTarget {
 

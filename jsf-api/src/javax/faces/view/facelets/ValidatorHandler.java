@@ -76,8 +76,9 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
 
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param config
+     * <p class="changed_added_2_0">Construct this instance around the configuration information in argument <code>config</code></p>
+     * @param config the <code>TagConfig</code> subclass for this kind
+     * of attached object.
      */
     public ValidatorHandler(ValidatorConfig config) {
         super(config);
@@ -99,12 +100,15 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
     }
 
     /**
-     * RELEASE_PENDING (review)
-     * <p>Retrieve the id of the validator that is to be created an added to the parent <code>EditableValueHolder</code>.
-     * All subclasses should override this method because it is important for Facelets to have a unique way of
-     * identifying the validators that are added to this <code>EditableValueHolder</code> and allows exclusions
-     * to work properly. An exclusion is a validator declaration that has the attribute "disabled" which resolves
-     * to false, instructing Facelets not to register a default validator with the same id.</p>
+     * <p>Retrieve the id of the validator that is to be created and
+     * added to the parent <code>EditableValueHolder</code>.  All
+     * subclasses should override this method because it is important
+     * for Facelets to have a unique way of identifying the validators
+     * that are added to this <code>EditableValueHolder</code> and
+     * allows exclusions to work properly. An exclusion is a validator
+     * declaration that has the attribute "disabled" which resolves to
+     * false, instructing Facelets not to register a default validator
+     * with the same id.</p>
      */
     public String getValidatorId(FaceletContext ctx) {
         if (validatorId == null) {
