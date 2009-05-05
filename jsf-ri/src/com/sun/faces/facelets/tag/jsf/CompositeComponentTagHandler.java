@@ -75,6 +75,9 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import javax.faces.FactoryFinder;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguageFactory;
 
 /**
  * RELEASE_PENDING (rlubke,driscoll) document
@@ -174,7 +177,13 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         if (ComponentHandler.isNew(c)) {
             FacesContext context = ctx.getFacesContext();
             ViewHandler viewHandler = context.getApplication().getViewHandler();
-            viewHandler.retargetAttachedObjects(context, c,
+            String viewId = context.getViewRoot().getViewId();
+            // PENDING(rlubke): performance
+            ViewDeclarationLanguageFactory factory = (ViewDeclarationLanguageFactory)
+                    FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
+
+            ViewDeclarationLanguage vdl = factory.getViewDeclarationLanguage(viewId);
+            vdl.retargetAttachedObjects(context, c,
                     getAttachedObjectHandlers(c, false));
             viewHandler.retargetMethodExpressions(context, c);
 

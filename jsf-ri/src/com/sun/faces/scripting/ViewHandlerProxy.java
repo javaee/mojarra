@@ -138,13 +138,6 @@ public class ViewHandlerProxy extends ViewHandler {
     }
 
     @Override
-    public void retargetAttachedObjects(FacesContext context, UIComponent topLevelComponent, List<AttachedObjectHandler> handlers) {
-        getGroovyDelegate().retargetAttachedObjects(context,
-                                                    topLevelComponent,
-                                                    handlers);
-    }
-
-    @Override
     public void retargetMethodExpressions(FacesContext context, UIComponent topLevelComponent) {
         getGroovyDelegate().retargetMethodExpressions(context, topLevelComponent);
     }

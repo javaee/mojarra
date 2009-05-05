@@ -159,96 +159,6 @@ public class MultiViewHandler extends ViewHandler {
 
 
     /**
-     * @see ViewHandler#retargetAttachedObjects(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.util.List)
-     */
-    @Override
-    public void retargetAttachedObjects(FacesContext context,
-                                        UIComponent topLevelComponent,
-                                        List<AttachedObjectHandler> handlers) {
-
-        //List<AttachedObjectHandler> handlers =
-        //      getAttachedObjectHandlers(topLevelComponent, false);
-
-        if (handlers == null || handlers.isEmpty()) {
-            return;
-        }
-        
-        BeanInfo componentBeanInfo = (BeanInfo) 
-                topLevelComponent.getAttributes().get(UIComponent.BEANINFO_KEY);
-        // PENDING(edburns): log error message if componentBeanInfo is null;
-        if (null == componentBeanInfo) {
-            return;
-        }
-        BeanDescriptor componentDescriptor = componentBeanInfo.getBeanDescriptor();
-        // There is an entry in targetList for each attached object in the 
-        // <composite:interface> section of the composite component.
-        List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
-                componentDescriptor.getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
-        // Each entry in targetList will vend one or more UIComponent instances
-        // that is to serve as the target of an attached object in the consuming
-        // page.
-        List<UIComponent> targetComponents = null;
-        String forAttributeValue, curTargetName, handlerTagId, componentTagId;
-
-        // For each of the attached object handlers...
-        for (AttachedObjectHandler curHandler : handlers) {
-            // Get the name given to this attached object by the page author
-            // in the consuming page.
-            forAttributeValue = curHandler.getFor();
-            // For each of the attached objects in the <composite:interface> section
-            // of this composite component...
-            for (AttachedObjectTarget curTarget : targetList) {
-                // Get the name given to this attached object target by the
-                // composite component author
-                curTargetName = curTarget.getName();
-                targetComponents = curTarget.getTargets(topLevelComponent);
-
-                if (curHandler instanceof ActionSource2AttachedObjectHandler &&
-                    curTarget instanceof ActionSource2AttachedObjectTarget) {
-                    if (forAttributeValue.equals(curTargetName)) {
-                        for (UIComponent curTargetComponent : targetComponents) {
-                            retargetHandler(context, curHandler, curTargetComponent);
-                        }
-                        break;
-                    }
-                }
-                else if (curHandler instanceof EditableValueHolderAttachedObjectHandler &&
-                         curTarget instanceof EditableValueHolderAttachedObjectTarget) {
-                    if (forAttributeValue.equals(curTargetName)) {
-                        for (UIComponent curTargetComponent : targetComponents) {
-                            retargetHandler(context, curHandler, curTargetComponent);
-                        }
-                        break;
-                    }
-                }
-                else if (curHandler instanceof ValueHolderAttachedObjectHandler &&
-                         curTarget instanceof ValueHolderAttachedObjectTarget) {
-                    if (forAttributeValue.equals(curTargetName)) {
-                        for (UIComponent curTargetComponent : targetComponents) {
-                            retargetHandler(context, curHandler, curTargetComponent);
-                        }
-                        break;
-                    }
-                } else if(curHandler instanceof BehaviorHolderAttachedObjectHandler && 
-                        curTarget instanceof BehaviorHolderAttachedObjectTarget) {
-                    BehaviorHolderAttachedObjectHandler behaviorHandler = (BehaviorHolderAttachedObjectHandler) curHandler;
-                    BehaviorHolderAttachedObjectTarget behaviorTarget = (BehaviorHolderAttachedObjectTarget) curTarget;
-                    String eventName = behaviorHandler.getEventName();
-                    if((null !=eventName && eventName.equals(curTargetName))||(null ==eventName && behaviorTarget.isDefaultEvent())){
-                        for (UIComponent curTargetComponent : targetComponents) {
-                            retargetHandler(context, curHandler, curTargetComponent);
-                        }
-                    }
-                }
-
-
-            }
-        }
-    }
-
-
-
-    /**
      * @see ViewHandler#retargetMethodExpressions(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
      */
     @Override
@@ -989,25 +899,6 @@ public class MultiViewHandler extends ViewHandler {
 
 
     // --------------------------------------------------------- Private Methods
-
-
-    private void retargetHandler(FacesContext context,
-                                 AttachedObjectHandler handler,
-                                 UIComponent targetComponent) {
-
-        if (UIComponent.isCompositeComponent(targetComponent)) {
-            // RELEASE_PENDING Not keen on calling CompositeComponentTagHandler here....
-            List<AttachedObjectHandler> nHandlers =
-                  CompositeComponentTagHandler
-                        .getAttachedObjectHandlers(targetComponent);
-            nHandlers.add(handler);
-            retargetAttachedObjects(context, targetComponent, nHandlers);
-        } else {
-            handler.applyAttachedObject(context, targetComponent);
-        }
-        
-    }
-
 
     private static boolean paramHasValueExpression(UIViewParameter param) {
 

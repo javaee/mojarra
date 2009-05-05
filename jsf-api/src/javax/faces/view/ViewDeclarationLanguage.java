@@ -38,8 +38,9 @@ package javax.faces.view;
 
 import java.beans.BeanInfo;
 import java.io.IOException;
+import java.util.List;
 import javax.faces.application.Resource;
-import javax.faces.application.StateManager;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
@@ -160,6 +161,115 @@ public abstract class ViewDeclarationLanguage {
      * <code>null</code>
      */
     public abstract UIViewRoot restoreView(FacesContext context, String viewId);
+
+
+    /**
+     * <p class="changed_added_2_0">Assuming the component metadata for
+     * argument <code>topLevelComponent</code> has been made available
+     * by an earlier call to {@link
+     * ViewDeclarationLanguage#getComponentMetadata}, leverage the
+     * component metadata for the purpose of re-targeting attached
+     * objects from the top level composite component to the individual
+     * {@link AttachedObjectTarget} instances inside the composite
+     * component.  This method must be called by the {@link
+     * ViewDeclarationLanguage} implementation when creating the
+     * <code>UIComponent</code> tree when a composite component usage is
+     * encountered.</p>
+     *
+     * <div class="changed_added_2_0">
+     *
+     * <p>An algorithm semantically equivalent to the following must be
+     * implemented.</p>
+     *
+     *<ul>
+     *
+     *<li><p>Obtain the metadata for the composite component.
+     *Currently this entails getting the value of the {@link
+     *UIComponent#BEANINFO_KEY} component attribute, which will be
+     *an instance of <code>BeanInfo</code>.  If the metadata cannot
+     *be found, log an error message and return.</p></li>
+     *
+     *<li><p>Get the <code>BeanDescriptor</code> from the
+     *<code>BeanInfo</code>.</p></li>
+     *
+     *<li><p>Get the value of the {@link
+     *AttachedObjectTarget#ATTACHED_OBJECT_TARGETS_KEY} from the
+     *<code>BeanDescriptor</code>'s <code>getValue()</code> method.
+     *This will be a <code>List&lt;{@link
+     *AttachedObjectTarget}&gt;</code>.  Let this be
+     *<em>targetList</em>.</p></li>
+     *
+     *<li><p>For each <em>curHandler</em> entry in the argument
+     *<code>handlers</code></p>
+     *
+     *<ul>
+     *
+     *<li><p>Let <em>forAttributeValue</em> be the return from
+     *{@link AttachedObjectHandler#getFor}.  </p></li>
+     *
+     *<li><p>For each <em>curTarget</em> entry in
+     *<em>targetList</em>, the first of the following items that
+     *causes a match will take this action:</p>
+     *
+     *<p style="margin-left: 3em;">For each <code>UIComponent</code> in the
+     *list returned from <em>curTarget.getTargets()</em>, call
+     *<em>curHandler.<a
+     *href="AttachedObjectHandler.html#applyAttachedObject">applyAttachedObject()</a></em>,
+     *passing the <code>FacesContext</code> and the
+     *<code>UIComponent</code>.</p>
+     *
+     *<p>and cause this inner loop to terminate.</p>
+     *
+     *<ul>
+     *
+     *<li><p>If <em>curHandler</em> is an instance of {@link
+     *ActionSource2AttachedObjectHandler} and <em>curTarget</em> is
+     *an instance of {@link ActionSource2AttachedObjectTarget},
+     *consider it a match.</p></li>
+     *
+     *<li><p>If <em>curHandler</em> is an instance of {@link
+     *EditableValueHolderAttachedObjectHandler} and <em>curTarget</em> is
+     *an instance of {@link EditableValueHolderAttachedObjectTarget},
+     *consider it a match.</p></li>
+     *
+     *<li><p>If <em>curHandler</em> is an instance of {@link
+     *ValueHolderAttachedObjectHandler} and <em>curTarget</em> is
+     *an instance of {@link ValueHolderAttachedObjectTarget},
+     *consider it a match.</p></li>
+     *
+     *</ul>
+     *</li>
+     *</ul>
+     *</li>
+     *</ul>
+     *
+     * <p>An implementation is provided that will throw
+     * <code>UnsupportedOperationException</code>.  A Faces implementation
+     * compliant with version 2.0 and beyond of the specification must 
+     * override this method.</p>
+     *
+     * </div>
+     *
+     * @param context the FacesContext for this request.
+     *
+     * @param topLevelComponent The UIComponent in the view to which the
+     * attached objects must be attached.  This UIComponent must have
+     * its component metadata already associated and available from via
+     * the JavaBeans API.
+     *
+     * @throws NullPointerException if any of the arguments are
+     * <code>null</code>.
+
+     * @since 2.0
+     *
+     */
+    public void retargetAttachedObjects(FacesContext context,
+                                        UIComponent topLevelComponent,
+                                        List<AttachedObjectHandler> handlers)  {
+        
+        // no-op
+
+    }
 
 
     /**

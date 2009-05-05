@@ -291,19 +291,6 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
     /**
      * <p>The default behavior of this method is to
-     * call {@link ViewHandler#retargetAttachedObjects}
-     * on the wrapped {@link ViewHandler} object.</p>
-     *
-     * @since 2.0
-     */
-
-    @Override
-    public void retargetAttachedObjects(FacesContext context, UIComponent topLevelComponent, List<AttachedObjectHandler> handlers) {
-        getWrapped().retargetAttachedObjects(context, topLevelComponent, handlers);
-    }
-
-    /**
-     * <p>The default behavior of this method is to
      * call {@link ViewHandler#retargetMethodExpressions}
      * on the wrapped {@link ViewHandler} object.</p>
      *
