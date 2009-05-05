@@ -57,7 +57,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build.xml. -->
     <property name="applications"
-              value="absolute-ordering,
+              value="clientside-statesaving,
+                   absolute-ordering,
                    document-ordering,
                    empty-string-as-null,
                    resource-locale-prefix,
@@ -92,6 +93,8 @@
     <!-- Property definitions to map the application to a JUnit test case -->
     <property name="absolute-ordering"
               value="com/sun/faces/systest/AbsoluteOrderingTestCase.class"/>
+    <property name="clientside-statesaving"
+              value="com/sun/faces/systest/clientside/AjaxMultiformTestCase.class"/>
     <property name="document-ordering"
               value="com/sun/faces/systest/DocumentOrderingTestCase.class"/>
     <property name="empty-string-as-null"

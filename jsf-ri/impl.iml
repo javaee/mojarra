@@ -9,6 +9,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -49,6 +78,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -89,6 +147,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-redirect/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -129,6 +216,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -169,6 +285,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -209,6 +354,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -249,6 +423,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -289,6 +492,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -329,6 +561,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -369,6 +630,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -409,6 +699,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -449,6 +768,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -489,6 +837,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -529,6 +906,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -569,6 +975,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -609,6 +1044,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -649,6 +1113,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -689,6 +1182,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -729,6 +1251,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -769,6 +1320,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -809,6 +1389,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -849,6 +1458,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -889,6 +1527,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -929,6 +1596,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -969,6 +1665,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/conf/test" relative="/WEB-INF" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -1009,6 +1734,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -1049,6 +1803,35 @@
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/document-ordering/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/build/generate" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/src/java" />
+          <root url="file://$MODULE_DIR$/systest/src" />
+          <root url="file://$MODULE_DIR$/test" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -1070,6 +1853,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/build/generate" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/clientside-statesaving/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" isTestSource="false" />
