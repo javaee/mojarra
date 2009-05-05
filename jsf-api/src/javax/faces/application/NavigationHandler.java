@@ -80,6 +80,12 @@ public abstract class NavigationHandler {
      * ConfigurableNavigationHandler#getNavigationCase} is used in this
      * method to determine the correct navigation.</p>
      *
+     * <p class="changed_added_2_0">This method must set the render targets
+     * (used in partial rendering) to <code>render all </code>
+     * invoking {@link javax.faces.context.PartialViewContext#setRenderAll()})
+     * if the view identifier has changed as the result of an application
+     * action (to take into account <code>Ajax requests</code>).</p> 
+     *
      * @param context The {@link FacesContext} for the current request
      * @param fromAction The action binding expression that was evaluated
      *  to retrieve the specified outcome, or <code>null</code> if the
