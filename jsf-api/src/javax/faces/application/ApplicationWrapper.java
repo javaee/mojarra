@@ -668,7 +668,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#publishEvent#publishEvent(javax.faces.context.FacesContext, Class, Class, Object)}
+     * is to call {@link Application#publishEvent(javax.faces.context.FacesContext, Class, Class, Object)}
      * on the wrapped {@link Application} object.</p>
      */
     @Override
@@ -696,7 +696,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#subscribeToEvent#subscribeToEvent(Class, javax.faces.event.SystemEventListener)} on the
+     * is to call {@link Application#subscribeToEvent(Class, javax.faces.event.SystemEventListener)} on the
      * wrapped {@link Application} object.</p>
      */
     @Override
@@ -707,7 +707,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#unsubscribeFromEvent#unsubscribeFromEvent(Class, Class, javax.faces.event.SystemEventListener)} on the
+     * is to call {@link Application#unsubscribeFromEvent(Class, Class, javax.faces.event.SystemEventListener)} on the
      * wrapped {@link Application} object.</p>
      */
     @Override
@@ -719,7 +719,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link Application#unsubscribeFromEvent#unsubscribeFromEvent(Class, javax.faces.event.SystemEventListener)} on the
+     * is to call {@link Application#unsubscribeFromEvent(Class, javax.faces.event.SystemEventListener)} on the
      * wrapped {@link Application} object.</p>
      */
     @Override

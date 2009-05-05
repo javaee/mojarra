@@ -82,7 +82,7 @@ public abstract class NavigationHandler {
      *
      * <p class="changed_added_2_0">This method must set the render targets
      * (used in partial rendering) to <code>render all </code>
-     * invoking {@link javax.faces.context.PartialViewContext#setRenderAll()})
+     * invoking {@link javax.faces.context.PartialViewContext#setRenderAll})
      * if the view identifier has changed as the result of an application
      * action (to take into account <code>Ajax requests</code>).</p> 
      *

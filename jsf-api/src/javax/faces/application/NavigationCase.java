@@ -81,15 +81,15 @@ public class NavigationCase {
      * <p class="changed_added_2_0"> Construct a new
      * <code>NavigationCase</code> based on the provided arguments.  See
      * section JSF.7.4.2 for how a <code>NavigationCase</code> is used
-     * by the standard {@link COnfigurableNavigationHandler}</p>
+     * by the standard {@link ConfigurableNavigationHandler}</p>
      *
-     * @param fromViewId return from {@link #getViewId}
+     * @param fromViewId return from {@link #getFromViewId}
      * @param fromAction return from {@link #getFromAction}
      * @param fromOutcome return from {@link #getFromOutcome}
      * @param condition A string to be interpreted as a
      * <code>ValueExpression</code> by a call to {@link #getCondition}
      * @param toViewId return from {@link #getToViewId}
-     * @param return from {@link #getParameters}
+     * @param parameters return from {@link #getParameters}
      * @param redirect return from {@link #isRedirect}
      * @param includeViewParams return {@link #isIncludeViewParams}
      */

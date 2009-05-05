@@ -86,7 +86,7 @@ public interface AttachedObjectTarget {
      * object</em> exposed by the <em>composite component author</em>
      * may point at multiple <code>UIComponent</code> instances within
      * the composite component.  This method is used by the {@link
-     * javax.faces.application.ViewHandler#retargetAttachedObjects}
+     * javax.faces.view.ViewDeclarationLanguage#retargetAttachedObjects}
      * method to take the appropriate action on the attached object.</p>
      *
      */

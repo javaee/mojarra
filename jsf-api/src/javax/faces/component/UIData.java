@@ -1076,7 +1076,7 @@ public class UIData extends UIComponentBase
 
      * 	  <li><p>If this component has children, for each child
      * 	  <code>UIComponent</code> retured from calling {@link
-     * 	  getChildren} on this instance, if the child has facets, call
+     * 	  #getChildren} on this instance, if the child has facets, call
      * 	  {@link UIComponent#getFacets} on the child instance and invoke
      * 	  the <code>values()</code> method.  For each
      * 	  <code>UIComponent</code> in the returned <code>Map</code>,

@@ -274,7 +274,7 @@ public abstract class ViewHandler {
      * converted to a physical <code>viewId</code> that can refer to an
      * actual resource suitable for use by the
      * <code>ViewDeclarationLanguage</code> {@link
-     * ViewDeclarationLanguage#createViewId}, which must be called by
+     * ViewDeclarationLanguage#createView}, which must be called by
      * this method.</span>
 
      * @throws NullPointerException if <code>context</code>

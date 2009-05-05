@@ -63,43 +63,52 @@ import java.lang.reflect.Method;
 public abstract class MetadataTarget {
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param name
-     * @return
+     * <p class="changed_added_2_0">Return a beans
+     * <code>PropertyDescriptor</code> for the property with name given
+     * by argument <code>name</code>.</p>
+     * @param name the name of the property for which the
+     * <code>PropertyDescriptor</code> must be returned.
      */
     public abstract PropertyDescriptor getProperty(String name);
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param type
-     * @return
+     * <p class="changed_added_2_0">Return true if the target for this
+     * metadata element is an instance of the argument
+     * <code>type</code>.</p>
+     * @param type the <code>Class</code> to test for the instance of.
      */
     public abstract boolean isTargetInstanceOf(Class type);
 
     /**
-     * RELEASE_PENDING (docs)
-     * @return
+     * <p class="changed_added_2_0">Return the <code>Class</code> of the
+     * metadata target.</p>
      */
     public abstract Class getTargetClass();
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param name
-     * @return
+     * <p class="changed_added_2_0">Return a 
+     * <code>Class</code> for the property with name given
+     * by argument <code>name</code>.</p>
+     * @param name the name of the property for which the
+     * <code>Class</code> must be returned.
      */
     public abstract Class getPropertyType(String name);
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param name
-     * @return
+     * <p class="changed_added_2_0">Return a <code>Method</code> for the
+     * setter of the property with name given by argument
+     * <code>name</code>.</p>
+     * @param name the name of the property for which the
+     * <code>Method</code> must be returned.
      */
     public abstract Method getWriteMethod(String name);
 
     /**
-     * RELEASE_PENDING (docs)
-     * @param name
-     * @return
+     * <p class="changed_added_2_0">Return a <code>Method</code> for the
+     * getter of the property with name given by argument
+     * <code>name</code>.</p>
+     * @param name the name of the property for which the
+     * <code>Method</code> must be returned.
      */
     public abstract Method getReadMethod(String name);
 

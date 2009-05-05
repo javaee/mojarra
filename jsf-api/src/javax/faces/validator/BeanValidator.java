@@ -167,13 +167,6 @@ public class BeanValidator implements Validator, PartialStateHolder {
     }
 
     /**
-     * RELEASE_PENDING (edburns) needs to be updated
-     *   - VALIDATION_GROUPS_KEY is no longer used.  It's the responsibility
-     *     of the view layer to push the group information to the
-     *     validator
-     *   - Since EL 1.3 isn't out yet (I don't believe there's a JSR either),
-     *     I don't think we should be referencing it here.
-     *
      * <p class="changed_added_2_0">Verify that the value is valid
      * according to the Bean Validation constraints.</p>
      *
@@ -183,14 +176,10 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * javax.validation.Validation#buildDefaultValidatorFactory}.</p>
 
      * <p>Let <em>validationGroupsArray</em> be a <code>Class []</code>
-     * representing validator groups discovered by looking in the
-     * component attribute <code>Map</code> for every ancestor {@link
-     * UIComponent} between argument <em>component</em> up to and
-     * including the {@link javax.faces.component.UIViewRoot} for a key
-     * given by the value of the symbolic constant {@link
-     * #VALIDATION_GROUPS_KEY}.  The first search component terminates
-     * the search for the validation groups value.  If no such value is
-     * found use the class name of {@link
+     * representing validator groups set on the component by the tag
+     * handler for this validator.  The first search component
+     * terminates the search for the validation groups value.  If no
+     * such value is found use the class name of {@link
      * javax.validation.groups.Default} as the value of the validation
      * groups.</p>
 
@@ -199,7 +188,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
      * <em>component</em>, passing the literal string
      * &#8220;value&#8221; (without the quotes) as an argument.  If this
      * application is running in an environment with a Unified EL
-     * Implementation version 1.3 or greater, obtain the
+     * Implementation for Java EE6 or later, obtain the
      * <code>ValueReference</code> from <em>valueExpression</em> and let
      * <em>valueBaseClase</em> be the return from calling
      * <code>ValueReference.getBase()</code> and <em>valueProperty</em>

@@ -86,8 +86,9 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
     }
 
     /**
-     * RELEASE_PENDING (docs)
-     * @return
+     * <p class="changed_added_2_0">Return the implementation specific
+     * delegate instance that provides the bulk of the work for this
+     * handler instance.</p>
      */
     @Override
     protected TagHandlerDelegate getTagHandlerDelegate() {
@@ -119,8 +120,8 @@ public class ValidatorHandler extends FaceletsAttachedObjectHandler implements E
 
 
     /**
-     * RELEASE_PENDING docs
-     * @return
+     * <p class="changed_added_2_0">Return the <code>TagConfig</code>
+     * subclass used to configure this handler instance.</p>
      */
     public ValidatorConfig getValidatorConfig() {
 

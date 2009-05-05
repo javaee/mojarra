@@ -684,8 +684,8 @@ public abstract class FacesContext {
 
     /**
      * <p class="changed_added_2_0">Allows control of wheter or not the runtime
-     * will publish events when {@link Application#publishEvent(Class, Object)} or
-     * {@link Application#publishEvent(Class, Class, Object)} is called.</p>
+     * will publish events when {@link Application#publishEvent(FacesContext, Class, Object)} or
+     * {@link Application#publishEvent(FacesContext, Class, Class, Object)} is called.</p>
      *
      * @param processingEvents flag indicating events should be processed or not
      */

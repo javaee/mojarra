@@ -71,11 +71,11 @@ public abstract class ViewMetadata {
      * containing only view parameter metadata.  The processing of
      * building this <code>UIViewRoot</code> with metadata should not
      * cause any events to be published to the application.  The
-     * implementation must call {@link #setProcessingEvents} passing
-     * <code>false</code> as the argument, at the beginning of the
-     * method, and pass <code>true</code> to the same method at the end.
-     * The implementation must ensure that this happens regardless of
-     * ant exceptions that may be thrown.</p>
+     * implementation must call {@link FacesContext#setProcessingEvents}
+     * passing <code>false</code> as the argument, at the beginning of
+     * the method, and pass <code>true</code> to the same method at the
+     * end.  The implementation must ensure that this happens regardless
+     * of ant exceptions that may be thrown.</p>
      *
      * @param context the {@link FacesContext} for the current request
      * @return a <code>UIViewRoot</code> containing only view parameter metadata
