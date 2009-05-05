@@ -426,8 +426,6 @@ public class MultiViewHandler extends ViewHandler {
     }
 
 
-
-
     /**
      * <p>Adjust the viewID per the requirements of {@link #renderView}.</p>
      *
@@ -597,10 +595,7 @@ public class MultiViewHandler extends ViewHandler {
     }
 
 
-
-
-
-     /**
+    /**
      * Attempts to find a matching locale based on <code>pref</code> and
      * list of supported locales, using the matching algorithm
      * as described in JSTL 8.3.2.
@@ -658,7 +653,6 @@ public class MultiViewHandler extends ViewHandler {
     }
 
 
-
     /**
      * <p>
      * Send {@link HttpServletResponse#SC_NOT_FOUND} (404) to the client.
@@ -679,6 +673,7 @@ public class MultiViewHandler extends ViewHandler {
 
 
     // --------------------------------------------------------- Private Methods
+
 
     private static boolean paramHasValueExpression(UIViewParameter param) {
 
@@ -716,6 +711,5 @@ public class MultiViewHandler extends ViewHandler {
         return viewId;
 
     }
-
     
 }
