@@ -1464,13 +1464,35 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Redirect a request to the specified URL, and cause the
+     * <p><span class="changed_modified_2_0">Redirect</span> a request 
+     * to the specified URL, and cause the
      * <code>responseComplete()</code> method to be called on the
      * {@link FacesContext} instance for the current request.</p>
      *
-     * <p><em>Servlet:</em> This must be accomplished by calling the
-     * <code>javax.servlet.http.HttpServletResponse</code> method
-     * <code>sendRedirect()</code>.</p>
+     * <p class="changed_added_2_0">The implementation must determine if
+     * the request is an <code>Ajax</code> request by obtaining a  
+     * {@link PartialViewContext} instance from the {@link FacesContext} and
+     * calling {@link PartialViewContext#isAjaxRequest()}.</p>
+     *
+     * <p><em>Servlet:</em> <span class="changed_modified_2_0">For
+     * non <code>Ajax</code> requests, this must be accomplished by calling 
+     * the <code>javax.servlet.http.HttpServletResponse</code> method
+     * <code>sendRedirect()</code>.</span> <div class="changed_added_2_0">
+     * For Ajax requests, the implementation must:
+     * <ul>
+     * <li>Get a {@link PartialResponseWriter} instance from the 
+     * {@link FacesContext}.</li>
+     * <li>Call {@link #setResponseContentType} with <code>text/xml</code></li>
+     * <li>Call {@link #setResponseCharacterEncoding} with <code>UTF-8</code></li>
+     * <li>Call {@link #addResponseHeader} with <code>Cache-Control</code>, 
+     * <code>no-cache</code></li>
+     * <li>Call {@link PartialResponseWriter#startDocument}</li>
+     * <li>Call {@link PartialResponseWriter#redirect} with the <code>url</code>
+     * argument.</li>
+     * <li>Call {@link PartialResponseWriter#endDocument}</li>
+     * </ul>
+     * </div>
+     * </p>
      *
      * @param url Absolute URL to which the client should be redirected
      *
