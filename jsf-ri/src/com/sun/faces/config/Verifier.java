@@ -167,6 +167,12 @@ public class Verifier {
      */
     public void validateObject(ObjectType type, String className, Class<?> assignableTo) {
 
+        // temporary hack until we can fix the stylesheets that create
+        // the runtime xml
+        if ("javax.faces.component.html.HtmlHead".equals(className)
+              || "javax.faces.component.html.HtmlBody".equals(className)) {
+            return;
+        }
         Class<?> c = null;
         try {
             c = Util.loadClass(className, this);
