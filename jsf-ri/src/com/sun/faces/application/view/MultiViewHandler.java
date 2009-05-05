@@ -561,7 +561,7 @@ public class MultiViewHandler extends ViewHandler {
         }
 
         for (UIViewParameter viewParam : toViewParams) {
-            String value = null;
+            String value;
             // don't bother looking at view parameter if it's been overridden
             if (existingParameters.containsKey(viewParam.getName())) {
                 continue;
@@ -677,9 +677,7 @@ public class MultiViewHandler extends ViewHandler {
 
     private static boolean paramHasValueExpression(UIViewParameter param) {
 
-        boolean result = false;
-        result = (null != param.getValueExpression("value"));
-        return result;
+        return (param.getValueExpression("value") != null);
 
     }
 
@@ -698,17 +696,6 @@ public class MultiViewHandler extends ViewHandler {
         }
 
         return null;
-
-    }
-
-
-    private static String extractViewId(String viewId) {
-
-        int idx = viewId.indexOf('?');
-        if (idx != -1) {
-            return viewId.substring(0, idx);
-        }
-        return viewId;
 
     }
     
