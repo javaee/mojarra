@@ -33,7 +33,7 @@ table.tableBody{
 
 table.tableBody tr td{
     /* important to make content aligned inside the table*/
-    text-align:center;
+     vertical-align:top;
 }
 
 
