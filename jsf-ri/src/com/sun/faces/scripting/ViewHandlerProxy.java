@@ -137,11 +137,6 @@ public class ViewHandlerProxy extends ViewHandler {
         return getGroovyDelegate().getViewDeclarationLanguage(context, viewId);
     }
 
-    @Override
-    public void retargetMethodExpressions(FacesContext context, UIComponent topLevelComponent) {
-        getGroovyDelegate().retargetMethodExpressions(context, topLevelComponent);
-    }
-
     public void renderView(FacesContext context, UIViewRoot viewToRender)
     throws IOException, FacesException {
         getGroovyDelegate().renderView(context, viewToRender);

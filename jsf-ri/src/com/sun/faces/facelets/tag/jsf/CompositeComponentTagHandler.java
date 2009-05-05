@@ -185,7 +185,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             ViewDeclarationLanguage vdl = factory.getViewDeclarationLanguage(viewId);
             vdl.retargetAttachedObjects(context, c,
                     getAttachedObjectHandlers(c, false));
-            viewHandler.retargetMethodExpressions(context, c);
+            vdl.retargetMethodExpressions(context, c);
 
             // RELEASE_PENDING This is *ugly*.  See my comments in
             // ComponentTagHandlerDelegateImpl at the end of the apply()

@@ -287,23 +287,7 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
         return getWrapped().restoreView(context, viewId);
 
-    }
-
-    /**
-     * <p>The default behavior of this method is to
-     * call {@link ViewHandler#retargetMethodExpressions}
-     * on the wrapped {@link ViewHandler} object.</p>
-     *
-     * @since 2.0
-     */
-
-    @Override
-    public void retargetMethodExpressions(FacesContext context, UIComponent topLevelComponent) {
-        getWrapped().retargetMethodExpressions(context, topLevelComponent);
-    }
-    
-    
-    
+    }    
 
     /**
      * <p>The default behavior of this method is to
