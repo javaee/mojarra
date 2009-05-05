@@ -18,151 +18,86 @@
             <h:form id="frmListStories">
 
                 <br/><br/>
-
-                <h:panelGrid columns="3" headerClass="tituloForm" footerClass="footerForm">
+                <h:panelGrid columns="5" headerClass="tableHeader" footerClass="tableFooter"  width="1024" cellpadding="0" cellspacing="0">
                     <f:facet name="header">
-                        <h:outputText value="Dashboard" styleClass="tituloForm" /><br/><br/>
+                        <h:outputText value=""></h:outputText>
                     </f:facet>
-                    <h:panelGroup>
-                        <menu:postit>
-                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}"></ui:param>
-                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-                        </menu:postit>
-                        <menu:postit rendered="#{storyManager.sprint.name != null}">
-                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
-                            <ui:param name="postitText" value="#{storyManager.sprint.name}" rendered="#{storyManager.sprint.name!= null}"></ui:param>                            
-                        </menu:postit>
-                        <menu:postit rendered="#{storyManager.sprint.name == null}">
-                            <ui:param name="postitLabel" value="#{i18n['story.form.label.sprint.name']}"></ui:param>
-                            <ui:param name="postitText" value="#{i18n['stories.show.nosprint']}" rendered="#{storyManager.sprint.name!= null}"></ui:param>
-                        </menu:postit>
-                    </h:panelGroup>
-                    <h:outputText value="#{i18n['story.show.table.label.empty']}"
-                                  rendered="#{storyManager.stories.rowCount eq 0}" />
-                                 
-                    <h:dataTable value="#{dashboardManager.stories}" var="story"
-                                 rendered="#{dashboardManager.stories.rowCount > 0}"
-                                 title="#{i18n['story.show.table.title']}"
-                                 summary="#{i18n['story.show.table.title']}"
-                                 border="0"
-                                 headerClass="datatableHeader"
-                                 rowClasses="datatableRow,datatableRow2"
-                                 columnClasses="dataTableFirstColumn"
-                                 styleClass="datatable"
-                                 id="dtStories">
+                    <h:panelGrid columns="6" headerClass="tituloForm" footerClass="footerForm" styleClass="tableBody" width="1024">
+                        <f:facet name="header">
+                            <h:outputText rendered="#{storyManager.sprint.name!= null}" value="Dashboard - #{i18n['sprint.form.label.project.name']}: #{sprintManager.project.name} - #{i18n['story.form.label.sprint.name']} - #{storyManager.sprint.name} " styleClass="tituloForm" /><br/><br/>
+                            <h:outputText rendered="#{storyManager.sprint.name == null}" value="Dashboard - #{i18n['sprint.form.label.project.name']}: #{storyManager.sprint.name} - #{i18n['story.form.label.sprint.name']} - #{i18n['stories.show.nosprint']} " styleClass="tituloForm" /><br/><br/>
+                        </f:facet>
+                        <h:outputLabel value=""></h:outputLabel>
 
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#" />
-                            </f:facet>
-                            <h:outputText value="#{dashboardManager.stories.rowIndex + 1}" />
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{i18n['story.show.table.header.name']}" />
-                            </f:facet>
-                            <h:outputText value="#{story.name}" />
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{i18n['story.show.table.header.startDate']}"/>
-                            </f:facet>
-                            <h:outputText value="#{story.startDate}">
-                                <f:convertDateTime pattern="#{i18n['story.show.table.header.startDate.pattern']}" />
-                            </h:outputText>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{i18n['story.show.table.header.priority']}" />
-                            </f:facet>
-                            <h:outputText value="#{story.priority}" />
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{i18n['story.show.table.header.estimation']}" />
-                            </f:facet>
-                            <h:outputText value="#{story.estimation}" />
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{i18n['story.show.table.header.acceptance']}" />
-                            </f:facet>
-                            <h:outputText value="#{story.acceptance}" />
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">
-                                <h:outputText value="Tasks" />
-                            </f:facet>
-                            <h:panelGrid columns="1">
+                        <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtStories" >
+                            <h:column>
+                                 <f:facet name="header">
+                                    <h:outputText value="STORIES" />
+                                </f:facet>
+                                <menu:bigPostit>
+                                    <ui:param name="postitLabel" value=""></ui:param>
+                                    <ui:param name="postitText" value="#{story.name}"></ui:param>
+                                </menu:bigPostit>
+                            </h:column>
+
+                        </h:dataTable>
+                        <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtToDoTasks">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="TO DO" />
+                                </f:facet>
                                 <!-- TODO Tasks -->
                                 <h:dataTable  value="#{story.todoTasks}" var="task" title="Todo Tasks">
                                     <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Name" />
-                                        </f:facet>
-                                        <h:outputText value="#{task.name}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Start Date" />
-                                        </f:facet>
-                                        <h:outputText value="#{task.startDate}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="End Date" />
-                                        </f:facet>
-                                        <h:outputText value="#{task.endDate}" />
+                                        <menu:postit>
+                                            <ui:param name="postitLabel" value=""></ui:param>
+                                            <ui:param name="postitText" value="#{task.name}"></ui:param>
+                                        </menu:postit>
                                     </h:column>
                                 </h:dataTable>
+                            </h:column>
+
+                        </h:dataTable>
+                        <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtDoingTasks">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="DOING" />
+                                </f:facet>
                                 <!-- Working Tasks -->
                                 <h:dataTable  value="#{story.workingTasks}" var="task" title="Working Tasks">
                                     <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Name" />
-                                        </f:facet>
-                                        <h:outputText value="#{task.name}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Start Date" />
-                                        </f:facet>
-                                        <h:outputText value="#{task.startDate}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="End Date" />
-                                        </f:facet>
-                                        <h:outputText value="#{task.endDate}" />
+                                        <menu:postit>
+                                            <ui:param name="postitLabel" value=""></ui:param>
+                                            <ui:param name="postitText" value="#{task.name}"></ui:param>
+                                        </menu:postit>
                                     </h:column>
                                 </h:dataTable>
-                                <!-- Done Tasks -->
+                            </h:column>
+
+                        </h:dataTable>
+                        <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtDoneTasks">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="DONE" />
+                                </f:facet>
+                                <!-- Working Tasks -->
                                 <h:dataTable  value="#{story.doneTasks}" var="task" title="Done Tasks">
                                     <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Name" />
-                                        </f:facet>
-                                        <h:outputText value="#{task.name}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Start Date" />
-                                        </f:facet>
-                                        <h:outputText value="#{task.startDate}" />
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="End Date" />
-                                        </f:facet>
-                                        <h:outputText value="#{task.endDate}" />
+                                        <menu:postit>
+                                            <ui:param name="postitLabel" value=""></ui:param>
+                                            <ui:param name="postitText" value="#{task.name}"></ui:param>
+                                        </menu:postit>
                                     </h:column>
                                 </h:dataTable>
-                            </h:panelGrid>
-                        </h:column>
+                            </h:column>
 
-                    </h:dataTable>
+                        </h:dataTable>
+                        <f:facet name="footer">
+                            <h:commandButton styleClass="botaoPostIt" action="showSprints" value="#{i18n['story.show.button.showSprints']}"  />
+                        </f:facet>
+                    </h:panelGrid>
                     <f:facet name="footer">
-                        <h:commandButton styleClass="botaoPostIt" action="showSprints" value="#{i18n['story.show.button.showSprints']}"  />
+                        <h:outputText value=""></h:outputText>
                     </f:facet>
                 </h:panelGrid>
             </h:form>
