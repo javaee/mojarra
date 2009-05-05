@@ -16,20 +16,19 @@
         </ui:define>
         <ui:define name="content">
             <h:form styleClass="scrumForm" id="editTaskForm">
-                 <h:panelGrid columns="2" headerClass="tituloForm" footerClass="footerForm">
-                     <h:panelGroup>
+                <h:panelGrid columns="2" headerClass="tituloForm" footerClass="footerForm">
 
-                     <h:panelGroup>
+                    <h:panelGroup>
                         <menu:bigPostit>
                             <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
-                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>                        
+                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
                             <ui:param name="postitLabel2" value="#{i18n['story.form.label.sprint.name']}:"></ui:param>
                             <ui:param name="postitText2" value="#{storyManager.sprint.name}"></ui:param>
                             <ui:param name="postitLabel3" value="#{i18n['task.form.label.story.name']}:"></ui:param>
                             <ui:param name="postitText3" value="#{taskManager.story.name}"></ui:param>
                         </menu:bigPostit>
 
-                       <menu:bigPostit rendered="#{storyManager.sprint.name == null}">
+                        <menu:bigPostit rendered="#{storyManager.sprint.name == null}">
                             <ui:param name="postitLabel" value="#{i18n['tasks.form.label.sprint.name']}"></ui:param>
                             <ui:param name="postitText" value="#{i18n['tasks.show.nosprint']}"></ui:param>
                             <ui:param name="postitLabel" value="#{i18n['task.form.label.story.name']}:"></ui:param>
@@ -37,15 +36,15 @@
                         </menu:bigPostit>
 
                     </h:panelGroup>
-                    
-                    </h:panelGroup>
+
+
                     <h:panelGroup>
-                    <h:outputText value="#{i18n['task.edit.form.title']}:" styleClass="tituloForm" />
-                    <ui:include src="form.xhtml" />
-                    <h:panelGroup>
-                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditUpdate" action="#{taskManager.save}" value="#{i18n['task.edit.button.update']}" styleClass="formInput" />
-                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditCancel" action="#{taskManager.cancelEdit}" immediate="true" value="#{i18n['task.edit.button.cancel']}" styleClass="formInput" />
-                    </h:panelGroup>
+                        <h:outputText value="#{i18n['task.edit.form.title']}:" styleClass="tituloForm" />
+                        <ui:include src="form.xhtml" />
+                        <h:panelGroup>
+                            <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditUpdate" action="#{taskManager.save}" value="#{i18n['task.edit.button.update']}" styleClass="formInput" />
+                            <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditCancel" action="#{taskManager.cancelEdit}" immediate="true" value="#{i18n['task.edit.button.cancel']}" styleClass="formInput" />
+                        </h:panelGroup>
                     </h:panelGroup>
                 </h:panelGrid>
             </h:form>

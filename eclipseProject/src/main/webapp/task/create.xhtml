@@ -17,12 +17,12 @@
         <ui:define name="content">
             <h:form  id="createTaskForm">
                 <h:panelGrid columns="3" headerClass="tituloForm" footerClass="footerForm">
-                    <f:facet name="header">
-                        <h:outputText value="#{i18n['task.create.form.title']}" styleClass="tituloForm" />
+                    <f:facet name="header" >
+                        <h:outputText id="headerTaskForm" value="#{i18n['task.create.form.title']}" styleClass="tituloForm" />
                     </f:facet>
-
+                    
                     <h:panelGroup>
-                        <menu:bigPostit>
+                        <menu:bigPostit id="piProjectStory">
                             <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
                             <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
                             <ui:param name="postitLabel2" value="#{i18n['story.form.label.sprint.name']}:"></ui:param>
@@ -31,7 +31,7 @@
                             <ui:param name="postitText3" value="#{taskManager.story.name}"></ui:param>
                         </menu:bigPostit>
 
-                        <menu:bigPostit rendered="#{storyManager.sprint.name == null}">
+                        <menu:bigPostit id="piNoProject" rendered="#{storyManager.sprint.name == null}">
                             <ui:param name="postitLabel" value="#{i18n['tasks.form.label.sprint.name']}"></ui:param>
                             <ui:param name="postitText" value="#{i18n['tasks.show.nosprint']}"></ui:param>
                             <ui:param name="postitLabel" value="#{i18n['task.form.label.story.name']}:"></ui:param>
