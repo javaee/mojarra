@@ -17,8 +17,7 @@
 
             <h:outputLabel value="#{i18n['sprint.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true"
-                requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLenght="30" size="30"
-                validator="#{sprintManager.checkUniqueSprintName}" />
+                requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLength="30" size="30" />
             <h:message for="itName" styleClass="errorMessage" />
 
             <h:outputLabel value="#{i18n['sprint.form.label.goals']}:" for="itGoals"  />
