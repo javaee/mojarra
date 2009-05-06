@@ -50,12 +50,11 @@ public class SprintNameUniquenessConstraintValidator implements ConstraintValida
                 context.getApplication().evaluateExpressionGet(context, 
                 "#{sprintManager}", SprintManager.class);
         boolean result = true;
-        
-        try {
-            sprintManager.checkUniqueSprintName(context, null, value);
-        } catch (Throwable t) {
+        String message = sprintManager.
+                checkUniqueSprintNameApplicationValidatorMethod(value);
+        if (null != message) {
             result = false;
-            ctx.addError(t.getLocalizedMessage(), "name");
+            ctx.addError(message, "name");
             ctx.disableDefaultError();
         }
 
