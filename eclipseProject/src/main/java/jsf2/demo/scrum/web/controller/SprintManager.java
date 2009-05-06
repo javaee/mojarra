@@ -138,8 +138,35 @@ public class SprintManager extends AbstractManager implements Serializable {
         }
         return "show";
     }
+    
+    /*
+     * This method can be pointed to by a validator methodExpression, such as:
+     * 
+     * <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true"
+     *   requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLength="30" size="30"
+     *   validator="#{sprintManager.checkUniqueSprintName}" />
+     */
 
-    public void checkUniqueSprintName(FacesContext context, UIComponent component, Object newValue) {
+    public void checkUniqueSprintNameFacesValidatorMethod(FacesContext context, UIComponent component, Object newValue) {
+        
+        final String newName = (String) newValue;
+        String message = checkUniqueSprintNameApplicationValidatorMethod(newName);
+        if (null != message) {
+            throw new ValidatorException(getFacesMessageForKey("sprint.form.label.name.unique"));
+        }
+    }
+    
+    
+    /*
+     * This method is called by the JSR-303 SprintNameUniquenessConstraintValidator.
+     * If it returns non-null, the result must be interpreted as the localized
+     * validation message.
+     * 
+     */
+    
+    public String checkUniqueSprintNameApplicationValidatorMethod(String newValue) {
+        String message = null;
+        
         final String newName = (String) newValue;
         try {
             Long count = doInTransaction(new PersistenceAction<Long>() {
@@ -155,11 +182,13 @@ public class SprintManager extends AbstractManager implements Serializable {
                 }
             });
             if (count != null && count > 0) {
-                throw new ValidatorException(getFacesMessageForKey("sprint.form.label.name.unique"));
+                message = getFacesMessageForKey("sprint.form.label.name.unique").getSummary();
             }
         } catch (ManagerException ex) {
             Logger.getLogger(SprintManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return message;
     }
 
     public String cancelEdit() {
