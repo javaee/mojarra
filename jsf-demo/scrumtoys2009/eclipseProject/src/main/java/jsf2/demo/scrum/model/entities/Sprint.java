@@ -69,6 +69,7 @@ public class Sprint extends AbstractEntity implements Serializable {
         this.project = project;
     }
 
+    @SprintNameUniquenessConstraint
     public String getName() {
         return name;
     }
