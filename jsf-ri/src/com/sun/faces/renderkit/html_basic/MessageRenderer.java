@@ -118,6 +118,9 @@ public class MessageRenderer extends HtmlBasicRenderer {
             return;
         }
 
+        //  If id is user specified, we must render
+        boolean mustRender = shouldWriteIdAttribute(component);
+
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
@@ -139,7 +142,12 @@ public class MessageRenderer extends HtmlBasicRenderer {
 
         assert(messageIter != null);
         if (!messageIter.hasNext()) {
-            //no messages to render
+            if (mustRender) {
+                // no message to render, but must render anyway
+                writer.startElement("span", component);
+                writeIdAttributeIfNecessary(context, writer, component);
+                writer.endElement("span");
+            } // otherwise, return without rendering
             return;
         }
         FacesMessage curMessage = (FacesMessage) messageIter.next();
@@ -219,7 +227,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
              || dir != null
              || lang != null
              || title != null
-             || shouldWriteIdAttribute(component)) {
+             || mustRender) {
             writer.startElement("span", component);
             writeIdAttributeIfNecessary(context, writer, component);
 
