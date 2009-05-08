@@ -1,114 +1,4 @@
-table.whiteboard {
-    width:1024px;
-    border-collapse:collapse;
-    margin:0px;
-    padding:0px;
-}
- 
-table.whiteboard tr td{
-    margin:0px;
-    padding:0px;
-}
 
-.tableHeader{
-    background-image:url("../resources/images/lousaNova/quadroNegro_r1_c1.png");
-    background-repeat:no-repeat;
-    height:42px;
-    width:100%;
-    margin: 0px;
-    padding: 0px;
-
-}
-
-table.tableBody{
-  width:100%;
-  background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");
-  margin: 0px;
-  padding: 0px;
-  border-collapse:collapse;
-  border-spacing:0pt;
-
-
-}
-
-table.tableBody tr td{
-    /* important to make content aligned inside the table*/
-     vertical-align:top;
-}
-
-
-
-.tableFooter{
-    width:100%;
-    background-image:url("../resources/images/lousaNova/quadroNegro_r3_c1.png");
-    background-repeat:no-repeat;
-    height:45px;
-    margin:0px;
-    padding:0px;
-    font-family: Arial, Helvetica, sans-serif ;
-	color: black;
-
-}
-
-td.postItYellow {
-    background-image:url("../resources/images/postits/novos/postit_amar_150x145.png");
-    background-position:center;
-    background-repeat:no-repeat;
-    height:200px;
-    width:25%;
-}
-td.postItYellow a {
-    color:black;
-    text-decoration:none;
-}
-
-td.postItOrange {
-    background-image:url("../resources/images/postits/novos/postit_lara_150x145.png");
-    background-position:center;
-    background-repeat:no-repeat;
-    height:200px;
-    width:25%;
-}
-
-td.postItOrange a {
-    color:black;
-    text-decoration:none;
-}
-
-td.postItRed {
-    background-image:url("../resources/images/postits/novos/postit_verm_150x145.png");
-    background-position:center;
-    background-repeat:no-repeat;
-    height:200px;
-    width:25%;
-}
-td.postItRed a {
-    color:white;
-    text-decoration:none;
-}
-
-td.postItBlue {
-    background-image:url("../resources/images/postits/novos/postit_azul_150x145.png");
-    background-position:center;
-    background-repeat:no-repeat;
-    height:200px;
-    width:25%;
-}
-
-td.postItBlue a {
-    color:white;
-    text-decoration:none;
-}
-
-td.footerForm{
-    text-align:center;
-
-}
-
-.errorMessage{
-  color: red;
-  font-size: 12px;
-}
 .tituloForm {
     font-size: 14pt;
     /* Red 100%*/
@@ -127,25 +17,6 @@ input.botaoPostIt{
 
 }
 
-
-td.formLabel, label{
-    margin-left:15pt;
-
-}
-
-.formLabel {
-    width:30%;
-    text-align: right;
-    background-position: left;
-    background-repeat:no-repeat;
-
-}
-
-
-.formInput{
-    font-size: 12px;
-}
-
 .inputPattern{
   /* Red 20%*/
   color: #F8C6C7;
@@ -159,10 +30,6 @@ label {
   text-align: left;
   border:none;
 
-}
-
-td{
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 input, select,textarea {
@@ -209,13 +76,6 @@ input, select,textarea {
     /* Red 100% */
     color:#EF3E42;
 }
-.datatable {
-    border-collapse:collapse;
-}
-.datatable tr td{
-    padding:5px;
-    margin:5px;
-}
 
 /*Diferent datatable lines / oposite*/
 .datatableRow{
@@ -223,9 +83,6 @@ input, select,textarea {
     color:black;
     font-size:12px;
     text-align:center;
-}
-.dataTableFirstColumn{
-    font-weight:bold;
 }
 
 table.menuTable{
@@ -355,14 +212,7 @@ table.menuTable tr td{
 
 }
 
-.postitLabel{
-    font-weight:bold;
-    font-size:16px;
-    text-align:right;
-    width:30%
-}
-
-.postItInfo{
-    width:70%;
-    text-align:left;
+.postitComponent a{
+    text-decoration:none;
+    color:white;
 }
