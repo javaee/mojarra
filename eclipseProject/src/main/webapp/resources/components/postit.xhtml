@@ -8,15 +8,20 @@
     <composite:interface>
         <composite:valueHolder name="postitLabel"/>
         <composite:valueHolder name="postitText"/>
-
+        <composite:valueHolder name="color"/>
+        <composite:attribute name="cor" type="java.lang.String"/>
+        <composite:attribute name="action" method-signature="java.lang.String action()" targets="postitAction"/>
     </composite:interface>
- 
+
     <composite:implementation>
-        <h:panelGrid styleClass="postitComponent">
+        <h:panelGrid styleClass="postitComponent#{cc.attrs.cor}">
             <h:panelGroup>
-            <h:outputText value="#{postitLabel}" styleClass="postitLabel"/> <br/><br/>
-            <h:outputText value="#{postitText}"/>
+                <h:outputText value="#{postitLabel}" styleClass="postitLabel"/> <br/><br/>
+                <h:commandLink id="postitAction" immediate="true">
+                    <h:outputText value="#{postitText}"/>
+                </h:commandLink>
             </h:panelGroup>
         </h:panelGrid>
+
     </composite:implementation>
 </html>
