@@ -20,10 +20,17 @@
                     <f:facet name="header">
                         <h:outputText value="#{i18n['sprint.edit.form.title']}:" styleClass="tituloForm" />
                     </f:facet>
-                    <menu:postit>
-                        <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
-                        <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-                    </menu:postit>
+                     <h:panelGroup>
+                            <menu:postit rendered="#{sprintManager.project.name != null}" action="editProject">
+                                <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
+                                <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                            </menu:postit>
+                            <menu:postit rendered="#{sprintManager.project.name == null}" action="showProjects">
+                                <ui:param name="postitLabel" value="#{i18n['sprint.form.label.noproject']}"></ui:param>
+                                <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
+                            </menu:postit>
+
+                    </h:panelGroup>
 
 
                     <ui:include src="form.xhtml" />
