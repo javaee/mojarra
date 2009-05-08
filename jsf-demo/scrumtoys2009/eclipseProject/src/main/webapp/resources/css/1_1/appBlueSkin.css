@@ -1,116 +1,8 @@
-table.whiteboard {
-    width:1024px;
-    border-collapse:collapse;
-    margin:0px;
-    padding:0px;
-}
 
-table.whiteboard tr td{
-    margin:0px;
-    padding:0px;
-}
- 
-.tableHeader{
-    background-image:url("../resources/images/lousaNova/quadroNegro_r1_c1.png");
-    background-repeat:no-repeat;
-    height:42px;
-    width:100%;
-    margin: 0px;
-    padding: 0px;
-    
-}
-
-table.tableBody{
-  width:100%;
-  background-image:url("../resources/images/lousaNova/quadroNegro_r2_c1.png;");  
-  margin: 0px;
-  padding: 0px;  
-  border-collapse:collapse;
-  border-spacing:0pt; 
-}
-
-table.tableBody tr td{
-    /* important to make content aligned inside the table*/
-  vertical-align:top;
-}
-
-
-
-.tableFooter{
-    width:100%;
-    background-image:url("../resources/images/lousaNova/quadroNegro_r3_c1.png");
-    background-repeat:no-repeat;
-    height:45px;    
-    margin:0px;
-    padding:0px;
-    font-family: Arial, Helvetica, sans-serif ;
-	color: black;
-    
-}
-
-td.postItYellow {
-    background-image:url("../resources/images/postits/novos/postit_amar_150x145.png");
-    background-position:center;
-    background-repeat:no-repeat;
-    height:200px;
-    width:25%;    
-}
-td.postItYellow a {
-    color:black;
-    text-decoration:none;
-}
-
-td.postItOrange {
-    background-image:url("../resources/images/postits/novos/postit_lara_150x145.png");
-    background-position:center;
-    background-repeat:no-repeat;
-    height:200px;
-    width:25%;
-}
-
-td.postItOrange a {
-    color:black;
-    text-decoration:none;
-}
-
-td.postItRed {
-    background-image:url("../resources/images/postits/novos/postit_verm_150x145.png");
-    background-position:center;
-    background-repeat:no-repeat;
-    height:200px;
-    width:25%;
-}
-td.postItRed a {
-    color:white;
-    text-decoration:none;
-}
-
-td.postItBlue {
-    background-image:url("../resources/images/postits/novos/postit_azul_150x145.png");
-    background-position:center;
-    background-repeat:no-repeat;
-    height:200px;
-    width:25%;
-}
-
-td.postItBlue a {
-    color:white;
-    text-decoration:none;
-}
-
-td.footerForm{
-    text-align:center;
-    
-}
-
-.errorMessage{
-  color: red;
-  font-size: 12px;
-}
 
 .tituloForm {
     font-size: 14pt;
-    /* blue 100%*/
+    /* Blue 100%*/
     color: #0069AA;;
     font-weight:bold;
     padding:11px;
@@ -118,56 +10,32 @@ td.footerForm{
 }
 input.botaoPostIt{
     font-size: 8pt;
-    /* blue 100%*/
+    /* Blue 100%*/
     color: #0069AA;
     font-weight:bold;
     background-color:white;
-    
-}
 
-
-td.formLabel, label{
-    margin-left:15pt;
-
-}
-
-.formLabel {
-    width:30%;
-    text-align: right;
-    background-position: left;
-    background-repeat:no-repeat;
-
-}
-
-.formInput{    
-    font-size: 12px;
 }
 
 .inputPattern{
-    /* blue 20%*/
+  /* Blue 20%*/
   color: #B3D4E7;
 }
-
-
-
 label {
   font-size: 12px;
-  /* blue 100%*/
+  /* Blue 100%*/
   color: #0069AA;
   text-align: left;
-  border:none;  
-}
+  border:none;
 
-td{
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 input, select,textarea {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
-  /* blue 100% */
+  /* Orange 100% */
   color: #0069AA;
-  text-align: left;  
+  text-align: left;
   background-color:white;
   border-style:ridge;
   /*lightgray*/
@@ -175,23 +43,21 @@ input, select,textarea {
   padding:4px;
   margin:4px;
   margin-bottom:4px;
-  font-weight:normal;  
+  font-weight:normal;
 }
 
-
 .datatableHeader{
-    /* blue 100% */
+    /* Orange 100% */
     background-color:#0069AA;
     color:white;
-
     font-size:12pt;
-    font-weight:normal;    
+    font-weight:normal;
     padding:10px;
     margin:10px;
 }
 
 .datatableRow2{
-    /* blue 20% */
+    /* Blue 20% */
     background-color:#B3D4E7;
     font-size:12px;
     color:black;
@@ -204,33 +70,23 @@ input, select,textarea {
 .navigationLink{
     text-decoration:none;
     text-align:right;
-    /* blue 100% */
+    /* Blue 100% */
     color:#0069AA;
-}
-.datatable {    
-    border-collapse:collapse;
-}
-.datatable tr td{
-    padding:5px;
-    margin:5px;
 }
 
 /*Diferent datatable lines / oposite*/
 .datatableRow{
     background-color:white;
-    color:black; 
+    color:black;
     font-size:12px;
     text-align:center;
-}
-.dataTableFirstColumn{
-    font-weight:bold;
 }
 
 table.menuTable{
     /* it seems its not necessary */
     border-collapse:collapse;
     vertical-align:middle;
-    text-align: left;           
+    text-align: left;
 }
 
 table.menuTable tr td{
@@ -238,85 +94,85 @@ table.menuTable tr td{
     padding-bottom:0px;
     /*space between menu itens */
     width:168px;
-    
+
 }
 
 .menu a{
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif ;
-    font-size: 12px;    
+    font-size: 12px;
     padding: 10px;
     /* Blue 100% */
     color: #0069AA;
 }
 
 /* menuItem and menu spacing */
-.menu ul{           
+.menu ul{
     text-align:left;
     padding:0pt;
     margin:0pt;
     /* sub menu item background */
     background-color:white;
 
-    /* fundo transparente 
+    /* fundo transparente
     background-image:url("../resources/images/menu/Transparency.png;");
     */
 }
 /* submenu div */
-.menu{    
+.menu{
     display:none;
     position:absolute;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-    font-weight: bold;        
-        
+    font-weight: bold;
+
 }
 
 /* submenu item*/
 .menu li{
     /* white background for avoiding transparency on submenu item */
     /*background-color:white;*/
-    
+
     list-style-type: none;
     display: block;
-    padding:10px;    
+    padding:10px;
     /* altura do submenu */
     width: 142px;
-    /* Blue 100% */
+    /* Orange 100% */
     border:1px solid #0069AA;
-    
+
     font-weight:bold;
-    
+
 }
 
 
 .menuhandler {
-    /* Blue 100% */
+    /* Orange 100% */
     border:1px solid #0069AA;
     color:white;
 
     text-decoration:none;
     display: block;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;    
+    font-size: 12px;
     width: 141px;
     vertical-align:middle;
     text-align: left;
-    font-weight: bold;    
+    font-weight: bold;
     padding:10px;
     background-color:#0069AA;
-    /* fundo transparente  
+    /* fundo transparente
     background-image:url("../resources/images/menu/Transparency.png;");
     color:white;
-    */    
+    */
 }
 .selectProject{
-    vertical-align:middle;
+    vertical-align:bottom;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: bold;
     text-align:center;
-    padding:3pt;
+
 }
 
 .postitComponent{
@@ -325,15 +181,20 @@ table.menuTable tr td{
         height:145px;
         font-size: 14px;
         text-align:center;
-        color:white;                
+        color:white;
 }
 
 .postitComponent tr td{
-    
+
     padding: 5pt;
     padding-top: 15pt;
     vertical-align:top;
-    
+
+}
+
+.postitComponent a{
+    text-decoration:none;
+    color:white;
 }
 
 .bigPostitComponent{
@@ -343,24 +204,12 @@ table.menuTable tr td{
         height:150px;
         font-size: 14px;
         text-align:center;
-        color:white;        
+        color:white;
 }
 
 .bigPostitComponent tr td{
 
-    padding: 5pt;    
+    padding: 5pt;
     vertical-align:top;
 
 }
-.postitLabel{    
-    font-weight:bold;
-    font-size:16px;
-    text-align:right;
-    width:30%
-}
-
-.postItInfo{
-    width:70%;
-    text-align:left;
-}
-

@@ -1,0 +1,176 @@
+/* Whiteboard */
+
+.tableHeader{
+    background-image:url("../resources/images/lousaNova/quadroNegro_top_990x80.png");
+    background-repeat:no-repeat;
+    height:80px;
+    width:100%;
+    margin: 0px;
+    padding: 0px;
+
+}
+
+table.tableBody{
+  width:990px;  
+  background-image:url("../resources/images/lousaNova/quadroNegro_meio_990x10.png;");
+  margin: 0px;
+  padding: 0px;
+  border-collapse:collapse;
+  border-spacing:0pt;
+}
+
+table.tableBody tr td{
+    /* important to make content aligned inside the table*/
+  vertical-align:top;  
+}
+
+td.tableFooter, .whiteboard-bottom{
+    width:990px;
+    height:120px;
+    background-image:url("../resources/images/lousaNova/quadroNegro_top_990x80");
+    background-repeat:no-repeat;    
+    margin:0px;
+    padding:0px;    	
+
+}
+
+
+td.footerForm{
+    text-align:center;
+
+}
+
+.errorMessage{
+  color: red;
+  font-size: 12px;
+}
+
+td.formLabel, label{
+    margin-left:15pt;
+
+}
+
+.formLabel {
+    width:30%;
+    text-align: right;
+    background-position: left;
+    background-repeat:no-repeat;
+
+}
+.formInput{
+    font-size: 12px;
+}
+
+td{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.datatable {
+    border-collapse:collapse;
+}
+.datatable tr td{
+    padding:5px;
+    margin:5px;
+}
+
+.dataTableFirstColumn{
+    font-weight:bold;
+}
+
+
+.postitComponentYellow{
+        background-image:url("../resources/images/postits/novos/postit_amar_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:black;        
+}
+
+
+.postItComponentYellow a {
+    color:black;
+    text-decoration:none;
+}
+
+.postitComponentYellow tr td{
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+}
+
+
+.postitComponentRed{
+        background-image:url("../resources/images/postits/novos/postit_verm_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:white;
+}
+
+
+.postitComponentRed tr td{
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+}
+
+.postItComponentRed a {
+    color:white;
+    text-decoration:none;
+}
+
+.postitComponentBlue{
+        background-image:url("../resources/images/postits/novos/postit_azul_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:white;
+}
+
+.postitComponentBlue tr td{
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+}
+
+.postItComponentBlue a {
+    color:white;
+    text-decoration:none;
+}
+.postitComponentOrange{
+        background-image:url("../resources/images/postits/novos/postit_lara_150x145.png");
+        width:150px;
+        height:145px;
+        font-size: 14px;
+        text-align:center;
+        color:black;
+}
+
+
+.postitComponentOrange tr td{
+    padding: 5pt;
+    padding-top: 15pt;
+    vertical-align:top;
+}
+
+.postItComponentOrange a {
+    color:black;
+    text-decoration:none;
+}
+
+
+.postitLabel{
+    font-weight:bold;
+    font-size:16px;
+    text-align:right;
+    width:30%
+}
+
+.postItInfo{
+    width:70%;
+    text-align:left;
+}
+
