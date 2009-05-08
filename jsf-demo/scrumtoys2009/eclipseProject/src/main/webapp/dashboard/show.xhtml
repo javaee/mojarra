@@ -16,24 +16,19 @@
         </ui:define>
         <ui:define name="content">
             <h:form id="frmListStories">
-
                 <br/><br/>
-                <h:panelGrid columns="5" headerClass="tableHeader" footerClass="tableFooter"  width="1024" cellpadding="0" cellspacing="0">
+                <h:panelGrid columns="5" headerClass="tableHeader" footerClass="whiteboard-bottom"  width="1010" cellpadding="0" cellspacing="0">
                     <f:facet name="header">
-                        <h:outputText value=""></h:outputText>
+                        <br/>
+                        <h:outputText rendered="#{storyManager.sprint.name!= null}" value="Dashboard - #{i18n['sprint.form.label.project.name']}: #{sprintManager.project.name} - #{i18n['story.form.label.sprint.name']} - #{storyManager.sprint.name} " styleClass="tituloForm" />
+                        <h:outputText rendered="#{storyManager.sprint.name == null}" value="Dashboard - #{i18n['sprint.form.label.project.name']}: #{storyManager.sprint.name} - #{i18n['story.form.label.sprint.name']} - #{i18n['stories.show.nosprint']} " styleClass="tituloForm" />
                     </f:facet>
-                    <h:panelGrid columns="6" headerClass="tituloForm" footerClass="footerForm" styleClass="tableBody" width="1024">
-                        <f:facet name="header">
-                            <h:outputText rendered="#{storyManager.sprint.name!= null}" value="Dashboard - #{i18n['sprint.form.label.project.name']}: #{sprintManager.project.name} - #{i18n['story.form.label.sprint.name']} - #{storyManager.sprint.name} " styleClass="tituloForm" /><br/><br/>
-                            <h:outputText rendered="#{storyManager.sprint.name == null}" value="Dashboard - #{i18n['sprint.form.label.project.name']}: #{storyManager.sprint.name} - #{i18n['story.form.label.sprint.name']} - #{i18n['stories.show.nosprint']} " styleClass="tituloForm" /><br/><br/>
-                        </f:facet>
+                    <h:panelGrid columns="6" headerClass="tituloForm" footerClass="footerForm" styleClass="tableBody">
                         <h:outputLabel value=""></h:outputLabel>
 
                         <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtStories" >
                             <h:column>
-                                 <f:facet name="header">
-                                    <h:outputText value="STORIES" />
-                                </f:facet>
+                                <f:facet name="header"><h:outputText value="STORIES" /></f:facet>
                                 <menu:bigPostit>
                                     <ui:param name="postitLabel" value=""></ui:param>
                                     <ui:param name="postitText" value="#{story.name}"></ui:param>
@@ -43,13 +38,10 @@
                         </h:dataTable>
                         <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtToDoTasks">
                             <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="TO DO" />
-                                </f:facet>
-                                <!-- TODO Tasks -->
+                                <f:facet name="header"><h:outputText value="TO DO" /></f:facet>                                
                                 <h:dataTable  value="#{story.todoTasks}" var="task" title="Todo Tasks">
                                     <h:column>
-                                        <menu:postit>
+                                        <menu:postit action="editProject">
                                             <ui:param name="postitLabel" value=""></ui:param>
                                             <ui:param name="postitText" value="#{task.name}"></ui:param>
                                         </menu:postit>
@@ -60,13 +52,10 @@
                         </h:dataTable>
                         <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtDoingTasks">
                             <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="DOING" />
-                                </f:facet>
-                                <!-- Working Tasks -->
+                                <f:facet name="header"><h:outputText value="DOING" /></f:facet>                                
                                 <h:dataTable  value="#{story.workingTasks}" var="task" title="Working Tasks">
                                     <h:column>
-                                        <menu:postit>
+                                        <menu:postit action="#{dashboardManager.editTask}">
                                             <ui:param name="postitLabel" value=""></ui:param>
                                             <ui:param name="postitText" value="#{task.name}"></ui:param>
                                         </menu:postit>
@@ -77,13 +66,10 @@
                         </h:dataTable>
                         <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtDoneTasks">
                             <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="DONE" />
-                                </f:facet>
-                                <!-- Working Tasks -->
+                                <f:facet name="header"><h:outputText value="DONE" /></f:facet>
                                 <h:dataTable  value="#{story.doneTasks}" var="task" title="Done Tasks">
                                     <h:column>
-                                        <menu:postit>
+                                        <menu:postit action="editProject">
                                             <ui:param name="postitLabel" value=""></ui:param>
                                             <ui:param name="postitText" value="#{task.name}"></ui:param>
                                         </menu:postit>
@@ -97,7 +83,7 @@
                         </f:facet>
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <h:outputText value=""></h:outputText>
+                        <h:graphicImage value="/resources/images/lousaNova/quadroNegro_botton_990x120.png" ></h:graphicImage>
                     </f:facet>
                 </h:panelGrid>
             </h:form>
