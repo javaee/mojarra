@@ -48,6 +48,7 @@ import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.TextRenderer;
 import com.sun.faces.renderkit.html_basic.HtmlBasicInputRenderer;
 import com.sun.faces.renderkit.html_basic.HiddenRenderer;
+import com.sun.faces.config.WebConfiguration;
 import org.apache.cactus.ServletTestCase;
 
 import javax.faces.FactoryFinder;
@@ -425,6 +426,28 @@ public class TestRenderKit extends ServletFacesTestCase {
         assertNotNull(notEmpty);
         assertTrue(notEmpty.hasNext());
 
+    }
+
+
+    // Added for issue 1106
+    public void beginCreateResponseWriter7(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "*/*");
+    }
+
+    public void testCreateResponseWriter7() throws Exception {
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        webConfig.overrideContextInitParameter(WebConfiguration.BooleanWebContextInitParameter.PreferXHTMLContentType, true);
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        ResponseWriter writer = null;
+
+        // see that the proper content type is picked up based on the
+        // accept header
+        writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
+        assertEquals(writer.getContentType(), "application/xhtml+xml");
+        webConfig.overrideContextInitParameter(WebConfiguration.BooleanWebContextInitParameter.PreferXHTMLContentType, true);
     }
 
 

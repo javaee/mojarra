@@ -62,7 +62,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.DisableUnicodeEscaping;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableJSStyleHiding;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableScriptInAttributeValue;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PreferXHTMLContentType;
 import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -265,13 +268,12 @@ public class RenderKitImpl extends RenderKit {
             }
 
             if (null != desiredContentTypeList) {
-                if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.PreferXHTMLContentType)) {
-                    desiredContentTypeList = RenderKitUtils.determineContentType(
-                         desiredContentTypeList, SUPPORTED_CONTENT_TYPES, RIConstants.XHTML_CONTENT_TYPE);
-                } else {
-                    desiredContentTypeList = RenderKitUtils.determineContentType(
-                         desiredContentTypeList, SUPPORTED_CONTENT_TYPES, null);
-                }
+                desiredContentTypeList =
+                      RenderKitUtils.determineContentType(desiredContentTypeList,
+                                                          SUPPORTED_CONTENT_TYPES,
+                                                          ((preferXhtml())
+                                                              ? RIConstants.XHTML_CONTENT_TYPE
+                                                              : null));
                 if (null != desiredContentTypeList) {
                     contentType = findMatch(
                          desiredContentTypeList,
@@ -282,16 +284,17 @@ public class RenderKitImpl extends RenderKit {
 
         // Step 4: Default to text/html
         if (contentType == null) {
-	        if (null == desiredContentTypeList) {
-	        	contentType = RIConstants.HTML_CONTENT_TYPE;
-	        } else {
-	        	String[] desiredContentTypes = contentTypeSplit(desiredContentTypeList);
-	        	for (String desiredContentType : desiredContentTypes) {
-	        		if (RIConstants.ALL_MEDIA.equals(desiredContentType.trim())) {
-	        			contentType = RIConstants.HTML_CONTENT_TYPE;
-	        		}
-	        	}
-	        }
+            if (null == desiredContentTypeList) {
+                contentType = getDefaultContentType();
+            } else {
+                String[] desiredContentTypes =
+                      contentTypeSplit(desiredContentTypeList);
+                for (String desiredContentType : desiredContentTypes) {
+                    if (RIConstants.ALL_MEDIA.equals(desiredContentType.trim())) {
+                        contentType = getDefaultContentType();
+                    }
+                }
+            }
         }
 
         if (null == contentType) {
@@ -303,13 +306,11 @@ public class RenderKitImpl extends RenderKit {
             characterEncoding = RIConstants.CHAR_ENCODING;
         }
 
-        boolean scriptHiding = webConfig
-              .isOptionEnabled(BooleanWebContextInitParameter.EnableJSStyleHiding);
-        boolean scriptInAttributes = webConfig
-              .isOptionEnabled(BooleanWebContextInitParameter.EnableScriptInAttributeValue);
-        WebConfiguration.DisableUnicodeEscaping escaping = WebConfiguration
-              .DisableUnicodeEscaping
-              .getByValue(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.DisableUnicodeEscaping));
+        boolean scriptHiding = webConfig.isOptionEnabled(EnableJSStyleHiding);
+        boolean scriptInAttributes = webConfig.isOptionEnabled( EnableScriptInAttributeValue);
+        WebConfiguration.DisableUnicodeEscaping escaping =
+              WebConfiguration.DisableUnicodeEscaping.getByValue(
+                    webConfig.getOptionValue(DisableUnicodeEscaping));
         return new HtmlResponseWriter(writer,
                                       contentType,
                                       characterEncoding,
@@ -317,6 +318,23 @@ public class RenderKitImpl extends RenderKit {
                                       scriptInAttributes,
                                       escaping);
     }
+
+
+    private boolean preferXhtml() {
+
+        return webConfig.isOptionEnabled(PreferXHTMLContentType);
+
+    }
+
+
+    private String getDefaultContentType() {
+
+        return ((preferXhtml())
+                ? RIConstants.XHTML_CONTENT_TYPE
+                : RIConstants.HTML_CONTENT_TYPE);
+
+    }
+
 
     private String[] contentTypeSplit(String contentTypeString) {
         String[] result = Util.split(contentTypeString, ",");
