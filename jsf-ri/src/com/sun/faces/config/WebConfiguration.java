@@ -743,7 +743,7 @@ public class WebConfiguration {
         ),
         DisableUnicodeEscaping(
             "com.sun.faces.disableUnicodeEscaping",
-            "false"
+            "auto"
         ),
         FaceletsDefaultRefreshPeriod(
               "javax.faces.FACELETS_REFRESH_PERIOD",

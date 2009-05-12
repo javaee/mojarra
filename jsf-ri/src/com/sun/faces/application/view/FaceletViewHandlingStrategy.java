@@ -838,11 +838,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         // get our content type
         String contentType =
-              (String) extContext.getRequestMap().get("facelets.ContentType");
+              (String) context.getAttributes().get("facelets.ContentType");
 
         // get the encoding
         String encoding =
-              (String) extContext.getRequestMap().get("facelets.Encoding");
+              (String) context.getAttributes().get("facelets.Encoding");
 
         // Create a dummy ResponseWriter with a bogus writer,
         // so we can figure out what content type the ReponseWriter

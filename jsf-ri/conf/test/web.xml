@@ -48,6 +48,10 @@
     <!-- if this PROJECT_STAGE init parameter is picked up, the test
          will fail.  This will validate that the JNDI entry is used first -->
     <context-param>
+        <param-name>com.sun.faces.disableUnicodeEscaping</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Production</param-value>
     </context-param>
