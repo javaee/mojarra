@@ -61,6 +61,9 @@ import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -80,6 +83,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 
 
 public class UIRepeat extends UINamingContainer {
@@ -513,6 +517,106 @@ public class UIRepeat extends UINamingContainer {
         }
         return false;
     }
+
+    @Override
+    public boolean visitTree(VisitContext context, VisitCallback callback) {
+        // First check to see whether we are visitable.  If not
+        // short-circuit out of this subtree, though allow the
+        // visit to proceed through to other subtrees.
+        if (!isVisitable(context))
+            return false;
+
+        FacesContext facesContext = context.getFacesContext();
+        int oldRowIndex = getOffset();
+        setIndex(facesContext, -1);
+
+        // Push ourselves to EL
+        pushComponentToEL(facesContext, null);
+
+        try {
+
+            // Visit ourselves.  Note that we delegate to the
+            // VisitContext to actually perform the visit.
+            VisitResult result = context.invokeVisitCallback(this, callback);
+
+            // If the visit is complete, short-circuit out and end the visit
+            if (result == VisitResult.COMPLETE)
+                return true;
+
+            // Visit children, short-circuiting as necessary
+            if ((result == VisitResult.ACCEPT) && doVisitChildren(context)) {
+
+                // And finally, visit rows
+                if (visitChildren(context, callback))
+                    return true;
+            }
+        }
+        finally {
+            // Clean up - pop EL and restore old row index
+            popComponentFromEL(facesContext);
+            setIndex(facesContext, oldRowIndex);
+        }
+
+        // Return false to allow the visit to continue
+        return false;
+    }
+
+    // Tests whether we need to visit our children as part of
+    // a tree visit
+    private boolean doVisitChildren(VisitContext context) {
+
+        // Just need to check whether there are any ids under this
+        // subtree.  Make sure row index is cleared out since
+        // getSubtreeIdsToVisit() needs our row-less client id.
+        setIndex(context.getFacesContext(), -1);
+        Collection<String> idsToVisit = context.getSubtreeIdsToVisit(this);
+        assert(idsToVisit != null);
+
+        // All ids or non-empty collection means we need to visit our children.
+        return (!idsToVisit.isEmpty());
+
+    }
+
+
+    private boolean visitChildren(VisitContext context,  VisitCallback callback) {
+
+        int begin = this.getOffset();
+        int num = this.getSize();
+        int step = this.getStep();
+        int rowCount = getDataModel().getRowCount();
+        int end = Math.min(num > 0 ? begin + num - 1 : rowCount, rowCount);
+        int i = begin;
+        FacesContext faces = context.getFacesContext();
+        this.setIndex(faces, i);
+        this.updateIterationStatus(faces,
+                                   new IterationStatus(true,
+                                                       i + step >= end,
+                                                       i,
+                                                       begin,
+                                                       end,
+                                                       step));
+        while (i <= end && this.isIndexAvailable()) {
+
+            this.setIndex(faces, i);
+            this.updateIterationStatus(faces,
+                                       new IterationStatus(false,
+                                                           i + step >= end,
+                                                           i,
+                                                           begin,
+                                                           end,
+                                                           step));
+            for (UIComponent kid : getChildren()) {
+                if (kid.visitTree(context, callback)) {
+                    return true;
+                }
+            }
+            i += step;
+        }
+
+
+        return false;
+    }
+
 
     public void processDecodes(FacesContext faces) {
         if (!this.isRendered())
