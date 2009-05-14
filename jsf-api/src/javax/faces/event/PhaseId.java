@@ -61,7 +61,7 @@ public class PhaseId implements Comparable {
      * <p>Private constructor to disable the creation of new instances.</p>
      */
     private PhaseId(String newPhaseName) {
-	phaseName = newPhaseName;
+        phaseName = newPhaseName;
     }
 
 
@@ -74,10 +74,8 @@ public class PhaseId implements Comparable {
     private final int ordinal = nextOrdinal++;
 
     /**
-
-    * <p>The (optional) name for this phase.</p>
-
-    */
+     * <p>The (optional) name for this phase.</p>
+     */
 
     private String phaseName = null;
 
@@ -113,11 +111,11 @@ public class PhaseId implements Comparable {
      * <p>Return a String representation of this {@link PhaseId} instance.</p>
      */
     public String toString() {
-	if (null == phaseName) {
-	    return (String.valueOf(this.ordinal));
-	}
-	
-	return (String.valueOf(this.phaseName) + ' ' + this.ordinal);
+        if (null == phaseName) {
+            return (String.valueOf(this.ordinal));
+        }
+
+        return (String.valueOf(this.phaseName) + ' ' + this.ordinal);
     }
 
 
@@ -198,15 +196,14 @@ public class PhaseId implements Comparable {
     public static final PhaseId RENDER_RESPONSE = new PhaseId(RENDER_RESPONSE_NAME);
 
 
-
     /**
      * <p>Array of all defined values, ascending order of ordinal value.
-     *  Be sure you include any new instances created above, in the
+     * Be sure you include any new instances created above, in the
      * same order.</p>
      */
     private static final PhaseId[] values =
-    { ANY_PHASE, RESTORE_VIEW, APPLY_REQUEST_VALUES,
-      PROCESS_VALIDATIONS, UPDATE_MODEL_VALUES, INVOKE_APPLICATION, RENDER_RESPONSE };
+            {ANY_PHASE, RESTORE_VIEW, APPLY_REQUEST_VALUES,
+                    PROCESS_VALIDATIONS, UPDATE_MODEL_VALUES, INVOKE_APPLICATION, RENDER_RESPONSE};
 
 
     /**
@@ -214,7 +211,7 @@ public class PhaseId implements Comparable {
      * of their ordinal value.</p>
      */
     public static final List<PhaseId> VALUES =
-        Collections.unmodifiableList(Arrays.asList(values));
+            Collections.unmodifiableList(Arrays.asList(values));
 
 
 }
