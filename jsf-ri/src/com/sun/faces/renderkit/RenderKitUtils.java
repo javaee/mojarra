@@ -50,7 +50,6 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.ClientBehaviorHint;
@@ -159,8 +158,6 @@ public class RenderKitUtils {
 
     protected static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
     
-    private static final Param[] EMPTY_PARAMS = new Param[0];
-
 
     // ------------------------------------------------------------ Constructors
 
