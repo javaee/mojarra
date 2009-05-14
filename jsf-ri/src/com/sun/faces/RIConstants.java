@@ -96,12 +96,6 @@ public class RIConstants {
     public static final String DEFAULT_STATEMANAGER =
           FACES_PREFIX + "DefaultStateManager";
 
-    /**
-     *  String used as Context boolean for if script already loaded.
-     */
-    public static final String SCRIPT_STATE =
-            FACES_PREFIX + "jsfjsState";
-
     public static final String ERROR_PAGE_PRESENT_KEY_NAME = 
 	FACES_PREFIX + "errorPagePresent";
 

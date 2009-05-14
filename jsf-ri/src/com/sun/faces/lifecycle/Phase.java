@@ -41,8 +41,6 @@
 package com.sun.faces.lifecycle;
 
 import java.util.ListIterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -54,9 +52,8 @@ import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.lifecycle.Lifecycle;
 
-import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
-import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 
 /**
@@ -67,9 +64,6 @@ import com.sun.faces.util.Util;
  */
 
 public abstract class Phase {
-
-
-    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
 
     // ---------------------------------------------------------- Public Methods
@@ -113,7 +107,7 @@ public abstract class Phase {
                       "Execution time for phase (including any PhaseListeners) -> "
                       + this.getId().toString());
             }
-            
+
             context.getExceptionHandler().handle();
         }
 
@@ -204,6 +198,8 @@ public abstract class Phase {
 
          Flash flash = context.getExternalContext().getFlash();
          flash.doPrePhaseActions(context);
+         RequestStateManager.clearAttributesForPhase(context,
+                                                     context.getCurrentPhaseId());
          while (listenersIterator.hasNext()) {
              PhaseListener listener = listenersIterator.next();
              if (this.getId().equals(listener.getPhaseId()) ||

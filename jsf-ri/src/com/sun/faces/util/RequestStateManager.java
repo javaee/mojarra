@@ -37,8 +37,12 @@
 package com.sun.faces.util;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
 
 import com.sun.faces.RIConstants;
+
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * <p>
@@ -144,6 +148,23 @@ public class RequestStateManager {
     public static final String FACELET_FACTORY =
           "com.sun.faces.FACELET_FACTORY";
 
+    /**
+     * Used to indicate whether or not jsf.js has already be rendered.
+     */
+    public static final String SCRIPT_STATE =
+          "com.sun.faces.SCRIPT_STATE";
+
+
+    private static final String[] RENDER_RESPONSE = {
+          SCRIPT_STATE
+    };
+
+    private static final Map<PhaseId,String[]> PHASE_ATTRIBUTES =
+        new HashMap<PhaseId,String[]>(1, 1.0f);
+    static {
+        PHASE_ATTRIBUTES.put(PhaseId.RENDER_RESPONSE, RENDER_RESPONSE);
+    }
+
 
     // ---------------------------------------------------------- Public Methods
 
@@ -203,6 +224,31 @@ public class RequestStateManager {
         }
 
         return ctx.getAttributes().remove(key);
+
+    }
+
+
+    /**
+     * <p>
+     * Remove all request state attributes associated that need to be cleared
+     * before the execution of a particular lifecycle phase.
+     * </p>
+     * @param ctx the <code>FacesContext</code> for the current request
+     * @param phaseId the phase used to obtain the associated attributes
+     */
+    public static void clearAttributesForPhase(FacesContext ctx,
+                                               PhaseId phaseId) {
+
+        if (ctx == null || phaseId == null) {
+            return;
+        }
+        String[] phaseAttributes = PHASE_ATTRIBUTES.get(phaseId);
+        if (phaseAttributes != null) {
+            Map<Object,Object> attrs = ctx.getAttributes();
+            for (String key : phaseAttributes) {
+                attrs.remove(key);
+            }
+        }
 
     }
 

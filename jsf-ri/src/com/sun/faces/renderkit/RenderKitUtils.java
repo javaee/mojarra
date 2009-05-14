@@ -945,54 +945,24 @@ public class RenderKitUtils {
      */
     public static void renderJsfJs(FacesContext context) throws IOException {
 
-        final String name = "jsf.js";
-        final String library = "javax.faces";
 
-        if (context.getAttributes().get(RIConstants.SCRIPT_STATE) != null) {
+        if (hasScriptBeenRendered(context)) {
             // Already included, return
             return;
         }
 
-        ResponseWriter writer = context.getResponseWriter();
-        UIViewRoot viewRoot = context.getViewRoot();
-        ListIterator iter = (viewRoot.getComponentResources(context, "head")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
-            String rname = (String)resource.getAttributes().get("name");
-            String rlibrary = (String)resource.getAttributes().get("library");
-            if (name.equals(rname) && library.equals(rlibrary)) {
-                // Set the context to record script as included
-                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
-                return;
-            }
+        final String name = "jsf.js";
+        final String library = "javax.faces";
+        
+        if (hasResourceBeenInstalled(context, name, library)) {
+            setScriptAsRendered(context);
+            return;
         }
-        iter = (viewRoot.getComponentResources(context, "body")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
-            String rname = (String)resource.getAttributes().get("name");
-            String rlibrary = (String)resource.getAttributes().get("library");
-            if (name.equals(rname) && library.equals(rlibrary)) {
-                // Set the context to record script as included
-                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
-                return;
-            }
-        }
-        iter = (viewRoot.getComponentResources(context, "form")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
-            String rname = (String)resource.getAttributes().get("name");
-            String rlibrary = (String)resource.getAttributes().get("library");
-            if (name.equals(rname) && library.equals(rlibrary)) {
-                // Set the context to record script as included
-                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
-                return;
-            }
-        }
-
         // Since we've now determined that it's not in the page, we need to add it.
 
         ResourceHandler handler = context.getApplication().getResourceHandler();
         Resource resource = handler.createResource(name, library);
+        ResponseWriter writer = context.getResponseWriter();
         writer.write('\n');
         writer.startElement("script", null);
         writer.writeAttribute("type", "text/javascript", null);
@@ -1002,8 +972,50 @@ public class RenderKitUtils {
         writer.append('\n');
 
         // Set the context to record script as included
-        context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
+        setScriptAsRendered(context);
     }
+
+
+    public static boolean hasResourceBeenInstalled(FacesContext ctx,
+                                                   String name,
+                                                   String library) {
+
+        UIViewRoot viewRoot = ctx.getViewRoot();
+        ListIterator iter = (viewRoot.getComponentResources(ctx, "head")).listIterator();
+        while (iter.hasNext()) {
+            UIComponent resource = (UIComponent)iter.next();
+            String rname = (String)resource.getAttributes().get("name");
+            String rlibrary = (String)resource.getAttributes().get("library");
+            if (name.equals(rname) && library.equals(rlibrary)) {
+                // Set the context to record script as included
+                return true;
+            }
+        }
+        iter = (viewRoot.getComponentResources(ctx, "body")).listIterator();
+        while (iter.hasNext()) {
+            UIComponent resource = (UIComponent)iter.next();
+            String rname = (String)resource.getAttributes().get("name");
+            String rlibrary = (String)resource.getAttributes().get("library");
+            if (name.equals(rname) && library.equals(rlibrary)) {
+                // Set the context to record script as included
+                return true;
+            }
+        }
+        iter = (viewRoot.getComponentResources(ctx, "form")).listIterator();
+        while (iter.hasNext()) {
+            UIComponent resource = (UIComponent)iter.next();
+            String rname = (String)resource.getAttributes().get("name");
+            String rlibrary = (String)resource.getAttributes().get("library");
+            if (name.equals(rname) && library.equals(rlibrary)) {
+                // Set the context to record script as included
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
 
     public static void renderUnhandledMessages(FacesContext ctx) {
 
@@ -1113,8 +1125,6 @@ public class RenderKitUtils {
         return ("click".equals(partialEvent));
     }
 
-    // --------------------------------------------------------- Private Methods
-
 
    /**
      * <p>Utility method to return the client ID of the parent form.</p>
@@ -1143,16 +1153,16 @@ public class RenderKitUtils {
         return null;
     }
 
+
     /**
      * @param context the <code>FacesContext</code> for the current request
      *
      * @return <code>true</code> If the <code>add/remove</code> javascript
      *         has been rendered, otherwise <code>false</code>
      */
-    private static boolean hasScriptBeenRendered(FacesContext context) {
+    public static boolean hasScriptBeenRendered(FacesContext context) {
 
-        return (context.getAttributes()
-              .get(RIConstants.SCRIPT_STATE) != null);
+        return RequestStateManager.containsKey(context, RequestStateManager.SCRIPT_STATE);
 
     }
 
@@ -1163,12 +1173,18 @@ public class RenderKitUtils {
      *
      * @param context the <code>FacesContext</code> of the current request
      */
-    private static void setScriptAsRendered(FacesContext context) {
+    public static void setScriptAsRendered(FacesContext context) {
 
-        context.getAttributes()
-              .put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
+        RequestStateManager.set(context,
+                                RequestStateManager.SCRIPT_STATE,
+                                Boolean.TRUE);
 
     }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
 
     // Appends a script to a jsf.util.chain() call
     private static void appendScriptToChain(StringBuilder builder, 

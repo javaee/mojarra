@@ -52,6 +52,7 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
@@ -355,58 +356,26 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
     private void installAjaxResourceIfNecessary() {
 
         FacesContext context = FacesContext.getCurrentInstance();
-        if (context.getAttributes().get(RIConstants.SCRIPT_STATE) != null) {
+        if (RenderKitUtils.hasScriptBeenRendered(context)) {
             // Already included, return
             return;
         }
 
         final String name = "jsf.js";
         final String library = "javax.faces";
-        UIViewRoot viewRoot = context.getViewRoot();
-        ListIterator iter = (viewRoot.getComponentResources(context, "head")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
-            String rname = (String)resource.getAttributes().get("name");
-            String rlibrary = (String)resource.getAttributes().get("library");
-            if (name.equals(rname) && library.equals(rlibrary)) {
-                // Set the context to record script as included
-                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
-                return;
-            }
-        }
 
-
-        iter = (viewRoot.getComponentResources(context, "body")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
-            String rname = (String)resource.getAttributes().get("name");
-            String rlibrary = (String)resource.getAttributes().get("library");
-            if (name.equals(rname) && library.equals(rlibrary)) {
-                // Set the context to record script as included
-                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
-                return;
-            }
+        if (RenderKitUtils.hasResourceBeenInstalled(context, name, library)) {
+            RenderKitUtils.setScriptAsRendered(context);
+            return;
         }
-        iter = (viewRoot.getComponentResources(context, "form")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
-            String rname = (String)resource.getAttributes().get("name");
-            String rlibrary = (String)resource.getAttributes().get("library");
-            if (name.equals(rname) && library.equals(rlibrary)) {
-                // Set the context to record script as included
-                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
-                return;
-            }
-        }
-        
         UIOutput output = new UIOutput();
         output.setRendererType("javax.faces.resource.Script");
         output.getAttributes().put("name", name);
         output.getAttributes().put("library", library);
-        viewRoot.addComponentResource(context, output, "head");
+        context.getViewRoot().addComponentResource(context, output, "head");
 
         // Set the context to record script as included
-        context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
+        RenderKitUtils.setScriptAsRendered(context);
 
     }
 }
