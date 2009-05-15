@@ -141,7 +141,7 @@ public class UIRepeat extends UINamingContainer {
         if (this.step != -1) {
             return this.step;
         }
-        ValueExpression ve = this.getValueExpression("offset");
+        ValueExpression ve = this.getValueExpression("step");
         if (ve != null) {
             return (Integer) ve.getValue(getFacesContext().getELContext());
         }
