@@ -176,7 +176,7 @@ table.menuTable tr td{
 }
 
 .postitComponent{
-        background-image:url("../resources/images/postits/novos/postit_lara_150x145.png");
+        background-image:url("../resources/images/postits/novos/postit_azul_150x145.png");
         width:150px;
         height:145px;
         font-size: 14px;
@@ -192,8 +192,13 @@ table.menuTable tr td{
 
 }
 
+.postitComponent a{
+    text-decoration:none;
+    color:white;
+}
+
 .bigPostitComponent{
-        background-image:url("../resources/images/postits/novos/postit_lara_315x150.png");
+        background-image:url("../resources/images/postits/novos/postit_azul_315x150.png");
         background-repeat:no-repeat;
         width:315px;
         height:150px;
@@ -207,9 +212,4 @@ table.menuTable tr td{
     padding: 5pt;
     vertical-align:top;
 
-}
-
-.postitComponent a{
-    text-decoration:none;
-    color:white;
 }
