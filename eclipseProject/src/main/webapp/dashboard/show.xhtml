@@ -55,7 +55,7 @@
                                 <f:facet name="header"><h:outputText value="DOING" /></f:facet>                                
                                 <h:dataTable  value="#{story.workingTasks}" var="task" title="Working Tasks">
                                     <h:column>
-                                        <menu:postit action="#{dashboardManager.editTask}">
+                                        <menu:postit action="editProject">
                                             <ui:param name="postitLabel" value=""></ui:param>
                                             <ui:param name="postitText" value="#{task.name}"></ui:param>
                                         </menu:postit>
