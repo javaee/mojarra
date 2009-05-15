@@ -760,6 +760,33 @@
         </navigation-case>
     </navigation-rule>
 
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>redirectWithParams</from-outcome>
+            <to-view-id>/standard/outcometarget01.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>id</name>
+                    <value>config</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+
+     <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>redirectWithAll</from-outcome>
+            <to-view-id>/standard/outcometarget01.xhtml</to-view-id>
+            <redirect include-view-params="true">
+                <view-param>
+                    <name>id</name>
+                    <value>#{'config'}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
 
 
 </faces-config>

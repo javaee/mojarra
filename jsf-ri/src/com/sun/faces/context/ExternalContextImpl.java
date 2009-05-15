@@ -69,8 +69,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.util.MessageUtils;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
 import com.sun.faces.context.flash.ELFlash;
@@ -78,9 +77,6 @@ import com.sun.faces.context.flash.ELFlash;
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
- *
- * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.68 2008/01/28 20:55:36 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -117,25 +113,17 @@ public class ExternalContextImpl extends ExternalContext {
                                ServletResponse response) {
 
         // Validate the incoming parameters
-        try {
-            Util.notNull("sc", sc);
-            Util.notNull("request", request);
-            Util.notNull("response", response);
-        } catch (Exception e) {
-            throw new FacesException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
-        }
+        Util.notNull("sc", sc);
+        Util.notNull("request", request);
+        Util.notNull("response", response);
 
         // Save references to our context, request, and response
         this.servletContext = sc;
         this.request = request;        
         this.response = response;
         WebConfiguration config = WebConfiguration.getInstance(sc);
-        if (config
-              .isOptionEnabled(BooleanWebContextInitParameter.SendPoweredByHeader)) {
-            ((HttpServletResponse) response)
-                  .addHeader("X-Powered-By", "JSF/2.0");
+        if (config.isOptionEnabled(SendPoweredByHeader)) {
+            ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.0");
         }
         
     }
@@ -540,9 +528,6 @@ public class ExternalContextImpl extends ExternalContext {
         }
         try {
             requestDispatcher.forward(this.request, this.response);
-        } catch (IOException ioe) {
-            // e.printStackTrace();
-            throw ioe;
         } catch (ServletException se) {
             throw new FacesException(se);
         }

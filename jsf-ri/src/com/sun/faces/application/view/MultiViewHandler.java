@@ -568,8 +568,7 @@ public class MultiViewHandler extends ViewHandler {
             }
             else if (paramHasValueExpression(viewParam)) {
                 value = viewParam.getStringValueFromModel(ctx);
-            }
-            else {
+            } else {
                 // Anonymous view parameter:
                 // Get string value from UIViewParameter instance stored in current view
                 if (currentIsSameAsNew) {
@@ -579,7 +578,7 @@ public class MultiViewHandler extends ViewHandler {
                 else {
                     value = getStringValueToTransfer(ctx,
                                                      viewParam,
-                                                     toViewParams);
+                                                     currentViewParams);
                 }
             }
             if (value != null) {

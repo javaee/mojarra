@@ -36,6 +36,11 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.util.Util;
+
+import javax.faces.context.FacesContext;
+import javax.faces.application.Application;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -70,6 +75,12 @@ class UrlBuilder {
     private String fragment;
     private Map<String, List<String>> parameters;
     private String encoding;
+    private FacesContext ctx;
+    private Application app;
+
+
+    // ------------------------------------------------------------ Constructors
+
 
     public UrlBuilder(String url, String encoding) {
         if (url == null || url.trim().length() == 0) {
@@ -78,20 +89,19 @@ class UrlBuilder {
         this.url = new StringBuilder(url.length() * 2);
         extractSegments(url);
         this.encoding = encoding;
+        // PERF TL lookup per-instance
+        ctx = FacesContext.getCurrentInstance();
+        app = ctx.getApplication();
     }
+
 
     public UrlBuilder(String url) {
         this(url, DEFAULT_ENCODING);
     }
 
-    public UrlBuilder addParameter(String name, String value) {
-        if (name == null || name.trim().length() == 0) {
-            throw new IllegalArgumentException("Parameter name cannot be empty");
-        }
-        parseQueryString();
-        addValueToParameter(name.trim(), value, true);
-        return this;
-    }
+
+    // ---------------------------------------------------------- Public Methods
+
 
     public UrlBuilder addParameters(String name, List<String> values) {
         if (name == null || name.trim().length() == 0) {
@@ -103,6 +113,7 @@ class UrlBuilder {
         return this;
     }
 
+
     public UrlBuilder addParameters(Map<String, List<String>> params) {
         if (params != null && !params.isEmpty()) {
             parseQueryString();
@@ -110,13 +121,15 @@ class UrlBuilder {
                 if (entry.getKey() == null || entry.getKey().trim().length() == 0) {
                     throw new IllegalArgumentException("Parameter name cannot be empty");
                 }
-
-                addValuesToParameter(entry.getKey().trim(), entry.getValue(), true);
+                List<String> values = entry.getValue();
+                evaluateExpressions(values);
+                addValuesToParameter(entry.getKey().trim(), values, true);
             }
         }
 
         return this;
     }
+
 
     public UrlBuilder setPath(String path) {
         if (path == null || path.trim().length() == 0) {
@@ -125,6 +138,7 @@ class UrlBuilder {
         this.path = path;
         return this;
     }
+
 
     /**
      * Setting a query string consecutively will replace all but the last one. Otherwise,
@@ -135,6 +149,7 @@ class UrlBuilder {
         cleanQueryString();
         return this;
     }
+
 
     /**
      * The fragment is appended at the end of the url after a hash mark. It represents
@@ -147,6 +162,7 @@ class UrlBuilder {
         return this;
     }
 
+
     public String createUrl() {
         appendPath();
         appendQueryString();
@@ -154,14 +170,20 @@ class UrlBuilder {
         return url.toString();
     }
 
+
+    // ------------------------------------------------------- Protected Methods
+
+
     protected String getPath() {
         return path;
     }
+
 
     protected Map<String, List<String>> getParameters() {
         parseQueryString();
         return parameters;
     }
+
 
     protected void parseQueryString() {
         if (parameters == null) {
@@ -173,11 +195,12 @@ class UrlBuilder {
             return;
         }
         
-        String[] pairs = queryString.split(PARAMETER_PAIR_SEPARATOR);
-        for(int i = 0; i < pairs.length; i++) {
-            String[] nameAndValue = pairs[i].split(PARAMETER_NAME_VALUE_SEPARATOR);
+        String[] pairs = Util.split(queryString, PARAMETER_PAIR_SEPARATOR);
+        for (String pair : pairs) {
+            String[] nameAndValue = Util.split(pair, PARAMETER_NAME_VALUE_SEPARATOR);
             // ignore malformed pair
-            if (nameAndValue.length != 2 || nameAndValue[0].trim().length() == 0) {
+            if (nameAndValue.length != 2
+                || nameAndValue[0].trim().length() == 0) {
                 continue;
             }
 
@@ -187,9 +210,11 @@ class UrlBuilder {
         queryString = null;
     }
 
+
     protected void appendPath() {
         url.append(path);
     }
+
 
     protected void appendQueryString() {
         if (parameters != null) {
@@ -220,11 +245,13 @@ class UrlBuilder {
         }
     }
 
+
     protected void appendFragment() {
         if (fragment != null) {
             url.append(FRAGMENT_SEPARATOR).append(fragment);
         }
     }
+
 
     protected void extractSegments(String url) {
         int fragmentIndex = url.indexOf(FRAGMENT_SEPARATOR);
@@ -245,6 +272,7 @@ class UrlBuilder {
         }
     }
 
+
     protected void addValueToParameter(String name, String value, boolean replace) {
         List<String> values = new ArrayList<String>(value == null ? 0 : 1);
         if (value != null) {
@@ -253,13 +281,14 @@ class UrlBuilder {
         addValuesToParameter(name, values, replace);
     }
 
+
     protected void addValuesToParameter(String name, List<String> valuesRef, boolean replace) {
         List<String> values = new ArrayList<String>();
         if (valuesRef != null) {
             values.addAll(valuesRef);
-			values.removeAll(NULL_LIST);
+            values.removeAll(NULL_LIST);
         }
-		
+
         if (replace) {
             parameters.put(name, values);
         }
@@ -272,6 +301,28 @@ class UrlBuilder {
             currentValues.addAll(values);
         }
     }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void evaluateExpressions(List<String> values) {
+        if (!values.isEmpty()) {
+            for (int i = 0, len = values.size(); i < len; i++) {
+                String value = values.get(i);
+                if (value != null) {
+                    value = value.trim();
+                    if (ELUtils.isExpression(value)) {
+                        value = app.evaluateExpressionGet(ctx,
+                                                          value,
+                                                          String.class);
+                    }
+                    values.set(i, value);
+                }
+            }
+        }
+    }
+
 
     private void cleanFragment() {
         if (fragment != null) {
@@ -289,6 +340,7 @@ class UrlBuilder {
         }
     }
 
+    
     private void cleanQueryString() {
         if (queryString != null) {
             String q = queryString;

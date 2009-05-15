@@ -59,9 +59,9 @@ public class TestOutputTargets extends AbstractTestCase {
         page = getPage("/faces/standard/outcometarget01.xhtml");
         assertNotNull(page);
 
-        List<HtmlInput> buttonList = new ArrayList<HtmlInput>(4);
+        List<HtmlInput> buttonList = new ArrayList<HtmlInput>(7);
         getAllElementsOfGivenClass(page, buttonList, HtmlInput.class);
-        assertTrue(buttonList.size() == 4);
+        assertTrue(buttonList.size() == 7);
 
         HtmlInput button = buttonList.get(0);
         String onclick = button.getOnClickAttribute();
@@ -89,7 +89,7 @@ public class TestOutputTargets extends AbstractTestCase {
         onclick = button.getOnClickAttribute();
         assertEquals("button", button.getTypeAttribute());
         assertEquals("button3", button.getIdAttribute());
-        assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?param=ack&id=ack#about'; return false;",
+        assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?id=page&id2=view#about'; return false;",
                      onclick);
         page = button.click();
         assertEquals("outcometarget01", page.getTitleText());
@@ -104,6 +104,35 @@ public class TestOutputTargets extends AbstractTestCase {
         page = button.click();
         assertEquals("nav2", page.getTitleText());
 
+        // ---------------------------------------------------------------------
+
+        button = buttonList.get(4);
+        onclick = button.getOnClickAttribute();
+        assertEquals("button", button.getTypeAttribute());
+        assertEquals("button5", button.getIdAttribute());
+        assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?id=page'; return false;", onclick);
+        page = button.click();
+        assertEquals("outcometarget01", page.getTitleText());
+
+        // ---------------------------------------------------------------------
+
+        button = buttonList.get(5);
+        onclick = button.getOnClickAttribute();
+        assertEquals("button", button.getTypeAttribute());
+        assertEquals("button6", button.getIdAttribute());
+        assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?id=page&id2=view'; return false;", onclick);
+        page = button.click();
+        assertEquals("outcometarget01", page.getTitleText());
+
+        // ---------------------------------------------------------------------
+
+        button = buttonList.get(6);
+        onclick = button.getOnClickAttribute();
+        assertEquals("button", button.getTypeAttribute());
+        assertEquals("button7", button.getIdAttribute());
+        assertEquals("window.location.href='/jsf-systest/faces/standard/outcometarget01.xhtml?id=config&id2=view'; return false;", onclick);
+        page = button.click();
+        assertEquals("outcometarget01", page.getTitleText());
 
     }
 
@@ -115,9 +144,9 @@ public class TestOutputTargets extends AbstractTestCase {
         page = getPage("/faces/standard/outcometarget01.xhtml");
         assertNotNull(page);
 
-        List<HtmlAnchor> linkList = new ArrayList<HtmlAnchor>(4);
+        List<HtmlAnchor> linkList = new ArrayList<HtmlAnchor>(7);
         getAllElementsOfGivenClass(page, linkList, HtmlAnchor.class);
-        assertTrue(linkList.size() == 4);
+        assertTrue(linkList.size() == 7);
 
         HtmlAnchor link = linkList.get(0);
         String onclick = link.getOnClickAttribute();
@@ -144,7 +173,7 @@ public class TestOutputTargets extends AbstractTestCase {
         onclick = link.getOnClickAttribute();
         assertEquals("link3", link.getIdAttribute());
         assertEquals("", onclick);
-        assertEquals("/jsf-systest/faces/standard/outcometarget01.xhtml?param=ack&id=ack#about",
+        assertEquals("/jsf-systest/faces/standard/outcometarget01.xhtml?id=page&id2=view#about",
                      link.getHrefAttribute());
         page = link.click();
         assertEquals("outcometarget01", page.getTitleText());
@@ -158,6 +187,33 @@ public class TestOutputTargets extends AbstractTestCase {
         assertEquals("/jsf-systest/faces/standard/nav2.xhtml", link.getHrefAttribute());
         page = link.click();
         assertEquals("nav2", page.getTitleText());
+
+        // ---------------------------------------------------------------------
+
+        link = linkList.get(4);
+        onclick = link.getOnClickAttribute();
+        assertEquals("link5", link.getIdAttribute());
+        assertEquals("/jsf-systest/faces/standard/outcometarget01.xhtml?id=page", link.getHrefAttribute());
+        page = link.click();
+        assertEquals("outcometarget01", page.getTitleText());
+
+        // ---------------------------------------------------------------------
+
+        link = linkList.get(5);
+        onclick = link.getOnClickAttribute();
+        assertEquals("link6", link.getIdAttribute());
+        assertEquals("/jsf-systest/faces/standard/outcometarget01.xhtml?id=page&id2=view", link.getHrefAttribute());
+        page = link.click();
+        assertEquals("outcometarget01", page.getTitleText());
+
+        // ---------------------------------------------------------------------
+
+        link = linkList.get(6);
+        onclick = link.getOnClickAttribute();
+        assertEquals("link7", link.getIdAttribute());
+        assertEquals("/jsf-systest/faces/standard/outcometarget01.xhtml?id=config&id2=view", link.getHrefAttribute());
+        page = link.click();
+        assertEquals("outcometarget01", page.getTitleText());
 
     }
 }

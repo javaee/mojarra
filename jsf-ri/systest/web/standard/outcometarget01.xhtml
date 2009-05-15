@@ -41,29 +41,48 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xml:lang="en" lang="en">
 <head>
     <title>outcometarget01</title>
 </head>
 <f:metadata>
-    <f:viewParam id="vid" name="id" value="ack"/>
+    <f:viewParam id="vid" name="id" value="view"/>
+    <f:viewParam id="vid2" name="id2" value="view"/>
 </f:metadata>
 <body>
     <h3>Button</h3>
     <h:button id="button1" value="button1" outcome="outcometarget01" />&#160;
     <h:button id="button2" value="button2" outcome="nav1?faces-redirect=true"/>&#160;
     <h:button id="button3" value="button3" outcome="outcometarget01" fragment="about" includeViewParams="true">
-        <f:param name="param" value="ack"/>
+        <f:param name="id" value="page"/>
     </h:button>&#160;
     <h:button id="button4" value="button4" outcome="nav2" onclick="alert('foo')" />&#160;
+    <h:button id="button5" value="button5" outcome="redirectWithParams">
+        <f:param name="id" value="page" />
+    </h:button>&#160;
+    <h:button id="button6" value="button6" outcome="redirectWithAll">
+        <f:param name="id" value="page" />
+    </h:button>&#160;
+    <h:button id="button7" value="button7" outcome="redirectWithAll">
+        <f:param name="id" value="page" disable="true"/>
+    </h:button>&#160;
     <hr />
-
     <h3>Link</h3>
     <h:link id="link1" value="link1" outcome="outcometarget01" />&#160;
     <h:link id="link2" value="link2" outcome="nav1?faces-redirect=true"/>&#160;
     <h:link id="link3" value="link3" outcome="outcometarget01" fragment="about" includeViewParams="true">
-        <f:param name="param" value="ack"/>
+        <f:param name="id" value="page"/>
     </h:link>&#160;
     <h:link id="link4" value="link4" outcome="nav2" onclick="alert('foo');" />&#160;
+    <h:link id="link5" value="link5" outcome="redirectWithParams">
+        <f:param name="id" value="page" />
+    </h:link>&#160;
+    <h:link id="link6" value="link6" outcome="redirectWithAll">
+        <f:param name="id" value="page" />
+    </h:link>&#160;
+    <h:link id="link7" value="link7" outcome="redirectWithAll">
+        <f:param name="id" value="page" disable="true"/>
+    </h:link>&#160;
 </body>
 </html>

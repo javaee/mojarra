@@ -293,8 +293,6 @@ public class ViewParametersTestCase extends AbstractTestCase {
         pageText = page.asText();
         
         URL requestUrl = page.getWebResponse().getRequestUrl();
-        // Assert that the queryString is in the reqeust URL.
-        assertTrue(-1 != requestUrl.getQuery().indexOf("bar=foo"));
         
         assertTrue(-1 != pageText.indexOf("Story 2"));
         assertTrue(-1 != pageText.indexOf("bar is:foo"));

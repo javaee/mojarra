@@ -43,16 +43,14 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.util.Util;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import javax.faces.application.ConfigurableNavigationHandler;
-import javax.faces.application.NavigationCase;
-import javax.faces.application.NavigationHandler;
-import javax.faces.application.ViewHandler;
+import javax.faces.application.*;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutcomeTarget;
 import javax.faces.context.FacesContext;
@@ -102,9 +100,9 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
 
     }
 
-    protected boolean isIncludeViewParams(UIComponent component) {
+    protected boolean isIncludeViewParams(UIComponent component, NavigationCase navcase) {
 
-        return ((UIOutcomeTarget) component).isIncludeViewParams();
+        return (((UIOutcomeTarget) component).isIncludeViewParams() || navcase.isIncludeViewParams());
 
     }
 
@@ -163,10 +161,31 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
     protected String getEncodedTargetURL(FacesContext context, UIComponent component, NavigationCase navCase) {
         // FIXME getNavigationCase doesn't resolve the target viewId (it is part of CaseStruct)
         String toViewId = navCase.getToViewId(context);
+        Map<String,List<String>> params = getParamOverrides(component);
+        addNavigationParams(navCase, params);
         return Util.getViewHandler(context).getBookmarkableURL(context,
                                                                toViewId,
-                                                               getParamOverrides(component),
-                                                               isIncludeViewParams(component));
+                                                               params,
+                                                               isIncludeViewParams(component, navCase));
+    }
+
+    protected void addNavigationParams(NavigationCase navCase,
+                                       Map<String,List<String>> existingParams) {
+
+        Map<String,List<String>> navParams = navCase.getParameters();
+        if (navParams == null || navParams.isEmpty()) {
+            return;
+        }
+        for (Map.Entry<String,List<String>> entry : navParams.entrySet()) {
+            String navParamName = entry.getKey();
+            // only add the navigation params to the existing params collection
+            // if the parameter name isn't already present within the existing
+            // collection
+            if (!existingParams.containsKey(navParamName)) {
+                existingParams.put(navParamName, entry.getValue());
+            }
+        }
+
     }
 
     protected Map<String, List<String>> getParamOverrides(UIComponent component) {

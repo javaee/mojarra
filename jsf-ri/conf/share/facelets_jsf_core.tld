@@ -973,6 +973,21 @@ they do, it must be done as shown above, (or with
             <deferred-value/>
         </attribute>
 
+        <attribute>
+            <description>
+                RELEASE_PENDING
+                - Also update spec for bookmarkable URL (don't forget the two
+                  sources for include-view-params).
+                - convey precendence feature using non-normative language
+                  vs algorithmic
+                Flag enabling or disabling the inclusion of the parameter
+            </description>
+            <name>disable</name>
+            <deferred-value>
+                <type>boolean</type>
+            </deferred-value>
+        </attribute>
+
     </tag>
 
     <tag>

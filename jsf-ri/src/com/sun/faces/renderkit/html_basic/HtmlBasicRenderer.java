@@ -566,11 +566,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
             for (UIComponent kid : command.getChildren()) {
                 if (kid instanceof UIParameter) {
                     UIParameter uiParam = (UIParameter) kid;
-                    Object value = uiParam.getValue();
-                    Param param = new Param(uiParam.getName(),
-                                            (value == null ? null :
-                                             value.toString()));
-                    parameterList.add(param);
+                    if (!uiParam.isDisable()) {
+                        Object value = uiParam.getValue();
+                        Param param = new Param(uiParam.getName(),
+                                                (value == null ? null :
+                                                 value.toString()));
+                        parameterList.add(param);
+                    }
                 }
             }
             return parameterList.toArray(new Param[parameterList.size()]);
