@@ -54,6 +54,7 @@ package com.sun.faces.facelets.tag.jsf.core;
 import com.sun.faces.facelets.el.LegacyValueBinding;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 
+import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
@@ -68,8 +69,10 @@ import javax.faces.event.ActionListener;
 import javax.faces.view.facelets.*;
 import java.io.IOException;
 import java.io.Serializable;
+import javax.faces.application.Resource;
+import javax.faces.view.ActionSource2AttachedObjectHandler;
 
-public class SetPropertyActionListenerHandler extends TagHandlerImpl {
+public class SetPropertyActionListenerHandler extends TagHandlerImpl implements ActionSource2AttachedObjectHandler {
 
     private final TagAttribute value;
 
@@ -83,31 +86,66 @@ public class SetPropertyActionListenerHandler extends TagHandlerImpl {
 
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
+
+        if (null == parent || !(ComponentHandler.isNew(parent))) {
+            return;
+        }
         if (parent instanceof ActionSource) {
-            ActionSource src = (ActionSource) parent;
-            if (ComponentHandler.isNew(parent)) {
-                ValueExpression valueExpr = this.value.getValueExpression(ctx,
-                        Object.class);
-                ValueExpression targetExpr = this.target.getValueExpression(
-                        ctx, Object.class);
-
-                ActionListener listener;
-
-                if (src instanceof ActionSource2) {
-                    listener = new SetPropertyListener(valueExpr, targetExpr);
-                } else {
-                    listener = new LegacySetPropertyListener(
-                            new LegacyValueBinding(valueExpr),
-                            new LegacyValueBinding(targetExpr));
-                }
-
-                src.addActionListener(listener);
+            applyAttachedObject(ctx.getFacesContext(), parent);
+        } else if (UIComponent.isCompositeComponent(parent)) {
+            if (null == getFor()) {
+                // PENDING(): I18N
+                throw new TagException(this.tag,
+                                       "actionListener tags nested within composite components must have a non-null \"for\" attribute");
             }
+            // Allow the composite component to know about the target
+            // component.
+            CompositeComponentTagHandler.getAttachedObjectHandlers(parent)
+                  .add(this);
+
         } else {
             throw new TagException(this.tag,
-                    "Parent is not of type ActionSource, type is: " + parent);
+                                   "Parent is not of type ActionSource, type is: "
+                                   + parent);
         }
+
     }
+
+    public void applyAttachedObject(FacesContext context, UIComponent parent) {
+        FaceletContext ctx = (FaceletContext) context.getAttributes()
+              .get(FaceletContext.FACELET_CONTEXT_KEY);
+
+        ActionSource src = (ActionSource) parent;
+        ValueExpression valueExpr = this.value.getValueExpression(ctx,
+                    Object.class);
+        ValueExpression targetExpr = this.target.getValueExpression(
+                ctx, Object.class);
+
+        ActionListener listener;
+
+        if (src instanceof ActionSource2) {
+            listener = new SetPropertyListener(valueExpr, targetExpr);
+        } else {
+            listener = new LegacySetPropertyListener(
+                    new LegacyValueBinding(valueExpr),
+                    new LegacyValueBinding(targetExpr));
+        }
+
+        src.addActionListener(listener);
+    }
+
+
+    public String getFor() {
+        String result = null;
+        TagAttribute attr = this.getAttribute("for");
+
+        if (null != attr) {
+            result = attr.getValue();
+        }
+        return result;
+    }
+
+
 
     private static class LegacySetPropertyListener implements ActionListener,
             Serializable {
