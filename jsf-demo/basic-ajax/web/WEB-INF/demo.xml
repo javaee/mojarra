@@ -130,4 +130,25 @@
         </sources>
     </demo>
 
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Redirect Demo</name>
+        <page>redirect.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/redirect.xhtml</path>
+            </source>
+            <source>
+                <label>Target Page (1 of 3)</label>
+                <path>/redirecttarget1.xhtml</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/basicajax/RedirectBean.java</path>
+            </source>
+        </sources>
+    </demo>
+
 </demo-info>
