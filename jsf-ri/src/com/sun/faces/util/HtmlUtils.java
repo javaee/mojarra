@@ -304,12 +304,17 @@ public class HtmlUtils {
                         }
                     }
                 } else if (ch <= 0xff) {
-                    // ISO-8859-1 entities: encode as needed
-                    buffIndex = addToBuffer(out,
-                                            buff,
-                                            buffIndex,
-                                            buffLength,
-                                            sISO8859_1_Entities[ch - 0xA0]);
+                    if (escapeIsocode) {
+                        // ISO-8859-1 entities: encode as needed
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                sISO8859_1_Entities[ch - 0xA0]);
+                    } else {
+                        buffIndex = addToBuffer(out, buff, buffIndex,
+                                                buffLength, ch);
+                    }
                 } else {
                     if(escapeUnicode) {
                         // UNICODE entities: encode as needed
