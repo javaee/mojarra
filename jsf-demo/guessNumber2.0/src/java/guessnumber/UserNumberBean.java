@@ -143,7 +143,7 @@ public class UserNumberBean implements Serializable {
                        MessageFormat.format("Duke''s number: {0}", randomInt));
         }
 
-        greeting = "Hi!  My name is Duke.  I'm thinking of a number between "
+        greeting = "<&> -- Hi!  My name is Duke.  I'm thinking of a number between "
                    + minimum
                    + " and "
                    + maximum

@@ -103,13 +103,6 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
                                              UIComponent component)
           throws IOException {
 
-        // render type attribute that is common to only link renderers
-        String type = (String) component.getAttributes().get("type");
-
-        if (type != null) {
-            writer.writeAttribute("type", type, "type");
-        }
-
         // handle styleClass
         String styleClass = (String)
               component.getAttributes().get("styleClass");
