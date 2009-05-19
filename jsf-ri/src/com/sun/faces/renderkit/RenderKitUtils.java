@@ -65,7 +65,6 @@ import javax.faces.render.Renderer;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.util.DevTools;
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
@@ -102,12 +101,6 @@ public class RenderKitUtils {
     private static final String[] XHTML_PREFIX_ATTRIBUTES = {
           "lang"
     };
-
-    /**
-     * <p>The maximum number of array elements that can be used
-     * to hold content types from an accept String.</p>
-     */
-    private final static int MAX_CONTENT_TYPES = 50;
 
     /**
      * <p>The maximum number of content type parts.
@@ -732,10 +725,10 @@ public class RenderKitUtils {
      * @return an two dimensional array containing content-type/quality info
      */
     private static String[][] buildTypeArrayFromString(String accept) {
-        String[][] arrayAccept = new String[MAX_CONTENT_TYPES][MAX_CONTENT_TYPE_PARTS];
         // return if empty
-        if ((accept == null) || (accept.length() == 0))
-            return arrayAccept;
+        if ((accept == null) || (accept.length() == 0)) {
+            return new String[0][0];
+        }
         // some helper variables
         StringBuilder typeSubType;
         String type;
@@ -745,6 +738,7 @@ public class RenderKitUtils {
 
         // Parse "types"
         String[] types = Util.split(accept, CONTENT_TYPE_DELIMITER);
+        String[][] arrayAccept = new String[types.length][MAX_CONTENT_TYPE_PARTS];
         int index = -1;
         for (int i=0; i<types.length; i++) {
             String token = types[i].trim();
@@ -838,18 +832,17 @@ public class RenderKitUtils {
                                         String[][] serverSupportedContentTypes,
                                         String[][] preferredContentType) {
 
-        // result array
-        String[][] results = new String[MAX_CONTENT_TYPES][MAX_CONTENT_TYPE_PARTS];
-        int resultidx = -1;
+        List<String[]> resultList = new ArrayList<String[]>(serverSupportedContentTypes.length);
+
         // the highest quality
         double highestQFactor = 0;
         // the record with the highest quality
         int idx = 0;
-        for (int sidx = 0; sidx < MAX_CONTENT_TYPES; sidx++) {
+        for (int sidx = 0, slen = serverSupportedContentTypes.length; sidx < slen; sidx++) {
             // get server type
             String serverType = serverSupportedContentTypes[sidx][1];
             if (serverType != null) {
-                for (int cidx = 0; cidx < MAX_CONTENT_TYPES; cidx++) {
+                for (int cidx = 0, clen = clientContentTypes.length; cidx < clen; cidx++) {
                     // get browser type
                     String browserType = clientContentTypes[cidx][1];
                     if (browserType != null) {
@@ -874,22 +867,25 @@ public class RenderKitUtils {
                                 double cQfactor = Double.parseDouble(clientContentTypes[cidx][0]) + cLevel;
                                 double sQfactor = Double.parseDouble(serverSupportedContentTypes[sidx][0]) + sLevel;
                                 double resultQuality = cQfactor * sQfactor;
-                                resultidx += 1;
-                                results[resultidx][0] = String.valueOf(resultQuality);
+
+                                String[] curResult = new String[MAX_CONTENT_TYPE_PARTS];
+                                resultList.add(curResult);
+                                curResult[0] = String.valueOf(resultQuality);
+
                                 if (clientContentTypes[cidx][2].equals("*")) {
                                     // browser subtype is wildcard
                                     // return type and subtype (wildcard)
-                                    results[resultidx][1] = clientContentTypes[cidx][1];
-                                    results[resultidx][2] = clientContentTypes[cidx][2];
+                                    curResult[1] = clientContentTypes[cidx][1];
+                                    curResult[2] = clientContentTypes[cidx][2];
                                 } else {
                                     // return server type and subtype
-                                    results[resultidx][1] = serverSupportedContentTypes[sidx][1];
-                                    results[resultidx][2] = serverSupportedContentTypes[sidx][2];
-                                    results[resultidx][3] = serverSupportedContentTypes[sidx][3];
+                                    curResult[1] = serverSupportedContentTypes[sidx][1];
+                                    curResult[2] = serverSupportedContentTypes[sidx][2];
+                                    curResult[3] = serverSupportedContentTypes[sidx][3];
                                 }
                                 // check if this was the highest factor
                                 if (resultQuality > highestQFactor) {
-                                    idx = resultidx;
+                                    idx = resultList.size() - 1;
                                     highestQFactor = resultQuality;
                                 }
                             }
@@ -902,23 +898,28 @@ public class RenderKitUtils {
         // First, determine if we have a type that has the highest quality factor that
         // also matches the preferred type (if there is one):
         String[][] match = new String[1][3];
-        if (preferredContentType[0][0] != null) {
+        if (preferredContentType.length != 0 && preferredContentType[0][0] != null) {
             BigDecimal highestQual = BigDecimal.valueOf(highestQFactor);
-            for (int i=0; i<=resultidx; i++) {
-                if ((BigDecimal.valueOf(Double.parseDouble(results[i][0])).compareTo(highestQual) == 0) &&
-                    (results[i][1]).equals(preferredContentType[0][1]) &&
-                    (results[i][2]).equals(preferredContentType[0][2])) {
-                    match[0][0] = results[i][0];
-                    match[0][1] = results[i][1];
-                    match[0][2] = results[i][2];
+            for (int i = 0, len = resultList.size(); i < len; i++) {
+                String[] result = resultList.get(i);
+                if ((BigDecimal.valueOf(Double.parseDouble(result[0])).compareTo(highestQual) == 0)
+                    && (result[1]).equals(preferredContentType[0][1])
+                    && (result[2]).equals(preferredContentType[0][2])) {
+                    match[0][0] = result[0];
+                    match[0][1] = result[1];
+                    match[0][2] = result[2];
                     return match;
                 }
             }
         }
 
-        match[0][0] = results[idx][0];
-        match[0][1] = results[idx][1];
-        match[0][2] = results[idx][2];
+        if (!resultList.isEmpty()) {
+            String[] fallBack = resultList.get(idx);
+            match[0][0] = fallBack[0];
+            match[0][1] = fallBack[1];
+            match[0][2] = fallBack[2];
+        }
+
         return match;
     }
 

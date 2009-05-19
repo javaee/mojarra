@@ -138,4 +138,26 @@ public class TestContentTypes extends ServletFacesTestCase {
             clientContentType, serverSupportedContentTypes, "application/xhtml+xml");
         assertEquals(contentType, "text/html");
     }
+
+     public void testReallyLargeAcceptHeader() throws Exception {
+        String clientAcceptHeader = "application/octet-stream, application/smil, application/vnd.oma.drm.content,"
+                                    + "application/vnd.oma.drm.message, application/vnd.oma.drm.rights+wbxml,"
+                                    + "application/vnd.oma.drm.rights+xml, application/vnd.wap.connectivity-wbxml,"
+                                    + "application/vnd.wap.multipart.mixed, application/vnd.wap.multipart.related,"
+                                    + "application/vnd.wap.wmlscriptc, application/vnd.wap.xhtml+xml,"
+                                    + "application/xhtml+xml;profile=\"http://www.wapforum.org/xhtml\", image/bmp, image/gif,"
+                                    + "image/jpeg, image/png, image/vnd.wap.wbmp, multipart/mixed, multipart/related, text/html,"
+                                    + "text/plain, text/vnd.wap.connectivity-xml, text/vnd.wap.wml;type=4365, application/java,"
+                                    + "application/java-archive, image/wbmp, text/vcalendar, text/vcard, video/3gpp, video/mpeg,"
+                                    + "audio/amr, audio/xmf, audio/x-midi, audio/x-mid, audio/x-wav, audio/imelody, text/x-imelody,"
+                                    + "audio/mp3, audio/mpeg, audio/mpeg3, audio/mpg3, audio/aac, audio/amr-wb, audio/mp4,"
+                                    + "pv-pvx, application/sdp, image/svg+xml, text/vnd.sun.j2me.app-descriptor, \n"
+                                    + "video/x-application/vnd.oma.dd+xml,text/vnd.wap.wmlscript,text/vnd.wap.wml";
+       String serverSupportedContentTypes = "text/html, application/xhtml+xml";
+        String contentType =
+              RenderKitUtils.determineContentType(clientAcceptHeader,
+                                                  serverSupportedContentTypes,
+                                                  "text/html");
+        assertEquals(contentType, "text/html");
+    }
 }
