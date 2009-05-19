@@ -349,17 +349,18 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         }
         writer.writeAttribute("class", labelClass.toString(), "labelClass");
         String itemLabel = curItem.getLabel();
-        if (itemLabel != null) {
-            writer.writeText(" ", component, null);
-            if (!curItem.isEscape()) {
-                // It seems the ResponseWriter API should
-                // have a writeText() with a boolean property
-                // to determine if it content written should
-                // be escaped or not.
-                writer.write(itemLabel);
-            } else {
-                writer.writeText(itemLabel, component, "label");
-            }
+        if (itemLabel == null) {
+            itemLabel = valueString;
+        }
+        writer.writeText(" ", component, null);
+        if (!curItem.isEscape()) {
+            // It seems the ResponseWriter API should
+            // have a writeText() with a boolean property
+            // to determine if it content written should
+            // be escaped or not.
+            writer.write(itemLabel);
+        } else {
+            writer.writeText(itemLabel, component, "label");
         }
         if (isSelected(context, component, itemValue, valuesArray, converter)) {
             
