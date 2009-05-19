@@ -177,15 +177,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public static final String VALIDATE_EMPTY_FIELDS_PARAM_NAME = 
 	"javax.faces.VALIDATE_EMPTY_FIELDS";
-
-    /**
-     * <p class="changed_added_2_0">The name of an application parameter
-     * that is consulted within the {@link #validate} method to decide
-     * how to handle <code>null</code> values.</p>
-     */
-
-    public static final String INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL_PARAM_NAME =
-	"javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL";
     
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
@@ -881,8 +872,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
      * <p/>
 
-     * <li><span class="changed_modified_2_0">If the value of the {@link
-     * #INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL_PARAM_NAME} 
+     * <li><span class="changed_modified_2_0">If the
+     * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>
      * context parameter value is <code>true</code> (ignoring case), and
      * <code>getSubmittedValue()</code> returns a zero-length
      * <code>String</code> call <code>{@link #setSubmittedValue}</code>,
@@ -1434,8 +1425,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private boolean considerEmptyStringNull(FacesContext ctx) {
 
         if (emptyStringIsNull == null) {
+            // RELEASE_PENDING (edburns,rogerk) This should have a constant
             String val = ctx.getExternalContext()
-              .getInitParameter(UIInput.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL_PARAM_NAME);
+              .getInitParameter("javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL");
             emptyStringIsNull = Boolean.valueOf(val);
         }
 
