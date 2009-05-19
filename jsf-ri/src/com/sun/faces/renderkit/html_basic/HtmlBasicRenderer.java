@@ -327,7 +327,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (component instanceof UIInput) {
             Object submittedValue = ((UIInput) component).getSubmittedValue();
             if (submittedValue != null) {
-                return (String) submittedValue;
+                // value may not be a String...
+                return submittedValue.toString();
             }
         }
 

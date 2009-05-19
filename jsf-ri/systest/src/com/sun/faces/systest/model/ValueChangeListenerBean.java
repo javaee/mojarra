@@ -42,6 +42,7 @@ package com.sun.faces.systest.model;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.context.FacesContext;
 
 
 public class ValueChangeListenerBean extends Object {
@@ -76,4 +77,11 @@ public class ValueChangeListenerBean extends Object {
 	setTextBResult("Received valueChangeEvent for textB: " + 
 		       event.hashCode());
     }
+
+    public void valueChange(ValueChangeEvent event)
+    throws AbortProcessingException {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ctx.renderResponse();
+    }
+
 }

@@ -232,7 +232,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
 
         System.out.println("    Testing decode method - no parameter");
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        assertEquals("false", selectBoolean.getSubmittedValue());
+        assertEquals("false", selectBoolean.getSubmittedValue().toString());
         Object value = checkboxRenderer.getConvertedValue(getFacesContext(),
                                                           selectBoolean,
                                                           selectBoolean.getSubmittedValue());
@@ -247,7 +247,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         selectBoolean.setId("myCheckboxOn");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        assertEquals("true", selectBoolean.getSubmittedValue());
+        assertEquals("true", selectBoolean.getSubmittedValue().toString());
         value = checkboxRenderer.getConvertedValue(getFacesContext(),
                                                    selectBoolean,
                                                    selectBoolean.getSubmittedValue());
@@ -261,7 +261,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         selectBoolean.setId("myCheckboxYes");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        assertEquals("true", selectBoolean.getSubmittedValue());
+        assertEquals("true", selectBoolean.getSubmittedValue().toString());
         value = checkboxRenderer.getConvertedValue(getFacesContext(),
                                                    selectBoolean,
                                                    selectBoolean.getSubmittedValue());
@@ -274,7 +274,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        assertEquals("true", selectBoolean.getSubmittedValue());
+        assertEquals("true", selectBoolean.getSubmittedValue().toString());
         value = checkboxRenderer.getConvertedValue(getFacesContext(),
                                                    selectBoolean,
                                                    selectBoolean.getSubmittedValue());
@@ -287,7 +287,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
-        assertEquals("true", selectBoolean.getSubmittedValue());
+        assertEquals("true", selectBoolean.getSubmittedValue().toString());
         value = checkboxRenderer.getConvertedValue(getFacesContext(),
                                                    selectBoolean,
                                                    selectBoolean.getSubmittedValue());

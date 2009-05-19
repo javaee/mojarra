@@ -971,7 +971,8 @@
                                    com/sun/faces/systest/SelectManyCollectionTestCase.class,
                                    com/sun/faces/systest/DataTableTestCase.class,
                                    com/sun/faces/systest/TestOutputTargets.class,
-                                   com/sun/faces/systest/LinkTypeAttributeTestCase.class"/>
+                                   com/sun/faces/systest/LinkTypeAttributeTestCase.class,
+                                   com/sun/faces/systest/CheckboxTestCase.class"/>
             </tests>
         </jsf.junit>  
     </target>

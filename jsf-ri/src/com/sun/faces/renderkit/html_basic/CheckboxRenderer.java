@@ -48,7 +48,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.ConverterException;
@@ -90,7 +89,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
         Map<String, String> requestParameterMap = context.getExternalContext()
               .getRequestParameterMap();
-        String isChecked = isChecked(requestParameterMap.get(clientId));
+        boolean isChecked = isChecked(requestParameterMap.get(clientId));
         setSubmittedValue(component, isChecked);
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE,
@@ -116,8 +115,9 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
                                     Object submittedValue)
     throws ConverterException {
 
-        String newValue = (String) submittedValue;
-        return Boolean.valueOf(newValue);
+        return ((submittedValue instanceof Boolean)
+                ? submittedValue
+                : Boolean.valueOf(submittedValue.toString()));
 
     }
 
@@ -139,7 +139,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
 
-        if (((UISelectBoolean) component).isSelected()) {
+        if (Boolean.valueOf(currentValue)) { 
             writer.writeAttribute("checked", Boolean.TRUE, "value");
         }
         if (null != (styleClass = (String)
@@ -166,11 +166,11 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
      * @param value the submitted value
      * @return "true" if the component was checked, otherise "false"
      */
-    private static String isChecked(String value) {
+    private static boolean isChecked(String value) {
 
-        return Boolean.toString("on".equalsIgnoreCase(value)
-                                || "yes".equalsIgnoreCase(value)
-                                || "true".equalsIgnoreCase(value));
+        return "on".equalsIgnoreCase(value)
+               || "yes".equalsIgnoreCase(value)
+               || "true".equalsIgnoreCase(value);
 
     }
 
