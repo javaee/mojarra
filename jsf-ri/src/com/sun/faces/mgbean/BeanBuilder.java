@@ -60,7 +60,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -281,13 +280,16 @@ public abstract class BeanBuilder {
 
     protected Map<Expression,Expression> getBakedMap(String keyClass,
                                                      String valueClass,
-                                                     Set<Map.Entry<String,String>> entries) {
+                                                     Map<String,String> mapEntries) {
+
+        if (mapEntries == null || mapEntries.isEmpty()) {
+            return new LinkedHashMap<Expression,Expression>(4, 1.0f);
+        }
         Class<?> keyClazz = loadClass(keyClass);
         Class<?> valueClazz = loadClass(valueClass);
         Map<Expression,Expression> target = new
-             LinkedHashMap<Expression,Expression>(entries.size(), 1.0f);
-        //noinspection StringBufferWithoutInitialCapacity
-        for (Map.Entry<String,String> m : entries) {
+             LinkedHashMap<Expression,Expression>(mapEntries.size(), 1.0f);
+        for (Map.Entry<String,String> m : mapEntries.entrySet()) {
             String sk = m.getKey();
             String sv = m.getValue();
 

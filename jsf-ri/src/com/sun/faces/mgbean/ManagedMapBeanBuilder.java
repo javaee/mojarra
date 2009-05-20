@@ -72,7 +72,7 @@ public class ManagedMapBeanBuilder extends BeanBuilder {
             ManagedBeanInfo.MapEntry entry = beanInfo.getMapEntry();
             mapEntries = getBakedMap(entry.getKeyClass(),
                                      entry.getValueClass(),
-                                     entry.getEntries().entrySet());
+                                     entry.getEntries());
             baked();
         }
 

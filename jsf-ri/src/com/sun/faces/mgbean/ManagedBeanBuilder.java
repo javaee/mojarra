@@ -178,7 +178,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
         Map<Expression,Expression> mapEntries =
              getBakedMap(rawEntry.getKeyClass(),
                          rawEntry.getValueClass(),
-                         rawEntry.getEntries().entrySet());
+                         rawEntry.getEntries());
 
         // Find property setter and validate.
         PropertyDescriptor pd =
