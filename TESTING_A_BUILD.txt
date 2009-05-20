@@ -13,7 +13,7 @@ ant test
 
 For testing the build with v3:
 Quicklook tests:
-ant build.and.deploy
+ant build.and.debug
 checkout v3
 cd tests/quicklook
 mvn -Dglassfish.home=/home/glassfish/dir test
