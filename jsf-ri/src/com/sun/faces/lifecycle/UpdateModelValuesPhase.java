@@ -89,9 +89,9 @@ public class UpdateModelValuesPhase extends Phase {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.warning(exceptionMessage);
             }
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Exiting UpdateModelValuesPhase");
-            }
+        }
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Exiting UpdateModelValuesPhase");
         }
 
     }
