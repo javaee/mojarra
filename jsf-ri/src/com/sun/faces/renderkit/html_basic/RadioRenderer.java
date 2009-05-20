@@ -46,7 +46,6 @@ import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.util.Util;
 
 import javax.el.ELException;
 import javax.faces.component.UIComponent;
@@ -56,9 +55,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
-import java.io.IOException;
+
 import java.util.Collection;
 import java.util.Iterator;
+import java.io.IOException;
 
 /**
  * <B>ReadoRenderer</B> is a class that renders the current value of
@@ -82,7 +82,8 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
                                 Object currentSelections,
                                 Object[] submittedValues,
                                 boolean alignVertical,
-                                int itemNumber) throws IOException {
+                                int itemNumber,
+                                OptionComponentInfo optionInfo) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
@@ -134,16 +135,11 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             newValue = itemValue;
         }
 
-        // disable the radio button if the attribute is set.
-        boolean componentDisabled = Util.componentIsDisabled(component);
-
         String labelClass;
-        if (componentDisabled || curItem.isDisabled()) {
-            labelClass = (String) component.
-                    getAttributes().get("disabledClass");
+        if (optionInfo.isDisabled() || curItem.isDisabled()) {
+            labelClass = optionInfo.getDisabledClass();
         } else {
-            labelClass = (String) component.
-                    getAttributes().get("enabledClass");
+            labelClass = optionInfo.getEnabledClass();
         }
         writer.startElement("td", component);
         writer.writeText("\n", component, null);
@@ -162,13 +158,13 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         writer.writeAttribute("id", idString, "id");
 
         writer.writeAttribute("value",
-                (getFormattedValue(context, component,
-                        curItem.getValue(), converter)),
-                "value");
+                              (getFormattedValue(context, component,
+                                      curItem.getValue(), converter)),
+                              "value");
 
         // Don't render the disabled attribute twice if the 'parent'
         // component is already marked disabled.
-        if (!Util.componentIsDisabled(component)) {
+        if (!optionInfo.isDisabled()) {
             if (curItem.isDisabled()) {
                 writer.writeAttribute("disabled", true, "disabled");
             }
@@ -219,24 +215,5 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         }
     }
 
-    @Override
-    protected void renderOption(FacesContext context,
-                                UIComponent component,
-                                Converter converter,
-                                SelectItem curItem,
-                                boolean alignVertical,
-                                int itemNumber)
-            throws IOException {
-
-        this.renderOption(context,
-                component,
-                converter,
-                curItem,
-                null,
-                null,
-                alignVertical,
-                itemNumber);
-
-    }
 
 } // end of class RadioRenderer

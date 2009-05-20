@@ -524,7 +524,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                 Converter converter,
                                 SelectItem curItem,
                                 Object currentSelections,
-                                Object[] submittedValues) throws IOException {
+                                Object[] submittedValues,
+                                OptionComponentInfo optionInfo) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
@@ -557,28 +558,17 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("selected", true, "selected");
         }
 
-        Boolean disabledAttr =
-              (Boolean) component.getAttributes().get("disabled");
-        boolean componentDisabled = false;
-        if (disabledAttr != null) {
-            if (disabledAttr.equals(Boolean.TRUE)) {
-                componentDisabled = true;
-            }
-        }
-
         // if the component is disabled, "disabled" attribute would be rendered
         // on "select" tag, so don't render "disabled" on every option.
-        if ((!componentDisabled) && curItem.isDisabled()) {
+        if ((!optionInfo.isDisabled()) && curItem.isDisabled()) {
             writer.writeAttribute("disabled", true, "disabled");
         }
 
         String labelClass;
-        if (componentDisabled || curItem.isDisabled()) {
-            labelClass = (String) component.
-                  getAttributes().get("disabledClass");
+        if (optionInfo.isDisabled() || curItem.isDisabled()) {
+            labelClass = optionInfo.getDisabledClass();
         } else {
-            labelClass = (String) component.
-                  getAttributes().get("enabledClass");
+            labelClass = optionInfo.getEnabledClass();
         }
         if (labelClass != null) {
             writer.writeAttribute("class", labelClass, "labelClass");
@@ -764,6 +754,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         int count = 0;
         Object currentSelections = getCurrentSelectedValues(component);
         Object[] submittedValues = getSubmittedSelectedValues(component);
+        Map<String,Object> attributes = component.getAttributes();
+        OptionComponentInfo optionInfo =
+              new OptionComponentInfo((String) attributes.get("disabledClass"),
+                                      (String) attributes.get("enabledClass"),
+                                      Util.componentIsDisabled(component));
         RequestStateManager.set(context,
                                 RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
                                 component);
@@ -793,7 +788,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                  converter,
                                  itemsArray[i],
                                  currentSelections,
-                                 submittedValues);
+                                 submittedValues,
+                                 optionInfo);
                 }
                 count += itemsArray.length;
                 writer.endElement("optgroup");
@@ -803,7 +799,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                              converter,
                              item,
                              currentSelections,
-                             submittedValues);
+                             submittedValues,
+                             optionInfo);
             }
         }
 

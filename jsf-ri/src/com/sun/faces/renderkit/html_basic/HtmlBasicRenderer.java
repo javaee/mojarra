@@ -878,4 +878,64 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
+
+    /**
+     * Structure to hold common info used by Select* components
+     * to reduce the number of times component attributes are evaluated
+     * when rendering options.
+     */
+    public static class OptionComponentInfo {
+
+        String disabledClass;
+        String enabledClass;
+        String selectedClass;
+        String unselectedClass;
+        boolean disabled;
+
+        public OptionComponentInfo(String disabledClass,
+                                   String enabledClass,
+                                   boolean disabled) {
+
+            this(disabledClass, enabledClass, null, null, disabled);
+
+        }
+
+
+        public OptionComponentInfo(String disabledClass,
+                                   String enabledClass,
+                                   String unselectedClass,
+                                   String selectedClass,
+                                   boolean disabled) {
+
+            this.disabledClass = disabledClass;
+            this.enabledClass = enabledClass;
+            this.unselectedClass = unselectedClass;
+            this.selectedClass = selectedClass;
+            this.disabled = disabled;
+            
+        }
+
+        public String getDisabledClass() {
+            return disabledClass;
+        }
+
+        public String getEnabledClass() {
+            return enabledClass;
+        }
+
+        public boolean isDisabled() {
+            return disabled;
+        }
+
+        public String getSelectedClass() {
+            return selectedClass;
+        }
+
+        public String getUnselectedClass() {
+            return unselectedClass;
+        }
+        
+    }
+    
+
 } // end of class HtmlBasicRenderer
