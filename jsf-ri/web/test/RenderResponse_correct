@@ -308,11 +308,11 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 	    <table id="basicForm:shipType" class="someStyleClass" style="someStyle">
 	<tr>
 <td>
-<input type="radio" name="basicForm:shipType" id="basicForm:shipType:0" value="nextDay&amp;" accesskey="A" tabindex="3" disabled="disabled" /></td><td><label for="basicForm:shipType:0" class="disabledClass"> Next Day</label></td>
+<input type="radio" name="basicForm:shipType" id="basicForm:shipType:0" value="nextDay&amp;" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:0" class="disabledClass"> Next Day</label></td>
 <td>
-<input type="radio" name="basicForm:shipType" id="basicForm:shipType:1" value="nextWeek" accesskey="A" tabindex="3" disabled="disabled" /></td><td><label for="basicForm:shipType:1" class="disabledClass"> &lt;Next Week&gt;</label></td>
+<input type="radio" name="basicForm:shipType" id="basicForm:shipType:1" value="nextWeek" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:1" class="disabledClass"> &lt;Next Week&gt;</label></td>
 <td>
-<input type="radio" name="basicForm:shipType" id="basicForm:shipType:2" value="nextMonth" accesskey="A" tabindex="3" disabled="disabled" /></td><td><label for="basicForm:shipType:2" class="disabledClass"> <Next Month></label></td>
+<input type="radio" name="basicForm:shipType" id="basicForm:shipType:2" value="nextMonth" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:2" class="disabledClass"> <Next Month></label></td>
 	</tr>
 </table>
 
@@ -326,15 +326,15 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
             <table border="1" id="basicForm:verticalRadio">
 	<tr>
 <td>
-<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:0" value="nextDay" disabled="disabled" /></td><td><label for="basicForm:verticalRadio:0"> Next Day</label></td>
+<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:0" value="nextDay" disabled="disabled" /><label for="basicForm:verticalRadio:0"> Next Day</label></td>
 	</tr>
 	<tr>
 <td>
-<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:1" value="nextWeek" disabled="disabled" /></td><td><label for="basicForm:verticalRadio:1"> Next Week</label></td>
+<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:1" value="nextWeek" disabled="disabled" /><label for="basicForm:verticalRadio:1"> Next Week</label></td>
 	</tr>
 	<tr>
 <td>
-<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:2" value="nextMonth" disabled="disabled" /></td><td><label for="basicForm:verticalRadio:2"> Next Month</label></td>
+<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:2" value="nextMonth" disabled="disabled" /><label for="basicForm:verticalRadio:2"> Next Month</label></td>
 	</tr>
 </table>
 
