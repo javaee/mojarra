@@ -22076,7 +22076,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       If the "styleClass" attribute is specified, render its value as the 
       value of the "class" attribute.  Render a "name"
       attribute with a value the same as the "id" attribute as described
-      in "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General Notes on
+      in "<a href="renderkit-summary.html#general_encoding">General Notes on
       Encoding</a>" regarding the "id" attribute for UIInput
       components.  <p class="changed_added_2_0">Obtain the <code>UIViewRoot view identifier</code> and
       use it to obtain an <code>action URL</code> by calling <code>ViewHandler.getActionURL</code>.
@@ -24956,7 +24956,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       the URL spec.  If the "styleClass" attribute is specified, render
       its value as the value of the "class" attribute.  If the "id" attribute
       is specified, follow the same steps as mentioned in the 
-      "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
+      "<a href="renderkit-summary.html#general_encoding">General
       Notes on Encoding</a>" regarding the "id" attribute for UIInput components.
       If the "disabled" attribute is specified, do not render the HTML "a"
       anchor element or the "href" element.  Instead, render a "span" element. 
@@ -25510,29 +25510,24 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[<div class="changed_added_2_0">Render an HTML "a" anchor element.  The value of the
-      component is rendered as the anchor text and the outcome of the component is used
-      to determine the target URL rendered in the "href" attribute.  Any
-      child <code>UIParameter</code> components are appended to the String to be
-      output as the value of the "href" attribute as query parameters
-      before rendering.  The entire "href" string must be passed through
-      a call to the <code>encodeResourceURL()</code> method of the
-      <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on
-      the left hand side, and the value of the <code>UIParameter</code> on the right
-      hand side.  The name and the value must be URLEncoded.  Each
-      <code>UIParameter</code> instance is separated by an ampersand, as dictated in
-      the URL spec.  If the "fragment" attribute is specified, the value will be
-      included at the end of the resulting URL preceded by a hash mark.
-      If the "styleClass" attribute is specified, render
-      its value as the value of the "class" attribute.  If the "id" attribute
-      is specified, follow the same steps as mentioned in the 
-      "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
-      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.
-      If the "disabled" attribute is specified, do not render the HTML "a"
-      anchor element or the "href" element.  Instead, render a "span" element. 
-      If the "styleClass" attribute is specified, render its value as the value 
-      of the "class" attribute on the "span".  Render any pass-through attributes
-      on the "span".</div>]]></description>
+      <description><![CDATA[
+
+<div class="changed_added_2_0">
+
+<p>Render an HTML "a" anchor element.  The value of the component is
+rendered as the anchor text and the outcome of the component is used to
+determine the target URL rendered in the "href" attribute.  Execute the
+<a href="javax.faces.OutcomeTargetjavax.faces.Button.html#UIOutcomeTargetGetEncodedTargetUrl">Algorithm
+to obtain the URL to which the user-agent should issue a GET request
+when clicked</a>.  If the "id" attribute is specified, follow the same
+steps as mentioned in the "<a
+href="renderkit-summary.html#general_encoding">General
+Notes on Encoding</a>" regarding the "id" attribute for UIInput
+components.  If the "disabled" attribute is specified, do not render the
+HTML "a" anchor element or the "href" element.  Instead, render a "span"
+element.  If the "styleClass" attribute is specified, render its value
+as the value of the "class" attribute on the "span".  Render any
+pass-through attributes on the "span".</div>]]></description>
       <component-family>javax.faces.OutcomeTarget</component-family>
       <renderer-type>javax.faces.Link</renderer-type>
       <renderer-class>
@@ -26097,29 +26092,113 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[<div class="changed_added_2_0">Render an HTML "input" element of type "button".
-      The value of the component is rendered as the button text and the outcome of the
-      component is used to determine the target URL which is activated by onclick.  If
-      "image" attribute is specified, render it as the value of the "src" attribute after
-      passing it to the <code>getResourceURL()</code> method of the <code>ViewHandler</code>
-      for this application, and passing the result through the <code>encodeResourceURL()</code>
-      method of the <code>ExternalContext</code>. Any child <code>UIParameter</code> components
-      are appended to the String to be used as the target URL as query parameters before rendering.
-      The entire target URL string must be passed through a call to the <code>encodeResourceURL()</code>
-      method of the <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on the 
-      left hand side, and the value of the <code>UIParameter</code> on the right hand side.  The name 
-      and the value must be URLEncoded.  Each <code>UIParameter</code> instance is separeted by an 
-      ampersand, as dictated in the URL spec.  The final encoded result will be written out to the
-      onclick attribute of the button as "window.location.href = '<encoded HREF value>'".
-      If the developer has specified a custom onlclick the window.location.href name/value
-      pair will be appended at the end of the developer specified script.
-      If the "fragment" attribute is specified, the value will be included at the end
-      of the resulting URL preceded by a hash mark.  If the "styleClass" attribute is specified,
-      render its value as the value of the "class" attribute.  If the "id" attribute is specified,
-      follow the same steps as mentioned in the "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
-      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.  If the
-      "disabled" attribute is specified, do not render the "onclick" element and assign the
-      "disabled" attribute a value of true.</div>]]></description>
+      <description><![CDATA[
+<div class="changed_added_2_0">
+
+      <p>Encode Behavior</p>
+
+<p>Render an HTML "input" element of type "button".  The value of the
+component is rendered as the button text and the outcome of the
+component is used to determine the target URL which is activated by
+onclick.  If "image" attribute is specified, render it as the value of
+the "src" attribute after passing it to the
+<code>getResourceURL()</code> method of the <code>ViewHandler</code> for
+this application, and passing the result through the
+<code>encodeResourceURL()</code> method of the
+<code>ExternalContext</code>.</p>
+
+<p>If the component is not disabled, take the following actions.</p>
+
+<div style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #ccffcc;">
+
+  <p><a name="UIOutcomeTargetGetEncodedTargetUrl">Algorithm to obtain the url to which the user-agent should issue a GET request when clicked</a></p>
+
+  <p>Obtain the <code>NavigationCase</code> that corresponds to the
+  component instance for this <code>Renderer</code>.</p>
+
+  <p>Obtain an instance of
+  <code>javax.faces.application.ConfigurableNavigationHandler</code> from
+  the <code>ViewHandler</code>.  If no such instance can be obtained,
+  write the "disabled" attribute on the button.  Otherwise, let
+  <em>outcome</em> be the result of calling <code>getOutcome()</code> on
+  the argument component, which must be an instance of
+  <code>UIOutcomeTarget</code>.  If this result is <code>null</code>, let
+  <em>outcome</em> be the viewId of the current <code>UIViewRoot</code>.
+  Let <em>navCase</em> be the return from calling
+  <code>getNavigationCase()</code> on the
+  <code>ConfigurableNavigationHandler</code>, passing the current
+  <code>FacesContext</code> as the first argument, <code>null</code>, as
+  the second argument, and <em>outcome</em> as the third argument.  If
+  this returns <code>null</code>, log an informative error which includes
+  the component id, and write the "disabled" attribute on the component
+  markup, with the value of <code>true</code>.  Otherwise obtain the
+  encoded target URL using the following algorithm.</p>
+
+  <p>Algorithm to obtain the encoded target URL</p>
+
+  <ul>
+
+	  <li><p>Let <em>params</em> be the <code>Map&lt;String,
+	  List&lt;String&gt;&gt;</code> to be passed to
+	  <code>ViewHandler.getBookmarkableURL()</code>.  Build this map up first
+	  from any child <code>UIParameter</code> components.  These children must
+	  be processed in the order in which they appear as children.  If multiple
+	  children with the same name are encountered, their values must appear in
+	  the <code>List&lt;String&gt;</code> in the <code>Map</code> entry with
+	  the same name, and appear in the list in the same order as their child
+	  order.</p></li>
+
+	  <li><p>Next, obtain any parameters included within the
+	  navigation case.  Call <code>getParameters()</code> on
+	  <em>navCase</em>.  The result will be a <code>Map&lt;String,
+	  List&lt;String&gt;&gt;</code>.  If the result is
+	  non-<code>null</code> and non-empty, iterate over the entries
+	  from the result <code>Map</code> and, if no entry with the
+	  same name exists in <em>params</em>, set the value from the
+	  current entry as the value in the <em>params</em>
+	  <code>Map</code>.</p></li>
+
+	  <li><p>Let <em>includeViewParams</em> be the result of a
+	  logical OR of the results from calling
+	  <code>isIncludeViewParams()</code> on the argument
+	  <code>UIOutcomeTarget</code> component and calling
+	  <code>isIncludeViewParams</code> on <em>navCase</em>.</p></li>
+
+
+	  <li><p>Call <code>getBookmarkableURL()</code> on the
+	  <code>ViewHandler</code>, passing the current
+	  <code>FacesContext</code> as the first argument, the return
+	  from calling <code>getToViewId()</code> as the second
+	  argument, <em>params</em> as the third argument, and
+	  <em>includeViewParams</em> as the last argument.</p></li>
+
+  </ul>
+
+  </div>
+
+  <p>The entire target URL string must be passed through a call to
+  the <code>encodeResourceURL()</code> method of the
+  <code>ExternalContext</code>.  The name of the
+  <code>UIParameter</code> goes on the left hand side, and the value of
+  the <code>UIParameter</code> on the right hand side.  The name and the
+  value must be URLEncoded.  Each <code>UIParameter</code> instance is
+  separeted by an ampersand, as dictated in the URL spec.  The final
+  encoded result will be written out to the onclick attribute of the
+  button as "window.location.href = '<encoded HREF value>'".  If the
+  developer has specified a custom onlclick the window.location.href
+  name/value pair will be appended at the end of the developer specified
+  script.  If the "fragment" attribute is specified, the value will be
+  included at the end of the resulting URL preceded by a hash mark.  If
+  the "styleClass" attribute is specified, render its value as the value
+  of the "class" attribute.  If the "id" attribute is specified, follow
+  the same steps as mentioned in the "<a
+  href="renderkit-summary.html#general_encoding">General
+  Notes on Encoding</a>" regarding the "id" attribute for UIInput
+  components.  If the "disabled" attribute is specified, do not render
+  the "onclick" element and assign the "disabled" attribute a value of
+  true.</p>
+
+</div>]]></description>
       <component-family>javax.faces.OutcomeTarget</component-family>
       <renderer-type>javax.faces.Button</renderer-type>
       <renderer-class>

@@ -276,7 +276,6 @@
         <mkdir dir="${dist.home}"/>
         <mkdir dir="${dist.home}/docs"/>
         <mkdir dir="${dist.home}/samples"/>
-        <mkdir dir="${dist.home}/renderkitdocs"/>
 
         <echo>Handle the top level files</echo>
         <copy file="${impl.dir}/${license}" todir="${dist.home}"/>
@@ -286,16 +285,6 @@
         <copy todir="${dist.home}/lib">
             <fileset dir="${api.dir}/build/lib" includes="*.jar"/>
         </copy>
-        <ant dir="${api.dir}"
-             antfile="build.xml"
-             inheritall="false"
-             target="facesdoc"/>
-        <copy todir="${dist.home}/renderkitdocs">
-            <fileset dir="${api.dir}/build/generate/facesdoc"/>
-        </copy>
-        <zip zipfile="${dist.home}/docs/renderkitdocs-${impl.version}.zip">
-           <fileset dir="${dist.home}" includes="renderkitdocs/**"/>
-        </zip>
         <antcall target="api.javadocs"/>
         <antcall target="api.jsdocs"/>
         <antcall target="ri.pdldocs"/>
@@ -308,6 +297,21 @@
         <delete dir="${dist.home}/renderkitdocs"/>
         <delete dir="${dist.home}/pdldocs"/>
         <delete dir="${dist.home}/javadocs"/>
+    </target>
+
+    <target name="api.renderkitdocs">
+        <mkdir dir="${dist.home}/renderkitdocs"/>
+        <ant dir="${api.dir}"
+             antfile="build.xml"
+             inheritall="false"
+             target="facesdoc"/>
+        <copy todir="${dist.home}/renderkitdocs">
+            <fileset dir="${api.dir}/build/generate/facesdoc"/>
+        </copy>
+        <zip zipfile="${dist.home}/docs/renderkitdocs-${impl.version}.zip">
+           <fileset dir="${dist.home}" includes="renderkitdocs/**"/>
+        </zip>
+
     </target>
 
     <target name="api.javadocs">
