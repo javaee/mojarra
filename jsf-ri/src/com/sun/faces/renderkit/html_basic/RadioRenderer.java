@@ -187,6 +187,8 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         RenderKitUtils.renderOnchange(context, component);
 
         writer.endElement("input");
+        writer.endElement("td");
+        writer.startElement("td",component);
         writer.startElement("label", component);
         writer.writeAttribute("for", idString, "for");
         // if enabledClass or disabledClass attributes are specified, apply
