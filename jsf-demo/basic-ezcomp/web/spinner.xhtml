@@ -46,11 +46,9 @@
 </h:head>
 <h:body><h1>Spinner Example</h1>
         <h:form id="form1" prependId="false">
-            <ez:spinner value="#{number.number}" increment="10"/>
-            <br/>
-            <h:outputText value="Last number submitted: #{number.number}" />
-            <br/>
-                <h:commandButton value="reload" type="submit"/>
+            <ez:spinner value="#{number.number}" increment="10"/><br/>
+            <h:outputText value="Last number submitted: #{number.number}" /><br/>
+            <h:commandButton value="reload" type="submit"/><br/>
             <h:messages/>
         </h:form>
     <p>
