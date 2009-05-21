@@ -66,6 +66,7 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 import com.sun.faces.context.FacesContextImpl;
 import org.apache.cactus.WebRequest;
 
@@ -287,6 +288,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
               WebConfiguration.getInstance(ctx.getExternalContext());
         webConfig.overrideContextInitParameter(StateSavingMethod,
                                                StateManager.STATE_SAVING_METHOD_CLIENT);
+        webConfig.overrideContextInitParameter(AutoCompleteOffOnViewState, false);
 
         // recreate the RenderKit so the change is picked up.
         RenderKit rk = new RenderKitImpl();

@@ -1018,7 +1018,12 @@ public class WebConfiguration {
         GenerateUniqueServerStateIds(
               "com.sun.faces.generateUniqueServerStateIds",
               true
+        ),
+        AutoCompleteOffOnViewState(
+              "com.sun.faces.autoCompleteOffOnViewState",
+              true
         );
+
 
         private BooleanWebContextInitParameter alternate;
 

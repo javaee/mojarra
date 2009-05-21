@@ -17,7 +17,7 @@
 
 <form id="basicForm" name="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
 <input type="hidden" name="basicForm" value="basicForm" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" autocomplete="off" />
 
 
   <TABLE BORDER="1">
@@ -717,7 +717,7 @@ see the <i>angle brackets</i> on this text
 </form>
 <form id="form2" name="form2" method="post" action="/test/faces/TestRenderResponsePhase.jsp" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form2" value="form2" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" autocomplete="off" />
 <input type="submit" name="form2:j_id_id828" value="form2 button1" />
    <p />
   <input type="submit" name="form2:j_id_id831" value="form2 button2" /> <p />
@@ -725,7 +725,7 @@ see the <i>angle brackets</i> on this text
 </form>
 <form id="form3" name="form3" method="post" action="/test/faces/TestRenderResponsePhase.jsp" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form3" value="form3" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" autocomplete="off" />
 <input type="submit" name="form3:j_id_id837" value="form3 button1" />
    <p />
   <a href="#" onclick="mojarra.jsfcljs(document.getElementById('form3'),{'form3:j_id_id840':'form3:j_id_id840'},'');return false">form3 link1</a> <p />
@@ -733,7 +733,7 @@ see the <i>angle brackets</i> on this text
 </form>
 <form id="form4" name="form4" method="post" action="/test/faces/TestRenderResponsePhase.jsp" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form4" value="form4" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" autocomplete="off" />
 <a href="test.html">
       Link Enabled
   </a><span>
