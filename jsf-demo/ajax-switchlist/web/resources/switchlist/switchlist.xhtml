@@ -41,24 +41,24 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite">
+      xmlns:cc="http://java.sun.com/jsf/composite">
 <head>
     <title>This will not be present in rendered output</title>
 </head>
 <body>
-<composite:interface name="switchlist"
+<cc:interface name="switchlist"
                      displayName="Switchlist Component"
                      shortDescription="A basic example of the composite component feature">
 
-    <composite:attribute name="selected1" required="true"/>
-    <composite:attribute name="selected2" required="true"/>
-    <composite:attribute name="items1" required="true"/>
-    <composite:attribute name="items2" required="true"/>
-    <composite:attribute name="move1to2" targets="move1to2" required="true" method-signature="void f1(javax.faces.event.ActionEvent)" />
-    <composite:attribute name="move2to1" targets="move2to1" required="true" method-signature="void f2(javax.faces.event.ActionEvent)" />
-</composite:interface>
+    <cc:attribute name="selected1" required="true"/>
+    <cc:attribute name="selected2" required="true"/>
+    <cc:attribute name="items1" required="true"/>
+    <cc:attribute name="items2" required="true"/>
+    <cc:attribute name="move1to2" targets="move1to2" required="true" method-signature="void f1(javax.faces.event.ActionEvent)" />
+    <cc:attribute name="move2to1" targets="move2to1" required="true" method-signature="void f2(javax.faces.event.ActionEvent)" />
+</cc:interface>
 
-<composite:implementation>
+<cc:implementation>
     <h:outputStylesheet name="switchlist/switchlist.css"/>
     <h:selectManyListbox value="#{cc.attrs.selected1}" styleClass="switchlist">
         <f:selectItems value="#{cc.attrs.items1}"/>
@@ -70,6 +70,6 @@
     <h:selectManyListbox value="#{cc.attrs.selected2}" styleClass="switchlist">
         <f:selectItems value="#{cc.attrs.items2}"/>
     </h:selectManyListbox>
-</composite:implementation>
+</cc:implementation>
 </body>
 </html>
