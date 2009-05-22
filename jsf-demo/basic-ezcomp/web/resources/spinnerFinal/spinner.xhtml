@@ -40,16 +40,15 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:composite="http://java.sun.com/jsf/composite">
+      xmlns:cc="http://java.sun.com/jsf/composite">
 <head/>
 <body>
-<composite:interface> 
-    <composite:attribute name="value" required="true" type="java.lang.Integer"/>
-    <composite:attribute name="increment" required="false" type="java.lang.Integer"/>
-</composite:interface>
-<composite:implementation>
+<cc:interface>
+    <cc:attribute name="value" required="true" type="java.lang.Integer"/>
+    <cc:attribute name="increment" required="false" type="java.lang.Integer"/>
+</cc:interface>
+<cc:implementation>
     <h:outputStylesheet name="spinnerFinal/spinner.css" />
-    <h:outputScript name="jsf.js" library="javax.faces" target="head"/>
     <h:outputScript name="spinnerFinal/spinner.js" target="head" />
     <script type="text/javascript">
         init("#{cc.clientId}","#{cc.attrs.increment}");
@@ -61,6 +60,6 @@
         <h:commandButton id="back" value="v" styleClass="spinnerButton"
                          onclick="return changeNumber('#{cc.clientId}',-1);" />
     </h:panelGroup>
-</composite:implementation>
+</cc:implementation>
 </body>
 </html>
