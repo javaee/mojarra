@@ -12,7 +12,7 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class SkinManager extends AbstractManager implements Serializable {
 
-    private String selectedSkin = "appSelectedColor.css";
+    private String selectedSkin = "appBlueSkin.css";
     private static final long serialVersionUID = 1L;
 
     public String getSelectedSkin() {
