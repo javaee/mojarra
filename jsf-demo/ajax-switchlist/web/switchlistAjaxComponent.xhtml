@@ -47,7 +47,8 @@
 <h:body>
         <h1>Switchlist Example</h1>
         <h:form id="form1">
-             <ez:switchlist id="switchlist" controller="#{listholder}"/>
+            <ez:switchlist id="switchlist"
+                           listholder1="#{listholder1}" listholder2="#{listholder2}"/>
             <br/>
             <h:commandButton value="reload" type="submit"/>
             <h:messages/>

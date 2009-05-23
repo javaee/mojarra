@@ -53,7 +53,7 @@
             </source>
             <source>
                 <label>Backing Bean</label>
-                <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
+                <path>/WEB-INF/classes/switchlist/SwitchlistBean.java</path>
             </source>
         </sources>
     </demo>
@@ -74,7 +74,7 @@
             </source>
             <source>
                 <label>Managed Bean</label>
-                <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
+                <path>/WEB-INF/classes/switchlist/SwitchlistBean.java</path>
             </source>
         </sources>
     </demo>
@@ -99,7 +99,7 @@
             </source>
             <source>
                 <label>Managed Bean</label>
-                <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
+                <path>/WEB-INF/classes/switchlist/SwitchlistBean.java</path>
             </source>
         </sources>
     </demo>
@@ -123,10 +123,21 @@
                 <path>/resources/switchlistajax/switchlist.xhtml</path>
             </source>
             <source>
-                <label>Managed Bean</label>
+                <label>Interface</label>
                 <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
             </source>
-        </sources>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/switchlist/ListHolder1.java</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/switchlist/ListHolder2.java</path>
+            </source>
+            <source>
+                <label>Controller Bean</label>
+                <path>/WEB-INF/classes/switchlist/SwitchlistController.java</path>
+            </source>        </sources>
     </demo>
 
 </demo-info>
