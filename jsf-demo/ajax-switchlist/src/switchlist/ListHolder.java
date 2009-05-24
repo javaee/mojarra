@@ -10,6 +10,4 @@ public interface ListHolder {
 
     public Map<String, String> getItems();
 
-    public void setItems(Map<String, String> items);
-
 }

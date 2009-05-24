@@ -34,8 +34,4 @@ public class ListHolder1 implements ListHolder, Serializable {
     public Map<String, String> getItems() {
         return items;
     }
-
-    public void setItems(Map<String, String> items) {
-        this.items = items;
-    }
 }

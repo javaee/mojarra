@@ -69,12 +69,12 @@
     <h:commandButton id="move1to2" value="&gt;&gt;" action="#{switchlistController.m1_2}" styleClass="switchlistButton">
         <f:setPropertyActionListener value="#{listholder1}" target="#{switchlistController.listHolder1}"/>
         <f:setPropertyActionListener value="#{listholder2}" target="#{switchlistController.listHolder2}"/>
-        <f:ajax execute="#{cc.clientId}:move1to2 #{cc.clientId}:list1" render="#{cc.clientId}:list1 #{cc.clientId}:list2"/>
+        <f:ajax execute="@this #{cc.clientId}:list1" render="#{cc.clientId}:list1 #{cc.clientId}:list2"/>
     </h:commandButton>
     <h:commandButton id="move2to1" value="&lt;&lt;" action="#{switchlistController.m2_1}" styleClass="switchlistButton">
         <f:setPropertyActionListener value="#{listholder1}" target="#{switchlistController.listHolder1}"/>
         <f:setPropertyActionListener value="#{listholder2}" target="#{switchlistController.listHolder2}"/>
-        <f:ajax execute="#{cc.clientId}:move2to1 #{cc.clientId}:list2" render="#{cc.clientId}:list1 #{cc.clientId}:list2"/>
+        <f:ajax execute="@this #{cc.clientId}:list2" render="#{cc.clientId}:list1 #{cc.clientId}:list2"/>
     </h:commandButton>
     </h:panelGroup>
     <h:selectManyListbox id="list2" value="#{cc.attrs.listholder2.list}" styleClass="switchlist">

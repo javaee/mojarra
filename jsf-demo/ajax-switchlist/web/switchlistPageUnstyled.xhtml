@@ -33,7 +33,6 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
-
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -41,30 +40,23 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-    <title>Switchlist Tag Example</title>
+    <title>Switchlist Example</title>
 </h:head>
 <h:body>
-    <h1>Switchlist Tag Example</h1>
-    <h:outputStylesheet name="switchlist.css"/>
+        <h1>Switchlist Example</h1>
         <h:form id="form1">
-            <h:selectManyListbox id="list1" value="#{switchlist.list1}" styleClass="switchlist">
+            <h:selectManyListbox value="#{switchlist.list1}">
                 <f:selectItems value="#{switchlist.items1}"/>
             </h:selectManyListbox>
-            <h:panelGroup id="buttonGroup" styleClass="switchlistButtons">
-            <h:commandButton id="button1" value="&gt;&gt;"
-                             actionListener="#{switchlist.move1to2}" styleClass="switchlistButton">
-                <f:ajax execute="@this form1:list1" render="form1:list1 form1:list2"/>
-                </h:commandButton>
-            <h:commandButton id="button2" value="&lt;&lt;"
-                             actionListener="#{switchlist.move2to1}" styleClass="switchlistButton">
-                <f:ajax execute="@this form1:list2" render="form1:list1 form1:list2"/>
-                </h:commandButton>
+            <h:panelGroup id="buttonGroup">
+                <h:commandButton value="&gt;&gt;" actionListener="#{switchlist.move1to2}" />
+                <h:commandButton value="&lt;&lt;" actionListener="#{switchlist.move2to1}" />
             </h:panelGroup>
-            <h:selectManyListbox id="list2" value="#{switchlist.list2}" styleClass="switchlist">
+            <h:selectManyListbox value="#{switchlist.list2}">
                 <f:selectItems value="#{switchlist.items2}"/>
             </h:selectManyListbox>
             <br/>
-                <h:commandButton value="reload" type="submit"/>
+            <h:commandButton value="reload" type="submit"/>
             <h:messages/>
         </h:form>
 </h:body>
