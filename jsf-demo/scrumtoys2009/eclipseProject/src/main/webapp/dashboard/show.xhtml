@@ -8,20 +8,29 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:menu="http://java.sun.com/jsf/composite/components" >
+      xmlns:scrum="http://java.sun.com/jsf/composite/components" >
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
             <h:outputText value="#{i18n['story.show.title']}"></h:outputText>
         </ui:define>
+        <ui:define name="navigationBar">
+
+            <h:commandLink   immediate="true" action="/project/show" value="#{i18n['navigation.projects']}"></h:commandLink>
+            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
+            <h:commandLink   immediate="true" action="/project/edit"  value="#{sprintManager.project.name}"></h:commandLink>
+            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
+            <h:commandLink   immediate="true" action="/sprint/show" value="#{i18n['navigation.sprints']}"></h:commandLink>
+            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
+            <h:outputText value="#{i18n['sprint.edit.form.title']}" styleClass="tituloForm"></h:outputText>
+
+
+        </ui:define>
         <ui:define name="content">
-            <h:form id="frmListStories">
-                <br/><br/>
+            <h:form id="frmListStories">                
                 <h:panelGrid columns="5" headerClass="tableHeader" footerClass="whiteboard-bottom"  width="1010" cellpadding="0" cellspacing="0">
                     <f:facet name="header">
-                        <br/>
-                        <h:outputText rendered="#{storyManager.sprint.name!= null}" value="Dashboard - #{i18n['sprint.form.label.project.name']}: #{sprintManager.project.name} - #{i18n['story.form.label.sprint.name']} - #{storyManager.sprint.name} " styleClass="tituloForm" />
-                        <h:outputText rendered="#{storyManager.sprint.name == null}" value="Dashboard - #{i18n['sprint.form.label.project.name']}: #{storyManager.sprint.name} - #{i18n['story.form.label.sprint.name']} - #{i18n['stories.show.nosprint']} " styleClass="tituloForm" />
+                        <h:outputText value=""></h:outputText>
                     </f:facet>
                     <h:panelGrid columns="6" headerClass="tituloForm" footerClass="footerForm" styleClass="tableBody">
                         <h:outputLabel value=""></h:outputLabel>
@@ -29,58 +38,44 @@
                         <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtStories" >
                             <h:column>
                                 <f:facet name="header"><h:outputText value="STORIES" /></f:facet>
-                                <menu:bigPostit>
+                                <scrum:bigPostit>
                                     <ui:param name="postitLabel" value=""></ui:param>
                                     <ui:param name="postitText" value="#{story.name}"></ui:param>
-                                </menu:bigPostit>
+                                </scrum:bigPostit>
                             </h:column>
 
                         </h:dataTable>
-                        <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtToDoTasks">
+
+                        <h:dataTable  value="#{dashboardManager.toDoTasks}" var="task" title="Todo Tasks">
+                            <f:facet name="header"><h:outputText value="TO DO" /></f:facet>
                             <h:column>
-                                <f:facet name="header"><h:outputText value="TO DO" /></f:facet>                                
-                                <h:dataTable  value="#{story.todoTasks}" var="task" title="Todo Tasks">
-                                    <h:column>
-                                        <menu:postit action="editProject">
-                                            <ui:param name="postitLabel" value=""></ui:param>
-                                            <ui:param name="postitText" value="#{task.name}"></ui:param>
-                                        </menu:postit>
-                                    </h:column>
-                                </h:dataTable>
+                                <scrum:postit action="#{dashboardManager.editToDoTask}">
+                                    <ui:param name="postitLabel" value=""></ui:param>
+                                    <ui:param name="postitText" value="#{task.name}"></ui:param>
+                                </scrum:postit>
                             </h:column>
-
                         </h:dataTable>
-                        <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtDoingTasks">
+
+                        <h:dataTable  value="#{dashboardManager.workingTasks}" var="task" title="Working Tasks">
+                            <f:facet name="header"><h:outputText value="DOING" /></f:facet>
                             <h:column>
-                                <f:facet name="header"><h:outputText value="DOING" /></f:facet>                                
-                                <h:dataTable  value="#{story.workingTasks}" var="task" title="Working Tasks">
-                                    <h:column>
-                                        <menu:postit action="editProject">
-                                            <ui:param name="postitLabel" value=""></ui:param>
-                                            <ui:param name="postitText" value="#{task.name}"></ui:param>
-                                        </menu:postit>
-                                    </h:column>
-                                </h:dataTable>
+                                <scrum:postit action="#{dashboardManager.editWorkingTask}">
+                                    <ui:param name="postitLabel" value=""></ui:param>
+                                    <ui:param name="postitText" value="#{task.name}"></ui:param>
+                                </scrum:postit>
                             </h:column>
-
                         </h:dataTable>
-                        <h:dataTable value="#{dashboardManager.stories}" var="story" rendered="#{dashboardManager.stories.rowCount > 0}" border="0" id="dtDoneTasks">
+
+                        <h:dataTable  value="#{dashboardManager.doneTasks}" var="task" title="Done Tasks">
+                            <f:facet name="header"><h:outputText value="DONE" /></f:facet>
                             <h:column>
-                                <f:facet name="header"><h:outputText value="DONE" /></f:facet>
-                                <h:dataTable  value="#{story.doneTasks}" var="task" title="Done Tasks">
-                                    <h:column>
-                                        <menu:postit action="editProject">
-                                            <ui:param name="postitLabel" value=""></ui:param>
-                                            <ui:param name="postitText" value="#{task.name}"></ui:param>
-                                        </menu:postit>
-                                    </h:column>
-                                </h:dataTable>
+                                <scrum:postit action="#{dashboardManager.editDoneTask}">
+                                    <ui:param name="postitLabel" value=""></ui:param>
+                                    <ui:param name="postitText" value="#{task.name}"></ui:param>
+                                </scrum:postit>
                             </h:column>
-
                         </h:dataTable>
-                        <f:facet name="footer">
-                            <h:commandButton styleClass="botaoPostIt" action="showSprints" value="#{i18n['story.show.button.showSprints']}"  />
-                        </f:facet>
+
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:graphicImage value="/resources/images/lousaNova/quadroNegro_botton_990x120.png" ></h:graphicImage>

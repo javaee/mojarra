@@ -5,35 +5,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:menu="http://java.sun.com/jsf/composite/components" >
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
             <h:outputText value="#{i18n['sprint.show.title']}"></h:outputText>
         </ui:define>
+
+        <ui:define name="navigationBar">
+            <h:commandLink action="/project/show" value="#{i18n['sprint.form.label.projects']}"></h:commandLink>
+            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
+            <h:commandLink action="/project/edit"  value="#{sprintManager.project.name}"></h:commandLink>
+            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
+            <h:outputText value="#{i18n['sprints.table.title']}" styleClass="tituloForm"></h:outputText>
+        </ui:define>
         <ui:define name="content">
             <h:form id="frmListSprints">
-
-                <br/><br/>
-
-
                 <h:panelGrid columns="2" headerClass="tituloForm" footerClass="footerForm">
-                    <f:facet name="header">
-                        <h:outputText value="#{i18n['sprints.table.title']}" styleClass="tituloForm"/><br/><br/>
-                    </f:facet>
-                    <h:panelGroup>
-                        <menu:postit rendered="#{sprintManager.project.name != null}" action="editProject">
-                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
-                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-                        </menu:postit>
-                        <menu:postit rendered="#{sprintManager.project.name == null}" action="showProjects">
-                            <ui:param name="postitLabel" value="#{i18n['sprint.form.label.noproject']}"></ui:param>
-                            <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-                        </menu:postit>
-                    </h:panelGroup>
+
                     <h:outputText value="#{i18n['sprint.show.table.label.empty']}"
                                   rendered="#{sprintManager.sprints.rowCount eq 0}" />
                     <h:dataTable value="#{sprintManager.sprints}" var="sprint"
@@ -99,7 +88,6 @@
                     </h:dataTable>
                     <f:facet name="footer">
                         <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.create}" value="#{i18n['sprint.show.button.newSprint']}" />
-                        <h:commandButton styleClass="botaoPostIt" action="home" value="#{i18n['sprint.show.button.home']}" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>

@@ -5,25 +5,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
             <h:outputText value="#{i18n['project.show.title']}"></h:outputText>
         </ui:define>
+        <ui:define name="navigationBar">
+            <h:outputText value="#{i18n['project.show.title']}" styleClass="tituloForm" />
+        </ui:define>
         <ui:define name="content">
             <h:form id="frmListProjects">
-                <br/><br/>
-
-              
-
-                <h:outputText value="#{i18n['project.show.title']}" styleClass="tituloForm" /><br/><br/>
-
                 <h:outputText value="#{i18n['project.show.table.label.empty']}"
-                    rendered="#{projectManager.projects.rowCount eq 0}" />
+                              rendered="#{projectManager.projects.rowCount eq 0}" />
 
                 <h:dataTable value="#{projectManager.projects}" var="project"
                              rendered="#{projectManager.projects.rowCount > 0}"
@@ -37,39 +31,28 @@
                              id="dtProjects">
 
                     <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#" />
-                        </f:facet>
+                        <f:facet name="header"><h:outputText value="#" /></f:facet>
                         <h:outputText value="#{projectManager.projects.rowIndex + 1}" />
                     </h:column>
                     <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['project.show.table.header.name']}" />
-                        </f:facet>
+                        <f:facet name="header"><h:outputText value="#{i18n['project.show.table.header.name']}" /></f:facet>
                         <h:outputText value="#{project.name}" />
                     </h:column>
                     <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['project.show.table.header.startDate']}"/>
-                        </f:facet>
+                        <f:facet name="header"><h:outputText value="#{i18n['project.show.table.header.startDate']}"/></f:facet>
                         <h:outputText value="#{project.startDate}">
                             <f:convertDateTime pattern="#{i18n['project.show.table.header.startDate.pattern']}" />
                         </h:outputText>
                     </h:column>
                     <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['project.show.table.header.endDate']}"/>
-                        </f:facet>
+                        <f:facet name="header"><h:outputText value="#{i18n['project.show.table.header.endDate']}"/></f:facet>
                         <h:outputText value="#{project.endDate}">
                             <f:convertDateTime pattern="#{i18n['project.show.table.header.endDate.pattern']}" />
                         </h:outputText>
                     </h:column>
                     <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{i18n['project.show.table.header.actions']}"/>
-                        </f:facet>
+                        <f:facet name="header"><h:outputText value="#{i18n['project.show.table.header.actions']}"/></f:facet>
                         <h:commandButton styleClass="botaoPostIt" action="#{projectManager.edit}" value="#{i18n['project.show.button.edit']}"  />
-                        
                         <h:commandButton styleClass="botaoPostIt" action="#{projectManager.remove}" value="#{i18n['project.show.button.delete']}"  />
                         <h:commandButton styleClass="botaoPostIt" action="#{projectManager.showSprints}" value="#{i18n['project.show.button.showSprints']}"  />
                     </h:column>
@@ -77,7 +60,6 @@
                 </h:dataTable>
 
                 <h:commandButton styleClass="botaoPostIt" action="#{projectManager.create}" value="#{i18n['project.show.button.newProject']}"  />
-                <h:commandButton styleClass="botaoPostIt" action="home" value="#{i18n['project.show.button.home']}"  />
 
             </h:form>
         </ui:define>
