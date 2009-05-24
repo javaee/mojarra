@@ -5,38 +5,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:menu="http://java.sun.com/jsf/composite/components" >
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
             <h:outputText value="#{i18n['sprint.create.title']}"></h:outputText>
         </ui:define>
+        <ui:define name="navigationBar">
+            <h:commandLink   immediate="true" action="/project/show" value="#{i18n['sprint.form.label.projects']}"></h:commandLink>
+            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
+            <h:commandLink   immediate="true" action="/project/edit"  value="#{sprintManager.project.name}"></h:commandLink>
+            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
+            <h:outputText value="#{i18n['sprint.create.form.title']}" styleClass="tituloForm"></h:outputText>
+        </ui:define>
         <ui:define name="content">
             <h:form styleClass="scrumForm" id="createSprintForm">
                 <h:panelGrid columns="2" headerClass="tituloForm" footerClass="footerForm">
-                    <f:facet name="header">
-                        <h:outputText value="#{i18n['sprint.create.form.title']}"  />
-                    </f:facet>
-                    <h:panelGroup>                        
-                            <menu:postit rendered="#{sprintManager.project.name != null}" action="editProject">
-                                <ui:param name="postitLabel" value="#{i18n['sprint.form.label.project.name']}:"></ui:param>
-                                <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-                            </menu:postit>
-                            <menu:postit rendered="#{sprintManager.project.name == null}" action="showProjects">
-                                <ui:param name="postitLabel" value="#{i18n['sprint.form.label.noproject']}"></ui:param>
-                                <ui:param name="postitText" value="#{sprintManager.project.name}"></ui:param>
-                            </menu:postit>
-                        
-                    </h:panelGroup>
                     <ui:include src="form.xhtml" />
                     <f:facet name="footer">
                         <h:commandButton rendered="#{sprintManager.project.name != null}" id="btnCreate" action="#{sprintManager.save}" value="#{i18n['sprint.create.button.create']}" styleClass="formInput" />
                         <h:commandButton rendered="#{sprintManager.project.name != null}" id="btnCancel" action="show" value="#{i18n['sprint.create.button.cancel']}" styleClass="formInput" immediate="true" />
                     </f:facet>
-
                 </h:panelGrid>
             </h:form>
         </ui:define>
