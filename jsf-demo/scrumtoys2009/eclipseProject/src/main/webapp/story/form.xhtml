@@ -5,13 +5,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition>
-        <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
+      
 
             <h:outputLabel value="#{i18n['story.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{storyManager.currentStory.name}" required="true"
@@ -39,8 +36,7 @@
             <h:outputLabel value="#{i18n['story.form.label.acceptance']}:" for="itAcceptance"  />
             <h:inputText id="itAcceptance" value="#{storyManager.currentStory.acceptance}" required="true" requiredMessage="#{i18n['story.form.label.acceptance.required']}" size="40" maxLength="40" />
             <h:message for="itAcceptance" styleClass="errorMessage" />
-
-        </h:panelGrid>
+        
     </ui:composition>
 
 </html>

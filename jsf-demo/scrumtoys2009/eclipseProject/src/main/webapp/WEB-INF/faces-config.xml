@@ -21,7 +21,7 @@
 		<navigation-case>
 			<description>Go to Edit Project Page</description>
 			<from-outcome>editProject</from-outcome>
-			<to-view-id>project/edit.jsf</to-view-id>
+			<to-view-id>/project/edit.jsf</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<description>Go to Select Projects Page</description>
@@ -32,6 +32,11 @@
 			<description>Go to Edit Sprint Page</description>
 			<from-outcome>editSprint</from-outcome>
 			<to-view-id>/sprint/edit.jsf</to-view-id>
+		</navigation-case>
+        <navigation-case>
+			<description>Go to Dashboard</description>
+			<from-outcome>showDashboard</from-outcome>
+			<to-view-id>/dashboard/show.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
@@ -57,7 +62,7 @@
 		<description>
 			project navigation rules
         </description>
-		<from-view-id>project/show.xhtml</from-view-id>
+		<from-view-id>/project/show.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>showSprints</from-outcome>
 			<to-view-id>/sprint/show.xhtml</to-view-id>
