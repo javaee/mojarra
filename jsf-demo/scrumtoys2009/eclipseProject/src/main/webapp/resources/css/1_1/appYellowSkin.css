@@ -1,10 +1,16 @@
+div.navBarClass span, div.navBarClass {
+     /* Yellow 100%*/
+    color: #FDBB30;;
+    padding:10px;
+}
+
 .tituloForm {
-    font-size: 14pt;
+    font-size: 10pt;
     /* Yellow 100%*/
     color: #FDBB30;;
     font-weight:bold;
-    padding:11px;
-    margin:11px;
+     padding:5px;
+    margin:5px;
 }
 input.botaoPostIt{
     font-size: 8pt;
