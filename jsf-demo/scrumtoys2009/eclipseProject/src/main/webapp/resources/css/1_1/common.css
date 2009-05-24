@@ -1,3 +1,11 @@
+div.navBarClass a{
+    background-color: white;
+    vertical-align: middle;
+    padding:10px;
+    color:gray;
+    text-decoration:none;
+}
+
 /* Whiteboard */
 
 .tableHeader{
@@ -11,7 +19,7 @@
 }
 
 table.tableBody{
-  width:990px;  
+  width:990px;
   background-image:url("../resources/images/lousaNova/quadroNegro_meio_990x10.png;");
   margin: 0px;
   padding: 0px;
@@ -21,16 +29,16 @@ table.tableBody{
 
 table.tableBody tr td{
     /* important to make content aligned inside the table*/
-  vertical-align:top;  
+  vertical-align:top;
 }
 
 td.tableFooter, .whiteboard-bottom{
     width:990px;
     height:120px;
-    background-image:url("../resources/images/lousaNova/quadroNegro_bottom_990x80");
-    background-repeat:no-repeat;    
+    background-image:url("../resources/images/lousaNova/quadroNegro_top_990x80");
+    background-repeat:no-repeat;
     margin:0px;
-    padding:0px;    	
+    padding:0px;
 
 }
 
@@ -84,7 +92,7 @@ td{
         height:145px;
         font-size: 14px;
         text-align:center;
-        color:black;        
+        color:black;
 }
 
 
