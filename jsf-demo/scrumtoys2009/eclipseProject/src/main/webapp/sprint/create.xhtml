@@ -23,8 +23,8 @@
                 <h:panelGrid columns="2" headerClass="tituloForm" footerClass="footerForm">
                     <ui:include src="form.xhtml" />
                     <f:facet name="footer">
-                        <h:commandButton rendered="#{sprintManager.project.name != null}" id="btnCreate" action="#{sprintManager.save}" value="#{i18n['sprint.create.button.create']}" styleClass="formInput" />
-                        <h:commandButton rendered="#{sprintManager.project.name != null}" id="btnCancel" action="show" value="#{i18n['sprint.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                        <h:commandButton rendered="#{sprintManager.project.name != null}" id="btnCreate" action="#{sprintManager.save}" value="#{i18n['sprint.create.button.create']}" styleClass="botaoPostIt" />
+                        <h:commandButton rendered="#{sprintManager.project.name != null}" id="btnCancel" action="show" value="#{i18n['sprint.create.button.cancel']}" styleClass="botaoPostIt" immediate="true" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>
