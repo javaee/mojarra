@@ -28,7 +28,7 @@
                     <f:facet name="footer">
                         <h:commandButton id="btnEditUpdate" action="#{sprintManager.save}" value="#{i18n['sprint.edit.button.update']}" styleClass="botaoPostIt" />
                         <h:commandButton id="btnEditCancel" action="#{sprintManager.cancelEdit}" immediate="true" value="#{i18n['sprint.edit.button.cancel']}" styleClass="botaoPostIt" />
-                        <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.showDashboard}" value="#{i18n['sprint.show.button.showDashboard']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="/dashboard/show" value="#{i18n['sprint.show.button.showDashboard']}"  />
                     </f:facet>
                 </h:panelGrid>
             </h:form>
