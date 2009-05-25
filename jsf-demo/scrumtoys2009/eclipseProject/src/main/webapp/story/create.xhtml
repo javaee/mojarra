@@ -56,8 +56,8 @@
                     <h:inputText id="itAcceptance" value="#{storyManager.currentStory.acceptance}" required="true" requiredMessage="#{i18n['story.form.label.acceptance.required']}" size="40" maxLength="40" />
                     <h:message for="itAcceptance" styleClass="errorMessage" />
                     <f:facet name="footer">
-                        <h:commandButton  id="btnCreate" action="#{storyManager.save}" value="#{i18n['story.create.button.create']}" styleClass="formInput" />
-                        <h:commandButton  id="btnCancel" action="show" value="#{i18n['story.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                        <h:commandButton  id="btnCreate" action="#{storyManager.save}" value="#{i18n['story.create.button.create']}" styleClass="botaoPostIt" />
+                        <h:commandButton  id="btnCancel" action="show" value="#{i18n['story.create.button.cancel']}" styleClass="botaoPostIt" immediate="true" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>
