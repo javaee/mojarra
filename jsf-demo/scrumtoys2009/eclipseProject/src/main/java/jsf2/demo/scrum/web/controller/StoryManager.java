@@ -190,6 +190,9 @@ public class StoryManager extends AbstractManager implements Serializable {
      * @return the storyList
      */
     public List<Story> getStoryList() {
+        if (sprintManager.getCurrentSprint()!=null){
+            this.storyList = sprintManager.getCurrentSprint().getStories();
+        }
         return this.storyList;
     }
 
