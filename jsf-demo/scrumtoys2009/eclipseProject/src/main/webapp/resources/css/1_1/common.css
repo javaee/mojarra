@@ -24,15 +24,18 @@ table.tableBody{
   margin: 0px;
   padding: 0px;
   border-collapse:collapse;
-  border-spacing:0pt;
+  border-spacing:0pt;    
+  background-repeat:repeat-y;
 }
+
 
 table.tableBody tr td{
     /* important to make content aligned inside the table*/
-  vertical-align:top;
+  vertical-align:top;    
+  
 }
 
-td.tableFooter, .whiteboard-bottom{
+td.tableFooter{
     width:990px;
     height:120px;
     background-image:url("../resources/images/lousaNova/quadroNegro_top_990x80");
