@@ -152,7 +152,7 @@ public class StoryManager extends AbstractManager implements Serializable {
     }
 
     public String showTasks() {
-        setCurrentStory(getStories().getRowData());
+        setCurrentStory(stories.getRowData());
         return "showTasks";
     }
 
@@ -166,7 +166,8 @@ public class StoryManager extends AbstractManager implements Serializable {
 
     public DataModel<Story> getStories() {
         if (sprintManager.getCurrentSprint()!=null){
-            return new ListDataModel(sprintManager.getCurrentSprint().getStories());
+            this.stories = new ListDataModel(sprintManager.getCurrentSprint().getStories());
+            return stories;
         }
         else{
             return new ListDataModel<Story>();
@@ -189,8 +190,7 @@ public class StoryManager extends AbstractManager implements Serializable {
      * @return the storyList
      */
     public List<Story> getStoryList() {
-
-        return sprintManager.getCurrentSprint().getStories();
+        return this.storyList;
     }
 
     /**

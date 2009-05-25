@@ -202,8 +202,8 @@ public class SprintManager extends AbstractManager implements Serializable {
     }
 
     public DataModel<Sprint> getSprints() {
-
-        return new ListDataModel(projectManager.getCurrentProject().getSprints());
+        this.sprints = new ListDataModel(projectManager.getCurrentProject().getSprints());
+        return this.sprints;
     }
 
     public void setSprints(DataModel<Sprint> sprints) {
