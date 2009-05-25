@@ -16,14 +16,16 @@
             <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
             <h:outputText value="#{i18n['project.create.form.title']}" styleClass="tituloForm"  />
         </ui:define>
-        <ui:define name="content">
-            
+        <ui:define name="content">        
             <h:form id="createProjectForm">
-                <h:panelGrid columns="1" headerClass="tituloForm" footerClass="footerForm">                    
-                    <ui:include src="form.xhtml" />
+                <h:panelGrid columns="1" footerClass="footerForm">
+                    <h:panelGroup>
+                        <ui:include src="form.xhtml"/>
+                    </h:panelGroup>
+
                     <f:facet name="footer">
-                        <h:commandButton id="btnCreate" action="#{projectManager.save}" value="#{i18n['project.create.button.create']}" styleClass="formInput" />
-                        <h:commandButton id="btnCancel" action="show" value="#{i18n['project.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                        <h:commandButton id="btnCreate" action="#{projectManager.save}" value="#{i18n['project.create.button.create']}" styleClass="botaoPostIt" />
+                        <h:commandButton id="btnCancel" action="show" value="#{i18n['project.create.button.cancel']}" styleClass="botaoPostIt" immediate="true" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>

@@ -16,15 +16,14 @@
             <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
             <h:outputText value="#{i18n['project.edit.form.title']}:" styleClass="tituloForm" />
         </ui:define>
+        
         <ui:define name="content">
             <h:form styleClass="scrumForm" id="editProjectForm">
                 <h:panelGrid columns="1" headerClass="tituloForm" footerClass="footerForm">
                     <ui:include src="form.xhtml" />
-                    <f:facet name="footer">
-                        <h:panelGroup>
-                            <h:commandButton id="btnEditUpdate" action="#{projectManager.save}" value="#{i18n['project.edit.button.update']}" styleClass="formInput" />
-                            <h:commandButton id="btnEditCancel" action="#{projectManager.cancelEdit}" immediate="true" value="#{i18n['project.edit.button.cancel']}" styleClass="formInput" />
-                        </h:panelGroup>
+                    <f:facet name="footer">                        
+                            <h:commandButton id="btnEditUpdate" action="#{projectManager.save}" value="#{i18n['project.edit.button.update']}" styleClass="botaoPostIt" />
+                            <h:commandButton id="btnEditCancel" action="#{projectManager.cancelEdit}" immediate="true" value="#{i18n['project.edit.button.cancel']}" styleClass="botaoPostIt" />                        
                     </f:facet>
                 </h:panelGrid>
             </h:form>
