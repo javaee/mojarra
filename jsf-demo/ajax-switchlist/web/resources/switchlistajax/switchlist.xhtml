@@ -47,8 +47,8 @@
 </head>
 <body>
 <cc:interface name="switchlist"
-                     displayName="Switchlist Component"
-                     shortDescription="A basic example of the composite component feature">
+              displayName="Switchlist Component"
+              shortDescription="A basic example of the composite component feature">
 
     <cc:attribute name="listholder1" required="true">
         <cc:attribute name="list" required="true"/>
@@ -62,24 +62,28 @@
 
 <cc:implementation>
     <h:outputStylesheet name="switchlist/switchlist.css"/>
+    <span id="#{cc.clientID}">
     <h:selectManyListbox id="list1" value="#{cc.attrs.listholder1.list}" styleClass="switchlist">
-       <f:selectItems value="#{cc.attrs.listholder1.items}"/>
+        <f:selectItems value="#{cc.attrs.listholder1.items}"/>
     </h:selectManyListbox>
-    <h:panelGroup id="buttonGroup" styleClass="switchlistButtons">    
-    <h:commandButton id="move1to2" value="&gt;&gt;" action="#{switchlistController.m1_2}" styleClass="switchlistButton">
-        <f:setPropertyActionListener value="#{listholder1}" target="#{switchlistController.listHolder1}"/>
-        <f:setPropertyActionListener value="#{listholder2}" target="#{switchlistController.listHolder2}"/>
-        <f:ajax execute="@this #{cc.clientId}:list1" render="#{cc.clientId}:list1 #{cc.clientId}:list2"/>
-    </h:commandButton>
-    <h:commandButton id="move2to1" value="&lt;&lt;" action="#{switchlistController.m2_1}" styleClass="switchlistButton">
-        <f:setPropertyActionListener value="#{listholder1}" target="#{switchlistController.listHolder1}"/>
-        <f:setPropertyActionListener value="#{listholder2}" target="#{switchlistController.listHolder2}"/>
-        <f:ajax execute="@this #{cc.clientId}:list2" render="#{cc.clientId}:list1 #{cc.clientId}:list2"/>
-    </h:commandButton>
+    <h:panelGroup id="buttonGroup" styleClass="switchlistButtons">
+        <h:commandButton id="move1to2" value="&gt;&gt;" action="#{switchlistController.m1_2}"
+                         styleClass="switchlistButton">
+            <f:setPropertyActionListener value="#{listholder1}" target="#{switchlistController.listHolder1}"/>
+            <f:setPropertyActionListener value="#{listholder2}" target="#{switchlistController.listHolder2}"/>
+            <f:ajax execute="@this #{cc.clientId}:list1" render="#{cc.clientId}:list1 #{cc.clientId}:list2"/>
+        </h:commandButton>
+        <h:commandButton id="move2to1" value="&lt;&lt;" action="#{switchlistController.m2_1}"
+                         styleClass="switchlistButton">
+            <f:setPropertyActionListener value="#{listholder1}" target="#{switchlistController.listHolder1}"/>
+            <f:setPropertyActionListener value="#{listholder2}" target="#{switchlistController.listHolder2}"/>
+            <f:ajax execute="@this #{cc.clientId}:list2" render="#{cc.clientId}:list1 #{cc.clientId}:list2"/>
+        </h:commandButton>
     </h:panelGroup>
     <h:selectManyListbox id="list2" value="#{cc.attrs.listholder2.list}" styleClass="switchlist">
         <f:selectItems value="#{cc.attrs.listholder2.items}"/>
     </h:selectManyListbox>
+    </span>
 </cc:implementation>
 </body>
 </html>

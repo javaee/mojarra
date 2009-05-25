@@ -61,6 +61,7 @@
         init("#{cc.clientId}", "#{cc.attrs.value}");
     </script>
     <h:outputStylesheet name="editText/styles.css"/>
+    <span id="#{cc.clientID}">
     <h:panelGroup id="edit1">
         <h:outputLink id="editLink" title="Click to edit" styleClass="editLink"
                       onclick="return linkClick('#{cc.clientId}');"
@@ -73,6 +74,7 @@
         <h:commandButton value="Cancel" id="cancel"
                          onclick="return cancelButton('#{cc.clientId}');"/>
     </h:panelGroup>
+    </span>
 </composite:implementation>
 
 </body>
