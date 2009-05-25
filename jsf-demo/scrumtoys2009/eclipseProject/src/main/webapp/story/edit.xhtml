@@ -32,7 +32,7 @@
                     <f:facet name="footer">
                         <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditUpdate" action="#{storyManager.save}" value="#{i18n['story.edit.button.update']}" styleClass="botaoPostIt" />
                         <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditCancel" action="#{storyManager.cancelEdit}" immediate="true" value="#{i18n['story.edit.button.cancel']}" styleClass="botaoPostIt" />
-                        <h:commandButton styleClass="botaoPostIt" action="#{sprintManager.showDashboard}" value="#{i18n['sprint.show.button.showDashboard']}"  />
+                        <h:commandButton styleClass="botaoPostIt" action="/dashboard/show" value="#{i18n['sprint.show.button.showDashboard']}"  />
                     </f:facet>
                 </h:panelGrid>
             </h:form>
