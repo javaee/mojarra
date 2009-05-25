@@ -32,8 +32,8 @@
                 <h:panelGrid columns="3" headerClass="tituloForm" footerClass="footerForm">
                     <ui:include src="form.xhtml" />
                     <f:facet name="footer">
-                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnCreate" action="#{taskManager.save}" value="#{i18n['task.create.button.create']}" styleClass="formInput" />
-                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnCancel" action="show" value="#{i18n['task.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnCreate" action="#{taskManager.save}" value="#{i18n['task.create.button.create']}" styleClass="botaoPostIt" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnCancel" action="show" value="#{i18n['task.create.button.cancel']}" styleClass="botaoPostIt" immediate="true" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>

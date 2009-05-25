@@ -33,8 +33,8 @@
 
                     <ui:include src="form.xhtml" />
                     <h:panelGroup>
-                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditUpdate" action="#{taskManager.save}" value="#{i18n['task.edit.button.update']}" styleClass="formInput" />
-                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditCancel" action="#{taskManager.cancelEdit}" immediate="true" value="#{i18n['task.edit.button.cancel']}" styleClass="formInput" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditUpdate" action="#{taskManager.save}" value="#{i18n['task.edit.button.update']}" styleClass="botaoPostIt" />
+                        <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditCancel" action="#{taskManager.cancelEdit}" immediate="true" value="#{i18n['task.edit.button.cancel']}" styleClass="botaoPostIt" />
                     </h:panelGroup>
                 </h:panelGrid>
             </h:form>
