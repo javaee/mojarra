@@ -24,7 +24,7 @@
             </h:panelGroup>
             <h:message for="itStartedDate" styleClass="errorMessage"/>
 
-            <h:outputLabel value="#{i18n['task.form.label.startDate']}:" for="itTaskName"/>
+            <h:outputLabel value="#{i18n['task.form.label.endDate']}:" for="itTaskName"/>
             <h:panelGroup>
                 <h:inputText id="itEndDate" value="#{taskManager.currentTask.endDate}" maxLenght="10" size="10" >
                     <f:convertDateTime pattern="#{i18n['task.form.label.endDate.pattern']}" />
