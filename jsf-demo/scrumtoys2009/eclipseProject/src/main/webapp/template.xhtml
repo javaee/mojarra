@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"   
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:scrum="http://java.sun.com/jsf/composite/components">
 
     <h:head>
@@ -16,7 +16,7 @@
             <ui:insert name="pageTitle">
                 <h:outputText value="#{i18n['template.title']}"></h:outputText>
             </ui:insert>
-        </title>        
+        </title>
     </h:head>
 
     <h:body>
@@ -27,15 +27,29 @@
                 </scrum:menu>
                 <h:form id="navigationBar">
                     <div class="navBarClass">
-                        <ui:insert name="navigationBar"></ui:insert>                    
+                        <ui:insert name="navigationBar"></ui:insert>
                     </div>
                 </h:form>
-                <h:panelGroup id="bodyContent" styleClass="tableBody">
-                    <div align="center">
-                        <ui:insert name="content">                            
-                        </ui:insert>
-                    </div>
-                </h:panelGroup>
+
+                <h:panelGrid columns="1"  headerClass="tableHeader" footerClass="tableFooter" cellpadding="0" cellspacing="0">
+                    <f:facet name="header">
+                        <h:outputText value=""></h:outputText>
+                    </f:facet>
+
+                    <table class="tableBody"><tr><td>
+                        <table align="center">
+                            <tr><td>
+                                    <ui:insert name="content"></ui:insert>
+                            </td></tr>
+                        </table>
+                    </td></tr></table>
+
+
+                    <f:facet name="footer">
+                        <h:graphicImage value="/resources/images/lousaNova/quadroNegro_botton_990x120.png" ></h:graphicImage>
+                    </f:facet>
+                </h:panelGrid>
+
                 <h:panelGroup>
                     <ui:include src="./footer.xhtml" />
                 </h:panelGroup>
