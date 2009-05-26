@@ -216,7 +216,8 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         } catch (ClassNotFoundException cnfe) {
             throw new ConfigurationException(
                       buildMessage(MessageFormat.format("Unable to find class ''{0}''",
-                                                        source), sourceNode));
+                                                        source), sourceNode),
+                                                        cnfe);
         }
 
         return null;
