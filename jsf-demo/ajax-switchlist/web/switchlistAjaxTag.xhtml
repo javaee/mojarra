@@ -53,11 +53,11 @@
             <h:panelGroup id="buttonGroup" styleClass="switchlistButtons">
             <h:commandButton id="button1" value="&gt;&gt;"
                              actionListener="#{switchlist.move1to2}" styleClass="switchlistButton">
-                <f:ajax execute="@this form1:list1" render="form1:list1 form1:list2"/>
+                <f:ajax execute="@this list1" render="list1 list2"/>
                 </h:commandButton>
             <h:commandButton id="button2" value="&lt;&lt;"
                              actionListener="#{switchlist.move2to1}" styleClass="switchlistButton">
-                <f:ajax execute="@this form1:list2" render="form1:list1 form1:list2"/>
+                <f:ajax execute="@this list2" render="list1 list2"/>
                 </h:commandButton>
             </h:panelGroup>
             <h:selectManyListbox id="list2" value="#{switchlist.list2}" styleClass="switchlist">
