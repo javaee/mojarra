@@ -60,6 +60,7 @@
 
 <cc:implementation>
     <h:outputStylesheet name="switchlist/switchlist.css"/>
+    <div id="#{cc.clientId}">
     <h:selectManyListbox value="#{cc.attrs.selected1}" styleClass="switchlist">
         <f:selectItems value="#{cc.attrs.items1}"/>
     </h:selectManyListbox>
@@ -70,6 +71,7 @@
     <h:selectManyListbox value="#{cc.attrs.selected2}" styleClass="switchlist">
         <f:selectItems value="#{cc.attrs.items2}"/>
     </h:selectManyListbox>
+    </div>
 </cc:implementation>
 </body>
 </html>
