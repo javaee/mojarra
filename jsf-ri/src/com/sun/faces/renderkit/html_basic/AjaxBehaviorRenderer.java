@@ -253,37 +253,15 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     // Returns the resolved (client id) for a particular id.
     private static String getResolvedId(UIComponent component, String id) {
 
-        UIComponent resolvedComponent = findComponent(component, id);
+        UIComponent resolvedComponent = component.findComponent(id);
         if (resolvedComponent == null) {
             // RELEASE_PENDING  i18n
             throw new FacesException(
                 "<f:ajax> contains an unknown id '"
                 + id
-                + "'");
+                + "' - cannot locate it in the context of the component "+component.getId());
         }
 
         return resolvedComponent.getClientId();
-    }
-    /**
-     * Attempt to find the component assuming the ID is relative to the
-     * nearest naming container.  If not found, then search for the component
-     * using an absolute component expression.
-     *
-     * @param component Root component of the search tree
-     * @param expr Search expression identifying the UIComponent  to be returned
-     * @return the found UIComponent, or <code>null</code> if the component was not found.
-     */
-    private static UIComponent findComponent(UIComponent component,
-                                             String expr) {
-
-        // RELEASE_PENDING - perhaps only enable ID validation if ProjectStage
-        // is development
-        UIComponent resolvedComponent = component.findComponent(expr);
-        if (resolvedComponent == null) {
-            // not found using a relative search, try an absolute search
-            resolvedComponent = component.findComponent(':' + expr);
-        }
-        return resolvedComponent;
-
     }
 }
