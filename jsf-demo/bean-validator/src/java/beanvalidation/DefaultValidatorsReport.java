@@ -43,9 +43,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-/**
- * @author Dan Allen
- */
 @RequestScoped @ManagedBean
 public class DefaultValidatorsReport {
 

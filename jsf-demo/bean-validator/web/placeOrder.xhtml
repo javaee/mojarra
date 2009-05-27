@@ -46,8 +46,9 @@
         <p>The address information is now required. Otherwise, where are we going to ship this order?</p>
         <h:messages style="color: red;"/>
         <h:form>
-            <f:validateBean validationGroups="beanvalidation.groups.Personal , beanvalidation.groups.Order"/>
+            <f:validateBean validationGroups="beanvalidation.groups.Personal , beanvalidation.groups.Order">
             <ui:include src="/WEB-INF/fragments/form.xhtml"/>
+            </f:validateBean>
         </h:form>
         <p><h:outputLink value="home.jsf">Back to home</h:outputLink></p>
     </body>
