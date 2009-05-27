@@ -48,6 +48,7 @@
     <cc:attribute name="increment" required="false" type="java.lang.Integer"/>
 </cc:interface>
 <cc:implementation>
+    <span id="#{cc.clientId}">
     <h:outputStylesheet name="spinnerFinal/spinner.css" />
     <h:outputScript name="spinnerFinal/spinner.js" target="head" />
     <script type="text/javascript">
@@ -60,6 +61,7 @@
         <h:commandButton id="back" value="v" styleClass="spinnerButton"
                          onclick="return changeNumber('#{cc.clientId}',-1);" />
     </h:panelGroup>
+    </span>
 </cc:implementation>
 </body>
 </html>
