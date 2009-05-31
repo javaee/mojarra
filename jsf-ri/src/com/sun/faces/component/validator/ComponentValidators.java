@@ -261,7 +261,7 @@ public class ComponentValidators {
         Map<String,String> defaultValidatorInfo =
               application.getDefaultValidatorInfo();
         Validator[] validators = editableValueHolder.getValidators();
-        // check to make sure that Validator instanes haven't already
+        // check to make sure that Validator instances haven't already
         // been added.
         for (Map.Entry<String,String> defaultValidator : defaultValidatorInfo.entrySet()) {
             for (Validator validator : validators) {
