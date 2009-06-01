@@ -39,6 +39,7 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.component.validator.ComponentValidators;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 import javax.el.ValueExpression;
 import javax.faces.component.EditableValueHolder;
@@ -102,7 +103,10 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
         EditableValueHolder evh = (EditableValueHolder) parent;
         if (owner.isDisabled(ctx)) {
-            ComponentValidators.addDefaultValidatorsToComponent(context, evh);
+            RequestStateManager.set(context,
+                                    RequestStateManager.DISABLED_VALIDATOR,
+                                    owner.getValidatorId(ctx));
+            return;
         }
 
         ValueExpression ve = null;

@@ -155,6 +155,10 @@ public class RequestStateManager {
           "com.sun.faces.SCRIPT_STATE";
 
 
+    public static final String DISABLED_VALIDATOR =
+          "com.sun.faces.DISABLED_VALIDATOR";
+
+
     private static final String[] RENDER_RESPONSE = {
           SCRIPT_STATE
     };

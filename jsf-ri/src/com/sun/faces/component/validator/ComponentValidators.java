@@ -52,6 +52,8 @@
 package com.sun.faces.component.validator;
 
 
+import com.sun.faces.util.RequestStateManager;
+
 import javax.faces.context.FacesContext;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.validator.Validator;
@@ -143,9 +145,15 @@ public class ComponentValidators {
 
         Set<String> keySet = ctx.getApplication().getDefaultValidatorInfo().keySet();
         List<String> validatorIds = new ArrayList<String>(keySet.size());
+        String disableValidatorId = (String)
+              RequestStateManager.remove(ctx, RequestStateManager.DISABLED_VALIDATOR);
         for (String key : keySet) {
+            if (disableValidatorId != null && disableValidatorId.equals(key)) {
+                continue;
+            }
             validatorIds.add(key);
         }
+
         addValidatorsToComponent(ctx, validatorIds, editableValueHolder, null);
 
     }
