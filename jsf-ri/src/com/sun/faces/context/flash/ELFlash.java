@@ -322,7 +322,7 @@ public class ELFlash extends Flash {
         boolean isRedirect = this.isRedirect();
         if (null != allFacesMessages) {
             if (isRedirect) {
-                this.getMapForCookie(context).put(Constants.FACES_MESSAGES_ATTRIBUTE_NAME,
+                this.getThisRequestMap(context).put(Constants.FACES_MESSAGES_ATTRIBUTE_NAME,
                         allFacesMessages);
                 
             } else {
