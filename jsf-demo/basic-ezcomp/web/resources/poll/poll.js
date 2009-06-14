@@ -34,39 +34,35 @@
  * holder.
  */
 
-if (!window["pollConextMap"]) {
-    var pollContextMap = {};
-}
 
-function init(componentID, increment, timeout) {
-    pollContextMap[componentID] = {
-        increment : Number(increment),
-        timeout : Number(timeout),
-        elapsed: 0,
-        token: null
-    };
+function init(id, inc, to) {
+    var componentID = id;
+    var increment = inc;
+    var timeout = to;
+    var elapsed = 0;
+    var token = null;
+
     // If increment isn't set, or it's less than some reasonable value (50) default to 200ms
     if (isNaN(increment) || increment <= 50) {
-        pollContextMap[componentID].increment = 200;
+        increment = 200;
     }
     // If timeout isn't set, default to no timeout
     if (isNaN(timeout) || timeout == 0) {
-        pollContextMap[componentID].timeout = -1;
+        timeout = -1;
     }
-    pollContextMap[componentID].token = window.setInterval("poll(\"" + componentID + "\")", pollContextMap[componentID].increment);
-}
 
-
-function poll(componentID) {
-    var hiddenID = componentID + ":" + "hidden";
-    var hidden = document.getElementById(hiddenID);
-    hidden.click();  // this executes the ajax request
-    if (pollContextMap[componentID].timeout != -1) {
-        // Not an accurate timeout - but simple to compute
-        pollContextMap[componentID].elapsed += pollContextMap[componentID].increment;
-        if (pollContextMap[componentID].elapsed > pollContextMap[componentID].timeout) {
-            window.clearInterval(pollContextMap[componentID].token);
+    var poll = function poll() {
+        var hiddenID = componentID + ":" + "hidden";
+        var hidden = document.getElementById(hiddenID);
+        hidden.click();  // this executes the ajax request
+        if (timeout != -1) {
+            // Not an accurate timeout - but simple to compute
+            elapsed += increment;
+            if (elapsed > timeout) {
+                window.clearInterval(token);
+            }
         }
     }
+
+    token = window.setInterval(poll, increment);
 }
-;
