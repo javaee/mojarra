@@ -101,5 +101,12 @@ public class JavaTopLevelComponentTestCase extends AbstractTestCase {
 
     }
 
+    public void testDefaultAttribute() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/defaultAttributeValuesUsingPage.xhtml");
+        String text = page.asXml();
+        assertTrue(-1 != text.indexOf("User ID:"));
+        assertTrue(-1 != text.indexOf("value=\"Login"));
+    }
 
 }
