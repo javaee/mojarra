@@ -35,6 +35,7 @@
  */
 package com.sun.faces.composite;
 
+import javax.el.ValueExpression;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.FacesComponent;
 import javax.faces.context.FacesContext;
@@ -43,7 +44,7 @@ import javax.faces.context.FacesContext;
 public class JavaTopLevelComponent extends UINamingContainer {
 
     public JavaTopLevelComponent() {
-        FacesContext context = FacesContext.getCurrentInstance();
+
     }
 
     public String getFamily() {
@@ -58,4 +59,23 @@ public class JavaTopLevelComponent extends UINamingContainer {
     public void setItem(String item) {
         this.item = item;
     }
+
+    private ValueExpression valExp;
+
+    public ValueExpression getValExp() {
+        return valExp;
+    }
+
+    public void setValExp(ValueExpression valExp) {
+        this.valExp = valExp;
+    }
+
+    public String getManualValExp() {
+        String result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        ValueExpression exp = getValueExpression("valExp");
+        result = exp.getValue(context.getELContext()).toString();
+        return result;
+    }
+
 }

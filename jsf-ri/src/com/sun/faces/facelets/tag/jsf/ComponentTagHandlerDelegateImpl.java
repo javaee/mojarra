@@ -68,7 +68,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
     private final String rendererType;
     
-    private CreateComponentDelegate createComponentDelegate;
+    private CreateComponentDelegate createCompositeComponentDelegate;
 
 
     public ComponentTagHandlerDelegateImpl(ComponentHandler owner) {
@@ -138,7 +138,12 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 log.fine(owner.getTag() + " Component["+id+"] Created: "
                         + c.getClass().getName());
             }
-            owner.setAttributes(ctx, c);
+            // If this is NOT a composite component...
+            if (null == createCompositeComponentDelegate) {
+                // set the attributes and properties into the UIComponent instance.
+                owner.setAttributes(ctx, c);
+            }
+            // otherwise, allow the composite component code to do it.
             
             // mark it owned by a facelet instance
             c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
@@ -245,8 +250,8 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         return m;
     }
     
-    void setCreateComponentDelegate(CreateComponentDelegate createComponentDelegate) {
-        this.createComponentDelegate = createComponentDelegate;
+    void setCreateCompositeComponentDelegate(CreateComponentDelegate createComponentDelegate) {
+        this.createCompositeComponentDelegate = createComponentDelegate;
     }
     
     /**
@@ -266,8 +271,8 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      */
     private UIComponent createComponent(FaceletContext ctx) {
         
-        if (null != createComponentDelegate) {
-            return createComponentDelegate.createComponent(ctx);
+        if (null != createCompositeComponentDelegate) {
+            return createCompositeComponentDelegate.createComponent(ctx);
         }
         
         UIComponent c;

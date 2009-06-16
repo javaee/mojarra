@@ -114,7 +114,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             ComponentConfig config) {
         super(config);
         this.ccResource = ccResource;
-        ((ComponentTagHandlerDelegateImpl)this.getTagHandlerDelegate()).setCreateComponentDelegate(this);
+        ((ComponentTagHandlerDelegateImpl)this.getTagHandlerDelegate()).setCreateCompositeComponentDelegate(this);
     }
     
     private void copyTagAttributesIntoComponentAttributes(FaceletContext ctx,
@@ -146,14 +146,26 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     }
                     if (doPut) {
                         Method m = ReflectionUtils.lookupWriteMethod(cc.getClass().getName(), name);
+                        // If there is a setter...
                         if (m != null) {
-                            try {
-                                Object v = expression.getValue(ctx.getFacesContext().getELContext());
-                                m.invoke(cc, v);
-                            } catch (Exception e) {
-                                throw new FacesException(e);
+                            // and the expression is a literal...
+                            if (expression.isLiteralText()) {
+                                try {
+                                    // evaluate the expression...
+                                    Object v = expression.getValue(ctx.getFacesContext().getELContext());
+                                    // and call the setter.
+                                    m.invoke(cc, v);
+                                } catch (Exception e) {
+                                    throw new FacesException(e);
+                                }
+                            // Otherwise, the expression is not a literal...
+                            } else {
+                                // so we ignore the setter and simply call setValueExpression().
+                                cc.setValueExpression(name, expression);
                             }
+                        // Otherwise, there is no setter...
                         } else {
+                            // So we just put it in the attributes map.
                             map.put(name, expression);
                         }
                     }

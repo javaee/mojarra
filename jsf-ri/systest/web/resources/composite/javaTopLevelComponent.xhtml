@@ -71,7 +71,12 @@
 
 <cc:implementation>
 
-      <p>Get out java property #{cc.item}</p>
+      <p>Get out java property of type String #{cc.item}</p>
+
+      <p>Get out java property of type ValueExpression.  Should be empty: #{cc.valExp}.</p>
+
+      <p>Call the special method that verifies the setValueExpression("valExp") has been called.
+         getValueExpression: #{cc.manualValExp}.</p>
 
       <p>
 

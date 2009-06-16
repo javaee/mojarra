@@ -85,14 +85,16 @@ public class JavaTopLevelComponentTestCase extends AbstractTestCase {
 
     public void testJavaBeanPropertyOnTopLevelComponentHasExpectedValue() throws Exception {
 
-        HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml");
+        HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml?q=foo");
         String text = page.asText();
         assertTrue(-1 != text.indexOf("Get out java property Smallberries"));
+        assertTrue(-1 != text.indexOf("Get out java property of type ValueExpression. Should be empty: ."));
+        assertTrue(-1 != text.indexOf("getValueExpression: foo."));
     }
 
     public void testDefaultActionAttribute() throws Exception {
 
-        HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml");
+        HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml?q=foo");
         HtmlSubmitInput button = (HtmlSubmitInput)
                 getInputContainingGivenId(page, "loginPanel1:loginAction");
         page = button.click();
