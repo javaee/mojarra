@@ -2164,15 +2164,8 @@ public abstract class UIComponentBase extends UIComponent {
                     }
                     Method writeMethod = pd.getWriteMethod();
                     if (writeMethod != null) {
-                        try {
-                            writeMethod.invoke(component, value);
-                        } catch (IllegalArgumentException e) {
-                            if (value instanceof ValueExpression) {
-                                FacesContext context = FacesContext.getCurrentInstance();
-                                value = ((ValueExpression) value).getValue(context.getELContext());
-                                writeMethod.invoke(component, value);
-                            }
-                        }
+                        writeMethod.invoke
+                                (component, value);
                     } else {
                         // TODO: i18n
                         throw new IllegalArgumentException("Setter not found for property " + keyValue);
