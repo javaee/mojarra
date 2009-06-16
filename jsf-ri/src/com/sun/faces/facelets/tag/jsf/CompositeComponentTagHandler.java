@@ -55,6 +55,7 @@ import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.ReflectionUtils;
 
 import javax.el.*;
 import javax.faces.FacesException;
@@ -75,6 +76,7 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.lang.reflect.Method;
 import javax.faces.FactoryFinder;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
@@ -127,7 +129,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                 String value = attr.getValue();
                 if (null != value && 0 < value.length()) {
 
-                    Expression expression = attr.getValueExpression(ctx, Object.class);
+                    ValueExpression expression = attr.getValueExpression(ctx, Object.class);
                     // PENDING: I don't think copyTagAttributesIntoComponentAttributes
                     // should be getting called 
                     // on postback, yet it is.  In lieu of a real fix, I'll
@@ -143,7 +145,17 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                         }
                     }
                     if (doPut) {
-                        map.put(name, expression);
+                        Method m = ReflectionUtils.lookupWriteMethod(cc.getClass().getName(), name);
+                        if (m != null) {
+                            try {
+                                Object v = expression.getValue(ctx.getFacesContext().getELContext());
+                                m.invoke(cc, v);
+                            } catch (Exception e) {
+                                throw new FacesException(e);
+                            }
+                        } else {
+                            map.put(name, expression);
+                        }
                     }
                 }
             }

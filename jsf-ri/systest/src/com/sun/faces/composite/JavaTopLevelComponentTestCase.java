@@ -82,7 +82,7 @@ public class JavaTopLevelComponentTestCase extends AbstractTestCase {
     
 
     // -------------------------------------------------------------- Test Cases
-    /*
+
     public void testJavaBeanPropertyOnTopLevelComponentHasExpectedValue() throws Exception {
 
         HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml");
@@ -108,9 +108,5 @@ public class JavaTopLevelComponentTestCase extends AbstractTestCase {
         assertTrue(-1 != text.indexOf("User ID:"));
         assertTrue(-1 != text.indexOf("value=\"Login"));
     }
-     */
-
-    public void testStub() {
-        
-    }
+    
 }

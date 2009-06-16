@@ -464,14 +464,21 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                         String attrName = cur.getName();
                         UIComponent target = topLevelComponent.findComponent(curTarget);
                         // Find the attribute on the top level component
-                        valueExpression = (ValueExpression) topLevelComponent.getAttributes().
+                        Object attrValue = topLevelComponent.getAttributes().
                                 get(attrName);
-                        if (null == valueExpression) {
-                            throw new FacesException(
-                                  "Unable to find attribute with name \""
-                                  + attrName
-                                  + "\" in top level component in consuming page.  "
-                                  + "Page author error.");
+                        // In all cases but one, the attrValue will be a ValueExpression.
+                        // The only case when it will not be a ValueExpression is
+                        // the case when the attrName is an action, and even then, it'll be a
+                        // ValueExpression in all cases except when it's a literal string.
+                        if (null == attrValue) {
+                            attrValue = cur.getValue("default");
+                            if (null == attrValue) {
+                                throw new FacesException(
+                                        "Unable to find attribute with name \"" + attrName
+                                  + "\" in top level component in consuming page, "
+                                  + " or with default value in composite component.  "
+                                  + "Page author or composite component author error.");
+                            }
                         }
 
                         // lazily initialize this local variable
@@ -488,6 +495,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                             (isActionListener = attrName.equals("actionListener")) ||
                             (isValidator = attrName.equals("validator")) ||
                             (isValueChangeListener = attrName.equals("valueChangeListener"))) {
+                            
+                            // Special case: explicitly rul out the case where 
+                            // the action is a literal string.  This case will be
+                            // handled below.
+                            if (!isAction && attrValue instanceof ValueExpression) {
+                                valueExpression = (ValueExpression) attrValue;
+                            }
                             // This is the inner component to which the attribute should 
                             // be applied
                             target = topLevelComponent.findComponent(curTarget);
@@ -501,8 +515,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                             if (isAction) {
                                 expectedReturnType = Object.class;
                                 expectedParameters = new Class[]{};
+                                String expr = (attrValue instanceof ValueExpression) ?
+                                    ((ValueExpression) attrValue).getExpressionString() : attrValue.toString();
                                 toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                        valueExpression.getExpressionString(),
+                                        expr,
                                         expectedReturnType, expectedParameters);
                                 ((ActionSource2) target).setActionExpression(toApply);
                             } else if (isActionListener) {
@@ -536,6 +552,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                 ((EditableValueHolder) target).addValueChangeListener(new MethodExpressionValueChangeListener(toApply));
                             }
                         } else {
+                            valueExpression = (ValueExpression) attrValue;
                             // There is no explicit methodExpression property on
                             // an inner component to which this MethodExpression
                             // should be retargeted.  In this case, replace the
