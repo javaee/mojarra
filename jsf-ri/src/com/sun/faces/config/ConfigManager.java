@@ -781,11 +781,14 @@ public class ConfigManager {
         private Document getDocument() throws Exception {
 
             Document returnDoc;
-            if (validating) {  // the Schema won't be null if validation is enabled.
-                DocumentBuilder db = getNonValidatingBuilder();
+            DocumentBuilder db = getNonValidatingBuilder();
+            InputSource is = new InputSource(getInputStream(documentURL));
+                is.setSystemId(documentURL.toExternalForm());
+            Document doc = db.parse(is);
+            String documentNS = doc.getDocumentElement().getNamespaceURI();
+            if (validating && documentNS != null) {
                 DOMSource domSource
-                     = new DOMSource(db.parse(getInputStream(documentURL),
-                                                    documentURL.toExternalForm()));
+                     = new DOMSource(doc, documentURL.toExternalForm());
 
                 /*
                  * If the Document in question is 1.2 (i.e. it has a namespace matching
@@ -794,7 +797,6 @@ public class ConfigManager {
                  * we need to transform it to reference a special 1.1 schema before validating.
                  */
                 Node documentElement = ((Document) domSource.getNode()).getDocumentElement();
-                String documentNS = documentElement.getNamespaceURI();
                 if (JAVAEE_SCHEMA_DEFAULT_NS.equals(documentNS)) {
                     Attr version = (Attr)
                             documentElement.getAttributes().getNamedItem("version");
@@ -830,9 +832,9 @@ public class ConfigManager {
                           .setDocumentURI(((Document) domSource
                                 .getNode()).getDocumentURI());
                     DbfFactory.FacesSchema schemaToApply;
-                    if (documentNS.equals(FACES_CONFIG_1_X_DEFAULT_NS)) {
+                    if (FACES_CONFIG_1_X_DEFAULT_NS.equals(documentNS)) {
                         schemaToApply = DbfFactory.FacesSchema.FACES_11;
-                    } else if (documentNS.equals(FACELETS_1_0_DEFAULT_NS)) {
+                    } else if (FACELETS_1_0_DEFAULT_NS.equals(documentNS)) {
                         schemaToApply = DbfFactory.FacesSchema.FACELET_TAGLIB_20;
                     } else {
                         throw new IllegalStateException();
@@ -842,11 +844,7 @@ public class ConfigManager {
                     returnDoc =  (Document) domResult.getNode();
                 }
             } else {
-                // validation isn't required, parse and return
-                DocumentBuilder builder = getNonValidatingBuilder();
-                InputSource is = new InputSource(getInputStream(documentURL));
-                is.setSystemId(documentURL.toExternalForm());
-                returnDoc = builder.parse(is);
+                returnDoc = doc;
             }
 
             // mark this document as the parsed representation of the
@@ -874,9 +872,9 @@ public class ConfigManager {
 
             TransformerFactory factory = TransformerFactory.newInstance();
             String xslToApply;
-            if (documentNS.equals(FACES_CONFIG_1_X_DEFAULT_NS)) {
+            if (FACES_CONFIG_1_X_DEFAULT_NS.equals(documentNS)) {
                 xslToApply = FACES_TO_1_1_PRIVATE_XSL;
-            } else if (documentNS.equals(FACELETS_1_0_DEFAULT_NS)) {
+            } else if (FACELETS_1_0_DEFAULT_NS.equals(documentNS)) {
                 xslToApply = FACELETS_TO_2_0_XSL;
             } else {
                 throw new IllegalStateException();
