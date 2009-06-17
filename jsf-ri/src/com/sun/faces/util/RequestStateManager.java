@@ -155,8 +155,8 @@ public class RequestStateManager {
           "com.sun.faces.SCRIPT_STATE";
 
 
-    public static final String DISABLED_VALIDATOR =
-          "com.sun.faces.DISABLED_VALIDATOR";
+    public static final String DISABLED_VALIDATORS =
+          "com.sun.faces.DISABLED_VALIDATORS";
 
 
     private static final String[] RENDER_RESPONSE = {
@@ -165,6 +165,7 @@ public class RequestStateManager {
 
     private static final Map<PhaseId,String[]> PHASE_ATTRIBUTES =
         new HashMap<PhaseId,String[]>(1, 1.0f);
+
     static {
         PHASE_ATTRIBUTES.put(PhaseId.RENDER_RESPONSE, RENDER_RESPONSE);
     }

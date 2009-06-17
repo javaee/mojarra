@@ -49,6 +49,8 @@ import javax.faces.validator.Validator;
 import javax.faces.view.AttachedObjectHandler;
 import javax.faces.view.facelets.*;
 import java.io.IOException;
+import java.util.Set;
+import java.util.HashSet;
 
 public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implements AttachedObjectHandler {
 
@@ -98,14 +100,21 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
     // -------------------------------------- Methods from AttachedObjectHandler
 
 
+    @SuppressWarnings({"unchecked"})
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
 
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
         EditableValueHolder evh = (EditableValueHolder) parent;
         if (owner.isDisabled(ctx)) {
-            RequestStateManager.set(context,
-                                    RequestStateManager.DISABLED_VALIDATOR,
-                                    owner.getValidatorId(ctx));
+            Set<String> disabledIds = (Set<String>)
+                  RequestStateManager.get(context, RequestStateManager.DISABLED_VALIDATORS);
+            if (disabledIds == null) {
+                disabledIds = new HashSet<String>(3);
+                RequestStateManager.set(context,
+                                        RequestStateManager.DISABLED_VALIDATORS,
+                                        disabledIds);
+            }
+            disabledIds.add(owner.getValidatorId(ctx));
             return;
         }
 

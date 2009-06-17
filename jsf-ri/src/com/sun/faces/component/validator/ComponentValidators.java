@@ -140,15 +140,16 @@ public class ComponentValidators {
      * @param ctx the <code>FacesContext</code> for the current request
      * @param editableValueHolder the component receiving the <code>Validator</code>s
      */
+    @SuppressWarnings({"unchecked"})
     public static void addDefaultValidatorsToComponent(FacesContext ctx,
                                                        EditableValueHolder editableValueHolder) {
 
         Set<String> keySet = ctx.getApplication().getDefaultValidatorInfo().keySet();
         List<String> validatorIds = new ArrayList<String>(keySet.size());
-        String disableValidatorId = (String)
-              RequestStateManager.remove(ctx, RequestStateManager.DISABLED_VALIDATOR);
+        Set<String> disabledValidatorIds = (Set<String>)
+              RequestStateManager.remove(ctx, RequestStateManager.DISABLED_VALIDATORS);
         for (String key : keySet) {
-            if (disableValidatorId != null && disableValidatorId.equals(key)) {
+            if (disabledValidatorIds != null && disabledValidatorIds.contains(key)) {
                 continue;
             }
             validatorIds.add(key);
@@ -169,6 +170,7 @@ public class ComponentValidators {
      * @param ctx the <code>FacesContext</code> for the current request
      * @param editableValueHolder the component receiving the <code>Validator</code>s
      */
+    @SuppressWarnings({"unchecked"})
     public void addValidators(FacesContext ctx,
                               EditableValueHolder editableValueHolder) {
 
@@ -187,10 +189,13 @@ public class ComponentValidators {
             validatorIds.add(key);
         }
 
+        Set<String> disabledIds = (Set<String>)
+              RequestStateManager.remove(ctx,
+                                         RequestStateManager.DISABLED_VALIDATORS);
         int count = validatorStack.size();
         for (int i = count - 1; i >= 0; i--) {
             ValidatorInfo info = validatorStack.get(i);
-            if (!info.isEnabled()) {
+            if (!info.isEnabled() || (disabledIds != null && disabledIds.contains(info.getValidatorId()))) {
                 if (validatorIds.contains(info.getValidatorId())) {
                     validatorIds.remove(info.getValidatorId());
                 }

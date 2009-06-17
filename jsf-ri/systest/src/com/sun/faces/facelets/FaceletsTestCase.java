@@ -44,9 +44,13 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
+import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
 
 /**
  * Test cases for Facelets functionality
@@ -231,6 +235,48 @@ public class FaceletsTestCase extends AbstractTestCase {
 
         String toplevelContent = lastpage.getElementById("insert").getTextContent();
         assertTrue("Inserted Text".equals(toplevelContent));
+    }
+
+
+    public void testValidatorWrappingNestingDisableHandling() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/validatorDisabled.xhtml");
+        HtmlTextInput input = (HtmlTextInput) getInputContainingGivenId(page, "form1:input");
+        assertNotNull(input);
+        input.setValueAttribute("aaaa");
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form1:sub");
+        page = submit.click();
+
+        HtmlUnorderedList list = (HtmlUnorderedList) page.getElementById("form1:messages1");
+        int count = 0;
+        for (HtmlElement element : list.getAllHtmlChildElements()) {
+            count++;
+            assertEquals("form1:input: Validation Error: Value is less than allowable minimum of '5'", element.asText());
+            if (count > 1) {
+                fail("Expected a single validation failure");
+            }
+        }
+
+        page = getPage("/faces/facelets/validatorDisabled.xhtml");
+        HtmlTextInput input1 = (HtmlTextInput) getInputContainingGivenId(page, "form2:input1");
+        HtmlTextInput input2 = (HtmlTextInput) getInputContainingGivenId(page, "form2:input2");
+        input1.setValueAttribute("aaaa");
+        input2.setValueAttribute("aaaa");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form2:sub");
+        page = submit.click();
+
+        HtmlElement list1 = page.getElementById("form2:messages2");
+        assertTrue(list1 instanceof HtmlDivision); // if it's not, it means messages where displayed
+        HtmlUnorderedList list2 = (HtmlUnorderedList) page.getElementById("form2:messages3");
+        assertFalse(list1.getAllHtmlChildElements().iterator().hasNext());
+        count = 0;
+        for (HtmlElement element : list2.getAllHtmlChildElements()) {
+            count++;
+            assertEquals("form2:input2: Validation Error: Value is less than allowable minimum of '5'", element.asText());
+            if (count > 1) {
+                fail("Expected a single validation failure");
+            }
+        }
     }
 
 }
