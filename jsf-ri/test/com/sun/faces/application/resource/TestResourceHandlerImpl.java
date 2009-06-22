@@ -762,6 +762,49 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     }
 
 
+    //==========================================================================
+    // Validate the fix for issue 1162.
+    //
+    public void beginHandleResourceRequest14(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/web.xml.faces", null, "ln=../WEB-INF");
+    }
+
+    public void testHandleResourceRequest14() throws Exception {
+
+        ResourceHandler handler =
+              getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+        handler.handleResourceRequest(getFacesContext());
+        
+    }
+
+    public void endHandleResourceRequest14(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
+
+
+    //==========================================================================
+    // Validate the fix for issue 1162.
+    //
+    public void beginHandleResourceRequest15(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/web.xml.faces", null, "ln=nvLibrary/../../WEB-INF");
+    }
+
+    public void testHandleResourceRequest15() throws Exception {
+
+        ResourceHandler handler =
+              getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+        handler.handleResourceRequest(getFacesContext());
+
+    }
+
+    public void endHandleResourceRequest15(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
+
+
+
 // ---------------------------------------------------------- Helper Methods
 
 

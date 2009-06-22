@@ -150,6 +150,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
     @Override
     public boolean libraryExists(String libraryName) {
 
+        if (libraryName.contains("../")) {
+            return false;
+        }
         FacesContext context = FacesContext.getCurrentInstance();
         LibraryInfo info = manager.findLibrary(libraryName, null, context);
         return (info != null);
