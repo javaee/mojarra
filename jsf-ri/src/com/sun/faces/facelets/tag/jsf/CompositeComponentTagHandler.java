@@ -52,27 +52,46 @@ package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
+import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
+import com.sun.faces.facelets.tag.MetaRulesetImpl;
+import com.sun.faces.facelets.tag.MetadataTargetImpl;
 import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Util;
 
-import javax.el.*;
+import javax.el.ELException;
+import javax.el.Expression;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.application.Resource;
-import javax.faces.application.ViewHandler;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIPanel;
+import javax.faces.component.ActionSource;
+import javax.faces.component.ValueHolder;
+import javax.faces.component.EditableValueHolder;
+import javax.faces.component.UISelectOne;
+import javax.faces.component.UISelectMany;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.view.AttachedObjectHandler;
-import javax.faces.view.facelets.*;
-import java.beans.Introspector;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.MetaRuleset;
+import javax.faces.view.facelets.Metadata;
+import javax.faces.view.facelets.MetadataTarget;
+import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.MetaRule;
+import javax.faces.view.facelets.TagAttribute;
 import java.beans.PropertyDescriptor;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -86,98 +105,18 @@ import javax.faces.view.ViewDeclarationLanguageFactory;
  */
 public class CompositeComponentTagHandler extends ComponentHandler implements CreateComponentDelegate {
 
-     private static String[] EXCLUDED_COPY_ATTRIBUTES;
-
-    // setup the list of properties that will not be exposed as composite
-    // component attributes
-    static {
-        try {
-            PropertyDescriptor[] properties =
-                  Introspector.getBeanInfo(UINamingContainer.class).getPropertyDescriptors();
-            Set<String> props = new HashSet<String>();
-            for (PropertyDescriptor pd : properties) {
-                if (pd.getWriteMethod() != null) {
-                    props.add(pd.getName());
-                }
-            }
-            // add attributes that aren't exposed as standard properties
-            props.add("binding");
-            String[] propNames = props.toArray(new String[props.size()]);
-            Arrays.sort(propNames);
-            EXCLUDED_COPY_ATTRIBUTES = propNames;
-        } catch (Exception e) {
-            throw new FacesException(e);
-        }
-    }
     
-    CompositeComponentTagHandler(Resource ccResource,
-            ComponentConfig config) {
+    CompositeComponentTagHandler(Resource ccResource, ComponentConfig config) {
         super(config);
         this.ccResource = ccResource;
         ((ComponentTagHandlerDelegateImpl)this.getTagHandlerDelegate()).setCreateCompositeComponentDelegate(this);
     }
-    
-    private void copyTagAttributesIntoComponentAttributes(FaceletContext ctx,
-                                                          UIComponent cc) {
-        
-        TagAttributes tagAttributes = this.tag.getAttributes();
-        TagAttribute attrs[] = tagAttributes.getAll();
 
-        for (TagAttribute attr : attrs) {
-            String name = attr.getLocalName();
-            if (isNameValid(name)) {
-                String value = attr.getValue();
-                if (null != value && 0 < value.length()) {
 
-                    ValueExpression expression = attr.getValueExpression(ctx, Object.class);
-                    // PENDING: I don't think copyTagAttributesIntoComponentAttributes
-                    // should be getting called 
-                    // on postback, yet it is.  In lieu of a real fix, I'll
-                    // make sure I'm not overwriting a MethodExpression with a 
-                    // ValueExpression.
-                    Map<String, Object> map = cc
-                          .getAttributes();
-                    boolean doPut = true;
-                    if (map.containsKey(name)) {
-                        Object curVal = map.get(name);
-                        if (curVal instanceof MethodExpression) {
-                            doPut = false;
-                        }
-                    }
-                    if (doPut) {
-                        Method m = ReflectionUtils.lookupWriteMethod(cc.getClass().getName(), name);
-                        // If there is a setter...
-                        if (m != null) {
-                            // and the expression is a literal...
-                            if (expression.isLiteralText()) {
-                                try {
-                                    // evaluate the expression...
-                                    Object v = expression.getValue(ctx.getFacesContext().getELContext());
-                                    // and call the setter.
-                                    m.invoke(cc, v);
-                                } catch (Exception e) {
-                                    throw new FacesException(e);
-                                }
-                            // Otherwise, the expression is not a literal...
-                            } else {
-                                // so we ignore the setter and simply call setValueExpression().
-                                cc.setValueExpression(name, expression);
-                            }
-                        // Otherwise, there is no setter...
-                        } else {
-                            // So we just put it in the attributes map.
-                            map.put(name, expression);
-                        }
-                    }
-                }
-            }
-        }
-        
-    }
-    
     private Resource ccResource;
+    private UIComponent cc;
     
-    
+
 
     public UIComponent createComponent(FaceletContext ctx) {
         FacesContext context = ctx.getFacesContext();
@@ -186,7 +125,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                                 new CompositeAttributesCopyListener());
 
 
-
+        this.cc = result;
         return result;
     }
     
@@ -200,7 +139,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         // Allow any PDL declared attached objects to be retargeted
         if (ComponentHandler.isNew(c)) {
             FacesContext context = ctx.getFacesContext();
-            ViewHandler viewHandler = context.getApplication().getViewHandler();
             String viewId = context.getViewRoot().getViewId();
             // PENDING(rlubke): performance
             ViewDeclarationLanguageFactory factory = (ViewDeclarationLanguageFactory)
@@ -222,13 +160,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
     }
 
-    private boolean isNameValid(String name) {
-
-        return (name != null
-                && name.length() > 0
-                && (Arrays.binarySearch(EXCLUDED_COPY_ATTRIBUTES, name) < 0));
-        
-    }
     
     private void applyCompositeComponent(FaceletContext ctx, UIComponent c)
     throws IOException {
@@ -241,10 +172,10 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         UIPanel facetComponent;
         if (ComponentHandler.isNew(c)) {
             facetComponent = (UIPanel)
-             facesContext.getApplication().createComponent("javax.faces.Panel");
+            facesContext.getApplication().createComponent("javax.faces.Panel");
             facetComponent.setRendererType("javax.faces.Group");
             c.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
-        }
+        }                                                                                 
         else {
             facetComponent = (UIPanel) 
                     c.getFacets().get(UIComponent.COMPOSITE_FACET_NAME);
@@ -253,7 +184,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         
         try {
             Facelet f = factory.getFacelet(ccResource.getURL());
-            copyTagAttributesIntoComponentAttributes(ctx, c);
+            setAttributes(ctx, c);
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 
                 @Override
@@ -267,6 +198,80 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         } finally {
             ctx.setVariableMapper(orig);
         }
+
+    }
+
+
+    /**
+     * Specialized implementation to prevent caching of the MetaRuleset when
+     * ProjectStage is Development.
+     */
+    @Override
+    public void setAttributes(FaceletContext ctx, Object instance) {
+
+        if (instance != null) {
+            if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
+                Metadata meta = createMetaRuleset(instance.getClass()).finish();
+                meta.applyMetadata(ctx, instance);
+            } else {
+                super.setAttributes(ctx, instance);
+            }
+        }
+
+    }
+
+
+    /**
+     * This is basically a copy of what's define in ComponentTagHandlerDelegateImpl
+     * except for the MetaRuleset implementation that's being used.
+     *
+     * This also allows us to treat composite component's backed by custom component
+     * implementation classes based on their type.
+     *
+     * @param type the <code>Class</code> for which the
+     * <code>MetaRuleset</code> must be created.
+     *
+     */
+    @Override
+    protected MetaRuleset createMetaRuleset(Class type) {
+
+        Util.notNull("type", type);
+        MetaRuleset m = new CompositeComponentMetaRuleset(getTag(), type, (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY));
+
+        // ignore standard component attributes
+        m.ignore("binding").ignore("id");
+
+        // Specialized rule for composite components
+        // NOTE: Switch this to ComponentRule.Instance once
+        //       the spec states composite component ValueExpressions
+        //       are to be stored in the ValueExpression map instead
+        //       of the component's attribute map.  Don't forget to
+        //       remove the CompositeComponentRule class in the process.
+        m.addRule(CompositeComponentRule.INSTANCE);
+
+        // if it's an ActionSource
+        if (ActionSource.class.isAssignableFrom(type)) {
+            m.addRule(ActionSourceRule.Instance);
+        }
+
+        // if it's a ValueHolder
+        if (ValueHolder.class.isAssignableFrom(type)) {
+            m.addRule(ValueHolderRule.Instance);
+
+            // if it's an EditableValueHolder
+            if (EditableValueHolder.class.isAssignableFrom(type)) {
+                m.ignore("submittedValue");
+                m.ignore("valid");
+                m.addRule(EditableValueHolderRule.Instance);
+            }
+        }
+
+        // if it's a selectone or selectmany
+        if (UISelectOne.class.isAssignableFrom(type) || UISelectMany.class.isAssignableFrom(type)) {
+            m.addRule(RenderPropertyRule.Instance);
+        }
+
+        return m;
 
     }
 
@@ -294,6 +299,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     }
 
 
+
     private void markInitialState(UIComponent c) {
         c.markInitialState();
         for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext(); ) {
@@ -305,7 +311,257 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     // ---------------------------------------------------------- Nested Classes
 
 
-     public static class CompositeAttributesCopyListener implements
+    /**
+     * Specialized MetaRulesetImpl to return CompositeMetadataTarget for component
+     * attribute handling.
+     */
+    private static final class CompositeComponentMetaRuleset extends MetaRulesetImpl {
+
+        private BeanInfo compBeanInfo;
+        private Class<?> type;
+
+        public CompositeComponentMetaRuleset(Tag tag,
+                                             Class<?> type,
+                                             BeanInfo compBeanInfo) {
+
+            super(tag, type);
+            this.compBeanInfo = compBeanInfo;
+            this.type = type;
+
+        }
+
+        @Override
+        protected MetadataTarget getMetadataTarget() {
+            try {
+                return new CompositeMetadataTarget(type, compBeanInfo);
+            } catch (IntrospectionException ie) {
+                throw new FacesException(ie);
+            }
+        }
+
+
+        // ------------------------------------------------------ Nested Classes
+
+
+        /**
+         * This class is responsible for creating ValueExpression instances with
+         * the expected type based off the following:
+         *
+         *  - if the composite:attribute metadata is present, then use the type
+         *    if specified by the author, or default to Object.class
+         *  - if no composite:attribute is specified, then attempt to return the
+         *    type based off the bean info for this component
+         */
+        private static final class CompositeMetadataTarget extends MetadataTargetImpl {
+
+            private BeanInfo compBeanInfo;
+
+
+            // ---------------------------------------------------- Construcrors
+
+
+            public CompositeMetadataTarget(Class<?> type, BeanInfo compBeanInfo)
+            throws IntrospectionException {
+
+                super(type);
+                this.compBeanInfo = compBeanInfo;
+                
+            }
+
+
+            // --------------------------------- Methods from MetadataTargetImpl
+
+
+            @Override
+            public Class getPropertyType(String name) {
+                PropertyDescriptor compDescriptor = findDescriptor(name);
+                if (compDescriptor != null) {
+                    // composite:attribute declaration...
+                    ValueExpression typeVE = (ValueExpression) compDescriptor.getValue("type");
+                    if (typeVE == null) {
+                        return Object.class;
+                    } else {
+                        String className = (String) typeVE.getValue(FacesContext.getCurrentInstance().getELContext());
+                        if (className != null) {
+                            className = prefix(className);
+                            try {
+                                return ReflectionUtil.forName(className);
+                            } catch (ClassNotFoundException cnfe) {
+                                throw new FacesException(cnfe);
+                            }
+                        } else {
+                            return Object.class;
+                        }
+                    }
+                } else {
+                    // defer to the default processing which will inspect the
+                    // PropertyDescriptor of the UIComponent type
+                    return super.getPropertyType(name);
+                }
+            }
+
+
+            // ------------------------------------------------- Private Methods
+
+
+            private PropertyDescriptor findDescriptor(String name) {
+
+                for (PropertyDescriptor pd : compBeanInfo.getPropertyDescriptors()) {
+
+                    if (pd.getName().equals(name)) {
+                        return pd;
+                    }
+
+                }
+                return null;
+
+            }
+
+
+            private String prefix(String className) {
+
+                if (className.indexOf('.') == -1
+                    && Character.isUpperCase(className.charAt(0))) {
+                    return ("java.lang." + className);
+                } else {
+                    return className;
+                }
+                
+            }
+        }
+
+    } // END CompositeComponentMetaRuleset
+
+
+    /**
+     * This Rule is responsible for populating either properties of the
+     * composite component or it's attributes map.
+     */
+    private static final class CompositeComponentRule extends MetaRule {
+
+        static final CompositeComponentRule INSTANCE = new CompositeComponentRule();
+
+
+        // ----------------------------------------------- Methods from MetaRule
+
+
+        public Metadata applyRule(String name,
+                                  TagAttribute attribute,
+                                  MetadataTarget meta) {
+
+            if (meta.isTargetInstanceOf(UIComponent.class)) {
+                Method m = meta.getWriteMethod(name);
+                if (m != null) {
+                    // The UIComponent backing this CompositeComponent has a
+                    // property matching 'name'.  With a traditional UIComponent,
+                    // we'd push the ValueExpression no matter if there is a
+                    // property or not to the ValueExpression map of the component.
+                    // Unfortunately, the spec requires us to store the ValueExpression
+                    // in the attributes map of the composite component.   The problem
+                    // with this is the put() operation of the attributes map will
+                    // attempt to set push the provided value to a property, if found.
+                    // When this is the case, obviously, a ValueExpression won't be
+                    // the correct type.
+                    return new PropertyMetadata(meta.getPropertyType(name),
+                                                attribute,
+                                                m);
+                } else {
+                    return new AttributeMetadata(name,
+                                                 meta.getPropertyType(name),
+                                                 attribute);
+                }
+            }
+            return null;
+
+        }
+
+
+        // ------------------------------------------------------ Nested Classes
+
+
+        /**
+         * Coerces and pushes the resulting value to the underlying component
+         * property.
+         */
+        private static final class PropertyMetadata extends Metadata {
+
+            private Class<?> type;
+            private final TagAttribute attribute;
+            private final Method method;
+
+
+            // ---------------------------------------------------- Constructors
+
+
+            public PropertyMetadata(Class<?> type,
+                                    TagAttribute attribute,
+                                    Method method) {
+
+                this.type = ((type != null) ? type : Object.class);
+                this.attribute = attribute;
+                this.method = method;
+
+            }
+
+
+            // ------------------------------------------- Methods from Metadata
+
+
+            public void applyMetadata(FaceletContext ctx, Object instance) {
+
+                try {
+                    ValueExpression ve = attribute.getValueExpression(ctx, type);
+                    method.invoke(instance, ve.getValue(ctx.getFacesContext().getELContext()));
+                } catch (Exception e) {
+                    throw new FacesException(e);
+                }
+
+            }
+
+        } // END PropertyMetadata
+
+
+        /**
+         * Creates a ValueExpression instance and stores it within the owning
+         * composite component attributes map.
+         */
+        private static final class AttributeMetadata extends Metadata {
+
+            private final String name;
+            private final Class<?> type;
+            private final TagAttribute attribute;
+
+
+            // --------------------------------------------------- Construcutors
+
+
+            public AttributeMetadata(String name,
+                                     Class<?> type,
+                                     TagAttribute attribute) {
+
+                this.name = name;
+                this.type = ((type != null) ? type : Object.class);
+                this.attribute = attribute;
+
+            }
+
+
+            // ------------------------------------------- Methods from Metadata
+
+
+            public void applyMetadata(FaceletContext ctx, Object instance) {
+
+                // copy the VE directly to the attributes map of the component
+                ((UIComponent) instance).getAttributes().put(name, attribute.getValueExpression(ctx, type));
+
+            }
+
+        } // END AttributeMetadata
+
+    } // END CompositeComponentRule
+
+    
+    public static class CompositeAttributesCopyListener implements
            ComponentSystemEventListener, Serializable {
 
 
@@ -360,7 +616,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
          }
 
-    }
+    } // END CompositeAttributesCopyListener
     
     
     

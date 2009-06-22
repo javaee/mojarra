@@ -60,22 +60,14 @@ public class JavaTopLevelComponent extends UINamingContainer {
         this.item = item;
     }
 
-    private ValueExpression valExp;
+    private int intv;
 
-    public ValueExpression getValExp() {
-        return valExp;
+    public void setInt(int intv) {
+        this.intv = intv;
     }
 
-    public void setValExp(ValueExpression valExp) {
-        this.valExp = valExp;
-    }
-
-    public String getManualValExp() {
-        String result = null;
-        FacesContext context = FacesContext.getCurrentInstance();
-        ValueExpression exp = getValueExpression("valExp");
-        result = exp.getValue(context.getELContext()).toString();
-        return result;
+    public int getInt() {
+        return intv;
     }
 
 }

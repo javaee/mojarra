@@ -63,6 +63,8 @@
 
   <cc:attribute name="loginButtonLabel" default="Login " />
 
+  <cc:attribute name="int" type="int" requred="false" />
+
   <cc:editableValueHolder name="username" />
 
   <cc:actionSource name="loginAction" />
@@ -73,10 +75,7 @@
 
       <p>Get out java property of type String #{cc.item}</p>
 
-      <p>Get out java property of type ValueExpression.  Should be empty: #{cc.valExp}.</p>
-
-      <p>Call the special method that verifies the setValueExpression("valExp") has been called.
-         getValueExpression: #{cc.manualValExp}.</p>
+      <p>Get out java property of type int #{cc.int}</p>
 
       <p>
 

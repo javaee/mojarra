@@ -88,8 +88,7 @@ public class JavaTopLevelComponentTestCase extends AbstractTestCase {
         HtmlPage page = getPage("/faces/composite/javaTopLevelComponentUsingPage.xhtml?q=foo");
         String text = page.asText();
         assertTrue(-1 != text.indexOf("Get out java property of type String Smallberries"));
-        assertTrue(-1 != text.indexOf("Get out java property of type ValueExpression. Should be empty: ."));
-        assertTrue(-1 != text.indexOf("getValueExpression: foo."));
+        assertTrue(-1 != text.indexOf("Get out java property of type int 5"));
     }
 
     public void testDefaultActionAttribute() throws Exception {

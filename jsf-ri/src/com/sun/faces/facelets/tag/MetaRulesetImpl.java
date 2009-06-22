@@ -65,7 +65,7 @@ import java.util.logging.Logger;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class MetaRulesetImpl extends MetaRuleset {
+public class MetaRulesetImpl extends MetaRuleset {
 
     private final static Logger LOGGER = FacesLogger.FACELETS_META.getLogger();
     private final static WeakHashMap<Class, MetadataTarget> metadata =
@@ -192,10 +192,10 @@ public final class MetaRulesetImpl extends MetaRuleset {
     }
 
 
-    // --------------------------------------------------------- Private Methods
+    // ------------------------------------------------------- Protected Methods
 
-    
-    private MetadataTarget getMetadataTarget() {
+
+    protected MetadataTarget getMetadataTarget() {
 
         MetadataTarget meta = metadata.get(type);
         if (meta == null) {
@@ -211,6 +211,9 @@ public final class MetaRulesetImpl extends MetaRuleset {
 
     }
 
+
+
+    // --------------------------------------------------------- Private Methods
 
     
     private final static Metadata NONE = new Metadata() {

@@ -65,7 +65,7 @@ import java.util.Map;
  * @author Jacob Hookom
  * @version $Id$
  */
-final class MetadataTargetImpl extends MetadataTarget {
+public class MetadataTargetImpl extends MetadataTarget {
 
     private final Map pd;
     private final Class type;
