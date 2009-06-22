@@ -667,7 +667,7 @@ public class WebConfiguration {
         ),
         ResourceExcludes(
             ResourceHandler.RESOURCE_EXCLUDES_PARAM_NAME,
-            ResourceHandler.RESOURCE_EXCLUDES_DEFAULT_VALUE
+            ResourceHandler.RESOURCE_EXCLUDES_DEFAULT_VALUE + " .groovy"
         ),
         NumberOfViews(
               "com.sun.faces.numberOfViewsInSession",
