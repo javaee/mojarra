@@ -3,13 +3,13 @@ var enabledImage = 'resources/button2.gif';
 
 
 var errorMsg = function errorMsg(data) {
-    alert("Error Name: "+data.name);
+    alert("Error: "+data.status);
 };
 
 var msg = function msg(data) {
-    if (data.name === 'begin') {
+    if (data.status === 'begin') {
         activeCell(document.createTextNode(data.source.id));
-    } else if (data.name === 'complete') {
+    } else if (data.status === 'complete') {
         removeCell(document.createTextNode(data.source.id));
     }
 };
@@ -74,9 +74,9 @@ var statusUpdate = function statusUpdate(data) {
     var text = statusArea.value;
     text = text + "Name: "+data.source.id;
     if (data.type === "event") {
-        text = text +" Event: "+data.name+"\n";
+        text = text +" Event: "+data.status+"\n";
     } else {  // otherwise, it's an error
-        text = text + " Error: "+data.name+"\n";
+        text = text + " Error: "+data.status+"\n";
     }
     statusArea.value = text;
 };
