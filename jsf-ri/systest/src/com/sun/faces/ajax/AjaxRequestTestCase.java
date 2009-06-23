@@ -494,8 +494,8 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         String statusArea = "Name: countForm:button1 Event: begin ";
         statusArea = statusArea + "Name: countForm:button1 Event: complete " ;
         statusArea = statusArea + "Name: countForm:button1 Event: success " ;
-        System.out.println(statusArea);
-        System.out.println(getText("statusArea"));
+        //System.out.println(statusArea);
+        //System.out.println(getText("statusArea"));
         assertTrue(check("statusArea",statusArea));
     }
 
