@@ -304,7 +304,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             } else {
                 var d = $(id);
                 if (!d) {
-                    throw new Error("During update: " + id + " not found");
+                    throw new Error("jsf.ajax.response: " + id + " not found");
                 }
                 var parent = d.parentNode;
                 var temp = document.createElement('div');
@@ -631,18 +631,18 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Assumes that the request has completed.
          * @ignore
          */
-        var sendError = function sendError(request, context, status, description, serverErrorName, serverErrorMessage) {
+        var sendError = function sendError(request, context, name, serverErrorName, serverErrorMessage) {
 
             // Possible errornames:
             // httpError
             // emptyResponse
-            // serverError  
+            // serverError  RELEASE_PENDING or facesError?
             // malformedXML
 
             var sent = false;
             var data = {};  // data payload for function
             data.type = "error";
-            data.status = status;
+            data.name = name;
             // RELEASE_PENDING won't work in response
             data.source = context.source;
             data.responseCode = request.status;
@@ -651,19 +651,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             // RELEASE_PENDING won't work in response
             data.responseText = request.responseText;
 
-            if (description) {
-                data.description = description;
-            } else if (status == "httpError") {
-                data.description = "There was an error communicating with the server, status: "+data.responseCode;
-            } else if (status == "serverError") {
-                data.description = serverErrorMessage;
-            } else if (status == "emptyResponse") {
-                data.description = "An emply response was received from the server.  Check server error logs.";
-            } else if (status == "malformedXML") {
-                data.description = "An invalid XML response was received from the server.";                
-            }
-
-            if (status == "serverError") {
+            if (name == "serverError") {
                 data.errorName = serverErrorName;
                 data.errorMessage = serverErrorMessage;
             }
@@ -682,10 +670,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
 
             if (!sent && jsf.getProjectStage() === "Development") {
-                if (status == "serverError") {
-                    alert("serverError: " + serverErrorName + " " + serverErrorMessage);
-                } else {
-                    alert(status + ": "+ data.description);
+                switch (name) {
+                    case "httpError":
+                        alert("httpError " + request.status);
+                        break;
+                    case "serverError":
+                        alert("serverError: " + serverErrorName + " " + serverErrorMessage);
+                        break;
+                    default:
+                        alert("Error " + name);
+                        break;
                 }
             }
         };
@@ -695,13 +689,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Request is assumed to have completed, except in the case of event = 'begin'.
          * @ignore
          */
-        var sendEvent = function sendEvent(request, context, status) {
+        var sendEvent = function sendEvent(request, context, name) {
 
             var data = {};
             data.type = "event";
-            data.status = status;
+            data.name = name;
             data.source = context.source;
-            if (status !== 'begin') {
+            if (name !== 'begin') {
                 data.responseCode = request.status;
                 // RELEASE_PENDING pass a copy, not a reference
                 data.responseXML = request.responseXML;
@@ -1264,7 +1258,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 if (responseType.nodeName === "error") { // it's an error
                     var errorName = responseType.firstChild.firstChild.nodeValue;
                     var errorMessage = responseType.firstChild.nextSibling.firstChild.nodeValue;
-                    sendError(request, context, "serverError", null, errorName, errorMessage);
+                    sendError(request, context, "serverError", errorName, errorMessage);
                     return;
                 }
 
@@ -1276,7 +1270,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
                 if (responseType.nodeName !== "changes") {
-                    sendError(request, context, "malformedXML", "Top level node must be one of: changes, redirect, error, received: "+responseType.nodeName+" instead.");
+                    sendError(request, context, "malformedXML");
                     return;
                 }
 
@@ -1305,12 +1299,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             // RELEASE_PENDING no action?
                                 break;
                             default:
-                                sendError(request, context, "malformedXML", "Changes allowed are: update, delete, insert, attributes, eval, extension.  Received "+changes[i].nodeName+" instead.");
+                                sendError(request, context, "malformedXML");
                                 return;
                         }
                     }
                 } catch (ex) {
-                    sendError(request, context, "malformedXML", ex.message);
+                    sendError(request, context, "malformedXML");
                     return;
                 }
                 sendEvent(request, context, "success");

@@ -120,22 +120,4 @@ public class AjaxErrorTestCase extends AbstractTestCase {
 
     }
 
-    public void testAjaxMalformedXMLError() throws Exception {
-
-        List<String> collectedAlerts = new ArrayList<String>(1);
-        client.setAlertHandler(new CollectingAlertHandler(collectedAlerts));
-
-        HtmlPage page = getPage("/faces/ajax/ajaxMalformedXML.xhtml");
-
-        HtmlSubmitInput button = (HtmlSubmitInput)
-              getInputContainingGivenId(page, "form:error");
-        assertNotNull(button);
-
-        button.click();
-
-        assertEquals(1, collectedAlerts.size());
-        assertEquals("malformedXML: During update: doesntExist not found", collectedAlerts.get(0));
-
-    }
-
 }

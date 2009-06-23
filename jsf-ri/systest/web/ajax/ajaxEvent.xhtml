@@ -53,9 +53,9 @@ var statusUpdate = function statusUpdate(data) {
     var text = statusArea.value;
     text = text + "Name: "+data.source.id;
     if (data.type === "event") {
-        text = text +" Event: "+data.status+" ";
+        text = text +" Event: "+data.name+" ";
     } else {  // otherwise, it's an error
-        text = text + " Error: "+data.status+" ";
+        text = text + " Error: "+data.name+" ";
     }
     statusArea.value = text;
 }
