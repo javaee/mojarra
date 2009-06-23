@@ -1089,8 +1089,9 @@ public class RenderKitUtils {
         } else {
             LOGGER.log(Level.WARNING,
                        "Unable to generate Facelets error page as the response has already been committed.");
+            LOGGER.log(Level.SEVERE, fe.toString(), fe);
         }
-        
+
     }
 
     // Check the request parameters to see whether an action event has

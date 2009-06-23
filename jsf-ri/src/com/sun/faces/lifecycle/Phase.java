@@ -91,15 +91,19 @@ public abstract class Phase {
             timer.startTiming();
         }
 
-        handleBeforePhase(context, listeners, event);
         try {
+            handleBeforePhase(context, listeners, event);
             if (!shouldSkip(context)) {
                 execute(context);
             }
         } catch (Throwable e) {
             queueException(context, e);
         } finally {
-            handleAfterPhase(context, listeners, event);
+            try {
+                handleAfterPhase(context, listeners, event);
+            } catch (Throwable e) {
+                queueException(context, e);
+            }
             // stop timing
             if (timer != null) {
                 timer.stopTiming();

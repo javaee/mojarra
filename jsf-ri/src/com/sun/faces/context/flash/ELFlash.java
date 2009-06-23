@@ -235,6 +235,22 @@ public class ELFlash extends Flash {
                 Cookie cookie = new Cookie(Constants.REDIRECT_AFTER_POST_ATTRIBUTE_NAME, "t");
                 cookie.setMaxAge(-1);
                 servletResponse.addCookie(cookie);
+                // Need special handling of the keepMessages functionality
+                // in the case of a redirect.  Normally the keepMessages cookie
+                // is set to expire on the next request, but for the redirect
+                // we need to keep the cookie for the GET that will be issued
+                // by the user-agent.  After the user-agent has sent the
+                // keepMessages cookie, it will be expired properly on the next
+                // request.
+                // Note that this has the side effect of this branch is that
+                // the keepMessages cookie is added again to the response
+                // (too bad there is no API to access cookies that have already
+                // been added).
+                if (isKeepMessages()) {
+                    Cookie keepMessages = new Cookie(Constants.FLASH_KEEP_ALL_REQUEST_SCOPED_DATA_ATTRIBUTE, "t");
+                    keepMessages.setMaxAge(-1);
+                    servletResponse.addCookie(keepMessages);
+                }
             } else {
                 /*****
                  * portletRequest = (PortletRequest) request;
@@ -322,7 +338,7 @@ public class ELFlash extends Flash {
         boolean isRedirect = this.isRedirect();
         if (null != allFacesMessages) {
             if (isRedirect) {
-                this.getThisRequestMap(context).put(Constants.FACES_MESSAGES_ATTRIBUTE_NAME,
+                this.getMapForCookie(context, true).put(Constants.FACES_MESSAGES_ATTRIBUTE_NAME,
                         allFacesMessages);
                 
             } else {
@@ -339,7 +355,7 @@ public class ELFlash extends Flash {
         List<FacesMessage> facesMessages;
         Map<String,Object> map;
 
-        if (null != (map = getMapForCookie(context))) {
+        if (null != (map = getMapForCookie(context, false))) {
             //noinspection unchecked
             if (null != (allFacesMessages = (Map<String, List<FacesMessage>>)
                          map.get(Constants.FACES_MESSAGES_ATTRIBUTE_NAME))) {
@@ -431,20 +447,24 @@ public class ELFlash extends Flash {
         
         Map<String,Object> result = innerMap.get(sequenceId.toString());
         if (null == result) {
-            result = new HashMap<String,Object>();
+            result = new HashMap<String,Object>(4);
             innerMap.put(sequenceId.toString(), result);
         }
         
         return result;
     }
     
-    private Map<String,Object> getMapForCookie(FacesContext context) {
+    private Map<String,Object> getMapForCookie(FacesContext context, boolean create) {
         String cookieName = 
                 getCookieValue(context.getExternalContext());
         Map<String,Object> result = null;
         
         if (null != cookieName) {
             result = innerMap.get(cookieName);
+            if (result == null && create) {
+                result = new HashMap<String,Object>(4);
+                innerMap.put(cookieName, result);
+            }
         }
         
         return result;
@@ -517,7 +537,7 @@ public class ELFlash extends Flash {
 
     public Object get(Object key) {
         FacesContext context = FacesContext.getCurrentInstance();        
-        Map<String,Object> map = this.isRedirect() ? getMapForCookie(context) : getThisRequestMap(context);
+        Map<String,Object> map = this.isRedirect() ? getMapForCookie(context, false) : getThisRequestMap(context);
         Object requestValue;
         Object result = null;
 
