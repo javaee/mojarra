@@ -60,7 +60,6 @@
     <property name="target.dir" value="target"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.lib.dir" value="${build.dir}/lib"/>
-    <property name="build.resources.dir" value="${build.dir}/javascript/resources/javax.faces"/>
     <property name="build.temp.dir" value="${build.dir}/temp"/>
     <property name="build.test.dir" value="${build.dir}/test"/>
     <property name="build.generate.dir" value="${build.dir}/generate"/>
@@ -109,7 +108,6 @@
         <mkdir dir="${build.javadocs.dir}"/>
         <mkdir dir="${build.managed-bean-javadocs.dir}"/>
         <mkdir dir="${build.generate.dir}"/>
-        <mkdir dir="${build.resources.dir}"/>
     </target>
 
     <target name="attributes"
@@ -176,13 +174,6 @@
                 <include name="*.dtd"/>
             </fileset>
         </copy>
-
-        <concat destfile="${build.resources.dir}/jsf.js" append="yes" fixlastline="yes">
-            <filelist dir="${resources.dir}">
-                <file name="jsf.js"/>
-                <file name="mojarra.js"/>
-            </filelist>
-        </concat>
 
     </target>
 
@@ -634,9 +625,6 @@ javax.faces.level=ALL
                             includes="**/*.class,**/*.properties"/>
         <delete file="tmp.bnd"/>
 
-        <jar jarfile="${build.lib.dir}/${name}.jar" update="yes">
-            <metainf dir="${build.dir}/javascript"/>
-        </jar>
     </target>
 
 
