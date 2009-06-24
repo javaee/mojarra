@@ -87,15 +87,16 @@ import javax.faces.view.facelets.MetaRuleset;
 import javax.faces.view.facelets.Metadata;
 import javax.faces.view.facelets.MetadataTarget;
 import javax.faces.view.facelets.Tag;
-import javax.faces.view.facelets.MetaRule;
-import javax.faces.view.facelets.TagAttribute;
 import java.beans.PropertyDescriptor;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import javax.faces.FactoryFinder;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
@@ -241,13 +242,14 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         // ignore standard component attributes
         m.ignore("binding").ignore("id");
 
-        // Specialized rule for composite components
-        // NOTE: Switch this to ComponentRule.Instance once
-        //       the spec states composite component ValueExpressions
-        //       are to be stored in the ValueExpression map instead
-        //       of the component's attribute map.  Don't forget to
-        //       remove the CompositeComponentRule class in the process.
-        m.addRule(CompositeComponentRule.INSTANCE);
+
+        // We treat composite components the same as regular components with
+        // respect to where the ValueExpressions are stored.  The spec requires
+        // that composite component attribute expressions are to be stored in
+        // the composite component's attribute map - but doing so makes the
+        // composite component different from standard components.  There is no
+        // real reason to make this distinction.
+        m.addRule(ComponentRule.Instance);
 
         // if it's an ActionSource
         if (ActionSource.class.isAssignableFrom(type)) {
@@ -365,7 +367,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
                 super(type);
                 this.compBeanInfo = compBeanInfo;
-                
+
             }
 
 
@@ -426,139 +428,11 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                 } else {
                     return className;
                 }
-                
+
             }
         }
 
     } // END CompositeComponentMetaRuleset
-
-
-    /**
-     * This Rule is responsible for populating either properties of the
-     * composite component or it's attributes map.
-     */
-    private static final class CompositeComponentRule extends MetaRule {
-
-        static final CompositeComponentRule INSTANCE = new CompositeComponentRule();
-
-
-        // ----------------------------------------------- Methods from MetaRule
-
-
-        public Metadata applyRule(String name,
-                                  TagAttribute attribute,
-                                  MetadataTarget meta) {
-
-            if (meta.isTargetInstanceOf(UIComponent.class)) {
-                Method m = meta.getWriteMethod(name);
-                if (m != null) {
-                    // The UIComponent backing this CompositeComponent has a
-                    // property matching 'name'.  With a traditional UIComponent,
-                    // we'd push the ValueExpression no matter if there is a
-                    // property or not to the ValueExpression map of the component.
-                    // Unfortunately, the spec requires us to store the ValueExpression
-                    // in the attributes map of the composite component.   The problem
-                    // with this is the put() operation of the attributes map will
-                    // attempt to set push the provided value to a property, if found.
-                    // When this is the case, obviously, a ValueExpression won't be
-                    // the correct type.
-                    return new PropertyMetadata(meta.getPropertyType(name),
-                                                attribute,
-                                                m);
-                } else {
-                    return new AttributeMetadata(name,
-                                                 meta.getPropertyType(name),
-                                                 attribute);
-                }
-            }
-            return null;
-
-        }
-
-
-        // ------------------------------------------------------ Nested Classes
-
-
-        /**
-         * Coerces and pushes the resulting value to the underlying component
-         * property.
-         */
-        private static final class PropertyMetadata extends Metadata {
-
-            private Class<?> type;
-            private final TagAttribute attribute;
-            private final Method method;
-
-
-            // ---------------------------------------------------- Constructors
-
-
-            public PropertyMetadata(Class<?> type,
-                                    TagAttribute attribute,
-                                    Method method) {
-
-                this.type = ((type != null) ? type : Object.class);
-                this.attribute = attribute;
-                this.method = method;
-
-            }
-
-
-            // ------------------------------------------- Methods from Metadata
-
-
-            public void applyMetadata(FaceletContext ctx, Object instance) {
-
-                try {
-                    ValueExpression ve = attribute.getValueExpression(ctx, type);
-                    method.invoke(instance, ve.getValue(ctx.getFacesContext().getELContext()));
-                } catch (Exception e) {
-                    throw new FacesException(e);
-                }
-
-            }
-
-        } // END PropertyMetadata
-
-
-        /**
-         * Creates a ValueExpression instance and stores it within the owning
-         * composite component attributes map.
-         */
-        private static final class AttributeMetadata extends Metadata {
-
-            private final String name;
-            private final Class<?> type;
-            private final TagAttribute attribute;
-
-
-            // --------------------------------------------------- Construcutors
-
-
-            public AttributeMetadata(String name,
-                                     Class<?> type,
-                                     TagAttribute attribute) {
-
-                this.name = name;
-                this.type = ((type != null) ? type : Object.class);
-                this.attribute = attribute;
-
-            }
-
-
-            // ------------------------------------------- Methods from Metadata
-
-
-            public void applyMetadata(FaceletContext ctx, Object instance) {
-
-                // copy the VE directly to the attributes map of the component
-                ((UIComponent) instance).getAttributes().put(name, attribute.getValueExpression(ctx, type));
-
-            }
-
-        } // END AttributeMetadata
-
-    } // END CompositeComponentRule
 
     
     public static class CompositeAttributesCopyListener implements
