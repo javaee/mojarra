@@ -41,11 +41,12 @@
 package com.sun.faces.generate;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 
 import com.sun.faces.config.beans.AttributeBean;
 import com.sun.faces.config.beans.ComponentBean;
@@ -71,6 +72,18 @@ public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xsi:schemaLocation",
             "http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("version", JSP_VERSION);
+    }
+
+    private static Map<String,List<String>> COMPONENT_PROPERTY_EXCLUDES = new HashMap<String, List<String>>();
+    static {
+        COMPONENT_PROPERTY_EXCLUDES.put("body", 
+            Arrays.asList("converter","id","rendered","value"));
+        COMPONENT_PROPERTY_EXCLUDES.put("button", 
+	    Arrays.asList("converter","fragment"));
+        COMPONENT_PROPERTY_EXCLUDES.put("head", 
+            Arrays.asList("converter","id","rendered","value"));
+        COMPONENT_PROPERTY_EXCLUDES.put("link", 
+	    Arrays.asList("converter","fragment"));
     }
 
     // ------------------------------------------------------------ Constructors
@@ -222,6 +235,7 @@ public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
                 writer.writeText(getBodyContent(tagName));
                 writer.closeElement();
 
+                List excludeComponentProperties = COMPONENT_PROPERTY_EXCLUDES.get(tagName);
 
                 // Generate tag attributes
                 //
@@ -232,12 +246,16 @@ public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
 
                 PropertyBean[] properties = component.getProperties();
                 PropertyBean property;
-                if (component.isIgnore()) {
                     for (int i = 0, len = properties.length; i < len; i++) {
                         if (null == (property = properties[i])) {
                             continue;
                         }
                         if (!property.isTagAttribute()) {
+                            continue;
+                        }
+
+                        if (null != excludeComponentProperties && excludeComponentProperties.contains(
+                            property.getPropertyName())) {
                             continue;
                         }
 
@@ -307,7 +325,6 @@ public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
                         writer.closeElement(); // closes attribute element above
 
                     } // END property FOR loop
-                }
 
                 // Renderer Attributes Next...
                 //
