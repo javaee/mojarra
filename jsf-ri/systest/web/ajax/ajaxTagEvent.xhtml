@@ -54,9 +54,9 @@
     var text = statusArea.value;
     text = text + "Name: "+data.source.id;
     if (data.type === "event") {
-        text = text +" Event: "+data.name+" ";
+        text = text +" Event: "+data.status+" ";
     } else {  // otherwise, it's an error
-        text = text + " Error: "+data.name+" ";
+        text = text + " Error: "+data.status+" ";
     }
     statusArea.value = text;
 }
