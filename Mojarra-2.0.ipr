@@ -80,6 +80,9 @@
       <entry name="?*.tld" />
     </wildcardResourcePatterns>
   </component>
+  <component name="CopyrightManager" default="">
+    <module2copyright />
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
     <option name="REVERSE_PATCH" value="false" />
@@ -175,6 +178,11 @@
               <file url="file://$PROJECT_DIR$/jsf-demo/ajax-queue/target/ajax-queue/WEB-INF/web.xml" />
               <file url="file://$PROJECT_DIR$/jsf-demo/ajax-request/target/ajax-request/WEB-INF/web.xml" />
               <file url="file://$PROJECT_DIR$/jsf-demo/ezcomp02/target/jsf-ezcomp02/WEB-INF/web.xml" />
+            </files>
+          </module>
+          <module name="impl">
+            <files>
+              <file url="file://$PROJECT_DIR$/jsf-ri/build/target/test/WEB-INF/web.xml" />
             </files>
           </module>
         </modules>
@@ -524,6 +532,9 @@
     <option name="projectName" value="Mojarra-2.0" />
   </component>
   <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectKey">
+    <option name="state" value="https://mojarra.dev.java.net/svn/mojarra/trunk/Mojarra-2.0.ipr" />
+  </component>
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
@@ -815,6 +826,7 @@
       </map>
     </option>
     <option name="myVersion" value="124" />
+    <option name="mySupportsUserInfoFilter" value="true" />
   </component>
   <component name="SvnConfiguration">
     <option name="USER" value="" />
