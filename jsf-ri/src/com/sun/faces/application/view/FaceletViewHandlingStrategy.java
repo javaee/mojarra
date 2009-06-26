@@ -520,7 +520,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                         expr,
                                         expectedReturnType, expectedParameters);
                                 ((ActionSource2) target).setActionExpression(toApply);
-                                topLevelComponent.setValueExpression(attrName, null);
                             } else if (isActionListener) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -530,7 +529,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                         valueExpression.getExpressionString(),
                                         expectedReturnType, expectedParameters);
                                 ((ActionSource2) target).addActionListener(new MethodExpressionActionListener(toApply));
-                                topLevelComponent.setValueExpression(attrName, null);
                             } else if (isValidator) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -542,7 +540,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                         valueExpression.getExpressionString(),
                                         expectedReturnType, expectedParameters);
                                 ((EditableValueHolder) target).addValidator(new MethodExpressionValidator(toApply));
-                                topLevelComponent.setValueExpression(attrName, null);
                             } else if (isValueChangeListener) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -552,7 +549,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                         valueExpression.getExpressionString(),
                                         expectedReturnType, expectedParameters);
                                 ((EditableValueHolder) target).addValueChangeListener(new MethodExpressionValueChangeListener(toApply));
-                                topLevelComponent.setValueExpression(attrName, null);
                             }
                         } else {
                             valueExpression = (ValueExpression) attrValue;
@@ -623,10 +619,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                             toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                     valueExpression.getExpressionString(),
                                     expectedReturnType, expectedParameters);
-                            topLevelComponent.setValueExpression(attrName, null);
                             topLevelComponent.getAttributes().put(attrName, toApply);
                         }
                     }
+                    topLevelComponent.setValueExpression(cur.getName(), null);
                 }
             }
         }

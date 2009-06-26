@@ -158,6 +158,13 @@ public class RequestStateManager {
     public static final String DISABLED_VALIDATORS =
           "com.sun.faces.DISABLED_VALIDATORS";
 
+    /**
+     * Used to aid in the evaluation of expressions passed between
+     * nested composite components.
+     */
+    public static final String COMPCOMP_STACK =
+          "com.sun.faces.COMPCOMP_STACK";
+
 
     private static final String[] RENDER_RESPONSE = {
           SCRIPT_STATE

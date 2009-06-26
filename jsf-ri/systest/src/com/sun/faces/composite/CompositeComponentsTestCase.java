@@ -297,6 +297,28 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
     }
 
 
+    public void testNesting04() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/nesting04.xhtml");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(3);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(3, spans.size());
+        assertEquals("static", spans.get(0).asText());
+        assertEquals("com.sun.faces.context.FacesContextImpl", spans.get(1).asText());
+        assertEquals("form:nesting4", spans.get(2).asText());
+
+        HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "form:sub");
+        page = input.click();
+        spans.clear();
+         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(3, spans.size());
+        assertEquals("static", spans.get(0).asText());
+        assertEquals("com.sun.faces.context.FacesContextImpl", spans.get(1).asText());
+        assertEquals("form:nesting4", spans.get(2).asText());
+        
+    }
+
+
     public void testChildrenAndFacets() throws Exception {
 
         HtmlPage page = getPage("/faces/composite/childrenfacets.xhtml");
