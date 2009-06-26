@@ -40,17 +40,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
       xmlns:h="http://java.sun.com/jsf/html">
 <h:head id="head">
-    <title>resourcereslocation</title>
+    <title>resourcereslocation 3</title>
 </h:head>
 <h:body id="body">
     <h:form id="form">
-        <h:outputScript id="js1" name="simple.js" target="#{param.location}"/>
-        <!-- duplicate added to ensure that duplicates aren't rendered twice -->
-        <h:outputScript id="js2" name="simple.js" target="#{param.location}"/>
-        <!-- target should have no impact on outputStylesheet -->
-        <h:outputStylesheet id="css1" name="simple.css" target="#{param.location}"/>
-        <!-- duplicate added to ensure that duplicates aren't rendered twice -->
-        <h:outputStylesheet id="css2" name="simple.css" target="#{param.location}"/>
+        <h:outputStylesheet id="css" name="simple.css"/>
+        <h:outputScript id="js" name="simple.js" target="#{param.location}"/>
     </h:form>
 </h:body>
 </html>
