@@ -34,6 +34,22 @@
       <maximumStackSize value="32" />
       <properties />
     </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/jsf-demo/ajax-component/build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/jsf-demo/basic-ezcomp/build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
+      <properties />
+    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -175,8 +191,11 @@
         <modules>
           <module name="demo">
             <files>
+              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-component/build/ajax-component/WEB-INF/web.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-component/web/WEB-INF/web.xml" />
               <file url="file://$PROJECT_DIR$/jsf-demo/ajax-queue/target/ajax-queue/WEB-INF/web.xml" />
               <file url="file://$PROJECT_DIR$/jsf-demo/ajax-request/target/ajax-request/WEB-INF/web.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/basic-ezcomp/build/basic-ezcomp/WEB-INF/web.xml" />
               <file url="file://$PROJECT_DIR$/jsf-demo/ezcomp02/target/jsf-ezcomp02/WEB-INF/web.xml" />
             </files>
           </module>
@@ -702,117 +721,6 @@
         <entry key="$PROJECT_DIR$">
           <value>
             <SvnBranchConfiguration>
-              <option name="branchMap">
-                <map>
-                  <entry key="https://mojarra.dev.java.net/svn/mojarra/branches">
-                    <value>
-                      <list>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1224597241668" />
-                          <option name="revision" value="5570" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/AJAX_PFD_BRANCH" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1224191764940" />
-                          <option name="revision" value="5553" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/JSF2_0_EDR2_BRANCH" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1218822794300" />
-                          <option name="revision" value="5184" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/AJAX_293_BRANCH" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1218130455985" />
-                          <option name="revision" value="5142" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/EZCOMP_ITERATION_4" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1212451663064" />
-                          <option name="revision" value="4848" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/EZCOMP_JAVAONE_2008" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1209737223597" />
-                          <option name="revision" value="4812" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/AJAX_JAVAONE_2008" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1209670597105" />
-                          <option name="revision" value="4804" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/AJAX_298_JAVAONE_2008" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1193247640744" />
-                          <option name="revision" value="1" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/README" />
-                        </SvnBranchItem>
-                      </list>
-                    </value>
-                  </entry>
-                  <entry key="https://mojarra.dev.java.net/svn/mojarra/tags">
-                    <value>
-                      <list>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1224191999201" />
-                          <option name="revision" value="5554" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/JSF_2_0_0_EDR2_B03" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1224102420158" />
-                          <option name="revision" value="5550" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/2.0.0-B02-EDR2" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1218826456380" />
-                          <option name="revision" value="5188" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/PRE_FACELETS_INTEGRATION" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1218825591112" />
-                          <option name="revision" value="5186" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/trunk_before_AJAX_293_BRANCH_20080815" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1218131352012" />
-                          <option name="revision" value="5144" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/trunk_before_EZCOMP_ITERATION_4_SNAPSHOT_20080807" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1218130780916" />
-                          <option name="revision" value="5143" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/EZCOMP_ITERATION_4_SNAPSHOT_20080807" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1217422209783" />
-                          <option name="revision" value="5102" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/EZCOMP_ITERATION_4_SNAPSHOT_20080730" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1214331443105" />
-                          <option name="revision" value="4994" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/2.0.0-B01-EDR1" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1212004716496" />
-                          <option name="revision" value="4832" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/EZCOMP_JAVAONE_20080528" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1211331942963" />
-                          <option name="revision" value="4829" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/EZCOMP_JAVAONE_20080520" />
-                        </SvnBranchItem>
-                        <SvnBranchItem>
-                          <option name="creationDateMillis" value="1193247640744" />
-                          <option name="revision" value="1" />
-                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/README" />
-                        </SvnBranchItem>
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
               <option name="branchUrls">
                 <list>
                   <option value="https://mojarra.dev.java.net/svn/mojarra/branches" />

@@ -137,7 +137,63 @@
             <source>
                 <label>Controller Bean</label>
                 <path>/WEB-INF/classes/switchlist/SwitchlistController.java</path>
-            </source>        </sources>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Editable Text Component</name>
+        <page>edittext.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/edittext.xhtml</path>
+            </source>
+            <source>
+                <label>Component CSS</label>
+                <path>/resources/editText/styles.css</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/editText/editText.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/editText/editText.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/dataholding/StringHolder.java</path>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Poll via Tag Component</name>
+        <page>polltag.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/polltag.xhtml</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/polltag/poll.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/polltag/poll.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/dataholding/Count.java</path>
+            </source>
+
+        </sources>
     </demo>
 
 </demo-info>

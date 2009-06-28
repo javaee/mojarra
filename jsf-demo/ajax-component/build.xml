@@ -34,7 +34,7 @@
  holder.
 -->
 
-<project name="ajax-switchlist" default="build" basedir=".">
+<project name="ajax-component" default="build" basedir=".">
    
 
     <property file="${user.home}/build.properties"/> 
@@ -42,8 +42,8 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     
     <!-- Configure the context path for this application -->
-    <property name="context.path" value="/ajax-switchlist"/>
-    <property name="example" value="ajax-switchlist"/>
+    <property name="context.path" value="/ajax-component"/>
+    <property name="example" value="ajax-component"/>
     <property name="build" value="${basedir}/build"/>   
 
     <!-- Location dependent jars -->

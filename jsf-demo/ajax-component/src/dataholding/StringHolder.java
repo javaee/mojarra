@@ -1,4 +1,4 @@
-package editexample;
+package dataholding;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
