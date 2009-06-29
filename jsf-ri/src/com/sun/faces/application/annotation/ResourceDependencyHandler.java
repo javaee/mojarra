@@ -2,6 +2,8 @@ package com.sun.faces.application.annotation;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 
 import javax.el.ValueExpression;
 import javax.faces.application.ResourceDependency;
@@ -10,6 +12,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.el.ELUtils;
+import com.sun.faces.util.RequestStateManager;
 
 /**
  * {@link RuntimeAnnotationHandler} responsible for processing {@link ResourceDependency} annotations.
@@ -94,9 +97,12 @@ class ResourceDependencyHandler implements RuntimeAnnotationHandler {
      * @return <code>true</code> if the {@link ResourceDependency} has been
      *  processed, otherwise <code>false</code>
      */
+    @SuppressWarnings({"unchecked"})
     private boolean hasBeenProcessed(FacesContext ctx, ResourceDependency dep) {
 
-        return (ctx.getAttributes().containsKey(dep));
+        Set<ResourceDependency> dependencies = (Set<ResourceDependency>)
+              RequestStateManager.get(ctx, RequestStateManager.PROCESSED_RESOURCE_DEPENDENCIES);
+        return ((dependencies != null) && dependencies.contains(dep));
 
     }
 
@@ -134,9 +140,16 @@ class ResourceDependencyHandler implements RuntimeAnnotationHandler {
      * @param ctx the {@link FacesContext} for the current request
      * @param dep the {@link ResourceDependency}
      */
+    @SuppressWarnings({"unchecked"})
     private void markProcssed(FacesContext ctx, ResourceDependency dep) {
 
-        ctx.getAttributes().put(dep, dep);
+        Set<ResourceDependency> dependencies = (Set<ResourceDependency>)
+              RequestStateManager.get(ctx, RequestStateManager.PROCESSED_RESOURCE_DEPENDENCIES);
+        if (dependencies == null) {
+            dependencies = new HashSet<ResourceDependency>(6);
+            RequestStateManager.set(ctx, RequestStateManager.PROCESSED_RESOURCE_DEPENDENCIES, dependencies);
+        }
+        dependencies.add(dep);
         
     }
 
