@@ -54,7 +54,6 @@ function init(id, inc, to, exe, rend) {
     }
 
     var poll = function poll() {
-        var hiddenID = componentID + ":" + "hidden";
         jsf.ajax.request(componentID, null, {execute: execute, render: render});
         if (timeout != -1) {
             // Not an accurate timeout - but simple to compute
