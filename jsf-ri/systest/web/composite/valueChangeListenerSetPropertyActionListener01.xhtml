@@ -54,7 +54,7 @@
       <f:valueChangeListener binding="#{valueChangeSetPropertyActionListenerBean}" for="value" />
 
       <f:setPropertyActionListener for="submit" 
-         value="#{valueChangeSetPropertyActionListenerBean.currentTimeMillis}" 
+         value="#{valueChangeSetPropertyActionListenerBean.nanoTime}" 
          target="#{flash.note}" />
 
    </ez:valueChangeSetPropertyActionListener>
@@ -64,7 +64,7 @@
    <p>Property set by setPropertyActionListener:<h:outputText value="#{flash.note}" />; </p>
 
    <p>System.currentTimeMillis():<h:outputText 
-       value="#{valueChangeSetPropertyActionListenerBean.currentTimeMillis}" />;</p>
+       value="#{valueChangeSetPropertyActionListenerBean.nanoTime}" />;</p>
 
 
 </h:form>

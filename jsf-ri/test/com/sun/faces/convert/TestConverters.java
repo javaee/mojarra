@@ -776,10 +776,10 @@ public class TestConverters extends JspFacesTestCase {
         assertTrue(exceptionThrown);
     }
 
-    public void testDateTimeConverterGMTTimzeZone() throws Exception {
+    public void testDateTimeConverterGMTTimeZone() throws Exception {
 
         UIInput input = new UIInput();
-        DateFormat df = DateFormat.getDateTimeInstance();
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.ENGLISH);
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date now = new Date();
         String formatted = df.format(now);
@@ -814,7 +814,7 @@ public class TestConverters extends JspFacesTestCase {
                                     application,
                                     TimeZone.getDefault());
         UIInput input = new UIInput();
-        DateFormat df = DateFormat.getDateTimeInstance();
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.ENGLISH);
         df.setTimeZone(TimeZone.getDefault());
         Date now = new Date();
         String formatted = df.format(now);
