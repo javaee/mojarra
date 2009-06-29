@@ -38,20 +38,20 @@
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jsf/mojarra/extensions" prefix="mjx" %>
-
-<f:view>
 
 <html>
 
 <head>
     <title>Welcome to CarStore</title>
-    <mjx:outputStyle name="styles/stylesheet.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/stylesheet.css">
 </head>
 
 <body bgcolor="white">
+<f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
+<f:view>
     <h:form>
-        <h:graphicImage url="#{resource['images/cardemo.jpg']}"/>
+        <h:graphicImage url="/images/cardemo.jpg"/>
 
         <h:panelGrid id="thanksPanel" columns="1" footerClass="subtitle"
                      headerClass="subtitlebig" styleClass="medium"

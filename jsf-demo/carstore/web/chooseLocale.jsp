@@ -36,18 +36,20 @@
 
 <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://java.sun.com/blueprints/ee5/components/ui" prefix="d" %>
-<%@ taglib uri="http://java.sun.com/jsf/mojarra/extensions" prefix="mjx" %>
-
-<f:view>
 <html>
 <head>
     <title>CarStore</title>
-    <mjx:outputStyle name="styles/stylesheet.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/stylesheet.css">
 </head>
 
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/blueprints/ee5/components/ui" prefix="d" %>
+
+<f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
+
+<f:view>
 <h:form>
 
     <h:panelGrid columns="1"
@@ -58,12 +60,12 @@
                  summary="#{bundle.chooseLocale}"
                  title="#{bundle.chooseLocale}">
 
-        <h:graphicImage url="#{resource['images/cardemo.jpg']}"/>
+        <h:graphicImage url="/images/cardemo.jpg"/>
 
         <h:outputText styleClass="maintitle"
                       value="#{bundle.chooseLocale}"/>
 
-        <h:graphicImage id="mapImage" url="#{resource['images/world.jpg']}"
+        <h:graphicImage id="mapImage" url="/images/world.jpg"
                         alt="#{bundle.chooseLocale}"
                         usemap="#worldMap"/>
 
@@ -71,20 +73,20 @@
                action="storeFront"
                actionListener="#{carstore.chooseLocaleFromMap}">
             <d:area id="NAmerica" value="#{NA}"
-                    onmouseover="/resources/images/world_namer.jpg"
-                    onmouseout="/resources/images/world.jpg"
+                    onmouseover="/images/world_namer.jpg"
+                    onmouseout="/images/world.jpg"
                     targetImage="mapImage"/>
             <d:area id="SAmerica" value="#{SA}"
-                    onmouseover="/resources/images/world_samer.jpg"
-                    onmouseout="/resources/images/world.jpg"
+                    onmouseover="/images/world_samer.jpg"
+                    onmouseout="/images/world.jpg"
                     targetImage="mapImage"/>
             <d:area id="Germany" value="#{gerA}"
-                    onmouseover="/resources/images/world_germany.jpg"
-                    onmouseout="/resources/images/world.jpg"
+                    onmouseover="/images/world_germany.jpg"
+                    onmouseout="/images/world.jpg"
                     targetImage="mapImage"/>
             <d:area id="France" value="#{fraA}"
-                    onmouseover="/resources/images/world_france.jpg"
-                    onmouseout="/resources/images/world.jpg"
+                    onmouseover="/images/world_france.jpg"
+                    onmouseout="/images/world.jpg"
                     targetImage="mapImage"/>
         </d:map>
 
