@@ -60,6 +60,10 @@
         <h:commandButton id="button1" value="Echo"
                          onclick="return buttonpush('form1:out1 form1:in1', 'form1:button1 form1:in1', this, event);"/>
         <br/>
+        <!-- Test using a valid string as an identifier, instead of an element -->
+        <h:commandButton id="button2" value="Echo"
+                         onclick="return buttonpush('form1:out1 form1:in1', 'form1:button2 form1:in1', 'form1:button2', event);"/>
+        <br/>
         <!-- Resets the string, refreshes the form, but not the page -->
         <h:commandButton id="reset" value="reset"
                             onclick="return resetpush(this, event);"

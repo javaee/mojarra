@@ -73,6 +73,7 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
     }
 
 
+    // Test basic ajax functionality
     public void testAjaxEcho() throws Exception {
         getPage("/faces/ajax/ajaxEcho.xhtml");
         System.out.println("Start ajax echo test");
@@ -88,6 +89,27 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
         HtmlPage lastpage = (HtmlPage) button1.click();
+
+        // Check that the ajax request succeeds
+        checkTrue("form1:out1","hello");
+    }
+
+    // Test using a valid string as the request identifier, instead of an element
+    public void testAjaxEchoWithStringId() throws Exception {
+        getPage("/faces/ajax/ajaxEcho.xhtml");
+        System.out.println("Start ajax echo test");
+
+        // First we'll check the first page was output correctly
+        checkTrue("form1:out1","");
+        checkTrue("form1:in1","");
+
+        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+
+        in1.type("hello");
+
+        // Submit the ajax request
+        HtmlSubmitInput button2 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button2");
+        HtmlPage lastpage = (HtmlPage) button2.click();
 
         // Check that the ajax request succeeds
         checkTrue("form1:out1","hello");
