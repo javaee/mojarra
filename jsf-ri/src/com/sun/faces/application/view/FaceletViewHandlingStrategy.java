@@ -83,11 +83,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
+import javax.el.MethodInfo;
+import javax.el.ELContext;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.event.MethodExpressionActionListener;
 import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.validator.MethodExpressionValidator;
 import javax.faces.view.ActionSource2AttachedObjectHandler;
 import javax.faces.view.ActionSource2AttachedObjectTarget;
@@ -519,7 +522,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                 toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                         expr,
                                         expectedReturnType, expectedParameters);
-                                ((ActionSource2) target).setActionExpression(toApply);
+                                ((ActionSource2) target).setActionExpression(new ContextualCompositeMethodExpression(toApply));
                             } else if (isActionListener) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -528,7 +531,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                 toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                         valueExpression.getExpressionString(),
                                         expectedReturnType, expectedParameters);
-                                ((ActionSource2) target).addActionListener(new MethodExpressionActionListener(toApply));
+                                MethodExpression noArg = expressionFactory.createMethodExpression(context.getELContext(),
+                                                                                                  valueExpression.getExpressionString(),
+                                                                                                  expectedReturnType, new Class[0]);
+                                ((ActionSource2) target).addActionListener(
+                                      new MethodExpressionActionListener(
+                                            new ContextualCompositeMethodExpression(toApply),
+                                            new ContextualCompositeMethodExpression(noArg)));
                             } else if (isValidator) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -539,7 +548,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                 toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                         valueExpression.getExpressionString(),
                                         expectedReturnType, expectedParameters);
-                                ((EditableValueHolder) target).addValidator(new MethodExpressionValidator(toApply));
+                                ((EditableValueHolder) target).addValidator(
+                                      new MethodExpressionValidator(
+                                            new ContextualCompositeMethodExpression(toApply)));
                             } else if (isValueChangeListener) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -548,7 +559,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                 toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                         valueExpression.getExpressionString(),
                                         expectedReturnType, expectedParameters);
-                                ((EditableValueHolder) target).addValueChangeListener(new MethodExpressionValueChangeListener(toApply));
+                                MethodExpression noArg = expressionFactory.createMethodExpression(context.getELContext(),
+                                                                                                  valueExpression.getExpressionString(),
+                                                                                                  expectedReturnType, new Class[0]);
+                                ((EditableValueHolder) target).addValueChangeListener(
+                                      new MethodExpressionValueChangeListener(
+                                            new ContextualCompositeMethodExpression(toApply),
+                                            new ContextualCompositeMethodExpression(noArg)));
                             }
                         } else {
                             valueExpression = (ValueExpression) attrValue;
@@ -619,7 +636,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                             toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                     valueExpression.getExpressionString(),
                                     expectedReturnType, expectedParameters);
-                            topLevelComponent.getAttributes().put(attrName, toApply);
+                            topLevelComponent.getAttributes().put(attrName, new ContextualCompositeMethodExpression(toApply));
                         }
                     }
                     topLevelComponent.setValueExpression(cur.getName(), null);
@@ -1050,6 +1067,122 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     // ---------------------------------------------------------- Nested Classes
+
+
+    /**
+     * Wrapper <code>MethodExpression</code> implementation to cope with MethodExpressions
+     * being mapped via #{cc.attrs} expressions.
+     */
+    private static final class ContextualCompositeMethodExpression extends MethodExpression {
+
+        private MethodExpression delegate;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        public ContextualCompositeMethodExpression(MethodExpression delegate) {
+
+            this.delegate = delegate;
+
+        }
+
+
+        // --------------------------------------- Methods from MethodExpression
+
+
+        public MethodInfo getMethodInfo(ELContext elContext) {
+
+            FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
+            boolean pushed = pushCompositeComponent(ctx);
+            try {
+                return delegate.getMethodInfo(elContext);
+            } finally {
+                if (pushed) {
+                    popCompositeComponent(ctx);
+                }
+            }
+
+        }
+
+        public Object invoke(ELContext elContext, Object[] objects) {
+
+            FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
+            boolean pushed = pushCompositeComponent(ctx);
+            try {
+                return delegate.invoke(elContext, objects);
+            } finally {
+                if (pushed) {
+                    popCompositeComponent(ctx);
+                }
+            }
+
+        }
+
+
+        // --------------------------------------------- Methods from Expression
+
+        public String getExpressionString() {
+            return delegate.getExpressionString();
+        }
+
+        @SuppressWarnings({"EqualsWhichDoesntCheckParameterClass"})
+        public boolean equals(Object o) {
+            return delegate.equals(o);
+        }
+
+        public int hashCode() {
+            return delegate.hashCode();
+        }
+
+        public boolean isLiteralText() {
+            return delegate.isLiteralText();
+        }
+
+
+        // ----------------------------------------------------- Private Methods
+
+
+        private boolean pushCompositeComponent(FacesContext ctx) {
+
+            UIComponent ccp = UIComponent.getCompositeComponentParent(UIComponent.getCurrentCompositeComponent(ctx));
+            Stack<UIComponent> stack = getStack(ctx, true);
+            if (ccp != null) {
+                stack.push(ccp);
+                return true;
+            }
+            return false;
+
+        }
+
+
+        private void popCompositeComponent(FacesContext ctx) {
+
+            Stack<UIComponent> stack = getStack(ctx, false);
+            if (stack == null) {
+                return;
+            }
+            if (!stack.isEmpty()) {
+                stack.pop();
+            }
+
+        }
+
+
+        @SuppressWarnings({"unchecked"})
+        private Stack<UIComponent> getStack(FacesContext ctx, boolean create) {
+
+            Stack<UIComponent> stack = (Stack<UIComponent>)
+                  RequestStateManager.get(ctx, RequestStateManager.COMPCOMP_STACK);
+            if (stack == null && create) {
+                stack = new Stack<UIComponent>();
+                RequestStateManager.set(ctx, RequestStateManager.COMPCOMP_STACK, stack);
+            }
+            return stack;
+
+        }
+
+    } // END ContextualCompositeMethodExpression
 
 
     /**
