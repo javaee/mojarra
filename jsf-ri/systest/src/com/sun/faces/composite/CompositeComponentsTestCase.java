@@ -41,6 +41,7 @@ import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.html.*;
 
+import javax.faces.component.html.HtmlInputText;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -338,6 +339,8 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
         page = getPage("/faces/composite/nesting05.xhtml");
         submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form4:command");
+        HtmlTextInput text = (HtmlTextInput) getInputContainingGivenId(page, "nesting6:nesting7:form4:input");
+        text.setValueAttribute("foo");
         page = submit.click();
         assertTrue(page.asText().contains("validator invoked"));
 
