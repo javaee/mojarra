@@ -192,7 +192,31 @@
                 <label>Managed Bean</label>
                 <path>/WEB-INF/classes/dataholding/Count.java</path>
             </source>
+        </sources>
+    </demo>
 
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Poll via Request Component</name>
+        <page>poll.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/poll.xhtml</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/poll/poll.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/poll/poll.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/dataholding/Count.java</path>
+            </source>
         </sources>
     </demo>
 
