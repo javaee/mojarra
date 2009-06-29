@@ -90,7 +90,6 @@ import javax.faces.component.EditableValueHolder;
 import javax.faces.event.MethodExpressionActionListener;
 import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.validator.MethodExpressionValidator;
 import javax.faces.view.ActionSource2AttachedObjectHandler;
 import javax.faces.view.ActionSource2AttachedObjectTarget;
@@ -461,32 +460,43 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                     
                     
                     String[] targetIds = targets.split(" ");
-                    
-                    for (String curTarget : targetIds) {
-                    
-                        String attrName = cur.getName();
-                        UIComponent target = topLevelComponent.findComponent(curTarget);
-                        // Find the attribute on the top level component
-                        Object attrValue = topLevelComponent.getValueExpression(attrName);
-                        // In all cases but one, the attrValue will be a ValueExpression.
-                        // The only case when it will not be a ValueExpression is
-                        // the case when the attrName is an action, and even then, it'll be a
-                        // ValueExpression in all cases except when it's a literal string.
+                    String attrName = cur.getName();
+                    Object attrValue = topLevelComponent
+                          .getValueExpression(attrName);
+                    // In all cases but one, the attrValue will be a ValueExpression.
+                    // The only case when it will not be a ValueExpression is
+                    // the case when the attrName is an action, and even then, it'll be a
+                    // ValueExpression in all cases except when it's a literal string.
+                    if (null == attrValue) {
+                        attrValue = cur.getValue("default");
                         if (null == attrValue) {
-                            attrValue = cur.getValue("default");
-                            if (null == attrValue) {
+                            ValueExpression req = (ValueExpression) cur.getValue("required");
+                            boolean required = ((req != null) ? Boolean.valueOf(req.getValue(context.getELContext()).toString()) : false);
+                            if (required) {
+                                Object location = topLevelComponent.getAttributes().get(UIComponent.VIEW_LOCATION_KEY);
+                                if (location == null) {
+                                    location = "";
+                                }
                                 throw new FacesException(
-                                        "Unable to find attribute with name \"" + attrName
-                                  + "\" in top level component in consuming page, "
-                                  + " or with default value in composite component.  "
-                                  + "Page author or composite component author error.");
+                                      // RELEASE_PENDING need a better message
+                                      location.toString()
+                                      + ": Unable to find attribute with name \""
+                                      + attrName
+                                      + "\" in top level component in consuming page, "
+                                      + " or with default value in composite component.  "
+                                      + "Page author or composite component author error.");
+                            } else {
+                                continue;
                             }
                         }
+                    }
 
-                        // lazily initialize this local variable
-                        if (null == expressionFactory) {
-                            expressionFactory = context.getApplication().getExpressionFactory();
-                        }
+                    // lazily initialize this local variable
+                    if (null == expressionFactory) {
+                        expressionFactory = context.getApplication().getExpressionFactory();
+                    }
+                    
+                    for (String curTarget : targetIds) {
 
                         // If the attribute is one of the pre-defined 
                         // MethodExpression attributes
@@ -506,7 +516,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                             }
                             // This is the inner component to which the attribute should 
                             // be applied
-                            target = topLevelComponent.findComponent(curTarget);
+                            UIComponent target = topLevelComponent.findComponent(curTarget);
                             if (null == target) {
                                 throw new FacesException(valueExpression.toString()
                                                          + " : Unable to re-target MethodExpression as inner component referenced by target id '"

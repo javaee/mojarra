@@ -465,6 +465,27 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         assertTrue("Inserted Text".equals(toplevelContent));
     }
 
+    public void testMethodExprNotRequired() throws Exception {
+
+        try {
+            getPage("/faces/composite/methodExprNotRequired.xhtml");
+        } catch (Exception e) {
+            fail("Exception thrown when compiling page methodExprNotRequired.");
+        }
+
+    }
+
+    public void testMethodExprRequired() throws Exception {
+
+        try {
+            getPage("/faces/composite/methodExprRequired.xhtml");
+            fail("No exceptio thrown when composite component was missing a required MethodExpression enabled attribute");
+        } catch (Exception e) {
+            
+        }
+
+    }
+
     
     // --------------------------------------------------------- Private Methods
 
