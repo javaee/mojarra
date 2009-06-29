@@ -136,13 +136,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     // ------------------------------------ Methods from ViewDeclarationLanguage
 
-     @Override
-     public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
+    @Override
+    public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
 
-         // 'null' return here means we're defaulting to the 1.2 style state saving.
-         return (context.getAttributes().containsKey("partialStateSaving") ? stateManagementStrategy : null);
+        // 'null' return here means we're defaulting to the 1.2 style state saving.
+        return (context.getAttributes().containsKey("partialStateSaving") ? stateManagementStrategy : null);
 
-     }
+    }
     
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, 
@@ -629,23 +629,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
-    private void retargetHandler(FacesContext context,
-                                 AttachedObjectHandler handler,
-                                 UIComponent targetComponent) {
-
-        if (UIComponent.isCompositeComponent(targetComponent)) {
-            // RELEASE_PENDING Not keen on calling CompositeComponentTagHandler here....
-            List<AttachedObjectHandler> nHandlers =
-                  CompositeComponentTagHandler
-                        .getAttachedObjectHandlers(targetComponent);
-            nHandlers.add(handler);
-            retargetAttachedObjects(context, targetComponent, nHandlers);
-        } else {
-            handler.applyAttachedObject(context, targetComponent);
-        }
-        
-    }
-
 
     /**
      * @see javax.faces.view.ViewDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
@@ -1022,7 +1005,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
-     private void updateStateSavingType(FacesContext ctx, String viewId) {
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void updateStateSavingType(FacesContext ctx, String viewId) {
 
         if (!ctx.getAttributes().containsKey("partialStateSaving")) {
             ctx.getAttributes().put("partialStateSaving",
@@ -1031,14 +1018,34 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
+
     private boolean usePartialSaving(String viewId) {
         return (partialStateSaving && !fullStateViewIds.contains(viewId));
     }
+
 
     private void doPostBuildActions(UIViewRoot root) {
         if (usePartialSaving(root.getViewId())) {
             stateManagementStrategy.notifyTrackChanges(root);    
         }
+    }
+
+
+    private void retargetHandler(FacesContext context,
+                                 AttachedObjectHandler handler,
+                                 UIComponent targetComponent) {
+
+        if (UIComponent.isCompositeComponent(targetComponent)) {
+            // RELEASE_PENDING Not keen on calling CompositeComponentTagHandler here....
+            List<AttachedObjectHandler> nHandlers =
+                  CompositeComponentTagHandler
+                        .getAttachedObjectHandlers(targetComponent);
+            nHandlers.add(handler);
+            retargetAttachedObjects(context, targetComponent, nHandlers);
+        } else {
+            handler.applyAttachedObject(context, targetComponent);
+        }
+
     }
 
 
