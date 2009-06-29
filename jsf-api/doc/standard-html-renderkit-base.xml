@@ -997,7 +997,6 @@
         <component-extension>
             <base-component-type>javax.faces.Output</base-component-type>
             <renderer-type>javax.faces.Head</renderer-type>
-            <ignore>true</ignore>
         </component-extension>
     </component>
 
@@ -1039,7 +1038,6 @@
         <component-extension>
             <base-component-type>javax.faces.Output</base-component-type>
             <renderer-type>javax.faces.Body</renderer-type>
-            <ignore>true</ignore>
         </component-extension>
     </component>
 
