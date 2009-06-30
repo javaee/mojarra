@@ -390,8 +390,7 @@ public class UIRepeat extends UINamingContainer {
         localModel.setRowIndex(index);
 
         if (this.index != -1 && this.var != null && localModel.isRowAvailable()) {
-            FacesContext faces = FacesContext.getCurrentInstance();
-            Map<String,Object> attrs = faces.getExternalContext().getRequestMap();
+            Map<String,Object> attrs = ctx.getExternalContext().getRequestMap();
             attrs.put(var, localModel.getRowData());
         }
 
