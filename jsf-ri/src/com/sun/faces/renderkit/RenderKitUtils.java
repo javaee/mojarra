@@ -1039,6 +1039,7 @@ public class RenderKitUtils {
             }
         } else {
             Iterator<String> clientIds = ctx.getClientIdsWithMessages();
+            int messageCount = 0;
             if (clientIds.hasNext()) {
                 //Display each message possibly not displayed.
                 StringBuilder builder = new StringBuilder();
@@ -1051,6 +1052,7 @@ public class RenderKitUtils {
                         if (message.isRendered()) {
                             continue;
                         }
+                        messageCount++;
                         builder.append("\n");
                         builder.append("sourceId=").append(clientId);
                         builder.append("[severity=(")
@@ -1061,7 +1063,9 @@ public class RenderKitUtils {
                               .append(message.getDetail()).append(")]");
                     }
                 }
-                LOGGER.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
+                if (messageCount > 0) {
+                    LOGGER.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
+                }
             }
         }
 
