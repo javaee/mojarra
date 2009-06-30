@@ -39,36 +39,21 @@
  */
 
 package javax.faces.component;
-import java.util.Iterator;
-import java.lang.reflect.InvocationTargetException;
-import javax.faces.application.FacesMessage;
-import javax.faces.el.ValueBinding;
-import javax.el.ValueExpression;
+
 import com.sun.faces.mock.MockValueBinding;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.io.IOException;
-
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.SystemEventListener;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.PostAddToViewEvent;
-import javax.faces.event.PreRenderComponentEvent;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.PostConstructViewMapEvent;
-import javax.faces.event.PostAddToViewEvent;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.faces.event.*;
+import javax.faces.validator.ValidatorException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 
 /**
@@ -101,6 +86,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     // Set up instance variables required by this test case.
+
     public void setUp() {
 
         // Set up the component under test
@@ -138,6 +124,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     // Test lifecycle management methods
+
     public void testLifecycleManagement() {
 
         checkLifecycleParentRendered();
@@ -197,7 +184,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         ebo.encodeBegin(ctx);
         assertEquals(UIComponent.getCurrentComponent(ctx), c2);
         ebo.encodeEnd(ctx); // if the component wasn't pushed
-                            // it shouldn't be popped.
+        // it shouldn't be popped.
         assertEquals(UIComponent.getCurrentComponent(ctx), c2);
         c2.encodeEnd(ctx);
         assertEquals(UIComponent.getCurrentComponent(ctx), c);
@@ -264,7 +251,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
-
     // Test recursive adding and removing child trees with ids
     public void testChildrenRecursive() {
 
@@ -302,20 +288,20 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
     public void testChildrenAndFacetsWithNullGetParent() throws Exception {
-	TestComponent child = new TestComponent() {
-		public UIComponent getParent() {
-		    return null;
-		}
-	    };
-	component.getChildren().add(child);
-	assertNull(component.getChildren().get(0).getParent());
-	TestComponent facet = new TestComponent() {
-		public UIComponent getParent() {
-		    return null;
-		}
-	    };
-	component.getFacets().put("nullParent", facet);
-	assertNull(component.getFacets().get("nullParent").getParent());
+        TestComponent child = new TestComponent() {
+            public UIComponent getParent() {
+                return null;
+            }
+        };
+        component.getChildren().add(child);
+        assertNull(component.getChildren().get(0).getParent());
+        TestComponent facet = new TestComponent() {
+            public UIComponent getParent() {
+                return null;
+            }
+        };
+        component.getFacets().put("nullParent", facet);
+        assertNull(component.getFacets().get("nullParent").getParent());
     }
 
 
@@ -466,32 +452,32 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         c.restoreState(facesContext, state);
         c.popComponentFromEL(facesContext);
         assertTrue(c.getListenersForEventClass(PostAddToViewEvent.class).size() == 1);
-        
+
     }
 
 
     public void testValueBindings() {
 
-	UIComponentBase test = (UIComponentBase) component;
+        UIComponentBase test = (UIComponentBase) component;
 
-	// generic attributes
-	request.setAttribute("foo", "bar");
+        // generic attributes
+        request.setAttribute("foo", "bar");
         Object result = test.getAttributes().get("childCount");
-	test.getAttributes().clear();
-	assertNull(test.getAttributes().get("baz"));
-	test.setValueBinding("baz", application.createValueBinding("#{foo}"));
-	assertEquals("bar", test.getAttributes().get("baz"));
-	test.getAttributes().put("baz", "bop");
-	assertEquals("bop", test.getAttributes().get("baz"));
-	test.getAttributes().remove("baz");
-	assertEquals("bar", test.getAttributes().get("baz"));
-	test.setValueBinding("baz", null);
-	assertNull(test.getAttributes().get("baz"));
+        test.getAttributes().clear();
+        assertNull(test.getAttributes().get("baz"));
+        test.setValueBinding("baz", application.createValueBinding("#{foo}"));
+        assertEquals("bar", test.getAttributes().get("baz"));
+        test.getAttributes().put("baz", "bop");
+        assertEquals("bop", test.getAttributes().get("baz"));
+        test.getAttributes().remove("baz");
+        assertEquals("bar", test.getAttributes().get("baz"));
+        test.setValueBinding("baz", null);
+        assertNull(test.getAttributes().get("baz"));
 
         // "id" property
         try {
             test.setValueBinding("id",
-                                 application.createValueBinding("#{foo}"));
+                    application.createValueBinding("#{foo}"));
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             ; // Expected response
@@ -500,64 +486,64 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         // "parent" property
         try {
             test.setValueBinding("parent",
-                                 application.createValueBinding("#{foo}"));
+                    application.createValueBinding("#{foo}"));
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             ; // Expected response
         }
 
-	// "rendered" property
-	request.setAttribute("foo", Boolean.FALSE);
-	boolean initial = test.isRendered();
-	if (initial) {
-	    request.setAttribute("foo", Boolean.FALSE);
-	} else {
-	    request.setAttribute("foo", Boolean.TRUE);
-	}
-	test.setValueBinding("rendered", application.createValueBinding("#{foo}"));
-	assertEquals(!initial, test.isRendered());
-	test.setRendered(initial);
-	assertEquals(initial, test.isRendered());
-	assertNotNull(test.getValueBinding("rendered"));
+        // "rendered" property
+        request.setAttribute("foo", Boolean.FALSE);
+        boolean initial = test.isRendered();
+        if (initial) {
+            request.setAttribute("foo", Boolean.FALSE);
+        } else {
+            request.setAttribute("foo", Boolean.TRUE);
+        }
+        test.setValueBinding("rendered", application.createValueBinding("#{foo}"));
+        assertEquals(!initial, test.isRendered());
+        test.setRendered(initial);
+        assertEquals(initial, test.isRendered());
+        assertNotNull(test.getValueBinding("rendered"));
 
-	// "rendererType" property
-	request.setAttribute("foo", "bar");
-	test.setRendererType(null);
-	assertNull(test.getRendererType());
-	test.setValueBinding("rendererType", application.createValueBinding("#{foo}"));
-	assertNotNull(test.getValueBinding("rendererType"));
-	assertEquals("bar", test.getRendererType());
-	test.setRendererType("baz");
-	assertEquals("baz", test.getRendererType());
-	test.setRendererType(null);
-	assertEquals("bar", test.getRendererType());
-	test.setValueBinding("rendererType", null);
-	assertNull(test.getValueBinding("rendererType"));
-	assertNull(test.getRendererType());
+        // "rendererType" property
+        request.setAttribute("foo", "bar");
+        test.setRendererType(null);
+        assertNull(test.getRendererType());
+        test.setValueBinding("rendererType", application.createValueBinding("#{foo}"));
+        assertNotNull(test.getValueBinding("rendererType"));
+        assertEquals("bar", test.getRendererType());
+        test.setRendererType("baz");
+        assertEquals("baz", test.getRendererType());
+        test.setRendererType(null);
+        assertEquals("bar", test.getRendererType());
+        test.setValueBinding("rendererType", null);
+        assertNull(test.getValueBinding("rendererType"));
+        assertNull(test.getRendererType());
 
     }
 
     public void testValueExpressions() throws Exception {
 
-	UIComponentBase test = (UIComponentBase) component;
+        UIComponentBase test = (UIComponentBase) component;
 
-	// generic attributes
-	request.setAttribute("foo", "bar");
-	test.getAttributes().clear();
-	assertNull(test.getAttributes().get("baz"));
-	test.setValueExpression("baz", application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", String.class));
-	assertEquals("bar", test.getAttributes().get("baz"));
-	test.getAttributes().put("baz", "bop");
-	assertEquals("bop", test.getAttributes().get("baz"));
-	test.getAttributes().remove("baz");
-	assertEquals("bar", test.getAttributes().get("baz"));
-	test.setValueExpression("baz", null);
-	assertNull(test.getAttributes().get("baz"));
+        // generic attributes
+        request.setAttribute("foo", "bar");
+        test.getAttributes().clear();
+        assertNull(test.getAttributes().get("baz"));
+        test.setValueExpression("baz", application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", String.class));
+        assertEquals("bar", test.getAttributes().get("baz"));
+        test.getAttributes().put("baz", "bop");
+        assertEquals("bop", test.getAttributes().get("baz"));
+        test.getAttributes().remove("baz");
+        assertEquals("bar", test.getAttributes().get("baz"));
+        test.setValueExpression("baz", null);
+        assertNull(test.getAttributes().get("baz"));
 
         // "id" property
         try {
             test.setValueExpression("id",
-                                 application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", String.class));
+                    application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", String.class));
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             ; // Expected response
@@ -566,93 +552,93 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         // "parent" property
         try {
             test.setValueExpression("parent",
-                                 application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", UIComponent.class));
+                    application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", UIComponent.class));
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             ; // Expected response
         }
 
-	// "rendered" property
-	request.setAttribute("foo", Boolean.FALSE);
-	test.setValueExpression("rendered", null);
-	boolean initial = test.isRendered();
-	if (initial) {
-	    request.setAttribute("foo", Boolean.FALSE);
-	} else {
-	    request.setAttribute("foo", Boolean.TRUE);
-	}
-	test.setValueExpression("rendered", application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", Boolean.class));
-	assertEquals(!initial, test.isRendered());
-	test.setRendered(initial);
-	assertEquals(initial, test.isRendered());
-	assertNotNull(test.getValueExpression("rendered"));
+        // "rendered" property
+        request.setAttribute("foo", Boolean.FALSE);
+        test.setValueExpression("rendered", null);
+        boolean initial = test.isRendered();
+        if (initial) {
+            request.setAttribute("foo", Boolean.FALSE);
+        } else {
+            request.setAttribute("foo", Boolean.TRUE);
+        }
+        test.setValueExpression("rendered", application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", Boolean.class));
+        assertEquals(!initial, test.isRendered());
+        test.setRendered(initial);
+        assertEquals(initial, test.isRendered());
+        assertNotNull(test.getValueExpression("rendered"));
 
-	// "rendererType" property
-	request.setAttribute("foo", "bar");
-	test.setRendererType(null);
-	assertNull(test.getRendererType());
-	test.setValueExpression("rendererType", application.getExpressionFactory().createValueExpression(facesContext.getELContext(),"#{foo}", String.class));
-	assertNotNull(test.getValueExpression("rendererType"));
-	assertEquals("bar", test.getRendererType());
-	test.setRendererType("baz");
-	assertEquals("baz", test.getRendererType());
-	test.setRendererType(null);
-	assertEquals("bar", test.getRendererType());
-	test.setValueExpression("rendererType", null);
-	assertNull(test.getValueExpression("rendererType"));
-	assertNull(test.getRendererType());
+        // "rendererType" property
+        request.setAttribute("foo", "bar");
+        test.setRendererType(null);
+        assertNull(test.getRendererType());
+        test.setValueExpression("rendererType", application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", String.class));
+        assertNotNull(test.getValueExpression("rendererType"));
+        assertEquals("bar", test.getRendererType());
+        test.setRendererType("baz");
+        assertEquals("baz", test.getRendererType());
+        test.setRendererType(null);
+        assertEquals("bar", test.getRendererType());
+        test.setValueExpression("rendererType", null);
+        assertNull(test.getValueExpression("rendererType"));
+        assertNull(test.getRendererType());
 
     }
 
-    public void testValueExpressionValueBindingIdempotency() throws Exception{
+    public void testValueExpressionValueBindingIdempotency() throws Exception {
 
-	UIComponentBase test = (UIComponentBase) component;
+        UIComponentBase test = (UIComponentBase) component;
 
-	request.setAttribute("foo", "bar");
-	test.getAttributes().clear();
-	assertNull(test.getAttributes().get("baz"));
-	ValueBinding binding = null;
-	ValueExpression expression = null;
-	
-	binding = application.createValueBinding("#{foo}");
-	test.setValueBinding("baz", binding);
-	expression = test.getValueExpression("baz");
-	
-	assertEquals(binding.getExpressionString(), 
-		     expression.getExpressionString());
-	test.setValueBinding("baz", null);
+        request.setAttribute("foo", "bar");
+        test.getAttributes().clear();
+        assertNull(test.getAttributes().get("baz"));
+        ValueBinding binding = null;
+        ValueExpression expression = null;
 
-	expression = application.getExpressionFactory().createValueExpression(facesContext.getELContext(),"#{foo}", String.class);
-	test.setValueExpression("baz", expression);
-	binding = test.getValueBinding("baz");
-	assertEquals(binding.getExpressionString(), 
-		     expression.getExpressionString());
-	test.setValueBinding("baz", null);
-	
+        binding = application.createValueBinding("#{foo}");
+        test.setValueBinding("baz", binding);
+        expression = test.getValueExpression("baz");
+
+        assertEquals(binding.getExpressionString(),
+                expression.getExpressionString());
+        test.setValueBinding("baz", null);
+
+        expression = application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", String.class);
+        test.setValueExpression("baz", expression);
+        binding = test.getValueBinding("baz");
+        assertEquals(binding.getExpressionString(),
+                expression.getExpressionString());
+        test.setValueBinding("baz", null);
+
     }
 
     public void testMethodBindingAdapterBaseException() throws Exception {
-	IllegalThreadStateException itse = new IllegalThreadStateException("The root cause!");
-	AbortProcessingException ape = new AbortProcessingException(itse);
-	InvocationTargetException ite1 = new InvocationTargetException(ape);
-	InvocationTargetException ite2 = new InvocationTargetException(ite1);
-	InvocationTargetException ite3 = new InvocationTargetException(ite2);
-	MethodBindingValueChangeListener mbvcl = 
-	    new MethodBindingValueChangeListener();
-	Throwable expected = 
-	    mbvcl.getExpectedCause(AbortProcessingException.class, ite3);
-	assertEquals(expected, ape);
+        IllegalThreadStateException itse = new IllegalThreadStateException("The root cause!");
+        AbortProcessingException ape = new AbortProcessingException(itse);
+        InvocationTargetException ite1 = new InvocationTargetException(ape);
+        InvocationTargetException ite2 = new InvocationTargetException(ite1);
+        InvocationTargetException ite3 = new InvocationTargetException(ite2);
+        MethodBindingValueChangeListener mbvcl =
+                new MethodBindingValueChangeListener();
+        Throwable expected =
+                mbvcl.getExpectedCause(AbortProcessingException.class, ite3);
+        assertEquals(expected, ape);
 
-	ValidatorException ve = new ValidatorException(new FacesMessage(), 
-						       itse);
-	ite1 = new InvocationTargetException(ve);
-	ite2 = new InvocationTargetException(ite1);
-	ite3 = new InvocationTargetException(ite2);
+        ValidatorException ve = new ValidatorException(new FacesMessage(),
+                itse);
+        ite1 = new InvocationTargetException(ve);
+        ite2 = new InvocationTargetException(ite1);
+        ite3 = new InvocationTargetException(ite2);
 
-	MethodBindingValidator mbv = new MethodBindingValidator();
-	expected = 
-	    mbv.getExpectedCause(ValidatorException.class, ite3);
-	assertEquals(expected, ve);	
+        MethodBindingValidator mbv = new MethodBindingValidator();
+        expected =
+                mbv.getExpectedCause(ValidatorException.class, ite3);
+        assertEquals(expected, ve);
     }
 
 
@@ -660,6 +646,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     // Check that the attributes on the specified components are equal
+
     protected void checkAttributes(UIComponent comp1, UIComponent comp2) {
         assertEquals(comp1.getAttributes(), comp2.getAttributes());
     }
@@ -721,24 +708,24 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         // Test processDecodes()
         TestComponent.trace(null);
-	component.processDecodes(facesContext);
+        component.processDecodes(facesContext);
         assertEquals("processDecodes",
-                     lifecycleTrace("pD", "d"),
-                     TestComponent.trace());
+                lifecycleTrace("pD", "d"),
+                TestComponent.trace());
 
         // Test processValidators()
         TestComponent.trace(null);
         component.processValidators(facesContext);
         assertEquals("processValidators",
-                     lifecycleTrace("pV", null),
-                     TestComponent.trace());
+                lifecycleTrace("pV", null),
+                TestComponent.trace());
 
         // Test processUpdates()
         TestComponent.trace(null);
         component.processUpdates(facesContext);
         assertEquals("processUpdates",
-                     lifecycleTrace("pU", null),
-                     TestComponent.trace());
+                lifecycleTrace("pU", null),
+                TestComponent.trace());
 
     }
 
@@ -791,24 +778,24 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         // Test processDecodes()
         TestComponent.trace(null);
-	component.processDecodes(facesContext);
+        component.processDecodes(facesContext);
         assertEquals("processDecodes",
-                     lifecycleTrace("pD", "d"),
-                     TestComponent.trace());
+                lifecycleTrace("pD", "d"),
+                TestComponent.trace());
 
         // Test processValidators()
         TestComponent.trace(null);
         component.processValidators(facesContext);
         assertEquals("processValidators",
-                     lifecycleTrace("pV", null),
-                     TestComponent.trace());
+                lifecycleTrace("pV", null),
+                TestComponent.trace());
 
         // Test processUpdates()
         TestComponent.trace(null);
         component.processUpdates(facesContext);
         assertEquals("processUpdates",
-                     lifecycleTrace("pU", null),
-                     TestComponent.trace());
+                lifecycleTrace("pU", null),
+                TestComponent.trace());
 
     }
 
@@ -858,24 +845,24 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         // Test processDecodes()
         TestComponent.trace(null);
-	component.processDecodes(facesContext);
+        component.processDecodes(facesContext);
         assertEquals("processDecodes",
-                     lifecycleTrace("pD", "d"),
-                     TestComponent.trace());
+                lifecycleTrace("pD", "d"),
+                TestComponent.trace());
 
         // Test processValidators()
         TestComponent.trace(null);
         component.processValidators(facesContext);
         assertEquals("processValidators",
-                     lifecycleTrace("pV", null),
-                     TestComponent.trace());
+                lifecycleTrace("pV", null),
+                TestComponent.trace());
 
         // Test processUpdates()
         TestComponent.trace(null);
         component.processUpdates(facesContext);
         assertEquals("processUpdates",
-                     lifecycleTrace("pU", null),
-                     TestComponent.trace());
+                lifecycleTrace("pU", null),
+                TestComponent.trace());
 
     }
 
@@ -925,24 +912,24 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         // Test processDecodes()
         TestComponent.trace(null);
-	component.processDecodes(facesContext);
+        component.processDecodes(facesContext);
         assertEquals("processDecodes",
-                     lifecycleTrace("pD", "d"),
-                     TestComponent.trace());
+                lifecycleTrace("pD", "d"),
+                TestComponent.trace());
 
         // Test processValidators()
         TestComponent.trace(null);
         component.processValidators(facesContext);
         assertEquals("processValidators",
-                     lifecycleTrace("pV", null),
-                     TestComponent.trace());
+                lifecycleTrace("pV", null),
+                TestComponent.trace());
 
         // Test processUpdates()
         TestComponent.trace(null);
         component.processUpdates(facesContext);
         assertEquals("processUpdates",
-                     lifecycleTrace("pU", null),
-                     TestComponent.trace());
+                lifecycleTrace("pU", null),
+                TestComponent.trace());
 
     }
 
@@ -950,7 +937,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // Check that the properties on the specified components are equal
     protected void checkProperties(UIComponent comp1, UIComponent comp2) {
         assertEquals(comp1.getClientId(facesContext),
-                     comp2.getClientId(facesContext));
+                comp2.getClientId(facesContext));
         assertEquals(comp1.getId(), comp2.getId());
         assertEquals(comp1.isRendered(), comp2.isRendered());
         assertEquals(comp1.getRendererType(), comp2.getRendererType());
@@ -961,17 +948,17 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // Check that the configured ValueBindings got restored
     protected void checkValueBindings(UIComponent comp1, UIComponent comp2) {
 
-	ValueBinding vb1, vb2;
+        ValueBinding vb1, vb2;
 
-	vb1 = comp1.getValueBinding("baz");
-	vb2 = comp2.getValueBinding("baz");
-	assertEquals(((MockValueBinding) vb1).ref(),
-		     ((MockValueBinding) vb2).ref());
+        vb1 = comp1.getValueBinding("baz");
+        vb2 = comp2.getValueBinding("baz");
+        assertEquals(((MockValueBinding) vb1).ref(),
+                ((MockValueBinding) vb2).ref());
 
-	vb1 = comp1.getValueBinding("bop");
-	vb2 = comp2.getValueBinding("bop");
-	assertEquals(((MockValueBinding) vb1).ref(),
-		     ((MockValueBinding) vb2).ref());
+        vb1 = comp1.getValueBinding("bop");
+        vb2 = comp2.getValueBinding("bop");
+        assertEquals(((MockValueBinding) vb1).ref(),
+                ((MockValueBinding) vb2).ref());
 
     }
 
@@ -1006,15 +993,15 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         component.setRendererType(null); // Since we have no renderers
 
         component.setValueBinding("baz",
-                                  application.createValueBinding("baz.value"));
+                application.createValueBinding("baz.value"));
         component.setValueBinding("bop",
-                                  application.createValueBinding("bop.value"));
+                application.createValueBinding("bop.value"));
         component.subscribeToEvent(PostAddToViewEvent.class,
-                                   new ComponentListener());
+                new ComponentListener());
         component.subscribeToEvent(PostAddToViewEvent.class,
-                                   new ComponentListener());
+                new ComponentListener());
         component.subscribeToEvent(PostConstructViewMapEvent.class,
-                                   new ComponentListener());
+                new ComponentListener());
 
     }
 
@@ -1048,10 +1035,10 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         while (names.hasNext()) {
             String name = (String) names.next();
             sb.append("/" + lmethod + "-" + name);
-	    if ((cmethod != null) &&
-                ((UIComponent) component.getFacets().get(name)).isRendered()) {
-		sb.append("/" + cmethod + "-" + name);
-	    }
+            if ((cmethod != null) &&
+                    ((UIComponent) component.getFacets().get(name)).isRendered()) {
+                sb.append("/" + cmethod + "-" + name);
+            }
         }
 
         // Append the calls for each child
@@ -1062,9 +1049,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         }
 
         // Append the call for this component's component method
-	if ((cmethod != null) && component.isRendered()) {
-	    sb.append("/" + cmethod + "-" + id);
-	}
+        if ((cmethod != null) && component.isRendered()) {
+            sb.append("/" + cmethod + "-" + id);
+        }
 
     }
 
@@ -1078,18 +1065,18 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         UIComponent facet2 = new TestComponent("facet2");
         UIComponent facet3 = new TestComponent("facet3");
 
-	testComponent.getChildren().add(child1);
+        testComponent.getChildren().add(child1);
         testComponent.getChildren().add(child2);
         testComponent.getChildren().add(child3);
         testComponent.getFacets().put("facet1", facet1);
         testComponent.getFacets().put("facet2", facet2);
-        testComponent.getFacets().put("facet3", facet3);        
+        testComponent.getFacets().put("facet3", facet3);
 
         Iterator iter = testComponent.getFacetsAndChildren();
         Object cur = null;
         boolean exceptionThrown = false;
         assertTrue(iter.hasNext());
-        
+
         try {
             iter.remove();
         }
@@ -1105,7 +1092,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(cur == facet1 || cur == facet2 || cur == facet3);
         cur = iter.next();
         assertTrue(cur == facet1 || cur == facet2 || cur == facet3);
-        
+
         // followed by components, in the order added
         cur = iter.next();
         assertTrue(cur == child1);
@@ -1113,41 +1100,40 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(cur == child2);
         cur = iter.next();
         assertTrue(cur == child3);
-        
+
         assertTrue(!iter.hasNext());
-        
+
     }
-        
+
     private Object foundComponent = null;
-    
+
     /**
-     *
      * <p>Build a tree with the following layout.</p>
      * <code><pre>
      * root: id: root
-     * 
+     * <p/>
      *   form1: id: form1
-     * 
+     * <p/>
      *     panel1: id: panel
-     * 
+     * <p/>
      *       input1: id: input1
-     * 
+     * <p/>
      *       input2: id: input2
-     * 
+     * <p/>
      *   form2: id: form2
-     * 
+     * <p/>
      *     panel2: id: panel
-     * 
+     * <p/>
      *       input3: id: input1
-     * 
+     * <p/>
      *       input4: id: input2
      * </pre></code>
-     * 
+     *
      * @return a Map<String, UIComponent>.  The key is the string before the
-     * first : in the above layout.  The value is the component instance.
-     * Note that the keys in the map are <b>not</b> the ids.
-     */    
-    
+     *         first : in the above layout.  The value is the component instance.
+     *         Note that the keys in the map are <b>not</b> the ids.
+     */
+
     private Map<String, UIComponent> setupInvokeOnComponentTree() {
         UIViewRoot root = new UIViewRoot();
         UIForm form1 = new UIForm();
@@ -1169,7 +1155,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         panel2.setId("panel");
         input3.setId("input1");
         input4.setId("input2");
-        
+
         root.getChildren().add(form1);
         form1.getChildren().add(panel1);
         panel1.getChildren().add(input1);
@@ -1179,7 +1165,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         form2.getChildren().add(panel2);
         panel2.getChildren().add(input3);
         panel2.getChildren().add(input4);
-        Map<String, UIComponent> result = new HashMap<String,UIComponent>();
+        Map<String, UIComponent> result = new HashMap<String, UIComponent>();
         result.put("root", root);
         result.put("form1", form1);
         result.put("panel1", panel1);
@@ -1192,32 +1178,33 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         return result;
     }
-    
-        
+
+
     public void testInvokeOnComponentPositive() throws Exception {
 
         Map<String, UIComponent> tree = setupInvokeOnComponentTree();
-        
+
         UIViewRoot root = (UIViewRoot) tree.get("root");
         UIInput input1 = (UIInput) tree.get("input1");
 
         foundComponent = null;
         boolean result = false;
 
-        result = root.invokeOnComponent(facesContext, 
+        result = root.invokeOnComponent(facesContext,
                 input1.getClientId(facesContext),
                 new ContextCallback() {
-            public void invokeContextCallback(FacesContext context, UIComponent component) {
-                foundComponent = component;
-            }});
+                    public void invokeContextCallback(FacesContext context, UIComponent component) {
+                        foundComponent = component;
+                    }
+                });
         assertEquals(input1, foundComponent);
         assertTrue(result);
 
     }
-    
+
     public void testInvokeOnComponentNegative() throws Exception {
         Map<String, UIComponent> tree = setupInvokeOnComponentTree();
-        
+
         UIViewRoot root = (UIViewRoot) tree.get("root");
         UIInput input4 = (UIInput) tree.get("input4");
 
@@ -1225,49 +1212,50 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         boolean result = false;
         boolean exceptionThrown = false;
 
-	// Negative case 0, null pointers
-	exceptionThrown = false;
-	FacesContext nullContext = null;
-	ContextCallback nullCallback = null;
-	try {
-	    root.invokeOnComponent(nullContext, "form:input7", 
-				   nullCallback);
-	}
-	catch (NullPointerException npe) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
+        // Negative case 0, null pointers
+        exceptionThrown = false;
+        FacesContext nullContext = null;
+        ContextCallback nullCallback = null;
+        try {
+            root.invokeOnComponent(nullContext, "form:input7",
+                    nullCallback);
+        }
+        catch (NullPointerException npe) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
- 	exceptionThrown = false;
-	try {
-	    root.invokeOnComponent(facesContext, null, 
-				   nullCallback);
-	}
-	catch (NullPointerException npe) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
+        exceptionThrown = false;
+        try {
+            root.invokeOnComponent(facesContext, null,
+                    nullCallback);
+        }
+        catch (NullPointerException npe) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
- 	exceptionThrown = false;
-	try {
-	    root.invokeOnComponent(nullContext, null, 
-				   nullCallback);
-	}
-	catch (NullPointerException npe) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
+        exceptionThrown = false;
+        try {
+            root.invokeOnComponent(nullContext, null,
+                    nullCallback);
+        }
+        catch (NullPointerException npe) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
         // Negative case 1, not found component.
-        result = root.invokeOnComponent(facesContext, 
+        result = root.invokeOnComponent(facesContext,
                 "form:input7",
                 new ContextCallback() {
-            public void invokeContextCallback(FacesContext context, UIComponent component) {
-                foundComponent = component;
-            }});
+                    public void invokeContextCallback(FacesContext context, UIComponent component) {
+                        foundComponent = component;
+                    }
+                });
         assertNull(foundComponent);
         assertTrue(!result);
-        
+
         // Negative case 2A, callback throws exception with found component
         foundComponent = null;
         result = false;
@@ -1276,11 +1264,12 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
             result = root.invokeOnComponent(facesContext,
                     "form2:input2",
                     new ContextCallback() {
-                public void invokeContextCallback(FacesContext context, UIComponent component) {
-                    foundComponent = component;
-                    // When else am I going to get the chance to throw this exception?
-                    throw new IllegalStateException();
-                }});
+                        public void invokeContextCallback(FacesContext context, UIComponent component) {
+                            foundComponent = component;
+                            // When else am I going to get the chance to throw this exception?
+                            throw new IllegalStateException();
+                        }
+                    });
         } catch (FacesException e) {
             assertTrue(e.getCause() instanceof IllegalStateException);
             exceptionThrown = true;
@@ -1288,7 +1277,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(exceptionThrown);
         assertEquals(foundComponent, input4);
         assertTrue(!result);
-        
+
         // Negative case 2B, callback throws exception with not found component
         foundComponent = null;
         result = false;
@@ -1297,11 +1286,12 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
             result = root.invokeOnComponent(facesContext,
                     "form2:input6",
                     new ContextCallback() {
-                public void invokeContextCallback(FacesContext context, UIComponent component) {
-                    foundComponent = component;
-                    // When else am I going to get the chance to throw this exception?
-                    throw new IllegalStateException();
-                }});
+                        public void invokeContextCallback(FacesContext context, UIComponent component) {
+                            foundComponent = component;
+                            // When else am I going to get the chance to throw this exception?
+                            throw new IllegalStateException();
+                        }
+                    });
         } catch (FacesException e) {
             assertTrue(e.getCause() instanceof IllegalStateException);
             exceptionThrown = true;
@@ -1309,19 +1299,19 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(!exceptionThrown);
         assertNull(foundComponent);
         assertTrue(!result);
-        
-        
+
+
     }
-    
+
     public void testInvokeOnComponentWithPrependId() throws Exception {
         Map<String, UIComponent> tree = setupInvokeOnComponentTree();
-        
+
         UIViewRoot root = (UIViewRoot) tree.get("root");
         UIForm truePrependIdForm = (UIForm) tree.get("form1");
         UIForm falsePrependIdForm = (UIForm) tree.get("form2");
         UIInput truePrependIdInput = (UIInput) tree.get("input2");
         UIInput falsePrependIdInput = (UIInput) tree.get("input3");
-        
+
         truePrependIdForm.setPrependId(true);
         falsePrependIdForm.setPrependId(false);
 
@@ -1330,43 +1320,46 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         boolean exceptionThrown = false;
 
         // Case 1, positive find with prependId == true
-        result = root.invokeOnComponent(facesContext, 
+        result = root.invokeOnComponent(facesContext,
                 "form1:input2",
                 new ContextCallback() {
-            public void invokeContextCallback(FacesContext context, UIComponent component) {
-                foundComponent = component;
-            }});
+                    public void invokeContextCallback(FacesContext context, UIComponent component) {
+                        foundComponent = component;
+                    }
+                });
         assertEquals(truePrependIdInput, foundComponent);
         assertTrue(result);
-        
+
         // Case 2, negative find with prependId == true
         foundComponent = null;
         result = false;
-        
-        result = root.invokeOnComponent(facesContext, 
+
+        result = root.invokeOnComponent(facesContext,
                 "form9:input5",
                 new ContextCallback() {
-            public void invokeContextCallback(FacesContext context, UIComponent component) {
-                foundComponent = component;
-            }});
+                    public void invokeContextCallback(FacesContext context, UIComponent component) {
+                        foundComponent = component;
+                    }
+                });
         assertNull(foundComponent);
         assertTrue(!result);
-        
+
         // Case 3, exception positive find with prependId == true
         foundComponent = null;
         result = false;
         exceptionThrown = false;
         try {
 
-            
-            result = root.invokeOnComponent(facesContext, 
+
+            result = root.invokeOnComponent(facesContext,
                     "form1:input2",
                     new ContextCallback() {
-                public void invokeContextCallback(FacesContext context, UIComponent component) {
-                    foundComponent = component;
-                    throw new IllegalStateException();
-                }});
-        } 
+                        public void invokeContextCallback(FacesContext context, UIComponent component) {
+                            foundComponent = component;
+                            throw new IllegalStateException();
+                        }
+                    });
+        }
         catch (FacesException e) {
             assertTrue(e.getCause() instanceof IllegalStateException);
             exceptionThrown = true;
@@ -1381,15 +1374,16 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         exceptionThrown = false;
         try {
 
-            
-            result = root.invokeOnComponent(facesContext, 
+
+            result = root.invokeOnComponent(facesContext,
                     "formFozzy:inputKermit",
                     new ContextCallback() {
-                public void invokeContextCallback(FacesContext context, UIComponent component) {
-                    foundComponent = component;
-                    throw new IllegalStateException();
-                }});
-        } 
+                        public void invokeContextCallback(FacesContext context, UIComponent component) {
+                            foundComponent = component;
+                            throw new IllegalStateException();
+                        }
+                    });
+        }
         catch (FacesException e) {
             assertTrue(e.getCause() instanceof IllegalStateException);
             exceptionThrown = true;
@@ -1397,45 +1391,48 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertNull(foundComponent);
         assertTrue(!result);
         assertTrue(!exceptionThrown);
-        
+
         // Case 5, positive find with prependId == false
-        result = root.invokeOnComponent(facesContext, 
+        result = root.invokeOnComponent(facesContext,
                 "input1",
                 new ContextCallback() {
-            public void invokeContextCallback(FacesContext context, UIComponent component) {
-                foundComponent = component;
-            }});
+                    public void invokeContextCallback(FacesContext context, UIComponent component) {
+                        foundComponent = component;
+                    }
+                });
         assertEquals(falsePrependIdInput, foundComponent);
         assertTrue(result);
 
         // Case 6, negative find with prependId == false
         foundComponent = null;
         result = false;
-        
-        result = root.invokeOnComponent(facesContext, 
+
+        result = root.invokeOnComponent(facesContext,
                 "input99",
                 new ContextCallback() {
-            public void invokeContextCallback(FacesContext context, UIComponent component) {
-                foundComponent = component;
-            }});
+                    public void invokeContextCallback(FacesContext context, UIComponent component) {
+                        foundComponent = component;
+                    }
+                });
         assertNull(foundComponent);
         assertTrue(!result);
-        
+
         // Case 3, exception positive find with prependId == false
         foundComponent = null;
         result = false;
         exceptionThrown = false;
         try {
 
-            
-            result = root.invokeOnComponent(facesContext, 
+
+            result = root.invokeOnComponent(facesContext,
                     "input1",
                     new ContextCallback() {
-                public void invokeContextCallback(FacesContext context, UIComponent component) {
-                    foundComponent = component;
-                    throw new IllegalStateException();
-                }});
-        } 
+                        public void invokeContextCallback(FacesContext context, UIComponent component) {
+                            foundComponent = component;
+                            throw new IllegalStateException();
+                        }
+                    });
+        }
         catch (FacesException e) {
             assertTrue(e.getCause() instanceof IllegalStateException);
             exceptionThrown = true;
@@ -1450,15 +1447,16 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         exceptionThrown = false;
         try {
 
-            
-            result = root.invokeOnComponent(facesContext, 
+
+            result = root.invokeOnComponent(facesContext,
                     "inputKermit",
                     new ContextCallback() {
-                public void invokeContextCallback(FacesContext context, UIComponent component) {
-                    foundComponent = component;
-                    throw new IllegalStateException();
-                }});
-        } 
+                        public void invokeContextCallback(FacesContext context, UIComponent component) {
+                            foundComponent = component;
+                            throw new IllegalStateException();
+                        }
+                    });
+        }
         catch (FacesException e) {
             assertTrue(e.getCause() instanceof IllegalStateException);
             exceptionThrown = true;
@@ -1467,7 +1465,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(!result);
         assertTrue(!exceptionThrown);
 
-    
+
     }
 
 
@@ -1518,15 +1516,15 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         UIComponent c3 = createComponent();
 
         List<SystemEvent> e = listener.getEvents();
-        Map<String,UIComponent> facets = c1.getFacets();
+        Map<String, UIComponent> facets = c1.getFacets();
         facets.put("c2", c2);
         assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);
 
         UIViewRoot root = new UIViewRoot();
         root.getChildren().add(c1);
         assertTrue("Expected Event queue size of 2, found: " + e.size(), e.size() == 2);
-        assertTrue (e.get(0).getSource() == c1);
-        assertTrue (e.get(1).getSource() == c2);
+        assertTrue(e.get(0).getSource() == c1);
+        assertTrue(e.get(1).getSource() == c2);
 
         // remove c1 from the root and add c3 as a facet to c1 - no events should be
         // published
@@ -1541,9 +1539,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         c2.getFacets().put("c3", c3);
         root.getChildren().add(c1);
         assertTrue("Expected Event queue size of 3, found: " + e.size(), e.size() == 3);
-        assertTrue (e.get(0).getSource() == c1);
-        assertTrue (e.get(1).getSource() == c2);
-        assertTrue (e.get(2).getSource() == c3);
+        assertTrue(e.get(0).getSource() == c1);
+        assertTrue(e.get(1).getSource() == c2);
+        assertTrue(e.get(2).getSource() == c3);
 
         e.clear();
         // ensure clear() method disconnects the facets from the view
@@ -1579,7 +1577,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue("Expected Event queue size of 4, found: " + e.size(), e.size() == 4);
 
         UIComponent[] comps = {
-              c1, c2, c3, c4
+                c1, c2, c3, c4
         };
         for (int i = 0; i < comps.length; i++) {
             assertTrue("Index " + i + " invalid", e.get(i).getSource() == comps[i]);
@@ -1593,12 +1591,12 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         c2.getChildren().remove(c4);
         c2.getChildren().add(c4);
         assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
-                   e.isEmpty());
+                e.isEmpty());
 
         c2.getChildren().remove(c4);
         c1.getChildren().add(c4);
         assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
-                   e.isEmpty());
+                e.isEmpty());
 
         // re-wire c1 as a child of root and ensure all children get re-notified
         root.getChildren().add(c1);
@@ -1618,15 +1616,15 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         e.clear();
         c2.getChildren().add(temp);
         assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
-                   e.isEmpty());
+                e.isEmpty());
         c2.getChildren().remove(temp);
         c3.getChildren().add(temp);
         assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
-                   e.isEmpty());
+                e.isEmpty());
         c3.getChildren().remove(temp);
         c4.getChildren().add(temp);
         assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
-                   e.isEmpty());
+                e.isEmpty());
         c4.getChildren().remove(temp);
 
         // now add c2 and c4 as children of c1.  This should cause three
@@ -1636,7 +1634,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue("Expected Event queue size of 3, found: " + e.size(), e.size() == 3);
 
         UIComponent[] comps2 = {
-              c2, c3, c4
+                c2, c3, c4
         };
         for (int i = 0; i < comps2.length; i++) {
             assertTrue("Index " + i + " invalid", e.get(i).getSource() == comps2[i]);
@@ -1708,13 +1706,13 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         e.clear();
         UIComponent t3 = createComponent();
         c2.getChildren().add(t3);
-        assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);        
+        assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);
 
         application.unsubscribeFromEvent(PostAddToViewEvent.class, listener);
 
         // validate Iterator.remove() over c1's children correctly disconnects
         // the children from the view
-        for(Iterator<UIComponent> i = c1.getChildren().iterator(); i.hasNext(); ) {
+        for (Iterator<UIComponent> i = c1.getChildren().iterator(); i.hasNext();) {
             i.next();
             i.remove();
         }
@@ -1724,15 +1722,15 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         e.clear();
         t1.getChildren().add(temp);
         assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
-                   e.isEmpty());
+                e.isEmpty());
         t1.getChildren().remove(temp);
         t2.getChildren().add(temp);
         assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
-                   e.isEmpty());
+                e.isEmpty());
         t2.getChildren().remove(temp);
         c4.getChildren().add(temp);
         assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
-                   e.isEmpty());
+                e.isEmpty());
         c4.getChildren().remove(temp);
 
     }
@@ -1755,7 +1753,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertNull(listener.getEvent());
 
         application.unsubscribeFromEvent(PreRenderComponentEvent.class, listener);
-        
+
     }
 
 
@@ -1767,7 +1765,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         private SystemEvent event;
 
         public void processEvent(SystemEvent event)
-        throws AbortProcessingException {
+                throws AbortProcessingException {
             this.event = event;
         }
 
@@ -1785,12 +1783,12 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
-    public static final class QueueingListener implements SystemEventListener  {
+    public static final class QueueingListener implements SystemEventListener {
 
         private List<SystemEvent> events = new ArrayList<SystemEvent>();
 
         public void processEvent(SystemEvent event)
-        throws AbortProcessingException {
+                throws AbortProcessingException {
             events.add(event);
         }
 
@@ -1811,7 +1809,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public static final class ComponentListener implements ComponentSystemEventListener {
 
         public void processEvent(ComponentSystemEvent event)
-        throws AbortProcessingException {
+                throws AbortProcessingException {
 
         }
     }
@@ -1824,7 +1822,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         }
 
         public void processEvent(ComponentSystemEvent event)
-        throws AbortProcessingException {
+                throws AbortProcessingException {
         }
 
     }

@@ -40,23 +40,14 @@
 
 package javax.faces.component;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.behavior.ClientBehaviorHint;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.BehaviorEvent;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * <p class="changed_added_2_0">
@@ -67,227 +58,225 @@ import javax.faces.event.BehaviorEvent;
  */
 public class UIComponentBaseBehaviorTestCase extends UIComponentTestCase {
 
-	private static final String ONTEST = "ontest";
-	private static final String ONCLICK = "onclick";
-	private static final String ONCHANGE = "onchange";
-	private static final String TEST_FAMILY = "javax.faces.Test";
-	private static final Collection<String> EVENTS=set(ONTEST,ONCLICK,ONCHANGE);
+    private static final String ONTEST = "ontest";
+    private static final String ONCLICK = "onclick";
+    private static final String ONCHANGE = "onchange";
+    private static final String TEST_FAMILY = "javax.faces.Test";
+    private static final Collection<String> EVENTS = set(ONTEST, ONCLICK, ONCHANGE);
 
-	/**
-	 * @author asmirnov
-	 *
-	 */
-	public static class BehaviorComponent extends UIComponentBase implements ClientBehaviorHolder {
+    /**
+     * @author asmirnov
+     */
+    public static class BehaviorComponent extends UIComponentBase implements ClientBehaviorHolder {
 
-		
-		/* (non-Javadoc)
-		 * @see javax.faces.component.UIComponent#getFamily()
-		 */
-		@Override
-		public String getFamily() {
-			return TEST_FAMILY;
-		}
-		
-		@Override
-		public Collection<String> getEventNames() {
-			return EVENTS;
-		}
-		
-		@Override
-		public String getDefaultEventName() {
-			return ONTEST;
-		}
 
-	}
+        /* (non-Javadoc)
+           * @see javax.faces.component.UIComponent#getFamily()
+           */
+        @Override
+        public String getFamily() {
+            return TEST_FAMILY;
+        }
 
-	@SuppressWarnings("serial")
-	public static class TestBehavior implements ClientBehavior, Serializable {
+        @Override
+        public Collection<String> getEventNames() {
+            return EVENTS;
+        }
 
-            private static final Set<ClientBehaviorHint> HINTS =
-            Collections.unmodifiableSet(EnumSet.of(ClientBehaviorHint.SUBMITTING));
+        @Override
+        public String getDefaultEventName() {
+            return ONTEST;
+        }
 
-            private static int sequence = 0;
-		
-            private final int id;
-		
-            public TestBehavior() {
-                id=sequence++;
-            }
+    }
 
-            public String getRendererType() {
-                return TEST_FAMILY;
-            }
+    @SuppressWarnings("serial")
+    public static class TestBehavior implements ClientBehavior, Serializable {
 
-            public Set<ClientBehaviorHint> getHints() {
-                return HINTS;
-            }
+        private static final Set<ClientBehaviorHint> HINTS =
+                Collections.unmodifiableSet(EnumSet.of(ClientBehaviorHint.SUBMITTING));
 
-            public void broadcast(BehaviorEvent event) {
-            }
+        private static int sequence = 0;
 
-            public void decode(FacesContext context, UIComponent component) {
-            }
+        private final int id;
 
-            public String getScript(ClientBehaviorContext bContext) {
-                return null;
-            }
+        public TestBehavior() {
+            id = sequence++;
+        }
 
-            @Override
-            public int hashCode() {
-                final int prime = 31;
-                int result = 1;
-                result = prime * result + id;
-                return result;
-            }
+        public String getRendererType() {
+            return TEST_FAMILY;
+        }
 
-            @Override
-            public boolean equals(Object obj) {
-                if (this == obj)
-                    return true;
-                if (obj == null)
-                    return false;
-                if (getClass() != obj.getClass())
-                    return false;
-                TestBehavior other = (TestBehavior) obj;
-                if (id != other.id)
-                    return false;
+        public Set<ClientBehaviorHint> getHints() {
+            return HINTS;
+        }
+
+        public void broadcast(BehaviorEvent event) {
+        }
+
+        public void decode(FacesContext context, UIComponent component) {
+        }
+
+        public String getScript(ClientBehaviorContext bContext) {
+            return null;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + id;
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
                 return true;
-            }
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            TestBehavior other = (TestBehavior) obj;
+            if (id != other.id)
+                return false;
+            return true;
+        }
 
-            @Override
-            public String toString() {
-                return "Behavior #"+id;
-            }
-		
-	}
-	
-	public UIComponentBaseBehaviorTestCase(String name) {
-		super(name);
-	}
+        @Override
+        public String toString() {
+            return "Behavior #" + id;
+        }
 
-	/* (non-Javadoc)
-	 * @see javax.faces.component.UIComponentTestCase#setUp()
-	 */
-	public void setUp() {
-		super.setUp();
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see javax.faces.component.UIComponentTestCase#tearDown()
-	 */
-	public void tearDown() {
-		super.tearDown();
-	}
+    public UIComponentBaseBehaviorTestCase(String name) {
+        super(name);
+    }
 
-	/**
-	 * Test method for {@link javax.faces.component.UIComponentBase#saveState(javax.faces.context.FacesContext)}.
-	 */
-	public void testSaveState() {
-		BehaviorComponent comp = new BehaviorComponent();
-		// Cast component to the interface, to be sure about method definition.
-		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
-		TestBehavior behavior = new TestBehavior();
-		holder.addClientBehavior(ONCLICK, behavior);
-		TestBehavior behavior2 = new TestBehavior();
-		holder.addClientBehavior(ONCLICK, behavior2);
-		TestBehavior behavior3 = new TestBehavior();
-		holder.addClientBehavior(ONCHANGE, behavior3);
-		Object state = comp.saveState(facesContext);
-		BehaviorComponent restoredComp = new BehaviorComponent();
-		restoredComp.restoreState(facesContext, state);
-		Map<String, List<ClientBehavior>> behaviors = restoredComp.getClientBehaviors();
-		assertFalse(behaviors.isEmpty());
-		assertTrue(behaviors.containsKey(ONCLICK));
-		assertTrue(behaviors.containsKey(ONCHANGE));
-		assertFalse(behaviors.containsKey(ONTEST));
-		assertEquals(2, behaviors.entrySet().size());
-		assertEquals(2, behaviors.keySet().size());
-		assertEquals(2, behaviors.values().size());
-		assertEquals(2, behaviors.get(ONCLICK).size());
-		assertEquals(1, behaviors.get(ONCHANGE).size());
-		assertEquals(behavior3, behaviors.get(ONCHANGE).get(0));
-		assertEquals(behavior, behaviors.get(ONCLICK).get(0));
-		assertEquals(behavior2, behaviors.get(ONCLICK).get(1));
+    /* (non-Javadoc)
+      * @see javax.faces.component.UIComponentTestCase#setUp()
+      */
+    public void setUp() {
+        super.setUp();
+    }
 
-	}
+    /* (non-Javadoc)
+      * @see javax.faces.component.UIComponentTestCase#tearDown()
+      */
+    public void tearDown() {
+        super.tearDown();
+    }
 
-	public void testNonClientBehaviorHolder() throws Exception {
-		UIInput input = new UIInput();
-		try {
-			input.addClientBehavior(ONTEST, new TestBehavior());
-		} catch (IllegalStateException e) {
-			return;
-		}
-		assertFalse(true);
-	}
+    /**
+     * Test method for {@link javax.faces.component.UIComponentBase#saveState(javax.faces.context.FacesContext)}.
+     */
+    public void testSaveState() {
+        BehaviorComponent comp = new BehaviorComponent();
+        // Cast component to the interface, to be sure about method definition.
+        ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
+        TestBehavior behavior = new TestBehavior();
+        holder.addClientBehavior(ONCLICK, behavior);
+        TestBehavior behavior2 = new TestBehavior();
+        holder.addClientBehavior(ONCLICK, behavior2);
+        TestBehavior behavior3 = new TestBehavior();
+        holder.addClientBehavior(ONCHANGE, behavior3);
+        Object state = comp.saveState(facesContext);
+        BehaviorComponent restoredComp = new BehaviorComponent();
+        restoredComp.restoreState(facesContext, state);
+        Map<String, List<ClientBehavior>> behaviors = restoredComp.getClientBehaviors();
+        assertFalse(behaviors.isEmpty());
+        assertTrue(behaviors.containsKey(ONCLICK));
+        assertTrue(behaviors.containsKey(ONCHANGE));
+        assertFalse(behaviors.containsKey(ONTEST));
+        assertEquals(2, behaviors.entrySet().size());
+        assertEquals(2, behaviors.keySet().size());
+        assertEquals(2, behaviors.values().size());
+        assertEquals(2, behaviors.get(ONCLICK).size());
+        assertEquals(1, behaviors.get(ONCHANGE).size());
+        assertEquals(behavior3, behaviors.get(ONCHANGE).get(0));
+        assertEquals(behavior, behaviors.get(ONCLICK).get(0));
+        assertEquals(behavior2, behaviors.get(ONCLICK).get(1));
 
-	/**
-	 * Test method for {@link javax.faces.component.UIComponentBase#addClientBehavior(java.lang.String, javax.faces.component.behavior.Behavior)}.
-	 */
-	public void testAddBehavior() {
-		BehaviorComponent comp = new BehaviorComponent();
-		// Cast component to the interface, to be sure about method definition.
-		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
-		holder.addClientBehavior(ONCLICK, new TestBehavior());
-		holder.addClientBehavior(ONCLICK, new TestBehavior());
-		holder.addClientBehavior(ONCHANGE, new TestBehavior());
-		try {
-			holder.addClientBehavior("foo", new TestBehavior());
-		} catch (IllegalArgumentException e) {
-			return;
-		}
-		assertFalse(true);
-	}
+    }
 
-	/**
-	 * Test method for {@link javax.faces.component.UIComponentBase#getEventNames()}.
-	 */
-	public void testGetEventNames() {
-		BehaviorComponent comp = new BehaviorComponent();
-		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
-		assertEquals(EVENTS, holder.getEventNames());
-	}
+    public void testNonClientBehaviorHolder() throws Exception {
+        UIInput input = new UIInput();
+        try {
+            input.addClientBehavior(ONTEST, new TestBehavior());
+        } catch (IllegalStateException e) {
+            return;
+        }
+        assertFalse(true);
+    }
 
-	/**
-	 * Test method for {@link javax.faces.component.UIComponentBase#getClientBehaviors()}.
-	 */
-	public void testGetBehaviors() {
-		BehaviorComponent comp = new BehaviorComponent();
-		// Cast component to the interface, to be sure about method definition.
-		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
-		Map<String, List<ClientBehavior>> behaviors = holder.getClientBehaviors();
-		assertTrue(behaviors.isEmpty());
-		assertFalse(behaviors.containsKey(ONCLICK));
-		assertFalse(behaviors.containsValue(new TestBehavior()));
-		assertEquals(0, behaviors.entrySet().size());
-		holder.addClientBehavior(ONCLICK, new TestBehavior());
-		holder.addClientBehavior(ONCLICK, new TestBehavior());
-		holder.addClientBehavior(ONCHANGE, new TestBehavior());
-		assertFalse(behaviors.isEmpty());
-		assertTrue(behaviors.containsKey(ONCLICK));
-		assertTrue(behaviors.containsKey(ONCHANGE));
-		assertFalse(behaviors.containsKey(ONTEST));
-		assertEquals(2, behaviors.entrySet().size());
-		assertEquals(2, behaviors.keySet().size());
-		assertEquals(2, behaviors.values().size());
-		assertEquals(2, behaviors.get(ONCLICK).size());
-		assertEquals(1, behaviors.get(ONCHANGE).size());
-	}
+    /**
+     * Test method for {@link javax.faces.component.UIComponentBase#addClientBehavior(java.lang.String, javax.faces.component.behavior.Behavior)}.
+     */
+    public void testAddBehavior() {
+        BehaviorComponent comp = new BehaviorComponent();
+        // Cast component to the interface, to be sure about method definition.
+        ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
+        holder.addClientBehavior(ONCLICK, new TestBehavior());
+        holder.addClientBehavior(ONCLICK, new TestBehavior());
+        holder.addClientBehavior(ONCHANGE, new TestBehavior());
+        try {
+            holder.addClientBehavior("foo", new TestBehavior());
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        assertFalse(true);
+    }
 
-	/**
-	 * Test method for {@link javax.faces.component.UIComponentBase#getDefaultEventName()}.
-	 */
-	public void testGetDefaultEventName() {
-		BehaviorComponent comp = new BehaviorComponent();
-		// Cast component to the interface, to be sure about method definition.
-		ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
-		assertEquals(ONTEST, holder.getDefaultEventName());
-	}
+    /**
+     * Test method for {@link javax.faces.component.UIComponentBase#getEventNames()}.
+     */
+    public void testGetEventNames() {
+        BehaviorComponent comp = new BehaviorComponent();
+        ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
+        assertEquals(EVENTS, holder.getEventNames());
+    }
 
-	public static <T> Set<T> set(T... ts) 
-	  {
-	    return new HashSet<T>(Arrays.asList(ts));
-	  }
+    /**
+     * Test method for {@link javax.faces.component.UIComponentBase#getClientBehaviors()}.
+     */
+    public void testGetBehaviors() {
+        BehaviorComponent comp = new BehaviorComponent();
+        // Cast component to the interface, to be sure about method definition.
+        ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
+        Map<String, List<ClientBehavior>> behaviors = holder.getClientBehaviors();
+        assertTrue(behaviors.isEmpty());
+        assertFalse(behaviors.containsKey(ONCLICK));
+        assertFalse(behaviors.containsValue(new TestBehavior()));
+        assertEquals(0, behaviors.entrySet().size());
+        holder.addClientBehavior(ONCLICK, new TestBehavior());
+        holder.addClientBehavior(ONCLICK, new TestBehavior());
+        holder.addClientBehavior(ONCHANGE, new TestBehavior());
+        assertFalse(behaviors.isEmpty());
+        assertTrue(behaviors.containsKey(ONCLICK));
+        assertTrue(behaviors.containsKey(ONCHANGE));
+        assertFalse(behaviors.containsKey(ONTEST));
+        assertEquals(2, behaviors.entrySet().size());
+        assertEquals(2, behaviors.keySet().size());
+        assertEquals(2, behaviors.values().size());
+        assertEquals(2, behaviors.get(ONCLICK).size());
+        assertEquals(1, behaviors.get(ONCHANGE).size());
+    }
+
+    /**
+     * Test method for {@link javax.faces.component.UIComponentBase#getDefaultEventName()}.
+     */
+    public void testGetDefaultEventName() {
+        BehaviorComponent comp = new BehaviorComponent();
+        // Cast component to the interface, to be sure about method definition.
+        ClientBehaviorHolder holder = (ClientBehaviorHolder) comp;
+        assertEquals(ONTEST, holder.getDefaultEventName());
+    }
+
+    public static <T> Set<T> set(T... ts) {
+        return new HashSet<T>(Arrays.asList(ts));
+    }
 
 
 }

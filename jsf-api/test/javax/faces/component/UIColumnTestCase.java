@@ -41,10 +41,6 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.context.FacesContext;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -73,6 +69,7 @@ public class UIColumnTestCase extends UIComponentBaseTestCase {
 
 
     // Set up instance variables required by this test case.
+
     public void setUp() {
         super.setUp();
         component = new UIColumn();
@@ -98,6 +95,7 @@ public class UIColumnTestCase extends UIComponentBaseTestCase {
 
 
     // Test attribute-property transparency
+
     public void testAttributesTransparency() {
 
         super.testAttributesTransparency();
@@ -142,6 +140,7 @@ public class UIColumnTestCase extends UIComponentBaseTestCase {
 
 
     // Create a pristine component of the type to be used in state holder tests
+
     protected UIComponent createComponent() {
         UIComponent component = new UIColumn();
         component.setRendererType(null);

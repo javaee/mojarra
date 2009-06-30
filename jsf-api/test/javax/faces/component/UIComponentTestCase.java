@@ -41,33 +41,16 @@
 package javax.faces.component;
 
 
-import com.sun.faces.mock.MockApplication;
-import com.sun.faces.mock.MockExternalContext;
-import com.sun.faces.mock.MockFacesContext;
-import com.sun.faces.mock.MockHttpServletRequest;
-import com.sun.faces.mock.MockHttpServletResponse;
-import com.sun.faces.mock.MockHttpSession;
-import com.sun.faces.mock.MockLifecycle;
-import com.sun.faces.mock.MockRenderKit;
-import com.sun.faces.mock.MockServletConfig;
-import com.sun.faces.mock.MockServletContext;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
+import com.sun.faces.mock.*;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
+import java.util.*;
 
 
 /**
@@ -100,43 +83,48 @@ public class UIComponentTestCase extends TestCase {
 
     // The expected rendersChildren on a pristine component instance
     protected boolean expectedRendersChildren = false;
-    
+
     private Map.Entry<String, UIComponent> bogusEntry =
             new Map.Entry<String, UIComponent>() {
-        public boolean equals(Object r) {
-            return false;
-        }
-        
-        public String getKey() { return "key"; }
-        
-        public int hashCode() {
-            return 0;
-        }
-        
-        public UIComponent getValue() { return null; }
-        
-        public UIComponent setValue(UIComponent value) {
-            return null;
-        }
-        
-    };    
-    
+                public boolean equals(Object r) {
+                    return false;
+                }
+
+                public String getKey() {
+                    return "key";
+                }
+
+                public int hashCode() {
+                    return 0;
+                }
+
+                public UIComponent getValue() {
+                    return null;
+                }
+
+                public UIComponent setValue(UIComponent value) {
+                    return null;
+                }
+
+            };
+
     // Mock object instances for our tests
-    protected MockApplication         application = null;
-    protected MockServletConfig       config = null;
-    protected MockExternalContext     externalContext = null;
-    protected MockFacesContext        facesContext = null;
-    protected MockLifecycle           lifecycle = null;
-    protected MockHttpServletRequest  request = null;
+    protected MockApplication application = null;
+    protected MockServletConfig config = null;
+    protected MockExternalContext externalContext = null;
+    protected MockFacesContext facesContext = null;
+    protected MockLifecycle lifecycle = null;
+    protected MockHttpServletRequest request = null;
     protected MockHttpServletResponse response = null;
-    protected MockServletContext      servletContext = null;
-    protected MockHttpSession         session = null;
-    
+    protected MockServletContext servletContext = null;
+    protected MockHttpSession session = null;
+
 
     // ------------------------------------------------------------ Constructors
 
 
     // Construct a new instance of this test case.
+
     public UIComponentTestCase(String name) {
         super(name);
     }
@@ -146,6 +134,7 @@ public class UIComponentTestCase extends TestCase {
 
 
     // Set up instance variables required by this test case.
+
     public void setUp() {
 
         expectedAttributes = new String[0];
@@ -154,7 +143,7 @@ public class UIComponentTestCase extends TestCase {
         expectedRendered = true;
         expectedRendererType = null;
         expectedRendersChildren = false;
-        
+
         // Set up Servlet API Objects
         servletContext = new MockServletContext();
         servletContext.addInitParameter("appParamName", "appParamValue");
@@ -167,34 +156,34 @@ public class UIComponentTestCase extends TestCase {
         response = new MockHttpServletResponse();
 
         // Set up Faces API Objects
-	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-				 "com.sun.faces.mock.MockApplicationFactory");
-	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-				 "com.sun.faces.mock.MockRenderKitFactory");
+        FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+                "com.sun.faces.mock.MockApplicationFactory");
+        FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+                "com.sun.faces.mock.MockRenderKitFactory");
 
         externalContext =
-            new MockExternalContext(servletContext, request, response);
+                new MockExternalContext(servletContext, request, response);
         Map map = new HashMap();
         externalContext.setRequestParameterMap(map);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
         ApplicationFactory applicationFactory = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();
         facesContext.setApplication(application);
-	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	root.setViewId("/viewId");
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.setViewId("/viewId");
         facesContext.setViewRoot(root);
         RenderKitFactory renderKitFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = new MockRenderKit();
         try {
             renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
-                                          renderKit);
+                    renderKit);
         } catch (IllegalArgumentException e) {
             ;
         }
-        
+
         component = new TestComponent(expectedId);
 
     }
@@ -226,6 +215,7 @@ public class UIComponentTestCase extends TestCase {
 
 
     // Test behavior of Map returned by getAttributes()
+
     public void testAttributesMap() {
 
         // Initialize some attributes
@@ -356,26 +346,26 @@ public class UIComponentTestCase extends TestCase {
     public void testAttributesTransparency() {
 
         assertEquals(component.getChildren(),
-                     (List) component.getAttributes().get("children"));
+                (List) component.getAttributes().get("children"));
 
         assertEquals(component.getFacets(),
-                     (Map) component.getAttributes().get("facets"));
+                (Map) component.getAttributes().get("facets"));
 
         assertEquals(component.getId(),
-                     (String) component.getAttributes().get("id"));
+                (String) component.getAttributes().get("id"));
 
         assertEquals(component.getParent(),
-                     (UIComponent) component.getAttributes().get("parent"));
+                (UIComponent) component.getAttributes().get("parent"));
 
         assertEquals(component.isRendered(),
-                     ((Boolean) component.getAttributes().get("rendered")).
-                     booleanValue());
+                ((Boolean) component.getAttributes().get("rendered")).
+                        booleanValue());
         component.setRendered(false);
         assertEquals(Boolean.FALSE,
-                     (Boolean) component.getAttributes().get("rendered"));
+                (Boolean) component.getAttributes().get("rendered"));
         component.setRendered(true);
         assertEquals(Boolean.TRUE,
-                     (Boolean) component.getAttributes().get("rendered"));
+                (Boolean) component.getAttributes().get("rendered"));
         component.getAttributes().put("rendered", Boolean.FALSE);
         assertTrue(!component.isRendered());
         component.getAttributes().put("rendered", Boolean.TRUE);
@@ -383,7 +373,7 @@ public class UIComponentTestCase extends TestCase {
 
         component.setRendererType("foo");
         assertEquals("foo",
-                     (String) component.getAttributes().get("rendererType"));
+                (String) component.getAttributes().get("rendererType"));
         component.setRendererType(null);
         assertNull((String) component.getAttributes().get("rendererType"));
         component.getAttributes().put("rendererType", "bar");
@@ -392,8 +382,8 @@ public class UIComponentTestCase extends TestCase {
         assertNull(component.getRendererType());
 
         assertEquals(component.getRendersChildren(),
-                     ((Boolean) component.getAttributes().
-                      get("rendersChildren")).booleanValue());
+                ((Boolean) component.getAttributes().
+                        get("rendersChildren")).booleanValue());
 
     }
 
@@ -437,7 +427,7 @@ public class UIComponentTestCase extends TestCase {
         kids = component.getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
-            if ((kid == comp2) || (kid == comp4))  {
+            if ((kid == comp2) || (kid == comp4)) {
                 kids.remove();
             }
         }
@@ -516,7 +506,7 @@ public class UIComponentTestCase extends TestCase {
         kids = component.getChildren().listIterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
-            if ((kid == comp2) || (kid == comp4))  {
+            if ((kid == comp2) || (kid == comp4)) {
                 kids.remove();
             }
         }
@@ -611,7 +601,7 @@ public class UIComponentTestCase extends TestCase {
         }
 
         try {
-            component.getChildren().listIterator(component.getChildren().size()+1);
+            component.getChildren().listIterator(component.getChildren().size() + 1);
             fail("Should throw IndexOutOfBoundsException on index = size() + 1");
         } catch (IndexOutOfBoundsException e) {
             ;//Expected result
@@ -622,7 +612,7 @@ public class UIComponentTestCase extends TestCase {
         for (ListIterator<UIComponent> li = component.getChildren().listIterator(
                 component.getChildren().size()); li.hasPrevious();) {
 
-            assertEquals(comps.get(i--),li.previous());    
+            assertEquals(comps.get(i--), li.previous());
         }
 
     }
@@ -872,7 +862,7 @@ public class UIComponentTestCase extends TestCase {
 
         // toArray(Object[])
         UIComponent kids[] =
-            (UIComponent[]) children.toArray(new UIComponent[0]);
+                (UIComponent[]) children.toArray(new UIComponent[0]);
         assertEquals(comp0, kids[0]);
         assertEquals(comp1, kids[1]);
         assertEquals(comp2, kids[2]);
@@ -1023,7 +1013,7 @@ public class UIComponentTestCase extends TestCase {
         } catch (UnsupportedOperationException e) {
             ; // Expected result
         }
-            
+
 
         // Test clear()
         facets = component.getFacets();
@@ -1223,7 +1213,7 @@ public class UIComponentTestCase extends TestCase {
         } catch (UnsupportedOperationException e) {
             ; // Expected result
         }
-            
+
 
         // Test clear()
         facets = component.getFacets();
@@ -1404,7 +1394,7 @@ public class UIComponentTestCase extends TestCase {
         } catch (UnsupportedOperationException e) {
             ; // Expected result
         }
-            
+
 
         // Test clear()
         facets = component.getFacets();
@@ -1703,16 +1693,16 @@ public class UIComponentTestCase extends TestCase {
 
         // Validate properties
         assertEquals("expected family",
-                     expectedFamily, component.getFamily());
+                expectedFamily, component.getFamily());
         assertEquals("expected id",
-                     expectedId, component.getId());
+                expectedId, component.getId());
         assertNull("no parent", component.getParent());
         assertEquals("expected rendered",
-                     expectedRendered, component.isRendered());
+                expectedRendered, component.isRendered());
         assertEquals("expected rendererType",
-                     expectedRendererType, component.getRendererType());
+                expectedRendererType, component.getRendererType());
         assertEquals("expected rendersChildren",
-                     expectedRendersChildren, component.getRendersChildren());
+                expectedRendersChildren, component.getRendersChildren());
 
         // Validate children and facets
         checkChildCount(component, 0);
@@ -1781,28 +1771,28 @@ public class UIComponentTestCase extends TestCase {
         // id - simple name
         component.setId("foo");
         assertEquals("expected id",
-                     "foo", component.getId());
+                "foo", component.getId());
 
         // id - complex name
         component.setId("a123-bcd_e");
         assertEquals("expected id",
-                     "a123-bcd_e", component.getId());
+                "a123-bcd_e", component.getId());
 
         // parent
         UIComponent parent = new TestComponent("parent");
         component.setParent(parent);
         assertEquals("expected parent",
-                     parent, component.getParent());
+                parent, component.getParent());
 
         // rendered
         component.setRendered(!expectedRendered);
         assertEquals("expected rendered",
-                     !expectedRendered, component.isRendered());
+                !expectedRendered, component.isRendered());
 
         // rendererType
         component.setRendererType("foo");
         assertEquals("expected rendererType",
-                     "foo", component.getRendererType());
+                "foo", component.getRendererType());
 
     }
 
@@ -1811,6 +1801,7 @@ public class UIComponentTestCase extends TestCase {
 
 
     // Validate that the specified number of attributes are present.
+
     protected void checkAttributeCount(UIComponent component, int count) {
         int result = 0;
         Iterator names = component.getAttributes().keySet().iterator();
@@ -1826,7 +1817,7 @@ public class UIComponentTestCase extends TestCase {
     protected void checkAttributeMissing(UIComponent component,
                                          String name) {
         assertNull("Attribute " + name + " should be missing",
-                   component.getAttributes().get(name));
+                component.getAttributes().get(name));
         Iterator keys = component.getAttributes().keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
@@ -1842,10 +1833,10 @@ public class UIComponentTestCase extends TestCase {
     protected void checkAttributePresent(UIComponent component,
                                          String name, Object value) {
         assertNotNull("attribute " + name + " should be present",
-                      component.getAttributes().get(name));
+                component.getAttributes().get(name));
         if (value != null) {
             assertEquals("attribute " + name + " value should be equal",
-                         value, component.getAttributes().get(name));
+                    value, component.getAttributes().get(name));
         }
         Iterator keys = component.getAttributes().keySet().iterator();
         while (keys.hasNext()) {
@@ -1853,7 +1844,7 @@ public class UIComponentTestCase extends TestCase {
             if (name.equals(key)) {
                 if (value != null) {
                     assertEquals("attribute " + name + " value should match",
-                                 value, component.getAttributes().get(name));
+                            value, component.getAttributes().get(name));
                 }
                 return;
             }
@@ -1867,7 +1858,7 @@ public class UIComponentTestCase extends TestCase {
     protected void checkChildCount(UIComponent component, int count) {
         assertEquals("child count 1", count, component.getChildCount());
         assertEquals("child count 2",
-                     count, component.getChildren().size());
+                count, component.getChildren().size());
         assertEquals("child count 3", count, component.getChildCount());
         if (count == 0) {
             assertTrue("children empty", component.getChildren().isEmpty());
@@ -1881,12 +1872,12 @@ public class UIComponentTestCase extends TestCase {
     protected void checkChildMissing(UIComponent component,
                                      UIComponent child) {
         assertNull("child " + child + " has no parent",
-                   child.getParent());
+                child.getParent());
         List children = component.getChildren();
         assertTrue("child " + child + " should not be contained",
-                   !children.contains(child));
+                !children.contains(child));
         assertEquals("child " + child + " should not be found by indexOf",
-                     -1, children.indexOf(child));
+                -1, children.indexOf(child));
         for (int i = 0; i < children.size(); i++) {
             if (child.equals((UIComponent) children.get(i)))
                 fail("child " + child + " should be missing");
@@ -1899,29 +1890,27 @@ public class UIComponentTestCase extends TestCase {
                                      UIComponent child, int index) {
         List children = component.getChildren();
         assertTrue("child " + child + " should be contained",
-                   children.contains(child));
+                children.contains(child));
         assertEquals("child " + child + " should be found by indexOf",
-                     index, children.indexOf(child));
+                index, children.indexOf(child));
         UIComponent kid = (UIComponent) children.get(index);
         assertEquals("child " + child + " should be present",
-                     child, kid);
+                child, kid);
         assertEquals("child " + child + " has correct parent",
-                     component, kid.getParent());
+                component, kid.getParent());
     }
-
-
 
 
     // Validate that the specified number of facets is present
     protected void checkFacetCount(UIComponent component, int count) {
         assertEquals("facet count",
-                     count, component.getFacets().size());
+                count, component.getFacets().size());
         if (count == 0) {
             assertTrue("facets empty",
-                       component.getFacets().isEmpty());
+                    component.getFacets().isEmpty());
         } else {
             assertTrue("facets not empty",
-                       !component.getFacets().isEmpty());
+                    !component.getFacets().isEmpty());
         }
     }
 
@@ -1930,16 +1919,16 @@ public class UIComponentTestCase extends TestCase {
     protected void checkFacetMissing(UIComponent component,
                                      String name, UIComponent facet) {
         assertNull("facet " + name + " has no parent",
-                   facet.getParent());
+                facet.getParent());
         Map facets = component.getFacets();
         assertTrue("facet " + name + " key not present",
-                   !facets.containsKey(name));
+                !facets.containsKey(name));
         assertTrue("facet " + name + " value not present",
-                   !facets.containsValue(facet));
+                !facets.containsValue(facet));
         assertNull("facet " + name + " key not found by get",
-                   facets.get(name));
+                facets.get(name));
         assertNull("facet " + name + " not returned by getFacet(String)",
-                   component.getFacet(name));
+                component.getFacet(name));
         Iterator keys = facets.keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
@@ -1962,16 +1951,16 @@ public class UIComponentTestCase extends TestCase {
                                      String name, UIComponent facet) {
 
         assertEquals("facet " + name + " has correct parent",
-                     component, facet.getParent());
+                component, facet.getParent());
         Map facets = component.getFacets();
         assertTrue("facet " + name + " key is present",
-                   facets.containsKey(name));
+                facets.containsKey(name));
         assertTrue("facet " + name + " value is present",
-                   facets.containsValue(facet));
+                facets.containsValue(facet));
         assertEquals("facet " + name + " has correct value",
-                     facet, (UIComponent) facets.get(name));
+                facet, (UIComponent) facets.get(name));
         assertTrue("facet " + name + " returned by getFacet(String)",
-                   facet == component.getFacet(name));
+                facet == component.getFacet(name));
         boolean found = false;
         Iterator keys = facets.keySet().iterator();
         while (keys.hasNext()) {
@@ -2003,6 +1992,7 @@ public class UIComponentTestCase extends TestCase {
 
 
     // Test Implementation of Map.Entry
+
     private class TestMapEntry implements Map.Entry {
 
         public TestMapEntry(Object key, Object value) {
@@ -2062,7 +2052,6 @@ public class UIComponentTestCase extends TestCase {
         }
 
     }
-
 
 
 }
