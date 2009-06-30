@@ -45,22 +45,23 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseEvent;
 
 import com.sun.faces.util.DebugUtil;
+
 import javax.faces.context.FacesContext;
 
 public class PrintTreePhaseListener extends Object implements PhaseListener {
-    
+
     public void afterPhase(PhaseEvent event) {
-	DebugUtil.printTree(FacesContext.getCurrentInstance().getViewRoot(),
-			    System.out);
+        DebugUtil.printTree(FacesContext.getCurrentInstance().getViewRoot(),
+                System.out);
     }
 
 
     public void beforePhase(PhaseEvent event) {
-	
+
     }
 
     public PhaseId getPhaseId() {
-	return PhaseId.ANY_PHASE;
+        return PhaseId.ANY_PHASE;
     }
 
 }
