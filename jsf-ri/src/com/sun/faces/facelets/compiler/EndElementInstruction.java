@@ -66,8 +66,8 @@ import java.util.List;
 
 final class EndElementInstruction implements Instruction {
 
-    private final String HEAD_ELEMENT = "head";
-    private final String BODY_ELEMENT = "body";
+    private static final String HEAD_ELEMENT = "head";
+    private static final String BODY_ELEMENT = "body";
 
     private final String element;
 
