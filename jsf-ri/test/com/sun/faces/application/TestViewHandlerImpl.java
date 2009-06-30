@@ -248,7 +248,9 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         RequestStateManager.remove(facesContext, RequestStateManager.INVOCATION_PATH);
         String path = handler.getActionURL(facesContext, "/path/test.jsp");
         System.out.println("VIEW ID PATH 2: " + path);
-        assertEquals(contextPath + "/faces/path/test.jsp", path);
+        String expected = contextPath + "/faces/path/test.jsp";
+        assertEquals("Expected: " + expected + ", recieved: " + path, expected, path);
+
 
 
         // if getServletPath() returns a path indicating extension mapping
@@ -259,7 +261,9 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         RequestStateManager.remove(facesContext, RequestStateManager.INVOCATION_PATH);
         path = handler.getActionURL(facesContext, "/path/test");
         System.out.println("VIEW ID PATH 3: " + path);
-        assertEquals(contextPath + "/path/test.jsf", path);
+        expected = contextPath + "/path/test";
+        assertEquals("Expected: " + expected + ", recieved: " + path, expected, path);
+
 
         // if getServletPath() returns a path indicating extension mapping
         // and the viewId passed has an extension, replace the extension with
@@ -269,7 +273,10 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         RequestStateManager.remove(facesContext, RequestStateManager.INVOCATION_PATH);
         path = handler.getActionURL(facesContext, "/path/t.est.jsp");
         System.out.println("VIEW ID PATH 4: " + path);
-        assertEquals(contextPath + "/path/t.est.jsf", path);
+        expected = contextPath + "/path/t.est.jsf";
+        assertEquals("Expected: " + expected + ", recieved: " + path, expected, path);
+
+
 
         // if path info is null, the impl must check to see if
         // there is an exact match on the servlet path, if so, return
@@ -279,7 +286,9 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         RequestStateManager.remove(facesContext, RequestStateManager.INVOCATION_PATH);
         path = handler.getActionURL(facesContext, "/path/t.est");
         System.out.println("VIEW ID PATH 5: " + path);
-        assertEquals(contextPath + "/faces/path/t.est", path);
+        expected = contextPath + "/faces/path/t.est";
+        assertEquals("Expected: " + expected + ", recieved: " + path, expected, path);
+
 
     }
 
