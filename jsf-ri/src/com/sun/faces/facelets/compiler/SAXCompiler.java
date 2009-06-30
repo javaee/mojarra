@@ -360,7 +360,7 @@ public final class SAXCompiler extends Compiler {
     public FaceletHandler doMetadataCompile(URL src, String alias)
     throws IOException {
 
-        CompilationManager mgr = new CompilationManager(alias, this);
+        CompilationManager mgr = new CompilationManager("metadata/" + alias, this);
         CompilationHandler handler = new MetadataCompilationHandler(mgr, alias);
         return doCompile(mgr, handler, src, alias);
     }
