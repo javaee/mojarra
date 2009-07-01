@@ -1082,7 +1082,7 @@ public class UIData extends UIComponentBase
      * 	  <code>UIComponent</code> in the returned <code>Map</code>,
      * 	  call {@link UIComponent#visitTree}.</p></li>
 
-     * 	  <li><p>Iterate over the columns an rows.</p>
+     * 	  <li><p>Iterate over the columns and rows.</p>
 
      * <ul>
 
@@ -1481,6 +1481,19 @@ public class UIData extends UIComponentBase
     // Visit each column and row
     private boolean visitColumnsAndRows(VisitContext context,  VisitCallback callback) {
 
+
+        // first, visit all columns
+        if (getChildCount() > 0) {
+            for (UIComponent kid : getChildren()) {
+                if (!(kid instanceof UIColumn)) {
+                    continue;
+                }
+                if (kid.visitTree(context, callback)) {
+                    return true;
+                }
+            }
+        }
+
         // Iterate over our UIColumn children, once per row
         int processed = 0;
         int rowIndex = getFirst() - 1;
@@ -1499,15 +1512,19 @@ public class UIData extends UIComponentBase
                 break; // Scrolled past the last row
             }
 
-            // Visit as required on the *children* of the UIColumn, as well as columns themselves
+            // Visit as required on the *children* of the UIColumn
             // (facets have been done a single time with rowIndex=-1 already)
             if (getChildCount() > 0) {
                 for (UIComponent kid : getChildren()) {
                     if (!(kid instanceof UIColumn)) {
                         continue;
                     }
-                    if (kid.visitTree(context, callback)) {
-                        return true;
+                    if (kid.getChildCount() > 0) {
+                    for (UIComponent grandkid : kid.getChildren()) {
+                            if (grandkid.visitTree(context, callback)) {
+                                return true;
+                            }
+                        }
                     }
                 }
             }
