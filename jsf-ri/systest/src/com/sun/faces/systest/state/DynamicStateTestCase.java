@@ -90,6 +90,9 @@ public class DynamicStateTestCase extends AbstractTestCase {
         doTestDynamicAddition("/state/dynamicAddition.faces");
     }
 
+    /*
+     * Added for issue 1183.
+     */
     public void testNestedComponentAddition() throws Exception {
 
         HtmlPage page = getPage("/faces/state/dynamicAddition2.xhtml");
