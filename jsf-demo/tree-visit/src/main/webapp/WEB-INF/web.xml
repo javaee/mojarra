@@ -41,9 +41,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-    <display-name></display-name>
-    <description></description>
-
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
@@ -53,39 +50,13 @@
         <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
         <param-value>.xhtml</param-value>
     </context-param>
-    <context-param>
-        <param-name>facelets.DEVELOPMENT</param-name>
-        <param-value>true</param-value>
-    </context-param>
 
-    <context-param>
-        <description>
-            Set this flag to true if you want the JavaServer Faces
-            Reference Implementation to validate the XML in your
-            faces-config.xml resources against the DTD. Default
-            value is false.
-        </description>
-        <param-name>com.sun.faces.validateXml</param-name>
-        <param-value>true</param-value>
-    </context-param>
-
-    <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-
-    <!-- Faces Servlet Mapping -->
-    <!-- 
-
-         This mapping identifies a jsp page as having JSF content.  If a
-         request comes to the server for foo.faces, the container will
-         send the request to the FacesServlet, which will expect a
-         corresponding foo.jsp page to exist containing the content.
-
-    -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>

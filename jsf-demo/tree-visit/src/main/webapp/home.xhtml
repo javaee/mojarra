@@ -63,16 +63,16 @@
             <h:outputText value="Select component ids from the listbox below and then click the 'Visit' button to perform a tree visit that includes the specified components.  The ids of the components that are reached during the tree visit are displayed below."
               id="instructions"/>
 
-            <h:outputLabel for="list" value="Components To Visit" 
+            <h:outputLabel for="componentsList" value="Components To Visit" 
                            styleClass="subtitle"
                            id="componentsListLabel"/>
 
-            <h:selectManyListbox value="#{bean.selectedIds}" id="componentsList" size="10">
-                <f:selectItems value="#{bean.items}"/>
+            <h:selectManyListbox value="#{treevisit.selectedIds}" id="componentsList" size="10">
+                <f:selectItems value="#{treevisit.items}"/>
             </h:selectManyListbox>
 
             <h:panelGroup id="visitRenderedGroup">
-                <h:selectBooleanCheckbox value="#{bean.visitRendered}"
+                <h:selectBooleanCheckbox value="#{treevisit.visitRendered}"
                                          id="visitRenderedCheckbox"/>
 
                 <h:outputLabel value="Visit rendered components only"
@@ -80,7 +80,7 @@
                                id="visitRenderedLabel"/>
             </h:panelGroup>
 
-            <h:commandButton value="visit" actionListener="#{bean.visit}" 
+            <h:commandButton value="visit" actionListener="#{treevisit.visit}"
                              id="visitButton">
                 <f:ajax execute="form" render="form:visitedTable"/>
             </h:commandButton>
@@ -110,7 +110,7 @@
 
             </h:panelGrid>
 
-            <h:dataTable value="#{bean.testData}" var="row" id="testTable"
+            <h:dataTable value="#{treevisit.testData}" var="row" id="testTable"
                          border="1">
                 <h:column id="labelColumn">
                     <f:facet name="header">
@@ -149,7 +149,7 @@
 
         </h:panelGrid>
 
-        <h:dataTable value="#{bean.visitedIds}" var="visitedId" id="visitedTable">
+        <h:dataTable value="#{treevisit.visitedIds}" var="visitedId" id="visitedTable">
             <h:column id="visitedColumn">
                 <f:facet name="header">
                     <h:outputText value="Visited Components" id="visitedColumnHeader"
