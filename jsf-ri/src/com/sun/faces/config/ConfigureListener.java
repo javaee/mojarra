@@ -238,10 +238,10 @@ public class ConfigureListener implements ServletRequestListener,
                         manager.create(name, initContext);
                     }
                 }
-		boolean isErrorPagePresent = webXmlProcessor.isErrorPagePresent();
-                associate.setErrorPagePresent(isErrorPagePresent);
-		context.setAttribute(RIConstants.ERROR_PAGE_PRESENT_KEY_NAME, 
-				     isErrorPagePresent);
+            boolean isErrorPagePresent = webXmlProcessor.isErrorPagePresent();
+            associate.setErrorPagePresent(isErrorPagePresent);
+            context.setAttribute(RIConstants.ERROR_PAGE_PRESENT_KEY_NAME,
+                                 isErrorPagePresent);
 
             }
             Application app = initContext.getApplication();
