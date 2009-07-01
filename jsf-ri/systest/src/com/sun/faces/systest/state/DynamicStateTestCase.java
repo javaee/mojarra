@@ -76,28 +76,46 @@ public class DynamicStateTestCase extends AbstractTestCase {
 
     public void testDynamicDeletionPrefix() throws Exception {
         doTestDynamicDeletion("/faces/state/dynamicDeletion.xhtml");
-
-
     }
     
     public void testDynamicDeletionExtension() throws Exception {
         doTestDynamicDeletion("/state/dynamicDeletion.faces");
-
-
     }
     
     public void testDynamicAdditionPrefix() throws Exception {
         doTestDynamicAddition("/faces/state/dynamicAddition.xhtml");
-
-
     }
     
     public void testDynamicAdditionExtension() throws Exception {
         doTestDynamicAddition("/state/dynamicAddition.faces");
+    }
 
+    public void testNestedComponentAddition() throws Exception {
+
+        HtmlPage page = getPage("/faces/state/dynamicAddition2.xhtml");
+        HtmlSubmitInput submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:render");
+        page = submit.click();
+        HtmlTextInput input = (HtmlTextInput)
+              getInputContainingGivenId(page, "form:textInput");
+        assertNotNull(input);
+        assertEquals("default value", input.getValueAttribute());
+        input.setValueAttribute("new value");
+        submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:render");
+        page = submit.click();
+        input = (HtmlTextInput)
+              getInputContainingGivenId(page, "form:textInput");
+        assertNotNull(input);
+        assertEquals("new value", input.getValueAttribute());
 
     }
-    public void doTestDynamicDeletion(String viewId) throws Exception {
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void doTestDynamicDeletion(String viewId) throws Exception {
         HtmlPage page = getPage(viewId);
         HtmlTextInput textField = (HtmlTextInput)
                 getInputContainingGivenId(page, "textField");
@@ -112,7 +130,8 @@ public class DynamicStateTestCase extends AbstractTestCase {
         assertTrue(-1 == page.asText().indexOf("cbutton should not be found"));
     }
 
-    public void doTestDynamicAddition(String viewId) throws Exception {
+
+    private void doTestDynamicAddition(String viewId) throws Exception {
         HtmlPage page = getPage(viewId);
         HtmlTextInput textField = (HtmlTextInput)
                 getInputContainingGivenId(page, "textField");

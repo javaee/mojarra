@@ -57,6 +57,7 @@ import com.sun.faces.util.MessageUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.io.IOException;
 import javax.faces.application.StateManager;
 import javax.faces.component.ContextCallback;
@@ -423,7 +424,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         Map<String,ComponentStruct> result;
         //noinspection unchecked
         if ((null == (result = (Map<String,ComponentStruct>) context.getAttributes().get(CLIENTIDS_TO_ADD_NAME))) && create) {
-            result = new HashMap<String,ComponentStruct>();
+            result = new LinkedHashMap<String,ComponentStruct>();
             context.getAttributes().put(CLIENTIDS_TO_ADD_NAME, result);
         }
         return result;
