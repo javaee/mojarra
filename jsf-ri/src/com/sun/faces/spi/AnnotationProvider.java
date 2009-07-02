@@ -76,6 +76,13 @@ import java.util.Map;
  * is only available while the application is being initialized and will be removed
  * before the application is put into service.
  * </p>
+ *
+ * <p>
+ * To register a custom AnnotationProvider with the runtime, place a file named
+ * com.sun.faces.spi.annotationprovider within META-INF/services of a JAR file,
+ * with a single line referencing the fully qualified class name of the AnnotationProvider
+ * implementation.
+ * </p>
  * 
  */
 public abstract class AnnotationProvider {
