@@ -197,7 +197,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             context.setViewRoot(viewRoot);
             context.setProcessingEvents(true);
             pdl.buildView(context, viewRoot);
-            context.setProcessingEvents(false);
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         }
@@ -299,7 +298,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         } else {
             viewRoot = null;
         }
-
+        context.setProcessingEvents(false);
         return viewRoot;
 
     }

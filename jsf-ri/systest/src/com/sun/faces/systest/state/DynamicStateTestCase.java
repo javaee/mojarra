@@ -112,6 +112,23 @@ public class DynamicStateTestCase extends AbstractTestCase {
         assertNotNull(input);
         assertEquals("new value", input.getValueAttribute());
 
+        // ensure events are fired properly when adding tree deltas
+        // to the view
+        submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:submit");
+        page = submit.click();
+        input = (HtmlTextInput)
+              getInputContainingGivenId(page, "form:textInput");
+        assertNotNull(input);
+
+        // once more for good measure
+        submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:submit");
+        page = submit.click();
+        input = (HtmlTextInput)
+              getInputContainingGivenId(page, "form:textInput");
+        assertNotNull(input);
+
     }
 
 
