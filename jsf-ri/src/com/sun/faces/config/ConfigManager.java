@@ -45,6 +45,8 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
 import com.sun.faces.spi.ConfigurationResourceProvider;
 import com.sun.faces.spi.ConfigurationResourceProviderFactory;
+import com.sun.faces.spi.AnnotationProvider;
+import com.sun.faces.spi.AnnotationProviderFactory;
 import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.*;
 import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.FaceletConfig;
 import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
@@ -720,9 +722,10 @@ public class ConfigManager {
                 t.startTiming();
             }
 
-            AnnotationScanner scanner = new AnnotationScanner(sc);
+            //AnnotationScanner scanner = new AnnotationScanner(sc);
+            AnnotationProvider provider = AnnotationProviderFactory.createAnnotationProvider(sc);
             Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =
-                  scanner.getAnnotatedClasses();
+                  provider.getAnnotatedClasses();
 
             if (t != null) {
                 t.stopTiming();
