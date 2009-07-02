@@ -362,11 +362,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             var target = $(id);
 
+            if (!target) {
+                throw new Error("The specified id: "+id+" was not found in the page.");
+            }
+
             // There can be multiple attributes modified.  Loop through the list.
             var nodes = element.childNodes;
             for (var i = 0; i < nodes.length; i++) {
-                var name = nodes[i].firstChild.firstChild.nodeValue;
-                var value = nodes[i].firstChild.nextSibling.firstChild.nodeValue;
+                var name = nodes[i].getAttribute('name');
+                var value = nodes[i].getAttribute('value');
                 target.setAttribute(name,value);
             }
         };
