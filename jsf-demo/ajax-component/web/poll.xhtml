@@ -60,7 +60,7 @@
 
                 <h:outputText>Count: </h:outputText><br/>
                 <h:outputText id="target" value="#{count.count}"/><br/>
-                <ez:poll id="poll" interval="200" timeout="5000" render="form:target"/>
+                <ez:polltag id="poll" interval="200" timeout="5000" render=":form:target"/>
                 <h:outputText id="target2" value="#{count.count2}"/>
                 <ez:poll id="poll2" interval="1000" timeout="10000" render="form:target2"/>
                 <!-- end composite component usage -->

@@ -52,13 +52,13 @@
 </cc:interface>
 <cc:implementation>
     <span id="#{cc.clientId}">
-    <h:outputScript name="polltag/poll.js" target="head" />
+    <h:outputScript name="poll/polltag.js" target="head" />
         <h:commandButton id="hidden" type="button" style="display: none;">
             <f:ajax execute="#{cc.attrs.execute}" render="#{cc.attrs.render}"/>
         </h:commandButton>
     </span>
     <script type="text/javascript">
-        init("#{cc.clientId}","#{cc.attrs.interval}", "#{cc.attrs.timeout}");
+        jsf.ajax.addOnError(jsfdemo.polltag.init("#{cc.clientId}","#{cc.attrs.interval}", "#{cc.attrs.timeout}"));
     </script>
 </cc:implementation>
 </body>

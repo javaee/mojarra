@@ -35,34 +35,48 @@
  */
 
 
-function init(id, inc, to, exe, rend) {
-    var componentID = id;
-    var increment = inc;
-    var timeout = to;
-    var elapsed = 0;
-    var token = null;
-    var execute = exe;
-    var render = rend;
+if (!window.jsfdemo) {
+    var jsfdemo = {};
+}
 
-    // If increment isn't set, or it's less than some reasonable value (50) default to 200ms
-    if (isNaN(increment) || increment <= 50) {
-        increment = 200;
-    }
-    // If timeout isn't set, default to no timeout
-    if (isNaN(timeout) || timeout == 0) {
-        timeout = -1;
-    }
+if (!jsfdemo.poll) {
+    jsfdemo.poll = {};
+}
 
-    var poll = function poll() {
-        jsf.ajax.request(componentID, null, {execute: execute, render: render});
-        if (timeout != -1) {
-            // Not an accurate timeout - but simple to compute
-            elapsed += increment;
-            if (elapsed > timeout) {
-                window.clearInterval(token);
+if (!jsfdemo.poll.init) {
+    jsfdemo.poll.init = function init(id, inc, to, exe, rend) {
+        var componentID = id;
+        var increment = inc;
+        var timeout = to;
+        var elapsed = 0;
+        var token = null;
+        var execute = exe;
+        var render = rend;
+
+        // If increment isn't set, or it's less than some reasonable value (50) default to 200ms
+        if (isNaN(increment) || increment <= 50) {
+            increment = 200;
+        }
+        // If timeout isn't set, default to no timeout
+        if (isNaN(timeout) || timeout == 0) {
+            timeout = -1;
+        }
+
+        var poll = function poll() {
+            jsf.ajax.request(componentID, null, {execute: execute, render: render});
+            if (timeout != -1) {
+                // Not an accurate timeout - but simple to compute
+                elapsed += increment;
+                if (elapsed > timeout) {
+                    window.clearInterval(token);
+                }
             }
         }
-    }
 
-    token = window.setInterval(poll, increment);
+        token = window.setInterval(poll, increment);
+
+        return function cancelPoll() {
+            window.clearInterval(token);
+        }
+    }
 }

@@ -173,31 +173,6 @@
     <!-- =================================================================== -->
 
     <demo>
-        <name>Poll via Tag Component</name>
-        <page>polltag.jsf</page>
-        <sources>
-            <source>
-                <label>JSF Page</label>
-                <path>/polltag.xhtml</path>
-            </source>
-            <source>
-                <label>Component xhtml</label>
-                <path>/resources/polltag/poll.xhtml</path>
-            </source>
-            <source>
-                <label>Component JavaScript</label>
-                <path>/resources/polltag/poll.js</path>
-            </source>
-            <source>
-                <label>Managed Bean</label>
-                <path>/WEB-INF/classes/dataholding/Count.java</path>
-            </source>
-        </sources>
-    </demo>
-
-    <!-- =================================================================== -->
-
-    <demo>
         <name>Poll via Request Component</name>
         <page>poll.jsf</page>
         <sources>
@@ -212,6 +187,14 @@
             <source>
                 <label>Component JavaScript</label>
                 <path>/resources/poll/poll.js</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/poll/polltag.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/poll/polltag.js</path>
             </source>
             <source>
                 <label>Managed Bean</label>

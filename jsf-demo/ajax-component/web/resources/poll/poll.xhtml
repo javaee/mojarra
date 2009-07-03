@@ -57,7 +57,7 @@
     </span>
     <script type="text/javascript">
         /* <![CDATA[ */
-        init("#{cc.clientId}","#{cc.attrs.interval}", "#{cc.attrs.timeout}", "#{cc.attrs.execute}", "#{cc.attrs.render}");
+        jsf.ajax.addOnError(jsfdemo.poll.init("#{cc.clientId}","#{cc.attrs.interval}", "#{cc.attrs.timeout}", "#{cc.attrs.execute}", "#{cc.attrs.render}"));
         /* ]]> */
     </script>
 </cc:implementation>
