@@ -75,8 +75,10 @@ if (!jsfdemo.polltag.init) {
 
         token = window.setInterval(poll, increment);
 
-        return function cancelPoll() {
-            window.clearInterval(token);
+        return function cancelPoll(data) {
+            if (data.source.id == componentID + ":" + "hidden") {
+                window.clearInterval(token);
+            }
         }
     }
 }
