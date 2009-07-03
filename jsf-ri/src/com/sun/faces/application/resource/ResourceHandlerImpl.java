@@ -134,7 +134,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         // Specialcasing to serve compressed jsf.js if not in Development Stage
         if ("javax.faces".equals(libraryName) && "jsf.js".equals(resourceName)) {
-            if (ctx.getApplication().getProjectStage() == ProjectStage.Development) {
+            if (ctx.isProjectStage(ProjectStage.Development)) {
                 resourceName = "jsf-uncompressed.js";
             } else {
                 resourceName = "jsf-compressed.js";

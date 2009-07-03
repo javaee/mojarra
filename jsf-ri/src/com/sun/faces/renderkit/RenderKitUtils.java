@@ -980,7 +980,7 @@ public class RenderKitUtils {
 
         //  Necessary to deal with jsf.js compression
         if ("javax.faces".equals(library) && "jsf.js".equals(name)) {
-            if (ctx.getApplication().getProjectStage() == ProjectStage.Development) {
+            if (ctx.isProjectStage(ProjectStage.Development)) {
                 name= "jsf-uncompressed.js";
             } else {
                 name = "jsf-compressed.js";
