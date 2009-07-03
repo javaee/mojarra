@@ -118,6 +118,9 @@ public class RenderResponsePhase extends Phase {
                 viewIdsUnchanged = beforePublishViewId == null && afterPublishViewId == null ||
                         (beforePublishViewId != null && afterPublishViewId != null) &&
                         beforePublishViewId.equals(afterPublishViewId);
+                if (facesContext.getResponseComplete()) {
+                    return;
+                }
             } while (!viewIdsUnchanged);
             
             //render the view

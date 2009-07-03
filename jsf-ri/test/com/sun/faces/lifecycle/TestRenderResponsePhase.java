@@ -42,12 +42,20 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.cactus.FileOutputResponseWrapper;
 import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.PreRenderViewEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import java.io.File;
 import java.util.Locale;
 
 /**
@@ -148,6 +156,70 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
                 !(getFacesContext().getResponseComplete()));
 
         assertTrue(verifyExpectedOutput());
+    }
+
+    public void beginShortCircuitRenderResponse(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+    }
+
+    public void testShortCircuitRenderResponse() {
+
+        SystemEventListener listener = new TestListener(getFacesContext());
+        Application application = getFacesContext().getApplication();
+        application.subscribeToEvent(PreRenderViewEvent.class, listener);
+
+        Phase renderResponse = new RenderResponsePhase();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        page.setId("root");
+        page.setViewId(TEST_URI);
+        page.setLocale(Locale.US);
+        getFacesContext().setViewRoot(page);
+
+        try {
+            renderResponse.execute(getFacesContext());
+        } catch (FacesException fe) {
+            System.out.println(fe.getMessage());
+            if (null != fe.getCause()) {
+                fe.getCause().printStackTrace();
+            } else {
+                fe.printStackTrace();
+            }
+        }
+
+        assertTrue(getFacesContext().getResponseComplete());
+        File renderedOutputFile = new File(FileOutputResponseWrapper.FACES_RESPONSE_FILENAME);
+        assertTrue(renderedOutputFile.length() == 0);
+    }
+
+    private static final class TestListener
+        implements SystemEventListener {
+
+        private FacesContext context = null;
+
+        private Class<?> sourceFor;
+        private Object passedSource;
+        private boolean forSourceInvoked;
+
+
+        public TestListener(FacesContext context) {
+            this.context = context;
+        }
+
+        public void processEvent(SystemEvent event)
+            throws AbortProcessingException {
+            context.responseComplete();
+        }
+
+        public boolean isListenerForSource(Object source) {
+            forSourceInvoked = true;
+            passedSource = source;
+            if (sourceFor == null) {
+                return (source != null);
+            } else {
+                return sourceFor.isInstance(source);
+            }
+        }
+
     }
 
 } // end of class TestRenderResponsePhase
