@@ -98,6 +98,27 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertNotNull(handler.createResource("jsf.js", "javax.faces"));
     }
 
+    public void testAjaxCompression() throws Exception {
+        
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        Resource resource =  handler.createResource("jsf-uncompressed.js", "javax.faces");
+
+        InputStream stream = resource.getInputStream();
+
+        int origSize = getBytes(stream).length;
+
+        resource =  handler.createResource("jsf.js", "javax.faces");
+
+        stream = resource.getInputStream();
+
+        int compSize = getBytes(stream).length;
+
+        //  If we're not getting 30% compression, something's gone horribly wrong.
+        assertTrue("compressed file less than 30% smaller: orig "+origSize+" comp: "+compSize,
+                origSize * 0.7 > compSize);
+
+    }
+
 
     public void testCreateResource() throws Exception {
 

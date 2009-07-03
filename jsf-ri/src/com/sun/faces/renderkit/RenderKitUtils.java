@@ -951,7 +951,7 @@ public class RenderKitUtils {
 
         final String name = "jsf.js";
         final String library = "javax.faces";
-        
+
         if (hasResourceBeenInstalled(context, name, library)) {
             setScriptAsRendered(context);
             return;
@@ -977,6 +977,15 @@ public class RenderKitUtils {
     public static boolean hasResourceBeenInstalled(FacesContext ctx,
                                                    String name,
                                                    String library) {
+
+        //  Necessary to deal with jsf.js compression
+        if ("javax.faces".equals(library) && "jsf.js".equals(name)) {
+            if (ctx.getApplication().getProjectStage() == ProjectStage.Development) {
+                name= "jsf-uncompressed.js";
+            } else {
+                name = "jsf-compressed.js";
+            }
+        }
 
         UIViewRoot viewRoot = ctx.getViewRoot();
         ListIterator iter = (viewRoot.getComponentResources(ctx, "head")).listIterator();

@@ -77,6 +77,10 @@
     <property name="conf.share.dir" value="${basedir}/conf/share"/>
     <property name="name" value="jsf-impl"/>
 
+    <property name="dependency.base.dir" value="${jsf.build.home}/dependencies"/>
+    <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
+    <property name="yuicompressor.jar" value="${dependency.jar.dir}/yuicompressor.jar"/>
+
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
         <path refid="sun.commons.classpath"/>
@@ -302,7 +306,7 @@
             </fileset>
         </copy>
 
-        <concat destfile="${build.classes.dir}/META-INF/resources/javax.faces/jsf.js" fixlastline="yes">
+        <concat destfile="${build.classes.dir}/META-INF/resources/javax.faces/jsf-uncompressed.js" fixlastline="yes">
             <filelist dir="${api.dir}/resources">
                 <file name="jsf.js"/>
             </filelist>
@@ -310,6 +314,9 @@
                 <file name="mojarra.js"/>
             </filelist>
         </concat>
+
+        <java jar="${yuicompressor.jar}" fork="true"
+            args="-o ${build.classes.dir}/META-INF/resources/javax.faces/jsf-compressed.js ${build.classes.dir}/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
 
         <!--
             RELEASE_PENDING (rlubke,driscoll)
