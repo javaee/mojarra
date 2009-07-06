@@ -41,6 +41,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.component.html.HtmlInputText;
+import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.context.FacesContext;
 
 @ManagedBean
@@ -96,4 +97,25 @@ public class DynamicStateBean2 {
 
         childPanel.getChildren().add(textInput);
     }
+
+    public void render2() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        UIComponent viewPanel = ctx.getViewRoot().findComponent("form:viewPanel");
+
+        viewPanel.getChildren().clear();
+
+        HtmlCommandButton btn = (HtmlCommandButton)
+              ctx.getApplication().createComponent(HtmlCommandButton.COMPONENT_TYPE);
+        btn.setValue("dynamically added button");
+
+        // Using a non-generated identifier will not cause
+        // the exception to be thrown.
+
+        //btn.setId("btn");
+
+        viewPanel.getChildren().add(btn);
+
+    }
+    
 }

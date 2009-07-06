@@ -132,6 +132,33 @@ public class DynamicStateTestCase extends AbstractTestCase {
     }
 
 
+    /**
+     * Added for issue 1185.
+     */
+    public void testDeleteAddSameAction() throws Exception {
+
+        HtmlPage page = getPage("/faces/state/dynamicAdditionDeletion.xhtml");
+        HtmlSubmitInput submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:render");
+        page = submit.click();
+
+        // first click removes children from the panel (should be empty)
+        // and adds a new button
+        assertTrue(page.asText().contains("dynamically added button"));
+
+        for (int i = 0; i < 5; i++) {
+            // repeated clicks will remove the single child and add a new button
+            // back.
+            submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:render");
+            page = submit.click();
+
+            assertTrue(page.asText().contains("dynamically added button"));
+        }
+
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
