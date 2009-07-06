@@ -365,8 +365,11 @@ class ComponentStateHelper implements StateHelper {
                     this.put(serializable, entry.getKey(), entry.getValue());
                 }
             } else if (value instanceof List) {
+                List<Object> list = (List) get(serializable);
                 for (Object o : ((List<Object>) value)) {
-                    this.add(serializable, o);
+                    if (list == null || !list.contains(o)) {
+                        this.add(serializable, o);
+                    }
                 }
             } else {
                 put(serializable, value);
