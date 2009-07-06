@@ -37,7 +37,6 @@
 package com.sun.faces.spi;
 
 import com.sun.faces.config.AnnotationScanner;
-import com.sun.faces.util.FacesLogger;
 
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
@@ -59,22 +58,26 @@ public class AnnotationProviderFactory {
 
 
     public static AnnotationProvider createAnnotationProvider(ServletContext sc) {
+        AnnotationProvider annotationProvider = createDefaultProvider(sc);
 
         String[] services = ServiceFactoryUtils.getServiceEntries(ANNOTATION_PROVIDER_SERVICE_KEY);
         if (services.length > 0) {
             // only use the first entry...
-            Object provider = ServiceFactoryUtils.getProviderFromEntry(services[0], new Class[] { ServletContext.class }, new Object[] { sc });
+            Object provider = ServiceFactoryUtils.getProviderFromEntry(services[0],
+                new Class[] { ServletContext.class, AnnotationProvider.class }, new Object[] { sc , annotationProvider });
             if (provider == null) {
-                return createDefaultProvider(sc);
+                provider = ServiceFactoryUtils.getProviderFromEntry(services[0], new Class[] { ServletContext.class }, new Object[] { sc });
             }
-            if (!(provider instanceof AnnotationProvider)) {
-                throw new FacesException("Class " + provider.getClass().getName() + " is not an instance of com.sun.faces.spi.AnnotationProvider");
+            
+            if (provider != null) {
+                if (!(provider instanceof AnnotationProvider)) {
+                    throw new FacesException("Class " + provider.getClass().getName() + " is not an instance of com.sun.faces.spi.AnnotationProvider");
+                }
+                annotationProvider = (AnnotationProvider)provider;
             }
-            return (AnnotationProvider) provider;
-        } else {
-            return createDefaultProvider(sc);
         }
-        
+
+        return annotationProvider;
     }
 
 

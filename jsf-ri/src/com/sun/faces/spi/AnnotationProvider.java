@@ -81,8 +81,18 @@ import java.util.Map;
  * To register a custom AnnotationProvider with the runtime, place a file named
  * com.sun.faces.spi.annotationprovider within META-INF/services of a JAR file,
  * with a single line referencing the fully qualified class name of the AnnotationProvider
- * implementation.
- * </p>
+ * implementation.  Custom AnnotationProviders can be used to decorate the default
+ * AnnotationProvider by providing a constructor that takes an AnnotationProvider as the
+ * second parameter:</p>
+ *
+ * <p><code>public AnnotationProvider(ServletContext sc, AnnotationProvider parent)</code></p>
+ * 
+ * <p>If decoration is not desired, then the custom provider must have a constructor
+ * that takes one paramer, a <code>ServletContext</code>:
+ *
+ * <p><code>public AnnotationProvider(ServletContext sc)</code></p>
+ *
+ * <p>All customer providers must extend this class.</p>
  * 
  */
 public abstract class AnnotationProvider {

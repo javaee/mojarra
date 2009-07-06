@@ -82,8 +82,8 @@ final class ServiceFactoryUtils {
             }
             return c.newInstance(arguments);
         } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, e.toString(), e);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, e.toString(), e);
             }
             return null;
         }
