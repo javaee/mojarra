@@ -351,7 +351,7 @@ public class RenderKitUtils {
 
         List<ClientBehaviorContext.Parameter> params;
         if (!incExec) {
-            params = Collections.<ClientBehaviorContext.Parameter>emptyList();
+            params = Collections.emptyList();
         } else {
             params = new LinkedList<ClientBehaviorContext.Parameter>();
             params.add(new ClientBehaviorContext.Parameter("incExec",true));
@@ -363,7 +363,8 @@ public class RenderKitUtils {
                       userHandler,
                       behaviorEventName,
                       null,
-                      false);
+                      false,
+                      incExec);
     }
 
     // Renders the onclick handler for command buttons.  Handles
@@ -387,7 +388,8 @@ public class RenderKitUtils {
                       userHandler,
                       behaviorEventName,
                       submitTarget,
-                      needsSubmit);
+                      needsSubmit,
+                      false);
     }
 
     public static String prefixAttribute(final String attrName,
@@ -572,6 +574,7 @@ public class RenderKitUtils {
                                       value,
                                       behaviorEventName,
                                       null,
+                                      false,
                                       false);
 
                         renderedBehavior = true;
@@ -605,6 +608,7 @@ public class RenderKitUtils {
                                       null,
                                       behaviorEventName,
                                       null,
+                                      false,
                                       false);
                 }
             }
@@ -659,6 +663,7 @@ public class RenderKitUtils {
                               value,
                               events[0],
                               null,
+                              false,
                               false);
             }
         }
@@ -1557,7 +1562,8 @@ public class RenderKitUtils {
                                       Object handlerValue,
                                       String behaviorEventName,
                                       String submitTarget,
-                                      boolean needsSubmit)
+                                      boolean needsSubmit,
+                                      boolean includeExec)
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -1571,20 +1577,11 @@ public class RenderKitUtils {
             behaviors = null;
         }
 
-        /*
-        for (ClientBehavior behavior : behaviors) {
-            if (behavior instanceof AjaxBehavior) {
-                AjaxBehavior abhavior = (AjaxBehavior) behavior;
-                abhavior.getExecute();
-            }
-        }
-        */
-
         if (params == null) {
             params = Collections.emptyList();
         }
         String handler = null;
-        switch (getHandlerType(behaviors, params, userHandler, needsSubmit)) {
+        switch (getHandlerType(behaviors, params, userHandler, needsSubmit, includeExec)) {
         
             case USER_HANDLER_ONLY:
                 handler = userHandler;
@@ -1632,12 +1629,15 @@ public class RenderKitUtils {
     private static HandlerType getHandlerType(List<ClientBehavior> behaviors,
                                               Collection<ClientBehaviorContext.Parameter> params,
                                               String userHandler,
-                                              boolean needsSubmit) {
+                                              boolean needsSubmit,
+                                              boolean includeExec) {
 
         if ((behaviors == null) || (behaviors.isEmpty())) {
 
-            // No behaviors and no params means user handler only
-            if (params.isEmpty() && !needsSubmit)
+            // No behaviors and no params means user handler only,
+            // if we have a param only because of includeExec while having
+            // no behaviors, also, user handler only
+            if ((params.isEmpty() && !needsSubmit) || includeExec)
                 return HandlerType.USER_HANDLER_ONLY;
 
             // We've got params.  If we've also got a user handler, we need 
