@@ -59,7 +59,6 @@ import javax.faces.event.ActionEvent;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.RIConstants;
 
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
@@ -142,7 +141,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         String clientId = component.getClientId(context);
         if (imageSrc != null) {
             writer.writeAttribute("type", "image", "type");
-            writer.writeURIAttribute("src", src(context, imageSrc), "image");
+            writer.writeURIAttribute("src", RenderKitUtils.getImageSource(context, component, "image"), "image");
             writer.writeAttribute("name", clientId, "clientId");
         } else {
             writer.writeAttribute("type", type, "type");
@@ -183,23 +182,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     }
 
     // --------------------------------------------------------- Private Methods
-
-    /**
-     * @param context the <code>FacesContext</code> for the current request
-     * @param imageURI the base URI of the image to use for the button
-     * @return the encoded result for the base imageURI
-     */
-    private static String src(FacesContext context, String imageURI) {
-
-        if (imageURI == null) {
-            return "";
-        }
-
-        String u = context.getApplication().getViewHandler()
-              .getResourceURL(context, imageURI);
-        return (context.getExternalContext().encodeResourceURL(u));
-
-    }
 
 
     /**

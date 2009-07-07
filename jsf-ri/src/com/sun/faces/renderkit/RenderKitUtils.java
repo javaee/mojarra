@@ -1203,6 +1203,56 @@ public class RenderKitUtils {
     }
 
 
+    /**
+     * <p>
+     * Determine the path value of an image value for a component such as
+     * UIGraphic or UICommand.
+     * </p>
+     *
+     * @param context the {@link FacesContext} for the current request.
+     * @param component the component to obtain the image information from
+     * @param attrName the attribute name that needs to be queried if the
+     *  name and library attributes are not specified
+     *
+     * @return the encoded path to the image source
+     */
+    public static String getImageSource(FacesContext context, UIComponent component, String attrName) {
+
+        String resName = (String) component.getAttributes().get("name");
+        if (resName != null) {
+            String libName = (String) component.getAttributes().get("library");
+            ResourceHandler handler = context.getApplication().getResourceHandler();
+            Resource res = handler.createResource(resName, libName);
+            if (res == null) {
+                if (context.isProjectStage(ProjectStage.Development)) {
+                    String msg = "Unable to find resource " + resName;
+                    context.addMessage(component.getClientId(context),
+                                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                        msg,
+                                                        msg));
+                }
+                return "RES_NOT_FOUND";
+            } else {
+                return res.getRequestPath();
+            }
+        } else {
+            
+            String value = (String) component.getAttributes().get(attrName);
+            if (value == null || value.length() == 0) {
+                return "";
+            }
+            if (value.contains(ResourceHandler.RESOURCE_IDENTIFIER)) {
+                return value;
+            } else {
+                value = context.getApplication().getViewHandler().
+                      getResourceURL(context, value);
+                return (context.getExternalContext().encodeResourceURL(value));
+            }
+        }
+
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
