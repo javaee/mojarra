@@ -138,6 +138,87 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
 
     }
 
+    public void testTransientListenersState() {
+
+        UIComponent output = new UIOutput();
+        output.markInitialState();
+        TestFacesListener l1 = new TestFacesListener();
+        TestFacesListener l2 = new TestFacesListener();
+        TestFacesListener l3 = new TestFacesListener();
+        TestFacesListener l4 = new TestFacesListener();
+        l1.setValue("l1");
+        l2.setValue("l2");
+        l3.setValue("l3");
+        l4.setValue("l4");
+        l2.setTransient(true);
+        l4.setTransient(true);
+
+        output.addFacesListener(l1);
+        output.addFacesListener(l2);
+        output.addFacesListener(l3);
+        output.addFacesListener(l4);
+
+        Object state = output.saveState(facesContext);
+        assertNotNull(state);
+        output = new UIOutput();
+        output.restoreState(facesContext, state);
+        FacesListener[] listeners = output.getFacesListeners(TestFacesListener.class);
+        assertTrue(listeners.length == 2);
+        assertEquals("l1", ((TestFacesListener) listeners[0]).getValue());
+        assertEquals("l3", ((TestFacesListener) listeners[1]).getValue());
+
+        output = new UIOutput();
+        output.markInitialState();
+        output.addFacesListener(l2);
+        state = output.saveState(facesContext);
+        assertNotNull(state);
+        output = new UIOutput();
+        output.restoreState(facesContext, state);
+        listeners = output.getFacesListeners(TestFacesListener.class);
+        assertTrue(listeners.length == 0);
+        
+    }
+
+
+    public void testTransientListenersState2() {
+
+        UIComponent output = new UIOutput();
+        TestFacesListener l1 = new TestFacesListener();
+        TestFacesListener l2 = new TestFacesListener();
+        TestFacesListener l3 = new TestFacesListener();
+        TestFacesListener l4 = new TestFacesListener();
+        l1.setValue("l1");
+        l2.setValue("l2");
+        l3.setValue("l3");
+        l4.setValue("l4");
+        l2.setTransient(true);
+        l4.setTransient(true);
+
+        output.addFacesListener(l1);
+        output.addFacesListener(l2);
+        output.addFacesListener(l3);
+        output.addFacesListener(l4);
+
+        Object state = output.saveState(facesContext);
+        assertNotNull(state);
+        output = new UIOutput();
+        output.restoreState(facesContext, state);
+        FacesListener[] listeners = output.getFacesListeners(TestFacesListener.class);
+        assertTrue(listeners.length == 2);
+        assertEquals("l1", ((TestFacesListener) listeners[0]).getValue());
+        assertEquals("l3", ((TestFacesListener) listeners[1]).getValue());
+
+        output = new UIOutput();
+        output.addFacesListener(l2);
+        state = output.saveState(facesContext);
+        assertNotNull(state);
+        output = new UIOutput();
+        output.restoreState(facesContext, state);
+        listeners = output.getFacesListeners(TestFacesListener.class);
+        assertTrue(listeners.length == 0);
+
+    }
+
 
     // ---------------------------------------------------------- Nested Classes
 

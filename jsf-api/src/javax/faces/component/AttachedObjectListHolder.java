@@ -135,7 +135,7 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
         }
 
         Object[] attachedObjects = (Object[]) state;
-        if (attachedObjects[0] instanceof StateHolderSaver) {
+        if (attachedObjects.length > 0 && attachedObjects[0] instanceof StateHolderSaver) {
             // overwrite the existing attachedObjects with those included
             // in the full state.
             if (this.attachedObjects != null) {
@@ -144,7 +144,10 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
                 this.attachedObjects = new ArrayList<T>(2);
             }
             for (int i = 0, len = attachedObjects.length; i < len; i++) {
-                this.attachedObjects.add((T) ((StateHolderSaver) attachedObjects[i]).restore(context));
+                T restored = (T) ((StateHolderSaver) attachedObjects[i]).restore(context);
+                if (restored != null) {
+                    this.attachedObjects.add(restored);
+                }
             }
         } else {
             // assume 1:1 relation between existing attachedObjects and state
