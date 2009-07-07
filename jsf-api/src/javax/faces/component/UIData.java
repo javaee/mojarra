@@ -873,7 +873,7 @@ public class UIData extends UIComponentBase
             super.broadcast(event);
             return;
         }
-
+        FacesContext context = FacesContext.getCurrentInstance();
         // Set up the correct context and fire our wrapped event
         WrapperEvent revent = (WrapperEvent) event;
         if (isNestedWithinUIData()) {
@@ -882,7 +882,23 @@ public class UIData extends UIComponentBase
         int oldRowIndex = getRowIndex();
         setRowIndex(revent.getRowIndex());
         FacesEvent rowEvent = revent.getFacesEvent();
-        rowEvent.getComponent().broadcast(rowEvent);
+        UIComponent source = rowEvent.getComponent();
+        UIComponent compositeParent = null;
+        try {
+            if (!UIComponent.isCompositeComponent(source)) {
+                compositeParent = UIComponent.getCompositeComponentParent(source);
+            }
+            if (compositeParent != null) {
+                compositeParent.pushComponentToEL(context, null);
+            }
+            source.pushComponentToEL(context, null);
+            source.broadcast(rowEvent);
+        } finally {
+            source.popComponentFromEL(context);
+            if (compositeParent != null) {
+                compositeParent.popComponentFromEL(context);
+            }
+        }
         setRowIndex(oldRowIndex);
 
     }

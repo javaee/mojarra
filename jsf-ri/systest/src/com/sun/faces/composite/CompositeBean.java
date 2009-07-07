@@ -36,6 +36,9 @@
 
 package com.sun.faces.composite;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.event.ActionListener;
@@ -54,11 +57,17 @@ import javax.faces.convert.Converter;
 public class CompositeBean {
 
 
+    public List<String> getTableInputValues() {
+        List<String> result = new ArrayList<String>();
+        result.add("a value");
+        return result;
+    }
+
     public ActionListener getActionListener() {
         return new ActionListener() {
 
             public void processAction(ActionEvent event)
-            throws AbortProcessingException {
+                  throws AbortProcessingException {
                 FacesContext ctx = FacesContext.getCurrentInstance();
                 UIComponent source = (UIComponent) event.getSource();
                 String cid = source.getClientId(ctx);
@@ -68,7 +77,7 @@ public class CompositeBean {
                                                 "Action Invoked : " + cid));
             }
         };
-        
+
     }
 
 
@@ -82,14 +91,14 @@ public class CompositeBean {
     public Converter getConverter() {
 
         return new TestConverter();
-        
+
     }
 
 
     public String doNav() {
 
         return "nestingNav";
-        
+
     }
 
 
@@ -99,9 +108,9 @@ public class CompositeBean {
         ctx.addMessage(null,
                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                         "Action invoked",
-                                         "Action invoked"));
+                                        "Action invoked"));
         return "";
-        
+
     }
 
     public String custom() {
@@ -110,7 +119,7 @@ public class CompositeBean {
         ctx.addMessage(null,
                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                         "Custom action invoked",
-                                         "Custom action invoked"));
+                                        "Custom action invoked"));
         return "";
 
     }
@@ -122,7 +131,7 @@ public class CompositeBean {
         ctx.addMessage(null,
                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                         "ActionListener invoked",
-                                         "ActionListener invoked"));
+                                        "ActionListener invoked"));
     }
 
 
