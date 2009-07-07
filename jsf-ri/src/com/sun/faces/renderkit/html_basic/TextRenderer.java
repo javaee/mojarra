@@ -130,7 +130,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                                                     getNonOnChangeBehaviors(component));
             RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
-            RenderKitUtils.renderOnchange(context, component);
+            RenderKitUtils.renderOnchange(context, component, false);
 
 
             writer.endElement("input");

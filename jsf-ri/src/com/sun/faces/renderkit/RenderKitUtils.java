@@ -50,10 +50,7 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.behavior.ClientBehavior;
-import javax.faces.component.behavior.ClientBehaviorContext;
-import javax.faces.component.behavior.ClientBehaviorHint;
-import javax.faces.component.behavior.ClientBehaviorHolder;
+import javax.faces.component.behavior.*;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ExternalContext;
@@ -345,16 +342,23 @@ public class RenderKitUtils {
     // Renders the onchange handler for input components.  Handles
     // chaining togeter the user-provided onchange handler with
     // any Behavior scripts.
-    public static void renderOnchange(FacesContext context, UIComponent component)
+    public static void renderOnchange(FacesContext context, UIComponent component, boolean incExec)
         throws IOException {
 
         final String handlerName = "onchange";
         final String behaviorEventName = "valueChange";
         final Object userHandler = component.getAttributes().get(handlerName);
 
+        List<ClientBehaviorContext.Parameter> params;
+        if (!incExec) {
+            params = Collections.<ClientBehaviorContext.Parameter>emptyList();
+        } else {
+            params = new LinkedList<ClientBehaviorContext.Parameter>();
+            params.add(new ClientBehaviorContext.Parameter("incExec",true));
+        }
         renderHandler(context,
                       component,
-                      Collections.<ClientBehaviorContext.Parameter>emptyList(),
+                      params,
                       handlerName,
                       userHandler,
                       behaviorEventName,
@@ -1566,6 +1570,15 @@ public class RenderKitUtils {
              Util.componentIsDisabled(component)) {
             behaviors = null;
         }
+
+        /*
+        for (ClientBehavior behavior : behaviors) {
+            if (behavior instanceof AjaxBehavior) {
+                AjaxBehavior abhavior = (AjaxBehavior) behavior;
+                abhavior.getExecute();
+            }
+        }
+        */
 
         if (params == null) {
             params = Collections.emptyList();

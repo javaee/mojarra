@@ -109,6 +109,14 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
 
         assertTrue(check("checkedvalue","true"));
         System.out.println("Boolean Checkbox Checked");
+
+        // Check on the select many checkbox
+        checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("manyCheckbox:0"));
+        lastpage = (HtmlPage)checked.setChecked(true);
+
+        assertTrue(check("manyCheckedValue","Value: 1"));
+        System.out.println("Many Checkbox Checked");
+
     }
 
 }

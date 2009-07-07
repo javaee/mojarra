@@ -50,10 +50,13 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.List;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.behavior.ClientBehaviorHolder;
+import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -320,8 +323,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                                 getNonOnChangeBehaviors(component));
 
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
-
-        RenderKitUtils.renderOnchange(context, component);
+        
+        RenderKitUtils.renderOnchange(context, component, true);
 
         writer.endElement("input");
         writer.startElement("label", component);

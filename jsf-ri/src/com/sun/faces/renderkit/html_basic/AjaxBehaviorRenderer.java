@@ -43,6 +43,7 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.FacesLogger;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -171,6 +172,28 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         String onerror = ajaxBehavior.getOnerror();
         String sourceId = behaviorContext.getSourceId();
         Collection<ClientBehaviorContext.Parameter> params = behaviorContext.getParameters();
+
+        // Needed workaround for SelectManyCheckbox - if execute doesn't have sourceId,
+        // we need to add it - otherwise, we use the default, which is sourceId:child, which
+        // won't work.
+        ClientBehaviorContext.Parameter foundparam = null;
+        for (ClientBehaviorContext.Parameter param : params) {
+            if (param.getName().equals("incExec") && (Boolean)param.getValue()) {
+                foundparam = param;
+            }
+        }
+        if (foundparam != null && !execute.contains(sourceId)) {
+                execute = new LinkedList<String>(execute);
+                execute.add(component.getClientId());
+        }
+        if (foundparam != null) {
+            try {
+                // And since this is a hack, we now try to remove the param
+                params.remove(foundparam);
+            } catch (UnsupportedOperationException unop) {
+                // nothing we can do about it
+            }
+        }
 
         ajaxCommand.append("mojarra.ab(");
 

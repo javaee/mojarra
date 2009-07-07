@@ -53,6 +53,7 @@ public class AjaxTagValuesBean {
     private String[] outArray = { "out1", ":form2:out2", ":out3" };
     private Collection<String> outSet = new LinkedHashSet<String>(Arrays.asList(outArray));
     private String render = "out1";
+    private String[] checkedvalues = {};
     
     public String getText() {
         return text;
@@ -72,6 +73,22 @@ public class AjaxTagValuesBean {
 
     public Integer getCount() {
         return count++;
+    }
+
+    public void setCheckedValues(String[] values) {
+        this.checkedvalues = values;
+    }
+
+    public String[] getCheckedValues() {
+        return checkedvalues;
+    }
+
+    public String getCheckedValuesString() {
+        String v = "Value: ";
+        for (String value : checkedvalues) {
+            v = v + value;
+        }
+        return v;
     }
 
     public void reset(ActionEvent ae) {
