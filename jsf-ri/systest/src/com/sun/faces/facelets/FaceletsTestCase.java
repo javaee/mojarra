@@ -279,4 +279,26 @@ public class FaceletsTestCase extends AbstractTestCase {
         }
     }
 
+
+    public void testUIRepeatVarStatusBroadcast() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/uirepeat2.xhtml");
+        List<HtmlAnchor> anchors = new ArrayList<HtmlAnchor>(4);
+        getAllElementsOfGivenClass(page, anchors, HtmlAnchor.class);
+        assertEquals("Expected to find only 4 HtmlAnchors", 4, anchors.size());
+        String[] expectedValues = {
+              "Index: 0",
+              "Index: 1",
+              "Index: 2",
+              "Index: 3",
+        };
+
+        for (int i = 0, len = expectedValues.length; i < len; i++) {
+            HtmlAnchor anchor = anchors.get(i);
+            page = anchor.click();
+            assertTrue(page.asText().contains(expectedValues[i]));
+        }
+
+    }
+
 }

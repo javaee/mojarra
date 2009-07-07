@@ -760,13 +760,44 @@ public class UIRepeat extends UINamingContainer {
             this.resetDataModel();
             int prevIndex = this.index;
             FacesContext ctx = FacesContext.getCurrentInstance();
+            FacesEvent target = idxEvent.getTarget();
+            UIComponent source = target.getComponent();
+            UIComponent compositeParent = null;
             try {
-                this.setIndex(ctx, idxEvent.getIndex());
+                int idx = idxEvent.getIndex();
+                this.setIndex(ctx, idx);
+                int begin = this.getOffset();
+                int num = this.getSize();
+                int step = this.getStep();
+                int rowCount = getDataModel().getRowCount();
+                int end = Math
+                      .min(num > 0 ? begin + num - 1 : rowCount, rowCount);
+                this.updateIterationStatus(ctx,
+                                           new IterationStatus(false,
+                                                               idx + step
+                                                               >= end,
+                                                               idx,
+                                                               begin,
+                                                               end,
+                                                               step));
                 if (this.isIndexAvailable()) {
-                    FacesEvent target = idxEvent.getTarget();
-                    target.getComponent().broadcast(target);
+                    if (!UIComponent.isCompositeComponent(source)) {
+                        compositeParent = UIComponent
+                              .getCompositeComponentParent(source);
+                    }
+                    if (compositeParent != null) {
+                        compositeParent.pushComponentToEL(ctx, null);
+                    }
+                    source.pushComponentToEL(ctx, null);
+                    source.broadcast(target);
+
                 }
             } finally {
+                source.popComponentFromEL(ctx);
+                if (compositeParent != null) {
+                    compositeParent.popComponentFromEL(ctx);
+                }
+                this.updateIterationStatus(ctx, null);
                 this.setIndex(ctx, prevIndex);
             }
         } else {
