@@ -35,6 +35,10 @@ $Id: web.xml,v 1.2 2005/12/23 19:17:05 edburns Exp $ -->
         <param-name>javax.faces.validator.DISABLE_DEFAULT_BEAN_VALIDATOR</param-name>
         <param-value>true</param-value>
     </context-param>
+    <context-param>
+        <param-name>com.sun.faces.allowTextChildren</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
   <!-- Faces Servlet -->
   <servlet>
