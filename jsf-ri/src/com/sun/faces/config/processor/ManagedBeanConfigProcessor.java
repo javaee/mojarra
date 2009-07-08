@@ -241,7 +241,8 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
         // via config files take precedence
         processAnnotations(ManagedBean.class);
         
-        BeanManager beanManager = null;
+        BeanManager beanManager =
+              ApplicationAssociate.getCurrentInstance().getBeanManager();
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -254,8 +255,6 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             NodeList managedBeans = documents[i].getDocumentElement()
                  .getElementsByTagNameNS(namespace, MANAGED_BEAN);
             if (managedBeans != null && managedBeans.getLength() > 0) {
-                beanManager =
-                     ApplicationAssociate.getCurrentInstance().getBeanManager();
                 for (int m = 0, size = managedBeans.getLength();
                      m < size;
                      m++) {
@@ -265,9 +264,7 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
 
             }
         }
-        if (beanManager != null) {
-            beanManager.preProcessesBeans();
-        }
+        beanManager.preProcessesBeans();
         invokeNext(documents);
 
     }
