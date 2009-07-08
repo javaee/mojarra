@@ -1857,6 +1857,7 @@
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/disable-bean-validator/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" isTestSource="false" />
