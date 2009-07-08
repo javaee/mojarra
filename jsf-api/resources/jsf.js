@@ -307,7 +307,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     throw new Error("During update: " + id + " not found");
                 }
                 var parent = d.parentNode;
-                var temp = document.createElement('div');
+                var isTableElement = ['td', 'th', 'tbody', 'thead', 'tfoot'].indexOf(d.tagName.toLocaleLowerCase()) >= 0;
+                var temp = document.createElement(isTableElement ? 'table' : 'div');
+
                 temp.id = d.id;
                 // Trim space padding before assigning to innerHTML
                 temp.innerHTML = str.replace(/^\s+/g,'').replace(/\s+$/g,'');
