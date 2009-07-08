@@ -53,6 +53,7 @@ import javax.faces.context.ResponseWriter;
 import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.config.WebConfiguration;
 
 /**
  * <B>TextRenderer</B> is a class that renders the current value of
@@ -170,6 +171,37 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                  || title != null
                  || (shouldWriteIdAttribute))) {
             writer.endElement("span");
+        }
+
+    }
+
+
+    @Override
+    public boolean getRendersChildren() {
+        return true;
+    }
+
+    @Override
+    public void encodeChildren(FacesContext context, UIComponent component)
+          throws IOException {
+
+        boolean renderChildren = WebConfiguration.getInstance()
+                .isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.AllowTextChildren);
+
+        if (!renderChildren) {
+            return;
+        }
+
+        rendererParamsNotNull(context, component);
+
+        if (!shouldEncodeChildren(component)) {
+            return;
+        }
+
+        if (component.getChildCount() > 0) {
+            for (UIComponent kid : component.getChildren()) {
+                encodeRecursive(context, kid);
+            }
         }
 
     }
