@@ -1046,10 +1046,6 @@ public class WebConfiguration {
         EnableThreading(
               "com.sun.faces.enableThreading",
               true
-        ),
-        AllowTextChildren(
-            "com.sun.faces.allowTextChildren",
-            false
         );
 
 
