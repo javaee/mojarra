@@ -45,7 +45,7 @@
     <h:head>
         <meta http-equiv="Content-Type"
               content="text/html; charset=ISO-8859-1"/>
-        <title>Keep Messages Test</title>
+        <title>Keep Messages Test: first page</title>
     </h:head>
     <h:body>
         <c:set target="#{flash}" property="keepMessages" value="true"/>
@@ -53,6 +53,12 @@
         <h:form>
             <h:commandButton value="Submit"
                              action="#{addMessageBean.addMessage}" id="submit"/>
+        </h:form>
+
+        <h:form id="requiredForm">
+        	<h:inputText required="true" id="requiredInput"/>
+            <h:commandButton value="Submit"
+                             action="#{addMessageBean.addMessage}" id="submitRequired"/>
         </h:form>
     </h:body>
 </f:view>

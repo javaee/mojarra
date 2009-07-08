@@ -36,9 +36,12 @@
 
 package com.sun.faces.facelets;
 
+import java.io.IOException;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
@@ -84,5 +87,34 @@ public class KeepMessagesTestCase extends AbstractTestCase {
 
         assertTrue(page.asText().indexOf("This is a global message") == -1);
     }
+    
+    public void testMessagesAreKeptAfterRedirectAfterDoubleValidationError() throws Exception {
+    	
+    	HtmlPage page = getPage("/faces/facelets/keepMessages.xhtml") ;
+		page = submitRequiredForm(page);
+    	assertOnPage(page, "first page");
+    	
+    	page = submitRequiredForm(page);
+    	assertOnPage(page, "first page");
+    	
+    	HtmlInput requiredInput = getInputContainingGivenId(page, "requiredInput");
+    	requiredInput.setValueAttribute("a value");
+    	
+    	page = submitRequiredForm(page);
+    	assertOnPage(page, "second page");
+    	
+    	assertTrue("FacesMessage should have survived redirect", page.asText().indexOf("This is a global message") != -1);
+    }
+
+
+	private void assertOnPage(HtmlPage page, String titleText) {
+		assertTrue(-1 != page.getTitleText().indexOf(titleText));
+	}
+
+
+	private HtmlPage submitRequiredForm(HtmlPage page) throws IOException {
+		HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "submitRequired");
+    	return button.click();
+	}
 
 }

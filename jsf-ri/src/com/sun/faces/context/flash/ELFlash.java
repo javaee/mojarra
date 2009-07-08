@@ -44,6 +44,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.event.PhaseId;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -366,8 +367,24 @@ public class ELFlash extends Flash {
                         }
                     }
                 }
-                requestMap.put(Constants.THIS_REQUEST_IS_GET_AFTER_REDIRECT_AFTER_POST_ATTRIBUTE_NAME,
-                        Boolean.TRUE);
+                boolean isGET = false;
+
+                Object request = context.getExternalContext().getRequest();
+                // to a servlet JSF app...
+                if (request instanceof HttpServletRequest) {
+                    isGET = ((HttpServletRequest)request).getMethod().equalsIgnoreCase("GET");
+                } else {
+                    isGET = true;
+                    /******
+                     * PortletRequest portletRequest = null;
+                     * portletRequest = (PortletRequest) request;
+                     *******/
+                }
+
+                if (isGET) {
+                    requestMap.put(Constants.THIS_REQUEST_IS_GET_AFTER_REDIRECT_AFTER_POST_ATTRIBUTE_NAME,
+                            Boolean.TRUE);
+                }
             }
             map.remove(Constants.FACES_MESSAGES_ATTRIBUTE_NAME);
         }
