@@ -198,7 +198,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Do update.
          * @ignore
          */
-        var doUpdate = function doUpdate(element, formid) {
+        var doUpdate = function doUpdate(element, context) {
             var id, content, markup, str, state;
             var stateForm;
 
@@ -210,7 +210,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // Now set the view state from the server into the DOM
                 // but only for the form that submitted the request.
 
-                stateForm = document.getElementById(formid);
+                stateForm = document.getElementById(context.formid);
                 if (!stateForm) {
                     // if the form went away for some reason, we're going to just return silently.
                     return;
@@ -223,6 +223,27 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     stateForm.appendChild(field);
                 }
                 field.value = state.text || state.data;
+
+                // Now set the view state from the server into the DOM
+                // for any form that is a render target.
+
+                var temp = context.render.split(' ');
+                for (var i=0; i<temp.length; i++) {
+                    if (temp.hasOwnProperty(i) {                    
+                        // See if the element is a form and the form is not the one that caused the submission..
+                        var f = document.forms[temp[i]];
+                        if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
+                            field = f.elements["javax.faces.ViewState"];
+                            if (typeof field === 'undefined') {
+                                field = document.createElement("input");
+                                field.type = "hidden";
+                                field.name = "javax.faces.ViewState";
+                                f.appendChild(field);
+                            }
+                            field.value = state.text || state.data;
+                        }
+                    }
+                }
 
                 return;
             }
@@ -1097,6 +1118,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 ajaxEngine.context.onerror = onerror;
                 ajaxEngine.context.source = element;
                 ajaxEngine.context.formid = form.id;
+                ajaxEngine.context.render = args["javax.faces.partial.render"];
                 ajaxEngine.sendRequest();
             },
             /**
@@ -1293,7 +1315,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     for (var i = 0; i < changes.length; i++) {
                         switch (changes[i].nodeName) {
                             case "update":
-                                doUpdate(changes[i], context.formid);
+                                doUpdate(changes[i], context);
                                 break;
                             case "delete":
                                 doDelete(changes[i]);
