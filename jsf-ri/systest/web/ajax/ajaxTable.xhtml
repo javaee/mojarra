@@ -93,12 +93,32 @@
                 </f:facet>
                 <h:outputText id="cheesepref" value="#{item.cheesePreference}"/>
             </h:column>
+
+            <h:column>
+                <f:facet name="countlink">
+                    <h:outputText value="Count Link"/>
+                </f:facet>
+                <h:commandLink id="countlink" value="Count">
+                    <f:ajax render="count :form:count"/>
+                </h:commandLink>
+            </h:column>
+
+            <h:column>
+                <f:facet name="count">
+                    <h:outputText value="Count"/>
+                </f:facet>
+                <h:outputText id="count" value="#{ajaxcount.count1}"/>
+            </h:column>
         </h:dataTable>
 
         <!-- Submits with out executing the table, so tests the city change -->
         <h:commandButton id="submitButton" value="Submit" type="submit">
             <f:ajax render="form:table"/>
         </h:commandButton>
+
+        <br/>
+
+        <h:outputText value="Count:"/><h:outputText id="count" value="#{ajaxcount.count2}"/>
 
     </h:form>
 </body>

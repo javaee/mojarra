@@ -40,9 +40,6 @@ import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.AjaxController;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 
 public class AjaxTableTestCase extends AbstractTestCase {
 
@@ -58,7 +55,7 @@ public class AjaxTableTestCase extends AbstractTestCase {
     }
 
 
-    /**
+    /*
      * Return the tests included in this test suite.
      */
     public static Test suite() {
@@ -66,7 +63,7 @@ public class AjaxTableTestCase extends AbstractTestCase {
     }
 
 
-    /**
+    /*
      * Tear down instance variables required by this test case.
      */
     public void tearDown() {
@@ -81,18 +78,6 @@ public class AjaxTableTestCase extends AbstractTestCase {
         getPage("/faces/ajax/ajaxTable.xhtml");
         System.out.println("Start ajax table test");
 
-        // First we'll check the first page was output correctly
-        //assertTrue(check("out1", "0"));
-        //assertTrue(check("checkedvalue", "false"));
-        //assertTrue(check("outtext", ""));
-
-        // Submit the ajax request
-        //HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("button1");
-        //lastpage = (HtmlPage) button1.click();
-
-        // Check that the ajax request succeeds - eventually.
-
-
         assertTrue(check("table:2:inCity","Boston"));
 
         // Check on the text field
@@ -102,19 +87,32 @@ public class AjaxTableTestCase extends AbstractTestCase {
         intext.type("test");
         intext.blur();
 
-        assertTrue(check("table:2:inCity","test"));
+        checkTrue("table:2:inCity","test");
         System.out.println("Text Checked");
 
         // Check on the checkbox
 
-        assertTrue(check("table:3:cheesepref","Eww"));
+        checkTrue("table:3:cheesepref","Eww");
 
         HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("table:3:cheesecheck"));
         lastpage = (HtmlPage)checked.setChecked(true);
 
-        assertTrue(check("table:3:cheesepref","Cheese Please"));
+        checkTrue("table:3:cheesepref","Cheese Please");
         System.out.println("Boolean Checkbox Checked");
 
+        checkTrue("table:4:count", "4");
+        HtmlAnchor countlink = (HtmlAnchor) lastpage.getHtmlElementById("table:4:countlink");
+        lastpage = countlink.click();
+
+        checkTrue("table:4:count", "5");
+        checkTrue("count","1");
+
+
+        HtmlSubmitInput button = (HtmlSubmitInput)lastpage.getHtmlElementById("submitButton");
+        lastpage = button.click();
+        checkTrue("table:0:count", "6");
+        checkTrue("count","1");
+        
     }
 
 }
