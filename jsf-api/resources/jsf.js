@@ -1505,16 +1505,4 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
 } //end if version detection block
-
-/*
-
-if( _SARISSA_IS_IE && oldnode.tagName.match( /(tbody|thead|tfoot|tr|th|td)/i ) ) {
-    LOG.debug( "Replace content of node by IE hack" );
-    var temp = document.createElement( "div" );
-    temp.innerHTML = '<table style="display: none">'+new XMLSerializer().serializeToString( newnode )+'</table>';
-    anchor.replaceChild( temp.getElementsByTagName( newnode.tagName ).item( 0 ), oldnode );
-} else {
-    LOG.debug( "Replace content of node by outerHTML()" );
-    oldnode.outerHTML = new XMLSerializer().serializeToString( newnode );
-}
-*/        
+       
