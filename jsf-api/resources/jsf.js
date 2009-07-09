@@ -229,7 +229,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 var temp = context.render.split(' ');
                 for (var i=0; i<temp.length; i++) {
-                    if (temp.hasOwnProperty(i) {                    
+                    if (temp.hasOwnProperty(i)) {                    
                         // See if the element is a form and the form is not the one that caused the submission..
                         var f = document.forms[temp[i]];
                         if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
