@@ -322,29 +322,20 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     elementReplace(docBody, "body", src);
                 }
 
-
             } else {
                 var d = $(id);
                 if (!d) {
                     throw new Error("During update: " + id + " not found");
                 }
+                var parent = d.parentNode;
+                var isTableElement = ['td', 'th', 'tbody', 'thead', 'tfoot'].indexOf(d.tagName.toLocaleLowerCase()) >= 0;
+                var temp = document.createElement(isTableElement ? 'table' : 'div');
+
+                temp.id = d.id;
                 // Trim space padding before assigning to innerHTML
-                var html = str.replace(/^\s+/g,'').replace(/\s+$/g,'');
-                var isTableElement = ['td', 'th', 'tr', 'tbody', 'thead', 'tfoot'].indexOf(d.tagName.toLocaleLowerCase()) >= 0;
-                if (isTableElement) {
-                    temp = document.createElement('table');
-                    temp.innerHTML = html;
-                    var newElement = temp.firstChild;
-                    //some browsers will also create intermediary elements such as table>tbody>tr>td
-                    while ((null != newElement) && (id != newElement.id)) {
-                        newElement = newElement.firstChild;
-                    }
-                    parent.replaceChild(newElement, d);
-                } else {
-                    temp = document.createElement('div');
-                    temp.innerHTML = html;
-                    parent.replaceChild(temp.firstChild, d);
-                }
+                temp.innerHTML = str.replace(/^\s+/g,'').replace(/\s+$/g,'');
+
+                parent.replaceChild(temp.firstChild, d);
             }
         };
 
