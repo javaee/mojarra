@@ -111,14 +111,27 @@ public abstract class AbstractTestCase extends TestCase {
      */
     public void setUp() throws Exception {
 
+        BrowserVersion browserVersion;
+
         contextPath = System.getProperty("context.path");
         host = System.getProperty("host");
         port = Integer.parseInt(System.getProperty("port"));
+        String browser = System.getProperty("browser");
+
+        if ("FF3".equals(browser)) {
+            browserVersion = BrowserVersion.FIREFOX_3;
+        } else if ("FF2".equals(browser)) {
+            browserVersion = BrowserVersion.FIREFOX_2;
+        } else if ("IE6".equals(browser)) {
+            browserVersion = BrowserVersion.INTERNET_EXPLORER_6;
+        } else {
+            browserVersion = BrowserVersion.INTERNET_EXPLORER_7;
+        }
         
         String proxyHost = System.getProperty("proxyHost");
         String proxyPort = System.getProperty("proxyPort");
 
-        client = new WebClient();
+        client = new WebClient(browserVersion);
         cmanager = client.getCookieManager();
         // Add an ajax controller to synchronize all ajax calls
         client.setAjaxController(new NicelyResynchronizingAjaxController());
