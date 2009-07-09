@@ -331,8 +331,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var parent = d.parentNode;
                 // Trim space padding before assigning to innerHTML
                 var html = str.replace(/^\s+/g,'').replace(/\s+$/g,'');
-                var isTableElement = ['td', 'th', 'tr', 'tbody', 'thead', 'tfoot'].indexOf(d.tagName.toLocaleLowerCase()) >= 0;
-                if (isTableElement) {
+                var tableElements = ['td', 'th', 'tr', 'tbody', 'thead', 'tfoot'];
+                var isInTable =  tableElements[d.tagName.toLocaleLowerCase()];
+                if (isInTable) {
                     temp = document.createElement('table');
                     temp.innerHTML = html;
                     var newElement = temp.firstChild;
@@ -1505,4 +1506,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
 } //end if version detection block
-       
+
+/*
+
+if( _SARISSA_IS_IE && oldnode.tagName.match( /(tbody|thead|tfoot|tr|th|td)/i ) ) {
+    LOG.debug( "Replace content of node by IE hack" );
+    var temp = document.createElement( "div" );
+    temp.innerHTML = '<table style="display: none">'+new XMLSerializer().serializeToString( newnode )+'</table>';
+    anchor.replaceChild( temp.getElementsByTagName( newnode.tagName ).item( 0 ), oldnode );
+} else {
+    LOG.debug( "Replace content of node by outerHTML()" );
+    oldnode.outerHTML = new XMLSerializer().serializeToString( newnode );
+}
+*/        
