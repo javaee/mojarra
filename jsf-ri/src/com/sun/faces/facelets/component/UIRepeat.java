@@ -357,17 +357,17 @@ public class UIRepeat extends UINamingContainer {
 
     private boolean keepSaved(FacesContext context) {
 
-        for (String clientId : this.getChildState().keySet()) {
-            Iterator messages = context.getMessages(clientId);
-            while (messages.hasNext()) {
-                FacesMessage message = (FacesMessage) messages.next();
-                if (message.getSeverity().compareTo(FacesMessage.SEVERITY_ERROR) >= 0) {
-                    return (true);
-                }
-            }
-        }
-        return (isNestedInIterator());
+        return (hasErrorMessages(context) || isNestedInIterator());
+
     }
+
+    private boolean hasErrorMessages(FacesContext context) {
+
+        FacesMessage.Severity sev = context.getMaximumSeverity();
+        return (sev != null && (FacesMessage.SEVERITY_ERROR.compareTo(sev) >= 0));
+        
+    }
+
     
     private boolean isNestedInIterator() {
         UIComponent parent = this.getParent();

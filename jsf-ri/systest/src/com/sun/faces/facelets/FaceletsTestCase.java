@@ -301,4 +301,30 @@ public class FaceletsTestCase extends AbstractTestCase {
 
     }
 
+
+    public void testUIRepeatStateNotLostOnNonUIRepeatMessage() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/uirepeat3.xhtml");
+        List<HtmlTextInput> inputs = new ArrayList<HtmlTextInput>(5);
+        getAllElementsOfGivenClass(page, inputs, HtmlTextInput.class);
+        assertEquals("Expected 5 input fields", 5, inputs.size());
+        inputs.get(0).setValueAttribute("A"); // this causes a validation failure
+        inputs.get(1).setValueAttribute("1");
+        inputs.get(2).setValueAttribute("2");
+        inputs.get(3).setValueAttribute("3");
+        inputs.get(4).setValueAttribute("4");
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "submit");
+        page = submit.click();
+        assertTrue(page.asText().contains("'A' is not a number."));
+        // now verify the inputs nested within the UIRepeat were not cleared
+        inputs.clear();
+        getAllElementsOfGivenClass(page, inputs, HtmlTextInput.class);
+        assertEquals("A", inputs.get(0).getValueAttribute());
+        assertEquals("1", inputs.get(1).getValueAttribute());
+        assertEquals("2", inputs.get(2).getValueAttribute());
+        assertEquals("3", inputs.get(3).getValueAttribute());
+        assertEquals("4", inputs.get(4).getValueAttribute());
+        
+    }
+
 }
