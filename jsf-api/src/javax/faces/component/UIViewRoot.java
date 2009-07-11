@@ -349,11 +349,10 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <p><span class="changed_modified_2_0">Allow</span> an arbitrary
      * method to be called for the "beforePhase" event as the UIViewRoot
      * runs through its lifecycle.  This method will be called for all
-     * phases <span class="changed_modified_2_0">including {@link
-     * PhaseId#RESTORE_VIEW}</span>.  Unlike a true {@link
-     * PhaseListener}, this approach doesn't allow for only receiving
-     * {@link PhaseEvent}s for a given phase.</p> <p/> <p>The method
-     * must conform to the signature of {@link
+     * phases except {@link PhaseId#RESTORE_VIEW}.  Unlike a true
+     * {@link PhaseListener}, this approach doesn't allow for only
+     * receiving {@link PhaseEvent}s for a given phase.</p> <p/> <p>The
+     * method must conform to the signature of {@link
      * PhaseListener#beforePhase}.</p>
      *
      * @param newBeforePhase the {@link MethodExpression} that will be
