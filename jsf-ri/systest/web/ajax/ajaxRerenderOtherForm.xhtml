@@ -1,0 +1,29 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Ajax Request Test Page</title>
+</h:head>
+<h:body>
+
+    <h1>Rerender a form from within another form</h1>
+    <h:form id="form1">
+    	<h:outputText value="#{viewScope.postback}"/>
+        <h:commandButton value="Should be postback" id="button1">
+        	<f:setPropertyActionListener value="It was a postback!!!" target="#{viewScope['postback']}"/>
+        </h:commandButton>
+    </h:form>
+    
+    <h:form id="form2">
+    	<h:commandButton value="Rerender form1" id="button2">
+			<f:ajax render=":form1"/>
+	</h:commandButton>
+    </h:form>
+
+</h:body>
+</html>
+

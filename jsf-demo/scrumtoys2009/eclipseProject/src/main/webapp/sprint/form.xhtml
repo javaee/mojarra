@@ -5,16 +5,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition>
-        <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">
-
-            
-
+        <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">           
             <h:outputLabel value="#{i18n['sprint.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true"
                 requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLength="30" size="30" />

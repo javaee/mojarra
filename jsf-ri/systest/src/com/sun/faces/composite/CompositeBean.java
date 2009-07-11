@@ -36,11 +36,15 @@
 
 package com.sun.faces.composite;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.application.FacesMessage;
@@ -53,11 +57,17 @@ import javax.faces.convert.Converter;
 public class CompositeBean {
 
 
+    public List<String> getTableInputValues() {
+        List<String> result = new ArrayList<String>();
+        result.add("a value");
+        return result;
+    }
+
     public ActionListener getActionListener() {
         return new ActionListener() {
 
             public void processAction(ActionEvent event)
-            throws AbortProcessingException {
+                  throws AbortProcessingException {
                 FacesContext ctx = FacesContext.getCurrentInstance();
                 UIComponent source = (UIComponent) event.getSource();
                 String cid = source.getClientId(ctx);
@@ -67,7 +77,7 @@ public class CompositeBean {
                                                 "Action Invoked : " + cid));
             }
         };
-        
+
     }
 
 
@@ -81,14 +91,68 @@ public class CompositeBean {
     public Converter getConverter() {
 
         return new TestConverter();
-        
+
     }
 
 
     public String doNav() {
 
         return "nestingNav";
-        
+
+    }
+
+
+    public String action() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ctx.addMessage(null,
+                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                        "Action invoked",
+                                        "Action invoked"));
+        return "";
+
+    }
+
+    public String custom() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ctx.addMessage(null,
+                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                        "Custom action invoked",
+                                        "Custom action invoked"));
+        return "";
+
+    }
+
+
+    public void actionListener() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ctx.addMessage(null,
+                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                        "ActionListener invoked",
+                                        "ActionListener invoked"));
+    }
+
+
+    public void validate(FacesContext ctx, UIComponent c, Object o) {
+
+        ctx.addMessage(null,
+                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                        "validator invoked",
+                                        "validator invoked"));
+
+    }
+
+
+    public void valueChange(ValueChangeEvent event) {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ctx.addMessage(null,
+                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                        "ValueChange invoked",
+                                        "ValueChange invoked"));
+
     }
 
 

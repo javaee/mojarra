@@ -193,7 +193,7 @@ public class ServerSideStateHelper extends StateHelper {
                  ResponseWriter writer = ctx.getResponseWriter();
                  writer.write(stateFieldStart);
                  writer.write(id);
-                 writer.write(STATE_FIELD_END);
+                 writer.write(stateFieldEnd);
                  writeRenderKitIdField(ctx, writer);
              }
         }

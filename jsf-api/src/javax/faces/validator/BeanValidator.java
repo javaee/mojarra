@@ -49,6 +49,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
 import javax.validation.ValidatorContext;
+import javax.validation.ValidationException;
 import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
@@ -263,7 +264,7 @@ public class BeanValidator implements Validator, PartialStateHolder {
             try {
                 validatorFactory = Validation.buildDefaultValidatorFactory();
             }
-            catch (ValidatorException e) {
+            catch (ValidationException e) {
                 throw new FacesException("Could not build a default Bean Validator factory", e);
             }
             context.getExternalContext().getApplicationMap().put(VALIDATOR_FACTORY_KEY, validatorFactory);

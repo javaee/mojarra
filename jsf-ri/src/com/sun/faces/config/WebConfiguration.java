@@ -56,6 +56,8 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+
 import java.util.HashMap;
 import javax.faces.component.UIInput;
 import javax.faces.validator.BeanValidator;
@@ -106,7 +108,9 @@ public class WebConfiguration {
         initSetList(servletContext);
         processBooleanParameters(servletContext, contextName);
         processInitParameters(servletContext, contextName);
-        processJndiEntries(contextName);
+        if (canProcessJndiEntries()) {
+            processJndiEntries(contextName);
+        }
         
         // build the cache of list type params
         cachedListParams = new HashMap<WebContextInitParameter, String []>(3);
@@ -621,6 +625,22 @@ public class WebConfiguration {
     }
 
 
+    private boolean canProcessJndiEntries() {
+
+        try {
+            Util.getCurrentLoader(this).loadClass("javax.naming.InitialContext");
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine(
+                      "javax.naming is unavailable.  JNDI entries related to Mojarra configuration will not be processed.");
+            }
+            return false;
+        }
+        return true;
+
+    }
+
+
     // ------------------------------------------------------------------- Enums
 
 
@@ -667,7 +687,7 @@ public class WebConfiguration {
         ),
         ResourceExcludes(
             ResourceHandler.RESOURCE_EXCLUDES_PARAM_NAME,
-            ResourceHandler.RESOURCE_EXCLUDES_DEFAULT_VALUE
+            ResourceHandler.RESOURCE_EXCLUDES_DEFAULT_VALUE + " .groovy"
         ),
         NumberOfViews(
               "com.sun.faces.numberOfViewsInSession",
@@ -1018,7 +1038,21 @@ public class WebConfiguration {
         GenerateUniqueServerStateIds(
               "com.sun.faces.generateUniqueServerStateIds",
               true
+        ),
+        AutoCompleteOffOnViewState(
+              "com.sun.faces.autoCompleteOffOnViewState",
+              true
+        ),
+        EnableThreading(
+              "com.sun.faces.enableThreading",
+              true
+        ),
+        AllowTextChildren(
+            "com.sun.faces.allowTextChildren",
+            false
         );
+
+
 
         private BooleanWebContextInitParameter alternate;
 

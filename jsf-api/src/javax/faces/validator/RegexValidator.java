@@ -91,6 +91,10 @@ public class RegexValidator implements Validator, PartialStateHolder {
                          UIComponent component,
                          Object value) {
 
+        if (value == null) {
+            return;
+        }
+
         FacesMessage fmsg;
 
         Locale locale = context.getViewRoot().getLocale();

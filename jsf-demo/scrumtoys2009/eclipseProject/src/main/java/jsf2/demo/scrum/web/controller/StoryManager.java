@@ -1,22 +1,18 @@
 package jsf2.demo.scrum.web.controller;
 
 import java.io.Serializable;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.validator.ValidatorException;
@@ -24,52 +20,42 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import jsf2.demo.scrum.model.entities.Sprint;
 import jsf2.demo.scrum.model.entities.Story;
-import jsf2.demo.scrum.web.event.CurrentSprintChangeEvent;
-import jsf2.demo.scrum.web.event.CurrentStoryChangeEvent;
 
-/**
- *
- * @author Dr. Spock (spock at dev.java.net)
- */
+
 @ManagedBean(name = "storyManager")
 @SessionScoped
 public class StoryManager extends AbstractManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @ManagedProperty("#{sprintManager}")
+    private SprintManager sprintManager;    
     private Story currentStory;
     private DataModel<Story> stories;
     private List<Story> storyList;
-    @ManagedProperty("#{sprintManager.currentSprint}")
-    private Sprint sprint;
-    private SystemEventListener sprintChangeListener;
 
     @PostConstruct
     public void construct() {
-        sprintChangeListener = new SprintChangeListener();
-        subscribeToEvent(CurrentSprintChangeEvent.class, sprintChangeListener);
         init();
     }
 
-    @PreDestroy
-    public void destroy() {
-        unsubscribeFromEvent(CurrentSprintChangeEvent.class, sprintChangeListener);
-    }
-
     public void init() {
-        Story story = new Story();
-        story.setSprint(sprint);
-        setCurrentStory(story);
-        if (sprint != null) {
-            storyList = new LinkedList<Story>(sprint.getStories());
+        
+        Sprint currentSprint = sprintManager.getCurrentSprint();
+
+        if (currentSprint != null) {
+            Story story = new Story();
+            setStoryList(new LinkedList<Story>(currentSprint.getStories()));
+            story.setSprint(currentSprint);
+            setCurrentStory(story);
         } else {
-            storyList = Collections.emptyList();
+            setStoryList(new ArrayList<Story>());
         }
-        stories = new ListDataModel<Story>(storyList);
+        stories = new ListDataModel<Story>(getStoryList());
     }
 
     public String create() {
         Story story = new Story();
-        story.setSprint(sprint);
+        story.setSprint(sprintManager.getCurrentSprint());
         setCurrentStory(story);
         return "create";
     }
@@ -90,14 +76,14 @@ public class StoryManager extends AbstractManager implements Serializable {
                 });
                 if (!currentStory.equals(merged)) {
                     setCurrentStory(merged);
-                    int idx = storyList.indexOf(currentStory);
+                    int idx = getStoryList().indexOf(currentStory);
                     if (idx != -1) {
-                        storyList.set(idx, merged);
+                        getStoryList().set(idx, merged);
                     }
                 }
-                sprint.addStory(merged);
+                sprintManager.getCurrentSprint().addStory(merged);
                 if (!storyList.contains(merged)) {
-                    storyList.add(merged);
+                    getStoryList().add(merged);
                 }
             } catch (Exception e) {
                 getLogger(getClass()).log(Level.SEVERE, "Error on try to save Story: " + currentStory, e);
@@ -127,8 +113,8 @@ public class StoryManager extends AbstractManager implements Serializable {
                         }
                     }
                 });
-                sprint.removeStory(story);
-                storyList.remove(story);
+                sprintManager.getCurrentSprint().removeStory(story);
+                getStoryList().remove(story);
             } catch (Exception e) {
                 getLogger(getClass()).log(Level.SEVERE, "Error on try to remove Story: " + currentStory, e);
                 addMessage("Error on try to remove Story", FacesMessage.SEVERITY_ERROR);
@@ -146,7 +132,7 @@ public class StoryManager extends AbstractManager implements Serializable {
                 public Long execute(EntityManager em) {
                     Query query = em.createNamedQuery((currentStory.isNew()) ? "story.new.countByNameAndSprint" : "story.countByNameAndSprint");
                     query.setParameter("name", newName);
-                    query.setParameter("sprint", sprint);
+                    query.setParameter("sprint", sprintManager.getCurrentSprint());
                     if (!currentStory.isNew()) {
                         query.setParameter("currentStory", currentStory);
                     }
@@ -175,12 +161,17 @@ public class StoryManager extends AbstractManager implements Serializable {
     }
 
     public void setCurrentStory(Story currentStory) {
-        this.currentStory = currentStory;
-        publishEvent(CurrentStoryChangeEvent.class, currentStory);
+        this.currentStory = currentStory;        
     }
 
     public DataModel<Story> getStories() {
-        return stories;
+        if (sprintManager.getCurrentSprint()!=null){
+            this.stories = new ListDataModel(sprintManager.getCurrentSprint().getStories());
+            return stories;
+        }
+        else{
+            return new ListDataModel<Story>();
+        }
     }
 
     public void setStories(DataModel<Story> stories) {
@@ -188,22 +179,43 @@ public class StoryManager extends AbstractManager implements Serializable {
     }
 
     public Sprint getSprint() {
-        return sprint;
+        return sprintManager.getCurrentSprint();
     }
 
     public void setSprint(Sprint sprint) {
-        this.sprint = sprint;
+        sprintManager.setCurrentSprint(sprint);
     }
 
-    private class SprintChangeListener implements SystemEventListener, Serializable {
-
-        public void processEvent(SystemEvent event) throws AbortProcessingException {
-            sprint = (Sprint) event.getSource();
-            init();
+    /**
+     * @return the storyList
+     */
+    public List<Story> getStoryList() {
+        if (sprintManager.getCurrentSprint()!=null){
+            this.storyList = sprintManager.getCurrentSprint().getStories();
         }
-
-        public boolean isListenerForSource(Object source) {
-            return (source instanceof Sprint);
-        }
+        return this.storyList;
     }
+
+    /**
+     * @param storyList the storyList to set
+     */
+    public void setStoryList(List<Story> storyList) {
+        this.storyList = storyList;
+    }
+
+    /**
+     * @return the sprintManager
+     */
+    public SprintManager getSprintManager() {
+        return sprintManager;
+    }
+
+    /**
+     * @param sprintManager the sprintManager to set
+     */
+    public void setSprintManager(SprintManager sprintManager) {
+        this.sprintManager = sprintManager;
+    }
+
+    
 }

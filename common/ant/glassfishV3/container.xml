@@ -237,6 +237,7 @@
                           failonerror="true">
                         <arg line="start-domain"/>
                         <arg line="--user ${glassfish.admin.user}"/>
+                        <arg line="--debug"/>
                         <arg line="${glassfish.domain}"/>
                     </exec>
                     <waitfor>

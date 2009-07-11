@@ -48,6 +48,7 @@
     <composite:attribute name="increment" required="false" type="Integer"/>
 </composite:interface>
 <composite:implementation>
+    <span id="#{cc.clientId}">
     <script type="text/javascript">
         function changeNumber(amount) {
             var increment = Number("#{cc.attrs.increment}");
@@ -64,6 +65,7 @@
     <h:commandButton id="back" value="&lt;" onclick="return changeNumber(-1);"/>
     <h:commandButton id="forward" value="&gt;" onclick="return changeNumber(1);"/>
     <h:commandButton id="bigforward" value="&gt;&gt;" onclick="return changeNumber(10);"/>
+    </span>
 </composite:implementation>
 </body>
 </html>

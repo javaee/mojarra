@@ -3832,9 +3832,9 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/OpenAjaxBridge/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ajax-component/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ajax-queue/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ajax-request/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ajax-switchlist/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ajax-tag/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/basic-ajax-edit/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/basic-ajax/src" isTestSource="false" />
@@ -3861,6 +3861,7 @@
       <sourceFolder url="file://$MODULE_DIR$/test/mappingDemo/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/tests" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/webtier-sample/src/java" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/ajax-component/build" />
       <excludeFolder url="file://$MODULE_DIR$/ajax-switchlist/build" />
       <excludeFolder url="file://$MODULE_DIR$/basic-ajax-edit/build" />
       <excludeFolder url="file://$MODULE_DIR$/basic-ajax/build" />

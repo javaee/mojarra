@@ -864,7 +864,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
                                                          component);
 
-        RenderKitUtils.renderOnchange(context, component);
+        RenderKitUtils.renderOnchange(context, component, false);
 
         // Now, write the buffered option content
         writer.write(bufferedWriter.toString());

@@ -48,6 +48,7 @@
     <composite:attribute name="increment" required="false" />
 </composite:interface>
 <composite:implementation>
+    <span id="#{cc.clientId}">
     <h:outputStylesheet name="spinnerStyled/spinner.css" />
     <h:inputText id="number" value="#{cc.attrs.value}" styleClass="spinnerText"/>
     <h:panelGroup id="spinnerButtonPanel" styleClass="spinnerButtons">
@@ -65,6 +66,7 @@
             return false;
         }
     </script>
+    </span>
 </composite:implementation>
 </body>
 </html>

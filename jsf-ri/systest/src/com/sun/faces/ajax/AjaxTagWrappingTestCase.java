@@ -90,9 +90,16 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("button1");
         lastpage = (HtmlPage) button1.click();
 
-        // Check that the ajax request succeeds - eventually.
+        // Check that the ajax request succeeds
         assertTrue(check("out1","1"));
         System.out.println("Button Checked");
+
+        HtmlAnchor link1 = (HtmlAnchor) lastpage.getHtmlElementById("link1");
+        lastpage = (HtmlPage) link1.click();
+
+        // Check that the ajax request succeeds
+        assertTrue(check("out1","2"));
+        System.out.println("Link Checked");
 
         // Check on the text field
         HtmlTextInput intext = ((HtmlTextInput)lastpage.getHtmlElementById("intext"));
@@ -109,6 +116,14 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
 
         assertTrue(check("checkedvalue","true"));
         System.out.println("Boolean Checkbox Checked");
+
+        // Check on the select many checkbox
+        checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("manyCheckbox:0"));
+        lastpage = (HtmlPage)checked.setChecked(true);
+
+        assertTrue(check("manyCheckedValue","Value: 1"));
+        System.out.println("Many Checkbox Checked");
+
     }
 
 }

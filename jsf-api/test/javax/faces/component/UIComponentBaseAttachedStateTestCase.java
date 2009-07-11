@@ -6,25 +6,22 @@
 package javax.faces.component;
 
 import com.sun.faces.mock.MockFacesContext;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
-import javax.faces.event.ValueChangeListener;
-import javax.faces.event.FacesListener;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.DateTimeConverter;
-import javax.faces.convert.Converter;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import javax.faces.context.FacesContext;
+import javax.faces.event.FacesListener;
+import javax.faces.event.ValueChangeListener;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+
 /**
- *
  * @author edburns
  */
 public class UIComponentBaseAttachedStateTestCase extends TestCase {
-    
+
     private UIComponentBase component;
     private MockFacesContext facesContext = null;
 
@@ -32,31 +29,31 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
     public UIComponentBaseAttachedStateTestCase(String arg0) {
         super(arg0);
     }
-    
+
     // Return the tests included in this test case.
     public static Test suite() {
         return (new TestSuite(UIComponentBaseAttachedStateTestCase.class));
     }
-    
+
     public void setUp() throws Exception {
         super.setUp();
         component = new UIOutput();
         facesContext = new MockFacesContext();
     }
-    
+
     public void testAttachedObjectsSet() throws Exception {
         Set<ValueChangeListener> returnedAttachedObjects = null,
                 attachedObjects = new HashSet<ValueChangeListener>();
         ValueChangeListener toAdd = new TestValueChangeListener();
         attachedObjects.add(toAdd);
         toAdd = new TestValueChangeListener();
-        attachedObjects.add(toAdd);        
+        attachedObjects.add(toAdd);
         toAdd = new TestValueChangeListener();
-        attachedObjects.add(toAdd);        
-        Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects); 
-        returnedAttachedObjects = (Set<ValueChangeListener>) 
+        attachedObjects.add(toAdd);
+        Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects);
+        returnedAttachedObjects = (Set<ValueChangeListener>)
                 UIComponentBase.restoreAttachedState(facesContext, result);
-        
+
     }
 
     public void testAttachedObjectsStack() throws Exception {
@@ -65,10 +62,10 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
         ValueChangeListener toAdd = new TestValueChangeListener();
         attachedObjects.add(toAdd);
         toAdd = new TestValueChangeListener();
-        attachedObjects.add(toAdd);        
+        attachedObjects.add(toAdd);
         toAdd = new TestValueChangeListener();
-        attachedObjects.add(toAdd);        
-        Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects); 
+        attachedObjects.add(toAdd);
+        Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects);
         returnedAttachedObjects = (Stack<ValueChangeListener>)
                 UIComponentBase.restoreAttachedState(facesContext, result);
     }
@@ -91,7 +88,7 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
         returnedAttachedObjects = (Set<ValueChangeListener>)
                 UIComponentBase.restoreAttachedState(facesContext, result);
         int secondSize = returnedAttachedObjects.size();
-        assertEquals(firstSize,secondSize);
+        assertEquals(firstSize, secondSize);
     }
 
 
@@ -138,7 +135,88 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
         TestFacesListener l = (TestFacesListener) component.getFacesListeners(TestFacesListener.class)[0];
         assertTrue(l != listener);
         assertTrue("initial".equals(l.getValue()));
+
+    }
+
+    public void testTransientListenersState() {
+
+        UIComponent output = new UIOutput();
+        output.markInitialState();
+        TestFacesListener l1 = new TestFacesListener();
+        TestFacesListener l2 = new TestFacesListener();
+        TestFacesListener l3 = new TestFacesListener();
+        TestFacesListener l4 = new TestFacesListener();
+        l1.setValue("l1");
+        l2.setValue("l2");
+        l3.setValue("l3");
+        l4.setValue("l4");
+        l2.setTransient(true);
+        l4.setTransient(true);
+
+        output.addFacesListener(l1);
+        output.addFacesListener(l2);
+        output.addFacesListener(l3);
+        output.addFacesListener(l4);
+
+        Object state = output.saveState(facesContext);
+        assertNotNull(state);
+        output = new UIOutput();
+        output.restoreState(facesContext, state);
+        FacesListener[] listeners = output.getFacesListeners(TestFacesListener.class);
+        assertTrue(listeners.length == 2);
+        assertEquals("l1", ((TestFacesListener) listeners[0]).getValue());
+        assertEquals("l3", ((TestFacesListener) listeners[1]).getValue());
+
+        output = new UIOutput();
+        output.markInitialState();
+        output.addFacesListener(l2);
+        state = output.saveState(facesContext);
+        assertNotNull(state);
+        output = new UIOutput();
+        output.restoreState(facesContext, state);
+        listeners = output.getFacesListeners(TestFacesListener.class);
+        assertTrue(listeners.length == 0);
         
+    }
+
+
+    public void testTransientListenersState2() {
+
+        UIComponent output = new UIOutput();
+        TestFacesListener l1 = new TestFacesListener();
+        TestFacesListener l2 = new TestFacesListener();
+        TestFacesListener l3 = new TestFacesListener();
+        TestFacesListener l4 = new TestFacesListener();
+        l1.setValue("l1");
+        l2.setValue("l2");
+        l3.setValue("l3");
+        l4.setValue("l4");
+        l2.setTransient(true);
+        l4.setTransient(true);
+
+        output.addFacesListener(l1);
+        output.addFacesListener(l2);
+        output.addFacesListener(l3);
+        output.addFacesListener(l4);
+
+        Object state = output.saveState(facesContext);
+        assertNotNull(state);
+        output = new UIOutput();
+        output.restoreState(facesContext, state);
+        FacesListener[] listeners = output.getFacesListeners(TestFacesListener.class);
+        assertTrue(listeners.length == 2);
+        assertEquals("l1", ((TestFacesListener) listeners[0]).getValue());
+        assertEquals("l3", ((TestFacesListener) listeners[1]).getValue());
+
+        output = new UIOutput();
+        output.addFacesListener(l2);
+        state = output.saveState(facesContext);
+        assertNotNull(state);
+        output = new UIOutput();
+        output.restoreState(facesContext, state);
+        listeners = output.getFacesListeners(TestFacesListener.class);
+        assertTrue(listeners.length == 0);
+
     }
 
 
@@ -174,7 +252,7 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
 
         public Object saveState(FacesContext context) {
 
-            return ((!initialState) ? new Object[] { value } : null);
+            return ((!initialState) ? new Object[]{value} : null);
 
         }
 

@@ -218,7 +218,7 @@ public class ResourceManager {
                                   FacesContext ctx) {
         
         LibraryInfo library = null;
-        if (libraryName != null) {
+        if (libraryName != null && !libraryName.contains("../")) {
             library = findLibrary(libraryName, localePrefix, ctx);
             if (library == null && localePrefix != null) {
                 // no localized library found.  Try to find

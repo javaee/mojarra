@@ -76,28 +76,93 @@ public class DynamicStateTestCase extends AbstractTestCase {
 
     public void testDynamicDeletionPrefix() throws Exception {
         doTestDynamicDeletion("/faces/state/dynamicDeletion.xhtml");
-
-
     }
     
     public void testDynamicDeletionExtension() throws Exception {
         doTestDynamicDeletion("/state/dynamicDeletion.faces");
-
-
     }
     
     public void testDynamicAdditionPrefix() throws Exception {
         doTestDynamicAddition("/faces/state/dynamicAddition.xhtml");
-
-
     }
     
     public void testDynamicAdditionExtension() throws Exception {
         doTestDynamicAddition("/state/dynamicAddition.faces");
+    }
 
+    /*
+     * Added for issue 1183.
+     */
+    public void testNestedComponentAddition() throws Exception {
+
+        HtmlPage page = getPage("/faces/state/dynamicAddition2.xhtml");
+        HtmlSubmitInput submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:render");
+        page = submit.click();
+        HtmlTextInput input = (HtmlTextInput)
+              getInputContainingGivenId(page, "form:textInput");
+        assertNotNull(input);
+        assertEquals("default value", input.getValueAttribute());
+        input.setValueAttribute("new value");
+        submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:render");
+        page = submit.click();
+        input = (HtmlTextInput)
+              getInputContainingGivenId(page, "form:textInput");
+        assertNotNull(input);
+        assertEquals("new value", input.getValueAttribute());
+
+        // ensure events are fired properly when adding tree deltas
+        // to the view
+        submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:submit");
+        page = submit.click();
+        input = (HtmlTextInput)
+              getInputContainingGivenId(page, "form:textInput");
+        assertNotNull(input);
+
+        // once more for good measure
+        submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:submit");
+        page = submit.click();
+        input = (HtmlTextInput)
+              getInputContainingGivenId(page, "form:textInput");
+        assertNotNull(input);
 
     }
-    public void doTestDynamicDeletion(String viewId) throws Exception {
+
+
+    /**
+     * Added for issue 1185.
+     */
+    public void testDeleteAddSameAction() throws Exception {
+
+        HtmlPage page = getPage("/faces/state/dynamicAdditionDeletion.xhtml");
+        HtmlSubmitInput submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:render");
+        page = submit.click();
+
+        // first click removes children from the panel (should be empty)
+        // and adds a new button
+        assertTrue(page.asText().contains("dynamically added button"));
+
+        for (int i = 0; i < 5; i++) {
+            // repeated clicks will remove the single child and add a new button
+            // back.
+            submit = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:render");
+            page = submit.click();
+
+            assertTrue(page.asText().contains("dynamically added button"));
+        }
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void doTestDynamicDeletion(String viewId) throws Exception {
         HtmlPage page = getPage(viewId);
         HtmlTextInput textField = (HtmlTextInput)
                 getInputContainingGivenId(page, "textField");
@@ -112,7 +177,8 @@ public class DynamicStateTestCase extends AbstractTestCase {
         assertTrue(-1 == page.asText().indexOf("cbutton should not be found"));
     }
 
-    public void doTestDynamicAddition(String viewId) throws Exception {
+
+    private void doTestDynamicAddition(String viewId) throws Exception {
         HtmlPage page = getPage(viewId);
         HtmlTextInput textField = (HtmlTextInput)
                 getInputContainingGivenId(page, "textField");

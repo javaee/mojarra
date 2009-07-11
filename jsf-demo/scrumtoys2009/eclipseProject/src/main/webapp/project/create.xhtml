@@ -5,25 +5,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
             <h:outputText value="#{i18n['project.create.title']}"></h:outputText>
         </ui:define>
-        <ui:define name="content">
+        <ui:define name="navigationBar">            
+            <h:commandLink action="/project/show" value="#{i18n['navigation.projects']}"></h:commandLink>
+            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
+            <h:outputText value="#{i18n['project.create.form.title']}" styleClass="tituloForm"  />
+        </ui:define>
+        <ui:define name="content">        
             <h:form id="createProjectForm">
-                <h:panelGrid columns="1" headerClass="tituloForm" footerClass="footerForm">
-                    <f:facet name="header">
-                    <h:outputText value="#{i18n['project.create.form.title']}"  />
-                    </f:facet>
-                    <ui:include src="form.xhtml" />
+                <h:panelGrid columns="1" footerClass="footerForm">
+                    <h:panelGroup>
+                        <ui:include src="form.xhtml"/>
+                    </h:panelGroup>
+
                     <f:facet name="footer">
-                        <h:commandButton id="btnCreate" action="#{projectManager.save}" value="#{i18n['project.create.button.create']}" styleClass="formInput" />
-                        <h:commandButton id="btnCancel" action="show" value="#{i18n['project.create.button.cancel']}" styleClass="formInput" immediate="true" />
+                        <h:commandButton id="btnCreate" action="#{projectManager.save}" value="#{i18n['project.create.button.create']}" styleClass="botaoPostIt" />
+                        <h:commandButton id="btnCancel" action="show" value="#{i18n['project.create.button.cancel']}" styleClass="botaoPostIt" immediate="true" />
                     </f:facet>
                 </h:panelGrid>
             </h:form>

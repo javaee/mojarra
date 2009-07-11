@@ -79,8 +79,31 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
 
     public void testResourceRelocation() throws Exception {
 
+        resourceRelocationTest("/faces/resourcerelocation.xhtml",true);
+        resourceRelocationTest("/faces/resourcerelocation2.xhtml",false);
+        resourceRelocationTest("/faces/resourcerelocation3.xhtml",false);
+        resourceRelocationTest("/faces/resourcerelocation4.xhtml",true);
+
+    }
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void resourceRelocationTest(String urlfrag, boolean scriptfirst) throws Exception {
+
+        int scriptPos;
+        int sheetPos;
+
+        if (scriptfirst) {
+            scriptPos = 1;
+            sheetPos = 2;
+        } else {
+            sheetPos = 1;
+            scriptPos = 2;
+        }
+
         // for this request, the script and stylesheet will be in the head
-        HtmlPage page = getPage("/faces/resourcerelocation.xhtml?location=head");
+        HtmlPage page = getPage(urlfrag+"?location=head");
         List<HtmlHead> headList = new ArrayList<HtmlHead>(1);
         getAllElementsOfGivenClass(page, headList, HtmlHead.class);
         assertTrue(headList.size() == 1);
@@ -88,8 +111,8 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
         List<HtmlElement> headChildren = getChildren(head);
         assertTrue(headChildren.size() == 3);
         assertTrue(headChildren.get(0) instanceof HtmlTitle);
-        assertTrue(headChildren.get(1) instanceof HtmlScript);
-        assertTrue(headChildren.get(2) instanceof HtmlLink);
+        assertTrue(headChildren.get(scriptPos) instanceof HtmlScript);
+        assertTrue(headChildren.get(sheetPos) instanceof HtmlLink);
         List<HtmlBody> bodyList = new ArrayList<HtmlBody>(1);
         getAllElementsOfGivenClass(page, bodyList, HtmlBody.class);
         assertTrue(bodyList.size() == 1);
@@ -108,7 +131,7 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
 
         // for this request, the stylesheet will be in the head, and the script
         // will be the last child of body
-        page = getPage("/faces/resourcerelocation.xhtml?location=body");
+        page = getPage(urlfrag+"?location=body");
         headList.clear();
         getAllElementsOfGivenClass(page, headList, HtmlHead.class);
         assertTrue(headList.size() == 1);
@@ -136,7 +159,7 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
 
         // for this request, the stylesheet will be in the head, and the
         // script will be the last child of the form
-        page = getPage("/faces/resourcerelocation.xhtml?location=form");
+        page = getPage(urlfrag+"?location=form");
         headList.clear();
         getAllElementsOfGivenClass(page, headList, HtmlHead.class);
         assertTrue(headList.size() == 1);
@@ -161,12 +184,8 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
         assertTrue(formChildren.get(0) instanceof HtmlInput);
         assertTrue(formChildren.get(1) instanceof HtmlInput);
         assertTrue(formChildren.get(2) instanceof HtmlScript);
-        
+
     }
-
-
-    // --------------------------------------------------------- Private Methods
-
 
     private List<HtmlElement> getChildren(HtmlElement parent) {
         List<HtmlElement> list = new ArrayList<HtmlElement>();

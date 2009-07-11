@@ -98,6 +98,27 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertNotNull(handler.createResource("jsf.js", "javax.faces"));
     }
 
+    public void testAjaxCompression() throws Exception {
+        
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        Resource resource =  handler.createResource("jsf-uncompressed.js", "javax.faces");
+
+        InputStream stream = resource.getInputStream();
+
+        int origSize = getBytes(stream).length;
+
+        resource =  handler.createResource("jsf.js", "javax.faces");
+
+        stream = resource.getInputStream();
+
+        int compSize = getBytes(stream).length;
+
+        //  If we're not getting 30% compression, something's gone horribly wrong.
+        assertTrue("compressed file less than 30% smaller: orig "+origSize+" comp: "+compSize,
+                origSize * 0.7 > compSize);
+
+    }
+
 
     public void testCreateResource() throws Exception {
 
@@ -760,6 +781,49 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue(!response.containsHeader("content-encoding"));
 
     }
+
+
+    //==========================================================================
+    // Validate the fix for issue 1162.
+    //
+    public void beginHandleResourceRequest14(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/web.xml.faces", null, "ln=../WEB-INF");
+    }
+
+    public void testHandleResourceRequest14() throws Exception {
+
+        ResourceHandler handler =
+              getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+        handler.handleResourceRequest(getFacesContext());
+        
+    }
+
+    public void endHandleResourceRequest14(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
+
+
+    //==========================================================================
+    // Validate the fix for issue 1162.
+    //
+    public void beginHandleResourceRequest15(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/web.xml.faces", null, "ln=nvLibrary/../../WEB-INF");
+    }
+
+    public void testHandleResourceRequest15() throws Exception {
+
+        ResourceHandler handler =
+              getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+        handler.handleResourceRequest(getFacesContext());
+
+    }
+
+    public void endHandleResourceRequest15(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
+
 
 
 // ---------------------------------------------------------- Helper Methods

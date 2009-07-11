@@ -216,7 +216,8 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         } catch (ClassNotFoundException cnfe) {
             throw new ConfigurationException(
                       buildMessage(MessageFormat.format("Unable to find class ''{0}''",
-                                                        source), sourceNode));
+                                                        source), sourceNode),
+                                                        cnfe);
         }
 
         return null;
@@ -273,19 +274,22 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                 throw new ConfigurationException(
                       buildMessage(MessageFormat.format("Unable to find class ''{0}''",
                                                         className),
-                                   source));
+                                   source),
+                                   cnfe);
             } catch (NoClassDefFoundError ncdfe) {
                 throw new ConfigurationException(
                       buildMessage(MessageFormat.format("Class ''{0}'' is missing a runtime dependency: {1}",
                                                         className,
                                                         ncdfe.toString()),
-                                   source));
+                                   source),
+                                   ncdfe);
             } catch (ClassCastException cce) {
                 throw new ConfigurationException(
                       buildMessage(MessageFormat.format("Class ''{0}'' is not an instance of ''{1}''",
                                                         className,
                                                         rootType),
-                                   source));
+                                   source),
+                                   cce);
             } catch (Exception e) {
                 throw new ConfigurationException(
                       buildMessage(MessageFormat.format("Unable to create a new instance of ''{0}'': {1}",

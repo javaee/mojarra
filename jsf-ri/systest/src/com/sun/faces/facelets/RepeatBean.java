@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.application.FacesMessage;
 
 @ManagedBean
 @RequestScoped
@@ -56,6 +58,17 @@ public class RepeatBean {
             flavors.add("chocolate peanut butter");
         }
         return flavors;
+    }
+
+
+    public void setIndex(int index) {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                            "Index: " + index,
+                                            "Index: " + index);
+        ctx.addMessage(null, msg);
+        
     }
     
     public String [] getFlavorsArray() {

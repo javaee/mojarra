@@ -1857,6 +1857,7 @@
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/core-tags/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/disable-bean-validator/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/el-performance/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/src/java" isTestSource="false" />
@@ -1886,13 +1887,18 @@
       <excludeFolder url="file://$MODULE_DIR$/build/test" />
       <excludeFolder url="file://$MODULE_DIR$/build/test-config-1" />
       <excludeFolder url="file://$MODULE_DIR$/build/test-config-2" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/absolute-ordering/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/clientside-statesaving/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/disable-bean-validator/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/document-ordering/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/flash/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/jsp-flash/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/build" />

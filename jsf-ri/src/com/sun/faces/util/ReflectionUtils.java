@@ -42,8 +42,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.beans.PropertyDescriptor;
+import java.beans.Introspector;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
 
 /**
  * <p>A set of utility methods to make working with
@@ -51,6 +57,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public final class ReflectionUtils {
 
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     /**
      * <p>Cache</p>
@@ -174,6 +181,43 @@ public final class ReflectionUtils {
     }
 
 
+    /**
+     * @param className the fully qualified class name
+     * @param propertyName a JavaBeans property name
+     * @return a method suitable for setting a JavaBeans property, or
+     *  <code>null</code> if the property doesn't exist or is readonly.
+     */
+    public static Method lookupWriteMethod(String className, String propertyName) {
+
+        ClassLoader loader = Util.getCurrentLoader(null);
+        if (loader == null) {
+            return null;
+        }
+
+        return getMetaData(loader, className).lookupWriteMethod(propertyName);
+
+    }
+
+
+    /**
+     * @param className the fully qualified class name
+     * @param propertyName a JavaBeans property name
+     * @return a method suitable for obtaining the value of a JavaBeans property,
+     *  or <code>null</code> if the property doesn't exist or can't be read.
+     */
+    public static Method lookupReadMethod(String className, String propertyName) {
+
+
+        ClassLoader loader = Util.getCurrentLoader(null);
+        if (loader == null) {
+            return null;
+        }
+
+        return getMetaData(loader, className).lookupReadMethod(propertyName);
+
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -253,6 +297,7 @@ public final class ReflectionUtils {
         Map<Integer,Constructor> constructors;
         Map<String,HashMap<Integer,Method>> methods;
         Map<String,HashMap<Integer,Method>> declaredMethods;
+        Map<String, PropertyDescriptor> propertyDescriptors;
         Class<?> clazz;
 
 
@@ -266,7 +311,7 @@ public final class ReflectionUtils {
          */
         public MetaData(Class<?> clazz) {
 
-            String name = null;
+            String name;
             this.clazz = clazz;
             Constructor[] ctors = clazz.getConstructors();
             constructors = new HashMap<Integer,Constructor>(ctors.length, 1.0f);
@@ -296,7 +341,26 @@ public final class ReflectionUtils {
                     declaredMethods.put(name, declaredMethodsMap);
                 }
                 declaredMethodsMap.put(getKey(meths[i].getParameterTypes()), meths[i]);
-            }            
+            }
+
+            try {
+                BeanInfo info = Introspector.getBeanInfo(clazz);
+                PropertyDescriptor[] pds = info.getPropertyDescriptors();
+                if (pds != null) {
+                    if (propertyDescriptors == null) {
+                        propertyDescriptors = new HashMap<String,PropertyDescriptor>(pds.length, 1.0f);
+                    }
+                    for (PropertyDescriptor pd : pds) {
+                        propertyDescriptors.put(pd.getName(), pd);
+                    }
+                }
+            } catch (IntrospectionException ie) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               ie.toString(),
+                               ie);
+                }
+            }
 
         }
 
@@ -351,6 +415,47 @@ public final class ReflectionUtils {
             return clazz;
 
         }
+
+
+        /**
+         * @param propName a JavaBeans property name
+         * @return a method suitable for setting a JavaBeans property, or
+         *  <code>null</code> if the property doesn't exist or is readonly.
+         */
+        public Method lookupWriteMethod(String propName) {
+
+            if (propertyDescriptors == null) {
+                return null;
+            }
+
+            PropertyDescriptor pd = propertyDescriptors.get(propName);
+            if (pd != null) {
+                return pd.getWriteMethod();
+            }
+            return null;
+
+        }
+
+
+        /**
+         * @param propName a JavaBeans property name
+         * @return a method suitable for obtaining the value of a JavaBeans property,
+         *  or <code>null</code> if the property doesn't exist or can't be read.
+         */
+        public Method lookupReadMethod(String propName) {
+
+            if (propertyDescriptors == null) {
+                return null;
+            }
+
+            PropertyDescriptor pd = propertyDescriptors.get(propName);
+            if (pd != null) {
+                return pd.getReadMethod();
+            }
+            return null;
+
+        }
+
 
 
     // --------------------------------------------------------- Private Methods

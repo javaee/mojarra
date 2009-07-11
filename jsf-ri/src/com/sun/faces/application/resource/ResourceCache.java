@@ -57,6 +57,7 @@ import javax.servlet.ServletContext;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MultiKeyConcurrentHashMap;
@@ -146,7 +147,9 @@ public class ResourceCache {
                        "ResourceCache constructed for {0}.  Check period is {1} minutes.",
                        new Object[] { contextName, checkPeriod });
         }
-        if (checkPeriod >= 1) {
+        // if the threading option is enabled, and ProjectStage is Production,
+        // then resources will be static and new versions will not be picked up.
+        if (config.isOptionEnabled(EnableThreading) && checkPeriod >= 1) {
             initExecutor((checkPeriod * 1000L * 60L));
             initMonitors(sc);
         }
@@ -284,11 +287,18 @@ public class ResourceCache {
     private int getThreadPoolSize() {
 
         ClassLoader thisClassLoader = ResourceCache.class.getClassLoader();
-        return (thisClassLoader
-                  .equals(Thread.currentThread().getContextClassLoader())
-                                  ? NON_SHARED_THREAD_COUNT
-                                  : SHARED_THREAD_COUNT);
-
+        boolean shared = thisClassLoader.equals(Thread.currentThread().getContextClassLoader());
+        int tc;
+        if (shared) {
+            tc = Runtime.getRuntime().availableProcessors();
+            if (tc > SHARED_THREAD_COUNT) {
+                tc = SHARED_THREAD_COUNT;
+            }
+        } else {
+            tc = NON_SHARED_THREAD_COUNT;
+        }
+        return tc;
+        
     }
 
 

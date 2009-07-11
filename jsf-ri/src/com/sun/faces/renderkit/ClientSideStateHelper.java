@@ -129,7 +129,7 @@ public class ClientSideStateHelper extends StateHelper {
             ResponseWriter writer = ctx.getResponseWriter();
             writer.write(stateFieldStart);
             doWriteState(state, writer);
-            writer.write(STATE_FIELD_END);
+            writer.write(stateFieldEnd);
             writeRenderKitIdField(ctx, writer);
         }
 

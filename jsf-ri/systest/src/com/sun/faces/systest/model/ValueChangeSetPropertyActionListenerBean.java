@@ -56,11 +56,11 @@ public class ValueChangeSetPropertyActionListenerBean implements Serializable, V
     
     
     public void processValueChange(ValueChangeEvent event) {
-	FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("message", "ValueChangeSetPropertyActionListenerBean.processValueChange called");
+        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("message", "ValueChangeSetPropertyActionListenerBean.processValueChange called");
     }
     
-    public String getCurrentTimeMillis() {
-	return "" + System.currentTimeMillis();
+    public String getNanoTime() {
+        return "" + System.nanoTime();
     }
 
     

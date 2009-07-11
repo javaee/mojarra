@@ -198,7 +198,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Do update.
          * @ignore
          */
-        var doUpdate = function doUpdate(element, formid) {
+        var doUpdate = function doUpdate(element, context) {
             var id, content, markup, str, state;
             var stateForm;
 
@@ -210,7 +210,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // Now set the view state from the server into the DOM
                 // but only for the form that submitted the request.
 
-                stateForm = document.getElementById(formid);
+                stateForm = document.getElementById(context.formid);
                 if (!stateForm) {
                     // if the form went away for some reason, we're going to just return silently.
                     return;
@@ -223,6 +223,27 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     stateForm.appendChild(field);
                 }
                 field.value = state.text || state.data;
+
+                // Now set the view state from the server into the DOM
+                // for any form that is a render target.
+
+                var temp = context.render.split(' ');
+                for (var i=0; i<temp.length; i++) {
+                    if (temp.hasOwnProperty(i)) {                    
+                        // See if the element is a form and the form is not the one that caused the submission..
+                        var f = document.forms[temp[i]];
+                        if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
+                            field = f.elements["javax.faces.ViewState"];
+                            if (typeof field === 'undefined') {
+                                field = document.createElement("input");
+                                field.type = "hidden";
+                                field.name = "javax.faces.ViewState";
+                                f.appendChild(field);
+                            }
+                            field.value = state.text || state.data;
+                        }
+                    }
+                }
 
                 return;
             }
@@ -301,18 +322,31 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     elementReplace(docBody, "body", src);
                 }
 
+
             } else {
                 var d = $(id);
                 if (!d) {
-                    throw new Error("jsf.ajax.response: " + id + " not found");
+                    throw new Error("During update: " + id + " not found");
                 }
                 var parent = d.parentNode;
-                var temp = document.createElement('div');
-                temp.id = d.id;
                 // Trim space padding before assigning to innerHTML
-                temp.innerHTML = str.replace(/^\s+/g,'').replace(/\s+$/g,'');
-
-                parent.replaceChild(temp.firstChild, d);
+                var html = str.replace(/^\s+/g,'').replace(/\s+$/g,'');
+                var tableElements = ['td', 'th', 'tr', 'tbody', 'thead', 'tfoot'];
+                var isInTable =  tableElements[d.tagName.toLocaleLowerCase()];
+                if (isInTable) {
+                    temp = document.createElement('table');
+                    temp.innerHTML = html;
+                    var newElement = temp.firstChild;
+                    //some browsers will also create intermediary elements such as table>tbody>tr>td
+                    while ((null != newElement) && (id != newElement.id)) {
+                        newElement = newElement.firstChild;
+                    }
+                    parent.replaceChild(newElement, d);
+                } else {
+                    temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    parent.replaceChild(temp.firstChild, d);
+                }
             }
         };
 
@@ -362,11 +396,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             var target = $(id);
 
+            if (!target) {
+                throw new Error("The specified id: "+id+" was not found in the page.");
+            }
+
             // There can be multiple attributes modified.  Loop through the list.
             var nodes = element.childNodes;
             for (var i = 0; i < nodes.length; i++) {
-                var name = nodes[i].firstChild.firstChild.nodeValue;
-                var value = nodes[i].firstChild.nextSibling.firstChild.nodeValue;
+                var name = nodes[i].getAttribute('name');
+                var value = nodes[i].getAttribute('value');
                 target.setAttribute(name,value);
             }
         };
@@ -631,18 +669,18 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Assumes that the request has completed.
          * @ignore
          */
-        var sendError = function sendError(request, context, name, serverErrorName, serverErrorMessage) {
+        var sendError = function sendError(request, context, status, description, serverErrorName, serverErrorMessage) {
 
             // Possible errornames:
             // httpError
             // emptyResponse
-            // serverError  RELEASE_PENDING or facesError?
+            // serverError
             // malformedXML
 
             var sent = false;
             var data = {};  // data payload for function
             data.type = "error";
-            data.name = name;
+            data.status = status;
             // RELEASE_PENDING won't work in response
             data.source = context.source;
             data.responseCode = request.status;
@@ -651,7 +689,19 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             // RELEASE_PENDING won't work in response
             data.responseText = request.responseText;
 
-            if (name == "serverError") {
+            if (description) {
+                data.description = description;
+            } else if (status == "httpError") {
+                data.description = "There was an error communicating with the server, status: "+data.responseCode;
+            } else if (status == "serverError") {
+                data.description = serverErrorMessage;
+            } else if (status == "emptyResponse") {
+                data.description = "An emply response was received from the server.  Check server error logs.";
+            } else if (status == "malformedXML") {
+                data.description = "An invalid XML response was received from the server.";
+            }
+
+            if (status == "serverError") {
                 data.errorName = serverErrorName;
                 data.errorMessage = serverErrorMessage;
             }
@@ -670,16 +720,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
 
             if (!sent && jsf.getProjectStage() === "Development") {
-                switch (name) {
-                    case "httpError":
-                        alert("httpError " + request.status);
-                        break;
-                    case "serverError":
+                if (status == "serverError") {
                         alert("serverError: " + serverErrorName + " " + serverErrorMessage);
-                        break;
-                    default:
-                        alert("Error " + name);
-                        break;
+                } else {
+                    alert(status + ": "+ data.description);
                 }
             }
         };
@@ -689,13 +733,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Request is assumed to have completed, except in the case of event = 'begin'.
          * @ignore
          */
-        var sendEvent = function sendEvent(request, context, name) {
+        var sendEvent = function sendEvent(request, context, status) {
 
             var data = {};
             data.type = "event";
-            data.name = name;
+            data.status = status;
             data.source = context.source;
-            if (name !== 'begin') {
+            if (status !== 'begin') {
                 data.responseCode = request.status;
                 // RELEASE_PENDING pass a copy, not a reference
                 data.responseXML = request.responseXML;
@@ -1085,6 +1129,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 ajaxEngine.context.onerror = onerror;
                 ajaxEngine.context.source = element;
                 ajaxEngine.context.formid = form.id;
+                ajaxEngine.context.render = args["javax.faces.partial.render"];
                 ajaxEngine.sendRequest();
             },
             /**
@@ -1258,7 +1303,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 if (responseType.nodeName === "error") { // it's an error
                     var errorName = responseType.firstChild.firstChild.nodeValue;
                     var errorMessage = responseType.firstChild.nextSibling.firstChild.nodeValue;
-                    sendError(request, context, "serverError", errorName, errorMessage);
+                    sendError(request, context, "serverError", null, errorName, errorMessage);
                     return;
                 }
 
@@ -1270,7 +1315,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
                 if (responseType.nodeName !== "changes") {
-                    sendError(request, context, "malformedXML");
+                    sendError(request, context, "malformedXML", "Top level node must be one of: changes, redirect, error, received: "+responseType.nodeName+" instead.");
                     return;
                 }
 
@@ -1281,7 +1326,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     for (var i = 0; i < changes.length; i++) {
                         switch (changes[i].nodeName) {
                             case "update":
-                                doUpdate(changes[i], context.formid);
+                                doUpdate(changes[i], context);
                                 break;
                             case "delete":
                                 doDelete(changes[i]);
@@ -1299,12 +1344,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             // RELEASE_PENDING no action?
                                 break;
                             default:
-                                sendError(request, context, "malformedXML");
+                                sendError(request, context, "malformedXML", "Changes allowed are: update, delete, insert, attributes, eval, extension.  Received "+changes[i].nodeName+" instead.");
                                 return;
                         }
                     }
                 } catch (ex) {
-                    sendError(request, context, "malformedXML");
+                    sendError(request, context, "malformedXML", ex.message);
                     return;
                 }
                 sendEvent(request, context, "success");
@@ -1394,7 +1439,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         break;
                     case 'checkbox':
                     case 'radio':
-                        addField(el.name, el.checked + "");
+                        if (el.checked)  {
+                            addField(el.name, el.value);
+                        }
                         break;
                 }
             }
@@ -1459,3 +1506,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
 } //end if version detection block
+
+/*
+
+if( _SARISSA_IS_IE && oldnode.tagName.match( /(tbody|thead|tfoot|tr|th|td)/i ) ) {
+    LOG.debug( "Replace content of node by IE hack" );
+    var temp = document.createElement( "div" );
+    temp.innerHTML = '<table style="display: none">'+new XMLSerializer().serializeToString( newnode )+'</table>';
+    anchor.replaceChild( temp.getElementsByTagName( newnode.tagName ).item( 0 ), oldnode );
+} else {
+    LOG.debug( "Replace content of node by outerHTML()" );
+    oldnode.outerHTML = new XMLSerializer().serializeToString( newnode );
+}
+*/        

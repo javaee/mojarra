@@ -56,6 +56,8 @@ import javax.faces.component.visit.VisitResult;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 /**
  * <p>This bean has the methods that are used to illustrate
@@ -63,10 +65,10 @@ import javax.faces.model.SelectItem;
  *
  */
 
+@ManagedBean(name="treevisit")
+@SessionScoped
 public class Bean {
-    
-    private static final Logger LOGGER = Logger.getLogger("treevisit");
-    
+
     //
     // Instance Variables
     //

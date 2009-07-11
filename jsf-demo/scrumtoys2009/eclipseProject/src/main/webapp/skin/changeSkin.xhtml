@@ -6,9 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:menu="http://java.sun.com/jsf/composite/components" >
+      xmlns:scrum="http://java.sun.com/jsf/composite/components">>
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
@@ -16,34 +14,25 @@
         </ui:define>
         <ui:define name="content">
             <h:form id="frmListStories">
+                <h:panelGrid columns="5" width="990" >
+                    <h:outputLabel value=""></h:outputLabel>
+                    <scrum:postit action="#{skinManager.yellowSkin}" color="Yellow" >
+                        <ui:param name="postitLabel" value=""></ui:param>
+                        <ui:param name="postitText" value="Yellow"></ui:param>
+                    </scrum:postit>
+                    <scrum:postit action="#{skinManager.orangeSkin}" color="Orange">
+                        <ui:param name="postitLabel" value=""></ui:param>
+                        <ui:param name="postitText" value="Orange"></ui:param>
+                    </scrum:postit>
+                    <scrum:postit action="#{skinManager.redSkin}" color="Red" >
+                        <ui:param name="postitLabel" value=""></ui:param>
+                        <ui:param name="postitText" value="Red"></ui:param>
+                    </scrum:postit>
+                    <scrum:postit action="#{skinManager.blueSkin}" color="Blue" >
+                        <ui:param name="postitLabel" value=""></ui:param>
+                        <ui:param name="postitText" value="Blue"></ui:param>
+                    </scrum:postit>
 
-                <br/><br/>
-                <h:panelGrid columns="1" headerClass="tableHeader" footerClass="whiteboard-bottom"  width="990" cellpadding="0" cellspacing="0">
-                    <f:facet name="header">
-                        <h:outputText value=""></h:outputText>
-                    </f:facet>
-                    <h:panelGrid columns="5" styleClass="tableBody" width="990" >                       
-                        <h:outputLabel value=""></h:outputLabel>
-                        <menu:postit action="#{skinManager.yellowSkin}" cor="Yellow" >
-                            <ui:param name="postitLabel" value=""></ui:param>
-                            <ui:param name="postitText" value="Yellow"></ui:param>
-                        </menu:postit>
-                        <menu:postit action="#{skinManager.orangeSkin}" cor="Orange">
-                            <ui:param name="postitLabel" value=""></ui:param>
-                            <ui:param name="postitText" value="Orange"></ui:param>
-                        </menu:postit>
-                        <menu:postit action="#{skinManager.redSkin}" cor="Red" >
-                            <ui:param name="postitLabel" value=""></ui:param>
-                            <ui:param name="postitText" value="Red"></ui:param>                            
-                        </menu:postit>
-                        <menu:postit action="#{skinManager.blueSkin}" cor="Blue" >
-                            <ui:param name="postitLabel" value=""></ui:param>
-                            <ui:param name="postitText" value="Blue"></ui:param>                            
-                        </menu:postit>
-                    </h:panelGrid>
-                   <f:facet name="footer">
-                        <h:graphicImage value="/resources/images/lousaNova/quadroNegro_botton_990x120.png" ></h:graphicImage>
-                    </f:facet>
                 </h:panelGrid>
             </h:form>
         </ui:define>

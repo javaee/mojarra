@@ -41,6 +41,7 @@ import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.html.*;
 
+import javax.faces.component.html.HtmlInputText;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -297,6 +298,60 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
     }
 
 
+    public void testNesting04() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/nesting04.xhtml");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(3);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(3, spans.size());
+        assertEquals("static", spans.get(0).asText());
+        assertEquals("com.sun.faces.context.FacesContextImpl", spans.get(1).asText());
+        assertEquals("form:nesting4", spans.get(2).asText());
+
+        HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "form:sub");
+        page = input.click();
+        spans.clear();
+         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(3, spans.size());
+        assertEquals("static", spans.get(0).asText());
+        assertEquals("com.sun.faces.context.FacesContextImpl", spans.get(1).asText());
+        assertEquals("form:nesting4", spans.get(2).asText());
+        
+    }
+
+
+    public void testNesting05() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/nesting05.xhtml");
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form1:command");
+        page = submit.click();
+        assertTrue(page.asText().contains("Action invoked"));
+
+        page = getPage("/faces/composite/nesting05.xhtml");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form2:command2");
+        page = submit.click();
+        assertTrue(page.asText().contains("ActionListener invoked"));
+
+        page = getPage("/faces/composite/nesting05.xhtml");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form3:command3");
+        page = submit.click();
+        assertTrue(page.asText().contains("Custom action invoked"));
+
+        page = getPage("/faces/composite/nesting05.xhtml");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form4:command");
+        HtmlTextInput text = (HtmlTextInput) getInputContainingGivenId(page, "nesting6:nesting7:form4:input");
+        text.setValueAttribute("foo");
+        page = submit.click();
+        assertTrue(page.asText().contains("validator invoked"));
+
+        page = getPage("/faces/composite/nesting05.xhtml");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "nesting6:nesting7:form5:command");
+        page = submit.click();
+        assertTrue(page.asText().contains("ValueChange invoked"));
+        
+    }
+
+
     public void testChildrenAndFacets() throws Exception {
 
         HtmlPage page = getPage("/faces/composite/childrenfacets.xhtml");
@@ -408,6 +463,27 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
         String toplevelContent = lastpage.getElementById("insert").getTextContent();
         assertTrue("Inserted Text".equals(toplevelContent));
+    }
+
+    public void testMethodExprNotRequired() throws Exception {
+
+        try {
+            getPage("/faces/composite/methodExprNotRequired.xhtml");
+        } catch (Exception e) {
+            fail("Exception thrown when compiling page methodExprNotRequired.");
+        }
+
+    }
+
+    public void testMethodExprRequired() throws Exception {
+
+        try {
+            getPage("/faces/composite/methodExprRequired.xhtml");
+            fail("No exceptio thrown when composite component was missing a required MethodExpression enabled attribute");
+        } catch (Exception e) {
+            
+        }
+
     }
 
     

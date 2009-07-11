@@ -5,31 +5,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-      xmlns:appez="http://java.sun.com/jsf/composite/components" >
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
             <h:outputText value="#{i18n['project.edit.title']}"></h:outputText>
         </ui:define>
+        <ui:define name="navigationBar">
+            <h:commandLink action="/project/show" value="#{i18n['navigation.projects']}"></h:commandLink>
+            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
+            <h:outputText value="#{i18n['project.edit.form.title']}:" styleClass="tituloForm" />
+        </ui:define>
+        
         <ui:define name="content">
             <h:form styleClass="scrumForm" id="editProjectForm">
                 <h:panelGrid columns="1" headerClass="tituloForm" footerClass="footerForm">
-                     <f:facet name="header">
-                        <h:outputText value="#{i18n['project.edit.form.title']}:" styleClass="tituloForm" />
-                    </f:facet>
                     <ui:include src="form.xhtml" />
-                    <f:facet name="footer">
-                    <h:panelGroup>
-                        <h:commandButton id="btnEditUpdate" action="#{projectManager.save}" value="#{i18n['project.edit.button.update']}" styleClass="formInput" />
-                        <h:commandButton id="btnEditCancel" action="#{projectManager.cancelEdit}" immediate="true" value="#{i18n['project.edit.button.cancel']}" styleClass="formInput" />
-                    </h:panelGroup>
+                    <f:facet name="footer">                        
+                            <h:commandButton id="btnEditUpdate" action="#{projectManager.save}" value="#{i18n['project.edit.button.update']}" styleClass="botaoPostIt" />
+                            <h:commandButton id="btnEditCancel" action="#{projectManager.cancelEdit}" immediate="true" value="#{i18n['project.edit.button.cancel']}" styleClass="botaoPostIt" />                        
                     </f:facet>
                 </h:panelGrid>
             </h:form>
         </ui:define>
     </ui:composition>
-
 </html>

@@ -47,35 +47,34 @@ public class ActionBean extends Object {
     }
 
     public String outerAction() {
-	outerActionCallCount++;
-	return null;
+        outerActionCallCount++;
+        return null;
     }
 
     public String innerAction() {
-	innerActionCallCount++;
-	return null;
+        innerActionCallCount++;
+        return null;
     }
 
     protected int outerActionCallCount = 0;
+
     public int getOuterActionCallCount() {
-	return outerActionCallCount;
+        return outerActionCallCount;
     }
 
     public void setOuterActionCallCount(int newOuterActionCallCount) {
-	outerActionCallCount = newOuterActionCallCount;
+        outerActionCallCount = newOuterActionCallCount;
     }
 
     protected int innerActionCallCount = 0;
+
     public int getInnerActionCallCount() {
-	return innerActionCallCount;
+        return innerActionCallCount;
     }
 
     public void setInnerActionCallCount(int newInnerActionCallCount) {
-	innerActionCallCount = newInnerActionCallCount;
+        innerActionCallCount = newInnerActionCallCount;
     }
-
-
-
 
 
 }

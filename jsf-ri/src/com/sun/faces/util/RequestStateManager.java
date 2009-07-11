@@ -155,12 +155,33 @@ public class RequestStateManager {
           "com.sun.faces.SCRIPT_STATE";
 
 
+    public static final String DISABLED_VALIDATORS =
+          "com.sun.faces.DISABLED_VALIDATORS";
+
+    /**
+     * Used to aid in the evaluation of expressions passed between
+     * nested composite components.
+     */
+    public static final String COMPCOMP_STACK =
+          "com.sun.faces.COMPCOMP_STACK";
+
+
+    /**
+     * Used to store the Set of ResourceDependency annotations that have
+     * been processed.
+     */
+    public static final String PROCESSED_RESOURCE_DEPENDENCIES =
+          "com.sun.faces.PROCESSED_RESOURCE_DEPENDENCIES";
+
+
     private static final String[] RENDER_RESPONSE = {
-          SCRIPT_STATE
+          SCRIPT_STATE,
+          PROCESSED_RESOURCE_DEPENDENCIES
     };
 
     private static final Map<PhaseId,String[]> PHASE_ATTRIBUTES =
-        new HashMap<PhaseId,String[]>(1, 1.0f);
+        new HashMap<PhaseId,String[]>(2, 1.0f);
+
     static {
         PHASE_ATTRIBUTES.put(PhaseId.RENDER_RESPONSE, RENDER_RESPONSE);
     }

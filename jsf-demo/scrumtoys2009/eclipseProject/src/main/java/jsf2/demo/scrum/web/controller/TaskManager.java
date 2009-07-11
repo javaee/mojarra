@@ -1,22 +1,18 @@
 package jsf2.demo.scrum.web.controller;
 
 import java.io.Serializable;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.validator.ValidatorException;
@@ -24,8 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import jsf2.demo.scrum.model.entities.Story;
 import jsf2.demo.scrum.model.entities.Task;
-import jsf2.demo.scrum.web.event.CurrentStoryChangeEvent;
-import jsf2.demo.scrum.web.event.CurrentTaskChangeEvent;
 
 /**
  *
@@ -39,37 +33,32 @@ public class TaskManager extends AbstractManager implements Serializable {
     private Task currentTask;
     private DataModel<Task> tasks;
     private List<Task> taskList;
-    @ManagedProperty("#{storyManager.currentStory}")
-    private Story story;
-    private SystemEventListener storyChangeListener;
+    @ManagedProperty("#{storyManager}")
+    private StoryManager storyManager;
 
     @PostConstruct
-    public void construct() {
-        storyChangeListener = new StoryChangeListener();
-        subscribeToEvent(CurrentStoryChangeEvent.class, storyChangeListener);
+    public void construct() {        
         init();
     }
 
-    @PreDestroy
-    public void destroy() {
-        unsubscribeFromEvent(CurrentStoryChangeEvent.class, storyChangeListener);
-    }
-
+    
+   
     public void init() {
         Task task = new Task();
-        task.setStory(story);
+        Story currentStory = storyManager.getCurrentStory();
+        task.setStory(currentStory);
         setCurrentTask(task);
-        if (story != null) {
-            taskList = new LinkedList<Task>(story.getTasks());
+        if (currentStory != null) {
+            taskList = new LinkedList<Task>(currentStory.getTasks());
         } else {
-            taskList = Collections.emptyList();
+            taskList = new ArrayList<Task>();
         }
         tasks = new ListDataModel<Task>(taskList);
     }
 
     public String create() {
         Task task = new Task();
-        task.setStory(story);
+        task.setStory(storyManager.getCurrentStory());
         setCurrentTask(task);
         return "create";
     }
@@ -95,7 +84,7 @@ public class TaskManager extends AbstractManager implements Serializable {
                         taskList.set(idx, merged);
                     }
                 }
-                story.addTask(merged);
+                storyManager.getCurrentStory().addTask(merged);
                 if (!taskList.contains(merged)) {
                     taskList.add(merged);
                 }
@@ -127,7 +116,7 @@ public class TaskManager extends AbstractManager implements Serializable {
                         }
                     }
                 });
-                story.removeTask(task);
+                storyManager.getCurrentStory().removeTask(task);
                 taskList.remove(task);
             } catch (Exception e) {
                 getLogger(getClass()).log(Level.SEVERE, "Error on try to remove Task: " + currentTask, e);
@@ -146,7 +135,7 @@ public class TaskManager extends AbstractManager implements Serializable {
                 public Long execute(EntityManager em) {
                     Query query = em.createNamedQuery((currentTask.isNew()) ? "task.new.countByNameAndStory" : "task.countByNameAndStory");
                     query.setParameter("name", newName);
-                    query.setParameter("story", story);
+                    query.setParameter("story", storyManager.getCurrentStory());
                     if (!currentTask.isNew()) {
                         query.setParameter("currentTask", (!currentTask.isNew()) ? currentTask : null);
                     }
@@ -170,11 +159,11 @@ public class TaskManager extends AbstractManager implements Serializable {
     }
 
     public void setCurrentTask(Task currentTask) {
-        this.currentTask = currentTask;
-        publishEvent(CurrentTaskChangeEvent.class, currentTask);
+        this.currentTask = currentTask;        
     }
 
     public DataModel<Task> getTasks() {
+        this.tasks = new ListDataModel(storyManager.getCurrentStory().getTasks());
         return tasks;
     }
 
@@ -182,23 +171,26 @@ public class TaskManager extends AbstractManager implements Serializable {
         this.tasks = tasks;
     }
 
-    public Story getStory() {
-        return story;
+   public Story getStory(){
+       return storyManager.getCurrentStory();
+   }
+
+   public void setStory(Story story){
+       storyManager.setCurrentStory(story);
+   }
+
+    /**
+     * @return the storyManager
+     */
+    public StoryManager getStoryManager() {
+        return storyManager;
     }
 
-    public void setStory(Story story) {
-        this.story = story;
+    /**
+     * @param storyManager the storyManager to set
+     */
+    public void setStoryManager(StoryManager storyManager) {
+        this.storyManager = storyManager;
     }
-
-    private class StoryChangeListener implements SystemEventListener, Serializable {
-
-        public void processEvent(SystemEvent event) throws AbortProcessingException {
-            story = (Story) event.getSource();
-            init();
-        }
-
-        public boolean isListenerForSource(Object source) {
-            return (source instanceof Story);
-        }
-    }
+    
 }

@@ -3,16 +3,17 @@ package jsf2.demo.scrum.web.controller;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
@@ -20,7 +21,6 @@ import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import jsf2.demo.scrum.model.entities.Project;
-import jsf2.demo.scrum.web.event.CurrentProjectChangeEvent;
 
 /**
  *
@@ -34,7 +34,7 @@ public class ProjectManager extends AbstractManager implements Serializable {
     private Project currentProject;
     private DataModel<Project> projects;
     private List<SelectItem> projectItems;
-    private List<Project> projectList;
+    private List<Project> projectList;   
 
     @PostConstruct
     public void construct() {
@@ -49,21 +49,21 @@ public class ProjectManager extends AbstractManager implements Serializable {
 
     public void init() {
         try {
-            projectList = doInTransaction(new PersistenceAction<List<Project>>() {
+            setProjectList(doInTransaction(new PersistenceAction<List<Project>>() {
 
                 public List<Project> execute(EntityManager em) {
                     Query query = em.createNamedQuery("project.getAll");
                     return (List<Project>) query.getResultList();
                 }
-            });
+            }));
         } catch (ManagerException ex) {
             Logger.getLogger(ProjectManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         projectItems = new LinkedList<SelectItem>();
         projectItems.add(new SelectItem(new Project(), "-- Select one project --"));
-        if (projectList != null) {
-            projects = new ListDataModel<Project>(projectList);
-            for (Project p : projectList) {
+        if (getProjectList() != null) {
+            projects = new ListDataModel<Project>(getProjectList());
+            for (Project p : getProjectList()) {
                 projectItems.add(new SelectItem(p, p.getName()));
             }
         }
@@ -76,31 +76,31 @@ public class ProjectManager extends AbstractManager implements Serializable {
     }
 
     public String save() {
-        if (currentProject != null) {
+        if (getCurrentProject() != null) {
             try {
                 Project merged = doInTransaction(new PersistenceAction<Project>() {
 
                     public Project execute(EntityManager em) {
-                        if (currentProject.isNew()) {
-                            em.persist(currentProject);
+                        if (getCurrentProject().isNew()) {
+                            em.persist(getCurrentProject());
                         } else if (!em.contains(currentProject)) {
-                            return em.merge(currentProject);
+                            return em.merge(getCurrentProject());
                         }
-                        return currentProject;
+                        return getCurrentProject();
                     }
                 });
                 if (!currentProject.equals(merged)) {
                     setCurrentProject(merged);
-                    int idx = projectList.indexOf(currentProject);
+                    int idx = getProjectList().indexOf(getCurrentProject());
                     if (idx != -1) {
-                        projectList.set(idx, merged);
+                        getProjectList().set(idx, merged);
                     }
                 }
                 if (!projectList.contains(merged)) {
-                    projectList.add(merged);
+                    getProjectList().add(merged);
                 }
             } catch (Exception e) {
-                getLogger(getClass()).log(Level.SEVERE, "Error on try to save Project: " + currentProject, e);
+                getLogger(getClass()).log(Level.SEVERE, "Error on try to save Project: " + getCurrentProject(), e);
                 addMessage("Error on try to save Project", FacesMessage.SEVERITY_ERROR);
                 return null;
             }
@@ -111,6 +111,7 @@ public class ProjectManager extends AbstractManager implements Serializable {
 
     public String edit() {
         setCurrentProject(projects.getRowData());
+        // Using implicity navigation, this request come from /projects/show.xhtml and directs to /project/edit.xhtml
         return "edit";
     }
 
@@ -128,14 +129,16 @@ public class ProjectManager extends AbstractManager implements Serializable {
                         }
                     }
                 });
-                projectList.remove(project);
+                getProjectList().remove(project);
             } catch (Exception e) {
-                getLogger(getClass()).log(Level.SEVERE, "Error on try to remove Project: " + currentProject, e);
+                getLogger(getClass()).log(Level.SEVERE, "Error on try to remove Project: " + getCurrentProject(), e);
                 addMessage("Error on try to remove Project", FacesMessage.SEVERITY_ERROR);
                 return null;
             }
         }
         init();
+        // Using implicity navigation, this request come from /projects/show.xhtml and directs to /project/show.xhtml
+        // could be null instead
         return "show";
     }
 
@@ -145,10 +148,10 @@ public class ProjectManager extends AbstractManager implements Serializable {
             Long count = doInTransaction(new PersistenceAction<Long>() {
 
                 public Long execute(EntityManager em) {
-                    Query query = em.createNamedQuery((currentProject.isNew()) ? "project.new.countByName" : "project.countByName");
+                    Query query = em.createNamedQuery((getCurrentProject().isNew()) ? "project.new.countByName" : "project.countByName");
                     query.setParameter("name", newName);
                     if (!currentProject.isNew()) {
-                        query.setParameter("currentProject", currentProject);
+                        query.setParameter("currentProject",getCurrentProject());
                     }
                     return (Long) query.getSingleResult();
                 }
@@ -162,11 +165,13 @@ public class ProjectManager extends AbstractManager implements Serializable {
     }
 
     public String cancelEdit() {
+        // Implicity navigation, this request come from /projects/edit.xhtml and directs to /project/show.xhtml
         return "show";
     }
 
     public String showSprints() {
         setCurrentProject(projects.getRowData());
+        // Implicity navigation, this request come from /projects/show.xhtml and directs to /project/showSprints.xhtml
         return "showSprints";
     }
 
@@ -176,7 +181,6 @@ public class ProjectManager extends AbstractManager implements Serializable {
 
     public void setCurrentProject(Project currentProject) {
         this.currentProject = currentProject;
-        publishEvent(CurrentProjectChangeEvent.class, currentProject);
     }
 
     public DataModel<Project> getProjects() {
@@ -194,4 +198,24 @@ public class ProjectManager extends AbstractManager implements Serializable {
     public void setProjectItems(List<SelectItem> projectItems) {
         this.projectItems = projectItems;
     }
+
+    /**
+     * @return the projectList
+     */
+    public List<Project> getProjectList() {
+        return projectList;
+    }
+
+    /**
+     * @param projectList the projectList to set
+     */
+    public void setProjectList(List<Project> projectList) {
+        this.projectList = projectList;
+    }
+
+    public String viewSprints(){
+        return "/sprint/show";
+    }
+
+ 
 }

@@ -62,7 +62,7 @@ public class AjaxRequestMultiRenderTestCase extends AbstractTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(AjaxRequestTestCase.class));
+        return (new TestSuite(AjaxRequestMultiRenderTestCase.class));
     }
 
 

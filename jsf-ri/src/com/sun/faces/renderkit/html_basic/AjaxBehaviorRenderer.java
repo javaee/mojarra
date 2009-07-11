@@ -43,6 +43,7 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.FacesLogger;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -172,6 +173,28 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         String sourceId = behaviorContext.getSourceId();
         Collection<ClientBehaviorContext.Parameter> params = behaviorContext.getParameters();
 
+        // Needed workaround for SelectManyCheckbox - if execute doesn't have sourceId,
+        // we need to add it - otherwise, we use the default, which is sourceId:child, which
+        // won't work.
+        ClientBehaviorContext.Parameter foundparam = null;
+        for (ClientBehaviorContext.Parameter param : params) {
+            if (param.getName().equals("incExec") && (Boolean)param.getValue()) {
+                foundparam = param;
+            }
+        }
+        if (foundparam != null && !execute.contains(sourceId)) {
+                execute = new LinkedList<String>(execute);
+                execute.add(component.getClientId());
+        }
+        if (foundparam != null) {
+            try {
+                // And since this is a hack, we now try to remove the param
+                params.remove(foundparam);
+            } catch (UnsupportedOperationException unop) {
+                // nothing we can do about it
+            }
+        }
+
         ajaxCommand.append("mojarra.ab(");
 
         if (sourceId == null) {
@@ -253,37 +276,15 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
     // Returns the resolved (client id) for a particular id.
     private static String getResolvedId(UIComponent component, String id) {
 
-        UIComponent resolvedComponent = findComponent(component, id);
+        UIComponent resolvedComponent = component.findComponent(id);
         if (resolvedComponent == null) {
             // RELEASE_PENDING  i18n
             throw new FacesException(
                 "<f:ajax> contains an unknown id '"
                 + id
-                + "'");
+                + "' - cannot locate it in the context of the component "+component.getId());
         }
 
         return resolvedComponent.getClientId();
-    }
-    /**
-     * Attempt to find the component assuming the ID is relative to the
-     * nearest naming container.  If not found, then search for the component
-     * using an absolute component expression.
-     *
-     * @param component Root component of the search tree
-     * @param expr Search expression identifying the UIComponent  to be returned
-     * @return the found UIComponent, or <code>null</code> if the component was not found.
-     */
-    private static UIComponent findComponent(UIComponent component,
-                                             String expr) {
-
-        // RELEASE_PENDING - perhaps only enable ID validation if ProjectStage
-        // is development
-        UIComponent resolvedComponent = component.findComponent(expr);
-        if (resolvedComponent == null) {
-            // not found using a relative search, try an absolute search
-            resolvedComponent = component.findComponent(':' + expr);
-        }
-        return resolvedComponent;
-
     }
 }

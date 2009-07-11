@@ -45,12 +45,7 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.Resource;
-import javax.faces.application.ProjectStage;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -99,7 +94,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
         writer.startElement("img", component);
         writeIdAttributeIfNecessary(context, writer, component);
-        writer.writeURIAttribute("src", src(context, component), "value");
+        writer.writeURIAttribute("src", RenderKitUtils.getImageSource(context, component, "value"), "value");
         // if we're writing XHTML and we have a null alt attribute
         if (writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE) &&
             null == component.getAttributes().get("alt")) {
@@ -127,41 +122,6 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
     // --------------------------------------------------------- Private Methods
 
-
-    private static String src(FacesContext context, UIComponent component) {
-
-        String resName = (String) component.getAttributes().get("name");
-        if (resName != null) {
-            String libName = (String) component.getAttributes().get("library");
-            ResourceHandler handler = context.getApplication().getResourceHandler();
-            Resource res = handler.createResource(resName, libName);
-            if (res == null) {
-                if (context.isProjectStage(ProjectStage.Development)) {
-                    String msg = "Unable to find resource " + resName;
-                    context.addMessage(component.getClientId(context),
-                                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                        msg,
-                                                        msg));
-                }
-                return "RES_NOT_FOUND";
-            } else {
-                return res.getRequestPath();
-            }
-        } else {
-            String value = (String) ((UIGraphic) component).getValue();
-            if (value == null || value.length() == 0) {
-                return "";
-            }
-            if (value.contains(ResourceHandler.RESOURCE_IDENTIFIER)) {
-                return value;
-            } else {
-                value = context.getApplication().getViewHandler().
-                      getResourceURL(context, value);
-                return (context.getExternalContext().encodeResourceURL(value));
-            }
-        }
-
-    }
 
     // The testcase for this class is TestRenderers_2.java
 

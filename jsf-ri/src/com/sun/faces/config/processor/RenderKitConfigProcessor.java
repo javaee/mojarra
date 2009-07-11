@@ -234,11 +234,13 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                     ? RenderKitFactory.HTML_BASIC_RENDER_KIT
                     : rkId);
 
-            RenderKit rk = rkf.getRenderKit(null, rkId);
-            if (rk == null && rkClass != null) {
+            if (rkClass != null) {
                 RenderKit previous = rkf.getRenderKit(FacesContext.getCurrentInstance(), 
                         rkId);
-                rk = (RenderKit) createInstance(rkClass, RenderKit.class, previous, renderKit);
+                RenderKit rk = (RenderKit) createInstance(rkClass,
+                                                          RenderKit.class,
+                                                          previous,
+                                                          renderKit);
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                MessageFormat.format(

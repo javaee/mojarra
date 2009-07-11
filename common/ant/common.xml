@@ -88,7 +88,7 @@
     <property name="standard.renderkit.xml" value="${api.dir}/doc/standard-html-renderkit.xml"/>
 
     <!-- Version -->
-    <property name="spec.version" value="2.0"/>
+    <property name="spec.version" value="2.1"/>
     <property name="patch.version" value="0"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>

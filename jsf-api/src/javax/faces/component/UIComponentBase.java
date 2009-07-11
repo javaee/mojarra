@@ -49,7 +49,6 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
-import javax.faces.event.PhaseId;
 import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PostValidateEvent;
 import javax.faces.event.PreRemoveFromViewEvent;
@@ -386,10 +385,12 @@ public abstract class UIComponentBase extends UIComponent {
 
     public void setParent(UIComponent parent) {
 
-        this.parent = parent;
-        if (this.parent == null) {
-            disconnectFromView(this);
+
+        if (parent == null) {
+            doPreRemoveProcessing(FacesContext.getCurrentInstance(), this);
+            this.parent = parent;
         } else {
+            this.parent = parent;
             if (this.getAttributes().get(ADDED) == null) {
                 // add an attribute to this component here to indiciate that
                 // it's being processed.  If we don't do this, and the component
@@ -1673,12 +1674,13 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-    private static void doPreRemoveProcessing(FacesContext context,
-                                              UIComponent toRemove) {
+    private void doPreRemoveProcessing(FacesContext context,
+                                       UIComponent toRemove) {
 
-        context.getApplication().publishEvent(context,
-                                              PreRemoveFromViewEvent.class,
-                                              toRemove);
+        if (parent.isInView()) {
+            disconnectFromView(context, context.getApplication(), toRemove);
+
+        }
 
     }
 
@@ -1976,18 +1978,21 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     private static void publishAfterViewEvents(FacesContext context,
-            Application application,
-            UIComponent component) {
+                                               Application application,
+                                               UIComponent component) {
 
         component.setInView(true);
         application.publishEvent(context, PostAddToViewEvent.class, component);
         if (component.getChildCount() > 0) {
-            for (UIComponent c : component.getChildren()) {
+            Collection<UIComponent> clist = new ArrayList<UIComponent>(component.getChildren());
+            for (UIComponent c : clist) {
                 publishAfterViewEvents(context, application, c);
             }
         }
+
         if (component.getFacetCount() > 0) {
-            for (UIComponent c : component.getFacets().values()) {
+            Collection<UIComponent> clist = new ArrayList<UIComponent>(component.getFacets().values());
+            for (UIComponent c : clist) {
                 publishAfterViewEvents(context, application, c);
             }
         }
@@ -1995,19 +2000,24 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
-    private static void disconnectFromView(UIComponent child) {
+    private static void disconnectFromView(FacesContext context,
+                                           Application application,
+                                           UIComponent component) {
 
-        child.setInView(false);
-        if (child.getChildCount() > 0) {
-            List<UIComponent> children = child.getChildren();
+        application.publishEvent(context,
+                                 PreRemoveFromViewEvent.class,
+                                 component);
+        component.setInView(false);
+        if (component.getChildCount() > 0) {
+            List<UIComponent> children = component.getChildren();
             for (UIComponent c : children) {
-                disconnectFromView(c);
+                disconnectFromView(context, application, c);
             }
         }
-        if (child.getFacetCount() > 0) {
-            Map<String, UIComponent> facets = child.getFacets();
+        if (component.getFacetCount() > 0) {
+            Map<String, UIComponent> facets = component.getFacets();
             for (UIComponent c : facets.values()) {
-                disconnectFromView(c);
+                disconnectFromView(context, application, c);
             }
         }
 
@@ -2474,8 +2484,6 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             }
 
-            UIComponentBase.doPreRemoveProcessing(FacesContext.getCurrentInstance(),
-                    element);
             if (super.remove(element)) {
                 element.setParent(null);
                 return (true);

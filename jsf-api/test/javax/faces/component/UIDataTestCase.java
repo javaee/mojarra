@@ -57,8 +57,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
+
 import com.sun.faces.mock.MockExternalContext;
 import com.sun.faces.mock.MockResponseWriter;
+
 import javax.faces.FacesException;
 import javax.faces.TestUtil;
 import javax.faces.component.UIComponentBaseTestCase;
@@ -67,6 +69,7 @@ import javax.faces.model.ListDataModel;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -95,6 +98,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
 
     // Set up instance variables required by this test case.
+
     public void setUp() {
         super.setUp();
         component = new UIData();
@@ -171,7 +175,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIData data = (UIData) component;
 
         assertEquals(data.getValue(),
-                     (String) component.getAttributes().get("value"));
+                (String) component.getAttributes().get("value"));
         data.setValue("foo");
         assertEquals("foo", (String) component.getAttributes().get("value"));
         data.setValue(null);
@@ -183,20 +187,20 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
         data.setFirst(6);
         assertEquals(data.getFirst(),
-                     ((Integer) data.getAttributes().get("first")).intValue());
+                ((Integer) data.getAttributes().get("first")).intValue());
         data.getAttributes().put("first", new Integer(7));
         assertEquals(data.getFirst(),
-                     ((Integer) data.getAttributes().get("first")).intValue());
+                ((Integer) data.getAttributes().get("first")).intValue());
 
         data.setRows(10);
         assertEquals(data.getRows(),
-                     ((Integer) data.getAttributes().get("rows")).intValue());
+                ((Integer) data.getAttributes().get("rows")).intValue());
         data.getAttributes().put("rows", new Integer(20));
         assertEquals(data.getRows(),
-                     ((Integer) data.getAttributes().get("rows")).intValue());
+                ((Integer) data.getAttributes().get("rows")).intValue());
 
         assertEquals(data.getVar(),
-                     (String) data.getAttributes().get("var"));
+                (String) data.getAttributes().get("var"));
         data.setVar("foo");
         assertEquals("foo", (String) data.getAttributes().get("var"));
         data.setVar(null);
@@ -258,7 +262,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             Object foo = vb.getValue(facesContext);
             assertNotNull("Row " + i + " data exposed", foo);
             assertTrue("Row " + i + " data correct",
-                       foo == bean);
+                    foo == bean);
 
             // Validate value references to the exposed value
             assertEquals("command" + i, vbCommand.getValue(facesContext));
@@ -304,7 +308,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             Object foo = vb.getValue(facesContext);
             assertNotNull("Row " + i + " data exposed", foo);
             assertTrue("Row " + i + " data correct",
-                       foo == bean);
+                    foo == bean);
 
             // Update via the exposed bean
             bean.setCommand("command" + i + "A");
@@ -395,7 +399,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // value
         data.setValue("foo.bar");
         assertEquals("expected value",
-                     "foo.bar", data.getValue());
+                "foo.bar", data.getValue());
         data.setValue(null);
         assertNull("erased value", data.getValue());
         data.setFirst(0);
@@ -415,11 +419,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         ValueBinding vbInput = application.createValueBinding("foo.input");
         ValueBinding vbOutput = application.createValueBinding("foo.output");
         String before[] =
-            { "input3", "input4", "input5", "input6", "input7" };
+                {"input3", "input4", "input5", "input6", "input7"};
         String after[] =
-            { "input3", "input4A", "input5", "input6B", "input7" };
+                {"input3", "input4A", "input5", "input6B", "input7"};
         String nulls[] =
-            { null, null, null, null, null };
+                {null, null, null, null, null};
 
         // Set up for this test
         setupModel();
@@ -438,7 +442,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         params.put("data:6:input", "input6B");
         params.put("data:7:input", "input7");
         MockExternalContext econtext =
-          (MockExternalContext) facesContext.getExternalContext();
+                (MockExternalContext) facesContext.getExternalContext();
         econtext.setRequestParameterMap(params);
         checkMessages(0);
 
@@ -449,11 +453,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIViewRoot root = (UIViewRoot) data.getParent();
 
         //   APPLY REQUEST VALUES
-	command.setImmediate(true);
+        command.setImmediate(true);
         root.processDecodes(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("", TestDataValidator.trace());
         assertEquals("", TestDataValueChangeListener.trace());
         checkMessages(0);
@@ -462,17 +466,17 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         //   PERFORM VALIDATIONS
         root.processValidators(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("/data:3:input/input3" +
-                     "/data:4:input/input4A" +
-                     "/data:5:input/input5" +
-                     "/data:6:input/input6B" +
-                     "/data:7:input/input7",
-                     TestDataValidator.trace());
+                "/data:4:input/input4A" +
+                "/data:5:input/input5" +
+                "/data:6:input/input6B" +
+                "/data:7:input/input7",
+                TestDataValidator.trace());
         assertEquals("/data:4:input/input4/input4A" +
-                     "/data:6:input/input6/input6B",
-                     TestDataValueChangeListener.trace());
+                "/data:6:input/input6/input6B",
+                TestDataValueChangeListener.trace());
         checkLocalValues(after);
         checkModelInputs(before);
         checkMessages(0);
@@ -480,17 +484,17 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         //   UPDATE MODEL VALUES
         root.processUpdates(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("/data:3:input/input3" +
-                     "/data:4:input/input4A" +
-                     "/data:5:input/input5" +
-                     "/data:6:input/input6B" +
-                     "/data:7:input/input7",
-                     TestDataValidator.trace());
+                "/data:4:input/input4A" +
+                "/data:5:input/input5" +
+                "/data:6:input/input6B" +
+                "/data:7:input/input7",
+                TestDataValidator.trace());
         assertEquals("/data:4:input/input4/input4A" +
-                     "/data:6:input/input6/input6B",
-                     TestDataValueChangeListener.trace());
+                "/data:6:input/input6/input6B",
+                TestDataValueChangeListener.trace());
         checkModelInputs(after);
         checkMessages(0);
         checkLocalValues(nulls);
@@ -524,18 +528,18 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
         viewRoot.setViewId("/view");
         facesContext.setViewRoot(viewRoot);
-        
+
         UIForm form1 = new UIForm(), form2 = new UIForm();
         form1.setId("form1");
         form2.setId("form2");
         viewRoot.getChildren().add(form1);
         viewRoot.getChildren().add(form2);
         setupTree2(form1, true, true);
-        
+
         // replace the "component" ivar with a new instance.
         component = new UIData();
         List beans = new ArrayList();
-        
+
         for (int i = 0; i < 10; i++) {
             TestDataBean bean = new TestDataBean();
             bean.setCommand("command" + i);
@@ -548,49 +552,49 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
         setupModel();
         setupTree2(form2, true, true);
-        
+
         boolean exceptionThrown = false, found = false;
         // At this point we have two forms, each containing a UIData 
-        
+
         UIData data1 = (UIData) viewRoot.findComponent("form1:data");
         UIData data2 = (UIData) viewRoot.findComponent("form2:data");
         assertNotNull(data1);
         assertNotNull(data2);
 
-	// Negative case 0, null pointers
-	exceptionThrown = false;
-	FacesContext nullContext = null;
-	ContextCallback nullCallback = null;
-	try {
-	    viewRoot.invokeOnComponent(nullContext, "form:input7", 
-				   nullCallback);
-	}
-	catch (NullPointerException npe) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
+        // Negative case 0, null pointers
+        exceptionThrown = false;
+        FacesContext nullContext = null;
+        ContextCallback nullCallback = null;
+        try {
+            viewRoot.invokeOnComponent(nullContext, "form:input7",
+                    nullCallback);
+        }
+        catch (NullPointerException npe) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
- 	exceptionThrown = false;
-	try {
-	    viewRoot.invokeOnComponent(facesContext, null, 
-				   nullCallback);
-	}
-	catch (NullPointerException npe) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
+        exceptionThrown = false;
+        try {
+            viewRoot.invokeOnComponent(facesContext, null,
+                    nullCallback);
+        }
+        catch (NullPointerException npe) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
- 	exceptionThrown = false;
-	try {
-	    viewRoot.invokeOnComponent(nullContext, null, 
-				   nullCallback);
-	}
-	catch (NullPointerException npe) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
+        exceptionThrown = false;
+        try {
+            viewRoot.invokeOnComponent(nullContext, null,
+                    nullCallback);
+        }
+        catch (NullPointerException npe) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
-        
+
         // Case 1, positive invoke on form1:data:commandHeader component of the 4th row
         found = false;
         data1.setRowIndex(3);
@@ -598,18 +602,18 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "form1:data:4:commandHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context, 
-                                                    UIComponent component) {
-                      UIData data = (UIData) getNamingContainer(component);
-                      UIForm form = (UIForm) getNamingContainer(data);
-                      assertEquals(4, data.getRowIndex());
-                      assertEquals("form1", form.getId());
-                      assertEquals("commandHeader", component.getId());
-                  }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        UIData data = (UIData) getNamingContainer(component);
+                        UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals(4, data.getRowIndex());
+                        assertEquals("form1", form.getId());
+                        assertEquals("commandHeader", component.getId());
+                    }
+                });
         assertEquals(3, data1.getRowIndex());
         assertTrue(found);
-        
+
         // Case 2, positive invoke on form2:data:commandHeader component of the 5th row
         data2.setRowIndex(4);
         found = false;
@@ -617,18 +621,18 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "form2:data:5:commandHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context, 
-                                                    UIComponent component) {
-                      UIData data = (UIData) getNamingContainer(component);
-                      UIForm form = (UIForm) getNamingContainer(data);
-                      assertEquals(5, data.getRowIndex());
-                      assertEquals("form2", form.getId());
-                      assertEquals("commandHeader", component.getId());
-                  }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        UIData data = (UIData) getNamingContainer(component);
+                        UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals(5, data.getRowIndex());
+                        assertEquals("form2", form.getId());
+                        assertEquals("commandHeader", component.getId());
+                    }
+                });
         assertEquals(4, data2.getRowIndex());
         assertTrue(found);
-        
+
         // Case 3, not found invoke on form2:data:5:yoyodyne
         data2.setRowIndex(4);
         found = false;
@@ -636,14 +640,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "form2:data:5:yoyodyne",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context, 
-                                                    UIComponent component) {
-                      fail();
-                 }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        fail();
+                    }
+                });
         assertEquals(4, data2.getRowIndex());
         assertTrue(!found);
-        
+
         // Case 4, not found due to invalid rowIndex
         data1.setRowIndex(3);
         found = false;
@@ -651,14 +655,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "form1:data:999:commandHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context, 
-                                                    UIComponent component) {
-                      fail();
-                 }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        fail();
+                    }
+                });
         assertEquals(3, data1.getRowIndex());
         assertTrue(!found);
-        
+
         // Case 5, not found due to invalid clientId (too many ':')
         data2.setRowIndex(6);
         found = false;
@@ -668,12 +672,12 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             found = viewRoot.invokeOnComponent(facesContext, "form2:data::7:commandHeader",
                     new ContextCallback() {
 
-                      public void invokeContextCallback(FacesContext context, 
-                                                        UIComponent component) {
-                          fail();
-                     }
-            });
-        } 
+                        public void invokeContextCallback(FacesContext context,
+                                                          UIComponent component) {
+                            fail();
+                        }
+                    });
+        }
         catch (FacesException fe) {
             assertTrue(fe.getCause() instanceof NumberFormatException);
             exceptionThrown = true;
@@ -681,7 +685,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         assertEquals(6, data2.getRowIndex());
         assertTrue(!found);
         assertTrue(exceptionThrown);
-        
+
         // Case 6, not found due to callback throwing Exception
         found = false;
         exceptionThrown = true;
@@ -691,11 +695,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             found = viewRoot.invokeOnComponent(facesContext, "form1:data:4:commandHeader",
                     new ContextCallback() {
 
-                      public void invokeContextCallback(FacesContext context, 
-                                                        UIComponent component) {
-                          throw new IllegalStateException();
-                      }
-            });
+                        public void invokeContextCallback(FacesContext context,
+                                                          UIComponent component) {
+                            throw new IllegalStateException();
+                        }
+                    });
         } catch (FacesException ex) {
             assertTrue(ex.getCause() instanceof IllegalStateException);
             exceptionThrown = true;
@@ -711,14 +715,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "form1:data:uidataHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context,
-                                                    UIComponent component) {
-                      UIData data = (UIData) getNamingContainer(component);
-                      UIForm form = (UIForm) getNamingContainer(data);
-                      assertEquals("form1", form.getId());
-                      assertEquals("uidataHeader", component.getId());
-                  }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        UIData data = (UIData) getNamingContainer(component);
+                        UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals("form1", form.getId());
+                        assertEquals("uidataHeader", component.getId());
+                    }
+                });
         assertEquals(3, data1.getRowIndex());
         assertTrue(found);
 
@@ -728,14 +732,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "form1:data:uidataFooter",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context,
-                                                    UIComponent component) {
-                      UIData data = (UIData) getNamingContainer(component);
-                      UIForm form = (UIForm) getNamingContainer(data);
-                      assertEquals("form1", form.getId());
-                      assertEquals("uidataFooter", component.getId());
-                  }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        UIData data = (UIData) getNamingContainer(component);
+                        UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals("form1", form.getId());
+                        assertEquals("uidataFooter", component.getId());
+                    }
+                });
         assertEquals(3, data1.getRowIndex());
         assertTrue(found);
 
@@ -767,15 +771,15 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         boolean found = viewRoot.invokeOnComponent(facesContext, "form:data3:4:test4",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context,
-                                                    UIComponent component) {
-                      UIData data = (UIData) getNamingContainer(component);
-                      UIForm form = (UIForm) getNamingContainer(data);
-                      assertEquals(4, data.getRowIndex());
-                      assertEquals("form", form.getId());
-                      assertEquals("test4", component.getId());
-                  }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        UIData data = (UIData) getNamingContainer(component);
+                        UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals(4, data.getRowIndex());
+                        assertEquals("form", form.getId());
+                        assertEquals("test4", component.getId());
+                    }
+                });
         assertEquals(3, data.getRowIndex());
         assertTrue(found);
 
@@ -783,135 +787,133 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
     /**
      * <p>Test invokeOnComponent on the following tree.</p>
-     *
+     * <p/>
      * <code><pre>
      * id:null
      * type:UIViewRoot
-     *
+     * <p/>
      *   id:outerData
      *   type:UIData
-     *
+     * <p/>
      *     id:outerColumn
      *     type:UIColumn
-     *
+     * <p/>
      *       id:form1
      *       type:UIForm
-     *
+     * <p/>
      *         id:data
      *         type:UIData
-     *
+     * <p/>
      *           id:commandColumn
      *           type:UIColumn
-     *
+     * <p/>
      *             id:commandFooter
      *             type:UIOutput
-     *
+     * <p/>
      *             id:commandHeader
      *             type:UIOutput
-     *
+     * <p/>
      *             id:command
      *             type:UICommand
-     *
+     * <p/>
      *           id:inputColumn
      *           type:UIColumn
-     *
+     * <p/>
      *             id:inputFooter
      *             type:UIOutput
-     *
+     * <p/>
      *             id:inputHeader
      *             type:UIOutput
-     *
+     * <p/>
      *             id:input
      *             type:UIInput
-     *
+     * <p/>
      *           id:outputColumn
      *           type:UIColumn
-     *
+     * <p/>
      *             id:outputFooter
      *             type:UIOutput
-     *
+     * <p/>
      *             id:outputHeader
      *             type:UIOutput
-     *
+     * <p/>
      *             id:output
      *             type:UIOutput
-     *
+     * <p/>
      *           id:constantColumn
      *           type:UIColumn
-     *
+     * <p/>
      *             id:constantFooter
      *             type:UIOutput
-     *
+     * <p/>
      *             id:constantHeader
      *             type:UIOutput
-     *
+     * <p/>
      *             id:constant
      *             type:UIOutput
-     *
+     * <p/>
      *       id:form2
      *       type:UIForm
-     *
+     * <p/>
      *         id:data
      *         type:UIData
-     *
+     * <p/>
      *           id:commandColumn
      *           type:UIColumn
-     *
+     * <p/>
      *             id:commandFooter
      *             type:UIOutput
-     *
+     * <p/>
      *             id:commandHeader
      *             type:UIOutput
-     *
+     * <p/>
      *             id:command
      *             type:UICommand
-     *
+     * <p/>
      *           id:inputColumn
      *           type:UIColumn
-     *
+     * <p/>
      *             id:inputFooter
      *             type:UIOutput
-     *
+     * <p/>
      *             id:inputHeader
      *             type:UIOutput
-     *
+     * <p/>
      *             id:input
      *             type:UIInput
-     *
+     * <p/>
      *           id:outputColumn
      *           type:UIColumn
-     *
+     * <p/>
      *             id:outputFooter
      *             type:UIOutput
-     *
+     * <p/>
      *             id:outputHeader
      *             type:UIOutput
-     *
+     * <p/>
      *             id:output
      *             type:UIOutput
-     *
+     * <p/>
      *           id:constantColumn
      *           type:UIColumn
-     *
+     * <p/>
      *             id:constantFooter
      *             type:UIOutput
-     *
+     * <p/>
      *             id:constantHeader
      *             type:UIOutput
-     *
+     * <p/>
      *             id:constant
      *             type:UIOutput
-     *</pre></code>
-     *
-     *
+     * </pre></code>
      */
 
     public void testInvokeOnComponentNested() throws Exception {
 
-	UIData
-	    outer = (UIData) component,
-	    inner = new UIData();
-	List innerBeans = new ArrayList();
+        UIData
+                outer = (UIData) component,
+                inner = new UIData();
+        List innerBeans = new ArrayList();
         for (int i = 0; i < 3; i++) {
             TestDataBean bean = new TestDataBean();
             bean.setCommand("innerCommand" + i);
@@ -919,24 +921,24 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             bean.setOutput("innerOutput" + i);
             innerBeans.add(bean);
         }
-	DataModel innerDataModel = new ListDataModel(innerBeans);
+        DataModel innerDataModel = new ListDataModel(innerBeans);
 
 
-	// set up the model for the outer table.
-	setupModel();
+        // set up the model for the outer table.
+        setupModel();
 
-	// set up the tree for the outer data table
+        // set up the tree for the outer data table
         setupRenderers();
         UIViewRoot viewRoot = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
         viewRoot.setViewId("/view");
         facesContext.setViewRoot(viewRoot);
-	outer.setId("outerData");
-	viewRoot.getChildren().add(outer);
+        outer.setId("outerData");
+        viewRoot.getChildren().add(outer);
 
-	UIColumn column = new UIColumn();
-	column.setId("outerColumn");
-	outer.getChildren().add(column);
+        UIColumn column = new UIColumn();
+        column.setId("outerColumn");
+        outer.getChildren().add(column);
 
         // Set up for this test
         setupModel();
@@ -998,15 +1000,15 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "outerData:2:form1:data:4:commandHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context,
-                                                    UIComponent component) {
-                      UIData data = (UIData) getNamingContainer(component);
-                      UIForm form = (UIForm) getNamingContainer(data);
-                      assertEquals(4, data.getRowIndex());
-                      assertEquals("form1", form.getId());
-                      assertEquals("commandHeader", component.getId());
-                  }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        UIData data = (UIData) getNamingContainer(component);
+                        UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals(4, data.getRowIndex());
+                        assertEquals("form1", form.getId());
+                        assertEquals("commandHeader", component.getId());
+                    }
+                });
         assertEquals(1, outerData.getRowIndex());
         assertEquals(3, data1.getRowIndex());
         assertTrue(found);
@@ -1020,15 +1022,15 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "outerData:1:form2:data:5:commandHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context,
-                                                    UIComponent component) {
-                      UIData data = (UIData) getNamingContainer(component);
-                      UIForm form = (UIForm) getNamingContainer(data);
-                      assertEquals(5, data.getRowIndex());
-                      assertEquals("form2", form.getId());
-                      assertEquals("commandHeader", component.getId());
-                  }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        UIData data = (UIData) getNamingContainer(component);
+                        UIForm form = (UIForm) getNamingContainer(data);
+                        assertEquals(5, data.getRowIndex());
+                        assertEquals("form2", form.getId());
+                        assertEquals("commandHeader", component.getId());
+                    }
+                });
         assertEquals(3, outerData.getRowIndex());
         assertEquals(4, data2.getRowIndex());
         assertTrue(found);
@@ -1042,11 +1044,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "outerData:2:form2:data:5:yoyodyne",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context,
-                                                    UIComponent component) {
-                      fail();
-                 }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        fail();
+                    }
+                });
         assertEquals(1, outerData.getRowIndex());
         assertEquals(4, data2.getRowIndex());
         assertTrue(!found);
@@ -1060,11 +1062,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "outerData:3:form1:data:999:commandHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context,
-                                                    UIComponent component) {
-                      fail();
-                 }
-        });
+                    public void invokeContextCallback(FacesContext context,
+                                                      UIComponent component) {
+                        fail();
+                    }
+                });
         assertEquals(1, outerData.getRowIndex());
         assertEquals(3, data1.getRowIndex());
         assertTrue(!found);
@@ -1080,11 +1082,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             found = viewRoot.invokeOnComponent(facesContext, "outerData:1:form2:data::7:commandHeader",
                     new ContextCallback() {
 
-                      public void invokeContextCallback(FacesContext context,
-                                                        UIComponent component) {
-                          fail();
-                     }
-            });
+                        public void invokeContextCallback(FacesContext context,
+                                                          UIComponent component) {
+                            fail();
+                        }
+                    });
         }
         catch (FacesException fe) {
             assertTrue(fe.getCause() instanceof NumberFormatException);
@@ -1106,11 +1108,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             found = viewRoot.invokeOnComponent(facesContext, "outerData:1:form1:data:4:commandHeader",
                     new ContextCallback() {
 
-                      public void invokeContextCallback(FacesContext context,
-                                                        UIComponent component) {
-                          throw new IllegalStateException();
-                      }
-            });
+                        public void invokeContextCallback(FacesContext context,
+                                                          UIComponent component) {
+                            throw new IllegalStateException();
+                        }
+                    });
         } catch (FacesException ex) {
             assertTrue(ex.getCause() instanceof IllegalStateException);
             exceptionThrown = true;
@@ -1130,16 +1132,16 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         ValueBinding vbInput = application.createValueBinding("foo.input");
         ValueBinding vbOutput = application.createValueBinding("foo.output");
         String before[] =
-            { "input3", "input4", "input5", "input6", "input7" };
+                {"input3", "input4", "input5", "input6", "input7"};
         String after[] =
-            { "input3", "input4A", "input5", "input6B", "input7" };
+                {"input3", "input4A", "input5", "input6B", "input7"};
         String nulls[] =
-            { null, null, null, null, null };
+                {null, null, null, null, null};
 
-	// Instantiate and store a bean used to count calls
-	UIDataHeaderBean hb = new UIDataHeaderBean();
-	facesContext.getExternalContext().getRequestMap().
-	    put("hb", hb);
+        // Instantiate and store a bean used to count calls
+        UIDataHeaderBean hb = new UIDataHeaderBean();
+        facesContext.getExternalContext().getRequestMap().
+                put("hb", hb);
 
         // Set up for this test
         setupModel();
@@ -1150,17 +1152,17 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
         // Set up our fake request parameters (three command invocations)
         Map params = new HashMap();
-	params.put("data:hcommand", "");
+        params.put("data:hcommand", "");
         params.put("data:5:command", "");
         params.put("data:7:command", "");
-	params.put("data:hinput", "New Value");
+        params.put("data:hinput", "New Value");
         params.put("data:3:input", "input3");
         params.put("data:4:input", "input4A");
         params.put("data:5:input", "input5");
         params.put("data:6:input", "input6B");
         params.put("data:7:input", "input7");
         MockExternalContext econtext =
-          (MockExternalContext) facesContext.getExternalContext();
+                (MockExternalContext) facesContext.getExternalContext();
         econtext.setRequestParameterMap(params);
         checkMessages(0);
 
@@ -1171,11 +1173,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIViewRoot root = (UIViewRoot) data.getParent();
 
         //   APPLY REQUEST VALUES
-	command.setImmediate(true);
+        command.setImmediate(true);
         root.processDecodes(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("", TestDataValidator.trace());
         assertEquals("", TestDataValueChangeListener.trace());
         checkMessages(0);
@@ -1184,17 +1186,17 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         //   PERFORM VALIDATIONS
         root.processValidators(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("/data:3:input/input3" +
-                     "/data:4:input/input4A" +
-                     "/data:5:input/input5" +
-                     "/data:6:input/input6B" +
-                     "/data:7:input/input7",
-                     TestDataValidator.trace());
+                "/data:4:input/input4A" +
+                "/data:5:input/input5" +
+                "/data:6:input/input6B" +
+                "/data:7:input/input7",
+                TestDataValidator.trace());
         assertEquals("/data:4:input/input4/input4A" +
-                     "/data:6:input/input6/input6B",
-                     TestDataValueChangeListener.trace());
+                "/data:6:input/input6/input6B",
+                TestDataValueChangeListener.trace());
         checkLocalValues(after);
         checkModelInputs(before);
         checkMessages(0);
@@ -1202,22 +1204,22 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         //   UPDATE MODEL VALUES
         root.processUpdates(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("/data:3:input/input3" +
-                     "/data:4:input/input4A" +
-                     "/data:5:input/input5" +
-                     "/data:6:input/input6B" +
-                     "/data:7:input/input7",
-                     TestDataValidator.trace());
+                "/data:4:input/input4A" +
+                "/data:5:input/input5" +
+                "/data:6:input/input6B" +
+                "/data:7:input/input7",
+                TestDataValidator.trace());
         assertEquals("/data:4:input/input4/input4A" +
-                     "/data:6:input/input6/input6B",
-                     TestDataValueChangeListener.trace());
+                "/data:6:input/input6/input6B",
+                TestDataValueChangeListener.trace());
         checkModelInputs(after);
         checkMessages(0);
         checkLocalValues(nulls);
-	assertEquals("Header input property updated",
-		     "New Value", hb.getValue());
+        assertEquals("Header input property updated",
+                "New Value", hb.getValue());
 
         //   RENDER RESPONSE
         renderResponse();
@@ -1225,10 +1227,10 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         renderResponse();
         checkResponse("/javax/faces/component/UIDataTestCase_8.xml");
 
-	// Check call counts
-	assertEquals("header action called once", 1, hb.getActionCount());
-	assertEquals("header validate called once", 1, hb.getValidateCount());
-	assertEquals("header update called once", 1, hb.getUpdateCount());
+        // Check call counts
+        assertEquals("header action called once", 1, hb.getActionCount());
+        assertEquals("header validate called once", 1, hb.getValidateCount());
+        assertEquals("header update called once", 1, hb.getUpdateCount());
 
     }
 
@@ -1240,11 +1242,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         ValueBinding vbInput = application.createValueBinding("foo.input");
         ValueBinding vbOutput = application.createValueBinding("foo.output");
         String before[] =
-            { "input3", "input4", "input5", "input6", "input7" };
+                {"input3", "input4", "input5", "input6", "input7"};
         String after[] =
-            { "input3", "input4A", "input5", "input6B", "input7" };
+                {"input3", "input4A", "input5", "input6B", "input7"};
         String nulls[] =
-            { null, null, null, null, null };
+                {null, null, null, null, null};
 
         // Set up for this test
         setupModel();
@@ -1263,7 +1265,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         params.put("data:6:input", "input6B");
         params.put("data:7:input", "input7");
         MockExternalContext econtext =
-          (MockExternalContext) facesContext.getExternalContext();
+                (MockExternalContext) facesContext.getExternalContext();
         econtext.setRequestParameterMap(params);
         checkMessages(0);
 
@@ -1274,11 +1276,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIViewRoot root = (UIViewRoot) data.getParent();
 
         //   APPLY REQUEST VALUES
-	command.setImmediate(true);
+        command.setImmediate(true);
         root.processDecodes(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("", TestDataValidator.trace());
         assertEquals("", TestDataValueChangeListener.trace());
         checkMessages(0);
@@ -1287,17 +1289,17 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         //   PERFORM VALIDATIONS
         root.processValidators(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("/data:3:input/input3" +
-                     "/data:4:input/input4A" +
-                     "/data:5:input/input5" +
-                     "/data:6:input/input6B" +
-                     "/data:7:input/input7",
-                     TestDataValidator.trace());
+                "/data:4:input/input4A" +
+                "/data:5:input/input5" +
+                "/data:6:input/input6B" +
+                "/data:7:input/input7",
+                TestDataValidator.trace());
         assertEquals("/data:4:input/input4/input4A" +
-                     "/data:6:input/input6/input6B",
-                     TestDataValueChangeListener.trace());
+                "/data:6:input/input6/input6B",
+                TestDataValueChangeListener.trace());
         checkLocalValues(after);
         checkModelInputs(before);
         checkMessages(0);
@@ -1305,17 +1307,17 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         //   UPDATE MODEL VALUES
         root.processUpdates(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("/data:3:input/input3" +
-                     "/data:4:input/input4A" +
-                     "/data:5:input/input5" +
-                     "/data:6:input/input6B" +
-                     "/data:7:input/input7",
-                     TestDataValidator.trace());
+                "/data:4:input/input4A" +
+                "/data:5:input/input5" +
+                "/data:6:input/input6B" +
+                "/data:7:input/input7",
+                TestDataValidator.trace());
         assertEquals("/data:4:input/input4/input4A" +
-                     "/data:6:input/input6/input6B",
-                     TestDataValueChangeListener.trace());
+                "/data:6:input/input6/input6B",
+                TestDataValueChangeListener.trace());
         checkModelInputs(after);
         checkMessages(0);
         checkLocalValues(nulls);
@@ -1339,11 +1341,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         ValueBinding vbInput = application.createValueBinding("foo.input");
         ValueBinding vbOutput = application.createValueBinding("foo.output");
         String before[] =
-            { "input3", "input4", "input5", "input6", "input7" };
+                {"input3", "input4", "input5", "input6", "input7"};
         String after[] =
-            { "input3", "input4A", "input5", "input6B", "input7" };
+                {"input3", "input4A", "input5", "input6B", "input7"};
         String nulls[] =
-            { null, null, null, null, null };
+                {null, null, null, null, null};
 
         // Set up for this test
         setupModel();
@@ -1362,7 +1364,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         params.put("data:6:input", "input6B");
         params.put("data:7:input", "input7");
         MockExternalContext econtext =
-          (MockExternalContext) facesContext.getExternalContext();
+                (MockExternalContext) facesContext.getExternalContext();
         econtext.setRequestParameterMap(params);
         checkMessages(0);
 
@@ -1373,11 +1375,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIViewRoot root = (UIViewRoot) data.getParent();
 
         //   APPLY REQUEST VALUES
-	command.setImmediate(true);
+        command.setImmediate(true);
         root.processDecodes(facesContext);
         assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
+                "/data:7:command",
+                TestDataActionListener.trace());
         assertEquals("", TestDataValidator.trace());
         assertEquals("", TestDataValueChangeListener.trace());
         checkMessages(0);
@@ -1475,7 +1477,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         ValueBinding vbInput = application.createValueBinding("foo.input");
         ValueBinding vbOutput = application.createValueBinding("foo.output");
         String before[] =
-            { "input3", "input4", "input5", "input6", "input7" };
+                {"input3", "input4", "input5", "input6", "input7"};
 
         // Set up for this test
         setupModel();
@@ -1491,7 +1493,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         params.put("data:6:input", "bad");
         params.put("data:7:input", "input7B");
         MockExternalContext econtext =
-          (MockExternalContext) facesContext.getExternalContext();
+                (MockExternalContext) facesContext.getExternalContext();
         econtext.setRequestParameterMap(params);
 
         // Simulate the Request Processing Lifecycle
@@ -1511,14 +1513,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         root.processValidators(facesContext);
         assertEquals("", TestDataActionListener.trace());
         assertEquals("/data:3:input/input3A" +
-                     "/data:4:input/bad/ERROR" +
-                     "/data:5:input/input5" +
-                     "/data:6:input/bad/ERROR" +
-                     "/data:7:input/input7B",
-                     TestDataValidator.trace());
+                "/data:4:input/bad/ERROR" +
+                "/data:5:input/input5" +
+                "/data:6:input/bad/ERROR" +
+                "/data:7:input/input7B",
+                TestDataValidator.trace());
         assertEquals("/data:3:input/input3/input3A" +
-                     "/data:7:input/input7/input7B",
-                     TestDataValueChangeListener.trace());
+                "/data:7:input/input7/input7B",
+                TestDataValueChangeListener.trace());
         checkModelInputs(before);
         checkMessages(2);
 
@@ -1533,10 +1535,10 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     }
 
     public void testNestedTablesWithIds() throws Exception {
-	UIData
-	    outer = (UIData) component,
-	    inner = new UIData();
-	List innerBeans = new ArrayList();
+        UIData
+                outer = (UIData) component,
+                inner = new UIData();
+        List innerBeans = new ArrayList();
         for (int i = 0; i < 3; i++) {
             TestDataBean bean = new TestDataBean();
             bean.setCommand("innerCommand" + i);
@@ -1544,49 +1546,49 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             bean.setOutput("innerOutput" + i);
             innerBeans.add(bean);
         }
-	DataModel innerDataModel = new ListDataModel(innerBeans);
+        DataModel innerDataModel = new ListDataModel(innerBeans);
 
-	// set up the model for the outer table.
-	setupModel();
+        // set up the model for the outer table.
+        setupModel();
 
-	// set up the tree for the outer data table
-	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
-	root.setViewId("/view");
-	facesContext.setViewRoot(root);
-	outer.setId("outerData");
-	root.getChildren().add(outer);
+        // set up the tree for the outer data table
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        root.setViewId("/view");
+        facesContext.setViewRoot(root);
+        outer.setId("outerData");
+        root.getChildren().add(outer);
 
-	UIColumn column = new UIColumn();
-	column.setId("outerColumn");
-	outer.getChildren().add(column);
+        UIColumn column = new UIColumn();
+        column.setId("outerColumn");
+        outer.getChildren().add(column);
 
 
-	component = inner;
-	setupModel();
-	setupTree(column, true, true);
+        component = inner;
+        setupModel();
+        setupTree(column, true, true);
 
-	UIDataHeaderBean hb = new UIDataHeaderBean();
-	facesContext.getExternalContext().getRequestMap().
-	    put("hb", hb);
+        UIDataHeaderBean hb = new UIDataHeaderBean();
+        facesContext.getExternalContext().getRequestMap().
+                put("hb", hb);
 
-	HashMap foo = new HashMap();
-	foo.put("input", "input");
-	foo.put("output", "output");
-	foo.put("component", "component");
-	request.setAttribute("foo", foo);
-	request.removeAttribute("foo");
+        HashMap foo = new HashMap();
+        foo.put("input", "input");
+        foo.put("output", "output");
+        foo.put("component", "component");
+        request.setAttribute("foo", foo);
+        request.removeAttribute("foo");
         setupRenderers();
 
-	renderResponse();
-	checkResponse("/javax/faces/component/UIDataTestCase_9_withIds.xml");
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_9_withIds.xml");
     }
 
     public void PENDING_FIXME_testNestedTablesWithoutIds() throws Exception {
-	UIData
-	    outer = (UIData) component,
-	    inner = new UIData();
-	List innerBeans = new ArrayList();
+        UIData
+                outer = (UIData) component,
+                inner = new UIData();
+        List innerBeans = new ArrayList();
         for (int i = 0; i < 3; i++) {
             TestDataBean bean = new TestDataBean();
             bean.setCommand("innerCommand" + i);
@@ -1594,95 +1596,95 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             bean.setOutput("innerOutput" + i);
             innerBeans.add(bean);
         }
-	DataModel innerDataModel = new ListDataModel(innerBeans);
+        DataModel innerDataModel = new ListDataModel(innerBeans);
 
-	// set up the model for the outer table.
-	setupModel();
+        // set up the model for the outer table.
+        setupModel();
 
-	// set up the tree for the outer data table
-	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
-	root.setViewId("/view");
-	facesContext.setViewRoot(root);
-	root.getChildren().add(outer);
+        // set up the tree for the outer data table
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        root.setViewId("/view");
+        facesContext.setViewRoot(root);
+        root.getChildren().add(outer);
 
-	UIColumn column = new UIColumn();
-	outer.getChildren().add(column);
+        UIColumn column = new UIColumn();
+        outer.getChildren().add(column);
 
 
-	component = inner;
-	setupModel();
-	setupTree(column, true, false);
+        component = inner;
+        setupModel();
+        setupTree(column, true, false);
 
-	UIDataHeaderBean hb = new UIDataHeaderBean();
-	facesContext.getExternalContext().getRequestMap().
-	    put("hb", hb);
+        UIDataHeaderBean hb = new UIDataHeaderBean();
+        facesContext.getExternalContext().getRequestMap().
+                put("hb", hb);
 
-	HashMap foo = new HashMap();
-	foo.put("input", "input");
-	foo.put("output", "output");
-	foo.put("component", "component");
-	request.setAttribute("foo", foo);
-	request.removeAttribute("foo");
+        HashMap foo = new HashMap();
+        foo.put("input", "input");
+        foo.put("output", "output");
+        foo.put("component", "component");
+        request.setAttribute("foo", foo);
+        request.removeAttribute("foo");
         setupRenderers();
 
-	renderResponse();
-	checkResponse("/javax/faces/component/UIDataTestCase_9_withoutIds.xml");
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_9_withoutIds.xml");
     }
 
 
     public void PENDING_FIXME_testValueBindings() {
 
-	super.testValueBindings();
-	UIData test = (UIData) component;
+        super.testValueBindings();
+        UIData test = (UIData) component;
 
-	// "first" property
-	request.setAttribute("foo", new Integer(5));
-	test.setValueBinding("first", application.createValueBinding("#{foo}"));
-	assertEquals(5, test.getFirst());
-	test.setFirst(10);
-	assertEquals(10, test.getFirst());
-	assertNotNull(test.getValueBinding("first"));
+        // "first" property
+        request.setAttribute("foo", new Integer(5));
+        test.setValueBinding("first", application.createValueBinding("#{foo}"));
+        assertEquals(5, test.getFirst());
+        test.setFirst(10);
+        assertEquals(10, test.getFirst());
+        assertNotNull(test.getValueBinding("first"));
 
         // "rowIndex" property
         try {
             request.setAttribute("foo", new Integer(5));
             test.setValueBinding("rowIndex",
-                                 application.createValueBinding("#{foo}"));
+                    application.createValueBinding("#{foo}"));
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
         request.removeAttribute("foo");
 
-	// "rows" property
-	request.setAttribute("foo", new Integer(5));
-	test.setValueBinding("rows", application.createValueBinding("#{foo}"));
-	assertEquals(5, test.getRows());
-	test.setRows(10);
-	assertEquals(10, test.getRows());
-	assertNotNull(test.getValueBinding("rows"));
+        // "rows" property
+        request.setAttribute("foo", new Integer(5));
+        test.setValueBinding("rows", application.createValueBinding("#{foo}"));
+        assertEquals(5, test.getRows());
+        test.setRows(10);
+        assertEquals(10, test.getRows());
+        assertNotNull(test.getValueBinding("rows"));
 
-	// "value" property
-	request.setAttribute("foo", "bar");
-	test.setValue(null);
-	assertNull(test.getValue());
-	test.setValueBinding("value", application.createValueBinding("#{foo}"));
-	assertNotNull(test.getValueBinding("value"));
-	assertEquals("bar", test.getValue());
-	test.setValue("baz");
-	assertEquals("baz", test.getValue());
-	test.setValue(null);
-	assertEquals("bar", test.getValue());
-	test.setValueBinding("value", null);
-	assertNull(test.getValueBinding("value"));
-	assertNull(test.getValue());
+        // "value" property
+        request.setAttribute("foo", "bar");
+        test.setValue(null);
+        assertNull(test.getValue());
+        test.setValueBinding("value", application.createValueBinding("#{foo}"));
+        assertNotNull(test.getValueBinding("value"));
+        assertEquals("bar", test.getValue());
+        test.setValue("baz");
+        assertEquals("baz", test.getValue());
+        test.setValue(null);
+        assertEquals("bar", test.getValue());
+        test.setValueBinding("value", null);
+        assertNull(test.getValueBinding("value"));
+        assertNull(test.getValue());
 
         // "var" property
         try {
             request.setAttribute("foo", "bar");
             test.setValueBinding("var",
-                                 application.createValueBinding("#{foo}"));
+                    application.createValueBinding("#{foo}"));
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             ; // Expected result
@@ -1696,6 +1698,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
 
     // Check that the per-row local values of the input component are correct
+
     protected void checkLocalValues(String values[]) {
 
         UIData data = (UIData) component;
@@ -1703,15 +1706,15 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         for (int i = 0; i < values.length; i++) {
             data.setRowIndex(i + first);
             assertTrue("Row " + (i + first) + " available",
-                       data.isRowAvailable());
+                    data.isRowAvailable());
             UIInput input = (UIInput) data.findComponent("input");
             assertNotNull("Row " + (i + first) + " input exists", input);
             assertEquals("Row " + (i + first) + " input clientId",
-                         "data:" + (i + first) + ":input",
-                         input.getClientId(facesContext));
+                    "data:" + (i + first) + ":input",
+                    input.getClientId(facesContext));
             assertEquals("Row " + (i + first) + " input localValue",
-                         values[i],
-                         (String) input.getLocalValue());
+                    values[i],
+                    (String) input.getLocalValue());
         }
         data.setRowIndex(-1);
 
@@ -1725,15 +1728,15 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         for (int i = 0; i < values.length; i++) {
             data.setRowIndex(i + first);
             assertTrue("Row " + (i + first) + " available",
-                       data.isRowAvailable());
+                    data.isRowAvailable());
             UIInput input = (UIInput) data.findComponent("input");
             assertNotNull("Row " + (i + first) + " input exists", input);
             assertEquals("Row " + (i + first) + " input clientId",
-                         "data:" + (i + first) + ":input",
-                         input.getClientId(facesContext));
+                    "data:" + (i + first) + ":input",
+                    input.getClientId(facesContext));
             assertEquals("Row " + (i + first) + " input submittedValue",
-                         values[i],
-                         (String) input.getSubmittedValue());
+                    values[i],
+                    (String) input.getSubmittedValue());
         }
         data.setRowIndex(-1);
 
@@ -1749,8 +1752,8 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         while (messages.hasNext()) {
             FacesMessage message = (FacesMessage) messages.next();
             assertEquals("Severity == ERROR",
-                         FacesMessage.SEVERITY_ERROR,
-                         message.getSeverity());
+                    FacesMessage.SEVERITY_ERROR,
+                    message.getSeverity());
             n++;
         }
         assertEquals("expected message count", expected, n);
@@ -1928,18 +1931,18 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     protected void setupRenderers() throws Exception {
 
         RenderKitFactory renderKitFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
-            renderKitFactory.getRenderKit(facesContext,
-					  RenderKitFactory.HTML_BASIC_RENDER_KIT);
+                renderKitFactory.getRenderKit(facesContext,
+                        RenderKitFactory.HTML_BASIC_RENDER_KIT);
         renderKit.addRenderer(UICommand.COMPONENT_FAMILY,
-			      "javax.faces.Button", new ButtonRenderer());
+                "javax.faces.Button", new ButtonRenderer());
         renderKit.addRenderer(UIData.COMPONENT_FAMILY,
-			      "javax.faces.Table", new TableRenderer());
+                "javax.faces.Table", new TableRenderer());
         renderKit.addRenderer(UIInput.COMPONENT_FAMILY,
-			      "javax.faces.Text", new TextRenderer());
+                "javax.faces.Text", new TextRenderer());
         renderKit.addRenderer(UIOutput.COMPONENT_FAMILY,
-			      "javax.faces.Text", new TextRenderer());
+                "javax.faces.Text", new TextRenderer());
 
     }
 
@@ -2048,8 +2051,9 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     // Set up the component tree corresponding to the data model
     // labels==true - header facet of command and input contain labels
     // labels==false - header facet of command and input contain controls
+
     protected UICommand setupTree(boolean labels) throws Exception {
-	return setupTree(null, labels, true);
+        return setupTree(null, labels, true);
     }
 
     // Set up the component tree corresponding to the data model
@@ -2061,16 +2065,16 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
         // Attach our UIData to the view root
         UIData data = (UIData) component;
-	if (ids) {
-	    data.setId("data");
-	}
-	if (null == root) {
-	    UIViewRoot viewRoot = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	    viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
-	    viewRoot.setViewId("/view");
-	    facesContext.setViewRoot(viewRoot);
-	    root = viewRoot;
-	}
+        if (ids) {
+            data.setId("data");
+        }
+        if (null == root) {
+            UIViewRoot viewRoot = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+            viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+            viewRoot.setViewId("/view");
+            facesContext.setViewRoot(viewRoot);
+            root = viewRoot;
+        }
         root.getChildren().add(data);
 
         // Set up columns with facets and fields for each property
@@ -2080,143 +2084,143 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIOutput output;
         UIOutput label;
         UIOutput constant;
-	UICommand hcommand;
-	UIInput hinput;
+        UICommand hcommand;
+        UIInput hinput;
 
         column = new UIColumn();
-	if (ids) {
-	    column.setId("commandColumn");
-	}
-	if (labels) {
-	    label = new UIOutput();
-	    if (ids) {
-		label.setId("commandHeader");
-	    }
-	    label.setValue("Command Header");
-	    column.getFacets().put("header", label);
-	} else {
-	    hcommand = new UICommand();
-	    if (ids) {
-		hcommand.setId("hcommand");
-	    }
-	    hcommand.setImmediate(true);
-	    hcommand.setActionListener
-		(application.createMethodBinding
-		 ("#{hb.action}",
-		  new Class[] { ActionEvent.class }));
-	    hcommand.setValue("Command Action");
-	    column.getFacets().put("header", hcommand);
-	}
+        if (ids) {
+            column.setId("commandColumn");
+        }
+        if (labels) {
+            label = new UIOutput();
+            if (ids) {
+                label.setId("commandHeader");
+            }
+            label.setValue("Command Header");
+            column.getFacets().put("header", label);
+        } else {
+            hcommand = new UICommand();
+            if (ids) {
+                hcommand.setId("hcommand");
+            }
+            hcommand.setImmediate(true);
+            hcommand.setActionListener
+                    (application.createMethodBinding
+                            ("#{hb.action}",
+                                    new Class[]{ActionEvent.class}));
+            hcommand.setValue("Command Action");
+            column.getFacets().put("header", hcommand);
+        }
         label = new UIOutput();
-	if (ids) {
-	    label.setId("commandFooter");
-	}
+        if (ids) {
+            label.setId("commandFooter");
+        }
         label.setValue("Command Footer");
         column.getFacets().put("footer", label);
         command = new UICommand();
-	if (ids) {
-	    command.setId("command");
-	}
+        if (ids) {
+            command.setId("command");
+        }
         command.setValueBinding("value",
-				application.createValueBinding("#{foo.command}"));
+                application.createValueBinding("#{foo.command}"));
         column.getChildren().add(command);
         data.getChildren().add(column);
         command.addActionListener(new TestDataActionListener());
 
         column = new UIColumn();
-	if (ids) {
-	    column.setId("inputColumn");
-	}
-	if (labels) {
-	    label = new UIOutput();
-	    if (ids) {
-		label.setId("inputHeader");
-	    }
-	    label.setValue("Input Header");
-	    column.getFacets().put("header", label);
-	} else {
-	    hinput = new UIInput();
-	    if (ids) {
-		hinput.setId("hinput");
-	    }
-	    hinput.setValidator
-		(application.createMethodBinding
-		 ("#{hb.validate}",
-		  new Class[] { FacesContext.class,
-				UIComponent.class,
-				Object.class }));
-	    hinput.setValueBinding
-		("value",
-		 application.createValueBinding("#{hb.value}"));
-	    column.getFacets().put("header", hinput);
-	}
+        if (ids) {
+            column.setId("inputColumn");
+        }
+        if (labels) {
+            label = new UIOutput();
+            if (ids) {
+                label.setId("inputHeader");
+            }
+            label.setValue("Input Header");
+            column.getFacets().put("header", label);
+        } else {
+            hinput = new UIInput();
+            if (ids) {
+                hinput.setId("hinput");
+            }
+            hinput.setValidator
+                    (application.createMethodBinding
+                            ("#{hb.validate}",
+                                    new Class[]{FacesContext.class,
+                                            UIComponent.class,
+                                            Object.class}));
+            hinput.setValueBinding
+                    ("value",
+                            application.createValueBinding("#{hb.value}"));
+            column.getFacets().put("header", hinput);
+        }
         label = new UIOutput();
-	if (ids) {
-	    label.setId("inputFooter");
-	}
+        if (ids) {
+            label.setId("inputFooter");
+        }
         label.setValue("Input Footer");
         column.getFacets().put("footer", label);
         input = new UIInput();
-	if (ids) {
-	    input.setId("input");
-	}
+        if (ids) {
+            input.setId("input");
+        }
         input.setValueBinding("value",
-			      application.createValueBinding("#{foo.input}"));
+                application.createValueBinding("#{foo.input}"));
         column.getChildren().add(input);
         data.getChildren().add(column);
         input.addValidator(new TestDataValidator());
         input.addValueChangeListener(new TestDataValueChangeListener());
 
         column = new UIColumn();
-	if (ids) {
-	    column.setId("outputColumn");
-	}
+        if (ids) {
+            column.setId("outputColumn");
+        }
         label = new UIOutput();
-	if (ids) {
-	    label.setId("outputHeader");
-	}
+        if (ids) {
+            label.setId("outputHeader");
+        }
         label.setValue("Output Header");
         column.getFacets().put("header", label);
         label = new UIOutput();
-	if (ids) {
-	    label.setId("outputFooter");
-	}
+        if (ids) {
+            label.setId("outputFooter");
+        }
         label.setValue("Output Footer");
         column.getFacets().put("footer", label);
         output = new UIOutput();
-	if (ids) {
-	    output.setId("output");
-	}
+        if (ids) {
+            output.setId("output");
+        }
         output.setValueBinding("value",
-			       application.createValueBinding("#{foo.output}"));
+                application.createValueBinding("#{foo.output}"));
         column.getChildren().add(output);
         data.getChildren().add(column);
 
         column = new UIColumn();
-	if (ids) {
-	    column.setId("constantColumn");
-	}
+        if (ids) {
+            column.setId("constantColumn");
+        }
         label = new UIOutput();
-	if (ids) {
-	    label.setId("constantHeader");
-	}
+        if (ids) {
+            label.setId("constantHeader");
+        }
         label.setValue("Constant Header");
         column.getFacets().put("header", label);
         label = new UIOutput();
-	if (ids) {
-	    label.setId("constantFooter");
-	}
+        if (ids) {
+            label.setId("constantFooter");
+        }
         label.setValue("Constant Footer");
         column.getFacets().put("footer", label);
         constant = new UIOutput();
-	if (ids) {
-	    constant.setId("constant");
-	}
+        if (ids) {
+            constant.setId("constant");
+        }
         constant.setValue("Constant Value");
         column.getChildren().add(constant);
         data.getChildren().add(column);
 
-	return command;
+        return command;
 
     }
 
@@ -2236,7 +2240,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         }
         if (null == root) {
             UIViewRoot viewRoot = facesContext.getApplication().getViewHandler()
-                  .createView(facesContext, null);
+                    .createView(facesContext, null);
             viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
             viewRoot.setViewId("/view");
             facesContext.setViewRoot(viewRoot);
@@ -2282,9 +2286,9 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             }
             hcommand.setImmediate(true);
             hcommand.setActionListener
-                  (application.createMethodBinding
-                        ("#{hb.action}",
-                         new Class[]{ActionEvent.class}));
+                    (application.createMethodBinding
+                            ("#{hb.action}",
+                                    new Class[]{ActionEvent.class}));
             hcommand.setValue("Command Action");
             column.getFacets().put("header", hcommand);
         }
@@ -2299,7 +2303,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             command.setId("command");
         }
         command.setValueBinding("value",
-                                application.createValueBinding("#{foo.command}"));
+                application.createValueBinding("#{foo.command}"));
         column.getChildren().add(command);
         data.getChildren().add(column);
         command.addActionListener(new TestDataActionListener());
@@ -2321,14 +2325,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                 hinput.setId("hinput");
             }
             hinput.setValidator
-                  (application.createMethodBinding
-                        ("#{hb.validate}",
-                         new Class[]{FacesContext.class,
-                                     UIComponent.class,
-                                     Object.class}));
+                    (application.createMethodBinding
+                            ("#{hb.validate}",
+                                    new Class[]{FacesContext.class,
+                                            UIComponent.class,
+                                            Object.class}));
             hinput.setValueBinding
-                  ("value",
-                   application.createValueBinding("#{hb.value}"));
+                    ("value",
+                            application.createValueBinding("#{hb.value}"));
             column.getFacets().put("header", hinput);
         }
         label = new UIOutput();
@@ -2342,7 +2346,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             input.setId("input");
         }
         input.setValueBinding("value",
-                              application.createValueBinding("#{foo.input}"));
+                application.createValueBinding("#{foo.input}"));
         column.getChildren().add(input);
         data.getChildren().add(column);
         input.addValidator(new TestDataValidator());
@@ -2369,7 +2373,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             output.setId("output");
         }
         output.setValueBinding("value",
-                               application.createValueBinding("#{foo.output}"));
+                application.createValueBinding("#{foo.output}"));
         column.getChildren().add(output);
         data.getChildren().add(column);
 
@@ -2402,11 +2406,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     }
 
 
-
     // --------------------------------------------------------- Private Classes
 
 
     // "Button" Renderer
+
     class ButtonRenderer extends Renderer {
 
         public void decode(FacesContext context, UIComponent component) {
@@ -2427,20 +2431,20 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         }
 
         public void encodeBegin(FacesContext context, UIComponent component)
-            throws IOException {
+                throws IOException {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
             }
             ResponseWriter writer = context.getResponseWriter();
             writer.write
-                ("<button id='" + component.getClientId(context) + "' value='" +
-                 ((UICommand) component).getValue() + "'/>\n");
+                    ("<button id='" + component.getClientId(context) + "' value='" +
+                            ((UICommand) component).getValue() + "'/>\n");
 
         }
 
         public void encodeChildren(FacesContext context, UIComponent component)
-            throws IOException {
+                throws IOException {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
@@ -2449,7 +2453,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         }
 
         public void encodeEnd(FacesContext context, UIComponent component)
-            throws IOException {
+                throws IOException {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
@@ -2463,7 +2467,9 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     // "Table" Renderer
     class TableRenderer extends Renderer {
 
-	public boolean getRendersChildren() { return true; }
+        public boolean getRendersChildren() {
+            return true;
+        }
 
         public void decode(FacesContext context, UIComponent component) {
 
@@ -2474,7 +2480,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         }
 
         public void encodeBegin(FacesContext context, UIComponent component)
-            throws IOException {
+                throws IOException {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
@@ -2486,12 +2492,12 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             data.setRowIndex(-1);
             String tableId = data.getClientId(context);
             writer.write
-                ("<table id='" + tableId + "'>\n");
+                    ("<table id='" + tableId + "'>\n");
             UIComponent header = (UIComponent) data.getFacet("header");
             if (header != null) {
                 writer.write
-                    ("<table-header id='" + header.getClientId(context) +
-                     "'>\n");
+                        ("<table-header id='" + header.getClientId(context) +
+                                "'>\n");
                 encodeRecursive(context, header);
                 writer.write("</table-header>\n");
             }
@@ -2502,7 +2508,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         }
 
         public void encodeChildren(FacesContext context, UIComponent component)
-            throws IOException {
+                throws IOException {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
@@ -2524,7 +2530,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                 if (header != null) {
                     String headerClientId = header.getClientId(context);
                     writer.write("<column-header id='" +
-                                 headerClientId + "'>\n");
+                            headerClientId + "'>\n");
                     encodeRecursive(context, header);
                     writer.write("</column-header>\n");
                 }
@@ -2538,10 +2544,10 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                 if ((rows > 0) && (++done > rows)) {
                     break;
                 }
-		data.setRowIndex(++rowId);
-		if (!data.isRowAvailable()) {
-		    break;
-		}
+                data.setRowIndex(++rowId);
+                if (!data.isRowAvailable()) {
+                    break;
+                }
                 writer.write("<table-row rowId='" + rowId + "'>\n");
                 kids = data.getChildren().iterator();
                 while (kids.hasNext()) {
@@ -2552,7 +2558,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                     UIColumn column = (UIColumn) kid;
                     String columnClientId = column.getClientId(context);
                     writer.write("<column id='" + columnClientId +
-                                 "'>\n");
+                            "'>\n");
                     encodeRecursive(context, column);
                     writer.write("</column>\n");
                 }
@@ -2572,7 +2578,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                 if (footer != null) {
                     String footerClientId = footer.getClientId(context);
                     writer.write("<column-footer id='" +
-                                 footerClientId + "'>\n");
+                            footerClientId + "'>\n");
                     encodeRecursive(context, footer);
                     writer.write("</column-footer>\n");
                 }
@@ -2581,7 +2587,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         }
 
         public void encodeEnd(FacesContext context, UIComponent component)
-            throws IOException {
+                throws IOException {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
@@ -2593,8 +2599,8 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             UIComponent footer = (UIComponent) data.getFacet("footer");
             if (footer != null) {
                 writer.write
-                    ("<table-footer id='" + footer.getClientId(context) +
-                     "'>\n");
+                        ("<table-footer id='" + footer.getClientId(context) +
+                                "'>\n");
                 encodeRecursive(context, footer);
                 writer.write("</table-footer>\n");
             }
@@ -2604,7 +2610,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
         private void encodeRecursive(FacesContext context,
                                      UIComponent component)
-            throws IOException {
+                throws IOException {
 
             component.encodeBegin(context);
             if (component.getRendersChildren()) {
@@ -2647,7 +2653,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         }
 
         public void encodeBegin(FacesContext context, UIComponent component)
-            throws IOException {
+                throws IOException {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
@@ -2666,13 +2672,13 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
             ResponseWriter writer = context.getResponseWriter();
             writer.write
-                ("<text id='" + component.getClientId(context) + "' value='" +
-                 value + "'/>\n");
+                    ("<text id='" + component.getClientId(context) + "' value='" +
+                            value + "'/>\n");
 
         }
 
         public void encodeChildren(FacesContext context, UIComponent component)
-            throws IOException {
+                throws IOException {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
@@ -2681,7 +2687,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         }
 
         public void encodeEnd(FacesContext context, UIComponent component)
-            throws IOException {
+                throws IOException {
 
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();

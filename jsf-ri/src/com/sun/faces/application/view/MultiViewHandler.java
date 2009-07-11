@@ -346,7 +346,7 @@ public class MultiViewHandler extends ViewHandler {
             params = parameters;
         }
         ExternalContext ectx = context.getExternalContext();
-        return ectx.encodeActionURL(ectx.encodeBookmarkableURL(getActionURL(context, viewId), params));
+        return ectx.encodeActionURL(ectx.encodeBookmarkableURL(Util.getViewHandler(context).getActionURL(context, viewId), params));
 
     }
 
@@ -364,7 +364,7 @@ public class MultiViewHandler extends ViewHandler {
             params = parameters;
         }
         ExternalContext ectx = context.getExternalContext();
-        return ectx.encodeActionURL(ectx.encodeRedirectURL(getActionURL(context, viewId), params));
+        return ectx.encodeActionURL(ectx.encodeRedirectURL(Util.getViewHandler(context).getActionURL(context, viewId), params));
 
     }
 

@@ -238,10 +238,10 @@ public class ConfigureListener implements ServletRequestListener,
                         manager.create(name, initContext);
                     }
                 }
-		boolean isErrorPagePresent = webXmlProcessor.isErrorPagePresent();
-                associate.setErrorPagePresent(isErrorPagePresent);
-		context.setAttribute(RIConstants.ERROR_PAGE_PRESENT_KEY_NAME, 
-				     isErrorPagePresent);
+            boolean isErrorPagePresent = webXmlProcessor.isErrorPagePresent();
+            associate.setErrorPagePresent(isErrorPagePresent);
+            context.setAttribute(RIConstants.ERROR_PAGE_PRESENT_KEY_NAME,
+                                 isErrorPagePresent);
 
             }
             Application app = initContext.getApplication();
@@ -568,7 +568,7 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     
-    private static boolean isJspTwoOne() {
+    private static boolean isJspTwoOne(ServletContext context) {
 
         // The following try/catch is a hack to work around
         // a bug in Tomcat 6 where JspFactory.getDefaultFactory() will
@@ -585,7 +585,12 @@ public class ConfigureListener implements ServletRequestListener,
         try {
             JspFactory.class.getMethod("getJspApplicationContext",
                                        ServletContext.class);
-        } catch (NoSuchMethodException nsme) {
+        } catch (Exception e) {
+            return false;
+        }
+        try {
+            JspFactory.getDefaultFactory().getJspApplicationContext(context);
+        } catch (Throwable e) {
             return false;
         }
         return true;
@@ -594,8 +599,8 @@ public class ConfigureListener implements ServletRequestListener,
 
     public void registerELResolverAndListenerWithJsp(ServletContext context, boolean reloaded) {
 
-        if (webConfig.isSet(WebContextInitParameter.ExpressionFactory) ||
-              !isJspTwoOne()) {
+        if (webConfig.isSet(WebContextInitParameter.ExpressionFactory)
+             || !isJspTwoOne(context)) {
 
             // first try to load a factory defined in web.xml
             if (!installExpressionFactory(context,

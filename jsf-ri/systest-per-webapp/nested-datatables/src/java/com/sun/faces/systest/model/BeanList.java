@@ -55,73 +55,78 @@ public class BeanList extends Object {
     }
 
     protected String outerDataName;
+
     public String getOuterDataName() {
-	return outerDataName;
+        return outerDataName;
     }
 
     public void setOuterDataName(String newOuterDataName) {
-	outerDataName = newOuterDataName;
+        outerDataName = newOuterDataName;
     }
 
     protected String innerDataName;
+
     public String getInnerDataName() {
-	return innerDataName;
+        return innerDataName;
     }
 
     public void setInnerDataName(String newInnerDataName) {
-	innerDataName = newInnerDataName;
+        innerDataName = newInnerDataName;
     }
 
 
     protected String name = "name";
+
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String newName) {
-	if (null == newName) {
-	    return;
-	}
-	name = newName;
+        if (null == newName) {
+            return;
+        }
+        name = newName;
     }
 
     protected int size = 10;
+
     public int getSize() {
-	return size;
+        return size;
     }
 
     public void setSize(int newSize) {
-	size = newSize;
+        size = newSize;
     }
 
     public ListDataModel getListDataModel() {
-	if (null == listDataModel) {
-	    ArrayList beans = new ArrayList(size);
-	    InputBean curBean = null;
-	    
-	    for (int i = 0; i < size; i++) {
-		curBean = new InputBean(this, size, getName() + " " + i);
-		
-		beans.add(curBean);
-	    }
-	    listDataModel = new ListDataModel(beans);
+        if (null == listDataModel) {
+            ArrayList beans = new ArrayList(size);
+            InputBean curBean = null;
 
-	}
-	
-	return listDataModel;
+            for (int i = 0; i < size; i++) {
+                curBean = new InputBean(this, size, getName() + " " + i);
+
+                beans.add(curBean);
+            }
+            listDataModel = new ListDataModel(beans);
+
+        }
+
+        return listDataModel;
     }
 
     public void setListDataModel(ListDataModel newListDataModel) {
-	listDataModel = newListDataModel;
+        listDataModel = newListDataModel;
     }
 
     protected List inputValues = null;
+
     public List getInputValues() {
-	return inputValues;
+        return inputValues;
     }
 
     public void setInputValues(List newInputValues) {
-	inputValues = newInputValues;
+        inputValues = newInputValues;
     }
 
 

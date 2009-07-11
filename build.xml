@@ -98,6 +98,20 @@
         <call.modules target="main"/>
     </target>
 
+    <target name="main.from.source" description="Build Mojarra, including some dependencies">
+        <!-- This target only works behind the Sun firewall, for now, since it relies on internal
+             repositories to get and build the dependent source files -->
+       <subant target="main" inheritAll="false">
+            <property name="build.source" value="true"/>
+            <filelist dir="${api.dir}">
+                <file name="build.xml"/>
+            </filelist>
+            <filelist dir="${impl.dir}">
+                <file name="build.xml"/>
+            </filelist>
+        </subant>
+    </target>
+
     <target name="test" description="Run API, Impl, and Demo automated tests">
         <call.modules target="test"/>
     </target>

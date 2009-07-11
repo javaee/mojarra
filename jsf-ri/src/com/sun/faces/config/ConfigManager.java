@@ -42,8 +42,11 @@ package com.sun.faces.config;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
 import com.sun.faces.spi.ConfigurationResourceProvider;
 import com.sun.faces.spi.ConfigurationResourceProviderFactory;
+import com.sun.faces.spi.AnnotationProvider;
+import com.sun.faces.spi.AnnotationProviderFactory;
 import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.*;
 import static com.sun.faces.spi.ConfigurationResourceProviderFactory.ProviderType.FaceletConfig;
 import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
@@ -281,10 +284,13 @@ public class ConfigManager {
 
         if (!hasBeenInitialized(sc)) {
             initializedContexts.add(sc);
+            ExecutorService executor = null;
             try {
                 WebConfiguration webConfig = WebConfiguration.getInstance(sc);
                 boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
-                ExecutorService executor = createExecutorService();
+                if (useThreads(sc)) {
+                    executor = createExecutorService();
+                }
 
                 Document[] facesDocuments =
                       getConfigDocuments(sc,
@@ -301,8 +307,15 @@ public class ConfigManager {
                       isFaceletsDisabled(webConfig, facesConfigInfo);
                 if (!facesConfigInfo.isMetadataComplete()) {
                     // execute the Task responsible for finding annotation classes
-                    Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan =
-                          executor.submit(new AnnotationScanTask(sc));
+                    Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan;
+                    if (executor != null) {
+                        annotationScan = executor.submit(new AnnotationScanTask(sc));
+                        pushTaskToContext(sc, annotationScan);
+                    } else {
+                        annotationScan =
+                              new FutureTask<Map<Class<? extends Annotation>,Set<Class<?>>>>(new AnnotationScanTask(sc));
+                        ((FutureTask) annotationScan).run();
+                    }
                     pushTaskToContext(sc, annotationScan);
                 }
 
@@ -316,7 +329,6 @@ public class ConfigManager {
                                              validating));
                 }
 
-                executor.shutdown();
                 publishPostConfigEvent();
             } catch (Exception e) {
                 // clear out any configured factories
@@ -330,6 +342,9 @@ public class ConfigManager {
                 throw new ConfigurationException("CONFIGURATION FAILED! " + t.getMessage(),
                                                  t);
             } finally {
+                if (executor != null) {
+                    executor.shutdown();
+                }
                 sc.removeAttribute(ANNOTATIONS_SCAN_TASK_KEY);
             }
         }
@@ -388,6 +403,15 @@ public class ConfigManager {
 
 
     // --------------------------------------------------------- Private Methods
+
+
+    private static boolean useThreads(ServletContext ctx) {
+
+        WebConfiguration config = WebConfiguration.getInstance(ctx);
+        return config.isOptionEnabled(EnableThreading);
+
+    }
+
 
     private List<ConfigurationResourceProvider> getFacesConfigResourceProviders() {
 
@@ -573,7 +597,11 @@ public class ConfigManager {
             FutureTask<Collection<URL>> t =
                  new FutureTask<Collection<URL>>(new URLTask(p, sc));
             urlTasks.add(t);
-            executor.execute(t);
+            if (executor != null) {
+                executor.execute(t);
+            } else {
+                t.run();
+            }
         }
 
         List<FutureTask<Document>> docTasks =
@@ -586,7 +614,11 @@ public class ConfigManager {
                     FutureTask<Document> d =
                          new FutureTask<Document>(new ParseTask(validating, u));
                     docTasks.add(d);
-                    executor.execute(d);
+                    if (executor != null) {
+                        executor.execute(d);
+                    } else {
+                        d.run();
+                    }
                 }
             } catch (InterruptedException ignored) {
             } catch (Exception e) {
@@ -614,7 +646,11 @@ public class ConfigManager {
      */
     private static ExecutorService createExecutorService() {
 
-        return Executors.newFixedThreadPool(NUMBER_OF_TASK_THREADS);
+        int tc = Runtime.getRuntime().availableProcessors();
+        if (tc > NUMBER_OF_TASK_THREADS) {
+            tc = NUMBER_OF_TASK_THREADS;
+        }
+        return Executors.newFixedThreadPool(tc);
 
     }
 
@@ -686,9 +722,10 @@ public class ConfigManager {
                 t.startTiming();
             }
 
-            AnnotationScanner scanner = new AnnotationScanner(sc);
+            //AnnotationScanner scanner = new AnnotationScanner(sc);
+            AnnotationProvider provider = AnnotationProviderFactory.createAnnotationProvider(sc);
             Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =
-                  scanner.getAnnotatedClasses();
+                  provider.getAnnotatedClasses();
 
             if (t != null) {
                 t.stopTiming();
@@ -781,11 +818,14 @@ public class ConfigManager {
         private Document getDocument() throws Exception {
 
             Document returnDoc;
-            if (validating) {  // the Schema won't be null if validation is enabled.
-                DocumentBuilder db = getNonValidatingBuilder();
+            DocumentBuilder db = getNonValidatingBuilder();
+            InputSource is = new InputSource(getInputStream(documentURL));
+                is.setSystemId(documentURL.toExternalForm());
+            Document doc = db.parse(is);
+            String documentNS = doc.getDocumentElement().getNamespaceURI();
+            if (validating && documentNS != null) {
                 DOMSource domSource
-                     = new DOMSource(db.parse(getInputStream(documentURL),
-                                                    documentURL.toExternalForm()));
+                     = new DOMSource(doc, documentURL.toExternalForm());
 
                 /*
                  * If the Document in question is 1.2 (i.e. it has a namespace matching
@@ -794,7 +834,6 @@ public class ConfigManager {
                  * we need to transform it to reference a special 1.1 schema before validating.
                  */
                 Node documentElement = ((Document) domSource.getNode()).getDocumentElement();
-                String documentNS = documentElement.getNamespaceURI();
                 if (JAVAEE_SCHEMA_DEFAULT_NS.equals(documentNS)) {
                     Attr version = (Attr)
                             documentElement.getAttributes().getNamedItem("version");
@@ -830,9 +869,9 @@ public class ConfigManager {
                           .setDocumentURI(((Document) domSource
                                 .getNode()).getDocumentURI());
                     DbfFactory.FacesSchema schemaToApply;
-                    if (documentNS.equals(FACES_CONFIG_1_X_DEFAULT_NS)) {
+                    if (FACES_CONFIG_1_X_DEFAULT_NS.equals(documentNS)) {
                         schemaToApply = DbfFactory.FacesSchema.FACES_11;
-                    } else if (documentNS.equals(FACELETS_1_0_DEFAULT_NS)) {
+                    } else if (FACELETS_1_0_DEFAULT_NS.equals(documentNS)) {
                         schemaToApply = DbfFactory.FacesSchema.FACELET_TAGLIB_20;
                     } else {
                         throw new IllegalStateException();
@@ -842,11 +881,7 @@ public class ConfigManager {
                     returnDoc =  (Document) domResult.getNode();
                 }
             } else {
-                // validation isn't required, parse and return
-                DocumentBuilder builder = getNonValidatingBuilder();
-                InputSource is = new InputSource(getInputStream(documentURL));
-                is.setSystemId(documentURL.toExternalForm());
-                returnDoc = builder.parse(is);
+                returnDoc = doc;
             }
 
             // mark this document as the parsed representation of the
@@ -874,9 +909,9 @@ public class ConfigManager {
 
             TransformerFactory factory = TransformerFactory.newInstance();
             String xslToApply;
-            if (documentNS.equals(FACES_CONFIG_1_X_DEFAULT_NS)) {
+            if (FACES_CONFIG_1_X_DEFAULT_NS.equals(documentNS)) {
                 xslToApply = FACES_TO_1_1_PRIVATE_XSL;
-            } else if (documentNS.equals(FACELETS_1_0_DEFAULT_NS)) {
+            } else if (FACELETS_1_0_DEFAULT_NS.equals(documentNS)) {
                 xslToApply = FACELETS_TO_2_0_XSL;
             } else {
                 throw new IllegalStateException();

@@ -122,7 +122,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
                                                 getNonOnChangeBehaviors(component));
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
-        RenderKitUtils.renderOnchange(context, component);
+        RenderKitUtils.renderOnchange(context, component, false);
 
         String styleClass;
         if (null != (styleClass = (String)

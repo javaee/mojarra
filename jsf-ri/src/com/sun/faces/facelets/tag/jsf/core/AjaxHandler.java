@@ -78,8 +78,12 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.TreeSet;
+
 
 
 /**
@@ -304,10 +308,10 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
                         + eventName);
             }
         } else {
-            if (!bHolder.getEventNames().contains(eventName)) {
-                throw new TagException(this.tag,
-                        "Event attribute could not be determined: "
-                                + eventName);
+            Collection<String> eventNames = bHolder.getEventNames();
+            if (!eventNames.contains(eventName)) {
+                throw new TagException(this.tag, 
+                    getUnsupportedEventMessage(eventName, eventNames, parent));
             }
         }
 
@@ -377,6 +381,38 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
         // Set the context to record script as included
         RenderKitUtils.setScriptAsRendered(context);
 
+    }
+
+    // Returns an error message for the case where the <f:ajax> event
+    // attribute specified an unknown/unsupported event.
+    private String getUnsupportedEventMessage(String             eventName,
+                                              Collection<String> eventNames,
+                                              UIComponent        parent) {
+        StringBuilder builder = new StringBuilder(100);
+        builder.append("'");
+        builder.append(eventName);
+        builder.append("' is not a supported event for ");
+        builder.append(parent.getClass().getSimpleName());
+        builder.append(".  Please specify one of these supported event names: ");
+
+        // Might as well sort the event names for a cleaner error message.
+        Collection<String> sortedEventNames = new TreeSet<String>(eventNames);
+        Iterator<String> iter = sortedEventNames.iterator();
+
+        boolean hasNext = iter.hasNext();
+        while (hasNext) {
+            builder.append(iter.next());
+
+            hasNext = iter.hasNext();
+
+            if (hasNext) {
+                builder.append(", ");
+            }
+        }
+
+        builder.append(".");
+
+        return builder.toString();
     }
 }
 

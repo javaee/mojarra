@@ -361,7 +361,6 @@
         <xsd:annotation>
             <xsd:documentation>
 
-                RELEASE_PENDING (edburns,rogerk) review docs
                 This element contains a sequence of "id" elements, each of which
                 refers to an application configuration resource by the "id"
                 declared on its faces-config element.  This element can also contain
@@ -1826,7 +1825,7 @@
                 <xsd:annotation>
                     <xsd:documentation>
 
-                        RELEASE_PENDING (edburns,rogerk) docs
+                       Please see section JSF.7.4.2 for the specification of this element.
 
                     </xsd:documentation>
                 </xsd:annotation>

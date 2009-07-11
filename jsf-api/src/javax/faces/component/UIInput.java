@@ -1193,22 +1193,29 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * @param value    new value of this component (if any)
      */
     protected boolean compareValues(Object previous, Object value) {
+        boolean result = true;
 
         if (previous == null) {
-            return (value != null);
+            result = (value != null);
         } else if (value == null) {
-            return (true);
+            result = true;
         } else {
 	    boolean previousEqualsValue = previous.equals(value);
 	    if (!previousEqualsValue && 
 		previous instanceof Comparable &&
 		value instanceof Comparable) {
-		return 0 ==((Comparable)previous).compareTo((Comparable)value);
+                try {
+                    result = !(0 == ((Comparable) previous).
+                                      compareTo((Comparable) value));
+                } catch (ClassCastException cce) {
+                    // Comparable throws CCE if the types prevent a comparison
+                    result = true;
+                }
 	    } else {
-		return (true);
+		result = !previousEqualsValue;
 	    }
         }
-
+        return result;
     }
 
 

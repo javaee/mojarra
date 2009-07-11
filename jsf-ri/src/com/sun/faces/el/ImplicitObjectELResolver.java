@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Stack;
 
 import javax.el.ELContext;
 import javax.el.ELException;
@@ -57,6 +58,7 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.RequestStateManager;
 
 public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
@@ -65,13 +67,15 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         "header", "headerValues", "initParam", "param", "paramValues",
         "request", "requestScope", "resource", "session", "sessionScope", 
         "view", "viewScope" };
+    static {
+        Arrays.sort(IMPLICIT_OBJECTS);
+    }
 
     public ImplicitObjectELResolver() {
     }
 
     public Object getValue(ELContext context,Object base, Object property)
             throws ELException {
-        Arrays.sort(IMPLICIT_OBJECTS);
         // variable resolution is a special case of property resolution
         // where the base is null.
         if (base != null) {
@@ -98,7 +102,23 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                     context.setPropertyResolved(true);
                     return extCtx.getApplicationMap();
                 case COMPOSITE_COMPONENT:
-                    Object o = facesContext.getAttributes().get(UIComponent.CURRENT_COMPOSITE_COMPONENT);
+                    // The following five lines violate the specification.
+                    // The specification states that the 'cc' implicit object
+                    // always evaluates to the current composite component,
+                    // however, this isn't desirable behavior when passing
+                    // attributes between nested composite components, so we
+                    // need to alter the behavior so that the components behave
+                    // as the user would expect.
+                    /* BEGIN DEVIATION */
+                    Stack stack = (Stack) RequestStateManager.get(facesContext, RequestStateManager.COMPCOMP_STACK);
+                    Object o = null;
+                    if (stack != null && !stack.isEmpty()) {
+                        o = stack.peek();
+                    }
+                    /* END DEVIATION */
+                    if (o == null) {
+                        o = UIComponent.getCurrentCompositeComponent(facesContext);
+                    }
                     context.setPropertyResolved(o != null);
                     return o;
                 case COMPONENT:

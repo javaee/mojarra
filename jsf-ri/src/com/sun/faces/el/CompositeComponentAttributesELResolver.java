@@ -42,7 +42,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Collections;
 
 import javax.el.ELResolver;
 import javax.el.ELContext;
@@ -53,6 +52,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.CompositeComponentExpressionHolder;
 
 import com.sun.faces.util.Util;
+import java.beans.BeanInfo;
+import java.beans.PropertyDescriptor;
 
 /**
  * <p>
@@ -129,8 +130,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             if (COMPOSITE_COMPONENT_PARENT_NAME.equals(propertyName)) {
                 UIComponent c = (UIComponent) base;
                 context.setPropertyResolved(true);
-                UIComponent ccParent = UIComponent.getCompositeComponentParent(c);
-                return ccParent;
+                return UIComponent.getCompositeComponentParent(c);
             }
         }
 
@@ -242,13 +242,13 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         if (topMap == null) {
             topMap = new HashMap<UIComponent,Map<String,Object>>();
             ctxAttributes.put(EVAL_MAP_KEY, topMap);
-            evalMap = new ExpressionEvalMap(ctx, c.getAttributes());
+            evalMap = new ExpressionEvalMap(ctx, c);
             topMap.put(c, evalMap);
         }
         if (evalMap == null) {
             evalMap = topMap.get(c);
             if (evalMap == null) {
-                evalMap = new ExpressionEvalMap(ctx, c.getAttributes());
+                evalMap = new ExpressionEvalMap(ctx, c);
                 topMap.put(c, evalMap);
             }
         }
@@ -268,15 +268,24 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
     implements Map<String,Object>, CompositeComponentExpressionHolder {
 
         private Map<String,Object> attributesMap;
+        private PropertyDescriptor[] declaredAttributes;
+        private Map<Object, Object> declaredDefaultValues;
         private FacesContext ctx;
+        private UIComponent cc;
 
 
         // -------------------------------------------------------- Constructors
 
 
-        ExpressionEvalMap(FacesContext ctx, Map<String,Object> attributesMap) {
+        ExpressionEvalMap(FacesContext ctx, UIComponent cc) {
 
-            this.attributesMap = attributesMap;
+            this.cc = cc;
+            this.attributesMap = cc.getAttributes();
+            BeanInfo metadata = (BeanInfo) this.attributesMap.get(UIComponent.BEANINFO_KEY);
+            if (null != metadata) {
+                this.declaredAttributes = metadata.getPropertyDescriptors();
+                this.declaredDefaultValues = new HashMap<Object, Object>(5);
+            }
             this.ctx = ctx;
 
         }
@@ -314,19 +323,28 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
 
         public Object get(Object key) {
             Object v = attributesMap.get(key);
-            if (v != null && v instanceof ValueExpression) {
-                return (((ValueExpression) v).getValue(ctx.getELContext()));
+            if (v == null) {
+                v = getDeclaredDefaultValue(key);
+                if (v != null) {
+                    return ((ValueExpression) v).getValue(ctx.getELContext());
+                }
             }
             if (v != null && v instanceof MethodExpression) {
                 return v;
             }
-            return null;
+            return v;
         }
 
         public Object put(String key, Object value) {
-            Object v = attributesMap.get(key);
-            if (v != null && v instanceof ValueExpression) {
-                ((ValueExpression) v).setValue(ctx.getELContext(), value);
+            // Unlinke AttributesMap.get() which will obtain a value from
+            // a ValueExpression, AttributesMap.put(), when passed a value,
+            // will never call ValueExpression.setValue(), so we have to take
+            // matters into our own hands...
+            ValueExpression ve = cc.getValueExpression(key);
+            if (ve != null) {
+                ve.setValue(ctx.getELContext(), value);
+            } else {
+                attributesMap.put(key, value);
             }
             return null;
         }
@@ -354,5 +372,35 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         public Set<Map.Entry<String,Object>> entrySet() {
             throw new UnsupportedOperationException();
         }
+
+        private Object getDeclaredDefaultValue(Object key) {
+            Object result = null;
+
+            // If it's not in the cache...
+            if (!declaredDefaultValues.containsKey(key)) {
+                // iterate through the property descriptors...
+                boolean found = false;
+                for (PropertyDescriptor cur : declaredAttributes) {
+                    // and if you find a match...
+                    if (cur.getName().equals(key)) {
+                        found = true;
+                        // put it in the cache, returning the value.
+                        declaredDefaultValues.put(key, result = cur.getValue("default"));
+                        break;
+                    }
+                }
+                // Otherwise, if no attribute was declared
+                if (!found) {
+                    // put null into the cache for future lookups.
+                    declaredDefaultValues.put(key, null);
+                }
+            } else {
+                // It's in the cache, just return the value.
+                result = declaredDefaultValues.get(key);
+            }
+
+            return result;
+        }
+
     }
 }

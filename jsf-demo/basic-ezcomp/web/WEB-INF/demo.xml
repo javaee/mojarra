@@ -195,5 +195,30 @@
     </sources>
 </demo>
 
+    <!-- =================================================================== -->
+
+<demo>
+    <name>Poll Component</name>
+    <page>poll.jsf</page>
+    <sources>
+        <source>
+            <label>Initial Using Page</label>
+            <path>/poll.xhtml</path>
+        </source>
+        <source>
+            <label>Composite Component</label>
+            <path>/resources/poll/poll.xhtml</path>
+        </source>
+        <source>
+            <label>Component JavaScript</label>
+            <path>/resources/poll/poll.js</path>
+        </source>
+        <source>
+            <label>Count Class</label>
+            <path>/WEB-INF/classes/ezcomp/Count.java</path>
+        </source>
+    </sources>
+</demo>
+
 
 </demo-info>

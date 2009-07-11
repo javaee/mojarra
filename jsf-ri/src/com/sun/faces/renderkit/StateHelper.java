@@ -49,6 +49,7 @@ import com.sun.faces.spi.SerializationProvider;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CompressViewState;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableViewStateIdRendering;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.AutoCompleteOffOnViewState;
 
 
 /**
@@ -96,6 +97,14 @@ public abstract class StateHelper {
 
     /**
      * <p>
+     * The end of the hidden state field.
+     * </p>
+     */
+    protected static final char[] STATE_FIELD_AUTOCOMPLETE_END =
+          "\" autocomplete=\"off\" />".toCharArray();
+
+    /**
+     * <p>
      * Factory for serialization streams.  These are pluggable via
      * the {@link com.sun.faces.config.WebConfiguration.WebContextInitParameter#SerializationProviderClass}.
      * </p>
@@ -132,6 +141,14 @@ public abstract class StateHelper {
     protected char[] stateFieldStart;
 
 
+    /**
+     * This will be used the by the different <code>StateHelper</code> implementations
+     * when writing the end of the state field.  This value of this field is
+     * determined by the value of the {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#AutoCompleteOffOnViewState}<code>
+     */
+    protected char[] stateFieldEnd;
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -148,6 +165,10 @@ public abstract class StateHelper {
         stateFieldStart = (webConfig.isOptionEnabled(EnableViewStateIdRendering)
                            ? STATE_FIELD_START
                            : STATE_FIELD_START_NO_ID);
+        stateFieldEnd = (webConfig.isOptionEnabled(AutoCompleteOffOnViewState)
+                           ? STATE_FIELD_AUTOCOMPLETE_END
+                           : STATE_FIELD_END);
+
 
         if (serialProvider == null) {
             serialProvider = SerializationProviderFactory

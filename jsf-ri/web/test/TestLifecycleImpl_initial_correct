@@ -15,7 +15,7 @@
     
 <form id="helloForm" name="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=4978ef01d82f915eac9b1f0c49b1" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="helloForm" value="helloForm" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" autocomplete="off" />
 <input id="helloForm:userNo" type="text" name="helloForm:userNo" value="NUMBER" />
   	 <BR>
 

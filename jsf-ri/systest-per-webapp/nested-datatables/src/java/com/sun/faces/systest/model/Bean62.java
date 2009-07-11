@@ -43,15 +43,16 @@ import java.util.ArrayList;
 import javax.faces.model.ListDataModel;
 
 /**
- *
  * @author edburns
  */
 public class Bean62 {
-    
-    /** Creates a new instance of Bean62 */
+
+    /**
+     * Creates a new instance of Bean62
+     */
     public Bean62() {
     }
-    
+
     public Bean62(String label) {
         this.label = label;
     }
@@ -63,6 +64,7 @@ public class Bean62 {
 
     /**
      * Getter for property model.
+     *
      * @return Value of property model.
      */
     public ListDataModel getModel() {
@@ -72,8 +74,7 @@ public class Bean62 {
                 list.add(new Bean62(label + ".one"));
                 list.add(new Bean62(label + ".two"));
                 list.add(new Bean62(label + ".three"));
-            }
-            else {
+            } else {
                 list.add("leaf1");
                 list.add("leaf2");
                 list.add("leaf3");
@@ -85,6 +86,7 @@ public class Bean62 {
 
     /**
      * Setter for property model.
+     *
      * @param model New value of property model.
      */
     public void setModel(ListDataModel model) {
@@ -99,6 +101,7 @@ public class Bean62 {
 
     /**
      * Getter for property root.
+     *
      * @return Value of property root.
      */
     public boolean isRoot() {
@@ -108,6 +111,7 @@ public class Bean62 {
 
     /**
      * Setter for property root.
+     *
      * @param root New value of property root.
      */
     public void setRoot(boolean root) {
@@ -122,6 +126,7 @@ public class Bean62 {
 
     /**
      * Getter for property label.
+     *
      * @return Value of property label.
      */
     public String getLabel() {
@@ -131,19 +136,20 @@ public class Bean62 {
 
     /**
      * Setter for property label.
+     *
      * @param label New value of property label.
      */
     public void setLabel(String label) {
 
         this.label = label;
     }
-    
+
     public String action() {
         Bean62 yyyInstance = (Bean62) this.model.getRowData();
         Object wwwInstance = yyyInstance.getModel().getRowData();
-        
+
         setCurStatus(wwwInstance);
-        
+
         return null;
     }
 
@@ -154,6 +160,7 @@ public class Bean62 {
 
     /**
      * Getter for property curStatus.
+     *
      * @return Value of property curStatus.
      */
     public Object getCurStatus() {
@@ -163,6 +170,7 @@ public class Bean62 {
 
     /**
      * Setter for property curStatus.
+     *
      * @param curStatus New value of property curStatus.
      */
     public void setCurStatus(Object curStatus) {

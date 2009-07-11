@@ -217,12 +217,12 @@ public class ApplicationAssociate {
 
         groovyHelper = GroovyHelper.getCurrentInstance();
 
+        devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
         // initialize Facelets
         if (!webConfig.isOptionEnabled(DisableFaceletJSFViewHandler)) {
             compiler = createCompiler(webConfig);
             faceletFactory = createFaceletFactory(compiler, webConfig);
         }
-        devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
 
         if (!devModeEnabled) {
             resourceCache = new ResourceCache();
@@ -338,7 +338,7 @@ public class ApplicationAssociate {
     /**
      * Obtain the PropertyEditorHelper instance for this app.
      *
-     * @return
+     * @return The PropertyEditorHeler instance for this app.
      */
     public PropertyEditorHelper getPropertyEditorHelper() {
         return propertyEditorHelper;
@@ -628,21 +628,21 @@ public class ApplicationAssociate {
             decParam = decParam.trim();
             String[] decs = Util.split(decParam, ";");
             TagDecorator decObj;
-            for (int i = 0; i < decs.length; i++) {
+            for (String decorator : decs) {
                 try {
-                    decObj = (TagDecorator) ReflectionUtil.forName(decs[i])
+                    decObj = (TagDecorator) ReflectionUtil.forName(decorator)
                           .newInstance();
                     c.addTagDecorator(decObj);
 
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    "Successfully Loaded Decorator: {0}",
-                                   decs[i]);
+                                   decorator);
                     }
                 } catch (Exception e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE,
-                                   "Error Loading Decorator: " + decs[i],
+                                   "Error Loading Decorator: " + decorator,
                                    e);
                     }
                 }

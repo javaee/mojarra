@@ -682,14 +682,12 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         // Deal with extension mapping
-        int period = viewId.lastIndexOf('.');
-        if (period < 0) {
-            return (contextPath + viewId + mapping);
-        } else if (!viewId.endsWith(mapping)) {
-            return (contextPath + viewId.substring(0, period) + mapping);
-        } else {
-            return (contextPath + viewId);
+        for (String extension : configuredExtensions) {
+            if (viewId.endsWith(extension)) {
+                return (contextPath + viewId.substring(0, viewId.lastIndexOf('.')) + mapping);
+            }
         }
+        return (contextPath + viewId);
 
     }
 

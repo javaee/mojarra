@@ -52,29 +52,49 @@ package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
+import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.jsf.ComponentTagHandlerDelegateImpl.CreateComponentDelegate;
+import com.sun.faces.facelets.tag.MetaRulesetImpl;
+import com.sun.faces.facelets.tag.MetadataTargetImpl;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
 
-import javax.el.*;
+import javax.el.ELException;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
+import javax.el.ELContext;
 import javax.faces.FacesException;
 import javax.faces.application.Resource;
-import javax.faces.application.ViewHandler;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIPanel;
+import javax.faces.component.ActionSource;
+import javax.faces.component.ValueHolder;
+import javax.faces.component.EditableValueHolder;
+import javax.faces.component.UISelectOne;
+import javax.faces.component.UISelectMany;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.PostAddToViewEvent;
 import javax.faces.view.AttachedObjectHandler;
-import javax.faces.view.facelets.*;
-import java.beans.Introspector;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.MetaRuleset;
+import javax.faces.view.facelets.Metadata;
+import javax.faces.view.facelets.MetadataTarget;
+import javax.faces.view.facelets.Tag;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.MetaRule;
 import java.beans.PropertyDescriptor;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 import javax.faces.FactoryFinder;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
@@ -84,85 +104,23 @@ import javax.faces.view.ViewDeclarationLanguageFactory;
  */
 public class CompositeComponentTagHandler extends ComponentHandler implements CreateComponentDelegate {
 
-     private static String[] EXCLUDED_COPY_ATTRIBUTES;
-
-    // setup the list of properties that will not be exposed as composite
-    // component attributes
-    static {
-        try {
-            PropertyDescriptor[] properties =
-                  Introspector.getBeanInfo(UINamingContainer.class).getPropertyDescriptors();
-            Set<String> props = new HashSet<String>();
-            for (PropertyDescriptor pd : properties) {
-                if (pd.getWriteMethod() != null) {
-                    props.add(pd.getName());
-                }
-            }
-            // add attributes that aren't exposed as standard properties
-            props.add("binding");
-            String[] propNames = props.toArray(new String[props.size()]);
-            Arrays.sort(propNames);
-            EXCLUDED_COPY_ATTRIBUTES = propNames;
-        } catch (Exception e) {
-            throw new FacesException(e);
-        }
-    }
     
-    CompositeComponentTagHandler(Resource ccResource,
-            ComponentConfig config) {
+    CompositeComponentTagHandler(Resource ccResource, ComponentConfig config) {
         super(config);
         this.ccResource = ccResource;
-        ((ComponentTagHandlerDelegateImpl)this.getTagHandlerDelegate()).setCreateComponentDelegate(this);
+        ((ComponentTagHandlerDelegateImpl)this.getTagHandlerDelegate()).setCreateCompositeComponentDelegate(this);
     }
-    
-    private void copyTagAttributesIntoComponentAttributes(FaceletContext ctx,
-                                                          UIComponent cc) {
-        
-        TagAttributes tagAttributes = this.tag.getAttributes();
-        TagAttribute attrs[] = tagAttributes.getAll();
 
-        for (TagAttribute attr : attrs) {
-            String name = attr.getLocalName();
-            if (isNameValid(name)) {
-                String value = attr.getValue();
-                if (null != value && 0 < value.length()) {
 
-                    Expression expression = attr.getValueExpression(ctx, Object.class);
-                    // PENDING: I don't think copyTagAttributesIntoComponentAttributes
-                    // should be getting called 
-                    // on postback, yet it is.  In lieu of a real fix, I'll
-                    // make sure I'm not overwriting a MethodExpression with a 
-                    // ValueExpression.
-                    Map<String, Object> map = cc
-                          .getAttributes();
-                    boolean doPut = true;
-                    if (map.containsKey(name)) {
-                        Object curVal = map.get(name);
-                        if (curVal instanceof MethodExpression) {
-                            doPut = false;
-                        }
-                    }
-                    if (doPut) {
-                        map.put(name, expression);
-                    }
-                }
-            }
-        }
-        
-    }
-    
     private Resource ccResource;
+    private UIComponent cc;
     
-    
+
 
     public UIComponent createComponent(FaceletContext ctx) {
         FacesContext context = ctx.getFacesContext();
         UIComponent result = context.getApplication().createComponent(context, ccResource);
-        result.subscribeToEvent(PostAddToViewEvent.class,
-                                new CompositeAttributesCopyListener());
-
-
-
+        this.cc = result;
         return result;
     }
     
@@ -176,7 +134,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         // Allow any PDL declared attached objects to be retargeted
         if (ComponentHandler.isNew(c)) {
             FacesContext context = ctx.getFacesContext();
-            ViewHandler viewHandler = context.getApplication().getViewHandler();
             String viewId = context.getViewRoot().getViewId();
             // PENDING(rlubke): performance
             ViewDeclarationLanguageFactory factory = (ViewDeclarationLanguageFactory)
@@ -198,13 +155,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
     }
 
-    private boolean isNameValid(String name) {
-
-        return (name != null
-                && name.length() > 0
-                && (Arrays.binarySearch(EXCLUDED_COPY_ATTRIBUTES, name) < 0));
-        
-    }
     
     private void applyCompositeComponent(FaceletContext ctx, UIComponent c)
     throws IOException {
@@ -217,10 +167,10 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         UIPanel facetComponent;
         if (ComponentHandler.isNew(c)) {
             facetComponent = (UIPanel)
-             facesContext.getApplication().createComponent("javax.faces.Panel");
+            facesContext.getApplication().createComponent("javax.faces.Panel");
             facetComponent.setRendererType("javax.faces.Group");
             c.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
-        }
+        }                                                                                 
         else {
             facetComponent = (UIPanel) 
                     c.getFacets().get(UIComponent.COMPOSITE_FACET_NAME);
@@ -229,7 +179,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         
         try {
             Facelet f = factory.getFacelet(ccResource.getURL());
-            copyTagAttributesIntoComponentAttributes(ctx, c);
+            setAttributes(ctx, c);
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 
                 @Override
@@ -243,6 +193,74 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         } finally {
             ctx.setVariableMapper(orig);
         }
+
+    }
+
+
+    /**
+     * Specialized implementation to prevent caching of the MetaRuleset when
+     * ProjectStage is Development.
+     */
+    @Override
+    public void setAttributes(FaceletContext ctx, Object instance) {
+
+        if (instance != null) {
+            if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
+                Metadata meta = createMetaRuleset(instance.getClass()).finish();
+                meta.applyMetadata(ctx, instance);
+            } else {
+                super.setAttributes(ctx, instance);
+            }
+        }
+
+    }
+
+
+    /**
+     * This is basically a copy of what's define in ComponentTagHandlerDelegateImpl
+     * except for the MetaRuleset implementation that's being used.
+     *
+     * This also allows us to treat composite component's backed by custom component
+     * implementation classes based on their type.
+     *
+     * @param type the <code>Class</code> for which the
+     * <code>MetaRuleset</code> must be created.
+     *
+     */
+    @Override
+    protected MetaRuleset createMetaRuleset(Class type) {
+
+        Util.notNull("type", type);
+        MetaRuleset m = new CompositeComponentMetaRuleset(getTag(), type, (BeanInfo) cc.getAttributes().get(UIComponent.BEANINFO_KEY));
+
+        // ignore standard component attributes
+        m.ignore("binding").ignore("id");
+
+        m.addRule(CompositeComponentRule.Instance);
+
+        // if it's an ActionSource
+        if (ActionSource.class.isAssignableFrom(type)) {
+            m.addRule(ActionSourceRule.Instance);
+        }
+
+        // if it's a ValueHolder
+        if (ValueHolder.class.isAssignableFrom(type)) {
+            m.addRule(ValueHolderRule.Instance);
+
+            // if it's an EditableValueHolder
+            if (EditableValueHolder.class.isAssignableFrom(type)) {
+                m.ignore("submittedValue");
+                m.ignore("valid");
+                m.addRule(EditableValueHolderRule.Instance);
+            }
+        }
+
+        // if it's a selectone or selectmany
+        if (UISelectOne.class.isAssignableFrom(type) || UISelectMany.class.isAssignableFrom(type)) {
+            m.addRule(RenderPropertyRule.Instance);
+        }
+
+        return m;
 
     }
 
@@ -270,6 +288,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     }
 
 
+
     private void markInitialState(UIComponent c) {
         c.markInitialState();
         for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext(); ) {
@@ -281,63 +300,404 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     // ---------------------------------------------------------- Nested Classes
 
 
-     public static class CompositeAttributesCopyListener implements
-           ComponentSystemEventListener, Serializable {
+    /**
+     * Specialized MetaRulesetImpl to return CompositeMetadataTarget for component
+     * attribute handling.
+     */
+    private static final class CompositeComponentMetaRuleset extends MetaRulesetImpl {
+
+        private BeanInfo compBeanInfo;
+        private Class<?> type;
+
+        public CompositeComponentMetaRuleset(Tag tag,
+                                             Class<?> type,
+                                             BeanInfo compBeanInfo) {
+
+            super(tag, type);
+            this.compBeanInfo = compBeanInfo;
+            this.type = type;
+
+        }
+
+        @Override
+        protected MetadataTarget getMetadataTarget() {
+            try {
+                return new CompositeMetadataTarget(type, compBeanInfo);
+            } catch (IntrospectionException ie) {
+                throw new FacesException(ie);
+            }
+        }
 
 
-
-        // --------------------------- Methods from ComponentSystemEventListener
-
-
-         public void processEvent(ComponentSystemEvent event)
-               throws AbortProcessingException {
-
-             UIComponent cc = event.getComponent();
-             UIComponent compositeParent =
-                   UIComponent.getCompositeComponentParent(cc);
-             if (compositeParent != null) {
-                 for (Map.Entry<String, Object> entry : cc
-                       .getAttributes().entrySet()) {
-                     if (entry.getValue() instanceof Expression) {
-                         Expression expr = (Expression) entry.getValue();
-                         if (!expr.isLiteralText()) {
-                             String exprString = expr
-                                   .getExpressionString();
-                             if (exprString.startsWith(
-                                   "#{cc.attrs.")) {
-                                 int lastDot = exprString
-                                       .lastIndexOf('.');
-                                 if (lastDot != -1) {
-                                     String attrName = exprString
-                                           .substring((lastDot + 1),
-                                                      (exprString.length()
-                                                       - 1));
-
-                                     // see if our parent composite component
-                                     // has an Expression in its attribute
-                                     // map for this attribute name, if so,
-                                     // use that as the expression for this
-                                     // composite component
-                                     Object parentExpr = compositeParent
-                                           .getAttributes()
-                                           .get(attrName);
-                                     if (parentExpr instanceof Expression) {
-                                         cc.getAttributes()
-                                               .put(entry.getKey(), parentExpr);
-                                     }
-
-                                 }
-                             }
-                         }
-                     }
-                 }
-             }
+        // ------------------------------------------------------ Nested Classes
 
 
-         }
+        /**
+         * This class is responsible for creating ValueExpression instances with
+         * the expected type based off the following:
+         *
+         *  - if the composite:attribute metadata is present, then use the type
+         *    if specified by the author, or default to Object.class
+         *  - if no composite:attribute is specified, then attempt to return the
+         *    type based off the bean info for this component
+         */
+        private static final class CompositeMetadataTarget extends MetadataTargetImpl {
 
-    }
-    
+            private BeanInfo compBeanInfo;
+
+
+            // ---------------------------------------------------- Construcrors
+
+
+            public CompositeMetadataTarget(Class<?> type, BeanInfo compBeanInfo)
+            throws IntrospectionException {
+
+                super(type);
+                this.compBeanInfo = compBeanInfo;
+
+            }
+
+
+            // --------------------------------- Methods from MetadataTargetImpl
+
+
+            @Override
+            public Class getPropertyType(String name) {
+                PropertyDescriptor compDescriptor = findDescriptor(name);
+                if (compDescriptor != null) {
+                    // composite:attribute declaration...
+                    ValueExpression typeVE = (ValueExpression) compDescriptor.getValue("type");
+                    if (typeVE == null) {
+                        return Object.class;
+                    } else {
+                        String className = (String) typeVE.getValue(FacesContext.getCurrentInstance().getELContext());
+                        if (className != null) {
+                            className = prefix(className);
+                            try {
+                                return ReflectionUtil.forName(className);
+                            } catch (ClassNotFoundException cnfe) {
+                                throw new FacesException(cnfe);
+                            }
+                        } else {
+                            return Object.class;
+                        }
+                    }
+                } else {
+                    // defer to the default processing which will inspect the
+                    // PropertyDescriptor of the UIComponent type
+                    return super.getPropertyType(name);
+                }
+            }
+
+
+            // ------------------------------------------------- Private Methods
+
+
+            private PropertyDescriptor findDescriptor(String name) {
+
+                for (PropertyDescriptor pd : compBeanInfo.getPropertyDescriptors()) {
+
+                    if (pd.getName().equals(name)) {
+                        return pd;
+                    }
+
+                }
+                return null;
+
+            }
+
+
+            private String prefix(String className) {
+
+                if (className.indexOf('.') == -1
+                    && Character.isUpperCase(className.charAt(0))) {
+                    return ("java.lang." + className);
+                } else {
+                    return className;
+                }
+
+            }
+        }
+
+    } // END CompositeComponentMetaRuleset
+
+
+    /**
+     * <code>MetaRule</code> for populating the ValueExpression map of a
+     * composite component.
+     */
+    private static class CompositeComponentRule extends MetaRule {
+
+        private static final CompositeComponentRule Instance = new CompositeComponentRule();
+
+
+        // ------------------------------------------ Methods from ComponentRule
+
+
+        public Metadata applyRule(String name, TagAttribute attribute, MetadataTarget meta) {
+
+            if (meta.isTargetInstanceOf(UIComponent.class)) {
+                Class type = meta.getPropertyType(name);
+                if (type == null) {
+                    type = Object.class;
+                }
+
+                if (!attribute.isLiteral()) {
+                    return new CompositeExpressionMetadata(name, type, attribute);
+                } else {
+                    return new LiteralAttributeMetadata(name, type, attribute);
+                }
+            }
+            return null;
+
+        }
+
+
+        // ------------------------------------------------------ Nested Classes
+
+
+        /**
+         * For literal expressions, coerce the literal value to the type
+         * as provided to the constructor prior to setting the value into
+         * the component's attribute map.
+         */
+        private static final class LiteralAttributeMetadata extends Metadata {
+
+            private String name;
+            private Class<?> type;
+            private TagAttribute attribute;
+
+
+            // ---------------------------------------------------- Constructors
+
+
+            public LiteralAttributeMetadata(String name,
+                                            Class<?> type,
+                                            TagAttribute attribute) {
+
+                this.name = name;
+                this.type = type;
+                this.attribute = attribute;
+                
+            }
+
+
+            // ------------------------------------------- Methods from Metadata
+
+
+            public void applyMetadata(FaceletContext ctx, Object instance) {
+
+                UIComponent c = (UIComponent) instance;
+                c.getAttributes().put(name, attribute.getObject(ctx, type));
+
+            }
+
+        } // END LiteralAttributeMetadata
+
+
+        /**
+         * CompositeExpressionMetadata sets up specialized wrapper ValueExpression
+         * instances around the source ValueExpression that, when evaluated,
+         * will cause the parent composite component of the currently available
+         * composite component to be pushed onto a stack that the
+         * ImplicitObjectELResolver will check for.
+         */
+        private static final class CompositeExpressionMetadata extends Metadata {
+
+            private String name;
+            private Class<?> type;
+            private TagAttribute attr;
+
+
+            // ---------------------------------------------------- Constructors
+
+
+            public CompositeExpressionMetadata(String name,
+                                               Class<?> type,
+                                               TagAttribute attr) {
+                this.name = name;
+                this.type = type;
+                this.attr = attr;
+
+
+            }
+
+            // ------------------------------------------- Methods from Metadata
+
+
+            public void applyMetadata(FaceletContext ctx, Object instance) {
+
+                ValueExpression ve = attr.getValueExpression(ctx, type);
+                UIComponent cc = (UIComponent) instance;
+                assert (UIComponent.isCompositeComponent(cc));
+                cc.setValueExpression(name, new ContextualCompositeExpression(ve));
+
+            }
+
+
+        } // END CompositeExpressionMetadata
+
+
+        private static final class ContextualCompositeExpression extends ValueExpression {
+
+            private ValueExpression originalVE;
+       
+
+            // ---------------------------------------------------- Constructors
+
+
+            /* For serialization purposes */
+            public ContextualCompositeExpression() { }
+
+
+            public ContextualCompositeExpression(ValueExpression originalVE) {
+
+                this.originalVE = originalVE;
+
+            }
+
+
+            // ------------------------------------ Methods from ValueExpression
+
+
+            public Object getValue(ELContext elContext) {
+
+                FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
+                boolean pushed = pushCompositeComponent(ctx);
+                try {
+                    return originalVE.getValue(elContext);
+                } finally {
+                    if (pushed) {
+                        popCompositeComponent(ctx);
+                    }
+                }
+
+            }
+
+            public void setValue(ELContext elContext, Object o) {
+
+                FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
+                 boolean pushed = pushCompositeComponent(ctx);
+                try {
+                    originalVE.setValue(elContext, o);
+                } finally {
+                    if (pushed) {
+                        popCompositeComponent(ctx);
+                    }
+                }
+
+            }
+
+            public boolean isReadOnly(ELContext elContext) {
+
+                FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
+                boolean pushed = pushCompositeComponent(ctx);
+                try {
+                    return originalVE.isReadOnly(elContext);
+                } finally {
+                    if (pushed) {
+                        popCompositeComponent(ctx);
+                    }
+                }
+
+            }
+
+            public Class<?> getType(ELContext elContext) {
+
+                FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
+                boolean pushed = pushCompositeComponent(ctx);
+                try {
+                    return originalVE.getType(elContext);
+                } finally {
+                    if (pushed) {
+                        popCompositeComponent(ctx);
+                    }
+                }
+
+            }
+
+            public Class<?> getExpectedType() {
+                
+                FacesContext ctx = FacesContext.getCurrentInstance();
+                boolean pushed = pushCompositeComponent(ctx);
+                try {
+                    return originalVE.getExpectedType();
+                } finally {
+                    if (pushed) {
+                        popCompositeComponent(ctx);
+                    }
+                }
+
+            }
+
+
+            // ----------------------------------------- Methods from Expression
+
+
+            public String getExpressionString() {
+                return originalVE.getExpressionString();
+            }
+
+            @SuppressWarnings({"EqualsWhichDoesntCheckParameterClass"})
+            public boolean equals(Object o) {
+                return originalVE.equals(o);
+            }
+
+            public int hashCode() {
+                return originalVE.hashCode();
+            }
+
+            public boolean isLiteralText() {
+                return originalVE.isLiteralText();
+            }
+
+
+            // ------------------------------------------------- Private Methods
+
+
+            private boolean pushCompositeComponent(FacesContext ctx) {
+
+                UIComponent ccp = UIComponent.getCompositeComponentParent(UIComponent.getCurrentCompositeComponent(ctx));
+                Stack<UIComponent> stack = getStack(ctx, true);
+                if (ccp != null) {
+                    stack.push(ccp);
+                    return true;
+                }
+                return false;
+
+            }
+
+
+            private void popCompositeComponent(FacesContext ctx) {
+
+                Stack<UIComponent> stack = getStack(ctx, false);
+                if (stack == null) {
+                    return;
+                }
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                }
+
+            }
+
+
+            @SuppressWarnings({"unchecked"})
+            private Stack<UIComponent> getStack(FacesContext ctx, boolean create) {
+
+                Stack<UIComponent> stack = (Stack<UIComponent>)
+                      RequestStateManager.get(ctx, RequestStateManager.COMPCOMP_STACK);
+                if (stack == null && create) {
+                    stack = new Stack<UIComponent>();
+                    RequestStateManager.set(ctx, RequestStateManager.COMPCOMP_STACK, stack);
+                }
+                return stack;
+
+            }
+
+
+        } // END ContextualCompositeExpression
+
+    } // END CompositeComponentRule
     
     
 }

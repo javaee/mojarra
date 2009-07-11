@@ -357,17 +357,17 @@ public class UIRepeat extends UINamingContainer {
 
     private boolean keepSaved(FacesContext context) {
 
-        for (String clientId : this.getChildState().keySet()) {
-            Iterator messages = context.getMessages(clientId);
-            while (messages.hasNext()) {
-                FacesMessage message = (FacesMessage) messages.next();
-                if (message.getSeverity().compareTo(FacesMessage.SEVERITY_ERROR) >= 0) {
-                    return (true);
-                }
-            }
-        }
-        return (isNestedInIterator());
+        return (hasErrorMessages(context) || isNestedInIterator());
+
     }
+
+    private boolean hasErrorMessages(FacesContext context) {
+
+        FacesMessage.Severity sev = context.getMaximumSeverity();
+        return (sev != null && (FacesMessage.SEVERITY_ERROR.compareTo(sev) >= 0));
+        
+    }
+
     
     private boolean isNestedInIterator() {
         UIComponent parent = this.getParent();
@@ -390,8 +390,7 @@ public class UIRepeat extends UINamingContainer {
         localModel.setRowIndex(index);
 
         if (this.index != -1 && this.var != null && localModel.isRowAvailable()) {
-            FacesContext faces = FacesContext.getCurrentInstance();
-            Map<String,Object> attrs = faces.getExternalContext().getRequestMap();
+            Map<String,Object> attrs = ctx.getExternalContext().getRequestMap();
             attrs.put(var, localModel.getRowData());
         }
 
@@ -761,13 +760,44 @@ public class UIRepeat extends UINamingContainer {
             this.resetDataModel();
             int prevIndex = this.index;
             FacesContext ctx = FacesContext.getCurrentInstance();
+            FacesEvent target = idxEvent.getTarget();
+            UIComponent source = target.getComponent();
+            UIComponent compositeParent = null;
             try {
-                this.setIndex(ctx, idxEvent.getIndex());
+                int idx = idxEvent.getIndex();
+                this.setIndex(ctx, idx);
+                int begin = this.getOffset();
+                int num = this.getSize();
+                int step = this.getStep();
+                int rowCount = getDataModel().getRowCount();
+                int end = Math
+                      .min(num > 0 ? begin + num - 1 : rowCount, rowCount);
+                this.updateIterationStatus(ctx,
+                                           new IterationStatus(false,
+                                                               idx + step
+                                                               >= end,
+                                                               idx,
+                                                               begin,
+                                                               end,
+                                                               step));
                 if (this.isIndexAvailable()) {
-                    FacesEvent target = idxEvent.getTarget();
-                    target.getComponent().broadcast(target);
+                    if (!UIComponent.isCompositeComponent(source)) {
+                        compositeParent = UIComponent
+                              .getCompositeComponentParent(source);
+                    }
+                    if (compositeParent != null) {
+                        compositeParent.pushComponentToEL(ctx, null);
+                    }
+                    source.pushComponentToEL(ctx, null);
+                    source.broadcast(target);
+
                 }
             } finally {
+                source.popComponentFromEL(ctx);
+                if (compositeParent != null) {
+                    compositeParent.popComponentFromEL(ctx);
+                }
+                this.updateIterationStatus(ctx, null);
                 this.setIndex(ctx, prevIndex);
             }
         } else {

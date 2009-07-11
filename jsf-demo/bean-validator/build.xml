@@ -85,6 +85,9 @@
             </classpath>
         </jsf.javac>
         <copy todir="${build}/${example}/WEB-INF/classes">
+            <fileset dir="src">
+                <include name="**/*.java"/>
+            </fileset>
             <fileset dir="src/resources">
                 <include name="**/*.properties"/>
             </fileset>

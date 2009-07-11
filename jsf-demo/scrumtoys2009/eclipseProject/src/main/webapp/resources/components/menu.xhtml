@@ -3,7 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:composite="http://java.sun.com/jsf/composite"
-      xmlns:menu="http://java.sun.com/jsf/composite/components"
+      xmlns:scrum="http://java.sun.com/jsf/composite/components"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <composite:interface>
@@ -12,109 +12,86 @@
 
     <composite:implementation>
 
+        <h:form id="menuSelectProjectForm">
+            <table width="990" class="menuTable" cellpadding="0" cellspacing="0" id="menuTable">
+                <tr>
+                    <scrum:menuItem>
+                        <ui:param name="label" value="#{i18n['menuitem.label.home']}"></ui:param>
+                        <ui:param name="destination" value="#{i18n['menuitem.path.home']}"></ui:param>
+                        <ui:param name="menuid" value="1"></ui:param>
+                    </scrum:menuItem>
+                    <scrum:menuItem>
+                        <ui:param name="label" value="#{i18n['menuitem.label.projects']}"></ui:param>
+                        <ui:param name="destination" value="#{i18n['menuitem.path.projects']}"></ui:param>
+                        <ui:param name="menuid" value="2"></ui:param>
+                    </scrum:menuItem>
+                    <scrum:menuItem>
+                        <ui:param name="label" value="#{i18n['menuitem.label.settings']}"></ui:param>
+                        <ui:param name="destination" value=""></ui:param>
+                        <ui:param name="menuid" value="4"></ui:param>
+                    </scrum:menuItem>
+                    <scrum:menuItem>
+                        <ui:param name="label" value="#{i18n['menuitem.label.jsf2']}"></ui:param>
+                        <ui:param name="destination" value=""></ui:param>
+                        <ui:param name="menuid" value="5"></ui:param>
+                    </scrum:menuItem>
 
-        <table width="990" class="menuTable" cellpadding="0" cellspacing="0" id="menuTable">
-
-            <tr>
-                <menu:menuItem>
-                    <ui:param name="label" value="#{i18n['menuitem.label.home']}"></ui:param>
-                    <ui:param name="destination" value="#{i18n['menuitem.path.home']}"></ui:param>
-                    <ui:param name="menuid" value="1"></ui:param>
-                </menu:menuItem>
-                <menu:menuItem>
-                    <ui:param name="label" value="#{i18n['menuitem.label.projects']}"></ui:param>
-                    <ui:param name="destination" value="#{i18n['menuitem.path.projects']}"></ui:param>
-                    <ui:param name="menuid" value="2"></ui:param>
-                </menu:menuItem>
-                <menu:menuItem>
-                    <ui:param name="label" value="#{i18n['menuitem.label.sprints']}"></ui:param>
-                    <ui:param name="destination" value="#{i18n['menuitem.path.sprints']}"></ui:param>
-                    <ui:param name="menuid" value="3"></ui:param>
-                </menu:menuItem>
-                <menu:menuItem>
-                    <ui:param name="label" value="#{i18n['menuitem.label.settings']}"></ui:param>
-                    <ui:param name="destination" value=""></ui:param>
-                    <ui:param name="menuid" value="4"></ui:param>
-                </menu:menuItem>
-                <menu:menuItem>
-                    <ui:param name="label" value="#{i18n['menuitem.label.jsf2']}"></ui:param>
-                    <ui:param name="destination" value=""></ui:param>
-                    <ui:param name="menuid" value="5"></ui:param>
-                </menu:menuItem>
-
-                <td>
-                    <h:form id="menuSelectProjectForm">
+                    <td>
                         <h:outputLabel for="prjCombo" value="#{i18n['home.project.combo.label']}" styleClass="formLabel" />
-                        <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput"
-                                         onchange="jsf.ajax.request(this, event, {execute: 'prjCombo', render: 'prjCombo, bodyContent'});">
-                            <f:selectItems value="#{projectManager.projectItems}" />
+                        <h:selectOneMenu id="prjCombo" value="#{projectManager.currentProject}" styleClass="formInput">
+                            <f:selectItems value="#{projectManager.projectList}" var="project" itemLabel="#{project.name}" itemValue="#{project}"/>
                         </h:selectOneMenu>
-                    </h:form>
-                </td>
-            </tr>
-            <tr>
-                <menu:submenu>
-                    <ui:param name="menuid" value="1"></ui:param>
-                </menu:submenu>
+                    </td>
+                    <td>
+                        <h:commandButton value="Change Project" action="#{projectManager.viewSprints}"></h:commandButton>
+                    </td>
+                </tr>
+                <tr>
+                    <scrum:submenu>
+                        <ui:param name="menuid" value="1"></ui:param>
+                    </scrum:submenu>
 
-                <menu:submenu>
-                    <ui:param name="menuid" value="2"></ui:param>
-                    <menu:submenuItem>
-                        <ui:param name="label" value="#{i18n['menuitem.label.createProject']}"></ui:param>
-                        <ui:param name="destination" value="#{i18n['menuitem.path.createProject']}"></ui:param>
-                    </menu:submenuItem>
-                    <menu:submenuItem>
-                        <ui:param name="label" value="#{i18n['menuitem.label.showProjects']}"></ui:param>
-                        <ui:param name="destination" value="#{i18n['menuitem.path.showProjects']}"></ui:param>
-                    </menu:submenuItem>
+                    <scrum:submenu>
+                        <ui:param name="menuid" value="2"></ui:param>
+                        <scrum:submenuItem>
+                            <ui:param name="label" value="#{i18n['menuitem.label.showProjects']}"></ui:param>
+                            <ui:param name="destination" value="#{i18n['menuitem.path.showProjects']}"></ui:param>
+                        </scrum:submenuItem>
 
-                </menu:submenu>
+                    </scrum:submenu>
+                    <scrum:submenu>
+                        <ui:param name="menuid" value="4"></ui:param>
 
-                <menu:submenu>
-                    <ui:param name="menuid" value="3"></ui:param>
-
-                    <menu:submenuItem>
-                        <ui:param name="label" value="#{i18n['menuitem.label.newsprint']}"></ui:param>
-                        <ui:param name="destination" value="#{i18n['menuitem.path.newsprint']}"></ui:param>
-                    </menu:submenuItem>
-                    <menu:submenuItem>
-                        <ui:param name="label" value="#{i18n['menuitem.label.sprintslist']}"></ui:param>
-                        <ui:param name="destination" value="#{i18n['menuitem.path.sprintslist']}"></ui:param>
-                    </menu:submenuItem>
-                </menu:submenu>
-                <menu:submenu>
-                    <ui:param name="menuid" value="4"></ui:param>
-
-                    <menu:submenuItem>
-                        <ui:param name="label" value="#{i18n['menuitem.label.changeskin']}"></ui:param>
-                        <ui:param name="destination" value="#{i18n['menuitem.path.changeskin']}"></ui:param>
-                    </menu:submenuItem>
-                </menu:submenu>
-                <menu:submenu>
-                    <ui:param name="menuid" value="5"></ui:param>
-                    <menu:submenuItem>
-                        <ui:param name="label" value="#{i18n['menuitem.label.about']}"></ui:param>
-                        <ui:param name="destination" value="#{i18n['menuitem.path.about']}"></ui:param>
-                    </menu:submenuItem>
-                    <menu:submenuItem>
-                        <ui:param name="label" value="#{i18n['menuitem.label.jsr314']}"></ui:param>
-                        <ui:param name="destination" value="#{i18n['menuitem.path.jsr314']}"></ui:param>
-                    </menu:submenuItem>
-                    <menu:submenuItem>
-                        <ui:param name="label" value="#{i18n['menuitem.label.irc']}"></ui:param>
-                        <ui:param name="destination" value="#{i18n['menuitem.path.irc']}"></ui:param>
-                    </menu:submenuItem>
-                    <menu:submenuItem>
-                        <ui:param name="label" value="#{i18n['menuitem.label.documentation']}"></ui:param>
-                        <ui:param name="destination" value="#{i18n['menuitem.path.documentation']}"></ui:param>
-                    </menu:submenuItem>
-                </menu:submenu>
-                <menu:submenu>
-                    <ui:param name="menuid" value="6"></ui:param>
-                </menu:submenu>
-            </tr>
-        </table>
-        <h:graphicImage  value="#{image}"></h:graphicImage><br/>
-
+                        <scrum:submenuItem>
+                            <ui:param name="label" value="#{i18n['menuitem.label.changeskin']}"></ui:param>
+                            <ui:param name="destination" value="#{i18n['menuitem.path.changeskin']}"></ui:param>
+                        </scrum:submenuItem>
+                    </scrum:submenu>
+                    <scrum:submenu>
+                        <ui:param name="menuid" value="5"></ui:param>
+                        <scrum:submenuItem>
+                            <ui:param name="label" value="#{i18n['menuitem.label.about']}"></ui:param>
+                            <ui:param name="destination" value="#{i18n['menuitem.path.about']}"></ui:param>
+                        </scrum:submenuItem>
+                        <scrum:submenuItem>
+                            <ui:param name="label" value="#{i18n['menuitem.label.jsr314']}"></ui:param>
+                            <ui:param name="destination" value="#{i18n['menuitem.path.jsr314']}"></ui:param>
+                        </scrum:submenuItem>
+                        <scrum:submenuItem>
+                            <ui:param name="label" value="#{i18n['menuitem.label.irc']}"></ui:param>
+                            <ui:param name="destination" value="#{i18n['menuitem.path.irc']}"></ui:param>
+                        </scrum:submenuItem>
+                        <scrum:submenuItem>
+                            <ui:param name="label" value="#{i18n['menuitem.label.documentation']}"></ui:param>
+                            <ui:param name="destination" value="#{i18n['menuitem.path.documentation']}"></ui:param>
+                        </scrum:submenuItem>
+                    </scrum:submenu>
+                    <scrum:submenu>
+                        <ui:param name="menuid" value="6"></ui:param>
+                    </scrum:submenu>
+                </tr>
+            </table>
+            <h:graphicImage  value="#{image}"></h:graphicImage><br/>
+        </h:form>
     </composite:implementation>
 </html>

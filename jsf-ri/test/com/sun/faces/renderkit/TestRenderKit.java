@@ -49,23 +49,47 @@ import com.sun.faces.renderkit.html_basic.TextRenderer;
 import com.sun.faces.renderkit.html_basic.HtmlBasicInputRenderer;
 import com.sun.faces.renderkit.html_basic.HiddenRenderer;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.ConfigManager;
+import com.sun.faces.config.DbfFactory;
+import com.sun.faces.config.processor.ConfigProcessor;
+import com.sun.faces.config.processor.FactoryConfigProcessor;
+import com.sun.faces.config.processor.LifecycleConfigProcessor;
+import com.sun.faces.config.processor.ApplicationConfigProcessor;
+import com.sun.faces.config.processor.ComponentConfigProcessor;
+import com.sun.faces.config.processor.ConverterConfigProcessor;
+import com.sun.faces.config.processor.ValidatorConfigProcessor;
+import com.sun.faces.config.processor.ManagedBeanConfigProcessor;
+import com.sun.faces.config.processor.RenderKitConfigProcessor;
+import com.sun.faces.config.processor.NavigationConfigProcessor;
+import com.sun.faces.config.processor.BehaviorConfigProcessor;
+import com.sun.faces.util.Util;
 import org.apache.cactus.ServletTestCase;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
+import javax.faces.render.ClientBehaviorRenderer;
+import javax.faces.render.ResponseStateManager;
+import javax.faces.render.RenderKitWrapper;
 
 import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
+import java.io.OutputStream;
 import java.util.Iterator;
 
 import org.apache.cactus.WebRequest;
+import org.w3c.dom.Document;
 
 /**
  * <B>TestRenderKit</B> is a class ...
@@ -448,6 +472,59 @@ public class TestRenderKit extends ServletFacesTestCase {
         writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
         assertEquals(writer.getContentType(), "application/xhtml+xml");
         webConfig.overrideContextInitParameter(WebConfiguration.BooleanWebContextInitParameter.PreferXHTMLContentType, true);
+    }
+
+
+    public void testRenderKitDecoration() throws Exception {
+
+        FacesContext ctx = getFacesContext();
+        ServletContext servletContext = (ServletContext) ctx.getExternalContext().getContext();
+        FactoryFinder.releaseFactories();
+        servletContext.removeAttribute("com.sun.faces.ApplicationAssociate");
+        ConfigManager config = ConfigManager.getInstance();
+
+        DocumentBuilderFactory factory = DbfFactory.getFactory();
+        factory.setValidating(false);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        ClassLoader loader = Util.getCurrentLoader(this);
+        Document defaultDoc = builder.parse(loader.getResourceAsStream("com/sun/faces/jsf-ri-runtime.xml"));
+        Document renderKitDoc = builder.parse(servletContext.getResourceAsStream("/WEB-INF/renderkit1.xml"));
+
+        ConfigProcessor[] configProcessors = {
+             new FactoryConfigProcessor(),
+             new ApplicationConfigProcessor(),
+             new RenderKitConfigProcessor(),
+        };
+        for (int i = 0; i < configProcessors.length; i++) {
+            ConfigProcessor p = configProcessors[i];
+            if ((i + 1) < configProcessors.length) {
+                p.setNext(configProcessors[i + 1]);
+            }
+        }
+
+        configProcessors[0].process(new Document[] { defaultDoc, renderKitDoc });
+
+        RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit rk = rkf.getRenderKit(getFacesContext(), RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        assertEquals(rk.getClass().getName(), DecoratingRenderKit.class.getName());
+        assertEquals(RenderKitImpl.class.getName(), ((RenderKitWrapper) rk).getWrapped().getClass().getName());
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    public static class DecoratingRenderKit extends RenderKitWrapper {
+
+        private RenderKit delegate;
+
+        public DecoratingRenderKit(RenderKit delegate) {
+            this.delegate = delegate;
+        }
+
+        public RenderKit getWrapped() {
+            return delegate;
+        }
     }
 
 

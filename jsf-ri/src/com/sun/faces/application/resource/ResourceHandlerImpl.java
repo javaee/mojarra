@@ -130,10 +130,19 @@ public class ResourceHandlerImpl extends ResourceHandler {
                                    String contentType) {
 
         Util.notNull("resourceName", resourceName);
+        FacesContext ctx = FacesContext.getCurrentInstance();
+
+        // Specialcasing to serve compressed jsf.js if not in Development Stage
+        if ("javax.faces".equals(libraryName) && "jsf.js".equals(resourceName)) {
+            if (ctx.isProjectStage(ProjectStage.Development)) {
+                resourceName = "jsf-uncompressed.js";
+            } else {
+                resourceName = "jsf-compressed.js";
+            }
+        }
         String ctype = ((contentType != null)
                         ? contentType
                         : getContentType(resourceName));
-        FacesContext ctx = FacesContext.getCurrentInstance();
         ResourceInfo info = manager.findResource(libraryName,
                                                  resourceName,
                                                  ctype,
@@ -150,6 +159,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
     @Override
     public boolean libraryExists(String libraryName) {
 
+        if (libraryName.contains("../")) {
+            return false;
+        }
         FacesContext context = FacesContext.getCurrentInstance();
         LibraryInfo info = manager.findLibrary(libraryName, null, context);
         return (info != null);

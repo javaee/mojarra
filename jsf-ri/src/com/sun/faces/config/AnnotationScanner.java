@@ -73,6 +73,7 @@ import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import com.sun.faces.spi.AnnotationProvider;
 
 /**
  * This class is responsible for scanning the class file bytes of
@@ -89,7 +90,7 @@ import com.sun.faces.util.Util;
  *  <li>javax.faces.event.NamedEvent</li>
  * </ul>
  */
-public class AnnotationScanner {
+public class AnnotationScanner extends AnnotationProvider {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
@@ -130,7 +131,6 @@ public class AnnotationScanner {
         FACES_ANNOTATION_TYPE = Collections.unmodifiableSet(annotationInstances);
     }
 
-    private ServletContext sc;
     private ClassFile classFileScanner;
 
 
@@ -145,7 +145,7 @@ public class AnnotationScanner {
      */
     public AnnotationScanner(ServletContext sc) {
 
-        this.sc = sc;
+        super(sc);
         classFileScanner = new ClassFile();
 
     }

@@ -50,10 +50,7 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.behavior.ClientBehavior;
-import javax.faces.component.behavior.ClientBehaviorContext;
-import javax.faces.component.behavior.ClientBehaviorHint;
-import javax.faces.component.behavior.ClientBehaviorHolder;
+import javax.faces.component.behavior.*;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ExternalContext;
@@ -352,21 +349,29 @@ public class RenderKitUtils {
     // Renders the onchange handler for input components.  Handles
     // chaining togeter the user-provided onchange handler with
     // any Behavior scripts.
-    public static void renderOnchange(FacesContext context, UIComponent component)
+    public static void renderOnchange(FacesContext context, UIComponent component, boolean incExec)
         throws IOException {
 
         final String handlerName = "onchange";
         final String behaviorEventName = "valueChange";
         final Object userHandler = component.getAttributes().get(handlerName);
 
+        List<ClientBehaviorContext.Parameter> params;
+        if (!incExec) {
+            params = Collections.emptyList();
+        } else {
+            params = new LinkedList<ClientBehaviorContext.Parameter>();
+            params.add(new ClientBehaviorContext.Parameter("incExec",true));
+        }
         renderHandler(context,
                       component,
-                      Collections.<ClientBehaviorContext.Parameter>emptyList(),
+                      params,
                       handlerName,
                       userHandler,
                       behaviorEventName,
                       null,
-                      false);
+                      false,
+                      incExec);
     }
 
     // Renders the onclick handler for command buttons.  Handles
@@ -390,7 +395,8 @@ public class RenderKitUtils {
                       userHandler,
                       behaviorEventName,
                       submitTarget,
-                      needsSubmit);
+                      needsSubmit,
+                      false);
     }
 
     public static String prefixAttribute(final String attrName,
@@ -575,6 +581,7 @@ public class RenderKitUtils {
                                       value,
                                       behaviorEventName,
                                       null,
+                                      false,
                                       false);
 
                         renderedBehavior = true;
@@ -608,6 +615,7 @@ public class RenderKitUtils {
                                       null,
                                       behaviorEventName,
                                       null,
+                                      false,
                                       false);
                 }
             }
@@ -662,6 +670,7 @@ public class RenderKitUtils {
                               value,
                               events[0],
                               null,
+                              false,
                               false);
             }
         }
@@ -950,7 +959,7 @@ public class RenderKitUtils {
 
         final String name = "jsf.js";
         final String library = "javax.faces";
-        
+
         if (hasResourceBeenInstalled(context, name, library)) {
             setScriptAsRendered(context);
             return;
@@ -976,6 +985,15 @@ public class RenderKitUtils {
     public static boolean hasResourceBeenInstalled(FacesContext ctx,
                                                    String name,
                                                    String library) {
+
+        //  Necessary to deal with jsf.js compression
+        if ("javax.faces".equals(library) && "jsf.js".equals(name)) {
+            if (ctx.isProjectStage(ProjectStage.Development)) {
+                name= "jsf-uncompressed.js";
+            } else {
+                name = "jsf-compressed.js";
+            }
+        }
 
         UIViewRoot viewRoot = ctx.getViewRoot();
         ListIterator iter = (viewRoot.getComponentResources(ctx, "head")).listIterator();
@@ -1038,6 +1056,7 @@ public class RenderKitUtils {
             }
         } else {
             Iterator<String> clientIds = ctx.getClientIdsWithMessages();
+            int messageCount = 0;
             if (clientIds.hasNext()) {
                 //Display each message possibly not displayed.
                 StringBuilder builder = new StringBuilder();
@@ -1050,6 +1069,7 @@ public class RenderKitUtils {
                         if (message.isRendered()) {
                             continue;
                         }
+                        messageCount++;
                         builder.append("\n");
                         builder.append("sourceId=").append(clientId);
                         builder.append("[severity=(")
@@ -1060,7 +1080,9 @@ public class RenderKitUtils {
                               .append(message.getDetail()).append(")]");
                     }
                 }
-                LOGGER.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
+                if (messageCount > 0) {
+                    LOGGER.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
+                }
             }
         }
 
@@ -1088,8 +1110,9 @@ public class RenderKitUtils {
         } else {
             LOGGER.log(Level.WARNING,
                        "Unable to generate Facelets error page as the response has already been committed.");
+            LOGGER.log(Level.SEVERE, fe.toString(), fe);
         }
-        
+
     }
 
     // Check the request parameters to see whether an action event has
@@ -1175,6 +1198,56 @@ public class RenderKitUtils {
         RequestStateManager.set(context,
                                 RequestStateManager.SCRIPT_STATE,
                                 Boolean.TRUE);
+
+    }
+
+
+    /**
+     * <p>
+     * Determine the path value of an image value for a component such as
+     * UIGraphic or UICommand.
+     * </p>
+     *
+     * @param context the {@link FacesContext} for the current request.
+     * @param component the component to obtain the image information from
+     * @param attrName the attribute name that needs to be queried if the
+     *  name and library attributes are not specified
+     *
+     * @return the encoded path to the image source
+     */
+    public static String getImageSource(FacesContext context, UIComponent component, String attrName) {
+
+        String resName = (String) component.getAttributes().get("name");
+        if (resName != null) {
+            String libName = (String) component.getAttributes().get("library");
+            ResourceHandler handler = context.getApplication().getResourceHandler();
+            Resource res = handler.createResource(resName, libName);
+            if (res == null) {
+                if (context.isProjectStage(ProjectStage.Development)) {
+                    String msg = "Unable to find resource " + resName;
+                    context.addMessage(component.getClientId(context),
+                                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                        msg,
+                                                        msg));
+                }
+                return "RES_NOT_FOUND";
+            } else {
+                return res.getRequestPath();
+            }
+        } else {
+            
+            String value = (String) component.getAttributes().get(attrName);
+            if (value == null || value.length() == 0) {
+                return "";
+            }
+            if (value.contains(ResourceHandler.RESOURCE_IDENTIFIER)) {
+                return value;
+            } else {
+                value = context.getApplication().getViewHandler().
+                      getResourceURL(context, value);
+                return (context.getExternalContext().encodeResourceURL(value));
+            }
+        }
 
     }
 
@@ -1538,7 +1611,8 @@ public class RenderKitUtils {
                                       Object handlerValue,
                                       String behaviorEventName,
                                       String submitTarget,
-                                      boolean needsSubmit)
+                                      boolean needsSubmit,
+                                      boolean includeExec)
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -1556,7 +1630,7 @@ public class RenderKitUtils {
             params = Collections.emptyList();
         }
         String handler = null;
-        switch (getHandlerType(behaviors, params, userHandler, needsSubmit)) {
+        switch (getHandlerType(behaviors, params, userHandler, needsSubmit, includeExec)) {
         
             case USER_HANDLER_ONLY:
                 handler = userHandler;
@@ -1604,12 +1678,15 @@ public class RenderKitUtils {
     private static HandlerType getHandlerType(List<ClientBehavior> behaviors,
                                               Collection<ClientBehaviorContext.Parameter> params,
                                               String userHandler,
-                                              boolean needsSubmit) {
+                                              boolean needsSubmit,
+                                              boolean includeExec) {
 
         if ((behaviors == null) || (behaviors.isEmpty())) {
 
-            // No behaviors and no params means user handler only
-            if (params.isEmpty() && !needsSubmit)
+            // No behaviors and no params means user handler only,
+            // if we have a param only because of includeExec while having
+            // no behaviors, also, user handler only
+            if ((params.isEmpty() && !needsSubmit) || includeExec)
                 return HandlerType.USER_HANDLER_ONLY;
 
             // We've got params.  If we've also got a user handler, we need 

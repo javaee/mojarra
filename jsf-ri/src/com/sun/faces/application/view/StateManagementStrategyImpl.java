@@ -57,6 +57,7 @@ import com.sun.faces.util.MessageUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.io.IOException;
 import javax.faces.application.StateManager;
 import javax.faces.component.ContextCallback;
@@ -196,7 +197,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             context.setViewRoot(viewRoot);
             context.setProcessingEvents(true);
             pdl.buildView(context, viewRoot);
-            context.setProcessingEvents(false);
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         }
@@ -298,7 +298,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         } else {
             viewRoot = null;
         }
-
+        context.setProcessingEvents(false);
         return viewRoot;
 
     }
@@ -423,21 +423,25 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         Map<String,ComponentStruct> result;
         //noinspection unchecked
         if ((null == (result = (Map<String,ComponentStruct>) context.getAttributes().get(CLIENTIDS_TO_ADD_NAME))) && create) {
-            result = new HashMap<String,ComponentStruct>();
+            result = new LinkedHashMap<String,ComponentStruct>();
             context.getAttributes().put(CLIENTIDS_TO_ADD_NAME, result);
         }
         return result;
     }
 
 
-    private void handleRemoveEvent(PreRemoveFromViewEvent event) {
-        FacesContext context = FacesContext.getCurrentInstance();
+    private void handleRemoveEvent(FacesContext context, PreRemoveFromViewEvent event) {
         UIComponent removed = event.getComponent();
         if (removed.isTransient()) {
             return;
         }
         List<String> idsToRemove = getClientIdsToRemove(context, true);
-        idsToRemove.add(event.getComponent().getClientId(context));
+        Map<String,ComponentStruct> toAdd = getClientIdsToAdd(context, false);
+        String clientId = event.getComponent().getClientId(context);
+        if (toAdd != null && toAdd.containsKey(clientId)) {
+            toAdd.remove(clientId);
+        }
+        idsToRemove.add(clientId);
     }
 
 
@@ -464,6 +468,10 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             }
         } else {
             toAdd.indexOfChildInParent = parent.getChildren().indexOf(added);
+        }
+        List<String> toRemove = getClientIdsToRemove(context, false);
+        if (toRemove != null && toRemove.contains(toAdd.clientId)) {
+            toRemove.remove(toAdd.clientId);
         }
         added.getAttributes().put(DYNAMIC_COMPONENT, Boolean.TRUE);
         idsToAdd.put(toAdd.clientId, toAdd);
@@ -504,7 +512,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             FacesContext context = FacesContext.getCurrentInstance();
             if (event instanceof PreRemoveFromViewEvent) {
                 if (!owner.isIgnoreRemoveEvent(context)) {
-                    owner.handleRemoveEvent((PreRemoveFromViewEvent) event);
+                    owner.handleRemoveEvent(context, (PreRemoveFromViewEvent) event);
                 }
             } else {
                 owner.handleAddEvent((PostAddToViewEvent) event);

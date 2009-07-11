@@ -19,25 +19,24 @@
         </description>
 		<from-view-id>*</from-view-id>
 		<navigation-case>
-			<description>
-				see menu
-            </description>
-			<from-outcome>home</from-outcome>
-			<to-view-id>/home.xhtml</to-view-id>
+			<description>Go to Edit Project Page</description>
+			<from-outcome>editProject</from-outcome>
+			<to-view-id>/project/edit.jsf</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<description>
-				see dashboard
-            </description>
-			<from-outcome>dashboard</from-outcome>
-			<to-view-id>/dashboard.xhtml</to-view-id>
+			<description>Go to Select Projects Page</description>
+			<from-outcome>showProjects</from-outcome>
+			<to-view-id>/project/show.jsf</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<description>
-				see all in one
-            </description>
-			<from-outcome>allInOne</from-outcome>
-			<to-view-id>/allInOne.xhtml</to-view-id>
+			<description>Go to Edit Sprint Page</description>
+			<from-outcome>editSprint</from-outcome>
+			<to-view-id>/sprint/edit.jsf</to-view-id>
+		</navigation-case>
+        <navigation-case>
+			<description>Go to Dashboard</description>
+			<from-outcome>showDashboard</from-outcome>
+			<to-view-id>/dashboard/show.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
@@ -45,7 +44,7 @@
 		<description>
 			dashboard navigation rules
         </description>
-		<from-view-id>/dashboard/show.xhtml</from-view-id>
+		<from-view-id>dashboard/show.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>showSprints</from-outcome>
 			<to-view-id>/sprint/show.xhtml</to-view-id>
@@ -74,7 +73,7 @@
 		<description>
 			sprint navigation rules
         </description>
-		<from-view-id>/sprint/show.xhtml</from-view-id>
+		<from-view-id>sprint/show.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>showStories</from-outcome>
 			<to-view-id>/story/show.xhtml</to-view-id>
@@ -89,7 +88,7 @@
 		<description>
 			story navigation rules
         </description>
-		<from-view-id>/story/show.xhtml</from-view-id>
+		<from-view-id>story/show.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>showTasks</from-outcome>
 			<to-view-id>/task/show.xhtml</to-view-id>
@@ -104,7 +103,7 @@
 		<description>
 			task navigation rules
         </description>
-		<from-view-id>/task/show.xhtml</from-view-id>
+		<from-view-id>task/show.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>showStories</from-outcome>
 			<to-view-id>/story/show.xhtml</to-view-id>

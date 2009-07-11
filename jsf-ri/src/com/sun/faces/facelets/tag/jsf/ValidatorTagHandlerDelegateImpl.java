@@ -39,6 +39,7 @@ package com.sun.faces.facelets.tag.jsf;
 import com.sun.faces.component.validator.ComponentValidators;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 import javax.el.ValueExpression;
 import javax.faces.component.EditableValueHolder;
@@ -48,6 +49,8 @@ import javax.faces.validator.Validator;
 import javax.faces.view.AttachedObjectHandler;
 import javax.faces.view.facelets.*;
 import java.io.IOException;
+import java.util.Set;
+import java.util.HashSet;
 
 public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implements AttachedObjectHandler {
 
@@ -97,12 +100,22 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
     // -------------------------------------- Methods from AttachedObjectHandler
 
 
+    @SuppressWarnings({"unchecked"})
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
 
         FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
         EditableValueHolder evh = (EditableValueHolder) parent;
         if (owner.isDisabled(ctx)) {
-            ComponentValidators.addDefaultValidatorsToComponent(context, evh);
+            Set<String> disabledIds = (Set<String>)
+                  RequestStateManager.get(context, RequestStateManager.DISABLED_VALIDATORS);
+            if (disabledIds == null) {
+                disabledIds = new HashSet<String>(3);
+                RequestStateManager.set(context,
+                                        RequestStateManager.DISABLED_VALIDATORS,
+                                        disabledIds);
+            }
+            disabledIds.add(owner.getValidatorId(ctx));
+            return;
         }
 
         ValueExpression ve = null;

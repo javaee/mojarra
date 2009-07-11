@@ -44,13 +44,13 @@
 </h:head>
 <h:body id="body">
     <h:form id="form">
-        <h:outputScript name="simple.js" target="#{param.location}"/>
+        <h:outputScript id="js1" name="simple.js" target="#{param.location}"/>
         <!-- duplicate added to ensure that duplicates aren't rendered twice -->
-        <h:outputScript name="simple.js" target="#{param.location}"/>
+        <h:outputScript id="js2" name="simple.js" target="#{param.location}"/>
         <!-- target should have no impact on outputStylesheet -->
-        <h:outputStylesheet name="simple.css" target="#{param.location}"/>
+        <h:outputStylesheet id="css1" name="simple.css" target="#{param.location}"/>
         <!-- duplicate added to ensure that duplicates aren't rendered twice -->
-        <h:outputStylesheet name="simple.css" target="#{param.location}"/>
+        <h:outputStylesheet id="css2" name="simple.css" target="#{param.location}"/>
     </h:form>
 </h:body>
 </html>
