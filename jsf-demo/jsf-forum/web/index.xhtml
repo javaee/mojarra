@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>JSF Forum</title>
+</h:head>
+<h:body bgcolor="white">
+    <h:form id="helloForm">
+
+        <h:commandLink value="initialize" actionListener="#{forum.init}"/>
+
+        <h:dataTable id="table" value="#{forum.topics}" var="topic" border="2" rules="all">
+            <f:facet name="header">
+                <h:outputText id="head" value="JSF Forum" />
+            </f:facet>
+
+            <h:column>
+                <f:facet name="header">
+                    Title
+                </f:facet>
+                <h:link outcome="topic" value="#{topic.title}">
+                    <f:param name="topicId" value="#{topic.id}"/>
+                </h:link>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    Subject
+                </f:facet>
+                <h:outputText id="subject" value="#{topic.subject}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    Threads
+                </f:facet>
+                <h:outputText id="threads" value="#{topic.sizeThreads}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    Messages
+                </f:facet>
+                <h:outputText id="messages" value="#{topic.sizeMessages}"/>
+            </h:column>
+
+        </h:dataTable>
+
+        <h:commandLink action="addTopic" value="Add a Topic">
+            <f:param name="addTopic" value="true"/>
+        </h:commandLink>
+
+    </h:form>
+</h:body>
+</html>
