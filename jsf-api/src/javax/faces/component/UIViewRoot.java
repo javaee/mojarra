@@ -840,14 +840,12 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * {@link UIComponentBase#processRestoreState} from within a
      * <code>try</code> block.  The <code>try</code> block must have a
      * <code>finally</code> block that ensures that no {@link
-     * FacesEvent}s remain in the event queue, that any
-     * <code>PhaseListener</code>s in {@link #getPhaseListeners} are
-     * invoked as appropriate, and that the <code>this.{@link
-     * UIComponent#visitTree} is called, passing a {@link
-     * ContextCallback} that takes the following action: call the {@link
-     * UIComponent#processEvent} method of the current component. The
-     * argument <code>event</code> must be an instance of {@link
-     * javax.faces.event.PostRestoreStateEvent} whose
+     * FacesEvent}s remain in the event queue, and that the
+     * <code>this.{@link UIComponent#visitTree} is called, passing a
+     * {@link ContextCallback} that takes the following action: call the
+     * {@link UIComponent#processEvent} method of the current
+     * component. The argument <code>event</code> must be an instance of
+     * {@link javax.faces.event.PostRestoreStateEvent} whose
      * <code>component</code> property is the current component in the
      * traversal.</code></p>
      * @param context the <code>FacesContext</code> for this requets
