@@ -36,22 +36,18 @@
 
 package jsf2.demo.scrum.model.entities;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import javax.validation.Constraint;
+import java.lang.annotation.*;
 
 @Documented
 @Constraint(validatedBy = SprintNameUniquenessConstraintValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD })
+@Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SprintNameUniquenessConstraint {
-    
-	String message() default "{sprint.form.label.name.unique}";
 
-	Class<?>[] groups() default {};
-    
+    String message() default "{sprint.form.label.name.unique}";
+
+    Class<?>[] groups() default {};
+
 
 }

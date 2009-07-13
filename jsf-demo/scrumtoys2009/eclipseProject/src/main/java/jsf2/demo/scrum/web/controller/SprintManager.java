@@ -1,11 +1,8 @@
 package jsf2.demo.scrum.web.controller;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import jsf2.demo.scrum.model.entities.Project;
+import jsf2.demo.scrum.model.entities.Sprint;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -18,11 +15,14 @@ import javax.faces.model.ListDataModel;
 import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import jsf2.demo.scrum.model.entities.Project;
-import jsf2.demo.scrum.model.entities.Sprint;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Dr. Spock (spock at dev.java.net)
  */
 @ManagedBean(name = "sprintManager")
@@ -38,7 +38,7 @@ public class SprintManager extends AbstractManager implements Serializable {
     private Project currentProject;
 
     @PostConstruct
-    public void construct() {        
+    public void construct() {
         init();
     }
 
@@ -126,35 +126,35 @@ public class SprintManager extends AbstractManager implements Serializable {
         }
         return "show";
     }
-    
+
     /*
-     * This method can be pointed to by a validator methodExpression, such as:
-     * 
-     * <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true"
-     *   requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLength="30" size="30"
-     *   validator="#{sprintManager.checkUniqueSprintName}" />
-     */
+    * This method can be pointed to by a validator methodExpression, such as:
+    *
+    * <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true"
+    *   requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLength="30" size="30"
+    *   validator="#{sprintManager.checkUniqueSprintName}" />
+    */
 
     public void checkUniqueSprintNameFacesValidatorMethod(FacesContext context, UIComponent component, Object newValue) {
-        
+
         final String newName = (String) newValue;
         String message = checkUniqueSprintNameApplicationValidatorMethod(newName);
         if (null != message) {
             throw new ValidatorException(getFacesMessageForKey("sprint.form.label.name.unique"));
         }
     }
-    
-    
+
+
     /*
-     * This method is called by the JSR-303 SprintNameUniquenessConstraintValidator.
-     * If it returns non-null, the result must be interpreted as the localized
-     * validation message.
-     * 
-     */
-    
+    * This method is called by the JSR-303 SprintNameUniquenessConstraintValidator.
+    * If it returns non-null, the result must be interpreted as the localized
+    * validation message.
+    *
+    */
+
     public String checkUniqueSprintNameApplicationValidatorMethod(String newValue) {
         String message = null;
-        
+
         final String newName = (String) newValue;
         try {
             Long count = doInTransaction(new PersistenceAction<Long>() {
@@ -175,7 +175,7 @@ public class SprintManager extends AbstractManager implements Serializable {
         } catch (ManagerException ex) {
             Logger.getLogger(SprintManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return message;
     }
 
@@ -198,7 +198,7 @@ public class SprintManager extends AbstractManager implements Serializable {
     }
 
     public void setCurrentSprint(Sprint currentSprint) {
-        this.currentSprint = currentSprint;        
+        this.currentSprint = currentSprint;
     }
 
     public DataModel<Sprint> getSprints() {
@@ -213,15 +213,16 @@ public class SprintManager extends AbstractManager implements Serializable {
     public ProjectManager getProjectManager() {
         return projectManager;
     }
+
     public void setProjectManager(ProjectManager projectManager) {
         this.projectManager = projectManager;
     }
 
-    public Project getProject(){
+    public Project getProject() {
         Project pmCurrentProject = projectManager.getCurrentProject();
         // Verify if the currentProject is out of date
         // If there is a new CurrentProject we need to update sprintList and set currentSprint to null and tell user he/she needs to select a Sprint
-        if (pmCurrentProject != currentProject){
+        if (pmCurrentProject != currentProject) {
             this.setCurrentSprint(null);
             this.sprintList = pmCurrentProject.getSprints();
             this.sprints = new ListDataModel<Sprint>(sprintList);
@@ -230,9 +231,9 @@ public class SprintManager extends AbstractManager implements Serializable {
         return currentProject;
     }
 
-    public void setProject(Project project){
+    public void setProject(Project project) {
         projectManager.setCurrentProject(project);
     }
 
-   
+
 }

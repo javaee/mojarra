@@ -1,16 +1,16 @@
 package jsf2.demo.scrum.web.helper;
 
-import java.util.HashMap;
-import java.util.Map;
+import jsf2.demo.scrum.model.entities.Project;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
-import jsf2.demo.scrum.model.entities.Project;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- *
  * @author Dr. Spock (spock at dev.java.net)
  */
 @FacesConverter(forClass = Project.class)

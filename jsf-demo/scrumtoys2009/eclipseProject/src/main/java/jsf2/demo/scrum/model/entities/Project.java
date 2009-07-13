@@ -1,30 +1,21 @@
 package jsf2.demo.scrum.model.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
- *
  * @author Dr. Spock (spock at dev.java.net)
  */
 @Entity
 @Table(name = "projects")
 @NamedQueries({@NamedQuery(name = "project.getAll", query = "select p from Project as p"),
-    @NamedQuery(name = "project.getAllOpen", query = "select p from Project as p where p.endDate is null"),
-    @NamedQuery(name = "project.countByName", query = "select count(p) from Project as p where p.name = :name and not(p = :currentProject)"),
-    @NamedQuery(name = "project.new.countByName", query = "select count(p) from Project as p where p.name = :name")})
+        @NamedQuery(name = "project.getAllOpen", query = "select p from Project as p where p.endDate is null"),
+        @NamedQuery(name = "project.countByName", query = "select count(p) from Project as p where p.name = :name and not(p = :currentProject)"),
+        @NamedQuery(name = "project.new.countByName", query = "select count(p) from Project as p where p.name = :name")})
 public class Project extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -1,28 +1,16 @@
 package jsf2.demo.scrum.model.entities;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
 
 /**
- *
  * @author Dr. Spock (spock at dev.java.net)
  */
 @Entity
 @Table(name = "tasks", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "story_id"}))
 @NamedQueries({@NamedQuery(name = "task.countByNameAndStory", query = "select count(t) from Task as t where t.name = :name and t.story = :story and not(t = :currentTask)"),
-    @NamedQuery(name = "task.new.countByNameAndStory", query = "select count(t) from Task as t where t.name = :name and t.story = :story")})
+        @NamedQuery(name = "task.new.countByNameAndStory", query = "select count(t) from Task as t where t.name = :name and t.story = :story")})
 public class Task extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,7 +19,7 @@ public class Task extends AbstractEntity implements Serializable {
     private String name;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "start_date")  
+    @Column(name = "start_date")
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
@@ -71,14 +59,14 @@ public class Task extends AbstractEntity implements Serializable {
 
     }
 
-    protected void changeTaskStatus(Date startDate , Date endDate){
-        if (endDate !=null){
+    protected void changeTaskStatus(Date startDate, Date endDate) {
+        if (endDate != null) {
             this.setStatus(status.DONE);
         }
-        if (endDate ==null && this.startDate!= null){
+        if (endDate == null && this.startDate != null) {
             this.setStatus(status.WORKING);
         }
-        if (endDate  ==null && this.startDate== null){
+        if (endDate == null && this.startDate == null) {
             this.setStatus(status.TODO);
         }
     }
@@ -91,7 +79,7 @@ public class Task extends AbstractEntity implements Serializable {
         this.name = name;
     }
 
-    public Date getStartDate() {        
+    public Date getStartDate() {
         return startDate;
     }
 
