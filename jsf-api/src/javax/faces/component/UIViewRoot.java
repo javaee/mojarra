@@ -855,12 +855,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     @Override
     public void processRestoreState(FacesContext context, Object state) {
 
-        initState();
         try {
             super.processRestoreState(context, state);
         } finally {
-            clearFacesEvents(context);
-            notifyAfter(context, PhaseId.RESTORE_VIEW);
             final PostRestoreStateEvent event = new PostRestoreStateEvent(this);
             try {
                 this.visitTree(VisitContext.createVisitContext(context), 
