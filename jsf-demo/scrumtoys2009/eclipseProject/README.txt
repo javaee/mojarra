@@ -16,3 +16,6 @@ This demo requires the Java EE APIs.
 
 * Document how it runs on Tomcat with OpenEJB
 
+* eclipseProject directory?
+
+* scrumtoys-uml what is it?  Increases confusion.
