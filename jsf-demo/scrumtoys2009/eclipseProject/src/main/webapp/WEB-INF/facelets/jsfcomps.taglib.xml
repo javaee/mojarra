@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE facelet-taglib PUBLIC
-  "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
-  "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
- 
+        "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
+        "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
+
 <facelet-taglib>
     <namespace>http://www.java.net/scrumtoys/jsfcomps</namespace>
     <tag>
@@ -12,7 +12,8 @@
             <renderer-type>BURNDOWN_RENDERER</renderer-type>
         </component>
     </tag>
-	<tag> 
-		<tag-name>test</tag-name>
-		<source>testTag.xhtml</source> </tag>
+    <tag>
+        <tag-name>test</tag-name>
+        <source>testTag.xhtml</source>
+    </tag>
 </facelet-taglib>

@@ -1,113 +1,113 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-	version="2.0">
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+              version="2.0">
 
-	<application>
-		<resource-bundle>
-			<base-name>i18n</base-name>
-			<var>i18n</var>
-		</resource-bundle>
-		<message-bundle>i18n</message-bundle>		
-	</application>
+    <application>
+        <resource-bundle>
+            <base-name>i18n</base-name>
+            <var>i18n</var>
+        </resource-bundle>
+        <message-bundle>i18n</message-bundle>
+    </application>
 
-	<navigation-rule>
-		<description>
-			global navigation rules
+    <navigation-rule>
+        <description>
+            global navigation rules
         </description>
-		<from-view-id>*</from-view-id>
-		<navigation-case>
-			<description>Go to Edit Project Page</description>
-			<from-outcome>editProject</from-outcome>
-			<to-view-id>/project/edit.jsf</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<description>Go to Select Projects Page</description>
-			<from-outcome>showProjects</from-outcome>
-			<to-view-id>/project/show.jsf</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<description>Go to Edit Sprint Page</description>
-			<from-outcome>editSprint</from-outcome>
-			<to-view-id>/sprint/edit.jsf</to-view-id>
-		</navigation-case>
+        <from-view-id>*</from-view-id>
         <navigation-case>
-			<description>Go to Dashboard</description>
-			<from-outcome>showDashboard</from-outcome>
-			<to-view-id>/dashboard/show.jsf</to-view-id>
-		</navigation-case>
-	</navigation-rule>
-	
-	<navigation-rule>
-		<description>
-			dashboard navigation rules
+            <description>Go to Edit Project Page</description>
+            <from-outcome>editProject</from-outcome>
+            <to-view-id>/project/edit.jsf</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <description>Go to Select Projects Page</description>
+            <from-outcome>showProjects</from-outcome>
+            <to-view-id>/project/show.jsf</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <description>Go to Edit Sprint Page</description>
+            <from-outcome>editSprint</from-outcome>
+            <to-view-id>/sprint/edit.jsf</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <description>Go to Dashboard</description>
+            <from-outcome>showDashboard</from-outcome>
+            <to-view-id>/dashboard/show.jsf</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <description>
+            dashboard navigation rules
         </description>
-		<from-view-id>dashboard/show.xhtml</from-view-id>
-		<navigation-case>
-			<from-outcome>showSprints</from-outcome>
-			<to-view-id>/sprint/show.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<description>
-				see burndown
+        <from-view-id>dashboard/show.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>showSprints</from-outcome>
+            <to-view-id>/sprint/show.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <description>
+                see burndown
             </description>
-			<from-outcome>burndown</from-outcome>
-			<to-view-id>/burndown.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
+            <from-outcome>burndown</from-outcome>
+            <to-view-id>/burndown.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
-	<navigation-rule>
-		<description>
-			project navigation rules
+    <navigation-rule>
+        <description>
+            project navigation rules
         </description>
-		<from-view-id>/project/show.xhtml</from-view-id>
-		<navigation-case>
-			<from-outcome>showSprints</from-outcome>
-			<to-view-id>/sprint/show.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
+        <from-view-id>/project/show.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>showSprints</from-outcome>
+            <to-view-id>/sprint/show.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
-	<navigation-rule>
-		<description>
-			sprint navigation rules
+    <navigation-rule>
+        <description>
+            sprint navigation rules
         </description>
-		<from-view-id>sprint/show.xhtml</from-view-id>
-		<navigation-case>
-			<from-outcome>showStories</from-outcome>
-			<to-view-id>/story/show.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>showDashboard</from-outcome>
-			<to-view-id>/dashboard/show.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
+        <from-view-id>sprint/show.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>showStories</from-outcome>
+            <to-view-id>/story/show.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>showDashboard</from-outcome>
+            <to-view-id>/dashboard/show.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
-	<navigation-rule>
-		<description>
-			story navigation rules
+    <navigation-rule>
+        <description>
+            story navigation rules
         </description>
-		<from-view-id>story/show.xhtml</from-view-id>
-		<navigation-case>
-			<from-outcome>showTasks</from-outcome>
-			<to-view-id>/task/show.xhtml</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>showSprints</from-outcome>
-			<to-view-id>/sprint/show.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
+        <from-view-id>story/show.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>showTasks</from-outcome>
+            <to-view-id>/task/show.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>showSprints</from-outcome>
+            <to-view-id>/sprint/show.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
-	<navigation-rule>
-		<description>
-			task navigation rules
+    <navigation-rule>
+        <description>
+            task navigation rules
         </description>
-		<from-view-id>task/show.xhtml</from-view-id>
-		<navigation-case>
-			<from-outcome>showStories</from-outcome>
-			<to-view-id>/story/show.xhtml</to-view-id>
-		</navigation-case>
-	</navigation-rule>
+        <from-view-id>task/show.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>showStories</from-outcome>
+            <to-view-id>/story/show.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
 </faces-config>
