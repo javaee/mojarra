@@ -973,7 +973,10 @@
                                    com/sun/faces/systest/DataTableTestCase.class,
                                    com/sun/faces/systest/TestOutputTargets.class,
                                    com/sun/faces/systest/LinkTypeAttributeTestCase.class,
-                                   com/sun/faces/systest/CheckboxTestCase.class"/>
+                                   com/sun/faces/systest/CheckboxTestCase.class,
+                                   com/sun/faces/systest/SelectOneHideNoSelectItemGroupTestCase.class,
+                                   com/sun/faces/systest/SelectOneHideNoSelectionTestCase.class,
+                                   com/sun/faces/systest/SelectOneValueExpressionHideNoSelectionTestCase.class"/>
             </tests>
         </jsf.junit>  
     </target>

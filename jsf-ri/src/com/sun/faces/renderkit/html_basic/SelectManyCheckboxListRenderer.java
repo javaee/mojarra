@@ -50,13 +50,10 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.List;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UINamingContainer;
-import javax.faces.component.behavior.ClientBehaviorHolder;
-import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -127,7 +124,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                       (String) attributes.get("enabledClass"),
                                       (String) attributes.get("unselectedClass"),
                                       (String) attributes.get("selectedClass"),
-                                      Util.componentIsDisabled(component));
+                                      Util.componentIsDisabled(component),
+                                      isHideNoSelection(component));
         int idx = -1;
         while (items.hasNext()) {
             SelectItem curItem = items.next();
@@ -264,6 +262,32 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                 int itemNumber,
                                 OptionComponentInfo optionInfo) throws IOException {
 
+
+        String valueString = getFormattedValue(context, component,
+                                               curItem.getValue(), converter);
+
+        Object valuesArray;
+        Object itemValue;
+        if (submittedValues != null) {
+            valuesArray = submittedValues;
+            itemValue = valueString;
+        } else {
+            valuesArray = currentSelections;
+            itemValue = curItem.getValue();
+        }
+
+        RequestStateManager.set(context,
+                                RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
+                                component);
+
+        boolean isSelected = isSelected(context, component, itemValue, valuesArray, converter);
+        if (optionInfo.isHideNoSelection()
+                && curItem.isNoSelectionOption()
+                && currentSelections != null
+                && !isSelected) {
+            return;
+        }
+
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
@@ -282,26 +306,11 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                           + UINamingContainer.getSeparatorChar(context)
                           + Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
-        String valueString = getFormattedValue(context, component,
-                                               curItem.getValue(), converter);
+
         writer.writeAttribute("value", valueString, "value");
         writer.writeAttribute("type", "checkbox", null);
 
-        Object valuesArray;
-        Object itemValue;
-        if (submittedValues != null) {
-            valuesArray = submittedValues;
-            itemValue = valueString;
-        } else {
-            valuesArray = currentSelections;
-            itemValue = curItem.getValue();
-        }
-
-        RequestStateManager.set(context,
-                                RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
-                                component);
-
-        if (isSelected(context, component, itemValue, valuesArray, converter)) {
+        if (isSelected) {
             writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);
         }
 

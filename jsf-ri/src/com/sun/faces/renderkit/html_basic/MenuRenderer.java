@@ -519,26 +519,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    protected void renderOption(FacesContext context,
-                                UIComponent component,
-                                Converter converter,
-                                SelectItem curItem,
-                                Object currentSelections,
-                                Object[] submittedValues,
-                                OptionComponentInfo optionInfo) throws IOException {
-
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-
-        writer.writeText("\t", component, null);
-        writer.startElement("option", component);
-
-        String valueString = getFormattedValue(context, component,
-                                               curItem.getValue(), converter);
-        writer.writeAttribute("value", valueString, "value");
+    protected boolean renderOption(FacesContext context,
+                                   UIComponent component,
+                                   Converter converter,
+                                   SelectItem curItem,
+                                   Object currentSelections,
+                                   Object[] submittedValues,
+                                   OptionComponentInfo optionInfo) throws IOException {
 
         Object valuesArray;
         Object itemValue;
+        String valueString = getFormattedValue(context, component,
+                                               curItem.getValue(), converter);
         boolean containsValue;
         if (submittedValues != null) {
             containsValue = containsaValue(submittedValues);
@@ -554,7 +546,21 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             itemValue = curItem.getValue();
         }
 
-        if (isSelected(context, component, itemValue, valuesArray, converter)) {
+        boolean isSelected = isSelected(context, component, itemValue, valuesArray, converter);
+        if (optionInfo.isHideNoSelection()
+                && curItem.isNoSelectionOption()
+                && currentSelections != null
+                && !isSelected) {
+            return false;
+        }
+
+        ResponseWriter writer = context.getResponseWriter();
+        assert (writer != null);
+        writer.writeText("\t", component, null);
+        writer.startElement("option", component);
+        writer.writeAttribute("value", valueString, "value");
+
+        if (isSelected) {
             writer.writeAttribute("selected", true, "selected");
         }
 
@@ -585,7 +591,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
         writer.endElement("option");
         writer.writeText("\n", component, null);
-
+        return true;
     }
 
 
@@ -619,9 +625,15 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
             Object value = select.getValue();
-            if (value instanceof Collection) {
+            if (value == null) {
+                return null;
+            } else if (value instanceof Collection) {
                 return ((Collection) value).toArray();
-            } else if (value != null && !value.getClass().isArray()) {
+            } else if (value.getClass().isArray()) {
+                if (Array.getLength(value) == 0) {
+                    return null;
+                }
+            } else if (!value.getClass().isArray()) {
                 logger.warning(
                     "The UISelectMany value should be an array or a collection type, the actual type is " +
                     value.getClass().getName());
@@ -755,16 +767,19 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Object currentSelections = getCurrentSelectedValues(component);
         Object[] submittedValues = getSubmittedSelectedValues(component);
         Map<String,Object> attributes = component.getAttributes();
+        boolean componentDisabled = Util.componentIsDisabled(component);
+
         OptionComponentInfo optionInfo =
               new OptionComponentInfo((String) attributes.get("disabledClass"),
                                       (String) attributes.get("enabledClass"),
-                                      Util.componentIsDisabled(component));
+                                      componentDisabled,
+                                      isHideNoSelection(component));
         RequestStateManager.set(context,
                                 RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
                                 component);
         while (items.hasNext()) {
             SelectItem item = items.next();
-            count++;
+
             if (item instanceof SelectItemGroup) {
                 // render OPTGROUP
                 writer.startElement("optgroup", component);
@@ -772,35 +787,35 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
                 // if the component is disabled, "disabled" attribute would be rendered
                 // on "select" tag, so don't render "disabled" on every option.
-                boolean componentDisabled =
-                      Boolean.TRUE
-                            .equals(component.getAttributes().get("disabled"));
                 if ((!componentDisabled) && item.isDisabled()) {
                     writer.writeAttribute("disabled", true, "disabled");
                 }
-
+                count++;
                 // render options of this group.
                 SelectItem[] itemsArray =
                       ((SelectItemGroup) item).getSelectItems();
                 for (int i = 0; i < itemsArray.length; ++i) {
-                    renderOption(context,
-                                 component,
-                                 converter,
-                                 itemsArray[i],
-                                 currentSelections,
-                                 submittedValues,
-                                 optionInfo);
+                    if (renderOption(context,
+                                     component,
+                                     converter,
+                                     itemsArray[i],
+                                     currentSelections,
+                                     submittedValues,
+                                     optionInfo)) {
+                        count++;
+                    }
                 }
-                count += itemsArray.length;
                 writer.endElement("optgroup");
             } else {
-                renderOption(context,
-                             component,
-                             converter,
-                             item,
-                             currentSelections,
-                             submittedValues,
-                             optionInfo);
+                if (renderOption(context,
+                                 component,
+                                 converter,
+                                 item,
+                                 currentSelections,
+                                 submittedValues,
+                                 optionInfo)) {
+                    count ++;
+                }
             }
         }
 
@@ -1028,6 +1043,14 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             throw new FacesException("Unable to create collection type " + collectionType);
         }
         return c;
+
+    }
+
+
+    protected boolean isHideNoSelection(UIComponent component) {
+
+        Object result = component.getAttributes().get("hideNoSelectionOption");
+        return ((result != null) ? (Boolean) result : false);
 
     }
 

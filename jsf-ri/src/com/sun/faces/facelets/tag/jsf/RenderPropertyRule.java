@@ -52,9 +52,12 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import javax.faces.component.UIInput;
-import javax.faces.component.UISelectMany;
-import javax.faces.component.UISelectOne;
-import javax.faces.view.facelets.*;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.MetaRule;
+import javax.faces.view.facelets.Metadata;
+import javax.faces.view.facelets.MetadataTarget;
+import javax.faces.view.facelets.TagAttribute;
 import java.util.Map;
 
 public final class RenderPropertyRule extends MetaRule {
@@ -84,8 +87,8 @@ public final class RenderPropertyRule extends MetaRule {
 
         @Override
         public void applyMetadata(FaceletContext ctx, Object instance) {
-            Map<String, Object> attributes = ((UIInput) instance).getAttributes();
-            attributes.put("hideNoSelectionOption", attr.getBoolean(ctx));
+            ((UIComponent) instance).setValueExpression("hideNoSelectionOption",
+                                                        attr.getValueExpression(ctx, Boolean.class));
         }
     }
 
@@ -95,14 +98,12 @@ public final class RenderPropertyRule extends MetaRule {
     public Metadata applyRule(String name, TagAttribute attribute,
                               MetadataTarget meta) {
 
-        if (meta.isTargetInstanceOf(UISelectMany.class) || meta.isTargetInstanceOf(UISelectOne.class)) {
 
-            if ("hideNoSelectionOption".equals(name)) {
-                if (attribute.isLiteral()) {
-                    return new HideNoSelectionLiteralMetadata(attribute.getValue());
-                } else {
-                    return new HideNoSelectionExpressionMetadata(attribute);
-                }
+        if ("hideNoSelectionOption".equals(name)) {
+            if (attribute.isLiteral()) {
+                return new HideNoSelectionLiteralMetadata(attribute.getValue());
+            } else {
+                return new HideNoSelectionExpressionMetadata(attribute);
             }
         }
         return null;

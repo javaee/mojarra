@@ -94,11 +94,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             curValue = selectOne.getValue();
         }
 
-        if (alignVertical) {
-            writer.writeText("\t", component, null);
-            writer.startElement("tr", component);
-            writer.writeText("\n", component, null);
-        }
+
 
         Class type = String.class;
         if (curValue != null) {
@@ -135,6 +131,21 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             newValue = itemValue;
         }
 
+        boolean checked = newValue.equals(curValue);
+
+        if (optionInfo.isHideNoSelection()
+                && curItem.isNoSelectionOption()
+                && curValue != null
+                && !checked) {
+            return;
+        }
+
+        if (alignVertical) {
+            writer.writeText("\t", component, null);
+            writer.startElement("tr", component);
+            writer.writeText("\n", component, null);
+        }
+
         String labelClass;
         if (optionInfo.isDisabled() || curItem.isDisabled()) {
             labelClass = optionInfo.getDisabledClass();
@@ -147,7 +158,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         writer.startElement("input", component);
         writer.writeAttribute("type", "radio", "type");
 
-        if (newValue.equals(curValue)) {
+        if (checked) {
             writer.writeAttribute("checked", Boolean.TRUE, null);
         }
         writer.writeAttribute("name", component.getClientId(context),
