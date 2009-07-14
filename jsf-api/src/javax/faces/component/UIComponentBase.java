@@ -533,7 +533,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
         int n = id.length();
         if (n < 1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Empty id attribute is not allowed");
         }
         for (int i = 0; i < n; i++) {
             char c = id.charAt(i);
