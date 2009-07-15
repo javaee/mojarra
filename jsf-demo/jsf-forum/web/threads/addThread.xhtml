@@ -3,26 +3,24 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
-<h:head>
+<head>
     <title>JSF Forum</title>
-</h:head>
-<h:body bgcolor="white">
-    <h:form id="helloForm">
+</head>
+<body bgcolor="white">
+    <h:form id="addThreadForm">
 
-        <h:outputText value="Subject:"/><h:inputText value="#{message.subject}"/>
+        <h:outputText value="Subject:"/><h:inputText value="#{thread.title}"/>
         <br/>
-        <h:inputTextarea value="#{message.text}"/>
+        <h:inputTextarea value="#{thread.text}"/>
         <br/>
-        <h:commandButton type="submit" value="Add"
-                         actionListener="#{message.save}" action="thread">
+        <h:commandButton type="submit" value="Add" 
+                         actionListener="#{thread.createThread}" action="/topics/listTopic">
             <f:param name="topicId" value="#{topic.id}"/>
             <f:param name="threadId" value="#{thread.id}"/>
-            <f:param name="messageId" value="#{message.id}"/>
         </h:commandButton>
-        <h:button type="cancel" value="Cancel" outcome="thread">
+        <h:button type="cancel" value="Cancel" outcome="/topics/listTopic">
             <f:param name="topicId" value="#{topic.id}" />
-            <f:param name="threadId" value="#{thread.id}"/>
         </h:button>
     </h:form>
-</h:body>
+</body>
 </html>

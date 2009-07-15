@@ -14,10 +14,9 @@
         <h:outputText value="Subject: "/><h:inputText value="#{topic.subject}"/>
         <br/>
         <h:commandButton type="submit" value="Add" 
-                         actionListener="#{topic.save}" action="index">
-            <f:param name="topicId" value="#{topic.id}"/>
+                         actionListener="#{topic.createTopic}" action="/index">
         </h:commandButton>
-        <h:commandButton type="cancel" value="Cancel" action="index"/>
+        <h:commandButton type="cancel" value="Cancel" action="/index"/>
     </h:form>
 </h:body>
 </html>

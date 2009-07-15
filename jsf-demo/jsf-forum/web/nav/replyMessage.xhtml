@@ -9,17 +9,18 @@
 <h:body bgcolor="white">
     <h:form id="helloForm">
 
-        <h:outputText value="Subject:"/><h:inputText value="#{thread.title}"/>
+        <h:outputText value="Subject:"/><h:inputText value="#{message.subject}"/>
         <br/>
-        <h:inputTextarea value="#{thread.text}"/>
+        <h:inputTextarea value="#{message.text}"/>
         <br/>
-        <h:commandButton type="submit" value="Add" 
-                         actionListener="#{thread.createThread}" action="topic">
+        <h:commandButton type="submit" value="Add"
+                         actionListener="#{message.createMessage}" action="/threads/listThread">
             <f:param name="topicId" value="#{topic.id}"/>
             <f:param name="threadId" value="#{thread.id}"/>
         </h:commandButton>
-        <h:button type="cancel" value="Cancel" outcome="thread">
+        <h:button type="cancel" value="Cancel" outcome="/threads/listThread">
             <f:param name="topicId" value="#{topic.id}" />
+            <f:param name="threadId" value="#{thread.id}"/>
         </h:button>
     </h:form>
 </h:body>

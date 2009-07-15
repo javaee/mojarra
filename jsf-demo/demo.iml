@@ -3853,6 +3853,7 @@
       <sourceFolder url="file://$MODULE_DIR$/ifnavigation/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/j2meDemo/midlet" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/j2meDemo/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/jsf-forum/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/mojarra_ext/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/nonjsp/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/renderkits/src/java" isTestSource="false" />

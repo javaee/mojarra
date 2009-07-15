@@ -9,7 +9,7 @@
 <h:body bgcolor="white">
     <h:form id="helloForm">
 
-        <h:link outcome="index" value="#{forum.title}"/> -- <h:link outcome="topic" value="#{topic.title}">
+        <h:link outcome="/index" value="#{forum.title}"/> -- <h:link outcome="/topics/listTopic" value="#{topic.title}">
                     <f:param name="topicId" value="#{topic.id}"/>
                 </h:link> -- #{thread.title}
 
@@ -33,7 +33,7 @@
             </h:column>
         </h:dataTable>
 
-        <h:commandLink id="replyMessage" action="replyMessage" value="Reply on this thread">
+        <h:commandLink id="replyMessage" action="/nav/replyMessage" value="Reply on this thread">
             <f:param name="topicId" value="#{topic.id}"/>
             <f:param name="threadId" value="#{thread.id}"/>
             <f:param name="replyMessage" value="true"/>

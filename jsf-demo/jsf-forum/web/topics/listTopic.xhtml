@@ -9,7 +9,7 @@
 <h:body bgcolor="white">
     <h:form id="helloForm">
 
-        <h:link outcome="index" value="#{forum.title}"/> -- #{topic.title}
+        <h:link outcome="/index" value="#{forum.title}"/> -- #{topic.title} 
 
         <h:dataTable id="table" value="#{topic.threads}" var="thread" border="2" rules="all">
             <f:facet name="header">
@@ -20,24 +20,17 @@
                 <f:facet name="header">
                     Title
                 </f:facet>
-                <h:link outcome="thread" value="#{thread.title}">
+                <h:link outcome="/threads/listThread" value="#{thread.title}">
                     <f:param name="topicId" value="#{topic.id}"/>
-                    <f:param name="threadId" value="#{thread.id}"/>
+                    <f:param name="threadId" value="#{thread.threadid}"/>
                 </h:link>
             </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    Messages
-                </f:facet>
-                <h:outputText id="messages" value="#{thread.sizeMessages}"/>
-            </h:column>
 
         </h:dataTable>
 
-        <h:commandLink id="addThread" action="addThread" value="Start a new Thread">
+        <h:commandLink id="addThread" action="/threads/addThread" value="Start a new Thread">
             <f:param name="topicId" value="#{topic.id}"/>
-            <f:param name="addThread" value="true"/>
         </h:commandLink>
 
 

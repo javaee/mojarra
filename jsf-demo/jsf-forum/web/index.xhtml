@@ -7,21 +7,26 @@
     <title>JSF Forum</title>
 </h:head>
 <h:body bgcolor="white">
-    <h:form id="helloForm">
-
-        <h:commandLink value="initialize" actionListener="#{forum.init}"/>
-
+    <h:form id="forumForm">
         <h:dataTable id="table" value="#{forum.topics}" var="topic" border="2" rules="all">
             <f:facet name="header">
-                <h:outputText id="head" value="JSF Forum" />
+                <h:outputText id="head" value="#{forum.title}" />
             </f:facet>
+
+            <h:column>
+                <f:facet name="header">
+                    ID
+                </f:facet>
+                <h:outputText id="topicId" value="#{topic.topicid}"/>
+            </h:column>
+
 
             <h:column>
                 <f:facet name="header">
                     Title
                 </f:facet>
-                <h:link outcome="topic" value="#{topic.title}">
-                    <f:param name="topicId" value="#{topic.id}"/>
+                <h:link id="title" outcome="topics/listTopic" value="#{topic.title}">
+                    <f:param name="topicId" value="#{topic.topicid}"/>
                 </h:link>
             </h:column>
 
@@ -31,24 +36,9 @@
                 </f:facet>
                 <h:outputText id="subject" value="#{topic.subject}"/>
             </h:column>
-
-            <h:column>
-                <f:facet name="header">
-                    Threads
-                </f:facet>
-                <h:outputText id="threads" value="#{topic.sizeThreads}"/>
-            </h:column>
-
-            <h:column>
-                <f:facet name="header">
-                    Messages
-                </f:facet>
-                <h:outputText id="messages" value="#{topic.sizeMessages}"/>
-            </h:column>
-
         </h:dataTable>
 
-        <h:commandLink action="addTopic" value="Add a Topic">
+        <h:commandLink action="topics/addTopic" value="Add a Topic">
             <f:param name="addTopic" value="true"/>
         </h:commandLink>
 
