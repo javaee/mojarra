@@ -11,6 +11,8 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;
 
 /**
@@ -19,15 +21,16 @@ import javax.transaction.UserTransaction;
  */
 public abstract class AbstractManager {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @PersistenceUnit
+    private EntityManagerFactory emf;
     @Resource
     private UserTransaction userTransaction;
 
     protected final <T> T doInTransaction(PersistenceAction<T> action) throws ManagerException {
+        EntityManager em = emf.createEntityManager();
         try {
             userTransaction.begin();
-            T result = action.execute(entityManager);
+            T result = action.execute(em);
             userTransaction.commit();
             return result;
         } catch (Exception e) {
@@ -37,13 +40,17 @@ public abstract class AbstractManager {
                 Logger.getLogger(AbstractManager.class.getName()).log(Level.SEVERE, null, ex);
             }
             throw new ManagerException(e);
+        } finally {
+            em.close();
         }
+
     }
 
     protected final void doInTransaction(PersistenceActionWithoutResult action) throws ManagerException {
+        EntityManager em = emf.createEntityManager();
         try {
             userTransaction.begin();
-            action.execute(entityManager);
+            action.execute(em);
             userTransaction.commit();
         } catch (Exception e) {
             try {
@@ -52,6 +59,8 @@ public abstract class AbstractManager {
                 Logger.getLogger(AbstractManager.class.getName()).log(Level.SEVERE, null, ex);
             }
             throw new ManagerException(e);
+        } finally {
+            em.close();
         }
     }
 
