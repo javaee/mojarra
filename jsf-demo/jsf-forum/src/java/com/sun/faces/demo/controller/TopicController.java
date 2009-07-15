@@ -6,7 +6,9 @@ package com.sun.faces.demo.controller;
 
 import com.sun.faces.demo.model.Threads;
 import com.sun.faces.demo.model.Topics;
+import java.io.Serializable;
 import java.util.Collection;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -22,7 +24,7 @@ import javax.persistence.Query;
  */
 @ManagedBean(name = "topic")
 @RequestScoped
-public class TopicController {
+public class TopicController implements Serializable {
 
     @PersistenceUnit
     private EntityManagerFactory emf;
@@ -32,8 +34,6 @@ public class TopicController {
 
 
     public TopicController() {
-
-
         FacesContext context = FacesContext.getCurrentInstance();
 
         String id = context.getExternalContext()
@@ -57,7 +57,9 @@ public class TopicController {
     }
 
 
+    @PostConstruct
     private void init() {
+        if (topic != null) return;
 
         FacesContext context = FacesContext.getCurrentInstance();
 
@@ -80,9 +82,6 @@ public class TopicController {
      * @return the title
      */
     public String getTitle() {
-        if (topic == null) {
-            init();
-        }
         return topic.getTitle();
     }
 
@@ -90,9 +89,6 @@ public class TopicController {
      * @param title the title to set
      */
     public void setTitle(String title) {
-        if (topic == null) {
-            init();
-        }
         topic.setTitle(title);
     }
 
@@ -100,9 +96,6 @@ public class TopicController {
      * @return the subject
      */
     public String getSubject() {
-        if (topic == null) {
-            init();
-        }
         return topic.getSubject();
     }
 
@@ -110,9 +103,6 @@ public class TopicController {
      * @param subject the subject to set
      */
     public void setSubject(String subject) {
-        if (topic == null) {
-            init();
-        }
         topic.setSubject(subject);
     }
 
@@ -121,9 +111,6 @@ public class TopicController {
      * @return the topic ID
      */
     public int getId() {
-        if (topic == null) {
-            init();
-        }
         if (topic.getTopicid() == null) {
             return 0;
         } else {
@@ -132,14 +119,10 @@ public class TopicController {
     }
 
     public Collection<Threads> getThreads() {
-        if (topic == null) {
-            init();
-        }
         return topic.getThreadsCollection();
     }
 
     public void createTopic() {
-
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -150,7 +133,5 @@ public class TopicController {
         } finally {
             em.close();
         }
-
-
     }
 }

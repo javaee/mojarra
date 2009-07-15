@@ -7,8 +7,10 @@ package com.sun.faces.demo.controller;
 import com.sun.faces.demo.model.Messages;
 import com.sun.faces.demo.model.Threads;
 import com.sun.faces.demo.model.Topics;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -24,7 +26,7 @@ import javax.persistence.Query;
  */
 @ManagedBean(name = "thread")
 @RequestScoped
-public class ThreadController {
+public class ThreadController implements Serializable {
 
     @PersistenceUnit
     private EntityManagerFactory emf;
@@ -71,17 +73,28 @@ public class ThreadController {
 
     }
 
-    private void initTopic() {
+    @PostConstruct
+    private void init() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        EntityManager em = emf.createEntityManager();
+
         if (thread == null) {
-            init();
+            try {
+                Query query = em.createNamedQuery("Threads.findByThreadid");
+                query.setParameter("threadid", threadId);
+                thread = (Threads) query.getSingleResult();
+            } catch (Exception e) {
+                FacesMessage message = new FacesMessage((e.getLocalizedMessage()));
+                context.addMessage(null, message);
+                thread = new Threads();
+            }
         }
+
         topic = thread.getTopicid();
 
         if (topic == null) {
-            FacesContext context = FacesContext.getCurrentInstance();
-
-            EntityManager em = emf.createEntityManager();
-
             try {
                 Query query = em.createNamedQuery("Topics.findByTopicid");
                 query.setParameter("topicid", Integer.valueOf(topicId));
@@ -90,43 +103,16 @@ public class ThreadController {
                 FacesMessage message = new FacesMessage((e.getLocalizedMessage()));
                 context.addMessage(null, message);
                 topic = new Topics();
-            } finally {
-                em.close();
             }
         }
+        em.close();
         thread.setTopicid(topic);
-    }
-
-    private void init() {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            Query query = em.createNamedQuery("Threads.findByThreadid");
-            query.setParameter("threadid", threadId);
-            thread = (Threads) query.getSingleResult();
-        } catch (Exception e) {
-            FacesMessage message = new FacesMessage((e.getLocalizedMessage()));
-            context.addMessage(null, message);
-            thread = new Threads();
-        } finally {
-            em.close();
-        }
-
-        if (thread.getTopicid() == null) {
-            initTopic();
-        }
     }
 
     /**
      * @return the title
      */
     public String getTitle() {
-        if (thread == null) {
-            init();
-        }
         return title;
     }
 
@@ -134,9 +120,6 @@ public class ThreadController {
      * @param title the title to set
      */
     public void setTitle(String title) {
-        if (thread == null) {
-            init();
-        }
         thread.setTitle(title);
         this.title = title;
     }
@@ -145,9 +128,6 @@ public class ThreadController {
      * @return the text
      */
     public String getText() {
-        if (thread == null) {
-            init();
-        }
         return text;
     }
 
@@ -155,16 +135,10 @@ public class ThreadController {
      * @param text the text to set
      */
     public void setText(String text) {
-        if (thread == null) {
-            init();
-        }
         this.text = text;
     }
 
     public int getId() {
-        if (thread == null) {
-            init();
-        }
         if (thread.getThreadid() == null) {
             return 0;
         } else {
@@ -173,25 +147,14 @@ public class ThreadController {
     }
 
     public Topics getParent() {
-        if (topic == null) {
-            initTopic();
-        }
         return topic;
     }
 
     public Collection<Messages> getMessages() {
-        if (thread == null) {
-            init();
-        }
         return thread.getMessagesCollection();
     }
 
-
     public void createThread() {
-        if (topic == null) {
-            initTopic();
-        }
-
         EntityManager em = emf.createEntityManager();
 
         Messages message = new Messages();

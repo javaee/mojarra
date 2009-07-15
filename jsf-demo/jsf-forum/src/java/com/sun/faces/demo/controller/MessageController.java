@@ -6,8 +6,10 @@ package com.sun.faces.demo.controller;
 
 import com.sun.faces.demo.model.Messages;
 import com.sun.faces.demo.model.Threads;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -23,7 +25,7 @@ import javax.persistence.Query;
  */
 @ManagedBean(name = "message")
 @RequestScoped
-public class MessageController {
+public class MessageController implements Serializable {
 
     @PersistenceUnit
     private EntityManagerFactory emf;
@@ -34,7 +36,6 @@ public class MessageController {
     private String text = null;
 
     public MessageController() {
-
         FacesContext context = FacesContext.getCurrentInstance();
 
         threadId = context.getExternalContext().getRequestParameterMap().get("threadId");
@@ -45,11 +46,10 @@ public class MessageController {
             context.addMessage(null, fmessage);
             return;
         }
-
         message = new Messages();
-
     }
 
+    @PostConstruct
     private void initThread() {
         thread = message.getThreadid();
 
@@ -71,7 +71,6 @@ public class MessageController {
             }
         }
         message.setThreadid(thread);
-
     }
 
     /**
@@ -103,12 +102,7 @@ public class MessageController {
     }
 
     public void createMessage() {
-        if (thread == null) {
-            initThread();
-        }
-
         EntityManager em = emf.createEntityManager();
-
         try {
             em.getTransaction().begin();
             em.persist(message);
