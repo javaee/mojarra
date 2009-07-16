@@ -136,6 +136,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
+    // ------------------------------------------------------------ Constructors
+
+    public static boolean isBuildingMetadata(FacesContext context) {
+        boolean result = context.getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA);
+        return result;
+    }
+
     // ------------------------------------ Methods from ViewDeclarationLanguage
 
     @Override

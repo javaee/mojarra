@@ -932,6 +932,7 @@
                          includes="com/sun/faces/composite/*TestCase.class"/>
             </tests>
         </jsf.junit>  
+
     </target>
 
 

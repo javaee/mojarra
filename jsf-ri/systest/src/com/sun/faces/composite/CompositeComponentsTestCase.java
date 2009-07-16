@@ -351,6 +351,11 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         
     }
 
+    public void testNesting06() throws Exception {
+        HtmlPage page = getPage("/faces/composite/addPhaseListener.xhtml");
+        assertTrue(page.asText().contains("/composite/addPhaseListener.xhtml PASSED"));
+    }
+
 
     public void testChildrenAndFacets() throws Exception {
 
