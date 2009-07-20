@@ -70,7 +70,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build-tests.xml. -->
     <property name="applications"
-              value="clientside-statesaving,
+              value="annotation-restrictions,
+                   clientside-statesaving,
                    absolute-ordering,
                    document-ordering,
                    empty-string-as-null,

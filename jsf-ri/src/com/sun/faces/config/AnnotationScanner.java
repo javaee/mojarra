@@ -74,6 +74,7 @@ import javax.servlet.ServletContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.spi.AnnotationProvider;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
 
 /**
  * This class is responsible for scanning the class file bytes of
@@ -132,6 +133,8 @@ public class AnnotationScanner extends AnnotationProvider {
     }
 
     private ClassFile classFileScanner;
+    private String[] webInfClassesPackages;
+    private Map<String,String[]> webInfLibPackages;
 
 
     // ------------------------------------------------------------ Constructors
@@ -147,6 +150,25 @@ public class AnnotationScanner extends AnnotationProvider {
 
         super(sc);
         classFileScanner = new ClassFile();
+        WebConfiguration webConfig = WebConfiguration.getInstance(sc);
+        if (webConfig.isSet(AnnotationScanPackages)) {
+            webInfLibPackages = new HashMap<String,String[]>(4);
+            webInfClassesPackages = new String[0];
+            String[] options = webConfig.getOptionValue(AnnotationScanPackages, "\\s");
+            List<String> packages = new ArrayList<String>(4);
+            for (String option : options) {
+                if (option.startsWith("jar:")) {
+                    String[] parts = Util.split(option, ":");
+                    webInfLibPackages.put(parts[1], Util.split(parts[2], ","));
+                } else {
+                    if (option.length() > 0) {
+                        packages.add(option);
+                    }
+                }
+            }
+            webInfClassesPackages = packages.toArray(new String[packages.size()]);
+        }
+
 
     }
 
@@ -233,10 +255,14 @@ public class AnnotationScanner extends AnnotationProvider {
 
         //noinspection unchecked
         Set<String> entries = sc.getResourcePaths(WEB_INF_LIB);
-        List<JarFile> jars = getJars(sc, entries);
+        Map<String,JarFile> jars = getJars(sc, entries);
         if (jars != null) {
-            for (JarFile jar : jars) {
-                processJarEntries(jar, classList);
+            for (Map.Entry<String,JarFile> entry : jars.entrySet()) {
+                processJarEntries(entry.getValue(),
+                                  ((webInfLibPackages != null)
+                                   ? webInfLibPackages.get(entry.getKey())
+                                   : null),
+                                  classList);
             }
         }
 
@@ -249,10 +275,11 @@ public class AnnotationScanner extends AnnotationProvider {
      * annotations.
      *
      * @param jarFile the JAR to process
+     * @param allowedPackages the packages that should be scanned within the jar
      * @param classList the <code>Set</code> to which annotated classes
      *  will be added
      */
-    private void processJarEntries(JarFile jarFile, Set<String> classList) {
+    private void processJarEntries(JarFile jarFile, String[] allowedPackages, Set<String> classList) {
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
@@ -272,11 +299,14 @@ public class AnnotationScanner extends AnnotationProvider {
             }
 
             if (name.endsWith(".class")) {
+                String cname = convertToClassName(name);
+                if (!processClass(cname, allowedPackages)) {
+                    continue;
+                }
                 ReadableByteChannel channel = null;
                 try {
                     channel = Channels.newChannel(jarFile.getInputStream(entry));
                     if (classFileScanner.containsAnnotation(channel, entry.getSize())) {
-                        String cname = convertToClassName(name);
                         if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.log(Level.FINE,
                                        "[JAR] Found annotated Class: {0}",
@@ -322,15 +352,19 @@ public class AnnotationScanner extends AnnotationProvider {
      *  scanned
      * @param entries the <code>Set</code> to which annotated classes
      *  will be added
-     * @return a <code>List</code> of JAR files that should be scanned
-     *  for annotations.
+     * @return a <code>Map</code> of JAR files that should be scanned
+     *  for annotations mapped to their jar name.
      */
-    private List<JarFile> getJars(ServletContext sc, Set<String> entries) {
-        List<JarFile> jars = null;
+    private Map<String,JarFile> getJars(ServletContext sc, Set<String> entries) {
+        Map<String,JarFile> jars = null;
         if (entries != null && !entries.isEmpty()) {
             for (String entry : entries) {
                 if (entry.endsWith(".jar")) {
-                    URL url = null;
+                    String jarName = entry.substring(entry.lastIndexOf('/') + 1);
+                    if (!processJar(jarName)) {
+                        continue;
+                    }
+                    URL url;
                     try {
                         url = sc.getResource(entry);
                         StringBuilder sb = new StringBuilder(32);
@@ -341,9 +375,9 @@ public class AnnotationScanner extends AnnotationProvider {
                                     .getJarFile();
                         if (jarFile.getJarEntry(FACES_CONFIG_XML) != null) {
                             if (jars == null) {
-                                jars = new ArrayList<JarFile>();
+                                jars = new HashMap<String,JarFile>();
                             }
-                            jars.add(jarFile);
+                            jars.put(jarName, jarFile);
                         } else {
                             // search the jar for files in META-INF ending
                             // with .faces-config.xml.
@@ -354,9 +388,9 @@ public class AnnotationScanner extends AnnotationProvider {
                                     Matcher m = FACES_CONFIG_PATTERN.matcher(entryName);
                                     if (m.matches()) {
                                         if (jars == null) {
-                                            jars = new ArrayList<JarFile>();
+                                            jars = new HashMap<String,JarFile>();
                                         }
-                                        jars.add(jarFile);
+                                        jars.put(entry, jarFile);
                                         break;
                                     }
                                 }
@@ -430,9 +464,12 @@ public class AnnotationScanner extends AnnotationProvider {
                     processWebInfClasses(sc, pathElement, classList);
                 } else {
                     if (pathElement.endsWith(".class")) {
-                        if (containsAnnotation(sc, pathElement)) {
-                            String cname = convertToClassName(WEB_INF_CLASSES,
+                        String cname = convertToClassName(WEB_INF_CLASSES,
                                                               pathElement);
+                        if (!processClass(cname, webInfClassesPackages)) {
+                            continue;
+                        }
+                        if (containsAnnotation(sc, pathElement)) {
                             if (LOGGER.isLoggable(Level.FINE)) {
                                 LOGGER.log(Level.FINE,
                                            "[WEB-INF/classes] Found annotated Class: {0}",
@@ -521,6 +558,30 @@ public class AnnotationScanner extends AnnotationProvider {
 
         return className.replace('/', '.');
 
+    }
+
+
+    private boolean processJar(String entry) {
+
+        return (webInfLibPackages == null
+                  || (webInfLibPackages.containsKey(entry)));
+
+    }
+
+
+    private boolean processClass(String candidate, String[] packages) {
+
+        if (packages == null) {
+            return true;
+        }
+
+        for (String packageName : packages) {
+            if (candidate.startsWith(packageName)) {
+                return true;
+            }
+        }
+        return false;
+        
     }
 
 
