@@ -222,11 +222,7 @@
                   executable="${mvn.cmd}">
                 <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
-            <exec os="Windows 2000" dir="@{dir}" executable="${mvn.cmd}"
-                  failonerror="yes">
-                <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
-            </exec>
-            <exec os="Windows XP" dir="@{dir}" executable="${mvn.cmd}"
+            <exec osfamily="windows" dir="@{dir}" executable="${mvn.cmd}"
                   failonerror="yes">
                 <arg line="-f @{pomFile} ${testSkipProperty} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}"/>
             </exec>
