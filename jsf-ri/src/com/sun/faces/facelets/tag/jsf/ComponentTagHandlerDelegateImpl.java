@@ -203,12 +203,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         ComponentSupport.addComponent(ctx, parent, c);
         c.popComponentFromEL(ctx.getFacesContext());
 
-        // RELEASE_PENDING - this is *ugly*.  We need to *not*
-        // call PartialStateHolder.markInitialState() if the component
-        // has a composite component parent under the assumption that
-        // the CompositeComponentTagHandler will take care of it.
-        if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))
-              && UIComponent.getCurrentCompositeComponent(ctx.getFacesContext()) == null) {
+        if (shouldMarkInitialState(ctx.getFacesContext())) {
             c.markInitialState();
         }
         
@@ -253,6 +248,27 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     void setCreateCompositeComponentDelegate(CreateComponentDelegate createComponentDelegate) {
         this.createCompositeComponentDelegate = createComponentDelegate;
     }
+
+
+
+    /**
+     * @param ctx the <code>FacesContext</code> for the current request.
+     * @return <code>true</code> if <code>UIComponent.markInitialState()</code>
+     *  should be called on the component that is being processed, otherwise
+     *  return <code>false</code>
+     */
+    private boolean shouldMarkInitialState(FacesContext ctx) {
+
+        // RELEASE_PENDING - this is *ugly*.  We need to *not*
+        // call PartialStateHolder.markInitialState() if the component
+        // has a composite component parent under the assumption that
+        // the CompositeComponentTagHandler will take care of it.
+
+        return (Boolean.TRUE.equals(ctx.getAttributes().get("partialStateSaving"))
+                 && UIComponent.getCurrentCompositeComponent(ctx) == null);
+
+    }
+
     
     /**
      * If the binding attribute was specified, use that in conjuction with our

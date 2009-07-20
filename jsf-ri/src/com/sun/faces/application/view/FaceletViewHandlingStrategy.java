@@ -1060,6 +1060,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     private void doPostBuildActions(UIViewRoot root) {
         if (usePartialSaving(root.getViewId())) {
+            root.markInitialState();
             stateManagementStrategy.notifyTrackChanges(root);    
         }
     }
