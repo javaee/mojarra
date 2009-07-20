@@ -26,4 +26,5 @@ create table messages (
     threadID INT NOT NULL,
     subject VARCHAR(80),
     text VARCHAR(10000),
+    creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (threadID) REFERENCES threads);

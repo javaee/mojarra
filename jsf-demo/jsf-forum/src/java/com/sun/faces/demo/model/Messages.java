@@ -6,6 +6,7 @@
 package com.sun.faces.demo.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -24,7 +27,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "MESSAGES", catalog = "", schema = "FORUM")
-@NamedQueries({@NamedQuery(name = "Messages.findAll", query = "SELECT m FROM Messages m"), @NamedQuery(name = "Messages.findByMessageid", query = "SELECT m FROM Messages m WHERE m.messageid = :messageid"), @NamedQuery(name = "Messages.findBySubject", query = "SELECT m FROM Messages m WHERE m.subject = :subject"), @NamedQuery(name = "Messages.findByText", query = "SELECT m FROM Messages m WHERE m.text = :text")})
+@NamedQueries({@NamedQuery(name = "Messages.findAll", query = "SELECT m FROM Messages m"), @NamedQuery(name = "Messages.findByMessageid", query = "SELECT m FROM Messages m WHERE m.messageid = :messageid"), @NamedQuery(name = "Messages.findBySubject", query = "SELECT m FROM Messages m WHERE m.subject = :subject"), @NamedQuery(name = "Messages.findByText", query = "SELECT m FROM Messages m WHERE m.text = :text"), @NamedQuery(name = "Messages.findByCreationTime", query = "SELECT m FROM Messages m WHERE m.creationTime = :creationTime")})
 public class Messages implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,6 +39,10 @@ public class Messages implements Serializable {
     private String subject;
     @Column(name = "TEXT", length = 10000)
     private String text;
+    @Basic(optional = false)
+    @Column(name = "CREATION_TIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationTime =  new Date(System.currentTimeMillis());
     @JoinColumn(name = "THREADID", referencedColumnName = "THREADID", nullable = false)
     @ManyToOne(optional = false)
     private Threads threadid;
@@ -45,6 +52,11 @@ public class Messages implements Serializable {
 
     public Messages(Integer messageid) {
         this.messageid = messageid;
+    }
+
+    public Messages(Integer messageid, Date creationTime) {
+        this.messageid = messageid;
+        this.creationTime = creationTime;
     }
 
     public Integer getMessageid() {
@@ -69,6 +81,14 @@ public class Messages implements Serializable {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Date getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
     }
 
     public Threads getThreadid() {
