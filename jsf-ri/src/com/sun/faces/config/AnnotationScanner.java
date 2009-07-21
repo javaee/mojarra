@@ -155,7 +155,7 @@ public class AnnotationScanner extends AnnotationProvider {
         if (webConfig.isSet(AnnotationScanPackages)) {
             webInfLibPackages = new HashMap<String,String[]>(4);
             webInfClassesPackages = new String[0];
-            String[] options = webConfig.getOptionValue(AnnotationScanPackages, "\\s");
+            String[] options = webConfig.getOptionValue(AnnotationScanPackages, "\\s+");
             List<String> packages = new ArrayList<String>(4);
             for (String option : options) {
                 if (option.length() == 0) {
