@@ -102,6 +102,7 @@ public class AnnotationScanner extends AnnotationProvider {
     private static final String WEB_INF_LIB = "/WEB-INF/lib/";
     private static final String FACES_CONFIG_XML = "META-INF/faces-config.xml";
     private static final String META_INF_PREFIX = "META-INF/";
+    private static final String WILDCARD = "*";
 
     private static final Set<String> FACES_ANNOTATIONS;
     private static final Set<Class<? extends Annotation>> FACES_ANNOTATION_TYPE;
@@ -157,12 +158,41 @@ public class AnnotationScanner extends AnnotationProvider {
             String[] options = webConfig.getOptionValue(AnnotationScanPackages, "\\s");
             List<String> packages = new ArrayList<String>(4);
             for (String option : options) {
+                if (option.length() == 0) {
+                    continue;
+                }
                 if (option.startsWith("jar:")) {
                     String[] parts = Util.split(option, ":");
-                    webInfLibPackages.put(parts[1], Util.split(parts[2], ","));
+                    if (parts.length != 3) {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                       "[{0}] {1} : invalid jar specification format.  Expected jar:<jar name or *>:<package or *>.  Entry will be ignored.",
+                                       new String[] { AnnotationScanPackages.getQualifiedName(), option });
+                        }
+                    } else {
+                        if (WILDCARD.equals(parts[1]) && !webInfLibPackages.containsKey(WILDCARD)) {
+                            webInfLibPackages.clear();
+                            webInfLibPackages.put(WILDCARD, normalizeJarPackages(Util.split(parts[2], ",")));
+                        } else if (WILDCARD.equals(parts[1]) && webInfLibPackages.containsKey(WILDCARD)) {
+                            if (LOGGER.isLoggable(Level.WARNING)) {
+                                LOGGER.log(Level.WARNING,
+                                           "[{0}] {1} : duplicate wildcard entry for jar name found.  Entry will be ignored.",
+                                           new String[] { AnnotationScanPackages.getQualifiedName(), option });
+                            }
+                        } else {
+                            if (!webInfLibPackages.containsKey(WILDCARD)) {
+                                webInfLibPackages.put(parts[1], normalizeJarPackages(Util.split(parts[2], ",")));
+                            }
+                        }
+                    }
                 } else {
-                    if (option.length() > 0) {
-                        packages.add(option);
+                    if (WILDCARD.equals(option) && !packages.contains(WILDCARD)) {
+                        packages.clear();
+                        packages.add(WILDCARD);
+                    } else {
+                        if (!packages.contains(WILDCARD)) {
+                            packages.add(option);
+                        }
                     }
                 }
             }
@@ -532,6 +562,26 @@ public class AnnotationScanner extends AnnotationProvider {
     }
 
 
+    private String[] normalizeJarPackages(String[] packages) {
+
+        if (packages.length == 0) {
+            return packages;
+        }
+        List<String> normalizedPackages = new ArrayList<String>(packages.length);
+        for (String pkg : packages) {
+            if (WILDCARD.equals(pkg)) {
+                normalizedPackages.clear();
+                normalizedPackages.add(WILDCARD);
+                break;
+            } else {
+                normalizedPackages.add(pkg);
+            }
+        }
+        return normalizedPackages.toArray(new String[normalizedPackages.size()]);
+
+    }
+
+
     /**
      * Utility method for converting paths to fully qualified class names.
      */
@@ -564,7 +614,8 @@ public class AnnotationScanner extends AnnotationProvider {
     private boolean processJar(String entry) {
 
         return (webInfLibPackages == null
-                  || (webInfLibPackages.containsKey(entry)));
+                  || (webInfLibPackages.containsKey(entry)
+                         || webInfLibPackages.containsKey(WILDCARD)));
 
     }
 
@@ -576,7 +627,7 @@ public class AnnotationScanner extends AnnotationProvider {
         }
 
         for (String packageName : packages) {
-            if (candidate.startsWith(packageName)) {
+            if (candidate.startsWith(packageName) || WILDCARD.equals(packageName)) {
                 return true;
             }
         }
