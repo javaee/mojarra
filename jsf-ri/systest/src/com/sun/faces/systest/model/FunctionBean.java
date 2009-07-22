@@ -49,65 +49,26 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.compiler;
+package com.sun.faces.systest.model;
 
-import com.sun.faces.facelets.el.CompositeFunctionMapper;
-import com.sun.faces.facelets.tag.TagLibrary;
-import com.sun.faces.el.ELContextImpl;
-
-import javax.el.FunctionMapper;
-import javax.el.ELContext;
-import javax.faces.component.UIComponent;
-import javax.faces.view.facelets.FaceletContext;
-import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.Map;
+import javax.faces.application.FacesMessage;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 
-final class NamespaceHandler extends FunctionMapper implements FaceletHandler {
+@ManagedBean
+public class FunctionBean {
 
-    private final TagLibrary library;
-    private final Map ns;
-    private FaceletHandler next;
-    
-    public NamespaceHandler(FaceletHandler next, TagLibrary library, Map ns) {
-        this.library = library;
-        this.ns = ns;
-        this.next = next;
+    public String getValidationResult() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExpressionFactory factory = ctx.getApplication().getExpressionFactory();
+        ValueExpression expr = factory.createValueExpression(ctx.getELContext(),
+                                                             "#{fn:contains('somestrvalue', 'str')}",
+                                                             Boolean.class);
+        Boolean result = (Boolean) expr.getValue(ctx.getELContext());
+        return (result != null && result) ? "PASSED" : "FAILED";
+        
     }
-
-    public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException {
-        FunctionMapper orig = ctx.getFunctionMapper();
-        pushMapper(ctx.getFacesContext(), this);
-        ctx.setFunctionMapper(new CompositeFunctionMapper(this, orig));
-        try {
-            next.apply(ctx, parent);
-        } finally {
-            ctx.setFunctionMapper(orig);
-        }
-    }
-
-    public Method resolveFunction(String prefix, String localName) {
-        String uri = (String) this.ns.get(prefix);
-        if (uri != null) {
-            return this.library.createFunction(uri, localName);
-        }
-        return null;
-    }
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    private void pushMapper(FacesContext ctx, FunctionMapper mapper) {
-
-        ELContext elContext = ctx.getELContext();
-        if (elContext instanceof ELContextImpl) {
-            ((ELContextImpl) elContext).setFunctionMapper(mapper);
-        }
-
-    }
-
 }
