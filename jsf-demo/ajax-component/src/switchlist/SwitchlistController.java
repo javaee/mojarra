@@ -37,6 +37,18 @@ public class SwitchlistController implements Serializable {
         return null;
     }
 
+    public String m1_2(ListHolder listholder1, ListHolder listholder2) {
+        this.listholder1 = listholder1;
+        this.listholder2 = listholder2;
+        return m1_2();
+    }
+
+    public String m2_1(ListHolder listholder1, ListHolder listholder2) {
+        this.listholder1 = listholder1;
+        this.listholder2 = listholder2;
+        return m2_1();
+    }
+
 
     public void setListHolder1(ListHolder listholder1) {
         this.listholder1 = listholder1;
