@@ -389,6 +389,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (parent == null) {
             doPreRemoveProcessing(FacesContext.getCurrentInstance(), this);
             this.parent = parent;
+            compositeParent = null;
         } else {
             this.parent = parent;
             if (this.getAttributes().get(ADDED) == null) {
@@ -2008,6 +2009,7 @@ public abstract class UIComponentBase extends UIComponent {
                                  PreRemoveFromViewEvent.class,
                                  component);
         component.setInView(false);
+        component.compositeParent = null;
         if (component.getChildCount() > 0) {
             List<UIComponent> children = component.getChildren();
             for (UIComponent c : children) {
