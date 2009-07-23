@@ -301,7 +301,7 @@
         <copy todir="${build.classes.dir}/com/sun/faces">
             <fileset dir="${api.dir}/doc">
                 <include name="*.dtd"/>
-                <include name="standard-html-renderkit.xml"/>
+                <!--<include name="standard-html-renderkit.xml"/> -->
                 <include name="*.xsd"/>
             </fileset>
         </copy>
