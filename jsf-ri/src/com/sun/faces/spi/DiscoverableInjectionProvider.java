@@ -40,7 +40,7 @@ import com.sun.faces.util.Util;
 
 /**
  * <p><code>InjectionProvider</code>s that implement this interface
- * can be configured via <code>META-INF/services/com.sun.faces.spi.InjectionProvider</code>.
+ * can be configured via <code>META-INF/services/com.sun.faces.spi.injectionprovider</code>.
  *
  * <p>The format of the configuration entries is:</p>
  * <ul>
