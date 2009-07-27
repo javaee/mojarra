@@ -82,7 +82,6 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
 
         kids = parent.getChildren().listIterator();
         this.ctx = ctx;
-        initializeItems();
 
     }
 
@@ -132,9 +131,13 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
             }
         }
         Object next = findNextValidChild();
-        if (next != null) {
-            kids.previous();
-            return true;
+        while (next != null) {
+            initializeItems(next);
+            if (items != null) {
+                return true;
+            } else {
+                next = findNextValidChild();
+            }
         }
         return false;
 
@@ -155,7 +158,6 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         if (items != null) {
             return (items.next());
         }
-        initializeItems();
         return next();
 
     }
@@ -180,9 +182,8 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      * <code>Iterator</code> appropriate to the UISelectItem(s) value.
      * </p>
      */
-    private void initializeItems() {
+    private void initializeItems(Object kid) {
 
-        UIComponent kid = (UIComponent) findNextValidChild();
         if (kid instanceof UISelectItem) {
             UISelectItem ui = (UISelectItem) kid;
             SelectItem item = (SelectItem) ui.getValue();
@@ -214,6 +215,9 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                 } else {
                     throw new IllegalArgumentException();
                 }
+            }
+            if (items != null && !items.hasNext()) {
+                items = null;
             }
         } 
 

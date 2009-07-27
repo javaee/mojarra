@@ -202,6 +202,22 @@
                       itemLabelEscaped="false"/>
     </h:selectManyListbox>
 
+     <!-- ////////////////////////////////////////////////////////////// -->
+
+
+    <p>
+        Non-null select item with empty f:selectItems Collection
+    </p>
+    <h:selectManyListbox id="emptyItems">
+        <f:selectItem itemValue="Choose" itemLabel="Choose" />
+        <f:selectItems value="#{select05.emptyCollection}"
+                       var="n"
+                       itemValue="#{n}" />
+    </h:selectManyListbox>
+
+
+    <!-- ////////////////////////////////////////////////////////////// -->
+
 
     <p>
     <h:commandButton id="command" value="Submit" />

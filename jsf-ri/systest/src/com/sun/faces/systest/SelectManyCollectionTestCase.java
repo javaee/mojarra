@@ -109,6 +109,7 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               "integerList1",
               "escape01",
               "escape02",
+              "emptyItems",
         };
         int[] totalNumberOfSelections = {
               4,
@@ -128,6 +129,7 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               4,
               4,
               4,
+              1,
         };
         String[][] initialSelections = {
               new String[0],
@@ -147,6 +149,7 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               new String[0],
               new String[] { "Frodo - &lt;Ring Bearer&gt;" },
               new String[] { "Frodo -" },
+              new String[0],
         };
 
         String[][] postBackSelections = {
@@ -167,14 +170,15 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
               new String[] { "3" },
               new String[] { "Bilbo - &lt;Ring Finder&gt;" },
               new String[] {  },
+              new String[] {  },
         };
 
         // =====================================================================
         //  Validate initial page state
         //
-        List<HtmlSelect> selects = new ArrayList<HtmlSelect>(15);
+        List<HtmlSelect> selects = new ArrayList<HtmlSelect>(18);
         getAllElementsOfGivenClass(page, selects, HtmlSelect.class);
-        assertTrue(selects.size() == 17);
+        assertTrue(selects.size() == 18);
         for (int i = 0; i < selectIds.length; i++) {
             String id = selectIds[i];
             System.out.println("Validating HtmlSelect with ID: " + id);
@@ -194,9 +198,12 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
 
         selects.clear();
         getAllElementsOfGivenClass(page, selects, HtmlSelect.class);
-        assertTrue(selects.size() == 17);
-        for (int i = 0; i < selectIds.length - 1; i++) {
+        assertTrue(selects.size() == 18);
+        for (int i = 0; i < selectIds.length; i++) {
             String id = selectIds[i];
+            if ("escape02".equals(id)) {
+                continue;
+            }
             String[] newSelection = postBackSelections[i];
             HtmlSelect select = getHtmlSelectForId(selects, id);
             assertNotNull(select);
@@ -232,6 +239,7 @@ public class SelectManyCollectionTestCase extends AbstractTestCase {
         assertTrue(options.size() == totalNumberOfOptions);
         if (selectedOptions == null || selectedOptions.length == 0) {
             for (HtmlOption option : options) {
+                System.out.println(option.asText());
                 assertTrue(!option.isSelected());
             }
         } else {
