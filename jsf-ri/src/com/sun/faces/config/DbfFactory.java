@@ -48,11 +48,11 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.File;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.MalformedURLException;
 import java.util.HashMap;
-import java.util.Collections;
-import java.util.Map;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -64,6 +64,24 @@ import com.sun.faces.util.FacesLogger;
 public class DbfFactory {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
+
+    private static final String AS_INSTALL_ROOT = "com.sun.aas.installRoot";
+
+    private static final String AS_SCHEMA_DIR =
+          System.getProperty(AS_INSTALL_ROOT)
+             + File.separatorChar
+             + "lib"
+             + File.separatorChar
+             + "schemas"
+             + File.separatorChar;
+
+    private static final String AS_DTD_DIR =
+          System.getProperty(AS_INSTALL_ROOT)
+             + File.separatorChar
+             + "lib"
+             + File.separatorChar
+             + "dtds"
+             + File.separatorChar;
     
     /**
      * Location of the facelet-taglib 2.0 Schema
@@ -89,6 +107,26 @@ public class DbfFactory {
      */
     private static final String FACES_1_1_XSD =
          "/com/sun/faces/web-facesconfig_1_1.xsd";
+
+
+    /**
+     * Location of the facelet taglib xsd within GlassFish.
+     */
+    private static final String FACELET_TAGLIB_2_0_XSD_FILE =
+          AS_SCHEMA_DIR + "web-facelettaglibrary_2_0.xsd";
+
+    /**
+     * Location of the faces 2.0 xsd within GlassFish.
+     */
+    private static final String FACES_2_0_XSD_FILE =
+          AS_SCHEMA_DIR + "web-facesconfig_2_0.xsd";
+
+    /**
+     * Location of the faces 1.2 xsd within GlassFish.
+     */
+    private static final String FACES_1_2_XSD_FILE =
+          AS_SCHEMA_DIR + "web-facesconfig_1_2.xsd";
+
 
     /**
      * Our cached 2.0 facelet-taglib Schema object for validation
@@ -145,7 +183,7 @@ public class DbfFactory {
 
 
     static {
-        initSchema();
+        initStatics();
     }
 
 
@@ -167,11 +205,19 @@ public class DbfFactory {
     /**
      * Init our cache objects.
      */
-    private static void initSchema() {       
+    private static void initStatics() {
         // First, cache the various files
         // PENDING_RELEASE (rlubke) clean this up
         try {
             URL url = DbfFactory.class.getResource(FACES_1_2_XSD);
+            if (url == null) {
+                // try to load from the file
+                File f = new File(FACES_1_2_XSD_FILE);
+                if (!f.exists()) {
+                    throw new IllegalStateException("Unable to find web-facesconfig_1_2.xsd");
+                }
+                url = f.toURI().toURL();
+            }
             URLConnection conn = url.openConnection();
             conn.setUseCaches(false);
             InputStream in = conn.getInputStream();
@@ -188,6 +234,14 @@ public class DbfFactory {
             FACES_11_SCHEMA = factory.newSchema(new StreamSource(in));
 
             url = DbfFactory.class.getResource(FACES_2_0_XSD);
+            if (url == null) {
+                // try to load from the file
+                File f = new File(FACES_2_0_XSD_FILE);
+                if (!f.exists()) {
+                    throw new IllegalStateException("Unable to find web-facesconfig_2_0.xsd");
+                }
+                url = f.toURI().toURL();
+            }
             conn = url.openConnection();
             conn.setUseCaches(false);
             in = conn.getInputStream();
@@ -196,6 +250,14 @@ public class DbfFactory {
             FACES_20_SCHEMA = factory.newSchema(new StreamSource(in));
 
             url = DbfFactory.class.getResource(FACELET_TAGLIB_2_0_XSD);
+            if (url == null) {
+                // try to load from the file
+                File f = new File(FACELET_TAGLIB_2_0_XSD_FILE);
+                if (!f.exists()) {
+                    throw new IllegalStateException("Unable to find web-facelettaglibrary_2_0.xsd");
+                }
+                url = f.toURI().toURL();
+            }
             conn = url.openConnection();
             conn.setUseCaches(false);
             in = conn.getInputStream();
@@ -220,51 +282,63 @@ public class DbfFactory {
         private static final String[][] DTD_SCHEMA_INFO = {
             {
                 "web-facesconfig_1_0.dtd",
-                "/com/sun/faces/web-facesconfig_1_0.dtd"
+                "/com/sun/faces/web-facesconfig_1_0.dtd",
+                AS_DTD_DIR + "web-facesconfig_1_0.dtd"
             },
             {
                 "web-facesconfig_1_1.dtd",
-                "/com/sun/faces/web-facesconfig_1_1.dtd"
+                "/com/sun/faces/web-facesconfig_1_1.dtd",
+                AS_DTD_DIR + "web-facesconfig_1_1.dtd"
             },
             {
                 "web-facesconfig_2_0.xsd",
-                 FACES_2_0_XSD
+                 FACES_2_0_XSD,
+                 FACES_2_0_XSD_FILE
             },
             {
                 "facelet-taglib_1_0.dtd",
-                "/com/sun/faces/facelet-taglib_1_0.dtd"
+                "/com/sun/faces/facelet-taglib_1_0.dtd",
+                null
             },
             {
                 "web-facelettaglibrary_2_0.xsd",
-                 FACELET_TAGLIB_2_0_XSD
+                 FACELET_TAGLIB_2_0_XSD,
+                 FACELET_TAGLIB_2_0_XSD_FILE
             },
             {
                 "web-facesconfig_1_2.xsd",
-                FACES_1_2_XSD
+                FACES_1_2_XSD,
+                FACES_1_2_XSD_FILE
             },
             {
                 "web-facesconfig_1_1.xsd",
-                FACES_1_1_XSD
+                FACES_1_1_XSD,
+                null
             },
             {
                 "javaee_5.xsd",
-                "/com/sun/faces/javaee_5.xsd"
+                "/com/sun/faces/javaee_5.xsd",
+                AS_SCHEMA_DIR + "javaee_5.xsd"
             },
             {
                 "javaee_web_services_client_1_2.xsd",
-                "/com/sun/faces/javaee_web_services_client_1_2.xsd"
+                "/com/sun/faces/javaee_web_services_client_1_2.xsd",
+                AS_SCHEMA_DIR + "javaee_web_services_client_1_2.xsd"
             },
             {
                 "xml.xsd",
-                "/com/sun/faces/xml.xsd"
+                "/com/sun/faces/xml.xsd",
+                AS_SCHEMA_DIR + "xml.xsd"
             },
             {
                 "datatypes.dtd",
-                "/com/sun/faces/datatypes.dtd"
+                "/com/sun/faces/datatypes.dtd",
+                AS_SCHEMA_DIR + "datatypes.dtd"
             },
             {
                 "XMLSchema.dtd",
-                "/com/sun/faces/XMLSchema.dtd"
+                "/com/sun/faces/XMLSchema.dtd",
+                AS_SCHEMA_DIR + "XMLSchema.dtd"
             }
         };
 
@@ -288,13 +362,43 @@ public class DbfFactory {
             for (String[] aDTD_SCHEMA_INFO : DTD_SCHEMA_INFO) {
                 URL url = this.getClass().getResource(aDTD_SCHEMA_INFO[1]);
                 if (url == null) {
-                    if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
                                    "jsf.config.cannot_resolve_entities",
                                    new Object[]{
                                         aDTD_SCHEMA_INFO[1],
                                         aDTD_SCHEMA_INFO[0]
                                    });
+                    }
+                    // the resource isn't available on the classpath, so
+                    // assume that we're running within a GF environment
+                    String path = aDTD_SCHEMA_INFO[2];
+                    if (path != null) {
+                        File f = new File(path);
+                        if (f.exists()) {
+                            try {
+                                url = f.toURI().toURL();
+                            } catch (MalformedURLException mue) {
+                                if (LOGGER.isLoggable(Level.SEVERE)) {
+                                    LOGGER.log(Level.SEVERE,
+                                               mue.toString(),
+                                               mue);
+                                }
+                            }
+                            if (url == null) {
+                                if (LOGGER.isLoggable(Level.FINE)) {
+                                    LOGGER.log(Level.FINE,
+                                               "jsf.config.cannot_resolve_entities",
+                                               new Object[]{
+                                                     aDTD_SCHEMA_INFO[1],
+                                                     aDTD_SCHEMA_INFO[2]
+                                               });
+                                }
+                            } else {
+                                entities.put(aDTD_SCHEMA_INFO[0], url.toString());
+                            }
+                        }
+
                     }
                 } else {
                     entities.put(aDTD_SCHEMA_INFO[0], url.toString());
@@ -391,13 +495,7 @@ public class DbfFactory {
            return null;
        }
 
-       // ------------------------------------------------------ Public Methods
 
-        public Map<String,String> getKnownEntities() {
-
-            return Collections.unmodifiableMap(entities);
-
-        }
     } // END FacesEntityResolver
 
 
