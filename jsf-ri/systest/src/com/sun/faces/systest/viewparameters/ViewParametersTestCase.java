@@ -295,7 +295,7 @@ public class ViewParametersTestCase extends AbstractTestCase {
         URL requestUrl = page.getWebResponse().getRequestUrl();
         
         assertTrue(-1 != pageText.indexOf("Story 2"));
-        assertTrue(-1 != pageText.indexOf("bar is:foo"));
+        assertTrue(-1 != pageText.indexOf("bar is: foo"));
         
         return page;
     }

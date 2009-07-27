@@ -269,7 +269,7 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
         assertEquals(2, spans.size());
         HtmlSpan span = spans.get(0);
-        assertEquals("Should have a value:Hello World", span.asText());
+        assertEquals("Should have a value: Hello World", span.asText());
         span = spans.get(1);
         assertEquals("Shouldn't have a value:", span.asText());
 
