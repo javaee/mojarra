@@ -304,6 +304,8 @@ public class MessageUtils {
           "com.sun.faces.NAVIGATION_NO_MATCHING_OUTCOME";
     public static final String NAVIGATION_NO_MATCHING_OUTCOME_ACTION_ID =
           "com.sun.faces.NAVIGATION_NO_MATCHING_OUTCOME_ACTION";
+    public static final String NAVIGATION_INVALID_QUERY_STRING_ID =
+          "com.sun.faces.NAVIGATION_INVALID_QUERY_STRING";
 	public static final String OUTCOME_TARGET_BUTTON_NO_MATCH =
 		  "com.sun.faces.OUTCOME_TARGET_BUTTON_NO_MATCH";
 	public static final String OUTCOME_TARGET_LINK_NO_MATCH =

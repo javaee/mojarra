@@ -42,6 +42,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 
 public class ImplicitNavigationTestCase extends AbstractTestCase {
 
@@ -150,4 +152,62 @@ public class ImplicitNavigationTestCase extends AbstractTestCase {
 
 
        }
+
+
+       public void testImplicitNavigationWithredirect() throws Exception {
+
+           HtmlPage page = getPage("/faces/implicitnav/implicitNavRedirect.xhtml");
+           String text;
+           final String SEARCH_TEXT = "SEARCH_TEXT";
+
+           // case 1, h:button, make sure the input value is lost.
+           HtmlTextInput input = (HtmlTextInput) page.getElementById("input");
+           input.setValueAttribute(SEARCH_TEXT);
+           HtmlButtonInput buttonButton = (HtmlButtonInput) page.getElementById("httpGet");
+
+           page = buttonButton.click();
+           text = page.asText();;
+           assertTrue(!text.contains(SEARCH_TEXT));
+
+           // case 2 h:commandButton that does redirect.  Make sure a redirect is
+           // performed and the value is lost.
+           client.setRedirectEnabled(false);
+           boolean exceptionThrown = false;
+           page = getPage("/faces/implicitnav/implicitNavRedirect.xhtml");
+           input = (HtmlTextInput) page.getElementById("input");
+           input.setValueAttribute(SEARCH_TEXT);
+           HtmlSubmitInput submitButton = (HtmlSubmitInput) page.getElementById("httpPostRedirect");
+           try {
+               page = submitButton.click();
+           } catch (FailingHttpStatusCodeException e) {
+               assertEquals(302, e.getStatusCode());
+               exceptionThrown = true;
+           }
+           assertTrue(exceptionThrown);
+           client.setRedirectEnabled(true);
+           page = submitButton.click();
+           text = page.asText();;
+           assertTrue(!text.contains(SEARCH_TEXT));
+
+           // case 3 h:commandButton with empty query string
+           page = getPage("/faces/implicitnav/implicitNavRedirect.xhtml");
+           input = (HtmlTextInput) page.getElementById("input");
+           input.setValueAttribute(SEARCH_TEXT);
+           submitButton = (HtmlSubmitInput) page.getElementById("httpPostInvalidQueryString");
+           page = submitButton.click();
+           text = page.asText();
+           assertTrue(text.contains(SEARCH_TEXT));
+           assertTrue(text.contains("Invalid query string in outcome \'implicitNavRedirect02?\'"));
+
+           // case 4: h:commandButton, regular post.
+           page = getPage("/faces/implicitnav/implicitNavRedirect.xhtml");
+           input = (HtmlTextInput) page.getElementById("input");
+           input.setValueAttribute(SEARCH_TEXT);
+           submitButton = (HtmlSubmitInput) page.getElementById("httpPost");
+           page = submitButton.click();
+           text = page.asText();;
+           assertTrue(text.contains(SEARCH_TEXT));
+
+       }
+
 }
