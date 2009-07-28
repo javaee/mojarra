@@ -72,7 +72,7 @@ public class ScriptRenderer extends ScriptStyleBaseRenderer {
 
         String name = (String) attributes.get("name");
         String library = (String) attributes.get("library");
-        
+
         String key = name + library;
         
         if (null == name) {
@@ -84,17 +84,37 @@ public class ScriptRenderer extends ScriptStyleBaseRenderer {
             return;
         }
         contextMap.put(key, Boolean.TRUE);
-        
+
+        // Special case of scripts that have query strings
+        // These scripts actually use their query strings internally, not externally
+        // so we don't need the resource to know about them
+        int queryPos = name.indexOf("?");
+        String query = null;
+        if (queryPos > -1 && name.length() > queryPos) {
+            query = name.substring(queryPos+1);
+            name = name.substring(0,queryPos);
+        }
+
+
         Resource resource = context.getApplication().getResourceHandler()
               .createResource(name, library);
 
         ResponseWriter writer = context.getResponseWriter();
         this.startElement(writer, component);
-        writer.writeAttribute("src",
-                              ((resource != null)
-                                  ? resource.getRequestPath()
-                                  : "RES_NOT_FOUND"),
-                              "src");
+
+        String resourceSrc;
+        if (resource == null) {
+            resourceSrc = "RES_NOT_FOUND";
+        } else {
+            resourceSrc = resource.getRequestPath();
+            if (query != null) {
+                resourceSrc = resourceSrc +
+                        ((resourceSrc.indexOf("?") > -1) ? "+" : "?") +
+                        query;
+            }
+        }
+
+        writer.writeAttribute("src", resourceSrc, "src");
         this.endElement(writer);
     }
     

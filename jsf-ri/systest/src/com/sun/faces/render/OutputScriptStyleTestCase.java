@@ -159,4 +159,28 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
                 ));
 
     }
+
+    public void testScriptQuery() throws Exception {
+        lastpage = getPage("/faces/render/outputScriptQuery.xhtml");
+        String text = lastpage.asXml();
+
+        assertTrue(text.matches(
+                "(?s).*"+
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/simple.js\\?mod=test\">.*" +
+                "</script>.*"
+                ));
+
+        assertTrue(text.matches(
+                "(?s).*"+
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/simple2.js\">.*" +
+                "</script>.*"
+                ));
+
+        assertTrue(text.matches(
+                "(?s).*"+
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/jsf-uncompressed.js\\?ln=javax.faces\">.*" +
+                "</script>.*"
+                ));
+
+    }
 }
