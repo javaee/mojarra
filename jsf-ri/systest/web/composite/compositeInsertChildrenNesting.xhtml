@@ -48,6 +48,7 @@
     <title>Composite InsertChildren Nesting</title>
 </h:head>
 <body>
+<h:form id="form">
 <ez:compA id="compA">
     <span>Before Nested compcomp (3)</span><br/>
     <ez:compB id="compB">
@@ -55,5 +56,7 @@
     </ez:compB>
     <span>After Nested compcomp(5)</span><br/>
 </ez:compA>
+<h:commandButton id="submit" value="Submit" />
+</h:form>
 </body>
 </html>

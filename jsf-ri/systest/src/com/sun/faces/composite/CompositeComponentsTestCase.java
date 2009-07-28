@@ -390,6 +390,17 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
             assertTrue(expectedItems[i].equals(spans.get(i).asText()));    
         }
 
+        HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
+        assertNotNull(input);
+        page = input.click();
+
+        spans = new ArrayList<HtmlSpan>();
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertTrue(spans.size() == expectedItems.length);
+        for (int i = 0, len = expectedItems.length; i < len; i++) {
+            assertTrue(expectedItems[i].equals(spans.get(i).asText()));
+        }
+        
     }
 
 
