@@ -38,12 +38,19 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.tag.jsf.CompositeChildrenProcessedEvent;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponentBase;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagException;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.util.List;
 
@@ -58,7 +65,7 @@ public class InsertChildrenHandler extends TagHandlerImpl {
 
     // This attribute is not required.  If not defined, then assume the facet
     // isn't necessary.
-    TagAttribute required;
+    private TagAttribute required;
 
     
     // ------------------------------------------------------------ Constructors
@@ -80,20 +87,11 @@ public class InsertChildrenHandler extends TagHandlerImpl {
 
         UIComponent compositeParent =
               UIComponent.getCurrentCompositeComponent(ctx.getFacesContext());
-        if (compositeParent == null) {
-            return;
+        if (compositeParent != null) {
+            int count = parent.getChildCount();
+            compositeParent.subscribeToEvent(CompositeChildrenProcessedEvent.class,
+                                             new RelocateChildrenListener(ctx, parent, count));
         }
-
-        boolean required =
-              ((this.required != null) && this.required.getBoolean(ctx));
-
-        if (compositeParent.getChildCount() == 0 && required) {
-            throwRequiredException(ctx, compositeParent);
-        }
-
-        List<UIComponent> compositeChildren = compositeParent.getChildren();
-        List<UIComponent> parentChildren = parent.getChildren();
-        parentChildren.addAll(compositeChildren);
 
     }
 
@@ -111,4 +109,73 @@ public class InsertChildrenHandler extends TagHandlerImpl {
                                + '\'');
 
     }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    private class RelocateChildrenListener implements ComponentSystemEventListener, StateHolder {
+
+        FaceletContext ctx;
+        private UIComponent component;
+        int idx;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        RelocateChildrenListener(FaceletContext ctx, UIComponent component, int idx) {
+
+            this.ctx = ctx;
+            this.component = component;
+            this.idx = idx;
+
+        }
+
+        // --------------------------- Methods from ComponentSystemEventListener
+
+
+        public void processEvent(ComponentSystemEvent event)
+        throws AbortProcessingException {
+
+            UIComponent compositeParent = event.getComponent();
+            if (compositeParent == null) {
+                return;
+            }
+
+            boolean req =
+                  ((required != null) && required.getBoolean(ctx));
+
+            if (compositeParent.getChildCount() == 0 && req) {
+                throwRequiredException(ctx, compositeParent);
+            }
+
+            List<UIComponent> compositeChildren = compositeParent.getChildren();
+            List<UIComponent> parentChildren = component.getChildren();
+            parentChildren.addAll(idx, compositeChildren);
+            
+        }
+
+
+        // -------------------------------------------- Methods from StateHolder
+
+
+        public Object saveState(FacesContext context) {
+            return null;
+        }
+
+        public void restoreState(FacesContext context, Object state) {
+            // no-op
+        }
+
+        public boolean isTransient() {
+            return true;
+        }
+
+        public void setTransient(boolean newTransientValue) {
+            // no-op
+        }
+        
+    } // END RelocateChildrenListener
+
 }

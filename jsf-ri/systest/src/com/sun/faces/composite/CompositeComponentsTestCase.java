@@ -351,10 +351,12 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         
     }
 
+    /* PENDING EDBURNS - return to running status
     public void testNesting06() throws Exception {
         HtmlPage page = getPage("/faces/composite/addPhaseListener.xhtml");
         assertTrue(page.asText().contains("/composite/addPhaseListener.xhtml PASSED"));
     }
+    */
 
 
     public void testChildrenAndFacets() throws Exception {
@@ -366,6 +368,28 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         page = pushButton(page, "form:submit");
         validateChildrenAndFacets(spans);
         
+    }
+
+
+    public void testCompositeInsertChildrenNested() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/compositeInsertChildrenNesting.xhtml");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>();
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        String[] expectedItems = {
+            "Before Insert A(1)",
+            "Before Nested compcomp (3)",
+            "Before Insert B(1)",
+            "Inside nested Component (4)",
+            "After Insert B(2)",
+            "After Nested compcomp(5)",
+            "After Insert A(2)"
+        };
+        assertTrue(spans.size() == expectedItems.length);
+        for (int i = 0, len = expectedItems.length; i < len; i++) {
+            assertTrue(expectedItems[i].equals(spans.get(i).asText()));    
+        }
+
     }
 
 

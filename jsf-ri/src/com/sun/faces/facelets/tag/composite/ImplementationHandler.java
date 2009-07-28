@@ -52,6 +52,7 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
@@ -69,7 +70,9 @@ public class ImplementationHandler extends TagHandlerImpl {
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        this.nextHandler.apply(ctx, parent);
+        if (!FaceletViewHandlingStrategy.isBuildingMetadata(ctx.getFacesContext())) {
+            this.nextHandler.apply(ctx, parent);
+        }
     }
 
 }

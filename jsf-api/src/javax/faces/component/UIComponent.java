@@ -2369,6 +2369,9 @@ private void doFind(FacesContext context, String clientId) {
 
         public boolean isTransient() {
 
+            if (wrapped instanceof StateHolder) {
+                return ((StateHolder) wrapped).isTransient();
+            }
             return false;
 
         }
