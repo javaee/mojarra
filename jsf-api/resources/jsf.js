@@ -331,21 +331,26 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var parent = d.parentNode;
                 // Trim space padding before assigning to innerHTML
                 var html = str.replace(/^\s+/g,'').replace(/\s+$/g,'');
+                var parserElement = document.createElement('div');
+                var tag = d.nodeName.toLowerCase();
                 var tableElements = ['td', 'th', 'tr', 'tbody', 'thead', 'tfoot'];
-                var isInTable =  tableElements[d.tagName.toLocaleLowerCase()];
+                var isInTable = false;
+                for (var tei = 0, tel = tableElements.length; tei < tel; tei++) {
+                    if (tableElements[tei] == tag) {
+                        isInTable = true; break;
+                    }
+                }
                 if (isInTable) {
-                    temp = document.createElement('table');
-                    temp.innerHTML = html;
-                    var newElement = temp.firstChild;
+                    parserElement.innerHTML = '<table>' + html + '</table>';
+                    var newElement = parserElement.firstChild;
                     //some browsers will also create intermediary elements such as table>tbody>tr>td
                     while ((null != newElement) && (id != newElement.id)) {
                         newElement = newElement.firstChild;
                     }
                     parent.replaceChild(newElement, d);
-                } else {
-                    temp = document.createElement('div');
-                    temp.innerHTML = html;
-                    parent.replaceChild(temp.firstChild, d);
+                } else if (html.length > 0) {
+                    parserElement.innerHTML = html;
+                    parent.replaceChild(parserElement.firstChild, d);
                 }
             }
         };
