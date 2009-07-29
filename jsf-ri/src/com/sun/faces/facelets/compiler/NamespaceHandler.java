@@ -53,11 +53,14 @@ package com.sun.faces.facelets.compiler;
 
 import com.sun.faces.facelets.el.CompositeFunctionMapper;
 import com.sun.faces.facelets.tag.TagLibrary;
+import com.sun.faces.el.ELContextImpl;
 
 import javax.el.FunctionMapper;
+import javax.el.ELContext;
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.FaceletHandler;
+import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -77,6 +80,7 @@ final class NamespaceHandler extends FunctionMapper implements FaceletHandler {
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
         FunctionMapper orig = ctx.getFunctionMapper();
+        pushMapper(ctx.getFacesContext(), this);
         ctx.setFunctionMapper(new CompositeFunctionMapper(this, orig));
         try {
             next.apply(ctx, parent);
@@ -91,6 +95,19 @@ final class NamespaceHandler extends FunctionMapper implements FaceletHandler {
             return this.library.createFunction(uri, localName);
         }
         return null;
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void pushMapper(FacesContext ctx, FunctionMapper mapper) {
+
+        ELContext elContext = ctx.getELContext();
+        if (elContext instanceof ELContextImpl) {
+            ((ELContextImpl) elContext).setFunctionMapper(mapper);
+        }
+
     }
 
 }

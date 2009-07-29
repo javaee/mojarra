@@ -183,6 +183,10 @@ public class SelectMany05Bean {
         return possibleValues;
     }
 
+    public Collection<?> getEmptyCollection() {
+        return Collections.emptyList();
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
 

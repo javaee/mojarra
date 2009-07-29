@@ -39,6 +39,7 @@
  */
 package com.sun.faces.el;
 
+
 import javax.el.ELContext;
 import javax.el.ELResolver;
 import javax.el.FunctionMapper;
@@ -57,7 +58,7 @@ import java.lang.reflect.Method;
  */
 public class ELContextImpl extends ELContext {
     
-    private static final FunctionMapper functionMapper = new NoopFunctionMapper();
+    private FunctionMapper functionMapper = new NoopFunctionMapper();
     private VariableMapper variableMapper;
     private ELResolver resolver;
 
@@ -90,6 +91,16 @@ public class ELContextImpl extends ELContext {
 
     public ELResolver getELResolver() {
         return resolver;
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void setFunctionMapper(FunctionMapper functionMapper) {
+
+        this.functionMapper = functionMapper;
+
     }
 
 

@@ -129,8 +129,10 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         // Allow any nested elements that reside inside the markup element
         // for this tag to get applied
         super.applyNextHandler(ctx, c);
+
         // Apply the facelet for this composite component
         applyCompositeComponent(ctx, c);
+
         // Allow any PDL declared attached objects to be retargeted
         if (ComponentHandler.isNew(c)) {
             FacesContext context = ctx.getFacesContext();
@@ -144,12 +146,16 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     getAttachedObjectHandlers(c, false));
             vdl.retargetMethodExpressions(context, c);
 
+            context.getApplication().publishEvent(context,
+                                                  CompositeChildrenProcessedEvent.class,
+                                                  c);
             // RELEASE_PENDING This is *ugly*.  See my comments in
             // ComponentTagHandlerDelegateImpl at the end of the apply()
             // method
             if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))) {
                 markInitialState(c);
             }
+
 
         }
 

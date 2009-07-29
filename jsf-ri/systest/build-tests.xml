@@ -163,6 +163,7 @@
                 test.component,
                 test.component01,
                 test.navigation,
+                test.implicitnav,
                 test.state,
                 test.resourceBundleELResolver,
                 test.tlvalidator,
@@ -931,6 +932,7 @@
                          includes="com/sun/faces/composite/*TestCase.class"/>
             </tests>
         </jsf.junit>  
+
     </target>
 
 
@@ -972,7 +974,10 @@
                                    com/sun/faces/systest/DataTableTestCase.class,
                                    com/sun/faces/systest/TestOutputTargets.class,
                                    com/sun/faces/systest/LinkTypeAttributeTestCase.class,
-                                   com/sun/faces/systest/CheckboxTestCase.class"/>
+                                   com/sun/faces/systest/CheckboxTestCase.class,
+                                   com/sun/faces/systest/SelectOneHideNoSelectItemGroupTestCase.class,
+                                   com/sun/faces/systest/SelectOneHideNoSelectionTestCase.class,
+                                   com/sun/faces/systest/SelectOneValueExpressionHideNoSelectionTestCase.class"/>
             </tests>
         </jsf.junit>  
     </target>
@@ -1275,6 +1280,18 @@
             request="${context.path}/faces/regression/InjectUserDefJS.jsp"
             golden="${golden.path}/regression/InjectUserDefJS.txt"
             recordGolden="${local.golden.path}/regression/InjectUserDefJS.txt"/>
+    </target>
+
+    <target name="test.implicitnav">
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/implicitnav/*TestCase.class"/> 
+            </tests>
+        </jsf.junit>
+
     </target>
 
     <target name="scratch">

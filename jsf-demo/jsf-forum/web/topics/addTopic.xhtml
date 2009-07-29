@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>JSF Forum</title>
+</h:head>
+<h:body bgcolor="white">
+    <h:form id="helloForm">
+
+        <h:outputText value="Title:"/><h:inputText value="#{topic.title}"/>
+        <br/>
+        <h:outputText value="Subject: "/><h:inputText value="#{topic.subject}"/>
+        <br/>
+        <h:commandButton type="submit" value="Add" 
+                         actionListener="#{topic.createTopic}" action="/index">
+        </h:commandButton>
+        <h:commandButton type="cancel" value="Cancel" action="/index"/>
+    </h:form>
+</h:body>
+</html>

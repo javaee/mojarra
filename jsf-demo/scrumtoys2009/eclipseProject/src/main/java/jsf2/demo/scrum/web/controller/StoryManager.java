@@ -1,11 +1,8 @@
 package jsf2.demo.scrum.web.controller;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import jsf2.demo.scrum.model.entities.Sprint;
+import jsf2.demo.scrum.model.entities.Story;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -18,8 +15,12 @@ import javax.faces.model.ListDataModel;
 import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import jsf2.demo.scrum.model.entities.Sprint;
-import jsf2.demo.scrum.model.entities.Story;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @ManagedBean(name = "storyManager")
@@ -28,7 +29,7 @@ public class StoryManager extends AbstractManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @ManagedProperty("#{sprintManager}")
-    private SprintManager sprintManager;    
+    private SprintManager sprintManager;
     private Story currentStory;
     private DataModel<Story> stories;
     private List<Story> storyList;
@@ -39,7 +40,7 @@ public class StoryManager extends AbstractManager implements Serializable {
     }
 
     public void init() {
-        
+
         Sprint currentSprint = sprintManager.getCurrentSprint();
 
         if (currentSprint != null) {
@@ -161,15 +162,14 @@ public class StoryManager extends AbstractManager implements Serializable {
     }
 
     public void setCurrentStory(Story currentStory) {
-        this.currentStory = currentStory;        
+        this.currentStory = currentStory;
     }
 
     public DataModel<Story> getStories() {
-        if (sprintManager.getCurrentSprint()!=null){
+        if (sprintManager.getCurrentSprint() != null) {
             this.stories = new ListDataModel(sprintManager.getCurrentSprint().getStories());
             return stories;
-        }
-        else{
+        } else {
             return new ListDataModel<Story>();
         }
     }
@@ -190,7 +190,7 @@ public class StoryManager extends AbstractManager implements Serializable {
      * @return the storyList
      */
     public List<Story> getStoryList() {
-        if (sprintManager.getCurrentSprint()!=null){
+        if (sprintManager.getCurrentSprint() != null) {
             this.storyList = sprintManager.getCurrentSprint().getStories();
         }
         return this.storyList;
@@ -217,5 +217,5 @@ public class StoryManager extends AbstractManager implements Serializable {
         this.sprintManager = sprintManager;
     }
 
-    
+
 }

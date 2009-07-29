@@ -42,24 +42,23 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.io.IOException;
+import com.sun.faces.renderkit.Attribute;
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.RequestStateManager;
 
 import javax.el.ELException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectOne;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
-import com.sun.faces.renderkit.Attribute;
-import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.RequestStateManager;
 import java.util.Collection;
 import java.util.Iterator;
+import java.io.IOException;
 
 /**
  * <B>ReadoRenderer</B> is a class that renders the current value of
@@ -70,11 +69,11 @@ import java.util.Iterator;
 public class RadioRenderer extends SelectManyCheckboxListRenderer {
 
     private static final Attribute[] ATTRIBUTES =
-          AttributeManager.getAttributes(AttributeManager.Key.SELECTONERADIO);
+            AttributeManager.getAttributes(AttributeManager.Key.SELECTONERADIO);
 
     // ------------------------------------------------------- Protected Methods
 
-    
+
     @Override
     protected void renderOption(FacesContext context,
                                 UIComponent component,
@@ -83,10 +82,11 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
                                 Object currentSelections,
                                 Object[] submittedValues,
                                 boolean alignVertical,
-                                int itemNumber) throws IOException {
+                                int itemNumber,
+                                OptionComponentInfo optionInfo) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        assert(writer != null);
+        assert (writer != null);
 
         UISelectOne selectOne = (UISelectOne) component;
         Object curValue = selectOne.getSubmittedValue();
@@ -94,22 +94,18 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             curValue = selectOne.getValue();
         }
 
-        if (alignVertical) {
-            writer.writeText("\t", component, null);
-            writer.startElement("tr", component);
-            writer.writeText("\n", component, null);
-        }
+
 
         Class type = String.class;
         if (curValue != null) {
             type = curValue.getClass();
             if (type.isArray()) {
-                curValue = ((Object [])curValue)[0];
+                curValue = ((Object[]) curValue)[0];
                 if (null != curValue) {
                     type = curValue.getClass();
                 }
             } else if (Collection.class.isAssignableFrom(type)) {
-                Iterator valueIter = ((Collection)curValue).iterator();
+                Iterator valueIter = ((Collection) curValue).iterator();
                 if (null != valueIter && valueIter.hasNext()) {
                     curValue = valueIter.next();
                     if (null != curValue) {
@@ -120,12 +116,12 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         }
         Object itemValue = curItem.getValue();
         RequestStateManager.set(context,
-                                RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
-                                component);
+                RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
+                component);
         Object newValue;
         try {
             newValue = context.getApplication().getExpressionFactory().
-                  coerceToType(itemValue, type);
+                    coerceToType(itemValue, type);
         } catch (ELException ele) {
             newValue = itemValue;
         } catch (IllegalArgumentException iae) {
@@ -135,16 +131,26 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             newValue = itemValue;
         }
 
-        // disable the radio button if the attribute is set.
-        boolean componentDisabled = Util.componentIsDisabled(component);
+        boolean checked = null != newValue && newValue.equals(curValue);
+
+        if (optionInfo.isHideNoSelection()
+                && curItem.isNoSelectionOption()
+                && curValue != null
+                && !checked) {
+            return;
+        }
+
+        if (alignVertical) {
+            writer.writeText("\t", component, null);
+            writer.startElement("tr", component);
+            writer.writeText("\n", component, null);
+        }
 
         String labelClass;
-        if (componentDisabled || curItem.isDisabled()) {
-            labelClass = (String) component.
-                  getAttributes().get("disabledClass");
+        if (optionInfo.isDisabled() || curItem.isDisabled()) {
+            labelClass = optionInfo.getDisabledClass();
         } else {
-            labelClass = (String) component.
-                  getAttributes().get("enabledClass");
+            labelClass = optionInfo.getEnabledClass();
         }
         writer.startElement("td", component);
         writer.writeText("\n", component, null);
@@ -152,24 +158,24 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         writer.startElement("input", component);
         writer.writeAttribute("type", "radio", "type");
 
-        if (newValue.equals(curValue)) {
+        if (checked) {
             writer.writeAttribute("checked", Boolean.TRUE, null);
         }
         writer.writeAttribute("name", component.getClientId(context),
-                              "clientId");
+                "clientId");
         String idString = component.getClientId(context)
-                          + UINamingContainer.getSeparatorChar(context)
-                          + Integer.toString(itemNumber);
+                + UINamingContainer.getSeparatorChar(context)
+                + Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
 
-	writer.writeAttribute("value",
+        writer.writeAttribute("value",
                               (getFormattedValue(context, component,
                                       curItem.getValue(), converter)),
                               "value");
 
         // Don't render the disabled attribute twice if the 'parent'
         // component is already marked disabled.
-        if (!Util.componentIsDisabled(component)) {
+        if (!optionInfo.isDisabled()) {
             if (curItem.isDisabled()) {
                 writer.writeAttribute("disabled", true, "disabled");
             }
@@ -178,12 +184,12 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
         RenderKitUtils.renderPassThruAttributes(context,
-                                                writer,
-                                                component,
-                                                ATTRIBUTES,
-                                                getNonOnChangeBehaviors(component));
+                writer,
+                component,
+                ATTRIBUTES,
+                getNonOnChangeBehaviors(component));
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
-                                                         component);
+                component);
 
         RenderKitUtils.renderOnchange(context, component, false);
 
@@ -218,24 +224,5 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         }
     }
 
-    @Override
-    protected void renderOption(FacesContext context,
-                                UIComponent component,
-                                Converter converter,
-                                SelectItem curItem,
-                                boolean alignVertical,
-                                int itemNumber)
-          throws IOException {
-
-        this.renderOption(context,
-                          component,
-                          converter,
-                          curItem,
-                          null,
-                          null,
-                          alignVertical,
-                          itemNumber);
-        
-    }
 
 } // end of class RadioRenderer

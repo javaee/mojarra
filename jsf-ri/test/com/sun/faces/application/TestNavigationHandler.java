@@ -344,6 +344,39 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         foo2Params = parameters.get("foo2");
         assertEquals(1, foo2Params.size());
         assertEquals("rab3", foo2Params.get(0));
+
+        // ensure implicit navigation outcomes that include query strings
+        // separated with &amp; are properly parsed.
+
+        NavigationCase c4 = cnh.getNavigationCase(getFacesContext(),
+                                                  null,
+                                                  "test?foo=rab&amp;foo=rab2&foo2=rab3&amp;faces-redirect=true&amp;includeViewParams=true&");
+        assertNotNull(c4);
+        parameters = c4.getParameters();
+        assertNotNull(parameters);
+        assertTrue(c4.isRedirect());
+        assertTrue(c4.isIncludeViewParams());
+        assertEquals(2, parameters.size());
+        fooParams = parameters.get("foo");
+        assertNotNull(fooParams);
+        assertEquals(2, fooParams.size());
+        assertEquals("rab", fooParams.get(0));
+        assertEquals("rab2", fooParams.get(1));
+        foo2Params = parameters.get("foo2");
+        assertEquals(1, foo2Params.size());
+        assertEquals("rab3", foo2Params.get(0));
+
+        // ensure invalid query string correctly handled
+        NavigationCase c5 = cnh.getNavigationCase(getFacesContext(),
+                                                  null,
+                                                  "test?");
+
+        assertNotNull(c5);
+        assertNull(c5.getParameters());
+        assertFalse(c5.isRedirect());
+        assertFalse(c5.isIncludeViewParams());
+
+
         
     }
 

@@ -319,14 +319,14 @@ final class TextUnit extends CompilationUnit {
 
     private final static String trimRight(String s) {
         int i = s.length() - 1;
-        while (i >= 0 && Character.isWhitespace(s.charAt(i))) {
-            i--;
+        while (i >= 0) {
+            if (Character.isWhitespace(s.charAt(i))) {
+                i--;
+            } else {
+                return s;
+            }
         }
-        if (i == s.length() - 1) {
-            return s;
-        } else {
-            return s.substring(0, i + 1);
-        }
+        return "";
     }
 
     public String toString() {

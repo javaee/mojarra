@@ -88,8 +88,8 @@ public class EmptyStringAsNullTestCase extends AbstractTestCase {
         assertEquals(integerInput.getValueAttribute(), "");
 
         String pageAsText = page.asText();
-        assertTrue(pageAsText.contains("VC1 Fired:false"));
-        assertTrue(pageAsText.contains("VC2 Fired:false"));
+        assertTrue(pageAsText.contains("VC1 Fired: false"));
+        assertTrue(pageAsText.contains("VC2 Fired: false"));
         assertTrue(pageAsText.contains("String model set with null: false"));
         assertTrue(pageAsText.contains("Integer model set with null: false"));
 
@@ -110,8 +110,8 @@ public class EmptyStringAsNullTestCase extends AbstractTestCase {
         assertEquals(integerInput.getValueAttribute(), "11");
 
         pageAsText = page.asText();
-        assertTrue(pageAsText.contains("VC1 Fired:true"));
-        assertTrue(pageAsText.contains("VC2 Fired:true"));
+        assertTrue(pageAsText.contains("VC1 Fired: true"));
+        assertTrue(pageAsText.contains("VC2 Fired: true"));
         assertTrue(pageAsText.contains("String model set with null: false"));
         assertTrue(pageAsText.contains("Integer model set with null: false"));
 
@@ -132,8 +132,8 @@ public class EmptyStringAsNullTestCase extends AbstractTestCase {
         assertEquals(integerInput.getValueAttribute(), "");
 
         pageAsText = page.asText();
-        assertTrue(pageAsText.contains("VC1 Fired:true"));
-        assertTrue(pageAsText.contains("VC2 Fired:true"));
+        assertTrue(pageAsText.contains("VC1 Fired: true"));
+        assertTrue(pageAsText.contains("VC2 Fired: true"));
         assertTrue(pageAsText.contains("String model set with null: true"));
         assertTrue(pageAsText.contains("Integer model set with null: true"));
 
@@ -154,8 +154,8 @@ public class EmptyStringAsNullTestCase extends AbstractTestCase {
         assertEquals(integerInput.getValueAttribute(), "");
 
         pageAsText = page.asText();
-        assertTrue(pageAsText.contains("VC1 Fired:false"));
-        assertTrue(pageAsText.contains("VC2 Fired:false"));
+        assertTrue(pageAsText.contains("VC1 Fired: false"));
+        assertTrue(pageAsText.contains("VC2 Fired: false"));
         assertTrue(pageAsText.contains("String model set with null: true"));
         assertTrue(pageAsText.contains("Integer model set with null: true"));
         

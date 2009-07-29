@@ -1,11 +1,8 @@
 package jsf2.demo.scrum.web.controller;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import jsf2.demo.scrum.model.entities.Story;
+import jsf2.demo.scrum.model.entities.Task;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -18,11 +15,14 @@ import javax.faces.model.ListDataModel;
 import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import jsf2.demo.scrum.model.entities.Story;
-import jsf2.demo.scrum.model.entities.Task;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Dr. Spock (spock at dev.java.net)
  */
 @ManagedBean(name = "taskManager")
@@ -37,12 +37,11 @@ public class TaskManager extends AbstractManager implements Serializable {
     private StoryManager storyManager;
 
     @PostConstruct
-    public void construct() {        
+    public void construct() {
         init();
     }
 
-    
-   
+
     public void init() {
         Task task = new Task();
         Story currentStory = storyManager.getCurrentStory();
@@ -159,7 +158,7 @@ public class TaskManager extends AbstractManager implements Serializable {
     }
 
     public void setCurrentTask(Task currentTask) {
-        this.currentTask = currentTask;        
+        this.currentTask = currentTask;
     }
 
     public DataModel<Task> getTasks() {
@@ -171,13 +170,13 @@ public class TaskManager extends AbstractManager implements Serializable {
         this.tasks = tasks;
     }
 
-   public Story getStory(){
-       return storyManager.getCurrentStory();
-   }
+    public Story getStory() {
+        return storyManager.getCurrentStory();
+    }
 
-   public void setStory(Story story){
-       storyManager.setCurrentStory(story);
-   }
+    public void setStory(Story story) {
+        storyManager.setCurrentStory(story);
+    }
 
     /**
      * @return the storyManager
@@ -192,5 +191,5 @@ public class TaskManager extends AbstractManager implements Serializable {
     public void setStoryManager(StoryManager storyManager) {
         this.storyManager = storyManager;
     }
-    
+
 }

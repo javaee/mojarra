@@ -169,7 +169,7 @@ public class SelectStarTestCase extends AbstractTestCase {
     public void testSelectStarXhtmlHide() throws Exception {
         String failMsg;
 
-        getPage("/faces/render/selectStarNoSelectionHide.xhtml");
+        getPage("/faces/render/selectStarSelectionHideNoSelection.xhtml");
         System.out.println("Start select star test case - facelets");
 
         // Check SelectManyListbox
@@ -190,11 +190,11 @@ public class SelectStarTestCase extends AbstractTestCase {
         assertTrue(selectOption.asText().equals("Apple"));
 
         // Check SelectOneRadio
-        HtmlInput selectOneRadio0 = (HtmlInput) lastpage.getHtmlElementById("selectOneRadio:0");
+        HtmlInput selectOneRadio0 = (HtmlInput) lastpage.getHtmlElementById("selectOneRadio:1");
         assertTrue(selectOneRadio0.getValueAttribute().equals("Apple"));
 
         // Check SelectManyCheckbox
-        HtmlInput selectManyCheckbox0 = (HtmlInput) lastpage.getHtmlElementById("selectManyCheckbox:0");
+        HtmlInput selectManyCheckbox0 = (HtmlInput) lastpage.getHtmlElementById("selectManyCheckbox:1");
         assertTrue(selectManyCheckbox0.getValueAttribute().equals("Apple"));
 
         // Check SelectManyListbox

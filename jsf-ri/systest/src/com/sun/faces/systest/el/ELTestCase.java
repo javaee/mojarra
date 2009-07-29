@@ -104,4 +104,12 @@ public class ELTestCase extends AbstractTestCase {
 
     }
 
+
+    public void testProgrammaticExpressionFunctionEval() throws Exception {
+
+        HtmlPage page = getPage("/faces/elfunction.xhtml");
+        assertTrue(page.asText().contains("PASSED"));
+        
+    }
+
 }

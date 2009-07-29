@@ -91,8 +91,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * Flag indicated the current mode.
      */
     private boolean development;
-    private static final Pattern REDIRECT_EQUALS_TRUE = Pattern.compile("(?:\\?|&amp;|&)(faces-redirect=true(&|$))");
-    private static final Pattern INCLUDE_VIEW_PARAMS_EQUALS_TRUE = Pattern.compile("(?:\\?|&amp;|&)(includeViewParams=true(&|$))");
+    private static final Pattern REDIRECT_EQUALS_TRUE = Pattern.compile("(.*)(faces-redirect=true)(.*)");
+    private static final Pattern INCLUDE_VIEW_PARAMS_EQUALS_TRUE = Pattern.compile("(.*)(includeViewParams=true)(.*)");
 
 
     // ------------------------------------------------------------ Constructors
@@ -467,23 +467,40 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         int questionMark = viewIdToTest.indexOf('?');
         String queryString;
         if (-1 != questionMark) {
-            queryString = viewIdToTest.substring(questionMark);
-            viewIdToTest = viewIdToTest.substring(0, questionMark);
+            int viewIdLen = viewIdToTest.length();
+            if (viewIdLen <= (questionMark+1)) {
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE, "jsf.navigation_invalid_query_string",
+                            viewIdToTest);
+                }
+                if (development) {
+                    String key;
+                    Object[] params;
+                    key = MessageUtils.NAVIGATION_INVALID_QUERY_STRING_ID;
+                    params = new Object[]{viewIdToTest};
+                    FacesMessage m = MessageUtils.getExceptionMessage(key, params);
+                    m.setSeverity(FacesMessage.SEVERITY_WARN);
+                    context.addMessage(null, m);
+                }
+                queryString = null;
+                viewIdToTest = viewIdToTest.substring(0, questionMark);
+            } else {
+                queryString = viewIdToTest.substring(questionMark + 1);
+                viewIdToTest = viewIdToTest.substring(0, questionMark);
 
-            Matcher m = REDIRECT_EQUALS_TRUE.matcher(queryString);
-            if (m.find()) {
-                isRedirect = true;
-                queryString = queryString.replace(m.group(1), "");
-
+                Matcher m = REDIRECT_EQUALS_TRUE.matcher(queryString);
+                if (m.find()) {
+                    isRedirect = true;
+                    queryString = queryString.replace(m.group(2), "");
+                }
                 m = INCLUDE_VIEW_PARAMS_EQUALS_TRUE.matcher(queryString);
                 if (m.find()) {
                     isIncludeViewParams = true;
-                    queryString = queryString.replace(m.group(1), "");
+                    queryString = queryString.replace(m.group(2), "");
                 }
             }
 
             if (queryString != null && queryString.length() > 0) {
-                queryString = queryString.substring(1);
                 String[] queryElements = Util.split(queryString, "&amp;|&");
                 for (int i = 0, len = queryElements.length; i < len; i ++) {
                     String[] elements = Util.split(queryElements[i], "=");

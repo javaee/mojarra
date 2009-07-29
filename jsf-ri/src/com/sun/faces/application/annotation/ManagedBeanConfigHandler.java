@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.LinkedHashMap;
 
 import javax.faces.bean.*;
 import javax.faces.context.FacesContext;
@@ -143,24 +144,23 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
         String scope = getScope(annotatedClass);
         boolean eager = metadata.eager();
         
-        Field[] fields = annotatedClass.getDeclaredFields();
+        Map<String,Field> annotatedFields = new LinkedHashMap<String,Field>();
+        collectAnnotatedFields(annotatedClass, annotatedFields);
+
         List<ManagedBeanInfo.ManagedProperty> properties = null;
-        if (fields.length > 0) {
-            for (Field field : fields) {
-                ManagedProperty property = field.getAnnotation(ManagedProperty.class);
-                if (property != null) {
-                    if (properties == null) {
-                        properties = new ArrayList<ManagedBeanInfo.ManagedProperty>();
-                    }
-                    String n = property.name();
-                    ManagedBeanInfo.ManagedProperty propertyInfo =
-                          new ManagedBeanInfo.ManagedProperty(((n != null && n.length() != 0) ? n : field.getName()),
-                                                              field.getType().getName(),
+
+        if (!annotatedFields.isEmpty()) {
+            properties = new ArrayList<ManagedBeanInfo.ManagedProperty>(annotatedFields.size());
+            for (Map.Entry<String,Field> entry : annotatedFields.entrySet()) {
+                Field f = entry.getValue();
+                ManagedProperty property = f.getAnnotation(ManagedProperty.class);
+                ManagedBeanInfo.ManagedProperty propertyInfo =
+                          new ManagedBeanInfo.ManagedProperty(entry.getKey(),
+                                                              f.getType().getName(),
                                                               property.value(),
                                                               null,
                                                               null);
-                    properties.add(propertyInfo);
-                }
+                properties.add(propertyInfo);
             }
         }
 
@@ -172,6 +172,31 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                                    null,
                                    properties,
                                    null);
+
+    }
+
+
+    private void collectAnnotatedFields(Class<?> baseClass, Map<String,Field> annotatedFields) {
+
+        Field[] fields = baseClass.getDeclaredFields();
+        for (Field field : fields) {
+            ManagedProperty property = field.getAnnotation(ManagedProperty.class);
+            if (property != null) {
+                String propName = property.name();
+                if (propName == null || propName.length() == 0) {
+                    propName = field.getName();
+                }
+                // if the field has already been collected, don't replace the existing
+                // value as that value represents an override.
+                if (!annotatedFields.containsKey(propName)) {
+                    annotatedFields.put(propName, field);
+                }
+            }
+        }
+        Class<?> superClass = baseClass.getSuperclass();
+        if (!Object.class.equals(superClass)) {
+            collectAnnotatedFields(superClass, annotatedFields);
+        }
 
     }
 

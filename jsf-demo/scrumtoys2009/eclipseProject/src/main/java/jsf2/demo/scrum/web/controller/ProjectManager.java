@@ -1,29 +1,27 @@
 package jsf2.demo.scrum.web.controller;
 
-import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import jsf2.demo.scrum.model.entities.Project;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import jsf2.demo.scrum.model.entities.Project;
+import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author Dr. Spock (spock at dev.java.net)
  */
 @ManagedBean(name = "projectManager")
@@ -34,7 +32,7 @@ public class ProjectManager extends AbstractManager implements Serializable {
     private Project currentProject;
     private DataModel<Project> projects;
     private List<SelectItem> projectItems;
-    private List<Project> projectList;   
+    private List<Project> projectList;
 
     @PostConstruct
     public void construct() {
@@ -151,7 +149,7 @@ public class ProjectManager extends AbstractManager implements Serializable {
                     Query query = em.createNamedQuery((getCurrentProject().isNew()) ? "project.new.countByName" : "project.countByName");
                     query.setParameter("name", newName);
                     if (!currentProject.isNew()) {
-                        query.setParameter("currentProject",getCurrentProject());
+                        query.setParameter("currentProject", getCurrentProject());
                     }
                     return (Long) query.getSingleResult();
                 }
@@ -213,9 +211,9 @@ public class ProjectManager extends AbstractManager implements Serializable {
         this.projectList = projectList;
     }
 
-    public String viewSprints(){
+    public String viewSprints() {
         return "/sprint/show";
     }
 
- 
+
 }

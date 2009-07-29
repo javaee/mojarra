@@ -49,13 +49,11 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UINamingContainer;
-import javax.faces.component.behavior.ClientBehaviorHolder;
-import javax.faces.component.behavior.ClientBehavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -120,6 +118,14 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
         Object currentSelections = getCurrentSelectedValues(component);
         Object[] submittedValues = getSubmittedSelectedValues(component);
+        Map<String,Object> attributes = component.getAttributes();
+        OptionComponentInfo optionInfo =
+              new OptionComponentInfo((String) attributes.get("disabledClass"),
+                                      (String) attributes.get("enabledClass"),
+                                      (String) attributes.get("unselectedClass"),
+                                      (String) attributes.get("selectedClass"),
+                                      Util.componentIsDisabled(component),
+                                      isHideNoSelection(component));
         int idx = -1;
         while (items.hasNext()) {
             SelectItem curItem = items.next();
@@ -158,7 +164,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                  currentSelections,
                                  submittedValues,
                                  alignVertical,
-                                 i);
+                                 i,
+                                 optionInfo);
                 }
                 renderEndText(component, alignVertical, context);
                 writer.endElement("td");
@@ -174,7 +181,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                              currentSelections,
                              submittedValues,
                              alignVertical,
-                             idx);
+                             idx,
+                             optionInfo);
             }
         }
 
@@ -251,7 +259,34 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                 Object currentSelections,
                                 Object[] submittedValues,
                                 boolean alignVertical,
-                                int itemNumber) throws IOException {
+                                int itemNumber,
+                                OptionComponentInfo optionInfo) throws IOException {
+
+
+        String valueString = getFormattedValue(context, component,
+                                               curItem.getValue(), converter);
+
+        Object valuesArray;
+        Object itemValue;
+        if (submittedValues != null) {
+            valuesArray = submittedValues;
+            itemValue = valueString;
+        } else {
+            valuesArray = currentSelections;
+            itemValue = curItem.getValue();
+        }
+
+        RequestStateManager.set(context,
+                                RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
+                                component);
+
+        boolean isSelected = isSelected(context, component, itemValue, valuesArray, converter);
+        if (optionInfo.isHideNoSelection()
+                && curItem.isNoSelectionOption()
+                && currentSelections != null
+                && !isSelected) {
+            return;
+        }
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
@@ -271,32 +306,17 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                           + UINamingContainer.getSeparatorChar(context)
                           + Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
-        String valueString = getFormattedValue(context, component,
-                                               curItem.getValue(), converter);
+
         writer.writeAttribute("value", valueString, "value");
         writer.writeAttribute("type", "checkbox", null);
 
-        Object valuesArray;
-        Object itemValue;
-        if (submittedValues != null) {
-            valuesArray = submittedValues;
-            itemValue = valueString;
-        } else {
-            valuesArray = currentSelections;
-            itemValue = curItem.getValue();
-        }
-
-        RequestStateManager.set(context,
-                                RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
-                                component);
-
-        if (isSelected(context, component, itemValue, valuesArray, converter)) {
+        if (isSelected) {
             writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);
         }
 
         // Don't render the disabled attribute twice if the 'parent'
         // component is already marked disabled.
-        if (!Util.componentIsDisabled(component)) {
+        if (!optionInfo.isDisabled()) {
             if (curItem.isDisabled()) {
                 writer.writeAttribute("disabled", true, "disabled");
             }
@@ -319,30 +339,23 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.startElement("label", component);
         writer.writeAttribute("for", idString, "for");
 
-        // disable the check box if the attribute is set.
-        boolean componentDisabled = Util.componentIsDisabled(component);
-
         // Set up the label's class, if appropriate
         StringBuilder labelClass = new StringBuilder();
         String style;
         // If disabledClass or enabledClass set, add it to the label's class
-        if (componentDisabled || curItem.isDisabled()) {
-            style = (String) component.
-                  getAttributes().get("disabledClass");
+        if (optionInfo.isDisabled() || curItem.isDisabled()) {
+            style = optionInfo.getDisabledClass();
         } else {  // enabled
-            style = (String) component.
-                  getAttributes().get("enabledClass");
+            style = optionInfo.getEnabledClass();
         }
         if (style != null) {
             labelClass.append(style);
         }
         // If selectedClass or unselectedClass set, add it to the label's class
         if (isSelected(context, component, itemValue, valuesArray, converter)) {
-            style = (String) component.
-                  getAttributes().get("selectedClass");
+            style = optionInfo.getSelectedClass();
         } else { // not selected
-            style = (String) component.
-                  getAttributes().get("unselectedClass");
+            style = optionInfo.getUnselectedClass();
         }
         if (style != null) {
             if (labelClass.length() > 0) {
@@ -352,17 +365,18 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         }
         writer.writeAttribute("class", labelClass.toString(), "labelClass");
         String itemLabel = curItem.getLabel();
-        if (itemLabel != null) {
-            writer.writeText(" ", component, null);
-            if (!curItem.isEscape()) {
-                // It seems the ResponseWriter API should
-                // have a writeText() with a boolean property
-                // to determine if it content written should
-                // be escaped or not.
-                writer.write(itemLabel);
-            } else {
-                writer.writeText(itemLabel, component, "label");
-            }
+        if (itemLabel == null) {
+            itemLabel = valueString;
+        }
+        writer.writeText(" ", component, null);
+        if (!curItem.isEscape()) {
+            // It seems the ResponseWriter API should
+            // have a writeText() with a boolean property
+            // to determine if it content written should
+            // be escaped or not.
+            writer.write(itemLabel);
+        } else {
+            writer.writeText(itemLabel, component, "label");
         }
         if (isSelected(context, component, itemValue, valuesArray, converter)) {
             
@@ -379,25 +393,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         }
     }
 
-    @Deprecated
-    protected void renderOption(FacesContext context,
-                                UIComponent component,
-                                Converter converter,
-                                SelectItem curItem,
-                                boolean alignVertical,
-                                int itemNumber)
-          throws IOException {
-
-        renderOption(context,
-                     component,
-                     converter,
-                     curItem,
-                     getCurrentSelectedValues(component),
-                     getSubmittedSelectedValues(component),
-                     alignVertical,
-                     itemNumber);
-
-    }
 
     // ------------------------------------------------- Package Private Methods
 

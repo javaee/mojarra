@@ -56,6 +56,9 @@ public class OutcomeTargetLinkRenderer extends OutcomeTargetRenderer {
     private static final Attribute[] ATTRIBUTES =
         AttributeManager.getAttributes(AttributeManager.Key.OUTPUTLINK);
 
+    private static final String NO_NAV_CASE =
+          OutcomeTargetLinkRenderer.class.getName() + "_NO_NAV_CASE";
+
 
     // --------------------------------------------------- Methods from Renderer
 
@@ -76,7 +79,11 @@ public class OutcomeTargetLinkRenderer extends OutcomeTargetRenderer {
 
         if (!disabled) {
             navCase = getNavigationCase(context, component);
-            failedToResolveNavigationCase = (navCase == null);
+            if (navCase == null) {
+                failedToResolveNavigationCase = true;
+                context.getAttributes().put(NO_NAV_CASE, true);
+            }
+
         }
 
         if (disabled || navCase == null) {
@@ -99,7 +106,10 @@ public class OutcomeTargetLinkRenderer extends OutcomeTargetRenderer {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
-        writer.endElement(Util.componentIsDisabled(component) ? "span" : "a");
+        String endElement = ((Util.componentIsDisabled(component) || context.getAttributes().remove(NO_NAV_CASE) != null) 
+                                ? "span"
+                                : "a");
+        writer.endElement(endElement);
 
     }
 

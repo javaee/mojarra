@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>JSF Forum</title>
+</h:head>
+<h:body bgcolor="white">
+    <h:form id="helloForm">
+
+        <h:link outcome="/index" value="#{forum.title}"/> -- #{topic.title} 
+
+        <h:dataTable id="table" value="#{topic.threads}" var="thread" border="2" rules="all">
+            <f:facet name="header">
+                <h:outputText id="head" value="#{topic.title}" />
+            </f:facet>
+
+            <h:column>
+                <f:facet name="header">
+                    Title
+                </f:facet>
+                <h:link outcome="/threads/listThread" value="#{thread.title}">
+                    <f:param name="topicId" value="#{topic.id}"/>
+                    <f:param name="threadId" value="#{thread.threadid}"/>
+                </h:link>
+            </h:column>
+
+
+        </h:dataTable>
+
+        <h:commandLink id="addThread" action="/threads/addThread" value="Start a new Thread">
+            <f:param name="topicId" value="#{topic.id}"/>
+        </h:commandLink>
+
+
+    </h:form>
+</h:body>
+</html>

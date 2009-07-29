@@ -163,6 +163,14 @@ public class AnnotationTestBean {
         assertEquals("Hello", greeting);
         assertTrue(ctx.getExternalContext().getRequestMap().get("customScopeAnnotatedBean") instanceof CustomScopeAnnotatedBean);
 
+        // validate inheritance
+        ve = factory.createValueExpression(ctx.getELContext(),
+                                           "#{baseBean}",
+                                           Object.class);
+        BaseBeanImplementation impl = (BaseBeanImplementation) ve.getValue(ctx.getELContext());
+        assertEquals(20, impl.getAge());
+        assertEquals("Bill", impl.getName());
+
     }
 
     private void testAnnotatedComponentsWebInfLib() throws Exception {

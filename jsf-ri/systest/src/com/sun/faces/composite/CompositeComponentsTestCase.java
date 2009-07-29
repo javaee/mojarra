@@ -269,7 +269,7 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
         assertEquals(2, spans.size());
         HtmlSpan span = spans.get(0);
-        assertEquals("Should have a value:Hello World", span.asText());
+        assertEquals("Should have a value: Hello World", span.asText());
         span = spans.get(1);
         assertEquals("Shouldn't have a value:", span.asText());
 
@@ -351,6 +351,13 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         
     }
 
+    /* PENDING EDBURNS - return to running status
+    public void testNesting06() throws Exception {
+        HtmlPage page = getPage("/faces/composite/addPhaseListener.xhtml");
+        assertTrue(page.asText().contains("/composite/addPhaseListener.xhtml PASSED"));
+    }
+    */
+
 
     public void testChildrenAndFacets() throws Exception {
 
@@ -360,6 +367,39 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         validateChildrenAndFacets(spans);
         page = pushButton(page, "form:submit");
         validateChildrenAndFacets(spans);
+        
+    }
+
+
+    public void testCompositeInsertChildrenNested() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/compositeInsertChildrenNesting.xhtml");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>();
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        String[] expectedItems = {
+            "Before Insert A(1)",
+            "Before Nested compcomp (3)",
+            "Before Insert B(1)",
+            "Inside nested Component (4)",
+            "After Insert B(2)",
+            "After Nested compcomp(5)",
+            "After Insert A(2)"
+        };
+        assertTrue(spans.size() == expectedItems.length);
+        for (int i = 0, len = expectedItems.length; i < len; i++) {
+            assertTrue(expectedItems[i].equals(spans.get(i).asText()));    
+        }
+
+        HtmlSubmitInput input = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
+        assertNotNull(input);
+        page = input.click();
+
+        spans = new ArrayList<HtmlSpan>();
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertTrue(spans.size() == expectedItems.length);
+        for (int i = 0, len = expectedItems.length; i < len; i++) {
+            assertTrue(expectedItems[i].equals(spans.get(i).asText()));
+        }
         
     }
 

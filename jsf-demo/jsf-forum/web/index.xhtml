@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>JSF Forum</title>
+</h:head>
+<h:body bgcolor="white">
+    <h:form id="forumForm">
+        <h:dataTable id="table" value="#{forum.topics}" var="topic" border="2" rules="all">
+            <f:facet name="header">
+                <h:outputText id="head" value="#{forum.title}" />
+            </f:facet>
+
+            <h:column>
+                <f:facet name="header">
+                    ID
+                </f:facet>
+                <h:outputText id="topicId" value="#{topic.topicid}"/>
+            </h:column>
+
+
+            <h:column>
+                <f:facet name="header">
+                    Title
+                </f:facet>
+                <h:link id="title" outcome="topics/listTopic" value="#{topic.title}">
+                    <f:param name="topicId" value="#{topic.topicid}"/>
+                </h:link>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    Subject
+                </f:facet>
+                <h:outputText id="subject" value="#{topic.subject}"/>
+            </h:column>
+        </h:dataTable>
+
+        <h:commandLink action="topics/addTopic" value="Add a Topic">
+            <f:param name="addTopic" value="true"/>
+        </h:commandLink>
+
+    </h:form>
+</h:body>
+</html>

@@ -51,13 +51,14 @@
 
 package com.sun.faces.facelets.tag.jstl.core;
 
+import javax.servlet.jsp.jstl.core.LoopTagStatus;
 import java.io.Serializable;
 
 /**
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class IterationStatus implements Serializable {
+public final class IterationStatus implements Serializable, LoopTagStatus {
 
     /**
      * 
@@ -65,31 +66,59 @@ public final class IterationStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final int index;
-    
     private final boolean first;
-    
     private final boolean last;
-
-    private final boolean even;
-
     private final Integer begin;
-
     private final Integer end;
-
     private final Integer step;
+    private final boolean even;
+    private final Object current;
+    private final int iterationCount;
+
+
+    // ------------------------------------------------------------ Constructors
+
 
     /**
-     * 
+     * Constructor used for ui:repeat.
      */
-    public IterationStatus(boolean first, boolean last, int index, Integer begin, Integer end, Integer step) {
+    public IterationStatus(boolean first,
+                           boolean last,
+                           int index,
+                           Integer begin,
+                           Integer end,
+                           Integer step) {
+        this(first, last, index, begin, end, step, null, 0);
+    }
+
+
+    /**
+     * Constructor used for c:forEach varStatus
+     */
+    public IterationStatus(boolean first,
+                           boolean last,
+                           int index,
+                           Integer begin,
+                           Integer end,
+                           Integer step,
+                           Object current,
+                           int iterationCount) {
         this.index = index;
         this.begin = begin;
         this.end = end;
         this.step = step;
         this.first = first;
         this.last = last;
-        this.even = ((index - begin) / step) % 2 == 0;
+        this.current = current;
+        int iBegin = ((begin != null) ? begin : 0);
+        int iStep = ((step != null) ? step : 1);
+        this.even = ((index - iBegin) / iStep) % 2 == 0;
+        this.iterationCount = iterationCount;
     }
+
+
+    // ---------------------------------------------- Methods from LoopTagStatus
+
 
     public boolean isFirst() {
         return this.first;
@@ -97,14 +126,6 @@ public final class IterationStatus implements Serializable {
 
     public boolean isLast() {
         return this.last;
-    }
-
-    public boolean isEven() {
-        return even;
-    }
-
-    public boolean isOdd() {
-        return !even;
     }
 
     public Integer getBegin() {
@@ -121,6 +142,25 @@ public final class IterationStatus implements Serializable {
 
     public Integer getStep() {
         return step;
+    }
+
+    public Object getCurrent() {
+        return current;
+    }
+
+    public int getCount() {
+        return iterationCount;
+    }
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public boolean isEven() {
+        return even;
+    }
+
+    public boolean isOdd() {
+        return !even;
     }
 
 }

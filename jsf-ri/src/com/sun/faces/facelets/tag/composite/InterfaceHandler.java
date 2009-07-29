@@ -83,7 +83,7 @@ public class InterfaceHandler extends TagHandlerImpl {
         FacesContext context = ctx.getFacesContext();
         // only process if it's been created
         // Do not process if we're simply building metadata
-        if (context.getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA)) {
+        if (FaceletViewHandlingStrategy.isBuildingMetadata(context)) {
             imbueComponentWithMetadata(ctx, parent);
             this.nextHandler.apply(ctx, parent);
         }

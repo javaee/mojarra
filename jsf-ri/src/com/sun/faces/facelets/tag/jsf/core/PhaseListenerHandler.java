@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.ReflectionUtil;
@@ -66,6 +67,8 @@ import javax.faces.event.PhaseListener;
 import javax.faces.view.facelets.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PhaseListenerHandler extends TagHandlerImpl {
 
@@ -158,7 +161,11 @@ public class PhaseListenerHandler extends TagHandlerImpl {
 
     public void apply(FaceletContext ctx, UIComponent parent)
           throws IOException {
-        if (ComponentHandler.isNew(parent)) {
+        FacesContext context = ctx.getFacesContext();
+        if (ComponentHandler.isNew(parent) ||
+            (FaceletViewHandlingStrategy.isBuildingMetadata(context) &&
+             !compositeComponentHasPhaseListenerForHandler(context, parent,
+                this))) {
             UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
             if (root == null) {
                 throw new TagException(this.tag, "UIViewRoot not available");
@@ -172,5 +179,39 @@ public class PhaseListenerHandler extends TagHandlerImpl {
 
             root.addPhaseListener(pl);
         }
+    }
+
+
+
+    private boolean compositeComponentHasPhaseListenerForHandler(FacesContext context,
+            UIComponent parent, TagHandler tagHandler) {
+        boolean result = false;
+
+        // This method uses the the UIComponent parent argument as a key in
+        // contextAttrs.  The value for such a key is a Map<TagHandler, Boolean>.
+        // If there is a non-null entry in this inner map for argument
+        // TagHandler tagHandler, we know that the composite component parent
+        // has already had this specific phaseListener tag applied to it.
+        Map<Object, Object> contextAttrs = context.getAttributes();
+        
+        // If this composite component instance has already this tag
+        // instance applied...
+        if (contextAttrs.containsKey(parent) &&
+            ((Map<TagHandler, Boolean>)contextAttrs.get(parent)).containsKey(tagHandler)) {
+            // return true.
+            result = true;
+        } else {
+            // Otherwise return false and store the result for future queries
+            // on this request.
+            result = false;
+            Map<TagHandler, Boolean> innerMap;
+            if (null == (innerMap = (Map<TagHandler, Boolean>)contextAttrs.get(parent))) {
+                innerMap = new HashMap<TagHandler, Boolean>();
+                contextAttrs.put(parent, innerMap);
+            }
+            innerMap.put(tagHandler, Boolean.TRUE);
+        }
+
+        return result;
     }
 }

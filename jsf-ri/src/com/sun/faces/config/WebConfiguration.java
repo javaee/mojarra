@@ -91,6 +91,8 @@ public class WebConfiguration {
     private Map<WebEnvironmentEntry, String> envEntries =
           new EnumMap<WebEnvironmentEntry, String>(WebEnvironmentEntry.class);
 
+    private Map<WebContextInitParameter, String []> cachedListParams;
+
     private List<String> setParams = new ArrayList<String>();
 
     private ServletContext servletContext;
@@ -223,8 +225,6 @@ public class WebConfiguration {
 
     }
     
-    private Map<WebContextInitParameter, String []> cachedListParams;
-    
     public String [] getOptionValue(WebContextInitParameter param, String sep) {
         String [] result;
         
@@ -234,7 +234,7 @@ public class WebConfiguration {
             if (null == value) {
                 result = new String[0];
             } else {
-                result = value.split(sep);
+                result = Util.split(value, sep);
             }
             cachedListParams.put(param, result);
         }
@@ -825,6 +825,10 @@ public class WebConfiguration {
         ),
         FullStateSavingViewIds(
               StateManager.FULL_STATE_SAVING_VIEW_IDS_PARAM_NAME,
+              ""
+        ),
+        AnnotationScanPackages(
+              "com.sun.faces.annotationScanPackages",
               ""
         );
 

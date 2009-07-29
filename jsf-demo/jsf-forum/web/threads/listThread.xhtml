@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>JSF Forum</title>
+</h:head>
+<h:body bgcolor="white">
+    <h:form id="helloForm">
+
+        <h:link outcome="/index" value="#{forum.title}"/> -- <h:link outcome="/topics/listTopic" value="#{topic.title}">
+                    <f:param name="topicId" value="#{topic.id}"/>
+                </h:link> -- #{thread.title}
+
+        <h:dataTable id="table" value="#{thread.messages}" var="message" border="2" rules="all">
+            <f:facet name="header">
+                <h:outputText id="head" value="#{thread.title}" />
+            </f:facet>
+
+            <h:column>
+                <f:facet name="header">
+                    Subject
+                </f:facet>
+                <h:outputText id="subject" value="#{message.subject}"/>
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    Text
+                </f:facet>
+                <h:outputText id="text" value="#{message.text}"/>
+            </h:column>
+        </h:dataTable>
+
+        <h:commandLink id="replyMessage" action="/nav/replyMessage" value="Reply on this thread">
+            <f:param name="topicId" value="#{topic.id}"/>
+            <f:param name="threadId" value="#{thread.id}"/>
+            <f:param name="replyMessage" value="true"/>
+        </h:commandLink>
+
+
+    </h:form>
+</h:body>
+</html>

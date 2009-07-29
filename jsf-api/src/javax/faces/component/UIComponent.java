@@ -222,6 +222,7 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      */
     List<String> attributesThatAreSet;
     StateHelper stateHelper = null;
+    UIComponent compositeParent;
 
 
     // -------------------------------------------------------------- Attributes
@@ -1766,9 +1767,15 @@ private void doFind(FacesContext context, String clientId) {
         if (component == null) {
             return null;
         } else {
+            if (component.compositeParent != null) {
+                return component.compositeParent;
+            }
             UIComponent parent = component.getParent();
             while (parent != null) {
                 if (UIComponent.isCompositeComponent(parent)) {
+                    if (component.isInView()) {
+                        component.compositeParent = parent;
+                    }
                     return parent;
                 }
                 parent = parent.getParent();
@@ -2362,6 +2369,9 @@ private void doFind(FacesContext context, String clientId) {
 
         public boolean isTransient() {
 
+            if (wrapped instanceof StateHolder) {
+                return ((StateHolder) wrapped).isTransient();
+            }
             return false;
 
         }

@@ -207,7 +207,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (null != behaviorEvent) {
             List<ClientBehavior> behaviorsForEvent = behaviors.get(behaviorEvent);
 
-            if (null != behaviors && behaviors.size() > 0) {
+            if (behaviors.size() > 0) {
                 String behaviorSource = params.get("javax.faces.source");
                String clientId = component.getClientId();
                if (null != behaviorSource && behaviorSource.equals(clientId)) {
@@ -877,5 +877,73 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
 
     }
+
+
+    /**
+     * Structure to hold common info used by Select* components
+     * to reduce the number of times component attributes are evaluated
+     * when rendering options.
+     */
+    public static class OptionComponentInfo {
+
+        String disabledClass;
+        String enabledClass;
+        String selectedClass;
+        String unselectedClass;
+        boolean disabled;
+        boolean hideNoSelection;
+
+        public OptionComponentInfo(String disabledClass,
+                                   String enabledClass,
+                                   boolean disabled,
+                                   boolean hideNoSelection) {
+
+            this(disabledClass, enabledClass, null, null, disabled, hideNoSelection);
+
+        }
+
+
+        public OptionComponentInfo(String disabledClass,
+                                   String enabledClass,
+                                   String unselectedClass,
+                                   String selectedClass,
+                                   boolean disabled,
+                                   boolean hideNoSelection) {
+
+            this.disabledClass = disabledClass;
+            this.enabledClass = enabledClass;
+            this.unselectedClass = unselectedClass;
+            this.selectedClass = selectedClass;
+            this.disabled = disabled;
+            this.hideNoSelection = hideNoSelection;
+            
+        }
+
+        public String getDisabledClass() {
+            return disabledClass;
+        }
+
+        public String getEnabledClass() {
+            return enabledClass;
+        }
+
+        public boolean isDisabled() {
+            return disabled;
+        }
+
+        public boolean isHideNoSelection() {
+            return hideNoSelection;
+        }
+
+        public String getSelectedClass() {
+            return selectedClass;
+        }
+
+        public String getUnselectedClass() {
+            return unselectedClass;
+        }
+        
+    }
+    
 
 } // end of class HtmlBasicRenderer

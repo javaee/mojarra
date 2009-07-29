@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -693,6 +694,7 @@ public class ConfigureListener implements ServletRequestListener,
     private static class WebXmlProcessor {
 
         private static final String WEB_XML_PATH = "/WEB-INF/web.xml";
+        private static final String WEB_FRAGMENT_PATH = "META-INF/web-fragment.xml";
 
         private boolean facesServletPresent;
         private boolean errorPagePresent;
@@ -745,25 +747,64 @@ public class ConfigureListener implements ServletRequestListener,
          * @param context the ServletContext instance for this application
          */
         private void scanForFacesServlet(ServletContext context) {
-
-            SAXParserFactory factory = getConfiguredFactory();
-            try {
-                SAXParser parser = factory.newSAXParser();
-                parser.parse(context.getResourceAsStream(WEB_XML_PATH),
-                              new WebXmlHandler());
-            } catch (Exception e) {
-                // This probably won't happen since the container would
-                // catch it before we would, but, if we catch an exception
-                // processing the web.xml, set facesServletFound to true to
-                // default to our previous behavior of processing the faces
-                // configuration.
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               MessageFormat.format("Unable to process deployment descriptor for context ''{0}''",
-                                                    getServletContextIdentifier(context)),
-                               e);
+            InputStream in = context.getResourceAsStream(WEB_XML_PATH);
+            if (in == null) {
+                if (context.getMajorVersion() < 3) {
+                    throw new ConfigurationException("no web.xml present");
                 }
-                facesServletPresent = true;
+            }
+            SAXParserFactory factory = getConfiguredFactory();
+            if (in != null) {
+                try {
+                    SAXParser parser = factory.newSAXParser();
+                    parser.parse(in, new WebXmlHandler());
+                } catch (Exception e) {
+                    warnProcessingError(e, context);
+                    facesServletPresent = true;
+                    return;
+                } finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (Exception ioe) {
+                            // ignored;
+                        }
+                    }
+                }
+            }
+            if (!facesServletPresent && context.getMajorVersion() >= 3) {
+                ClassLoader cl = Util.getCurrentLoader(this);
+                Enumeration<URL> urls;
+                try {
+                    urls = cl.getResources(WEB_FRAGMENT_PATH);
+                } catch (IOException ioe) {
+                    throw new ConfigurationException(ioe);
+                }
+                if (urls != null) {
+                    while (urls.hasMoreElements() && !facesServletPresent) {
+                        InputStream fragmentStream = null;
+                        try {
+                            URL url = urls.nextElement();
+                            URLConnection conn = url.openConnection();
+                            conn.setUseCaches(false);
+                            fragmentStream = conn.getInputStream();
+                            SAXParser parser = factory.newSAXParser();
+                            parser.parse(fragmentStream, new WebXmlHandler());
+                        } catch (Exception e) {
+                            warnProcessingError(e, context);
+                            facesServletPresent = true;
+                            return;
+                        } finally {
+                            if (fragmentStream != null) {
+                                try {
+                                    fragmentStream.close();
+                                } catch (IOException ioe) {
+                                    // ignore
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
         } // END scanForFacesServlet
@@ -781,6 +822,19 @@ public class ConfigureListener implements ServletRequestListener,
             return factory;
 
         } // END getConfiguredFactory
+
+
+        private void warnProcessingError(Exception e, ServletContext sc) {
+
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           MessageFormat.format(
+                                 "Unable to process deployment descriptor for context ''{0}''",
+                                 getServletContextIdentifier(sc)),
+                           e);
+            }
+
+        }
 
 
         /**

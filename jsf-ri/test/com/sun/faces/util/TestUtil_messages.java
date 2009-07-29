@@ -120,6 +120,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, "1"},
         {MessageUtils.CANT_CONVERT_VALUE_ERROR_MESSAGE_ID, "2"},
         {MessageUtils.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, "4"},
+        {MessageUtils.NAVIGATION_INVALID_QUERY_STRING_ID, "1"},
         {MessageUtils.ENCODING_ERROR_MESSAGE_ID, "0"},
         {MessageUtils.ILLEGAL_IDENTIFIER_LVALUE_MODE_ID, "1"},
         {MessageUtils.VALIDATION_ID_ERROR_ID, "1"},
