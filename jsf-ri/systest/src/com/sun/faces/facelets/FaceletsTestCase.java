@@ -335,7 +335,7 @@ public class FaceletsTestCase extends AbstractTestCase {
      */
     public void testPhaseListenerRegistration() throws Exception {
 
-        HtmlPage page = (HtmlPage) getPage("/faces/facelets/viewPhaseListeners.xhtml");
+        HtmlPage page = getPage("/faces/facelets/viewPhaseListeners.xhtml");
         HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:button");
         assertNotNull(submit);
 
@@ -345,6 +345,17 @@ public class FaceletsTestCase extends AbstractTestCase {
             submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:button");
         }
 
+    }
+
+
+    /**
+     * Added for issue 1218.
+     */
+    public void testForEachVarStatusNoException() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/forEach.xhtml");
+        assertTrue(page.asText().contains("1 2 3"));
+        
     }
 
 }

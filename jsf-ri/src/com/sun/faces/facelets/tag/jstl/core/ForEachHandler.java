@@ -179,9 +179,11 @@ public final class ForEachHandler extends TagHandlerImpl {
                 ValueExpression vsO = this.capture(vs, vars);
                 int mi = 0;
                 Object value = null;
+                int count = 0;
                 try {
                     boolean first = true;
                     while (i <= e && itr.hasNext()) {
+                        count++;
                         value = itr.next();
 
                         // set the var
@@ -196,7 +198,7 @@ public final class ForEachHandler extends TagHandlerImpl {
 
                         // set the varStatus
                         if (vs != null) {
-                            IterationStatus itrS = new IterationStatus(first, !itr.hasNext(),i, sO, eO, mO);
+                            IterationStatus itrS = new IterationStatus(first, !itr.hasNext(),i, sO, eO, mO, value, count);
                             if (t || srcVE == null) {
                                 ctx.setAttribute(vs, itrS);
                             } else {
