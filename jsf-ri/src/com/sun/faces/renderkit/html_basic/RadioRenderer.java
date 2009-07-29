@@ -131,7 +131,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             newValue = itemValue;
         }
 
-        boolean checked = newValue.equals(curValue);
+        boolean checked = null != newValue && newValue.equals(curValue);
 
         if (optionInfo.isHideNoSelection()
                 && curItem.isNoSelectionOption()
