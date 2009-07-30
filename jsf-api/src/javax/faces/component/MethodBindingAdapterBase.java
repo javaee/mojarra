@@ -60,7 +60,7 @@ abstract class MethodBindingAdapterBase extends Object {
 			       Throwable exception) {
 	Throwable result = exception.getCause();
 	if (null != result) {
-	    if (!result.getClass().isAssignableFrom(expectedExceptionClass)) {
+	    if (!expectedExceptionClass.isAssignableFrom(result.getClass())) {
 		result = getExpectedCause(expectedExceptionClass, result);
 	    }
 	}

@@ -619,7 +619,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     public void testMethodBindingAdapterBaseException() throws Exception {
         IllegalThreadStateException itse = new IllegalThreadStateException("The root cause!");
-        AbortProcessingException ape = new AbortProcessingException(itse);
+        AbortProcessingException ape = new CustomAbortProcessingException(itse);
         InvocationTargetException ite1 = new InvocationTargetException(ape);
         InvocationTargetException ite2 = new InvocationTargetException(ite1);
         InvocationTargetException ite3 = new InvocationTargetException(ite2);
@@ -1851,6 +1851,25 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         @Override
         public void encodeEnd(FacesContext context) throws IOException {
             // no-op
+        }
+    }
+
+
+    public static final class CustomAbortProcessingException extends AbortProcessingException {
+        public CustomAbortProcessingException() {
+            super();
+        }
+
+        public CustomAbortProcessingException(String message) {
+            super(message);
+        }
+
+        public CustomAbortProcessingException(Throwable cause) {
+            super(cause);
+        }
+
+        public CustomAbortProcessingException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 
