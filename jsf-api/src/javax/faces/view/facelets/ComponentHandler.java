@@ -37,6 +37,7 @@
 package javax.faces.view.facelets;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIPanel;
 
 
 /**
@@ -184,7 +185,20 @@ public class ComponentHandler extends DelegatingMetaTagHandler {
      * @since 2.0
      */
     public static boolean isNew(UIComponent component) {
-        return component != null && component.getParent() == null;
+        
+        UIComponent c = component;
+        if (c != null) {
+            UIComponent parent = c.getParent();
+            if (parent != null) {
+                if (UIComponent.isCompositeComponent(parent)) {
+                    c = parent;
+                }
+            }
+            return c.getParent() == null;
+        } else {
+            return false;
+        }
+
     }
 
     
