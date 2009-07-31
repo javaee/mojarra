@@ -183,4 +183,14 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
                 ));
 
     }
+
+    public void testSheetMedia() throws Exception {
+        lastpage = getPage("/faces/render/outputSheetMedia.xhtml");
+        String text = lastpage.asXml();
+        assertTrue(text.matches(
+                "(?s).*<head>.*"+
+                "<link.* type=\"text/css\".* rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case9.css\".* media=\"print\"\\s*/>.*" + 
+                "</head>.*"
+                ));
+    }
 }
