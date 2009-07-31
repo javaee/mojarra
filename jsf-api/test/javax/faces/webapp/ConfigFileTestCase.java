@@ -53,7 +53,7 @@ import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.digester.Digester;
+import com.sun.org.apache.commons.digester.Digester;
 
 import org.xml.sax.InputSource;
 import com.sun.faces.config.DigesterFactory;

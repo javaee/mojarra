@@ -45,7 +45,7 @@ import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.DisplayNameBean;
 import com.sun.faces.config.beans.FeatureBean;
 import com.sun.faces.config.beans.IconBean;
-import org.apache.commons.digester.Rule;
+import com.sun.org.apache.commons.digester.Rule;
 
 
 /**

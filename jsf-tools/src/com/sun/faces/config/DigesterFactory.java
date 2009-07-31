@@ -48,8 +48,8 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.digester.Digester;
-import org.apache.commons.logging.impl.NoOpLog;
+import com.sun.org.apache.commons.digester.Digester;
+import com.sun.org.apache.commons.logging.impl.NoOpLog;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

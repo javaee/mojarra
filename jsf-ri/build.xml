@@ -83,7 +83,7 @@
 
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
-        <path refid="apache.commons.classpath"/>
+        <path refid="sun.commons.classpath"/>
         <path refid="compile.classpath"/>
         <pathelement location="${tools.dir}/build/classes"/>
     </path>

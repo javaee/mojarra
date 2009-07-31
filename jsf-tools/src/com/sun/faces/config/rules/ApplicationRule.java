@@ -45,7 +45,7 @@ import org.xml.sax.Attributes;
 
 import com.sun.faces.config.beans.ApplicationBean;
 import com.sun.faces.config.beans.FacesConfigBean;
-import org.apache.commons.digester.Rule;
+import com.sun.org.apache.commons.digester.Rule;
 
 
 /**

@@ -81,7 +81,7 @@
         <pathelement location="${build.test.dir}"/>
         <pathelement location="${jsf.test.jar}"/>
         <pathelement location="${tools.dir}/build/classes"/>
-        <path refid="apache.commons.classpath"/>
+        <path refid="sun.commons.classpath"/>
         <path refid="compile.classpath"/>
         <path refid="junit.classpath"/>
     </path>
@@ -192,11 +192,10 @@
 
         <delete dir="${build.generate.dir}"/>      
         <antcall target="tools.javac"/>
-
         <taskdef name="generateComponents"
                  classname="com.sun.faces.ant.ComponentGenTask">
             <classpath>
-                <path refid="apache.commons.classpath"/>
+                <path refid="sun.commons.classpath"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>
@@ -205,12 +204,8 @@
               facesConfig="${standard.renderkit.xml}"
               fork="true">
             <classpath>
-                <path refid="apache.commons.classpath"/>
+                <path refid="sun.commons.classpath"/>
                 <path refid="compile.classpath"/>
-                <pathelement location="${commons-beanutils.jar}" />
-                <pathelement location="${commons-digester.jar}" />
-                <pathelement location="${commons-collections.jar}" />
-                <pathelement location="${commons-logging.jar}" />
                 <pathelement location="${jsf-api.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
@@ -233,7 +228,7 @@
         <taskdef name="generateRenderkitDocs"
                  classname="com.sun.faces.ant.RenderkitDocGenTask">
             <classpath>
-                <path refid="apache.commons.classpath"/>
+                <path refid="sun.commons.classpath"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>
@@ -248,7 +243,7 @@
               facesConfig="${standard.renderkit.xml}"
               fork="true">
             <classpath>
-                <path refid="apache.commons.classpath"/>
+                <path refid="sun.commons.classpath"/>
                 <path refid="compile.classpath"/>
                 <pathelement location="${jsf-api.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
@@ -272,7 +267,7 @@
                    destdir="${tools.dir}/build/classes">
             <classpath>
                 <path refid="compile.classpath"/>
-                <path refid="apache.commons.classpath"/>
+                <path refid="sun.commons.classpath"/>
                 <path refid="ant.classpath"/>
             </classpath>
         </jsf.javac>
@@ -386,7 +381,7 @@
                    destdir="${build.test.dir}">
             <classpath>
                 <path refid="test.classpath"/>
-                <path refid="apache.commons.classpath"/>
+                <path refid="sun.commons.classpath"/>
             </classpath>
         </jsf.javac>
 

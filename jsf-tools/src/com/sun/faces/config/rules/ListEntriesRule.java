@@ -45,7 +45,7 @@ import org.xml.sax.Attributes;
 
 import com.sun.faces.config.beans.ListEntriesBean;
 import com.sun.faces.config.beans.ListEntriesHolder;
-import org.apache.commons.digester.Rule;
+import com.sun.org.apache.commons.digester.Rule;
 
 
 /**

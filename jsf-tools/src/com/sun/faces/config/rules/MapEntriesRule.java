@@ -46,7 +46,7 @@ import org.xml.sax.Attributes;
 import com.sun.faces.config.beans.MapEntriesBean;
 import com.sun.faces.config.beans.MapEntriesHolder;
 import com.sun.faces.config.beans.MapEntryBean;
-import org.apache.commons.digester.Rule;
+import com.sun.org.apache.commons.digester.Rule;
 
 
 /**
