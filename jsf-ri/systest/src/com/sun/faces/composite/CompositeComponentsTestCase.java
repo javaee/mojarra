@@ -404,6 +404,29 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
     }
 
 
+    public void testCompositeInsertChildrenNested02() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/compositeInsertChildrenNesting02.xhtml");
+        List<HtmlDivision> divs = new ArrayList<HtmlDivision>(1);
+        getAllElementsOfGivenClass(page, divs, HtmlDivision.class);
+        assertTrue(Integer.toString(divs.size()), divs.size() == 1);
+        HtmlDivision div = divs.get(0);
+        int count = 0;
+        Class[] expectedElements = {
+              HtmlAnchor.class,
+              HtmlBreak.class
+        };
+        for (HtmlElement element : div.getChildElements()) {
+            if (count > 2) {
+                fail("Expected two children of the div");
+            }
+            assertTrue(element.getClass().equals(expectedElements[count]));
+            count++;
+        }
+        
+    }
+
+
     public void testInsertFacetRequired01() throws Exception {
 
         // facet required but not present

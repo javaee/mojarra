@@ -146,9 +146,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     getAttachedObjectHandlers(c, false));
             vdl.retargetMethodExpressions(context, c);
 
-            context.getApplication().publishEvent(context,
-                                                  CompositeChildrenProcessedEvent.class,
-                                                  c);
             // RELEASE_PENDING This is *ugly*.  See my comments in
             // ComponentTagHandlerDelegateImpl at the end of the apply()
             // method

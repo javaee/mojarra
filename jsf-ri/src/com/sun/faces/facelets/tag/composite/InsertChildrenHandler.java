@@ -38,21 +38,25 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
-import com.sun.faces.facelets.tag.jsf.CompositeChildrenProcessedEvent;
+import com.sun.faces.util.FacesLogger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponentBase;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagException;
+import javax.faces.view.Location;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.context.FacesContext;
+import javax.faces.application.Resource;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * This <code>TagHandler</code> is responsible for relocating children
@@ -61,6 +65,7 @@ import java.util.List;
  */
 public class InsertChildrenHandler extends TagHandlerImpl {
 
+    private final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
     private static final String REQUIRED_ATTRIBUTE = "required";
 
     // This attribute is not required.  If not defined, then assume the facet
@@ -89,26 +94,15 @@ public class InsertChildrenHandler extends TagHandlerImpl {
               UIComponent.getCurrentCompositeComponent(ctx.getFacesContext());
         if (compositeParent != null) {
             int count = parent.getChildCount();
-            compositeParent.subscribeToEvent(CompositeChildrenProcessedEvent.class,
-                                             new RelocateChildrenListener(ctx, parent, count));
+            compositeParent.subscribeToEvent(PostAddToViewEvent.class,
+                                             new RelocateChildrenListener(ctx,
+                                                                          parent,
+                                                                          count,
+                                                                          this.tag.getLocation()));
         }
 
     }
 
-
-    // --------------------------------------------------------- Private Methods
-
-
-    private void throwRequiredException(FaceletContext ctx,
-                                        UIComponent compositeParent) {
-
-        throw new TagException(this.tag,
-                               "Unable to find any children components "
-                               + "nested within parent composite component with id '"
-                               + compositeParent .getClientId(ctx.getFacesContext())
-                               + '\'');
-
-    }
 
 
     // ---------------------------------------------------------- Nested Classes
@@ -116,19 +110,25 @@ public class InsertChildrenHandler extends TagHandlerImpl {
 
     private class RelocateChildrenListener implements ComponentSystemEventListener, StateHolder {
 
-        FaceletContext ctx;
+
+        private FaceletContext ctx;
         private UIComponent component;
-        int idx;
+        private int idx;
+        private Location location;
 
 
         // -------------------------------------------------------- Constructors
 
 
-        RelocateChildrenListener(FaceletContext ctx, UIComponent component, int idx) {
+        RelocateChildrenListener(FaceletContext ctx,
+                                 UIComponent component,
+                                 int idx,
+                                 Location location) {
 
             this.ctx = ctx;
             this.component = component;
             this.idx = idx;
+            this.location = location;
 
         }
 
@@ -143,10 +143,24 @@ public class InsertChildrenHandler extends TagHandlerImpl {
                 return;
             }
 
-            boolean req =
-                  ((required != null) && required.getBoolean(ctx));
+            // ensure we're working with the expected composite component as
+            // nesting levels may mask this.
+            Resource resource = getBackingResource(compositeParent);
+            while (compositeParent != null && !resourcesMatch(resource, location)) {
+                compositeParent = UIComponent.getCompositeComponentParent(compositeParent);
+                if (compositeParent != null) {
+                    resource = getBackingResource(compositeParent);
+                }
+            }
 
-            if (compositeParent.getChildCount() == 0 && req) {
+            if (compositeParent == null) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.warning("Unable to find owning composite component template for insertChildren handler at location: " + location.toString());
+                }
+                return;
+            }
+
+            if (compositeParent.getChildCount() == 0 && isRequired()) {
                 throwRequiredException(ctx, compositeParent);
             }
 
@@ -175,6 +189,59 @@ public class InsertChildrenHandler extends TagHandlerImpl {
         public void setTransient(boolean newTransientValue) {
             // no-op
         }
+
+
+        // ----------------------------------------------------- Private Methods
+
+
+        private void throwRequiredException(FaceletContext ctx,
+                                        UIComponent compositeParent) {
+
+            throw new TagException(tag,
+                                   "Unable to find any children components "
+                                     + "nested within parent composite component with id '"
+                                     + compositeParent .getClientId(ctx.getFacesContext())
+                                     + '\'');
+
+        }
+
+
+        private boolean isRequired() {
+
+            return ((required != null) && required.getBoolean(ctx));
+
+        }
+
+
+        /**
+         * @return the <code>Resource</code> instance that was used to create
+         *  the argument composite component.
+         */
+        private Resource getBackingResource(UIComponent component) {
+
+            assert(UIComponent.isCompositeComponent(component));
+            Resource resource = (Resource) component.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+            if (resource == null) {
+                throw new IllegalStateException("Backing resource information not found in composite component attribute map");
+            }
+            return resource;
+
+        }
+
+
+        /**
+         * @return <code>true</code> if the argument handler is from the same
+         *  template source as the argument <code>Resource</code> otherwise
+         *  <code>false</code>
+         */
+        private boolean resourcesMatch(Resource compositeResource,
+                                       Location handlerLocation) {
+
+            String resName = compositeResource.getResourceName();
+            return (handlerLocation.getPath().contains(resName));
+
+        }
+
         
     } // END RelocateChildrenListener
 

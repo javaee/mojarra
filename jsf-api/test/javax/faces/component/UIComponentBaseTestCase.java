@@ -969,9 +969,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         List<SystemEventListener> tvl = toValidate.getListenersForEventClass(PostAddToViewEvent.class);
         List<SystemEventListener> lc2 = control.getListenersForEventClass(PostConstructViewMapEvent.class);
         List<SystemEventListener> tvl2 = toValidate.getListenersForEventClass(PostConstructViewMapEvent.class);
-
-        assertTrue(Arrays.equals(lc.toArray(), tvl.toArray()));
-        assertTrue(Arrays.equals(lc2.toArray(), tvl2.toArray()));
+        assertTrue(lc.size() == tvl.size());
+        assertTrue(lc2.size() == tvl2.size());
 
     }
 

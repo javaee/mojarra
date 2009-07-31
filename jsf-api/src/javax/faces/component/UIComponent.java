@@ -2412,7 +2412,7 @@ private void doFind(FacesContext context, String clientId) {
             }
             ComponentSystemEventListenerAdapter in =
                   (ComponentSystemEventListenerAdapter) obj;
-            return (wrapped.getClass().equals(in.wrapped.getClass())
+            return (wrapped.equals(in.wrapped)
                     && instanceClass.equals(in.instanceClass));
             
         }
