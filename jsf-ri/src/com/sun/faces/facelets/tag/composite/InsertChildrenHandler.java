@@ -41,17 +41,14 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.util.FacesLogger;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.StateHolder;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagException;
 import javax.faces.view.Location;
-import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostAddToViewEvent;
-import javax.faces.context.FacesContext;
 import javax.faces.application.Resource;
 import java.io.IOException;
 import java.util.List;
@@ -105,10 +102,10 @@ public class InsertChildrenHandler extends TagHandlerImpl {
 
 
 
-    // ---------------------------------------------------------- Nested Classes
+    // ----------------------------------------------------------- Inner Classes
 
 
-    private class RelocateChildrenListener implements ComponentSystemEventListener, StateHolder {
+    private class RelocateChildrenListener extends RelocateListener {
 
 
         private FaceletContext ctx;
@@ -171,26 +168,6 @@ public class InsertChildrenHandler extends TagHandlerImpl {
         }
 
 
-        // -------------------------------------------- Methods from StateHolder
-
-
-        public Object saveState(FacesContext context) {
-            return null;
-        }
-
-        public void restoreState(FacesContext context, Object state) {
-            // no-op
-        }
-
-        public boolean isTransient() {
-            return true;
-        }
-
-        public void setTransient(boolean newTransientValue) {
-            // no-op
-        }
-
-
         // ----------------------------------------------------- Private Methods
 
 
@@ -213,36 +190,6 @@ public class InsertChildrenHandler extends TagHandlerImpl {
         }
 
 
-        /**
-         * @return the <code>Resource</code> instance that was used to create
-         *  the argument composite component.
-         */
-        private Resource getBackingResource(UIComponent component) {
-
-            assert(UIComponent.isCompositeComponent(component));
-            Resource resource = (Resource) component.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
-            if (resource == null) {
-                throw new IllegalStateException("Backing resource information not found in composite component attribute map");
-            }
-            return resource;
-
-        }
-
-
-        /**
-         * @return <code>true</code> if the argument handler is from the same
-         *  template source as the argument <code>Resource</code> otherwise
-         *  <code>false</code>
-         */
-        private boolean resourcesMatch(Resource compositeResource,
-                                       Location handlerLocation) {
-
-            String resName = compositeResource.getResourceName();
-            return (handlerLocation.getPath().contains(resName));
-
-        }
-
-        
     } // END RelocateChildrenListener
 
 }

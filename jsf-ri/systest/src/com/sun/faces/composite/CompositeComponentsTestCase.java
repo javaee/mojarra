@@ -41,11 +41,8 @@ import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.html.*;
 
-import javax.faces.component.html.HtmlInputText;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 /**
  * Unit tests for Composite Components.
@@ -366,6 +363,8 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
         validateChildrenAndFacets(spans);
         page = pushButton(page, "form:submit");
+        spans.clear();
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
         validateChildrenAndFacets(spans);
         
     }
@@ -424,6 +423,40 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
             count++;
         }
         
+    }
+
+
+    public void testCompositeInsertFacetNested() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/compositeInsertFacetNesting.xhtml");
+        List<HtmlTable> tables = new ArrayList<HtmlTable>();
+        getAllElementsOfGivenClass(page, tables, HtmlTable.class);
+        assertTrue(tables.size() == 1);
+        HtmlTable table = tables.get(0);
+        HtmlTableHeader header = table.getHeader();
+        assertNotNull(header);
+        assertEquals(header.asText(), "header");
+        HtmlTableFooter footer = table.getFooter();
+        assertNotNull(footer);
+        assertEquals(footer.asText(), "footer");
+
+    }
+
+
+    public void testCompositeInsertFacetNested02() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/compositeInsertFacetNesting02.xhtml");
+        List<HtmlTable> tables = new ArrayList<HtmlTable>();
+        getAllElementsOfGivenClass(page, tables, HtmlTable.class);
+        assertTrue(tables.size() == 1);
+        HtmlTable table = tables.get(0);
+        HtmlTableHeader header = table.getHeader();
+        assertNotNull(header);
+        assertEquals(header.asText(), "Header");
+        HtmlTableFooter footer = table.getFooter();
+        assertNotNull(footer);
+        assertEquals(footer.asText(), "Footer");
+
     }
 
 

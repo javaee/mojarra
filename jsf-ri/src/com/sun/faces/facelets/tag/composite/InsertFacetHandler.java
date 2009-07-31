@@ -37,14 +37,22 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.util.FacesLogger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagException;
+import javax.faces.view.Location;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.PostAddToViewEvent;
+import javax.faces.application.Resource;
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This <code>TagHandler</code> is responsible for relocating Facets
@@ -53,6 +61,8 @@ import java.util.Map;
  */
 public class InsertFacetHandler extends TagHandlerImpl {
 
+    private final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
+    
     // Supported attribute names
     private static final String NAME_ATTRIBUTE = "name";
 
@@ -89,45 +99,114 @@ public class InsertFacetHandler extends TagHandlerImpl {
 
         UIComponent compositeParent =
               UIComponent.getCurrentCompositeComponent(ctx.getFacesContext());
-        if (compositeParent == null) {
-            return;
+
+
+        if (compositeParent != null) {
+            compositeParent.subscribeToEvent(PostAddToViewEvent.class,
+                                             new RelocateFacetListener(ctx,
+                                                                       parent,
+                                                                       this.tag.getLocation()));
         }
 
-        String name = this.name.getValue(ctx);
-        boolean required =
-              (this.required != null && this.required.getBoolean(ctx));
+    }
 
-        if (compositeParent.getFacetCount() == 0 && required) {
-            throwRequiredException(ctx, name, compositeParent);
+
+    // ----------------------------------------------------------- Inner Classes
+
+
+    private class RelocateFacetListener extends RelocateListener {
+
+
+        private FaceletContext ctx;
+        private UIComponent component;
+        private Location location;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        RelocateFacetListener(FaceletContext ctx,
+                              UIComponent component,
+                              Location location) {
+
+            this.ctx = ctx;
+            this.component = component;
+            this.location = location;
+
         }
 
-        Map<String,UIComponent> facets = compositeParent.getFacets();
-        UIComponent facet = facets.remove(name);
-        if (facet != null) {
-            parent.getFacets().put(name, facet);
-        } else {
-            if (required) {
-                throwRequiredException(ctx, name, compositeParent);
+        // --------------------------- Methods from ComponentSystemEventListener
+
+
+        public void processEvent(ComponentSystemEvent event)
+        throws AbortProcessingException {
+
+            UIComponent compositeParent = event.getComponent();
+            if (compositeParent == null) {
+                return;
             }
+
+            // ensure we're working with the expected composite component as
+            // nesting levels may mask this.
+            Resource resource = getBackingResource(compositeParent);
+            while (compositeParent != null && !resourcesMatch(resource, location)) {
+                compositeParent = UIComponent.getCompositeComponentParent(compositeParent);
+                if (compositeParent != null) {
+                    resource = getBackingResource(compositeParent);
+                }
+            }
+
+            if (compositeParent == null) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.warning("Unable to find owning composite component template for insertChildren handler at location: " + location.toString());
+                }
+                return;
+            }
+            boolean req = isRequired();
+            String facetName = name.getValue(ctx);
+            if (compositeParent.getFacetCount() == 0 && req) {
+                throwRequiredException(ctx, facetName, compositeParent);
+            }
+
+            Map<String, UIComponent> facets = compositeParent.getFacets();
+            UIComponent facet = facets.remove(facetName);
+            if (facet == null) {
+                facet = compositeParent.getParent().getFacets().remove(facetName);
+            }
+            if (facet != null) {
+                component.getFacets().put(facetName, facet);
+            } else {
+                if (req) {
+                    throwRequiredException(ctx, facetName, compositeParent);
+                }
+            }
+
         }
 
-    }
+
+        // ----------------------------------------------------- Private Methods
 
 
-    // --------------------------------------------------------- Private Methods
+        private void throwRequiredException(FaceletContext ctx,
+                                            String facetName,
+                                            UIComponent compositeParent) {
+
+            throw new TagException(tag,
+                                   "Unable to find facet named '"
+                                   + facetName
+                                   + "' in parent composite component with id '"
+                                   + compositeParent .getClientId(ctx.getFacesContext())
+                                   + '\'');
+
+        }
 
 
-    private void throwRequiredException(FaceletContext ctx,
-                                        String facetName,
-                                        UIComponent compositeParent) {
+        private boolean isRequired() {
 
-        throw new TagException(this.tag,
-                               "Unable to find facet named '"
-                                + facetName
-                                + "' in parent composite component with id '"
-                                + compositeParent .getClientId(ctx.getFacesContext())
-                                + '\'');
+            return ((required != null) && required.getBoolean(ctx));
 
-    }
+        }
+
+    } // END RelocateFacetListener
 
 }
