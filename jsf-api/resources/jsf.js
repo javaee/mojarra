@@ -348,9 +348,73 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         newElement = newElement.firstChild;
                     }
                     parent.replaceChild(newElement, d);
-                } else if (html.length > 0) {
+                } else if (d.tagName == 'input') { //special case handling for 'input' elements
+                    parserElement = document.createElement('div');
                     parserElement.innerHTML = html;
-                    parent.replaceChild(parserElement.firstChild, d);
+                    newElement = parserElement.firstChild;
+                    var InputElementAttributes =
+                        //core and i18n attributes (except 'id' and 'style' attributes)
+                        ['className', 'title', 'lang',
+                        //input element attributes
+                        'name', 'value', 'checked', 'disabled', 'readOnly',
+                        'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
+                        'tabIndex', 'accessKey', 'accept'];
+                        //'dir' attribute cannot be updated dynamically in IE 7
+                        //'type' attribute cannot be updated dynamically in Firefox 2.0
+                    for (var iIndex = 0, iLength = InputElementAttributes.length; iIndex < iLength; iIndex++) {
+                        var attributeName = InputElementAttributes[iIndex];
+                        var newValue = newElement[attributeName];
+                        var oldValue = d[attributeName];
+                        if (oldValue != newValue) {
+                            d[attributeName] = newValue;
+                        }
+                    }
+
+                    var ElementStyleProperties = [
+                        'backgroundAttachment', 'backgroundColor', 'backgroundImage', 'backgroundPosition', 'backgroundRepeat',
+                        'borderBottom', 'borderBottomColor', 'borderBottomStyle', 'borderBottomWidth', 'borderColor', 'borderLeft',
+                        'borderLeftColor', 'borderLeftStyle', 'borderLeftWidth', 'borderRight', 'borderRightColor', 'borderRightStyle',
+                        'borderRightWidth', 'borderStyle', 'borderTop', 'borderTopColor', 'borderTopStyle', 'borderTopWidth', 'borderWidth',
+                        'fontFamily', 'fontSize', 'fontVariant', 'fontWeight',
+                        'letterSpacing', 'lineHeight',
+                        'listStyle', 'listStyleImage', 'listStylePosition', 'listStyleType',
+                        'marginBottom', 'marginLeft', 'marginRight', 'marginTop',
+                        'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingTop',
+                        'pageBreakAfter', 'pageBreakBefore',
+                        'textAlign', 'textDecorationBlink', 'textDecorationLineThrough', 'textDecorationNone', 'textDecorationOverline',
+                        'textDecorationUnderline', 'textIndent', 'textTransform',
+                        'clear', 'filter', 'clip', 'color', 'cursor', 'display', 'visibility',
+                        'top', 'left', 'width', 'height',
+                        'verticalAlign', 'position' , 'zIndex', 'overflow', 'styleFloat'
+                    ];
+                    //'style' attribute special case
+                    var newStyle = newElement.getAttribute('style');
+                    var oldStyle = d.getAttribute('style');
+                    if (newStyle != oldStyle) {
+                        d.setAttribute('style', newStyle);
+
+                        var elementStyle = d.style;
+                        var newElementStyle = newElement.style;
+                        for (var sIndex = 0, sLength = ElementStyleProperties.length; sIndex < sLength; sIndex++) {
+                            var p = ElementStyleProperties[sIndex];
+                            if (!(p != "font" && newElementStyle[p])) {
+                                elementStyle[p] = newElementStyle[p];
+                            }
+                        };
+                    }
+
+                    var listenerNames = [
+                        'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup',
+                        'onkeydown', 'onkeypress', 'onkeyup', 'onhelp', 'onblur', 'onfocus', 'onchange'
+                    ];
+                    for (var lIndex = 0, lLength = listenerNames.length; lIndex < lLength; lIndex++) {
+                        var name = listenerNames[lIndex];
+                        d[name] = newElement[name] ? newElement[name] : null;
+                        newElement[name] = null;
+                    }
+                } else if (html.length > 0) {
+                                    parserElement.innerHTML = html;
+                                    parent.replaceChild(parserElement.firstChild, d);
                 }
             }
         };
