@@ -86,7 +86,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         expectedRendererType = "javax.faces.Text";
     }
 
-    
+
     // Return the tests included in this test case.
     public static Test suite() {
         return (new TestSuite(UIInputTestCase.class));
@@ -109,7 +109,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         UIInput input = (UIInput) component;
 
         assertEquals(input.getSubmittedValue(),
-                     (String) input.getAttributes().get("submittedValue"));
+                (String) input.getAttributes().get("submittedValue"));
         input.setSubmittedValue("foo");
         assertEquals("foo", (String) input.getAttributes().get("submittedValue"));
         input.setSubmittedValue(null);
@@ -121,10 +121,10 @@ public class UIInputTestCase extends UIOutputTestCase {
 
         input.setRequired(true);
         assertEquals(Boolean.TRUE,
-                     (Boolean) input.getAttributes().get("required"));
+                (Boolean) input.getAttributes().get("required"));
         input.setRequired(false);
         assertEquals(Boolean.FALSE,
-                     (Boolean) input.getAttributes().get("required"));
+                (Boolean) input.getAttributes().get("required"));
         input.getAttributes().put("required", Boolean.TRUE);
         assertTrue(input.isRequired());
         input.getAttributes().put("required", Boolean.FALSE);
@@ -132,16 +132,16 @@ public class UIInputTestCase extends UIOutputTestCase {
 
         assertEquals(input.isValid(), true);
         assertEquals(input.isValid(),
-                     ((Boolean) component.getAttributes().get("valid")).
-                     booleanValue());
+                ((Boolean) component.getAttributes().get("valid")).
+                        booleanValue());
         input.setValid(false);
         assertEquals(input.isValid(),
-                     ((Boolean) component.getAttributes().get("valid")).
-                     booleanValue());
+                ((Boolean) component.getAttributes().get("valid")).
+                        booleanValue());
         component.getAttributes().put("valid", Boolean.TRUE);
         assertEquals(input.isValid(),
-                     ((Boolean) component.getAttributes().get("valid")).
-                     booleanValue());
+                ((Boolean) component.getAttributes().get("valid")).
+                        booleanValue());
 
     }
 
@@ -177,17 +177,17 @@ public class UIInputTestCase extends UIOutputTestCase {
 
         // Register three listeners
         input.addValueChangeListener
-            (new TestValueChangeListener("AP0"));
+                (new TestValueChangeListener("AP0"));
         input.addValueChangeListener
-            (new TestValueChangeListener("AP1"));
+                (new TestValueChangeListener("AP1"));
         input.addValueChangeListener
-            (new TestValueChangeListener("AP2"));
+                (new TestValueChangeListener("AP2"));
 
         // Fire events and evaluate results
         TestValueChangeListener.trace(null);
         input.broadcast(event);
         assertEquals("/AP0/AP1/AP2",
-                     TestValueChangeListener.trace());
+                TestValueChangeListener.trace());
 
     }
 
@@ -196,38 +196,38 @@ public class UIInputTestCase extends UIOutputTestCase {
     public void testEventsMixed() {
 
         UIInput input = (UIInput) component;
-	input.setRendererType(null);
-	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	root.getChildren().add(input);
-        ValueChangeEvent event  = null;
-	
+        input.setRendererType(null);
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.getChildren().add(input);
+        ValueChangeEvent event = null;
+
         // Register three listeners
         input.addValueChangeListener
-            (new TestValueChangeListener("ARV"));
+                (new TestValueChangeListener("ARV"));
         input.addValueChangeListener
-            (new TestValueChangeListener("PV"));
+                (new TestValueChangeListener("PV"));
         input.addValueChangeListener
-            (new TestValueChangeListener("AP"));
+                (new TestValueChangeListener("AP"));
 
         TestValueChangeListener.trace(null);
-	event = new ValueChangeEvent(input, null, null);
-	event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
-	input.queueEvent(event);
+        event = new ValueChangeEvent(input, null, null);
+        event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+        input.queueEvent(event);
 
-	event = new ValueChangeEvent(input, null, null);
-	event.setPhaseId(PhaseId.PROCESS_VALIDATIONS);
-	input.queueEvent(event);
+        event = new ValueChangeEvent(input, null, null);
+        event.setPhaseId(PhaseId.PROCESS_VALIDATIONS);
+        input.queueEvent(event);
 
-	event = new ValueChangeEvent(input, null, null);
-	event.setPhaseId(PhaseId.INVOKE_APPLICATION);
-	input.queueEvent(event);
+        event = new ValueChangeEvent(input, null, null);
+        event.setPhaseId(PhaseId.INVOKE_APPLICATION);
+        input.queueEvent(event);
 
         // Fire events and evaluate results
-	root.processDecodes(facesContext);
-	root.processValidators(facesContext);
-	root.processApplication(facesContext);
+        root.processDecodes(facesContext);
+        root.processValidators(facesContext);
+        root.processApplication(facesContext);
         assertEquals("/ARV/PV/AP/ARV/PV/AP/ARV/PV/AP",
-                     TestValueChangeListener.trace());
+                TestValueChangeListener.trace());
 
     }
 
@@ -238,15 +238,15 @@ public class UIInputTestCase extends UIOutputTestCase {
         TestValueChangeListener listener = null;
 
         input.addValueChangeListener
-            (new TestValueChangeListener("ARV0"));
+                (new TestValueChangeListener("ARV0"));
         input.addValueChangeListener
-            (new TestValueChangeListener("ARV1"));
+                (new TestValueChangeListener("ARV1"));
         input.addValueChangeListener
-            (new TestValueChangeListener("PV0"));
+                (new TestValueChangeListener("PV0"));
         input.addValueChangeListener
-            (new TestValueChangeListener("PV1"));
+                (new TestValueChangeListener("PV1"));
         input.addValueChangeListener
-            (new TestValueChangeListener("PV2"));
+                (new TestValueChangeListener("PV2"));
 
         ValueChangeListener listeners[] = input.getValueChangeListeners();
         assertEquals(5, listeners.length);
@@ -264,7 +264,7 @@ public class UIInputTestCase extends UIOutputTestCase {
 
         //No listeners added, should be empty
         ValueChangeListener listeners[] = input.getValueChangeListeners();
-	assertEquals(0, listeners.length);
+        assertEquals(0, listeners.length);
 
     }
 
@@ -315,16 +315,16 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertTrue(input.isValid());
 
         Application app = facesContext.getApplication();
-	MethodBinding methodBinding = null;
+        MethodBinding methodBinding = null;
 
-        input.setValidator(methodBinding = 
-			  app.createMethodBinding("#{foo.bar}", null));
+        input.setValidator(methodBinding =
+                app.createMethodBinding("#{foo.bar}", null));
         assertEquals(methodBinding, input.getValidator());
         input.setValidator(null);
         assertNull(input.getValidator());
 
-        input.setValueChangeListener(methodBinding = 
-	    app.createMethodBinding("#{foo.bar}", null));
+        input.setValueChangeListener(methodBinding =
+                app.createMethodBinding("#{foo.bar}", null));
         assertEquals(methodBinding, input.getValueChangeListener());
         input.setValueChangeListener(null);
         assertNull(input.getValueChangeListener());
@@ -345,8 +345,8 @@ public class UIInputTestCase extends UIOutputTestCase {
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
         input.setValueBinding
-            ("value",
-             application.createValueBinding("#{test.command}"));
+                ("value",
+                        application.createValueBinding("#{test.command}"));
         checkMessages(0);
 
         // Perform update on a valid value
@@ -358,12 +358,12 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertNull(input.getLocalValue());
         assertTrue(input.isValid());
         checkMessages(0);
-	input.resetValue();
-	assertNull(input.getLocalValue());
-	assertEquals("new command", input.getValue());
-	assertNull(input.getSubmittedValue());
+        input.resetValue();
+        assertNull(input.getLocalValue());
+        assertEquals("new command", input.getValue());
+        assertNull(input.getSubmittedValue());
         assertTrue(input.isValid());
-	assertTrue(!input.isLocalValueSet());
+        assertTrue(!input.isLocalValueSet());
 
         // Skip update on an invalid value
         input.setValid(false);
@@ -402,18 +402,18 @@ public class UIInputTestCase extends UIOutputTestCase {
     public void testValidateOrder() throws Exception {
 
         Class validateParams[] = {FacesContext.class, UIComponent.class,
-                                  Object.class};
-    
+                Object.class};
+
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
         input.addValidator(new TestInputValidator("v1"));
         input.addValidator(new TestInputValidator("v2"));
         Application app = facesContext.getApplication();
-	MethodBinding methodBinding = null;
+        MethodBinding methodBinding = null;
 
-        input.setValidator(methodBinding = 
-			  app.createMethodBinding("v3.validate", validateParams));
+        input.setValidator(methodBinding =
+                app.createMethodBinding("v3.validate", validateParams));
         assertEquals(methodBinding, input.getValidator());
         request.setAttribute("v3", new TestInputValidator("v3"));
         TestInputValidator.trace(null);
@@ -445,13 +445,13 @@ public class UIInputTestCase extends UIOutputTestCase {
         input.validate(facesContext);
         checkMessages(1);
         assertTrue(!input.isValid());
-                                                                 
+
         Iterator messages = facesContext.getMessages();
         while (messages.hasNext()) {
             FacesMessage message = (FacesMessage) messages.next();
             assertTrue(message.getSummary().indexOf("mylabel") >= 0);
         }
-        
+
         input.setValid(true);
         input.setSubmittedValue(null);
         input.validate(facesContext);
@@ -466,60 +466,60 @@ public class UIInputTestCase extends UIOutputTestCase {
     // Test that appropriate properties are value binding enabled
     public void testValueBindings() {
 
-	super.testValueBindings();
-	UIInput test = (UIInput) component;
+        super.testValueBindings();
+        UIInput test = (UIInput) component;
 
-	// "required" property
-	request.setAttribute("foo", Boolean.FALSE);
-	boolean initial = test.isRequired();
-	if (initial) {
-	    request.setAttribute("foo", Boolean.FALSE);
-	} else {
-	    request.setAttribute("foo", Boolean.TRUE);
-	}
-	test.setValueBinding("required", application.createValueBinding("#{foo}"));
-	assertEquals(!initial, test.isRequired());
-	test.setRequired(initial);
-	assertEquals(initial, test.isRequired());
-	assertNotNull(test.getValueBinding("required"));
+        // "required" property
+        request.setAttribute("foo", Boolean.FALSE);
+        boolean initial = test.isRequired();
+        if (initial) {
+            request.setAttribute("foo", Boolean.FALSE);
+        } else {
+            request.setAttribute("foo", Boolean.TRUE);
+        }
+        test.setValueBinding("required", application.createValueBinding("#{foo}"));
+        assertEquals(!initial, test.isRequired());
+        test.setRequired(initial);
+        assertEquals(initial, test.isRequired());
+        assertNotNull(test.getValueBinding("required"));
 
-	// "value" property
-	request.setAttribute("foo", "bar");
-	test.setValue(null);
-	assertNull(test.getValue());
-	test.setValueBinding("value", application.createValueBinding("#{foo}"));
-	assertNotNull(test.getValueBinding("value"));
-	assertEquals("bar", test.getValue());
-	test.setValue("baz");
-	assertEquals("baz", test.getValue());
-	test.setValue(null);
-	assertEquals("bar", test.getValue());
-	test.setValueBinding("value", null);
-	assertNull(test.getValueBinding("value"));
-	assertNull(test.getValue());
+        // "value" property
+        request.setAttribute("foo", "bar");
+        test.setValue(null);
+        assertNull(test.getValue());
+        test.setValueBinding("value", application.createValueBinding("#{foo}"));
+        assertNotNull(test.getValueBinding("value"));
+        assertEquals("bar", test.getValue());
+        test.setValue("baz");
+        assertEquals("baz", test.getValue());
+        test.setValue(null);
+        assertEquals("bar", test.getValue());
+        test.setValueBinding("value", null);
+        assertNull(test.getValueBinding("value"));
+        assertNull(test.getValue());
 
-	// "immediate" property
-	request.setAttribute("foo", Boolean.FALSE);
-	boolean initialImmediate = test.isImmediate();
-	if (initialImmediate) {
-	    request.setAttribute("foo", Boolean.FALSE);
-	} else {
-	    request.setAttribute("foo", Boolean.TRUE);
-	}
-	test.setValueBinding("immediate", application.createValueBinding("#{foo}"));
-	assertEquals(!initialImmediate, test.isImmediate());
-	test.setImmediate(initialImmediate);
-	assertEquals(initialImmediate, test.isImmediate());
-	assertNotNull(test.getValueBinding("immediate"));
+        // "immediate" property
+        request.setAttribute("foo", Boolean.FALSE);
+        boolean initialImmediate = test.isImmediate();
+        if (initialImmediate) {
+            request.setAttribute("foo", Boolean.FALSE);
+        } else {
+            request.setAttribute("foo", Boolean.TRUE);
+        }
+        test.setValueBinding("immediate", application.createValueBinding("#{foo}"));
+        assertEquals(!initialImmediate, test.isImmediate());
+        test.setImmediate(initialImmediate);
+        assertEquals(initialImmediate, test.isImmediate());
+        assertNotNull(test.getValueBinding("immediate"));
     }
 
 
     // Test order of value change calls with valueChangeListener also
     public void testValueChangeOrder() throws Exception {
 
-        Class signature[] = { ValueChangeEvent.class };
-	Application app = facesContext.getApplication();
-	MethodBinding methodBinding = null;
+        Class signature[] = {ValueChangeEvent.class};
+        Application app = facesContext.getApplication();
+        MethodBinding methodBinding = null;
 
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
@@ -539,9 +539,9 @@ public class UIInputTestCase extends UIOutputTestCase {
     // Test order of value change calls with valueChangeListener also
     public void testImmediate() throws Exception {
 
-        Class signature[] = { ValueChangeEvent.class };
-	Application app = facesContext.getApplication();
-	MethodBinding methodBinding = null;
+        Class signature[] = {ValueChangeEvent.class};
+        Application app = facesContext.getApplication();
+        MethodBinding methodBinding = null;
 
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
@@ -562,21 +562,21 @@ public class UIInputTestCase extends UIOutputTestCase {
     }
 
     public void testGetValueChangeListeners() throws Exception {
-	UIInput command = (UIInput) component;
-	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	root.getChildren().add(command);
-	
-	TestValueChangeListener 
-	    ta1 = new TestValueChangeListener("ta1"),
-	    ta2 = new TestValueChangeListener("ta2");
+        UIInput command = (UIInput) component;
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.getChildren().add(command);
 
-	command.addValueChangeListener(ta1);
-	command.addValueChangeListener(ta2);
-	ValueChangeListener [] listeners = (ValueChangeListener [])
-	    command.getValueChangeListeners();
-	assertEquals(2, listeners.length);
-	TestValueChangeListener [] taListeners = (TestValueChangeListener [])
-	    command.getFacesListeners(TestValueChangeListener.class);
+        TestValueChangeListener
+                ta1 = new TestValueChangeListener("ta1"),
+                ta2 = new TestValueChangeListener("ta2");
+
+        command.addValueChangeListener(ta1);
+        command.addValueChangeListener(ta2);
+        ValueChangeListener[] listeners = (ValueChangeListener[])
+                command.getValueChangeListeners();
+        assertEquals(2, listeners.length);
+        TestValueChangeListener[] taListeners = (TestValueChangeListener[])
+                command.getFacesListeners(TestValueChangeListener.class);
     }
 
 
@@ -586,7 +586,7 @@ public class UIInputTestCase extends UIOutputTestCase {
     // Check that the number of queued messages equals the expected count
     // and that each of them is of severity ERROR
     protected void checkMessages(int expected) {
-        
+
         facesContext.getExceptionHandler().handle();
 
         int n = 0;
@@ -594,8 +594,8 @@ public class UIInputTestCase extends UIOutputTestCase {
         while (messages.hasNext()) {
             FacesMessage message = (FacesMessage) messages.next();
             assertEquals("Severity == ERROR",
-                         FacesMessage.SEVERITY_ERROR,
-                         message.getSeverity());
+                    FacesMessage.SEVERITY_ERROR,
+                    message.getSeverity());
             n++;
             // System.err.println(message.getSummary());
         }
@@ -634,17 +634,17 @@ public class UIInputTestCase extends UIOutputTestCase {
         i.setValid(false);
         i.setRequired(true);
         Application app = facesContext.getApplication();
-	MethodBinding methodBinding = null;
+        MethodBinding methodBinding = null;
 
-        i.setValidator(methodBinding = 
-			  app.createMethodBinding("#{foo.bar}", null));
+        i.setValidator(methodBinding =
+                app.createMethodBinding("#{foo.bar}", null));
         i.setValueChangeListener(app.createMethodBinding("#{baz.bop}", null));
     }
 
 
     protected boolean listenersAreEqual(FacesContext context,
-					UIInput comp1,
-					UIInput comp2) {
+                                        UIInput comp1,
+                                        UIInput comp2) {
 
         ValueChangeListener list1[] = comp1.getValueChangeListeners();
         ValueChangeListener list2[] = comp2.getValueChangeListeners();
@@ -654,7 +654,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         for (int i = 0; i < list1.length; i++) {
             assertTrue(list1[i].getClass() == list2[i].getClass());
         }
-	return true;
+        return true;
 
     }
 
@@ -667,8 +667,8 @@ public class UIInputTestCase extends UIOutputTestCase {
 
 
     protected boolean validatorsAreEqual(FacesContext context,
-					UIInput comp1,
-					UIInput comp2) {
+                                         UIInput comp1,
+                                         UIInput comp2) {
 
         Validator list1[] = comp1.getValidators();
         Validator list2[] = comp2.getValidators();
