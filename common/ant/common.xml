@@ -155,11 +155,11 @@
         <pathelement location="${validation-api.jar}"/>
     </path>
     
-    <path id="sun.commons.classpath">
-        <pathelement location="${sun-commons-beanutils.jar}"/>
-        <pathelement location="${sun-commons-digester.jar}"/>
-        <pathelement location="${sun-commons-collections.jar}"/>
-        <pathelement location="${sun-commons-logging.jar}"/>
+    <path id="apache.commons.classpath">
+        <pathelement location="${commons-beanutils.jar}"/>
+        <pathelement location="${commons-digester.jar}"/>
+        <pathelement location="${commons-collections.jar}"/>
+        <pathelement location="${commons-logging.jar}"/>
     </path>
 
     <!-- Common Targets -->
@@ -324,7 +324,7 @@
                    destdir="${tools.dir}/build/classes">
                 <classpath>
                     <path refid="compile.classpath"/>  
-                    <path refid="sun.commons.classpath"/>
+                    <path refid="apache.commons.classpath"/>
                 </classpath>
             </jsf.javac>
             <taskdef name="generateComponents"

@@ -57,7 +57,7 @@ import com.sun.faces.config.DigesterFactory;
 import com.sun.faces.config.rules.FacesConfigRuleSet;
 
 import org.xml.sax.InputSource;
-import com.sun.org.apache.commons.digester.Digester;
+import org.apache.commons.digester.Digester;
 
 /**
  * <p>Utility methods that may be useful to all <code>Generators</code>.</p>

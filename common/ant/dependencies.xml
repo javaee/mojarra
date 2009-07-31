@@ -52,6 +52,12 @@
     <property name="junit.version" value="3.8.1"/>
     <property name="htmlunit.version" value="2.4"/>
     <property name="cactus.version" value="13-1.7.2"/>
+    <!-- Note that if changing the Apache Commons versions
+         you must also change the versions in the source loading code -->
+    <property name="beanutils.version" value="1.6.1"/>
+    <property name="digester.version" value="1.5"/>
+    <property name="collections.version" value="2.1"/>
+    <property name="logging.version" value="1.0.4"/>
     <property name="taglibdoc.version" value="1.3"/>
     <property name="jsdoc.version" value="2.0.2"/>
     <property name="servlet.api.version" value="2.5"/>
@@ -77,6 +83,10 @@
     <property name="junit.home" value="${dependency.base.dir}/junit${junit.version}"/>
     <property name="htmlunit.home" value="${dependency.base.dir}/htmlunit-${htmlunit.version}"/>
     <property name="cactus.home" value="${dependency.base.dir}/jakarta-cactus-${cactus.version}"/>
+    <property name="beanutils.home" value="${dependency.base.dir}/commons-beanutils-${beanutils.version}"/>
+    <property name="digester.home" value="${dependency.base.dir}/commons-digester-${digester.version}"/>
+    <property name="collections.home" value="${dependency.base.dir}/commons-collections-${collections.version}"/>
+    <property name="logging.home" value="${dependency.base.dir}/commons-logging-${logging.version}"/>
     <property name="taglibdoc.home" value="${dependency.base.dir}/taglibrarydoc-${taglibdoc.version}"/>
     <property name="jsdoc.home" value="${dependency.base.dir}/jsdoc_toolkit-${jsdoc.version}"/>
     <property name="maven.repository.importer.home"
@@ -89,6 +99,10 @@
 
     <property name="junit.jar" value="${dependency.jar.dir}/junit-${junit.version}.jar"/>
     <property name="htmlunit.jar" value="${dependency.jar.dir}/htmlunit-${htmlunit.version}.jar"/>
+    <property name="commons-beanutils.jar" value="${dependency.jar.dir}/commons-beanutils-${beanutils.version}.jar"/>
+    <property name="commons-digester.jar" value="${dependency.jar.dir}/commons-digester-${digester.version}.jar"/>
+    <property name="commons-collections.jar" value="${dependency.jar.dir}/commons-collections-${collections.version}.jar"/>
+    <property name="commons-logging.jar" value="${dependency.jar.dir}/commons-logging-${logging.version}.jar"/>
     <property name="yuicompressor.jar" value="${dependency.jar.dir}/yuicompressor.jar"/>
     <property name="tlddoc.jar" value="${dependency.jar.dir}/tlddoc-${taglibdoc.version}.jar"/>
     <property name="jsdoc.jar" value="${dependency.jar.dir}/jsdoc-${jsdoc.version}.jar"/>
@@ -100,10 +114,6 @@
     <property name="el-impl.jar" value="${dependency.jar.dir}/el-impl-${el.version}.jar"/>
     <property name="jstl.jar" value="${dependency.jar.dir}/jstl-${jstl.api.version}.jar"/>
     <property name="annotation.jar" value="${dependency.jar.dir}/jsr250-api-${annotation.api.version}.jar"/>
-    <property name="sun-commons-beanutils.jar" value="${dependency.jar.dir}/com-sun-commons-beanutils.jar"/>
-    <property name="sun-commons-digester.jar" value="${dependency.jar.dir}/com-sun-commons-digester.jar"/>
-    <property name="sun-commons-collections.jar" value="${dependency.jar.dir}/com-sun-commons-collections.jar"/>
-    <property name="sun-commons-logging.jar" value="${dependency.jar.dir}/com-sun-commons-logging-api.jar"/>
     <property name="portlet.jar" value="${dependency.jar.dir}/portlet-api-${portlet.api.version}.jar"/>
     <property name="groovy.jar" value="${dependency.jar.dir}/groovy-all-${groovy.version}.jar"/>
     <property name="validation-api.jar" value="${dependency.jar.dir}/validation-api-1.0.CR2.jar"/>
@@ -111,21 +121,18 @@
     <property name="glassfish.installer.jar" value="glassfish-installer-v2ur1-b09d-"/>
 
     <!--  source build properties -->
-    <property name="commons.cvsroot" value=":pserver:cvsguest@redcvs.red.iplanet.com:/m/jws-mirror"/>
-    <property name="commons.logging.location" value="jakarta-commons/com-sun-commons-logging-1.0.4-src"/>
-    <property name="commons.collections.location" value="jakarta-commons/com-sun-commons-collections-2.1-src"/>
-    <property name="commons.beanutils.location" value="jakarta-commons/com-sun-commons-beanutils-1.6.1-src"/>
-    <property name="commons.digester.location" value="jakarta-commons/com-sun-commons-digester-1.5-src"/>
-    <property name="external.dir" value="${dependency.base.dir}/source"/>
-    <property name="commons.logging.jar"
-              value="${external.dir}/${commons.logging.location}/dist/com-sun-commons-logging-api.jar"/>
-    <property name="commons.collections.jar"
-              value="${external.dir}/${commons.collections.location}/dist/com-sun-commons-collections.jar"/>
-    <property name="commons.beanutils.jar"
-              value="${external.dir}/${commons.beanutils.location}/dist/com-sun-commons-beanutils.jar"/>
-    <property name="commons.digester.jar"
-              value="${external.dir}/${commons.digester.location}/dist/com-sun-commons-digester.jar"/>
+    
+    <property name="commons.logging.url" value="http://svn.apache.org/repos/asf/commons/proper/logging/tags/LOGGING_1_0_4/"/>
+    <property name="commons.collections.url" value="http://svn.apache.org/repos/asf/commons/proper/collections/tags/COLLECTIONS_2_1/"/>
+    <property name="commons.beanutils.url" value="http://svn.apache.org/repos/asf/commons/proper/beanutils/tags/BEANUTILS_1_6_1/"/>
+    <property name="commons.digester.url" value="http://svn.apache.org/repos/asf/commons/proper/digester/tags/DIGESTER_1_5"/>
 
+    <property name="commons.logging.name" value="commons-logging"/>
+    <property name="commons.collections.name" value="commons-collections"/>
+    <property name="commons.beanutils.name" value="commons-beanutils"/>
+    <property name="commons.digester.name" value="commons-digester"/>
+
+    <property name="external.dir" value="${dependency.base.dir}/source"/>
 
     <target name="update" description="Download project dependencies">
         <mkdir dir="${dependency.base.dir}/downloads"/>
@@ -361,130 +368,128 @@
             </then>
         </if>
 
-        <!-- com-sun-commons -->
+        <!-- buid commons from source -->
 
+        <echo>starting commons and build.source ${build.source}</echo>
         <if>
             <equals arg1="${build.source}" arg2="true"/>
             <then>
+                <echo>build from source</echo>
                 <mkdir dir="${external.dir}"/>
-                <exec executable="cvs" dir="${external.dir}" failonerror="true">
-                    <arg line="-d${commons.cvsroot}"/>
+
+                <exec executable="svn" dir="${external.dir}" failonerror="true">
                     <arg line="checkout"/>
-                    <arg line="${commons.logging.location}"/>
-                </exec>
-                <exec executable="cvs" dir="${external.dir}" failonerror="true">
-                    <arg line="-d${commons.cvsroot}"/>
-                    <arg line="checkout"/>
-                    <arg line="${commons.collections.location}"/>
-                </exec>
-                <exec executable="cvs" dir="${external.dir}" failonerror="true">
-                    <arg line="-d${commons.cvsroot}"/>
-                    <arg line="checkout"/>
-                    <arg line="${commons.beanutils.location}"/>
-                </exec>
-                <exec executable="cvs" dir="${external.dir}" failonerror="true">
-                    <arg line="-d${commons.cvsroot}"/>
-                    <arg line="checkout"/>
-                    <arg line="${commons.digester.location}"/>
+                    <arg line="${commons.logging.url}"/>
+                    <arg line="commons-logging"/>
                 </exec>
 
-                <ant antfile="${external.dir}/${commons.logging.location}/build.xml"
+                <exec executable="svn" dir="${external.dir}" failonerror="true">
+                    <arg line="checkout"/>
+                    <arg line="${commons.collections.url}"/>
+                    <arg line="commons-collections"/>
+                </exec>
+
+                <exec executable="svn" dir="${external.dir}" failonerror="true">
+                    <arg line="checkout"/>
+                    <arg line="${commons.beanutils.url}"/>
+                    <arg line="commons-beanutils"/>
+                </exec>
+
+                <exec executable="svn" dir="${external.dir}" failonerror="true">
+                    <arg line="checkout"/>
+                    <arg line="${commons.digester.url}"/>
+                    <arg line="commons-digester"/>
+                </exec>
+
+                <ant antfile="${external.dir}/commons-logging/build.xml"
                      target="dist"
-                     dir="${external.dir}/${commons.logging.location}"
+                     dir="${external.dir}/commons-logging"
                      inheritAll="false" />
 
-                <ant antfile="${external.dir}/${commons.collections.location}/build.xml"
+                <ant antfile="${external.dir}/commons-collections/build.xml"
                      target="dist"
-                     dir="${external.dir}/${commons.collections.location}"
+                     dir="${external.dir}/commons-collections"
                      inheritAll="false">
                     <property name="ant.build.javac.source" value="1.4"/>
                 </ant>
 
-                <ant antfile="${external.dir}/${commons.beanutils.location}/build.xml"
+                <ant antfile="${external.dir}/commons-beanutils/build.xml"
                      target="dist"
-                     dir="${external.dir}/${commons.beanutils.location}"
+                     dir="${external.dir}/commons-beanutils"
                      inheritAll="false">
                     <property name="commons-collections.home"
-                              value="${external.dir}/${commons.collections.location}/dist"/>
-                    <property name="commons-collections.jar" value="${commons.collections.jar}"/>
-                    <property name="commons-logging.home" value="${external.dir}/${commons.logging.location}/dist"/>
-                    <property name="commons-logging.jar" value="${commons.logging.jar}"/>
+                              value="${external.dir}/commons-collections/dist"/>
+                    <property name="commons-collections.jar" value="${external.dir}/commons-collections/dist/commons-collections.jar"/>
+                    <property name="commons-logging.home" value="${external.dir}/commons-logging/dist"/>
+                    <property name="commons-logging.jar" value="${external.dir}/commons-logging/dist/commons-logging.jar"/>
                 </ant>
 
-                <ant antfile="${external.dir}/${commons.digester.location}/build.xml"
+                <ant antfile="${external.dir}/commons-digester/build.xml"
                      target="dist"
-                     dir="${external.dir}/${commons.digester.location}"
+                     dir="${external.dir}/commons-digester"
                      inheritAll="false">
                     <property name="commons-collections.home"
-                              value="${external.dir}/${commons.collections.location}/dist"/>
-                    <property name="commons-collections.jar" value="${commons.collections.jar}"/>
-                    <property name="commons-logging.home" value="${external.dir}/${commons.logging.location}/dist"/>
-                    <property name="commons-logging.jar" value="${commons.logging.jar}"/>
-                    <property name="commons-beanutils.home" value="${external.dir}/${commons.beanutils.location}/dist"/>
-                    <property name="commons-beanutils.jar" value="${commons.beanutils.jar}"/>
+                              value="${external.dir}/commons-collections/dist"/>
+                    <property name="commons-collections.jar" value="${external.dir}/commons-collections/dist/commons-collections.jar"/>
+                    <property name="commons-logging.home" value="${external.dir}/commons-logging/dist"/>
+                    <property name="commons-logging.jar" value="${external.dir}/commons-logging/dist/commons-logging.jar"/>
+                    <property name="commons-beanutils.home" value="${external.dir}/commons-beanutils/dist"/>
+                    <property name="commons-beanutils.jar" value="${external.dir}/commons-beanutils/dist/commons-beanutils.jar"/>
                 </ant>
-
-                <copy file="${commons.logging.jar}" todir="${dependency.jar.dir}"/>
-                <copy file="${commons.collections.jar}" todir="${dependency.jar.dir}"/>
-                <copy file="${commons.beanutils.jar}" todir="${dependency.jar.dir}"/>
-                <copy file="${commons.digester.jar}" todir="${dependency.jar.dir}"/>
+                <copy file="${external.dir}/commons-logging/dist/commons-logging.jar" tofile="${commons.logging.jar}"/>
+                <copy file="${external.dir}/commons-collections/dist/commons-collections.jar" tofile="${commons.collections.jar}"/>
+                <copy file="${external.dir}/commons-beanutils/dist/commons-beanutils.jar" tofile="${commons.beanutils.jar}"/>
+                <copy file="${external.dir}/commons-digester/dist/commons-digester.jar" tofile="${commons.digester.jar}"/>
 
             </then>
             <else>
 
+                <!-- BEANUTILS -->
                 <if>
                     <not>
-                        <available file="${sun-commons-collections.jar}" property="ignored"/>
+                        <available file="${commons-beanutils.jar}" property="ignored"/>
                     </not>
                     <then>
-                        <get src="${download.java.net}/com-sun-commons-collections/jars/com-sun-commons-collections-2.1.jar"
-                             dest="${dependency.base.dir}/jars/com-sun-commons-collections-2.1.jar"
+                        <echo> get beanutils</echo>
+                        <get src="http://repo1.maven.org/maven2/commons-beanutils/commons-beanutils/${beanutils.version}/commons-beanutils-${beanutils.version}.jar"
+                             dest="${commons-beanutils.jar}"
                              usetimestamp="true"/>
-                        <unjar src="${dependency.base.dir}/jars/com-sun-commons-collections-2.1.jar"
-                               dest="${dependency.jar.dir}"/>
-                        <delete file="${dependency.base.dir}/jars/com-sun-commons-collections-2.1.jar"/>
                     </then>
                 </if>
 
+                <!-- DIGESTER -->
                 <if>
                     <not>
-                        <available file="${sun-commons-digester.jar}" property="ignored"/>
+                        <available file="${commons-digester.jar}" property="ignored"/>
                     </not>
                     <then>
-                        <get src="${download.java.net}/com-sun-commons-digester/jars/com-sun-commons-digester-1.5.jar"
-                             dest="${dependency.base.dir}/jars/com-sun-commons-digester-1.5.jar"
+                        <get src="http://repo1.maven.org/maven2/commons-digester/commons-digester/${digester.version}/commons-digester-${digester.version}.jar"
+                             dest="${commons-digester.jar}"
                              usetimestamp="true"/>
-                        <unjar src="${dependency.base.dir}/jars/com-sun-commons-digester-1.5.jar"
-                               dest="${dependency.jar.dir}"/>
-                        <delete file="${dependency.base.dir}/jars/com-sun-commons-digester-1.5.jar"/>
                     </then>
                 </if>
 
+                <!-- COLLECTIONS -->
                 <if>
                     <not>
-                        <available file="${sun-commons-beanutils.jar}" property="ignored"/>
+                        <available file="${commons-collections.jar}" property="ignored"/>
                     </not>
                     <then>
-                        <get src="${download.java.net}/com-sun-commons-beanutils/jars/com-sun-commons-beanutils-1.6.1.jar"
-                             dest="${dependency.base.dir}/jars/com-sun-commons-beanutils-1.6.1.jar"
+                        <get src="http://repo1.maven.org/maven2/commons-collections/commons-collections/${collections.version}/commons-collections-${collections.version}.jar"
+                             dest="${commons-collections.jar}"
                              usetimestamp="true"/>
-                        <unjar src="${dependency.base.dir}/jars/com-sun-commons-beanutils-1.6.1.jar"
-                               dest="${dependency.jar.dir}"/>
-                        <delete file="${dependency.base.dir}/jars/com-sun-commons-beanutils-1.6.1.jar"/>
                     </then>
                 </if>
 
+                <!-- LOGGING_API -->
                 <if>
                     <not>
-                        <available file="${sun-commons-logging.jar}" property="ignored"/>
+                        <available file="${commons-logging.jar}" property="ignored"/>
                     </not>
                     <then>
-                        <get src="${download.java.net}/com-sun-commons-logging/jars/com-sun-commons-logging-1.0.4.jar"
-                             dest="${dependency.base.dir}/jars/com-sun-commons-logging-1.0.4.jar"
+                        <get src="http://repo1.maven.org/maven2/commons-logging/commons-logging/${logging.version}/commons-logging-${logging.version}.jar"
+                             dest="${commons-logging.jar}"
                              usetimestamp="true"/>
-                        <unjar src="${dependency.base.dir}/jars/com-sun-commons-logging-1.0.4.jar"
-                               dest="${dependency.jar.dir}"/>
-                        <delete file="${dependency.base.dir}/jars/com-sun-commons-logging-1.0.4.jar"/>
                     </then>
                 </if>
             </else>

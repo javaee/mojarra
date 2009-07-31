@@ -47,7 +47,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 
 import com.sun.faces.config.beans.DescriptionBean;
-import com.sun.org.apache.commons.digester.NodeCreateRule;
+import org.apache.commons.digester.NodeCreateRule;
 
 
 /**

@@ -44,7 +44,7 @@ package com.sun.faces.config.rules;
 import org.xml.sax.Attributes;
 
 import com.sun.faces.config.beans.NullValueHolder;
-import com.sun.org.apache.commons.digester.Rule;
+import org.apache.commons.digester.Rule;
 
 
 /**
