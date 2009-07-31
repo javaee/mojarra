@@ -228,8 +228,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // for any form that is a render target.
 
                 var temp = context.render.split(' ');
-                for (var i=0; i<temp.length; i++) {
-                    if (temp.hasOwnProperty(i)) {                    
+                for (var i = 0; i < temp.length; i++) {
+                    if (temp.hasOwnProperty(i)) {
                         // See if the element is a form and the form is not the one that caused the submission..
                         var f = document.forms[temp[i]];
                         if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
@@ -330,14 +330,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
                 var parent = d.parentNode;
                 // Trim space padding before assigning to innerHTML
-                var html = str.replace(/^\s+/g,'').replace(/\s+$/g,'');
+                var html = str.replace(/^\s+/g, '').replace(/\s+$/g, '');
                 var parserElement = document.createElement('div');
                 var tag = d.nodeName.toLowerCase();
                 var tableElements = ['td', 'th', 'tr', 'tbody', 'thead', 'tfoot'];
                 var isInTable = false;
                 for (var tei = 0, tel = tableElements.length; tei < tel; tei++) {
                     if (tableElements[tei] == tag) {
-                        isInTable = true; break;
+                        isInTable = true;
+                        break;
                     }
                 }
                 if (isInTable) {
@@ -348,19 +349,23 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         newElement = newElement.firstChild;
                     }
                     parent.replaceChild(newElement, d);
-                } else if (d.tagName == 'input') { //special case handling for 'input' elements
+
+                } else if (d.tagName == 'input') {
+                    // special case handling for 'input' elements
+                    // in order to not lose focus when updating,
+                    // input elements need to be added in place.
                     parserElement = document.createElement('div');
                     parserElement.innerHTML = html;
                     newElement = parserElement.firstChild;
                     var InputElementAttributes =
                         //core and i18n attributes (except 'id' and 'style' attributes)
-                        ['className', 'title', 'lang',
-                        //input element attributes
-                        'name', 'value', 'checked', 'disabled', 'readOnly',
-                        'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
-                        'tabIndex', 'accessKey', 'accept'];
-                        //'dir' attribute cannot be updated dynamically in IE 7
-                        //'type' attribute cannot be updated dynamically in Firefox 2.0
+                            ['className', 'title', 'lang',
+                                //input element attributes
+                                'name', 'value', 'checked', 'disabled', 'readOnly',
+                                'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
+                                'tabIndex', 'accessKey', 'accept'];
+                    //'dir' attribute cannot be updated dynamically in IE 7
+                    //'type' attribute cannot be updated dynamically in Firefox 2.0
                     for (var iIndex = 0, iLength = InputElementAttributes.length; iIndex < iLength; iIndex++) {
                         var attributeName = InputElementAttributes[iIndex];
                         var newValue = newElement[attributeName];
@@ -400,7 +405,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             if (!(p != "font" && newElementStyle[p])) {
                                 elementStyle[p] = newElementStyle[p];
                             }
-                        };
+                        }
                     }
 
                     var listenerNames = [
@@ -413,8 +418,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         newElement[name] = null;
                     }
                 } else if (html.length > 0) {
-                                    parserElement.innerHTML = html;
-                                    parent.replaceChild(parserElement.firstChild, d);
+                    parserElement.innerHTML = html;
+                    parent.replaceChild(parserElement.firstChild, d);
                 }
             }
         };
@@ -466,7 +471,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var target = $(id);
 
             if (!target) {
-                throw new Error("The specified id: "+id+" was not found in the page.");
+                throw new Error("The specified id: " + id + " was not found in the page.");
             }
 
             // There can be multiple attributes modified.  Loop through the list.
@@ -474,7 +479,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             for (var i = 0; i < nodes.length; i++) {
                 var name = nodes[i].getAttribute('name');
                 var value = nodes[i].getAttribute('value');
-                target.setAttribute(name,value);
+                target.setAttribute(name, value);
             }
         };
 
@@ -761,7 +766,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (description) {
                 data.description = description;
             } else if (status == "httpError") {
-                data.description = "There was an error communicating with the server, status: "+data.responseCode;
+                data.description = "There was an error communicating with the server, status: " + data.responseCode;
             } else if (status == "serverError") {
                 data.description = serverErrorMessage;
             } else if (status == "emptyResponse") {
@@ -790,9 +795,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             if (!sent && jsf.getProjectStage() === "Development") {
                 if (status == "serverError") {
-                        alert("serverError: " + serverErrorName + " " + serverErrorMessage);
+                    alert("serverError: " + serverErrorName + " " + serverErrorMessage);
                 } else {
-                    alert(status + ": "+ data.description);
+                    alert(status + ": " + data.description);
                 }
             }
         };
@@ -924,7 +929,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * </tr>
              * <tr>
              * <td><code>javax.faces.ViewState</code></td>
-             * <td><code>Contents of javax.faces.ViewState hidden field.  This is included when 
+             * <td><code>Contents of javax.faces.ViewState hidden field.  This is included when
              * {@link jsf.getViewState} is used.</code></td>
              * </tr>
              * <tr>
@@ -946,9 +951,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <ul>
              * <li>If the keyword <code>@none</code> is present, do not create and send
              * the post data argument <code>javax.faces.partial.execute</code>.</li>
-             * <li>If the keyword <code>@all</code> is present, create the post data argument with 
+             * <li>If the keyword <code>@all</code> is present, create the post data argument with
              * the name <code>javax.faces.partial.execute</code> and the value <code>@all</code>.</li>
-             * <li>Otherwise, there are specific identifiers that need to be sent.  Create the post 
+             * <li>Otherwise, there are specific identifiers that need to be sent.  Create the post
              * data argument with the name <code>javax.faces.partial.execute</code> and the value as a
              * space delimited <code>string</code> of client identifiers.</li>
              * </ul>
@@ -960,13 +965,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <ul>
              * <li>If the keyword <code>@none</code> is present, do not create and send
              * the post data argument <code>javax.faces.partial.render</code>.</li>
-             * <li>If the keyword <code>@all</code> is present, create the post data argument with 
+             * <li>If the keyword <code>@all</code> is present, create the post data argument with
              * the name <code>javax.faces.partial.render</code> and the value <code>@all</code>.</li>
-             * <li>Otherwise, there are specific identifiers that need to be sent.  Create the post 
+             * <li>Otherwise, there are specific identifiers that need to be sent.  Create the post
              * data argument with the name <code>javax.faces.partial.render</code> and the value as a
              * space delimited <code>string</code> of client identifiers.</li>
              * </ul>
-             * <li>If <code>options.render</code> does not exist do not create and send the 
+             * <li>If <code>options.render</code> does not exist do not create and send the
              * post data argument <code>javax.faces.partial.render</code>.</li>
              * <li>Determine additional arguments (if any) from the <code>event</code>
              * argument.  The following name/value pairs may be used from the
@@ -1004,7 +1009,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * value: <code>partial/ajax</code>.</li>
              * <li>Determine the <code>posting URL</code> as follows: If the hidden field
              * <code>javax.faces.encodedURL</code> is present in the submitting form, use its
-             * value as the <code>posting URL</code>.  Otherwise, use the <code>action</code> 
+             * value as the <code>posting URL</code>.  Otherwise, use the <code>action</code>
              * property of the <code>form</code> element as the <code>URL</code>.</li>
              * <li>Send the request as an <code>asynchronous POST</code> using the
              * <code>posting URL</code> that was determined in the previous step.</li>
@@ -1231,27 +1236,27 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
              * Update the entire DOM replacing the appropriate <code>head</code> and/or
-             * <code>body</code> sections with the content from the response.</li> 
+             * <code>body</code> sections with the content from the response.</li>
              * <li>If an <code>update</code> element is found in the response with the identifier
              * <code>javax.faces.ViewState</code>:
              * <pre><code>&lt;update id="javax.faces.ViewState"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
              * locate and update the submitting form's <code>javax.faces.ViewState</code> value
-             * with the <code>CDATA</code> contents from the response.</li> 
+             * with the <code>CDATA</code> contents from the response.</li>
              * <li>If an <code>update</code> element is found in the response with the identifier
              * <code>javax.faces.ViewHead</code>:
              * <pre><code>&lt;update id="javax.faces.ViewHead"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
-             * update the document's <code>head</code> section with the <code>CDATA</code> 
+             * update the document's <code>head</code> section with the <code>CDATA</code>
              * contents from the response.</li>
              * <li>If an <code>update</code> element is found in the response with the identifier
              * <code>javax.faces.ViewBody</code>:
              * <pre><code>&lt;update id="javax.faces.ViewBody"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
-             * update the document's <code>body</code> section with the <code>CDATA</code> 
+             * update the document's <code>body</code> section with the <code>CDATA</code>
              * contents from the response.</li>
              * <li>For any other <code>&lt;update&gt;</code> element:
              * <pre><code>&lt;update id="update id"&gt;
@@ -1384,7 +1389,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
                 if (responseType.nodeName !== "changes") {
-                    sendError(request, context, "malformedXML", "Top level node must be one of: changes, redirect, error, received: "+responseType.nodeName+" instead.");
+                    sendError(request, context, "malformedXML", "Top level node must be one of: changes, redirect, error, received: " + responseType.nodeName + " instead.");
                     return;
                 }
 
@@ -1410,10 +1415,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                                 doEval(changes[i]);
                                 break;
                             case "extension":
-                            // RELEASE_PENDING no action?
+                                // RELEASE_PENDING no action?
                                 break;
                             default:
-                                sendError(request, context, "malformedXML", "Changes allowed are: update, delete, insert, attributes, eval, extension.  Received "+changes[i].nodeName+" instead.");
+                                sendError(request, context, "malformedXML", "Changes allowed are: update, delete, insert, attributes, eval, extension.  Received " + changes[i].nodeName + " instead.");
                                 return;
                         }
                     }
@@ -1508,7 +1513,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         break;
                     case 'checkbox':
                     case 'radio':
-                        if (el.checked)  {
+                        if (el.checked) {
                             addField(el.name, el.value);
                         }
                         break;
@@ -1531,7 +1536,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * and subsequent scripts are not invoked.  Any number of scripts may
      * specified after the <code>event</code> argument.</p>
      *
-     * @param source The DOM element that triggered this Ajax request, or an 
+     * @param source The DOM element that triggered this Ajax request, or an
      * id string of the element to use as the triggering element.
      * @param event The DOM event that triggered this Ajax request.  The
      * <code>event</code> argument is optional.
@@ -1549,11 +1554,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         // Call back any scripts that were passed in
         for (var i = 2; i < arguments.length; i++) {
 
-          var f = new Function("event", arguments[i]);
-          var returnValue = f.call(thisArg, event);   
+            var f = new Function("event", arguments[i]);
+            var returnValue = f.call(thisArg, event);
 
-          if (returnValue === false)
-            break;
+            if (returnValue === false)
+                break;
         }
     }
 
@@ -1578,13 +1583,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 /*
 
-if( _SARISSA_IS_IE && oldnode.tagName.match( /(tbody|thead|tfoot|tr|th|td)/i ) ) {
-    LOG.debug( "Replace content of node by IE hack" );
-    var temp = document.createElement( "div" );
-    temp.innerHTML = '<table style="display: none">'+new XMLSerializer().serializeToString( newnode )+'</table>';
-    anchor.replaceChild( temp.getElementsByTagName( newnode.tagName ).item( 0 ), oldnode );
-} else {
-    LOG.debug( "Replace content of node by outerHTML()" );
-    oldnode.outerHTML = new XMLSerializer().serializeToString( newnode );
-}
-*/        
+ if( _SARISSA_IS_IE && oldnode.tagName.match( /(tbody|thead|tfoot|tr|th|td)/i ) ) {
+ LOG.debug( "Replace content of node by IE hack" );
+ var temp = document.createElement( "div" );
+ temp.innerHTML = '<table style="display: none">'+new XMLSerializer().serializeToString( newnode )+'</table>';
+ anchor.replaceChild( temp.getElementsByTagName( newnode.tagName ).item( 0 ), oldnode );
+ } else {
+ LOG.debug( "Replace content of node by outerHTML()" );
+ oldnode.outerHTML = new XMLSerializer().serializeToString( newnode );
+ }
+ */
