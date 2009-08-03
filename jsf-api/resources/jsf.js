@@ -1482,12 +1482,17 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         }
         var els = form.elements;
         var len = els.length;
-        var qString = "";
+        // create an array which we'll use to hold all the intermediate strings
+        // this bypasses a problem in IE when repeatedly concatenating very
+        // large strings - we'll perform the concatenation once at the end
+        var qString = [];
         var addField = function(name, value) {
+            var tmpStr = "";
             if (qString.length > 0) {
-                qString += "&";
+                tmpStr = "&";
             }
-            qString += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+            tmpStr += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+            qString.push(tmpStr);
         };
         for (var i = 0; i < len; i++) {
             var el = els[i];
@@ -1520,7 +1525,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
             }
         }
-        return qString;
+        // concatenate the array
+        return qString.join("");
     };
 
     /**
