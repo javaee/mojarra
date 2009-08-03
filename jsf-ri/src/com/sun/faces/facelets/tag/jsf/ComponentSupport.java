@@ -340,7 +340,7 @@ public final class ComponentSupport {
      * does not yet exist, make the child the facet.</p>
      */
     public final static void addComponent(FaceletContext ctx, UIComponent parent, UIComponent child) {
-        // RELEASE_PENDING (edburns,rogerk) doc ADDED_BY_PDL_KEY HERE
+ 
         String facetName = getFacetName(parent);
         if (facetName == null) {
             parent.getChildren().add(child);
@@ -367,6 +367,7 @@ public final class ComponentSupport {
                 parent.getFacets().put(facetName, child);
             }
         }
+        
     }
 
     public final static String getFacetName(UIComponent parent) {
