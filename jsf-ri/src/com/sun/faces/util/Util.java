@@ -43,6 +43,7 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.io.FastStringWriter;
 
 import javax.el.ELResolver;
 import javax.el.ValueExpression;
@@ -60,6 +61,8 @@ import java.beans.FeatureDescriptor;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -682,6 +685,45 @@ public class Util {
                                         UIViewRoot viewToRender) {
 
         ctx.getAttributes().put(viewToRender, Boolean.TRUE);
+
+    }
+
+
+    /**
+     * Utility method to validate ID uniqueness for the tree represented
+     * by <code>component</code>.
+     */
+    public static void checkIdUniqueness(FacesContext context,
+                                          UIComponent component,
+                                          Set<String> componentIds) {
+
+        // deal with children/facets that are marked transient.
+        for (Iterator<UIComponent> kids = component.getFacetsAndChildren();
+             kids.hasNext();) {
+
+            UIComponent kid = kids.next();
+            // check for id uniqueness
+            String id = kid.getClientId(context);
+            if (componentIds.add(id)) {
+                checkIdUniqueness(context, kid, componentIds);
+            } else {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               "jsf.duplicate_component_id_error",
+                               id);
+
+
+                    FastStringWriter writer = new FastStringWriter(128);
+                    DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
+                    LOGGER.severe(writer.toString());
+                }
+
+                String message =
+                      MessageUtils.getExceptionMessageString(
+                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id);
+                throw new IllegalStateException(message);
+            }
+        }
 
     }
 

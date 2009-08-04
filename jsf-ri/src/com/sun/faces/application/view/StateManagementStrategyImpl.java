@@ -37,9 +37,7 @@
 package com.sun.faces.application.view;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,11 +47,10 @@ import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 
-import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +61,11 @@ import javax.faces.component.ContextCallback;
 import javax.faces.component.StateHolder;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
-import javax.faces.event.*;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.PostAddToViewEvent;
+import javax.faces.event.PreRemoveFromViewEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.view.StateManagementStrategy;
 import javax.faces.FacesException;
 
@@ -129,9 +130,9 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
 
         // honor the requirement to check for id uniqueness
-        checkIdUniqueness(context,
-                          viewRoot,
-                          new HashSet<String>(viewRoot.getChildCount() << 1));
+        Util.checkIdUniqueness(context,
+                               viewRoot,
+                               new HashSet<String>(viewRoot.getChildCount() << 1));
         final Map<String,Object> stateMap = new HashMap<String,Object>();
         
         VisitContext visitContext = VisitContext.createVisitContext(context);
@@ -314,51 +315,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         root.subscribeToViewEvent(PreRemoveFromViewEvent.class, listener);
 
     }
-
-
-
-
-    // ------------------------------------------------------- Protected Methods
-
-    // RELEASE_PENDING (this is duplicated in StateManagerImpl...
-    protected void checkIdUniqueness(FacesContext context,
-                                     UIComponent component,
-                                     Set<String> componentIds)
-          throws IllegalStateException {
-
-        // deal with children/facets that are marked transient.
-        for (Iterator<UIComponent> kids = component.getFacetsAndChildren();
-             kids.hasNext();) {
-
-            UIComponent kid = kids.next();
-            // check for id uniqueness
-            String id = kid.getClientId(context);
-            if (componentIds.add(id)) {
-                checkIdUniqueness(context, kid, componentIds);
-            } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               "jsf.duplicate_component_id_error",
-                               id);
-
-
-                    FastStringWriter writer = new FastStringWriter(128);
-                    DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
-                    LOGGER.severe(writer.toString());
-                }
-
-                String message =
-                      MessageUtils.getExceptionMessageString(
-                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id);
-                throw new IllegalStateException(message);
-            }
-        }
-
-    }
-
-
-    
-
 
 
     // --------------------------------------------------------- Private Methods

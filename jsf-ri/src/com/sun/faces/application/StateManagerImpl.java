@@ -36,11 +36,7 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.DebugUtil;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
@@ -57,11 +53,12 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * <p>
@@ -77,7 +74,6 @@ import java.util.logging.Logger;
  */
 public class StateManagerImpl extends StateManager {
 
-    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     private boolean isDevelopmentMode;
     private Map<String,Class<?>> classMap;
 
@@ -130,9 +126,9 @@ public class StateManagerImpl extends StateManager {
             result = strategy.saveView(context);
         } else {
             // honor the requirement to check for id uniqueness
-            checkIdUniqueness(context,
-                    viewRoot,
-                    new HashSet<String>(viewRoot.getChildCount() << 1));
+            Util.checkIdUniqueness(context,
+                                   viewRoot,
+                                   new HashSet<String>(viewRoot.getChildCount() << 1));
 
             List<TreeNode> treeList = new ArrayList<TreeNode>(32);
             Object state = viewRoot.processSaveState(context);
@@ -207,43 +203,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    // ------------------------------------------------------- Protected Methods
-
-
-    protected void checkIdUniqueness(FacesContext context,
-                                     UIComponent component,
-                                     Set<String> componentIds)
-          throws IllegalStateException {
-
-        // deal with children/facets that are marked transient.
-        for (Iterator<UIComponent> kids = component.getFacetsAndChildren();
-             kids.hasNext();) {
-
-            UIComponent kid = kids.next();
-            // check for id uniqueness
-            String id = kid.getClientId(context);
-            if (componentIds.add(id)) {
-                checkIdUniqueness(context, kid, componentIds);
-            } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               "jsf.duplicate_component_id_error",
-                               id);
-
-
-                    FastStringWriter writer = new FastStringWriter(128);
-                    DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
-                    LOGGER.severe(writer.toString());
-                }
-
-                String message =
-                      MessageUtils.getExceptionMessageString(
-                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id);
-                throw new IllegalStateException(message);
-            }
-        }
-
-    }
+    // --------------------------------------------------------- Private Methods
 
 
     private static void captureChild(List<TreeNode> tree,
