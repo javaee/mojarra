@@ -325,7 +325,6 @@ public class ResourceCache {
             while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
                 if (!"jar".equals(url.getProtocol())) {
-                    // RELEASE_PENDING - should be a better way to handle this case
                     String urlString = url.toString();
                     if (urlString.contains("/WEB-INF/classes/META-INF/resources")
                         || urlString.contains("jsf-ri-runtime.xml")) {
