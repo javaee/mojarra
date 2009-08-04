@@ -39,6 +39,7 @@ package com.sun.faces.ajax;
 
 import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import junit.framework.Test;
@@ -117,6 +118,16 @@ public class AjaxErrorTestCase extends AbstractTestCase {
         assertEquals(1, collectedAlerts.size());
         String serverError = "serverError: class javax.faces.el.MethodNotFoundException /ajax/ajaxError.xhtml @51,76 action=\"#{evalBean.error}\": Method not found: com.sun.faces.systest.model.ajax.EvalBean@2bc3d6f3.error()";
         assertEquals(serverError.substring(0,165), collectedAlerts.get(0).substring(0,165));
+
+        page = getPage("/faces/ajax/ajaxError3.xhtml");
+        button = (HtmlSubmitInput) getInputContainingGivenId(page, "form:error");
+        assertNotNull(button);
+
+        HtmlPage page1 = button.click();
+        HtmlElement element = page1.getElementById("statusArea");
+        assertNotNull(element);
+        String statusText = element.getAttribute("value");
+        assertTrue(statusText.equals("Name: form:error Error: serverError "));
 
     }
 

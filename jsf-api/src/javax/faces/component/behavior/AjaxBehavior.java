@@ -610,7 +610,7 @@ public class AjaxBehavior extends ClientBehaviorBase {
         if (ONEVENT.equals(propertyName)) {
             onevent = (String)value;
         } else if (ONERROR.equals(propertyName)) {
-            onevent = (String)value;
+            onerror = (String)value;
         } else if (IMMEDIATE.equals(propertyName)) {
             immediate = (Boolean)value;
         } else if (DISABLED.equals(propertyName)) {
