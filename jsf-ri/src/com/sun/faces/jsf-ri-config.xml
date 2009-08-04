@@ -253,7 +253,7 @@
     </component>
 
     <!-- Facelets Custom Components -->
-    <!-- RELEASE_PENDING will these be needed by the spec? -->
+    
     <component>
         <component-type>facelets.ui.Repeat</component-type>
         <component-class>com.sun.faces.facelets.component.UIRepeat</component-class>
