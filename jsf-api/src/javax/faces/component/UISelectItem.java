@@ -57,8 +57,8 @@ import javax.faces.model.SelectItem;
  * item of type {@link SelectItem}.</li> <li>A new {@link SelectItem}
  * instance is synthesized from the values of the
  * <code>itemDescription</code>, <code>itemDisabled</code>,
- * <code>itemLabel</code>, and <code>itemValue</code> attributes.</li>
- * </ul>
+ * <code>itemLabel</code>, <code>itemEscaped</code>, and
+ * <code>itemValue</code> attributes.</li> </ul>
  */
 
 public class UISelectItem extends UIComponentBase {

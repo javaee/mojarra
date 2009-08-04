@@ -302,22 +302,25 @@ public class SelectItem implements Serializable {
 
     }
 
-    /**
-     * Holds value of property escape.
-     */
     private boolean escape;
 
     /**
-     * Getter for property escape.
-     * @return Value of property escape.
+     * <p class="changed_added_2_0">If and only if this returns
+     * <code>true</code>, the code that renders this select item must
+     * escape the label using escaping syntax appropriate to the content
+     * type being rendered.  </p>
+     *
+     * @since 2.0
      */
     public boolean isEscape() {
         return this.escape;
     }
 
     /**
-     * Setter for property escape.
-     * @param escape New value of property escape.
+     * <p class="changed_added_2_0">Set the value of the escape
+     * property.  See {@link #isEscape}.</p>
+     *
+     * @since 2.0
      */
     public void setEscape(boolean escape) {
         this.escape = escape;
