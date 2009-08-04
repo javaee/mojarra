@@ -238,6 +238,42 @@ public class ResourceManager {
             // resource that isn't localized
             info = findResource(library, resName, null, compressable, ctx);
         }
+
+        // If no resource has been found so far, and we have a library that
+        // was found in the webapp filesystem, see if there is a matching
+        // library on the classpath.  If one is found, try to find a matching
+        // resource in that library.
+        if (info == null
+                && library != null
+                && library.getHelper() instanceof WebappResourceHelper) {
+            LibraryInfo altLibrary = classpathHelper.findLibrary(libraryName,
+                                                                 localePrefix,
+                                                                 ctx);
+            if (altLibrary != null) {
+                VersionInfo originalVersion = library.getVersion();
+                VersionInfo altVersion = altLibrary.getVersion();
+                if (originalVersion == null && altVersion == null) {
+                    library = altLibrary;
+                } else if (originalVersion == null && altVersion != null) {
+                    library = null;
+                } else if (originalVersion != null && altVersion == null) {
+                    library = null;
+                } else if (originalVersion.compareTo(altVersion) == 0) {
+                    library = altLibrary;
+                }
+
+            }
+   
+            if (library != null) {
+                info = findResource(library, resName, localePrefix, compressable, ctx);
+                if (info == null && localePrefix != null) {
+                    // no localized resource found, try to find a
+                    // resource that isn't localized
+                    info = findResource(library, resName, null, compressable, ctx);
+                }
+            }
+
+        }
         return info;
 
     }
