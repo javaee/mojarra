@@ -242,7 +242,10 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
         boolean isDevelopment = ctx.isProjectStage(ProjectStage.Development);
         if (isDevelopment && !errorPagePresent) {
-            // RELEASE_PENDING what about other device types?
+            // RELEASE_PENDING_2_1
+            // thThe error page here will be text/html which means not all device
+            // types are going to render this properly.  This should be addressed
+            // in 2.1
             RenderKitUtils.renderHtmlErrorPage(ctx, fe);
         } else {
             if (isDevelopment) {
