@@ -251,14 +251,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
 
             // join the CDATA sections in the markup
-            // RELEASE_PENDING are there allowed to be more than one CDATA?
             markup = '';
             for (var j = 0; j < element.childNodes.length; j++) {
                 content = element.childNodes[j];
                 markup += content.text || content.data;
             }
 
-            // RELEASE_PENDING - doc what this does
+            // Strip out scripts
             str = markup.replace(new RegExp('(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)', 'img'), '');
 
             var src = str;
@@ -454,7 +453,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 target = target.nextSibling;
             }  // otherwise, this is a 'before' element
             parent.insertBefore(tempElement.firstChild, target);
-            // RELEASE_PENDING what do we do with the span we've just inserted?
         };
 
         /**
@@ -757,12 +755,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var data = {};  // data payload for function
             data.type = "error";
             data.status = status;
-            // RELEASE_PENDING won't work in response
             data.source = context.source;
             data.responseCode = request.status;
-            // RELEASE_PENDING pass a copy, not a reference
             data.responseXML = request.responseXML;
-            // RELEASE_PENDING won't work in response
             data.responseText = request.responseText;
 
             if (description) {
@@ -817,7 +812,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             data.source = context.source;
             if (status !== 'begin') {
                 data.responseCode = request.status;
-                // RELEASE_PENDING pass a copy, not a reference
                 data.responseXML = request.responseXML;
                 data.responseText = request.responseText;
             }
@@ -1146,7 +1140,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             options.execute = options.execute.replace("@this", element.id);
                             options.execute = options.execute.replace("@form", form.id);
                             var temp = options.execute.split(' ');
-                            // RELEASE_PENDING refactor isInArray function
                             if (!isInArray(temp, element.name)) {
                                 options.execute = element.name + " " + options.execute;
                             }
@@ -1417,7 +1410,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                                 doEval(changes[i]);
                                 break;
                             case "extension":
-                                // RELEASE_PENDING no action?
+                                // no action
                                 break;
                             default:
                                 sendError(request, context, "malformedXML", "Changes allowed are: update, delete, insert, attributes, eval, extension.  Received " + changes[i].nodeName + " instead.");
