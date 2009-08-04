@@ -20,10 +20,6 @@ package model;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-/**
- * @author Hardy Ferentschik
- * @todo Extend to not only support strings, but also collections and maps. Needs to be specified first though.
- */
 public class NotEmptyValidator implements ConstraintValidator<NotEmpty, String> {
 
 	public void initialize(NotEmpty parameters) {

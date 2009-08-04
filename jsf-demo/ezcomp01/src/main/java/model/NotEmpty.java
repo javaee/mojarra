@@ -25,9 +25,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 
-/**
- * @author Emmanuel Bernard
- */
 @Documented
 @Constraint(validatedBy = NotEmptyValidator.class)
 @Target({ METHOD, FIELD })
