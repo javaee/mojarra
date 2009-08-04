@@ -300,7 +300,7 @@ public class ConvertDateTimeTag extends AbstractConverterTag {
         if (string.length() > 2) {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING,
-                           "jsf.core.taglib.convertdatetime.invalid_local_value",
+                           "jsf.core.taglib.invalid_locale_value",
                            string);
             }
         } else {
@@ -309,7 +309,7 @@ public class ConvertDateTimeTag extends AbstractConverterTag {
             if (Arrays.binarySearch(langs, string) < 0) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING,
-                               "jsf.core.taglib.convertdatetime.invalid_language",
+                               "jsf.core.taglib.invalid_language",
                                string);
                 }
             }
