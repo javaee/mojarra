@@ -200,6 +200,9 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.NAVIGATION_NO_MATCHING_OUTCOME_ID, "2"},
         {MessageUtils.NAVIGATION_NO_MATCHING_OUTCOME_ACTION_ID, "3"},
         {MessageUtils.NO_RESOURCE_TARGET_AVAILABLE, "1"},
+        {MessageUtils.INVALID_RESOURCE_FORMAT_ERROR, "1"},
+        {MessageUtils.INVALID_RESOURCE_FORMAT_NO_LIBRARY_NAME_ERROR, "1"},
+        {MessageUtils.INVALID_RESOURCE_FORMAT_COLON_ERROR, "1"},
     };
 
 // Attribute Instance Variables

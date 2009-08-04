@@ -55,6 +55,7 @@ import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 import com.sun.faces.application.ApplicationAssociate;
 
 import java.util.ArrayList;
@@ -267,15 +268,17 @@ public class ResourceImpl extends Resource implements Externalizable {
                 if (-1 != (colon = expressionBody.indexOf(":"))) {
                     // Make sure it contains only one ":"
                     if (!isPropertyValid(expressionBody)) {
-                        // RELEASE_PENDING i18n
-                        throw new ELException("Invalid resource format.  Property " +
-                                expressionBody + " contains more than one colon (:)");
+                        String message =
+                              MessageUtils.getExceptionMessageString(MessageUtils.INVALID_RESOURCE_FORMAT_COLON_ERROR,
+                                                                     expressionBody);
+                        throw new ELException(message);
                     }
                     String[] parts = Util.split(expressionBody, ":");
                     if (null == parts[0] || null == parts[1]) {
-                        // RELEASE_PENDING i18n
-                        throw new ELException("Invalid resource format.  Property " +
-                                expressionBody + " cannot be parsed to extract resource name and library name");
+                        String message = 
+                              MessageUtils.getExceptionMessageString(MessageUtils.INVALID_RESOURCE_FORMAT_NO_LIBRARY_NAME_ERROR,
+                                                                     expressionBody);
+                        throw new ELException(message);
                         
                     }
                     try {
@@ -291,9 +294,10 @@ public class ResourceImpl extends Resource implements Externalizable {
                         }
                     }
                     catch (Exception e) {
-                        // RELEASE_PENDING i18n
-                        throw new ELException("Invalid resource format.  Property " +
-                                expressionBody + " cannot be parsed");
+                        String message =
+                              MessageUtils.getExceptionMessageString(MessageUtils.INVALID_RESOURCE_FORMAT_ERROR,
+                                                                     expressionBody);
+                        throw new ELException(message);
                         
                     }
                 }

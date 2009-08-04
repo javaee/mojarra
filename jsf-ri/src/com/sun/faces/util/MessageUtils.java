@@ -312,6 +312,12 @@ public class MessageUtils {
 		  "com.sun.faces.OUTCOME_TARGET_LINK_NO_MATCH";
     public static final String NO_RESOURCE_TARGET_AVAILABLE =
           "com.sun.faces.RESOURCE_TARGET_NOT_AVAILABLE";
+    public static final String INVALID_RESOURCE_FORMAT_COLON_ERROR =
+          "com.sun.faces.RESOURCE_INVALID_FORMAT_COLON_ERROR";
+    public static final String INVALID_RESOURCE_FORMAT_NO_LIBRARY_NAME_ERROR =
+          "com.sun.faces.RESOURCE_INVALID_FORMAT_NO_LIBRARY_NAME_ERROR";
+    public static final String INVALID_RESOURCE_FORMAT_ERROR =
+          "com.sun.faces.RESOURCE_INVALID_FORMAT_ERROR";
    
     
     public static final String JS_RESOURCE_WRITING_ERROR_ID =
