@@ -774,7 +774,6 @@ public class ViewHandlerImpl extends ViewHandler {
             String convertedViewId = buffer.toString();
             try {
                 if (context.getExternalContext().getResource(convertedViewId) != null) {
-                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
                     return convertedViewId;
                 } else {
                     // reset the buffer to check for the next extension
