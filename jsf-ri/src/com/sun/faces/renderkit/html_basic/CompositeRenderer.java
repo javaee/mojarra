@@ -37,6 +37,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.Util;
+
 import java.io.IOException;
 import java.util.Map;
 import javax.faces.component.UIComponent;
@@ -44,17 +46,24 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 
 /**
- * RELEASE_PENDING (rlubke,driscoll) docs
+ * <p>
+ * This <code>Renderer</code> is responsible for rendering the children
+ * defined within the composite implementation section of a composite component
+ * template.
+ * </p>
  */
 public class CompositeRenderer extends Renderer {
 
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        
-    }
+
+    // --------------------------------------------------- Methods from Renderer
+
 
     @Override
     public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
+
+        Util.notNull("context", context);
+        Util.notNull("component", component);
+
         Map<String,UIComponent> facets = component.getFacets();
         UIComponent compositeRoot = facets.get(UIComponent.COMPOSITE_FACET_NAME);
         if (null == compositeRoot) {
@@ -64,19 +73,14 @@ public class CompositeRenderer extends Renderer {
                     component.getClass().getName());
         }
         compositeRoot.encodeAll(context);
+
     }
 
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        
-    }
 
     @Override
     public boolean getRendersChildren() {
         return true;
     }
 
-
-    
 
 }

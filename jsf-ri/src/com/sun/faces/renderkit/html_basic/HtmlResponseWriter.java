@@ -57,7 +57,6 @@ import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
 import javax.faces.context.ExternalContext;
-import javax.faces.context.PartialResponseWriter;
 
 
 /**
@@ -606,11 +605,12 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     /**
      * Starts a CDATA block.  Nested blocks are not allowed.
-     * RELEASE_PENDING edburns, rogerk - need to expand on this description.
+     *
      * @since 2.0
      * @throws IOException on a read/write error
      * @throws IllegalStateException If startCDATA is called a second time before endCDATA.
      */
+    // RELEASE_PENDING_2_1 edburns, rogerk - need to expand on this description.
     public void startCDATA() throws IOException {
         if (writingCdata) {
             throw new IllegalStateException("CDATA tags may not nest");
@@ -625,10 +625,11 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     /**
      * Closes the CDATA block.
-     * RELEASE_PENDING edburns, rogerk - need to expand on this description.
+     *
      * @since 2.0
      * @throws IOException
      */
+    // RELEASE_PENDING_2_1 edburns, rogerk - need to expand on this description.
     public void endCDATA() throws IOException {
         closeStartIfNecessary();
         writer.write("]]>");

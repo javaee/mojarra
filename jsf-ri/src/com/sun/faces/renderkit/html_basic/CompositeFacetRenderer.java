@@ -38,6 +38,8 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,53 +48,53 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 
 /**
- * RELEASE_PENDING (rlubke,driscoll) docs
+ * <p>
+ * This <code>Renderer</code> is responsible for rendering the content of a
+ * facet defined within the <em>using page</em> template in the desired location
+ * within the composite component implementation section.
+ * </p>
  */
 public class CompositeFacetRenderer extends Renderer {
-    
-    // Log instance for this class
-    protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
+
+    private static final Logger logger = FacesLogger.RENDERKIT.getLogger();
+
+
+    // --------------------------------------------------- Methods from Renderer
 
 
     @Override
-    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        
+    public void encodeChildren(FacesContext context, UIComponent component)
+    throws IOException {
+
+        Util.notNull("context", context);
+        Util.notNull("component", component);
+
+        String facetName = (String)
+              component.getAttributes().get(UIComponent.FACETS_KEY);
+        if (null == facetName) {
+            return;
+        }
+
+        UIComponent currentCompositeComponent = UIComponent
+              .getCurrentCompositeComponent(context);
+        if (null != currentCompositeComponent) {
+            UIComponent facet = currentCompositeComponent.getFacet(facetName);
+            if (null != facet) {
+                facet.encodeAll(context);
+            } else {
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE,
+                               "Could not find facet named {0}",
+                               facetName);
+                }
+            }
+        }
     }
 
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-       String facetName = (String)
-               component.getAttributes().get(UIComponent.FACETS_KEY);
-       if (null == facetName) {
-           return;
-       }
-       
-       UIComponent currentCompositeComponent = UIComponent.getCurrentCompositeComponent(context);
-       if (null != currentCompositeComponent) {
-           UIComponent facet = currentCompositeComponent.getFacet(facetName);
-           if (null != facet) {
-               facet.encodeAll(context);
-           } else {
-               if (logger.isLoggable(Level.FINE)) {
-                   logger.log(Level.FINE,
-                           "Could not find facet named {0}",
-                           facetName);
-               }
-           }
-       }       
-    }
-
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        
-    }
 
     @Override
     public boolean getRendersChildren() {
         return true;
     }
-
-
-    
 
 }

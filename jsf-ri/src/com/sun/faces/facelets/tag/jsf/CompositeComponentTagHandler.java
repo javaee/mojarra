@@ -100,7 +100,11 @@ import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
 
 /**
- * RELEASE_PENDING (rlubke,driscoll) document
+ * <p>
+ * Facelet handler responsible for, building the component tree representation
+ * of a composite component based on the metadata contained in the composite
+ * interface and implementation sections of the composite component template.
+ * </p>
  */
 public class CompositeComponentTagHandler extends ComponentHandler implements CreateComponentDelegate {
 

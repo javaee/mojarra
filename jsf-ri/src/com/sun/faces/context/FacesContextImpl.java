@@ -621,8 +621,6 @@ public class FacesContextImpl extends FacesContext {
 
     // -------------------------------------------------------- Private Methods
 
-    // RELEASE_PENDING (rlubke,driscoll) profile to see if this actually
-    // gets inlined after we made it final
 
     @SuppressWarnings({"FinalPrivateMethod"})
     private final void assertNotReleased() {
@@ -631,6 +629,7 @@ public class FacesContextImpl extends FacesContext {
         }
     }
 
+    
     // ---------------------------------------------------------- Inner Classes
 
 
