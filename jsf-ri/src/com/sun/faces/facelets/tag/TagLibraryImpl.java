@@ -42,7 +42,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 
 /**
- * RELEASE_PENDING (rlubke,driscoll) docs
+ * Concrete implementation for defining Facelet tag libraries in Java.
  */
 public class TagLibraryImpl extends AbstractTagLibrary {
         public TagLibraryImpl(String namespace) {
