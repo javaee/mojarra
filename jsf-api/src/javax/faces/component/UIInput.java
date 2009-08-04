@@ -1438,7 +1438,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             if (null == val) {
                 val = (String) extCtx.getApplicationMap().get(VALIDATE_EMPTY_FIELDS_PARAM_NAME);
             }
-            if (val == null || "auto".equals(val)) {
+            if ("auto".equals(val)) {
                 validateEmptyFields = isBeansValidationAvailable(ctx);
             } else {
                 validateEmptyFields = Boolean.valueOf(val);
