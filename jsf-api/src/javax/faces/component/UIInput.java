@@ -40,17 +40,10 @@
 
 package javax.faces.component;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.Collections;
-import java.util.logging.Logger;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -122,8 +115,12 @@ import javax.faces.validator.ValidatorException;
 
 public class UIInput extends UIOutput implements EditableValueHolder {
 
-    private static Logger LOGGER = Logger.getLogger("javax.faces.component",
-            "javax.faces.LogStrings");
+    /* PENDING_2_1 (edburns,rogerk) this should be exposed as public constant */
+    private static final String EMPTY_STRING_AS_NULL =
+          "javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL";
+
+    private static final String BEANS_VALIDATION_AVAILABLE =
+          "javax.faces.private.BEANS_VALIDATION_AVAILABLE";
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -1146,10 +1143,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                             Collection<FacesMessage> messages = ve.getFacesMessages();
                             if (null != messages) {
                                 message = null;
-                                Iterator<FacesMessage> iter = messages.iterator();
-                                while (iter.hasNext()) {
-                                    context.addMessage(getClientId(context), 
-                                            iter.next());
+                                String cid = getClientId(context);
+                                for (FacesMessage m : messages) {
+                                    context.addMessage(cid, m);
                                 }
                             } else {
                                 message = ve.getFacesMessage();
@@ -1425,9 +1421,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private boolean considerEmptyStringNull(FacesContext ctx) {
 
         if (emptyStringIsNull == null) {
-            // RELEASE_PENDING (edburns,rogerk) This should have a constant
-            String val = ctx.getExternalContext()
-              .getInitParameter("javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL");
+            String val = ctx.getExternalContext().getInitParameter(EMPTY_STRING_AS_NULL);
             emptyStringIsNull = Boolean.valueOf(val);
         }
 
@@ -1457,19 +1451,17 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     
     private boolean isBeansValidationAvailable(FacesContext context) {
         boolean result = false;
-        // RELEASE_PENDING (edburns,rogerk) this should have a constant
-        final String beansValidationAvailabilityCacheKey = 
-                "javax.faces.BEANS_VALIDATION_AVAILABLE";
+
         Map<String,Object> appMap = context.getExternalContext().getApplicationMap();
         
-        if (appMap.containsKey(beansValidationAvailabilityCacheKey)) {
-            result = (Boolean) appMap.get(beansValidationAvailabilityCacheKey);
+        if (appMap.containsKey(BEANS_VALIDATION_AVAILABLE)) {
+            result = (Boolean) appMap.get(BEANS_VALIDATION_AVAILABLE);
         } else {
             try {
                 new BeanValidator();
-                appMap.put(beansValidationAvailabilityCacheKey, result = true);
+                appMap.put(BEANS_VALIDATION_AVAILABLE, result = true);
             } catch (Throwable t) {
-                appMap.put(beansValidationAvailabilityCacheKey, Boolean.FALSE);
+                appMap.put(BEANS_VALIDATION_AVAILABLE, Boolean.FALSE);
             }
         }
 
