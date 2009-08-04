@@ -283,6 +283,14 @@
                              value="http://${container.host}:${container.port}/test"/>
             </custom-sysproperties>
             <suite>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
 
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.resource.TestResourceManager"/>
@@ -399,17 +407,6 @@
                       name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
-                <!--  Commented out.  This funcationality is fully implemented
-                      in systest, without being so fragile.
-                      RELEASE_PENDING see bug #867
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
-                <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>  -->
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.renderkit.html_basic.MenuRendererTestCase"/>
                 <test todir="${impl.test.results.dir}"
