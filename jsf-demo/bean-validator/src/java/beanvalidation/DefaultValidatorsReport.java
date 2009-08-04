@@ -43,21 +43,23 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-@RequestScoped @ManagedBean
+@RequestScoped
+@ManagedBean
 public class DefaultValidatorsReport {
 
-	private List<String> validatorIds;
+    private List<String> validatorIds;
 
-	@PostConstruct
-	public void onCreate() {
-		validatorIds = new ArrayList<String>();
-		FacesContext ctx = FacesContext.getCurrentInstance();
-		for (String validatorId : ctx.getApplication().getDefaultValidatorInfo().keySet()) {
-			validatorIds.add(validatorId);
-		}
-	}
+    @PostConstruct
+    public void onCreate() {
+        validatorIds = new ArrayList<String>();
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        for (String validatorId : ctx.getApplication().getDefaultValidatorInfo()
+              .keySet()) {
+            validatorIds.add(validatorId);
+        }
+    }
 
-	public List<String> getValidatorIds() {
-		return validatorIds;
-	}
+    public List<String> getValidatorIds() {
+        return validatorIds;
+    }
 }

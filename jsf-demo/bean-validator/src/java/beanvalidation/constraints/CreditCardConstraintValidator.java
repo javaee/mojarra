@@ -43,35 +43,34 @@ import javax.validation.ConstraintValidatorContext;
 /**
  * Valid a credit card number using the standard LUHN check. Implementation borrowed from Mojarra's
  * CreditCardValidator.
- *
- * @author Dan Allen
  */
-public class CreditCardConstraintValidator implements ConstraintValidator<CreditCard, String> {
+public class CreditCardConstraintValidator
+      implements ConstraintValidator<CreditCard, String> {
 
-	private Pattern basicSyntaxPattern;
+    private Pattern basicSyntaxPattern;
 
-	public void initialize(CreditCard parameters) {
-		basicSyntaxPattern = Pattern.compile("^[0-9\\ \\-]*$");
-	}
+    public void initialize(CreditCard parameters) {
+        basicSyntaxPattern = Pattern.compile("^[0-9\\ \\-]*$");
+    }
 
-	public boolean isValid(String value, ConstraintValidatorContext ctxt) {
-		if (value == null || value.length() == 0) {
-			return true;
-		}
+    public boolean isValid(String value, ConstraintValidatorContext ctxt) {
+        if (value == null || value.length() == 0) {
+            return true;
+        }
 
-		if (!basicSyntaxPattern.matcher(value).matches()) {
-			return false;
-		}
+        if (!basicSyntaxPattern.matcher(value).matches()) {
+            return false;
+        }
 
-		return luhnCheck(stripNonDigits(value));
-	}
+        return luhnCheck(stripNonDigits(value));
+    }
 
-	private String stripNonDigits(String s) {
+    private String stripNonDigits(String s) {
         return s.replaceAll(" ", "").replaceAll("-", "");
     }
 
 
-	private boolean luhnCheck(String number) {
+    private boolean luhnCheck(String number) {
         int sum = 0;
 
         boolean timestwo = false;
