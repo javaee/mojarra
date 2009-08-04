@@ -227,20 +227,22 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // Now set the view state from the server into the DOM
                 // for any form that is a render target.
 
-                var temp = context.render.split(' ');
-                for (var i = 0; i < temp.length; i++) {
-                    if (temp.hasOwnProperty(i)) {
-                        // See if the element is a form and the form is not the one that caused the submission..
-                        var f = document.forms[temp[i]];
-                        if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
-                            field = f.elements["javax.faces.ViewState"];
-                            if (typeof field === 'undefined') {
-                                field = document.createElement("input");
-                                field.type = "hidden";
-                                field.name = "javax.faces.ViewState";
-                                f.appendChild(field);
+                if (typeof context.render !== 'undefined' && context.render !== null) {
+                    var temp = context.render.split(' ');
+                    for (var i = 0; i < temp.length; i++) {
+                        if (temp.hasOwnProperty(i)) {
+                            // See if the element is a form and the form is not the one that caused the submission..
+                            var f = document.forms[temp[i]];
+                            if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
+                                field = f.elements["javax.faces.ViewState"];
+                                if (typeof field === 'undefined') {
+                                    field = document.createElement("input");
+                                    field.type = "hidden";
+                                    field.name = "javax.faces.ViewState";
+                                    f.appendChild(field);
+                                }
+                                field.value = state.text || state.data;
                             }
-                            field.value = state.text || state.data;
                         }
                     }
                 }
