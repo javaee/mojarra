@@ -85,10 +85,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     private Boolean renderAll;
     private FacesContext ctx;
 
-    // RELEASE_PENDING (does the spec require this key?  If so, it should be
-    // in PartialViewContext propery, otherwise, I'd recommend changing
-    // to a com.sun.faces namespace.
-    private static final String ORIGINAL_WRITER = "javax.faces.originalWriter";
+    private static final String ORIGINAL_WRITER = "com.sun.faces.ORIGINAL_WRITER";
 
 
     // ----------------------------------------------------------- Constructors
@@ -132,15 +129,6 @@ public class PartialViewContextImpl extends PartialViewContext {
 
     }
 
-    public boolean isExecuteNone() {
-
-        assertNotReleased();
-        String execute = ctx.
-            getExternalContext().getRequestParameterMap()
-              .get(PARTIAL_EXECUTE_PARAM_NAME);
-        return (null == execute);
-
-    }
 
     /**
      * @see javax.faces.context.PartialViewContext#isExecuteAll()
@@ -189,16 +177,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     public void setPartialRequest(boolean isPartialRequest) {
         this.partialRequest = isPartialRequest;
     }
-    
-    public boolean isRenderNone() {
 
-        assertNotReleased();
-        String render = ctx.
-            getExternalContext().getRequestParameterMap()
-            .get(PARTIAL_RENDER_PARAM_NAME);
-        return (null == render);
-
-    }
 
     /**
      * @see javax.faces.context.PartialViewContext#getExecuteIds()
