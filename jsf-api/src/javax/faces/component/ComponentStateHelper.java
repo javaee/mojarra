@@ -72,10 +72,11 @@ class ComponentStateHelper implements StateHelper {
     }
 
 
-    // ----------------------------------------- Methods from PartialStateHolder
+    // ------------------------------------------------ Methods from StateHelper
 
 
-    /**Put the object in the main-map
+    /**
+     * Put the object in the main-map
      * and/or the delta-map, if necessary.
      *
      * @param key
@@ -101,7 +102,8 @@ class ComponentStateHelper implements StateHelper {
     }
 
 
-    /**We need to remove from both
+    /**
+     * We need to remove from both
      * maps, if we do remove an existing key.
      *
      * @param key
@@ -125,6 +127,9 @@ class ComponentStateHelper implements StateHelper {
     }
 
 
+    /**
+     * @see StateHelper#put(java.io.Serializable, String, Object)
+     */
     public Object put(Serializable key, String mapKey, Object value) {
 
         Object ret = null;
@@ -151,7 +156,9 @@ class ComponentStateHelper implements StateHelper {
 
     }
 
-    /**Get the object from the main-map.
+
+    /**
+     * Get the object from the main-map.
      * As everything is written through
      * from the delta-map to the main-map, this
      * should be enough.
@@ -163,15 +170,17 @@ class ComponentStateHelper implements StateHelper {
         return defaultMap.get(key);
     }
 
+
+    /**
+     * @see StateHelper#eval(java.io.Serializable)
+     */
     public Object eval(Serializable key) {
         return eval(key, null);
     }
 
+
     /**
-     * Docs
-     * @param key
-     * @param defaultValue value to return if key is not present in main or delta-map
-     * @return value - if null, defaultValue
+     * @see StateHelper#eval(java.io.Serializable, Object)
      */
     public Object eval(Serializable key, Object defaultValue) {
         Object retVal = get(key);
@@ -186,6 +195,10 @@ class ComponentStateHelper implements StateHelper {
         return ((retVal != null) ? retVal : defaultValue);
     }
 
+
+    /**
+     * @see StateHelper#add(java.io.Serializable, Object)
+     */
     public void add(Serializable key, Object value) {
 
         if (component.initialStateMarked()) {
@@ -206,6 +219,9 @@ class ComponentStateHelper implements StateHelper {
     }
 
 
+    /**
+     * @see StateHelper#remove(java.io.Serializable, Object)
+     */
     public Object remove(Serializable key, Object valueOrKey) {
         Object source = get(key);
         if (source instanceof Collection) {
@@ -216,62 +232,12 @@ class ComponentStateHelper implements StateHelper {
         return null;
     }
 
-    private Object removeFromList(Serializable key, Object value) {
-        Object ret = null;
-        if (component.initialStateMarked() || value instanceof PartialStateHolder) {
-            Collection<Object> deltaList = (Collection<Object>) deltaMap.get(key);
-            if (deltaList != null) {
-                ret = deltaList.remove(value);
-                if (deltaList.isEmpty()) {
-                    deltaMap.remove(key);
-                }
-            }
-        }
-        Collection<Object> list = (Collection<Object>) get(key);
-        if (list != null) {
-            if (ret == null) {
-                ret = list.remove(value);
-            } else {
-                list.remove(value);
-            }
-            if (list.isEmpty()) {
-                defaultMap.remove(key);
-            }
-        }
-        return ret;
-    }
 
-    private Object removeFromMap(Serializable key, String mapKey) {
-        Object ret = null;
-        if (component.initialStateMarked()) {
-            Map<String,Object> dMap = (Map<String,Object>) deltaMap.get(key);
-            if (dMap != null) {
-                ret = dMap.remove(mapKey);
-                if (dMap.isEmpty()) {
-                    deltaMap.remove(key);
-                }
-            }
-        }
-        Map<String,Object> map = (Map<String,Object>) get(key);
-        if (map != null) {
-            if (ret == null) {
-                ret = map.remove(mapKey);
-            } else {
-                map.remove(mapKey);
-
-            }
-            if (map.isEmpty()) {
-                defaultMap.remove(key);
-            }
-        }
-        if (ret != null && !component.initialStateMarked()) {
-            deltaMap.remove(key);
-        }
-        return ret;
-    }
+    // ------------------------------------------------ Methods from StateHolder
 
 
-    /**One and only implementation of
+    /**
+     * One and only implementation of
      * save-state - makes all other implementations
      * unnecessary.
      *
@@ -287,45 +253,10 @@ class ComponentStateHelper implements StateHelper {
         }
     }
 
-    private Object saveMap(FacesContext context, Map<Serializable, Object> map) {
 
-        if (map.isEmpty()) {
-            if (!component.initialStateMarked()) {
-                // only need to propagate the component's delta status when
-                // delta tracking has been disabled.  We're assuming that
-                // the VDL will reset the status when the view is reconstructed,
-                // so no need to save the state if the saved state is the default.
-                return new Object[] { component.initialStateMarked() };
-            }
-            return null;
-        }
 
-        Object[] savedState = new Object[map.size() * 2 + 1];
-
-        int i=0;
-
-        for(Map.Entry<Serializable, Object> entry : map.entrySet()) {
-            Object value = entry.getValue();
-            if (value == null) {
-                value = Void.TYPE;
-            }
-            savedState[i * 2] = entry.getKey();
-            if (value instanceof Collection
-                  || value instanceof StateHolder
-                  || !(value instanceof Serializable)) {
-                value = saveAttachedState(context,value);
-            }
-            savedState[i * 2 + 1] = value;
-            i++;
-        }
-        if (!component.initialStateMarked()) {
-            savedState[savedState.length - 1] = component.initialStateMarked();
-        }
-        return savedState;
-
-    }
-
-    /**One and only implementation of
+    /**
+     * One and only implementation of
      * restore state. Makes all other implementations
      * unnecessary.
      *
@@ -377,21 +308,118 @@ class ComponentStateHelper implements StateHelper {
         }
     }
 
-    /**TODO decide if this is can just return false
-     *
-     * @return
+
+    /**
+     * @see javax.faces.component.StateHolder#isTransient()
      */
     public boolean isTransient() {
         return isTransient;
     }
 
-    /**TODO decide if this should be a NO-OP
-     *
-     * @param newTransientValue
+    
+    /**
+     * @see StateHolder#setTransient(boolean)
      */
     public void setTransient(boolean newTransientValue) {
         isTransient = newTransientValue;
     }
 
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private Object saveMap(FacesContext context, Map<Serializable, Object> map) {
+
+        if (map.isEmpty()) {
+            if (!component.initialStateMarked()) {
+                // only need to propagate the component's delta status when
+                // delta tracking has been disabled.  We're assuming that
+                // the VDL will reset the status when the view is reconstructed,
+                // so no need to save the state if the saved state is the default.
+                return new Object[] { component.initialStateMarked() };
+            }
+            return null;
+        }
+
+        Object[] savedState = new Object[map.size() * 2 + 1];
+
+        int i=0;
+
+        for(Map.Entry<Serializable, Object> entry : map.entrySet()) {
+            Object value = entry.getValue();
+            if (value == null) {
+                value = Void.TYPE;
+            }
+            savedState[i * 2] = entry.getKey();
+            if (value instanceof Collection
+                  || value instanceof StateHolder
+                  || !(value instanceof Serializable)) {
+                value = saveAttachedState(context,value);
+            }
+            savedState[i * 2 + 1] = value;
+            i++;
+        }
+        if (!component.initialStateMarked()) {
+            savedState[savedState.length - 1] = component.initialStateMarked();
+        }
+        return savedState;
+
+    }
+
+
+    private Object removeFromList(Serializable key, Object value) {
+        Object ret = null;
+        if (component.initialStateMarked() || value instanceof PartialStateHolder) {
+            Collection<Object> deltaList = (Collection<Object>) deltaMap.get(key);
+            if (deltaList != null) {
+                ret = deltaList.remove(value);
+                if (deltaList.isEmpty()) {
+                    deltaMap.remove(key);
+                }
+            }
+        }
+        Collection<Object> list = (Collection<Object>) get(key);
+        if (list != null) {
+            if (ret == null) {
+                ret = list.remove(value);
+            } else {
+                list.remove(value);
+            }
+            if (list.isEmpty()) {
+                defaultMap.remove(key);
+            }
+        }
+        return ret;
+    }
+
+
+    private Object removeFromMap(Serializable key, String mapKey) {
+        Object ret = null;
+        if (component.initialStateMarked()) {
+            Map<String,Object> dMap = (Map<String,Object>) deltaMap.get(key);
+            if (dMap != null) {
+                ret = dMap.remove(mapKey);
+                if (dMap.isEmpty()) {
+                    deltaMap.remove(key);
+                }
+            }
+        }
+        Map<String,Object> map = (Map<String,Object>) get(key);
+        if (map != null) {
+            if (ret == null) {
+                ret = map.remove(mapKey);
+            } else {
+                map.remove(mapKey);
+
+            }
+            if (map.isEmpty()) {
+                defaultMap.remove(key);
+            }
+        }
+        if (ret != null && !component.initialStateMarked()) {
+            deltaMap.remove(key);
+        }
+        return ret;
+    }
 
 }
