@@ -330,7 +330,6 @@ public class PartialVisitContext extends VisitContext {
                 Collection<String> c = subtreeClientIds.get(namingContainerClientId);
 
                 if (c == null) {
-                    // TODO: smarter initial size?
                     c = new ArrayList<String>();
                     subtreeClientIds.put(namingContainerClientId, c);
                 }
