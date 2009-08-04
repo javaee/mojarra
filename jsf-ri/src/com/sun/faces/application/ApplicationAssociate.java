@@ -127,13 +127,6 @@ public class ApplicationAssociate {
      */
     private Map<String, Set<NavigationCase>> navigationMap = null;
 
-    /**
-     * The List that contains all view identifier strings ending in an
-     * asterisk "*".  The entries are stored without the trailing
-     * asterisk.
-     */
-    private TreeSet<String> wildcardMatchList = null;
-
     // Flag indicating that a response has been rendered.
     private boolean responseRendered = false;
 
@@ -202,7 +195,6 @@ public class ApplicationAssociate {
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
         navigationMap = new ConcurrentHashMap<String, Set<NavigationCase>>();
-        wildcardMatchList = new TreeSet<String>(new SortIt());
         injectionProvider = InjectionProviderFactory.createInstance(externalContext);
         WebConfiguration webConfig = WebConfiguration.getInstance(externalContext);
         beanManager = new BeanManager(injectionProvider,
@@ -499,11 +491,6 @@ public class ApplicationAssociate {
             // replace it ...  (last one wins).
             caseSet.add(navigationCase);
         }
-        if (fromViewId.endsWith("*")) {
-            fromViewId =
-                 fromViewId.substring(0, fromViewId.lastIndexOf('*'));
-            wildcardMatchList.add(fromViewId);
-        }
 
     }
     
@@ -529,17 +516,6 @@ public class ApplicationAssociate {
         return navigationMap;
     }
 
-
-    /**
-     * Return all navigation mappings whose <code>from-view-id</code>
-     * contained a trailing "*".
-     *
-     * @return <code>TreeSet</code> The navigation mappings sorted in
-     *         descending order.
-     */
-    public TreeSet<String> getNavigationWildCardList() {
-        return wildcardMatchList;
-    }
 
     public ResourceBundle getResourceBundle(FacesContext context,
                                             String var) {
@@ -668,17 +644,5 @@ public class ApplicationAssociate {
 
     }
 
-
-    /**
-     * This Comparator class will help sort the <code>NavigationCaseImpl</code> objects
-     * based on their <code>fromViewId</code> properties in descending order -
-     * largest string to smallest string.
-     */
-    static class SortIt implements Comparator<String> {
-
-        public int compare(String fromViewId1, String fromViewId2) {
-            return -(fromViewId1.compareTo(fromViewId2));
-        }
-    }
 
 }

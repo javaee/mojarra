@@ -75,17 +75,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     /**
      * <code>Map</code> containing configured navigation cases.
      */
-    private Map<String, Set<NavigationCase>> navigationMap;
+    private volatile NavigationMap navigationMap;
 
-    /**
-     * <code>Set</code> containing wildcard navigation cases.
-     */
-    private Set<String> wildCardSet;
-
-    /**
-     * Flag indicating navigation cases properly consumed and available.
-     */
-    private boolean navigationConfigured;
 
     /**
      * Flag indicated the current mode.
@@ -104,6 +95,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      * navigational decisions.
      */
     public NavigationHandlerImpl() {
+
         super();
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created NavigationHandler instance ");
@@ -111,12 +103,9 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         ApplicationAssociate associate = ApplicationAssociate.getInstance(
               FacesContext.getCurrentInstance().getExternalContext());
         if (associate != null) {
-            navigationMap = associate.getNavigationCaseListMappings();
-            wildCardSet = associate.getNavigationWildCardList();
-            navigationConfigured = (wildCardSet != null &&
-                                    navigationMap != null);
             development = associate.isDevModeEnabled();
         }
+
     }
 
 
@@ -128,6 +117,8 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      */
     @Override
     public NavigationCase getNavigationCase(FacesContext context, String fromAction, String outcome) {
+
+        Util.notNull("context", context);
         NavigationCase result = null;
         CaseStruct caseStruct = getViewId(context, fromAction, outcome);
         if (null != caseStruct) {
@@ -135,6 +126,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
         }
         
         return result;
+        
     }
 
 
@@ -143,7 +135,12 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
      */
     @Override
     public Map<String, Set<NavigationCase>> getNavigationCases() {
+
+        if (navigationMap == null) {
+            navigationMap = new NavigationMap();
+        }
         return navigationMap;
+
     }
 
 
@@ -157,11 +154,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                  String fromAction,
                                  String outcome) {
 
-        if (context == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
-            throw new NullPointerException(message);
-        }
+        Util.notNull("context", context);
 
         CaseStruct caseStruct = getViewId(context, fromAction, outcome);
         if (caseStruct != null) {
@@ -213,6 +206,18 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
     // --------------------------------------------------------- Private Methods
 
+    private void initializeNavigationFromAssociate() {
+
+        ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
+        if (associate != null) {
+            Map<String,Set<NavigationCase>> m = associate.getNavigationCaseListMappings();
+            navigationMap = new NavigationMap();
+            if (m != null) {
+                navigationMap.putAll(m);
+            }
+        }
+
+    }
 
     /**
      * Calls <code>clear()</code> on the ViewMap (if available) if the view
@@ -254,7 +259,13 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct getViewId(FacesContext ctx,
                                  String fromAction,
                                  String outcome) {
-        
+
+        if (navigationMap == null) {
+            synchronized (this) {
+                initializeNavigationFromAssociate();
+            }
+        }
+
         UIViewRoot root = ctx.getViewRoot();
 
         
@@ -317,12 +328,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                       String fromAction,
                                       String outcome) {
 
-        // if the user has elected to replace the Application instance
-        // entirely
-        if (!navigationConfigured) {
-            return null;
-        }
-
         Set<NavigationCase> caseSet = navigationMap.get(viewId);
 
         if (caseSet == null) {
@@ -359,13 +364,7 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
                                          String outcome) {
         CaseStruct result = null;
 
-        // if the user has elected to replace the Application instance
-        // entirely
-        if (!navigationConfigured) {
-            return null;
-        }
-
-        for (String fromViewId : wildCardSet) {
+        for (String fromViewId : navigationMap.wildcardMatchList) {
             // See if the entire wildcard string (without the trailing "*" is
             // contained in the incoming viewIdToTest.  
             // Ex: /foobar is contained with /foobarbaz
@@ -418,11 +417,6 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     private CaseStruct findDefaultMatch(FacesContext ctx,
                                         String fromAction,
                                         String outcome) {
-        // if the user has elected to replace the Application instance
-        // entirely
-        if (!navigationConfigured) {
-            return null;
-        }
 
         Set<NavigationCase> caseSet = navigationMap.get("*");
 
@@ -625,9 +619,180 @@ public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
     }
 
 
+    // ---------------------------------------------------------- Nested Classes
+
+
     private static class CaseStruct {
         String viewId;
         NavigationCase navCase;
     }
 
+
+    private static final class NavigationMap extends AbstractMap<String,Set<NavigationCase>> {
+
+        private HashMap<String,Set<NavigationCase>> navigationMap =
+              new HashMap<String,Set<NavigationCase>>();
+        private TreeSet<String> wildcardMatchList =
+              new TreeSet<String>(new Comparator<String>() {
+                  public int compare(String fromViewId1, String fromViewId2) {
+                      return -(fromViewId1.compareTo(fromViewId2));
+                  }
+              });
+
+
+        // ---------------------------------------------------- Methods from Map
+
+
+        @Override
+        public int size() {
+            return navigationMap.size();
+        }
+
+
+        @Override
+        public boolean isEmpty() {
+            return navigationMap.isEmpty();
+        }
+
+        
+        @Override
+        public Set<NavigationCase> put(String key, Set<NavigationCase> value) {
+            if (key == null) {
+                throw new IllegalArgumentException(key);
+            }
+            if (value == null) {
+                throw new IllegalArgumentException();
+            }
+            updateWildcards(key);
+            Set<NavigationCase> existing = navigationMap.get(key);
+            if (existing == null) {
+                navigationMap.put(key, value);
+                return null;
+            } else {
+                existing.addAll(value);
+                return existing;
+            }
+
+        }
+
+        @Override
+        public void putAll(Map<? extends String, ? extends Set<NavigationCase>> m) {
+            if (m == null) {
+                return;
+            }
+            for (Map.Entry<? extends String, ? extends Set<NavigationCase>> entry : m.entrySet()) {
+                String key = entry.getKey();
+                updateWildcards(key);
+                Set<NavigationCase> existing = navigationMap.get(key);
+                if (existing == null) {
+                    navigationMap.put(key, entry.getValue());
+                } else {
+                    existing.addAll(entry.getValue());
+                }
+            }
+        }
+
+
+        @Override
+        public Set<String> keySet() {
+            return new AbstractSet<String>() {
+
+                public Iterator<String> iterator() {
+                    return new Iterator<String>() {
+
+                        Iterator<Map.Entry<String,Set<NavigationCase>>> i = entrySet().iterator();
+
+                        public boolean hasNext() {
+                            return i.hasNext();
+                        }
+
+                        public String next() {
+                            return i.next().getKey();
+                        }
+
+                        public void remove() {
+                            throw new UnsupportedOperationException();
+                        }
+                    };
+                }
+
+                public int size() {
+                    return NavigationMap.this.size();
+                }
+            };
+        }
+
+        @Override
+        public Collection<Set<NavigationCase>> values() {
+            return new AbstractCollection<Set<NavigationCase>>() {
+
+                public Iterator<Set<NavigationCase>> iterator() {
+                    return new Iterator<Set<NavigationCase>>() {
+
+                        Iterator<Map.Entry<String,Set<NavigationCase>>> i = entrySet().iterator();
+
+                        public boolean hasNext() {
+                            return i.hasNext();
+                        }
+
+                        public Set<NavigationCase> next() {
+                            return i.next().getValue();
+                        }
+
+                        public void remove() {
+                            throw new UnsupportedOperationException();
+                        }
+                    };
+                }
+
+                public int size() {
+                    return NavigationMap.this.size();
+                }
+            };
+        }
+
+        public Set<Entry<String, Set<NavigationCase>>> entrySet() {
+            return new AbstractSet<Entry<String, Set<NavigationCase>>>() {
+
+                public Iterator<Entry<String, Set<NavigationCase>>> iterator() {
+
+                    return new Iterator<Entry<String,Set<NavigationCase>>>() {
+
+                        Iterator<Entry<String, Set<NavigationCase>>> i =
+                              navigationMap.entrySet().iterator();
+
+                        public boolean hasNext() {
+                            return i.hasNext();
+                        }
+
+                        public Entry<String, Set<NavigationCase>> next() {
+                            return i.next();
+                        }
+
+                        public void remove() {
+                            throw new UnsupportedOperationException();
+                        }
+                    };
+                }
+
+                public int size() {
+                    return NavigationMap.this.size();
+                }
+            };
+        }
+
+
+        // ----------------------------------------------------- Private Methods
+
+        private void updateWildcards(String fromViewId) {
+
+            if (!navigationMap.containsKey(fromViewId)) {
+                if (fromViewId.endsWith("*")) {
+                    wildcardMatchList.add(fromViewId.substring(0, fromViewId.lastIndexOf('*')));
+                }
+            }
+            
+        }
+
+    }
 }

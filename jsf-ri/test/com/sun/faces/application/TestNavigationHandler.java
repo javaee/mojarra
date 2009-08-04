@@ -274,10 +274,8 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                 FactoryFinder.APPLICATION_FACTORY);
         Application application = aFactory.getApplication();
         assertTrue(application instanceof ApplicationImpl);
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
-	assertNotNull(associate);
-	
-        Map caseListMap = associate.getNavigationCaseListMappings();
+        ConfigurableNavigationHandler handler = (ConfigurableNavigationHandler) application.getNavigationHandler();
+        Map caseListMap = handler.getNavigationCases();
         Iterator iter = caseListMap.keySet().iterator();
         while (iter.hasNext()) {
             String fromViewId = (String) iter.next();
@@ -291,6 +289,32 @@ public class TestNavigationHandler extends ServletFacesTestCase {
             }
         }
         assertTrue(cnt == 6);
+    }
+
+
+    public void testWrappedNavigationHandler() {
+
+        Application app = getFacesContext().getApplication();
+        ConfigurableNavigationHandler impl = new NavigationHandlerImpl();
+        NavigationHandler parent = new WrapperNavigationHandler(impl);
+        parent.handleNavigation(getFacesContext(), "", "");
+
+        int cnt = 0;
+        Map caseListMap = impl.getNavigationCases();
+        Iterator iter = caseListMap.keySet().iterator();
+        while (iter.hasNext()) {
+            String fromViewId = (String) iter.next();
+            if (fromViewId.equals("/login.jsp")) {
+                Set<NavigationCase> caseSet = (Set<NavigationCase>) caseListMap.get(fromViewId);
+                for (NavigationCase navCase : caseSet) {
+                    if (navCase.getFromViewId().equals("/login.jsp")) {
+                        cnt++;
+                    }
+                }
+            }
+        }
+        assertTrue(cnt == 6);
+
     }
 
 
@@ -382,6 +406,18 @@ public class TestNavigationHandler extends ServletFacesTestCase {
 
     // ---------------------------------------------------------- Nested Classes
 
+    private static final class WrapperNavigationHandler extends NavigationHandler {
+
+        private NavigationHandler delegate;
+
+        public WrapperNavigationHandler(NavigationHandler delegate) {
+            this.delegate = delegate;
+        }
+
+        public void handleNavigation(FacesContext context, String fromAction, String outcome) {
+            delegate.handleNavigation(context, fromAction, outcome);
+        }
+    }
 
     class TestResult extends Object {
 

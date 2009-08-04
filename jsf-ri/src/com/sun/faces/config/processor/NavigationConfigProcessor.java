@@ -42,6 +42,9 @@ package com.sun.faces.config.processor;
 
 import com.sun.faces.application.ApplicationAssociate;
 import javax.faces.application.NavigationCase;
+import javax.faces.application.NavigationHandler;
+import javax.faces.application.ConfigurableNavigationHandler;
+
 import com.sun.faces.util.FacesLogger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -141,6 +144,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
     public void process(Document[] documents)
     throws Exception {
 
+        NavigationHandler handler = getApplication().getNavigationHandler();
         for (Document document : documents) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -153,7 +157,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
             NodeList navigationRules = document.getDocumentElement()
                     .getElementsByTagNameNS(namespace, NAVIGATION_RULE);
             if (navigationRules != null && navigationRules.getLength() > 0) {
-                addNavigationRules(navigationRules);
+                addNavigationRules(navigationRules, handler);
             }
 
         }
@@ -165,7 +169,8 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
     // --------------------------------------------------------- Private Methods
 
 
-    private void addNavigationRules(NodeList navigationRules)
+    private void addNavigationRules(NodeList navigationRules,
+                                    NavigationHandler navHandler)
     throws XPathExpressionException {
 
             for (int i = 0, size = navigationRules.getLength(); i < size; i++) {
@@ -208,14 +213,16 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                                         fromViewId));
                     }
                     addNavigationCasesForRule(fromViewId,
-                                              navigationCases);
+                                              navigationCases,
+                                              navHandler);
                 }
             }
     }
 
 
     private void addNavigationCasesForRule(String fromViewId,
-                                           List<Node> navigationCases) {
+                                           List<Node> navigationCases,
+                                           NavigationHandler navHandler) {
 
         if (navigationCases != null && !navigationCases.isEmpty()) {
             ApplicationAssociate associate =
@@ -288,11 +295,25 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                                                     cnc.toString()));
                 }
 
-                // RELEASE_PENDING need to check to see if he top-level navigation
-                //  handler is a ConfigurableNavigationHandler, and if so,
-                //  add the navigation cases to it.  We may potentially want
-                //  to continue adding the cases to the associate as well
+                // if the top-level NavigationHandler is an instance of
+                // ConfigurableNavigationHandler, add the NavigationCases to
+                // that instance as well as adding them to the application associate.
+                // We have to add them to the ApplicationAssociate in the case
+                // where the top-level NavigationHandler may be custom and delegates
+                // to the default NavigationHandler implementation.  In 1.2, they
+                // could be guaranteed that the default implementation had all
+                // defined navigation mappings.
+                if (navHandler instanceof ConfigurableNavigationHandler) {
+                    ConfigurableNavigationHandler cnav = (ConfigurableNavigationHandler) navHandler;
+                    Set<NavigationCase> cases = cnav.getNavigationCases().get(fromViewId);
+                    if (cases == null) {
+                        cases = new LinkedHashSet<NavigationCase>();
+                        cnav.getNavigationCases().put(fromViewId, cases);
+                    }
+                    cases.add(cnc);
+                }
                 associate.addNavigationCase(cnc);
+                
             }
 
 
