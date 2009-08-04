@@ -223,25 +223,49 @@ public abstract class ViewDeclarationLanguage {
      *<ul>
      *
      *<li><p>If <em>curHandler</em> is an instance of {@link
-     *ActionSource2AttachedObjectHandler} and <em>curTarget</em> is
-     *an instance of {@link ActionSource2AttachedObjectTarget},
+     *ActionSource2AttachedObjectHandler} and <em>curTarget</em> is an
+     *instance of {@link ActionSource2AttachedObjectTarget}, and
+     *<em>curTarget.getName()</em> is equal to <em>curTargetName</em>,
      *consider it a match.</p></li>
      *
      *<li><p>If <em>curHandler</em> is an instance of {@link
-     *EditableValueHolderAttachedObjectHandler} and <em>curTarget</em> is
-     *an instance of {@link EditableValueHolderAttachedObjectTarget},
-     *consider it a match.</p></li>
+     *EditableValueHolderAttachedObjectHandler} and <em>curTarget</em>
+     *is an instance of {@link EditableValueHolderAttachedObjectTarget},
+     *and <em>curTarget.getName()</em> is equal to
+     *<em>curTargetName</em>, consider it a match.</p></li>
      *
      *<li><p>If <em>curHandler</em> is an instance of {@link
-     *ValueHolderAttachedObjectHandler} and <em>curTarget</em> is
-     *an instance of {@link ValueHolderAttachedObjectTarget},
+     *ValueHolderAttachedObjectHandler} and <em>curTarget</em> is an
+     *instance of {@link ValueHolderAttachedObjectTarget}, and
+     *<em>curTarget.getName()</em> is equal to <em>curTargetName</em>,
      *consider it a match.</p></li>
+
+     *<li><p>If <em>curHandler</em> is an instance of {@link
+     *BehaviorHolderAttachedObjectHandler} and <em>curTarget</em> is an
+     *instance of {@link BehaviorHolderAttachedObjectTarget}, and either
+     *of the following conditions are true,</p>
+
+     * <ul>
      *
+     * <li><em>curHandler.getEventName()</em> is not <code>null</code>
+     * and is equal to <em>curTargetName</em>.</li>
+     *
+     * <li><em>curHandler.getEventName()</em> is <code>null</code> and
+     * <em>curTarget.isDefaultEvent()</em> is <code>true</code>.</li>
+     *
+     * </ul>
+
+     *<p>consider it a match.</p></li>
+
      *</ul>
      *</li>
      *</ul>
      *</li>
      *</ul>
+
+     * <p>The implementation must support retargeting attached objects
+     * from the top level compsite component to targets that are
+     * composite and non-composite components.</p>
      *
      * <p>An implementation is provided that will throw
      * <code>UnsupportedOperationException</code>.  A Faces implementation

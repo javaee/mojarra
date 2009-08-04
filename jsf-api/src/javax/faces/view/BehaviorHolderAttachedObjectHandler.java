@@ -48,6 +48,12 @@ import javax.faces.view.AttachedObjectHandler;
  */
 public interface BehaviorHolderAttachedObjectHandler extends AttachedObjectHandler {
 
+    /**
+     * <p class="changed_added_2_0">Return the client event name to
+     * which this behavior applies.</p>
+     *
+     * @since 2.0
+     */
     public String getEventName();
 
 }

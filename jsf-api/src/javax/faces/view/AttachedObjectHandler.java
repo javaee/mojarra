@@ -44,7 +44,8 @@ import javax.faces.context.FacesContext;
  * <p class="changed_added_2_0">The abstract base interface for a
  * handler representing an <em>attached object</em> in a VDL page.
  * Subinterfaces are provided for the common attached objects that
- * expose {@link javax.faces.convert.Converter}s, {@link
+ * expose {@link javax.faces.component.behavior.Behavior}, {@link
+ * javax.faces.convert.Converter}s, {@link
  * javax.faces.validator.Validator}s, {@link
  * javax.faces.event.ValueChangeListener}s, and {@link
  * javax.faces.event.ActionListener}s for use by <em>page

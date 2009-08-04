@@ -57,7 +57,8 @@ import javax.faces.component.UIComponent;
  * <div class="changed_added_2_0">
 
  * <p>Subinterfaces are provided for the common behavioral interfaces:
- * {@link javax.faces.component.ValueHolder}, {@link
+ * {@link javax.faces.component.behavior.Behavior}, {@link
+ * javax.faces.component.ValueHolder}, {@link
  * javax.faces.component.EditableValueHolder} and {@link
  * javax.faces.component.ActionSource2}.  The default VDL implementation
  * must provide a corresponding Facelets tag handler for each of the
