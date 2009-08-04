@@ -153,6 +153,33 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
     
+    /*
+     * Called by Application.createComponent(Resource).
+     * 
+     * This method creates two temporary UIComponent instances to aid in
+     * the creation of the compcomp metadata.  These instances no longer
+     * needed after the method returns and can be safely garbage
+     * collected.
+     *
+     * PENDING(): memory analysis should be done to verify there are no
+     * memory leaks as a result of this implementation.
+
+     * The instances are
+
+     * 1. tmp: a javax.faces.NamingContainer to serve as the temporary
+     * top level component
+
+     * 2. facetComponent: a javax.faces.Panel to serve as the parent
+     * UIComponent that is passed to Facelets so that the <cc:interface>
+     * section can be parsed and understood.
+
+     * Per the compcomp spec, tmp has the compcomp Resource stored in
+     * its attr set under the key Resource.COMPONENT_RESOURCE_KEY.  tmp
+     * has the facetComponent added as its
+     * UIComponent.COMPOSITE_FACET_NAME facet.
+
+     */
+
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, 
             Resource ccResource) {
@@ -164,10 +191,19 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         FaceletFactory factory = (FaceletFactory)
               RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
         VariableMapper orig = ctx.getVariableMapper();
+
+	// create tmp and facetComponent
         UIComponent tmp = context.getApplication().createComponent("javax.faces.NamingContainer");
         UIPanel facetComponent = (UIPanel)
                 context.getApplication().createComponent("javax.faces.Panel");
+
+	// PENDING I think this can be skipped because we don't render
+	// this component instance.
         facetComponent.setRendererType("javax.faces.Group");
+
+	// PENDING This could possibly be skipped too.  However, I think
+	// this is important because other tag handlers, within
+	// <cc:interface> expect it will be there.
         tmp.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
         // We have to put the resource in here just so the classes that eventually
         // get called by facelets have access to it.
@@ -188,7 +224,27 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             };
             ctx.setVariableMapper(wrapper);
             context.getAttributes().put(IS_BUILDING_METADATA, Boolean.TRUE);
+
+	    // Because mojarra currently requires a <cc:interface>
+	    // element within the compcomp markup, we can rely on the
+	    // fact that its tag handler, InterfaceHandler.apply(), is
+	    // called.  In this method, we first imbue facetComponent
+	    // with any config information present on the <cc:interface>
+	    // element.
+
+	    // Then we do the normal facelet thing:
+	    // this.nextHandler.apply().  This causes any child tag
+	    // handlers of the <cc:interface> to be called.  The
+	    // compcomp spec says each such tag handler is responsible
+	    // for adding to the compcomp metadata, referenced from the
+	    // facetComponent parent.
+
             f.apply(context, facetComponent);
+
+	    // When f.apply() returns (and therefore
+	    // InterfaceHandler.apply() returns), the compcomp metadata
+	    // pointed to by facetComponent is fully populated.
+
         } catch (Exception e) {
             if (e instanceof FacesException) {
                 throw (FacesException) e;
@@ -200,6 +256,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             context.getAttributes().remove(IS_BUILDING_METADATA);
             ctx.setVariableMapper(orig);
         }
+	// we extract the compcomp metadata and return it, making sure
+	// to discard tmp and facetComponent.  The compcomp metadata
+	// should be cacheable and shareable across threads, but this is
+	// not yet implemented.
         result = (CompositeComponentBeanInfo) 
                 tmp.getAttributes().get(UIComponent.BEANINFO_KEY);
         
