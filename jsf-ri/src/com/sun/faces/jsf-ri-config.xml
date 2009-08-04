@@ -281,7 +281,6 @@
             <renderer-class>com.sun.faces.ext.render.FocusHTMLRenderer</renderer-class>
         </renderer>
         <!-- Facelets Custom Renderers -->
-        <!-- RELEASE_PENDING will these be needed by the spec? -->
         <renderer>
             <component-family>facelets</component-family>
             <renderer-type>facelets.ui.Repeat</renderer-type>
