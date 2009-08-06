@@ -222,7 +222,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     field.name = "javax.faces.ViewState";
                     stateForm.appendChild(field);
                 }
-                field.value = state.text || state.data;
+                field.value = state.nodeValue;
 
                 // Now set the view state from the server into the DOM
                 // for any form that is a render target.
@@ -241,7 +241,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                                     field.name = "javax.faces.ViewState";
                                     f.appendChild(field);
                                 }
-                                field.value = state.text || state.data;
+                                field.value = state.nodeValue;
                             }
                         }
                     }
@@ -254,7 +254,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             markup = '';
             for (var j = 0; j < element.childNodes.length; j++) {
                 content = element.childNodes[j];
-                markup += content.text || content.data;
+                markup += content.nodeValue;
             }
 
             // Strip out scripts
@@ -346,12 +346,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     parserElement.innerHTML = '<table>' + html + '</table>';
                     var newElement = parserElement.firstChild;
                     //some browsers will also create intermediary elements such as table>tbody>tr>td
-                    while ((null != newElement) && (id != newElement.id)) {
+                    while ((null !== newElement) && (id !== newElement.id)) {
                         newElement = newElement.firstChild;
                     }
                     parent.replaceChild(newElement, d);
 
-                } else if (d.tagName == 'input') {
+                } else if (d.nodeName.toLowerCase() === 'input') {
                     // special case handling for 'input' elements
                     // in order to not lose focus when updating,
                     // input elements need to be added in place.
@@ -491,7 +491,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var doEval = function doEval(element) {
             var evalText = element.firstChild.nodeValue;
             eval(evalText);
-        }
+        };
 
         /**
          * Ajax Request Queue
@@ -1064,7 +1064,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * The <code>options</code> argument is optional.
              * @member jsf.ajax
              * @function jsf.ajax.request
-             * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
+             * @throws Error if first required argument <code>element</code> is not specified
              */
             request: function request(source, event, options) {
 
@@ -1345,7 +1345,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * @param context An object containing the request context, including the following properties:
              * the source element, per call onerror callback function, and per call onevent callback function.
              *
-             * @throws EmptyResponse error if request contains no data
+             * @throws  Error if request contains no data
              *
              * @function jsf.ajax.response
              */
@@ -1558,10 +1558,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var f = new Function("event", arguments[i]);
             var returnValue = f.call(thisArg, event);
 
-            if (returnValue === false)
+            if (returnValue === false) {
                 break;
+            }
         }
-    }
+    };
 
     /**
      * <p>An integer specifying the specification version that this file implements.
