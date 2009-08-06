@@ -231,7 +231,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     var temp = context.render.split(' ');
                     for (var i = 0; i < temp.length; i++) {
                         if (temp.hasOwnProperty(i)) {
-                            // See if the element is a form and the form is not the one that caused the submission..
+                            // See if the element is a form and
+                            // the form is not the one that caused the submission..
                             var f = document.forms[temp[i]];
                             if (typeof f !== 'undefined' && f !== null && f.id !== context.formid) {
                                 field = f.elements["javax.faces.ViewState"];
@@ -1354,9 +1355,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     throw new Error("jsf.ajax.response: Request parameter is unset");
                 }
 
-                var xmlReq = request;
-
-                var xml = xmlReq.responseXML;
+                var xml = request.responseXML;
                 if (xml === null) {
                     sendError(request, context, "emptyResponse");
                     return;
@@ -1546,9 +1545,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      */
     jsf.util.chain = function(source, event) {
 
-        var length = arguments.length;
-        if (length < 3)
+        if (arguments.length < 3) {
             return;
+        }
 
         var thisArg = (typeof source === 'object') ? source : null;
 
