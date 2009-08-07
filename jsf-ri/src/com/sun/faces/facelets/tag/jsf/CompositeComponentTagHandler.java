@@ -664,9 +664,30 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
             private boolean pushCompositeComponent(FacesContext ctx) {
 
-                UIComponent ccp = UIComponent.getCompositeComponentParent(UIComponent.getCurrentCompositeComponent(ctx));
-                Stack<UIComponent> stack = getStack(ctx, true);
+                Stack<UIComponent> tstack = getTreeCreationStack(ctx);
+                UIComponent ccp = null;
+                if (tstack != null) {
+                    // We have access to the stack of composite components
+                    // the tree creation process has made available.
+                    // Since we can' reliably access the parent composite component
+                    // of the current composite component, use the index of the
+                    // current composite component within the stack to locate the
+                    // parent.
+                    UIComponent currentComp = UIComponent.getCurrentComponent(ctx);
+                    if (currentComp != null) {
+                        int idx = tstack.indexOf(currentComp);
+                        if (idx > 0) {
+                            ccp = tstack.get(idx - 1);
+                        }
+                    }
+                } else {
+                    // no tree creation stack available, so this call should
+                    // be safe
+                    ccp = UIComponent.getCompositeComponentParent(UIComponent.getCurrentCompositeComponent(ctx));
+                }
+
                 if (ccp != null) {
+                    Stack<UIComponent> stack = getStack(ctx, true);
                     stack.push(ccp);
                     return true;
                 }
@@ -698,6 +719,15 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     RequestStateManager.set(ctx, RequestStateManager.COMPCOMP_STACK, stack);
                 }
                 return stack;
+
+            }
+
+
+            @SuppressWarnings({"unchecked"})
+            private Stack<UIComponent> getTreeCreationStack(FacesContext ctx) {
+
+                return (Stack<UIComponent>)
+                      RequestStateManager.get(ctx, RequestStateManager.COMPCOMP_STACK_TREE_CREATION);
 
             }
 

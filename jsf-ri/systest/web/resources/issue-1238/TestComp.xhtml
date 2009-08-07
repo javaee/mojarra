@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+   <head>
+      <title>This will not be present in rendered output</title>
+   </head>
+   <body>
+      <composite:interface>
+         <composite:attribute name="key" />
+         <composite:attribute name="property" required="true"/>
+         <composite:attribute name="datatype" required="true"/>
+      </composite:interface>
+
+      <composite:implementation>
+
+         <div style="border: 1px solid blue; margin: 3px; padding: 3px;">
+            <h3>within TestComp</h3>
+
+            <c:choose>
+               <c:when test="#{cc.attrs.datatype eq 'double'}">
+                  <p>#{cc.attrs.key} formatting as number.</p>
+
+                  <h:outputLabel value="formatting component parameter as number because JSF-EL says that '#{cc.attrs.datatype}' eq 'double' is TRUE"/>
+                  <div style="text-align: right; width: 250px; background-color: yellow; color: red;">
+                     <h:outputText value="#{cc.attrs.property}">
+                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2"/>
+                     </h:outputText>
+                  </div>
+               </c:when>
+               <c:otherwise>
+                  <p>#{cc.attrs.key} formatting as text.</p>
+
+
+                  <h:outputLabel value="formatting component parameter as text because JSF-EL says that '#{cc.attrs.datatype}' eq 'double' is FALSE"/>
+                  <div style="text-align: left; width: 250px; background-color: yellow; color: blue;">
+                     <h:outputText value="#{cc.attrs.property}"/>
+                  </div>
+               </c:otherwise>
+            </c:choose>
+         </div>
+
+      </composite:implementation>
+   </body>
+</html>
