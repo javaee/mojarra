@@ -206,10 +206,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var elementReplace = function elementReplace(newElement, origElement) {
-            var ne = document.importNode(newElement, true); 
-            var parent = origElement.parentNode;
-            parent.replaceChild(ne,origElement);
-        }
+            Sarissa.moveChildNodes(newElement, origElement);
+        };
 
         /**
          * Create a new document, then select the body element within it
@@ -229,9 +227,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 throw new Error("You don't seem to be running a supported browser");
             }
 
-            // While it only works in FF, it's worth doing
-            if (doc.documentElement.nodeName === "parsererror") {
-                throw new Error(doc.documentElement.firstChild.nodeValue);
+            if(Sarissa.getParseErrorText(doc) !== Sarissa.PARSED_OK){
+                throw new Error(Sarissa.getParseErrorText(doc));
             }
 
             var body = doc.getElementsByTagName("body")[0];
@@ -770,10 +767,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             } else if (status == "emptyResponse") {
                 data.description = "An emply response was received from the server.  Check server error logs.";
             } else if (status == "malformedXML") {
-                // If we're in Firefox, try to say something intelligent
-                if (request && request.responseXML && request.responseXML.documentElement &&
-                    request.responseXML.documentElement.nodeName === "parsererror") {
-                    data.description = request.responseXML.documentElement.firstChild.nodeValue;
+                if(Sarissa.getParseErrorText(doc) !== Sarissa.PARSED_OK){
+                    data.description(Sarissa.getParseErrorText(doc));
                 } else {
                     data.description = "An invalid XML response was received from the server.";
                 }

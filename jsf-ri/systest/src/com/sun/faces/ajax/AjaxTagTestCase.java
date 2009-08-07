@@ -586,7 +586,6 @@ public class AjaxTagTestCase extends AbstractTestCase {
 
     }
 
-    /*  Commented out due to apparent HtmlUnit bug - see Mojarra bug #1242
     public void testAjaxTagKeywords() throws Exception {
         getPage("/faces/ajax/ajaxTagKeywords.xhtml");
         System.out.println("Start ajax tag Keyword test");
@@ -643,5 +642,5 @@ public class AjaxTagTestCase extends AbstractTestCase {
         checkTrue("out3","7");
         
     }
-    */
+
 }
