@@ -60,6 +60,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.faces.view.Location;
 import javax.faces.view.facelets.*;
+import javax.faces.context.FacesContext;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -199,18 +200,25 @@ public final class SAXCompiler extends Compiler {
         public void startDTD(String name, String publicId, String systemId)
                 throws SAXException {
             if (this.inDocument) {
-                StringBuffer sb = new StringBuffer(64);
-                sb.append("<!DOCTYPE ").append(name);
-                if (publicId != null) {
-                    sb.append(" PUBLIC \"").append(publicId).append("\"");
-                    if (systemId != null) {
-                        sb.append(" \"").append(systemId).append("\"");
+                // If we're in an ajax request, this is unnecessary and bugged
+                // RELEASE_PENDING - this is a hack, and should probably not be here -
+                // but the alternative is to somehow figure out how *not* to escape the "<!"
+                // within the cdata of the ajax response.  Putting the PENDING in here to
+                // remind me to have rlubke take a look.  But I'm stumped.
+                if (FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest()) {
+                    StringBuffer sb = new StringBuffer(64);
+                    sb.append("<!DOCTYPE ").append(name);
+                    if (publicId != null) {
+                        sb.append(" PUBLIC \"").append(publicId).append("\"");
+                        if (systemId != null) {
+                            sb.append(" \"").append(systemId).append("\"");
+                        }
+                    } else if (systemId != null) {
+                        sb.append(" SYSTEM \"").append(systemId).append("\"");
                     }
-                } else if (systemId != null) {
-                    sb.append(" SYSTEM \"").append(systemId).append("\"");
+                    sb.append(">\n");
+                    this.unit.writeInstruction(sb.toString());
                 }
-                sb.append(">\n");
-                this.unit.writeInstruction(sb.toString());
             }
             this.inDocument = false;
         }

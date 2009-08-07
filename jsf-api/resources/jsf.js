@@ -118,6 +118,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         };
 
         /**
+         * Find instance of passed String via getElementById
          * @ignore
          */
         var $ = function $() {
@@ -173,13 +174,18 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
         /**
          * Replace DOM element
+         * @param d element to replace
+         * @param tempTagName new tag name to replace with
+         * @param src string to replace element with
          * @ignore
          */
-        var elementReplace = function elementReplace(d, tempTagName, src) {
+        var elementReplaceStr = function elementReplaceStr(d, tempTagName, src) {
             var parent = d.parentNode;
             var temp = document.createElement(tempTagName);
             var result = null;
-            temp.id = d.id;
+            if (d.id) {
+                temp.id = d.id;
+            }
 
             // Creating a head element isn't allowed in IE, so we'll disallow it
             if (d.nodeName.toLowerCase() === "head") {
@@ -193,9 +199,54 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             return result;
         };
 
+        /**
+         * Replace an element from one document into another
+         * @param newElement new element to put in document
+         * @param origElement original element to replace
+         * @ignore
+         */
+        var elementReplace = function elementReplace(newElement, origElement) {
+            var ne = document.importNode(newElement, true); 
+            var parent = origElement.parentNode;
+            parent.replaceChild(ne,origElement);
+        }
+
+        /**
+         * Create a new document, then select the body element within it
+         * @param docStr Stringified version of document to create
+         */
+        var getBodyElement = function getBodyElement(docStr) {
+
+            var doc;  // intermediate document we'll create
+            var body; // Body element to return
+
+            if (DOMParser) {  // FF, S, Chrome
+                doc = (new DOMParser()).parseFromString(docStr,"text/xml");
+            } else if (ActiveXObject) { // IE
+                doc = new ActiveXObject("MSXML2.DOMDocument");
+                doc.loadXML(docStr);
+            } else {
+                throw new Error("You don't seem to be running a supported browser");
+            }
+
+            // While it only works in FF, it's worth doing
+            if (doc.documentElement.nodeName === "parsererror") {
+                throw new Error(doc.documentElement.firstChild.nodeValue);
+            }
+
+            var body = doc.getElementsByTagName("body")[0];
+
+            if (!body) {
+                throw new Error("Can't find body tag in returned document.");
+            }
+
+            return body;
+        };
 
         /**
          * Do update.
+         * @param element element to update
+         * @param context context of request
          * @ignore
          */
         var doUpdate = function doUpdate(element, context) {
@@ -264,67 +315,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var src = str;
 
             // If our special render all markup is present..
-            if (id === "javax.faces.ViewRoot") {
-                // if src contains <html>, trim the <html> and </html>, if present.
-                //   if src contains <head>
-                //      extract the contents of <head> and replace current document's
-                //      <head> with the contents.
-                //   if src contains <body>
-                //      extract the contents of <body> and replace the current
-                //      document's <body> with the contents.
-                //   if src does not contain <body>
-                //      replace the current document's <body> with the contents.
-                var
-                        htmlStartEx = new RegExp("< *html.*>", "gi"),
-                        htmlEndEx = new RegExp("< */ *html.*>", "gi"),
-                        headStartEx = new RegExp("< *head.*>", "gi"),
-                        headEndEx = new RegExp("< */ *head.*>", "gi"),
-                        bodyStartEx = new RegExp("< *body.*>", "gi"),
-                        bodyEndEx = new RegExp("< */ *body.*>", "gi"),
-                        htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
-                var srcHead = null, srcBody = null;
-                // find the current document's "body" element
+            if (id === "javax.faces.ViewRoot" || id === "javax.faces.ViewBody") {
+                var bodyStartEx = new RegExp("< *body.*>", "gi");
                 var docBody = document.getElementsByTagName("body")[0];
-                // if src contains <html>
-                if (null !== (htmlStart = htmlStartEx.exec(src))) {
-                    // if src contains </html>
-                    if (null !== (htmlEnd = htmlEndEx.exec(src))) {
-                        src = src.substring(htmlStartEx.lastIndex, htmlEnd.index);
-                    } else {
-                        src = src.substring(htmlStartEx.lastIndex);
-                    }
+                if (bodyStartEx.exec(src) !== null) { // replace body tag
+                    elementReplace(getBodyElement(src), docBody);
+                } else {  // replace body contents
+                    elementReplaceStr(docBody, "body", src);
                 }
-                // if src contains <head>
-                if (null !== (headStart = headStartEx.exec(src))) {
-                    // if src contains </head>
-                    if (null !== (headEnd = headEndEx.exec(src))) {
-                        srcHead = src.substring(headStartEx.lastIndex,
-                                headEnd.index);
-                    } else {
-                        srcHead = src.substring(headStartEx.lastIndex);
-                    }
-                    // find the "head" element
-                    var docHead = document.getElementsByTagName("head")[0];
-                    if (docHead) {
-                        elementReplace(docHead, "head", srcHead);
-                    }
-                }
-                // if src contains <body>
-                if (null !== (bodyStart = bodyStartEx.exec(src))) {
-                    // if src contains </body>
-                    if (null !== (bodyEnd = bodyEndEx.exec(src))) {
-                        srcBody = src.substring(bodyStartEx.lastIndex,
-                                bodyEnd.index);
-                    } else {
-                        srcBody = src.substring(bodyStartEx.lastIndex);
-                    }
-                    elementReplace(docBody, "body", srcBody);
-                }
-                if (!srcBody) {
-                    elementReplace(docBody, "body", src);
-                }
-
-
+            } else if (id === "javax.faces.ViewHead") {
+                throw new Error("javax.faces.ViewHead not supported - browsers cannot reliably replace the head's contents");
             } else {
                 var d = $(id);
                 if (!d) {
@@ -770,7 +770,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             } else if (status == "emptyResponse") {
                 data.description = "An emply response was received from the server.  Check server error logs.";
             } else if (status == "malformedXML") {
-                data.description = "An invalid XML response was received from the server.";
+                // If we're in Firefox, try to say something intelligent
+                if (request && request.responseXML && request.responseXML.documentElement &&
+                    request.responseXML.documentElement.nodeName === "parsererror") {
+                    data.description = request.responseXML.documentElement.firstChild.nodeValue;
+                } else {
+                    data.description = "An invalid XML response was received from the server.";
+                }
             }
 
             if (status == "serverError") {
