@@ -317,6 +317,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var docBody = document.getElementsByTagName("body")[0];
                 if (bodyStartEx.exec(src) !== null) { // replace body tag
                     elementReplace(getBodyElement(src), docBody);
+                    docBody.innerHTML = docBody.innerHTML;
                 } else {  // replace body contents
                     elementReplaceStr(docBody, "body", src);
                 }

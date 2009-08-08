@@ -46,6 +46,13 @@
     <title>Ajax Update Root</title>
 </h:head>
 <h:body>
+    <script type="text/javascript">
+        function checkPass() {
+            var body = document.getElementsByTagName("body")[0];
+            body.innerHTML = '<span id="newvalue">PASSED</span>';
+        }
+    </script>
+    <input type="button" onclick="checkPass();" value="Click Me"/>
     <h:form id="form1">
         <h:commandButton id="simpleroot" value="SimpleRoot" action="#{updateRootBean.updateRootSimple}">
               <f:ajax execute="@this" render="@none"/>
@@ -61,7 +68,7 @@
         <br/>
         <h:commandButton id="faultyviewroot" value="AllRootFaulty" action="#{updateRootBean.updateRootFaulty}">
                       <f:ajax execute="@this" render="@none"/>
-        </h:commandButton> Fails on FF - this is fine
+        </h:commandButton> Fails on FF, IE, passes on S, CH - this is fine
         <br/>
         <h:commandButton id="bodysimple" value="BodySimple" action="#{updateRootBean.updateBodySimple}">
                       <f:ajax execute="@this" render="@none"/>
@@ -75,9 +82,13 @@
                       <f:ajax execute="@this" render="@none"/>
         </h:commandButton> Fails on all - this is fine
         <br/>
-        <h:commandButton id="roothead" value="RootHead" action="#{updateRootBean.updateRootHead}">
+        <h:commandButton id="rootsimpleevent" value="RootSimpleEvent" action="#{updateRootBean.updateRootSimpleEvent}">
                       <f:ajax execute="@this" render="@none"/>
-        </h:commandButton> Fails on all - this is fine
+        </h:commandButton> Works in FF, S, CH
+        <br/>
+        <h:commandButton id="rootallevent" value="RootAllEvent" action="#{updateRootBean.updateRootAllEvent}">
+                      <f:ajax execute="@this" render="@none"/>
+        </h:commandButton> Fails in FF, S, CH
         <br/>
     </h:form>
 </h:body>

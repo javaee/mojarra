@@ -23,10 +23,10 @@ public class UpdateRootBean {
                       ctx.getPartialViewContext().getPartialResponseWriter();
                 writer.startDocument();
                 writer.startUpdate("javax.faces.ViewRoot");
-                writer.startElement("p", null);
+                writer.startElement("span", null);
                 writer.writeAttribute("id","newvalue","id");
                 writer.writeText("PASSED",null);
-                writer.endElement("p");
+                writer.endElement("span");
                 writer.endUpdate();
                 writer.endDocument();
                 writer.flush();
@@ -52,10 +52,10 @@ public class UpdateRootBean {
                 writer.startDocument();
                 writer.startUpdate("javax.faces.ViewRoot");
                 writer.startElement("body",null);
-                writer.startElement("p", null);
+                writer.startElement("span", null);
                 writer.writeAttribute("id","newvalue","id");
                 writer.writeText("PASSED",null);
-                writer.endElement("p");
+                writer.endElement("span");
                 writer.endElement("body");
                 writer.endUpdate();
                 writer.endDocument();
@@ -87,10 +87,10 @@ public class UpdateRootBean {
                 writer.endElement("title");
                 writer.endElement("head");
                 writer.startElement("body",null);
-                writer.startElement("p", null);
+                writer.startElement("span", null);
                 writer.writeAttribute("id","newvalue","id");
                 writer.writeText("PASSED",null);
-                writer.endElement("p");
+                writer.endElement("span");
                 writer.endElement("body");
                 writer.endElement("html");
                 writer.endUpdate();
@@ -123,10 +123,10 @@ public class UpdateRootBean {
                 writer.endElement("title");
                 writer.endElement("head");
                 writer.startElement("body",null);
-                writer.startElement("p", null);
+                writer.startElement("span", null);
                 writer.writeAttribute("id","newvalue","id");
                 writer.writeText("PASSED",null);
-                writer.endElement("p");
+                writer.endElement("span");
                 writer.endElement("body");
                 writer.endUpdate();
                 writer.endDocument();
@@ -151,10 +151,10 @@ public class UpdateRootBean {
                       ctx.getPartialViewContext().getPartialResponseWriter();
                 writer.startDocument();
                 writer.startUpdate("javax.faces.ViewRoot");
-                writer.startElement("p", null);
+                writer.startElement("span", null);
                 writer.writeAttribute("id","newvalue","id");
                 writer.writeText("PASSED",null);
-                writer.endElement("p");
+                writer.endElement("span");
                 writer.endUpdate();
                 writer.endDocument();
                 writer.flush();
@@ -179,10 +179,10 @@ public class UpdateRootBean {
                 writer.startDocument();
                 writer.startUpdate("javax.faces.ViewBody");
                 writer.startElement("body",null);
-                writer.startElement("p", null);
+                writer.startElement("span", null);
                 writer.writeAttribute("id","newvalue","id");
                 writer.writeText("PASSED",null);
-                writer.endElement("p");
+                writer.endElement("span");
                 writer.endElement("body");
                 writer.endUpdate();
                 writer.endDocument();
@@ -223,7 +223,7 @@ public class UpdateRootBean {
         return null;
     }
 
-    public String updateRootHead() {
+    public String updateRootAllEvent() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
@@ -235,11 +235,88 @@ public class UpdateRootBean {
                       ctx.getPartialViewContext().getPartialResponseWriter();
                 writer.startDocument();
                 writer.startUpdate("javax.faces.ViewRoot");
+                writer.startElement("html",null);
                 writer.startElement("head",null);
                 writer.startElement("title",null);
                 writer.writeText("PASSED",null);
                 writer.endElement("title");
                 writer.endElement("head");
+                writer.startElement("body",null);
+                writer.startElement("input", null);
+                writer.writeAttribute("id","newbutton","id");
+                writer.writeAttribute("type","button","type");
+                writer.writeAttribute("onclick","checkPass();","onclick");
+                writer.writeAttribute("value","Click Me","value");
+                writer.endElement("input");
+                writer.endElement("body");
+                writer.endElement("html");
+                writer.endUpdate();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
+
+    public String updateRootSimpleEvent() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.startUpdate("javax.faces.ViewRoot");
+                writer.startElement("input", null);
+                writer.writeAttribute("id","newbutton","id");
+                writer.writeAttribute("type","button","type");
+                writer.writeAttribute("onclick","checkPass();","onclick");
+                writer.writeAttribute("value","Click Me","value");
+                writer.endElement("input");
+                writer.endUpdate();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+
+    }
+
+
+    public String updateRootAllStlye() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.startUpdate("javax.faces.ViewRoot");
+                writer.startElement("html",null);
+                writer.startElement("head",null);
+                writer.startElement("title",null);
+                writer.writeText("PASSED",null);
+                writer.endElement("title");
+                writer.endElement("head");
+                writer.startElement("body",null);
+                writer.startElement("span", null);
+                writer.writeAttribute("id","newvalue","id");
+                writer.writeText("PASSED",null);
+                writer.endElement("span");
+                writer.endElement("body");
+                writer.endElement("html");
                 writer.endUpdate();
                 writer.endDocument();
                 writer.flush();
