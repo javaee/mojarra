@@ -52,7 +52,6 @@
             body.innerHTML = '<span id="newvalue">PASSED</span>';
         };
     </script>
-    <input type="button" onclick="changeColor();" value="Click Me"/>
     <h:form id="form1">
         <h:commandButton id="simpleroot" value="SimpleRoot" action="#{updateRootBean.updateRootSimple}">
               <f:ajax execute="@this" render="@none"/>
