@@ -292,7 +292,7 @@ public class UpdateRootBean {
     }
 
 
-    public String updateRootAllStlye() {
+    public String updateRootAllStyle() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
@@ -313,7 +313,8 @@ public class UpdateRootBean {
                 writer.startElement("body",null);
                 writer.startElement("span", null);
                 writer.writeAttribute("id","newvalue","id");
-                writer.writeText("PASSED",null);
+                writer.writeAttribute("style", "background-color: green","style");
+                writer.writeText("Green means PASSED",null);
                 writer.endElement("span");
                 writer.endElement("body");
                 writer.endElement("html");
@@ -328,5 +329,32 @@ public class UpdateRootBean {
         return null;
     }
 
+    public String updateRootSimpleStyle() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.startUpdate("javax.faces.ViewRoot");
+                writer.startElement("span", null);
+                writer.writeAttribute("id","newvalue","id");
+                writer.writeAttribute("style", "background-color: green","style");
+                writer.writeText("Green means PASSED",null);
+                writer.endElement("span");
+                writer.endUpdate();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
 
 }
