@@ -203,4 +203,30 @@
         </sources>
     </demo>
 
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>YUI Calendar Component</name>
+        <page>yuical.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/yuical.xhtml</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/yuical/yuical.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/yuical/calendar.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/dataholding/DateHolder.java</path>
+            </source>
+        </sources>
+    </demo>
+
 </demo-info>
