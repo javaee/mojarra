@@ -575,7 +575,7 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
         try {
             getPage("/faces/composite/methodExprRequired.xhtml");
-            fail("No exceptio thrown when composite component was missing a required MethodExpression enabled attribute");
+            fail("No exception thrown when composite component was missing a required MethodExpression enabled attribute");
         } catch (Exception e) {
             
         }
