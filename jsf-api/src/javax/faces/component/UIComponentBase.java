@@ -387,8 +387,10 @@ public abstract class UIComponentBase extends UIComponent {
 
 
         if (parent == null) {
-            doPreRemoveProcessing(FacesContext.getCurrentInstance(), this);
-            this.parent = parent;
+            if (this.parent != null) {
+                doPreRemoveProcessing(FacesContext.getCurrentInstance(), this);
+                this.parent = parent;
+            }
             compositeParent = null;
         } else {
             this.parent = parent;
@@ -1680,7 +1682,6 @@ public abstract class UIComponentBase extends UIComponent {
 
         if (parent.isInView()) {
             disconnectFromView(context, context.getApplication(), toRemove);
-
         }
 
     }
