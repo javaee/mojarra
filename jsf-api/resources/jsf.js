@@ -219,7 +219,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var body; // Body element to return
 
             if (DOMParser) {  // FF, S, Chrome
-                doc = (new DOMParser()).parseFromString(docStr,"text/xml");
+                doc = (new DOMParser()).parseFromString(docStr, "text/xml");
             } else if (ActiveXObject) { // IE
                 doc = new ActiveXObject("MSXML2.DOMDocument");
                 doc.loadXML(docStr);
@@ -227,7 +227,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 throw new Error("You don't seem to be running a supported browser");
             }
 
-            if(Sarissa.getParseErrorText(doc) !== Sarissa.PARSED_OK){
+            if (Sarissa.getParseErrorText(doc) !== Sarissa.PARSED_OK) {
                 throw new Error(Sarissa.getParseErrorText(doc));
             }
 
@@ -768,7 +768,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             } else if (status == "emptyResponse") {
                 data.description = "An emply response was received from the server.  Check server error logs.";
             } else if (status == "malformedXML") {
-                if(Sarissa.getParseErrorText(doc) !== Sarissa.PARSED_OK){
+                if (Sarissa.getParseErrorText(doc) !== Sarissa.PARSED_OK) {
                     data.description(Sarissa.getParseErrorText(doc));
                 } else {
                     data.description = "An invalid XML response was received from the server.";
