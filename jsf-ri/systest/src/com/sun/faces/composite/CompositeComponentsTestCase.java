@@ -582,18 +582,6 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
-
-    public void testIssue1238NestedPlusJstl() throws Exception {
-        HtmlPage page = getPage("/faces/composite/issue-1238-nested-plus-jstl.xhtml");
-        String text = page.asText();
-        assertTrue(text.contains("inner0 formatting as number."));
-        assertTrue(text.contains("inner1 formatting as text."));
-        assertTrue(text.contains("forEach formatting as number."));
-        assertTrue(text.contains("forEach formatting as text."));
-
-    }
-
-
     
     // --------------------------------------------------------- Private Methods
 
