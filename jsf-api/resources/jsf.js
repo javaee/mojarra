@@ -83,11 +83,52 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * @namespace
      * @exec
      */
-
     jsf.ajax = function() {
 
         var eventListeners = [];
         var errorListeners = [];
+
+        // Enumerate all input element attributes
+        var InputElementAttributes =
+            //core and i18n attributes (except 'id' and 'style' attributes)
+                ['className', 'title', 'lang', 'dir',
+                    //input element attributes
+                    'name', 'value', 'checked', 'disabled', 'readOnly',
+                    'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
+                    'tabIndex', 'accessKey', 'accept', 'type'];
+        // RELEASE_PENDING - consider notifying with a message if in an inappropriate env
+        //'dir' attribute cannot be updated dynamically in IE 7
+        //'type' attribute cannot be updated dynamically in Firefox 2.0
+
+
+        // Enumerate all the possible style properties
+        var ElementStyleProperties = [
+            'backgroundAttachment', 'backgroundColor', 'backgroundImage',
+            'backgroundPosition', 'backgroundRepeat', 'borderBottom',
+            'borderBottomColor', 'borderBottomStyle', 'borderBottomWidth',
+            'borderColor', 'borderLeft', 'borderLeftColor', 'borderLeftStyle',
+            'borderLeftWidth', 'borderRight', 'borderRightColor', 'borderRightStyle',
+            'borderRightWidth', 'borderStyle', 'borderTop', 'borderTopColor',
+            'borderTopStyle', 'borderTopWidth', 'borderWidth', 'fontFamily',
+            'fontSize', 'fontVariant', 'fontWeight', 'letterSpacing', 'lineHeight',
+            'listStyle', 'listStyleImage', 'listStylePosition', 'listStyleType',
+            'marginBottom', 'marginLeft', 'marginRight', 'marginTop',
+            'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingTop',
+            'pageBreakAfter', 'pageBreakBefore', 'textAlign', 'textDecorationBlink',
+            'textDecorationLineThrough', 'textDecorationNone', 'textDecorationOverline',
+            'textDecorationUnderline', 'textIndent', 'textTransform',
+            'clear', 'filter', 'clip', 'color', 'cursor', 'display', 'visibility',
+            'top', 'left', 'width', 'height', 'verticalAlign', 'position', 
+            'zIndex', 'overflow', 'styleFloat'
+        ];
+
+        // Enumerate all the names of the event listeners
+        var listenerNames = [
+            'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
+            'onmouseover', 'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup',
+            'onhelp', 'onblur', 'onfocus', 'onchange', 'onload', 'onunload', 'onabort',
+            'onreset', 'onselect', 'onsubmit'
+        ];
 
         /**
          * @ignore
@@ -231,7 +272,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 throw new Error(Sarissa.getParseErrorText(doc));
             }
 
-            var body = doc.getElementsByTagName("body")[0];
+            body = doc.getElementsByTagName("body")[0];
 
             if (!body) {
                 throw new Error("Can't find body tag in returned document.");
@@ -295,7 +336,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         }
                     }
                 }
-
                 return;
             }
 
@@ -357,15 +397,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     parserElement = document.createElement('div');
                     parserElement.innerHTML = html;
                     newElement = parserElement.firstChild;
-                    var InputElementAttributes =
-                        //core and i18n attributes (except 'id' and 'style' attributes)
-                            ['className', 'title', 'lang',
-                                //input element attributes
-                                'name', 'value', 'checked', 'disabled', 'readOnly',
-                                'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
-                                'tabIndex', 'accessKey', 'accept'];
-                    //'dir' attribute cannot be updated dynamically in IE 7
-                    //'type' attribute cannot be updated dynamically in Firefox 2.0
                     for (var iIndex = 0, iLength = InputElementAttributes.length; iIndex < iLength; iIndex++) {
                         var attributeName = InputElementAttributes[iIndex];
                         var newValue = newElement[attributeName];
@@ -374,24 +405,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             d[attributeName] = newValue;
                         }
                     }
-
-                    var ElementStyleProperties = [
-                        'backgroundAttachment', 'backgroundColor', 'backgroundImage', 'backgroundPosition', 'backgroundRepeat',
-                        'borderBottom', 'borderBottomColor', 'borderBottomStyle', 'borderBottomWidth', 'borderColor', 'borderLeft',
-                        'borderLeftColor', 'borderLeftStyle', 'borderLeftWidth', 'borderRight', 'borderRightColor', 'borderRightStyle',
-                        'borderRightWidth', 'borderStyle', 'borderTop', 'borderTopColor', 'borderTopStyle', 'borderTopWidth', 'borderWidth',
-                        'fontFamily', 'fontSize', 'fontVariant', 'fontWeight',
-                        'letterSpacing', 'lineHeight',
-                        'listStyle', 'listStyleImage', 'listStylePosition', 'listStyleType',
-                        'marginBottom', 'marginLeft', 'marginRight', 'marginTop',
-                        'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingTop',
-                        'pageBreakAfter', 'pageBreakBefore',
-                        'textAlign', 'textDecorationBlink', 'textDecorationLineThrough', 'textDecorationNone', 'textDecorationOverline',
-                        'textDecorationUnderline', 'textIndent', 'textTransform',
-                        'clear', 'filter', 'clip', 'color', 'cursor', 'display', 'visibility',
-                        'top', 'left', 'width', 'height',
-                        'verticalAlign', 'position' , 'zIndex', 'overflow', 'styleFloat'
-                    ];
                     //'style' attribute special case
                     var newStyle = newElement.getAttribute('style');
                     var oldStyle = d.getAttribute('style');
@@ -407,11 +420,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             }
                         }
                     }
-
-                    var listenerNames = [
-                        'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup',
-                        'onkeydown', 'onkeypress', 'onkeyup', 'onhelp', 'onblur', 'onfocus', 'onchange'
-                    ];
                     for (var lIndex = 0, lLength = listenerNames.length; lIndex < lLength; lIndex++) {
                         var name = listenerNames[lIndex];
                         d[name] = newElement[name] ? newElement[name] : null;
@@ -461,9 +469,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          */
         var doAttributes = function doAttributes(element) {
 
-            // RELEASE_PENDING IE 5-7 does not allow setting styles with setAttribute
-            // RELEASE_PENDING IE 5-7 will clear event attributes if you try to set them
-
             // Get id of element we'll act against
             var id = element.getAttribute('id');
 
@@ -478,7 +483,25 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             for (var i = 0; i < nodes.length; i++) {
                 var name = nodes[i].getAttribute('name');
                 var value = nodes[i].getAttribute('value');
-                target.setAttribute(name, value);
+                if (!Sarissa._SARISSA_IS_IE) {
+                    target.setAttribute(name, value);
+                } else { // if it's IE, then quite a bit more work is required
+                    if (name === 'class') {
+                        name = 'className';
+                        target.setAttribute(name, value);
+                    } else if (name === "for") {
+                        name = 'htmlFor';
+                        target.setAttribute(name, value);
+                    } else if (name === 'style') {
+                        target.style.cssText = value;
+                    } else if (listenerNames[name]) {
+                        target.setAttribute(name, function() {
+                            window.execScript(value);
+                        });
+                    } else {
+                        target.setAttribute(name,value);
+                    }
+                }
             }
         };
 
@@ -1596,3 +1619,32 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
  oldnode.outerHTML = new XMLSerializer().serializeToString( newnode );
  }
  */
+
+/*
+var appendEvent = function () {
+    if (window.addEventListener) {
+        return function (el, type, fn) {
+            if (typeof el === 'string') {
+                document.getElementById(el).addEventListener(type, fn, false);
+            } else {
+                el.addEventListener(type, fn, false);
+            }
+        };
+    } else if (window.attachEvent) {
+        return function (el, type, fn) {
+            var f = function () {
+                fn.call(((typeof el === 'string')?document.getElementById(el):el), window.event);
+            };
+            if (typeof el === 'string') {
+                document.getElementById(el).attachEvent('on' + type, f);
+            } else {
+                el.attachEvent('on' + type, f);
+            }
+        };
+    }
+}();
+
+//Append the event: (omit 'on' in change)
+appendEvent('element','change', function () {alert('Hello World')});
+*/
+
