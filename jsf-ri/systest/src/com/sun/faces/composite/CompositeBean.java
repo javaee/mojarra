@@ -156,6 +156,17 @@ public class CompositeBean {
     }
 
 
+    public String getStringValue() {
+
+        return "equalityCheck";
+        
+    }
+
+    public String[] getStringValues() {
+        return new String[] { "equalityCheck", "failedCheck" };
+    }
+
+
     // ---------------------------------------------------------- Nested Classes
 
 

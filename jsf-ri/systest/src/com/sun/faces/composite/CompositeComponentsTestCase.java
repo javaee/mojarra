@@ -353,6 +353,36 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         HtmlPage page = getPage("/faces/composite/addPhaseListener.xhtml");
         assertTrue(page.asText().contains("/composite/addPhaseListener.xhtml PASSED"));
     }
+
+
+    /**
+     * Added for issue 1238.
+     */
+    public void testNesting07() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/nestingCompositeExpressionTreeCreation.xhtml");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(3);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(3, spans.size());
+        final String[] expectedSpanValues = {
+              "PASSED", "PASSED", "FAILED"
+        };
+        for (int i = 0; i < expectedSpanValues.length; i++) {
+            assertEquals(expectedSpanValues[i], expectedSpanValues[i], spans.get(i).asText());
+        }
+
+        // redisplay the view to make sure nothing changes over post back
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
+        assertNotNull(submit);
+        page = submit.click();
+        spans.clear();
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(3, spans.size());
+        for (int i = 0; i < expectedSpanValues.length; i++) {
+            assertEquals(expectedSpanValues[i], expectedSpanValues[i], spans.get(i).asText());
+        }
+        
+    }
     
 
 
