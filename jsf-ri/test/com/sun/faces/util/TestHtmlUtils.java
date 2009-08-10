@@ -55,35 +55,50 @@ import junit.framework.TestCase;
  * @version $Id: TestHtmlUtils.java,v 1.5 2008/01/07 22:07:26 rlubke Exp $
  */
 public class TestHtmlUtils extends TestCase {
-	
-	public void testWriteURL() throws IOException {
-		//Test url with no params
-		testURLEncoding("http://www.google.com", "http://www.google.com", "http://www.google.com");
-		//Test URL with one param
-		testURLEncoding("http://www.google.com?joe=10", "http://www.google.com?joe=10", "http://www.google.com?joe=10");
-		//Test URL with two params
-		testURLEncoding("http://www.google.com?joe=10&fred=20", "http://www.google.com?joe=10&amp;fred=20", "http://www.google.com?joe=10&amp;fred=20");
-		//Test URL with & entity encoded
-		testURLEncoding("/index.jsf?joe=10&amp;fred=20", "/index.jsf?joe=10&amp;fred=20", "/index.jsf?joe=10&amp;fred=20");
-		//Test URL with two params and second & close to end of string
-		testURLEncoding("/index.jsf?joe=10&f=20", "/index.jsf?joe=10&amp;f=20", "/index.jsf?joe=10&amp;f=20");
-		//Test URL with misplaced & expected behavior but not necissarily right.
-		testURLEncoding("/index.jsf?joe=10&f=20&", "/index.jsf?joe=10&amp;f=20&amp;", "/index.jsf?joe=10&amp;f=20&amp;");
-		//Test URL with encoded entity at end of URL expected behavior but not necissarily right.
-		testURLEncoding("/index.jsf?joe=10&f=20&amp;", "/index.jsf?joe=10&amp;f=20&amp;", "/index.jsf?joe=10&amp;f=20&amp;");
-	}
-	
-	private void testURLEncoding(String urlToEncode, String expectedHTML, String expectedXML) throws UnsupportedEncodingException, IOException {
-		char[] buffer = new char[1024];
+
+    public void testWriteURL() throws IOException {
+        //Test url with no params
+        testURLEncoding("http://www.google.com",
+                        "http://www.google.com",
+                        "http://www.google.com");
+        //Test URL with one param
+        testURLEncoding("http://www.google.com?joe=10",
+                        "http://www.google.com?joe=10",
+                        "http://www.google.com?joe=10");
+        //Test URL with two params
+        testURLEncoding("http://www.google.com?joe=10&fred=20",
+                        "http://www.google.com?joe=10&amp;fred=20",
+                        "http://www.google.com?joe=10&amp;fred=20");
+        //Test URL with & entity encoded
+        testURLEncoding("/index.jsf?joe=10&amp;fred=20",
+                        "/index.jsf?joe=10&amp;fred=20",
+                        "/index.jsf?joe=10&amp;fred=20");
+        //Test URL with two params and second & close to end of string
+        testURLEncoding("/index.jsf?joe=10&f=20",
+                        "/index.jsf?joe=10&amp;f=20",
+                        "/index.jsf?joe=10&amp;f=20");
+        //Test URL with misplaced & expected behavior but not necissarily right.
+        testURLEncoding("/index.jsf?joe=10&f=20&",
+                        "/index.jsf?joe=10&amp;f=20&amp;",
+                        "/index.jsf?joe=10&amp;f=20&amp;");
+        //Test URL with encoded entity at end of URL expected behavior but not necissarily right.
+        testURLEncoding("/index.jsf?joe=10&f=20&amp;",
+                        "/index.jsf?joe=10&amp;f=20&amp;",
+                        "/index.jsf?joe=10&amp;f=20&amp;");
+    }
+
+    private void testURLEncoding(String urlToEncode, String expectedHTML, String expectedXML)
+          throws UnsupportedEncodingException, IOException {
+        char[] buffer = new char[1024];
         char[] textBuffer = new char[1024];
         StringWriter xmlWriter = new StringWriter();
-		HtmlUtils.writeURL(xmlWriter, urlToEncode, textBuffer, "UTF-8");
-      System.out.println("XML: " + xmlWriter.toString());
-		assertEquals(xmlWriter.toString(), expectedXML);
-		StringWriter htmlWriter = new StringWriter();
-		HtmlUtils.writeURL(htmlWriter, urlToEncode, textBuffer, "UTF-8");
-      System.out.println("HTML: " + htmlWriter.toString());
-		assertEquals(htmlWriter.toString(), expectedHTML);
-	}
+        HtmlUtils.writeURL(xmlWriter, urlToEncode, textBuffer, "UTF-8");
+        System.out.println("XML: " + xmlWriter.toString());
+        assertEquals(xmlWriter.toString(), expectedXML);
+        StringWriter htmlWriter = new StringWriter();
+        HtmlUtils.writeURL(htmlWriter, urlToEncode, textBuffer, "UTF-8");
+        System.out.println("HTML: " + htmlWriter.toString());
+        assertEquals(htmlWriter.toString(), expectedHTML);
+    }
 
 }
