@@ -128,6 +128,11 @@ public class HtmlUtils {
                                      char[] buff,
                                      int buffLength) throws IOException {
         int nextIndex;
+        if (ch <= 0x1f) {
+            if (!isPrintableControlChar(ch)) {
+                return buffIndex;
+            }
+        }
         if (ch < 0xA0) {
             // If "?" or over, no escaping is needed (this covers
             // most of the Latin alphabet)
@@ -228,6 +233,11 @@ public class HtmlUtils {
             for (int i = 0; i < length; i++) {
                 char ch = text.charAt(i);
 
+                if (ch <= 0x1f) {
+                    if (!isPrintableControlChar(ch)) {
+                        continue;
+                    }
+                }
                 // Tilde or less...
                 if (ch < 0xA0) {
                     // If "?" or over, no escaping is needed (this covers
@@ -363,6 +373,11 @@ public class HtmlUtils {
             char ch = text[i];
 
             // "Application Program Command" or less...
+            if (ch <= 0x1f) {
+                if (!isPrintableControlChar(ch)) {
+                    continue;
+                }
+            }
             if (ch < 0xA0) {
                 // If "?" or over, no escaping is needed (this covers
                 // most of the Latin alphabet)
@@ -462,6 +477,13 @@ public class HtmlUtils {
         }
 
         flushBuffer(out, buff, buffIndex);
+    }
+
+
+    static private boolean isPrintableControlChar(int ch) {
+
+        return (ch == 0x09 || ch == 0x0A || ch == 0x0C || ch == 0x0D);
+
     }
 
 
