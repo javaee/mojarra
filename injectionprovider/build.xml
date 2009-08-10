@@ -57,6 +57,8 @@
         <pathelement location="${jsf-impl.jar}"/>
         <pathelement location="${glassfish.jar}"/>
         <pathelement location="${tomcat6.jar}"/>
+        <pathelement location="${jetty.jar}" />
+        <pathelement location="${jetty.util.jar}" />
         <pathelement location="${jetty.annotations.jar}"/>
         <pathelement location="${jetty.plus.jar}"/>
         <pathelement location="${annotation.jar}"/>

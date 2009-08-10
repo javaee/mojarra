@@ -41,6 +41,8 @@ import com.sun.faces.spi.InjectionProviderException;
 import org.mortbay.jetty.plus.annotation.InjectionCollection;
 import org.mortbay.jetty.plus.annotation.LifeCycleCallbackCollection;
 import org.mortbay.jetty.annotations.AnnotationParser;
+import org.mortbay.jetty.webapp.WebAppContext;
+
 
 
 /**
@@ -88,7 +90,8 @@ public class Jetty6InjectionProvider extends DiscoverableInjectionProvider {
      */
     public void inject(Object managedBean) throws InjectionProviderException {
 
-        AnnotationParser.parseAnnotations(managedBean.getClass(),
+        AnnotationParser.parseAnnotations((WebAppContext) WebAppContext.getCurrentWebAppContext(),
+                                          managedBean.getClass(),
                                           null,
                                           injections,
                                           callbacks);
