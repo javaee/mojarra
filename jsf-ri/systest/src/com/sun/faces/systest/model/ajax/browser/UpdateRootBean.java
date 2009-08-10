@@ -45,10 +45,10 @@ import javax.faces.FacesException;
 
 @ManagedBean
 @RequestScoped
+@SuppressWarnings("unused")
 public class UpdateRootBean {
 
     public String updateRootSimple() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -72,11 +72,9 @@ public class UpdateRootBean {
             }
         }
         return null;
-
     }
 
     public String updateRootBody() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -105,7 +103,6 @@ public class UpdateRootBean {
     }
 
     public String updateRootAll() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -141,7 +138,6 @@ public class UpdateRootBean {
     }
 
     public String updateRootFaulty() {  // missing end tags
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -176,7 +172,6 @@ public class UpdateRootBean {
     }
 
     public String updateBodySimple() {  // missing end tags
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -203,7 +198,6 @@ public class UpdateRootBean {
     }
 
     public String updateBodyTag() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -232,7 +226,6 @@ public class UpdateRootBean {
     }
 
     public String updateHead() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -260,7 +253,6 @@ public class UpdateRootBean {
     }
 
     public String updateRootAllEvent() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -298,7 +290,6 @@ public class UpdateRootBean {
     }
 
     public String updateRootSimpleEvent() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -324,12 +315,10 @@ public class UpdateRootBean {
             }
         }
         return null;
-
     }
 
 
     public String updateRootAllStyle() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
@@ -366,7 +355,6 @@ public class UpdateRootBean {
     }
 
     public String updateRootSimpleStyle() {
-
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
