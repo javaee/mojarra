@@ -77,7 +77,7 @@ public class updateAttributesBean {
     public String updateStyle() {
         Map<String,String> map = new TreeMap<String,String>();
         map.put("value","green means PASSED");
-        map.put("style","background-color: green");
+        map.put("style","background-color: green;");
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
@@ -101,7 +101,7 @@ public class updateAttributesBean {
 
     public String updateEvent() {
         Map<String,String> map = new TreeMap<String,String>();
-        map.put("style","display: inline");
+        map.put("style","display: block;");
         map.put("onclick","checkPass();");
 
         FacesContext ctx = FacesContext.getCurrentInstance();
