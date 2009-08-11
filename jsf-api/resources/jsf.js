@@ -122,6 +122,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             'zIndex', 'overflow', 'styleFloat'
         ];
 
+        var styleEquivalent = [];
+        styleEquivalent["background-color"] = "backgroundColor";
+        styleEquivalent["background-attachment"] = "backgroundAttachment";
+        styleEquivalent["background-image"] = "backgroundImage";
+        styleEquivalent["background-position"] = "backgroundPosition";
+        styleEquivalent["border-bottom-style"] = "borderBottomStyle";
+        styleEquivalent["border-bottom"] = "borderBottom";
+        styleEquivalent["border-bottom-color"] = "borderBottomColor";
+
+
         // Enumerate all the names of the event listeners
         var listenerNames = [
             'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
@@ -502,6 +512,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             // remove leading and trailing spaces
                             s[0] = s[0].replace(/^\s*|\s*$/,"");
                             s[1] = s[1].replace(/^\s*|\s*$/,"");
+                            if (styleEquivalent[s[0]] !== "undefined") {
+                                s[0] = styleEquivalent[s[0]];
+                            }
                             // Lots of blogs say either of these should work.
                             // They don't.
                             //target.style.setAttribute(s[0],s[1],0);
