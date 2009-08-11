@@ -68,7 +68,7 @@
         <param-value>false</param-value>
     </context-param>
     <context-param>
-        <param-name>com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION</param-name>
+        <param-name>com.sun.faces.numberOfViewsInSession</param-name>
         <param-value>20</param-value>
     </context-param>
     <context-param>
@@ -99,11 +99,6 @@
     <context-param>
         <param-name>com.sun.faces.validateXml</param-name>
         <param-value>true</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>com.sun.faces.externalizeJavaScript</param-name>
-        <param-value>false</param-value>
     </context-param>
 
     <listener>
