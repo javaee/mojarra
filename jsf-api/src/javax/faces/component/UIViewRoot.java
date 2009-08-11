@@ -1715,14 +1715,15 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
 
+    @SuppressWarnings({"UnusedDeclaration"})
     private List<UIComponent> getComponentResources(FacesContext context,
-                                                   String target,
-                                                   boolean create) {
+                                                    String target,
+                                                    boolean create) {
 
         String location = getIdentifier(target);
         UIComponent facet = getFacet(location);
         if (facet == null && create) {
-            facet = context.getApplication().createComponent("javax.faces.Panel");
+            facet = new ComponentResourceContainer();
             facet.setId(location);
             getFacets().put(location, facet);
         }
@@ -1732,7 +1733,30 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
 
-    // ----------------------------------------------------------- Inner Classes
+    // ---------------------------------------------------------- Nested Classes
+
+
+    /**
+     * Using a stock UIPanel instance may produce undesirable results when
+     * UIViewRoot.getFacetsAndChildren(), followed by a call to encodeAll()
+     * on each element returned by that iterator.
+     */
+    private static final class ComponentResourceContainer extends UIPanel {
+
+        /**
+         * Take no action to prevent component resources from inadvertantly
+         * being rendered.
+         */
+        @Override
+        public void encodeAll(FacesContext context) throws IOException {
+
+            // no-op
+
+        }
+
+
+    } // END ComponentResourceContainer
+    
 
     private static final class ViewMap extends HashMap<String,Object> {
 
