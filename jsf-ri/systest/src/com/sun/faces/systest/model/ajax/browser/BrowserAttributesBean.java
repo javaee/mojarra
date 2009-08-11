@@ -45,10 +45,10 @@ import javax.faces.FacesException;
 import java.util.Map;
 import java.util.TreeMap;
 
-@ManagedBean
+@ManagedBean(name="browserAttributes")
 @RequestScoped
 @SuppressWarnings("unused")
-public class updateAttributesBean {
+public class BrowserAttributesBean {
 
     public String updateValue() {
         Map<String,String> map = new TreeMap<String,String>();
@@ -78,6 +78,31 @@ public class updateAttributesBean {
         Map<String,String> map = new TreeMap<String,String>();
         map.put("value","green means PASSED");
         map.put("style","background-color: green;");
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.updateAttributes("checkvalue",map);
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
+
+    public String updateClass() {
+        Map<String,String> map = new TreeMap<String,String>();
+        map.put("value","green means PASSED");
+        map.put("class","green");
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();

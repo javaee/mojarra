@@ -46,6 +46,9 @@
     <title>Ajax Update Root</title>
 </h:head>
 <h:body>
+    <style type="text/css">
+        .green { background-color: green;}
+    </style>
     <script type="text/javascript">
         function checkPass() {
             var check = document.getElementById('checkvalue');
@@ -57,15 +60,19 @@
         <br/>
         <input type="button" id="checkbutton" value="" style="display: none"/>
         <hr/>
-        <h:commandButton id="updatevalue" value="UpdateValue" action="#{updateAttributesBean.updateValue}">
+        <h:commandButton id="updatevalue" value="UpdateValue" action="#{browserAttributes.updateValue}">
               <f:ajax execute="@this" render="@none"/>
         </h:commandButton> Works in all browsers
         <br/>
-        <h:commandButton id="updatestyle" value="UpdateStyle" action="#{updateAttributesBean.updateStyle}">
+        <h:commandButton id="updatestyle" value="UpdateStyle" action="#{browserAttributes.updateStyle}">
               <f:ajax execute="@this" render="@none"/>
         </h:commandButton> Works in all browsers
         <br/>
-        <h:commandButton id="updateevent" value="UpdateEvent" action="#{updateAttributesBean.updateEvent}">
+        <h:commandButton id="updateclass" value="UpdateClass" action="#{browserAttributes.updateClass}">
+              <f:ajax execute="@this" render="@none"/>
+        </h:commandButton> Works in all browsers
+        <br/>
+        <h:commandButton id="updateevent" value="UpdateEvent" action="#{browserAttributes.updateEvent}">
               <f:ajax execute="@this" render="@none"/>
         </h:commandButton> Works in all browsers
         <br/>
