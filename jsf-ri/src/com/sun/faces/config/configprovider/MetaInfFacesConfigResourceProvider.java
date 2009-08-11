@@ -81,6 +81,9 @@ public class MetaInfFacesConfigResourceProvider implements
     private static final String META_INF_RESOURCES =
          "META-INF/faces-config.xml";
 
+    private static final String WEB_INF_CLASSES =
+          "/WEB-INF/classes/META-INF";
+
 
     // ------------------------------ Methods From ConfigurationResourceProvider
 
@@ -101,7 +104,7 @@ public class MetaInfFacesConfigResourceProvider implements
         List<URL> unsortedResourceList = new ArrayList<URL>();
 
         try {
-            for (URL url : loadURLs()) {
+            for (URL url : loadURLs(context)) {
 
                 String jarUrl = url.toString();
                 String jarName = null;
@@ -147,13 +150,23 @@ public class MetaInfFacesConfigResourceProvider implements
     // --------------------------------------------------------- Private Methods
 
 
-    private Collection<URL> loadURLs() throws IOException {
+    private Collection<URL> loadURLs(ServletContext context) throws IOException {
 
         Set<URL> urls = new HashSet<URL>();
         for (Enumeration<URL> e = Util.getCurrentLoader(this).getResources(META_INF_RESOURCES); e.hasMoreElements();) {
             urls.add(e.nextElement());            
         }
         urls.addAll(Arrays.asList(Classpath.search("META-INF/", ".faces-config.xml")));
+        // special case for finding taglib files in WEB-INF/classes/META-INF
+        Set paths = context.getResourcePaths(WEB_INF_CLASSES);
+        if (paths != null) {
+            for (Object path : paths) {
+                String p = path.toString();
+                if (p.endsWith(".taglib.xml")) {
+                    urls.add(context.getResource(p));
+                }
+            }
+        }
         return urls;
         
     }

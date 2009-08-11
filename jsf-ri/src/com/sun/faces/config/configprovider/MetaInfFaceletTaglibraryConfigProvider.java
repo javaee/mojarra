@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.io.IOException;
 
@@ -60,6 +61,8 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
     private static final String SUFFIX = ".taglib.xml";
+    private static final String WEB_INF_CLASSES =
+          "/WEB-INF/classes/META-INF";
 
     private static final String[] FACELET_CONFIG_FILES = {
         "META-INF/jsf-core.taglib.xml",
@@ -84,7 +87,19 @@ public class MetaInfFaceletTaglibraryConfigProvider implements
             // but has left the jsf-facelets.jar in the classpath, we
             // need to ignore the default configuration resouces from
             // that JAR.
-            return pruneURLs(urls);
+            List<URL> urlsList = pruneURLs(urls);
+
+            // special case for finding taglib files in WEB-INF/classes/META-INF
+            Set paths = context.getResourcePaths(WEB_INF_CLASSES);
+            if (paths != null) {
+                for (Object path : paths) {
+                    String p = path.toString();
+                    if (p.endsWith(".taglib.xml")) {
+                        urlsList.add(context.getResource(p));
+                    }
+                }
+            }
+            return urlsList;
         } catch (IOException ioe) {
             throw new FacesException("Error searching classpath from facelet-taglib documents", ioe);
         }
