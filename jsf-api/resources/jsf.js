@@ -122,16 +122,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             'zIndex', 'overflow', 'styleFloat'
         ];
 
-        var styleEquivalent = [];
-        styleEquivalent["background-color"] = "backgroundColor";
-        styleEquivalent["background-attachment"] = "backgroundAttachment";
-        styleEquivalent["background-image"] = "backgroundImage";
-        styleEquivalent["background-position"] = "backgroundPosition";
-        styleEquivalent["border-bottom-style"] = "borderBottomStyle";
-        styleEquivalent["border-bottom"] = "borderBottom";
-        styleEquivalent["border-bottom-color"] = "borderBottomColor";
-
-
         // Enumerate all the names of the event listeners
         var listenerNames = [
             'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
@@ -503,43 +493,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         name = 'htmlFor';
                         target.setAttribute(name, value, 0);
                     } else if (name === 'style') {
-                        if (value.charAt(value.length-1) === ";") {
-                            value = value.slice(0,-1);
-                        }
-                        var split = value.split(";");
-                        for (var i = 0, len=split.length; i < len; i++) {
-                            var s = split[i].split(":");
-                            // remove leading and trailing spaces
-                            s[0] = s[0].replace(/^\s*|\s*$/,"");
-                            s[1] = s[1].replace(/^\s*|\s*$/,"");
-                            if (styleEquivalent[s[0]] !== "undefined") {
-                                s[0] = styleEquivalent[s[0]];
-                            }
-                            // Lots of blogs say either of these should work.
-                            // They don't.
-                            //target.style.setAttribute(s[0],s[1],0);
-                            // So we're left with eval.
-                            // With special casing.
-                            // I hate IE
-/*
-                            switch (s[0]) {
-                                case "background-color" : s[0] = "backgroundColor";
-                                case "background"
-                                default: // try something
-                            }
-                            var exe = "target.style."+s[0]+"='"+s[1]+"';";
-                            target.style.background-color='green';
-
-                            */
-                            eval(exe);
-                        }
-                        // RELEASE_PENDING I really wish this worked, but it
-                        // fails for certain cases, like setting display: inline
-                        //target.style.setAttribute('cssText', value, 0);
+                        target.style.setAttribute('cssText', value, 0);
                     } else if (name.substring(0,2) === 'on') {
-                        target.setAttribute(name, function() {
-                            window.execScript(value);
-                        },0);
+                        var fn = function(value) {
+                            return function() {
+                                window.execScript(value);
+                            }}(value);
+                        target.setAttribute(name, fn, 0);
                     } else {
                         target.setAttribute(name, value, 0);
                     }

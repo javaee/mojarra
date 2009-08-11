@@ -102,6 +102,7 @@ public class updateAttributesBean {
     public String updateEvent() {
         Map<String,String> map = new TreeMap<String,String>();
         map.put("style","display: inline;");
+        map.put("value","Click Me");
         map.put("onclick","checkPass();");
 
         FacesContext ctx = FacesContext.getCurrentInstance();

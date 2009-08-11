@@ -55,19 +55,19 @@
     <h:form id="form1" prependId="true">
         <input id="checkvalue" value="Pending"/>
         <br/>
-        <input type="button" id="checkbutton" value="Click Me" style="display: none;"/>
+        <input type="button" id="checkbutton" value="" style="display: none"/>
         <hr/>
         <h:commandButton id="updatevalue" value="UpdateValue" action="#{updateAttributesBean.updateValue}">
               <f:ajax execute="@this" render="@none"/>
-        </h:commandButton> Work in FF, S, CH
+        </h:commandButton> Works in all browsers
         <br/>
         <h:commandButton id="updatestyle" value="UpdateStyle" action="#{updateAttributesBean.updateStyle}">
               <f:ajax execute="@this" render="@none"/>
-        </h:commandButton> Work in FF, S, CH
+        </h:commandButton> Works in all browsers
         <br/>
         <h:commandButton id="updateevent" value="UpdateEvent" action="#{updateAttributesBean.updateEvent}">
               <f:ajax execute="@this" render="@none"/>
-        </h:commandButton> Work in FF, S, CH
+        </h:commandButton> Works in all browsers
         <br/>
     </h:form>
 </h:body>
