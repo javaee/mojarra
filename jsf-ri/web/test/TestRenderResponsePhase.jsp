@@ -753,7 +753,6 @@ brackets</i> on this text</f:verbatim>
 
 </td>
 </tr>
-<
 <tr><td>
 
 <f:verbatim escape="#{SimpleBean.falseValue}">5. You should not see the

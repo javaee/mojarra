@@ -109,6 +109,7 @@ public class GridRenderer extends BaseTableRenderer {
 
         // Render our children, starting a new row as needed
         renderTableBodyStart(context, component, writer);
+        boolean rowRendered = false;
         for (Iterator<UIComponent> kids = getChildren(component);
              kids.hasNext();) {
 
@@ -119,9 +120,9 @@ public class GridRenderer extends BaseTableRenderer {
             if ((i % columnCount) == 0) {
                 if (open) {
                     renderRowEnd(context, component, writer);
-                    open = false;
                 }
                 renderRowStart(context, component, writer);
+                rowRendered = true;
                 open = true;
                 info.newRow();
             }
@@ -130,6 +131,9 @@ public class GridRenderer extends BaseTableRenderer {
         }
         if (open) {
            renderRowEnd(context, component, writer);
+        }
+        if (!rowRendered) {
+            this.renderEmptyTableRow(writer, component);
         }
         renderTableBodyEnd(context, component, writer);
     }
@@ -242,7 +246,21 @@ public class GridRenderer extends BaseTableRenderer {
             writer.endElement("tfoot");
             writer.writeText("\n", table, null);
         }
-        
+
+    }
+
+
+    // ------------------------------------------------------- Private Methods
+
+
+    private void renderEmptyTableRow(final ResponseWriter writer,
+            final UIComponent component) throws IOException {
+
+        writer.startElement("tr", component);
+        writer.startElement("td", component);
+        writer.endElement("td");
+        writer.endElement("tr");
+
     }
 
 }

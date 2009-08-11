@@ -104,16 +104,93 @@ public class DataTableTestCase extends AbstractTestCase {
         assertTrue(tableList.size() == 1);
         HtmlTable table = tableList.get(0);
         List<HtmlTableRow> rows = table.getRows();
-        assertTrue(rows.size() == 6);
+        assertEquals(6,rows.size());
         for (int i = 0, len = rows.size(); i < len; i++) {
             HtmlTableRow row = rows.get(i);
             if (i % 2 == 0) {
-                assertTrue(row.getClassAttribute().equals("b1"));
+            	assertEquals("b1",row.getClassAttribute());
             } else {
-                assertTrue(row.getClassAttribute().equals("b2"));
+            	assertEquals("b2",row.getClassAttribute());
             }
         }
-        
+
+    }
+
+    public void testTablesWithEmptyBody() throws Exception {
+
+        HtmlPage page = getPage("/faces/standard/dtablewithemptybody.jsp");
+        String xml = page.asText();
+        System.out.println(xml);
+        assertNotNull(page);
+
+        assertEmptyTable("Empty", page, false);
+
+        HtmlTable table = (HtmlTable) page.getElementById("Some");
+        assertNotNull(table);
+        HtmlTableHeader header = table.getHeader();
+        HtmlTableRow row = assertSingle(header.getRows());
+        HtmlTableCell cell = assertSingle(row.getCells());
+        assertFalse(cell.hasAttribute("colspan"));
+        HtmlTableFooter footer = table.getFooter();
+        row = assertSingle(footer.getRows());
+        cell = assertSingle(row.getCells());
+        assertFalse(cell.hasAttribute("colspan"));
+        HtmlTableBody body = assertSingle(table.getBodies());
+        row = assertSingle(body.getRows());
+        cell = assertSingle(row.getCells());
+        assertEquals("", cell.asText());
+
+        assertEmptyTable("PureEmptyDataTable", page, false);
+
+        // panelGridTests
+        assertEmptyTable("PureEmptyPanelGrid", page, false);
+        assertEmptyTable("NoRenderedContentPanelGrid", page, true);
+
+    }
+
+    /**
+     * tests that a table with the given id exists, and that it is rendered as
+     * &lt;table>
+     * <tr>
+     * <td></td>
+     * </tr>
+     * </table>
+     *
+     * @param tableId
+     *            the id of the table
+     * @param page
+     *            the page to lookup the table in
+     */
+    private static void assertEmptyTable(final String tableId,
+            final HtmlPage page, final boolean hasHeader) {
+        HtmlTable table = (HtmlTable) page.getElementById(tableId);
+        assertNotNull("Should find Table with ID: " + tableId, table);
+        // Test that we have only one row at all
+        List<HtmlTableRow> allRows = table.getRows();
+        int expectedRowCount = hasHeader ? 2 : 1;
+        assertEquals("Table " + tableId
+                + " should have " + expectedRowCount
+                + " row(s)", expectedRowCount,
+                allRows.size());
+        // test that we have <tbody><tr><td></td></tr></tbody>
+        HtmlTableBody body = assertSingle(tableId + "should have one tbody",
+                table.getBodies());
+        HtmlTableRow row = assertSingle(tableId + ":tbody should have one tr",
+                body.getRows());
+        HtmlTableCell cell = assertSingle(tableId
+                + ":tbody:tr should have one td", row.getCells());
+        assertEquals(tableId + " the single td should be empty", "", cell
+                .asText());
+    }
+
+    private static <T> T assertSingle(final String msg, final List<T> input) {
+        assertEquals(msg, 1, input.size());
+        return input.get(0);
+    }
+
+    private static <T> T assertSingle(final List<T> input) {
+        assertEquals(1, input.size());
+        return input.get(0);
     }
 
     public void testTableForms() throws Exception {
