@@ -96,7 +96,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     'name', 'value', 'checked', 'disabled', 'readOnly',
                     'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
                     'tabIndex', 'accessKey', 'accept', 'type'];
-        // RELEASE_PENDING - consider notifying with a message if in an inappropriate env
+        // RELEASE_PENDING - consider notifying with a message
+        // if in an inappropriate env
         //'dir' attribute cannot be updated dynamically in IE 7
         //'type' attribute cannot be updated dynamically in Firefox 2.0
 
@@ -1608,45 +1609,3 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
 } //end if version detection block
-
-/*
-
- if( _SARISSA_IS_IE && oldnode.tagName.match( /(tbody|thead|tfoot|tr|th|td)/i ) ) {
- LOG.debug( "Replace content of node by IE hack" );
- var temp = document.createElement( "div" );
- temp.innerHTML = '<table style="display: none">'+new XMLSerializer().serializeToString( newnode )+'</table>';
- anchor.replaceChild( temp.getElementsByTagName( newnode.tagName ).item( 0 ), oldnode );
- } else {
- LOG.debug( "Replace content of node by outerHTML()" );
- oldnode.outerHTML = new XMLSerializer().serializeToString( newnode );
- }
- */
-
-/*
-var appendEvent = function () {
-    if (window.addEventListener) {
-        return function (el, type, fn) {
-            if (typeof el === 'string') {
-                document.getElementById(el).addEventListener(type, fn, false);
-            } else {
-                el.addEventListener(type, fn, false);
-            }
-        };
-    } else if (window.attachEvent) {
-        return function (el, type, fn) {
-            var f = function () {
-                fn.call(((typeof el === 'string')?document.getElementById(el):el), window.event);
-            };
-            if (typeof el === 'string') {
-                document.getElementById(el).attachEvent('on' + type, f);
-            } else {
-                el.attachEvent('on' + type, f);
-            }
-        };
-    }
-}();
-
-//Append the event: (omit 'on' in change)
-appendEvent('element','change', function () {alert('Hello World')});
-*/
-
