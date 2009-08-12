@@ -107,12 +107,9 @@ public class UIRepeat extends UINamingContainer {
 
     private int index = -1;
 
-    // scoping
-    private int offset = -1;
-
-    private int size = -1;
-
-    private int step = -1;
+    private Integer begin;
+    private Integer end;
+    private Integer step;
 
     public UIRepeat() {
         this.setRendererType("facelets.ui.Repeat");
@@ -122,50 +119,58 @@ public class UIRepeat extends UINamingContainer {
         return COMPONENT_FAMILY;
     }
 
-    public int getOffset() {
-        if (this.offset != -1) {
-            return this.offset;
+    public void setEnd(Integer end) {
+        this.end = end;
+    }
+
+    public Integer getEnd() {
+
+        if (this.end != null) {
+            return end;
         }
-        ValueExpression ve = this.getValueExpression("offset");
+        ValueExpression ve = this.getValueExpression("end");
         if (ve != null) {
             return (Integer) ve.getValue(getFacesContext().getELContext());
         }
-        return 0;
+        return null;
+
     }
 
-    public void setOffset(int offset) {
-        this.offset = offset;
+
+    public void setBegin(Integer begin) {
+        this.begin = begin;
     }
 
-    public int getStep() {
-        if (this.step != -1) {
+    public Integer getBegin() {
+
+        if (this.begin != null) {
+            return this.begin;
+        }
+        ValueExpression ve = this.getValueExpression("begin");
+        if (ve != null) {
+            return (Integer) ve.getValue(getFacesContext().getELContext());
+        }
+        return null;
+
+    }
+
+    public void setStep(Integer step) {
+        this.step = step;
+    }
+
+    public Integer getStep() {
+
+        if (this.step != null) {
             return this.step;
         }
         ValueExpression ve = this.getValueExpression("step");
         if (ve != null) {
             return (Integer) ve.getValue(getFacesContext().getELContext());
         }
-        return 1;
+        return null;
+
     }
 
-    public void setStep(int step) {
-        this.step = step;
-    }
-
-    public int getSize() {
-        if (this.size != -1) {
-            return this.size;
-        }
-        ValueExpression ve = this.getValueExpression("size");
-        if (ve != null) {
-            return (Integer) ve.getValue(getFacesContext().getELContext());
-        }
-        return -1;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
 
     public String getVar() {
         return this.var;
@@ -428,11 +433,9 @@ public class UIRepeat extends UINamingContainer {
                 Iterator itr;
                 UIComponent c;
 
-                int begin = this.getOffset();
-                int num = this.getSize();
-                int step = this.getStep();
-                int rowCount = getDataModel().getRowCount();
-                int end = Math.min(num > 0 ? begin + num - 1 : rowCount, rowCount);
+                Integer begin = this.getBegin();
+                Integer step = this.getStep();
+                Integer end = this.getEnd();
 
                 // grab renderer
                 String rendererType = getRendererType();
@@ -441,10 +444,12 @@ public class UIRepeat extends UINamingContainer {
                     renderer = getRenderer(faces);
                 }
 
-                int i = begin;
+                int i = ((begin != null) ? begin : 0);
+                int e = ((end != null) ? end : getDataModel().getRowCount());
+                int s = ((step != null) ? step : 1);
                 this.setIndex(faces, i);
-                this.updateIterationStatus(faces, new IterationStatus(true, i + step >= end, i, begin, end, step));
-                while (i <= end && this.isIndexAvailable()) {
+                this.updateIterationStatus(faces, new IterationStatus(true, i >= e, i, begin, end, step));
+                while (i <= e && this.isIndexAvailable()) {
 
                     if (PhaseId.RENDER_RESPONSE.equals(phase)
                             && renderer != null) {
@@ -466,9 +471,9 @@ public class UIRepeat extends UINamingContainer {
                             }
                         }
                     }
-                    i += step;
+                    i += s;
                     this.setIndex(faces, i);
-                    this.updateIterationStatus(faces, new IterationStatus(false, i + step >= end, i, begin, end, step));
+                    this.updateIterationStatus(faces, new IterationStatus(false, i + s >= e, i, begin, end, step));
                 }
             }
         } catch (IOException e) {
@@ -526,7 +531,7 @@ public class UIRepeat extends UINamingContainer {
             return false;
 
         FacesContext facesContext = context.getFacesContext();
-        int oldRowIndex = getOffset();
+        int oldRowIndex = getDataModel().getRowIndex();
         setIndex(facesContext, -1);
 
         // Push ourselves to EL
@@ -579,27 +584,28 @@ public class UIRepeat extends UINamingContainer {
 
     private boolean visitChildren(VisitContext context,  VisitCallback callback) {
 
-        int begin = this.getOffset();
-        int num = this.getSize();
-        int step = this.getStep();
-        int rowCount = getDataModel().getRowCount();
-        int end = Math.min(num > 0 ? begin + num - 1 : rowCount, rowCount);
-        int i = begin;
+        Integer begin = this.getBegin();
+        Integer end = this.getEnd();
+        Integer step = this.getStep();
+
+        int i = ((begin != null) ? begin : 0);
+        int e = ((end != null) ? end : getDataModel().getRowCount());
+        int s = ((step != null) ? step : 1);
         FacesContext faces = context.getFacesContext();
         this.setIndex(faces, i);
         this.updateIterationStatus(faces,
                                    new IterationStatus(true,
-                                                       i + step >= end,
+                                                       i >= e,
                                                        i,
                                                        begin,
                                                        end,
                                                        step));
-        while (i <= end && this.isIndexAvailable()) {
+        while (i <= e && this.isIndexAvailable()) {
 
             this.setIndex(faces, i);
             this.updateIterationStatus(faces,
                                        new IterationStatus(false,
-                                                           i + step >= end,
+                                                           i + s >= e,
                                                            i,
                                                            begin,
                                                            end,
@@ -609,7 +615,7 @@ public class UIRepeat extends UINamingContainer {
                     return true;
                 }
             }
-            i += step;
+            i += s;
         }
 
 
@@ -766,16 +772,14 @@ public class UIRepeat extends UINamingContainer {
             try {
                 int idx = idxEvent.getIndex();
                 this.setIndex(ctx, idx);
-                int begin = this.getOffset();
-                int num = this.getSize();
-                int step = this.getStep();
-                int rowCount = getDataModel().getRowCount();
-                int end = Math
-                      .min(num > 0 ? begin + num - 1 : rowCount, rowCount);
+                Integer begin = this.getBegin();
+                Integer end = this.getEnd();
+                Integer step = this.getStep();
+                int e = ((end != null) ? end : getDataModel().getRowCount());
+                int s = ((step != null) ? step : 1);
                 this.updateIterationStatus(ctx,
                                            new IterationStatus(false,
-                                                               idx + step
-                                                               >= end,
+                                                               idx + s >= e,
                                                                idx,
                                                                begin,
                                                                end,
@@ -814,8 +818,8 @@ public class UIRepeat extends UINamingContainer {
         super.restoreState(faces, state[0]);
         //noinspection unchecked
         this.childState = (Map<String,SavedState>) state[1];
-        this.offset = (Integer) state[2];
-        this.size = (Integer) state[3];
+        this.begin = (Integer) state[2];
+        this.end = (Integer) state[3];
         this.step = (Integer) state[4];
         this.var = (String) state[5];
         this.varStatus = (String) state[6];
@@ -826,8 +830,8 @@ public class UIRepeat extends UINamingContainer {
         Object[] state = new Object[8];
         state[0] = super.saveState(faces);
         state[1] = this.childState;
-        state[2] = this.offset;
-        state[3] = this.size;
+        state[2] = this.begin;
+        state[3] = this.end;
         state[4] = this.step;
         state[5] = this.var;
         state[6] = this.varStatus;

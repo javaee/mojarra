@@ -280,52 +280,7 @@ public class FaceletsTestCase extends AbstractTestCase {
     }
 
 
-    public void testUIRepeatVarStatusBroadcast() throws Exception {
-
-        HtmlPage page = getPage("/faces/facelets/uirepeat2.xhtml");
-        List<HtmlAnchor> anchors = new ArrayList<HtmlAnchor>(4);
-        getAllElementsOfGivenClass(page, anchors, HtmlAnchor.class);
-        assertEquals("Expected to find only 4 HtmlAnchors", 4, anchors.size());
-        String[] expectedValues = {
-              "Index: 0",
-              "Index: 1",
-              "Index: 2",
-              "Index: 3",
-        };
-
-        for (int i = 0, len = expectedValues.length; i < len; i++) {
-            HtmlAnchor anchor = anchors.get(i);
-            page = anchor.click();
-            assertTrue(page.asText().contains(expectedValues[i]));
-        }
-
-    }
-
-
-    public void testUIRepeatStateNotLostOnNonUIRepeatMessage() throws Exception {
-
-        HtmlPage page = getPage("/faces/facelets/uirepeat3.xhtml");
-        List<HtmlTextInput> inputs = new ArrayList<HtmlTextInput>(5);
-        getAllElementsOfGivenClass(page, inputs, HtmlTextInput.class);
-        assertEquals("Expected 5 input fields", 5, inputs.size());
-        inputs.get(0).setValueAttribute("A"); // this causes a validation failure
-        inputs.get(1).setValueAttribute("1");
-        inputs.get(2).setValueAttribute("2");
-        inputs.get(3).setValueAttribute("3");
-        inputs.get(4).setValueAttribute("4");
-        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "submit");
-        page = submit.click();
-        assertTrue(page.asText().contains("'A' is not a number."));
-        // now verify the inputs nested within the UIRepeat were not cleared
-        inputs.clear();
-        getAllElementsOfGivenClass(page, inputs, HtmlTextInput.class);
-        assertEquals("A", inputs.get(0).getValueAttribute());
-        assertEquals("1", inputs.get(1).getValueAttribute());
-        assertEquals("2", inputs.get(2).getValueAttribute());
-        assertEquals("3", inputs.get(3).getValueAttribute());
-        assertEquals("4", inputs.get(4).getValueAttribute());
-        
-    }
+    
 
 
     /**
@@ -347,15 +302,5 @@ public class FaceletsTestCase extends AbstractTestCase {
 
     }
 
-
-    /**
-     * Added for issue 1218.
-     */
-    public void testForEachVarStatusNoException() throws Exception {
-
-        HtmlPage page = getPage("/faces/facelets/forEach.xhtml");
-        assertTrue(page.asText().contains("1 2 3"));
-        
-    }
 
 }

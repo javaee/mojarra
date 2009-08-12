@@ -39,11 +39,11 @@ package com.sun.faces.facelets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -58,7 +58,7 @@ public class UIRepeatTestCase extends AbstractTestCase {
 
 
     public UIRepeatTestCase() {
-        this("FaceletsTestCase");
+        this("UIRepeatTestCase");
     }
 
 
@@ -103,15 +103,97 @@ public class UIRepeatTestCase extends AbstractTestCase {
         
         String text = page.asText();
         
-        assertTrue(-1 != text.indexOf("ListFlavor is chocolate. Begin is 0. End is 4. Index is 0. Step is 1. Index is even: true. Index is odd: false. Index is first: true. Index is last: false."));
-        assertTrue(-1 != text.indexOf("ListFlavor is vanilla. Begin is 0. End is 4. Index is 1. Step is 1. Index is even: false. Index is odd: true. Index is first: false. Index is last: false."));
-        assertTrue(-1 != text.indexOf("ListFlavor is strawberry. Begin is 0. End is 4. Index is 2. Step is 1. Index is even: true. Index is odd: false. Index is first: false. Index is last: false."));
-        assertTrue(-1 != text.indexOf("ListFlavor is chocolate peanut butter. Begin is 0. End is 4. Index is 3. Step is 1. Index is even: false. Index is odd: true. Index is first: false. Index is last: true."));
-        assertTrue(-1 != text.indexOf("ArrayFlavor is chocolate. Begin is 0. End is 4. Index is 0. Step is 1. Index is even: true. Index is odd: false. Index is first: true. Index is last: false."));
-        assertTrue(-1 != text.indexOf("ArrayFlavor is vanilla. Begin is 0. End is 4. Index is 1. Step is 1. Index is even: false. Index is odd: true. Index is first: false. Index is last: false."));
-        assertTrue(-1 != text.indexOf("ArrayFlavor is strawberry. Begin is 0. End is 4. Index is 2. Step is 1. Index is even: true. Index is odd: false. Index is first: false. Index is last: false."));
-        assertTrue(-1 != text.indexOf("ArrayFlavor is chocolate peanut butter. Begin is 0. End is 4. Index is 3. Step is 1. Index is even: false. Index is odd: true. Index is first: false. Index is last: true."));
+        assertTrue(-1 != text.indexOf("ListFlavor is chocolate. Begin is . End is . Index is 0. Step is . Index is even: true. Index is odd: false. Index is first: true. Index is last: false."));
+        assertTrue(-1 != text.indexOf("ListFlavor is vanilla. Begin is . End is . Index is 1. Step is . Index is even: false. Index is odd: true. Index is first: false. Index is last: false."));
+        assertTrue(-1 != text.indexOf("ListFlavor is strawberry. Begin is . End is . Index is 2. Step is . Index is even: true. Index is odd: false. Index is first: false. Index is last: false."));
+        assertTrue(-1 != text.indexOf("ListFlavor is chocolate peanut butter. Begin is . End is . Index is 3. Step is . Index is even: false. Index is odd: true. Index is first: false. Index is last: true."));
+        assertTrue(-1 != text.indexOf("ArrayFlavor is chocolate. Begin is . End is . Index is 0. Step is . Index is even: true. Index is odd: false. Index is first: true. Index is last: false."));
+        assertTrue(-1 != text.indexOf("ArrayFlavor is vanilla. Begin is . End is . Index is 1. Step is . Index is even: false. Index is odd: true. Index is first: false. Index is last: false."));
+        assertTrue(-1 != text.indexOf("ArrayFlavor is strawberry. Begin is . End is . Index is 2. Step is . Index is even: true. Index is odd: false. Index is first: false. Index is last: false."));
+        assertTrue(-1 != text.indexOf("ArrayFlavor is chocolate peanut butter. Begin is . End is . Index is 3. Step is . Index is even: false. Index is odd: true. Index is first: false. Index is last: true."));
         
+    }
+
+
+    public void testUIRepeatVarStatusBroadcast() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/uirepeat2.xhtml");
+        List<HtmlAnchor> anchors = new ArrayList<HtmlAnchor>(4);
+        getAllElementsOfGivenClass(page, anchors, HtmlAnchor.class);
+        assertEquals("Expected to find only 4 HtmlAnchors", 4, anchors.size());
+        String[] expectedValues = {
+              "Index: 0",
+              "Index: 1",
+              "Index: 2",
+              "Index: 3",
+        };
+
+        for (int i = 0, len = expectedValues.length; i < len; i++) {
+            HtmlAnchor anchor = anchors.get(i);
+            page = anchor.click();
+            assertTrue(page.asText().contains(expectedValues[i]));
+        }
+
+    }
+
+
+    public void testUIRepeatStateNotLostOnNonUIRepeatMessage() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/uirepeat3.xhtml");
+        List<HtmlTextInput> inputs = new ArrayList<HtmlTextInput>(5);
+        getAllElementsOfGivenClass(page, inputs, HtmlTextInput.class);
+        assertEquals("Expected 5 input fields", 5, inputs.size());
+        inputs.get(0).setValueAttribute("A"); // this causes a validation failure
+        inputs.get(1).setValueAttribute("1");
+        inputs.get(2).setValueAttribute("2");
+        inputs.get(3).setValueAttribute("3");
+        inputs.get(4).setValueAttribute("4");
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "submit");
+        page = submit.click();
+        assertTrue(page.asText().contains("'A' is not a number."));
+        // now verify the inputs nested within the UIRepeat were not cleared
+        inputs.clear();
+        getAllElementsOfGivenClass(page, inputs, HtmlTextInput.class);
+        assertEquals("A", inputs.get(0).getValueAttribute());
+        assertEquals("1", inputs.get(1).getValueAttribute());
+        assertEquals("2", inputs.get(2).getValueAttribute());
+        assertEquals("3", inputs.get(3).getValueAttribute());
+        assertEquals("4", inputs.get(4).getValueAttribute());
+
+    }
+
+
+    public void testUIRepeatVarBeginEndStepProperties() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/uirepeat4.xhtml");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(7);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals("Expected 7 spans", 7, spans.size());
+        String[] expectedValues = {
+              "vanilla : index=1 : begin=1 : end= : step= : first=true : last=false : even=true : odd=false",
+              "strawberry : index=2 : begin=1 : end= : step= : first=false : last=false : even=false : odd=true",
+              "chocolate peanut butter : index=3 : begin=1 : end= : step= : first=false : last=true : even=true : odd=false",
+              "strawberry: index=2 : begin=2 : end=3 : step= : first=true : last=false : even=true : odd=false",
+              "chocolate peanut butter: index=3 : begin=2 : end=3 : step= : first=false : last=true : even=false : odd=true",
+              "chocolate: index=0 : begin= : end= : step=2 : first=true : last=false : even=true : odd=false",
+              "strawberry: index=2 : begin= : end= : step=2 : first=false : last=true : even=false : odd=true"
+        };
+        for (int i = 0; i < 5; i++) {
+            assertEquals("Expected: " + expectedValues[i] + ", received: " + spans.get(i).asText(),
+                         expectedValues[i],
+                         spans.get(i).asText());
+        }
+
+    }
+
+    /**
+     * Added for issue 1218.
+     */
+    public void testForEachVarStatusNoException() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/forEach.xhtml");
+        assertTrue(page.asText().contains("1 2 3"));
+
     }
 
 }

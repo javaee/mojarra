@@ -163,4 +163,18 @@ public final class IterationStatus implements Serializable, LoopTagStatus {
         return !even;
     }
 
+    @Override
+    public String toString() {
+        return "IterationStatus{" +
+               "index=" + index +
+               ", first=" + first +
+               ", last=" + last +
+               ", begin=" + begin +
+               ", end=" + end +
+               ", step=" + step +
+               ", even=" + even +
+               ", current=" + current +
+               ", iterationCount=" + iterationCount +
+               '}';
+    }
 }
