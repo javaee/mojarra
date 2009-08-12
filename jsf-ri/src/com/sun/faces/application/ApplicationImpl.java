@@ -830,6 +830,11 @@ public class ApplicationImpl extends Application {
         Util.notNull("behaviorId", behaviorId);
         Util.notNull("behaviorClass", behaviorClass);
 
+        if (LOGGER.isLoggable(Level.FINE) && behaviorMap.containsKey(behaviorId)) {
+            LOGGER.log(Level.FINE,
+                       "behaviorId {0} has already been registered.  Replacing existing behavior class type {1} with {2}.",
+                       new Object[] { behaviorId, behaviorMap.get(behaviorId), behaviorClass });
+        }
         behaviorMap.put(behaviorId, behaviorClass);
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -881,6 +886,11 @@ public class ApplicationImpl extends Application {
         Util.notNull("componentType", componentType);
         Util.notNull("componentType", componentClass);
 
+        if (LOGGER.isLoggable(Level.FINE) && componentMap.containsKey(componentType)) {
+            LOGGER.log(Level.FINE,
+                       "componentType {0} has already been registered.  Replacing existing component class type {1} with {2}.",
+                       new Object[] { componentType, componentMap.get(componentType), componentClass });
+        }
         componentMap.put(componentType, componentClass);
         
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -1105,6 +1115,12 @@ public class ApplicationImpl extends Application {
         Util.notNull("converterId", converterId);
         Util.notNull("converterClass", converterClass);
 
+        if (LOGGER.isLoggable(Level.FINE) && converterIdMap.containsKey(converterId)) {
+            LOGGER.log(Level.FINE,
+                       "converterId {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
+                       new Object[] { converterId, converterIdMap.get(converterId), converterClass });
+        }
+
         converterIdMap.put(converterId, converterClass);
 
         Class<?>[] types = STANDARD_CONV_ID_TO_TYPE_MAP.get(converterId);
@@ -1136,6 +1152,15 @@ public class ApplicationImpl extends Application {
         if (converterId != null) {
             addConverter(converterId, converterClass);
         } else {
+            if (LOGGER.isLoggable(Level.FINE) && converterTypeMap
+                  .containsKey(targetClass)) {
+                LOGGER.log(Level.FINE,
+                           "converter target class {0} has already been registered.  Replacing existing converter class type {1} with {2}.",
+                           new Object[]{
+                                 targetClass.getName(),
+                                 converterTypeMap.get(targetClass),
+                                 converterClass});
+            }
             converterTypeMap.put(targetClass, converterClass);
             addPropertyEditorIfNecessary(targetClass);
         }                
@@ -1434,6 +1459,12 @@ public class ApplicationImpl extends Application {
 
         Util.notNull("validatorId", validatorId);
         Util.notNull("validatorClass", validatorClass);
+
+        if (LOGGER.isLoggable(Level.FINE) && validatorMap.containsKey(validatorId)) {
+            LOGGER.log(Level.FINE,
+                       "validatorId {0} has already been registered.  Replacing existing validator class type {1} with {2}.",
+                       new Object[] { validatorId, validatorMap.get(validatorId), validatorClass });    
+        }
 
         validatorMap.put(validatorId, validatorClass);
         

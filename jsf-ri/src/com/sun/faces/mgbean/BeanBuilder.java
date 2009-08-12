@@ -95,7 +95,7 @@ public abstract class BeanBuilder {
 
 
     // ---------------------------------------------------------- Public Methods
-   
+
 
     public Object build(InjectionProvider injectionProvider,
                         FacesContext context) {

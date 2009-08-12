@@ -277,6 +277,11 @@ public class BeanManager implements SystemEventListener {
         if (configPreprocessed) {
             preProcessBean(beanName, builder);
         }
+        if (LOGGER.isLoggable(Level.FINE) && managedBeans.containsKey(beanName)) {
+            LOGGER.log(Level.FINE,
+                       "managed bean named {0} has already been registered.  Replacing existing managed bean class type {1} with {2}.",
+                       new Object[] { beanName, managedBeans.get(beanName).getBeanClass().getName(), builder.getBeanClass().getName() });
+        }
         managedBeans.put(beanName, builder);
 
     }

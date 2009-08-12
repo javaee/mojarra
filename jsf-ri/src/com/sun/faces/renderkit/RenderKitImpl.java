@@ -58,6 +58,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Collections;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.sun.faces.RIConstants;
@@ -69,6 +71,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <B>RenderKitImpl</B> is a class ...
@@ -79,6 +82,8 @@ import com.sun.faces.util.Util;
  */
 
 public class RenderKitImpl extends RenderKit {
+
+    private static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
 
     private static final String[] SUPPORTED_CONTENT_TYPES_ARRAY =
          new String[]{
@@ -130,21 +135,9 @@ public class RenderKitImpl extends RenderKit {
                             String rendererType,
                             Renderer renderer) {
 
-        if (family == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
-            throw new NullPointerException(message);
-        }
-        if (rendererType == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
-            throw new NullPointerException(message);
-        }
-        if (renderer == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderer");
-            throw new NullPointerException(message);
-        }
+        Util.notNull("family", family);
+        Util.notNull("rendererType", rendererType);
+        Util.notNull("renderer", renderer);
 
         HashMap<String,Renderer> renderers = rendererFamilies.get(family);
         if (renderers == null) {
@@ -152,6 +145,11 @@ public class RenderKitImpl extends RenderKit {
             rendererFamilies.put(family, renderers);
         }
 
+        if (LOGGER.isLoggable(Level.FINE) && renderers.containsKey(rendererType)) {
+            LOGGER.log(Level.FINE,
+                       "rendererType {0} has already been registered for family {1}.  Replacing existing renderer class type {2} with {3}.",
+                       new Object[] { rendererType, family, renderers.get(rendererType).getClass().getName(), renderer.getClass().getName() });
+        }
         renderers.put(rendererType, renderer);
 
     }
@@ -159,16 +157,8 @@ public class RenderKitImpl extends RenderKit {
 
     public Renderer getRenderer(String family, String rendererType) {
 
-        if (rendererType == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
-            throw new NullPointerException(message);
-        }
-        if (family == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
-            throw new NullPointerException(message);
-        }
+        Util.notNull("family", family);
+        Util.notNull("rendererType", rendererType);
 
         assert(rendererFamilies != null);
 
@@ -178,30 +168,23 @@ public class RenderKitImpl extends RenderKit {
     }
 
     public void addClientBehaviorRenderer(String behaviorRendererType,
-                                    ClientBehaviorRenderer behaviorRenderer) {
+                                          ClientBehaviorRenderer behaviorRenderer) {
 
-        if (behaviorRendererType == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "behaviorRendererType");
-            throw new NullPointerException(message);
-        }
-        if (behaviorRenderer == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "behaviorRenderer");
-            throw new NullPointerException(message);
-        }
+        Util.notNull("behaviorRendererType", behaviorRendererType);
+        Util.notNull("behaviorRenderer", behaviorRenderer);
 
+        if (LOGGER.isLoggable(Level.FINE) && behaviorRenderers.containsKey(behaviorRendererType)) {
+            LOGGER.log(Level.FINE,
+                       "behaviorRendererType {0} has already been registered.  Replacing existing behavior renderer class type {1} with {2}.",
+                       new Object[] { behaviorRendererType, behaviorRenderers.get(behaviorRendererType).getClass().getName(), behaviorRenderer.getClass().getName() });
+        }
         behaviorRenderers.put(behaviorRendererType, behaviorRenderer);
     
     }
 
     public ClientBehaviorRenderer getClientBehaviorRenderer(String behaviorRendererType) {
-            
-        if (behaviorRendererType == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "behaviorRendererType");
-            throw new NullPointerException(message);
-        }   
+
+        Util.notNull("behaviorRendererType", behaviorRendererType);
         
         return ((behaviorRenderers != null) ? behaviorRenderers.get(behaviorRendererType) : null);
             
