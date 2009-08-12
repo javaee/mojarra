@@ -186,9 +186,6 @@ public class RestoreViewPhase extends Phase {
         }
 
         if (viewId == null) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.warning("viewId is null");
-            }
             throw new FacesException(MessageUtils.getExceptionMessageString(
                   MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }

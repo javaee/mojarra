@@ -307,7 +307,7 @@ public class DocumentOrderingWrapper {
                     // we've already processed a document with this name
                     if (LOGGER.isLoggable(Level.WARNING)) {
                         LOGGER.log(Level.WARNING,
-                                   "Multiple documents named {0} found while processing absolute ordering.  Processing the first named document only.",
+                                   "jsf.configuration.absolute.order.duplicate.document",
                                    new Object[] { name });
                     }
                     // only log this once
@@ -317,7 +317,7 @@ public class DocumentOrderingWrapper {
             if (!found) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING,
-                               "Unable to find document named ''{0}'' while performing absolut ordering processing.",
+                               "jsf.configuration.absolute.order.missing.document",
                                new Object[] { name });
                 }
             }

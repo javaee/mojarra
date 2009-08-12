@@ -122,7 +122,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
         if (!(navHandler instanceof ConfigurableNavigationHandler)) {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.log(Level.WARNING,
-                    "NavigationHandler must be an instance of ConfigurableNavigationHandler to use a UIOutputTarget component {0}",
+                    "jsf.outcome.target.invalid.navigationhandler.type",
                     component.getId());
             }
             return null;
@@ -139,7 +139,7 @@ public abstract class OutcomeTargetRenderer extends HtmlBasicRenderer {
         if (navCase == null) {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.log(Level.WARNING,
-                           "Navigation case not resolved for component {0}",
+                           "jsf.outcometarget.navigation.case.not.resolved",
                            component.getId());
             }
         }

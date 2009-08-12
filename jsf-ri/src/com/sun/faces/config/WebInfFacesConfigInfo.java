@@ -211,7 +211,7 @@ public class WebInfFacesConfigInfo {
               documentElement.getElementsByTagNameNS(namespace, ORDERING);
         if (orderingElements.getLength() > 0) {
             if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.warning("/WEB-INF/faces-config.xml contains <ordering> elements.  These will be ignored.");
+                LOGGER.warning("jsf.configuration.web.faces.config.contains.ordering");
             }
         }
         

@@ -287,7 +287,7 @@ public class ServerSideStateHelper extends StateHelper {
             String defaultValue = param.getDefaultValue();
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING,
-                           "Error parsing the context init parameter {0}.  Using default value {1} instead.",
+                           "jsf.state.server.cannot.parse.int.option",
                            new Object[] { param.getQualifiedName(),
                                           defaultValue} );
             }

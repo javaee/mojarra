@@ -117,13 +117,6 @@ public class CommandLinkRenderer extends LinkRenderer {
               Boolean.TRUE.equals(component.getAttributes().get("disabled"));
 
         String formClientId = RenderKitUtils.getFormClientId(component, context);
-        if (formClientId == null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING,
-                           "Component {0} must be enclosed inside a form",
-                           component.getId());
-            }
-        }
 
         if (componentDisabled || formClientId == null) {
             renderAsDisabled(context, component);

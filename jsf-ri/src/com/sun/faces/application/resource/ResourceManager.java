@@ -510,7 +510,7 @@ public class ResourceManager {
                         if (LOGGER.isLoggable(Level.WARNING)) {
                             // PENDING i18n
                             LOGGER.log(Level.WARNING,
-                                       "Mime type {0} doesn't match expected pattern {1}: ignoring.",
+                                       "jsf.resource.mime.type.configration.invalid",
                                        new Object[] { pattern, pse.getPattern()});
                         }
                     }

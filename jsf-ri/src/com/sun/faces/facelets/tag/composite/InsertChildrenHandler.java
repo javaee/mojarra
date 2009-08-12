@@ -152,7 +152,9 @@ public class InsertChildrenHandler extends TagHandlerImpl {
 
             if (compositeParent == null) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.warning("Unable to find owning composite component template for insertChildren handler at location: " + location.toString());
+                    LOGGER.log(Level.WARNING,
+                               "jsf.composite.component.insertchildren.missing.template",
+                               location.toString());
                 }
                 return;
             }

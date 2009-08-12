@@ -512,7 +512,7 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             if (eager && (scope == null || !ELUtils.Scope.APPLICATION.toString().equals(scope))) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING,
-                               "Eager managed bean instantiation is allowable for application scoped beans only.  Managed bean \"{0}\" is configured as eager, but the scope \"{1}\" is invalid.",
+                               "jsf.configuration.illegal.eager.bean",
                                new Object[]{beanName, scope});
                 }
                 eager = false;

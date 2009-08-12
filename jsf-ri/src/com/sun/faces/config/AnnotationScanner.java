@@ -166,7 +166,7 @@ public class AnnotationScanner extends AnnotationProvider {
                     if (parts.length != 3) {
                         if (LOGGER.isLoggable(Level.WARNING)) {
                             LOGGER.log(Level.WARNING,
-                                       "[{0}] {1} : invalid jar specification format.  Expected jar:<jar name or *>:<package or *>.  Entry will be ignored.",
+                                       "jsf.annotation.scanner.configuration.invalid",
                                        new String[] { AnnotationScanPackages.getQualifiedName(), option });
                         }
                     } else {
@@ -176,7 +176,7 @@ public class AnnotationScanner extends AnnotationProvider {
                         } else if (WILDCARD.equals(parts[1]) && webInfLibPackages.containsKey(WILDCARD)) {
                             if (LOGGER.isLoggable(Level.WARNING)) {
                                 LOGGER.log(Level.WARNING,
-                                           "[{0}] {1} : duplicate wildcard entry for jar name found.  Entry will be ignored.",
+                                           "jsf.annotation.scanner.configuration.duplicate.wildcard",
                                            new String[] { AnnotationScanPackages.getQualifiedName(), option });
                             }
                         } else {

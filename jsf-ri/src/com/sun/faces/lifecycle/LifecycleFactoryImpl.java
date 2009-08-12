@@ -130,9 +130,6 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID,
                     params);
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.warning("LifecycleId " + lifecycleId + " does not exist");
-            }
             throw new IllegalArgumentException(message);
         }
 

@@ -1110,7 +1110,7 @@ public class RenderKitUtils {
             ctx.responseComplete();
         } else {
             LOGGER.log(Level.WARNING,
-                       "Unable to generate Facelets error page as the response has already been committed.");
+                       "jsf.facelets.error.page.response.committed");
             LOGGER.log(Level.SEVERE, fe.toString(), fe);
         }
 

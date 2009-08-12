@@ -600,7 +600,7 @@ public class BeanManager implements SystemEventListener {
                 } else {
                     if (LOGGER.isLoggable(Level.WARNING)) {
                         LOGGER.log(Level.WARNING,
-                                   "Custom scope ''{0}'' evaluated to null.  Managed bean was not pushed.",
+                                   "jsf.managed.bean.custom.scope.eval.null",
                                    new Object[] { scope.getExpressionString() });
                     }
                 }
@@ -614,7 +614,7 @@ public class BeanManager implements SystemEventListener {
                 } else {
                     if (LOGGER.isLoggable(Level.WARNING)) {
                         LOGGER.log(Level.WARNING,
-                                   "Custom scope ''{0}'' evaluated to null.  Unable to determine if managed bean exists.",
+                                   "jsf.managed.bean.custom.scope.eval.null.existence",
                                    new Object[] { scope.getExpressionString() });
                     }
                     // since the scope evaluated to null, return true to prevent

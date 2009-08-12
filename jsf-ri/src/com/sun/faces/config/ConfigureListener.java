@@ -829,7 +829,7 @@ public class ConfigureListener implements ServletRequestListener,
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING,
                            MessageFormat.format(
-                                 "Unable to process deployment descriptor for context ''{0}''",
+                                 "jsf.configuration.web.xml.parse.failed",
                                  getServletContextIdentifier(sc)),
                            e);
             }
