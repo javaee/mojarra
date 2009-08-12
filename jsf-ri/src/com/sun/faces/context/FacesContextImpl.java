@@ -41,6 +41,8 @@
 package com.sun.faces.context;
 
 import javax.el.ELContext;
+import javax.el.ELContextListener;
+import javax.el.ELContextEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.event.PhaseId;
@@ -239,14 +241,23 @@ public class FacesContextImpl extends FacesContext {
     public ELContext getELContext() {
         assertNotReleased();
         if (elContext == null) {
-            elContext = new ELContextImpl(getApplication().getELResolver());
+            Application app = getApplication();
+            elContext = new ELContextImpl(app.getELResolver());
             elContext.putContext(FacesContext.class, this);
             UIViewRoot root = this.getViewRoot();
             if (null != root) {
                 elContext.setLocale(root.getLocale());
             }
+            ELContextListener[] listeners = app.getELContextListeners();
+            if (listeners.length > 0) {
+                ELContextEvent event = new ELContextEvent(elContext);
+                for (ELContextListener listener: listeners) {
+                    listener.contextCreated(event);
+                }
+            }
         }
         return elContext;
+        
     }
 
 

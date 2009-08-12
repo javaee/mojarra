@@ -59,6 +59,8 @@ import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.el.ELContextListener;
+import javax.el.ELContextEvent;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -678,6 +680,37 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         assertTrue(!ctx.isPostback());
         assertTrue(ctx.getAttributes().containsKey(key));
         assertTrue(Boolean.FALSE.equals(getFacesContext().getAttributes().get(key)));
+    }
+
+    public void testELContextListenerNotification() {
+
+        ELContextListenerImpl listener = new ELContextListenerImpl();
+        FacesContext ctx = getFacesContext();
+        Application app = ctx.getApplication();
+        FacesContextImpl ctxImpl = new FacesContextImpl(ctx.getExternalContext(),
+                                                        new LifecycleImpl());
+        app.addELContextListener(listener);
+        ctxImpl.getELContext();
+        assertTrue(listener.wasInvoked());
+        
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    private static final class ELContextListenerImpl implements ELContextListener {
+
+        private boolean invoked;
+
+        public void contextCreated(ELContextEvent elContextEvent) {
+            invoked = true;
+        }
+
+        public boolean wasInvoked() {
+            return invoked;
+        }
+
     }
 
 
