@@ -110,9 +110,9 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
                     LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
             }
-            result = (componentStream != null || super.containsTagHandler(ns, localName));
+            result = (componentStream != null);
         }
-        return result;
+        return result || super.containsTagHandler(ns, localName);
     }
     
     private Resource getCompositeComponentResource(String ns, String localName) {
