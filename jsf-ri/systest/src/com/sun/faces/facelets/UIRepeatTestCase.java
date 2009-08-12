@@ -168,7 +168,7 @@ public class UIRepeatTestCase extends AbstractTestCase {
         HtmlPage page = getPage("/faces/facelets/uirepeat4.xhtml");
         List<HtmlSpan> spans = new ArrayList<HtmlSpan>(7);
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
-        assertEquals("Expected 7 spans", 7, spans.size());
+        assertEquals("Expected 8 spans", 8, spans.size());
         String[] expectedValues = {
               "vanilla : index=1 : begin=1 : end= : step= : first=true : last=false : even=true : odd=false",
               "strawberry : index=2 : begin=1 : end= : step= : first=false : last=false : even=false : odd=true",
@@ -176,9 +176,10 @@ public class UIRepeatTestCase extends AbstractTestCase {
               "strawberry: index=2 : begin=2 : end=3 : step= : first=true : last=false : even=true : odd=false",
               "chocolate peanut butter: index=3 : begin=2 : end=3 : step= : first=false : last=true : even=false : odd=true",
               "chocolate: index=0 : begin= : end= : step=2 : first=true : last=false : even=true : odd=false",
-              "strawberry: index=2 : begin= : end= : step=2 : first=false : last=true : even=false : odd=true"
+              "strawberry: index=2 : begin= : end= : step=2 : first=false : last=true : even=false : odd=true",
+              "vanilla: index=1 : begin=1 : end=1 : step=2 : first=true : last=true : even=true : odd=false",
         };
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0, len = spans.size(); i < len; i++) {
             assertEquals("Expected: " + expectedValues[i] + ", received: " + spans.get(i).asText(),
                          expectedValues[i],
                          spans.get(i).asText());
