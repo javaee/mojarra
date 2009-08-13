@@ -136,8 +136,8 @@ public class UIRepeat extends UINamingContainer {
 
     }
 
-    public void setSize(Integer end) {
-        this.end = end;
+    public void setSize(Integer size) {
+        this.end = size;
     }
 
     public Integer getSize() {
@@ -153,8 +153,8 @@ public class UIRepeat extends UINamingContainer {
 
     }
 
-    public void setOffset(Integer begin) {
-        this.begin = begin;
+    public void setOffset(Integer offset) {
+        this.begin = offset;
     }
 
     public Integer getOffset() {
