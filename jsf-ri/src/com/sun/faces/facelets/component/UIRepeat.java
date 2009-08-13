@@ -136,6 +136,40 @@ public class UIRepeat extends UINamingContainer {
 
     }
 
+    public void setSize(Integer end) {
+        this.end = end;
+    }
+
+    public Integer getSize() {
+
+        if (this.end != null) {
+            return end;
+        }
+        ValueExpression ve = this.getValueExpression("size");
+        if (ve != null) {
+            return (Integer) ve.getValue(getFacesContext().getELContext());
+        }
+        return null;
+
+    }
+
+    public void setOffset(Integer begin) {
+        this.begin = begin;
+    }
+
+    public Integer getOffset() {
+
+        if (this.begin != null) {
+            return this.begin;
+        }
+        ValueExpression ve = this.getValueExpression("offset");
+        if (ve != null) {
+            return (Integer) ve.getValue(getFacesContext().getELContext());
+        }
+        return null;
+
+    }
+
 
     public void setBegin(Integer begin) {
         this.begin = begin;
@@ -444,9 +478,12 @@ public class UIRepeat extends UINamingContainer {
                     renderer = getRenderer(faces);
                 }
 
+                int rowCount = getDataModel().getRowCount();
                 int i = ((begin != null) ? begin : 0);
-                int e = ((end != null) ? end : getDataModel().getRowCount());
+                int e = ((end != null) ? end : rowCount);
                 int s = ((step != null) ? step : 1);
+                validateIterationControlValues(rowCount, i, e);
+
                 this.setIndex(faces, i);
                 this.updateIterationStatus(faces, new IterationStatus(true, i >= e, i, begin, end, step));
                 while (i <= e && this.isIndexAvailable()) {
@@ -582,15 +619,37 @@ public class UIRepeat extends UINamingContainer {
     }
 
 
+    private void validateIterationControlValues(int rowCount,
+                                                int begin,
+                                                int end) {
+
+        if (rowCount == 0) {
+            return;
+        }
+        // PENDING i18n
+        if (begin > rowCount) {
+            throw new FacesException("Iteration start index is greater than the number of available rows.");
+        }
+        if (begin > end) {
+            throw new FacesException("Iteration start index is greater than the end index.");
+        }
+        if (end > rowCount) {
+            throw new FacesException("Iteration end index is greater than the number of available rows.");
+        }
+    }
+
+
     private boolean visitChildren(VisitContext context,  VisitCallback callback) {
 
         Integer begin = this.getBegin();
         Integer end = this.getEnd();
         Integer step = this.getStep();
 
+        int rowCount = getDataModel().getRowCount();
         int i = ((begin != null) ? begin : 0);
-        int e = ((end != null) ? end : getDataModel().getRowCount());
+        int e = ((end != null) ? end : rowCount);
         int s = ((step != null) ? step : 1);
+        validateIterationControlValues(rowCount, i, e);
         FacesContext faces = context.getFacesContext();
         this.setIndex(faces, i);
         this.updateIterationStatus(faces,
