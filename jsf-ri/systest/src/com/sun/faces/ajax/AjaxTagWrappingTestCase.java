@@ -89,14 +89,19 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
 
         // Check that the ajax request succeeds
         checkTrue("out1","1");
-        System.out.println("Button Checked");
 
         HtmlAnchor link1 = (HtmlAnchor) lastpage.getHtmlElementById("link1");
         lastpage = (HtmlPage) link1.click();
 
         // Check that the ajax request succeeds
         checkTrue("out1","2");
-        System.out.println("Link Checked");
+
+        // Submit the ajax request
+        HtmlSubmitInput button2 = (HtmlSubmitInput) lastpage.getHtmlElementById("button2");
+        lastpage = (HtmlPage) button2.click();
+
+        // Check that the ajax request succeeds
+        checkTrue("out1","3");
 
         // Check on the text field
         HtmlTextInput intext = ((HtmlTextInput)lastpage.getHtmlElementById("intext"));
@@ -105,21 +110,26 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
         intext.blur();
 
         checkTrue("outtext","test");
-        System.out.println("Text Checked");
+
+        // Check on the text field
+        HtmlTextInput intext2 = ((HtmlTextInput)lastpage.getHtmlElementById("intext2"));
+        intext2.focus();
+        intext2.type("test2");
+        intext2.blur();
+
+        checkTrue("outtext","test2");
 
         // Check on the checkbox
         HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox"));
         lastpage = (HtmlPage)checked.click();
 
         checkTrue("checkedvalue","true");
-        System.out.println("Boolean Checkbox Checked");
 
         // Check on the select many checkbox
         checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("manyCheckbox:0"));
         lastpage = (HtmlPage)checked.click();
 
         checkTrue("manyCheckedValue","Value: 1");
-        System.out.println("Many Checkbox Checked");
 
     }
 

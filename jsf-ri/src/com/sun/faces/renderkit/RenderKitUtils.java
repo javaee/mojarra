@@ -346,8 +346,15 @@ public class RenderKitUtils {
         throws IOException {
 
         final String handlerName = "onchange";
-        final String behaviorEventName = "valueChange";
         final Object userHandler = component.getAttributes().get(handlerName);
+        String behaviorEventName = "valueChange";
+        if (component instanceof ClientBehaviorHolder) {
+            Map behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
+            if (null != behaviors && behaviors.containsKey("change")) {
+                behaviorEventName = "change";
+            }
+        }
+
 
         List<ClientBehaviorContext.Parameter> params;
         if (!incExec) {
@@ -372,8 +379,14 @@ public class RenderKitUtils {
         throws IOException {
 
         final String handlerName = "onclick";
-        final String behaviorEventName = "valueChange";
         final Object userHandler = component.getAttributes().get(handlerName);
+        String behaviorEventName = "valueChange";
+        if (component instanceof ClientBehaviorHolder) {
+            Map behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
+            if (null != behaviors && behaviors.containsKey("click")) {
+                behaviorEventName = "click";
+            }
+        }
 
         List<ClientBehaviorContext.Parameter> params;
         if (!incExec) {
@@ -404,8 +417,14 @@ public class RenderKitUtils {
         throws IOException {
 
         final String handlerName = "onclick";
-        final String behaviorEventName = "action";
         final Object userHandler = component.getAttributes().get(handlerName);
+        String behaviorEventName = "action";
+        if (component instanceof ClientBehaviorHolder) {
+            Map behaviors = ((ClientBehaviorHolder)component).getClientBehaviors();
+            if (null != behaviors && behaviors.containsKey("click")) {
+                behaviorEventName = "click";
+            }
+        }
 
         renderHandler(context,
                       component,
@@ -1543,7 +1562,9 @@ public class RenderKitUtils {
         // If we're submitting (either via a behavior, or by rendering
         // a submit script), we need to return false to prevent the
         // default button/link action.
-        if (submitting && "action".equals(behaviorEventName)) {
+        if (submitting &&
+                ("action".equals(behaviorEventName) ||
+                 "click".equals(behaviorEventName))) {
             builder.append(";return false");
         }
 
@@ -1574,7 +1595,7 @@ public class RenderKitUtils {
         // has native default behavior.  We should generalize this so that
         // we do not have to perform that explicitly check for "action".
         boolean preventDefault = ((needsSubmit || isSubmitting(behavior)) &&
-                                  "action".equals(behaviorEventName));
+                                  ("action".equals(behaviorEventName) || "click".equals(behaviorEventName)));
 
          if (script == null) {
              if (needsSubmit) {
