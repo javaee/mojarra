@@ -372,6 +372,7 @@
                       name="com.sun.faces.el.TestValueExpressionImpl_Model"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.el.TestVariableResolverImpl"/>
+            	
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.el.TestMethodRef"/>
                 <test todir="${impl.test.results.dir}"
@@ -446,17 +447,18 @@
 
     <target name="run.test" depends="compile.test">
         <jsf.junit classpath-refid="test.runtime.classpath"
-                   test-results-dir="${impl.test.results.dir}">
+                   test-results-dir="${impl.test.results.dir}" assert.classes="-ea:com.sun.faces.el.ChainAwareVariableResolver">
             <suite>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.util.TestUtil_local"/>  
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestNestedELResolver"/>  
                  <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.util.TestLRUMap_local"/>
                  <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.util.TestHtmlUtils"/>
                  <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.renderkit.html_basic.HtmlResponseWriterTest"/>
-
 
             </suite>    
         </jsf.junit>

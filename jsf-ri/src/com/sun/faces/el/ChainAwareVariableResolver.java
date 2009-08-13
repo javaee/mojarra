@@ -102,13 +102,9 @@ public class ChainAwareVariableResolver extends VariableResolver {
                   .createValueExpression(context.getELContext(),
                                          "#{" + name + "}", Object.class);
             result = ve.getValue(context.getELContext());
-        }
-        else if (ELResolverChainType.Faces == type) {
+        } else if (ELResolverChainType.Faces == type) {
             ELResolver elr = context.getApplication().getELResolver();
             result = elr.getValue(context.getELContext(), null, name);
-        } else {
-            //noinspection ConstantConditions
-            assert(false);
         }
 
         return result;
