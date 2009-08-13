@@ -247,7 +247,7 @@
         <antcall target="undeploy"/>
         <antcall target="deploy"/>
         <touch file="${out.test.dir}/last-testrun"/>
-        <antcall target="run.cactus.test"/>  
+        <antcall target="run.cactus.test"/>
         <antcall target="undeploy"/>
     </target>
 
@@ -330,6 +330,12 @@
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.config.ConfigFileTestCase"/>
                 -->
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.component.visit.TestTreeWithUIRepeatVisit"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.component.visit.TestTreeWithUIDataVisit"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.component.visit.TestTreeVisit"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.config.ConfigureListenerTestCase"/>
                 <test todir="${impl.test.results.dir}"
