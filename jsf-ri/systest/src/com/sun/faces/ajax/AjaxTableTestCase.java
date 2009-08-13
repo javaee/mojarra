@@ -95,7 +95,7 @@ public class AjaxTableTestCase extends AbstractTestCase {
         checkTrue("table:3:cheesepref","Eww");
 
         HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("table:3:cheesecheck"));
-        lastpage = (HtmlPage)checked.setChecked(true);
+        lastpage = (HtmlPage)checked.click();
 
         checkTrue("table:3:cheesepref","Cheese Please");
         System.out.println("Boolean Checkbox Checked");

@@ -101,13 +101,13 @@
         <h:outputText id="checkedvalue1" value="#{ajaxtag.checked}"/>
         <br/>
         <h:selectBooleanCheckbox id="checkbox2" value="#{ajaxtag.checked}"
-                onchange="say();return true;">
+                onclick="say();return true;">
             <f:ajax render="checkedvalue2"/>
         </h:selectBooleanCheckbox>
         <h:outputText id="checkedvalue2" value="#{ajaxtag.checked}"/>
         <br/>
         <h:selectBooleanCheckbox id="checkbox3" value="#{ajaxtag.checked}"
-                onchange="say();return true;">
+                onclick="say();return true;">
         </h:selectBooleanCheckbox>
         <h:outputText id="checkedvalue3" value="#{ajaxtag.checked}"/>
         <br/>

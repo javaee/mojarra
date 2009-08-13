@@ -15282,20 +15282,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     <property>
       <description>
           Javascript code executed when a pointer button is
-          clicked over this element.
-        </description>
-      <display-name>Button Click Script</display-name>
-      <icon/>
-      <property-name>onclick</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-        <behavior/>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
           double clicked over this element.
         </description>
       <display-name>Double Click Script</display-name>
@@ -15521,22 +15507,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Javascript code executed when this element loses focus
-          and its value has been modified since gaining focus.
-        </description>
-      <display-name>Input Change Script</display-name>
-      <icon/>
-      <property-name>onchange</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>false</pass-through>
-        <behavior/>
-        <behavior>valueChange</behavior>
-        <default-behavior>true</default-behavior>
-      </property-extension>
-    </property>
-    <property>
-      <description>
           Javascript code executed when text within this
           element is selected by the user.
         </description>
@@ -15575,6 +15545,38 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Javascript code executed when this element loses focus
+          and its value has been modified since gaining focus.
+        </description>
+      <display-name>Input Change Script</display-name>
+      <icon/>
+      <property-name>onchange</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+        <behavior/>
+        <behavior>valueChange</behavior>
+        <default-behavior>true</default-behavior>
       </property-extension>
     </property>
 
@@ -15988,20 +15990,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     <property>
       <description>
           Javascript code executed when a pointer button is
-          clicked over this element.
-        </description>
-      <display-name>Button Click Script</display-name>
-      <icon/>
-      <property-name>onclick</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-        <behavior/>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
           double clicked over this element.
         </description>
       <display-name>Double Click Script</display-name>
@@ -16227,22 +16215,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Javascript code executed when this element loses focus
-          and its value has been modified since gaining focus.
-        </description>
-      <display-name>Input Change Script</display-name>
-      <icon/>
-      <property-name>onchange</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>false</pass-through>
-        <behavior/>
-        <behavior>valueChange</behavior>
-        <default-behavior>true</default-behavior>
-      </property-extension>
-    </property>
-    <property>
-      <description>
           Javascript code executed when text within this
           element is selected by the user.
         </description>
@@ -16281,6 +16253,38 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Javascript code executed when this element loses focus
+          and its value has been modified since gaining focus.
+        </description>
+      <display-name>Input Change Script</display-name>
+      <icon/>
+      <property-name>onchange</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+        <behavior/>
+        <behavior>valueChange</behavior>
+        <default-behavior>true</default-behavior>
       </property-extension>
     </property>
 
@@ -19655,20 +19659,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     <property>
       <description>
           Javascript code executed when a pointer button is
-          clicked over this element.
-        </description>
-      <display-name>Button Click Script</display-name>
-      <icon/>
-      <property-name>onclick</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-        <behavior/>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
           double clicked over this element.
         </description>
       <display-name>Double Click Script</display-name>
@@ -19894,22 +19884,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Javascript code executed when this element loses focus
-          and its value has been modified since gaining focus.
-        </description>
-      <display-name>Input Change Script</display-name>
-      <icon/>
-      <property-name>onchange</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>false</pass-through>
-        <behavior/>
-        <behavior>valueChange</behavior>
-        <default-behavior>true</default-behavior>
-      </property-extension>
-    </property>
-    <property>
-      <description>
           Javascript code executed when text within this
           element is selected by the user.
         </description>
@@ -19948,6 +19922,38 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-class>java.lang.String</property-class>
       <property-extension>
         <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Javascript code executed when this element loses focus
+          and its value has been modified since gaining focus.
+        </description>
+      <display-name>Input Change Script</display-name>
+      <icon/>
+      <property-name>onchange</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+        <behavior/>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+        <behavior/>
+        <behavior>valueChange</behavior>
+        <default-behavior>true</default-behavior>
       </property-extension>
     </property>
 

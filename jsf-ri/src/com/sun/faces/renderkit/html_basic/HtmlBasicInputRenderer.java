@@ -223,8 +223,17 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         return getPassThruBehaviors(component, "change", "valueChange");
     }
 
-    // --------------------------------------------------------- Private Methods
+    // Returns the Behaviors map, but only if it contains some entry other
+    // than those handled by renderOnchange().  This helps us optimize
+    // renderPassThruAttributes() in the very common case where the
+    // button only contains an "valueChange" (or "change") Behavior.  In that
+    // we pass a null Behaviors map into renderPassThruAttributes(),
+    // which allows us to take a more optimized code path.
+    protected static Map<String, List<ClientBehavior>> getNonOnClickSelectBehaviors(UIComponent component) {
+        return getPassThruBehaviors(component, "click", "valueChange");
+    }
 
+    // --------------------------------------------------------- Private Methods
 
     private boolean hasStringConverter(FacesContext context) {
 

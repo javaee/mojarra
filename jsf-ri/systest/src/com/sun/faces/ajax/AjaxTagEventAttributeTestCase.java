@@ -71,7 +71,7 @@ public class AjaxTagEventAttributeTestCase extends AbstractTestCase {
     }
 
 
-    public void testAjaxTagEventWrapping() throws Exception {
+    public void testAjaxTagEventAttribute() throws Exception {
         getPage("/faces/ajax/ajaxTagEventAttribute.xhtml");
         System.out.println("Start ajax tag event attribute test");
 
@@ -90,7 +90,6 @@ public class AjaxTagEventAttributeTestCase extends AbstractTestCase {
         checkTrue("out2","0");
 
         HtmlInput input = (HtmlInput) lastpage.getHtmlElementById("in1");
-        //input.setTextContent("test");
         lastpage = (HtmlPage) input.setValueAttribute("test");
 
         checkTrue("out3","test");
@@ -100,12 +99,10 @@ public class AjaxTagEventAttributeTestCase extends AbstractTestCase {
         HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox1"));
         lastpage = (HtmlPage)checked.click();
 
-        //System.out.println(getText("checkedvalue1"));
         checkTrue("checkedvalue1","true");
 
         // Check ajax checkbox
         checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox2"));
-        //lastpage = (HtmlPage)checked.setChecked(true);
         lastpage = (HtmlPage)checked.click();
 
         checkTrue("checkedvalue2","true");

@@ -340,12 +340,38 @@ public class RenderKitUtils {
     }
 
     // Renders the onchange handler for input components.  Handles
-    // chaining togeter the user-provided onchange handler with
+    // chaining together the user-provided onchange handler with
     // any Behavior scripts.
     public static void renderOnchange(FacesContext context, UIComponent component, boolean incExec)
         throws IOException {
 
         final String handlerName = "onchange";
+        final String behaviorEventName = "valueChange";
+        final Object userHandler = component.getAttributes().get(handlerName);
+
+        List<ClientBehaviorContext.Parameter> params;
+        if (!incExec) {
+            params = Collections.emptyList();
+        } else {
+            params = new LinkedList<ClientBehaviorContext.Parameter>();
+            params.add(new ClientBehaviorContext.Parameter("incExec",true));
+        }
+        renderHandler(context,
+                      component,
+                      params,
+                      handlerName,
+                      userHandler,
+                      behaviorEventName,
+                      null,
+                      false,
+                      incExec);
+    }
+
+    // Renders onclick handler for SelectRaidio and SelectCheckbox
+    public static void renderSelectOnclick(FacesContext context, UIComponent component, boolean incExec)
+        throws IOException {
+
+        final String handlerName = "onclick";
         final String behaviorEventName = "valueChange";
         final Object userHandler = component.getAttributes().get(handlerName);
 

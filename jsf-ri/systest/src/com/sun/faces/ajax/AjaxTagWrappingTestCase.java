@@ -40,9 +40,6 @@ import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.AjaxController;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 
 public class AjaxTagWrappingTestCase extends AbstractTestCase {
 
@@ -82,23 +79,23 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
         System.out.println("Start ajax tag wrapping test");
 
         // First we'll check the first page was output correctly
-        assertTrue(check("out1", "0"));
-        assertTrue(check("checkedvalue", "false"));
-        assertTrue(check("outtext", ""));
+        checkTrue("out1", "0");
+        checkTrue("checkedvalue", "false");
+        checkTrue("outtext", "");
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("button1");
         lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
-        assertTrue(check("out1","1"));
+        checkTrue("out1","1");
         System.out.println("Button Checked");
 
         HtmlAnchor link1 = (HtmlAnchor) lastpage.getHtmlElementById("link1");
         lastpage = (HtmlPage) link1.click();
 
         // Check that the ajax request succeeds
-        assertTrue(check("out1","2"));
+        checkTrue("out1","2");
         System.out.println("Link Checked");
 
         // Check on the text field
@@ -107,21 +104,21 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
         intext.type("test");
         intext.blur();
 
-        assertTrue(check("outtext","test"));
+        checkTrue("outtext","test");
         System.out.println("Text Checked");
 
         // Check on the checkbox
         HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox"));
-        lastpage = (HtmlPage)checked.setChecked(true);
+        lastpage = (HtmlPage)checked.click();
 
-        assertTrue(check("checkedvalue","true"));
+        checkTrue("checkedvalue","true");
         System.out.println("Boolean Checkbox Checked");
 
         // Check on the select many checkbox
         checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("manyCheckbox:0"));
-        lastpage = (HtmlPage)checked.setChecked(true);
+        lastpage = (HtmlPage)checked.click();
 
-        assertTrue(check("manyCheckedValue","Value: 1"));
+        checkTrue("manyCheckedValue","Value: 1");
         System.out.println("Many Checkbox Checked");
 
     }

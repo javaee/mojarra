@@ -814,10 +814,11 @@
 
         <xi:include href="uiselectboolean-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props-noclick.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-nochange.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-valueChanged-click.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
             <base-component-type>javax.faces.SelectBoolean</base-component-type>
@@ -839,10 +840,11 @@
 
         <xi:include href="uiselectmany-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props-noclick.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-nochange.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-valueChanged-click.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="selectmany-checkbox-props.xml" xpointer="xpointer(/root/*)"/>
 
         <component-extension>
@@ -969,10 +971,11 @@
 
         <xi:include href="uiselectone-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-props-noclick.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="input-props-nochange.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="events-valueChanged-click.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="selectone-radio-props.xml" xpointer="xpointer(/root/*)"/>
         <component-extension>
             <base-component-type>javax.faces.SelectOne</base-component-type>
