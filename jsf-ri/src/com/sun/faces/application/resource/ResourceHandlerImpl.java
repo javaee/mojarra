@@ -142,7 +142,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
         }
         String ctype = ((contentType != null)
                         ? contentType
-                        : getContentType(resourceName));
+                        : getContentType(ctx, resourceName));
         ResourceInfo info = manager.findResource(libraryName,
                                                  resourceName,
                                                  ctype,
@@ -194,7 +194,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
     public String getRendererTypeForResourceName(String resourceName) {
         String rendererType = null;
         
-        String contentType = getContentType(resourceName);
+        String contentType = getContentType(FacesContext.getCurrentInstance(),
+                                            resourceName);
         if (null != contentType) {
             contentType = contentType.toLowerCase();
             if (-1 != contentType.indexOf("javascript")) {
@@ -431,9 +432,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
      *  be something like path1/path2/resource.jpg or resource.jpg
      * @return the content type for this resource
      */
-    private String getContentType(String resourceName) {
+    private String getContentType(FacesContext ctx, String resourceName) {
 
-        return FacesContext.getCurrentInstance().getExternalContext().getMimeType(resourceName);
+        return ctx.getExternalContext().getMimeType(resourceName);
 
     }
 

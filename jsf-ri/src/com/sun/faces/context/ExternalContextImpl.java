@@ -67,11 +67,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.SendPoweredByHeader;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.context.flash.ELFlash;
 
 /**
@@ -79,6 +82,8 @@ import com.sun.faces.context.flash.ELFlash;
  * servlet implementation.
  */
 public class ExternalContextImpl extends ExternalContext {
+
+    private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
 
     private ServletContext servletContext = null;
     private ServletRequest request = null;
@@ -93,6 +98,7 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,String[]> requestHeaderValuesMap = null;
     private Map<String,Object> cookieMap = null;
     private Map<String,String> initParameterMap = null;
+    private Map<String,String> fallbackContentTypeMap = null;
 
     private enum ALLOWABLE_COOKIE_PROPERTIES {
         domain,
@@ -125,6 +131,9 @@ public class ExternalContextImpl extends ExternalContext {
         if (config.isOptionEnabled(SendPoweredByHeader)) {
             ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.0");
         }
+        fallbackContentTypeMap = new HashMap<String,String>(2, 1.0f);
+        fallbackContentTypeMap.put("js", "text/javascript");
+        fallbackContentTypeMap.put("css", "text/css");
         
     }
 
@@ -591,7 +600,18 @@ public class ExternalContextImpl extends ExternalContext {
      */
     @Override
     public String getMimeType(String file) {
-        return servletContext.getMimeType(file);
+
+        String mimeType = servletContext.getMimeType(file);
+        if (mimeType == null) {
+            mimeType = getFallbackMimeType(file);
+        }
+        if (mimeType == null && LOGGER.isLoggable(Level.WARNING)) {
+            LOGGER.log(Level.WARNING,
+                       "jsf.externalcontext.no.mime.type.found",
+                       new Object[] { file });
+        }
+        return mimeType;
+        
     }
 
 
@@ -885,6 +905,27 @@ public class ExternalContextImpl extends ExternalContext {
     @Override
     public Flash getFlash() {
         return ELFlash.getFlash(this, true);
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    public String getFallbackMimeType(String file) {
+
+        if (file == null || file.length() == 0) {
+            return null;
+        }
+        int idx = file.lastIndexOf('.');
+        if (idx == -1) {
+            return null;
+        }
+        String extension = file.substring(idx + 1);
+        if (extension.length() == 0) {
+            return null;
+        }
+        return fallbackContentTypeMap.get(extension);
+
     }
 
 
