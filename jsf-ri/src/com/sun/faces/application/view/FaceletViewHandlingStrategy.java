@@ -192,18 +192,18 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
               RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
         VariableMapper orig = ctx.getVariableMapper();
 
-	// create tmp and facetComponent
+    // create tmp and facetComponent
         UIComponent tmp = context.getApplication().createComponent("javax.faces.NamingContainer");
         UIPanel facetComponent = (UIPanel)
                 context.getApplication().createComponent("javax.faces.Panel");
 
-	// PENDING I think this can be skipped because we don't render
-	// this component instance.
+    // PENDING I think this can be skipped because we don't render
+    // this component instance.
         facetComponent.setRendererType("javax.faces.Group");
 
-	// PENDING This could possibly be skipped too.  However, I think
-	// this is important because other tag handlers, within
-	// <cc:interface> expect it will be there.
+    // PENDING This could possibly be skipped too.  However, I think
+    // this is important because other tag handlers, within
+    // <cc:interface> expect it will be there.
         tmp.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
         // We have to put the resource in here just so the classes that eventually
         // get called by facelets have access to it.
@@ -225,25 +225,25 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             ctx.setVariableMapper(wrapper);
             context.getAttributes().put(IS_BUILDING_METADATA, Boolean.TRUE);
 
-	    // Because mojarra currently requires a <cc:interface>
-	    // element within the compcomp markup, we can rely on the
-	    // fact that its tag handler, InterfaceHandler.apply(), is
-	    // called.  In this method, we first imbue facetComponent
-	    // with any config information present on the <cc:interface>
-	    // element.
+        // Because mojarra currently requires a <cc:interface>
+        // element within the compcomp markup, we can rely on the
+        // fact that its tag handler, InterfaceHandler.apply(), is
+        // called.  In this method, we first imbue facetComponent
+        // with any config information present on the <cc:interface>
+        // element.
 
-	    // Then we do the normal facelet thing:
-	    // this.nextHandler.apply().  This causes any child tag
-	    // handlers of the <cc:interface> to be called.  The
-	    // compcomp spec says each such tag handler is responsible
-	    // for adding to the compcomp metadata, referenced from the
-	    // facetComponent parent.
+        // Then we do the normal facelet thing:
+        // this.nextHandler.apply().  This causes any child tag
+        // handlers of the <cc:interface> to be called.  The
+        // compcomp spec says each such tag handler is responsible
+        // for adding to the compcomp metadata, referenced from the
+        // facetComponent parent.
 
             f.apply(context, facetComponent);
 
-	    // When f.apply() returns (and therefore
-	    // InterfaceHandler.apply() returns), the compcomp metadata
-	    // pointed to by facetComponent is fully populated.
+        // When f.apply() returns (and therefore
+        // InterfaceHandler.apply() returns), the compcomp metadata
+        // pointed to by facetComponent is fully populated.
 
         } catch (Exception e) {
             if (e instanceof FacesException) {
@@ -256,10 +256,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             context.getAttributes().remove(IS_BUILDING_METADATA);
             ctx.setVariableMapper(orig);
         }
-	// we extract the compcomp metadata and return it, making sure
-	// to discard tmp and facetComponent.  The compcomp metadata
-	// should be cacheable and shareable across threads, but this is
-	// not yet implemented.
+    // we extract the compcomp metadata and return it, making sure
+    // to discard tmp and facetComponent.  The compcomp metadata
+    // should be cacheable and shareable across threads, but this is
+    // not yet implemented.
         result = (CompositeComponentBeanInfo) 
                 tmp.getAttributes().get(UIComponent.BEANINFO_KEY);
         
