@@ -55,14 +55,8 @@ import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.application.ApplicationAssociate;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.el.ELContext;
-import javax.el.ELException;
-import javax.el.ValueExpression;
 import javax.faces.application.ResourceHandler;
 
 /**
@@ -140,200 +134,12 @@ public class ResourceImpl extends Resource implements Externalizable {
      * @see javax.faces.application.Resource#getInputStream()
      */
     public InputStream getInputStream() throws IOException {
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        InputStream result;
-        if (isEvaluateExpressions()) {
-            result = getExpressionEvaluatingInputStream(ctx);
-        } else {
-            result = resourceInfo.getHelper().getInputStream(resourceInfo, ctx);
-        }
-        return result;
+
+        return resourceInfo.getHelper().getInputStream(resourceInfo,
+                                                       FacesContext.getCurrentInstance());
+
     }
     
-    private InputStream getExpressionEvaluatingInputStream(final FacesContext context)
-    throws IOException {
-
-        InputStream result;
-        final InputStream inner = resourceInfo.getHelper().getInputStream(resourceInfo, 
-                context);
-        result = new InputStream() {
-
-            // Premature optimization is the root of all evil.  Blah blah.
-            private List<Integer> buf = new ArrayList<Integer>(1024);
-            boolean failedExpressionTest = false;
-            boolean writingExpression = false;
-
-            public boolean isWritingExpression() {
-                return writingExpression;
-            }
-
-            public void setWritingExpression(boolean writingExpression) {
-                this.writingExpression = writingExpression;
-            }
-
-            public boolean isFailedExpressionTest() {
-                return failedExpressionTest;
-            }
-
-            public void setFailedExpressionTest(boolean testingForExpression) {
-                this.failedExpressionTest = testingForExpression;
-            }
-
-            public List<Integer> getBuf() {
-                return buf;
-            }
-
-            private int nextRead = -1;
-                    
-            @Override
-            public int read() throws IOException {
-                int i;
-                char c;
-                
-                if (isFailedExpressionTest()) {
-                    i = nextRead;
-                    nextRead = -1;
-                    setFailedExpressionTest(false);
-                } else if (isWritingExpression()) {
-                    if (0 < getBuf().size()) {
-                        i = getBuf().remove(0);
-                    }
-                    else {
-                        setWritingExpression(false);
-                        i = inner.read();
-                    }
-                } else {
-                    // Read a character.
-                    i = inner.read();
-                    c = (char) i;
-                    // If it *might* be an expression...
-                    if (c == '#') {
-                        // read another character.
-                        i = inner.read();
-                        c = (char) i;
-                        // If it's '{', assume we have an expression.
-                        if (c == '{') {
-                            // read it into the buffer, and evaluate it into the
-                            // same buffer.
-                            readExpressionIntoBufferAndEvaluateIntoBuffer();
-                            // set the flag so that we need to return content
-                            // from the buffer.
-                            setWritingExpression(true);
-                            // Make sure to swallow the '{'.
-                            i = this.read();
-                        } else {
-                            // It's not an expression, we need to return '#',
-                            i = (int) '#';
-                            // then return whatever we just read, on the
-                            // *next* read;
-                            nextRead = (int) c;
-                            setFailedExpressionTest(true);
-                        }
-                    } 
-                }
-                
-                return i;
-            }
-            
-            private void readExpressionIntoBufferAndEvaluateIntoBuffer() throws IOException {
-                int i;
-                char c;
-                do {
-                    i = inner.read();
-                    c = (char) i;
-                    if (c == '}') {
-                        evaluateExpressionIntoBuffer();
-                    } else {
-                        getBuf().add(i);
-                    }
-                } while (c != '}' && i != -1);
-            }
-            
-            /*
-             * At this point, we know that getBuf() returns a List<Integer>
-             * that contains the bytes of the expression.  
-             * Turn it into a String, turn the String into a ValueExpression,
-             * evaluate it, store the toString() of it in 
-             * expressionResult;
-             */
-            private void evaluateExpressionIntoBuffer() {
-                List<Integer> buf = getBuf();
-                char chars[] = new char[buf.size()];
-                for (int i = 0, len = buf.size(); i < len; i++) {
-                    chars[i] = (char) (int) buf.get(i);
-                }
-                String expressionBody = new String(chars);
-                int colon;
-                // If this expression contains a ":"
-                if (-1 != (colon = expressionBody.indexOf(":"))) {
-                    // Make sure it contains only one ":"
-                    if (!isPropertyValid(expressionBody)) {
-                        String message =
-                              MessageUtils.getExceptionMessageString(MessageUtils.INVALID_RESOURCE_FORMAT_COLON_ERROR,
-                                                                     expressionBody);
-                        throw new ELException(message);
-                    }
-                    String[] parts = Util.split(expressionBody, ":");
-                    if (null == parts[0] || null == parts[1]) {
-                        String message = 
-                              MessageUtils.getExceptionMessageString(MessageUtils.INVALID_RESOURCE_FORMAT_NO_LIBRARY_NAME_ERROR,
-                                                                     expressionBody);
-                        throw new ELException(message);
-                        
-                    }
-                    try {
-                        int mark = parts[0].indexOf("[") + 2;
-                        char quoteMark = parts[0].charAt(mark - 1);
-                        parts[0] = parts[0].substring(mark, colon);
-                        if (parts[0].equals("this")) {
-                            parts[0] = ResourceImpl.this.getLibraryName();
-                            mark = parts[1].indexOf("]") - 1;
-                            parts[1] = parts[1].substring(0, mark);
-                            expressionBody = "resource[" + quoteMark + parts[0]+
-                                    ":" + parts[1] + quoteMark + "]";
-                        }
-                    }
-                    catch (Exception e) {
-                        String message =
-                              MessageUtils.getExceptionMessageString(MessageUtils.INVALID_RESOURCE_FORMAT_ERROR,
-                                                                     expressionBody);
-                        throw new ELException(message);
-                        
-                    }
-                }
-                ELContext elContext = context.getELContext();
-                ValueExpression ve = context.getApplication().getExpressionFactory().
-                        createValueExpression(elContext, "#{" + expressionBody +
-                        "}", String.class);
-                Object value = ve.getValue(elContext);
-                String expressionResult = ((value != null) ? value.toString() : "");
-                buf.clear();
-                for (int i = 0, len = expressionResult.length(); i < len; i++) {
-                    buf.add((int) expressionResult.charAt(i));
-                }
-            }
-            
-            
-            private boolean isPropertyValid(String property) {
-                int idx = property.indexOf(':');
-                return (property.indexOf(':', idx + 1) == -1);
-            }
-            
-        };
-        
-        return result;
-    }
-
-    /* PENDING(edburns): really, this should be a public proprty on Resource.
-     */
-    
-    private boolean isEvaluateExpressions() {
-        String contentType = getContentType();
-
-        return ("text/css".equals(contentType)
-                || "text/javascript".equals(contentType)
-                || "application/x-javascript".equals(contentType));
-    }
 
 
     /**

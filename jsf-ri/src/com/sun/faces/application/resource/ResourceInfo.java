@@ -65,18 +65,25 @@ public class ResourceInfo {
     private String path;
     private String compressedPath;
     private boolean compressable;
+    private boolean supportsEL;
 
 
     /**
      * Constructs a new <code>ResourceInfo</code> using the specified details.
-     * The {@ResourceHelper} of the resource will be the same as the
+     * The {@link ResourceHelper} of the resource will be the same as the
      * {@link ResourceHelper} of the {@link LibraryInfo}.
      * @param library the library containing this resource
      * @param name the resource name
      * @param version the version of this resource (if any)
      * @param compressable if this resource should be compressed
+     * @param supportsEL <code>true</code> if this resource may contain
+     *   EL expressions
      */
-    public ResourceInfo(LibraryInfo library, String name, VersionInfo version, boolean compressable) {
+    public ResourceInfo(LibraryInfo library,
+                        String name,
+                        VersionInfo version,
+                        boolean compressable,
+                        boolean supportsEL) {
         this.name = name;
         this.version = version;
         this.helper = library.getHelper();
@@ -84,6 +91,7 @@ public class ResourceInfo {
         this.libraryName = library.getName();
         this.localePrefix = library.getLocalePrefix();
         this.compressable = compressable;
+        this.supportsEL = supportsEL;
         initPath();
     }
 
@@ -94,17 +102,21 @@ public class ResourceInfo {
      * @param localePrefix the locale prefix for this resource (if any)
      * @param helper helper the helper class for this resource
      * @param compressable if this resource should be compressed
+     * @param supportsEL <code>true</code> if this resource may contain
+     *   EL expressions
      */
     ResourceInfo(String name,
                  VersionInfo version,
                  String localePrefix,
                  ResourceHelper helper,
-                 boolean compressable) {
+                 boolean compressable,
+                 boolean supportsEL) {
         this.name = name;
         this.version = version;
         this.localePrefix = localePrefix;
         this.helper = helper;
         this.compressable = compressable;
+        this.supportsEL = supportsEL;
         initPath();
     }
 
@@ -169,6 +181,14 @@ public class ResourceInfo {
         return compressable;
     }
 
+    /**
+     * @return <code>true</code> if the this resource may contain EL expressions
+     *  that should be evaluated, otherwise, return <code>false</code>
+     */
+    public boolean supportsEL() {
+        return supportsEL;
+    }
+
     @Override
     public String toString() {
         return "ResourceInfo{" +
@@ -212,7 +232,7 @@ public class ResourceInfo {
         }
         path = sb.toString();
 
-        if (compressable) {
+        if (compressable && !supportsEL) { // compression for static resources
             FacesContext ctx = FacesContext.getCurrentInstance();
             File servletTmpDir = (File) ctx.getExternalContext()
                   .getApplicationMap().get("javax.servlet.context.tempdir");

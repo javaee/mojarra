@@ -197,13 +197,15 @@ public class WebappResourceHelper extends ResourceHelper {
                 value = new ResourceInfo(library,
                                          resourceName,
                                          null,
-                                         compressable);
+                                         compressable,
+                                         resourceSupportsEL(resourceName, ctx));
             } else {
                 value = new ResourceInfo(resourceName,
                                          null,
                                          localePrefix,
                                          this,
-                                         compressable);
+                                         compressable,
+                                         resourceSupportsEL(resourceName, ctx));
             }
         } else {
             // ok, subdirectories exist, so find the latest 'version' directory
@@ -220,13 +222,15 @@ public class WebappResourceHelper extends ResourceHelper {
                 value = new ResourceInfo(library,
                                          resourceName,
                                          version,
-                                         compressable);
+                                         compressable,
+                                         resourceSupportsEL(resourceName, ctx));
             } else {
                 value = new ResourceInfo(resourceName,
                                          version,
                                          localePrefix,
                                          this,
-                                         compressable);
+                                         compressable,
+                                         resourceSupportsEL(resourceName, ctx));
             }
         }
 

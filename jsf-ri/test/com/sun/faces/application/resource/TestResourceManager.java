@@ -330,7 +330,7 @@ public class TestResourceManager extends ServletFacesTestCase {
 
     public void testResourceInfoCompression() throws Exception {
         WebConfiguration config = WebConfiguration.getInstance();
-        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif,text/css");
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif,text/css,text/plain");
         // create a new ResourceManager so that the mime type configuration is picked up
         ResourceManager manager = new ResourceManager(null);
         ResourceInfo resource = manager.findResource("nvLibrary", "images/duke-nv.gif", "image/gif", getFacesContext());
@@ -347,9 +347,19 @@ public class TestResourceManager extends ServletFacesTestCase {
         // if a resource is compressable, but the compressed result is larger
         // than the original resource, the returned ResourceInfo shouldn't
         // be marked as compressable and getCompressedPath() will be null
-        resource = manager.findResource(null, "simple.css", "text/css", getFacesContext());
+        resource = manager.findResource(null, "simple.txt", "text/plain", getFacesContext());
         assertTrue(resource != null);
         assertTrue(!resource.isCompressable());
+        assertTrue(resource.getCompressedPath() == null);
+
+        // if a resource is compressable, but the compressed result is larger
+        // than the original resource, the returned ResourceInfo should be
+        // marked compressable.  However, since css files may have EL expressions
+        // embedded within, the the resource will be marked as supporting such.
+        resource = manager.findResource(null, "simple.css", "text/plain", getFacesContext());
+        assertTrue(resource != null);
+        assertTrue(resource.isCompressable());
+        assertTrue(resource.supportsEL());
         assertTrue(resource.getCompressedPath() == null);
 
     }

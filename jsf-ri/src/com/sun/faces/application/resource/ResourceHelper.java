@@ -44,12 +44,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -59,9 +61,13 @@ import java.util.zip.GZIPOutputStream;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.el.ELException;
+import javax.el.ValueExpression;
+import javax.el.ELContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <p>
@@ -109,6 +115,17 @@ public abstract class ResourceHelper {
     private static final String COMPRESSED_CONTENT_FILENAME =
           "compressed-content";
 
+    private static final String[] EL_CONTENT_TYPES = {
+          "text/css",
+          "text/javascript",
+          "application/x-javascript",
+          "application/javascript"
+    };
+
+    static {
+        Arrays.sort(EL_CONTENT_TYPES);
+    }
+
 
     // ---------------------------------------------------------- Public Methods
 
@@ -141,25 +158,70 @@ public abstract class ResourceHelper {
 
         InputStream in = null;
         if (resource.isCompressable() && clientAcceptsCompression(ctx)) {
-            try {
-                String path = resource.getCompressedPath();
-                in = new BufferedInputStream(
-                      new FileInputStream(path
-                                          + File.separatorChar
-                                          + COMPRESSED_CONTENT_FILENAME));
-            } catch (IOException ioe) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               ioe.getMessage(),
-                               ioe);
+            if (!resource.supportsEL()) {
+                try {
+                    String path = resource.getCompressedPath();
+                    in = new BufferedInputStream(
+                             new FileInputStream(path
+                                                    + File.separatorChar
+                                                    + COMPRESSED_CONTENT_FILENAME));
+                } catch (IOException ioe) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   ioe.getMessage(),
+                                   ioe);
+                    }
+                    // return null so that the override code will try to serve
+                    // the non-compressed content
+                    in = null;
                 }
-                // return null so that the override code will try to serve
-                // the non-compressed content
-                in = null;
+            } else {
+                InputStream temp = null;
+                try {
+                    // using dynamic compression here
+                    temp = new BufferedInputStream(
+                             new ELEvaluatingInputStream(ctx,
+                                                         resource,
+                                                         getNonCompressedInputStream(resource,
+                                                                                     ctx)));
+                    byte[] buf = new byte[512];
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+                    OutputStream out = new GZIPOutputStream(baos);
+                    for (int read = temp.read(buf); read != -1; read = temp.read(buf)) {
+                        out.write(buf, 0, read);
+                    }
+                    out.flush();
+                    out.close();
+                    in = new BufferedInputStream(
+                          new ByteArrayInputStream(baos.toByteArray()));
+
+                } catch (IOException ioe) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   ioe.getMessage(),
+                                   ioe);
+                    }
+                } finally {
+                    if (temp != null) {
+                        try {
+                            temp.close();
+                        } catch (IOException ioe) {
+                            // ignore
+                        }
+                    }
+                }
             }
         }
         if (in == null) {
-            in = getNonCompressedInputStream(resource, ctx);
+            if (resource.supportsEL()) {
+                return new BufferedInputStream(
+                           new ELEvaluatingInputStream(ctx,
+                                                       resource,
+                                                       getNonCompressedInputStream(resource,
+                                                                                   ctx)));
+            } else {
+                in = getNonCompressedInputStream(resource, ctx);
+            }
         }
         return in;
 
@@ -321,7 +383,7 @@ public abstract class ResourceHelper {
      * to the temporary directory specified by {@link com.sun.faces.application.resource.ResourceInfo#getCompressedPath()}.
      *
      * @param info the resource to be compressed
-     * @returns <code>true</code> if compression succeeded <em>and</em> the compressed
+     * @return <code>true</code> if compression succeeded <em>and</em> the compressed
      *  result is smaller than the original content, otherwise <code>false</code>
      * @throws IOException if any error occur reading/writing
      */
@@ -458,7 +520,7 @@ public abstract class ResourceHelper {
     protected ResourceInfo handleCompression(ResourceInfo resource) {
 
         try {
-            if (!compressContent(resource)) {
+            if (!resource.supportsEL() && !compressContent(resource)) {
                 resource = rebuildAsNonCompressed(resource);
             }
         } catch (IOException ioe) {
@@ -470,6 +532,15 @@ public abstract class ResourceHelper {
             resource = rebuildAsNonCompressed(resource);
         }
         return resource;
+
+    }
+
+
+    protected boolean resourceSupportsEL(String resourceName, FacesContext ctx) {
+
+        ExternalContext extContext = ctx.getExternalContext();
+        String contentType = extContext.getMimeType(resourceName);
+        return (Arrays.binarySearch(EL_CONTENT_TYPES, contentType) >= 0);
 
     }
 
@@ -485,13 +556,15 @@ public abstract class ResourceHelper {
             ret = new ResourceInfo(resource.getLibraryInfo(),
                                    resource.getName(),
                                    resource.getVersion(),
-                                   false);
+                                   false,
+                                   resource.supportsEL());
         } else {
             ret = new ResourceInfo(resource.getName(),
                                    resource.getVersion(),
                                    resource.getLocalePrefix(),
                                    this,
-                                   false);
+                                   false,
+                                   resource.supportsEL());
         }
         return ret;
 
@@ -525,5 +598,178 @@ public abstract class ResourceHelper {
 
     }
 
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    private static final class ELEvaluatingInputStream extends InputStream {
+
+        // Premature optimization is the root of all evil.  Blah blah.
+        private List<Integer> buf = new ArrayList<Integer>(1024);
+        private boolean failedExpressionTest = false;
+        private boolean writingExpression = false;
+        private InputStream inner;
+        private ResourceInfo info;
+        private FacesContext ctx;
+
+        // ---------------------------------------------------- Constructors
+
+
+        public ELEvaluatingInputStream(FacesContext ctx,
+                                       ResourceInfo info,
+                                       InputStream inner) {
+
+            this.inner = inner;
+            this.info = info;
+            this.ctx = ctx;
+
+        }
+
+
+        // ------------------------------------------------ Methods from InputStream
+
+
+        @Override
+        public int read() throws IOException {
+            int i;
+            char c;
+
+            if (failedExpressionTest) {
+                i = nextRead;
+                nextRead = -1;
+                failedExpressionTest = false;
+            } else if (writingExpression) {
+                if (0 < buf.size()) {
+                    i = buf.remove(0);
+                } else {
+                    writingExpression = true;
+                    i = inner.read();
+                }
+            } else {
+                // Read a character.
+                i = inner.read();
+                c = (char) i;
+                // If it *might* be an expression...
+                if (c == '#') {
+                    // read another character.
+                    i = inner.read();
+                    c = (char) i;
+                    // If it's '{', assume we have an expression.
+                    if (c == '{') {
+                        // read it into the buffer, and evaluate it into the
+                        // same buffer.
+                        readExpressionIntoBufferAndEvaluateIntoBuffer();
+                        // set the flag so that we need to return content
+                        // from the buffer.
+                        writingExpression = true;
+                        // Make sure to swallow the '{'.
+                        i = this.read();
+                    } else {
+                        // It's not an expression, we need to return '#',
+                        i = (int) '#';
+                        // then return whatever we just read, on the
+                        // *next* read;
+                        nextRead = (int) c;
+                        failedExpressionTest = true;
+                    }
+                }
+            }
+
+            return i;
+        }
+
+
+        private int nextRead = -1;
+
+
+        private void readExpressionIntoBufferAndEvaluateIntoBuffer()
+              throws IOException {
+            int i;
+            char c;
+            do {
+                i = inner.read();
+                c = (char) i;
+                if (c == '}') {
+                    evaluateExpressionIntoBuffer();
+                } else {
+                    buf.add(i);
+                }
+            } while (c != '}' && i != -1);
+        }
+
+        /*
+        * At this point, we know that getBuf() returns a List<Integer>
+        * that contains the bytes of the expression.
+        * Turn it into a String, turn the String into a ValueExpression,
+        * evaluate it, store the toString() of it in
+        * expressionResult;
+        */
+        private void evaluateExpressionIntoBuffer() {
+            char chars[] = new char[buf.size()];
+            for (int i = 0, len = buf.size(); i < len; i++) {
+                chars[i] = (char) (int) buf.get(i);
+            }
+            String expressionBody = new String(chars);
+            int colon;
+            // If this expression contains a ":"
+            if (-1 != (colon = expressionBody.indexOf(":"))) {
+                // Make sure it contains only one ":"
+                if (!isPropertyValid(expressionBody)) {
+                    String message =
+                          MessageUtils
+                                .getExceptionMessageString(MessageUtils.INVALID_RESOURCE_FORMAT_COLON_ERROR,
+                                                           expressionBody);
+                    throw new ELException(message);
+                }
+                String[] parts = Util.split(expressionBody, ":");
+                if (null == parts[0] || null == parts[1]) {
+                    String message =
+                          MessageUtils
+                                .getExceptionMessageString(MessageUtils.INVALID_RESOURCE_FORMAT_NO_LIBRARY_NAME_ERROR,
+                                                           expressionBody);
+                    throw new ELException(message);
+
+                }
+                try {
+                    int mark = parts[0].indexOf("[") + 2;
+                    char quoteMark = parts[0].charAt(mark - 1);
+                    parts[0] = parts[0].substring(mark, colon);
+                    if (parts[0].equals("this")) {
+                        parts[0] = info.getLibraryInfo().getName();
+                        mark = parts[1].indexOf("]") - 1;
+                        parts[1] = parts[1].substring(0, mark);
+                        expressionBody = "resource[" + quoteMark + parts[0] +
+                                         ":" + parts[1] + quoteMark + "]";
+                    }
+                }
+                catch (Exception e) {
+                    String message =
+                          MessageUtils
+                                .getExceptionMessageString(MessageUtils.INVALID_RESOURCE_FORMAT_ERROR,
+                                                           expressionBody);
+                    throw new ELException(message);
+
+                }
+            }
+            ELContext elContext = ctx.getELContext();
+            ValueExpression ve = ctx.getApplication().getExpressionFactory()
+                  .
+                        createValueExpression(elContext, "#{" + expressionBody +
+                                                         "}", String.class);
+            Object value = ve.getValue(elContext);
+            String expressionResult = ((value != null) ? value.toString() : "");
+            buf.clear();
+            for (int i = 0, len = expressionResult.length(); i < len; i++) {
+                buf.add((int) expressionResult.charAt(i));
+            }
+        }
+
+
+        private boolean isPropertyValid(String property) {
+            int idx = property.indexOf(':');
+            return (property.indexOf(':', idx + 1) == -1);
+        }
+
+    } // END ELEvaluatingInputStream
 
 }

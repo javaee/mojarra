@@ -221,13 +221,15 @@ public class ClasspathResourceHelper extends ResourceHelper {
                     value = new ResourceInfo(library,
                                              resourceName,
                                              null,
-                                             compressable);
+                                             compressable,
+                                             resourceSupportsEL(resourceName, ctx));
                 } else {
                     value = new ResourceInfo(resourceName,
                                              null,
                                              localePrefix,
                                              this,
-                                             compressable);
+                                             compressable,
+                                             resourceSupportsEL(resourceName, ctx));
                 }
             } else {
                 VersionInfo version = getVersion(subPaths, true);
@@ -243,13 +245,17 @@ public class ClasspathResourceHelper extends ResourceHelper {
                         value = new ResourceInfo(library,
                                                  resourceName,
                                                  version,
-                                                 compressable);
+                                                 compressable,
+                                                 resourceSupportsEL(resourceName,
+                                                                   ctx));
                     } else {
                         value = new ResourceInfo(resourceName,
                                                  version,
                                                  localePrefix,
                                                  this,
-                                                 compressable);
+                                                 compressable,
+                                                 resourceSupportsEL(resourceName,
+                                                                   ctx));
                     }
                 }
             }
