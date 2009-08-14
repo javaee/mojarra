@@ -61,4 +61,20 @@ class ImplementationUnit extends TrimmedTagUnit {
         super(library, namespace, name, tag, id);
     }
 
+    @Override
+    protected void finishNotify(CompilationManager manager) {
+        ((CompilerPackageCompilationMessageHolder)manager.getCompilationMessageHolder()).
+                setCurrentCompositeComponentCompilationManager(null);
+        super.finishNotify(manager);
+    }
+
+    @Override
+    protected void startNotify(CompilationManager manager) {
+        super.startNotify(manager);
+        ((CompilerPackageCompilationMessageHolder)manager.getCompilationMessageHolder()).
+                setCurrentCompositeComponentCompilationManager(manager);
+    }
+
+
+
 }

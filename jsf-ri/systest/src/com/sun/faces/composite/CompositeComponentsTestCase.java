@@ -612,6 +612,17 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
+
+    public void testCompositionWithinComposite() throws Exception {
+        try {
+            getPage("/faces/composite/compositionWithinCompositeUsingPage.xhtml");
+            fail("No exception thrown when composite component contained ui:composition");
+        } catch (Exception e) {
+
+        }
+
+    }
+
     
     // --------------------------------------------------------- Private Methods
 

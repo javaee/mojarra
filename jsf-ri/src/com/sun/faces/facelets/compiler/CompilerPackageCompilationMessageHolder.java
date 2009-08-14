@@ -36,60 +36,9 @@
 
 package com.sun.faces.facelets.compiler;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import java.util.*;
-
-/**
- *
- * @author edburns
- */
-public class CompilationMessageHolderImpl implements CompilerPackageCompilationMessageHolder {
+interface CompilerPackageCompilationMessageHolder extends CompilationMessageHolder {
     
-    private Map<String, List<FacesMessage>> messageListMap;
-    private CompilationManager compilationManager;
 
-
-    private Map<String, List<FacesMessage>> getMessageListMap() {
-        if (null == messageListMap) {
-            messageListMap = new HashMap<String, List<FacesMessage>>();
-        }
-        return messageListMap;
-    }
-    
-    public List<FacesMessage> getNamespacePrefixMessages(FacesContext context,
-            String prefix) {
-        List<FacesMessage> result = null;
-        Map<String, List<FacesMessage>> map = getMessageListMap();
-        if (null == (result = map.get(prefix))) {
-            result = new ArrayList<FacesMessage>();
-            map.put(prefix, result);
-        }
-        
-        return result;
-    }
-
-    public void processCompilationMessages(FacesContext context) {
-        Map<String, List<FacesMessage>> map = getMessageListMap();
-        Collection<List<FacesMessage>> values = map.values();
-        for (List<FacesMessage> curList : values) {
-            for (FacesMessage curMessage : curList) {
-                context.addMessage(null, curMessage);
-            }
-        }
-    }
-
-    public void removeNamespacePrefixMessages(String prefix) {
-        Map<String, List<FacesMessage>> map = getMessageListMap();
-        map.remove(prefix);
-    }
-
-    public CompilationManager getCurrentCompositeComponentCompilationManager() {
-        return compilationManager;
-    }
-
-    public void setCurrentCompositeComponentCompilationManager(CompilationManager manager) {
-        this.compilationManager = manager;
-    }
-
+    CompilationManager getCurrentCompositeComponentCompilationManager();
+    void setCurrentCompositeComponentCompilationManager(CompilationManager manager);
 }

@@ -354,10 +354,11 @@ final class CompilationManager {
     }
 
     private void finishUnit() {
-        Object obj = this.units.pop();
+        CompilationUnit unit = this.units.pop();
+        unit.finishNotify(this);
 
         if (log.isLoggable(Level.FINE)) {
-            log.fine("Finished Unit: " + obj);
+            log.fine("Finished Unit: " + unit);
         }
     }
 
@@ -381,6 +382,7 @@ final class CompilationManager {
 
         this.currentUnit().addChild(unit);
         this.units.push(unit);
+        unit.startNotify(this);
     }
 
     private Tag trimAttributes(Tag tag) {

@@ -392,6 +392,8 @@ public final class SAXCompiler extends Compiler {
         } catch (ParserConfigurationException e) {
             throw new FaceletException("Error Configuring Parser " + alias
                     + ": " + e.getMessage(), e.getCause());
+        } catch (FaceletException e) {
+            throw e;
         } finally {
             if (is != null) {
                 is.close();

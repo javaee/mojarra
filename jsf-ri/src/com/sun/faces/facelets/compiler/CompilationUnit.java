@@ -80,6 +80,14 @@ class CompilationUnit {
     public CompilationUnit() {
     }
 
+    protected void startNotify(CompilationManager manager) {
+
+    }
+
+    protected void finishNotify(CompilationManager manager) {
+        
+    }
+
     public void addChild(CompilationUnit unit) {
         if (this.children == null) {
             this.children = new ArrayList();

@@ -648,13 +648,18 @@ The filename of an XHTML page to include. The filename is relative to the XHTML 
                 <![CDATA[
 <div class="changed_added_2_0">
 
+The optional name attribute matches the associated &lt;ui:define/&gt;
+tag in this template's client. If no name is specified, it's expected
+that the whole template client will be inserted.
 
 </div>]]>
 
             </description>
             <name>
+				name
             </name>
             <required>
+				false
             </required>
             <deferred-value>
                 <type>
@@ -662,7 +667,6 @@ The filename of an XHTML page to include. The filename is relative to the XHTML 
                 </type>
             </deferred-value>
         </attribute>
-
   </tag>
 
     <tag>
