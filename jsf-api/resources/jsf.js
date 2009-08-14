@@ -35,9 +35,10 @@
  *
  *
  * This file incorporates work covered by the following copyright and
- * permission notice:
+ * permission notices:
  *
  * Copyright 2004 The Apache Software Foundation
+ * Copyright 2004-2008 Emmanouil Batsis, mailto: mbatsis at users full stop sourceforge full stop net
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,7 +120,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             'textDecorationLineThrough', 'textDecorationNone', 'textDecorationOverline',
             'textDecorationUnderline', 'textIndent', 'textTransform',
             'clear', 'filter', 'clip', 'color', 'cursor', 'display', 'visibility',
-            'top', 'left', 'width', 'height', 'verticalAlign', 'position', 
+            'top', 'left', 'width', 'height', 'verticalAlign', 'position',
             'zIndex', 'overflow', 'styleFloat'
         ];
 
@@ -130,6 +131,17 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             'onhelp', 'onblur', 'onfocus', 'onchange', 'onload', 'onunload', 'onabort',
             'onreset', 'onselect', 'onsubmit'
         ];
+
+        /**
+         * Determine if the current browser is part of Microsoft's failed attempt at
+         * standards modification.
+         * @ignore
+         */
+        var isIE = function isIE() {
+            return document.all && window.ActiveXObject &&
+                   navigator.userAgent.toLowerCase().indexOf("msie") > -1 &&
+                   navigator.userAgent.toLowerCase().indexOf("opera") == -1;
+        }
 
         /**
          * @ignore
@@ -229,7 +241,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 temp.id = d.id;
             }
 
-            // Creating a head element isn't allowed in IE, so we'll disallow it
+            // Creating a head element isn't allowed in IE, and faulty in most browsers,
+            // so we'll disallow it
             if (d.nodeName.toLowerCase() === "head") {
                 throw new Error("Attempted to replace a head element");
             } else {
@@ -242,13 +255,205 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         };
 
         /**
+         * Get a string with the concatenated values of all string nodes under the given node
+         * @param {DOMNode} oNode the given DOM node
+         * @param {boolean} deep whether to recursively scan the children nodes of the given node for text as well. Default is <code>false</code>
+         * @ignore
+         * Note:  This code originally from Sarissa: http://dev.abiss.gr/sarissa
+         * It has been modified to fit into the overall codebase
+         */
+        var getText = function(oNode, deep) {
+            var Node = {ELEMENT_NODE: 1, ATTRIBUTE_NODE: 2, TEXT_NODE: 3, CDATA_SECTION_NODE: 4,
+                ENTITY_REFERENCE_NODE: 5,  ENTITY_NODE: 6, PROCESSING_INSTRUCTION_NODE: 7,
+                COMMENT_NODE: 8, DOCUMENT_NODE: 9, DOCUMENT_TYPE_NODE: 10,
+                DOCUMENT_FRAGMENT_NODE: 11, NOTATION_NODE: 12};
+
+            var s = "";
+            var nodes = oNode.childNodes;
+            for (var i = 0; i < nodes.length; i++) {
+                var node = nodes[i];
+                var nodeType = node.nodeType;
+                if (nodeType == Node.TEXT_NODE || nodeType == Node.CDATA_SECTION_NODE) {
+                    s += node.data;
+                } else if (deep === true && (nodeType == Node.ELEMENT_NODE ||
+                                             nodeType == Node.DOCUMENT_NODE ||
+                                             nodeType == Node.DOCUMENT_FRAGMENT_NODE)) {
+                    s += getText(node, true);
+                }
+            }
+            return s;
+        };
+
+        var PARSED_OK = "Document contains no parsing errors";
+        var PARSED_EMPTY = "Document is empty";
+        var PARSED_UNKNOWN_ERROR = "Not well-formed or other error";
+        var getParseErrorText;
+        if (isIE()) {
+            /**
+             * Note: This code orginally from Sarissa: http://dev.abiss.gr/sarissa
+             * @ignore
+             */
+            getParseErrorText = function (oDoc) {
+                var parseErrorText = PARSED_OK;
+                if (oDoc && oDoc.parseError && oDoc.parseError.errorCode && oDoc.parseError.errorCode != 0) {
+                    parseErrorText = "XML Parsing Error: " + oDoc.parseError.reason +
+                                     "\nLocation: " + oDoc.parseError.url +
+                                     "\nLine Number " + oDoc.parseError.line + ", Column " +
+                                     oDoc.parseError.linepos +
+                                     ":\n" + oDoc.parseError.srcText +
+                                     "\n";
+                    for (var i = 0; i < oDoc.parseError.linepos; i++) {
+                        parseErrorText += "-";
+                    }
+                    parseErrorText += "^\n";
+                }
+                else if (oDoc.documentElement === null) {
+                    parseErrorText = PARSED_EMPTY;
+                }
+                return parseErrorText;
+            };
+        } else { // (non-IE)
+
+            /**
+             * <p>Returns a human readable description of the parsing error. Usefull
+             * for debugging. Tip: append the returned error string in a &lt;pre&gt;
+             * element if you want to render it.</p>
+             * <p>Many thanks to Christian Stocker for the initial patch.</p>
+             * @param {DOMDocument} oDoc The target DOM document
+             * @returns {String} The parsing error description of the target Document in
+             *          human readable form (preformated text)
+             * @ignore
+             * Note:  This code orginally from Sarissa: http://dev.abiss.gr/sarissa
+             */
+            getParseErrorText = function (oDoc) {
+                var parseErrorText = PARSED_OK;
+                if ((!oDoc) || (!oDoc.documentElement)) {
+                    parseErrorText = PARSED_EMPTY;
+                } else if (oDoc.documentElement.tagName == "parsererror") {
+                    parseErrorText = oDoc.documentElement.firstChild.data;
+                    parseErrorText += "\n" + oDoc.documentElement.firstChild.nextSibling.firstChild.data;
+                } else if (oDoc.getElementsByTagName("parsererror").length > 0) {
+                    var parsererror = oDoc.getElementsByTagName("parsererror")[0];
+                    parseErrorText = getText(parsererror, true) + "\n";
+                } else if (oDoc.parseError && oDoc.parseError.errorCode != 0) {
+                    parseErrorText = PARSED_UNKNOWN_ERROR;
+                }
+                return parseErrorText;
+            };
+        }
+
+        if ((typeof(document.importNode) == "undefined") && isIE()) {
+            try {
+                /**
+                 * Implementation of importNode for the context window document in IE.
+                 * If <code>oNode</code> is a TextNode, <code>bChildren</code> is ignored.
+                 * @param {DOMNode} oNode the Node to import
+                 * @param {boolean} bChildren whether to include the children of oNode
+                 * @returns the imported node for further use
+                 * @ignore
+                 * Note:  This code orginally from Sarissa: http://dev.abiss.gr/sarissa
+                 */
+                document.importNode = function(oNode, bChildren) {
+                    var tmp;
+                    if (oNode.nodeName == '#text') {
+                        return document.createTextNode(oNode.data);
+                    }
+                    else {
+                        if (oNode.nodeName == "tbody" || oNode.nodeName == "tr") {
+                            tmp = document.createElement("table");
+                        }
+                        else if (oNode.nodeName == "td") {
+                            tmp = document.createElement("tr");
+                        }
+                        else if (oNode.nodeName == "option") {
+                                tmp = document.createElement("select");
+                            }
+                            else {
+                                tmp = document.createElement("div");
+                            }
+                        if (bChildren) {
+                            tmp.innerHTML = oNode.xml ? oNode.xml : oNode.outerHTML;
+                        } else {
+                            tmp.innerHTML = oNode.xml ? oNode.cloneNode(false).xml : oNode.cloneNode(false).outerHTML;
+                        }
+                        return tmp.getElementsByTagName("*")[0];
+                    }
+                };
+            } catch(e) {
+            }
+        }
+
+        /**
+         * <p>Deletes all child nodes of the given node</p>
+         * @param {DOMNode} oNode the Node to empty
+         * @ignore
+         * Note:  This code originally from Sarissa:  http://dev.abiss.gr/sarissa
+         */
+        var clearChildNodes = function(oNode) {
+            // need to check for firstChild due to opera 8 bug with hasChildNodes
+            while (oNode.firstChild) {
+                oNode.removeChild(oNode.firstChild);
+            }
+        };
+
+
+        /**
+         * <p> Moves the childNodes of nodeFrom to nodeTo</p>
+         * <p> <b>Note:</b> The second object's original content is deleted before
+         * the move operation, unless you supply a true third parameter</p>
+         * @param {DOMNode} nodeFrom the Node to copy the childNodes from
+         * @param {DOMNode} nodeTo the Node to copy the childNodes to
+         * @param {boolean} bPreserveExisting whether to preserve the original content of nodeTo, default is
+         * @ignore
+         * Note:  This code originally from Sarissa:  http://dev.abiss.gr/sarissa
+         * It has been modified to fit into the overall codebase
+         */
+        var moveChildNodes = function(nodeFrom, nodeTo, bPreserveExisting) {
+            var Node = {ELEMENT_NODE: 1, ATTRIBUTE_NODE: 2, TEXT_NODE: 3, CDATA_SECTION_NODE: 4,
+                ENTITY_REFERENCE_NODE: 5,  ENTITY_NODE: 6, PROCESSING_INSTRUCTION_NODE: 7,
+                COMMENT_NODE: 8, DOCUMENT_NODE: 9, DOCUMENT_TYPE_NODE: 10,
+                DOCUMENT_FRAGMENT_NODE: 11, NOTATION_NODE: 12};
+            if ((!nodeFrom) || (!nodeTo)) {
+                throw "Both source and destination nodes must be provided";
+            }
+            if (!bPreserveExisting) {
+                clearChildNodes(nodeTo);
+            }
+            var nodes = nodeFrom.childNodes;
+            // if within the same doc, just move, else copy and delete
+            if (nodeFrom.ownerDocument == nodeTo.ownerDocument) {
+                while (nodeFrom.firstChild) {
+                    nodeTo.appendChild(nodeFrom.firstChild);
+                }
+            } else {
+                var ownerDoc = nodeTo.nodeType == Node.DOCUMENT_NODE ? nodeTo : nodeTo.ownerDocument;
+                var i;
+                if (typeof(ownerDoc.importNode) != "undefined") {
+                    for (i = 0; i < nodes.length; i++) {
+                        nodeTo.appendChild(ownerDoc.importNode(nodes[i], true));
+                    }
+                } else {
+                    for (i = 0; i < nodes.length; i++) {
+                        nodeTo.appendChild(nodes[i].cloneNode(true));
+                    }
+                }
+                clearChildNodes(nodeFrom);
+            }
+        };
+
+        /**
          * Replace an element from one document into another
          * @param newElement new element to put in document
          * @param origElement original element to replace
          * @ignore
          */
         var elementReplace = function elementReplace(newElement, origElement) {
-            Sarissa.moveChildNodes(newElement, origElement);
+            moveChildNodes(newElement, origElement);
+            // sadly, we have to reparse all over again
+            // to reregister the event handlers and styles
+            // RELEASE_PENDING do some performance tests on large pages
+            origElement.innerHTML = origElement.innerHTML;
+
         };
 
         /**
@@ -260,17 +465,17 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var doc;  // intermediate document we'll create
             var body; // Body element to return
 
-            if (DOMParser) {  // FF, S, Chrome
+            if (typeof DOMParser !== "undefined") {  // FF, S, Chrome
                 doc = (new DOMParser()).parseFromString(docStr, "text/xml");
-            } else if (ActiveXObject) { // IE
+            } else if (typeof ActiveXObject !== "undefined") { // IE
                 doc = new ActiveXObject("MSXML2.DOMDocument");
                 doc.loadXML(docStr);
             } else {
                 throw new Error("You don't seem to be running a supported browser");
             }
 
-            if (Sarissa.getParseErrorText(doc) !== Sarissa.PARSED_OK) {
-                throw new Error(Sarissa.getParseErrorText(doc));
+            if (getParseErrorText(doc) !== PARSED_OK) {
+                throw new Error(getParseErrorText(doc));
             }
 
             body = doc.getElementsByTagName("body")[0];
@@ -358,7 +563,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var docBody = document.getElementsByTagName("body")[0];
                 if (bodyStartEx.exec(src) !== null) { // replace body tag
                     elementReplace(getBodyElement(src), docBody);
-                    docBody.innerHTML = docBody.innerHTML;
                 } else {  // replace body contents
                     elementReplaceStr(docBody, "body", src);
                 }
@@ -484,7 +688,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             for (var i = 0; i < nodes.length; i++) {
                 var name = nodes[i].getAttribute('name');
                 var value = nodes[i].getAttribute('value');
-                if (!Sarissa._SARISSA_IS_IE) {
+                if (!isIE()) {
                     target.setAttribute(name, value);
                 } else { // if it's IE, then quite a bit more work is required
                     if (name === 'class') {
@@ -495,11 +699,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         target.setAttribute(name, value, 0);
                     } else if (name === 'style') {
                         target.style.setAttribute('cssText', value, 0);
-                    } else if (name.substring(0,2) === 'on') {
+                    } else if (name.substring(0, 2) === 'on') {
                         var fn = function(value) {
                             return function() {
                                 window.execScript(value);
-                            }}(value);
+                            }
+                        }(value);
                         target.setAttribute(name, fn, 0);
                     } else {
                         target.setAttribute(name, value, 0);
@@ -794,8 +999,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             } else if (status == "emptyResponse") {
                 data.description = "An emply response was received from the server.  Check server error logs.";
             } else if (status == "malformedXML") {
-                if (Sarissa.getParseErrorText(doc) !== Sarissa.PARSED_OK) {
-                    data.description(Sarissa.getParseErrorText(doc));
+                if (getParseErrorText(data.responseXML) !== PARSED_OK) {
+                    data.description(getParseErrorText(data.responseXML));
                 } else {
                     data.description = "An invalid XML response was received from the server.";
                 }

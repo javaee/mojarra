@@ -312,7 +312,6 @@
             </filelist>
             <filelist  dir="${basedir}/resources">
                 <file name="mojarra.js"/>
-                <file name="sarissa.js"/>
             </filelist>
         </concat>
 
