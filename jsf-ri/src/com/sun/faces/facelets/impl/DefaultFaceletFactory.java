@@ -79,7 +79,7 @@ import java.util.logging.Logger;
  * @version $Id: DefaultFaceletFactory.java,v 1.10 2007/04/09 01:13:17 youngm
  *          Exp $
  */
-public final class DefaultFaceletFactory extends FaceletFactory {
+public class DefaultFaceletFactory extends FaceletFactory {
 
     protected final static Logger log = FacesLogger.FACELETS_FACTORY.getLogger();
 
@@ -118,6 +118,17 @@ public final class DefaultFaceletFactory extends FaceletFactory {
         log.fine("Using Refresh Period: " + this.refreshPeriod);
     }
 
+
+    /*
+      * (non-Javadoc)
+      *
+      * @see com.sun.facelets.FaceletFactory#getResourceResolver
+      */
+    public ResourceResolver getResourceResolver() {
+        return resolver;
+    }
+
+    
     /*
       * (non-Javadoc)
       *

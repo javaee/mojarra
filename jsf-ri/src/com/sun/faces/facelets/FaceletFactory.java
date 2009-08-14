@@ -54,6 +54,7 @@ package com.sun.faces.facelets;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.view.facelets.FaceletException;
+import javax.faces.view.facelets.ResourceResolver;
 import java.io.IOException;
 import java.net.URL;
 
@@ -86,7 +87,10 @@ public abstract class FaceletFactory {
     public abstract Facelet getMetadataFacelet(String uri) throws IOException;
 
     public abstract Facelet getMetadataFacelet(URL url) throws IOException;
-    
+
+    public abstract ResourceResolver getResourceResolver();
+
+    public abstract long getRefreshPeriod();
 
     /**
      * NOT CURRENTLY USED.  However, this class may be moved to the API and

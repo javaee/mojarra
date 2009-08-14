@@ -69,6 +69,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
 
@@ -86,13 +87,11 @@ import javax.faces.event.ScopeContext;
 import javax.servlet.ServletContext;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.TreeSet;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.util.logging.Level;
@@ -573,22 +572,32 @@ public class ApplicationAssociate {
     protected FaceletFactory createFaceletFactory(Compiler c, WebConfiguration webConfig) {
 
         // refresh period
-        String refreshPeriod = webConfig
-              .getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsDefaultRefreshPeriod);
+        String refreshPeriod = webConfig.getOptionValue(FaceletsDefaultRefreshPeriod);
         long period = Long.parseLong(refreshPeriod);
 
         // resource resolver
         ResourceResolver resolver = new DefaultResourceResolver();
-        String resolverName = webConfig
-              .getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsResourceResolver);
+        String resolverName = webConfig.getOptionValue(FaceletsResourceResolver);
         if (resolverName != null && resolverName.length() > 0) {
             resolver = (ResourceResolver) 
-                    com.sun.faces.facelets.util.ReflectionUtil.
-                    decorateInstance(resolverName, ResourceResolver.class, resolver);
+                    ReflectionUtil.decorateInstance(resolverName,
+                                                    ResourceResolver.class,
+                                                    resolver);
         }
 
         // Resource.getResourceUrl(ctx,"/")
-        return new DefaultFaceletFactory(c, resolver, period);
+        FaceletFactory factory = new DefaultFaceletFactory(c, resolver, period);
+
+        // Check to see if a custom Factory has been defined
+        String factoryClass = webConfig.getOptionValue(FaceletFactory);
+        if (factoryClass != null && factoryClass.length() > 0) {
+            factory = (FaceletFactory)
+                  ReflectionUtil.decorateInstance(factoryClass,
+                                                  FaceletFactory.class,
+                                                  factory);
+        }
+
+        return factory;
 
     }
 
@@ -599,7 +608,7 @@ public class ApplicationAssociate {
 
         // load decorators
         String decParam = webConfig
-              .getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsDecorators);
+              .getOptionValue(FaceletsDecorators);
         if (decParam != null) {
             decParam = decParam.trim();
             String[] decs = Util.split(decParam, ";");

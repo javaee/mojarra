@@ -830,6 +830,10 @@ public class WebConfiguration {
         AnnotationScanPackages(
               "com.sun.faces.annotationScanPackages",
               ""
+        ),
+        FaceletFactory(
+              "com.sun.faces.faceletFactory",
+              ""
         );
 
 
