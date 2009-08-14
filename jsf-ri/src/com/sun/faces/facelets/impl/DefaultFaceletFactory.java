@@ -245,7 +245,7 @@ public class DefaultFaceletFactory extends FaceletFactory {
                 URLConnection conn = url.openConnection();
                 is = conn.getInputStream();
                 long atl = conn.getLastModified();
-                return atl == 0 || atl > ttl;
+                return atl > ttl;
             } catch (Exception e) {
                 throw new FaceletException("Error Checking Last Modified for "
                                            + facelet.getAlias(), e);
