@@ -2209,8 +2209,9 @@ will not pass validation.</p> ]]>
 
     <tag>
         <description>
-            Register an ValueChangeListener instance on the UIComponent associated
-            with the closest parent UIComponent custom action.
+            Register a ValueChangeListener instance on the UIComponent
+            associated with the closest parent UIComponent custom
+            action.
         </description>
         <name>valueChangeListener</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ValueChangeListenerTag</tag-class>
@@ -2238,6 +2239,22 @@ will not pass validation.</p> ]]>
          <deferred-value>
            <type>javax.faces.event.ValueChangeListener</type>
          </deferred-value>
+    </attribute>
+
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
     </attribute>
 
 
