@@ -68,6 +68,8 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.view.StateManagementStrategy;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
+import javax.faces.event.PostRestoreStateEvent;
 
 /**
  * <p>
@@ -209,6 +211,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         final Map<String, Object> state = (Map<String,Object>) rawState[1];
 
         if (null != state) {
+            final Application app = context.getApplication();
             // We need to clone the tree, otherwise we run the risk
             // of being left in a state where the restored
             // UIComponent instances are in the session instead
@@ -224,6 +227,9 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     if (stateObj != null && !target.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
                         target.restoreState(context.getFacesContext(),
                                 stateObj);
+                        app.publishEvent(context.getFacesContext(),
+                                PostRestoreStateEvent.class,
+                                target);
                     }
 
                     return result;

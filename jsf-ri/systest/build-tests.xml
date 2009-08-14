@@ -1280,6 +1280,15 @@
             request="${context.path}/faces/regression/InjectUserDefJS.jsp"
             golden="${golden.path}/regression/InjectUserDefJS.txt"
             recordGolden="${local.golden.path}/regression/InjectUserDefJS.txt"/>
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/event/*TestCase.class"/> 
+            </tests>
+        </jsf.junit>
+
     </target>
 
     <target name="test.implicitnav">
