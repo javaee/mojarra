@@ -540,10 +540,8 @@ public abstract class ResourceHelper {
 
         ExternalContext extContext = ctx.getExternalContext();
         String contentType = extContext.getMimeType(resourceName);
-        if (contentType == null) {
-            return false;
-        }
-        return (Arrays.binarySearch(EL_CONTENT_TYPES, contentType) >= 0);
+        return (contentType != null
+                   && (Arrays.binarySearch(EL_CONTENT_TYPES, contentType) >= 0));
 
     }
 
