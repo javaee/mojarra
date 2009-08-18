@@ -409,8 +409,23 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
         String className = getNodeText(handlerClass);
         try {
-            Class<?> clazz = loadClass(className, this, null);
-            taglibrary.putTagHandler(name, clazz);
+            Class<?> clazz = null;
+            try {
+                clazz = loadClass(className, this, null);
+                taglibrary.putTagHandler(name, clazz);
+            } catch (NoClassDefFoundError defNotFound) {
+                String message = defNotFound.toString();
+                if (message.contains("com/sun/facelets/")
+                    || message.contains("com.sun.facelets.")) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.config.legacy.facelet.warning",
+                                   new Object[]{handlerClass,});
+                    }
+                } else {
+                    throw defNotFound;
+                }
+            }
         } catch (ClassNotFoundException cnfe) {
             throw new ConfigurationException(cnfe);
         }
@@ -455,6 +470,18 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 try {
                     Class<?> clazz = loadClass(handlerClass, this, null);
                     taglibrary.putValidator(name, validatorId, clazz);
+                } catch (NoClassDefFoundError defNotFound) {
+                    String message = defNotFound.toString();
+                    if (message.contains("com/sun/facelets/")
+                        || message.contains("com.sun.facelets.")) {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                       "jsf.config.legacy.facelet.warning",
+                                       new Object[]{handlerClass,});
+                        }
+                    } else {
+                        throw defNotFound;
+                    }
                 } catch (ClassNotFoundException e) {
                     throw new ConfigurationException(e);
                 }
@@ -488,6 +515,18 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 try {
                     Class<?> clazz = loadClass(handlerClass, this, null);
                     taglibrary.putConverter(name, converterId, clazz);
+                } catch (NoClassDefFoundError defNotFound) {
+                    String message = defNotFound.toString();
+                    if (message.contains("com/sun/facelets/")
+                        || message.contains("com.sun.facelets.")) {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                       "jsf.config.legacy.facelet.warning",
+                                       new Object[]{handlerClass,});
+                        }
+                    } else {
+                        throw defNotFound;
+                    }
                 } catch (ClassNotFoundException e) {
                     throw new ConfigurationException(e);
                 }
@@ -525,6 +564,18 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                                             componentType,
                                             rendererType,
                                             clazz);
+                } catch (NoClassDefFoundError defNotFound) {
+                    String message = defNotFound.toString();
+                    if (message.contains("com/sun/facelets/")
+                        || message.contains("com.sun.facelets.")) {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                       "jsf.config.legacy.facelet.warning",
+                                       new Object[]{handlerClass,});
+                        }
+                    } else {
+                        throw defNotFound;
+                    }
                 } catch (ClassNotFoundException e) {
                     throw new ConfigurationException(e);
                 }
