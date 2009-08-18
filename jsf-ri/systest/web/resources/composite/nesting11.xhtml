@@ -63,7 +63,10 @@
                 <span>FAILED</span><br />
             </c:otherwise>
         </c:choose>
-        <ez:nesting11 value="#{cc.attrs.value}" values="#{cc.attrs.values}" />
+        <ez:nesting9 check="#{cc.attrs.value}" />
+        <c:forEach items="#{cc.attrs.values}" var="v">
+            <ez:nesting9 check="#{v}" />
+        </c:forEach>
     </composite:implementation>
 </body>
 </html>

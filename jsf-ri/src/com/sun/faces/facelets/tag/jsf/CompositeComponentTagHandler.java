@@ -665,7 +665,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             private boolean pushCompositeComponent(FacesContext ctx) {
 
                 Stack<UIComponent> tstack = getTreeCreationStack(ctx);
-                Stack<UIComponent> stack = null;
+                Stack<UIComponent> stack = getStack(ctx, false);
                 UIComponent ccp = null;
                 if (tstack != null) {
                     // We have access to the stack of composite components
@@ -674,7 +674,13 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     // of the current composite component, use the index of the
                     // current composite component within the stack to locate the
                     // parent.
-                    UIComponent currentComp = UIComponent.getCurrentComponent(ctx);
+                    UIComponent currentComp;
+                    if (stack == null || stack.isEmpty()) {
+                        currentComp = UIComponent.getCurrentComponent(ctx);
+                    } else {
+                        currentComp = stack.peek();
+
+                    }
                     if (currentComp != null) {
                         int idx = tstack.indexOf(currentComp);
                         if (idx > 0) {

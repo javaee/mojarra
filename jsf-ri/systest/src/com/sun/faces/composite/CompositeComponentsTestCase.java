@@ -361,11 +361,11 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
     public void testNesting07() throws Exception {
 
         HtmlPage page = getPage("/faces/composite/nestingCompositeExpressionTreeCreation.xhtml");
-        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(3);
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(5);
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
-        assertEquals(3, spans.size());
+        assertEquals(5, spans.size());
         final String[] expectedSpanValues = {
-              "PASSED", "PASSED", "FAILED"
+              "PASSED", "PASSED", "PASSED", "PASSED", "FAILED"
         };
         for (int i = 0; i < expectedSpanValues.length; i++) {
             assertEquals(expectedSpanValues[i], expectedSpanValues[i], spans.get(i).asText());
@@ -377,7 +377,7 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         page = submit.click();
         spans.clear();
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
-        assertEquals(3, spans.size());
+        assertEquals(5, spans.size());
         for (int i = 0; i < expectedSpanValues.length; i++) {
             assertEquals(expectedSpanValues[i], expectedSpanValues[i], spans.get(i).asText());
         }
