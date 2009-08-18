@@ -665,6 +665,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             private boolean pushCompositeComponent(FacesContext ctx) {
 
                 Stack<UIComponent> tstack = getTreeCreationStack(ctx);
+                Stack<UIComponent> stack = null;
                 UIComponent ccp = null;
                 if (tstack != null) {
                     // We have access to the stack of composite components
@@ -681,13 +682,21 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                         }
                     }
                 } else {
-                    // no tree creation stack available, so this call should
-                    // be safe
-                    ccp = UIComponent.getCompositeComponentParent(UIComponent.getCurrentCompositeComponent(ctx));
+                    // no tree creation stack available, so use the runtime stack.
+                    // If the current stack isn't empty, then use the component
+                    // on the stack as the current composite component.
+                    stack = getStack(ctx, false);
+                    if (stack != null && !stack.isEmpty()) {
+                        ccp = UIComponent.getCompositeComponentParent(stack.peek());
+                    } else {
+                        ccp = UIComponent.getCompositeComponentParent(UIComponent.getCurrentCompositeComponent(ctx));
+                    }
                 }
 
                 if (ccp != null) {
-                    Stack<UIComponent> stack = getStack(ctx, true);
+                    if (stack == null) {
+                        stack = getStack(ctx, true);
+                    }
                     stack.push(ccp);
                     return true;
                 }
