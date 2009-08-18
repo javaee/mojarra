@@ -89,49 +89,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var eventListeners = [];
         var errorListeners = [];
 
-        // Enumerate all input element attributes
-        var InputElementAttributes =
-            //core and i18n attributes (except 'id' and 'style' attributes)
-                ['className', 'title', 'lang', 'dir',
-                    //input element attributes
-                    'name', 'value', 'checked', 'disabled', 'readOnly',
-                    'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
-                    'tabIndex', 'accessKey', 'accept', 'type'];
-        // RELEASE_PENDING - consider notifying with a message
-        // if in an inappropriate env
-        //'dir' attribute cannot be updated dynamically in IE 7
-        //'type' attribute cannot be updated dynamically in Firefox 2.0
-
-
-        // Enumerate all the possible style properties
-        var ElementStyleProperties = [
-            'backgroundAttachment', 'backgroundColor', 'backgroundImage',
-            'backgroundPosition', 'backgroundRepeat', 'borderBottom',
-            'borderBottomColor', 'borderBottomStyle', 'borderBottomWidth',
-            'borderColor', 'borderLeft', 'borderLeftColor', 'borderLeftStyle',
-            'borderLeftWidth', 'borderRight', 'borderRightColor', 'borderRightStyle',
-            'borderRightWidth', 'borderStyle', 'borderTop', 'borderTopColor',
-            'borderTopStyle', 'borderTopWidth', 'borderWidth', 'fontFamily',
-            'fontSize', 'fontVariant', 'fontWeight', 'letterSpacing', 'lineHeight',
-            'listStyle', 'listStyleImage', 'listStylePosition', 'listStyleType',
-            'marginBottom', 'marginLeft', 'marginRight', 'marginTop',
-            'paddingBottom', 'paddingLeft', 'paddingRight', 'paddingTop',
-            'pageBreakAfter', 'pageBreakBefore', 'textAlign', 'textDecorationBlink',
-            'textDecorationLineThrough', 'textDecorationNone', 'textDecorationOverline',
-            'textDecorationUnderline', 'textIndent', 'textTransform',
-            'clear', 'filter', 'clip', 'color', 'cursor', 'display', 'visibility',
-            'top', 'left', 'width', 'height', 'verticalAlign', 'position',
-            'zIndex', 'overflow', 'styleFloat'
-        ];
-
-        // Enumerate all the names of the event listeners
-        var listenerNames = [
-            'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
-            'onmouseover', 'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup',
-            'onhelp', 'onblur', 'onfocus', 'onchange', 'onload', 'onunload', 'onabort',
-            'onreset', 'onselect', 'onsubmit'
-        ];
-
         /**
          * Determine if the current browser is part of Microsoft's failed attempt at
          * standards modification.
@@ -364,11 +321,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             tmp = document.createElement("tr");
                         }
                         else if (oNode.nodeName == "option") {
-                                tmp = document.createElement("select");
-                            }
-                            else {
-                                tmp = document.createElement("div");
-                            }
+                            tmp = document.createElement("select");
+                        }
+                        else {
+                            tmp = document.createElement("div");
+                        }
                         if (bChildren) {
                             tmp.innerHTML = oNode.xml ? oNode.xml : oNode.outerHTML;
                         } else {
@@ -396,9 +353,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
         /**
-         * <p> Moves the childNodes of nodeFrom to nodeTo</p>
-         * <p> <b>Note:</b> The second object's original content is deleted before
-         * the move operation, unless you supply a true third parameter</p>
+         * <p> Copies the childNodes of nodeFrom to nodeTo</p>
+         *
          * @param {DOMNode} nodeFrom the Node to copy the childNodes from
          * @param {DOMNode} nodeTo the Node to copy the childNodes to
          * @param {boolean} bPreserveExisting whether to preserve the original content of nodeTo, default is
@@ -406,7 +362,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Note:  This code originally from Sarissa:  http://dev.abiss.gr/sarissa
          * It has been modified to fit into the overall codebase
          */
-        var moveChildNodes = function(nodeFrom, nodeTo, bPreserveExisting) {
+        var copyChildNodes = function(nodeFrom, nodeTo) {
             var Node = {ELEMENT_NODE: 1, ATTRIBUTE_NODE: 2, TEXT_NODE: 3, CDATA_SECTION_NODE: 4,
                 ENTITY_REFERENCE_NODE: 5,  ENTITY_NODE: 6, PROCESSING_INSTRUCTION_NODE: 7,
                 COMMENT_NODE: 8, DOCUMENT_NODE: 9, DOCUMENT_TYPE_NODE: 10,
@@ -414,9 +370,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if ((!nodeFrom) || (!nodeTo)) {
                 throw "Both source and destination nodes must be provided";
             }
-            if (!bPreserveExisting) {
-                clearChildNodes(nodeTo);
-            }
+
+            clearChildNodes(nodeTo);
             var nodes = nodeFrom.childNodes;
             // if within the same doc, just move, else copy and delete
             if (nodeFrom.ownerDocument == nodeTo.ownerDocument) {
@@ -435,9 +390,79 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         nodeTo.appendChild(nodes[i].cloneNode(true));
                     }
                 }
-                clearChildNodes(nodeFrom);
             }
         };
+
+
+        /**
+         * copy all attributes from one element to another - except id
+         * @param target element to copy attributes to
+         * @param source element to copy attributes from
+         */
+        var cloneAttributes = function cloneAttributes(target, source) {
+            // Enumerate all input element attributes
+            var inputElementAttributes =
+                    [   'name', 'value', 'checked', 'disabled', 'readOnly',
+                        'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
+                        'tabIndex', 'accessKey', 'accept', 'type'
+                    ];
+
+            // enumerate core element attributes - without 'dir' as special case
+            var coreElementAttributes = ['className', 'title', 'lang', 'xml:lang'];
+
+            // Enumerate all the names of the event listeners
+            var listenerNames =
+              [ 'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
+                'onmouseover', 'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup',
+                'onhelp', 'onblur', 'onfocus', 'onchange', 'onload', 'onunload', 'onabort',
+                'onreset', 'onselect', 'onsubmit'
+                ];
+
+            // First, copy over core attributes
+            for (var iIndex = 0, iLength = coreElementAttributes.length; iIndex < iLength; iIndex++) {
+                var attributeName = coreElementAttributes[iIndex];
+                var newValue = source[attributeName];
+                var oldValue = target[attributeName];
+                if (oldValue != newValue) {
+                    target[attributeName] = newValue;
+                }
+            }
+            // Special case for 'dir' attribute
+
+
+            // Next, if it's an input, copy those over
+            if (target.nodeName.toLowerCase() === 'input') {
+                for (var iIndex = 0, iLength = inputElementAttributes.length; iIndex < iLength; iIndex++) {
+                    var attributeName = inputElementAttributes[iIndex];
+                    var newValue = source[attributeName];
+                    var oldValue = target[attributeName];
+                    if (oldValue != newValue) {
+                        target[attributeName] = newValue;
+                    }
+                }
+            }
+            //'style' attribute special case
+            var newStyle = source.getAttribute('style');
+            var oldStyle = target.getAttribute('style');
+            if (newStyle != oldStyle) {
+                target.setAttribute('style', newStyle);
+
+                if (isIE()) {     // Only required for IE - for other browsers, setAttribute is enough
+                    target.style.setAttribute('cssText', newStyle);
+                }
+            }
+            for (var lIndex = 0, lLength = listenerNames.length; lIndex < lLength; lIndex++) {
+                var name = listenerNames[lIndex];
+                target[name] = source[name] ? source[name] : null;
+                if (source[name]) {
+                    source[name] = null;
+                }
+            }
+            // Special case for 'dir' attribute
+            if (!isIE() && source.dir != target.dir) {
+                target.dir = source.dir ? source.dir : null;
+            }
+        }
 
         /**
          * Replace an element from one document into another
@@ -446,17 +471,29 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var elementReplace = function elementReplace(newElement, origElement) {
-            moveChildNodes(newElement, origElement);
+            copyChildNodes(newElement, origElement);
             // sadly, we have to reparse all over again
             // to reregister the event handlers and styles
             // RELEASE_PENDING do some performance tests on large pages
             origElement.innerHTML = origElement.innerHTML;
+
+            try {
+                cloneAttributes(origElement, newElement);
+            } catch (ex) {
+                // if in dev mode, report an error, else try to limp onward
+                if (jsf.getProjectStage() == "Development") {
+                    throw new Error("Error updating attributes");
+                }
+            }
+            clearChildNodes(newElement);
 
         };
 
         /**
          * Create a new document, then select the body element within it
          * @param docStr Stringified version of document to create
+         * @return element the body element
+         * @ignore
          */
         var getBodyElement = function getBodyElement(docStr) {
 
@@ -600,34 +637,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     parserElement = document.createElement('div');
                     parserElement.innerHTML = html;
                     newElement = parserElement.firstChild;
-                    for (var iIndex = 0, iLength = InputElementAttributes.length; iIndex < iLength; iIndex++) {
-                        var attributeName = InputElementAttributes[iIndex];
-                        var newValue = newElement[attributeName];
-                        var oldValue = d[attributeName];
-                        if (oldValue != newValue) {
-                            d[attributeName] = newValue;
-                        }
-                    }
-                    //'style' attribute special case
-                    var newStyle = newElement.getAttribute('style');
-                    var oldStyle = d.getAttribute('style');
-                    if (newStyle != oldStyle) {
-                        d.setAttribute('style', newStyle);
 
-                        var elementStyle = d.style;
-                        var newElementStyle = newElement.style;
-                        for (var sIndex = 0, sLength = ElementStyleProperties.length; sIndex < sLength; sIndex++) {
-                            var p = ElementStyleProperties[sIndex];
-                            if (!(p != "font" && newElementStyle[p])) {
-                                elementStyle[p] = newElementStyle[p];
-                            }
-                        }
-                    }
-                    for (var lIndex = 0, lLength = listenerNames.length; lIndex < lLength; lIndex++) {
-                        var name = listenerNames[lIndex];
-                        d[name] = newElement[name] ? newElement[name] : null;
-                        newElement[name] = null;
-                    }
+                    cloneAttributes(d, newElement);
                 } else if (html.length > 0) {
                     parserElement.innerHTML = html;
                     parent.replaceChild(parserElement.firstChild, d);
@@ -1359,7 +1370,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 // If we have 'execute' identifiers:
                 // Handle any keywords that may be present.
-                // If @none present anywhere, do not send the 
+                // If @none present anywhere, do not send the
                 // "javax.faces.partial.execute" parameter.
                 // The 'execute' and 'render' lists must be space
                 // delimited.

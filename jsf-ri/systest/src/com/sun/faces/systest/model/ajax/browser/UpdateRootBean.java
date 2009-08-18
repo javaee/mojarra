@@ -251,7 +251,6 @@ public class UpdateRootBean {
         }
         return null;
     }
-
     public String updateRootAllEvent() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
@@ -276,6 +275,40 @@ public class UpdateRootBean {
                 writer.writeAttribute("onclick","checkPass();","onclick");
                 writer.writeAttribute("value","Click Me","value");
                 writer.endElement("input");
+                writer.endElement("body");
+                writer.endElement("html");
+                writer.endUpdate();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
+
+    public String updateRootBodyStyle() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.startUpdate("javax.faces.ViewRoot");
+                writer.startElement("html",null);
+                writer.startElement("head",null);
+                writer.startElement("title",null);
+                writer.writeText("PASSED",null);
+                writer.endElement("title");
+                writer.endElement("head");
+                writer.startElement("body",null);
+                writer.writeAttribute("id","bodyId","id");
+                writer.writeAttribute("style", "background-color: green","style");
+                writer.writeText("Green means PASSED",null);
                 writer.endElement("body");
                 writer.endElement("html");
                 writer.endUpdate();
