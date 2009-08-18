@@ -1782,6 +1782,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             return;
         }
 
+        // RELEASE_PENDING rogerk - shouldn't this be getElementById instead of null
         var thisArg = (typeof source === 'object') ? source : null;
 
         // Call back any scripts that were passed in
