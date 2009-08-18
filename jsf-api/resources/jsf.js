@@ -227,31 +227,29 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
         /**
-         * Replace DOM element
-         * @param d element to replace
+         * Replace DOM element with a new tagname and supplied innerHTML
+         * @param element element to replace
          * @param tempTagName new tag name to replace with
-         * @param src string to replace element with
+         * @param src string new content for element
          * @ignore
          */
-        var elementReplaceStr = function elementReplaceStr(d, tempTagName, src) {
-            var parent = d.parentNode;
+        var elementReplaceStr = function elementReplaceStr(element, tempTagName, src) {
+            var parent = element.parentNode;
             var temp = document.createElement(tempTagName);
             var result = null;
-            if (d.id) {
-                temp.id = d.id;
+            if (element.id) {
+                temp.id = element.id;
             }
 
             // Creating a head element isn't allowed in IE, and faulty in most browsers,
-            // so we'll disallow it
-            if (d.nodeName.toLowerCase() === "head") {
-                throw new Error("Attempted to replace a head element");
+            // so it is not allowed
+            if (element.nodeName.toLowerCase() === "head") {
+                throw new Error("Attempted to replace a head element - this is not allowed.");
             } else {
                 temp.innerHTML = src;
             }
 
-            result = temp;
-            parent.replaceChild(temp, d);
-            return result;
+            parent.replaceChild(temp, element);
         };
 
         /**
