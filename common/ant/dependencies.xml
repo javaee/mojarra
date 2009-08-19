@@ -94,7 +94,10 @@
     <property name="jsdoc.jar" value="${dependency.jar.dir}/jsdoc-${jsdoc.version}.jar"/>
     <property name="maven.repository.importer.jar"
               value="${dependency.jar.dir}/maven-repository-importer-${maven.repository.importer.version}.jar"/>
+    <!--
     <property name="servlet.jar" value="${dependency.jar.dir}/servlet-api-${servlet.api.version}.jar"/>
+    -->
+    <property name="servlet.jar" value="${jsf.build.home}/lib/javax.servlet.jar"/>
     <property name="jsp.jar" value="${dependency.jar.dir}/jsp-api-${jsp.api.version}.jar"/>
     <property name="el-api.jar" value="${dependency.jar.dir}/el-api-${el.version}.jar"/>
     <property name="el-impl.jar" value="${dependency.jar.dir}/el-impl-${el.version}.jar"/>

@@ -331,6 +331,10 @@
             </fileset>
         </copy>
 
+        <!-- Commented out until a couple V3 issues are resolved
+        <copy file="conf/share/javax.servlet.ServletContainerInitializer"
+              toDir="${build.classes.dir}/META-INF/services" />
+        -->
         <copy file="${build.generate.tld.dir}/html_basic.tld"
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="conf/xslt/jsf1_0-1_1toSchema.xsl"
