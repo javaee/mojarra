@@ -55,7 +55,7 @@ package javax.faces.view.facelets;
  * Provides the ability to completely change the Tag before it's processed for
  * compiling with the associated TagHandler.
  * <p />
- * You could take &lt;input type="text" /> and convert it to &lth:inputText />
+ * You could take &lt;input type="text" /> and convert it to &lt;h:inputText />
  * before compiling.
  */
 public interface TagDecorator {
