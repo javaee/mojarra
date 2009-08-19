@@ -99,6 +99,9 @@ public class RIConstants {
     public static final String ERROR_PAGE_PRESENT_KEY_NAME = 
 	FACES_PREFIX + "errorPagePresent";
 
+    public static final String FACES_INITIALIZER_MAPPINGS_ADDED =
+          FACES_PREFIX + "facesInitializerMappingsAdded";
+
     private RIConstants() {
 
         throw new IllegalStateException();

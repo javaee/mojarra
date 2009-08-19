@@ -38,6 +38,7 @@ package com.sun.faces.config;
 
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.RIConstants;
 
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
@@ -93,6 +94,7 @@ public class FacesInitializer implements ServletContainerInitializer {
                                             "javax.faces.webapp.FacesServlet");
             servletContext.addListener(com.sun.faces.config.ConfigureListener.class);
             reg.addMapping("/faces/*", "*.jsf", "*.faces");
+            servletContext.setAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED, Boolean.TRUE);
 
         }
     }

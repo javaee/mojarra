@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.EventListener;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
@@ -123,6 +124,11 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import javax.servlet.FilterRegistration;
+import javax.servlet.SessionCookieConfig;
+import javax.servlet.SessionTrackingMode;
+import javax.servlet.descriptor.JspConfigDescriptor;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
@@ -886,6 +892,109 @@ public class ConfigureListenerTestCase extends ServletFacesTestCase {
 
         public String getServletContextName() {
             return delegate.getServletContextName();
+        }
+
+        public int getEffectiveMajorVersion() {
+            return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public int getEffectiveMinorVersion() {
+            return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public boolean setInitParameter(String s, String s1) {
+            return false;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public ServletRegistration.Dynamic addServlet(String s, String s1) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public ServletRegistration.Dynamic addServlet(String s, Servlet servlet) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public ServletRegistration.Dynamic addServlet(String s, Class<? extends Servlet> aClass) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public <T extends Servlet> T createServlet(Class<T> tClass)
+              throws ServletException {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public ServletRegistration getServletRegistration(String s) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public Map<String, ? extends ServletRegistration> getServletRegistrations() {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public FilterRegistration.Dynamic addFilter(String s, String s1) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public FilterRegistration.Dynamic addFilter(String s, javax.servlet.Filter filter) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public FilterRegistration.Dynamic addFilter(String s, Class<? extends javax.servlet.Filter> aClass) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public <T extends javax.servlet.Filter> T createFilter(Class<T> tClass)
+              throws ServletException {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public FilterRegistration getFilterRegistration(String s) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public SessionCookieConfig getSessionCookieConfig() {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public void setSessionTrackingModes(Set<SessionTrackingMode> sessionTrackingModes) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public void addListener(String s) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public <T extends EventListener> void addListener(T t) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public void addListener(Class<? extends EventListener> aClass) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public <T extends EventListener> T createListener(Class<T> tClass)
+              throws ServletException {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public JspConfigDescriptor getJspConfigDescriptor() {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public ClassLoader getClassLoader() {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
         }
     }
 

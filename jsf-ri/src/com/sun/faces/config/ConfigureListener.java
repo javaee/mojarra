@@ -163,20 +163,27 @@ public class ConfigureListener implements ServletRequestListener,
         // Check to see if the FacesServlet is present in the
         // web.xml.   If it is, perform faces configuration as normal,
         // otherwise, simply return.
+        Object mappingsAdded = context.getAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED);
+        if (mappingsAdded != null) {
+            context.removeAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED);
+        }
+
         WebXmlProcessor webXmlProcessor = new WebXmlProcessor(context);
-        if (!webXmlProcessor.isFacesServletPresent()) {
-            if (!webConfig.isOptionEnabled(ForceLoadFacesConfigFiles)) {
+        if (mappingsAdded == null) {
+            if (!webXmlProcessor.isFacesServletPresent()) {
+                if (!webConfig.isOptionEnabled(ForceLoadFacesConfigFiles)) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   "No FacesServlet found in deployment descriptor - bypassing configuration");
+                    }
+                    WebConfiguration.clear(context);
+                    return;
+                }
+            } else {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
-                               "No FacesServlet found in deployment descriptor - bypassing configuration");
+                               "FacesServlet found in deployment descriptor - processing configuration.");
                 }
-                WebConfiguration.clear(context);
-                return;
-            }
-        } else {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "FacesServlet found in deployment descriptor - processing configuration.");
             }
         }
 
