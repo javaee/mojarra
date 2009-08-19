@@ -86,7 +86,7 @@ public class FacesInitializer implements ServletContainerInitializer {
 
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
-                           "Registering FacesServlet with mappings '/faces/*' and '*.jsf'.");
+                           "Registering FacesServlet with mappings '/faces/*', '*.jsf', and '*.faces'.");
             }
             ServletRegistration reg =
                   servletContext.addServlet("FacesServlet",
