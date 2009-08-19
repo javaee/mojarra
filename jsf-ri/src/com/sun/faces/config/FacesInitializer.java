@@ -92,7 +92,7 @@ public class FacesInitializer implements ServletContainerInitializer {
                   servletContext.addServlet("FacesServlet",
                                             "javax.faces.webapp.FacesServlet");
             servletContext.addListener(com.sun.faces.config.ConfigureListener.class);
-            reg.addMapping("/faces/*", "*.jsf");
+            reg.addMapping("/faces/*", "*.jsf", "*.faces");
 
         }
     }
