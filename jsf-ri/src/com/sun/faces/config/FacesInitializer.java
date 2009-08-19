@@ -49,12 +49,14 @@ import javax.faces.event.ListenerFor;
 import javax.faces.event.ListenersFor;
 import javax.faces.render.FacesBehaviorRenderer;
 import javax.faces.validator.FacesValidator;
+import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.servlet.annotation.HandlesTypes;
 import java.util.Set;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -75,7 +77,7 @@ import java.util.logging.Level;
 public class FacesInitializer implements ServletContainerInitializer {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
-
+    private static final String FACES_SERVLET_CLASS = FacesServlet.class.getName();
 
     // -------------------------------- Methods from ServletContainerInitializer
 
@@ -85,6 +87,14 @@ public class FacesInitializer implements ServletContainerInitializer {
 
         if (classes != null && !classes.isEmpty()) {
 
+            Map<String,? extends ServletRegistration> existing = servletContext.getServletRegistrations();
+            for (ServletRegistration registration : existing.values()) {
+                if (FACES_SERVLET_CLASS.equals(registration.getClassName())) {
+                    // FacesServlet has already been defined, so we're
+                    // not going to add additional mappings;
+                    return;
+                }
+            }
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            "Registering FacesServlet with mappings '/faces/*', '*.jsf', and '*.faces'.");
