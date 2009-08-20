@@ -184,7 +184,7 @@
                     <if>
                         <os family="windows"/>
                         <then>
-                            <property name="mvn.cmd" value="mvn.exe"/>
+                            <property name="mvn.cmd" value="mvn.bat"/>
                         </then>
                         <else>
                             <property name="mvn.cmd" value="mvn"/>
@@ -195,7 +195,7 @@
                     <if>
                         <os family="windows"/>
                         <then>
-                            <property name="mvn.cmd" value="${mvn.home}/bin/mvn.exe"/>
+                            <property name="mvn.cmd" value="${mvn.home}/bin/mvn.bat"/>
                         </then>
                         <else>
                             <property name="mvn.cmd" value="${mvn.home}/bin/mvn"/>
