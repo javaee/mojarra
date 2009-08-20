@@ -103,6 +103,15 @@ public class TestExceptionHandler extends ServletFacesTestCase {
         testHandleExceptionThrow(apiFactory.getExceptionHandler());
         testHandleBeforeAfterExceptions(implFactory.getExceptionHandler(), true);
         testHandleBeforeAfterExceptions(apiFactory.getExceptionHandler(), false);
+        //test for issue 1263
+        boolean isProcessingEvents = getFacesContext().isProcessingEvents(); 
+        try {
+            getFacesContext().setProcessingEvents(false);
+            testHandleExceptionThrow(implFactory.getExceptionHandler());
+            testHandleExceptionThrow(apiFactory.getExceptionHandler());
+        } finally {
+        	getFacesContext().setProcessingEvents(isProcessingEvents);
+        }
     }
 
     public void testGetRootCause() {

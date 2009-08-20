@@ -111,6 +111,8 @@ import com.sun.faces.util.Util;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.util.LinkedHashSet;
+
+import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
@@ -259,7 +261,7 @@ public class ApplicationImpl extends Application {
         Util.notNull("context", context);
         Util.notNull("systemEventClass", systemEventClass);
         Util.notNull("source", source);
-        if (!context.isProcessingEvents()) {
+        if (!needsProcessing(context, systemEventClass)) {
             return;
         }
         // source is not compatible with the provided base type.
@@ -1991,6 +1993,10 @@ public class ApplicationImpl extends Application {
         return event;
 
     }
+    
+	private boolean needsProcessing(FacesContext context, Class<? extends SystemEvent> systemEventClass) {
+		return context.isProcessingEvents() || ExceptionQueuedEvent.class.isAssignableFrom(systemEventClass);
+	}
 
 
     // ----------------------------------------------------------- Inner Classes
