@@ -271,7 +271,12 @@
         <component-class>com.sun.faces.facelets.tag.jsf.CompositeComponentImpl
         </component-class>
     </component>
-    
+
+    <!-- Custom component to contain component resources -->
+    <component>
+        <component-type>javax.faces.ComponentResourceContainer</component-type>
+        <component-class>com.sun.faces.component.ComponentResourceContainer</component-class>
+    </component>
     <!-- Add our implementation specific Renderers -->
     <render-kit>
         <render-kit-id>HTML_BASIC</render-kit-id>

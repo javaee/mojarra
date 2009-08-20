@@ -167,7 +167,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public void testAddGetComponentResources() {
 
-        application.addComponent("javax.faces.Panel", "javax.faces.component.UIPanel");
+        application.addComponent("javax.faces.ComponentResourceContainer", Container.class.getName());
         UIViewRoot root = new UIViewRoot();
         UIOutput resource = new UIOutput();
 
@@ -1060,6 +1060,14 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
             event = null;
         }
 
+    }
+
+    public static class Container extends UIPanel {
+
+        @Override
+        public void encodeAll(FacesContext context) throws IOException {
+
+        }
     }
 
 }
