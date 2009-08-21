@@ -44,11 +44,15 @@ import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.FacesComponent;
+import javax.faces.component.UIComponent;
 import javax.faces.convert.FacesConverter;
+import javax.faces.convert.Converter;
 import javax.faces.event.ListenerFor;
 import javax.faces.event.ListenersFor;
 import javax.faces.render.FacesBehaviorRenderer;
+import javax.faces.render.Renderer;
 import javax.faces.validator.FacesValidator;
+import javax.faces.validator.Validator;
 import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
@@ -57,12 +61,15 @@ import javax.servlet.ServletRegistration;
 import javax.servlet.annotation.HandlesTypes;
 import java.util.Set;
 import java.util.Map;
+import java.util.Enumeration;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.net.MalformedURLException;
 
 /**
  *
  */
+@SuppressWarnings({"UnusedDeclaration"})
 @HandlesTypes({
       ManagedBean.class,
       FacesComponent.class,
@@ -72,7 +79,12 @@ import java.util.logging.Level;
       ResourceDependency.class,
       ResourceDependencies.class,
       ListenerFor.class,
-      ListenersFor.class
+      ListenersFor.class,
+      UIComponent.class,
+      Validator.class,
+      Converter.class,
+      Renderer.class
+
 })
 public class FacesInitializer implements ServletContainerInitializer {
 
@@ -85,7 +97,7 @@ public class FacesInitializer implements ServletContainerInitializer {
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext)
           throws ServletException {
 
-        if (classes != null && !classes.isEmpty()) {
+        if (shouldCheckMappings(classes, servletContext)) {
 
             Map<String,? extends ServletRegistration> existing = servletContext.getServletRegistrations();
             for (ServletRegistration registration : existing.values()) {
@@ -102,10 +114,55 @@ public class FacesInitializer implements ServletContainerInitializer {
             ServletRegistration reg =
                   servletContext.addServlet("FacesServlet",
                                             "javax.faces.webapp.FacesServlet");
-            servletContext.addListener(com.sun.faces.config.ConfigureListener.class);
             reg.addMapping("/faces/*", "*.jsf", "*.faces");
             servletContext.setAttribute(RIConstants.FACES_INITIALIZER_MAPPINGS_ADDED, Boolean.TRUE);
 
+            // The following line is temporary until we can solve an ordering
+            // issue in V3.  Right now the JSP container looks for a mapping
+            // of the FacesServlet in the web.xml.  If it's not present, then
+            // it assumes that the application isn't a faces application.  In this
+            // case the JSP container will not register the ConfigureListener
+            // definition from our TLD nor will it parse cause or JSP TLDs to
+            // be parsed.
+            servletContext.addListener(com.sun.faces.config.ConfigureListener.class);
+
         }
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private boolean shouldCheckMappings(Set<Class<?>> classes,
+                                        ServletContext context) {
+
+        if (classes != null && !classes.isEmpty()) {
+            return true;
+        }
+
+        // failing that, check to see if any javax.faces or com.sun.faces
+        // context init parameters have been defined
+        for (Enumeration<String> parameters = context.getInitParameterNames();
+             parameters.hasMoreElements(); ) {
+
+            String paramName = parameters.nextElement().trim();
+
+            if (paramName.startsWith("javax.faces.")
+                  || paramName.startsWith("com.sun.faces.")) {
+                return true;
+            }
+        }
+
+        // no JSF specific parameters found, check for a WEB-INF/faces-config.xml
+        try {
+            return context.getResource("/WEB-INF/faces-config.xml") != null;
+        } catch (MalformedURLException mue) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, mue.toString(), mue);
+            }
+        }
+        
+        return false;
+
     }
 }
