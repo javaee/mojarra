@@ -92,6 +92,7 @@ import com.sun.faces.application.WebappLifecycleListener;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceLoadFacesConfigFiles;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.*;
 import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
@@ -204,19 +205,21 @@ public class ConfigureListener implements ServletRequestListener,
 
             // see if we need to disable our TLValidator
             Util.setHtmlTLVActive(
-                  webConfig.isOptionEnabled(BooleanWebContextInitParameter.EnableHtmlTagLibraryValidator));
+                  webConfig.isOptionEnabled(EnableHtmlTagLibraryValidator));
 
-            if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.VerifyFacesConfigObjects)) {
+            if (webConfig.isOptionEnabled(VerifyFacesConfigObjects)) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.warning("jsf.config.verifyobjects.development_only");
                 }
                 // if we're verifying, force bean validation to occur at startup as well
-                webConfig.overrideContextInitParameter(BooleanWebContextInitParameter.EnableLazyBeanValidation, false);
+                webConfig.overrideContextInitParameter(EnableLazyBeanValidation, false);
                 Verifier.setCurrentInstance(new Verifier());
             }
             initScripting();
             configManager.initialize(context);
-            initConfigMonitoring(context);
+            if (webConfig.isOptionEnabled(EnableThreading)) {
+                initConfigMonitoring(context);
+            }
 
             // Step 7, verify that all the configured factories are available
             // and optionall that configured objects can be created. 
@@ -445,7 +448,7 @@ public class ConfigureListener implements ServletRequestListener,
     }
 
     private void initScripting() {
-        if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.EnableGroovyScripting)) {
+        if (webConfig.isOptionEnabled(EnableGroovyScripting)) {
             GroovyHelper helper = GroovyHelperFactory.createHelper();
             if (helper != null) {
                 helper.setClassLoader();
