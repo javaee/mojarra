@@ -48,7 +48,7 @@ public class ComponentResourceContainer extends UIPanel {
      */
     @Override
     public void encodeAll(FacesContext context) throws IOException {
-        super.encodeAll(context);    //To change body of overridden methods use File | Settings | File Templates.
+        // no-op
     }
     
 }
