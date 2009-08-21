@@ -50,6 +50,7 @@ import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.StateSavingMethod;
+import com.sun.faces.util.RequestStateManager;
 
 
 /**
@@ -93,11 +94,21 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     @Override
     public Object getState(FacesContext context, String viewId) {
 
-        try {
-            return helper.getState(context, viewId);
-        } catch (IOException e) {
-            throw new FacesException(e);
+        Object state =
+              RequestStateManager.get(context, RequestStateManager.FACES_VIEW_STATE);
+        if (state == null) {
+            try {
+                state = helper.getState(context, viewId);
+                if (state != null) {
+                    RequestStateManager.set(context,
+                                            RequestStateManager.FACES_VIEW_STATE,
+                                            state);
+                }
+            } catch (IOException e) {
+                throw new FacesException(e);
+            }
         }
+        return state;
 
     }
 
@@ -130,4 +141,17 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     }
 
+
+    @SuppressWarnings({"deprecation"})
+    @Override
+    public Object getTreeStructureToRestore(FacesContext context, String viewId) {
+
+        Object[] state = (Object[]) getState(context, viewId);
+        if (state != null) {
+            return state[0];
+        }
+        return null;
+
+    }
+    
 } 

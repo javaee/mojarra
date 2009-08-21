@@ -856,6 +856,11 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     public void processRestoreState(FacesContext context, Object state) {
 
         try {
+            // hack to work around older state managers that may not set the
+            // view root early enough
+            if (context.getViewRoot() == null) {
+                context.setViewRoot(this);
+            }
             super.processRestoreState(context, state);
         } finally {
             final PostRestoreStateEvent event = new PostRestoreStateEvent(this);
