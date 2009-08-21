@@ -127,10 +127,10 @@
     <!-- converter06 impl logic deferred to 2.0 -->
     <target name="test"
             description="Execute all tests against installed application"
-            depends="test.annotations,
+            depends="test.ajax,
+                test.annotations,
                 test.composite,
                 test.facelets,
-                test.ajax,
                 test.init,
                 test.render,
                 test.html.taglib,

@@ -182,6 +182,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         };
 
         /**
+         * Get the form element which encloses the supplied element.
+         * @param element - element to act against in search
+         * @returns form element representing enclosing form, or first form if none found.
          * @ignore
          */
         var getForm = function getForm(element) {
