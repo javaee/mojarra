@@ -205,20 +205,18 @@ public final class SAXCompiler extends Compiler {
                 // but the alternative is to somehow figure out how *not* to escape the "<!"
                 // within the cdata of the ajax response.  Putting the PENDING in here to
                 // remind me to have rlubke take a look.  But I'm stumped.
-                if (!FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest()) {
-                    StringBuffer sb = new StringBuffer(64);
-                    sb.append("<!DOCTYPE ").append(name);
-                    if (publicId != null) {
-                        sb.append(" PUBLIC \"").append(publicId).append("\"");
-                        if (systemId != null) {
-                            sb.append(" \"").append(systemId).append("\"");
-                        }
-                    } else if (systemId != null) {
-                        sb.append(" SYSTEM \"").append(systemId).append("\"");
+                StringBuffer sb = new StringBuffer(64);
+                sb.append("<!DOCTYPE ").append(name);
+                if (publicId != null) {
+                    sb.append(" PUBLIC \"").append(publicId).append("\"");
+                    if (systemId != null) {
+                        sb.append(" \"").append(systemId).append("\"");
                     }
-                    sb.append(">\n");
-                    this.unit.writeInstruction(sb.toString());
+                } else if (systemId != null) {
+                    sb.append(" SYSTEM \"").append(systemId).append("\"");
                 }
+                sb.append(">\n");
+                this.unit.writeInstruction(sb.toString());
             }
             this.inDocument = false;
         }

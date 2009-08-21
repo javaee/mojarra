@@ -155,8 +155,8 @@ public class HtmlResponseWriter extends ResponseWriter {
     private static final String BREAKCDATA = "]]><![CDATA[";
     private static final String ESCAPEDSINGLEBRACKET = "]"+BREAKCDATA;
     private static final String ESCAPEDLT= "&lt;"+BREAKCDATA;
-    private static final String ESCAPEDSTART= "&lt;"+BREAKCDATA+"!";
-    private static final String ESCAPEDEND= "]"+BREAKCDATA+"]";
+    private static final String ESCAPEDSTART= "&lt;"+BREAKCDATA+"![";
+    private static final String ESCAPEDEND= "]"+BREAKCDATA+"]>";
 
     private static final int CLOSEBRACKET = (int)']';
     private static final int LT = (int)'<';
@@ -1152,41 +1152,75 @@ public class HtmlResponseWriter extends ResponseWriter {
 // RELEASE_PENDING Add a character array buffer, as well as unwinding the final Strings into char[]
 /*
  *  Method to escape all CDATA instances in a character array.
+ *
+ * This method looks for occurances of "<![" and "]]>"
  */
-    private String escapeArray(char cbuf[]) {
-        if (cbuf == null || cbuf.length == 0) {
-            return "";
-        }
-        boolean last = false;
-        StringBuilder builder = new StringBuilder(cbuf.length);
-        for (int i = 0; i < cbuf.length-1; i++) {
-            if (cbuf[i] == '<' && cbuf[i+1] == '!') {
-                builder.append(ESCAPEDSTART);
-                i++;
-            } else if (cbuf[i] == ']' && cbuf[i+1] == ']') {
-                builder.append(ESCAPEDEND);
-                i++;
-            } else {
-                builder.append(cbuf[i]);
-            }
-            if (i == cbuf.length - 1) {
-                    last = true;
-            }
-        }
-        // if we didn't look at the last, look at it now
-        // RELEASE_PENDING consider buffering the last character, in this case
-        if (!last) {
-            if (cbuf[cbuf.length-1] == '<') {
-                builder.append(ESCAPEDLT);
-            } else if (cbuf[cbuf.length-1] == '[') {
-                builder.append(ESCAPEDSINGLEBRACKET);
-            } else {
-                builder.append(cbuf[cbuf.length-1]);
-            }
-        }
+private String escapeArray(char cbuf[]) {
+    if (cbuf == null || cbuf.length == 0) {
+        return "";
+    }
+    StringBuilder builder = new StringBuilder(cbuf.length);
 
+    // Single char case
+    if (cbuf.length == 1) {
+        if (cbuf[0] == '<') {
+            builder.append(ESCAPEDLT);
+        } else if (cbuf[0] == '[') {
+            builder.append(ESCAPEDSINGLEBRACKET);
+        } else {
+            builder.append(cbuf[0]);
+        }
         return builder.toString();
     }
+    // two char case
+    if (cbuf.length == 2) {
+        if (cbuf[0] == '<' && cbuf[1] == '!') {
+            builder.append(ESCAPEDLT);
+            builder.append(cbuf[1]);
+        } else if (cbuf[0] == ']' && cbuf[1] == ']') {
+            builder.append(ESCAPEDSINGLEBRACKET);
+            builder.append(ESCAPEDSINGLEBRACKET);
+        } else {
+            builder.append(cbuf[0]);
+            builder.append(cbuf[1]);
+        }
+        return builder.toString();
+    }
+    // > 2 char case
+    boolean last = false;
+    for (int i = 0; i < cbuf.length - 2; i++) {
+        if (cbuf[i] == '<' && cbuf[i + 1] == '!' && cbuf[i + 2] == '[') {
+            builder.append(ESCAPEDSTART);
+            i += 2;
+        } else if (cbuf[i] == ']' && cbuf[i + 1] == ']' && cbuf[i + 2] == '>') {
+            builder.append(ESCAPEDEND);
+            i += 2;
+        } else {
+            builder.append(cbuf[i]);
+        }
+        if (i == cbuf.length - 1) {
+            last = true;
+        }
+    }
+    // if we didn't look at the last characters, look at them now
+    if (!last) {
+        if (cbuf[cbuf.length - 2] == '<') {
+            builder.append(ESCAPEDLT);
+        } else if (cbuf[cbuf.length - 2] == '[') {
+            builder.append(ESCAPEDSINGLEBRACKET);
+        } else {
+            builder.append(cbuf[cbuf.length - 2]);
+        }
+        if (cbuf[cbuf.length - 1] == '<') {
+            builder.append(ESCAPEDLT);
+        } else if (cbuf[cbuf.length - 1] == '[') {
+            builder.append(ESCAPEDSINGLEBRACKET);
+        } else {
+            builder.append(cbuf[cbuf.length - 1]);
+        }
+    }
+    return builder.toString();
+}
 
 
 }
