@@ -151,16 +151,14 @@
                           <zipfileset dir="@{base-app-dir}/web"
                                       includes="**/*"/>
                           <zipfileset dir="@{base-app-dir}/build/classes"
-                                      prefix="WEB-INF/classes"/>
+                                      prefix="WEB-INF/classes"
+                                      excludes="**/*TestCase.class"/>
                           <zipfileset dir="@{base-app-dir}/src/java"
                                       includes="**/*.properties,**/*.xml"
                                       prefix="WEB-INF/classes"/>
-                          <zipfileset file="${jsf.test.jar}"
-                                      prefix="WEB-INF/lib"/>
                           <zipfileset dir="${basedir}/build/classes"
-                                      prefix="WEB-INF/classes"/>
-                          <zipfileset dir="${impl.dir}/build/test/classes"
-                                      prefix="WEB-INF/classes"/>
+                                      prefix="WEB-INF/classes"
+                                      excludes="**/*TestCase.class"/>
                       </archive-elements>
                   </jsf.war>
                 <mkdir dir="@{base-app-dir}/build/jsf-@{appname}" />
