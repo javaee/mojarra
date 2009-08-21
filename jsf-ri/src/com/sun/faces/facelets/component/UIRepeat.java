@@ -485,7 +485,7 @@ public class UIRepeat extends UINamingContainer {
                 validateIterationControlValues(rowCount, i, e);
 
                 this.setIndex(faces, i);
-                this.updateIterationStatus(faces, new IterationStatus(true, i >= e, i, begin, end, step));
+                this.updateIterationStatus(faces, new IterationStatus(true, (i + s > e || rowCount == 1), i, begin, end, step));
                 while (i <= e && this.isIndexAvailable()) {
 
                     if (PhaseId.RENDER_RESPONSE.equals(phase)
@@ -654,7 +654,7 @@ public class UIRepeat extends UINamingContainer {
         this.setIndex(faces, i);
         this.updateIterationStatus(faces,
                                    new IterationStatus(true,
-                                                       i >= e,
+                                                       (i + s > e || rowCount == 1),
                                                        i,
                                                        begin,
                                                        end,
@@ -829,16 +829,18 @@ public class UIRepeat extends UINamingContainer {
             UIComponent source = target.getComponent();
             UIComponent compositeParent = null;
             try {
+                int rowCount = getDataModel().getRowCount();
                 int idx = idxEvent.getIndex();
                 this.setIndex(ctx, idx);
                 Integer begin = this.getBegin();
                 Integer end = this.getEnd();
                 Integer step = this.getStep();
-                int e = ((end != null) ? end : getDataModel().getRowCount());
+                int b = ((end != null) ? end : 0);
+                int e = ((end != null) ? end : rowCount);
                 int s = ((step != null) ? step : 1);
                 this.updateIterationStatus(ctx,
-                                           new IterationStatus(false,
-                                                               idx + s >= e,
+                                           new IterationStatus(idx == b,
+                                                               (idx + s >= e || rowCount == 1),
                                                                idx,
                                                                begin,
                                                                end,

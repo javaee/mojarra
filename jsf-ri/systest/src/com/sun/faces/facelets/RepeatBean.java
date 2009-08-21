@@ -48,6 +48,7 @@ import javax.faces.application.FacesMessage;
 public class RepeatBean {
     
     List<String> flavors;
+    List<String> singleFlavor;
     
     public List<String> getFlavorsList() {
         if (null == flavors) {
@@ -60,6 +61,14 @@ public class RepeatBean {
         return flavors;
     }
 
+    public List<String> getSingleFlavorList() {
+        if (singleFlavor == null) {
+            singleFlavor = new ArrayList<String>(1);
+            singleFlavor.add("chocolate");
+        }
+        return singleFlavor;
+    }
+
 
     public void setIndex(int index) {
 
@@ -70,6 +79,7 @@ public class RepeatBean {
         ctx.addMessage(null, msg);
         
     }
+
     
     public String [] getFlavorsArray() {
         String [] result = new String[getFlavorsList().size()];

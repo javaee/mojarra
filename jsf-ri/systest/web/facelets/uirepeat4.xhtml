@@ -89,6 +89,15 @@
             <br/>
         </ui:repeat>
     </div>
+    <br />
+    <br />
+    <div id="section5">
+        <ui:repeat var="var" value="#{repeatBean.singleFlavorList}"
+                   varStatus="status">
+            <span>#{var}: index=#{status.index} : begin=#{status.begin} : end=#{status.end} : step=#{status.step} : first=#{status.first} : last=#{status.last} : even=#{status.even} : odd=#{status.odd}</span>
+            <br/>
+        </ui:repeat>
+    </div>
 
 
 </h:form>
