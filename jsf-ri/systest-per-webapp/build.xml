@@ -144,25 +144,25 @@
                         <path refid="test.compile.classpath"/>
                     </classpath>
                 </jsf.javac>
-		<jsf.war archive-name="jsf-@{appname}"
-			 basedir="@{base-app-dir}/build"
-			 webxml="@{base-app-dir}/web/WEB-INF/web.xml">
-		    <archive-elements>
-			<zipfileset dir="@{base-app-dir}/web"
-				    includes="**/*"/>
-			<zipfileset dir="@{base-app-dir}/build/classes"
-				    prefix="WEB-INF/classes"/>
-			<zipfileset dir="@{base-app-dir}/src/java"
-				    includes="**/*.properties,**/*.xml"
-				    prefix="WEB-INF/classes"/>
-			<zipfileset file="${jsf.test.jar}"
-				    prefix="WEB-INF/lib"/>
-			<zipfileset dir="${basedir}/build/classes"
-				    prefix="WEB-INF/classes"/>
-			<zipfileset dir="${impl.dir}/build/test/classes"
-				    prefix="WEB-INF/classes"/>
-		    </archive-elements>
-		</jsf.war>
+                  <jsf.war archive-name="jsf-@{appname}"
+                           basedir="@{base-app-dir}/build"
+                           webxml="@{base-app-dir}/web/WEB-INF/web.xml">
+                      <archive-elements>
+                          <zipfileset dir="@{base-app-dir}/web"
+                                      includes="**/*"/>
+                          <zipfileset dir="@{base-app-dir}/build/classes"
+                                      prefix="WEB-INF/classes"/>
+                          <zipfileset dir="@{base-app-dir}/src/java"
+                                      includes="**/*.properties,**/*.xml"
+                                      prefix="WEB-INF/classes"/>
+                          <zipfileset file="${jsf.test.jar}"
+                                      prefix="WEB-INF/lib"/>
+                          <zipfileset dir="${basedir}/build/classes"
+                                      prefix="WEB-INF/classes"/>
+                          <zipfileset dir="${impl.dir}/build/test/classes"
+                                      prefix="WEB-INF/classes"/>
+                      </archive-elements>
+                  </jsf.war>
                 <mkdir dir="@{base-app-dir}/build/jsf-@{appname}" />
                 <unwar src="@{base-app-dir}/build/jsf-@{appname}.war"
                        dest="@{base-app-dir}/build/jsf-@{appname}" />
