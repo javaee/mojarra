@@ -186,8 +186,9 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             owner.onComponentCreated(ctx, c, parent);
         }
         c.pushComponentToEL(ctx.getFacesContext(), c);
+        boolean compcompPushed = false;
         if (UIComponent.isCompositeComponent(c)) {
-            pushCompositeComponent(ctx.getFacesContext(), c);
+            compcompPushed = pushCompositeComponent(ctx.getFacesContext(), c);
         }
         // first allow c to get populated
         owner.applyNextHandler(ctx, c);
@@ -208,7 +209,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // been part of the tree or not yet
         ComponentSupport.addComponent(ctx, parent, c);
         c.popComponentFromEL(ctx.getFacesContext());
-        if (UIComponent.isCompositeComponent(c)) {
+        if (compcompPushed) {
             popCompositeComponent(ctx.getFacesContext());
         }
 
@@ -373,14 +374,19 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      *
      * @param ctx the <code>FacesContext</code> for the current request
      * @param c the composite component to push
+     *
+     * @return <code>true</code> if the argument component was pushed onto the
+     *  stack, otherwise returns <code>false</code>
      */
-    private void pushCompositeComponent(FacesContext ctx, UIComponent c) {
+    private boolean pushCompositeComponent(FacesContext ctx, UIComponent c) {
 
         if (c != null) {
             assert (UIComponent.isCompositeComponent(c));
             Stack<UIComponent> stack = getStack(ctx, true);
             stack.push(c);
+            return true;
         }
+        return false;
 
     }
 
