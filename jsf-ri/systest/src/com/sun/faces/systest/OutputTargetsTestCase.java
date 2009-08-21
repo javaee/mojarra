@@ -41,7 +41,6 @@ import junit.framework.TestSuite;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 
 import java.util.ArrayList;
@@ -50,14 +49,14 @@ import java.util.List;
 /**
  * Test h:link and h:button.
  */
-public class TestOutputTargets extends AbstractTestCase {
+public class OutputTargetsTestCase extends AbstractTestCase {
 
     /**
      * Construct a new instance of this test case.
      *
      * @param name Name of the test case
      */
-    public TestOutputTargets(String name) {
+    public OutputTargetsTestCase(String name) {
         super(name);
     }
 
@@ -74,7 +73,7 @@ public class TestOutputTargets extends AbstractTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(TestOutputTargets.class));
+        return (new TestSuite(OutputTargetsTestCase.class));
     }
 
 

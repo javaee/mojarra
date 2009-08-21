@@ -41,32 +41,20 @@
 package com.sun.faces.systest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-
-import javax.faces.component.NamingContainer;
 
 
 /**
  * <p>Verify that required validation occurrs for Select* components.</p>
  */
 
-public class TestDuplicateIds04 extends AbstractTestCase {
+public class DuplicateIds04TestCase extends AbstractTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -77,7 +65,7 @@ public class TestDuplicateIds04 extends AbstractTestCase {
      *
      * @param name Name of the test case
      */
-    public TestDuplicateIds04(String name) {
+    public DuplicateIds04TestCase(String name) {
         super(name);
     }
 
@@ -100,7 +88,7 @@ public class TestDuplicateIds04 extends AbstractTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(TestDuplicateIds04.class));
+        return (new TestSuite(DuplicateIds04TestCase.class));
     }
 
 
