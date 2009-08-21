@@ -155,7 +155,7 @@ public class FacesInitializer implements ServletContainerInitializer {
 
         // no JSF specific parameters found, check for a WEB-INF/faces-config.xml
         try {
-            return context.getResource("/WEB-INF/faces-config.xml") != null;
+            return (context.getResource("/WEB-INF/faces-config.xml") != null);
         } catch (MalformedURLException mue) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, mue.toString(), mue);
