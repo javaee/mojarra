@@ -95,10 +95,47 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var isIE = function isIE() {
-            return document.all && window.ActiveXObject &&
+            if (typeof isIECache !== "undefined") {
+                return isIECache;
+            }
+            isIECache =
+                   document.all && window.ActiveXObject &&
                    navigator.userAgent.toLowerCase().indexOf("msie") > -1 &&
                    navigator.userAgent.toLowerCase().indexOf("opera") == -1;
+            return isIECache;
         }
+        var isIECache;
+
+        /**
+         * Determine if loading scripts into the page executes the script.
+         * This is instead of doing a complicated browser detection algorithm.  Some do, some don't.
+         * @returns {boolean} does including a script in the dom execute it?
+         *
+         */
+        var isAutoExecCache;
+        var isAutoExec = function isAutoExec() {
+            try {
+                if (typeof isAutoExecCache !== "undefined") return isAutoExecCache;
+                var autoExecTestString = "<script>var mojarra = mojarra || {};mojarra.autoExecTest = true;</script>";
+                var tempElement = document.createElement('span');
+                tempElement.innerHTML = autoExecTestString;
+                var body = document.getElementsByTagName('body')[0];
+                var tempNode = body.appendChild(tempElement);
+                if (mojarra && mojarra.autoExecTest) {
+                    isAutoExecCache = true;
+                } else {
+                    isAutoExecCache = false;
+                }
+                body.removeChild(tempNode);
+                return isAutoExecCache;
+            } catch (ex) {
+                // OK, that didn't work, we'll have to make an assumption
+                if (typeof isAutoExecCache === "undefined") {
+                    isAutoExecCache = false;
+                }
+                return isAutoExecCache;
+            }
+        };
 
         /**
          * @ignore
@@ -184,6 +221,66 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
         /**
+         * Evaluate JavaScript code in a global context.
+         * @param src JavaScript code to evaluate
+         */
+        var globalEval = function globalEval(src) {
+            if (window.execScript) {
+                window.execScript(src);
+                return;
+            }
+
+            window.eval.call(window,src);
+        }
+
+        /**
+         * Strip all script tags out of the supplied element, return them as an array for later processing
+         * @param element element to scan for tags
+         * @returns {array} of script text
+         * @ignore
+         */
+        var stripScripts = function stripScripts(element) {
+            if (isAutoExec()) {
+                return [];
+            }
+            var pattern = /^\s*(<!--)*\s*(\/\/)*\s*(<!\[CDATA\[)*/;
+            // get the script nodes, add them into an array, and remove them from node
+            var scriptNodes = element.getElementsByTagName('script');
+            var scripts = [];
+            while (scriptNodes.length) {
+                // push into script array
+                var node = scriptNodes[0];
+                var src = node.text.replace(pattern,"");
+                scripts.push(node.text);
+
+                // then remove it
+                node.parentNode.removeChild(node);
+            }
+            return scripts;
+        };
+
+
+        /**
+         * Run an array of scripts text
+         * @param scripts array of script nodes
+         */
+        var runScripts = function runScripts(scripts) {
+            if (scripts.length === 0) {
+                return;
+            }
+
+            var head = document.getElementsByTagName('head')[0] || document.documentElement;
+            while (scripts.length) {
+                // create script node
+                var scriptNode = document.createElement('script');
+                scriptNode.type = 'text/javascript';
+                scriptNode.text = scripts.shift(); // add the code to the script node
+                head.appendChild(scriptNode); // add it to the page
+                head.removeChild(scriptNode); // then remove it
+            }
+        };
+
+        /**
          * Replace DOM element with a new tagname and supplied innerHTML
          * @param element element to replace
          * @param tempTagName new tag name to replace with
@@ -193,7 +290,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var elementReplaceStr = function elementReplaceStr(element, tempTagName, src) {
             var parent = element.parentNode;
             var temp = document.createElement(tempTagName);
-            var result = null;
             if (element.id) {
                 temp.id = element.id;
             }
@@ -207,12 +303,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
 
             parent.replaceChild(temp, element);
+            //RELEASE_PENDING add script handling
         };
 
         /**
          * Get a string with the concatenated values of all string nodes under the given node
-         * @param {DOMNode} oNode the given DOM node
-         * @param {boolean} deep whether to recursively scan the children nodes of the given node for text as well. Default is <code>false</code>
+         * @param  oNode the given DOM node
+         * @param  deep boolean - whether to recursively scan the children nodes of the given node for text as well. Default is <code>false</code>
          * @ignore
          * Note:  This code originally from Sarissa: http://dev.abiss.gr/sarissa
          * It has been modified to fit into the overall codebase
@@ -274,7 +371,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * for debugging. Tip: append the returned error string in a &lt;pre&gt;
              * element if you want to render it.</p>
              * <p>Many thanks to Christian Stocker for the initial patch.</p>
-             * @param {DOMDocument} oDoc The target DOM document
+             * @param  oDoc The target DOM document
              * @returns {String} The parsing error description of the target Document in
              *          human readable form (preformated text)
              * @ignore
@@ -302,8 +399,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 /**
                  * Implementation of importNode for the context window document in IE.
                  * If <code>oNode</code> is a TextNode, <code>bChildren</code> is ignored.
-                 * @param {DOMNode} oNode the Node to import
-                 * @param {boolean} bChildren whether to include the children of oNode
+                 * @param oNode the Node to import
+                 * @param bChildren whether to include the children of oNode
                  * @returns the imported node for further use
                  * @ignore
                  * Note:  This code orginally from Sarissa: http://dev.abiss.gr/sarissa
@@ -340,7 +437,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
         /**
          * <p>Deletes all child nodes of the given node</p>
-         * @param {DOMNode} oNode the Node to empty
+         * @param oNode the Node to empty
          * @ignore
          * Note:  This code originally from Sarissa:  http://dev.abiss.gr/sarissa
          */
@@ -355,9 +452,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         /**
          * <p> Copies the childNodes of nodeFrom to nodeTo</p>
          *
-         * @param {DOMNode} nodeFrom the Node to copy the childNodes from
-         * @param {DOMNode} nodeTo the Node to copy the childNodes to
-         * @param {boolean} bPreserveExisting whether to preserve the original content of nodeTo, default is
+         * @param  nodeFrom the Node to copy the childNodes from
+         * @param  nodeTo the Node to copy the childNodes to
          * @ignore
          * Note:  This code originally from Sarissa:  http://dev.abiss.gr/sarissa
          * It has been modified to fit into the overall codebase
@@ -400,29 +496,34 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @param source element to copy attributes from
          */
         var cloneAttributes = function cloneAttributes(target, source) {
-            // Enumerate all input element attributes
+
+            // enumerate core element attributes - without 'dir' as special case
+            var coreElementAttributes = ['className', 'title', 'lang', 'xml:lang'];
+
+            // Enumerate additional input element attributes
             var inputElementAttributes =
                     [   'name', 'value', 'checked', 'disabled', 'readOnly',
                         'size', 'maxLength', 'src', 'alt', 'useMap', 'isMap',
                         'tabIndex', 'accessKey', 'accept', 'type'
                     ];
 
-            // enumerate core element attributes - without 'dir' as special case
-            var coreElementAttributes = ['className', 'title', 'lang', 'xml:lang'];
-
             // Enumerate all the names of the event listeners
             var listenerNames =
-              [ 'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
-                'onmouseover', 'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup',
-                'onhelp', 'onblur', 'onfocus', 'onchange', 'onload', 'onunload', 'onabort',
-                'onreset', 'onselect', 'onsubmit'
-                ];
+                    [ 'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
+                        'onmouseover', 'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup',
+                        'onhelp', 'onblur', 'onfocus', 'onchange', 'onload', 'onunload', 'onabort',
+                        'onreset', 'onselect', 'onsubmit'
+                    ];
+
+            var iIndex, iLength; // for loop variables
+            var attributeName; // name of the attribute to set
+            var newValue, oldValue; // attribute values in each element
 
             // First, copy over core attributes
-            for (var iIndex = 0, iLength = coreElementAttributes.length; iIndex < iLength; iIndex++) {
-                var attributeName = coreElementAttributes[iIndex];
-                var newValue = source[attributeName];
-                var oldValue = target[attributeName];
+            for (iIndex = 0,iLength = coreElementAttributes.length; iIndex < iLength; iIndex++) {
+                attributeName = coreElementAttributes[iIndex];
+                newValue = source[attributeName];
+                oldValue = target[attributeName];
                 if (oldValue != newValue) {
                     target[attributeName] = newValue;
                 }
@@ -432,10 +533,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             // Next, if it's an input, copy those over
             if (target.nodeName.toLowerCase() === 'input') {
-                for (var iIndex = 0, iLength = inputElementAttributes.length; iIndex < iLength; iIndex++) {
-                    var attributeName = inputElementAttributes[iIndex];
-                    var newValue = source[attributeName];
-                    var oldValue = target[attributeName];
+                for (iIndex = 0,iLength = inputElementAttributes.length; iIndex < iLength; iIndex++) {
+                    attributeName = inputElementAttributes[iIndex];
+                    newValue = source[attributeName];
+                    oldValue = target[attributeName];
                     if (oldValue != newValue) {
                         target[attributeName] = newValue;
                     }
@@ -445,10 +546,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var newStyle = source.getAttribute('style');
             var oldStyle = target.getAttribute('style');
             if (newStyle != oldStyle) {
-                target.setAttribute('style', newStyle);
-
-                if (isIE()) {     // Only required for IE - for other browsers, setAttribute is enough
-                    target.style.setAttribute('cssText', newStyle);
+                if (isIE()) {
+                    target.style.setAttribute('cssText', newStyle, 0);
+                } else {
+                    target.setAttribute('style',newStyle);
                 }
             }
             for (var lIndex = 0, lLength = listenerNames.length; lIndex < lLength; lIndex++) {
@@ -462,7 +563,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (!isIE() && source.dir != target.dir) {
                 target.dir = source.dir ? source.dir : null;
             }
-        }
+        };
 
         /**
          * Replace an element from one document into another
@@ -531,6 +632,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var doUpdate = function doUpdate(element, context) {
             var id, content, markup, str, state;
             var stateForm;
+            var scripts; // temp holding value for array of script nodes
 
             id = element.getAttribute('id');
             if (id === "javax.faces.ViewState") {
@@ -588,17 +690,19 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
 
             // Strip out scripts
-            str = markup.replace(new RegExp('(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)', 'img'), '');
+            //str = markup.replace(new RegExp('(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)', 'img'), '');
 
-            var src = str;
+            var src = markup;
 
             // If our special render all markup is present..
             if (id === "javax.faces.ViewRoot" || id === "javax.faces.ViewBody") {
                 var bodyStartEx = new RegExp("< *body.*>", "gi");
                 var docBody = document.getElementsByTagName("body")[0];
                 if (bodyStartEx.exec(src) !== null) { // replace body tag
+                    // RELEASE_PENDING add script handling here
                     elementReplace(getBodyElement(src), docBody);
                 } else {  // replace body contents
+                    // RELEASE_PENDING add script handling here
                     elementReplaceStr(docBody, "body", src);
                 }
             } else if (id === "javax.faces.ViewHead") {
@@ -610,7 +714,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
                 var parent = d.parentNode;
                 // Trim space padding before assigning to innerHTML
-                var html = str.replace(/^\s+/g, '').replace(/\s+$/g, '');
+                var html = src.replace(/^\s+/g, '').replace(/\s+$/g, '');
                 var parserElement = document.createElement('div');
                 var tag = d.nodeName.toLowerCase();
                 var tableElements = ['td', 'th', 'tr', 'tbody', 'thead', 'tfoot'];
@@ -623,6 +727,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
                 if (isInTable) {
                     parserElement.innerHTML = '<table>' + html + '</table>';
+                    // RELEASE_PENDING add script handling here
                     var newElement = parserElement.firstChild;
                     //some browsers will also create intermediary elements such as table>tbody>tr>td
                     while ((null !== newElement) && (id !== newElement.id)) {
@@ -636,12 +741,17 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     // input elements need to be added in place.
                     parserElement = document.createElement('div');
                     parserElement.innerHTML = html;
+                    // RELEASE_PENDING add script handling here
                     newElement = parserElement.firstChild;
 
                     cloneAttributes(d, newElement);
                 } else if (html.length > 0) {
                     parserElement.innerHTML = html;
+                    scripts = stripScripts(parserElement);
                     parent.replaceChild(parserElement.firstChild, d);
+                    if (!isAutoExec) {
+                        runScripts(scripts);
+                    }
                 }
             }
         };
@@ -669,6 +779,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var parent = target.parentNode;
             var tempElement = document.createElement('span');
             tempElement.innerHTML = element.firstChild.firstChild.nodeValue;
+            // RELEASE PENDING add script handling here.
             if (element.firstChild.nodeName === 'after') {
                 // Get the next in the list, to insert before
                 target = target.nextSibling;
@@ -712,9 +823,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         var fn = function(value) {
                             return function() {
                                 window.execScript(value);
-                            }
+                            };
                         }(value);
                         target.setAttribute(name, fn, 0);
+                    } else if (name === 'dir') {
+                        if (jsf.getProjectStage() == 'Development') {
+                            throw new Error("Cannot set 'dir' attribute in IE");
+                        }
                     } else {
                         target.setAttribute(name, value, 0);
                     }
@@ -729,7 +844,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          */
         var doEval = function doEval(element) {
             var evalText = element.firstChild.nodeValue;
-            eval(evalText);
+            globalEval(evalText);
         };
 
         /**
@@ -1009,7 +1124,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 data.description = "An emply response was received from the server.  Check server error logs.";
             } else if (status == "malformedXML") {
                 if (getParseErrorText(data.responseXML) !== PARSED_OK) {
-                    data.description(getParseErrorText(data.responseXML));
+                    data.description = getParseErrorText(data.responseXML);
                 } else {
                     data.description = "An invalid XML response was received from the server.";
                 }
@@ -1603,7 +1718,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     return;
                 }
 
-                if (xml.firstChild.tagName === "parsererror") {
+                if (getParseErrorText(xml) !== PARSED_OK) {
                     sendError(request, context, "malformedXML");
                     return;
                 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Eval Script Tests</title>
+</h:head>
+<h:body>
+
+<span id="target">Pending</span>  <br/>
+
+<script type="text/javascript">
+    var target;
+    var checkPass = function checkPass() {
+        target = document.getElementById('target');
+        if (typeof marker === 'undefined') {
+            target.innerHTML = "Failed - marker unset";
+        } else {
+            target.innerHTML = "PASSED";
+        }
+    }
+</script>
+    <div id="updated"></div>
+
+    <h:form>
+        <h:commandButton id="doEval" value="doEval" action="#{evalScriptBean.doEval}">
+                      <f:ajax execute="@this" render="@none"/>
+        </h:commandButton> Works in all browsers
+        <br/>
+        <h:commandButton id="doInline" value="doInline" action="#{evalScriptBean.doInline}">
+                      <f:ajax execute="@this" render="@none"/>
+        </h:commandButton> Works in all browsers
+        <br/>
+    </h:form>
+</h:body>
+</html>
