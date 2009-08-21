@@ -95,7 +95,8 @@
                             includes="**/*.properties,**/*.xml"
                             prefix="WEB-INF/classes"/>
                 <zipfileset dir="${build.dir}/classes"
-                            prefix="WEB-INF/classes"/>
+                            prefix="WEB-INF/classes"
+                            excludes="**/*TestCase.class"/>
                 <zipfileset dir="${web.dir}"/>
             </archive-elements>
         </jsf.war>
