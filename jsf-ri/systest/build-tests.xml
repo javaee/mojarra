@@ -604,7 +604,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/NavigationTestCase.class"/>
+                         includes="com/sun/faces/systest/*NavigationTestCase.class"/>
             </tests>
         </jsf.junit>         
         

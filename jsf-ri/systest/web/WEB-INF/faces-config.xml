@@ -788,5 +788,19 @@
         </navigation-case>
     </navigation-rule>
 
+<navigation-rule>
+  <from-view-id>/conditionalNav.xhtml</from-view-id>
+  <navigation-case>
+    <from-outcome>submit</from-outcome>
+    <if>#{test1.booleanProperty}</if>
+    <to-view-id>#{test1.successOutcome}</to-view-id>
+  </navigation-case>
+  <navigation-case>
+    <from-outcome>submit</from-outcome>
+    <to-view-id>#{test1.failureOutcome}</to-view-id>
+  </navigation-case>
+</navigation-rule>
+
+
 
 </faces-config>

@@ -128,6 +128,25 @@ public enum Color { Red, Blue, Green, Orange }
     booleanProperty2 = newBooleanProperty2;
     }
 
+    protected String successOutcome = "/success.xhtml";
+
+    public String getSuccessOutcome() {
+        return successOutcome;
+    }
+
+    public void setSuccessOutcome(String successOutcome) {
+        this.successOutcome = successOutcome;
+    }
+    protected String failureOutcome = "/failure.xhtml";
+
+    public String getFailureOutcome() {
+        return failureOutcome;
+    }
+
+    public void setFailureOutcome(String failureOutcome) {
+        this.failureOutcome = failureOutcome;
+    }
+
 
 
     private byte byteProperty = 12;
