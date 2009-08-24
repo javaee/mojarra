@@ -158,20 +158,6 @@ public class RequestStateManager {
     public static final String DISABLED_VALIDATORS =
           "com.sun.faces.DISABLED_VALIDATORS";
 
-    /**
-     * Used to aid in the evaluation of expressions passed between
-     * nested composite components.
-     */
-    public static final String COMPCOMP_STACK =
-          "com.sun.faces.COMPCOMP_STACK";
-
-    /**
-     * Used to aid in the evaluation of nested composite component
-     * expressions during tree creation.
-     */
-    public static final String COMPCOMP_STACK_TREE_CREATION =
-          "com.sun.faces.COMPCOMP_STACK_TREE_CREATION";
-
 
     /**
      * Used to store the Set of ResourceDependency annotations that have

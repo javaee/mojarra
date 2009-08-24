@@ -38,11 +38,12 @@ package com.sun.faces.facelets.tag.jsf;
 
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.component.validator.ComponentValidators;
+import com.sun.faces.component.CompositeComponentStackManager;
+import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.RequestStateManager;
 
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
@@ -50,12 +51,16 @@ import javax.faces.application.ProjectStage;
 import javax.faces.component.*;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.view.facelets.*;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.MetaRuleset;
+import javax.faces.view.facelets.TagAttribute;
+import javax.faces.view.facelets.TagException;
+import javax.faces.view.facelets.TagHandlerDelegate;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Stack;
-import java.util.Vector;
 
 public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
@@ -187,8 +192,10 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         }
         c.pushComponentToEL(ctx.getFacesContext(), c);
         boolean compcompPushed = false;
+        CompositeComponentStackManager ccStackManager =
+              CompositeComponentStackManager.getManager(ctx.getFacesContext());
         if (UIComponent.isCompositeComponent(c)) {
-            compcompPushed = pushCompositeComponent(ctx.getFacesContext(), c);
+            compcompPushed = ccStackManager.push(c, TreeCreation);
         }
         // first allow c to get populated
         owner.applyNextHandler(ctx, c);
@@ -210,7 +217,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         ComponentSupport.addComponent(ctx, parent, c);
         c.popComponentFromEL(ctx.getFacesContext());
         if (compcompPushed) {
-            popCompositeComponent(ctx.getFacesContext());
+            ccStackManager.pop(TreeCreation);
         }
 
         if (shouldMarkInitialState(ctx.getFacesContext())) {
@@ -368,90 +375,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     }
 
 
-    /**
-     * Pushes the specified composite component to the stack used to track
-     * the composite component child/parent relationship during tree creation.
-     *
-     * @param ctx the <code>FacesContext</code> for the current request
-     * @param c the composite component to push
-     *
-     * @return <code>true</code> if the argument component was pushed onto the
-     *  stack, otherwise returns <code>false</code>
-     */
-    private boolean pushCompositeComponent(FacesContext ctx, UIComponent c) {
 
-        if (c != null) {
-            assert (UIComponent.isCompositeComponent(c));
-            Stack<UIComponent> stack = getStack(ctx, true);
-            stack.push(c);
-            return true;
-        }
-        return false;
-
-    }
-
-
-    /**
-     * Pops the top level composite component from stack used to
-     * track the composite component child/parent relationship during tree
-     * creation.
-     *
-     * @param ctx the <code>FacesContext</code> for the current request
-     */
-    public static void popCompositeComponent(FacesContext ctx) {
-
-        Stack<UIComponent> stack = getStack(ctx, false);
-        if (stack == null) {
-            return;
-        }
-        if (!stack.isEmpty()) {
-            stack.pop();
-            if (stack.isEmpty()) {
-                deleteStack(ctx);
-            }
-        }
-
-    }
-
-
-    /**
-     * Removes the stack used to track composite component child/parent
-     * relationships from scope.
-     *
-     * @param ctx the <code>FacesContet</code> for the current request
-     */
-    private static void deleteStack(FacesContext ctx) {
-
-        RequestStateManager.remove(ctx, RequestStateManager.COMPCOMP_STACK_TREE_CREATION);
-
-    }
-
-
-    /**
-     * Return the stack used to track child/parent relationships between
-     * composite components during tree creation time.
-     *
-     * @param ctx the <code>FacesContext</code> for the current request
-     * @param create if <code>true</code> and the stack doesn't already exist
-     *  the stack will be created and put into scope.  If <code>false</code>
-     *  whatever is currently in scope will be returned
-     * @return the Stack of composite components currently in scope or
-     *  <code>null</code> if no stack exists and <code>create</code> is
-     *  <code>false</code>
-     */
-    @SuppressWarnings({"unchecked"})
-    private static Stack<UIComponent> getStack(FacesContext ctx, boolean create) {
-
-        Stack<UIComponent> stack = (Stack<UIComponent>)
-              RequestStateManager.get(ctx, RequestStateManager.COMPCOMP_STACK_TREE_CREATION);
-        if (stack == null && create) {
-            stack = new Stack<UIComponent>();
-            RequestStateManager
-                  .set(ctx, RequestStateManager.COMPCOMP_STACK_TREE_CREATION, stack);
-        }
-        return stack;
-
-    }
 
     interface CreateComponentDelegate {
 

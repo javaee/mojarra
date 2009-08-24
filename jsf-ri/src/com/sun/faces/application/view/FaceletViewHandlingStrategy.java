@@ -53,6 +53,7 @@ import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
+import com.sun.faces.component.CompositeComponentStackManager;
 
 import java.awt.event.ActionEvent;
 import java.beans.BeanDescriptor;
@@ -139,8 +140,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     // ------------------------------------------------------------ Constructors
 
     public static boolean isBuildingMetadata(FacesContext context) {
-        boolean result = context.getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA);
-        return result;
+        return context.getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA);
     }
 
     // ------------------------------------ Methods from ViewDeclarationLanguage
@@ -1223,40 +1223,18 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         private boolean pushCompositeComponent(FacesContext ctx) {
 
-            UIComponent ccp = UIComponent.getCompositeComponentParent(UIComponent.getCurrentCompositeComponent(ctx));
-            Stack<UIComponent> stack = getStack(ctx, true);
-            if (ccp != null) {
-                stack.push(ccp);
-                return true;
-            }
-            return false;
+            CompositeComponentStackManager manager =
+                  CompositeComponentStackManager.getManager(ctx);
+            return manager.push();
 
         }
 
 
         private void popCompositeComponent(FacesContext ctx) {
 
-            Stack<UIComponent> stack = getStack(ctx, false);
-            if (stack == null) {
-                return;
-            }
-            if (!stack.isEmpty()) {
-                stack.pop();
-            }
-
-        }
-
-
-        @SuppressWarnings({"unchecked"})
-        private Stack<UIComponent> getStack(FacesContext ctx, boolean create) {
-
-            Stack<UIComponent> stack = (Stack<UIComponent>)
-                  RequestStateManager.get(ctx, RequestStateManager.COMPCOMP_STACK);
-            if (stack == null && create) {
-                stack = new Stack<UIComponent>();
-                RequestStateManager.set(ctx, RequestStateManager.COMPCOMP_STACK, stack);
-            }
-            return stack;
+            CompositeComponentStackManager manager =
+                  CompositeComponentStackManager.getManager(ctx);
+            manager.pop();
 
         }
 

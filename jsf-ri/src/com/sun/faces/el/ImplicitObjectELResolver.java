@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Stack;
 
 import javax.el.ELContext;
 import javax.el.ELException;
@@ -58,7 +57,7 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.component.CompositeComponentStackManager;
 
 public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
@@ -110,11 +109,9 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                     // need to alter the behavior so that the components behave
                     // as the user would expect.
                     /* BEGIN DEVIATION */
-                    Stack stack = (Stack) RequestStateManager.get(facesContext, RequestStateManager.COMPCOMP_STACK);
-                    Object o = null;
-                    if (stack != null && !stack.isEmpty()) {
-                        o = stack.peek();
-                    }
+                    CompositeComponentStackManager manager =
+                          CompositeComponentStackManager.getManager(facesContext);
+                    Object o = manager.peek();
                     /* END DEVIATION */
                     if (o == null) {
                         o = UIComponent.getCurrentCompositeComponent(facesContext);

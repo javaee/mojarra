@@ -59,6 +59,7 @@ import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.MetadataTargetImpl;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
+import com.sun.faces.component.CompositeComponentStackManager;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -94,7 +95,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import javax.faces.FactoryFinder;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
@@ -664,85 +664,18 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
             private boolean pushCompositeComponent(FacesContext ctx) {
 
-                Stack<UIComponent> tstack = getTreeCreationStack(ctx);
-                Stack<UIComponent> stack = getStack(ctx, false);
-                UIComponent ccp = null;
-                if (tstack != null) {
-                    // We have access to the stack of composite components
-                    // the tree creation process has made available.
-                    // Since we can' reliably access the parent composite component
-                    // of the current composite component, use the index of the
-                    // current composite component within the stack to locate the
-                    // parent.
-                    UIComponent currentComp;
-                    if (stack == null || stack.isEmpty()) {
-                        currentComp = UIComponent.getCurrentComponent(ctx);
-                    } else {
-                        currentComp = stack.peek();
-
-                    }
-                    if (currentComp != null) {
-                        int idx = tstack.indexOf(currentComp);
-                        if (idx > 0) {
-                            ccp = tstack.get(idx - 1);
-                        }
-                    }
-                } else {
-                    // no tree creation stack available, so use the runtime stack.
-                    // If the current stack isn't empty, then use the component
-                    // on the stack as the current composite component.
-                    stack = getStack(ctx, false);
-                    if (stack != null && !stack.isEmpty()) {
-                        ccp = UIComponent.getCompositeComponentParent(stack.peek());
-                    } else {
-                        ccp = UIComponent.getCompositeComponentParent(UIComponent.getCurrentCompositeComponent(ctx));
-                    }
-                }
-
-                if (ccp != null) {
-                    if (stack == null) {
-                        stack = getStack(ctx, true);
-                    }
-                    stack.push(ccp);
-                    return true;
-                }
-                return false;
+                CompositeComponentStackManager manager =
+                      CompositeComponentStackManager.getManager(ctx);
+                return manager.push();
 
             }
 
 
             private void popCompositeComponent(FacesContext ctx) {
 
-                Stack<UIComponent> stack = getStack(ctx, false);
-                if (stack == null) {
-                    return;
-                }
-                if (!stack.isEmpty()) {
-                    stack.pop();
-                }
-
-            }
-
-
-            @SuppressWarnings({"unchecked"})
-            private Stack<UIComponent> getStack(FacesContext ctx, boolean create) {
-
-                Stack<UIComponent> stack = (Stack<UIComponent>)
-                      RequestStateManager.get(ctx, RequestStateManager.COMPCOMP_STACK);
-                if (stack == null && create) {
-                    stack = new Stack<UIComponent>();
-                    RequestStateManager.set(ctx, RequestStateManager.COMPCOMP_STACK, stack);
-                }
-                return stack;
-
-            }
-
-
-            @SuppressWarnings({"unchecked"})
-            private Stack<UIComponent> getTreeCreationStack(FacesContext ctx) {
-
-                return (Stack<UIComponent>)
-                      RequestStateManager.get(ctx, RequestStateManager.COMPCOMP_STACK_TREE_CREATION);
+                CompositeComponentStackManager manager =
+                      CompositeComponentStackManager.getManager(ctx);
+                manager.pop();
 
             }
 
