@@ -42,6 +42,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
+import javax.validation.ConstraintPayload;
 
 @Documented
 @Constraint(validatedBy = CreditCardConstraintValidator.class)
@@ -55,4 +56,6 @@ public @interface CreditCard {
     //CreditCardVendor vendor default ANY;
 
     Class<?>[] groups() default {};
+
+    Class<? extends ConstraintPayload>[] payload() default {};
 }

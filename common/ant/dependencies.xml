@@ -61,7 +61,7 @@
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.5.5"/>
     <property name="el.version" value="1.0"/>
-    <property name="beans.validation.version" value="1.0.CR2"/>
+    <property name="bean-validator.version" value="3.0-JBoss-4.0.0.Beta3"/>
     <property name="maven.repository.importer.version" value="1.2"/>
     <property name="yuicompressor.version" value="2.4.2"/>
 
@@ -358,7 +358,7 @@
                 <available file="${validation-api.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${jboss.maven2}/javax/validation/validation-api/${beans.validation.version}/validation-api-${beans.validation.version}.jar"
+                <get src="${java.net.maven2}/org/glassfish/bean-validator/${bean-validator.version}/bean-validator-${bean-validator.version}.jar"
                      dest="${validation-api.jar}"
                      usetimestamp="true"/>
             </then>

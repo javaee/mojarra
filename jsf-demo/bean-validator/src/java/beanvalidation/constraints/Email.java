@@ -42,6 +42,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
+import javax.validation.ConstraintPayload;
 
 @Documented
 @Constraint(validatedBy = EmailConstraintValidator.class)
@@ -53,4 +54,6 @@ public @interface Email {
     String message() default "{validator.email}";
 
     Class<?>[] groups() default {};
+
+    Class<? extends ConstraintPayload>[] payload() default {};
 }
