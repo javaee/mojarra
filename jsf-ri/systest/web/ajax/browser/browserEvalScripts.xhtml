@@ -37,7 +37,7 @@
                 // need a sleep function, to wait for file load
                 setTimeout(checkPassFile,200);
             }
-        }
+        };
     </script>
     <div id="updated"></div>
     <cc:evalTest id="eval"/>
@@ -50,7 +50,7 @@
         <h:commandButton id="doInline" value="doInline" action="#{evalScriptBean.doInline}">
             <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
-        Fails in S, IE, works in FF, CH
+        Fails in IE, works in FF, CH, S
         <br/>
         <h:commandButton id="doFile" value="doFile" action="#{evalScriptBean.doInline}">
             <f:ajax execute="@none" render=":eval" onevent="evalFileEvent"/>

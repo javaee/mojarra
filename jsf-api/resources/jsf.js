@@ -752,7 +752,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     parserElement.innerHTML = html;
                     scripts = stripScripts(parserElement);
                     parent.replaceChild(parserElement.firstChild, d);
-                    if (!isAutoExec) {
+                    if (!isAutoExec()) {
                         runScripts(scripts);
                     }
                 }
