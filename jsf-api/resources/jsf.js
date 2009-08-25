@@ -262,6 +262,21 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             return scripts;
         };
 
+        var stripScriptsIE = function stripScriptsIE(str) {
+            var regex = /<script[^>]*>([\S\s]*?)<\/script>/igm;
+            var regex2 = /<script([^>]*)>([\S\s]*?)<\/script>/im;
+            var pattern = /^\s*(<!--)*\s*(\/\/)*\s*(<!\[CDATA\[)*/;
+            var initialnodes = [];
+            var scripts = [];
+            initialnodes = str.match(regex);
+            while (initialnodes.length > 0) {
+                var scriptStr = [];
+                scriptStr = initialnodes.shift().match(regex2);
+                var script = scriptStr[2].replace(pattern,"");
+                scripts.push(script);
+            }
+            return scripts;
+        };
 
         /**
          * Run an array of scripts text
@@ -749,8 +764,18 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                     cloneAttributes(d, newElement);
                 } else if (html.length > 0) {
-                    parserElement.innerHTML = html;
-                    scripts = stripScripts(parserElement);
+                    if (isIE()) {
+                        // Get the scripts from the text
+                        scripts = stripScriptsIE(html);
+                        // Remove scripts from text
+                        html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
+                        parserElement.innerHTML = html;
+                    } else {
+                        // Create html
+                        parserElement.innerHTML = html;
+                        // then extract scripts from it
+                        scripts = stripScripts(parserElement);
+                    }
                     parent.replaceChild(parserElement.firstChild, d);
                     if (!isAutoExec()) {
                         runScripts(scripts);
