@@ -336,7 +336,7 @@ public class AnnotationScanner extends AnnotationProvider {
                 ReadableByteChannel channel = null;
                 try {
                     channel = Channels.newChannel(jarFile.getInputStream(entry));
-                    if (classFileScanner.containsAnnotation(channel, entry.getSize())) {
+                    if (classFileScanner.containsAnnotation(channel)) {
                         if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.log(Level.FINE,
                                        "[JAR] Found annotated Class: {0}",
@@ -527,11 +527,8 @@ public class AnnotationScanner extends AnnotationProvider {
         ReadableByteChannel channel = null;
         try {
             URL url = sc.getResource(pathElement);
-            URLConnection conn = url.openConnection();
-            conn.setUseCaches(false);
             channel = Channels.newChannel(url.openStream());
-            return classFileScanner.containsAnnotation(channel,
-                                                       conn.getContentLength());
+            return classFileScanner.containsAnnotation(channel);
         } catch (MalformedURLException e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
@@ -704,7 +701,7 @@ public class AnnotationScanner extends AnnotationProvider {
         /**
          * Read the input channel and initialize instance data structure.
          */
-        public boolean containsAnnotation(ReadableByteChannel in, long size)
+        public boolean containsAnnotation(ReadableByteChannel in)
               throws IOException {
 
             /**
@@ -730,12 +727,8 @@ public class AnnotationScanner extends AnnotationProvider {
              }
              **/
             header.clear();
-            if (size != -1 && size > header.capacity()) {
-                // time to expand...
-                header = ByteBuffer.allocate((int) size);
-            }
             long read = (long) in.read(header);
-            if (size != -1 && read != size) {
+            if (read == -1) {
                 return false;
             }
             header.rewind();
@@ -744,12 +737,12 @@ public class AnnotationScanner extends AnnotationProvider {
                 return false;
             }
 
-            majorVersion = header.getShort();
             minorVersion = header.getShort();
+            majorVersion = header.getShort();
             int constantPoolSize = header.getShort();
 
             return constantPoolInfo
-                  .containsAnnotation(constantPoolSize, header);
+                  .containsAnnotation(constantPoolSize, header, in);
 
         }
 
@@ -793,17 +786,27 @@ public class AnnotationScanner extends AnnotationProvider {
          * Read the input channel and initialize instance data structure.
          */
         public boolean containsAnnotation(int constantPoolSize,
-                                          final ByteBuffer buffer)
+                                          final ByteBuffer buffer,
+                                          final ReadableByteChannel in)
               throws IOException {
 
             for (int i = 1; i < constantPoolSize; i++) {
+                if (!refill(buffer, in, 1)) {
+                    return false;
+                }
                 final byte type = buffer.get();
                 switch (type) {
                     case ASCIZ:
                     case UNICODE:
+                        if (!refill(buffer, in, 2)) {
+                            return false;
+                        }
                         final short length = buffer.getShort();
                         if (length < 0 || length > Short.MAX_VALUE) {
                             return true;
+                        }
+                        if (!refill(buffer, in, length)) {
+                            return false;
                         }
                         buffer.get(bytes, 0, length);
                         /* to speed up the process, I am comparing the first few
@@ -826,6 +829,9 @@ public class AnnotationScanner extends AnnotationProvider {
                         break;
                     case CLASS:
                     case STRING:
+                        if (!refill(buffer, in, 2)) {
+                            return false;
+                        }
                         buffer.getShort();
                         break;
                     case FIELDREF:
@@ -833,15 +839,24 @@ public class AnnotationScanner extends AnnotationProvider {
                     case INTERFACEMETHODREF:
                     case INTEGER:
                     case FLOAT:
+                        if (!refill(buffer, in, 4)) {
+                            return false;
+                        }
                         buffer.position(buffer.position() + 4);
                         break;
                     case LONG:
                     case DOUBLE:
+                        if (!refill(buffer, in, 8)) {
+                            return false;
+                        }
                         buffer.position(buffer.position() + 8);
                         // for long, and double, they use 2 constantPool
                         i++;
                         break;
                     case NAMEANDTYPE:
+                        if (!refill(buffer, in, 4)) {
+                            return false;
+                        }
                         buffer.getShort();
                         buffer.getShort();
                         break;
@@ -855,6 +870,26 @@ public class AnnotationScanner extends AnnotationProvider {
                 }
             }
             return false;
+        }
+
+
+        // ----------------------------------------------------- Private Methods
+
+        private boolean refill(ByteBuffer buffer,
+                               ReadableByteChannel in,
+                               int requestLen) throws IOException {
+            
+            int cap = buffer.capacity();
+            if (buffer.position() + requestLen > cap) {
+                buffer.compact();
+                int read = in.read(buffer);
+                if (read < 0) {
+                    return false;
+                }
+                buffer.rewind();
+            }
+            return true;
+
         }
 
     } // END ConstantPoolInfo
