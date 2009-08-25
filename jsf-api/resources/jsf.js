@@ -330,7 +330,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             xhr.setRequestHeader("Content-Type", "application/x-javascript");
             xhr.send(null);
 
-            // RELEASE_PENDING error handling
+            // RELEASE_PENDING error handling required here
             if (xhr.readyState == 4 && xhr.status == 200) {
                     return xhr.responseText;
             }
@@ -378,11 +378,24 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (element.nodeName.toLowerCase() === "head") {
                 throw new Error("Attempted to replace a head element - this is not allowed.");
             } else {
-                temp.innerHTML = src;
+                var scripts;
+                if (isIE()) {
+                    // Get scripts from text
+                    scripts = stripScriptsIE(src);
+                    // Remove scripts from text
+                    src = src.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
+                    temp.innerHTML = src;
+                } else {
+                    temp.innerHTML = src;
+                    scripts = stripScripts(temp);
+                }
             }
 
             parent.replaceChild(temp, element);
-            //RELEASE_PENDING add script handling
+            if (!isAutoExec()) {
+                runScripts(scripts);
+            }
+
         };
 
         /**
@@ -778,10 +791,28 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var bodyStartEx = new RegExp("< *body.*>", "gi");
                 var docBody = document.getElementsByTagName("body")[0];
                 if (bodyStartEx.exec(src) !== null) { // replace body tag
-                    // RELEASE_PENDING add script handling here
-                    elementReplace(getBodyElement(src), docBody);
-                } else {  // replace body contents
-                    // RELEASE_PENDING add script handling here
+
+                    var scripts;
+                    if (isIE()) {
+                        // Get scripts from text
+                        scripts = stripScriptsIE(src);
+                        // Remove scripts from text
+                        src = src.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm, "");
+                        elementReplace(getBodyElement(src), docBody);
+                    } else {
+                        // Get the body element out of the source text
+                        var newBody = getBodyElement(src);
+                        // strip scripts out, if necessary
+                        scripts = stripScripts(newBody);
+                        // replace current body with new body
+                        elementReplace(newBody, docBody);
+                    }
+                    // Run scripts, if necessary
+                    if (!isAutoExec()) {
+                        runScripts(scripts);
+                    }
+
+                } else {  // replace body contents with innerHTML - note, script handling happens within function
                     elementReplaceStr(docBody, "body", src);
                 }
             } else if (id === "javax.faces.ViewHead") {
@@ -805,14 +836,28 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     }
                 }
                 if (isInTable) {
-                    parserElement.innerHTML = '<table>' + html + '</table>';
-                    // RELEASE_PENDING add script handling here
+
+                    if (isIE()) {
+                        // Get the scripts from the text
+                        scripts = stripScriptsIE(html);
+                        // Remove scripts from text
+                        html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
+                        parserElement.innerHTML = '<table>' + html + '</table>';
+                    } else {
+                        // Create html
+                        parserElement.innerHTML = '<table>' + html + '</table>';
+                        // then extract scripts from it
+                        scripts = stripScripts(parserElement);
+                    }
                     var newElement = parserElement.firstChild;
                     //some browsers will also create intermediary elements such as table>tbody>tr>td
                     while ((null !== newElement) && (id !== newElement.id)) {
                         newElement = newElement.firstChild;
                     }
                     parent.replaceChild(newElement, d);
+                    if (!isAutoExec()) {
+                        runScripts(scripts);
+                    }
 
                 } else if (d.nodeName.toLowerCase() === 'input') {
                     // special case handling for 'input' elements
@@ -820,7 +865,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     // input elements need to be added in place.
                     parserElement = document.createElement('div');
                     parserElement.innerHTML = html;
-                    // RELEASE_PENDING add script handling here
                     newElement = parserElement.firstChild;
 
                     cloneAttributes(d, newElement);
@@ -863,7 +907,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var doInsert = function doInsert(element) {
-            // RELEASE_PENDING there may be an insert issue in IE tables.  Needs testing.
             var target = $(element.firstChild.getAttribute('id'));
             var parent = target.parentNode;
             var tempElement = document.createElement('span');
