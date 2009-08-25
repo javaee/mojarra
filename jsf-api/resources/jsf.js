@@ -290,7 +290,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var initialnodes = [];
             var scripts = [];
             initialnodes = str.match(findscripts);
-            while (initialnodes.length > 0) {
+            while (!!initialnodes && initialnodes.length > 0) {
                 var scriptStr = [];
                 scriptStr = initialnodes.shift().match(findscript);
                 var src = [];
