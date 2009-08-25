@@ -88,8 +88,4 @@
     lifecycle.execute(facesContext);
     lifecycle.render(facesContext);
 
-    String pageRefresh = System.getProperty("PageRefreshPhases");
-    // All tests passed
-    //
-    out.println("/phaseListener01.jsp PASSED");
 %>

@@ -1103,7 +1103,7 @@
             description="Test Phase processing with Phase Listener">
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/phaseListener01.jsp"
+              request="${context.path}/phaseListener01.jsp"
               outContent="/phaseListener01.jsp PASSED"/>
         <!-- PENDING investigate the need for this
   <jsf.tester 
