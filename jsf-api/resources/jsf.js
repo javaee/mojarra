@@ -250,37 +250,98 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             // get the script nodes, add them into an array, and remove them from node
             var scriptNodes = element.getElementsByTagName('script');
             var scripts = [];
-            while (scriptNodes.length) {
+            var nidx = 0;
+            while (nidx <= scriptNodes.length -1) {
                 // push into script array
-                var node = scriptNodes[0];
-                var src = node.text.replace(pattern,"");
-                scripts.push(node.text);
+                var node = scriptNodes[nidx++];
+                if (!!node && node.src) {
+                    var src = loadScript(node.src);
+                    if (!!src) {
+                        scripts.push(src);
+                    }
+                } else if (!!node) {
+                    node.text.replace(pattern,"");
+                    scripts.push(node.text);
+                }
 
                 // then remove it
-                node.parentNode.removeChild(node);
-            }
-            return scripts;
-        };
-
-        var stripScriptsIE = function stripScriptsIE(str) {
-            var regex = /<script[^>]*>([\S\s]*?)<\/script>/igm;
-            var regex2 = /<script([^>]*)>([\S\s]*?)<\/script>/im;
-            var pattern = /^\s*(<!--)*\s*(\/\/)*\s*(<!\[CDATA\[)*/;
-            var initialnodes = [];
-            var scripts = [];
-            initialnodes = str.match(regex);
-            while (initialnodes.length > 0) {
-                var scriptStr = [];
-                scriptStr = initialnodes.shift().match(regex2);
-                var script = scriptStr[2].replace(pattern,"");
-                scripts.push(script);
+                if (!!node) {
+                    node.parentNode.removeChild(node);
+                }
             }
             return scripts;
         };
 
         /**
+         * Get all scripts from supplied string, return them as an array for later processing.
+         * @param str
+         * @returns {array} of script text
+         * @ignore
+         */
+        var stripScriptsIE = function stripScriptsIE(str) {
+            // Regex to find all scripts in a string
+            var findscripts = /<script[^>]*>([\S\s]*?)<\/script>/igm;
+            // Regex to find one script, to isolate it's content [2] and attributes [1]
+            var findscript = /<script([^>]*)>([\S\s]*?)<\/script>/im;
+            // Regex to remove leading cruft
+            var stripStart = /^\s*(<!--)*\s*(\/\/)*\s*(<!\[CDATA\[)*/;
+            // Regex to find src attribute
+            var findsrc = /src="([\S]*?)"/im;
+            var initialnodes = [];
+            var scripts = [];
+            initialnodes = str.match(findscripts);
+            while (initialnodes.length > 0) {
+                var scriptStr = [];
+                scriptStr = initialnodes.shift().match(findscript);
+                var src = [];
+                // check if src specified
+                src = scriptStr[1].match(findsrc);
+                var script;
+                if ( !!src && src[1]) {
+                    // if this is a file, load it
+                    var url = src[1];
+                    script = loadScript(url);
+                } else if (!!scriptStr && scriptStr[2]){
+                    // else get content of tag, without leading CDATA and such
+                    script = scriptStr[2].replace(stripStart,"");
+                } else {
+                    script = false;
+                }
+                if (!!script) {
+                    scripts.push(script);
+                }
+            }
+            return scripts;
+        };
+
+        /**
+         * Load a script via a url, use synchronous XHR request.  This is liable to be slow,
+         * but it's probably the only correct way.
+         * @param url the url to load
+         * @ignore
+         */
+        var loadScript = function loadScript(url) {
+            var xhr = getTransport();
+            if (xhr === null) {
+                return "";
+            }
+
+            xhr.open("GET", url, false);
+            xhr.setRequestHeader("Content-Type", "application/x-javascript");
+            xhr.send(null);
+
+            // RELEASE_PENDING error handling
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                    return xhr.responseText;
+            }
+
+            return "";
+        };
+
+        /**
          * Run an array of scripts text
          * @param scripts array of script nodes
+         * @ignore
          */
         var runScripts = function runScripts(scripts) {
             if (scripts.length === 0) {
