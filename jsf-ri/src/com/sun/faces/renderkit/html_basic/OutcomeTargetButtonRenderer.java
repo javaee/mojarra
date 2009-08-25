@@ -42,6 +42,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.Attribute;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import java.io.IOException;
@@ -77,7 +78,7 @@ public class OutcomeTargetButtonRenderer extends OutcomeTargetRenderer {
         String imageSrc = (String) component.getAttributes().get("image");
         if (imageSrc != null) {
             writer.writeAttribute("type", "image", "type");
-            writer.writeURIAttribute("src", getEncodedResourceURL(context, imageSrc), "image");
+            writer.writeURIAttribute("src", RenderKitUtils.getImageSource(context, component, "image"), "image");
         }
         else {
             writer.writeAttribute("type", "button", "type");
@@ -133,26 +134,6 @@ public class OutcomeTargetButtonRenderer extends OutcomeTargetRenderer {
 
 
     // ------------------------------------------------------- Protected Methods
-
-    
-    /**
-     * @param context the <code>FacesContext</code> for the current request
-     * @param imageURI the base URI of the image to use for the button
-     * @return the encoded result for the base imageURI
-     *
-     * FIXME copied from ButtonRenderer; can this be moved to HtmlBasicRenderer??
-     */
-    protected String getEncodedResourceURL(FacesContext context, String imageURI) {
-
-        if (imageURI == null) {
-            return "";
-        }
-
-        String resourceUrl = context.getApplication().getViewHandler()
-              .getResourceURL(context, imageURI);
-        return context.getExternalContext().encodeResourceURL(resourceUrl);
-
-    }
 
 
     protected String getOnclick(UIComponent component, String targetURI) {
