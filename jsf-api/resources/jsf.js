@@ -930,7 +930,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // Get the next in the list, to insert before
                 target = target.nextSibling;
             }  // otherwise, this is a 'before' element
-            parent.insertBefore(tempElement.firstChild, target);
+            if (!!tempElement.innerHTML) { // check if only scripts were inserted - if so, do nothing here
+                parent.insertBefore(tempElement.firstChild, target);
+            }
             runScripts(scripts);
         };
 

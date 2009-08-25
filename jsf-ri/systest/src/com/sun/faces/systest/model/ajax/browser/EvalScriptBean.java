@@ -103,5 +103,32 @@ public class EvalScriptBean {
         return null;
     }
 
+    public String insertBeforeEval() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.startInsertBefore("target");
+                writer.writeAttribute("id", "target2", "id");
+                writer.startElement("script",null);
+                writer.writeAttribute("type","text/javascript","type");
+                writer.write("var marker = true; checkPass();");
+                writer.endElement("script");
+                writer.endInsert();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
 
 }

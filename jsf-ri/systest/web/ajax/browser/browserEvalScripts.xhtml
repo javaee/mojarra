@@ -62,6 +62,11 @@
         </h:commandButton>
         Works in all browsers
         <br/>
+        <h:commandButton id="insertBeforeEval" value="insertBeforeEval" action="#{evalScriptBean.insertBeforeEval}">
+            <f:ajax execute="@this" render="@none"/>
+        </h:commandButton>
+        Works in all browsers
+        <br/>
     </h:form>
 </h:body>
 </html>
