@@ -88,7 +88,7 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
         checkTrue("form1:out1","hello");
@@ -109,7 +109,7 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
 
         // Submit the ajax request
         HtmlSubmitInput button2 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button2");
-        HtmlPage lastpage = (HtmlPage) button2.click();
+        lastpage = (HtmlPage) button2.click();
 
         // Check that the ajax request succeeds
         checkTrue("form1:out1","hello");
@@ -130,7 +130,7 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
         checkTrue("form1:out1","<");
@@ -154,7 +154,7 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
         checkTrue("form1:out1","]]>");
@@ -173,7 +173,7 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
         checkTrue("form1:out1","<!");
@@ -192,7 +192,7 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
         checkTrue("form1:out1","]");
@@ -211,7 +211,7 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
         checkTrue("form1:out1","]");
@@ -230,7 +230,7 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
 
         // Submit the ajax request
         HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
-        HtmlPage lastpage = (HtmlPage) button1.click();
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds
         checkTrue("form1:out1","<![CDATA[ ]]>");
