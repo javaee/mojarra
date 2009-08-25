@@ -103,8 +103,67 @@ public class EvalScriptBean {
         return null;
     }
 
-    public String insertBeforeEval() {
+        public String doUpdateRootSimpleEval() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.startUpdate("javax.faces.ViewRoot");
+                writer.startElement("span",null);
+                writer.writeAttribute("id","target","id");
+                writer.endElement("span");
+                writer.startElement("script",null);
+                writer.writeAttribute("type","text/javascript","type");
+                writer.write("var marker = true; checkPass();");
+                writer.endElement("script");
+                writer.endUpdate();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
 
+    public String doUpdateBodyTagEval() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.startUpdate("javax.faces.ViewBody");
+                writer.startElement("body",null);
+                writer.startElement("span",null);
+                writer.writeAttribute("id","target","id");
+                writer.endElement("span");
+                writer.startElement("script",null);
+                writer.writeAttribute("type","text/javascript","type");
+                writer.write("var marker = true; checkPass();");
+                writer.endElement("script");
+                writer.endElement("body");
+                writer.endUpdate();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
+
+    public String insertBeforeEval() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         if (ctx.getPartialViewContext().isAjaxRequest()) {
