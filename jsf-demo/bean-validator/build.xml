@@ -56,6 +56,9 @@
         <pathelement location="${build}/WEB-INF/classes"/>
         <pathelement location="${jsf-demo.lib}/ui.jar"/>
         <path refid="compile.classpath"/>
+       <fileset dir="${api.dir}" >
+          <include name="bean*.jar" />
+       </fileset> 
     </path>
     
     <target name="init">
