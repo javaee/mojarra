@@ -57,6 +57,11 @@
         </h:commandButton>
         Works in all browsers
         <br/>
+        <h:commandButton id="doUpdateRootAllEval" value="doUpdateRootAllEval" action="#{evalScriptBean.doUpdateRootAllEval}">
+            <f:ajax execute="@this" render="@none"/>
+        </h:commandButton>
+        Works in all browsers
+        <br/>
     </h:form>
 </h:body>
 </html>

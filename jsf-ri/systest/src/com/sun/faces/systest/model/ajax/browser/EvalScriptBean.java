@@ -64,4 +64,44 @@ public class EvalScriptBean {
         }
         return null;
     }
+
+    public String doUpdateRootAllEval() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        if (ctx.getPartialViewContext().isAjaxRequest()) {
+            try {
+                extContext.setResponseContentType("text/xml");
+                extContext.addResponseHeader("Cache-Control", "no-cache");
+                PartialResponseWriter writer =
+                      ctx.getPartialViewContext().getPartialResponseWriter();
+                writer.startDocument();
+                writer.startUpdate("javax.faces.ViewRoot");
+                writer.startElement("html",null);
+                writer.startElement("head",null);
+                writer.startElement("title",null);
+                writer.writeText("PASSED",null);
+                writer.endElement("title");
+                writer.endElement("head");
+                writer.startElement("body",null);
+                writer.startElement("span",null);
+                writer.writeAttribute("id","target","id");
+                writer.endElement("span");
+                writer.startElement("script",null);
+                writer.writeAttribute("type","text/javascript","type");
+                writer.write("var marker = true; checkPass();");
+                writer.endElement("script");
+                writer.endElement("body");
+                writer.endElement("html");
+                writer.endUpdate();
+                writer.endDocument();
+                writer.flush();
+                ctx.responseComplete();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return null;
+    }
+
+
 }

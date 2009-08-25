@@ -243,9 +243,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var stripScripts = function stripScripts(element) {
-            if (isAutoExec()) {
-                return [];
-            }
             var pattern = /^\s*(<!--)*\s*(\/\/)*\s*(<!\[CDATA\[)*/;
             // get the script nodes, add them into an array, and remove them from node
             var scriptNodes = element.getElementsByTagName('script');
@@ -255,13 +252,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // push into script array
                 var node = scriptNodes[nidx++];
                 if (!!node && node.src) {
+                    // if it's a remote script, load it first
                     var src = loadScript(node.src);
                     if (!!src) {
                         scripts.push(src);
                     }
-                } else if (!!node) {
-                    node.text.replace(pattern,"");
-                    scripts.push(node.text);
+                } else if (!!node && !!node.textContent) {
+                    var script = node.textContent;
+                    script.replace(pattern,"");
+                    scripts.push(script);
                 }
 
                 // then remove it
@@ -330,7 +329,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             xhr.setRequestHeader("Content-Type", "application/x-javascript");
             xhr.send(null);
 
-            // RELEASE_PENDING error handling required here
+            // PENDING graceful error handling
             if (xhr.readyState == 4 && xhr.status == 200) {
                     return xhr.responseText;
             }
@@ -344,7 +343,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var runScripts = function runScripts(scripts) {
-            if (scripts.length === 0) {
+            if (!scripts || scripts.length === 0) {
                 return;
             }
 
@@ -378,7 +377,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (element.nodeName.toLowerCase() === "head") {
                 throw new Error("Attempted to replace a head element - this is not allowed.");
             } else {
-                var scripts;
+                var scripts = [];
                 if (isIE()) {
                     // Get scripts from text
                     scripts = stripScriptsIE(src);
@@ -387,14 +386,14 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     temp.innerHTML = src;
                 } else {
                     temp.innerHTML = src;
-                    scripts = stripScripts(temp);
+                    if (!isAutoExec()) {
+                        scripts = stripScripts(temp);
+                    }
                 }
             }
 
             parent.replaceChild(temp, element);
-            if (!isAutoExec()) {
-                runScripts(scripts);
-            }
+            runScripts(scripts);
 
         };
 
@@ -724,7 +723,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var doUpdate = function doUpdate(element, context) {
             var id, content, markup, str, state;
             var stateForm;
-            var scripts; // temp holding value for array of script nodes
+            var scripts = []; // temp holding value for array of script nodes
 
             id = element.getAttribute('id');
             if (id === "javax.faces.ViewState") {
@@ -792,7 +791,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var docBody = document.getElementsByTagName("body")[0];
                 if (bodyStartEx.exec(src) !== null) { // replace body tag
 
-                    var scripts;
                     if (isIE()) {
                         // Get scripts from text
                         scripts = stripScriptsIE(src);
@@ -803,14 +801,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         // Get the body element out of the source text
                         var newBody = getBodyElement(src);
                         // strip scripts out, if necessary
+                        // Note that unlike other places, we run stripscripts regardless of autoexec
+                        // Since the copy code doesn't load the scripts - since they're first created
+                        // outside the current document
                         scripts = stripScripts(newBody);
                         // replace current body with new body
                         elementReplace(newBody, docBody);
                     }
                     // Run scripts, if necessary
-                    if (!isAutoExec()) {
-                        runScripts(scripts);
-                    }
+                    runScripts(scripts);
 
                 } else {  // replace body contents with innerHTML - note, script handling happens within function
                     elementReplaceStr(docBody, "body", src);
@@ -847,7 +846,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         // Create html
                         parserElement.innerHTML = '<table>' + html + '</table>';
                         // then extract scripts from it
-                        scripts = stripScripts(parserElement);
+                        if (!isAutoExec()) {
+                            scripts = stripScripts(parserElement);
+                        }
                     }
                     var newElement = parserElement.firstChild;
                     //some browsers will also create intermediary elements such as table>tbody>tr>td
@@ -855,9 +856,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         newElement = newElement.firstChild;
                     }
                     parent.replaceChild(newElement, d);
-                    if (!isAutoExec()) {
-                        runScripts(scripts);
-                    }
+                    runScripts(scripts);
 
                 } else if (d.nodeName.toLowerCase() === 'input') {
                     // special case handling for 'input' elements
@@ -879,12 +878,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         // Create html
                         parserElement.innerHTML = html;
                         // then extract scripts from it
-                        scripts = stripScripts(parserElement);
+                        if (!isAutoExec()) {
+                            scripts = stripScripts(parserElement);
+                        }
                     }
                     parent.replaceChild(parserElement.firstChild, d);
-                    if (!isAutoExec()) {
-                        runScripts(scripts);
-                    }
+                    runScripts(scripts);
                 }
             }
         };
@@ -907,16 +906,32 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var doInsert = function doInsert(element) {
+            var scripts = [];
             var target = $(element.firstChild.getAttribute('id'));
             var parent = target.parentNode;
             var tempElement = document.createElement('span');
-            tempElement.innerHTML = element.firstChild.firstChild.nodeValue;
-            // RELEASE PENDING add script handling here.
+            var html = element.firstChild.firstChild.nodeValue;
+
+            if (isIE()) {
+                // Get the scripts from the text
+                scripts = stripScriptsIE(html);
+                // Remove scripts from text
+                html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
+                tempElement.innerHTML = html;
+            } else {
+                // Create html
+                tempElement.innerHTML = html;
+                // then extract scripts from it
+                if (!isAutoExec()) {
+                    scripts = stripScripts(tempElement);
+                }
+            }
             if (element.firstChild.nodeName === 'after') {
                 // Get the next in the list, to insert before
                 target = target.nextSibling;
             }  // otherwise, this is a 'before' element
             parent.insertBefore(tempElement.firstChild, target);
+            runScripts(scripts);
         };
 
         /**

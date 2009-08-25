@@ -251,6 +251,7 @@ public class UpdateRootBean {
         }
         return null;
     }
+
     public String updateRootAllEvent() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
