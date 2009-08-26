@@ -43,7 +43,7 @@ package com.sun.faces.mgbean;
 import javax.faces.FacesException;
 
 /**
- * <p>Indicates an error in the ManagedBean, beit a user or runtime.</p>
+ * <p>Indicates an error in the ManagedBean, be it a user error or runtime error.</p>
  */
 public class ManagedBeanCreationException extends FacesException {
 
