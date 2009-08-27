@@ -935,7 +935,7 @@ public abstract class Application {
                                        String rendererType) {
 
         if (defaultApplication != null) {
-            defaultApplication.createComponent(context,
+            return defaultApplication.createComponent(context,
                                                componentType,
                                                rendererType);
         }
