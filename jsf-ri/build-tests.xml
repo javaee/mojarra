@@ -229,7 +229,7 @@
                 <zipfileset dir="${basedir}/web/test/WEB-INF"
                             prefix="WEB-INF"/>
                 <zipfileset dir="${basedir}/web/test/resources"
-                            prefix="/resources"/>
+                            prefix="resources"/>
             </archive-elements>
         </jsf.war>        
         <copy todir="${out.test.dir}">
@@ -238,7 +238,7 @@
         </copy>
 
         <mkdir dir="${basedir}/build/target/test" />
-        <unjar src="${basedir}/build/test.war" overwrite="true"
+        <unzip src="${basedir}/build/test.war" overwrite="true"
                dest="${basedir}/build/target/test" />
 
     </target>
@@ -450,6 +450,21 @@
         </jsf.junit>       
     </target>
 
+    <target name="run.cactus.test.single">
+        <jsf.junit classpath-refid="test.runtime.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <custom-sysproperties>
+                <sysproperty key="cactus.contextURL"
+                             value="http://${container.host}:${container.port}/test"/>
+            </custom-sysproperties>
+            <suite>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestApplicationImpl"/>
+            </suite>
+
+        </jsf.junit>       
+    </target>
+
 
     <target name="run.test" depends="compile.test">
         <jsf.junit classpath-refid="test.runtime.classpath"
@@ -497,7 +512,7 @@
 
     <target name="passthru">
 
-      <antcall target="run.cactus.test" />
+      <antcall target="run.cactus.test.single" />
        
     </target>
 
