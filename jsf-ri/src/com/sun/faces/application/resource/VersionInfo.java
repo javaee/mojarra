@@ -105,6 +105,9 @@ public class VersionInfo implements Comparable {
         if (obj == null || !(obj instanceof VersionInfo)) {
             return false;
         }
+        if (this == obj) {
+            return true;
+        }
         VersionInfo passed = (VersionInfo) obj;
         boolean versionsEqual = this.version.equals(passed.version);
         boolean extensionEqual;

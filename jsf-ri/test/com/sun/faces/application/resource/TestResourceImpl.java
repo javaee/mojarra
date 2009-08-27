@@ -55,6 +55,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
+import javax.faces.context.FacesContext;
 import org.apache.cactus.WebRequest;
 
 /**
@@ -190,6 +191,42 @@ public class TestResourceImpl extends ServletFacesTestCase {
         underTest = getBytes(in);
         assertTrue(Arrays.equals(controlBytes, underTest));
         
+    }
+
+    public void testEqualsOnResourceAndRelatedClasses() throws Exception {
+        // validate the behavior of getInputStream() for a webapp-based resource
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        assertTrue (handler != null);
+
+        Object
+                x = handler.createResource("duke-nv.gif", "nvLibrary", "image/gif"),
+                y = handler.createResource("duke-nv.gif", "nvLibrary", "image/gif"),
+                z = handler.createResource("duke-nv.gif", "nvLibrary", "image/gif");
+        this.verifyEqualsContractPositive(x, y, z);
+
+        y = handler.createResource("simple.css");
+        assertFalse(x.equals(y));
+
+
+        VersionInfo
+                viA = new VersionInfo("1.0", null),
+                viB = new VersionInfo("1.0", null),
+                viC = new VersionInfo("1.0", null);
+        this.verifyEqualsContractPositive(viA, viB, viC);
+
+        ResourceHelper helper = new ClasspathResourceHelper() {};
+        FacesContext context = this.getFacesContext();
+
+        LibraryInfo
+                liA = helper.findLibrary("vLibrary-jar", null, context),
+                liB = helper.findLibrary("vLibrary-jar", null, context),
+                liC = helper.findLibrary("vLibrary-jar", null, context);
+        this.verifyEqualsContractPositive(liA, liB, liC);
+
+        liB = helper.findLibrary("vLibrary", null, context);
+        assertFalse(liA.equals(liB));
+
+
     }
 
 

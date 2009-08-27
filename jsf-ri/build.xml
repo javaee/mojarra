@@ -628,6 +628,10 @@
         <ant antfile="build-tests.xml" target="passthru"/>
     </target>
 
+    <target name="prepare.cactus.webapp">
+        <ant antfile="build-tests.xml" target="prepare.test.webapp"/>
+    </target>
+
      <!--
        USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO YOUR LOCAL
        M2 REPOSITORY

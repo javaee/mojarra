@@ -126,6 +126,33 @@ public class ResourceImpl extends Resource implements Externalizable {
 
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        final ResourceImpl other = (ResourceImpl) obj;
+        if (null != this.resourceInfo && null != other.resourceInfo) {
+            return this.resourceInfo.equals(other.resourceInfo);
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 41 * hash + (this.resourceInfo != null ? this.resourceInfo.hashCode() : 0);
+        return hash;
+    }
+
+    
+
 
     // --------------------------------------------------- Methods from Resource
 
