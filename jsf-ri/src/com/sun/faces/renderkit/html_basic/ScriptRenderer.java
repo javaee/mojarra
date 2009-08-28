@@ -50,7 +50,6 @@ import javax.faces.application.Resource;
  */
 public class ScriptRenderer extends ScriptStyleBaseRenderer {
     
-    public static final String RENDERER_TYPE = "javax.faces.resource.Script";
     
     @Override
     protected void startElement(ResponseWriter writer, UIComponent component) throws IOException {
@@ -116,6 +115,7 @@ public class ScriptRenderer extends ScriptStyleBaseRenderer {
 
         writer.writeAttribute("src", resourceSrc, "src");
         this.endElement(writer);
+        super.encodeEnd(context, component);
     }
     
 }

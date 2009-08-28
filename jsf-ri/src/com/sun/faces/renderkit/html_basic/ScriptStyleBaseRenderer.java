@@ -37,6 +37,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.FacesLogger;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -59,8 +60,10 @@ import javax.faces.event.ListenerFor;
  */
 @ListenerFor(systemEventClass=PostAddToViewEvent.class)
 public abstract class ScriptStyleBaseRenderer extends Renderer implements ComponentSystemEventListener {
-    
-    
+
+    private static final String COMP_KEY =
+          ScriptStyleBaseRenderer.class.getName() + "_COMPOSITE_COMPONENT";
+
     // Log instance for this class
     protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
 
@@ -81,10 +84,19 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
         UIComponent component = event.getComponent();
         FacesContext context = FacesContext.getCurrentInstance();
-
+        
         String target = verifyTarget((String) component.getAttributes().get("target"));
         if (target != null) {
+            // We're checking for a composite component here as if the resource
+            // is relocated, it may still require it's composite component context
+            // in order to properly render.  Store it for later use by
+            // encodeBegin() and encodeEnd().
+            UIComponent cc = UIComponent.getCurrentCompositeComponent(context);
+            if (cc != null) {
+                component.getAttributes().put(COMP_KEY, cc);
+            }
             context.getViewRoot().addComponentResource(context, component, target);
+
         }
     }
     
@@ -98,10 +110,48 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
         return true;
     }
 
+
+    /**
+     * If overridden, this method (i.e. super.encodeEnd) should be called
+     * <em>last</em> within the overridding implementation.
+     */
     @Override
-    public final void encodeBegin(FacesContext context, UIComponent component)
+    public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
-        // no-op
+
+        // Remove the key to prevent issues with state saving...
+        UIComponent cc = (UIComponent) component.getAttributes().remove(COMP_KEY);
+        if (cc != null) {
+            // the first pop maps to the component we're rendering.
+            // the second pop maps to the composite component that was pushed
+            // in this renderer's encodeBegin implementation.
+            // re-push the current component to reset the original context
+            component.popComponentFromEL(context);
+            component.popComponentFromEL(context);
+            component.pushComponentToEL(context, component);
+        }
+    }
+
+
+    /**
+     * If overridden, this method (i.e. super.encodeBegin) should be called
+     * <em>first</em> within the overridding implementation.
+     */
+    @Override
+    public void encodeBegin(FacesContext context, UIComponent component)
+          throws IOException {
+
+        UIComponent cc = (UIComponent) component.getAttributes().get(COMP_KEY);
+        if (cc != null) {
+            // the first pop maps to the component we're rendering.
+            // push the composite component to the 'stack' and then re-push
+            // the component we're rendering so the current component is
+            // correct.
+            component.popComponentFromEL(context);
+            component.pushComponentToEL(context, cc);
+            component.pushComponentToEL(context, component);
+        }
+
     }
         
     @Override
@@ -142,11 +192,16 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
         }
         
     }
+
+
+    // ------------------------------------------------------- Protected Methods
+
+
     /**
      * <p>Allow the subclass to customize the start element content</p>
      */
     protected abstract void startElement(ResponseWriter writer, 
-            UIComponent component) throws IOException;
+                                         UIComponent component) throws IOException;
     
     /**
      * <p>Allow the subclass to customize the start element content</p>

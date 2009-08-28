@@ -50,7 +50,6 @@ import javax.faces.context.ResponseWriter;
  */
 public class StylesheetRenderer extends ScriptStyleBaseRenderer {
 
-    public static final String RENDERER_TYPE = "javax.faces.resource.Stylesheet";
 
     @Override
     protected void startElement(ResponseWriter writer, UIComponent component) throws IOException {
@@ -102,6 +101,6 @@ public class StylesheetRenderer extends ScriptStyleBaseRenderer {
                                   : "RES_NOT_FOUND"),
                               "href");
         writer.endElement("link");
-
+        super.encodeEnd(context, component);
     }
 }

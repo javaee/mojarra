@@ -1984,19 +1984,26 @@ public abstract class UIComponentBase extends UIComponent {
                                                UIComponent component) {
 
         component.setInView(true);
-        application.publishEvent(context, PostAddToViewEvent.class, component);
-        if (component.getChildCount() > 0) {
-            Collection<UIComponent> clist = new ArrayList<UIComponent>(component.getChildren());
-            for (UIComponent c : clist) {
-                publishAfterViewEvents(context, application, c);
+        try {
+            component.pushComponentToEL(context, component);
+            application.publishEvent(context, PostAddToViewEvent.class, component);
+            if (component.getChildCount() > 0) {
+                Collection<UIComponent> clist =
+                      new ArrayList<UIComponent>(component.getChildren());
+                for (UIComponent c : clist) {
+                    publishAfterViewEvents(context, application, c);
+                }
             }
-        }
 
-        if (component.getFacetCount() > 0) {
-            Collection<UIComponent> clist = new ArrayList<UIComponent>(component.getFacets().values());
-            for (UIComponent c : clist) {
-                publishAfterViewEvents(context, application, c);
+            if (component.getFacetCount() > 0) {
+                Collection<UIComponent> clist =
+                      new ArrayList<UIComponent>(component.getFacets().values());
+                for (UIComponent c : clist) {
+                    publishAfterViewEvents(context, application, c);
+                }
             }
+        } finally {
+            component.popComponentFromEL(context);
         }
 
     }

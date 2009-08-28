@@ -658,6 +658,53 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
+
+    /**
+     * Added for issue 1256.
+     */
+    public void testCompositeComponentResolutionWithinRelocatableResources() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/compAttributeResourceRelocation.xhtml");
+        List<HtmlStyle> styles = new ArrayList<HtmlStyle>(4);
+        List<HtmlScript> scripts = new ArrayList<HtmlScript>(1);
+        getAllElementsOfGivenClass(page, styles, HtmlStyle.class);
+        getAllElementsOfGivenClass(page, scripts, HtmlScript.class);
+        assertEquals(4, styles.size());
+        assertEquals(1, scripts.size());
+        String[] styleValues = {
+              "color:red",
+              "color:blue",
+              "color:red",
+              "color:red"
+        };
+        String[] scriptValues = {
+              "var a = \"ss\";"
+        };
+
+        for (int i = 0, len = styles.size(); i < len; i++) {
+            assertTrue(styles.get(i).asXml().contains(styleValues[i]));
+        }
+        for (int i = 0, len = scripts.size(); i < len; i++) {
+            assertTrue(scripts.get(i).asXml().contains(scriptValues[i]));
+        }
+
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
+        page = submit.click();
+
+        styles.clear();
+        scripts.clear();
+        getAllElementsOfGivenClass(page, styles, HtmlStyle.class);
+        getAllElementsOfGivenClass(page, scripts, HtmlScript.class);
+        assertEquals(4, styles.size());
+        assertEquals(1, scripts.size());
+        for (int i = 0, len = styles.size(); i < len; i++) {
+            assertTrue(styles.get(i).asXml().contains(styleValues[i]));
+        }
+        for (int i = 0, len = scripts.size(); i < len; i++) {
+            assertTrue(scripts.get(i).asXml().contains(scriptValues[i]));
+        }
+    }
+
     
     // --------------------------------------------------------- Private Methods
 
