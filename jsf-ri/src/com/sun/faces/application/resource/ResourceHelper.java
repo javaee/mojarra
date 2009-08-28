@@ -643,7 +643,7 @@ public abstract class ResourceHelper {
                 if (0 < buf.size()) {
                     i = buf.remove(0);
                 } else {
-                    writingExpression = true;
+                    writingExpression = false;
                     i = inner.read();
                 }
             } else {

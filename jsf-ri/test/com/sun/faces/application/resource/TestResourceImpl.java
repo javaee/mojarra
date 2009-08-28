@@ -42,11 +42,15 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
@@ -415,6 +419,46 @@ public class TestResourceImpl extends ServletFacesTestCase {
         assertEquals("duke-nv.gif", "duke-nv.gif", resource.getResourceName());
         assertEquals("image/gif", "image/gif", resource.getContentType());
 
+    }
+
+
+    /**
+     * Added for issue 1274.
+     */
+    public void testResourceELEval() throws Exception {
+
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        assertNotNull(handler);
+
+        Resource resource = handler.createResource("simple-with-el.css");
+        assertNotNull(resource);
+
+        byte[] bytes = getBytes(resource.getInputStream());
+      
+        ByteArrayInputStream bai = new ByteArrayInputStream(bytes);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(bai));
+        List<String> lines = new ArrayList<String>();
+
+        for (String l = reader.readLine(); l != null; l = reader.readLine()) {
+            String t = l.trim();
+            if (t.length() > 0) {
+                lines.add(t);
+            }
+        }
+
+        assertEquals(4, lines.size());
+
+        final String[] expectedLines = {
+            "# /test",
+            "# /test",
+            "h2 { color: red }",
+            "# /test}"
+        };
+
+        for (int i = 0, len = expectedLines.length; i < len; i++) {
+            assertEquals(expectedLines[i], expectedLines[i], lines.get(i));
+        }
+        
     }
 
 
