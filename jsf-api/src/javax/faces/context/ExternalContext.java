@@ -231,10 +231,9 @@ public abstract class ExternalContext {
 
         if (defaultExternalContext != null) {
             defaultExternalContext.addResponseCookie(name, value, properties);
-            return;
+        } else {
+            throw new UnsupportedOperationException();
         }
-
-        throw new UnsupportedOperationException();
 
     }
 
@@ -570,10 +569,9 @@ public abstract class ExternalContext {
 
         if (defaultExternalContext != null) {
             defaultExternalContext.setRequest(request);
-            return;
+        } else {
+            throw new UnsupportedOperationException();
         }
-
-        throw new UnsupportedOperationException();
 
     }
 
@@ -691,10 +689,10 @@ public abstract class ExternalContext {
 
         if (defaultExternalContext != null) {
             defaultExternalContext.setRequestCharacterEncoding(encoding);
-            return;
+        } else {
+            throw new UnsupportedOperationException();
         }
 
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -1167,10 +1165,9 @@ public abstract class ExternalContext {
 
         if (defaultExternalContext != null) {
             defaultExternalContext.setResponse(response);
-            return;
+        } else {
+            throw new UnsupportedOperationException();
         }
-        
-        throw new UnsupportedOperationException();
 
     }
 
@@ -1255,10 +1252,9 @@ public abstract class ExternalContext {
 
         if (defaultExternalContext != null) {
             defaultExternalContext.setResponseCharacterEncoding(encoding);
-            return;
+        } else {
+            throw new UnsupportedOperationException();
         }
-        
-        throw new UnsupportedOperationException();
 
     }
     
@@ -1290,10 +1286,9 @@ public abstract class ExternalContext {
 
         if (defaultExternalContext != null) {
             defaultExternalContext.setResponseContentType(contentType);
-            return;
+        } else {
+            throw new UnsupportedOperationException();
         }
-
-        throw new UnsupportedOperationException();
 
     }
 
@@ -1388,10 +1383,9 @@ public abstract class ExternalContext {
 
         if (defaultExternalContext != null) {
             defaultExternalContext.invalidateSession();
-            return;
+        } else {
+            throw new UnsupportedOperationException();
         }
-
-        throw new UnsupportedOperationException();
 
     }
 
@@ -1528,7 +1522,6 @@ public abstract class ExternalContext {
 
         if (defaultExternalContext != null) {
             defaultExternalContext.setResponseHeader(name, value);
-
         } else {
             throw new UnsupportedOperationException();
         }
