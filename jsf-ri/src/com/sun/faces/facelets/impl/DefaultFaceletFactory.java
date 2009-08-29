@@ -221,6 +221,17 @@ public class DefaultFaceletFactory extends FaceletFactory {
         return f;
     }
 
+    public boolean needsToBeRefreshed(URL url) {
+        boolean result = false;
+
+        Util.notNull("url", url);
+        String key = url.toString();
+        DefaultFacelet f = this.facelets.get(key);
+        result = (f == null || this.needsToBeRefreshed(f));
+
+        return result;
+    }
+
     /**
      * Template method for determining if the Facelet needs to be refreshed.
      *

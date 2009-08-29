@@ -626,6 +626,12 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         assertTrue("Inserted Text".equals(toplevelContent));
     }
 
+    public void testMetadataCache() throws Exception {
+        HtmlPage page = getPage("/faces/composite/boostrapCompositeComponentMetadata.xhtml");
+        String text = page.asText();
+        assertTrue(text.contains("First call longer than second call"));
+    }
+
     public void testMethodExprNotRequired() throws Exception {
 
         try {

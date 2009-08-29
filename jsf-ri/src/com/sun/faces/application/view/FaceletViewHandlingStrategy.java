@@ -53,8 +53,11 @@ import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.Cache;
+import com.sun.faces.util.Cache.Factory;
 import com.sun.faces.component.CompositeComponentStackManager;
 
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import java.awt.event.ActionEvent;
 import java.beans.BeanDescriptor;
 import javax.el.ValueExpression;
@@ -127,7 +130,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private boolean partialStateSaving;
     private Set<String> fullStateViewIds;
     private boolean groovyAvailable;
-    
+
+    private Cache<Resource, BeanInfo> metadataCache;
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -183,6 +189,22 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, 
             Resource ccResource) {
+
+        FaceletFactory factory = (FaceletFactory)
+                RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
+        assert(factory instanceof DefaultFaceletFactory);
+        DefaultFaceletFactory ourFactory = (DefaultFaceletFactory) factory;
+        if (ourFactory.needsToBeRefreshed(ccResource.getURL())) {
+            metadataCache.remove(ccResource);
+        }
+        BeanInfo result = metadataCache.get(ccResource);
+
+        return result;
+    }
+    
+    public BeanInfo createComponentMetadata(FacesContext context,
+            Resource ccResource) {
+
         // PENDING this implementation is terribly wasteful.
         // Must find a better way.
         CompositeComponentBeanInfo result;
@@ -854,6 +876,23 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         groovyAvailable = GroovyHelper.isGroovyAvailable(FacesContext.getCurrentInstance());
+
+
+        metadataCache = new Cache<Resource, BeanInfo>(new Factory<Resource, BeanInfo>() {
+
+            public BeanInfo newInstance(Resource ccResource) throws InterruptedException {
+                FacesContext context = FacesContext.getCurrentInstance();
+                BeanInfo result = null;
+                result = FaceletViewHandlingStrategy.this.
+                        createComponentMetadata(context, ccResource);
+
+                return result;
+            }
+        });
+
+
+
+
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Initialization Successful");

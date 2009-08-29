@@ -1,12 +1,8 @@
 /*
- * $Id: FacesLogger.java,v 1.5 2008/02/14 00:32:11 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
+ * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -14,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -23,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -37,61 +33,28 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
- 
-package com.sun.faces.util;
 
-import java.util.logging.Logger;
+package com.sun.faces.composite;
 
-/**
- * <p/>
- * An <code>enum</code> of all application <code>Logger</code>s.
- * </p>
- */
-public enum FacesLogger {
-
-    APPLICATION("application"),
-    APPLICATION_VIEW("application.view"),
-    RESOURCE("resource"),
-    CONFIG("config"),
-    CONTEXT("context"),
-    FACELETS_COMPILER("facelets.compiler"),
-    FACELETS_COMPONENT("facelets.tag.component"),
-    FACELETS_META("facelets.tag.meta"),
-    FACELETS_COMPOSITION("facelets.tag.ui.composition"),
-    FACELETS_DECORATE("facelets.tag.ui.decorate"),
-    FACELETS_INCLUDE("facelets.tag.ui.include"),
-    FACELETS_FACELET("faclets.facelet"),
-    FACELETS_FACTORY("facelets.factory"),
-    LIFECYCLE("lifecycle"),
-    MANAGEDBEAN("managedbean"),
-    RENDERKIT("renderkit"),
-    TAGLIB("taglib"),
-    TIMING("timing"),
-    UTIL("util");
-
-    private static final String LOGGER_RESOURCES
-         = "com.sun.faces.LogStrings";
-    public static final String FACES_LOGGER_NAME_PREFIX
-         = "javax.enterprise.resource.webcontainer.jsf.";
-    private String loggerName;
+import java.io.IOException;
+import javax.faces.component.UIComponent;
+import javax.faces.view.facelets.FaceletContext;
+import javax.faces.view.facelets.TagConfig;
+import javax.faces.view.facelets.TagHandler;
 
 
-    FacesLogger(String loggerName) {
-        this.loggerName = FACES_LOGGER_NAME_PREFIX + loggerName;
+public class TimeWastingTagHandler extends TagHandler {
+
+    public TimeWastingTagHandler(TagConfig config) {
+        super(config);
     }
 
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
 
-    public String getLoggerName() {
-        return loggerName;
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ex) {
+        }
+
     }
-
-
-    public String getResourcesName() {
-        return LOGGER_RESOURCES;
-    }
-
-    public Logger getLogger() {
-        return Logger.getLogger(loggerName, LOGGER_RESOURCES);
-    }
-
 }
