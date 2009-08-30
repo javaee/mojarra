@@ -1656,7 +1656,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         args["javax.faces.partial.execute"] = options.execute;
                     }
                 } else {
-                    options.execute = element.id;
+                    options.execute = element.name + " " + element.id;
                     args["javax.faces.partial.execute"] = options.execute;
                 }
 
