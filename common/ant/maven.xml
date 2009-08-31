@@ -132,7 +132,7 @@
                         <exclude name="XMLSchema.dtd" />
                         <exclude name="datatypes.dtd" />
                       </fileset>
-                      <fileset dir="${api.dir}/src" includes="**/*" />
+                      <fileset dir="${api.dir}/src/main/java" includes="**/*" />
                       <fileset dir="${api.dir}/build/generate/" 
                                includes="**/*" excludes="last-generation" />
                     </copy>
