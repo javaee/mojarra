@@ -307,7 +307,7 @@
         </copy>
 
         <concat destfile="${build.classes.dir}/META-INF/resources/javax.faces/jsf-uncompressed.js" fixlastline="yes">
-            <filelist dir="${api.dir}/resources">
+            <filelist dir="${api.dir}/src/main/resources">
                 <file name="jsf.js"/>
             </filelist>
             <filelist  dir="${basedir}/resources">
@@ -638,7 +638,7 @@
        M2 REPOSITORY
     -->
 
-    <target name="mvn.deploy.snapshot.local">
+    <target name="mvn.deploy.snapshot.local" description="Deploy a SNAPSHOT build to the local maven repo">
         <mvn.deploy.snapshot.local type="impl"/>
     </target>
 

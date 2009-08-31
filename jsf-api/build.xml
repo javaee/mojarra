@@ -51,10 +51,10 @@
 
     <!-- Structural -->
     <property name="doc.dir" value="${basedir}/doc"/>
-    <property name="resources.dir" value="${basedir}/resources"/>
-    <property name="src.dir" value="${basedir}/src"/>
+    <property name="src.dir" value="${basedir}/src/main/java"/>
+    <property name="resources.dir" value="${basedir}/src/main/resources"/>
     <property name="tools.dir" value="${basedir}/tools"/>
-    <property name="test.dir" value="${basedir}/test"/>
+    <property name="test.dir" value="${basedir}/src/test/java"/>
     <property name="dist.dir" value="${basedir}/dist"/>
     <property name="build.dir" value="build"/>
     <property name="target.dir" value="target"/>
