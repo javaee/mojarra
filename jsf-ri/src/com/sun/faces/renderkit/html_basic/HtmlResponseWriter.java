@@ -126,8 +126,8 @@ public class HtmlResponseWriter extends ResponseWriter {
     // Keep one instance of the script buffer per Writer
     private FastStringWriter scriptBuffer;
 
-    // Keep one instance of attributesBuffer to buffer the writting
-    // of all attributes for a particular element to reducr the number
+    // Keep one instance of attributesBuffer to buffer the writing
+    // of all attributes for a particular element to reduce the number
     // of writes
     private FastStringWriter attributesBuffer;
     
@@ -143,6 +143,15 @@ public class HtmlResponseWriter extends ResponseWriter {
     //
     private char[] buffer = new char[1028];
 
+    // Internal buffer used when outputting properly escaped CData information.
+    //
+    private final static int cdataBufferSize = 1024;
+    private char[] cdataBuffer = new char[cdataBufferSize];
+    private int cdataBufferLength = 0;
+    // Secondary cdata buffer, used for writeText
+    private final static int cdataTextBufferSize = 128;
+    private char[] cdataTextBuffer = new char[cdataTextBufferSize];
+
     // Internal buffer for to store the result of String.getChars() for
     // values passed to the writer as String to reduce the overhead
     // of String.charAt().  This buffer will be grown, if necessary, to
@@ -153,10 +162,10 @@ public class HtmlResponseWriter extends ResponseWriter {
 
 
     private static final String BREAKCDATA = "]]><![CDATA[";
-    private static final String ESCAPEDSINGLEBRACKET = "]"+BREAKCDATA;
-    private static final String ESCAPEDLT= "&lt;"+BREAKCDATA;
-    private static final String ESCAPEDSTART= "&lt;"+BREAKCDATA+"![";
-    private static final String ESCAPEDEND= "]"+BREAKCDATA+"]>";
+    private static final char[] ESCAPEDSINGLEBRACKET = ("]"+BREAKCDATA).toCharArray();
+    private static final char[] ESCAPEDLT= ("&lt;"+BREAKCDATA).toCharArray();
+    private static final char[] ESCAPEDSTART= ("&lt;"+BREAKCDATA+"![").toCharArray();
+    private static final char[] ESCAPEDEND= ("]"+BREAKCDATA+"]>").toCharArray();
 
     private static final int CLOSEBRACKET = (int)']';
     private static final int LT = (int)'<';
@@ -620,7 +629,6 @@ public class HtmlResponseWriter extends ResponseWriter {
         dontEscape = true;
         writer.write("<![CDATA[");
         closeStart = false;
-        return;
     }
 
     /**
@@ -643,7 +651,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         closeStartIfNecessary();
 
         if (writingCdata) {
-            writer.write(escapeArray(cbuf));
+            writeEscaped(cbuf, 0, cbuf.length);
         } else {
             writer.write(cbuf);
         }
@@ -655,7 +663,6 @@ public class HtmlResponseWriter extends ResponseWriter {
 
         closeStartIfNecessary();
 
-        // RELEASE_PENDING add buffer for lookahead
         if (writingCdata) {
             if (c == CLOSEBRACKET) {
                 writer.write(ESCAPEDSINGLEBRACKET);
@@ -696,17 +703,8 @@ public class HtmlResponseWriter extends ResponseWriter {
             throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > cbuf.length");
         }
 
-        // RELEASE_PENDING
-        //Might take a page from the HtmlUtils book and if the content being written
-        // is more than 16 chars, then use an existing buffer and copy the contents
-        // to said buffer.  If 16 or less, then just iterate over the string using charAt()
-
         if (writingCdata) {
-            char[] nbuf = new char[off+len];
-
-            System.arraycopy(cbuf, off, nbuf, 0, len);
-
-            writer.write(escapeArray(nbuf));
+            writeEscaped(cbuf, off, len);
         } else {
             writer.write(cbuf, off, len);
         }
@@ -918,18 +916,29 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "text"));
         }
         closeStartIfNecessary();
+        String textStr = text.toString();
         if (writingCdata) {
-            writer.write(escapeArray(text.toString().toCharArray()));
+            int textLen = textStr.length();
+            if (textLen > cdataTextBufferSize) {
+                writeEscaped(textStr.toCharArray(), 0, textLen);
+            } else if (textLen >= 16) { // >16, < cdataTextBufferSize
+                textStr.getChars(0, textLen, cdataTextBuffer, 0);
+                writeEscaped(cdataTextBuffer, 0, textLen);
+            } else { // <16
+                for (int i=0; i < textLen;  i++)  {
+                    cdataTextBuffer[i] = textStr.charAt(i);
+                }
+                writeEscaped(cdataTextBuffer, 0, textLen);
+            }
         } else if (dontEscape) {
-            writer.write(text.toString());
+            writer.write(textStr);
         } else {
-            String val = text.toString();
-            ensureTextBufferCapacity(val);
+            ensureTextBufferCapacity(textStr);
             HtmlUtils.writeText(writer,
                                 escapeUnicode,
                                 escapeIso,
                                 buffer,
-                                val,
+                                textStr,
                                 textBuffer);
         }
     }
@@ -966,16 +975,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         closeStartIfNecessary();
         if (writingCdata) {
-
-            // RELEASE_PENDING
-            //Might take a page from the HtmlUtils book and if the content being written
-            // is more than 16 chars, then use an existing buffer and copy the contents
-            // to said buffer.  If 16 or less, then just iterate over the string using charAt()
-
-            char[] cbuf = new char[off+len];
-            System.arraycopy(text, off, cbuf, 0, len);
-
-            writer.write(escapeArray(cbuf));
+            writeEscaped(text, off, len);
         } else  if (dontEscape) {
             writer.write(text, off, len);
         } else {
@@ -1148,79 +1148,115 @@ public class HtmlResponseWriter extends ResponseWriter {
         return (isScript || isStyle);
     }
 
-// RELEASE_PENDING Consider changing from returning a String to returning a char array
-// RELEASE_PENDING Add a character array buffer, as well as unwinding the final Strings into char[]
 /*
- *  Method to escape all CDATA instances in a character array.
+ *  Method to escape all CDATA instances in a character array, then write to writer.
  *
- * This method looks for occurances of "<![" and "]]>"
+ * This method looks for occurrences of "<![" and "]]>"
  */
-private String escapeArray(char cbuf[]) {
-    if (cbuf == null || cbuf.length == 0) {
-        return "";
+private void writeEscaped(char cbuf[], int offset, int length) throws IOException {
+    if (cbuf == null || cbuf.length == 0 || length == 0) {
+        return;
     }
-    StringBuilder builder = new StringBuilder(cbuf.length);
+
+   if (offset < 0 || length < 0 || offset + length > cbuf.length ) {
+        throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > cbuf.length");
+   }
 
     // Single char case
-    if (cbuf.length == 1) {
-        if (cbuf[0] == '<') {
-            builder.append(ESCAPEDLT);
-        } else if (cbuf[0] == '[') {
-            builder.append(ESCAPEDSINGLEBRACKET);
+    if (length == 1) {
+        if (cbuf[offset] == '<') {
+            appendBuffer(ESCAPEDLT);
+        } else if (cbuf[offset] == '[') {
+            appendBuffer(ESCAPEDSINGLEBRACKET);
         } else {
-            builder.append(cbuf[0]);
+            appendBuffer(cbuf[offset]);
         }
-        return builder.toString();
+        flushBuffer();
+        return;
     }
     // two char case
-    if (cbuf.length == 2) {
-        if (cbuf[0] == '<' && cbuf[1] == '!') {
-            builder.append(ESCAPEDLT);
-            builder.append(cbuf[1]);
-        } else if (cbuf[0] == ']' && cbuf[1] == ']') {
-            builder.append(ESCAPEDSINGLEBRACKET);
-            builder.append(ESCAPEDSINGLEBRACKET);
+    if (length == 2) {
+        if (cbuf[offset] == '<' && cbuf[offset + 1] == '!') {
+            appendBuffer(ESCAPEDLT);
+            appendBuffer(cbuf[offset + 1]);
+        } else if (cbuf[offset] == ']' && cbuf[offset + 1] == ']') {
+            appendBuffer(ESCAPEDSINGLEBRACKET);
+            appendBuffer(ESCAPEDSINGLEBRACKET);
         } else {
-            builder.append(cbuf[0]);
-            builder.append(cbuf[1]);
+            appendBuffer(cbuf[offset]);
+            appendBuffer(cbuf[offset + 1]);
         }
-        return builder.toString();
+        flushBuffer();
+        return;
     }
     // > 2 char case
     boolean last = false;
-    for (int i = 0; i < cbuf.length - 2; i++) {
+    for (int i = offset; i < length - 2; i++) {
         if (cbuf[i] == '<' && cbuf[i + 1] == '!' && cbuf[i + 2] == '[') {
-            builder.append(ESCAPEDSTART);
+            appendBuffer(ESCAPEDSTART);
             i += 2;
         } else if (cbuf[i] == ']' && cbuf[i + 1] == ']' && cbuf[i + 2] == '>') {
-            builder.append(ESCAPEDEND);
+            appendBuffer(ESCAPEDEND);
             i += 2;
         } else {
-            builder.append(cbuf[i]);
+            appendBuffer(cbuf[i]);
         }
-        if (i == cbuf.length - 1) {
+        if (i == (offset + length - 1)) {
             last = true;
         }
     }
     // if we didn't look at the last characters, look at them now
     if (!last) {
-        if (cbuf[cbuf.length - 2] == '<') {
-            builder.append(ESCAPEDLT);
-        } else if (cbuf[cbuf.length - 2] == '[') {
-            builder.append(ESCAPEDSINGLEBRACKET);
+        if (cbuf[offset + length - 2] == '<') {
+            appendBuffer(ESCAPEDLT);
+        } else if (cbuf[offset + length - 2] == '[') {
+            appendBuffer(ESCAPEDSINGLEBRACKET);
         } else {
-            builder.append(cbuf[cbuf.length - 2]);
+            appendBuffer(cbuf[offset + length - 2]);
         }
-        if (cbuf[cbuf.length - 1] == '<') {
-            builder.append(ESCAPEDLT);
-        } else if (cbuf[cbuf.length - 1] == '[') {
-            builder.append(ESCAPEDSINGLEBRACKET);
+        if (cbuf[offset + length - 1] == '<') {
+            appendBuffer(ESCAPEDLT);
+        } else if (cbuf[offset + length - 1] == '[') {
+            appendBuffer(ESCAPEDSINGLEBRACKET);
         } else {
-            builder.append(cbuf[cbuf.length - 1]);
+            appendBuffer(cbuf[offset + length - 1]);
         }
     }
-    return builder.toString();
+    flushBuffer();
 }
 
+/*
+ *  append a character array to the cdatabuffer
+ */
+private void appendBuffer(char[] cbuf) throws IOException {
+    if (cbuf.length + cdataBufferLength >= cdataBufferSize) {
+        flushBuffer();
+    }
+    if (cbuf.length >= cdataBufferSize) {  // bigger than the buffer, direct write
+        writer.write(cbuf);
+    }
+    System.arraycopy(cbuf, 0, cdataBuffer, cdataBufferLength, cbuf.length);
+    cdataBufferLength = cdataBufferLength + cbuf.length;
+}
+/*
+ * append a character to the cdatabuffer
+ */
+private void appendBuffer(char c) throws IOException {
+    if (cdataBufferLength + 1 >= cdataBufferSize) {
+        flushBuffer();
+    }
+    cdataBuffer[cdataBufferLength] = c;
+    cdataBufferLength++;
+}
 
+/*
+ * flush the cdatabuffer to the writer
+ */
+private void flushBuffer() throws IOException {
+    if (cdataBufferLength == 0) {
+        return;
+    }
+    writer.write(cdataBuffer, 0, cdataBufferLength);
+    cdataBufferLength = 0;
+}
 }
