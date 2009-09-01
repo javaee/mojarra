@@ -1340,7 +1340,7 @@ public abstract class ExternalContext {
      * rethrown.  The exception may be logged.</p>
      *
      * <p><em>Servlet:</em>  This must be the set of attributes available via
-     * the <code>javax.servlet.http.HttpServletSession</code> methods
+     * the <code>javax.servlet.http.HttpSession</code> methods
      * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
      * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      *
