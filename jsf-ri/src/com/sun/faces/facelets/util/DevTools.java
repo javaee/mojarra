@@ -57,6 +57,7 @@ import javax.el.Expression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
 import java.beans.BeanInfo;
@@ -196,6 +197,12 @@ public final class DevTools {
             writeVariables(writer, Collections.<String,Object>emptyMap(), "View Attributes");
         }
         writeVariables(writer, ctx.getRequestMap(), "Request Attributes");
+        Flash flash = ctx.getFlash();
+        if (flash != null) {
+            writeVariables(writer, flash, "Flash Attributes");
+        } else {
+            writeVariables(writer, Collections.<String,Object>emptyMap(), "Flash Attributes");
+        }
         if (ctx.getSession(false) != null) {
             writeVariables(writer, ctx.getSessionMap(), "Session Attributes");
         } else {
