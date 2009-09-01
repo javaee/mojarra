@@ -218,7 +218,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
                 viC = new VersionInfo("1.0", null);
         this.verifyEqualsContractPositive(viA, viB, viC);
 
-        ResourceHelper helper = new ClasspathResourceHelper() {};
+        ResourceHelper helper = ClasspathResourceHelper.getInstance();
         FacesContext context = this.getFacesContext();
 
         LibraryInfo
@@ -259,41 +259,6 @@ public class TestResourceImpl extends ServletFacesTestCase {
         assertTrue(Arrays.equals(controlBytes, underTest));
 
     }
-
-
-    public void testWebappGetURL() throws Exception {
-
-        // validate the behavior of getURL() for a webapp-based resource
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue (handler != null);
-
-        URL control = getFacesContext().getExternalContext().getResource("/resources/duke-nv.gif");
-        assertTrue(control != null);
-        Resource resource = handler.createResource("duke-nv.gif");
-        assertTrue(resource != null);
-        URL test = resource.getURL();
-        assertTrue(test != null);
-        assertTrue(control.equals(test));
-
-    }
-
-
-    public void testJarGetURL() throws Exception {
-
-        // validate the behavior of getURL() for a webapp-based resource
-        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue (handler != null);
-
-        URL control = Util.getCurrentLoader(this.getClass()).getResource("META-INF/resources/duke-jar-nv.gif");
-        assertTrue(control != null);
-        Resource resource = handler.createResource("duke-jar-nv.gif");
-        assertTrue(resource != null);
-        URL test = resource.getURL();
-        assertTrue(test != null);
-        assertTrue(control.equals(test));
-
-    }
-
 
 
     public void testGetContentType() throws Exception {
