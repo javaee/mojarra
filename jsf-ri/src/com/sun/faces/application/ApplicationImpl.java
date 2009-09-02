@@ -922,7 +922,7 @@ public class ApplicationImpl extends Application {
     public UIComponent createComponent(FacesContext context, Resource componentResource) throws FacesException {
 
         // RELEASE_PENDING (rlubke,driscoll) this method needs review.
-        
+
         Util.notNull("context", context);
         Util.notNull("componentResource", componentResource);
 
@@ -1624,7 +1624,7 @@ public class ApplicationImpl extends Application {
         try {
             result = clazz.newInstance();
         } catch (Throwable t) {
-            Throwable previousT = null;
+            Throwable previousT;
             do {
                 previousT = t;
                 LOGGER.log(Level.SEVERE, "Unable to load class: ", t);
@@ -2256,6 +2256,4 @@ public class ApplicationImpl extends Application {
 
     } // END SourceInfo
 
-
-  
 }
