@@ -1058,13 +1058,7 @@ public class WebConfiguration {
         AllowTextChildren(
             "com.sun.faces.allowTextChildren",
             false
-        ),
-        EnableClasspathVersioning(
-            "com.sun.faces.enableClasspathVersioning",
-            true
         );
-
-
 
         private BooleanWebContextInitParameter alternate;
 

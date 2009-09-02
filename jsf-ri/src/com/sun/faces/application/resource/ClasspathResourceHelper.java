@@ -36,19 +36,18 @@
 
 package com.sun.faces.application.resource;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileOutputStream;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.TreeMap;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.jar.JarEntry;
@@ -60,8 +59,6 @@ import javax.faces.context.ExternalContext;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableClasspathVersioning;
 
 /**
  * <p>
@@ -76,7 +73,23 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
-    private ResourceHelper delegate;
+    private static final String BASE_PATH = "META-INF/resources";
+    private static final String BASE_PATH_MATCH = "META-INF/resources/";
+    private static final String SEPARATOR_CHAR_STR = "/";
+    private static final char SEPARATOR_CHAR = '/';
+    private static final String WEB_INF_LIB = "/WEB-INF/lib";
+    private static final String WEB_INF_CLASSES_RESOURCES = "/WEB-INF/classes/META-INF/resources/";
+    private static final String JAR_EXT = ".jar";
+    private static final String JAR_PROTOCOL = "jar:";
+    private static final String JAR_SEP = "!/";
+
+    private static final String[] MOJARRA_JS_FILES = {
+          "javax.faces/",
+          "javax.faces/jsf-compressed.js",
+          "javax.faces/jsf-uncompressed.js"
+    };
+
+    private PathNode resourcePathNodes = new PathNode(null, "/", false);
 
 
     // ------------------------------------------------------------ Constructors
@@ -85,13 +98,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
     private ClasspathResourceHelper() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
-        WebConfiguration webConfig =
-              WebConfiguration.getInstance(ctx.getExternalContext());
-        if (webConfig.isOptionEnabled(EnableClasspathVersioning)) {
-            delegate = new VersionedClasspathResourceDelegate();
-        } else {
-            delegate = new NonVersionedClasspathResourceDelegate();
-        }
+        buildNodeTree(ctx, getWebappLibJarFiles(ctx));
 
     }
 
@@ -109,13 +116,12 @@ public class ClasspathResourceHelper extends ResourceHelper {
     // --------------------------------------------- Methods from ResourceHelper
 
 
-
     /**
      * @see com.sun.faces.application.resource.ResourceHelper#getBaseResourcePath()
      */
     public String getBaseResourcePath() {
 
-        return delegate.getBaseResourcePath();
+        return BASE_PATH;
 
     }
 
@@ -124,9 +130,16 @@ public class ClasspathResourceHelper extends ResourceHelper {
      * @see ResourceHelper#getNonCompressedInputStream(ResourceInfo, javax.faces.context.FacesContext)
      */
     protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx)
-    throws IOException {
+          throws IOException {
 
-        return delegate.getNonCompressedInputStream(resource, ctx);
+        ClassLoader loader = Util.getCurrentLoader(this.getClass());
+        String path = resource.getPath();
+        InputStream in = loader.getResourceAsStream(path);
+        if (in == null) {
+            // try using this class' loader (necessary when running in OSGi)
+            in = this.getClass().getClassLoader().getResourceAsStream(path);
+        }
+        return in;
 
     }
 
@@ -136,7 +149,14 @@ public class ClasspathResourceHelper extends ResourceHelper {
      */
     public URL getURL(ResourceInfo resource, FacesContext ctx) {
 
-        return delegate.getURL(resource, ctx);
+        ClassLoader loader = Util.getCurrentLoader(this.getClass());
+        URL url = loader.getResource(resource.getPath());
+        if (url == null) {
+            // try using this class' loader (necessary when running in OSGi)
+            url = this.getClass().getClassLoader()
+                  .getResource(resource.getPath());
+        }
+        return url;
 
     }
 
@@ -148,7 +168,42 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                    String localePrefix,
                                    FacesContext ctx) {
 
-        return delegate.findLibrary(libraryName, localePrefix, ctx);
+        PathNode n;
+        if (localePrefix == null) {
+            n = resourcePathNodes;
+        } else {
+            n = resourcePathNodes.getPathNode(localePrefix);
+            if (n == null) {
+                return null;
+            }
+        }
+
+        String[] libraryNodes = Util.split(libraryName, SEPARATOR_CHAR_STR);
+        for (String e : libraryNodes) {
+            n = n.getPathNode(e);
+            if (n == null) {
+                return null;
+            }
+        }
+
+
+        try {
+            List<String> subPaths = getSubPaths(n.getPathNodes());
+            if (subPaths.isEmpty()) {
+                return new LibraryInfo(libraryName,
+                                       null,
+                                       localePrefix,
+                                       ClasspathResourceHelper.this);
+            } else {
+                VersionInfo version = getVersion(subPaths, false);
+                return new LibraryInfo(libraryName,
+                                       version,
+                                       localePrefix,
+                                       ClasspathResourceHelper.this);
+            }
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
 
     }
 
@@ -162,106 +217,37 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      boolean compressable,
                                      FacesContext ctx) {
 
-        return delegate.findResource(library,
-                                     resourceName,
-                                     localePrefix,
-                                     compressable,
-                                     ctx);
-
-    }
-
-
-    // ---------------------------------------------------------- Nested Classes
-
-
-    private final class NonVersionedClasspathResourceDelegate extends ResourceHelper {
-
-        private static final String BASE_RESOURCE_PATH = "META-INF/resources";
-
-
-        // -------------------------------------------------------- Constructors
-
-
-        NonVersionedClasspathResourceDelegate() {}
-
-
-        // ----------------------------------------- Methods from ResourceHelper
-
-        /**
-         * @see com.sun.faces.application.resource.ResourceHelper#getBaseResourcePath()
-         */
-        public String getBaseResourcePath() {
-
-            return BASE_RESOURCE_PATH;
-
-        }
-
-
-        /**
-         * @see ResourceHelper#getNonCompressedInputStream(ResourceInfo, javax.faces.context.FacesContext)
-         */
-        protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx)
-              throws IOException {
-
-            ClassLoader loader = Util.getCurrentLoader(this.getClass());
-            String path = resource.getPath();
-            InputStream in = loader.getResourceAsStream(path);
-            if (in == null) {
-                // try using this class' loader (necessary when running in OSGi)
-                in = this.getClass().getClassLoader().getResourceAsStream(path);
+        PathNode n = resourcePathNodes;
+        if (library != null) {
+            String[] libraryNodes = Util.split(library.getPath(), SEPARATOR_CHAR_STR);
+            for (int i = 2, len = libraryNodes.length; i < len; i++) {
+                n = n.getPathNode(libraryNodes[i]);
+                if (n == null) {
+                    return null;
+                }
             }
-            return in;
-
-        }
-
-
-        /**
-         * @see com.sun.faces.application.resource.ResourceHelper#getURL(ResourceInfo, javax.faces.context.FacesContext)
-         */
-        public URL getURL(ResourceInfo resource, FacesContext ctx) {
-
-            ClassLoader loader = Util.getCurrentLoader(this.getClass());
-            URL url = loader.getResource(resource.getPath());
-            if (url == null) {
-                // try using this class' loader (necessary when running in OSGi)
-                url = this.getClass().getClassLoader()
-                      .getResource(resource.getPath());
+        } else {
+            if (localePrefix == null) {
+                n = resourcePathNodes;
+            } else {
+                n = resourcePathNodes.getPathNode(localePrefix);
+                if (n == null) {
+                    return null;
+                }
             }
-            return url;
-
         }
-
-
-        /**
-         * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
-         */
-        public LibraryInfo findLibrary(String libraryName,
-                                       String localePrefix,
-                                       FacesContext ctx) {
-
-            try {
-                return new LibraryInfo(libraryName,
-                                       null,
-                                       localePrefix,
-                                       ClasspathResourceHelper.this);
-            } catch (Exception e) {
-                throw new FacesException(e);
+        String[] resourceNodes = Util.split(resourceName, SEPARATOR_CHAR_STR);
+        for (String e : resourceNodes) {
+            n = n.getPathNode(e);
+            if (n == null) {
+                return null;
             }
-
         }
 
-
-        /**
-         * @see ResourceHelper#findResource(LibraryInfo, String, String, boolean, javax.faces.context.FacesContext)
-         */
-        public ResourceInfo findResource(LibraryInfo library,
-                                         String resourceName,
-                                         String localePrefix,
-                                         boolean compressable,
-                                         FacesContext ctx) {
-
-            ResourceInfo value;
-            try {
+        ResourceInfo value;
+        try {
+            List<String> subPaths = getSubPaths(n.getPathNodes());
+            if (subPaths.isEmpty()) {
                 if (library != null) {
                     value = new ResourceInfo(library,
                                              resourceName,
@@ -278,431 +264,281 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                              resourceSupportsEL(resourceName,
                                                                 ctx));
                 }
-            } catch (Exception e) {
-                throw new FacesException(e);
-            }
-            if (value.isCompressable()) {
-                value = handleCompression(value);
-            }
-            return value;
-
-        }
-
-    } // END VersionedClasspathResourceDelegate
-
-
-    private final class VersionedClasspathResourceDelegate extends ResourceHelper {
-
-
-        private final String basePath;
-        private final String[] MOJARRA_JS_FILES = {
-              "META-INF/resources/javax.faces/jsf-compressed.js",
-              "META-INF/resources/javax.faces/jsf-uncompressed.js"
-        };
-
-        // -------------------------------------------------------- Constructors
-
-
-        VersionedClasspathResourceDelegate() {
-
-            FacesContext ctx = FacesContext.getCurrentInstance();
-            File basePathFile = explodeResources(ctx, getWebappLibJarFileURLS(ctx));
-            try {
-                basePath = basePathFile.getCanonicalPath();
-            } catch (IOException ioe) {
-                throw new FacesException(ioe); // should handle this better
-            }
-
-        }
-
-
-        // ----------------------------------------- Methods from ResourceHelper
-
-
-        @Override
-        public String getBaseResourcePath() {
-            return basePath;
-        }
-
-
-        @Override
-        public URL getURL(ResourceInfo resource, FacesContext ctx) {
-
-            File f = new File(resource.getPath());
-            try {
-                return f.toURI().toURL();
-            } catch (MalformedURLException mue) {
-                throw new FacesException(mue);
-            }
-
-        }
-
-        @Override
-        protected InputStream getNonCompressedInputStream(ResourceInfo info, FacesContext ctx)
-              throws IOException {
-            
-            return getURL(info, ctx).openStream();
-
-        }
-
-        /**
-         * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
-         */
-        public LibraryInfo findLibrary(String libraryName,
-                                       String localePrefix,
-                                       FacesContext ctx) {
-
-            String basePath;
-            if (localePrefix == null) {
-                basePath = getBaseResourcePath()
-                             + File.separatorChar
-                             + libraryName;
             } else {
-                basePath = getBaseResourcePath()
-                             + File.separatorChar
-                             + localePrefix
-                             + File.separatorChar
-                             + libraryName;
-            }
-
-            File basePathDir = new File(basePath);
-            if (!basePathDir.exists()) {
-                return null;
-            }
-
-            try {
-                List<String> subPaths = getSubPaths(basePathDir);
-                if (subPaths.isEmpty()) {
-                    return new LibraryInfo(libraryName,
-                                           null,
-                                           localePrefix,
-                                           ClasspathResourceHelper.this);
+                VersionInfo version = getVersion(subPaths, true);
+                if (version == null) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.application.resource.unable_to_determine_resource_version",
+                                   resourceName);
+                    }
+                    return null;
                 } else {
-                    VersionInfo version = getVersion(subPaths, false);
-                    return new LibraryInfo(libraryName,
-                                           version,
-                                           localePrefix,
-                                           ClasspathResourceHelper.this);
-                }
-            } catch (Exception e) {
-                throw new FacesException(e);
-            }
-        }
-
-
-        /**
-         * @see ResourceHelper#findResource(LibraryInfo, String, String, boolean, javax.faces.context.FacesContext)
-         */
-        public ResourceInfo findResource(LibraryInfo library,
-                                         String resourceName,
-                                         String localePrefix,
-                                         boolean compressable,
-                                         FacesContext ctx) {
-
-            String basePath;
-            String resName = resourceName.replace('/', File.separatorChar);
-            if (library != null) {
-                basePath = library.getPath() + File.separatorChar + resName;
-            } else {
-                if (localePrefix == null) {
-                    basePath = getBaseResourcePath()
-                                 + File.separatorChar
-                                 + resName;
-                } else {
-                    basePath = getBaseResourcePath() +
-                               + File.separatorChar
-                               + localePrefix
-                               + File.separatorChar
-                               + resName;
-                }
-            }
-
-            File basePathDir = new File(basePath);
-            if (!basePathDir.exists()) {
-                return null;
-            }
-
-            ResourceInfo value;
-            try {
-                List<String> subPaths = getSubPaths(basePathDir);
-                if (subPaths.isEmpty()) {
                     if (library != null) {
                         value = new ResourceInfo(library,
                                                  resourceName,
-                                                 null,
+                                                 version,
                                                  compressable,
-                                                 resourceSupportsEL(resourceName,
-                                                                    ctx));
+                                                 resourceSupportsEL(
+                                                       resourceName,
+                                                       ctx));
                     } else {
                         value = new ResourceInfo(resourceName,
-                                                 null,
+                                                 version,
                                                  localePrefix,
                                                  ClasspathResourceHelper.this,
                                                  compressable,
-                                                 resourceSupportsEL(resourceName,
-                                                                    ctx));
-                    }
-                } else {
-                    VersionInfo version = getVersion(subPaths, true);
-                    if (version == null) {
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.application.resource.unable_to_determine_resource_version",
-                                       resourceName);
-                        }
-                        return null;
-                    } else {
-                        if (library != null) {
-                            value = new ResourceInfo(library,
-                                                     resourceName,
-                                                     version,
-                                                     compressable,
-                                                     resourceSupportsEL(
-                                                           resourceName,
-                                                           ctx));
-                        } else {
-                            value = new ResourceInfo(resourceName,
-                                                     version,
-                                                     localePrefix,
-                                                     ClasspathResourceHelper.this,
-                                                     compressable,
-                                                     resourceSupportsEL(
-                                                           resourceName,
-                                                           ctx));
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                throw new FacesException(e);
-            }
-            if (value.isCompressable()) {
-                value = handleCompression(value);
-            }
-            return value;
-
-        }
-
-
-        // ----------------------------------------------------- Private Methods
-
-
-        private File explodeResources(FacesContext ctx, Set<JarFile> jarFiles) {
-
-            File tmpDir = (File) ctx.getExternalContext().getApplicationMap()
-                  .get("javax.servlet.context.tempdir");
-
-            if (tmpDir == null) {
-                throw new FacesException("Unable to support versioned classpath resources as the servlet container temp directory as identified by 'javax.servlet.context.tempdir' is null.");
-            }
-
-            File javaxResourcesDir = new File(tmpDir, "javax.faces.resources");
-            deleteDir(javaxResourcesDir);
-            mkdirs(javaxResourcesDir);
-
-            // allocate 16kb for copying resources
-            byte[] buf = createBuffer(16);
-
-            copyWebappResources(jarFiles, javaxResourcesDir, buf);
-
-            copyWebInfClassesMetaInfResources(ctx.getExternalContext(),
-                                              javaxResourcesDir,
-                                              "/WEB-INF/classes/META-INF/resources/",
-                                              buf);
-
-            copyMojarraResources(javaxResourcesDir, buf);
-
-            return javaxResourcesDir;
-
-        }
-
-        
-        private void copyWebappResources(Set<JarFile> jarFiles, File javaxResourcesDir, byte[] buf) {
-
-            if (jarFiles != null && !jarFiles.isEmpty()) {
-                for (JarFile jar : jarFiles) {
-                    for (Enumeration<JarEntry> entries = jar.entries(); entries .hasMoreElements();) {
-                        JarEntry e = entries.nextElement();
-                        if (e.getName().startsWith("META-INF/resources")) {
-                            String entryName = e.getName().substring(18);
-                            if (entryName.length() == 1) {
-                                continue;
-                            }
-                            File f = new File(javaxResourcesDir, entryName);
-                            if (e.isDirectory()) {
-                                mkdirs(f);
-                            } else {
-                                try {
-                                    writeBytes(f, jar.getInputStream(e), buf);
-                                } catch (IOException ioe) {
-                                    throw new FacesException(ioe);
-                                }
-                            }
-                        }
+                                                 resourceSupportsEL(
+                                                       resourceName,
+                                                       ctx));
                     }
                 }
             }
+        } catch (Exception e) {
+            throw new FacesException(e);
         }
-
-
-        // special handling for Mojarra ajax javascripts
-        private void copyMojarraResources(File javaxResourcesDir, byte[] buf) {
-
-            File f = new File(javaxResourcesDir, "javax.faces");
-            mkdirs(f);
-            for (int i = 0, len = MOJARRA_JS_FILES.length; i < len; i++) {
-                String jsPath = MOJARRA_JS_FILES[i];
-                String fname = jsPath.substring(jsPath.lastIndexOf('/') + 1);
-                File ff = new File(f, fname);
-                InputStream in = this.getClass().getClassLoader().getResourceAsStream(jsPath);
-                writeBytes(ff, in, buf);
-            }
-
+        if (value.isCompressable()) {
+            value = handleCompression(value);
         }
+        return value;
+
+    }
 
 
-        private void copyWebInfClassesMetaInfResources(ExternalContext extContext,
-                                                       File base,
-                                                       String basePath,
-                                                       byte[] buf) {
-            Set<String> subPaths = extContext.getResourcePaths(basePath);
-            if (subPaths != null && !subPaths.isEmpty()) {
-                for (String path : subPaths) {
-
-                    if (path.charAt(path.length() - 1) == '/') {
-                        String name = path.substring(basePath.length(), path.length() - 1);
-                        File f = new File(base, name);
-                        mkdirs(f);
-                        copyWebInfClassesMetaInfResources(extContext,
-                                                          f,
-                                                          path,
-                                                          buf);
-                    } else {
-                        String name = path.substring(path.lastIndexOf('/') + 1);
-                        File f = new File(base, name);
-                        writeBytes(f, extContext.getResourceAsStream(path), buf);
-                    }
-                }
-            }
-
-        }
+    // --------------------------------------------------------- Private Methods
 
 
-        private void mkdirs(File f) {
+    private void buildNodeTree(FacesContext ctx, Set<JarFile> jarFiles) {
 
-            if (!f.mkdirs()) {
-                throw new FacesException("Unable to create "
-                                         + f.toString()
-                                         + " temp directory.");
-            }
-
-        }
-
-
-        private void writeBytes(File f, InputStream in, byte[] buf) {
-
-            FileOutputStream fout = null;
-            try {
-                fout = new FileOutputStream(f);
-                for (int read = in.read(buf); read != -1; read = in.read(buf)) {
-                    fout.write(buf, 0, read);
-                }
-                fout.flush();
-            } catch (Exception e) {
-                throw new FacesException(e);
-            } finally {
-                if (fout != null) {
-                    try {
-                        fout.close();
-                    } catch (IOException ioe) {
-                        // ignored
-                    }
-                }
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException ioe) {
-                        // ignored
-                    }
-                }
-            }
-
-        }
-
-
-        private byte[] createBuffer(int kb) {
-
-            return new byte[1024 * kb];
-
-        }
-
-
-        private boolean deleteDir(File dir) {
-            if (dir.exists() && dir.isDirectory()) {
-                String[] children = dir.list();
-                for (int i = 0, len = children.length; i < len; i++) {
-                    boolean success = deleteDir(new File(dir, children[i]));
-                    if (!success) {
-                        return false;
-                    }
-                }
-            }
-
-            return dir.delete();
-        }
-
-
-        private Set<JarFile> getWebappLibJarFileURLS(FacesContext ctx) {
-
-            ExternalContext extContext = ctx.getExternalContext();
-            Set<String> elements = extContext.getResourcePaths("/WEB-INF/lib");
-            Set<JarFile> appJars = null;
-            if (elements != null && !elements.isEmpty()) {
-                for (String element : elements) {
-                    if (element.charAt(element.length() - 1) == '/'
-                        || !element.endsWith(".jar")) {
+        if (jarFiles != null && !jarFiles.isEmpty()) {
+            for (JarFile jarFile : jarFiles) {
+                for (Enumeration<JarEntry> e = jarFile.entries(); e
+                      .hasMoreElements();) {
+                    JarEntry je = e.nextElement();
+                    String eName = je.getName();
+                    if (!eName.startsWith(BASE_PATH_MATCH)
+                        || eName.length() <= 19) {
                         continue;
                     }
-                    try {
-                        URL url = extContext.getResource(element);
-                        StringBuilder sb = new StringBuilder(32);
-                        sb.append("jar:").append(url.toString()).append("!/");
-                        url = new URL(sb.toString());
-                        JarFile jarFile =
-                              ((JarURLConnection) url.openConnection())
-                                    .getJarFile();
-                        if (appJars == null) {
-                            appJars = new HashSet<JarFile>(elements.size());
-                        }
-                        appJars.add(jarFile);
-                    } catch (MalformedURLException mue) {
-                        throw new FacesException(mue);
-                    } catch (IOException ioe) {
-                        throw new FacesException(ioe);
-                    }
+                    String pathName = eName.substring(19);
+                    processPath(pathName, !je.isDirectory(), resourcePathNodes);
                 }
             }
-            return appJars;
+        }
+
+        // special handling for mojarra scripts
+        // If we add more scripts, then MOJARRA_JS_FILES needs to be updated
+        // appropriately
+        for (String mojarraJS : MOJARRA_JS_FILES) {
+            processPath(mojarraJS,
+                        mojarraJS.charAt(mojarraJS.length() - 1) == SEPARATOR_CHAR,
+                        resourcePathNodes);
+        }
+
+        // add PathNode instances for WEB-INF/classes/META-INF/resources/
+        buildPathNodesWebInfClasses(ctx.getExternalContext(),
+                                    WEB_INF_CLASSES_RESOURCES,
+                                    resourcePathNodes);
+
+    }
+
+
+    private PathNode processPath(String path, boolean leaf, PathNode pathNode) {
+
+        String[] pElements = Util.split(path, SEPARATOR_CHAR_STR);
+        PathNode currentNode = pathNode;
+        for (String pElement : pElements) {
+            PathNode node = currentNode.getPathNode(pElement);
+            if (node == null) {
+
+                PathNode n = new PathNode(currentNode, pElement, !leaf);
+                currentNode.addPathNode(pElement, n);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("ADD RESOURCE NODE: Parent Node ["
+                                + currentNode.name
+                                + "], new node path ["
+                                + pElement
+                                + "], leaf ["
+                                + leaf
+                                + ']');
+                    LOGGER.fine("NODE PATH: " + n.getPath());
+                }
+                currentNode = n;
+            } else {
+                currentNode = node;
+            }
+        }
+        return currentNode;
+
+    }
+
+
+
+    private void buildPathNodesWebInfClasses(ExternalContext extContext,
+                                             String basePath,
+                                             PathNode pathNode) {
+
+        Set<String> subPaths = extContext.getResourcePaths(basePath);
+        if (subPaths != null && !subPaths.isEmpty()) {
+            for (String path : subPaths) {
+                boolean leaf = !(path.charAt(path.length() - 1) == SEPARATOR_CHAR);
+                String mPath;
+                if (leaf) {
+                    mPath = path.substring(path.lastIndexOf('/') + 1);
+                } else {
+                    mPath = path.substring(basePath.length(), path.length() - 1);
+                }
+                PathNode n = processPath(mPath, leaf, pathNode);
+                if (!leaf) {
+                    buildPathNodesWebInfClasses(extContext, path, n);
+                }
+            }
+        }
+
+    }
+
+
+
+    private Set<JarFile> getWebappLibJarFiles(FacesContext ctx) {
+
+        ExternalContext extContext = ctx.getExternalContext();
+        Set<String> elements = extContext.getResourcePaths(WEB_INF_LIB);
+        Set<JarFile> appJars = null;
+        if (elements != null && !elements.isEmpty()) {
+            for (String element : elements) {
+                if (element.charAt(element.length() - 1) == SEPARATOR_CHAR
+                    || !element.endsWith(JAR_EXT)) {
+                    continue;
+                }
+                try {
+                    URL url = extContext.getResource(element);
+                    StringBuilder sb = new StringBuilder(32);
+                    sb.append(JAR_PROTOCOL).append(url.toString()).append(JAR_SEP);
+                    url = new URL(sb.toString());
+                    JarFile jarFile =
+                          ((JarURLConnection) url.openConnection())
+                                .getJarFile();
+                    if (appJars == null) {
+                        appJars = new HashSet<JarFile>(elements.size());
+                    }
+                    appJars.add(jarFile);
+                } catch (MalformedURLException mue) {
+                    throw new FacesException(mue);
+                } catch (IOException ioe) {
+                    throw new FacesException(ioe);
+                }
+            }
+        }
+        return appJars;
+
+    }
+
+
+    private List<String> getSubPaths(Collection<PathNode> pathNodes)
+          throws IOException {
+
+        List<String> paths = new ArrayList<String>(pathNodes.size());
+        for (PathNode n : pathNodes) {
+            paths.add(n.getName());
+        }
+
+        return paths;
+
+    }
+
+
+    // ------------------------------------------------------ Nested Classes
+
+
+    private final class PathNode {
+
+        private TreeMap<String, PathNode> subpathNodes = new TreeMap<String, PathNode>();
+        private PathNode parent;
+        private String name;
+        private boolean leaf;
+
+
+        // ---------------------------------------------------- Constructors
+
+
+        PathNode(PathNode parent, String name, boolean leaf) {
+
+            if (name == null) {
+                throw new IllegalArgumentException();
+            }
+            if (!leaf) {
+                subpathNodes = new TreeMap<String, PathNode>();
+            }
+            this.name = name;
+            this.parent = parent;
+            this.leaf = leaf;
 
         }
 
 
-        private List<String> getSubPaths(File basePath) throws IOException {
+        // -------------------------------------------------- Public Methods
 
-            List<String> paths = null;
-            if (basePath.isDirectory()) {
-                File[] subDirs = basePath.listFiles();
-                for (File sub : subDirs) {
-                    if (paths == null) {
-                        paths = new ArrayList<String>(subDirs.length);
-                    }
-                    paths.add(sub.getName());
-                }
+
+        private String getName() {
+            return name;
+        }
+
+
+        private void addPathNode(String name, PathNode n) {
+
+            if (name == null || n == null) {
+                throw new IllegalArgumentException();
             }
 
-            return ((paths == null) ? Collections.<String>emptyList() : paths);
+            subpathNodes.put(name, n);
 
         }
 
-    } // END VersionedClasspathResourceHelperDelegate
+
+        private PathNode getPathNode(String name) {
+
+            if (name == null) {
+                throw new IllegalArgumentException();
+            }
+
+            return subpathNodes.get(name);
+
+        }
+
+
+        private Collection<PathNode> getPathNodes() {
+
+            return subpathNodes.values();
+
+        }
+
+
+        private String getPath() {
+
+            StringBuilder sb = new StringBuilder(32);
+            sb.append(SEPARATOR_CHAR).append(name);
+            PathNode p = parent;
+            while (true) {
+                if (p.parent == null) {
+                    break;
+                }
+                sb.insert(0, p.name);
+                sb.insert(0, SEPARATOR_CHAR);
+                p = p.parent;
+            }
+            return sb.toString();
+
+        }
+
+        @Override
+        public String toString() {
+            return "PathNode{" +
+                   "parent=" + parent +
+                   ", name='" + name + '\'' +
+                   ", leaf=" + leaf +
+                   '}';
+        }
+        
+    } // END PathNode
 
 }
