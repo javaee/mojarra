@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="MacRoman"?>
+
+<!--
+    Document   : cc-metadata.taglib.xml
+    Created on : September 2, 2009, 11:43 AM
+    Author     : edburns
+    Description:
+        Purpose of the document follows.
+-->
+
+<facelet-taglib  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+   xmlns='http://java.sun.com/xml/ns/javaee'
+   xsi:schemaLocation='http://java.sun.com/xml/ns/javaee web-facelettaglibrary_2_0.xsd' 
+   version="2.0">
+    <namespace>http://mojarra.dev.java.net/cc-metadata</namespace>
+    <tag>
+        <tag-name>printMetadata</tag-name>
+        <component>
+            <component-type>jsf2.PrintMetadata</component-type>
+        </component>
+        <attribute>
+            <name>libraryName</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <name>resourceName</name>
+            <required>true</required>
+        </attribute>
+    </tag>
+
+</facelet-taglib>
