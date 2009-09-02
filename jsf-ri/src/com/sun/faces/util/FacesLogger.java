@@ -37,13 +37,19 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
- 
+
 package com.sun.faces.util;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.logging.Filter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
- * <p/>
+ * <p>
  * An <code>enum</code> of all application <code>Logger</code>s.
  * </p>
  */
@@ -70,28 +76,164 @@ public enum FacesLogger {
     UTIL("util");
 
     private static final String LOGGER_RESOURCES
-         = "com.sun.faces.LogStrings";
+          = "com.sun.faces.LogStrings";
     public static final String FACES_LOGGER_NAME_PREFIX
-         = "javax.enterprise.resource.webcontainer.jsf.";
+          = "javax.enterprise.resource.webcontainer.jsf.";
+
     private String loggerName;
 
+    private FacesLogger(String loggerName) {
 
-    FacesLogger(String loggerName) {
-        this.loggerName = FACES_LOGGER_NAME_PREFIX + loggerName;
-    }
+        this.loggerName = loggerName;
 
-
-    public String getLoggerName() {
-        return loggerName;
-    }
-
-
-    public String getResourcesName() {
-        return LOGGER_RESOURCES;
     }
 
     public Logger getLogger() {
-        return Logger.getLogger(loggerName, LOGGER_RESOURCES);
+
+        String className = Thread.currentThread().getStackTrace()[2].getClassName();
+        ResourceBundle bundle = ResourceBundle.getBundle(LOGGER_RESOURCES,
+                                                         Locale.getDefault(),
+                                                         getCurrentLoader());
+        return new ResourceBundleLogger(
+              className,
+              Logger.getLogger(FACES_LOGGER_NAME_PREFIX + loggerName),
+              bundle
+        );
+
     }
+
+
+    // ---------------------------------------------------------- Private Methods
+
+    
+    private static ClassLoader getCurrentLoader() {
+
+        ClassLoader loader =
+              Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            loader = FacesLogger.class.getClassLoader();
+        }
+        return loader;
+        
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    private static final class ResourceBundleLogger extends Logger {
+
+        private Logger delegate;
+        private ResourceBundle bundle;
+        private String className;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        protected ResourceBundleLogger(String className,
+                                       Logger delegate,
+                                       ResourceBundle bundle) {
+            super(null, null);
+            this.delegate = delegate;
+            this.bundle = bundle;
+            this.className = className;
+            //this way all messages are passed to the delegate, which will do
+            // appropriate filtering to avoid creating unnecessary LogRecords,
+            // all logging should be preceded by a call to isLoggable(level)
+            super.setLevel(Level.ALL);
+        }
+
+
+        // -------------------------------------- Overridden methods from Logger
+
+
+        @Override
+        public ResourceBundle getResourceBundle() {
+            return this.bundle;
+        }
+
+        @Override
+        public String getResourceBundleName() {
+            return LOGGER_RESOURCES;
+        }
+
+        @Override
+        public void log(LogRecord record) {
+            record.setSourceClassName(className);
+            record.setResourceBundle(getResourceBundle());
+            this.delegate.log(record);
+        }
+
+
+        // ----------------------------------------------  Pure Delegate Methods
+
+
+        @Override
+        public void addHandler(Handler handler) throws SecurityException {
+            this.delegate.addHandler(handler);
+        }
+
+        @Override
+        public Filter getFilter() {
+            return this.delegate.getFilter();
+        }
+
+        @Override
+        public Handler[] getHandlers() {
+            return this.delegate.getHandlers();
+        }
+
+        @Override
+        public Level getLevel() {
+            return this.delegate.getLevel();
+        }
+
+        @Override
+        public String getName() {
+            return this.delegate.getName();
+        }
+
+        @Override
+        public Logger getParent() {
+            return this.delegate.getParent();
+        }
+
+        @Override
+        public boolean getUseParentHandlers() {
+            return this.delegate.getUseParentHandlers();
+        }
+
+        @Override
+        public boolean isLoggable(Level level) {
+            return this.delegate.isLoggable(level);
+        }
+
+        @Override
+        public void removeHandler(Handler handler) throws SecurityException {
+            this.delegate.removeHandler(handler);
+        }
+
+        @Override
+        public void setFilter(Filter newFilter) throws SecurityException {
+            this.delegate.setFilter(newFilter);
+        }
+
+        @Override
+        public void setLevel(Level newLevel) throws SecurityException {
+            this.delegate.setLevel(newLevel);
+        }
+
+        @Override
+        public void setParent(Logger parent) {
+            this.delegate.setParent(parent);
+        }
+
+        @Override
+        public void setUseParentHandlers(boolean useParentHandlers) {
+            this.delegate.setUseParentHandlers(useParentHandlers);
+        }
+
+    } // END ResourceBundleLogger
 
 }
