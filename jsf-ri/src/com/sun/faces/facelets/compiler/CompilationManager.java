@@ -236,16 +236,22 @@ final class CompilationManager {
         boolean handled = false;
 
         if (isTrimmed(qname[0], qname[1])) {
-            log.fine("Composition Found, Popping Parent Tags");
+        	if (log.isLoggable(Level.FINE)) {
+        		log.fine("Composition Found, Popping Parent Tags");
+        	}
             this.units.clear();
             NamespaceUnit nsUnit = this.namespaceManager
                     .toNamespaceUnit(this.tagLibrary);
             this.units.push(nsUnit);
             this.startUnit(new TrimmedTagUnit(this.tagLibrary, qname[0], qname[1], t, this
                     .nextTagId()));
-            log.fine("New Namespace and [Trimmed] TagUnit pushed");
+            if (log.isLoggable(Level.FINE)) {
+            	log.fine("New Namespace and [Trimmed] TagUnit pushed");
+            }
         } else if (isImplementation(qname[0], qname[1])) {
-            log.fine("Composite Component Implementation Found, Popping Parent Tags");
+        	if (log.isLoggable(Level.FINE)) {
+        		log.fine("Composite Component Implementation Found, Popping Parent Tags");
+        	}
 
             // save aside the InterfaceUnit
             InterfaceUnit iface = getInterfaceUnit();
@@ -261,7 +267,9 @@ final class CompilationManager {
             this.currentUnit().addChild(iface);
             this.startUnit(new ImplementationUnit(this.tagLibrary, qname[0], qname[1], t, this
                     .nextTagId()));
-            log.fine("New Namespace and ImplementationUnit pushed");
+            if (log.isLoggable(Level.FINE)) {
+            	log.fine("New Namespace and ImplementationUnit pushed");
+            }
             
         } else if (isRemove(qname[0], qname[1])) {
             this.units.push(new RemoveUnit());

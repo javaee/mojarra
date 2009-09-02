@@ -68,8 +68,7 @@ import java.util.logging.Logger;
  */
 public abstract class BeanBuilder {
 
-    private static Logger LOGGER =
-         Logger.getLogger(FacesLogger.MANAGEDBEAN.getLoggerName());
+    private static Logger LOGGER = FacesLogger.MANAGEDBEAN.getLogger();
 
     private List<String> messages;
     private List<String> references;

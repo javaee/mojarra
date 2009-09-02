@@ -69,6 +69,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -151,8 +152,10 @@ public abstract class Compiler {
                 el = FacesContext.getCurrentInstance().getApplication()
                         .getExpressionFactory();
                 if (el == null) {
-                    log.warning("No default ExpressionFactory from Faces Implementation, attempting to load from Feature["
-                                + EXPRESSION_FACTORY + "]");
+                	if (log.isLoggable(Level.WARNING)) {
+	                    log.warning("No default ExpressionFactory from Faces Implementation, attempting to load from Feature["
+	                                + EXPRESSION_FACTORY + "]");
+                	}
                 }
             } catch (Exception e) {
                 // do nothing

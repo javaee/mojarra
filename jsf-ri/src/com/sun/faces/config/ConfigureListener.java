@@ -267,8 +267,10 @@ public class ConfigureListener implements ServletRequestListener,
         } finally {
             Verifier.setCurrentInstance(null);
             initContext.release();
-            LOGGER.log(Level.FINE,
-                       "jsf.config.listener.version.complete");
+            if (LOGGER.isLoggable(Level.FINE)) {
+	            LOGGER.log(Level.FINE,
+	                       "jsf.config.listener.version.complete");
+            }
             if (timer != null) {
                 timer.stopTiming();
                 timer.logResult("Initialization of context " +
@@ -291,10 +293,11 @@ public class ConfigureListener implements ServletRequestListener,
         if (helper != null) {
             helper.setClassLoader();
         }
-
-        LOGGER.log(Level.FINE,
-                   "ConfigureListener.contextDestroyed({0})",
-                   context.getServletContextName());
+        if (LOGGER.isLoggable(Level.FINE)) {
+	        LOGGER.log(Level.FINE,
+	                   "ConfigureListener.contextDestroyed({0})",
+	                   context.getServletContextName());
+        }
 
         InitFacesContext initContext = new InitFacesContext(context);
 
@@ -687,8 +690,10 @@ public class ConfigureListener implements ServletRequestListener,
             }
             return true;
         } catch (Exception e) {
-            LOGGER.severe(MessageFormat.format("Unable to instantiate ExpressionFactory ''{0}''",
-                                               elFactoryType));
+        	if (LOGGER.isLoggable(Level.SEVERE)) {
+	            LOGGER.severe(MessageFormat.format("Unable to instantiate ExpressionFactory ''{0}''",
+	                                               elFactoryType));
+        	}
             return false;
         }
 
@@ -980,9 +985,11 @@ public class ConfigureListener implements ServletRequestListener,
 
                 this.url = url;
                 this.timestamp = getLastModified();
-                LOGGER.log(Level.INFO,
-                           "Monitoring {0} for modifications",
-                           url.toExternalForm());
+                if (LOGGER.isLoggable(Level.INFO)) {
+	                LOGGER.log(Level.INFO,
+	                           "Monitoring {0} for modifications",
+	                           url.toExternalForm());
+                }
 
             }
 
@@ -994,9 +1001,11 @@ public class ConfigureListener implements ServletRequestListener,
                 long temp = getLastModified();
                 if (timestamp < temp) {
                     timestamp = temp;
-                    LOGGER.log(Level.INFO,
-                           "{0} changed!",
-                           url.toExternalForm());
+                    if (LOGGER.isLoggable(Level.INFO)) {
+	                    LOGGER.log(Level.INFO,
+	                           "{0} changed!",
+	                           url.toExternalForm());
+                    }
                     return true;
                 }
                 return false;

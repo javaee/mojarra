@@ -151,7 +151,9 @@ class GroovyHelperImpl extends GroovyHelper {
                     try {
                         result[i++] = extContext.getResource(cur);
                     } catch (MalformedURLException ex) {
-                        Logger.getLogger(GroovyHelperImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    	if (LOGGER.isLoggable(Level.SEVERE)) {
+                    		LOGGER.log(Level.SEVERE, null, ex);
+                    	}
                     }
                 }
             }

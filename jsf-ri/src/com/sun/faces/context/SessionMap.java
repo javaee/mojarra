@@ -95,9 +95,11 @@ public class SessionMap extends BaseContextMap<Object> {
             Object v = entry.getValue();
             Object k = entry.getKey();
             if (ProjectStage.Development.equals(stage) && !(v instanceof Serializable)) {
-                LOGGER.log(Level.WARNING,
-                           "jsf.context.extcontext.sessionmap.nonserializable",
-                           new Object[] { k, v.getClass().getName() });
+            	if (LOGGER.isLoggable(Level.WARNING)) {
+	                LOGGER.log(Level.WARNING,
+	                           "jsf.context.extcontext.sessionmap.nonserializable",
+	                           new Object[] { k, v.getClass().getName() });
+            	}
             }
             //noinspection NonSerializableObjectBoundToHttpSession
             session.setAttribute((String) k, v);
@@ -120,9 +122,11 @@ public class SessionMap extends BaseContextMap<Object> {
         HttpSession session = getSession(true);
         Object result = session.getAttribute(key);
         if (value != null && ProjectStage.Development.equals(stage) && !(value instanceof Serializable)) {
-            LOGGER.log(Level.WARNING,
-                       "jsf.context.extcontext.sessionmap.nonserializable",
-                       new Object[]{key, value.getClass().getName()});
+        	if (LOGGER.isLoggable(Level.WARNING)) {
+	            LOGGER.log(Level.WARNING,
+	                       "jsf.context.extcontext.sessionmap.nonserializable",
+	                       new Object[]{key, value.getClass().getName()});
+        	}
         }
         //noinspection NonSerializableObjectBoundToHttpSession
         session.setAttribute(key, value);

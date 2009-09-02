@@ -113,9 +113,11 @@ public class DefaultFaceletFactory extends FaceletFactory {
         this.resolver = resolver;
         this.baseUrl = resolver.resolveUrl("/");
         // this.location = url;
-        log.fine("Using ResourceResolver: " + resolver);
         this.refreshPeriod = (refreshPeriod >= 0) ? refreshPeriod * 1000 : -1;
-        log.fine("Using Refresh Period: " + this.refreshPeriod);
+        if (log.isLoggable(Level.FINE)) {
+	        log.fine("Using ResourceResolver: " + resolver);
+	        log.fine("Using Refresh Period: " + this.refreshPeriod);
+        }
     }
 
 

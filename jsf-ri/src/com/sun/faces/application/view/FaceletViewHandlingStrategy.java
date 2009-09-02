@@ -542,8 +542,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                     
                     if (null == targets || 0 == targets.length()) {
                         // PENDING error message in page?
-                        LOGGER.severe("Unable to retarget MethodExpression: " +
-                                methodSignature);
+                    	if (LOGGER.isLoggable(Level.SEVERE)) {
+	                        LOGGER.severe("Unable to retarget MethodExpression: " +
+	                                methodSignature);
+                    	}
                         continue;
                     }
                     
@@ -691,8 +693,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                     throw new FacesException(cur.getValue("method-signature") + " : Unable to load type '" + strValue + '\'');
                                 }
                             } else {
-                                LOGGER.severe("Unable to determine expected return type for " +
-                                        methodSignature);
+                            	if (LOGGER.isLoggable(Level.SEVERE)) {
+	                                LOGGER.severe("Unable to determine expected return type for " +
+	                                        methodSignature);
+                            	}
                                 continue;
                             }
                             
@@ -711,9 +715,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                                 expectedParameters[i] = 
                                                         Util.getTypeFromString(params[i]);
                                             } catch (ClassNotFoundException cnfe) {
-                                                LOGGER.log(Level.SEVERE,
-                                                        "Unable to determine expected return type for " +
-                                                        methodSignature, cnfe);
+                                            	if (LOGGER.isLoggable(Level.SEVERE)) {
+	                                                LOGGER.log(Level.SEVERE,
+	                                                        "Unable to determine expected return type for " +
+	                                                        methodSignature, cnfe);
+                                            	}
                                                 exceptionThrown = true;
                                                 break;
                                             }

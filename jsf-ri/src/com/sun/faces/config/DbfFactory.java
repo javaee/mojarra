@@ -447,8 +447,9 @@ public class DbfFactory {
             if (entityURL == null) {
                 // we don't have a registered mapping, so defer to our
                 // superclass for resolution
-
-                LOGGER.log(Level.FINE, "Unknown entity, deferring to superclass.");
+            	if (LOGGER.isLoggable(Level.FINE)) {
+            		LOGGER.log(Level.FINE, "Unknown entity, deferring to superclass.");
+            	}
 
                 try {
                     source = super.resolveEntity(publicId, systemId);
@@ -462,9 +463,11 @@ public class DbfFactory {
                 try {
                     source = new InputSource(new URL(entityURL).openStream());
                 } catch (Exception e) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.config.cannot_create_inputsource",
-                               entityURL);
+                	if (LOGGER.isLoggable(Level.WARNING)) {
+	                    LOGGER.log(Level.WARNING,
+	                               "jsf.config.cannot_create_inputsource",
+	                               entityURL);
+                	}
                     source = null;
                 }
             }

@@ -315,9 +315,11 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             }
         }
 
-        LOGGER.log(Level.FINE,
-                   "Begin processing managed bean ''{0}''",
-                   beanName);
+        if (LOGGER.isLoggable(Level.FINE)) {
+	        LOGGER.log(Level.FINE,
+	                   "Begin processing managed bean ''{0}''",
+	                   beanName);
+        }
 
 
         List<ManagedBeanInfo.ManagedProperty> properties = null;
@@ -340,10 +342,11 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
                                                  properties,
                                                  getTextMap(descriptions)));
 
-
-        LOGGER.log(Level.FINE,
-                   "Completed processing bean ''{0}''",
-                   beanName);
+        if (LOGGER.isLoggable(Level.FINE)) {
+	        LOGGER.log(Level.FINE,
+	                   "Completed processing bean ''{0}''",
+	                   beanName);
+        }
 
     }
 

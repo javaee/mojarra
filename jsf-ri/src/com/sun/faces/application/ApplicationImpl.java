@@ -1215,7 +1215,9 @@ public class ApplicationImpl extends Application {
         if (editorClass != null) {
             PropertyEditorManager.registerEditor(targetClass, editorClass);
         } else {
-            LOGGER.warning(MessageFormat.format("definePropertyEditorClassFor({0}) returned null.", targetClass.getName()));
+        	if (LOGGER.isLoggable(Level.WARNING)) {
+        		LOGGER.warning(MessageFormat.format("definePropertyEditorClassFor({0}) returned null.", targetClass.getName()));
+        	}
         }
     }
 
@@ -1627,7 +1629,9 @@ public class ApplicationImpl extends Application {
             Throwable previousT;
             do {
                 previousT = t;
-                LOGGER.log(Level.SEVERE, "Unable to load class: ", t);
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                	LOGGER.log(Level.SEVERE, "Unable to load class: ", t);
+                }
             } while (null != (t = t.getCause()));
             t = previousT;
             
@@ -1740,11 +1744,17 @@ public class ApplicationImpl extends Application {
             }
             result = (UIComponent) componentClass.newInstance();
         } catch (IllegalAccessException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+        	if (LOGGER.isLoggable(Level.SEVERE)) {
+        		LOGGER.log(Level.SEVERE, null, ex);
+        	}
         } catch (InstantiationException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+        	if (LOGGER.isLoggable(Level.SEVERE)) {
+        		LOGGER.log(Level.SEVERE, null, ex);
+        	}
         } catch (ClassNotFoundException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
+        	if (LOGGER.isLoggable(Level.SEVERE)) {
+        		LOGGER.log(Level.SEVERE, null, ex);
+        	}
         }
 
         if (result != null) {

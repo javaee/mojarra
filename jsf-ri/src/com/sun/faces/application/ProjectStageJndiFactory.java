@@ -37,6 +37,7 @@
 package com.sun.faces.application;
 
 import java.util.Hashtable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.spi.ObjectFactory;
@@ -80,7 +81,9 @@ public class ProjectStageJndiFactory implements ObjectFactory {
                     return val.trim();
                 }
             } else {
-                LOGGER.warning("'stage' property not defined.  Defaulting to Production");
+            	if (LOGGER.isLoggable(Level.WARNING)) {
+            		LOGGER.warning("'stage' property not defined.  Defaulting to Production");
+            	}
             }
         }
         return ProjectStage.Production.toString();

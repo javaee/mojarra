@@ -499,8 +499,8 @@ public class ConverterPropertyEditorFactory {
                                                 classBytes,
                                                 0,
                                                 classBytes.length);
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("Defined editorClass " + editorClass);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Defined editorClass " + editorClass);
                 }
                 return editorClass;
             }
@@ -509,7 +509,6 @@ public class ConverterPropertyEditorFactory {
         }
     }
 
-    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
     private static final Pattern UnderscorePattern = Pattern.compile("_+");
     private static final Pattern SingleUnderscorePattern = Pattern
         .compile("([^_])_([^_])");
@@ -610,9 +609,11 @@ public class ConverterPropertyEditorFactory {
             return (Class<? extends ConverterPropertyEditorBase>) loader
                 .loadClass(className);
         } catch (ClassNotFoundException e) {
-            logger.log(Level.WARNING,
-                "definePropertyEditorClassFor: ClassNotFoundException: "
-                    + e.getMessage(), e);
+        	if (LOGGER.isLoggable(Level.WARNING)) {
+	            LOGGER.log(Level.WARNING,
+	                "definePropertyEditorClassFor: ClassNotFoundException: "
+	                    + e.getMessage(), e);
+        	}
         }
         return null;
     }

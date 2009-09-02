@@ -95,8 +95,10 @@ public class Timer {
      * @param taskInfo task description
      */
     public void logResult(String taskInfo) {
-        LOGGER.log(Level.FINE,
-                   " [TIMING] - [" + getTimingResult() + "ms] : " + taskInfo);
+    	if (LOGGER.isLoggable(Level.FINE)) {
+	        LOGGER.log(Level.FINE,
+	                   " [TIMING] - [" + getTimingResult() + "ms] : " + taskInfo);
+    	}
     }
 
 

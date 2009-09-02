@@ -238,13 +238,19 @@ public class ClientSideStateHelper extends StateHelper {
             return new Object[] { structure, state };
 
         } catch (java.io.OptionalDataException ode) {
-            LOGGER.log(Level.SEVERE, ode.getMessage(), ode);
+        	if (LOGGER.isLoggable(Level.SEVERE)) {
+        		LOGGER.log(Level.SEVERE, ode.getMessage(), ode);
+        	}
             throw new FacesException(ode);
         } catch (ClassNotFoundException cnfe) {
-            LOGGER.log(Level.SEVERE, cnfe.getMessage(), cnfe);
+        	if (LOGGER.isLoggable(Level.SEVERE)) {
+        		LOGGER.log(Level.SEVERE, cnfe.getMessage(), cnfe);
+        	}
             throw new FacesException(cnfe);
         } catch (IOException iox) {
-            LOGGER.log(Level.SEVERE, iox.getMessage(), iox);
+        	if (LOGGER.isLoggable(Level.SEVERE)) {
+        		LOGGER.log(Level.SEVERE, iox.getMessage(), iox);
+        	}
             throw new FacesException(iox);
         } finally {
             if (ois != null) {

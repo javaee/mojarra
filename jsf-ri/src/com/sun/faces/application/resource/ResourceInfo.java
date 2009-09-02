@@ -312,9 +312,11 @@ public class ResourceInfo {
                         compressedPath = newDir.getCanonicalPath();
                     }
                 } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE,
-                               e.toString(),
-                               e);
+                	if (LOGGER.isLoggable(Level.SEVERE)) {
+	                    LOGGER.log(Level.SEVERE,
+	                               e.toString(),
+	                               e);
+                	}
                     compressable = false;
                 }
             }
