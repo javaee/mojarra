@@ -142,7 +142,8 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
           throws IOException {
 
         UIComponent cc = (UIComponent) component.getAttributes().get(COMP_KEY);
-        if (cc != null) {
+        UIComponent curCC = UIComponent.getCurrentCompositeComponent(context);
+        if (cc != curCC) {
             // the first pop maps to the component we're rendering.
             // push the composite component to the 'stack' and then re-push
             // the component we're rendering so the current component is
@@ -150,6 +151,8 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
             component.popComponentFromEL(context);
             component.pushComponentToEL(context, cc);
             component.pushComponentToEL(context, component);
+        } else {
+            component.getAttributes().remove(COMP_KEY);
         }
 
     }
