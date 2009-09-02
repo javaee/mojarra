@@ -76,7 +76,6 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
     // Test basic ajax functionality
     public void testAjaxEcho() throws Exception {
         getPage("/faces/ajax/ajaxEcho.xhtml");
-        System.out.println("Start ajax echo test");
 
         // First we'll check the first page was output correctly
         checkTrue("form1:out1","");
@@ -97,7 +96,6 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
     // Test using a valid string as the request identifier, instead of an element
     public void testAjaxEchoWithStringId() throws Exception {
         getPage("/faces/ajax/ajaxEcho.xhtml");
-        System.out.println("Start ajax echo test");
 
         // First we'll check the first page was output correctly
         checkTrue("form1:out1","");
@@ -118,7 +116,6 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
     // Test basic ajax functionality
     public void testAjaxEchoLT() throws Exception {
         getPage("/faces/ajax/ajaxEcho.xhtml");
-        System.out.println("Start ajax echo test");
 
         // First we'll check the first page was output correctly
         checkTrue("form1:out1","");
@@ -142,7 +139,6 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
      */
     public void testCdataEscape1() throws Exception {
         getPage("/faces/ajax/ajaxEcho.xhtml");
-        System.out.println("Start ajax cdata 1 test");
 
         // First we'll check the first page was output correctly
         checkTrue("form1:out1","");
@@ -161,7 +157,6 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
     }
     public void testCdataEscape2() throws Exception {
         getPage("/faces/ajax/ajaxEcho.xhtml");
-        System.out.println("Start ajax cdata 2 test");
 
         // First we'll check the first page was output correctly
         checkTrue("form1:out1","");
@@ -180,7 +175,6 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
     }
     public void testCdataEscape3() throws Exception {
         getPage("/faces/ajax/ajaxEcho.xhtml");
-        System.out.println("Start ajax cdata 2 test");
 
         // First we'll check the first page was output correctly
         checkTrue("form1:out1","");
@@ -199,7 +193,6 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
     }
     public void testCdataEscape4() throws Exception {
         getPage("/faces/ajax/ajaxEcho.xhtml");
-        System.out.println("Start ajax cdata 2 test");
 
         // First we'll check the first page was output correctly
         checkTrue("form1:out1","");
@@ -218,7 +211,6 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
     }
     public void testCdataEscape5() throws Exception {
         getPage("/faces/ajax/ajaxEcho.xhtml");
-        System.out.println("Start ajax cdata 2 test");
 
         // First we'll check the first page was output correctly
         checkTrue("form1:out1","");
@@ -235,5 +227,45 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
         // Check that the ajax request succeeds
         checkTrue("form1:out1","<![CDATA[ ]]>");
     }
-    
+
+    // Test for bug #1284
+    public void testCdataEscape6() throws Exception {
+        getPage("/faces/ajax/ajaxEcho.xhtml");
+
+        // First we'll check the first page was output correctly
+        checkTrue("form1:out1","");
+        checkTrue("form1:in1","");
+
+        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+
+        in1.type("[");
+
+        // Submit the ajax request
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
+        lastpage = (HtmlPage) button1.click();
+
+        // Check that the ajax request succeeds
+        checkTrue("form1:out1","[");
+    }
+    // Test for bug #1284
+    public void testCdataEscape7() throws Exception {
+        getPage("/faces/ajax/ajaxEcho.xhtml");
+
+        // First we'll check the first page was output correctly
+        checkTrue("form1:out1","");
+        checkTrue("form1:in1","");
+
+        HtmlTextInput in1 = (HtmlTextInput) lastpage.getHtmlElementById("form1:in1");
+
+        in1.type("var a=[");
+
+        // Submit the ajax request
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("form1:button1");
+        lastpage = (HtmlPage) button1.click();
+
+        // Check that the ajax request succeeds
+        checkTrue("form1:out1","var a=[");
+    }
+
+
 }

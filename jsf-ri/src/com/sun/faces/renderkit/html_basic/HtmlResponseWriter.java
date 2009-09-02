@@ -1166,7 +1166,7 @@ private void writeEscaped(char cbuf[], int offset, int length) throws IOExceptio
     if (length == 1) {
         if (cbuf[offset] == '<') {
             appendBuffer(ESCAPEDLT);
-        } else if (cbuf[offset] == '[') {
+        } else if (cbuf[offset] == ']') {
             appendBuffer(ESCAPEDSINGLEBRACKET);
         } else {
             appendBuffer(cbuf[offset]);
@@ -1209,14 +1209,14 @@ private void writeEscaped(char cbuf[], int offset, int length) throws IOExceptio
     if (!last) {
         if (cbuf[offset + length - 2] == '<') {
             appendBuffer(ESCAPEDLT);
-        } else if (cbuf[offset + length - 2] == '[') {
+        } else if (cbuf[offset + length - 2] == ']') {
             appendBuffer(ESCAPEDSINGLEBRACKET);
         } else {
             appendBuffer(cbuf[offset + length - 2]);
         }
         if (cbuf[offset + length - 1] == '<') {
             appendBuffer(ESCAPEDLT);
-        } else if (cbuf[offset + length - 1] == '[') {
+        } else if (cbuf[offset + length - 1] == ']') {
             appendBuffer(ESCAPEDSINGLEBRACKET);
         } else {
             appendBuffer(cbuf[offset + length - 1]);
