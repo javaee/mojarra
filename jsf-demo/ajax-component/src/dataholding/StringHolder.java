@@ -46,6 +46,7 @@ public class StringHolder implements Serializable {
 
     private static final long serialVersionUID = -2988876386472612330L;
     private String str = "Text Edit Magic";
+    private String delayString = "";
 
     public void setStr(String str) {
         this.str = str;
@@ -53,5 +54,19 @@ public class StringHolder implements Serializable {
 
     public String getStr() {
         return str;
+    }
+
+    public String getDelayString() {
+        return delayString;
+    }
+
+    public void setDelayString(String delayString) {
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            // do nothing
+        }
+        
+        this.delayString = delayString;
     }
 }

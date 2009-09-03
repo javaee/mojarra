@@ -229,4 +229,30 @@
         </sources>
     </demo>
 
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Busy Status Component</name>
+        <page>busystatus.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/busystatus.xhtml</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/busystatus/busystatus.xhtml</path>
+            </source>
+            <source>
+                <label>Component JavaScript</label>
+                <path>/resources/busystatus/busystatus.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/dataholding/StringHolder.java</path>
+            </source>
+        </sources>
+    </demo>
+
 </demo-info>
