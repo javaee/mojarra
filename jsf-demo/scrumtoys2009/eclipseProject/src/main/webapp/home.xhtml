@@ -45,6 +45,10 @@
       xmlns:appez="http://java.sun.com/jsf/composite/components" >
 
     <ui:composition template="template.xhtml">
+        <f:metadata>
+            <f:viewParam name="skin" value="#{dashBoardUrlManager.skin}" />
+            <f:event type="preRenderView" listener="#{dashBoardUrlManager.update}" />
+        </f:metadata>
         <ui:insert name="pageTitle">
             <h:outputText value="#{i18n['template.title']}"></h:outputText>
         </ui:insert>    
