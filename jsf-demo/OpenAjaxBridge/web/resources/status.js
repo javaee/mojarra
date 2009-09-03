@@ -41,9 +41,9 @@ var statusUpdate = function statusUpdate(name, data) {
     var text = statusArea.value;
     text = text + "Name: "+data.source.id;
     if (name === "jsf.event") {
-        text = text +" Event: "+data.name+"\n";
+        text = text +" Event: "+data.status+"\n";
     } else if (name === "jsf.error") {  
-        text = text + " Error: "+data.name+"\n";
+        text = text + " Error: "+data.status+"\n";
     }
     statusArea.value = text;
 };
