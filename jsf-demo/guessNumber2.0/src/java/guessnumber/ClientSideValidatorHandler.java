@@ -39,7 +39,6 @@ package guessnumber;
 import java.io.IOException;
 
 import java.io.Serializable;
-import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
