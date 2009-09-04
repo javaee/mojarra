@@ -76,11 +76,7 @@ public class CustomScopeELResolver extends ELResolver {
             // by an expression.  'property' will be the name of some entity
             // within the scope.
             return lookup(elContext, (CustomScope) base, property.toString());
-        } else if (base == null) {
-            // bean may have already been created and is in scope.
-            // check to see if the bean is present
-            return lookup(elContext, getScope(elContext), property.toString());
-        }
+        } 
         return null;
     }
 

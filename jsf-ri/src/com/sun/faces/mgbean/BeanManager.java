@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -53,6 +54,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.*;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
+import javax.el.ELContext;
+import javax.el.ELResolver;
+import javax.el.FunctionMapper;
+import javax.el.VariableMapper;
 
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.spi.InjectionProvider;
@@ -229,6 +234,14 @@ public class BeanManager implements SystemEventListener {
 
         String scope = this.getBuilder(name).getScope();
         return ScopeManager.isInScope(name, scope, context);
+
+    }
+
+
+    public Object getBeanFromScope(String name, FacesContext context) {
+
+        String scope = this.getBuilder(name).getScope();
+        return ScopeManager.getFromScope(name, scope, context);
 
     }
 
@@ -452,6 +465,15 @@ public class BeanManager implements SystemEventListener {
 
         }
 
+        static Object getFromScope(String name,
+                                   String customScope,
+                                   FacesContext context) {
+
+            ScopeHandler handler = getScopeHandler(customScope, context);
+            return handler.getFromScope(name, context);
+
+        }
+
         private static ScopeHandler getScopeHandler(String customScope,
                                                     FacesContext context) {
 
@@ -475,6 +497,8 @@ public class BeanManager implements SystemEventListener {
 
             boolean isInScope(String name, FacesContext context);
 
+            Object getFromScope(String name, FacesContext context);
+
         }
 
         private static class NoneScopeHandler implements ScopeHandler {
@@ -487,6 +511,9 @@ public class BeanManager implements SystemEventListener {
                 return false;
             }
 
+            public Object getFromScope(String name, FacesContext context) {
+                return null;
+            }
         }
 
         private static class RequestScopeHandler implements ScopeHandler {
@@ -500,6 +527,12 @@ public class BeanManager implements SystemEventListener {
             public boolean isInScope(String name, FacesContext context) {
 
                 return context.getExternalContext().getRequestMap().containsKey(name);
+
+            }
+
+            public Object getFromScope(String name, FacesContext context) {
+
+                return context.getExternalContext().getRequestMap().get(name);
 
             }
 
@@ -518,6 +551,13 @@ public class BeanManager implements SystemEventListener {
 
                 Map<String,Object> viewMap = context.getViewRoot().getViewMap(false);
                 return ((viewMap != null) && viewMap.containsKey(name));
+
+            }
+
+            public Object getFromScope(String name, FacesContext context) {
+
+                Map<String,Object> viewMap = context.getViewRoot().getViewMap(false);
+                return ((viewMap != null) ? viewMap.get(name) : null);
 
             }
 
@@ -540,6 +580,12 @@ public class BeanManager implements SystemEventListener {
 
             }
 
+            public Object getFromScope(String name, FacesContext context) {
+
+                return context.getExternalContext().getSessionMap().get(name);
+
+            }
+
         } // END SessionScopeHandler
 
 
@@ -559,6 +605,13 @@ public class BeanManager implements SystemEventListener {
 
             }
 
+
+            public Object getFromScope(String name, FacesContext context) {
+
+                return context.getExternalContext().getApplicationMap().get(name);
+
+            }
+
         } // END ApplicationScopeHandler
 
 
@@ -572,7 +625,7 @@ public class BeanManager implements SystemEventListener {
 
             public void handle(String name, Object bean, FacesContext context) {
 
-                Map scopeMap = (Map) scope.getValue(context.getELContext());
+                Map scopeMap = (Map) scope.getValue(getELContext(context));
                 
                 // IMPLEMENTATION PENDING.  I've added this to the Frame doc:
                 
@@ -608,7 +661,7 @@ public class BeanManager implements SystemEventListener {
 
             public boolean isInScope(String name, FacesContext context) {
 
-                Map scopeMap = (Map) scope.getValue(context.getELContext());
+                Map scopeMap = (Map) scope.getValue(getELContext(context));
                 if (scopeMap != null) {
                     return scopeMap.containsKey(name);
                 } else {
@@ -620,6 +673,106 @@ public class BeanManager implements SystemEventListener {
                     // since the scope evaluated to null, return true to prevent
                     // the managed bean from being needlessly created
                     return true;
+                }
+            }
+
+            public Object getFromScope(String name, FacesContext context) {
+
+                Map scopeMap = (Map) scope.getValue(getELContext(context));
+                if (scopeMap != null) {
+                    return scopeMap.get(name);
+                } else {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.managed.bean.custom.scope.eval.null.existence",
+                                   new Object[] { scope.getExpressionString() });
+                    }
+                    return null;
+                }
+            }
+
+
+            // ------------------------------------------------- Private Methods
+
+
+            private ELContext getELContext(FacesContext ctx) {
+
+                return new CustomScopeELContext(ctx.getELContext());
+
+            }
+
+
+            // -------------------------------------------------- Nested Classes
+
+
+            /**
+             * We have to use a different ELContext when evaluating the expressions
+             * for the custom scopes as we don't want to cause the resolved
+             * flag on the original ELContext to be changed.  
+             */
+            private static final class CustomScopeELContext extends ELContext {
+
+                private ELContext delegate;
+
+                // ------------------------------------------------ Constructors
+
+
+                public CustomScopeELContext(ELContext delegate) {
+
+                    this.delegate = delegate;
+
+                }
+
+                // -------------------------------------- Methods from ELContext
+
+
+                @Override
+                public void putContext(Class aClass, Object o) {
+
+                    delegate.putContext(aClass, o);
+
+                }
+
+                @Override
+                public Object getContext(Class aClass) {
+
+                    return delegate.getContext(aClass);
+
+                }
+
+                @Override
+                public Locale getLocale() {
+
+                    return delegate.getLocale();
+
+                }
+
+                @Override
+                public void setLocale(Locale locale) {
+
+                    delegate.setLocale(locale);
+
+                }
+
+                @Override
+                public ELResolver getELResolver() {
+
+                    return delegate.getELResolver();
+
+                }
+
+                @Override
+                public FunctionMapper getFunctionMapper() {
+
+                    return delegate.getFunctionMapper();
+
+                }
+
+                @Override
+                public VariableMapper getVariableMapper() {
+
+                    return delegate.getVariableMapper();
+
                 }
             }
 
