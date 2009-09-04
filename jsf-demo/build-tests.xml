@@ -47,6 +47,7 @@
     <property name="components.context.path" value="/jsf-components"/>
     <property name="cardemo.context.path" value="/jsf-cardemo"/>
     <property name="tree-visit.context.path" value="/tree-visit"/>
+    <property name="viewExpired.context.path" value="/jsf2-viewExpired"/>
     <property name="mojarra_ext.context.path" value="/mojarra_ext"/>
     <property name="mapping-extension.context.path"
               value="/jsf-mappingDemo-extension"/>
@@ -73,6 +74,8 @@
               value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>
     <property name="tree-visit.war"
               value="${basedir}/tree-visit/build/tree-visit.war"/>
+    <property name="viewExpired.war"
+              value="${basedir}/viewExpired/build/viewExpired.war"/>
     <property name="test.results.dir" value="${basedir}/testresults"/>
 
     <property name="appserver.domain" value="domain1"/>
@@ -190,6 +193,11 @@
                    demo-name="tree-visit"
                    tests="treevisit"
                    context-path="${tree-visit.context.path}"/>
+
+        <run-tests demo-war="${viewExpired.war}"
+                   demo-name="viewExpired"
+                   tests="viewExpired"
+                   context-path="${viewExpired.context.path}"/>
 
         <run-tests demo-war="${cardemo.war}"
                    demo-name="jsf-cardemo"
