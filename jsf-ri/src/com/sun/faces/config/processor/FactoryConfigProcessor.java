@@ -41,14 +41,15 @@
 package com.sun.faces.config.processor;
 
 import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.application.InjectionApplicationFactory;
 import com.sun.faces.context.InjectionFacesContextFactory;
 import com.sun.faces.context.InjectionExternalContextFactory;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
 
 import javax.faces.FactoryFinder;
 
@@ -161,9 +162,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(org.w3c.dom.Document[])
+     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
      */
-    public void process(Document[] documents)
+    public void process(DocumentInfo[] documentInfos)
     throws Exception {
 
         // track how many FacesContextFactory instances are being added
@@ -180,16 +181,17 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
 
 
 
-        for (int i = 0; i < documents.length; i++) {
+        for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing factory elements for document: ''{0}''",
-                                documents[i].getDocumentURI()));
+                                documentInfos[i].getSourceURL()));
             }
-            String namespace = documents[i].getDocumentElement()
+            Document document = documentInfos[i].getDocument();
+            String namespace = document.getDocumentElement()
                  .getNamespaceURI();
-            NodeList factories = documents[i].getDocumentElement()
+            NodeList factories = document.getDocumentElement()
                  .getElementsByTagNameNS(namespace, FACTORY);
             if (factories != null && factories.getLength() > 0) {
                 processFactories(factories,
@@ -217,7 +219,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         verifyFactoriesExist();
 
         // invoke the next config processor
-        invokeNext(documents);
+        invokeNext(documentInfos);
 
     }
 

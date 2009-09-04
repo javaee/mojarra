@@ -55,7 +55,7 @@ import com.sun.faces.util.FacesLogger;
  * to expose information relevant to the intialization of the runtime.
  * </p>
 */
-public class WebInfFacesConfigInfo {
+public class FacesConfigInfo {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
@@ -65,7 +65,7 @@ public class WebInfFacesConfigInfo {
     private static final String OTHERS = "others";
 
     private double version = 2.0;
-    private boolean exists;
+    private boolean isWebInfFacesConfig;
     private boolean metadataComplete;
     private List<String> absoluteOrdering;
 
@@ -77,15 +77,16 @@ public class WebInfFacesConfigInfo {
      * Creates a new <code>WebInfFacesConfig</code> document based
      * on the provided <code>Document</code>.  If the <code>Document</code>
      * does not represent the <code>WEB-INF/faces-config.xml</code> the
-     * {@link #exists()} method will return <code>false</code>
+     * {@link #isWebInfFacesConfig()} method will return <code>false</code>
      *
-     * @param document document representing the <code>/WEB-INF/faces-config.xml</code>
+     * @param documentInfo DocumentInfo representing the <code>/WEB-INF/faces-config.xml</code>
      */
-    public WebInfFacesConfigInfo(Document document) {
+    public FacesConfigInfo(DocumentInfo documentInfo) {
 
-        exists = isWebinfFacesConfig(document);
-        if (exists) {
-            version = getVersion(document);
+        Document document = documentInfo.getDocument();
+        isWebInfFacesConfig = isWebinfFacesConfig(document);
+        version = getVersion(document);
+        if (isWebInfFacesConfig) {
             if (isVersionGreaterOrEqual(2.0)) {
                 extractOrdering(document);
             }
@@ -114,9 +115,9 @@ public class WebInfFacesConfigInfo {
      * @return <code>true</code> if the <code>Document</code> provided at
      *  construction time represents the <code>/WEB-INF/faces-config.xml</code>.
      */
-    public boolean exists() {
+    public boolean isWebInfFacesConfig() {
 
-        return exists;
+        return isWebInfFacesConfig;
 
     }
 
@@ -187,17 +188,17 @@ public class WebInfFacesConfigInfo {
 
     private boolean isMetadataComplete(Document document) {
 
-        if (exists) {
-            if (isVersionGreaterOrEqual(2.0)) {
-                String metadataComplete = document.getDocumentElement().getAttributeNS(document.getNamespaceURI(), "metadata-complete");
-                return ((metadataComplete != null) ? Boolean.valueOf(metadataComplete) : false);
-            } else {
-                // not a 2.0 application, so annotation processing will not occur
-                return true;
-            }
+        if (isVersionGreaterOrEqual(2.0)) {
+            String metadataComplete = document.getDocumentElement()
+                  .getAttributeNS(document.getNamespaceURI(),
+                                  "metadata-complete");
+            return ((metadataComplete != null)
+                    ? Boolean.valueOf(metadataComplete)
+                    : false);
+        } else {
+            // not a 2.0 application, so annotation processing will not occur
+            return true;
         }
-        // no faces-config.xml so assume it's not metadata-complete; process annotations
-        return false;
 
     }
 
@@ -258,4 +259,4 @@ public class WebInfFacesConfigInfo {
 
     }
 
-} // END WebInfFacesConfigInfo
+} // END FacesConfigInfo

@@ -40,6 +40,7 @@ import javax.servlet.ServletContext;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.Map;
+import java.net.URL;
 
 /**
  * <p>
@@ -115,9 +116,13 @@ public abstract class AnnotationProvider {
 
 
     /**
+     * @param urls a <code>Set</code> of URLs that refer to specific faces-config.xml
+     *  documents on the classpath.  The information returned by the map may
+     *  return annotation information from sources outside of those defined by the
+     *  urls.
      * @return a <code>Map</code> of classes mapped to a specific annotation type.
      *  If no annotations are present, this method returns an empty <code>Map</code>.
      */
-    public abstract Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses();
+    public abstract Map<Class<? extends Annotation>,Set<Class<?>>> getAnnotatedClasses(Set<URL> urls);
 
 } // END AnnotationProvider

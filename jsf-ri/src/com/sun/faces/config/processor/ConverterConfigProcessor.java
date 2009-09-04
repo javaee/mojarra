@@ -42,12 +42,13 @@ package com.sun.faces.config.processor;
 
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.Verifier;
+import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
 
 import javax.faces.application.Application;
 import javax.faces.convert.Converter;
@@ -96,31 +97,32 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(org.w3c.dom.Document[])
+     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
      */
-    public void process(Document[] documents)
+    public void process(DocumentInfo[] documentInfos)
     throws Exception {
 
         // process annotated converters first as converters configured
         // via config files take precedence
         processAnnotations(FacesConverter.class);
 
-        for (int i = 0; i < documents.length; i++) {
+        for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing converter elements for document: ''{0}''",
-                                documents[i].getDocumentURI()));
+                                documentInfos[i].getSourceURL()));
             }
-            String namespace = documents[i].getDocumentElement()
+            Document document = documentInfos[i].getDocument();
+            String namespace = document.getDocumentElement()
                  .getNamespaceURI();
-            NodeList nodes = documents[i].getDocumentElement()
+            NodeList nodes = document.getDocumentElement()
                  .getElementsByTagNameNS(namespace, CONVERTER);
             if (nodes != null && nodes.getLength() > 0) {
                 addConverters(nodes, namespace);
             }
         }
-        invokeNext(documents);
+        invokeNext(documentInfos);
 
     }
 

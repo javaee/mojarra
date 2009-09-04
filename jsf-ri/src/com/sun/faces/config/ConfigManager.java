@@ -90,7 +90,16 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
@@ -113,6 +122,8 @@ import org.w3c.dom.*;
 public class ConfigManager {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
+
+    private static final Pattern JAR_PATTERN = Pattern.compile("(.*/(\\S*\\.jar)).*(/faces-config.xml|/*.\\.faces-config.xml)");
 
     /**
      * <p>
@@ -292,28 +303,29 @@ public class ConfigManager {
                     executor = createExecutorService();
                 }
 
-                Document[] facesDocuments =
+                DocumentInfo[] facesDocuments =
                       getConfigDocuments(sc,
                                          getFacesConfigResourceProviders(),
                                          executor,
                                          validating);
 
-                WebInfFacesConfigInfo facesConfigInfo =
-                      new WebInfFacesConfigInfo(facesDocuments[facesDocuments.length - 1]);
+                FacesConfigInfo webInfFacesConfigInfo =
+                      new FacesConfigInfo(facesDocuments[facesDocuments.length - 1]);
 
-                facesDocuments = sortDocuments(facesDocuments, facesConfigInfo);
+                facesDocuments = sortDocuments(facesDocuments, webInfFacesConfigInfo);
 
                 boolean isFaceletsDisabled =
-                      isFaceletsDisabled(webConfig, facesConfigInfo);
-                if (!facesConfigInfo.isMetadataComplete()) {
+                      isFaceletsDisabled(webConfig, webInfFacesConfigInfo);
+                if (!webInfFacesConfigInfo.isWebInfFacesConfig() || !webInfFacesConfigInfo.isMetadataComplete()) {
                     // execute the Task responsible for finding annotation classes
+                    Set<URL> scanUrls = getAnnotationScanURLs(facesDocuments);
                     Future<Map<Class<? extends Annotation>,Set<Class<?>>>> annotationScan;
                     if (executor != null) {
-                        annotationScan = executor.submit(new AnnotationScanTask(sc));
+                        annotationScan = executor.submit(new AnnotationScanTask(sc, scanUrls));
                         pushTaskToContext(sc, annotationScan);
                     } else {
                         annotationScan =
-                              new FutureTask<Map<Class<? extends Annotation>,Set<Class<?>>>>(new AnnotationScanTask(sc));
+                              new FutureTask<Map<Class<? extends Annotation>,Set<Class<?>>>>(new AnnotationScanTask(sc, scanUrls));
                         ((FutureTask) annotationScan).run();
                     }
                     pushTaskToContext(sc, annotationScan);
@@ -405,6 +417,29 @@ public class ConfigManager {
     // --------------------------------------------------------- Private Methods
 
 
+    private static Set<URL> getAnnotationScanURLs(DocumentInfo[] documentInfos) {
+
+        Set<URL> urls = new HashSet<URL>(documentInfos.length);
+        Set<String> jarNames = new HashSet<String>(documentInfos.length);
+        for (DocumentInfo docInfo : documentInfos) {
+            Matcher m = JAR_PATTERN.matcher(docInfo.getSourceURL().toString());
+            if (m.matches()) {
+                String jarName = m.group(2);
+                if (!jarNames.contains(jarName)) {
+                    FacesConfigInfo configInfo = new FacesConfigInfo(docInfo);
+                    if (!configInfo.isMetadataComplete()) {
+                        urls.add(docInfo.getSourceURL());
+                        jarNames.add(jarName);
+                    }
+                }
+            }
+        }
+
+        return urls;
+
+    }
+
+
     private static boolean useThreads(ServletContext ctx) {
 
         WebConfiguration config = WebConfiguration.getInstance(ctx);
@@ -457,19 +492,20 @@ public class ConfigManager {
      *
      * @param facesDocuments an array of <em>all</em> <code>faces-config</code>
      *  documents
-     * @param facesConfig WebInfoFacesConfigInfo for this app
+     * @param webInfFacesConfig FacesConfigInfo representing the WEB-INF/faces-config.xml
+     *  for this app
      *
      * @return the sorted documents
      */
-    private Document[] sortDocuments(Document[] facesDocuments,
-                                     WebInfFacesConfigInfo facesConfig) {
+    private DocumentInfo[] sortDocuments(DocumentInfo[] facesDocuments,
+                                         FacesConfigInfo webInfFacesConfig) {
 
 
-        int len = (facesConfig.exists()
+        int len = (webInfFacesConfig.isWebInfFacesConfig()
                      ? facesDocuments.length - 1
                      : facesDocuments.length);
 
-        List<String> absoluteOrdering = facesConfig.getAbsoluteOrdering();
+        List<String> absoluteOrdering = webInfFacesConfig.getAbsoluteOrdering();
 
         if (len > 1) {
             List<DocumentOrderingWrapper> list =
@@ -490,14 +526,14 @@ public class ConfigManager {
             } else {
                 DocumentOrderingWrapper[] result =
                       DocumentOrderingWrapper.sort(ordering, absoluteOrdering);
-                Document[] ret = new Document[((facesConfig.exists()) ? (result.length + 2) : (result.length + 1))];
+                DocumentInfo[] ret = new DocumentInfo[((webInfFacesConfig.isWebInfFacesConfig()) ? (result.length + 2) : (result.length + 1))];
                 for (int i = 1; i < len; i++) {
                     ret[i] = result[i - 1].getDocument();
                 }
                 // add the impl specific config file
                 ret[0] = facesDocuments[0];
                 // add the WEB-INF if necessary
-                if (facesConfig.exists()) {
+                if (webInfFacesConfig.isWebInfFacesConfig()) {
                     ret[ret.length - 1] = facesDocuments[facesDocuments.length - 1];
                 }
                 return ret;
@@ -529,7 +565,7 @@ public class ConfigManager {
      * @return <code>true</code> if Facelets should be disabled
      */
     private boolean isFaceletsDisabled(WebConfiguration webconfig,
-                                       WebInfFacesConfigInfo facesConfigInfo) {
+                                       FacesConfigInfo facesConfigInfo) {
 
         boolean isFaceletsDisabled = webconfig.isOptionEnabled(DisableFaceletJSFViewHandler);
         if (!isFaceletsDisabled) {
@@ -584,9 +620,9 @@ public class ConfigManager {
      *  request to
      * @param validating flag indicating whether or not the documents
      *  should be validated
-     * @return an array of <code>Document</code>s
+     * @return an array of <code>DocumentInfo</code>s
      */
-    private static Document[] getConfigDocuments(ServletContext sc,
+    private static DocumentInfo[] getConfigDocuments(ServletContext sc,
                                                  List<ConfigurationResourceProvider> providers,
                                                  ExecutorService executor,
                                                  boolean validating) {
@@ -604,15 +640,15 @@ public class ConfigManager {
             }
         }
 
-        List<FutureTask<Document>> docTasks =
-             new ArrayList<FutureTask<Document>>(providers.size() << 1);
+        List<FutureTask<DocumentInfo>> docTasks =
+             new ArrayList<FutureTask<DocumentInfo>>(providers.size() << 1);
 
         for (FutureTask<Collection<URL>> t : urlTasks) {
             try {
                 Collection<URL> l = t.get();
                 for (URL u : l) {
-                    FutureTask<Document> d =
-                         new FutureTask<Document>(new ParseTask(validating, u));
+                    FutureTask<DocumentInfo> d =
+                         new FutureTask<DocumentInfo>(new ParseTask(validating, u));
                     docTasks.add(d);
                     if (executor != null) {
                         executor.execute(d);
@@ -626,8 +662,8 @@ public class ConfigManager {
             }
         }
 
-        List<Document> docs = new ArrayList<Document>(docTasks.size());
-        for (FutureTask<Document> t : docTasks) {
+        List<DocumentInfo> docs = new ArrayList<DocumentInfo>(docTasks.size());
+        for (FutureTask<DocumentInfo> t : docTasks) {
             try {
                 docs.add(t.get());
             } catch (ExecutionException e) {
@@ -635,7 +671,7 @@ public class ConfigManager {
             } catch (InterruptedException ignored) { }
         }
 
-        return docs.toArray(new Document[docs.size()]);
+        return docs.toArray(new DocumentInfo[docs.size()]);
 
     }
 
@@ -700,14 +736,16 @@ public class ConfigManager {
     private static class AnnotationScanTask implements Callable<Map<Class<? extends Annotation>,Set<Class<?>>>> {
 
         private ServletContext sc;
+        private Set<URL> urls;
 
 
         // -------------------------------------------------------- Constructors
 
 
-        public AnnotationScanTask(ServletContext sc) {
+        public AnnotationScanTask(ServletContext sc, Set<URL> urls) {
 
             this.sc = sc;
+            this.urls = urls;
 
         }
 
@@ -725,7 +763,7 @@ public class ConfigManager {
             //AnnotationScanner scanner = new AnnotationScanner(sc);
             AnnotationProvider provider = AnnotationProviderFactory.createAnnotationProvider(sc);
             Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =
-                  provider.getAnnotatedClasses();
+                  provider.getAnnotatedClasses(urls);
 
             if (t != null) {
                 t.stopTiming();
@@ -746,7 +784,7 @@ public class ConfigManager {
      *  It represents a single configuration resource to be parsed into a DOM.
      * </p>
      */
-    private static class ParseTask implements Callable<Document> {
+    private static class ParseTask implements Callable<DocumentInfo> {
         private static final String JAVAEE_SCHEMA_DEFAULT_NS =
             "http://java.sun.com/xml/ns/javaee";
         private URL documentURL;
@@ -782,7 +820,7 @@ public class ConfigManager {
          * @return the result of the parse operation (a DOM)
          * @throws Exception if an error occurs during the parsing process
          */
-        public Document call() throws Exception {
+        public DocumentInfo call() throws Exception {
 
             try {
                 Timer timer = Timer.getInstance();
@@ -796,8 +834,8 @@ public class ConfigManager {
                     timer.stopTiming();
                     timer.logResult("Parse " + documentURL.toExternalForm());
                 }
-              
-                return d;
+
+                return new DocumentInfo(d, documentURL);
             } catch (Exception e) {
                 throw new ConfigurationException(MessageFormat.format(
                      "Unable to parse document ''{0}'': {1}",

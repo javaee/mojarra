@@ -51,6 +51,7 @@ import com.sun.faces.renderkit.html_basic.HiddenRenderer;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.DbfFactory;
+import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.config.processor.ConfigProcessor;
 import com.sun.faces.config.processor.FactoryConfigProcessor;
 import com.sun.faces.config.processor.LifecycleConfigProcessor;
@@ -87,6 +88,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.io.OutputStream;
 import java.util.Iterator;
+import java.net.URL;
 
 import org.apache.cactus.WebRequest;
 import org.w3c.dom.Document;
@@ -487,6 +489,8 @@ public class TestRenderKit extends ServletFacesTestCase {
         factory.setValidating(false);
         DocumentBuilder builder = factory.newDocumentBuilder();
         ClassLoader loader = Util.getCurrentLoader(this);
+        URL runtime = loader.getResource("com/sun/faces/jsf-ri-runtime.xml");
+        URL renderkit = servletContext.getResource("/WEB-INF/renderkit1.xml");
         Document defaultDoc = builder.parse(loader.getResourceAsStream("com/sun/faces/jsf-ri-runtime.xml"));
         Document renderKitDoc = builder.parse(servletContext.getResourceAsStream("/WEB-INF/renderkit1.xml"));
 
@@ -502,7 +506,9 @@ public class TestRenderKit extends ServletFacesTestCase {
             }
         }
 
-        configProcessors[0].process(new Document[] { defaultDoc, renderKitDoc });
+        configProcessors[0].process(new DocumentInfo[] {
+                                           new DocumentInfo(defaultDoc, runtime),
+                                           new DocumentInfo(renderKitDoc, renderkit) });
 
         RenderKitFactory rkf = (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit rk = rkf.getRenderKit(getFacesContext(), RenderKitFactory.HTML_BASIC_RENDER_KIT);

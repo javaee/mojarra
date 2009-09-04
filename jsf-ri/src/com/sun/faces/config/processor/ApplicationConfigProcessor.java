@@ -74,14 +74,16 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.DocumentInfo;
+
 import java.util.LinkedHashSet;
 import java.util.Map;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
 
 /**
  * <p>
@@ -241,9 +243,9 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(org.w3c.dom.Document[])
+     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
      */
-    public void process(Document[] documents)
+    public void process(DocumentInfo[] documentInfos)
     throws Exception {
 
         Application app = getApplication();
@@ -252,15 +254,16 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     FacesContext.getCurrentInstance().getExternalContext());
         LinkedHashMap<String,Node> viewHandlers = new LinkedHashMap<String,Node>();
         LinkedHashSet<String> defaultValidatorIds = null;
-        for (int i = 0; i < documents.length; i++) {
+        for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format("Processing application elements for document: ''{0}''",
-                                                documents[i].getDocumentURI()));
+                                                documentInfos[i].getSourceURL()));
             }
+            Document document = documentInfos[i].getDocument();
             String namespace =
-                 documents[i].getDocumentElement().getNamespaceURI();
-            NodeList applicationElements = documents[i].getDocumentElement()
+                 document.getDocumentElement().getNamespaceURI();
+            NodeList applicationElements = document.getDocumentElement()
                  .getElementsByTagNameNS(namespace, APPLICATION);
             if (applicationElements != null
                 && applicationElements.getLength() > 0) {
@@ -330,7 +333,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         processAnnotations(NamedEvent.class);
 
         // continue processing...
-        invokeNext(documents);
+        invokeNext(documentInfos);
 
     }
 

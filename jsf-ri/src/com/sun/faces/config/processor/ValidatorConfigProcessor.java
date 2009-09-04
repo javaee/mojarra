@@ -42,11 +42,12 @@ package com.sun.faces.config.processor;
 
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.Verifier;
+import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.util.FacesLogger;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
 
 import javax.faces.application.Application;
 import javax.faces.validator.Validator;
@@ -57,7 +58,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
 import javax.faces.validator.BeanValidator;
 
 /**
@@ -90,25 +90,25 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(org.w3c.dom.Document[])
+     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
      */
-    public void process(Document[] documents)
+    public void process(DocumentInfo[] documentInfos)
     throws Exception {
 
         // process annotated Validators first as Validators configured
         // via config files take precedence
         processAnnotations(FacesValidator.class);
 
-        for (int i = 0; i < documents.length; i++) {
+        for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing validator elements for document: ''{0}''",
-                                documents[i].getDocumentURI()));
+                                documentInfos[i].getSourceURL()));
             }
-            String namespace = documents[i].getDocumentElement()
-                 .getNamespaceURI();
-            NodeList validators = documents[i].getDocumentElement()
+            Document document = documentInfos[i].getDocument();
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList validators = document.getDocumentElement()
                  .getElementsByTagNameNS(namespace, VALIDATOR);
             if (validators != null && validators.getLength() > 0) {
                 addValidators(validators, namespace);
@@ -116,7 +116,7 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
         }
         processDefaultValidatorIds();
 
-        invokeNext(documents);
+        invokeNext(documentInfos);
 
     }
 

@@ -36,13 +36,17 @@
 
 package com.sun.faces.config;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.text.MessageFormat;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
@@ -119,7 +123,7 @@ public class DocumentOrderingWrapper {
     /**
      * The wrapped Document.
      */
-    private Document document;
+    private DocumentInfo documentInfo;
 
     /**
      * The wrapped Document's ID.
@@ -143,9 +147,9 @@ public class DocumentOrderingWrapper {
      * Constructs a new <code>DocumentOrderingWrapper</code> for the specified
      * <code>Document<code>.
      */
-    public DocumentOrderingWrapper(Document document) {
+    public DocumentOrderingWrapper(DocumentInfo document) {
 
-        this.document = document;
+        this.documentInfo = document;
         init();
 
     }
@@ -157,9 +161,9 @@ public class DocumentOrderingWrapper {
     /**
      * @return the wrapped <code>Document</code>
      */
-    public Document getDocument() {
+    public DocumentInfo getDocument() {
 
-        return document;
+        return documentInfo;
 
     }
 
@@ -563,7 +567,7 @@ public class DocumentOrderingWrapper {
      */
     private void init() {
 
-        Element documentElement = document.getDocumentElement();
+        Element documentElement = documentInfo.getDocument().getDocumentElement();
         String namespace = documentElement.getNamespaceURI();
         id = getDocumentName(documentElement);
         NodeList orderingElements =
@@ -631,7 +635,7 @@ public class DocumentOrderingWrapper {
         for (String id : source) {
             if (search(searchTarget, id)) {
                 String msg = MessageFormat.format("Document {0} is specified to come before and after {1}.",
-                                                  document.getDocumentURI(),
+                                                  documentInfo.getDocument().getDocumentURI(),
                                                   id);
                 throw new ConfigurationException(msg);
             }

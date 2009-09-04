@@ -46,10 +46,11 @@ import com.sun.faces.mgbean.ManagedBeanInfo;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.el.ELUtils;
-import org.w3c.dom.Document;
+import com.sun.faces.config.DocumentInfo;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Document;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -232,9 +233,9 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(org.w3c.dom.Document[])
+     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
      */
-    public void process(Document[] documents)
+    public void process(DocumentInfo[] documentInfos)
     throws Exception {
 
         // process annotated managed beans first as managed beans configured
@@ -243,16 +244,16 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
         
         BeanManager beanManager =
               ApplicationAssociate.getCurrentInstance().getBeanManager();
-        for (int i = 0; i < documents.length; i++) {
+        for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing managed-bean elements for document: ''{0}''",
-                                documents[i].getDocumentURI()));
+                                documentInfos[i].getSourceURL()));
             }
-            String namespace = documents[i].getDocumentElement()
-                 .getNamespaceURI();
-            NodeList managedBeans = documents[i].getDocumentElement()
+            Document document = documentInfos[i].getDocument();
+            String namespace = document.getDocumentElement().getNamespaceURI();
+            NodeList managedBeans = document.getDocumentElement()
                  .getElementsByTagNameNS(namespace, MANAGED_BEAN);
             if (managedBeans != null && managedBeans.getLength() > 0) {
                 for (int m = 0, size = managedBeans.getLength();
@@ -265,7 +266,7 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             }
         }
         beanManager.preProcessesBeans();
-        invokeNext(documents);
+        invokeNext(documentInfos);
 
     }
 

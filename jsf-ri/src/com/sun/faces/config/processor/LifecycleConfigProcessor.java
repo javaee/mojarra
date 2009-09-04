@@ -41,10 +41,11 @@
 package com.sun.faces.config.processor;
 
 import com.sun.faces.util.FacesLogger;
-import org.w3c.dom.Document;
+import com.sun.faces.config.DocumentInfo;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
 
 import javax.faces.FactoryFinder;
 import javax.faces.event.PhaseListener;
@@ -80,26 +81,26 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(org.w3c.dom.Document[])
+     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
      */
-    public void process(Document[] documents)
+    public void process(DocumentInfo[] documentInfos)
     throws Exception {
 
         LifecycleFactory factory = (LifecycleFactory)
              FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 
-        for (int i = 0; i < documents.length; i++) {
+        for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing lifecycle elements for document: ''{0}''",
-                                documents[i].getDocumentURI()));
+                                documentInfos[i].getSourceURL()));
             }
+            Document document = documentInfos[i].getDocument();
             String namespace =
-                 documents[i].getDocumentElement().getNamespaceURI();
+                 document.getDocumentElement().getNamespaceURI();
             NodeList lifecycles = 
-                 documents[i].getDocumentElement().getElementsByTagNameNS(namespace,
-                                                                          LIFECYCLE);
+                 document.getElementsByTagNameNS(namespace, LIFECYCLE);
             if (lifecycles != null) {
                 for (int c = 0, csize = lifecycles.getLength(); c < csize; c++) {
                     Node n = lifecycles.item(c);
@@ -111,7 +112,7 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                 }
             }            
         }
-        invokeNext(documents);
+        invokeNext(documentInfos);
 
     }
 

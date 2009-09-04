@@ -121,12 +121,12 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Collections.addAll(docBBeforeIds, "@others");
         List<String> docFBeforeIds = new ArrayList<String>();
         Collections.addAll(docFBeforeIds, "B", "@others");
-        Document docA = createDocument("A", null, docAAfterIds);
-        Document docB = createDocument("B", docBBeforeIds, null);
-        Document docC = createDocument("C", null, docCAfterIds);
-        Document docD = createDocument("D", null, null);
-        Document docE = createDocument("E", null, null);
-        Document docF = createDocument("F", docFBeforeIds, null);
+        DocumentInfo docA = createDocument("A", null, docAAfterIds);
+        DocumentInfo docB = createDocument("B", docBBeforeIds, null);
+        DocumentInfo docC = createDocument("C", null, docCAfterIds);
+        DocumentInfo docD = createDocument("D", null, null);
+        DocumentInfo docE = createDocument("E", null, null);
+        DocumentInfo docF = createDocument("F", docFBeforeIds, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -164,12 +164,12 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         List<String> docEBeforeIds = new ArrayList<String>();
         Collections.addAll(docEBeforeIds, "@others");
 
-        Document docA = createDocument(null, docABeforeIds, docAAfterIds); // no ID here to ensure this works
-        Document docB = createDocument("B", docBBeforeIds, null);
-        Document docC = createDocument("C", null, null);
-        Document docD = createDocument("D", null, docDAfterIds);
-        Document docE = createDocument("E", docEBeforeIds, null);
-        Document docF = createDocument("F", null, null);
+        DocumentInfo docA = createDocument(null, docABeforeIds, docAAfterIds); // no ID here to ensure this works
+        DocumentInfo docB = createDocument("B", docBBeforeIds, null);
+        DocumentInfo docC = createDocument("C", null, null);
+        DocumentInfo docD = createDocument("D", null, docDAfterIds);
+        DocumentInfo docE = createDocument("E", docEBeforeIds, null);
+        DocumentInfo docF = createDocument("F", null, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -205,12 +205,12 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         List<String> docEAfterIds = new ArrayList<String>();
         Collections.addAll(docEAfterIds, "C");
 
-        Document docA = createDocument("A", null, docAAfterIds);
-        Document docB = createDocument("B", docBBeforeIds, null);
-        Document docC = createDocument("C", null, null);
-        Document docD = createDocument("D", null, docDAfterIds);
-        Document docE = createDocument("E", docEBeforeIds, docEAfterIds);
-        Document docF = createDocument("F", null, null);
+        DocumentInfo docA = createDocument("A", null, docAAfterIds);
+        DocumentInfo docB = createDocument("B", docBBeforeIds, null);
+        DocumentInfo docC = createDocument("C", null, null);
+        DocumentInfo docD = createDocument("D", null, docDAfterIds);
+        DocumentInfo docE = createDocument("E", docEBeforeIds, docEAfterIds);
+        DocumentInfo docF = createDocument("F", null, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -238,10 +238,10 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Collections.addAll(docAAfterIds, "B");
         List<String> docCBeforeIds = new ArrayList<String>();
         Collections.addAll(docCBeforeIds, "@others");
-        Document docA = createDocument("A", null, docAAfterIds);
-        Document docB = createDocument("B", null, null);
-        Document docC = createDocument("C", docCBeforeIds, null);
-        Document docD = createDocument("D", null, null);
+        DocumentInfo docA = createDocument("A", null, docAAfterIds);
+        DocumentInfo docB = createDocument("B", null, null);
+        DocumentInfo docC = createDocument("C", docCBeforeIds, null);
+        DocumentInfo docD = createDocument("D", null, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -265,10 +265,10 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Collections.addAll(docCBeforeIds, "B");
         List<String> docCAfterIds = new ArrayList<String>();
         Collections.addAll(docCAfterIds, "@others");
-        Document docA = createDocument("A", null, null);
-        Document docB = createDocument("B", null, null);
-        Document docC = createDocument("C", docCBeforeIds, docCAfterIds);
-        Document docD = createDocument("D", null, null);
+        DocumentInfo docA = createDocument("A", null, null);
+        DocumentInfo docB = createDocument("B", null, null);
+        DocumentInfo docC = createDocument("C", docCBeforeIds, docCAfterIds);
+        DocumentInfo docD = createDocument("D", null, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -292,10 +292,10 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Collections.addAll(docCAfterIds, "D");
         List<String> docCBeforeIds = new ArrayList<String>();
         Collections.addAll(docCBeforeIds, "@others");
-        Document docA = createDocument("A", null, null);
-        Document docB = createDocument("B", null, null);
-        Document docC = createDocument("C", docCBeforeIds, docCAfterIds);
-        Document docD = createDocument("D", null, null);
+        DocumentInfo docA = createDocument("A", null, null);
+        DocumentInfo docB = createDocument("B", null, null);
+        DocumentInfo docC = createDocument("C", docCBeforeIds, docCAfterIds);
+        DocumentInfo docD = createDocument("D", null, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -321,10 +321,10 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Collections.addAll(docAAfterIds, "B");
         Collections.addAll(docBAfterIds, "C");
         Collections.addAll(docCAfterIds, "D");
-        Document docA = createDocument("A", null, docAAfterIds);
-        Document docB = createDocument("B", null, docBAfterIds);
-        Document docC = createDocument("C", null, docCAfterIds);
-        Document docD = createDocument("D", null, null);
+        DocumentInfo docA = createDocument("A", null, docAAfterIds);
+        DocumentInfo docB = createDocument("B", null, docBAfterIds);
+        DocumentInfo docC = createDocument("C", null, docCAfterIds);
+        DocumentInfo docD = createDocument("D", null, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -350,10 +350,10 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Collections.addAll(docBBeforeIds, "A");
         Collections.addAll(docCBeforeIds, "B");
         Collections.addAll(docDBeforeIds, "C");
-        Document docA = createDocument("A", null, null);
-        Document docB = createDocument("B", docBBeforeIds, null);
-        Document docC = createDocument("C", docCBeforeIds, null);
-        Document docD = createDocument("D", docDBeforeIds, null);
+        DocumentInfo docA = createDocument("A", null, null);
+        DocumentInfo docB = createDocument("B", docBBeforeIds, null);
+        DocumentInfo docC = createDocument("C", docCBeforeIds, null);
+        DocumentInfo docD = createDocument("D", docDBeforeIds, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -377,10 +377,10 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         List<String> docCBeforeIds = new ArrayList<String>();
         Collections.addAll(docBAfterIds, "C");
         Collections.addAll(docCBeforeIds, "B");
-        Document docA = createDocument("A", null, null);
-        Document docB = createDocument("B", null, docBAfterIds);
-        Document docC = createDocument("C", docCBeforeIds, null);
-        Document docD = createDocument("D", null, null);
+        DocumentInfo docA = createDocument("A", null, null);
+        DocumentInfo docB = createDocument("B", null, docBAfterIds);
+        DocumentInfo docC = createDocument("C", docCBeforeIds, null);
+        DocumentInfo docD = createDocument("D", null, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -406,10 +406,10 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Collections.addAll(docABeforeIds, "C");
         Collections.addAll(docBBeforeIds, "A");
         Collections.addAll(docCBeforeIds, "B");
-        Document docA = createDocument("A", docABeforeIds, null);
-        Document docB = createDocument("B", docBBeforeIds, null);
-        Document docC = createDocument("C", docCBeforeIds, null);
-        Document docD = createDocument("D", null, null);
+        DocumentInfo docA = createDocument("A", docABeforeIds, null);
+        DocumentInfo docB = createDocument("B", docBBeforeIds, null);
+        DocumentInfo docC = createDocument("C", docCBeforeIds, null);
+        DocumentInfo docD = createDocument("D", null, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -439,10 +439,10 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Collections.addAll(docAAfterIds, "B");
         Collections.addAll(docBAfterIds, "C");
         Collections.addAll(docCAfterIds, "A");
-        Document docA = createDocument("A", null, docAAfterIds);
-        Document docB = createDocument("B", null, docBAfterIds);
-        Document docC = createDocument("C", null, docCAfterIds);
-        Document docD = createDocument("D", null, null);
+        DocumentInfo docA = createDocument("A", null, docAAfterIds);
+        DocumentInfo docB = createDocument("B", null, docBAfterIds);
+        DocumentInfo docC = createDocument("C", null, docCAfterIds);
+        DocumentInfo docD = createDocument("D", null, null);
 
         List<DocumentOrderingWrapper> documents =
               new ArrayList<DocumentOrderingWrapper>();
@@ -467,8 +467,8 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
     public void testAbsoluteDocumentOrderingAPI() throws Exception {
 
         Document d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute1.xml");
-        WebInfFacesConfigInfo info = new WebInfFacesConfigInfo(d);
-        assertTrue(info.exists());
+        FacesConfigInfo info = new FacesConfigInfo(new DocumentInfo(d, null));
+        assertTrue(info.isWebInfFacesConfig());
         assertTrue(info.isVersionGreaterOrEqual(2.0));
         assertFalse(info.isMetadataComplete());
         List<String> ordering = info.getAbsoluteOrdering();
@@ -479,8 +479,8 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         assertEquals("c", ordering.get(2));
 
         d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute2.xml");
-        info = new WebInfFacesConfigInfo(d);
-        assertTrue(info.exists());
+        info = new FacesConfigInfo(new DocumentInfo(d, null));
+        assertTrue(info.isWebInfFacesConfig());
         assertTrue(info.isVersionGreaterOrEqual(2.0));
         assertTrue(info.isMetadataComplete());
         ordering = info.getAbsoluteOrdering();
@@ -492,28 +492,28 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         assertEquals("c", ordering.get(3));
 
         d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute3.xml");
-        info = new WebInfFacesConfigInfo(d);
-        assertTrue(info.exists());
+        info = new FacesConfigInfo(new DocumentInfo(d, null));
+        assertTrue(info.isWebInfFacesConfig());
         assertFalse(info.isVersionGreaterOrEqual(2.0));
         assertTrue(info.isMetadataComplete());
         ordering = info.getAbsoluteOrdering();
         assertNull(ordering);
 
         d = parseDocument(getFacesContext(), "/WEB-INF/webinfAbsolute1.xml");
-        info = new WebInfFacesConfigInfo(d);
-        assertFalse(info.exists());
+        info = new FacesConfigInfo(new DocumentInfo(d, null));
+        assertFalse(info.isWebInfFacesConfig());
 
     }
 
 
     public void testAbsoluteOrderingProcessing() throws Exception {
 
-        Document docA = createDocument("a", null, null);
-        Document docB = createDocument("b", null, null);
-        Document docC = createDocument("c", null, null);
-        Document docD = createDocument("d", null, null);
-        Document docE = createDocument("e", null, null);
-        Document docF = createDocument("f", null, null);
+        DocumentInfo docA = createDocument("a", null, null);
+        DocumentInfo docB = createDocument("b", null, null);
+        DocumentInfo docC = createDocument("c", null, null);
+        DocumentInfo docD = createDocument("d", null, null);
+        DocumentInfo docE = createDocument("e", null, null);
+        DocumentInfo docF = createDocument("f", null, null);
         List<DocumentOrderingWrapper> wrappers = new ArrayList<DocumentOrderingWrapper>();
         Collections.addAll(wrappers,
                            new DocumentOrderingWrapper(docF),
@@ -526,7 +526,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
               wrappers.toArray(new DocumentOrderingWrapper[wrappers.size()]);
 
         Document d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute1.xml");
-        WebInfFacesConfigInfo info = new WebInfFacesConfigInfo(d);
+        FacesConfigInfo info = new FacesConfigInfo(new DocumentInfo(d, null));
         List<String> ordering = info.getAbsoluteOrdering();
         DocumentOrderingWrapper[] result =
               DocumentOrderingWrapper.sort(documentWrappers, ordering);
@@ -536,7 +536,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         assertEquals("c", result[2].getDocumentId());
 
         d = parseDocumentAsWebInfFacesConfig(getFacesContext(), "/WEB-INF/webinfAbsolute2.xml");
-        info = new WebInfFacesConfigInfo(d);
+        info = new FacesConfigInfo(new DocumentInfo(d, null));
         ordering = info.getAbsoluteOrdering();
         result =
               DocumentOrderingWrapper.sort(documentWrappers, ordering);
@@ -583,7 +583,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
     }
     
 
-    private Document createDocument(String documentId,
+    private DocumentInfo createDocument(String documentId,
                                     List<String> beforeIds,
                                     List<String> afterIds)
           throws Exception {
@@ -611,7 +611,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
             }
         }
 
-        return document;
+        return new DocumentInfo(document, null);
 
     }
 

@@ -46,6 +46,7 @@ import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.ConfigManager;
+import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
@@ -55,7 +56,6 @@ import com.sun.faces.scripting.ELResolverProxy;
 import com.sun.faces.scripting.PhaseListenerProxy;
 import com.sun.faces.scripting.ViewHandlerProxy;
 import com.sun.faces.scripting.ActionListenerProxy;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -104,13 +104,13 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
     
 
     /**
-     * @see ConfigProcessor#invokeNext(org.w3c.dom.Document[])
+     * @see ConfigProcessor#invokeNext(com.sun.faces.config.DocumentInfo[])
      */
-    public void invokeNext(Document[] documents)
+    public void invokeNext(DocumentInfo[] documentInfos)
     throws Exception {
 
         if (nextProcessor != null) {
-            nextProcessor.process(documents);
+            nextProcessor.process(documentInfos);
         }
         
     }

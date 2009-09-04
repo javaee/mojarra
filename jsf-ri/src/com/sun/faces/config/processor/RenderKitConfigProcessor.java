@@ -43,6 +43,7 @@ package com.sun.faces.config.processor;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.config.DocumentInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -129,9 +130,9 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(org.w3c.dom.Document[])
+     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
      */
-    public void process(Document[] documents)
+    public void process(DocumentInfo[] documentInfos)
     throws Exception {
 
         Map<String,Map<Document,List<Node>>> renderers =
@@ -140,14 +141,14 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
               new LinkedHashMap<String,Map<Document,List<Node>>>();
         RenderKitFactory rkf = (RenderKitFactory)
              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        for (int i = 0; i < documents.length; i++) {
-            Document document = documents[i];
+        for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing render-kit elements for document: ''{0}''",
-                                document.getDocumentURI()));
+                                documentInfos[i].getSourceURL()));
             }
+            Document document = documentInfos[i].getDocument();
             String namespace = document.getDocumentElement()
                  .getNamespaceURI();
             NodeList renderkits = document.getDocumentElement()
@@ -191,7 +192,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 addClientBehaviorRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
             }
         }
-        invokeNext(documents);
+        invokeNext(documentInfos);
 
     }
 

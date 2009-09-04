@@ -57,8 +57,9 @@ import java.util.logging.Logger;
 import java.text.MessageFormat;
 
 import com.sun.faces.el.ELUtils;
+import com.sun.faces.config.DocumentInfo;
 
- 
+
 /**
  * <p>
  *  This <code>ConfigProcessor</code> handles all elements defined under
@@ -139,19 +140,20 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(org.w3c.dom.Document[])
+     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
      */
-    public void process(Document[] documents)
+    public void process(DocumentInfo[] documentInfos)
     throws Exception {
 
         NavigationHandler handler = getApplication().getNavigationHandler();
-        for (Document document : documents) {
+        for (DocumentInfo documentInfo : documentInfos) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                         MessageFormat.format(
                                 "Processing navigation-rule elements for document: ''{0}''",
-                                document.getDocumentURI()));
+                                documentInfo.getSourceURL()));
             }
+            Document document = documentInfo.getDocument();
             String namespace = document.getDocumentElement()
                     .getNamespaceURI();
             NodeList navigationRules = document.getDocumentElement()
@@ -161,7 +163,7 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
             }
 
         }
-        invokeNext(documents);
+        invokeNext(documentInfos);
 
     }
 

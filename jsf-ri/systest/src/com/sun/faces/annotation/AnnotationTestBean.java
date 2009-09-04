@@ -221,6 +221,21 @@ public class AnnotationTestBean {
         assertNotNull(bean);
         assertEquals("com.sun.faces.annotation.AnnotatedBean4", bean.getClass().getName());
 
+        // negative tests - if the jar files are metadata-complete, then their
+        // annotated classes shouldn't be scanned/registered
+
+        // faces-config is versioned at 2.0 and is marked metadata-complete
+        bean = ctx.getApplication().evaluateExpressionGet(ctx,
+                                                          "#{notFoundBean1}",
+                                                          Object.class);
+        assertTrue(bean == null);
+
+        // faces-config is versioned at 1.2 which assumes metadata-complete
+        bean = ctx.getApplication().evaluateExpressionGet(ctx,
+                                                          "#{notFoundBean2}",
+                                                          Object.class);
+        assertTrue(bean == null);
+
     }
 
     private void assertNotNull(Object v) {

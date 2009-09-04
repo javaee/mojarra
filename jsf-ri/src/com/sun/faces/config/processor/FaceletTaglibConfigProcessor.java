@@ -48,10 +48,11 @@ import com.sun.faces.facelets.tag.TagLibraryImpl;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagLibrary;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.config.ConfigurationException;
-import org.w3c.dom.Document;
+import com.sun.faces.config.DocumentInfo;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
+import org.w3c.dom.Document;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -231,9 +232,9 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(org.w3c.dom.Document[])
+     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
      */
-    public void process(Document[] documents)
+    public void process(DocumentInfo[] documentInfos)
     throws Exception {
 
         ApplicationAssociate associate =
@@ -241,16 +242,17 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
         assert (associate != null);
         Compiler compiler = associate.getCompiler();
 
-        for (int i = 0, length = documents.length; i < length; i++) {
+        for (int i = 0, length = documentInfos.length; i < length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                  "Processing facelet-taglibrary document: ''{0}''",
-                                 documents[i].getDocumentURI()));
+                                 documentInfos[i].getSourceURL()));
             }
+            Document document = documentInfos[i].getDocument();
             String namespace =
-                  documents[i].getDocumentElement().getNamespaceURI();
-            Element documentElement = documents[i].getDocumentElement();
+                  document.getDocumentElement().getNamespaceURI();
+            Element documentElement = document.getDocumentElement();
             NodeList libraryClass =
                   documentElement
                         .getElementsByTagNameNS(namespace, LIBRARY_CLASS);
@@ -261,7 +263,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             }
         }
 
-        invokeNext(documents);
+        invokeNext(documentInfos);
 
     }
 
@@ -399,17 +401,17 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 taglibrary.putBehavior(tagName, behaviorId);
             }
         }
-		
-	}
+
+    }
 
 
-	private void processHandlerClass(Node handlerClass,
+    private void processHandlerClass(Node handlerClass,
                                      TagLibraryImpl taglibrary,
                                      String name) {
 
         String className = getNodeText(handlerClass);
         try {
-            Class<?> clazz = null;
+            Class<?> clazz;
             try {
                 clazz = loadClass(className, this, null);
                 taglibrary.putTagHandler(name, clazz);
