@@ -125,10 +125,11 @@
 
     <!-- ======================== Test Execution ============================== -->
     <!-- converter06 impl logic deferred to 2.0 -->
+    <!-- DO NOT REORDER test.annotations -->
     <target name="test"
             description="Execute all tests against installed application"
-            depends="test.ajax,
-                test.annotations,
+            depends="test.annotations,
+                test.ajax,
                 test.composite,
                 test.facelets,
                 test.init,
@@ -178,10 +179,6 @@
                 test.misc,
                 test.regressions"
             />
-<!-- 139-StateSaving 
-                test.ajax,
-                test.facelets,
--->
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
