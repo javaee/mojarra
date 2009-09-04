@@ -76,7 +76,7 @@ import java.lang.annotation.Inherited;
  * handled as if the {@link RequestScoped} annotation is present.</p>
 
  * <p> If the value of the {@link #eager} attribute is
- * <code>true</code>, and the <code>managed-bean-scop</code> value is
+ * <code>true</code>, and the <code>managed-bean-scope</code> value is
  * "application", the runtime must instantiate this class when the
  * application starts.  This instantiation and storing of the instance
  * must happen before any requests are serviced.  If <em>eager</em> is
