@@ -45,14 +45,16 @@ import javax.faces.bean.RequestScoped;
  *
  * @author eder
  */
-@ManagedBean(name = "dashBoardUrlManager")
+@ManagedBean(name = "skinUrlManager")
 @RequestScoped
-public class DashboardUrlManager extends AbstractManager implements Serializable {
+public class SkinUrlManager extends AbstractManager implements Serializable {
 
     private String skin;
 
     @ManagedProperty(value="#{skinManager}")
     private SkinManager skinManager;
+    @ManagedProperty(value="#{skinValuesManager}")
+    private SkinValuesManager skinValuesManager;
     
     public String getSkin() {
         return skin;
@@ -65,15 +67,8 @@ public class DashboardUrlManager extends AbstractManager implements Serializable
     public void update() {
         if (skin == null ||"".equals(skin))
             return;
-        if (skin.toLowerCase().equals("blue"))
-            skinManager.blueSkin();
-        if (skin.toLowerCase().equals("red"))
-            skinManager.redSkin();
-        if (skin.toLowerCase().equals("orange"))
-            skinManager.orangeSkin();
-        if (skin.toLowerCase().equals("yellow"))
-            skinManager.yellowSkin();
-
+        String skinCss = skinValuesManager.getSkinCss(skin.toLowerCase());
+        skinManager.setSelectedSkin(skinCss);
     }
 
     public SkinManager getSkinManager() {
@@ -82,6 +77,14 @@ public class DashboardUrlManager extends AbstractManager implements Serializable
 
     public void setSkinManager(SkinManager skinManager) {
         this.skinManager = skinManager;
+    }
+
+    public SkinValuesManager getSkinValuesManager() {
+        return skinValuesManager;
+    }
+
+    public void setSkinValuesManager(SkinValuesManager skinValuesManager) {
+        this.skinValuesManager = skinValuesManager;
     }
 
 }

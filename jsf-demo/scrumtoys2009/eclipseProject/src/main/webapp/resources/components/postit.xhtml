@@ -53,9 +53,11 @@
             <h:panelGrid styleClass="postitComponent#{cc.attrs.color}">
                 <h:panelGroup>
                     <h:outputText value="#{postitLabel}" styleClass="postitLabel"/> <br/><br/>
-                    <h:commandLink id="postitAction" immediate="true">
-                        <h:outputText value="#{postitText}"/>
-                    </h:commandLink>
+                    <ui:insert name="main">
+                        <h:commandLink id="postitAction" immediate="true">
+                            <h:outputText value="#{postitText}"/>
+                        </h:commandLink>
+                    </ui:insert>
                 </h:panelGroup>
             </h:panelGrid>        
     </composite:implementation>

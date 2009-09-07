@@ -48,8 +48,8 @@
 
     <ui:composition template="/template.xhtml">
         <f:metadata>
-            <f:viewParam name="skin" value="#{dashBoardUrlManager.skin}" />
-            <f:event type="preRenderView" listener="#{dashBoardUrlManager.update}" />
+            <f:viewParam name="skin" value="#{skinUrlManager.skin}" />
+            <f:event type="preRenderView" listener="#{skinUrlManager.update}" />
         </f:metadata>
         <ui:define name="pageTitle">
             <h:outputText value="#{i18n['story.show.title']}"></h:outputText>

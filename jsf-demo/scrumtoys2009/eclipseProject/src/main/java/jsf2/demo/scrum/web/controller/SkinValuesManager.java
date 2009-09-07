@@ -36,43 +36,53 @@
 
 package jsf2.demo.scrum.web.controller;
 
-import java.io.Serializable;
 import javax.annotation.PostConstruct;
+
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ApplicationScoped;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ArrayList;
+
 
 /**
  *
- * @author Dr. Spock (spock at dev.java.net)
+ * @author edermag
  */
-@ManagedBean(name = "skinManager")
-@SessionScoped
-public class SkinManager extends AbstractManager implements Serializable {
+@ManagedBean(name="skinValuesManager", eager=true)
+@ApplicationScoped
+public class SkinValuesManager {
 
-    private String selectedSkin;
-    @ManagedProperty(value="#{skinValuesManager}")
-    private SkinValuesManager skinValuesManager;
+    private Map<String, String> values;
 
+    private String defaultSkin = "blue";
+    
     @PostConstruct
     public void construct() {
-        selectedSkin = skinValuesManager.getDefaultSkinCss();
-    }
-
-    public String getSelectedSkin() {
-        return selectedSkin;
-    }
-
-    public void setSelectedSkin(String selectedSkin) {
-        this.selectedSkin = selectedSkin;
-    }
-
-    public SkinValuesManager getSkinValuesManager() {
-        return skinValuesManager;
-    }
-
-    public void setSkinValuesManager(SkinValuesManager skinValuesManager) {
-        this.skinValuesManager = skinValuesManager;
+        values = new LinkedHashMap<String, String>();
+        values.put("yellow", "appYellowSkin.css");
+        values.put("orange", "appOrangeSkin.css");
+        values.put("red", "appRedSkin.css");
+        values.put(defaultSkin, "appBlueSkin.css");
     }
     
+    protected String getSkinCss(String skin) {
+        if (!values.containsKey(skin))
+            return getDefaultSkinCss();
+        return values.get(skin);
+    }
+
+    protected String getDefaultSkinCss() {
+        return values.get(defaultSkin);
+    }
+
+    public List<String> getNames() {
+        return new ArrayList<String>(values == null ? null : values.keySet());
+    }
+
+    public int getSize() {
+        return values.keySet().size();
+    }
+
 }
