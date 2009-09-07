@@ -71,7 +71,7 @@
                     <h:panelGroup>
                         <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditUpdate" action="#{taskManager.save}" value="#{i18n['task.edit.button.update']}" styleClass="botaoPostIt" />
                         <h:commandButton rendered="#{storyManager.sprint.name != null}" id="btnEditCancel" action="#{taskManager.cancelEdit}" immediate="true" value="#{i18n['task.edit.button.cancel']}" styleClass="botaoPostIt" />
-                        <h:commandButton styleClass="botaoPostIt" action="/dashboard/show" value="#{i18n['sprint.show.button.showDashboard']}"  />
+                        <h:button styleClass="botaoPostIt" outcome="/dashboard/show" value="#{i18n['sprint.show.button.showDashboard']}" />
                     </h:panelGroup>
                 </h:panelGrid>
             </h:form>

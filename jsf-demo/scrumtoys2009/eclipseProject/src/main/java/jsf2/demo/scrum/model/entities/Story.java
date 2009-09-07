@@ -69,12 +69,6 @@ public class Story extends AbstractEntity implements Serializable {
     private Sprint sprint;
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL)
     private List<Task> tasks;
-    @Transient
-    private List<Task> doneTasks;
-    @Transient
-    private List<Task> workingTasks;
-    @Transient
-    private List<Task> todoTasks;
 
     public Story() {
         this.startDate = new Date();
@@ -154,24 +148,15 @@ public class Story extends AbstractEntity implements Serializable {
     }
 
     public List<Task> getDoneTasks() {
-        if (doneTasks == null) {
-            doneTasks = Collections.unmodifiableList(getTasks(TaskStatus.DONE));
-        }
-        return doneTasks;
+        return Collections.unmodifiableList(getTasks(TaskStatus.DONE));
     }
 
     public List<Task> getWorkingTasks() {
-        if (workingTasks == null) {
-            workingTasks = Collections.unmodifiableList(getTasks(TaskStatus.WORKING));
-        }
-        return workingTasks;
+        return Collections.unmodifiableList(getTasks(TaskStatus.WORKING));
     }
 
     public List<Task> getTodoTasks() {
-        if (todoTasks == null) {
-            todoTasks = Collections.unmodifiableList(getTasks(TaskStatus.TODO));
-        }
-        return todoTasks;
+        return Collections.unmodifiableList(getTasks(TaskStatus.TODO));
     }
 
     private List<Task> getTasks(TaskStatus status) {
@@ -191,9 +176,6 @@ public class Story extends AbstractEntity implements Serializable {
             tasks = new LinkedList<Task>();
         }
         if (task != null && !tasks.contains(task)) {
-            doneTasks = null;
-            workingTasks = null;
-            todoTasks = null;
             tasks.add(task);
             task.setStory(this);
             return true;
