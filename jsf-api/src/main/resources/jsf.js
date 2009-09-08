@@ -238,7 +238,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 window.eval.call(window,src);
             };
             fn();
-        }
+        };
 
         /**
          * Strip all script tags out of the supplied element, return them as an array for later processing
