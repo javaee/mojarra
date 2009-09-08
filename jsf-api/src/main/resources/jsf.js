@@ -232,8 +232,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 window.execScript(src);
                 return;
             }
-
-            window.eval.call(window,src);
+            // We have to wrap the call in an anon function because of a firefox bug, where this is incorrectly set
+            // We need to explicitly call window.eval because of a Chrome peculiarity
+            var fn = function() {
+                window.eval.call(window,src);
+            };
+            fn();
         }
 
         /**
