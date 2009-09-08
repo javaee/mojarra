@@ -619,8 +619,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     target[attributeName] = newValue;
                 }
             }
-            // Special case for 'dir' attribute
-
 
             // Next, if it's an input, copy those over
             if (target.nodeName.toLowerCase() === 'input') {
