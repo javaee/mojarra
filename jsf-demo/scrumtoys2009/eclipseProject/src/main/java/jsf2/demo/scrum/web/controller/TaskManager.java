@@ -43,7 +43,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
@@ -57,12 +56,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PreDestroy;
+import javax.faces.bean.CustomScoped;
+import jsf2.demo.scrum.web.scope.TaskScopeResolver;
 
 /**
  * @author Dr. Spock (spock at dev.java.net)
  */
 @ManagedBean(name = "taskManager")
-@SessionScoped
+@CustomScoped(value="#{taskScope}")
 public class TaskManager extends AbstractManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -74,9 +76,9 @@ public class TaskManager extends AbstractManager implements Serializable {
 
     @PostConstruct
     public void construct() {
+        getLogger(getClass()).log(Level.INFO, "new intance of taskManager in taskScope");
         init();
     }
-
 
     public void init() {
         Task task = new Task();
@@ -214,18 +216,26 @@ public class TaskManager extends AbstractManager implements Serializable {
         storyManager.setCurrentStory(story);
     }
 
-    /**
-     * @return the storyManager
-     */
     public StoryManager getStoryManager() {
         return storyManager;
     }
 
-    /**
-     * @param storyManager the storyManager to set
-     */
     public void setStoryManager(StoryManager storyManager) {
         this.storyManager = storyManager;
+    }
+
+    public String showStories() {
+        endScope();
+        return "/story/show";
+    }
+
+    private void endScope() {
+        TaskScopeResolver.destroyScope();
+    }
+
+    @PreDestroy
+    public void destroy() {
+        getLogger(getClass()).log(Level.INFO, "destroy intance of taskManager in taskScope");
     }
 
 }

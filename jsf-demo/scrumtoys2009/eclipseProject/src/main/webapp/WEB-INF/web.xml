@@ -66,4 +66,8 @@
     <login-config>
         <auth-method>BASIC</auth-method>
     </login-config>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/index.html</location>
+    </error-page>
 </web-app>

@@ -46,6 +46,8 @@
             <var>i18n</var>
         </resource-bundle>
         <message-bundle>i18n</message-bundle>
+
+        <el-resolver>jsf2.demo.scrum.web.scope.TaskScopeResolver</el-resolver>
     </application>
 
     <navigation-rule>
