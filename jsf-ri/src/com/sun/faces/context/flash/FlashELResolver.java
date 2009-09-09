@@ -226,8 +226,10 @@ public class FlashELResolver extends ELResolver {
             }
             // Otherwise, if base is the flash, and property is "now"...
             else if (property.toString().equals(FLASH_NOW_VARIABLE_NAME)) {
+                Map<String, Object> requestMap = extCtx.getRequestMap();
+                requestMap.put(ELFlash.FLASH_NOW_REQUEST_KEY, property);
                 elContext.setPropertyResolved(true);
-                result = extCtx.getRequestMap();
+                result = requestMap;
             } else {
                 result = null;
             }

@@ -72,6 +72,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ELFlash extends Flash {
     
     private Map<String,Map<String, Object>> innerMap = null;
+
+    static final String FLASH_NOW_REQUEST_KEY = "com.sun.faces.context.flash.now";
     
     /** Creates a new instance of ELFlash */
     private ELFlash() {
@@ -553,7 +555,9 @@ public class ELFlash extends Flash {
      */
 
     public Object get(Object key) {
-        FacesContext context = FacesContext.getCurrentInstance();        
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+
         Map<String,Object> map = this.isRedirect() ? getMapForCookie(context, false) : getThisRequestMap(context);
         Object requestValue;
         Object result = null;
@@ -582,6 +586,10 @@ public class ELFlash extends Flash {
                     result = requestValue;
                 }
             }
+            // If something is in flash.now
+            if (null == result && requestMap.containsKey(FLASH_NOW_REQUEST_KEY)) {
+                result = requestMap.get((String) key);
+            }
             // If this resolution is for a keep promotion...
             if (FlashELResolver.isDoKeep()) {
                 FlashELResolver.setDoKeep(false);
@@ -601,7 +609,9 @@ public class ELFlash extends Flash {
 
     @Override
     public void putNow(String key, Object value) {
-        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(key, value);
+        Map<String, Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        requestMap.put(FLASH_NOW_REQUEST_KEY, key);
+        requestMap.put(key, value);
     }
     
     /**
