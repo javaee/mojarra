@@ -155,6 +155,10 @@ public class RequestStateManager {
           "com.sun.faces.SCRIPT_STATE";
 
 
+    /**
+     * Used to communicate which validators have been disabled for a particular
+     * nesting level within a view.
+     */
     public static final String DISABLED_VALIDATORS =
           "com.sun.faces.DISABLED_VALIDATORS";
 
@@ -165,6 +169,16 @@ public class RequestStateManager {
      */
     public static final String PROCESSED_RESOURCE_DEPENDENCIES =
           "com.sun.faces.PROCESSED_RESOURCE_DEPENDENCIES";
+
+
+    /**
+     * Used by the CompositeComponentAttributesELResolver to communicate to
+     * the CompositeComponentStateManager that a #{cc.parent.} expression
+     * has been resolved.  The CompositeComponentState manager will use this
+     * component for its evaluation basis if this attribute value is not null.
+     */
+    public static final String RESOLVED_CC_PARENT =
+          "com.sun.faces.RESOLVED_CC_PARENT";
 
 
     private static final String[] RENDER_RESPONSE = {

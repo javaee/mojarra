@@ -52,6 +52,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.CompositeComponentExpressionHolder;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
+import static com.sun.faces.util.RequestStateManager.RESOLVED_CC_PARENT;
+import com.sun.faces.component.CompositeComponentStackManager;
+import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
+
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
 
@@ -130,7 +135,18 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
             if (COMPOSITE_COMPONENT_PARENT_NAME.equals(propertyName)) {
                 UIComponent c = (UIComponent) base;
                 context.setPropertyResolved(true);
-                return UIComponent.getCompositeComponentParent(c);
+                 FacesContext ctx = (FacesContext)
+                          context.getContext(FacesContext.class);
+                UIComponent ccp = UIComponent.getCompositeComponentParent(c);
+                if (ccp == null) {
+                    CompositeComponentStackManager manager =
+                          CompositeComponentStackManager.getManager(ctx);
+                    ccp = manager.getParentCompositeComponent(TreeCreation,
+                                                              ctx,
+                                                              c);
+                }
+                RequestStateManager.set(ctx, RESOLVED_CC_PARENT, ccp);
+                return ccp;                
             }
         }
 

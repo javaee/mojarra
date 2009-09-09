@@ -130,6 +130,13 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     
     @Override
     public void applyNextHandler(FaceletContext ctx, UIComponent c) throws IOException, FacesException, ELException {
+
+        // attributes need to be applied before any action is taken on
+        // nested children handlers or the composite component handlers
+        // as there may be an expression evaluated at tree creation time
+        // that needs access to these attributes
+        setAttributes(ctx, c);
+
         // Allow any nested elements that reside inside the markup element
         // for this tag to get applied
         super.applyNextHandler(ctx, c);
@@ -186,7 +193,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         
         try {
             Facelet f = factory.getFacelet(ccResource.getURL());
-            setAttributes(ctx, c);
+
             VariableMapper wrapper = new VariableMapperWrapper(orig) {
 
                 @Override

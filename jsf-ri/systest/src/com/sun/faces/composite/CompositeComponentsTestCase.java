@@ -711,6 +711,60 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         }
     }
 
+
+    /**
+     * Added for issue 1290.
+     */
+    public void testCCParentExpressionEvaluationWithNestingLevels() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/nesting07.xhtml");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(4);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+
+        assertEquals(4, 4, spans.size());
+
+        final String[] expectedSpanValues = {
+              "A",  // runtime eval value
+              "A",  // tree creation eval value
+              "B",  // tree creation eval value
+              "C"   // tree creation eval value
+        };
+
+        for (int i = 0, len = spans.size(); i < len; i++) {
+            String spanText = spans.get(i).asText();
+            assertEquals("Index: "
+                         + i
+                         + ", expected: "
+                         + expectedSpanValues[i]
+                         + ", received: "
+                         + spanText,
+                         expectedSpanValues[i],
+                         spanText);
+        }
+
+        HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
+        assertNotNull(button);
+
+        page = button.click();
+
+        spans.clear();
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertEquals(4, 4, spans.size());
+        for (int i = 0, len = spans.size(); i < len; i++) {
+            String spanText = spans.get(i).asText();
+            assertEquals("Index: "
+                         + i
+                         + ", expected: "
+                         + expectedSpanValues[i]
+                         + ", received: "
+                         + spanText,
+                         expectedSpanValues[i],
+                         spanText);
+        }
+
+
+    }
+
     
     // --------------------------------------------------------- Private Methods
 

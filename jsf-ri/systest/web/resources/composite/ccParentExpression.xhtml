@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -36,25 +35,32 @@
  holder.
 
 -->
-<!DOCTYPE html
-      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:ez="http://java.sun.com/jsf/composite/composite">
 <head>
-    <title>Should Not Be Displayed</title>
 </head>
+
 <body>
-    <composite:interface >
-        <composite:attribute name="items" required="false" />
-        <composite:attribute name="itemsList" required="false" />
-    </composite:interface>
-    <composite:implementation>
-        <composite:insertChildren />
-    </composite:implementation>
+<composite:interface>
+    <composite:attribute name="items" required="true" />
+</composite:interface>
+<composite:implementation>
+   <div>
+   <ez:wrapper>
+       <h:outputText style="color:black" value="#{cc.parent.attrs.items[0]}" /><br/> 
+       <c:set var="items" value="#{cc.parent.attrs.items}" />
+       <c:forEach var="i" items="#{items}">
+           <span>#{i}</span><br />
+       </c:forEach>
+   </ez:wrapper>
+   </div>
+</composite:implementation>
+
 </body>
+
 </html>

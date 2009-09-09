@@ -51,6 +51,9 @@
 
 package com.sun.faces.component;
 
+import com.sun.faces.util.RequestStateManager;
+import static com.sun.faces.util.RequestStateManager.RESOLVED_CC_PARENT;
+
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import java.util.Stack;
@@ -227,6 +230,13 @@ public class CompositeComponentStackManager {
     }
 
 
+    public UIComponent getParentCompositeComponent(StackType stackType,
+                                                   FacesContext ctx,
+                                                   UIComponent forComponent) {
+        return getStackHandler(stackType).getParentCompositeComponent(ctx, forComponent);
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -251,6 +261,7 @@ public class CompositeComponentStackManager {
         boolean push();
         void pop();
         UIComponent peek();
+        UIComponent getParentCompositeComponent(FacesContext ctx, UIComponent forComponent);
         void delete();
         Stack<UIComponent> getStack(boolean create);
 
@@ -344,13 +355,19 @@ public class CompositeComponentStackManager {
                 // current composite component within the stack to locate the
                 // parent.
                 UIComponent currentComp;
-                if (stack == null || stack.isEmpty()) {
-                    currentComp = ((compositeComponent == null)
-                                      ? UIComponent.getCurrentComponent(ctx)
-                                      : compositeComponent);
+                UIComponent resolvedParent = (UIComponent)
+                      RequestStateManager.remove(ctx, RESOLVED_CC_PARENT);
+                if (resolvedParent != null) {
+                    currentComp = resolvedParent;
                 } else {
-                    currentComp = stack.peek();
+                    if (stack == null || stack.isEmpty()) {
+                        currentComp = ((compositeComponent == null)
+                                       ? UIComponent.getCurrentComponent(ctx)
+                                       : compositeComponent);
+                    } else {
+                        currentComp = stack.peek();
 
+                    }
                 }
                 if (currentComp != null) {
                     int idx = tstack.indexOf(currentComp);
@@ -363,12 +380,18 @@ public class CompositeComponentStackManager {
                 // If the current stack isn't empty, then use the component
                 // on the stack as the current composite component.
                 stack = getStack(false);
-                if (stack != null && !stack.isEmpty()) {
-                    ccp = getCompositeParent(stack.peek());
+                UIComponent resolvedParent = (UIComponent)
+                      RequestStateManager.remove(ctx, RESOLVED_CC_PARENT);
+                if (resolvedParent != null) {
+                    ccp = UIComponent.getCompositeComponentParent(resolvedParent);
                 } else {
-                    ccp = getCompositeParent(((compositeComponent == null)
-                                                ? UIComponent.getCurrentCompositeComponent(ctx)
-                                                : compositeComponent));
+                    if (stack != null && !stack.isEmpty()) {
+                        ccp = getCompositeParent(stack.peek());
+                    } else {
+                        ccp = getCompositeParent(((compositeComponent == null)
+                                                  ? UIComponent.getCurrentCompositeComponent(ctx)
+                                                  : compositeComponent));
+                    }
                 }
             }
 
@@ -380,6 +403,13 @@ public class CompositeComponentStackManager {
                 return true;
             }
             return false;
+
+        }
+
+        public UIComponent getParentCompositeComponent(FacesContext ctx,
+                                                       UIComponent forComponent) {
+
+            return UIComponent.getCurrentCompositeComponent(ctx);
 
         }
 
@@ -434,6 +464,21 @@ public class CompositeComponentStackManager {
 
         }
 
+
+        public UIComponent getParentCompositeComponent(FacesContext ctx, UIComponent forComponent) {
+
+            Stack<UIComponent> s = getStack(false);
+            if (s == null) {
+                return null;
+            } else {
+                int idx = s.indexOf(forComponent);
+                if (idx == 0) { // no parent
+                    return null;
+                }
+                return (s.get(idx - 1));
+            }
+        }
+        
     } // END TreeCreationStackHandler
 
 

@@ -166,6 +166,10 @@ public class CompositeBean {
         return new String[] { "equalityCheck", "failedCheck" };
     }
 
+    public String[] getItems() {
+        return new String[] { "A", "B", "C" };
+    }
+
 
     // ---------------------------------------------------------- Nested Classes
 

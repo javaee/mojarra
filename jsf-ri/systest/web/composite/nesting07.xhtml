@@ -43,18 +43,16 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:ez="http://java.sun.com/jsf/composite/composite">
-<head>
-    <title>Should Not Be Displayed</title>
-</head>
+<h:head>
+    <title>Nesting 07</title>
+</h:head>
 <body>
-    <composite:interface >
-        <composite:attribute name="items" required="false" />
-        <composite:attribute name="itemsList" required="false" />
-    </composite:interface>
-    <composite:implementation>
-        <composite:insertChildren />
-    </composite:implementation>
+    <h:form id="form">
+        <ez:wrapper itemsList="#{compositeBean.items}">
+            <ez:ccParentExpression items="#{cc.attrs.itemsList}" />
+        </ez:wrapper>
+        <h:commandButton id="submit" value="Refresh" />
+    </h:form>
 </body>
 </html>
