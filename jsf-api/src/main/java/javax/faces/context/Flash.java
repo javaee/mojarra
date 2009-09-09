@@ -131,6 +131,44 @@ import java.util.Map;
  *
  * <p>The same usage syntax must be available in JSP.</p>
 
+ * <p>Note that extra action must be taken when using the flash in
+ * concert with output components that cause the browser to issue a GET
+ * request when clicked, such as <code>h:button</code> and
+ * <code>h:link</code>.  The following example illustrates one way to
+ * use the flash in such circumstances.</p>
+
+ * <ul>
+
+ * <p>First page</p>
+
+<code><pre>
+&lt;h:button id="nextButton" value="Next (button)" outcome="next.xhtml"&gt;
+  &lt;f:param name="foo" value="bar"/&gt;
+&lt;/h:button&gt;
+</pre></code>
+
+ * <p>Next page</p>
+
+<code><pre>
+&lt;html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"&gt;
+&lt;f:metadata&gt;
+  &lt;f:viewParam name="foo" id="foo" value="#{flash.now.foo}" /&gt;
+&lt;/f:metadata&gt;
+&lt;head /&gt;&lt;body&gt;
+foo = #{flash.foo}
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></code>
+
+ * </ul>
+
+ * <p>Note that this example uses <code>#{flash.now}</code> on the
+ * second page.  This is because the value doesn't actuall enter the
+ * flash until the server is processing the GET request sent by the
+ * browser due to the button being clicked.</p>
+
  * </div>
  *
  * @since 2.0
