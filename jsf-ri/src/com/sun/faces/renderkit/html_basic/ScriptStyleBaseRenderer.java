@@ -94,7 +94,7 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
             // encodeBegin() and encodeEnd().
             UIComponent cc = UIComponent.getCurrentCompositeComponent(context);
             if (cc != null) {
-                component.getAttributes().put(COMP_KEY, cc);
+                component.getAttributes().put(COMP_KEY, cc.getClientId(context));
             }
             context.getViewRoot().addComponentResource(context, component, target);
 
@@ -121,8 +121,8 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
           throws IOException {
 
         // Remove the key to prevent issues with state saving...
-        UIComponent cc = (UIComponent) component.getAttributes().remove(COMP_KEY);
-        if (cc != null) {
+        String ccID = (String) component.getAttributes().get(COMP_KEY);
+        if (ccID != null) {
             // the first pop maps to the component we're rendering.
             // the second pop maps to the composite component that was pushed
             // in this renderer's encodeBegin implementation.
@@ -142,7 +142,8 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        UIComponent cc = (UIComponent) component.getAttributes().get(COMP_KEY);
+        String ccID = (String) component.getAttributes().get(COMP_KEY);
+        UIComponent cc = context.getViewRoot().findComponent(':' + ccID);
         UIComponent curCC = UIComponent.getCurrentCompositeComponent(context);
         if (cc != curCC) {
             // the first pop maps to the component we're rendering.
@@ -152,9 +153,7 @@ public abstract class ScriptStyleBaseRenderer extends Renderer implements Compon
             component.popComponentFromEL(context);
             component.pushComponentToEL(context, cc);
             component.pushComponentToEL(context, component);
-        } else {
-            component.getAttributes().remove(COMP_KEY);
-        }
+        } 
 
     }
         
