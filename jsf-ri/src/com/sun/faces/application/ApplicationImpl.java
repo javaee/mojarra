@@ -1984,7 +1984,7 @@ public class ApplicationImpl extends Application {
 
           if (listeners != null && !listeners.isEmpty()) {
             for (SystemEventListener curListener : listeners) {
-                if (curListener.isListenerForSource(source)) {
+                if (curListener != null && curListener.isListenerForSource(source)) {
                     if (event == null) {
                         event = eventInfo.createSystemEvent(source);
                     }
