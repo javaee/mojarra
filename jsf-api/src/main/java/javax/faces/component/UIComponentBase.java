@@ -1507,14 +1507,17 @@ public abstract class UIComponentBase extends UIComponent {
 
         if (attachedObject instanceof Collection) {
             Collection attachedCollection = (Collection) attachedObject;
-            List<StateHolderSaver> resultList =
-                    new ArrayList<StateHolderSaver>(attachedCollection.size() + 1);
-            resultList.add(new StateHolderSaver(context, attachedCollection.getClass()));
-            Iterator listIter = attachedCollection.iterator();
-            Object cur;
-            while (listIter.hasNext()) {
-                if (null != (cur = listIter.next())) {
-                    resultList.add(new StateHolderSaver(context, cur));
+            List<StateHolderSaver> resultList = null;
+            for (Object item : attachedCollection) {
+                if (item != null) {
+                    if (item instanceof StateHolder && ((StateHolder) item).isTransient()) {
+                        continue;
+                    }
+                    if (resultList == null) {
+                        resultList = new ArrayList<StateHolderSaver>(attachedCollection.size() + 1);
+                        resultList.add(new StateHolderSaver(context, attachedCollection.getClass()));
+                    }
+                    resultList.add(new StateHolderSaver(context, item));
                 }
             }
             result = resultList;
@@ -1634,13 +1637,19 @@ public abstract class UIComponentBase extends UIComponent {
         int size = listenersByEventClass.size();
         Object listeners[][] = new Object[size][2];
         int idx = 0;
+        boolean savedState = false;
         for (Entry<Class<? extends SystemEvent>, List<SystemEventListener>> e : listenersByEventClass.entrySet()) {
             Object[] target = listeners[idx++];
             target[0] = e.getKey();
             target[1] = saveAttachedState(ctx, e.getValue());
+            if (target[1] == null) {
+                target[0] = null;
+            } else {
+                savedState = true;
+            }
         }
 
-        return listeners;
+        return ((savedState) ? listeners : null);
 
     }
 
