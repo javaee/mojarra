@@ -124,6 +124,9 @@ public class InsertChildrenHandler extends TagHandlerImpl {
 
             this.ctx = ctx;
             this.component = component;
+            if (!component.getAttributes().containsKey("idx")) {
+                component.getAttributes().put("idx", idx);
+            }
             this.idx = idx;
             this.location = location;
 
@@ -165,13 +168,17 @@ public class InsertChildrenHandler extends TagHandlerImpl {
 
             List<UIComponent> compositeChildren = compositeParent.getChildren();
             List<UIComponent> parentChildren = component.getChildren();
-            parentChildren.addAll(idx, compositeChildren);
+            parentChildren.addAll(getIdx(), compositeChildren);
             
         }
 
 
         // ----------------------------------------------------- Private Methods
 
+        private int getIdx() {
+            Integer idx = (Integer) component.getAttributes().get("idx");
+            return ((idx != null) ? idx : this.idx);
+        }
 
         private void throwRequiredException(FaceletContext ctx,
                                         UIComponent compositeParent) {
