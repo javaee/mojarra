@@ -140,6 +140,9 @@ public class Task extends AbstractEntity implements Serializable {
         this.story = story;
     }
 
+    public String getStatusKeyI18n() {
+        return "task.show.table.header.status."+status;
+    }
 
     @Override
     public boolean equals(Object obj) {

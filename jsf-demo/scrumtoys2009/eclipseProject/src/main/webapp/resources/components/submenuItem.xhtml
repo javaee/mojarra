@@ -40,8 +40,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:composite="http://java.sun.com/jsf/composite"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <composite:interface>
         <composite:valueHolder name="label"  />
@@ -50,13 +49,11 @@
 
     <composite:implementation>
 
-
-        <li> <h:outputLink  value="#{destination}" rendered="#{label!=''}">
+        <li>
+            <h:outputLink  value="#{destination}" rendered="#{label!=''}">
                 <h:outputText value="#{label}" />
             </h:outputLink>
         </li>
-
-
 
     </composite:implementation>
 </html>

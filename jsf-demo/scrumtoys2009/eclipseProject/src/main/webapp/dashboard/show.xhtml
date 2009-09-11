@@ -42,8 +42,6 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:scrum="http://java.sun.com/jsf/composite/components" >
 
     <ui:composition template="/template.xhtml">
@@ -54,8 +52,8 @@
         <ui:define name="pageTitle">
             <h:outputText value="#{i18n['story.show.title']}"></h:outputText>
         </ui:define>
-        <ui:define name="navigationBar">
 
+        <ui:define name="navigationBar">
             <h:commandLink   immediate="true" action="/project/show" value="#{i18n['navigation.projects']}"></h:commandLink>
             <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
             <h:commandLink   immediate="true" action="/project/edit"  value="#{sprintManager.project.name}"></h:commandLink>
@@ -63,9 +61,8 @@
             <h:commandLink   immediate="true" action="/sprint/show" value="#{i18n['navigation.sprints']}"></h:commandLink>
             <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
             <h:outputText value="#{i18n['sprint.edit.form.title']}" styleClass="tituloForm"></h:outputText>
-
-
         </ui:define>
+
         <ui:define name="content">
             <h:form id="frmListStories">
                 <h:panelGrid columns="5">                    

@@ -41,8 +41,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:jc="http://java.sun.com/jsp/jstl/core">
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
@@ -111,8 +110,7 @@
                             <f:facet name="header">
                                 <h:outputText value="#{i18n['task.show.table.header.status']}" />
                             </f:facet>
-                            <jc:set var="statusKey" value="task.show.table.header.status.#{task.status}" />
-                            <h:outputText value="#{i18n[statusKey]}" />
+                            <h:outputText value="#{i18n[task.statusKeyI18n]}"  />
                         </h:column>
                         <h:column>
                             <f:facet name="header">
