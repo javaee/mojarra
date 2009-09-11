@@ -37,10 +37,12 @@
 if (!window["edittextdemo"]) {
     var edittextdemo = {};
 }
-function init(componentID, initialValue) {
+
+edittextdemo.init = function init(componentID, initialValue) {
     edittextdemo[componentID] = initialValue;
-}
-function toggle(idOn, idOff) {
+};
+
+edittextdemo.toggle = function toggle(idOn, idOff) {
     try {
         var elementon = document.getElementById(idOn);
         var elementoff = document.getElementById(idOff);
@@ -49,12 +51,13 @@ function toggle(idOn, idOff) {
     } catch (ex) {
         alert(ex);
     }
-}
-function submitButton(componentID, event) {
+};
+
+edittextdemo.submitButton = function submitButton(componentID, event) {
     try {
         var edit1 = componentID + ':edit1';
         var edit2 = componentID + ':edit2';
-        toggle(edit1, edit2);
+        edittextdemo.toggle(edit1, edit2);
 
         var link = componentID + ':editLink';
         var input = componentID + ':editInput';
@@ -67,28 +70,30 @@ function submitButton(componentID, event) {
         alert(ex);
     }
     return false;
-}
-function cancelButton(componentID) {
+};
+
+edittextdemo.cancelButton = function cancelButton(componentID) {
     try {
         var edit1 = componentID + ':edit1';
         var edit2 = componentID + ':edit2';
-        toggle(edit1, edit2);
+        edittextdemo.toggle(edit1, edit2);
         var input = componentID + ':editInput';
         document.getElementById(input).value = edittextdemo[componentID];
     } catch (ex) {
         alert(ex);
     }
     return false;
-}
-function linkClick(componentID) {
+};
+
+edittextdemo.linkClick = function linkClick(componentID) {
     try {
         var edit1 = componentID + ':edit1';
         var edit2 = componentID + ':edit2';
         var editInput = componentID + ':editInput';
-        toggle(edit2, edit1);
+        edittextdemo.toggle(edit2, edit1);
         document.getElementById(editInput).focus();
     } catch (ex) {
         alert(ex);
     }
     return false;
-}
+};
