@@ -82,13 +82,19 @@ import java.beans.PropertyDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.el.MethodInfo;
 import javax.el.ELContext;
+import javax.el.ELException;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.event.MethodExpressionActionListener;
@@ -623,7 +629,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                 toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                         expr,
                                         expectedReturnType, expectedParameters);
-                                ((ActionSource2) target).setActionExpression(new ContextualCompositeMethodExpression(toApply));
+                                ((ActionSource2) target).setActionExpression(new ContextualCompositeMethodExpression(context, valueExpression, toApply));
                             } else if (isActionListener) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -637,8 +643,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                                                                                   expectedReturnType, new Class[0]);
                                 ((ActionSource2) target).addActionListener(
                                       new MethodExpressionActionListener(
-                                            new ContextualCompositeMethodExpression(toApply),
-                                            new ContextualCompositeMethodExpression(noArg)));
+                                            new ContextualCompositeMethodExpression(context, valueExpression, toApply),
+                                            new ContextualCompositeMethodExpression(context, valueExpression, noArg)));
                             } else if (isValidator) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -651,7 +657,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                         expectedReturnType, expectedParameters);
                                 ((EditableValueHolder) target).addValidator(
                                       new MethodExpressionValidator(
-                                            new ContextualCompositeMethodExpression(toApply)));
+                                            new ContextualCompositeMethodExpression(context, valueExpression, toApply)));
                             } else if (isValueChangeListener) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -665,8 +671,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                                                                                   expectedReturnType, new Class[0]);
                                 ((EditableValueHolder) target).addValueChangeListener(
                                       new MethodExpressionValueChangeListener(
-                                            new ContextualCompositeMethodExpression(toApply),
-                                            new ContextualCompositeMethodExpression(noArg)));
+                                            new ContextualCompositeMethodExpression(context, valueExpression, toApply),
+                                            new ContextualCompositeMethodExpression(context, valueExpression, noArg)));
                             }
                         } else {
                             valueExpression = (ValueExpression) attrValue;
@@ -741,7 +747,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                             toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                     valueExpression.getExpressionString(),
                                     expectedReturnType, expectedParameters);
-                            topLevelComponent.getAttributes().put(attrName, new ContextualCompositeMethodExpression(toApply));
+                            topLevelComponent.getAttributes().put(attrName,
+                                                                  new ContextualCompositeMethodExpression(context,
+                                                                                                          valueExpression,
+                                                                                                          toApply));
                         }
                     }
                     topLevelComponent.setValueExpression(cur.getName(), null);
@@ -1199,14 +1208,32 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private static final class ContextualCompositeMethodExpression extends MethodExpression {
 
         private MethodExpression delegate;
+        private ValueExpression source;
+        private ValueExpression nestedLookupVE;
+        boolean performNestedLookup;
 
 
         // -------------------------------------------------------- Constructors
 
 
-        public ContextualCompositeMethodExpression(MethodExpression delegate) {
+        public ContextualCompositeMethodExpression(FacesContext ctx,
+                                                   ValueExpression source,
+                                                   MethodExpression delegate) {
 
             this.delegate = delegate;
+            ExpressionFactory f = ctx.getApplication().getExpressionFactory();
+            this.source = source;
+
+            String exprString = source.getExpressionString();
+            performNestedLookup = (exprString.contains("cc.attrs.") || exprString.contains("cc.parent."));
+            if (performNestedLookup) {
+                // we recreate the expression in this case as we don't want
+                // the ContextualCompositeExpression interfering with the
+                // push/pop of composite components.
+                nestedLookupVE = f.createValueExpression(ctx.getELContext(),
+                                                         source.getExpressionString(),
+                                                         source.getExpectedType());
+            }
 
         }
 
@@ -1233,11 +1260,32 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
             boolean pushed = pushCompositeComponent(ctx);
             try {
-                return delegate.invoke(elContext, objects);
-            } finally {
-                if (pushed) {
-                    popCompositeComponent(ctx);
+                if (performNestedLookup) {
+                    Object delegateME;
+                    try {
+                        // we need to try to evaluate the source VE as we may not
+                        // be at the top level attribute when dealing with multiple
+                        // nesting levels.  If we catch an exception, we've gotten
+                        // to the top level where we can successfully evaluate the
+                        // MethodExpression.  If we don't catch the exception, the
+                        // result will be a MethodExpression which we invoke to begin
+                        // evaluating at the next higher nesting level.
+                        delegateME = nestedLookupVE.getValue(elContext);
+                        if (delegateME instanceof MethodExpression) {
+                            return ((MethodExpression) delegateME).invoke(elContext, objects);
+                        } else {
+                            throw new ELException("Unable able to resolve expression: " + source.toString());
+                        }
+                    } catch (Exception e) {
+                        return delegate.invoke(elContext, objects);
+                    }
+                } else {
+                    return delegate.invoke(elContext, objects);
                 }
+            } finally {
+               if (pushed) {
+                    popCompositeComponent(ctx);
+               }
             }
 
         }

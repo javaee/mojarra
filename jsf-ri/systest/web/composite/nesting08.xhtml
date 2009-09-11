@@ -3,7 +3,7 @@
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -43,20 +43,15 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:ez="http://java.sun.com/jsf/composite/composite">
-<head>
-    <title>Should Not Be Displayed</title>
-</head>
+<h:head>
+    <title>Nesting 08</title>
+</h:head>
 <body>
-    <composite:interface >
-        <composite:attribute name="items" required="false" />
-        <composite:attribute name="itemsList" required="false" />
-        <composite:attribute name="testAction" required="false" method-signature="java.lang.String f()" />
-        <composite:attribute name="testAction2" required="false" method-signature="java.lang.String f()" />
-    </composite:interface>
-    <composite:implementation>
-        <composite:insertChildren />
-    </composite:implementation>
+    <ez:wrapper testAction="#{compositeBean.action}">
+        <ez:wrapper testAction2="#{cc.attrs.testAction}">
+            <ez:myaction myaction="#{cc.attrs.testAction2}" />
+        </ez:wrapper>
+    </ez:wrapper>
 </body>
 </html>

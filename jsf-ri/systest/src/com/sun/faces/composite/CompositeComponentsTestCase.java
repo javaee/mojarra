@@ -762,6 +762,21 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
                          spanText);
         }
 
+    }
+
+
+    /**
+     * Added for issue 1298.
+     */
+    public void testMethodExpressionNesting() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/nesting08.xhtml");
+
+        HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
+        assertNotNull(button);
+
+        page = button.click();
+        assertTrue(page.asText().contains("Action invoked"));
 
     }
 
