@@ -629,7 +629,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                 toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                         expr,
                                         expectedReturnType, expectedParameters);
-                                ((ActionSource2) target).setActionExpression(new ContextualCompositeMethodExpression(context, valueExpression, toApply));
+                                ((ActionSource2) target).setActionExpression(new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, toApply));
                             } else if (isActionListener) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -643,8 +643,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                                                                                   expectedReturnType, new Class[0]);
                                 ((ActionSource2) target).addActionListener(
                                       new MethodExpressionActionListener(
-                                            new ContextualCompositeMethodExpression(context, valueExpression, toApply),
-                                            new ContextualCompositeMethodExpression(context, valueExpression, noArg)));
+                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, toApply),
+                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, noArg)));
                             } else if (isValidator) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -657,7 +657,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                         expectedReturnType, expectedParameters);
                                 ((EditableValueHolder) target).addValidator(
                                       new MethodExpressionValidator(
-                                            new ContextualCompositeMethodExpression(context, valueExpression, toApply)));
+                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, toApply)));
                             } else if (isValueChangeListener) {
                                 expectedReturnType = Void.TYPE;
                                 expectedParameters = new Class[]{
@@ -671,8 +671,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                                                                                                   expectedReturnType, new Class[0]);
                                 ((EditableValueHolder) target).addValueChangeListener(
                                       new MethodExpressionValueChangeListener(
-                                            new ContextualCompositeMethodExpression(context, valueExpression, toApply),
-                                            new ContextualCompositeMethodExpression(context, valueExpression, noArg)));
+                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, toApply),
+                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, noArg)));
                             }
                         } else {
                             valueExpression = (ValueExpression) attrValue;
