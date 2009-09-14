@@ -39,12 +39,10 @@ package com.sun.faces.application.view;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
-import com.sun.faces.facelets.compiler.Compiler;
-import com.sun.faces.facelets.compiler.SAXCompiler;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
@@ -88,6 +86,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Iterator;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ExpressionFactory;
@@ -132,6 +132,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
     private StateManagementStrategyImpl stateManagementStrategy;
+    private MethodRetargetHandlerManager retargetHandlerManager =
+          new MethodRetargetHandlerManager();
 
     private boolean partialStateSaving;
     private Set<String> fullStateViewIds;
@@ -203,9 +205,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (ourFactory.needsToBeRefreshed(ccResource.getURL())) {
             metadataCache.remove(ccResource);
         }
-        BeanInfo result = metadataCache.get(ccResource);
 
-        return result;
+        return metadataCache.get(ccResource);
     }
     
     public BeanInfo createComponentMetadata(FacesContext context,
@@ -416,6 +417,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     /**
      * @see ViewHandlingStrategy#retargetAttachedObjects(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.util.List)
      */
+    @SuppressWarnings({"unchecked"})
     @Override
     public void retargetAttachedObjects(FacesContext context,
                                         UIComponent topLevelComponent,
@@ -442,8 +444,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         // Each entry in targetList will vend one or more UIComponent instances
         // that is to serve as the target of an attached object in the consuming
         // page.
-        List<UIComponent> targetComponents = null;
-        String forAttributeValue, curTargetName, handlerTagId, componentTagId;
+        List<UIComponent> targetComponents;
+        String forAttributeValue, curTargetName;
 
         // For each of the attached object handlers...
         for (AttachedObjectHandler curHandler : handlers) {
@@ -517,246 +519,64 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         PropertyDescriptor attributes[] = componentBeanInfo.getPropertyDescriptors();
-        ExpressionFactory expressionFactory = null;
-        ValueExpression valueExpression = null;
-        MethodExpression toApply = null;
-        Class expectedReturnType = null;
-        Class expectedParameters[] = null;
 
-        for (PropertyDescriptor cur : attributes) {
-            // If the current attribute represents a ValueExpression
-            if (null != (valueExpression =
-                  (ValueExpression) cur.getValue("type"))) {
-                // take no action on this attribute.
-                continue;
-            }
-            // If the current attribute representes a MethodExpression
-            if (null != (valueExpression = (ValueExpression) cur.getValue("method-signature"))) {
-                String methodSignature = (String) valueExpression.getValue(context.getELContext());
-                if (null != methodSignature) {
-                
-                    // This is the name of the attribute on the top level component,
-                    // and on the inner component.
-                    String targets = null;
-                    if (null != (valueExpression = (ValueExpression) cur.getValue("targets"))) {
-                        targets = (String) valueExpression.getValue(context.getELContext());
-                    }
-                    
-                    if (targets == null) {
-                        targets = cur.getName();
-                    }
+        MethodMetadataIterator allMetadata = new MethodMetadataIterator(attributes);
+        for (CompCompInterfaceMethodMetadata metadata : allMetadata) {
 
-                    if (null == targets || 0 == targets.length()) {
-                        // PENDING error message in page?
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.severe(
-                                  "Unable to retarget MethodExpression: " +
-                                  methodSignature);
+            String attrName = metadata.getName();
+            String[] targets = metadata.getTargets(context);
+
+            Object attrValue = topLevelComponent.getValueExpression(attrName);
+
+            // In all cases but one, the attrValue will be a ValueExpression.
+            // The only case when it will not be a ValueExpression is
+            // the case when the attrName is an action, and even then, it'll be a
+            // ValueExpression in all cases except when it's a literal string.
+            if (null == attrValue) {
+                attrValue = metadata.getDefault(context);
+                if (attrValue == null) {
+                    if (metadata.isRequired(context)) {
+                        Object location = topLevelComponent.getAttributes()
+                              .get(UIComponent.VIEW_LOCATION_KEY);
+                        if (location == null) {
+                            location = "";
                         }
+                        throw new FacesException(
+                              // RELEASE_PENDING need a better message
+                              location.toString()
+                              + ": Unable to find attribute with name \""
+                              + attrName
+                              + "\" in top level component in consuming page, "
+                              + " or with default value in composite component.  "
+                              + "Page author or composite component author error.");
+                    } else {
                         continue;
                     }
-                    
-                    
-                    String[] targetIds = targets.split(" ");
-                    String attrName = cur.getName();
-                    Object attrValue = topLevelComponent
-                          .getValueExpression(attrName);
-                    // In all cases but one, the attrValue will be a ValueExpression.
-                    // The only case when it will not be a ValueExpression is
-                    // the case when the attrName is an action, and even then, it'll be a
-                    // ValueExpression in all cases except when it's a literal string.
-                    if (null == attrValue) {
-                        attrValue = cur.getValue("default");
-                        if (null == attrValue) {
-                            ValueExpression req = (ValueExpression) cur.getValue("required");
-                            boolean required = ((req != null) ? Boolean.valueOf(req.getValue(context.getELContext()).toString()) : false);
-                            if (required) {
-                                Object location = topLevelComponent.getAttributes().get(UIComponent.VIEW_LOCATION_KEY);
-                                if (location == null) {
-                                    location = "";
-                                }
-                                throw new FacesException(
-                                      // RELEASE_PENDING need a better message
-                                      location.toString()
-                                      + ": Unable to find attribute with name \""
-                                      + attrName
-                                      + "\" in top level component in consuming page, "
-                                      + " or with default value in composite component.  "
-                                      + "Page author or composite component author error.");
-                            } else {
-                                continue;
-                            }
-                        }
-                    }
-
-                    // lazily initialize this local variable
-                    if (null == expressionFactory) {
-                        expressionFactory = context.getApplication().getExpressionFactory();
-                    }
-                    
-                    for (String curTarget : targetIds) {
-
-                        // If the attribute is one of the pre-defined 
-                        // MethodExpression attributes
-                        boolean
-                                isAction = false, isActionListener = false, 
-                                isValidator = false, isValueChangeListener = false;
-                        if ((isAction = attrName.equals("action")) ||
-                            (isActionListener = attrName.equals("actionListener")) ||
-                            (isValidator = attrName.equals("validator")) ||
-                            (isValueChangeListener = attrName.equals("valueChangeListener"))) {
-                            
-                            // Special case: explicitly rul out the case where 
-                            // the action is a literal string.  This case will be
-                            // handled below.
-                            if (!isAction && attrValue instanceof ValueExpression) {
-                                valueExpression = (ValueExpression) attrValue;
-                            }
-                            // This is the inner component to which the attribute should 
-                            // be applied
-                            UIComponent target = topLevelComponent.findComponent(curTarget);
-                            if (null == target) {
-                                throw new FacesException(valueExpression.toString()
-                                                         + " : Unable to re-target MethodExpression as inner component referenced by target id '"
-                                                         + curTarget
-                                                         + "' cannot be found.");
-                            }
-
-                            if (isAction) {
-                                expectedReturnType = Object.class;
-                                expectedParameters = new Class[]{};
-                                String expr = (attrValue instanceof ValueExpression) ?
-                                    ((ValueExpression) attrValue).getExpressionString() : attrValue.toString();
-                                toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                        expr,
-                                        expectedReturnType, expectedParameters);
-                                ((ActionSource2) target).setActionExpression(new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, toApply));
-                            } else if (isActionListener) {
-                                expectedReturnType = Void.TYPE;
-                                expectedParameters = new Class[]{
-                                            ActionEvent.class
-                                        };
-                                toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                        valueExpression.getExpressionString(),
-                                        expectedReturnType, expectedParameters);
-                                MethodExpression noArg = expressionFactory.createMethodExpression(context.getELContext(),
-                                                                                                  valueExpression.getExpressionString(),
-                                                                                                  expectedReturnType, new Class[0]);
-                                ((ActionSource2) target).addActionListener(
-                                      new MethodExpressionActionListener(
-                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, toApply),
-                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, noArg)));
-                            } else if (isValidator) {
-                                expectedReturnType = Void.TYPE;
-                                expectedParameters = new Class[]{
-                                            FacesContext.class,
-                                            UIComponent.class,
-                                            Object.class
-                                        };
-                                toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                        valueExpression.getExpressionString(),
-                                        expectedReturnType, expectedParameters);
-                                ((EditableValueHolder) target).addValidator(
-                                      new MethodExpressionValidator(
-                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, toApply)));
-                            } else if (isValueChangeListener) {
-                                expectedReturnType = Void.TYPE;
-                                expectedParameters = new Class[]{
-                                            ValueChangeEvent.class
-                                        };
-                                toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                        valueExpression.getExpressionString(),
-                                        expectedReturnType, expectedParameters);
-                                MethodExpression noArg = expressionFactory.createMethodExpression(context.getELContext(),
-                                                                                                  valueExpression.getExpressionString(),
-                                                                                                  expectedReturnType, new Class[0]);
-                                ((EditableValueHolder) target).addValueChangeListener(
-                                      new MethodExpressionValueChangeListener(
-                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, toApply),
-                                            new ContextualCompositeMethodExpression(context, (ValueExpression) attrValue, noArg)));
-                            }
-                        } else {
-                            valueExpression = (ValueExpression) attrValue;
-                            // There is no explicit methodExpression property on
-                            // an inner component to which this MethodExpression
-                            // should be retargeted.  In this case, replace the
-                            // ValueExpression with a method expresson.
-                            
-                            // Pull apart the methodSignature to derive the 
-                            // expectedReturnType and expectedParameters
-
-                            // PENDING(rlubke,jimdriscoll) bulletproof this
-                            
-                            assert(null != methodSignature);
-                            methodSignature = methodSignature.trim();
-                            
-                            // Get expectedReturnType
-                            int j, i = methodSignature.indexOf(" ");
-                            if (-1 != i) {
-                                String strValue = methodSignature.substring(0, i);
-                                try {
-                                    expectedReturnType = Util.getTypeFromString(strValue);
-                                } catch (ClassNotFoundException cnfe) {
-                                    throw new FacesException(cur.getValue("method-signature") + " : Unable to load type '" + strValue + '\'');
-                                }
-                            } else {
-                            	if (LOGGER.isLoggable(Level.SEVERE)) {
-	                                LOGGER.severe("Unable to determine expected return type for " +
-	                                        methodSignature);
-                            	}
-                                continue;
-                            }
-                            
-                            // derive the arguments
-                            i = methodSignature.indexOf("(");
-                            if (-1 != i) {
-                                j = methodSignature.indexOf(")", i+1);
-                                if (-1 != j) {
-                                    String strValue = methodSignature.substring(i + 1, j);
-                                    if (0 < strValue.length()) {
-                                        String [] params = strValue.split(",");
-                                        expectedParameters = new Class[params.length];
-                                        boolean exceptionThrown = false;
-                                        for (i = 0; i < params.length; i++) {
-                                            try {
-                                                expectedParameters[i] = 
-                                                        Util.getTypeFromString(params[i]);
-                                            } catch (ClassNotFoundException cnfe) {
-                                            	if (LOGGER.isLoggable(Level.SEVERE)) {
-	                                                LOGGER.log(Level.SEVERE,
-	                                                        "Unable to determine expected return type for " +
-	                                                        methodSignature, cnfe);
-                                            	}
-                                                exceptionThrown = true;
-                                                break;
-                                            }
-                                        }
-                                        if (exceptionThrown) {
-                                            continue;
-                                        }
-                                        
-                                    } else {
-                                        expectedParameters = new Class[]{};
-                                    }
-                                }
-                                
-                            }
-                            
-                            assert(null != expectedReturnType);
-                            assert(null != expectedParameters);
-                            
-                            toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                    valueExpression.getExpressionString(),
-                                    expectedReturnType, expectedParameters);
-                            topLevelComponent.getAttributes().put(attrName,
-                                                                  new ContextualCompositeMethodExpression(context,
-                                                                                                          valueExpression,
-                                                                                                          toApply));
-                        }
-                    }
-                    topLevelComponent.setValueExpression(cur.getName(), null);
                 }
             }
+
+
+            if (targets != null) {
+                MethodRetargetHandler handler = retargetHandlerManager.getRetargetHandler(attrName);
+                for (String curTarget : targets) {
+                    UIComponent targetComp = topLevelComponent.findComponent(curTarget);
+                    if (null == targetComp) {
+                        throw new FacesException(attrValue.toString()
+                                                 + " : Unable to re-target MethodExpression as inner component referenced by target id '"
+                                                 + curTarget
+                                                 + "' cannot be found.");
+                    }
+                    handler.retarget(context, metadata, attrValue, targetComp);
+                }
+            } else {
+                MethodRetargetHandler handler = retargetHandlerManager.getDefaultHandler();
+                handler.retarget(context, metadata, attrValue, topLevelComponent);
+            }
+
+            // clear out the ValueExpression that we've retargeted as a
+            // MethodExpression
+            topLevelComponent.setValueExpression(attrName, null);
+
         }
 
     }
@@ -805,8 +625,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
             if (extensionsArray != null) {
-                for (int i = 0; i < extensionsArray.length; i++) {
-                    String extension = extensionsArray[i];
+                for (String extension : extensionsArray) {
                     if (viewId.endsWith(extension)) {
                         return true;
                     }
@@ -814,8 +633,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
             if (prefixesArray != null) {
-                for (int i = 0; i < prefixesArray.length; i++) {
-                    String prefix = prefixesArray[i];
+                for (String prefix : prefixesArray) {
                     if (viewId.startsWith(prefix)) {
                         return true;
                     }
@@ -898,11 +716,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
             public BeanInfo newInstance(Resource ccResource) throws InterruptedException {
                 FacesContext context = FacesContext.getCurrentInstance();
-                BeanInfo result = null;
-                result = FaceletViewHandlingStrategy.this.
-                        createComponentMetadata(context, ccResource);
-
-                return result;
+                return FaceletViewHandlingStrategy.this.createComponentMetadata(context, ccResource);
             }
         });
 
@@ -922,16 +736,15 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      */
     protected void initializeMappings() {
 
-        String viewMappings = webConfig
-              .getOptionValue(WebContextInitParameter.FaceletsViewMappings);
+        String viewMappings = webConfig.getOptionValue(FaceletsViewMappings);
         if ((viewMappings != null) && (viewMappings.length() > 0)) {
             String[] mappingsArray = Util.split(viewMappings, ";");
 
             List<String> extensionsList = new ArrayList<String>(mappingsArray.length);
             List<String> prefixesList = new ArrayList<String>(mappingsArray.length);
 
-            for (int i = 0; i < mappingsArray.length; i++) {
-                String mapping = mappingsArray[i].trim();
+            for (String aMappingsArray : mappingsArray) {
+                String mapping = aMappingsArray.trim();
                 int mappingLength = mapping.length();
                 if (mappingLength <= 1) {
                     continue;
@@ -950,14 +763,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             prefixesArray = new String[prefixesList.size()];
             prefixesList.toArray(prefixesArray);
         }
-    }
-
-
-    /**
-     * @return a new Compiler for Facelet processing.
-     */
-    protected Compiler createCompiler() {
-        return new SAXCompiler();
     }
 
 
@@ -1225,15 +1030,18 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             ExpressionFactory f = ctx.getApplication().getExpressionFactory();
             this.source = source;
 
-            String exprString = source.getExpressionString();
-            performNestedLookup = (exprString.contains("cc.attrs.") || exprString.contains("cc.parent."));
-            if (performNestedLookup) {
-                // we recreate the expression in this case as we don't want
-                // the ContextualCompositeExpression interfering with the
-                // push/pop of composite components.
-                nestedLookupVE = f.createValueExpression(ctx.getELContext(),
-                                                         source.getExpressionString(),
-                                                         source.getExpectedType());
+            if (source != null) {
+                String exprString = source.getExpressionString();
+                performNestedLookup = (exprString.contains("cc.attrs.")
+                                       || exprString.contains("cc.parent."));
+                if (performNestedLookup) {
+                    // we recreate the expression in this case as we don't want
+                    // the ContextualCompositeExpression interfering with the
+                    // push/pop of composite components.
+                    nestedLookupVE = f.createValueExpression(ctx.getELContext(),
+                                                             source.getExpressionString(),
+                                                             source.getExpectedType());
+                }
             }
 
         }
@@ -1333,6 +1141,595 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
     } // END ContextualCompositeMethodExpression
+
+
+    /**
+     * Provides iteration services over a composite component's
+     * MethodExpression-enabled <code>PropertyDescriptors</code>.
+     */
+    private static final class MethodMetadataIterator implements Iterable<CompCompInterfaceMethodMetadata>, Iterator<CompCompInterfaceMethodMetadata> {
+
+        private final PropertyDescriptor[] descriptors;
+        private int curIndex = -1;
+
+        // -------------------------------------------------------- Constructors
+
+
+        MethodMetadataIterator(PropertyDescriptor[] descriptors) {
+
+            this.descriptors = descriptors;
+            if (descriptors != null && descriptors.length > 0) {
+                curIndex = 0;
+            }
+
+        }
+
+
+        // ----------------------------------------------- Methods from Iterable
+
+
+        public Iterator<CompCompInterfaceMethodMetadata> iterator() {
+            return this;
+        }
+
+
+        // ----------------------------------------------- Methods from Iterator
+
+
+        public boolean hasNext() {
+
+            if (curIndex != -1 && curIndex < descriptors.length) {
+                int idx = curIndex;
+
+                while (idx < descriptors.length) {
+                    PropertyDescriptor pd = descriptors[idx];
+                    if (pd.getValue("type") != null || pd.getValue("method-signature") == null) {
+                        // this is a ValueExpression-enabled attribute and
+                        // should be ignored.
+                        idx++;
+                    } else {
+                        if (idx != curIndex) {
+                            // the PD that was found to be returned by the
+                            // next() call has a different offset from the
+                            // current index; update the current index.
+                            curIndex = idx;
+                        }
+                        return (curIndex < descriptors.length);
+                    }
+                }
+            }
+            return false;
+
+        }
+
+        public CompCompInterfaceMethodMetadata next() {
+
+
+            return new CompCompInterfaceMethodMetadata(descriptors[curIndex++]);
+
+        }
+
+        public void remove() {
+
+            throw new UnsupportedOperationException();
+
+        }
+
+    } // END MethodMetadataIterator
+
+
+    /**
+     * Utility class to encapsulate the ValueExpression evaluation of the various
+     * MethodExpression composite component properties.
+     */
+    private static final class CompCompInterfaceMethodMetadata {
+
+        private final PropertyDescriptor pd;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        CompCompInterfaceMethodMetadata(PropertyDescriptor pd) {
+
+            this.pd = pd;
+
+        }
+
+
+        // ------------------------------------------------------ Public Methods
+
+
+        /**
+         * @param ctx the <code>FacesContext</code> for the current request
+         * @return the <code>method-signature</code> for this attribute
+         */
+        public String getMethodSignature(FacesContext ctx) {
+
+            ValueExpression ms = (ValueExpression) pd.getValue("method-signature");
+            if (ms != null) {
+                return (String) ms.getValue(ctx.getELContext());
+            }
+            return null;
+
+        }
+
+
+        /**
+         * @param ctx the <code>FacesContext</code> for the current request
+         * @return an array of component targets to which a MethodExpression
+         *  should be retargeted
+         */
+        public String[] getTargets(FacesContext ctx) {
+
+            ValueExpression ts = (ValueExpression) pd.getValue("targets");
+            if (ts != null) {
+                String targets = (String) ts.getValue(ctx.getELContext());
+                if (targets != null) {
+                    return Util.split(targets, " ");
+                }
+            }
+
+            return null;
+
+        }
+
+
+        /**
+         * @param ctx the <code>FacesContext</code> for the current request
+         * @return <code>true<code> if this attribute is required to be present,
+         *  otherwise, returns <code>false</code>
+         */
+        public boolean isRequired(FacesContext ctx) {
+
+            ValueExpression rd = (ValueExpression) pd.getValue("required");
+            return ((rd != null) ? Boolean.valueOf(rd.getValue(ctx.getELContext()).toString()) : false);
+
+        }
+
+
+        /**
+         *
+         * @param ctx the <code>FacesContext</code> for the current request
+         * @return the default value as designated by the composite component
+         *  author if no attribute was specified by the composite component
+         *  consumer
+         */
+        public Object getDefault(FacesContext ctx) {
+
+            ValueExpression dt = (ValueExpression) pd.getValue("default");
+            return ((dt != null) ? dt.getValue(ctx.getELContext()) : null);
+
+        }
+
+
+        /**
+         * @return the composite component attribute name
+         */
+        public String getName() {
+
+            return pd.getName();
+
+        }
+
+    } // END CompCompInterfaceMethodMetadata
+
+
+    /**
+     * Managed the <code>MethodRetargetHandler</code> implementations for the
+     * current <code>MethodExpression</code> enabled component attributes:
+     * <ul>
+     *    <li>action</li>
+     *    <li>actionListener</li>
+     *    <li>validator</li>
+     *    <li>valueChangeListener</li>
+     * </ul>
+     *
+     * Instances of this object also provide a default handler that can be
+     * used to re-target <code>MethodExperssions</code> that don't match
+     * on of the four names described above.
+     */
+    private static final class MethodRetargetHandlerManager {
+
+        private Map<String,MethodRetargetHandler> handlerMap =
+              new HashMap<String,MethodRetargetHandler>(4, 1.0f);
+        private MethodRetargetHandler arbitraryHandler = new ArbitraryMethodRegargetHandler();
+
+        // -------------------------------------------------------- Constructors
+
+
+        MethodRetargetHandlerManager() {
+
+            MethodRetargetHandler[] handlers = {
+                  new ActionRegargetHandler(),
+                  new ActionListenerRegargetHandler(),
+                  new ValidatorRegargetHandler(),
+                  new ValueChangeListenerRegargetHandler()
+            };
+            for (MethodRetargetHandler h : handlers) {
+                handlerMap.put(h.getAttribute(), h);
+            }
+
+        }
+
+
+        // ------------------------------------------------------ Public Methods
+
+
+        /**
+         * Lookup/return a <code>MethodRetargetHandler</code> appropriate to the
+         * provided attribute name
+         * @param attrName the attribute name
+         * @return a <code>MethodRetargetHandler</code> that can properly handle
+         *  retargeting expressions for the specified attribute, or </code>null</code>
+         *  if there is no handler available.
+         */
+        private MethodRetargetHandler getRetargetHandler(String attrName) {
+
+            return handlerMap.get(attrName);
+
+        }
+
+
+        /**
+         * @return a <code>MethodRetargetHandler</code> that can retarget
+         * arbitrarily named MethodExpressions.
+         */
+        private MethodRetargetHandler getDefaultHandler() {
+
+            return arbitraryHandler;
+
+        }
+
+
+        // ------------------------------------------------------ Nested Classes
+
+
+        /**
+         * Base MethodRetargetHandler implementation.
+         */
+        private static abstract class AbstractRetargetHandler implements MethodRetargetHandler {
+
+            protected static final Class[] NO_ARGS = new Class[0];
+
+
+        } // END AbstractRetargetHandler
+
+
+        /**
+         * This handler is responsible for creating/retargeting MethodExpressions defined
+         * associated with the <code>action</code> attribute
+         */
+        private static final class ActionRegargetHandler extends AbstractRetargetHandler {
+
+            private static final String ACTION = "action";
+
+
+            // ------------------------------ Methods from MethodRetargetHandler
+
+
+            public void retarget(FacesContext ctx,
+                                 CompCompInterfaceMethodMetadata metadata,
+                                 Object sourceValue,
+                                 UIComponent target) {
+
+                String expr = (sourceValue instanceof ValueExpression)
+                                 ? ((ValueExpression) sourceValue).getExpressionString()
+                                 : sourceValue.toString();
+                ExpressionFactory f = ctx.getApplication().getExpressionFactory();
+                MethodExpression me = f.createMethodExpression(ctx.getELContext(),
+                                                               expr,
+                                                               Object.class,
+                                                               NO_ARGS);
+                ((ActionSource2) target)
+                      .setActionExpression(
+                            new ContextualCompositeMethodExpression(ctx,
+                                                                    ((sourceValue instanceof ValueExpression)
+                                                                        ? (ValueExpression) sourceValue
+                                                                        : null),
+                                                                    me));
+
+            }
+
+
+            public String getAttribute() {
+
+                return ACTION;
+
+            }
+
+        } // END ActionRegargetHandler
+
+
+        /**
+         * This handler is responsible for creating/retargeting MethodExpressions defined
+         * associated with the <code>actionListener</code> attribute
+         */
+        private static final class ActionListenerRegargetHandler extends AbstractRetargetHandler {
+
+            private static final String ACTION_LISTENER = "actionListener";
+            private static final Class[] ACTION_LISTENER_ARGS = new Class[] { ActionEvent.class };
+
+
+            // ------------------------------ Methods from MethodRetargetHandler
+
+
+            public void retarget(FacesContext ctx,
+                                 CompCompInterfaceMethodMetadata metadata,
+                                 Object sourceValue,
+                                 UIComponent target) {
+
+                ValueExpression ve = (ValueExpression) sourceValue;
+                ExpressionFactory f = ctx.getApplication().getExpressionFactory();
+                MethodExpression me = f.createMethodExpression(ctx.getELContext(),
+                                                               ve.getExpressionString(),
+                                                               Void.TYPE,
+                                                               ACTION_LISTENER_ARGS);
+                MethodExpression noArg = f.createMethodExpression(ctx.getELContext(),
+                                                                  ve.getExpressionString(),
+                                                                  Void.TYPE,
+                                                                  NO_ARGS);
+
+                ((ActionSource2) target).addActionListener(
+                      new MethodExpressionActionListener(
+                            new ContextualCompositeMethodExpression(ctx,
+                                                                    ve,
+                                                                    me),
+                            new ContextualCompositeMethodExpression(ctx,
+                                                                    ve,
+                                                                    noArg)));
+
+            }
+
+
+            public String getAttribute() {
+
+                return ACTION_LISTENER;
+
+            }
+
+        } // END ActionListenerRegargetHandler
+
+
+        /**
+         * This handler is responsible for creating/retargeting MethodExpressions defined
+         * associated with the <code>validator</code> attribute
+         */
+        private static final class ValidatorRegargetHandler extends AbstractRetargetHandler {
+
+            private static final String VALIDATOR = "validator";
+            private static final Class[] VALIDATOR_ARGS = new Class[]{
+                  FacesContext.class,
+                  UIComponent.class,
+                  Object.class
+            };
+
+
+            // ------------------------------ Methods from MethodRetargetHandler
+
+
+            public void retarget(FacesContext ctx,
+                                 CompCompInterfaceMethodMetadata metadata,
+                                 Object sourceValue,
+                                 UIComponent target) {
+
+                ValueExpression ve = (ValueExpression) sourceValue;
+                ExpressionFactory f = ctx.getApplication().getExpressionFactory();
+                MethodExpression me = f.createMethodExpression(ctx.getELContext(),
+                                                               ve.getExpressionString(),
+                                                               Void.TYPE,
+                                                               VALIDATOR_ARGS);
+
+                ((EditableValueHolder) target).addValidator(
+                      new MethodExpressionValidator(
+                            new ContextualCompositeMethodExpression(ctx,
+                                                                    ve,
+                                                                    me)));
+
+            }
+
+
+            public String getAttribute() {
+
+                return VALIDATOR;
+
+            }
+
+        } // END ValidatorRegargetHandler
+
+
+        /**
+         * This handler is responsible for creating/retargeting MethodExpressions defined
+         * associated with the <code>valueChangeListener</code> attribute
+         */
+        private static final class ValueChangeListenerRegargetHandler extends AbstractRetargetHandler {
+
+            private static final String VALUE_CHANGE_LISTENER = "valueChangeListener";
+            private static final Class[] VALUE_CHANGE_LISTENER_ARGS = new Class[]{
+                  ValueChangeEvent.class
+            };
+
+
+            // ------------------------------ Methods from MethodRetargetHandler
+
+
+            public void retarget(FacesContext ctx,
+                                 CompCompInterfaceMethodMetadata metadata,
+                                 Object sourceValue,
+                                 UIComponent target) {
+
+                ValueExpression ve = (ValueExpression) sourceValue;
+                ExpressionFactory f = ctx.getApplication().getExpressionFactory();
+                MethodExpression me = f.createMethodExpression(ctx.getELContext(),
+                                                               ve.getExpressionString(),
+                                                               Void.TYPE,
+                                                               VALUE_CHANGE_LISTENER_ARGS);
+                MethodExpression noArg = f.createMethodExpression(ctx.getELContext(),
+                                                                  ve.getExpressionString(),
+                                                                  Void.TYPE,
+                                                                  NO_ARGS);
+
+                ((EditableValueHolder) target).addValueChangeListener(
+                      new MethodExpressionValueChangeListener(
+                            new ContextualCompositeMethodExpression(ctx,
+                                                                    ve,
+                                                                    me),
+                            new ContextualCompositeMethodExpression(ctx,
+                                                                    ve,
+                                                                    noArg)));
+
+            }
+
+
+            public String getAttribute() {
+                return VALUE_CHANGE_LISTENER;
+            }
+
+        } // END ValueChangeListenerRegargetHandler
+
+
+        /**
+         * This handler is responsible for creating/retargeting MethodExpressions defined
+         * using arbitrary attribute names.
+         */
+        private static final class ArbitraryMethodRegargetHandler extends AbstractRetargetHandler {
+
+
+            // ------------------------------ Methods from MethodRetargetHandler
+
+
+            public void retarget(FacesContext ctx, CompCompInterfaceMethodMetadata metadata, Object sourceValue, UIComponent target) {
+
+                ValueExpression ve = (ValueExpression) sourceValue;
+                ExpressionFactory f = ctx.getApplication()
+                      .getExpressionFactory();
+
+                // There is no explicit methodExpression property on
+                // an inner component to which this MethodExpression
+                // should be retargeted.  In this case, replace the
+                // ValueExpression with a method expresson.
+
+                // Pull apart the methodSignature to derive the
+                // expectedReturnType and expectedParameters
+
+                String methodSignature = metadata.getMethodSignature(ctx);
+                assert (null != methodSignature);
+                methodSignature = methodSignature.trim();
+                Class<?> expectedReturnType;
+                Class<?>[] expectedParameters = NO_ARGS;
+
+                // Get expectedReturnType
+                int j, i = methodSignature.indexOf(" ");
+                if (-1 != i) {
+                    String strValue = methodSignature.substring(0, i);
+                    try {
+                        expectedReturnType = Util.getTypeFromString(strValue);
+                    } catch (ClassNotFoundException cnfe) {
+                        throw new FacesException(methodSignature
+                                                 + " : Unable to load type '"
+                                                 + strValue
+                                                 + '\'');
+                    }
+                } else {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.severe(
+                              "Unable to determine expected return type for " +
+                              methodSignature);
+                    }
+                    return;
+                }
+
+                // derive the arguments
+                i = methodSignature.indexOf("(");
+                if (-1 != i) {
+                    j = methodSignature.indexOf(")", i + 1);
+                    if (-1 != j) {
+                        String strValue = methodSignature.substring(i + 1, j);
+                        if (0 < strValue.length()) {
+                            String[] params = strValue.split(",");
+                            expectedParameters = new Class[params.length];
+                            boolean exceptionThrown = false;
+                            for (i = 0; i < params.length; i++) {
+                                try {
+                                    expectedParameters[i] =
+                                          Util.getTypeFromString(params[i]);
+                                } catch (ClassNotFoundException cnfe) {
+                                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                                        LOGGER.log(Level.SEVERE,
+                                                   "Unable to determine expected return type for "
+                                                   + methodSignature,
+                                                   cnfe);
+                                    }
+                                    exceptionThrown = true;
+                                    break;
+                                }
+                            }
+                            if (exceptionThrown) {
+                                return;
+                            }
+
+                        } else {
+                            expectedParameters = NO_ARGS;
+                        }
+                    }
+
+                }
+
+                assert (null != expectedReturnType);
+                assert (null != expectedParameters);
+
+                MethodExpression me = f
+                      .createMethodExpression(ctx.getELContext(),
+                                              ve.getExpressionString(),
+                                              expectedReturnType,
+                                              expectedParameters);
+                target.getAttributes().put(metadata.getName(),
+                                           new ContextualCompositeMethodExpression(
+                                                 ctx,
+                                                 ve,
+                                                 me));
+
+            }
+
+
+            public String getAttribute() {
+                return null;
+            }
+
+        } // END ArbitraryMethodRegargetHandler
+
+    } // END MethodRegargetHandlerManager
+
+
+    /**
+     * Implementations of this interface provide the <code>strategy</code> to
+     * properly retarget a method expression for a particular attribute.
+     */
+    private interface MethodRetargetHandler {
+
+        /**
+         * Constructs and retargets a <code>MethodExpression</code> as appropriate
+         * based on the provided arguments.
+         *
+         * @param ctx the <code>FacesContext</code> for the current request
+         * @param metadata the metadata describing the method to be retargeted
+         * @param sourceValue typically, this will be a ValueExpression, however,
+         *  there are cases where this could be provided as a literal.  It basically
+         *  represents the attribute value being passed to the composite component
+         * @param target the component that will be target of the method expression
+         */
+        void retarget(FacesContext ctx,
+                      CompCompInterfaceMethodMetadata metadata,
+                      Object sourceValue,
+                      UIComponent target);
+
+        /**
+         * @return the attribute name this <code>MethodRetargetHandler</code>
+         *  is designed to handle
+         */
+        String getAttribute();
+
+    } // END MethodRetargetHandler
 
 
     /**
