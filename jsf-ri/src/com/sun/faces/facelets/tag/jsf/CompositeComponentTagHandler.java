@@ -665,6 +665,10 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                 return originalVE.isLiteralText();
             }
 
+            @Override
+            public String toString() {
+                return originalVE.toString();
+            }
 
             // ------------------------------------------------- Private Methods
 
