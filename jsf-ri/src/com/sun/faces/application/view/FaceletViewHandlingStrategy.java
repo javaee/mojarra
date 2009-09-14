@@ -545,13 +545,14 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                     if (targets == null) {
                         targets = cur.getName();
                     }
-                    
+
                     if (null == targets || 0 == targets.length()) {
                         // PENDING error message in page?
-                    	if (LOGGER.isLoggable(Level.SEVERE)) {
-	                        LOGGER.severe("Unable to retarget MethodExpression: " +
-	                                methodSignature);
-                    	}
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.severe(
+                                  "Unable to retarget MethodExpression: " +
+                                  methodSignature);
+                        }
                         continue;
                     }
                     
