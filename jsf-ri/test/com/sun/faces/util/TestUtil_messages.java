@@ -245,29 +245,24 @@ public class TestUtil_messages extends ServletFacesTestCase {
 
     public void testVerifyMessages() {
 
-        // English Language
-        System.out.println("Verifying English Messages...");
-        Locale locale = new Locale("en", "US");
-        getFacesContext().getViewRoot().setLocale(locale);
-        verifyParamsInMessages(messageInfo);
+        Locale[] localesToTest = new Locale[] {
+            new Locale("en", "US"),
+            new Locale("fr", ""),
+            new Locale("de", ""),
+            new Locale("es", ""),
+            new Locale("ja", ""),
+            new Locale("ko", ""),
+            new Locale("pt", "BR"),
+            new Locale("zh", "CN"),
+            new Locale("zh", "TW"),
+        };
 
-        // French Language
-        System.out.println("Verifying French Messages...");
-        locale = new Locale("fr", "");
-        getFacesContext().getViewRoot().setLocale(locale);
-        verifyParamsInMessages(messageInfo);
+        for (Locale locale : localesToTest) {
+            System.out.println("Verifying messages for locale: " + locale.toString());
+            getFacesContext().getViewRoot().setLocale(locale);
+            verifyParamsInMessages(messageInfo);
+        }
 
-        // German Language
-        System.out.println("Verifying German Messages...");
-        locale = new Locale("de", "");
-        getFacesContext().getViewRoot().setLocale(locale);
-        verifyParamsInMessages(messageInfo);
-
-        // Spanish Language
-        System.out.println("Verifying Spanish Messages...");
-        locale = new Locale("es", "");
-        getFacesContext().getViewRoot().setLocale(locale);
-        verifyParamsInMessages(messageInfo);
     }     
 
     private void verifyParamsInMessages(String[][] messageInfo) {
