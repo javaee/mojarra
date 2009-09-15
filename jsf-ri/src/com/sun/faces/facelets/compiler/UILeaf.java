@@ -61,22 +61,28 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.render.Renderer;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-class UILeaf extends UIComponentBase {
+@SuppressWarnings({"deprecation"})
+public class UILeaf extends UIComponentBase {
     
-    private final static Map facets = new HashMap(){
+    private final static Map<String,UIComponent> facets = new HashMap<String,UIComponent>(0, 1.0f){
     
         public void putAll(Map map) {
             // do nothing
         }
     
-        public Object put(Object name, Object value) {
+        public UIComponent put(String name, UIComponent value) {
             return null;
         }
     };
     
     private UIComponent parent;
+    private boolean returnLocalTransient = true;
 
     public ValueBinding getValueBinding(String binding) {
         return null;
@@ -106,14 +112,6 @@ class UILeaf extends UIComponentBase {
         this.parent = parent;
     }
 
-    public boolean isRendered() {
-        return true;
-    }
-
-    public void setRendered(boolean rendered) {
-        // do nothing
-    }
-
     public String getRendererType() {
         return null;
     }
@@ -126,8 +124,8 @@ class UILeaf extends UIComponentBase {
         return true;
     }
 
-    public List getChildren() {
-        return Collections.EMPTY_LIST;
+    public List<UIComponent> getChildren() {
+        return Collections.emptyList();
     }
 
     public int getChildCount() {
@@ -138,7 +136,7 @@ class UILeaf extends UIComponentBase {
         return null;
     }
 
-    public Map getFacets() {
+    public Map<String,UIComponent> getFacets() {
         return facets;
     }
 
@@ -150,8 +148,8 @@ class UILeaf extends UIComponentBase {
         return null;
     }
 
-    public Iterator getFacetsAndChildren() {
-        return Collections.EMPTY_LIST.iterator();
+    public Iterator<UIComponent> getFacetsAndChildren() {
+        return Collections.<UIComponent>emptyList().iterator();
     }
 
     public void broadcast(FacesEvent event) throws AbortProcessingException {
@@ -194,10 +192,6 @@ class UILeaf extends UIComponentBase {
         // do nothing
     }
 
-    public void processRestoreState(FacesContext faces, Object state) {
-        // do nothing
-    }
-
     public void processDecodes(FacesContext faces) {
         // do nothing
     }
@@ -210,10 +204,6 @@ class UILeaf extends UIComponentBase {
         // do nothing
     }
 
-    public Object processSaveState(FacesContext faces) {
-        return null;
-    }
-
     protected FacesContext getFacesContext() {
         return FacesContext.getCurrentInstance();
     }
@@ -222,20 +212,14 @@ class UILeaf extends UIComponentBase {
         return null;
     }
 
-    public Object saveState(FacesContext faces) {
-        return null;
-    }
-
-    public void restoreState(FacesContext faces, Object state) {
-        // do nothing
-    }
 
     public boolean isTransient() {
-        return true;
+        return ((returnLocalTransient) || super.isTransient());
     }
 
     public void setTransient(boolean tranzient) {
-        // do nothing
+        returnLocalTransient = false;
+        super.setTransient(tranzient);
     }
 
 }

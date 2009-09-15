@@ -55,7 +55,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 
-final class UILiteralText extends UILeaf {
+public final class UILiteralText extends UILeaf {
     
     private final String text;
     

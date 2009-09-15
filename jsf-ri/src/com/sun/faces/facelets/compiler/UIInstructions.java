@@ -57,7 +57,7 @@ import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.util.Arrays;
 
-final class UIInstructions extends UILeaf {
+public final class UIInstructions extends UILeaf {
 
     private final ELText txt;
 

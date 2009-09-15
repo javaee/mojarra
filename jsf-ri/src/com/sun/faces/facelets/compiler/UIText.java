@@ -62,7 +62,7 @@ import java.io.IOException;
  * @author Jacob Hookom
  * @version $Id$
  */
-final class UIText extends UILeaf {
+public final class UIText extends UILeaf {
 
     private final ELText txt;
     
