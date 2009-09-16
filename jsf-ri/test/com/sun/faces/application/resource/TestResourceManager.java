@@ -205,6 +205,7 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue("META-INF/resources/duke-jar-nv.gif".equals(resource.getPath()));
     }
 
+    /*
     public void testJarVersionedResource() throws Exception {
         ResourceInfo resource = manager.findResource(null, "duke-jar.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
@@ -216,7 +217,9 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue("duke-jar.gif".equals(resource.getName()));
         assertTrue("META-INF/resources/duke-jar.gif/1_1.gif".equals(resource.getPath()));
     }
+    */
 
+    /*
     public void testJarNonVersionedLibraryVersionedResource() throws Exception {
         ResourceInfo resource = manager.findResource("nvLibrary-jar", "duke.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
@@ -236,6 +239,7 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue("duke.gif".equals(resource.getName()));
         assertTrue("META-INF/resources/nvLibrary-jar/duke.gif/1_1.gif".equals(resource.getPath()));
     }
+    */
 
     public void testJarNonVersionedLibraryNonVersionedResource() throws Exception {
         ResourceInfo resource = manager.findResource("nvLibrary-jar", "duke-nv.gif", "image/gif", getFacesContext());
@@ -257,6 +261,7 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue("META-INF/resources/nvLibrary-jar/duke-nv.gif".equals(resource.getPath()));
     }
 
+    /*
     public void testJarVersionedLibraryNonVersionedResource() throws Exception {
         ResourceInfo resource = manager.findResource("vLibrary-jar", "duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
@@ -276,7 +281,9 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue("duke-nv.gif".equals(resource.getName()));
         assertTrue("META-INF/resources/vLibrary-jar/2_0/duke-nv.gif".equals(resource.getPath()));
     }
+    */
 
+    /*
     public void testJarVersionedLibraryVersionedResource() throws Exception {
         ResourceInfo resource = manager.findResource("vLibrary-jar", "duke.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
@@ -296,6 +303,7 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue("duke.gif".equals(resource.getName()));
         assertTrue("META-INF/resources/vLibrary-jar/2_0/duke.gif/1_1.gif".equals(resource.getPath()));
     }
+    */
 
     public void testNoExtensionVersionedResource() throws Exception {
         ResourceInfo resource = manager.findResource("vLibrary", "duke2.gif", "image/gif", getFacesContext());

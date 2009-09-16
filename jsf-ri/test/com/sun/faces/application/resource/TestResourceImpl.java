@@ -250,6 +250,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
         assertTrue(Arrays.equals(controlBytes, underTest));
 
         // step 2 - versioned
+        /*
         controlBytes = getBytes(Util.getCurrentLoader(this.getClass()).getResource("META-INF/resources/duke-jar.gif/1_1.gif"));
         resource = handler.createResource("duke-jar.gif");
         assertTrue(resource != null);
@@ -257,6 +258,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
         assertTrue(in != null);
         underTest = getBytes(in);
         assertTrue(Arrays.equals(controlBytes, underTest));
+        */
 
     }
 
