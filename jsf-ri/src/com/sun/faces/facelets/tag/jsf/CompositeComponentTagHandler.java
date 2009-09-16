@@ -108,7 +108,13 @@ import javax.faces.view.ViewDeclarationLanguageFactory;
  */
 public class CompositeComponentTagHandler extends ComponentHandler implements CreateComponentDelegate {
 
-    
+    private Resource ccResource;
+    private UIComponent cc;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
     CompositeComponentTagHandler(Resource ccResource, ComponentConfig config) {
         super(config);
         this.ccResource = ccResource;
@@ -116,8 +122,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     }
 
 
-    private Resource ccResource;
-    private UIComponent cc;
+    // ------------------------------------ Methods from CreateComponentDelegate
     
 
 
@@ -127,6 +132,10 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         this.cc = result;
         return result;
     }
+
+
+    // ------------------------------------------- Methods from ComponentHandler
+
     
     @Override
     public void applyNextHandler(FaceletContext ctx, UIComponent c) throws IOException, FacesException, ELException {
@@ -165,47 +174,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             }
 
 
-        }
-
-    }
-
-    
-    private void applyCompositeComponent(FaceletContext ctx, UIComponent c)
-    throws IOException {
-
-        FacesContext facesContext = ctx.getFacesContext();
-        FaceletFactory factory = (FaceletFactory)
-              RequestStateManager.get(facesContext, RequestStateManager.FACELET_FACTORY);
-        VariableMapper orig = ctx.getVariableMapper();
-        
-        UIPanel facetComponent;
-        if (ComponentHandler.isNew(c)) {
-            facetComponent = (UIPanel)
-            facesContext.getApplication().createComponent("javax.faces.Panel");
-            facetComponent.setRendererType("javax.faces.Group");
-            c.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
-        }                                                                                 
-        else {
-            facetComponent = (UIPanel) 
-                    c.getFacets().get(UIComponent.COMPOSITE_FACET_NAME);
-        }
-        assert(null != facetComponent);
-        
-        try {
-            Facelet f = factory.getFacelet(ccResource.getURL());
-
-            VariableMapper wrapper = new VariableMapperWrapper(orig) {
-
-                @Override
-                public ValueExpression resolveVariable(String variable) {
-                    return super.resolveVariable(variable);
-                }
-                
-            };
-            ctx.setVariableMapper(wrapper);
-            f.apply(facesContext, facetComponent);
-        } finally {
-            ctx.setVariableMapper(orig);
         }
 
     }
@@ -278,28 +246,83 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
     }
 
+
+    // ---------------------------------------------------------- Public Methods
+
+
     public static List<AttachedObjectHandler> getAttachedObjectHandlers(UIComponent component) {
+
         return getAttachedObjectHandlers(component, true);
+
     }
     
+
     @SuppressWarnings({"unchecked"})
     public static List<AttachedObjectHandler> getAttachedObjectHandlers(UIComponent component,
-            boolean create) {
+                                                                        boolean create) {
         Map<String, Object> attrs = component.getAttributes();
         List<AttachedObjectHandler> result = (List<AttachedObjectHandler>)
-                attrs.get("javax.faces.RetargetableHandlers");
-        
-        if (null == result) {
+              attrs.get("javax.faces.RetargetableHandlers");
+
+        if (result == null) {
             if (create) {
                 result = new ArrayList<AttachedObjectHandler>();
                 attrs.put("javax.faces.RetargetableHandlers", result);
-            }
-            else {
+            } else {
                 result = Collections.EMPTY_LIST;
             }
         }
         return result;
+
     }
+
+
+
+    // --------------------------------------------------------- Private Methods
+
+    
+    private void applyCompositeComponent(FaceletContext ctx, UIComponent c)
+    throws IOException {
+
+        FacesContext facesContext = ctx.getFacesContext();
+        FaceletFactory factory = (FaceletFactory)
+              RequestStateManager.get(facesContext, RequestStateManager.FACELET_FACTORY);
+        VariableMapper orig = ctx.getVariableMapper();
+        
+        UIPanel facetComponent;
+        if (ComponentHandler.isNew(c)) {
+            facetComponent = (UIPanel)
+            facesContext.getApplication().createComponent("javax.faces.Panel");
+            facetComponent.setRendererType("javax.faces.Group");
+            c.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
+        }                                                                                 
+        else {
+            facetComponent = (UIPanel) 
+                    c.getFacets().get(UIComponent.COMPOSITE_FACET_NAME);
+        }
+        assert(null != facetComponent);
+        
+        try {
+            Facelet f = factory.getFacelet(ccResource.getURL());
+
+            VariableMapper wrapper = new VariableMapperWrapper(orig) {
+
+                @Override
+                public ValueExpression resolveVariable(String variable) {
+                    return super.resolveVariable(variable);
+                }
+                
+            };
+            ctx.setVariableMapper(wrapper);
+            f.apply(facesContext, facetComponent);
+        } finally {
+            ctx.setVariableMapper(orig);
+        }
+
+    }
+
+
+
 
 
 
@@ -694,6 +717,5 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
         } // END ContextualCompositeExpression
 
     } // END CompositeComponentRule
-    
     
 }
