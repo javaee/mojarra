@@ -528,7 +528,11 @@ public abstract class Application {
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * {@link Application}.</p>
-     *
+
+     * @throws IllegalStateException if called after the first
+     * request to the {@link javax.faces.webapp.FacesServlet} has been
+     * serviced.
+
      * @since 1.2
      */
 
