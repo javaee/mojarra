@@ -197,15 +197,47 @@ public class FlashTestCase extends AbstractTestCase {
         // See that it still has banzai
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash4BuckarooValueId\">\\s*banzai\\s*</span>.*"));
 
-        // click the link
+        // click the link http://localhost:8080/jsf-flash/flash5.jsf?id=1
         HtmlAnchor link = (HtmlAnchor) page.getElementById("link");
         page = link.click();
 
-        // click the link on the next page
+        // on flash5
         link = (HtmlAnchor) page.getElementById("link");
+        page = link.click(); // clicks http://localhost:8080/jsf-flash/flash6.jsf
+
+        assertTrue(page.asText().contains("Value is 1."));
+
+        // click the link on the next page
+        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:8080/jsf-flash/flash7.jsf
         page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
+
+        // click the link on the same page
+        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:8080/jsf-flash/flash7.jsf
+        page = link.click();
+
+        assertTrue(page.asText().contains("Value is 1."));
+
+        // click the link on the same page
+        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:8080/jsf-flash/flash7.jsf
+        page = link.click();
+
+        assertTrue(page.asText().contains("Value is 1."));
+
+        link = (HtmlAnchor) page.getElementById("link2"); // http://localhost:8080/jsf-flash/flash8.jsf
+        page = link.click();
+
+        assertTrue(page.asText().contains("Value is 1."));
+
+        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:8080/jsf-flash/flash8.jsf
+        page = link.click();
+
+        // it went away because there was no keep
+        assertTrue(page.asText().contains("Value is ."));
+
+
+
     }
 
 }

@@ -206,7 +206,6 @@ public class FlashELResolver extends ELResolver {
                             flash);
                 }
                 result = flash;
-                setDoKeep(false);
             }
         }
         // If the base argument is the flash itself...
@@ -220,8 +219,8 @@ public class FlashELResolver extends ELResolver {
                 // expression, to flash scope.
                 result = base;
                 // Set a flag so the flash itself can look in the request
-                // and promote the value from request scope to flash scope.
-                setDoKeep(true);
+                // and promote the value to the next request
+                ELFlash.getFlash(extCtx, true).setKeepFlag(facesContext);
 
             }
             // Otherwise, if base is the flash, and property is "now"...
@@ -238,24 +237,6 @@ public class FlashELResolver extends ELResolver {
         }
 
         return result;
-    }
-
-    /**
-     * <p>The <code>ThreadLocal</code> variable used to record
-     * whether we're keeping results, from having FLASH_KEEP_VARIABLE_NAME set..</p>
-     */
-    private static ThreadLocal <Boolean> instance = new ThreadLocal<Boolean>() {
-        protected Boolean initialValue() {
-            return Boolean.FALSE;
-        }
-    };
-
-    static boolean isDoKeep() {
-        return instance.get();
-    }
-
-    static void setDoKeep(boolean newValue) {
-        instance.set(newValue ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**

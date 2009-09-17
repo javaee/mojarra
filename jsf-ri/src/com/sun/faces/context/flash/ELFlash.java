@@ -173,7 +173,14 @@ public class ELFlash extends Flash {
 	 * messages are being saved across request/response boundaries.
 	 */
 
-        KeepAllMessagesAttributeName;
+        KeepAllMessagesAttributeName,
+
+        /**
+         * This key is used in the contextMap to indicate that the next
+         * get should be treated as a keep.
+         *
+         */
+        KeepFlagAttributeName;
 
     }
 
@@ -288,10 +295,18 @@ public class ELFlash extends Flash {
         if (null != key) {
             if (key.equals("keepMessages")) {
                 result = this.isKeepMessages();
-            }
-            if (key.equals("redirect")) {
+            } else if (key.equals("redirect")) {
                 result = this.isRedirect();
+            } else {
+                Map<Object, Object> contextMap = FacesContext.getCurrentInstance().getAttributes();
+                Boolean keepFlagIsTrue;
+                if (null != (keepFlagIsTrue = (Boolean) contextMap.get(CONSTANTS.KeepFlagAttributeName)) &&
+                    (boolean) keepFlagIsTrue) {
+                    keep(key.toString());
+                }
+
             }
+
         }
         
         if (null == result) {
@@ -434,7 +449,7 @@ public class ELFlash extends Flash {
             }
 
             if (null != toKeep) {
-                flashManager.getNextRequestFlashInfo().getFlashMap().put(key, toKeep);
+                getPhaseMapForWriting().put(key, toKeep);
             }
         }
 
@@ -549,6 +564,11 @@ public class ELFlash extends Flash {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Helpers">
+
+
+    void setKeepFlag(FacesContext context) {
+        context.getAttributes().put(CONSTANTS.KeepFlagAttributeName, Boolean.TRUE);
+    }
 
     private static long getNewSequenceNumber() {
         long result = sequenceNumber.incrementAndGet();

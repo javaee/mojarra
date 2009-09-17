@@ -31,15 +31,13 @@
 
 <body>
 
-            <h3>Event Information</h3>
+            <h3>flash7</h3>
 
-<c:set target="#{bean}" property="selectedEventId"
-       value="#{flash.selectedEventId}" />
+<p>Value is <h:outputText value="#{flash.selectedEventId}" />.</p>
 #{flash.keep.selectedEventId}
 
-<p>Value is <h:outputText value="#{bean.selectedEventId}" />.</p>
-
-<h:link id="link" outcome="flash7" value="go to flash7" />
+<h:link id="link" outcome="flash7" value="stay on flash7" />
+<h:link id="link2" outcome="flash8" value="go to flash8" />
 
 </body>
 </html>
