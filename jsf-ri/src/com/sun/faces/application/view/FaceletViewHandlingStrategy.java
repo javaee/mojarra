@@ -555,18 +555,36 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 }
             }
 
-
             if (targets != null) {
                 MethodRetargetHandler handler = retargetHandlerManager.getRetargetHandler(attrName);
-                for (String curTarget : targets) {
-                    UIComponent targetComp = topLevelComponent.findComponent(curTarget);
-                    if (null == targetComp) {
-                        throw new FacesException(attrValue.toString()
-                                                 + " : Unable to re-target MethodExpression as inner component referenced by target id '"
-                                                 + curTarget
-                                                 + "' cannot be found.");
+                if (handler != null) {
+                    for (String curTarget : targets) {
+                        UIComponent targetComp = topLevelComponent
+                              .findComponent(curTarget);
+                        if (null == targetComp) {
+                            throw new FacesException(attrValue.toString()
+                                                     + " : Unable to re-target MethodExpression as inner component referenced by target id '"
+                                                     + curTarget
+                                                     + "' cannot be found.");
+                        }
+                        handler.retarget(context,
+                                         metadata,
+                                         attrValue,
+                                         targetComp);
                     }
-                    handler.retarget(context, metadata, attrValue, targetComp);
+                } else {
+                    // the developer has specified a target for a MethodExpression
+                    // but the attribute name doesn't match one action, actionListener,
+                    // validator, or valueChangeListener.  We can ignore the
+                    // target(s) in this case
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.compcomp.unecessary.targets.attribute",
+                                   new Object[] { getCompositeComponentName(topLevelComponent),
+                                                  attrName });
+                    }
+                    handler = retargetHandlerManager.getDefaultHandler();
+                    handler.retarget(context, metadata, attrValue, topLevelComponent);
                 }
             } else {
                 MethodRetargetHandler handler = retargetHandlerManager.getDefaultHandler();
@@ -684,9 +702,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
     // ------------------------------------------------------- Protected Methods
-
-
-
 
 
     /**
@@ -962,6 +977,20 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     // --------------------------------------------------------- Private Methods
 
+    private String getCompositeComponentName(UIComponent compositeComponent) {
+
+        Resource resource =
+              (Resource) compositeComponent.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+        String name = resource.getResourceName();
+        String library = resource.getLibraryName();
+
+        if (library != null) {
+            return "Composite Component: " + name + ", library: " + library;
+        } else {
+            return "Composite Component: " + name;
+        }
+
+    }
 
     private void updateStateSavingType(FacesContext ctx, String viewId) {
 

@@ -59,6 +59,7 @@ import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.MetadataTargetImpl;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.component.CompositeComponentStackManager;
 
 import javax.el.ELException;
@@ -95,6 +96,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import javax.faces.FactoryFinder;
 import javax.faces.view.ViewDeclarationLanguage;
 import javax.faces.view.ViewDeclarationLanguageFactory;
@@ -108,8 +111,10 @@ import javax.faces.view.ViewDeclarationLanguageFactory;
  */
 public class CompositeComponentTagHandler extends ComponentHandler implements CreateComponentDelegate {
 
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
     private Resource ccResource;
     private UIComponent cc;
+    private TagAttribute binding;
 
 
     // ------------------------------------------------------------ Constructors
@@ -118,6 +123,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
     CompositeComponentTagHandler(Resource ccResource, ComponentConfig config) {
         super(config);
         this.ccResource = ccResource;
+        this.binding = config.getTag().getAttributes().get("binding");
         ((ComponentTagHandlerDelegateImpl)this.getTagHandlerDelegate()).setCreateCompositeComponentDelegate(this);
     }
 
@@ -127,10 +133,31 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
 
     public UIComponent createComponent(FaceletContext ctx) {
+        
         FacesContext context = ctx.getFacesContext();
-        UIComponent result = context.getApplication().createComponent(context, ccResource);
-        this.cc = result;
-        return result;
+        // we have to handle the binding here, as Application doesn't
+        // expose a method to do so with Resource.
+        if (binding != null) {
+            ValueExpression ve = binding.getValueExpression(ctx, UIComponent.class);
+            cc = (UIComponent) ve.getValue(ctx);
+            if (cc != null && !UIComponent.isCompositeComponent(cc)) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               "jsf.compcomp.binding.eval.non.compcomp",
+                               binding.toString());
+                }
+                cc = null;
+            }
+            if (cc == null) {
+                cc = context.getApplication().createComponent(context, ccResource);
+                ve.setValue(ctx, cc);
+            }
+        } else {
+            cc = context.getApplication().createComponent(context, ccResource);
+        }
+
+        return cc;
+
     }
 
 
