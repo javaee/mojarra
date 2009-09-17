@@ -191,6 +191,8 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
         doRenderView(context, view);
 
+        extContext.getFlash().doPostPhaseActions(context);
+
         newWriter.endDocument();
 
         // replace markers in the body content and write it to response.

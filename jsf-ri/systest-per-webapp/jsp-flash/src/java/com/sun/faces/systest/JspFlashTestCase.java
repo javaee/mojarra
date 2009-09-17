@@ -1,5 +1,5 @@
 /*
- * $Id: FlashTestCase.java,v 1.2 2007/04/27 22:02:01 ofung Exp $
+ * $Id: JspFlashTestCase.java,v 1.2 2007/04/27 22:02:01 ofung Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ import junit.framework.TestSuite;
  * to do the bulk of the requests works.</p>
  */
 
-public class FlashTestCase extends AbstractTestCase {
+public class JspFlashTestCase extends AbstractTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -69,7 +69,7 @@ public class FlashTestCase extends AbstractTestCase {
      *
      * @param name Name of the test case
      */
-    public FlashTestCase(String name) {
+    public JspFlashTestCase(String name) {
         super(name);
     }
 
@@ -92,7 +92,7 @@ public class FlashTestCase extends AbstractTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(FlashTestCase.class));
+        return (new TestSuite(JspFlashTestCase.class));
     }
 
 
@@ -137,13 +137,6 @@ public class FlashTestCase extends AbstractTestCase {
 
         // Get the first page, again
         page = getPage("/home-flash.jsf");
-        pageText = page.asXml();
-
-        // the page contains the following span, with the following id, with no contents
-        // meaning the flash has no value for foo
-        assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"fooValueId\">\\s*</span>.*"));
-
-
         
         // fill in "addMessage" in the textBox
         HtmlTextInput text = (HtmlTextInput) page.getHtmlElementById("inputText");

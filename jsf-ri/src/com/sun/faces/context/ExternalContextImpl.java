@@ -99,6 +99,7 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,Object> cookieMap = null;
     private Map<String,String> initParameterMap = null;
     private Map<String,String> fallbackContentTypeMap = null;
+    private ELFlash flash;
 
     private enum ALLOWABLE_COOKIE_PROPERTIES {
         domain,
@@ -549,6 +550,7 @@ public class ExternalContextImpl extends ExternalContext {
     public void redirect(String requestURI) throws IOException {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
+        getELFlash().doLastPhaseActions(ctx, true);
 
         if (ctx.getPartialViewContext().isAjaxRequest()) {
             PartialResponseWriter pwriter;
@@ -846,6 +848,7 @@ public class ExternalContextImpl extends ExternalContext {
      */
     @Override
     public void responseFlushBuffer() throws IOException {
+        getELFlash().doLastPhaseActions(FacesContext.getCurrentInstance(), false);
 
         response.flushBuffer();
 
@@ -904,7 +907,16 @@ public class ExternalContextImpl extends ExternalContext {
 
     @Override
     public Flash getFlash() {
-        return ELFlash.getFlash(this, true);
+        return getELFlash();
+    }
+
+    private ELFlash getELFlash() {
+
+        if (null == flash) {
+            flash = ELFlash.getFlash(this, true);
+        }
+        return flash;
+
     }
 
 

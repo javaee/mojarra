@@ -105,7 +105,7 @@
     <property name="flash"
               value="com/sun/faces/systest/FlashTestCase.class"/>
     <property name="jsp-flash"
-              value="com/sun/faces/systest/FlashTestCase.class"/>
+              value="com/sun/faces/systest/JspFlashTestCase.class"/>
     <property name="resource-locale-prefix"
               value="com/sun/faces/systest/ResourceLocalePrefixTestCase.class"/>
     <property name="replace-application"

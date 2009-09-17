@@ -43,6 +43,7 @@ package com.sun.faces.systest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
@@ -195,7 +196,16 @@ public class FlashTestCase extends AbstractTestCase {
         
         // See that it still has banzai
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash4BuckarooValueId\">\\s*banzai\\s*</span>.*"));
-        
+
+        // click the link
+        HtmlAnchor link = (HtmlAnchor) page.getElementById("link");
+        page = link.click();
+
+        // click the link on the next page
+        link = (HtmlAnchor) page.getElementById("link");
+        page = link.click();
+
+        assertTrue(page.asText().contains("Value is 1."));
     }
 
 }

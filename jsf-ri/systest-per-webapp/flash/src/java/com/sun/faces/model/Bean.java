@@ -34,12 +34,27 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.event.ComponentSystemEvent;
 
 @RequestScoped
 @ManagedBean(name="bean")
 public class Bean {
     
-        protected String stringVal;
+    protected String stringVal;
+
+    private Long selectedEventId;
+
+    public void loadTrainingEvent(ComponentSystemEvent cse) {
+        Long eventId = getSelectedEventId();
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null == eventId) {
+            context.addMessage(null,
+                    new FacesMessage("The training event you requested is invalid"));
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.getApplication().getNavigationHandler().
+                    handleNavigation(context, null, "/index?faces-redirect=true");
+        }
+    }
 
     public String getStringVal() {
         return stringVal;
@@ -56,6 +71,14 @@ public class Bean {
             context.addMessage(null, message);
             context.getExternalContext().getFlash().setKeepMessages(true);
         }
+    }
+
+    public Long getSelectedEventId() {
+        return selectedEventId;
+    }
+
+    public void setSelectedEventId(Long selectedEventId) {
+        this.selectedEventId = selectedEventId;
     }
 
 }

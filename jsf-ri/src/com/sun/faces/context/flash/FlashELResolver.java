@@ -202,7 +202,7 @@ public class FlashELResolver extends ELResolver {
                 if (null == flash) {
                     // create a new one and store it in the session.
                     flash = ELFlash.getFlash(extCtx, true);
-                    extCtx.getSessionMap().put(Constants.FLASH_ATTRIBUTE_NAME,
+                    extCtx.getSessionMap().put(ELFlash.FLASH_ATTRIBUTE_NAME,
                             flash);
                 }
                 result = flash;
@@ -226,6 +226,8 @@ public class FlashELResolver extends ELResolver {
             }
             // Otherwise, if base is the flash, and property is "now"...
             else if (property.toString().equals(FLASH_NOW_VARIABLE_NAME)) {
+		// PENDING(edburns): use FacesContext.getAttributes() instead of 
+		// request scope.
                 Map<String, Object> requestMap = extCtx.getRequestMap();
                 requestMap.put(ELFlash.FLASH_NOW_REQUEST_KEY, property);
                 elContext.setPropertyResolved(true);
@@ -366,7 +368,7 @@ public class FlashELResolver extends ELResolver {
 
         //noinspection unchecked
         if (null != (flash = (Map<String, Object>)
-                extCtx.getSessionMap().get(Constants.FLASH_ATTRIBUTE_NAME))) {
+                extCtx.getSessionMap().get(ELFlash.FLASH_ATTRIBUTE_NAME))) {
             Iterator<Map.Entry<String, Object>> iter = flash.entrySet().iterator();
             Map.Entry<String, Object> cur;
             ArrayList<FeatureDescriptor> fds;
