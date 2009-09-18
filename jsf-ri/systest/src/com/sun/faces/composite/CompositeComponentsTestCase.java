@@ -780,6 +780,38 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
+
+    public void testMethodExpressionDefaults() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/defaultAttributeMethodExpression.xhtml");
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "def:form1:command");
+        page = submit.click();
+        assertTrue(page.asText().contains("Action invoked"));
+
+        page = getPage("/faces/composite/defaultAttributeMethodExpression.xhtml");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "def:form2:command2");
+        page = submit.click();
+        assertTrue(page.asText().contains("ActionListener invoked"));
+
+        page = getPage("/faces/composite/defaultAttributeMethodExpression.xhtml");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "def:form3:command3");
+        page = submit.click();
+        assertTrue(page.asText().contains("Custom action invoked"));
+
+        page = getPage("/faces/composite/defaultAttributeMethodExpression.xhtml");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "def:form4:command");
+        HtmlTextInput text = (HtmlTextInput) getInputContainingGivenId(page, "def:form4:input");
+        text.setValueAttribute("foo");
+        page = submit.click();
+        assertTrue(page.asText().contains("validator invoked"));
+
+        page = getPage("/faces/composite/defaultAttributeMethodExpression.xhtml");
+        submit = (HtmlSubmitInput) getInputContainingGivenId(page, "def:form5:command");
+        page = submit.click();
+        assertTrue(page.asText().contains("ValueChange invoked"));
+
+    }
+
     
     // --------------------------------------------------------- Private Methods
 

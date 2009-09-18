@@ -533,7 +533,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // the case when the attrName is an action, and even then, it'll be a
             // ValueExpression in all cases except when it's a literal string.
             if (null == attrValue) {
-                attrValue = metadata.getDefault(context);
+                attrValue = metadata.getDefault();
                 if (attrValue == null) {
                     if (metadata.isRequired(context)) {
                         Object location = topLevelComponent.getAttributes()
@@ -1318,16 +1318,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
 
         /**
-         *
-         * @param ctx the <code>FacesContext</code> for the current request
          * @return the default value as designated by the composite component
          *  author if no attribute was specified by the composite component
-         *  consumer
+         *  consumer.  This value may be a ValueExpression, or a literal.
          */
-        public Object getDefault(FacesContext ctx) {
+        public Object getDefault() {
 
-            ValueExpression dt = (ValueExpression) pd.getValue("default");
-            return ((dt != null) ? dt.getValue(ctx.getELContext()) : null);
+            return pd.getValue("default");
 
         }
 
