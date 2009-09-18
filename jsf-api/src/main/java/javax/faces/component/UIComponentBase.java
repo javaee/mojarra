@@ -1371,7 +1371,7 @@ public abstract class UIComponentBase extends UIComponent {
                   && savedHelper == null) {
                 return null;
             } else {
-                if (values == null) {
+                if (values == null || values.length != 5) {
                     values = new Object[5];
                 }
 
@@ -1386,7 +1386,7 @@ public abstract class UIComponentBase extends UIComponent {
                 return values;
             }
         } else {
-            if (values == null) {
+            if (values == null || values.length != 6) {
                 values = new Object[6];
             }
 
