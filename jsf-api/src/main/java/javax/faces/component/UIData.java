@@ -756,11 +756,20 @@ public class UIData extends UIComponentBase
 
         // check the facets, if any, of UIData
         if (this.getFacetCount() > 0) {
-            for (Iterator<UIComponent> i = this.getFacets().values().iterator(); i.hasNext(); ) {
-                UIComponent c = i.next();
-                if (clientId.equals(c.getClientId(context))) {
-                    callback.invokeContextCallback(context, c);
-                    return true;
+            for (UIComponent c : this.getFacets().values()) {
+                c.invokeOnComponent(context, clientId, callback);
+            }
+        }
+        
+        // check column level facets, if any
+        if (this.getChildCount() > 0) {
+            for (UIComponent column : this.getChildren()) {
+                if (column instanceof UIComponent) {
+                    if (column.getFacetCount() > 0) {
+                        for (UIComponent facet : column.getFacets().values()) {
+                            facet.invokeOnComponent(context, clientId, callback);
+                        }
+                    }
                 }
             }
         }
