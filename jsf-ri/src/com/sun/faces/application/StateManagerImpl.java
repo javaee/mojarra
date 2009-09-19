@@ -180,21 +180,23 @@ public class StateManagerImpl extends StateManager {
                     RenderKitUtils.getResponseStateManager(context, renderKitId);
             Object[] state = (Object[]) rsm.getState(context, viewId);
 
-            if (state != null) {
+            if (state != null && state.length >= 2) {
                 // We need to clone the tree, otherwise we run the risk
                 // of being left in a state where the restored
                 // UIComponent instances are in the session instead
                 // of the TreeNode instances.  This is a problem
                 // for servers that persist session data since
                 // UIComponent instances are not serializable.
-                UIViewRoot viewRoot = restoreTree(context,
-                                                  renderKitId,
-                                                  ((Object[]) state[0]).clone());
-                viewRoot.processRestoreState(context, state[1]);
+                UIViewRoot viewRoot = null;
+                if (state[0] != null) {
+                    viewRoot = restoreTree(context,
+                                           renderKitId,
+                                           ((Object[]) state[0]).clone());
+                }
+                if (viewRoot != null && state[1] != null) {
+                    viewRoot.processRestoreState(context, state[1]);
+                }
 
-                // mark the view as populated to prevent the view from
-                // being built again during RenderResponse
-                // Util.setViewPopulated(context, viewRoot);
                 result = viewRoot;
             }
         }
@@ -394,8 +396,9 @@ public class StateManagerImpl extends StateManager {
 
 
     // ------------------------------------------------------------ Constructors
-        
-        public FacetNode() { }
+
+        @SuppressWarnings({"UnusedDeclaration"})
+        public FacetNode() { } // for serialization purposes
 
         public FacetNode(int parent, 
                          String name, 
