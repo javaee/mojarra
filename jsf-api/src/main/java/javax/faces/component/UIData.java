@@ -764,7 +764,7 @@ public class UIData extends UIComponentBase
         // check column level facets, if any
         if (this.getChildCount() > 0) {
             for (UIComponent column : this.getChildren()) {
-                if (column instanceof UIComponent) {
+                if (column instanceof UIColumn) {
                     if (column.getFacetCount() > 0) {
                         for (UIComponent facet : column.getFacets().values()) {
                             facet.invokeOnComponent(context, clientId, callback);
