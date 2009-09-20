@@ -1678,11 +1678,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                             for (i = 0; i < params.length; i++) {
                                 try {
                                     expectedParameters[i] =
-                                          Util.getTypeFromString(params[i]);
+                                          Util.getTypeFromString(params[i].trim());
                                 } catch (ClassNotFoundException cnfe) {
                                     if (LOGGER.isLoggable(Level.SEVERE)) {
                                         LOGGER.log(Level.SEVERE,
-                                                   "Unable to determine expected return type for "
+                                                   "Unable to determine parameter type for "
                                                    + methodSignature,
                                                    cnfe);
                                     }
