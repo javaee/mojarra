@@ -1649,7 +1649,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 if (-1 != i) {
                     String strValue = methodSignature.substring(0, i);
                     try {
-                        expectedReturnType = Util.getTypeFromString(strValue);
+                        expectedReturnType = Util.getTypeFromString(strValue.trim());
                     } catch (ClassNotFoundException cnfe) {
                         throw new FacesException(methodSignature
                                                  + " : Unable to load type '"
