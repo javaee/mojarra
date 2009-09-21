@@ -73,9 +73,9 @@ import java.util.logging.Logger;
  *
  */
 
-@ManagedBean(name="bean")
+@ManagedBean(name="ajaxtagbean")
 @SessionScoped
-public class Bean implements Serializable {
+public class TagBean implements Serializable {
     
     private static final long serialVersionUID = 1962330230278633796L;
 
@@ -96,7 +96,7 @@ public class Bean implements Serializable {
     // Constructors
     //
     
-    public Bean() {
+    public TagBean() {
         stateMap = new HashMap<String,String>();
         stateMap.put("CA", "California");
         stateMap.put("CT", "Connecticut");
