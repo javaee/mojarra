@@ -1583,12 +1583,19 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 if (typeof source === 'undefined' || source === null) {
                     throw new Error("jsf.ajax.request: source not set");
                 }
+
+                // set up the element based on source
                 if (typeof source === 'string') {
                     element = document.getElementById(source);
                 } else if (typeof source === 'object') {
                     element = source;
                 } else {
                     throw new Error("jsf.request: source must be object or string");
+                }
+                // attempt to handle case of name unset
+                // this might be true in a badly written composite component
+                if (!element.name) {
+                    element.name = element.id;
                 }
 
                 if (typeof(options) === 'undefined' || options === null) {
