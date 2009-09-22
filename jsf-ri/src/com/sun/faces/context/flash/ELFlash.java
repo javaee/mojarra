@@ -31,11 +31,13 @@
 
 package com.sun.faces.context.flash;
 
+import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.util.FacesLogger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -403,27 +405,40 @@ public class ELFlash extends Flash {
 
     
     public Set<Map.Entry<String, Object>> entrySet() {
-        Set<Map.Entry<String, Object>> result = null;
+        Set<Map.Entry<String, Object>> 
+                readingMapEntrySet = getPhaseMapForReading().entrySet(),
+                writingMapEntrySet = getPhaseMapForWriting().entrySet(),
+                result = null;
 
-        result = getPhaseMapForWriting().entrySet();
+        result = new HashSet<Map.Entry<String, Object>>();
+        result.addAll(readingMapEntrySet);
+        result.addAll(writingMapEntrySet);
 
         return result;
     }
 
     
     public boolean isEmpty() {
-        boolean result = false;
+        boolean 
+                readingMapIsEmpty = getPhaseMapForReading().isEmpty(),
+                writingMapIsEmpty = getPhaseMapForWriting().isEmpty(),
+                result = false;
 
-        result = getPhaseMapForReading().isEmpty();
+        result = readingMapIsEmpty && writingMapIsEmpty;
 
         return result;
     }
 
     
     public Set<String> keySet() {
-        Set<String> result = null;
+        Set<String>
+                readingMapKeySet = getPhaseMapForReading().keySet(),
+                writingMapKeySet = getPhaseMapForWriting().keySet(),
+                result = null;
 
-        result = getPhaseMapForWriting().keySet();
+        result = new HashSet<String>();
+        result.addAll(readingMapKeySet);
+        result.addAll(writingMapKeySet);
 
         return result;
     }
@@ -480,7 +495,7 @@ public class ELFlash extends Flash {
             Cookie cookie = null;
 
             if (null != (cookie = getCookie(context.getExternalContext()))) {
-                getCurrentFlashManager(contextMap, cookie);
+                getCurrentFlashManager(context, contextMap, cookie);
             }
 
             if (this.isKeepMessages()) {
@@ -839,14 +854,15 @@ public class ELFlash extends Flash {
      * cookie.  If no instance of the FlashManager exists for this
      * request, create it and store it in the contextMap.</p>
      */
-    private PreviousNextFlashInfoManager getCurrentFlashManager(Map<Object, Object> contextMap,
+    private PreviousNextFlashInfoManager getCurrentFlashManager(FacesContext context,
+            Map<Object, Object> contextMap,
             Cookie cookie) {
         PreviousNextFlashInfoManager result = (PreviousNextFlashInfoManager)
                 contextMap.get(CONSTANTS.RequestFlashManager);
 
         if (null == result) {
             result = new PreviousNextFlashInfoManager();
-            result.decode(cookie);
+            result.decode(context, cookie);
             contextMap.put(CONSTANTS.RequestFlashManager, result);
 
         }
@@ -955,7 +971,7 @@ public class ELFlash extends Flash {
 	 *
 	 */
 
-        void decode(Cookie cookie) {
+        void decode(FacesContext context, Cookie cookie) {
             String temp, value = cookie.getValue();
             try {
                 int i = value.indexOf("_");
@@ -977,7 +993,10 @@ public class ELFlash extends Flash {
                     this.setIncomingCookieCameFromRedirect(true);
                     previousRequestFlashInfo.setIsRedirect(false);
                 } else {
-                    previousRequestFlashInfo.setLifetimeMarker(LifetimeMarker.SecondTimeThru);
+                    // Don't make the flash older on debug requests
+                    if (!UIDebug.debugRequest(context)) {
+                        previousRequestFlashInfo.setLifetimeMarker(LifetimeMarker.SecondTimeThru);
+                    }
                 }
                 Map<String, Object> flashMap;
                 // If the browser sent a cookie that is valid, but
