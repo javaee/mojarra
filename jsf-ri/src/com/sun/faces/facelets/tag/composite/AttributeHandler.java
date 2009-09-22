@@ -85,10 +85,10 @@ public class AttributeHandler extends TagHandlerImpl {
         
         PropertyDescriptor propertyDescriptor;
         TagAttribute attr;
-        CompositeComponentBeanInfo componentBeanInfo = null;
-	Map<String, Object> attrs = parent.getAttributes();
+        Map<String, Object> attrs = parent.getAttributes();
         
-        componentBeanInfo = (CompositeComponentBeanInfo) attrs.get(UIComponent.BEANINFO_KEY);
+        CompositeComponentBeanInfo componentBeanInfo =
+              (CompositeComponentBeanInfo) attrs.get(UIComponent.BEANINFO_KEY);
         assert(null != componentBeanInfo);
         List<PropertyDescriptor> declaredAttributes = 
                 componentBeanInfo.getPropertyDescriptorsList();
