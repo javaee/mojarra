@@ -45,35 +45,32 @@ import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 
-/**
- * <p class="changed_added_2_0"></p>
- * @author asmirnov@exadel.com
- *
- */
+
 public class BehaviorHolderAttachedObjectTargetHandler extends
-		AttachedObjectTargetHandler {
+      AttachedObjectTargetHandler {
 
-	public BehaviorHolderAttachedObjectTargetHandler(TagConfig config) {
-		super(config);
-	}
+    public BehaviorHolderAttachedObjectTargetHandler(TagConfig config) {
+        super(config);
+    }
 
-	/* (non-Javadoc)
-	 * @see com.sun.faces.facelets.tag.composite.AttachedObjectTargetHandler#newAttachedObjectTargetImpl()
-	 */
-	@Override
-	AttachedObjectTargetImpl newAttachedObjectTargetImpl() {
-		BehaviorHolderAttachedObjectTargetImpl target = new BehaviorHolderAttachedObjectTargetImpl();
-		TagAttribute event = this.getAttribute("event");
-		if(null != event){
-			target.setEvent(event.getValue());
-		}
-		TagAttribute defaultAttr = this.getAttribute("default");
-		if(null != defaultAttr){
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-	        FaceletContext ctx = (FaceletContext) facesContext.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-			target.setDefaultEvent(defaultAttr.getBoolean(ctx));
-		}
-		return target;
-	}
+    /* (non-Javadoc)
+      * @see com.sun.faces.facelets.tag.composite.AttachedObjectTargetHandler#newAttachedObjectTargetImpl()
+      */
+    @Override
+    AttachedObjectTargetImpl newAttachedObjectTargetImpl() {
+        BehaviorHolderAttachedObjectTargetImpl target = new BehaviorHolderAttachedObjectTargetImpl();
+        TagAttribute event = this.getAttribute("event");
+        if (null != event) {
+            target.setEvent(event.getValue());
+        }
+        TagAttribute defaultAttr = this.getAttribute("default");
+        if (null != defaultAttr) {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            FaceletContext ctx = (FaceletContext) facesContext.getAttributes()
+                  .get(FaceletContext.FACELET_CONTEXT_KEY);
+            target.setDefaultEvent(defaultAttr.getBoolean(ctx));
+        }
+        return target;
+    }
 
 }

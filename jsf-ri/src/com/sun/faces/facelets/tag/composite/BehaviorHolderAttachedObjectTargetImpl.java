@@ -45,58 +45,64 @@ import javax.faces.view.BehaviorHolderAttachedObjectTarget;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * <p class="changed_added_2_0"></p>
- * @author asmirnov@exadel.com
- *
- */
-public class BehaviorHolderAttachedObjectTargetImpl extends
-		AttachedObjectTargetImpl implements BehaviorHolderAttachedObjectTarget {
 
-	private String event;
-	
-	private boolean defaultEvent;
-	/**
-	 * <p class="changed_added_2_0"></p>
-	 */
-	public BehaviorHolderAttachedObjectTargetImpl() {
-		
-	}
-	/**
-	 * <p class="changed_added_2_0"></p>
-	 * @return the event
-	 */
-	public String getEvent() {
-		return event;
-	}
-	/**
-	 * <p class="changed_added_2_0"></p>
-	 * @param event the event to set
-	 */
-	public void setEvent(String event) {
-		this.event = event;
-	}
-	/**
-	 * <p class="changed_added_2_0"></p>
-	 * @return the defaultEvent
-	 */
-	public boolean isDefaultEvent() {
-		return defaultEvent;
-	}
-	/**
-	 * <p class="changed_added_2_0"></p>
-	 * @param defaultEvent the defaultEvent to set
-	 */
-	public void setDefaultEvent(boolean defaultEvent) {
-		this.defaultEvent = defaultEvent;
-	}
-	
-	@Override
-	public List<UIComponent> getTargets(UIComponent topLevelComponent) {
-		List<UIComponent> targets = super.getTargets(topLevelComponent);
-		List<UIComponent> wrappedTargets = new ArrayList<UIComponent>(targets.size());
-		for (UIComponent component : targets) {
-			wrappedTargets.add(new BehaviorHolderWrapper(component,getName(),getEvent()));
+public class BehaviorHolderAttachedObjectTargetImpl extends
+      AttachedObjectTargetImpl implements BehaviorHolderAttachedObjectTarget {
+
+    private String event;
+
+    private boolean defaultEvent;
+
+    /**
+     * <p class="changed_added_2_0"></p>
+     */
+    public BehaviorHolderAttachedObjectTargetImpl() {
+
+    }
+
+    /**
+     * <p class="changed_added_2_0"></p>
+     *
+     * @return the event
+     */
+    public String getEvent() {
+        return event;
+    }
+
+    /**
+     * <p class="changed_added_2_0"></p>
+     *
+     * @param event the event to set
+     */
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
+    /**
+     * <p class="changed_added_2_0"></p>
+     *
+     * @return the defaultEvent
+     */
+    public boolean isDefaultEvent() {
+        return defaultEvent;
+    }
+
+    /**
+     * <p class="changed_added_2_0"></p>
+     *
+     * @param defaultEvent the defaultEvent to set
+     */
+    public void setDefaultEvent(boolean defaultEvent) {
+        this.defaultEvent = defaultEvent;
+    }
+
+    @Override
+    public List<UIComponent> getTargets(UIComponent topLevelComponent) {
+        List<UIComponent> targets = super.getTargets(topLevelComponent);
+        List<UIComponent> wrappedTargets = new ArrayList<UIComponent>(targets.size());
+        for (UIComponent component : targets) {
+            wrappedTargets
+                  .add(new BehaviorHolderWrapper(component, getName(), getEvent()));
 		}
 		return wrappedTargets;
 	}
