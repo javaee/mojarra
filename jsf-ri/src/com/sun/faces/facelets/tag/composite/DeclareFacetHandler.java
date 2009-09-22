@@ -65,18 +65,32 @@ import java.util.Map;
 
 
 public class DeclareFacetHandler extends TagHandlerImpl {
-    
+
+    private static final String[] ATTRIBUTES = {
+          "required",
+          "displayName",
+          "expert",
+          "hidden",
+          "preferred",
+          "shortDescription",
+          "default"
+    };
+
+    private static final PropertyHandlerManager ATTRIBUTE_MANAGER =
+          PropertyHandlerManager.getInstance(ATTRIBUTES);
+
     private TagAttribute name = null;
-    private TagAttribute required = null;
+
 
 
     public DeclareFacetHandler(TagConfig config) {
         super(config);
         this.name = this.getRequiredAttribute("name");
-        this.required = this.getAttribute("required");
+
         
     }
     
+    @SuppressWarnings({"unchecked"})
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         // only process if it's been created
         if (null == parent || 
@@ -86,29 +100,25 @@ public class DeclareFacetHandler extends TagHandlerImpl {
         }
         
         Map<String, Object> componentAttrs = parent.getAttributes();
-        ValueExpression ve = null;
-        String strValue = null;
 
         CompositeComponentBeanInfo componentBeanInfo = (CompositeComponentBeanInfo)
                 componentAttrs.get(UIComponent.BEANINFO_KEY);
 
         // Get the value of required the name propertyDescriptor
-        ve = name.getValueExpression(ctx, String.class);
-        strValue = (String) ve.getValue(ctx);
-        boolean booleanValue = false;
+        ValueExpression ve = name.getValueExpression(ctx, String.class);
+        String strValue = (String) ve.getValue(ctx);
         BeanDescriptor componentBeanDescriptor = componentBeanInfo.getBeanDescriptor();
         
-        Map<String, PropertyDescriptor> facetDescriptors = null;
-        PropertyDescriptor propertyDescriptor = null;
-        TagAttribute attr = null;
+        Map<String, PropertyDescriptor> facetDescriptors = (Map<String, PropertyDescriptor>) 
+                   componentBeanDescriptor.getValue(UIComponent.FACETS_KEY);
         
-        if (null == (facetDescriptors = (Map<String, PropertyDescriptor>) 
-                   componentBeanDescriptor.getValue(UIComponent.FACETS_KEY))) {
-
+        if (facetDescriptors == null) {
             facetDescriptors = new HashMap<String, PropertyDescriptor>();
             componentBeanDescriptor.setValue(UIComponent.FACETS_KEY, 
                     facetDescriptors);
         }
+
+        PropertyDescriptor propertyDescriptor;
         try {
             propertyDescriptor = new PropertyDescriptor(strValue, null, null);
         } catch (IntrospectionException ex) {
@@ -116,43 +126,13 @@ public class DeclareFacetHandler extends TagHandlerImpl {
         }
         facetDescriptors.put(strValue, propertyDescriptor);
         
-        if (null != required) {
-            ve = required.getValueExpression(ctx, Boolean.class);
-            propertyDescriptor.setValue("required", ve);
-        }
-        
-        if (null != (attr = this.getAttribute("displayName"))) {
-            ve = attr.getValueExpression(ctx, String.class);
-            strValue = (String) ve.getValue(ctx);
-            if (null != strValue) {
-                propertyDescriptor.setDisplayName(strValue);
+        for (TagAttribute tagAttribute : this.tag.getAttributes().getAll()) {
+            String attributeName = tagAttribute.getLocalName();
+            PropertyHandler handler = ATTRIBUTE_MANAGER.getHandler(ctx, attributeName);
+            if (handler != null) {
+                handler.apply(ctx, attributeName, propertyDescriptor, tagAttribute);
             }
-        }
-        if (null != (attr = this.getAttribute("expert"))) {
-            ve = attr.getValueExpression(ctx, Boolean.class);
-            booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
-            propertyDescriptor.setExpert(booleanValue);
-        }
-        if (null != (attr = this.getAttribute("hidden"))) {
-            ve = attr.getValueExpression(ctx, Boolean.class);
-            booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
-            propertyDescriptor.setHidden(booleanValue);
-        }
-        if (null != (attr = this.getAttribute("preferred"))) {
-            ve = attr.getValueExpression(ctx, Boolean.class);
-            booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
-            propertyDescriptor.setPreferred(booleanValue);
-        }
-        if (null != (attr = this.getAttribute("shortDescription"))) {
-            ve = attr.getValueExpression(ctx, String.class);
-            strValue = (String) ve.getValue(ctx);
-            if (null != strValue) {
-                propertyDescriptor.setShortDescription(strValue);
-            }
-        }
-        if (null != (attr = this.getAttribute("default"))) {
-            ve = attr.getValueExpression(ctx, String.class);
-            propertyDescriptor.setValue("default", ve);
+
         }
         
         this.nextHandler.apply(ctx, parent);

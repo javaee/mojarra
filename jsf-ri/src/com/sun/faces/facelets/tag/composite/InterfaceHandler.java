@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -54,9 +54,8 @@ package com.sun.faces.facelets.tag.composite;
 import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 
-import javax.el.ValueExpression;
-import javax.faces.application.ProjectStage;
 import javax.faces.application.Resource;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.view.AttachedObjectTarget;
@@ -71,6 +70,23 @@ import java.util.List;
 import java.util.Map;
 
 public class InterfaceHandler extends TagHandlerImpl {
+
+    private static final String[] ATTRIBUTES_DEV = {
+          "displayName",
+          "expert",
+          "hidden",
+          "preferred",
+          "shortDescription",
+          "name",
+          "componentType"
+    };
+
+
+
+    private static final PropertyHandlerManager INTERFACE_HANDLERS =
+          PropertyHandlerManager.getInstance(ATTRIBUTES_DEV);
+
+
 
     public final static String Name = "interface";
 
@@ -89,6 +105,7 @@ public class InterfaceHandler extends TagHandlerImpl {
         }
     }
     
+    @SuppressWarnings({"unchecked"})
     private void imbueComponentWithMetadata(FaceletContext ctx, UIComponent parent) {
         // only process if it's been created
         if (null == parent || 
@@ -97,66 +114,30 @@ public class InterfaceHandler extends TagHandlerImpl {
             return;
         }
         
-        // the real implementation will check if there is a cached beaninfo somewhere first
-	Map<String, Object> attrs = parent.getAttributes();
+        Map<String, Object> attrs = parent.getAttributes();
 
-        CompositeComponentBeanInfo componentBeanInfo = null;
+        CompositeComponentBeanInfo componentBeanInfo =
+              (CompositeComponentBeanInfo) attrs.get(UIComponent.BEANINFO_KEY);
+
+        if (componentBeanInfo == null) {
         
-        if (null == (componentBeanInfo = (CompositeComponentBeanInfo)
-                     attrs.get(UIComponent.BEANINFO_KEY))) {
             componentBeanInfo = new CompositeComponentBeanInfo();
             attrs.put(UIComponent.BEANINFO_KEY, componentBeanInfo);
             BeanDescriptor componentDescriptor = new BeanDescriptor(parent.getClass());
             // PENDING(edburns): Make sure attributeNames() returns the right content
             // per the javadocs for ViewDeclarationLanguage.getComponentMetadata()
             componentBeanInfo.setBeanDescriptor(componentDescriptor);
-            TagAttribute attr = null;
-            ValueExpression ve = null;
-            String strValue = null;
-            boolean booleanValue = false;
 
-            if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
+            for (TagAttribute tagAttribute : this.tag.getAttributes().getAll()) {
+                String attributeName = tagAttribute.getLocalName();
+                PropertyHandler handler = INTERFACE_HANDLERS.getHandler(ctx, attributeName);
+                if (handler != null) {
+                    handler.apply(ctx,
+                                  attributeName,
+                                  componentDescriptor,
+                                  tagAttribute);
+                }
 
-                if (null != (attr = this.getAttribute("displayName"))) {
-                    ve = attr.getValueExpression(ctx, String.class);
-                    strValue = (String) ve.getValue(ctx);
-                    if (null != strValue) {
-                        componentDescriptor.setDisplayName(strValue);
-                    }
-                }
-                if (null != (attr = this.getAttribute("expert"))) {
-                    ve = attr.getValueExpression(ctx, Boolean.class);
-                    booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
-                    componentDescriptor.setExpert(booleanValue);
-                }
-                if (null != (attr = this.getAttribute("hidden"))) {
-                    ve = attr.getValueExpression(ctx, Boolean.class);
-                    booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
-                    componentDescriptor.setHidden(booleanValue);
-                }
-                if (null != (attr = this.getAttribute("name"))) {
-                    ve = attr.getValueExpression(ctx, String.class);
-                    strValue = (String) ve.getValue(ctx);
-                    if (null != strValue) {
-                        componentDescriptor.setName(strValue);
-                    }
-                }
-                if (null != (attr = this.getAttribute("preferred"))) {
-                    ve = attr.getValueExpression(ctx, Boolean.class);
-                    booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
-                    componentDescriptor.setPreferred(booleanValue);
-                }
-                if (null != (attr = this.getAttribute("shortDescription"))) {
-                    ve = attr.getValueExpression(ctx, String.class);
-                    strValue = (String) ve.getValue(ctx);
-                    if (null != strValue) {
-                        componentDescriptor.setShortDescription(strValue);
-                    }
-                }
-            }
-            if (null != (attr = this.getAttribute("componentType"))) {
-                ve = attr.getValueExpression(ctx, String.class);
-                componentDescriptor.setValue(UIComponent.COMPOSITE_COMPONENT_TYPE_KEY, ve);
             }
 
             List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)

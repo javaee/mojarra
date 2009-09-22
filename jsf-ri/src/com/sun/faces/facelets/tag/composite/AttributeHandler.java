@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -64,15 +64,31 @@ import java.util.Map;
 
 
 public class AttributeHandler extends TagHandlerImpl {
-    
-    private TagAttribute name = null;
-    private TagAttribute required = null;
+
+    private static final String[] COMPOSITE_ATTRIBUTE_ATTRIBUTES = {
+          "required",
+          "targets",
+          "default",
+          "displayName",
+          "preferred",
+          "hidden",
+          "expert",
+          "shortDescription",
+          "method-signature",
+          "type",
+          
+    };
+
+    private static final PropertyHandlerManager ATTRIBUTE_MANAGER =
+          PropertyHandlerManager.getInstance(COMPOSITE_ATTRIBUTE_ATTRIBUTES);
+
+
+    private TagAttribute name;
 
 
     public AttributeHandler(TagConfig config) {
         super(config);
         this.name = this.getRequiredAttribute("name");
-        this.required = this.getAttribute("required");
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
@@ -83,8 +99,7 @@ public class AttributeHandler extends TagHandlerImpl {
             return;
         }
         
-        PropertyDescriptor propertyDescriptor;
-        TagAttribute attr;
+
         Map<String, Object> attrs = parent.getAttributes();
         
         CompositeComponentBeanInfo componentBeanInfo =
@@ -105,61 +120,22 @@ public class AttributeHandler extends TagHandlerImpl {
                 return;
             }
         }
-        
+
+        PropertyDescriptor propertyDescriptor;
         try {
             propertyDescriptor = new PropertyDescriptor(strValue, null, null);
             declaredAttributes.add(propertyDescriptor);
         } catch (IntrospectionException ex) {
             throw new  TagException(tag, "Unable to create property descriptor for property " + strValue, ex);
         }
-        
-        if (null != required) {
-            ve = required.getValueExpression(ctx, Boolean.class);
-            propertyDescriptor.setValue("required", ve);
-        }
-        
-        if (null != (attr = this.getAttribute("displayName"))) {
-            ve = attr.getValueExpression(ctx, String.class);
-            strValue = (String) ve.getValue(ctx);
-            if (null != strValue) {
-                propertyDescriptor.setDisplayName(strValue);
+
+        for (TagAttribute tagAttribute : this.tag.getAttributes().getAll()) {
+            String attributeName = tagAttribute.getLocalName();
+            PropertyHandler handler = ATTRIBUTE_MANAGER.getHandler(ctx, attributeName);
+            if (handler != null) {
+                handler.apply(ctx, attributeName, propertyDescriptor, tagAttribute);
             }
-        }
-        if (null != (attr = this.getAttribute("expert"))) {
-            ve = attr.getValueExpression(ctx, Boolean.class);
-            propertyDescriptor.setExpert((Boolean) ve.getValue(ctx));
-        }
-        if (null != (attr = this.getAttribute("hidden"))) {
-            ve = attr.getValueExpression(ctx, Boolean.class);
-            propertyDescriptor.setHidden((Boolean) ve.getValue(ctx));
-        }
-        if (null != (attr = this.getAttribute("preferred"))) {
-            ve = attr.getValueExpression(ctx, Boolean.class);
-            propertyDescriptor.setPreferred((Boolean) ve.getValue(ctx));
-        }
-        if (null != (attr = this.getAttribute("shortDescription"))) {
-            ve = attr.getValueExpression(ctx, String.class);
-            strValue = (String) ve.getValue(ctx);
-            if (null != strValue) {
-                propertyDescriptor.setShortDescription(strValue);
-            }
-        }
-        if (null != (attr = this.getAttribute("default"))) {
-            ve = attr.getValueExpression(ctx, String.class);
-            propertyDescriptor.setValue("default", ve);
-        }
-        if (null != (attr = this.getAttribute("type"))) {
-            ve = attr.getValueExpression(ctx, String.class);
-            propertyDescriptor.setValue("type", ve);
-        } else {
-            if (null != (attr = this.getAttribute("method-signature"))) {
-                ve = attr.getValueExpression(ctx, String.class);
-                propertyDescriptor.setValue("method-signature", ve);
-            }
-        }
-        if (null != (attr = this.getAttribute("targets"))) {
-            ve = attr.getValueExpression(ctx, String.class);
-            propertyDescriptor.setValue("targets", ve);
+
         }
         
         this.nextHandler.apply(ctx, parent);

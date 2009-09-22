@@ -369,11 +369,17 @@ public final class TagAttributeImpl extends TagAttribute {
 
     private boolean isCompositeExpression(String expression) {
         // PENDING - can we come up with a tighter check here?
-        return (expression.contains("{cc.")
-                || expression.contains(" cc.")
-                || expression.contains("(cc.")
-                || expression.contains(",cc.")
-                || expression.contains("[cc."));
+        int idx = expression.indexOf("cc.");
+        if (idx == -1) {
+            return false;
+        } else {
+            char c = expression.charAt(idx - 1);
+            return (c == '{'
+                     || c == ' '
+                     || c == '('
+                     || c == ','
+                     || c == '[');
+        }
         
     }
 
