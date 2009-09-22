@@ -45,17 +45,14 @@ import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagHandler;
 import java.io.IOException;
 
-/**
- *
- * @author edburns
- */
+
 public class ExtensionHandler extends TagHandler {
 
-    public ExtensionHandler(TagConfig arg0) {
-        super(arg0);
+    public ExtensionHandler(TagConfig tagConfig) {
+        super(tagConfig);
     }
 
-    public void apply(FaceletContext ctx, UIComponent arg1) throws IOException {
+    public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         // extract a prefix from the child content
         if (null != nextHandler) {
             String content = this.nextHandler.toString().trim();
