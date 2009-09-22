@@ -71,12 +71,7 @@ public final class CompositeLibrary extends AbstractTagLibrary {
         
         // Things that go insead of the interface section
         this.addTagHandler("attribute", AttributeHandler.class);
-        this.addTagHandler("deferred-value", DeferredValueHandler.class);
         this.addTagHandler("extension", ExtensionHandler.class);
-        this.addTagHandler("type", TypeHandler.class);
-        this.addTagHandler("deferred-method", DeferredMethodHandler.class);
-        this.addTagHandler("method-signature", MethodSignatureHandler.class);
-        
         this.addTagHandler("editableValueHolder", EditableValueHolderAttachedObjectTargetHandler.class);
         this.addTagHandler("actionSource", ActionSource2AttachedObjectTargetHandler.class);
         this.addTagHandler("valueHolder", ValueHolderAttachedObjectTargetHandler.class);
