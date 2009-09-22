@@ -126,12 +126,6 @@ public class RequestStateManager {
     public static final String FACES_VIEW_STATE =
           "com.sun.faces.FACES_VIEW_STATE";
 
-    /**
-     * Leveraged by the RequestStateManager to allow deprecated ResponseStateManager
-     * methods to continue to work if called.
-     */
-    public static final String FACES_VIEW_STRUCTURE =
-          "com.sun.faces.FACES_VIEW_STRUCTURE";
 
     /**
      * Leveraged by ResourceHandlerImpl to denote whether or not a request
@@ -169,16 +163,6 @@ public class RequestStateManager {
      */
     public static final String PROCESSED_RESOURCE_DEPENDENCIES =
           "com.sun.faces.PROCESSED_RESOURCE_DEPENDENCIES";
-
-
-    /**
-     * Used by the CompositeComponentAttributesELResolver to communicate to
-     * the CompositeComponentStateManager that a #{cc.parent.} expression
-     * has been resolved.  The CompositeComponentState manager will use this
-     * component for its evaluation basis if this attribute value is not null.
-     */
-    public static final String RESOLVED_CC_PARENT =
-          "com.sun.faces.RESOLVED_CC_PARENT";
 
 
     private static final String[] RENDER_RESPONSE = {

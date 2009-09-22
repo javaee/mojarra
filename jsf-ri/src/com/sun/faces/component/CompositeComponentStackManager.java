@@ -51,11 +51,10 @@
 
 package com.sun.faces.component;
 
-import com.sun.faces.util.RequestStateManager;
-import static com.sun.faces.util.RequestStateManager.RESOLVED_CC_PARENT;
-
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
+import javax.faces.view.Location;
+import javax.faces.application.Resource;
 import java.util.Stack;
 
 /**
@@ -236,6 +235,35 @@ public class CompositeComponentStackManager {
         return getStackHandler(stackType).getParentCompositeComponent(ctx, forComponent);
     }
 
+    public UIComponent findCompositeComponentUsingLocation(FacesContext ctx,
+                                                           Location location) {
+
+        StackHandler sh = getStackHandler(StackType.TreeCreation);
+        Stack<UIComponent> s = sh.getStack(false);
+        if (s != null) {
+            String path = location.getPath();
+            for (int i = s.size(); i > 0; i--) {
+                UIComponent cc = s.get(i - 1);
+                Resource r = (Resource) cc.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+                if (path.endsWith(r.getResourceName()) && path.contains(r.getLibraryName())) {
+                    return cc;
+                }
+            }
+        } else {
+            // runtime eval
+            String path = location.getPath();
+            UIComponent cc = UIComponent.getCurrentCompositeComponent(ctx);
+            while (cc != null) {
+                Resource r = (Resource) cc.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+                if (path.endsWith(r.getResourceName()) && path.contains(r.getLibraryName())) {
+                    return cc;
+                }
+                cc = UIComponent.getCompositeComponentParent(cc);
+            }
+        }
+        return null;
+    }
+
 
     // --------------------------------------------------------- Private Methods
 
@@ -346,7 +374,7 @@ public class CompositeComponentStackManager {
             Stack<UIComponent> tstack =
                   CompositeComponentStackManager.this.treeCreation.getStack(false);
             Stack<UIComponent> stack = getStack(false);
-            UIComponent ccp = null;
+            UIComponent ccp;
             if (tstack != null) {
                 // We have access to the stack of composite components
                 // the tree creation process has made available.
@@ -354,46 +382,25 @@ public class CompositeComponentStackManager {
                 // of the current composite component, use the index of the
                 // current composite component within the stack to locate the
                 // parent.
-                UIComponent currentComp;
-                UIComponent resolvedParent = (UIComponent)
-                      RequestStateManager.remove(ctx, RESOLVED_CC_PARENT);
-                if (resolvedParent != null) {
-                    currentComp = resolvedParent;
-                } else {
-                    if (stack == null || stack.isEmpty()) {
-                        currentComp = ((compositeComponent == null)
-                                       ? UIComponent.getCurrentComponent(ctx)
-                                       : compositeComponent);
-                    } else {
-                        currentComp = stack.peek();
-
-                    }
-                }
-                if (currentComp != null) {
-                    int idx = tstack.indexOf(currentComp);
-                    if (idx > 0) {
-                        ccp = tstack.get(idx - 1);
-                    }
-                }
+                ccp = compositeComponent;
             } else {
                 // no tree creation stack available, so use the runtime stack.
                 // If the current stack isn't empty, then use the component
                 // on the stack as the current composite component.
                 stack = getStack(false);
-                UIComponent resolvedParent = (UIComponent)
-                      RequestStateManager.remove(ctx, RESOLVED_CC_PARENT);
-                if (resolvedParent != null) {
-                    ccp = UIComponent.getCompositeComponentParent(resolvedParent);
-                } else {
+
+                if (compositeComponent == null) {
                     if (stack != null && !stack.isEmpty()) {
                         ccp = getCompositeParent(stack.peek());
                     } else {
-                        ccp = getCompositeParent(((compositeComponent == null)
-                                                  ? UIComponent.getCurrentCompositeComponent(ctx)
-                                                  : compositeComponent));
+                        ccp = getCompositeParent((UIComponent
+                              .getCurrentCompositeComponent(ctx)));
                     }
+                } else {
+                    ccp = compositeComponent;
                 }
             }
+
 
             if (ccp != null) {
                 if (stack == null) {

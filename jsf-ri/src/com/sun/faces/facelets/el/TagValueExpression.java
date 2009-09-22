@@ -133,6 +133,8 @@ public final class TagValueExpression extends ValueExpression implements
         }
     }
 
+    @SuppressWarnings({"EqualsWhichDoesntCheckParameterClass"})
+    @Override
     public boolean equals(Object obj) {
         return this.orig.equals(obj);
     }
@@ -158,6 +160,10 @@ public final class TagValueExpression extends ValueExpression implements
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(this.orig);
         out.writeUTF(this.attr);
+    }
+
+    public ValueExpression getWrapped() {
+        return orig;
     }
 
     public String toString() {

@@ -3,7 +3,7 @@
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -43,16 +43,24 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:ez="http://java.sun.com/jsf/composite/composite">
-<h:head>
-    <title>Nesting 07</title>
-</h:head>
+<head>
+</head>
+
 <body>
-    <h:form id="form">
-        <ez:wrapper itemsList="#{compositeBean.items}">
-            <ez:ccParentExpression items="#{compositeBean.items}" />
-        </ez:wrapper>
-        <h:commandButton id="submit" value="Refresh" />
-    </h:form>
+<composite:interface>
+    <composite:attribute name="bean" type="com.sun.faces.composite.CompositeBean" required="false" />
+</composite:interface>
+<composite:implementation>
+   <ez:nesting id="nesting">
+   <div style="border: 1px black solid">
+       <ez:customAction id="aw2" action="#{cc.attrs.bean.action}" />
+   </div>
+   </ez:nesting>
+</composite:implementation>
+
 </body>
+
 </html>

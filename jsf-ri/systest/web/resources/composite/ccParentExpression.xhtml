@@ -52,8 +52,8 @@
 <composite:implementation>
    <div>
    <ez:wrapper>
-       <h:outputText style="color:black" value="#{cc.parent.attrs.items[0]}" /><br/> 
-       <c:set var="items" value="#{cc.parent.attrs.items}" />
+       <h:outputText style="color:black" value="#{cc.attrs.items[0]}" /><br/> 
+       <c:set var="items" value="#{cc.attrs.items}" />
        <c:forEach var="i" items="#{items}">
            <span>#{i}</span><br />
        </c:forEach>

@@ -105,10 +105,11 @@ public class CompositeBean {
     public String action() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
+        UIComponent c = UIComponent.getCurrentComponent(ctx);
         ctx.addMessage(null,
                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                        "Action invoked",
-                                        "Action invoked"));
+                                        "Action invoked: " + c.getClientId(ctx),
+                                        "Action invoked: " + c.getClientId(ctx)));
         return "";
 
     }
@@ -116,22 +117,24 @@ public class CompositeBean {
     public String custom() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
+        UIComponent c = UIComponent.getCurrentComponent(ctx);
         ctx.addMessage(null,
                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                        "Custom action invoked",
-                                        "Custom action invoked"));
+                                        "Custom action invoked: " + c.getClientId(ctx),
+                                        "Custom action invoked: " + c.getClientId(ctx)));
         return "";
 
     }
 
 
-    public void actionListener() {
+    public void actionListener(ActionEvent ae) {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
+        UIComponent c = UIComponent.getCurrentComponent(ctx);
         ctx.addMessage(null,
                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                        "ActionListener invoked",
-                                        "ActionListener invoked"));
+                                        "ActionListener invoked: " + c.getClientId(ctx),
+                                        "ActionListener invoked: " + c.getClientId(ctx)));
     }
 
 
@@ -139,8 +142,8 @@ public class CompositeBean {
 
         ctx.addMessage(null,
                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                        "validator invoked",
-                                        "validator invoked"));
+                                        "validator invoked: " + c.getClientId(ctx),
+                                        "validator invoked: " + c.getClientId(ctx)));
 
     }
 
@@ -148,10 +151,11 @@ public class CompositeBean {
     public void valueChange(ValueChangeEvent event) {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
+        UIComponent c = event.getComponent();
         ctx.addMessage(null,
                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                        "ValueChange invoked",
-                                        "ValueChange invoked"));
+                                        "ValueChange invoked: " + c.getClientId(ctx),
+                                        "ValueChange invoked: " + c.getClientId(ctx)));
 
     }
 

@@ -54,21 +54,20 @@ package com.sun.faces.facelets.tag;
 import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.el.TagMethodExpression;
 import com.sun.faces.facelets.el.TagValueExpression;
+import com.sun.faces.facelets.el.ContextualCompositeValueExpression;
 import com.sun.faces.util.Util;
 
-import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
-import javax.el.MethodInfo;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.component.StateHolder;
-import javax.faces.context.FacesContext;
+import javax.el.MethodInfo;
+import javax.el.ELContext;
 import javax.faces.view.Location;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
+import javax.faces.FacesException;
 
 /**
  * Representation of a Tag's attribute in a Facelet File
@@ -184,17 +183,17 @@ public final class TagAttributeImpl extends TagAttribute {
      * @return a MethodExpression instance
      */
     @Override
-    public MethodExpression getMethodExpression(FaceletContext ctx, Class type,
-            Class[] paramTypes) {
+    public MethodExpression getMethodExpression(FaceletContext ctx,
+                                                Class type,
+                                                Class[] paramTypes) {
+
         MethodExpression result = null;
 
         try {
             ExpressionFactory f = ctx.getExpressionFactory();
             // Determine if this is a composite component attribute lookup.
             // If so, look for a MethodExpression under the attribute key
-            CompositeComponentExpressionHelper helper =
-                  new CompositeComponentExpressionHelper(this.value);
-            if (helper.isValidCCExpression() && helper.isLookup()) {
+            if (isCompositeExpression(this.value)) {
                 result = new AttributeLookupMethodExpression(getValueExpression(ctx, MethodExpression.class));
             }
             if (null == result) {
@@ -205,85 +204,6 @@ public final class TagAttributeImpl extends TagAttribute {
             throw new TagAttributeException(this, e);
         }
         return result;
-    }
-    
-    public static class AttributeLookupMethodExpression extends MethodExpression implements StateHolder {
-
-        private ValueExpression lookupExpression;
-        private boolean isTransient = false;
-        
-        public AttributeLookupMethodExpression(ValueExpression lookupExpression) {
-
-            Util.notNull("lookupExpression", lookupExpression);
-            this.lookupExpression = lookupExpression;
-
-        }
-        
-        @SuppressWarnings({"UnusedDeclaration"})
-        public AttributeLookupMethodExpression() {} // for serialization
-
-        public boolean isTransient() {
-            return isTransient;
-        }
-        
-        public void setTransient(boolean isTransient) {
-            this.isTransient = isTransient;
-        }
-        
-        public void restoreState(FacesContext context, Object stateObj) {
-            Object[] state = (Object[]) stateObj;
-            lookupExpression = (ValueExpression) state[0];
-        }
-
-        public Object saveState(FacesContext arg0) {
-            Object[] state = new Object[1];
-            state[0] = lookupExpression;
-            return state;
-        }
-
-        @Override
-        public MethodInfo getMethodInfo(ELContext arg0) {
-            return null;
-        }
-
-        @Override
-        public Object invoke(ELContext elContext, Object[] arg1) {
-            Object result = lookupExpression.getValue(elContext);
-            if (result == null) {
-                throw new FacesException("Unable to resolve composite component from using page using EL expression '" + lookupExpression.getExpressionString() + '\'');
-            }
-            if (!(result instanceof MethodExpression)) {
-                throw new FacesException("Successfully resolved expression '" + lookupExpression.getExpressionString() + "', but the value is not a MethodExpression");
-            }
-
-            return ((MethodExpression) result).invoke(elContext, arg1);
-        }
-
-        @Override
-        public String getExpressionString() {
-            return lookupExpression.getExpressionString();
-        }
-
-        @Override
-        public boolean equals(Object otherObj) {
-            boolean result = false;
-            if (otherObj instanceof AttributeLookupMethodExpression) {
-                AttributeLookupMethodExpression other = 
-                        (AttributeLookupMethodExpression) otherObj;
-                result = lookupExpression.getExpressionString().equals(other.lookupExpression.getExpressionString());
-            }
-            return result;
-        }
-
-        @Override
-        public boolean isLiteralText() {
-            return lookupExpression.isLiteralText();
-        }
-
-        @Override
-        public int hashCode() {
-            return lookupExpression.hashCode();
-        }
     }
 
     /**
@@ -401,8 +321,19 @@ public final class TagAttributeImpl extends TagAttribute {
     public ValueExpression getValueExpression(FaceletContext ctx, Class type) {
         try {
             ExpressionFactory f = ctx.getExpressionFactory();
-            return new TagValueExpression(this, f.createValueExpression(ctx,
-                    this.value, type));
+            ValueExpression delegate = f.createValueExpression(ctx,
+                                                               this.value,
+                                                               type);
+            if (isCompositeExpression(this.value)) {
+                return new TagValueExpression(this,
+                                              new ContextualCompositeValueExpression(getLocation(),
+                                                                                delegate));
+            } else {
+                return new TagValueExpression(this,
+                                              f.createValueExpression(ctx,
+                                              this.value,
+                                              type));
+            }
         } catch (Exception e) {
             throw new TagAttributeException(this, e);
         }
@@ -433,39 +364,100 @@ public final class TagAttributeImpl extends TagAttribute {
     }
 
 
+    // --------------------------------------------------------- Private Methods
+
+
+    private boolean isCompositeExpression(String expression) {
+        // PENDING - can we come up with a tighter check here?
+        return (expression.contains("{cc.")
+                || expression.contains(" cc.")
+                || expression.contains("(cc.")
+                || expression.contains(",cc.")
+                || expression.contains("[cc."));
+        
+    }
+
+
     // ---------------------------------------------------------- Nested Classes
 
 
-    private static class CompositeComponentExpressionHelper {
+    private static class AttributeLookupMethodExpression extends MethodExpression {
 
-        private boolean valid;
-        private boolean lookup;
+        private ValueExpression lookupExpression;
 
-        CompositeComponentExpressionHelper(String expression) {
+        public AttributeLookupMethodExpression(ValueExpression lookupExpression) {
 
-            if (expression.startsWith("#{cc.")) {
-                String[] parts = Util.split(expression, "\\.");
-                int len = parts.length;
-                if (len <= 2) {
-                    valid = false;
-                } else {
-                    valid = true;
-                    if ("attrs".equals(parts[len - 2])) {
-                        lookup = true;
-                    }
-                }
+            Util.notNull("lookupExpression", lookupExpression);
+            this.lookupExpression = lookupExpression;
+
+        }
+
+        @SuppressWarnings({"UnusedDeclaration"})
+        public AttributeLookupMethodExpression() {} // for serialization
+
+        @Override
+        public MethodInfo getMethodInfo(ELContext elContext) {
+
+            Util.notNull("elContext", elContext);
+            Object result = lookupExpression.getValue(elContext);
+            if (result != null && result instanceof MethodExpression) {
+                return ((MethodExpression) result).getMethodInfo(elContext);
             }
+
+            return null;
+
         }
 
+        @Override
+        public Object invoke(ELContext elContext, Object[] args) {
 
-        boolean isValidCCExpression() {
-            return valid;
+            Util.notNull("elContext", elContext);
+
+            Object result = lookupExpression.getValue(elContext);
+            if (result == null) {
+                throw new FacesException("Unable to resolve composite component from using page using EL expression '" + lookupExpression.getExpressionString() + '\'');
+            }
+            if (!(result instanceof MethodExpression)) {
+                throw new FacesException("Successfully resolved expression '" + lookupExpression.getExpressionString() + "', but the value is not a MethodExpression");
+            }
+
+            return ((MethodExpression) result).invoke(elContext, args);
+
         }
 
-        boolean isLookup() {
-            return lookup;
+        @Override
+        public String getExpressionString() {
+
+            return lookupExpression.getExpressionString();
+
         }
 
-    }
+        @Override
+        public boolean equals(Object otherObj) {
 
+            boolean result = false;
+            if (otherObj instanceof AttributeLookupMethodExpression) {
+                AttributeLookupMethodExpression other =
+                        (AttributeLookupMethodExpression) otherObj;
+                result = lookupExpression.getExpressionString().equals(other.lookupExpression.getExpressionString());
+            }
+            return result;
+
+        }
+
+        @Override
+        public boolean isLiteralText() {
+
+            return lookupExpression.isLiteralText();
+
+        }
+
+        @Override
+        public int hashCode() {
+
+            return lookupExpression.hashCode();
+
+        }
+
+    } // END AttributeLookupMethodExpression
 }

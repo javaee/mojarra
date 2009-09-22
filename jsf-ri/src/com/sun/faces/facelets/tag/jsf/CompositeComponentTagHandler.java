@@ -60,12 +60,10 @@ import com.sun.faces.facelets.tag.MetadataTargetImpl;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.component.CompositeComponentStackManager;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
-import javax.el.ELContext;
 import javax.faces.FacesException;
 import javax.faces.application.Resource;
 import javax.faces.application.ProjectStage;
@@ -594,154 +592,13 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                 ValueExpression ve = attr.getValueExpression(ctx, type);
                 UIComponent cc = (UIComponent) instance;
                 assert (UIComponent.isCompositeComponent(cc));
-                cc.setValueExpression(name, new ContextualCompositeExpression(ve));
+                cc.setValueExpression(name, ve);
 
             }
 
 
         } // END CompositeExpressionMetadata
 
-
-        private static final class ContextualCompositeExpression extends ValueExpression {
-
-            private ValueExpression originalVE;
-       
-
-            // ---------------------------------------------------- Constructors
-
-
-            /* For serialization purposes */
-            public ContextualCompositeExpression() { }
-
-
-            public ContextualCompositeExpression(ValueExpression originalVE) {
-
-                this.originalVE = originalVE;
-
-            }
-
-
-            // ------------------------------------ Methods from ValueExpression
-
-
-            public Object getValue(ELContext elContext) {
-
-                FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
-                boolean pushed = pushCompositeComponent(ctx);
-                try {
-                    return originalVE.getValue(elContext);
-                } finally {
-                    if (pushed) {
-                        popCompositeComponent(ctx);
-                    }
-                }
-
-            }
-
-            public void setValue(ELContext elContext, Object o) {
-
-                FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
-                 boolean pushed = pushCompositeComponent(ctx);
-                try {
-                    originalVE.setValue(elContext, o);
-                } finally {
-                    if (pushed) {
-                        popCompositeComponent(ctx);
-                    }
-                }
-
-            }
-
-            public boolean isReadOnly(ELContext elContext) {
-
-                FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
-                boolean pushed = pushCompositeComponent(ctx);
-                try {
-                    return originalVE.isReadOnly(elContext);
-                } finally {
-                    if (pushed) {
-                        popCompositeComponent(ctx);
-                    }
-                }
-
-            }
-
-            public Class<?> getType(ELContext elContext) {
-
-                FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
-                boolean pushed = pushCompositeComponent(ctx);
-                try {
-                    return originalVE.getType(elContext);
-                } finally {
-                    if (pushed) {
-                        popCompositeComponent(ctx);
-                    }
-                }
-
-            }
-
-            public Class<?> getExpectedType() {
-                
-                FacesContext ctx = FacesContext.getCurrentInstance();
-                boolean pushed = pushCompositeComponent(ctx);
-                try {
-                    return originalVE.getExpectedType();
-                } finally {
-                    if (pushed) {
-                        popCompositeComponent(ctx);
-                    }
-                }
-
-            }
-
-
-            // ----------------------------------------- Methods from Expression
-
-
-            public String getExpressionString() {
-                return originalVE.getExpressionString();
-            }
-
-            @SuppressWarnings({"EqualsWhichDoesntCheckParameterClass"})
-            public boolean equals(Object o) {
-                return originalVE.equals(o);
-            }
-
-            public int hashCode() {
-                return originalVE.hashCode();
-            }
-
-            public boolean isLiteralText() {
-                return originalVE.isLiteralText();
-            }
-
-            @Override
-            public String toString() {
-                return originalVE.toString();
-            }
-
-            // ------------------------------------------------- Private Methods
-
-
-            private boolean pushCompositeComponent(FacesContext ctx) {
-
-                CompositeComponentStackManager manager =
-                      CompositeComponentStackManager.getManager(ctx);
-                return manager.push();
-
-            }
-
-
-            private void popCompositeComponent(FacesContext ctx) {
-
-                CompositeComponentStackManager manager =
-                      CompositeComponentStackManager.getManager(ctx);
-                manager.pop();
-
-            }
-
-
-        } // END ContextualCompositeExpression
 
     } // END CompositeComponentRule
     

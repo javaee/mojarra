@@ -50,6 +50,7 @@ import java.util.ArrayList;
 public class CompositeComponentsTestCase extends AbstractTestCase {
 
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public CompositeComponentsTestCase() {
         this("CompositeComponentsTestCase");
     }
@@ -255,6 +256,120 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         validateConverterMessages(page, messageSuffixes);
         page = pushButton(page, "cf:clear");
         validateConverterMessages(page, messageSuffixes);
+
+    }
+
+
+    public void testActions() throws Exception {
+
+        final String[] commandIds = {
+              "form:c0:command",
+              "form:c1:nesting:aw1:command",
+              "form:c2:nesting:aw2:command",
+              "form:c3:nesting:aw3:nesting:aw1:command",
+              "form:c4:nesting:aw4:nesting:aw1:command"
+        };
+
+        HtmlPage page = getPage("/faces/composite/action.xhtml");
+        for (String commandId : commandIds) {
+            HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, commandId);
+            assertNotNull(submit);
+            page = submit.click();
+            String message = "Action invoked: " + commandId;
+            assertTrue(page.asText().contains(message));
+        }
+        
+    }
+
+
+    public void testCustomActions() throws Exception {
+
+        final String[] commandIds = {
+              "form:c0:command",
+              "form:c1:nesting:aw1:command",
+              "form:c2:nesting:aw2:command",
+              "form:c3:nesting:aw3:nesting:aw1:command",
+              "form:c4:nesting:aw4:nesting:aw1:command"
+        };
+
+        HtmlPage page = getPage("/faces/composite/customAction.xhtml");
+        for (String commandId : commandIds) {
+            HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, commandId);
+            assertNotNull(submit);
+            page = submit.click();
+            String message = "Custom action invoked: " + commandId;
+            assertTrue(page.asText().contains(message));
+        }
+
+    }
+
+
+    public void testActionListeners() throws Exception {
+
+        final String[] commandIds = {
+              "form:c0:command",
+              "form:c1:nesting:aw1:command",
+              "form:c2:nesting:aw2:command",
+              "form:c3:nesting:aw3:nesting:aw1:command",
+              "form:c4:nesting:aw4:nesting:aw1:command"
+        };
+
+        HtmlPage page = getPage("/faces/composite/actionListener.xhtml");
+        for (String commandId : commandIds) {
+            HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, commandId);
+            assertNotNull(submit);
+            page = submit.click();
+            String message = "ActionListener invoked: " + commandId;
+            assertTrue(page.asText().contains(message));
+        }
+
+    }
+
+
+    public void testValidators() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/validator.xhtml");
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
+        assertNotNull(submit);
+        page = submit.click();
+
+        final String[] inputIds = {
+              "form:c0:input",
+              "form:c1:nesting:aw1:input",
+              "form:c2:nesting:aw2:input",
+              "form:c3:nesting:aw3:nesting:aw1:input",
+              "form:c4:nesting:aw4:nesting:aw1:input"
+        };
+
+        String pageText = page.asText();
+        for (String inputId : inputIds) {
+            String message = "validator invoked: " + inputId;
+            assertTrue(pageText.contains(message));
+        }
+
+    }
+
+
+    public void testValueChangeListeners() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/valueChangeListener.xhtml");
+        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
+        assertNotNull(submit);
+        page = submit.click();
+
+        final String[] inputIds = {
+              "form:c0:input",
+              "form:c1:nesting:aw1:input",
+              "form:c2:nesting:aw2:input",
+              "form:c3:nesting:aw3:nesting:aw1:input",
+              "form:c4:nesting:aw4:nesting:aw1:input"
+        };
+
+        String pageText = page.asText();
+        for (String inputId : inputIds) {
+            String message = "ValueChange invoked: " + inputId;
+            assertTrue(pageText.contains(message));
+        }
 
     }
 
@@ -768,6 +883,7 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
     /**
      * Added for issue 1298.
      */
+    /*
     public void testMethodExpressionNesting() throws Exception {
 
         HtmlPage page = getPage("/faces/composite/nesting08.xhtml");
@@ -779,6 +895,7 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         assertTrue(page.asText().contains("Action invoked"));
 
     }
+    */
 
 
     public void testMethodExpressionDefaults() throws Exception {
