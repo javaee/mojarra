@@ -193,7 +193,8 @@ public final class TagAttributeImpl extends TagAttribute {
             ExpressionFactory f = ctx.getExpressionFactory();
             // Determine if this is a composite component attribute lookup.
             // If so, look for a MethodExpression under the attribute key
-            if (isCompositeExpression(this.value)) {
+            if (isCompositeExpression(this.value) &&
+                isLookupExpression(this.value)) {
                 result = new AttributeLookupMethodExpression(getValueExpression(ctx, MethodExpression.class));
             }
             if (null == result) {
@@ -383,6 +384,9 @@ public final class TagAttributeImpl extends TagAttribute {
         
     }
 
+    private boolean isLookupExpression(String expression) {
+        return expression.contains(".attrs.");
+    }
 
     // ---------------------------------------------------------- Nested Classes
 
