@@ -187,13 +187,18 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         }
         context.setResponseWriter(newWriter);
 
-        newWriter.startDocument();
+        //  Don't call startDoc and endDoc on a partial response
+        if (context.getPartialViewContext().isAjaxRequest()) {
+            doRenderView(context, view);
+            extContext.getFlash().doPostPhaseActions(context);
+        } else {
+            // render the view to the response
+            newWriter.startDocument();
+            doRenderView(context, view);
+            extContext.getFlash().doPostPhaseActions(context);
+            newWriter.endDocument();
+        }
 
-        doRenderView(context, view);
-
-        extContext.getFlash().doPostPhaseActions(context);
-
-        newWriter.endDocument();
 
         // replace markers in the body content and write it to response.
 
