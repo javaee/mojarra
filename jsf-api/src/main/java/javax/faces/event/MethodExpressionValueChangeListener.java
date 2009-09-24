@@ -168,6 +168,9 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
      */
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         return new Object[] { methodExpressionOneArg, methodExpressionZeroArg };
 
     }
@@ -179,6 +182,12 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
      */
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (state == null) {
+            return;
+        }
         methodExpressionOneArg = (MethodExpression) ((Object[]) state)[0];
         methodExpressionZeroArg = (MethodExpression) ((Object[]) state)[1];
 

@@ -123,6 +123,10 @@ public class BehaviorBase implements Behavior, PartialStateHolder {
      */
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        
         // If initial state has been marked, we don't need to
         // save any state.
         if (initialStateMarked()) {
@@ -139,6 +143,10 @@ public class BehaviorBase implements Behavior, PartialStateHolder {
      */
     @SuppressWarnings("unchecked")
     public void restoreState(FacesContext context, Object state) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
 
         if (state != null) {
 

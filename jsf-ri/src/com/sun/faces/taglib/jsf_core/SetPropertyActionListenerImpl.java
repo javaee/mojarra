@@ -108,6 +108,9 @@ public class SetPropertyActionListenerImpl implements ActionListener, StateHolde
     
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         Object [] state = new Object[2];
         state[0] = target;
         state[1] = source;
@@ -117,6 +120,12 @@ public class SetPropertyActionListenerImpl implements ActionListener, StateHolde
     
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (state == null) {
+            return;
+        }
         Object [] stateArray = (Object []) state;
         target = (ValueExpression) stateArray[0];
         source = (ValueExpression) stateArray[1];

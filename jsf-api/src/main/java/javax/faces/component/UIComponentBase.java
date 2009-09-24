@@ -1351,6 +1351,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         assert (!transientFlag);
         if (initialStateMarked()) {
             Object savedFacesListeners = ((listeners != null) ? listeners.saveState(context) : null);
@@ -1407,6 +1410,10 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     public void restoreState(FacesContext context, Object state) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
 
         if (state == null) {
             return;

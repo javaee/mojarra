@@ -410,6 +410,9 @@ public class AjaxBehavior extends ClientBehaviorBase {
     @Override
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         Object[] values;
 
         Object superState = super.saveState(context);
@@ -439,6 +442,9 @@ public class AjaxBehavior extends ClientBehaviorBase {
     @Override
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (state != null) {
 
             Object[] values = (Object[]) state;

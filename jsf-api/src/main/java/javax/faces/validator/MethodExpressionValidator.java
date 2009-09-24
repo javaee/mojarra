@@ -112,7 +112,9 @@ public class MethodExpressionValidator implements Validator, StateHolder {
 
 
     public Object saveState(FacesContext context) {
-
+        if (context == null) {
+            throw new NullPointerException();
+        }
         Object values[] = new Object[1];
         values[0] = methodExpression;
         return (values);
@@ -121,7 +123,12 @@ public class MethodExpressionValidator implements Validator, StateHolder {
 
 
     public void restoreState(FacesContext context, Object state) {
-
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (state == null) {
+            return;
+        }
         Object values[] = (Object[]) state;
         methodExpression = (MethodExpression) values[0];
     }

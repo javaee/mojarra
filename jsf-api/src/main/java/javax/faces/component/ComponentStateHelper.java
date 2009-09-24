@@ -245,6 +245,9 @@ class ComponentStateHelper implements StateHelper {
      * @return the saved state
      */
     public Object saveState(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if(component.initialStateMarked()) {
             return saveMap(context, deltaMap);
         }
@@ -265,6 +268,9 @@ class ComponentStateHelper implements StateHelper {
      */
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (state == null) {
             return;
         }

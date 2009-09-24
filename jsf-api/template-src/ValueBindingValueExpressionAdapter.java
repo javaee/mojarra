@@ -168,6 +168,9 @@ import javax.el.ELException;
     }
     
     public Object saveState(FacesContext context){
+        if (context == null) {
+            throw new NullPointerException();
+        }
 	Object result = null;
 	if (!tranzient) {
 	    if (valueExpression instanceof StateHolder) {
@@ -190,6 +193,9 @@ import javax.el.ELException;
     }
 
     public void restoreState(FacesContext context, Object state) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
 	// if we have state
 	if (null == state) {
 	    return;

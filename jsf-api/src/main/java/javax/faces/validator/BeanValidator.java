@@ -413,6 +413,9 @@ public class BeanValidator implements Validator, PartialStateHolder {
     // ----------------------------------------------------- StateHolder Methods
 
     public Object saveState(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (!initialStateMarked()) {
             Object values[] = new Object[1];
             values[0] = validationGroups;
@@ -422,6 +425,9 @@ public class BeanValidator implements Validator, PartialStateHolder {
     }
 
     public void restoreState(FacesContext context, Object state) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (state != null) {
             Object values[] = (Object[]) state;
             validationGroups = (String) values[0];

@@ -293,6 +293,9 @@ public class BehaviorHolderWrapper extends UIComponent implements
      * @see javax.faces.component.StateHolder#restoreState(javax.faces.context.FacesContext, java.lang.Object)
      */
     public void restoreState(FacesContext context, Object state) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
         parent.restoreState(context, state);
     }
 
@@ -300,6 +303,9 @@ public class BehaviorHolderWrapper extends UIComponent implements
      * @see javax.faces.component.StateHolder#saveState(javax.faces.context.FacesContext)
      */
     public Object saveState(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
         return parent.saveState(context);
     }
 

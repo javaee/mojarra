@@ -900,6 +900,9 @@ public class NumberConverter implements Converter, PartialStateHolder {
 
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (!initialStateMarked()) {
             Object values[] = new Object[11];
             values[0] = currencyCode;
@@ -922,6 +925,9 @@ public class NumberConverter implements Converter, PartialStateHolder {
 
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (state != null) {
             Object values[] = (Object[]) state;
             currencyCode = (String) values[0];

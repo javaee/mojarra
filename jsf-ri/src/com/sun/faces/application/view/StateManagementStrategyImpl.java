@@ -353,6 +353,12 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         }
 
         public void restoreState(FacesContext ctx, Object state) {
+            if (ctx == null) {
+                throw new NullPointerException();
+            }
+            if (state == null) {
+                return;
+            }
             Object s[] = (Object []) state;
             this.parentClientId = s[0].toString();
             this.clientId = s[1].toString();
@@ -360,7 +366,10 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             this.facetName = (String) s[3];
         }
 
-        public Object saveState(FacesContext arg0) {
+        public Object saveState(FacesContext ctx) {
+            if (ctx == null) {
+                throw new NullPointerException();
+            }
             Object state[] = new Object[4];
             state[0] = this.parentClientId;
             state[1] = this.clientId;

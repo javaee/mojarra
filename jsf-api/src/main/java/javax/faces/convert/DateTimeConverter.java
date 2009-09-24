@@ -560,6 +560,9 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
 
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (!initialStateMarked()) {
             Object values[] = new Object[6];
             values[0] = dateStyle;
@@ -577,6 +580,9 @@ public class DateTimeConverter implements Converter, PartialStateHolder {
 
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (state != null) {
             Object values[] = (Object[]) state;
             dateStyle = (String) values[0];

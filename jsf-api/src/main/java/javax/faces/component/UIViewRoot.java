@@ -1683,6 +1683,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     @Override
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (values == null) {
             values = new Object[2];
         }
@@ -1696,6 +1699,13 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     @Override
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (state == null) {
+            return;
+        }
+        
         values = (Object[]) state;
         super.restoreState(context, values[0]);
         //noinspection unchecked

@@ -881,6 +881,12 @@ public class UIRepeat extends UINamingContainer {
     }
 
     public void restoreState(FacesContext faces, Object object) {
+        if (faces == null) {
+            throw new NullPointerException();
+        }
+        if (object == null) {
+            return;
+        }
         Object[] state = (Object[]) object;
         super.restoreState(faces, state[0]);
         //noinspection unchecked
@@ -894,6 +900,9 @@ public class UIRepeat extends UINamingContainer {
     }
 
     public Object saveState(FacesContext faces) {
+        if (faces == null) {
+            throw new NullPointerException();
+        }
         Object[] state = new Object[8];
         state[0] = super.saveState(faces);
         state[1] = this.childState;

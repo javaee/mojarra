@@ -224,12 +224,18 @@ public class EnumConverter implements Converter, PartialStateHolder {
     // ----------------------------------------------------------- StateHolder
 
     public void restoreState(FacesContext facesContext, Object object) {
+        if (facesContext == null) {
+            throw new NullPointerException();
+        }
         if (object != null) {
             this.targetClass = (Class<? extends Enum>) object;
         }
     }
 
     public Object saveState(FacesContext facesContext) {
+        if (facesContext == null) {
+            throw new NullPointerException();
+        }
         if (!initialStateMarked()) {
             return this.targetClass;
         }

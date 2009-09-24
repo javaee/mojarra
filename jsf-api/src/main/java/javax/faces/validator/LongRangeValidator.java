@@ -378,6 +378,9 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
 
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (!initialStateMarked()) {
             Object values[] = new Object[2];
             values[0] = maximum;
@@ -391,6 +394,9 @@ public class LongRangeValidator implements Validator, PartialStateHolder {
 
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (state != null) {
             Object values[] = (Object[]) state;
             maximum = (Long) values[0];

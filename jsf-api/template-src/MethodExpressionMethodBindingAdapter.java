@@ -219,6 +219,9 @@ import java.io.Serializable;
     
 
     public Object saveState(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
 	Object result = null;
 	if (!tranzient) {
 	    if (binding instanceof StateHolder) {
@@ -240,6 +243,9 @@ import java.io.Serializable;
     }
 
     public void restoreState(FacesContext context, Object state) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
 	// if we have state
 	if (null == state) {
 	    return;

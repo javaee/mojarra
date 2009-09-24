@@ -103,6 +103,9 @@ public class ValidatorTag extends AbstractValidatorTag {
         private Object[] state;
         public Object saveState(FacesContext context) {
 
+            if (context == null) {
+                throw new NullPointerException();
+            }
             if (state == null) {
                 state = new Object[2];
             }
@@ -115,6 +118,9 @@ public class ValidatorTag extends AbstractValidatorTag {
 
         public void restoreState(FacesContext context, Object state) {
 
+            if (context == null) {
+                throw new NullPointerException();
+            }
             this.state = (Object[]) state;
             if (this.state != null) {
                 this.validatorId = (ValueExpression) this.state[0];

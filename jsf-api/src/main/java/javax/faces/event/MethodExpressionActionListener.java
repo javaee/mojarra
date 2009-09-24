@@ -195,6 +195,9 @@ public class MethodExpressionActionListener implements ActionListener,
      */
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         return new Object[] { methodExpressionOneArg, methodExpressionZeroArg  };
 
     }
@@ -206,6 +209,12 @@ public class MethodExpressionActionListener implements ActionListener,
      */
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (state == null) {
+            return;
+        }
         methodExpressionOneArg = (MethodExpression) ((Object[]) state)[0];
         methodExpressionZeroArg = (MethodExpression) ((Object[]) state)[1];
 

@@ -97,6 +97,9 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (attachedObjects == null) {
             return null;
         }
@@ -130,6 +133,9 @@ class AttachedObjectListHolder<T> implements PartialStateHolder {
 
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (state == null) {
             return;
         }

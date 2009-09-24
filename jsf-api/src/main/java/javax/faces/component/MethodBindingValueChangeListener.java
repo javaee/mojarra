@@ -115,6 +115,9 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
     
 
     public Object saveState(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
 	Object result = null;
 	if (!tranzient) {
 	    if (methodBinding instanceof StateHolder) {
@@ -136,6 +139,9 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
     }
 
     public void restoreState(FacesContext context, Object state) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
 	// if we have state
 	if (null == state) {
 	    return;

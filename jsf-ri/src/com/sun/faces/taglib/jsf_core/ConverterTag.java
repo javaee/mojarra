@@ -132,6 +132,9 @@ public class ConverterTag extends AbstractConverterTag {
         private Object[] state;
         public Object saveState(FacesContext context) {
 
+            if (context == null) {
+                throw new NullPointerException();
+            }
             if (state == null) {
                 state = new Object[2];
             }
@@ -143,6 +146,10 @@ public class ConverterTag extends AbstractConverterTag {
         }
 
         public void restoreState(FacesContext context, Object state) {
+
+            if (context == null) {
+                throw new NullPointerException();
+            }
 
             this.state = (Object[]) state;
             if (this.state != null) {

@@ -2344,6 +2344,9 @@ private void doFind(FacesContext context, String clientId) {
 
         public Object saveState(FacesContext context) {
 
+            if (context == null) {
+                throw new NullPointerException();
+            }
             return new Object[] {
                   ((wrapped instanceof UIComponent) ? null : new StateHolderSaver(context, wrapped)),
                   instanceClass
@@ -2354,6 +2357,9 @@ private void doFind(FacesContext context, String clientId) {
 
         public void restoreState(FacesContext context, Object state) {
 
+            if (context == null) {
+                throw new NullPointerException();
+            }
             if (state == null) {
                 return;
             }

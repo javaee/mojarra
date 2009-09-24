@@ -75,6 +75,9 @@ public class GreetBehavior extends ClientBehaviorBase {
     @Override
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (initialStateMarked()) {
             Object superState = super.saveState(context);
             if (superState == null) {
@@ -96,6 +99,10 @@ public class GreetBehavior extends ClientBehaviorBase {
 
     @Override
     public void restoreState(FacesContext context, Object state) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
 
         if (state == null) {
             return;

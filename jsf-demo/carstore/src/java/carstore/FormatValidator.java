@@ -257,6 +257,9 @@ public class FormatValidator implements Validator, StateHolder {
 
 
     public Object saveState(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
         Object values[] = new Object[2];
         values[0] = formatPatterns;
         values[1] = formatPatternsList;
@@ -265,6 +268,12 @@ public class FormatValidator implements Validator, StateHolder {
 
 
     public void restoreState(FacesContext context, Object state) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (state == null) {
+            return;
+        }
         Object values[] = (Object[]) state;
         formatPatterns = (ValueExpression) values[0];
         formatPatternsList = (ArrayList<String>) values[1];

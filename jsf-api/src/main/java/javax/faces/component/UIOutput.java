@@ -215,6 +215,9 @@ public class UIOutput extends UIComponentBase
     @Override
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         Object[] values = (Object[]) super.saveState(context);
         Object converterState = null;
         if (converter != null) {
@@ -240,6 +243,10 @@ public class UIOutput extends UIComponentBase
     
     @Override
     public void restoreState(FacesContext context, Object state) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
 
         if (state == null) {
             return;

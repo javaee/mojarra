@@ -165,6 +165,9 @@ public class RegexValidator implements Validator, PartialStateHolder {
 
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (!initialStateMarked()) {
             Object values[] = new Object[1];
             values[0] = regex;
@@ -178,6 +181,9 @@ public class RegexValidator implements Validator, PartialStateHolder {
 
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (state != null) {
             Object values[] = (Object[]) state;
             regex = (String) values[0];

@@ -1330,6 +1330,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public Object saveState(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (values == null) {
             values = new Object[4];
         }
@@ -1345,6 +1348,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public void restoreState(FacesContext context, Object state) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        if (state == null) {
+            return;
+        }
         values = (Object[]) state;
         super.restoreState(context, values[0]);
         emptyStringIsNull = (Boolean) values[1];
