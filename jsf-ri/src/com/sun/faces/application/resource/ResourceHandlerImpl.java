@@ -132,9 +132,11 @@ public class ResourceHandlerImpl extends ResourceHandler {
         Util.notNull("resourceName", resourceName);
         FacesContext ctx = FacesContext.getCurrentInstance();
 
+        boolean development = ctx.isProjectStage(ProjectStage.Development);
+
         // Specialcasing to serve compressed jsf.js if not in Development Stage
         if ("javax.faces".equals(libraryName) && "jsf.js".equals(resourceName)) {
-            if (ctx.isProjectStage(ProjectStage.Development)) {
+            if (development) {
                 resourceName = "jsf-uncompressed.js";
             } else {
                 resourceName = "jsf-compressed.js";
@@ -148,6 +150,12 @@ public class ResourceHandlerImpl extends ResourceHandler {
                                                  ctype,
                                                  ctx);
         if (info == null) {
+            // prevent message from being when we're dealing with
+            // groovy is present and Application.createComponent()
+            // tries to resolve a .groovy file as backing UIComponent.
+            if (!development && "application/x-groovy".equals(ctype)) {
+                return null;
+            }
             logMissingResource(ctx, resourceName, libraryName, null);
             return null;
         } else {

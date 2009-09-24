@@ -136,6 +136,7 @@ public class ExternalContextImpl extends ExternalContext {
         fallbackContentTypeMap.put("js", "text/javascript");
         fallbackContentTypeMap.put("css", "text/css");
         fallbackContentTypeMap.put("groovy", "application/x-groovy");
+        fallbackContentTypeMap.put("properties", "text/plain");
         
     }
 
