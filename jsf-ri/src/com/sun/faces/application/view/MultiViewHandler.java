@@ -123,15 +123,6 @@ public class MultiViewHandler extends ViewHandler {
         Util.notNull("context", context);
         Util.notNull("viewToRender", viewToRender);
 
-        if (context.getExternalContext().isResponseCommitted()) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING,
-                           "jsf.view.cannot.render.response.committed",
-                           viewToRender.getViewId());
-            }
-            return;
-        }
-
         vdlFactory.getViewDeclarationLanguage(viewToRender.getViewId())
               .renderView(context, viewToRender);
 
