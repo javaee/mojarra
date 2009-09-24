@@ -42,10 +42,13 @@ package javax.faces.component;
 
 import java.util.Collection;
 import java.util.Iterator;
+import javax.faces.application.Application;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PostValidateEvent;
+import javax.faces.event.PreValidateEvent;
 
 
 /**
@@ -231,13 +234,15 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         if (!isSubmitted()) {
             return;
         }
-
+        Application app = context.getApplication();
+        app.publishEvent(context, PreValidateEvent.class, this);
         // Process all the facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             kid.processValidators(context);
         }
+        app.publishEvent(context, PostValidateEvent.class, this);
 
     }
 

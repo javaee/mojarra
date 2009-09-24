@@ -1071,17 +1071,17 @@ public abstract class UIComponentBase extends UIComponent {
 
         pushComponentToEL(context, null);
 
+        Application app = context.getApplication();
+        app.publishEvent(context, PreValidateEvent.class, this);
         // Process all the facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
-            Application app = context.getApplication();
-            app.publishEvent(context, PreValidateEvent.class, kid);
             kid.processValidators(context);
-            app.publishEvent(context, PostValidateEvent.class, kid);
-
         }
+        app.publishEvent(context, PostValidateEvent.class, this);
         popComponentFromEL(context);
+
     }
 
 

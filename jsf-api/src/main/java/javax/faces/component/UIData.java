@@ -38,6 +38,7 @@ package javax.faces.component;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
@@ -49,6 +50,8 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
+import javax.faces.event.PostValidateEvent;
+import javax.faces.event.PreValidateEvent;
 import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -1006,10 +1009,11 @@ public class UIData extends UIComponentBase
         if (!isRendered()) {
             return;
         }
-
+        Application app = context.getApplication();
+        app.publishEvent(context, PreValidateEvent.class, this);
         preValidate(context);
         iterate(context, PhaseId.PROCESS_VALIDATIONS);
-        // This is not a EditableValueHolder, so no further processing is required
+        app.publishEvent(context, PostValidateEvent.class, this);
 
     }
 

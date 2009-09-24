@@ -48,8 +48,14 @@ import junit.framework.TestSuite;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.PostValidateEvent;
+import javax.faces.event.PreValidateEvent;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+import java.io.Serializable;
 import java.util.*;
 
 
@@ -213,6 +219,47 @@ public class UIComponentTestCase extends TestCase {
 
     // ------------------------------------------------- Individual Test Methods
 
+    public void testRenderEvents() {
+        Listener prelistener = new Listener();
+        Listener postlistener = new Listener();
+        List<String> ldata = new ArrayList<String>();
+        ldata.add("one");
+        UIViewRoot root = new UIViewRoot();
+        root.setId("root");
+        root.subscribeToEvent(PreValidateEvent.class, prelistener);
+        root.subscribeToEvent(PostValidateEvent.class, postlistener);
+        UIOutput out = new UIOutput();
+        out.setId("out");
+        out.subscribeToEvent(PreValidateEvent.class, prelistener);
+        out.subscribeToEvent(PostValidateEvent.class, postlistener);
+        root.getChildren().add(out);
+        UIForm f = new UIForm();
+        f.setSubmitted(true);
+        f.setId("form");
+        f.subscribeToEvent(PreValidateEvent.class, prelistener);
+        f.subscribeToEvent(PostValidateEvent.class, postlistener);
+        root.getChildren().add(f);
+        UIData data = new UIData();
+        data.setId("data");
+        data.subscribeToEvent(PreValidateEvent.class, prelistener);
+        data.subscribeToEvent(PostValidateEvent.class, postlistener);
+        data.setValue(ldata);
+        UIColumn c = new UIColumn();
+        c.setId("column");
+        c.subscribeToEvent(PreValidateEvent.class, prelistener);
+        c.subscribeToEvent(PostValidateEvent.class, postlistener);
+        UIInput in = new UIInput();
+        in.setId("in");
+        in.subscribeToEvent(PreValidateEvent.class, prelistener);
+        in.subscribeToEvent(PostValidateEvent.class, postlistener);
+        c.getChildren().add(in);
+        data.getChildren().add(c);
+        f.getChildren().add(data);
+        root.processValidators(facesContext);
+        assertEquals("root/out/form/data/in/", "root/out/form/data/in/", prelistener.getResults());
+        assertEquals("out/in/data/form/root/", "out/in/data/form/root/", postlistener.getResults());
+
+    }
 
     // Test behavior of Map returned by getAttributes()
 
@@ -2051,6 +2098,21 @@ public class UIComponentTestCase extends TestCase {
             return (previous);
         }
 
+    }
+
+
+    public static class Listener implements ComponentSystemEventListener, Serializable {
+
+        private StringBuilder sb = new StringBuilder();
+
+        public void processEvent(ComponentSystemEvent event)
+              throws AbortProcessingException {
+            sb.append(((UIComponent) event.getSource()).getId()).append('/');
+        }
+
+        public String getResults() {
+            return sb.toString();
+        }
     }
 
 

@@ -55,6 +55,7 @@ import com.sun.faces.facelets.tag.jstl.core.IterationStatus;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.EditableValueHolder;
@@ -69,6 +70,8 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
+import javax.faces.event.PostValidateEvent;
+import javax.faces.event.PreValidateEvent;
 import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -700,7 +703,10 @@ public class UIRepeat extends UINamingContainer {
     public void processValidators(FacesContext faces) {
         if (!this.isRendered()) return;
         this.resetDataModel();
+        Application app = faces.getApplication();
+        app.publishEvent(faces, PreValidateEvent.class, this);
         this.process(faces, PhaseId.PROCESS_VALIDATIONS);
+        app.publishEvent(faces, PostValidateEvent.class, this);
     }
 
     private final static SavedState NullState = new SavedState();
