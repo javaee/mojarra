@@ -117,6 +117,9 @@ public class HtmlResponseWriter extends ResponseWriter {
     // 'script' or 'style' element
     private boolean scriptOrStyleSrc;
 
+    // flag to indicate that we're writing inside a partial reponse
+    private boolean isPartial = false;
+
     // flag to indicate if the content type is Xhtml
     private boolean isXhtml;
 
@@ -1051,6 +1054,15 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     }
 
+    /**
+     * Set a flag to indicate that this stream is being used by a partial response.
+     * See writeText for it's impact.
+     * @param isPartial  Is this a partial response?
+     */
+    public void setPartial(boolean isPartial) {
+        this.isPartial = isPartial;
+    }
+
     // --------------------------------------------------------- Private Methods
 
     private void ensureTextBufferCapacity(String source) {
@@ -1161,6 +1173,28 @@ private void writeEscaped(char cbuf[], int offset, int length) throws IOExceptio
    if (offset < 0 || length < 0 || offset + length > cbuf.length ) {
         throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > cbuf.length");
    }
+
+    if (isPartial) {
+        // PENDING - it's not hard to imagine how this could break
+        // but there aren't any other options with the current API
+        // These if statements check for XML and DOCTYPE declarations,
+        // and pass them through.
+        // This is going to only get fixed when we disambiguate CDATA in a partial
+        // from regular CDATA.
+        if (cbuf[0] == '<') {
+            if (cbuf[1] == '?' && cbuf[2] == 'x' && cbuf[3] == 'm' && cbuf[4] == 'l') {
+                writer.write(cbuf, offset, length);
+                return;
+            }
+            if (cbuf[1] == '!' && cbuf[2] == 'D' && cbuf[3] == 'O' && cbuf[4] == 'C') {
+                writer.write(cbuf, offset, length);
+                return;
+            }
+        }
+        HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, cbuf, offset, length);
+        return;
+    }
+
 
     // Single char case
     if (length == 1) {

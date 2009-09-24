@@ -68,8 +68,9 @@ import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.OnOffResponseWrapper;
 import com.sun.faces.util.Util;
+import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 
-public class PartialViewContextImpl extends PartialViewContext {
+ public class PartialViewContextImpl extends PartialViewContext {
 
     // Log instance for this class
     private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
@@ -410,6 +411,9 @@ public class PartialViewContextImpl extends PartialViewContext {
         }
         if (responseWriter instanceof PartialResponseWriter)  {
             return (PartialResponseWriter) responseWriter;
+        } else if (responseWriter instanceof HtmlResponseWriter) {
+            ((HtmlResponseWriter)responseWriter).setPartial(true);
+            return new PartialResponseWriter(responseWriter);
         } else {
             return new PartialResponseWriter(responseWriter);
         }
