@@ -132,9 +132,10 @@ public class ExternalContextImpl extends ExternalContext {
         if (config.isOptionEnabled(SendPoweredByHeader)) {
             ((HttpServletResponse) response).addHeader("X-Powered-By", "JSF/2.0");
         }
-        fallbackContentTypeMap = new HashMap<String,String>(2, 1.0f);
+        fallbackContentTypeMap = new HashMap<String,String>(3, 1.0f);
         fallbackContentTypeMap.put("js", "text/javascript");
         fallbackContentTypeMap.put("css", "text/css");
+        fallbackContentTypeMap.put("groovy", "application/x-groovy");
         
     }
 
