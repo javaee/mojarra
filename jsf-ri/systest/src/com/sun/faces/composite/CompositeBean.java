@@ -114,6 +114,24 @@ public class CompositeBean {
 
     }
 
+
+    public String action(Object arg1, Object arg2) {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        UIComponent c = UIComponent.getCurrentComponent(ctx);
+        String message = "Action invoked: "
+                             + c.getClientId(ctx)
+                             + ", arg1: " + arg1.toString()
+                             + ", arg2: " + arg2.toString();
+
+        ctx.addMessage(null,
+                       new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                        message,
+                                        message));
+        return "";
+
+    }
+
     public String custom() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();

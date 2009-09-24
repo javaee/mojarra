@@ -929,6 +929,21 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
+
+    /**
+     * Added for issue 1318.
+     */
+    public void testIssue1318() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/issue1318.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "form:arg:n1:n2:command");
+        assertNotNull(button);
+        page = button.click();
+        String message = "Action invoked: form:arg:n1:n2:command, arg1: Hello, arg2: World!";
+        assertTrue(page.asText().contains(message));
+        
+    }
+
     
     // --------------------------------------------------------- Private Methods
 

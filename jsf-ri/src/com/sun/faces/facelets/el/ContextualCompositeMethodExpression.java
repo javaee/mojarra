@@ -60,6 +60,7 @@ import javax.el.ELContext;
 import javax.el.ELException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.view.Location;
 
 /**
  * <p>
@@ -120,6 +121,7 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
     private final MethodExpression delegate;
     private final ValueExpression source;
+    private final Location location;
 
 
     // -------------------------------------------------------- Constructors
@@ -130,7 +132,17 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
 
         this.delegate = delegate;
         this.source = source;
+        this.location = null;
 
+    }
+
+
+    public ContextualCompositeMethodExpression(Location location,
+                                               MethodExpression delegate) {
+
+        this.delegate = delegate;
+        this.location = location;
+        this.source = null;
     }
 
 
@@ -156,17 +168,20 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
                 }
             }
         } catch (ELException ele) {
-            // special handling when an ELException handling.  This is necessary
-            // when there are multiple levels of composite component nesting.
-            // When this happens, we need to evaluate the source expression
-            // to find and invoke the MethodExpression at the next highest
-            // nesting level.  Is there a cleaner way to detect this case?
-            Object fallback = source.getValue(elContext);
-            if (fallback != null && fallback instanceof MethodExpression) {
-                return ((MethodExpression) fallback).invoke(elContext, objects);
-            } else {
-                throw ele;
+            if (source != null) {
+                // special handling when an ELException handling.  This is necessary
+                // when there are multiple levels of composite component nesting.
+                // When this happens, we need to evaluate the source expression
+                // to find and invoke the MethodExpression at the next highest
+                // nesting level.  Is there a cleaner way to detect this case?
+                Object fallback = source.getValue(elContext);
+                if (fallback != null && fallback instanceof MethodExpression) {
+                    return ((MethodExpression) fallback).invoke(elContext, objects);
+                } else {
+                    throw ele;
+                }
             }
+            throw ele;
         }
 
     }
@@ -213,13 +228,17 @@ public class ContextualCompositeMethodExpression extends MethodExpression {
               CompositeComponentStackManager.getManager(ctx);
         UIComponent cc = null;
 
-        // We need to obtain the Location of the source expression in order
-        // to find the composite component that needs to be available within
-        // the evaluation stack.
-        if (source instanceof TagValueExpression) {
-            ValueExpression orig = ((TagValueExpression) source).getWrapped();
-            if (orig instanceof ContextualCompositeValueExpression) {
-                cc = manager.findCompositeComponentUsingLocation(ctx, ((ContextualCompositeValueExpression) orig).getLocation());
+        if (location != null) {
+            cc = manager.findCompositeComponentUsingLocation(ctx, location);
+        } else {
+            // We need to obtain the Location of the source expression in order
+            // to find the composite component that needs to be available within
+            // the evaluation stack.
+            if (source instanceof TagValueExpression) {
+                ValueExpression orig = ((TagValueExpression) source).getWrapped();
+                if (orig instanceof ContextualCompositeValueExpression) {
+                    cc = manager.findCompositeComponentUsingLocation(ctx, ((ContextualCompositeValueExpression) orig).getLocation());
+                }
             }
         }
 

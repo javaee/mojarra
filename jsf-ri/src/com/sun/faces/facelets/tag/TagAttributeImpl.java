@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
 import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.el.TagMethodExpression;
 import com.sun.faces.facelets.el.TagValueExpression;
@@ -187,19 +188,27 @@ public final class TagAttributeImpl extends TagAttribute {
                                                 Class type,
                                                 Class[] paramTypes) {
 
-        MethodExpression result = null;
+        MethodExpression result;
 
         try {
             ExpressionFactory f = ctx.getExpressionFactory();
             // Determine if this is a composite component attribute lookup.
             // If so, look for a MethodExpression under the attribute key
-            if (isCompositeExpression(this.value) &&
-                isLookupExpression(this.value)) {
+            if (isLookupExpression(this.value)) {
                 result = new AttributeLookupMethodExpression(getValueExpression(ctx, MethodExpression.class));
-            }
-            if (null == result) {
-                result = new TagMethodExpression(this, f.createMethodExpression(ctx,
-                        this.value, type, paramTypes));
+            } else if (isCompositeExpression(this.value)) {
+                MethodExpression delegate = new TagMethodExpression(this,
+                                                 f.createMethodExpression(ctx,
+                                                                          this.value,
+                                                                          type,
+                                                                          paramTypes));
+                result = new ContextualCompositeMethodExpression(getLocation(), delegate);
+            } else {
+                result = new TagMethodExpression(this,
+                                                 f.createMethodExpression(ctx,
+                                                                          this.value,
+                                                                          type,
+                                                                          paramTypes));
             }
         } catch (Exception e) {
             throw new TagAttributeException(this, e);
@@ -385,7 +394,10 @@ public final class TagAttributeImpl extends TagAttribute {
     }
 
     private boolean isLookupExpression(String expression) {
-        return expression.contains(".attrs.");
+
+
+        return expression.indexOf("{cc.attrs.", 1) != -1;
+
     }
 
     // ---------------------------------------------------------- Nested Classes
