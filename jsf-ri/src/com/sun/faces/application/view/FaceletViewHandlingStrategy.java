@@ -56,6 +56,8 @@ import com.sun.faces.util.Cache;
 import com.sun.faces.util.Cache.Factory;
 
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
+import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
+
 import java.beans.BeanDescriptor;
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
@@ -69,6 +71,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.PartialResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.view.StateManagementStrategy;
 import javax.faces.view.ViewMetadata;
@@ -361,14 +364,17 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             ResponseWriter writer = origWriter.cloneWithWriter(stateWriter);
             ctx.setResponseWriter(writer);
 
-            // render the view to the response
-            writer.startDocument();
-            viewToRender.encodeAll(ctx);
-
-            ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
-
-            writer.endDocument();
-
+            //  Don't call startDoc and endDoc on a partial response
+            if (ctx.getPartialViewContext().isAjaxRequest()) {
+                viewToRender.encodeAll(ctx);
+                ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);                
+            } else {
+                // render the view to the response
+                writer.startDocument();
+                viewToRender.encodeAll(ctx);
+                ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
+                writer.endDocument();
+            }
             // finish writing
             writer.close();
 
