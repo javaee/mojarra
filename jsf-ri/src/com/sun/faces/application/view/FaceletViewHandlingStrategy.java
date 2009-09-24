@@ -364,6 +364,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // render the view to the response
             writer.startDocument();
             viewToRender.encodeAll(ctx);
+
+            ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
+
             writer.endDocument();
 
             // finish writing
