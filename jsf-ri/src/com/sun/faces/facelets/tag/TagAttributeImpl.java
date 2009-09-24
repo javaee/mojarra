@@ -56,6 +56,8 @@ import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.el.TagMethodExpression;
 import com.sun.faces.facelets.el.TagValueExpression;
 import com.sun.faces.facelets.el.ContextualCompositeValueExpression;
+import com.sun.faces.util.MessageUtils;
+import static com.sun.faces.util.MessageUtils.ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR;
 import com.sun.faces.util.Util;
 
 import javax.el.ELException;
@@ -195,6 +197,11 @@ public final class TagAttributeImpl extends TagAttribute {
             // Determine if this is a composite component attribute lookup.
             // If so, look for a MethodExpression under the attribute key
             if (isLookupExpression(this.value)) {
+                if (expressionHasArguments(this.value)) {
+                    String message =
+                          MessageUtils.getExceptionMessageString(ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR);
+                    throw new TagAttributeException(this, message);
+                }
                 result = new AttributeLookupMethodExpression(getValueExpression(ctx, MethodExpression.class));
             } else if (isCompositeExpression(this.value)) {
                 MethodExpression delegate = new TagMethodExpression(this,
@@ -211,7 +218,11 @@ public final class TagAttributeImpl extends TagAttribute {
                                                                           paramTypes));
             }
         } catch (Exception e) {
-            throw new TagAttributeException(this, e);
+            if (e instanceof TagAttributeException) {
+                throw (TagAttributeException) e;
+            } else {
+                throw new TagAttributeException(this, e);
+            }
         }
         return result;
     }
@@ -335,6 +346,11 @@ public final class TagAttributeImpl extends TagAttribute {
                                                                this.value,
                                                                type);
             if (isCompositeExpression(this.value)) {
+                if (isLookupExpression(this.value) && expressionHasArguments(this.value)) {
+                    String message =
+                          MessageUtils.getExceptionMessageString(ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR);
+                    throw new TagAttributeException(this, message);
+                }
                 return new TagValueExpression(this,
                                               new ContextualCompositeValueExpression(getLocation(),
                                                                                 delegate));
@@ -399,6 +415,14 @@ public final class TagAttributeImpl extends TagAttribute {
         return expression.indexOf("{cc.attrs.", 1) != -1;
 
     }
+
+
+    private boolean expressionHasArguments(String expression) {
+
+        return (expression.indexOf('(') != -1);
+
+    }
+
 
     // ---------------------------------------------------------- Nested Classes
 

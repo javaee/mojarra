@@ -59,7 +59,7 @@
     <property name="jstl.api.version" value="1.2"/>
     <property name="annotation.api.version" value="1.0"/>
     <property name="portlet.api.version" value="1.0"/>
-    <property name="groovy.version" value="1.5.5"/>
+    <property name="groovy.version" value="1.6.4"/>
     <property name="el.version" value="1.0"/>
     <property name="bean-validator.version" value="3.0-JBoss-4.0.0.Beta3"/>
     <property name="maven.repository.importer.version" value="1.2"/>
