@@ -31,6 +31,8 @@
 
 package com.sun.faces.context.flash;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.facelets.tag.ui.UIDebug;
 import com.sun.faces.util.FacesLogger;
 import java.util.ArrayList;
@@ -110,6 +112,16 @@ public class ELFlash extends Flash {
      */
     private Map<String,Map<String, Object>> innerMap = null;
 
+    private final AtomicLong sequenceNumber = new AtomicLong(0);
+
+    private int numberOfConcurentFlashUsers = Integer.
+     parseInt(WebContextInitParameter.NumberOfConcurrentFlashUsers.getDefaultValue());
+
+    private long numberOfFlashesBetweenFlashReapings = Long.
+     parseLong(WebContextInitParameter.NumberOfFlashesBetweenFlashReapings.getDefaultValue());
+
+    private long lastReaping;
+
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="class vars">
@@ -186,8 +198,6 @@ public class ELFlash extends Flash {
 
     }
 
-    private static final AtomicLong sequenceNumber = new AtomicLong(0);
-
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors and instance accessors">
@@ -195,6 +205,32 @@ public class ELFlash extends Flash {
     /** Creates a new instance of ELFlash */
     private ELFlash() {
         innerMap = new ConcurrentHashMap<String,Map<String, Object>>();
+        WebConfiguration config = WebConfiguration.getInstance();
+        String value;
+        try {
+            value = config.getOptionValue(WebContextInitParameter.NumberOfConcurrentFlashUsers);
+            numberOfConcurentFlashUsers = Integer.parseInt(value);
+        } catch (NumberFormatException nfe) {
+	    if (LOGGER.isLoggable(Level.WARNING)) {
+		LOGGER.log(Level.WARNING,
+			   "Unable to set number of concurrent flash users.  Defaulting to " +
+                           numberOfConcurentFlashUsers);
+	    }
+
+        }
+
+        try {
+            value = config.getOptionValue(WebContextInitParameter.NumberOfFlashesBetweenFlashReapings);
+            numberOfFlashesBetweenFlashReapings = Long.parseLong(value);
+        } catch (NumberFormatException nfe) {
+	    if (LOGGER.isLoggable(Level.WARNING)) {
+		LOGGER.log(Level.WARNING,
+			   "Unable to set number flashes between flash repaings.  Defaulting to " +
+                           numberOfFlashesBetweenFlashReapings);
+	    }
+
+        }
+
     }
 
     /**
@@ -585,8 +621,12 @@ public class ELFlash extends Flash {
         context.getAttributes().put(CONSTANTS.KeepFlagAttributeName, Boolean.TRUE);
     }
 
-    private static long getNewSequenceNumber() {
+    private long getNewSequenceNumber() {
         long result = sequenceNumber.incrementAndGet();
+
+        if (0 == result % numberOfFlashesBetweenFlashReapings) {
+            reapFlashes();
+        }
 
         if (result == Long.MAX_VALUE) {
             result = 1;
@@ -594,6 +634,28 @@ public class ELFlash extends Flash {
         }
 
         return result;
+    }
+
+    private void reapFlashes() {
+
+        if (innerMap.size() < numberOfConcurentFlashUsers) {
+            return;
+        }
+
+        Set<String> keys = innerMap.keySet();
+        long
+                sequenceNumberToTest,
+                currentSequenceNumber = sequenceNumber.get();
+        Map<String, Object> curFlash;
+        for (String cur : keys) {
+            sequenceNumberToTest = Long.parseLong(cur);
+            if (numberOfConcurentFlashUsers < currentSequenceNumber - sequenceNumberToTest) {
+                if (null != (curFlash = innerMap.get(cur))) {
+                    curFlash.clear();
+                }
+                innerMap.remove(cur);
+            }
+        }
     }
 
     private boolean responseCompleteWasJustSetTrue(FacesContext context,

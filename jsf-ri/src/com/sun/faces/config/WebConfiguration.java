@@ -709,6 +709,14 @@ public class WebConfiguration {
               true,
               NumberOfLogicalViews
         ),
+        NumberOfConcurrentFlashUsers(
+              "com.sun.faces.numberOfConcerrentFlashUsers",
+              "5000"
+        ),
+        NumberOfFlashesBetweenFlashReapings(
+              "com.sun.faces.numberOfFlashesBetweenFlashReapings",
+              "5000"
+        ),
         InjectionProviderClass(
                 "com.sun.faces.injectionProvider",
                 ""
