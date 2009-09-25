@@ -318,7 +318,7 @@ public class ResourceCache {
 
         monitors = new ArrayList<ResourceMonitor>();
         monitors.add(new WebappResourceMonitor(sc, "/resources/"));
-        monitors.add(new WebappResourceMonitor(sc, "/WEB-INF/classes/META-INF/resources/"));
+
     }
 
 
