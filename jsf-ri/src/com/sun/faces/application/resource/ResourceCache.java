@@ -319,53 +319,6 @@ public class ResourceCache {
         monitors = new ArrayList<ResourceMonitor>();
         monitors.add(new WebappResourceMonitor(sc, "/resources/"));
         monitors.add(new WebappResourceMonitor(sc, "/WEB-INF/classes/META-INF/resources/"));
-        ClassLoader loader = Util.getCurrentLoader(this.getClass());
-        try {
-            Enumeration<URL> urls = loader.getResources("META-INF/resources");
-            while (urls.hasMoreElements()) {
-                URL url = urls.nextElement();
-                if (!"jar".equals(url.getProtocol())) {
-                    String urlString = url.toString();
-                    if (urlString.contains("/WEB-INF/classes/META-INF/resources")
-                        || urlString.contains("jsf-ri-runtime.xml")) {
-                        continue;
-                    }
-                    if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                   "Unhandled URL: {0}",
-                                   url);
-                    }
-                    continue;
-                }
-                if (url.toString().contains("jsf-impl.jar")) {
-                    continue;
-                }
-                try {
-                    monitors.add(new JarResourceMonitor(url));
-                } catch (IOException ioe) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                   "IOException occurred setting up JarResourceMonitor for URL {0}.  Updates to this resource will be ignored.",
-                                   url.toExternalForm());
-                    }
-                }
-            }
-        } catch (IOException ioe) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                           "Classpath resource monitoring unavailable.",
-                           ioe);
-            }
-        }
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE,
-                       "[{0}] Registered ResouceMonitors:",
-                       sc.getContextPath());
-            for (ResourceMonitor monitor : monitors) {
-                LOGGER.log(Level.FINE, monitor.toString());
-            }
-        }
-
     }
 
 
