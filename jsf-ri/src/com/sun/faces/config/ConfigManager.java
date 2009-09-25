@@ -890,8 +890,12 @@ public class ConfigManager {
                             throw new ConfigurationException("Unknown Schema version: " + versionStr);
                         }
                         DocumentBuilder builder = getBuilderForSchema(schema);
-                        builder.getSchema().newValidator().validate(domSource);
-                        returnDoc = ((Document) domSource.getNode());
+                        if (builder.isValidating()) {
+                            builder.getSchema().newValidator().validate(domSource);
+                            returnDoc = ((Document) domSource.getNode());
+                        } else {
+                            returnDoc = ((Document) domSource.getNode());
+                        }
                     } else {
                         // this shouldn't happen, but...
                         throw new ConfigurationException("No document version available.");
@@ -915,8 +919,12 @@ public class ConfigManager {
                         throw new IllegalStateException();
                     }
                     DocumentBuilder builder = getBuilderForSchema(schemaToApply);
-                    builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
-                    returnDoc =  (Document) domResult.getNode();
+                    if (builder.isValidating()) {
+                        builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
+                        returnDoc = (Document) domResult.getNode();
+                    } else {
+                        returnDoc = (Document) domResult.getNode();
+                    }
                 }
             } else {
                 returnDoc = doc;
@@ -990,7 +998,11 @@ public class ConfigManager {
 
         private DocumentBuilder getBuilderForSchema(DbfFactory.FacesSchema schema)
         throws Exception {
-            factory.setSchema(schema.getSchema());
+            try {
+                factory.setSchema(schema.getSchema());
+            } catch (UnsupportedOperationException upe) {
+                return getNonValidatingBuilder();
+            }
             DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
             builder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
