@@ -58,6 +58,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.application.ApplicationAssociate;
 
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.ProjectStage;
 
 /**
  * Default implementation of {@link javax.faces.application.Resource}.
@@ -196,7 +197,14 @@ public class ResourceImpl extends Resource implements Externalizable {
             if (responseHeaders == null)
             responseHeaders = new HashMap<String, String>(6, 1.0f);
 
-            long expiresTime = new Date().getTime() + maxAge;
+            long expiresTime;
+            FacesContext ctx = FacesContext.getCurrentInstance();
+
+            if (ctx.isProjectStage(ProjectStage.Development)) {
+                expiresTime = new Date().getTime();
+            } else {
+                expiresTime = new Date().getTime() + maxAge;
+            }
             SimpleDateFormat format =
                   new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
             format.setTimeZone(GMT);
