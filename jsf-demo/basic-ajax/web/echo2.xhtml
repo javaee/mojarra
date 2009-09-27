@@ -41,20 +41,17 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-<f:view contentType="text/html"/>
+<f:view contentType="text/html; charset=iso-8859-1"/>
 <h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
     <title>Ajax</title>
 </h:head>
 <h:body>
     <h:form id="form1">    <!-- Note that unlike previous examples, prependid='true' -->
-        <h:outputScript name="jsf.js" library="javax.faces" target="head"/>
         <h:outputScript name="javascript/echo1.js" target="head"/>
-        <h:outputStylesheet name="stylesheet.css"/>
 
         Output: <h:outputText id="out1" value="#{echo.str}"/>
         <br/>
-        Input: <h:inputText id="in1" value="#{echo.str}">
+        Input: <h:inputText id="in1" autocomplete="off" value="#{echo.str}">
             <f:ajax render="out1"/>
         </h:inputText>
         <br/>
@@ -62,13 +59,12 @@
         <h:commandButton id="button1" value="Echo" type="button"/>
         <br/>
         <!-- Resets the string, refreshes the form, but not the page -->
-        <h:commandButton id="reset" value="reset"
-                            onclick="return resetpush(this, event);"
-                            actionListener="#{echo.reset}"/>
+        <h:commandButton id="reset" value="reset" actionListener="#{echo.reset}">
+            <f:ajax render="@form" />
+        </h:commandButton>
         <!-- Reloads the page, doesn't reset the string -->
         <h:commandButton id="reload" value="reload"/>
         <h:messages/>
     </h:form>
-
 </h:body>
 </html>

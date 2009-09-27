@@ -41,16 +41,14 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-<f:view contentType="text/html"/>
+<f:view contentType="text/html; charset=iso-8859-1"/>
 <h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-    <title>Ajax</title>
+    <title>Ajax Echo</title>
 </h:head>
 <h:body>
     <h:form id="form1">    <!-- Note that unlike previous examples, prependid='true' -->
         <h:outputScript name="jsf.js" library="javax.faces" target="head"/>
         <h:outputScript name="javascript/echo1.js" target="head"/>
-        <h:outputStylesheet name="stylesheet.css"/>
 
         Output: <h:outputText id="out1" value="#{echo.str}"/>
         <br/>

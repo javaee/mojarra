@@ -40,23 +40,6 @@
 <demo-info>
 
     <demo>
-        <name>In Page Counter</name>
-        <page>countinpage.jsf</page>
-        <sources>
-            <source>
-                <label>JSF Page</label>
-                <path>/countinpage.xhtml</path>
-            </source>
-            <source>
-                <label>Backing Javascript</label>
-                <path>/resources/javascript/countinpage.js</path>
-            </source>
-        </sources>
-    </demo>
-
-    <!-- =================================================================== -->
-
-    <demo>
         <name>Simple JSF Ajax Count Page</name>
         <page>count.jsf</page>
         <sources>
@@ -147,6 +130,23 @@
             <source>
                 <label>Managed Bean</label>
                 <path>/WEB-INF/classes/basicajax/RedirectBean.java</path>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Listener Demo</name>
+        <page>listener.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/listener.xhtml</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/basicajax/ListenerBean.java</path>
             </source>
         </sources>
     </demo>

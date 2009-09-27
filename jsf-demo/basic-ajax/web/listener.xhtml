@@ -35,27 +35,32 @@
   holder.
 
 -->
-<!DOCTYPE html
-      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:f="http://java.sun.com/jsf/core">
 <f:view contentType="text/html; charset=iso-8859-1"/>
-<h:head>
-    <title>Ajax Redirect</title>
-</h:head>
-<h:body>
-    <h1>Ajax Redirect</h1>
-    <h:form id="form">
-        <h:selectOneMenu valueChangeListener="#{redirectBean.redirectPage}">
-            <f:selectItem itemLabel="Pick One" noSelectionOption="true" />
-            <f:selectItem itemValue="/redirecttarget1.xhtml" itemLabel="Page 1"/>
-            <f:selectItem itemValue="/redirecttarget2.xhtml" itemLabel="Page 2"/>
-            <f:selectItem itemValue="/redirecttarget3.xhtml" itemLabel="Page 3"/>
-            <f:ajax/>
-        </h:selectOneMenu>
-    </h:form>
-</h:body>
+    <h:head><title>Ajax Tag Event and Listener Demo</title></h:head>
+    <h:body>
+        <h:form id="form">
+            <br/>
+            Echo test: <h:outputText id="out" value="#{listenBean.hello}"/>
+            <br/>
+            String Length: <h:outputText id="count" value="#{listenBean.length}"/>
+            <br/>
+            <h:inputText id="in" value="#{listenBean.hello}" autocomplete="off">
+                <f:ajax event="keyup" render="out count eventcount" listener="#{listenBean.update}"/>
+            </h:inputText>
+            <br/>
+            Event count: <h:outputText id="eventcount" value="#{listenBean.eventCount}"/>
+        </h:form>
+        <hr/>
+        <p>
+            <a href="http://weblogs.java.net/blog/driscoll/archive/2009/09/26/ajax-tag-events-and-listeners">
+                Blog discussing this example.
+            </a>
+        </p>
+    </h:body>
 </html>
+
