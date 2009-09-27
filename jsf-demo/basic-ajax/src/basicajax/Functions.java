@@ -69,6 +69,7 @@ public class Functions {
     public static void writeSource(FacesContext ctx, String file) {
 
         // PENDING - add logic to colorize key words/XML elements?
+        // PENDING - add logic to strip licence header
 
         ExternalContext extCtx = ctx.getExternalContext();
         BufferedReader r =
