@@ -103,10 +103,6 @@
                 <path>/echo2.xhtml</path>
             </source>
             <source>
-                <label>Backing Javascript</label>
-                <path>/resources/javascript/echo1.js</path>
-            </source>
-            <source>
                 <label>Managed Bean</label>
                 <path>/WEB-INF/classes/basicajax/Echo.java</path>
             </source>

@@ -47,8 +47,6 @@
 </h:head>
 <h:body>
     <h:form id="form1">    <!-- Note that unlike previous examples, prependid='true' -->
-        <h:outputScript name="javascript/echo1.js" target="head"/>
-
         Output: <h:outputText id="out1" value="#{echo.str}"/>
         <br/>
         Input: <h:inputText id="in1" autocomplete="off" value="#{echo.str}">
