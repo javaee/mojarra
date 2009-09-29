@@ -63,7 +63,7 @@ public class FlashReaperBean {
         String result = null;
 
         ELFlash flash = (ELFlash) FacesContext.getCurrentInstance().getExternalContext().getFlash();
-        Field innerMapField = ELFlash.class.getDeclaredField("innerMap");
+        Field innerMapField = ELFlash.class.getDeclaredField("flashInnerMap");
         innerMapField.setAccessible(true);
         Map<String,Map<String, Object>> innerMap =
                 (Map<String,Map<String, Object>>) innerMapField.get(flash);
