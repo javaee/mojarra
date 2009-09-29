@@ -71,6 +71,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * Default FaceletFactory implementation.
@@ -310,8 +311,8 @@ public class DefaultFaceletFactory extends FaceletFactory {
         if (log.isLoggable(Level.FINE)) {
             log.fine("Creating Facelet for: " + url);
         }
-        String alias = '/'
-                       + url.getFile().replaceFirst(this.baseUrl.getFile(), "");
+        String escapedBaseURL = Pattern.quote(this.baseUrl.getFile());
+        String alias = '/' + url.getFile().replaceFirst(escapedBaseURL, "");
         try {
             FaceletHandler h = this.compiler.compile(url, alias);
             return new DefaultFacelet(this,
@@ -332,8 +333,8 @@ public class DefaultFaceletFactory extends FaceletFactory {
         if (log.isLoggable(Level.FINE)) {
             log.fine("Creating Metadata Facelet for: " + url);
         }
-        String alias = '/'
-                       + url.getFile().replaceFirst(this.baseUrl.getFile(), "");
+        String escapedBaseURL = Pattern.quote(this.baseUrl.getFile());
+        String alias = '/' + url.getFile().replaceFirst(escapedBaseURL, "");
         try {
             FaceletHandler h = this.compiler.metadataCompile(url, alias);
             return new DefaultFacelet(this,
