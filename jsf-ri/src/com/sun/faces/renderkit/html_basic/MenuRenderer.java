@@ -857,8 +857,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         // render the options to a buffer now so that we can determine
         // the size
-        FastStringWriter bufferedWriter = new FastStringWriter(128);
-        context.setResponseWriter(writer.cloneWithWriter(bufferedWriter));
+        RecordingResponseWriter recordwriter = new RecordingResponseWriter();
+        context.setResponseWriter(recordwriter);
         int count = renderOptions(context, component, items);
         context.setResponseWriter(writer);
         // If "size" is *not* set explicitly, we have to default it correctly
@@ -879,8 +879,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         RenderKitUtils.renderOnchange(context, component, false);
 
         // Now, write the buffered option content
-        writer.write(bufferedWriter.toString());
-
+        recordwriter.replay(writer);
+        
         writer.endElement("select");
 
     }
