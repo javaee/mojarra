@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
 import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.el.TagMethodExpression;
@@ -194,16 +195,16 @@ public final class TagAttributeImpl extends TagAttribute {
 
         try {
             ExpressionFactory f = ctx.getExpressionFactory();
+            if (ELUtils.isCompositeComponentLookupWithArgs(this.value)) {
+                String message =
+                      MessageUtils.getExceptionMessageString(ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR);
+                throw new TagAttributeException(this, message);
+            }
             // Determine if this is a composite component attribute lookup.
             // If so, look for a MethodExpression under the attribute key
-            if (isLookupExpression(this.value)) {
-                if (expressionHasArguments(this.value)) {
-                    String message =
-                          MessageUtils.getExceptionMessageString(ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR);
-                    throw new TagAttributeException(this, message);
-                }
+            if (ELUtils.isCompositeComponentMethodExprLookup(this.value)) {
                 result = new AttributeLookupMethodExpression(getValueExpression(ctx, MethodExpression.class));
-            } else if (isCompositeExpression(this.value)) {
+            } else if (ELUtils.isCompositeComponentExpr(this.value)) {
                 MethodExpression delegate = new TagMethodExpression(this,
                                                  f.createMethodExpression(ctx,
                                                                           this.value,
@@ -340,29 +341,7 @@ public final class TagAttributeImpl extends TagAttribute {
      */
     @Override
     public ValueExpression getValueExpression(FaceletContext ctx, Class type) {
-        try {
-            ExpressionFactory f = ctx.getExpressionFactory();
-            ValueExpression delegate = f.createValueExpression(ctx,
-                                                               this.value,
-                                                               type);
-            if (isCompositeExpression(this.value)) {
-                if (isLookupExpression(this.value) && expressionHasArguments(this.value)) {
-                    String message =
-                          MessageUtils.getExceptionMessageString(ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR);
-                    throw new TagAttributeException(this, message);
-                }
-                return new TagValueExpression(this,
-                                              new ContextualCompositeValueExpression(getLocation(),
-                                                                                delegate));
-            } else {
-                return new TagValueExpression(this,
-                                              f.createValueExpression(ctx,
-                                              this.value,
-                                              type));
-            }
-        } catch (Exception e) {
-            throw new TagAttributeException(this, e);
-        }
+        return getValueExpression(ctx, this.value, type);
     }
 
     /**
@@ -393,34 +372,27 @@ public final class TagAttributeImpl extends TagAttribute {
     // --------------------------------------------------------- Private Methods
 
 
-    private boolean isCompositeExpression(String expression) {
-        // PENDING - can we come up with a tighter check here?
-        int idx = expression.indexOf("cc.");
-        if (idx == -1) {
-            return false;
-        } else {
-            char c = expression.charAt(idx - 1);
-            return (c == '{'
-                     || c == ' '
-                     || c == '('
-                     || c == ','
-                     || c == '[');
+    public ValueExpression getValueExpression(FaceletContext ctx, String expr, Class type) {
+        try {
+            ExpressionFactory f = ctx.getExpressionFactory();
+            ValueExpression delegate = f.createValueExpression(ctx,
+                                                               expr,
+                                                               type);
+            if (ELUtils.isCompositeComponentExpr(expr)) {
+                if (ELUtils.isCompositeComponentLookupWithArgs(expr)) {
+                    String message =
+                          MessageUtils.getExceptionMessageString(ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR);
+                    throw new TagAttributeException(this, message);
+                }
+                return new TagValueExpression(this,
+                                              new ContextualCompositeValueExpression(getLocation(),
+                                                                                delegate));
+            } else {
+                return new TagValueExpression(this, delegate);
+            }
+        } catch (Exception e) {
+            throw new TagAttributeException(this, e);
         }
-        
-    }
-
-    private boolean isLookupExpression(String expression) {
-
-
-        return expression.indexOf("{cc.attrs.", 1) != -1;
-
-    }
-
-
-    private boolean expressionHasArguments(String expression) {
-
-        return (expression.indexOf('(') != -1);
-
     }
 
 
@@ -430,6 +402,7 @@ public final class TagAttributeImpl extends TagAttribute {
     private static class AttributeLookupMethodExpression extends MethodExpression {
 
         private ValueExpression lookupExpression;
+
 
         public AttributeLookupMethodExpression(ValueExpression lookupExpression) {
 

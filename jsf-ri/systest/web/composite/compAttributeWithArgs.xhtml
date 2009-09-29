@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -36,29 +35,29 @@
  holder.
 
 -->
-<!DOCTYPE html
-      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:ez="http://java.sun.com/jsf/composite/composite">
-<head>
-    <title>Should Not Be Displayed</title>
-</head>
-<body>
-    <composite:interface>
-        <composite:attribute name="bean" required="true" />
-    </composite:interface>
-    <composite:implementation>
-        <ez:nesting7 id="nesting7" action="#{cc.attrs.bean.action}"
-                                   actionListener="#{cc.attrs.bean.actionListener}"
-                                   validator="#{cc.attrs.bean.validate}"
-                                   valueChangeListener="#{cc.attrs.bean.valueChange}"
-                                   bean="#{cc.attrs.bean}"/>
-    </composite:implementation>
-</body>
+<h:head>
+<title>Expression using EL arguments</title>
+</h:head>
+
+<h:body>
+
+  <ui:debug hotkey="p" rendered="true"/>
+
+
+  <ez:compAttributeWithArgs id="c" arg1="#{'arg1'}" bean="#{compositeBean}" />
+
+<h:messages id="messages"/>
+<h:form>
+    <h:commandButton value="Clear Messages" />
+</h:form>
+
+
+</h:body>
+
 </html>

@@ -944,6 +944,38 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         
     }
 
+
+    public void testCompositeComponentActionWithArgs() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/compActionWithArgs.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "n:form:command");
+        assertNotNull(button);
+        page = button.click();
+        String message = "Custom action invoked: c:n:form:command, arg1: arg1, arg2: arg2";
+        assertTrue(page.asText().contains(message));
+
+    }
+
+
+    public void testCompositeComponentAttributeWithArgs() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/compAttributeWithArgs.xhtml");
+        String message = "arg: arg1";
+        assertTrue(page.asText().contains(message));
+        
+    }
+
+
+    public void testInvalidArgsToCCExpression() throws Exception {
+
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/invalidMeArgs.xhtml");
+        assertTrue(page.asText().contains("value=\"#{cc.attrs.custom(cc.attrs.arg1)}\" Illegal attempt to pass arguments to a composite component lookup expression"));
+
+        page = getPage("/faces/composite/invalidVeArgs.xhtml");
+        assertTrue(page.asText().contains("value=\"#{cc.attrs.bean(cc.attrs.arg1)}\" Illegal attempt to pass arguments to a composite component lookup expression"));
+    }
+
     
     // --------------------------------------------------------- Private Methods
 

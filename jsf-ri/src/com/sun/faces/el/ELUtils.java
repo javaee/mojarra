@@ -66,11 +66,45 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * <p>Utility class for EL related methods.</p>
  */
 public class ELUtils {
+
+    /**
+     * Helps to determine if a EL expression represents a composite component
+     * EL expression.
+     */
+    private static final Pattern COMPOSITE_COMPONENT_EXPRESSION =
+          Pattern.compile(".(?:[ ]+|[\\[{,(])cc[.].+[}]");
+
+    /**
+     * Used to determine if EL method arguments are being passed to a
+     * composite component lookup expression.
+     *
+     * For example:
+     *
+     *    #{cc.attrs.label('foo')}
+     *
+     * is illegal, while:
+     *
+     *    #{cc.attrs.bean.label('foo')}
+     *
+     * is legal.
+     */
+    private static final Pattern COMPOSITE_COMPONENT_LOOKUP_WITH_ARGS =
+          Pattern.compile("(?:[ ]+|[\\[{,(])cc[.]attrs[.]\\w+[(].+[)]");
+
+
+    /**
+     * Use to determine if an expression being considered as a
+     * MethodExpression is a simple lookup (i.e. #{cc.attrs.myaction}).
+     */
+    private static final Pattern METHOD_EXPRESSION_LOOKUP =
+          Pattern.compile(".[{]cc[.]attrs[.]\\w+[}]");
 
     private static final String APPLICATION_SCOPE = "applicationScope";
     private static final String SESSION_SCOPE = "sessionScope";
@@ -151,6 +185,34 @@ public class ELUtils {
 
 
     // ---------------------------------------------------------- Public Methods
+
+
+    public static boolean isCompositeComponentExpr(String expression) {
+
+        // TODO we should be trying to re-use the Matcher by calling
+        // m.reset(expression);
+        Matcher m = COMPOSITE_COMPONENT_EXPRESSION.matcher(expression);
+        return m.find();
+
+    }
+
+
+    public static boolean isCompositeComponentMethodExprLookup(String expression) {
+
+        Matcher m = METHOD_EXPRESSION_LOOKUP.matcher(expression);
+        return m.matches();
+
+    }
+
+
+    public static boolean isCompositeComponentLookupWithArgs(String expression) {
+
+        // TODO we should be trying to re-use the Matcher by calling
+        // m.reset(expression);
+        Matcher m = COMPOSITE_COMPONENT_LOOKUP_WITH_ARGS.matcher(expression);
+        return m.find();
+        
+    }
 
 
     /**

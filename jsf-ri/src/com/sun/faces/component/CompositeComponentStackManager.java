@@ -245,7 +245,7 @@ public class CompositeComponentStackManager {
             for (int i = s.size(); i > 0; i--) {
                 UIComponent cc = s.get(i - 1);
                 Resource r = (Resource) cc.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
-                if (path.endsWith(r.getResourceName()) && path.contains(r.getLibraryName())) {
+                if (path.endsWith('/' + r.getResourceName()) && path.contains(r.getLibraryName())) {
                     return cc;
                 }
             }
@@ -255,7 +255,7 @@ public class CompositeComponentStackManager {
             UIComponent cc = UIComponent.getCurrentCompositeComponent(ctx);
             while (cc != null) {
                 Resource r = (Resource) cc.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
-                if (path.endsWith(r.getResourceName()) && path.contains(r.getLibraryName())) {
+                if (path.endsWith('/' + r.getResourceName()) && path.contains(r.getLibraryName())) {
                     return cc;
                 }
                 cc = UIComponent.getCompositeComponentParent(cc);

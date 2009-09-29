@@ -3,7 +3,7 @@
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -51,14 +51,15 @@
 </head>
 <body>
     <composite:interface>
-        <composite:attribute name="bean" required="true" />
+        <composite:interface name="arg1" type="java.lang.String" />
+        <composite:attribute name="bean" type="com.sun.faces.composite.CompositeBean" />
     </composite:interface>
     <composite:implementation>
-        <ez:nesting7 id="nesting7" action="#{cc.attrs.bean.action}"
-                                   actionListener="#{cc.attrs.bean.actionListener}"
-                                   validator="#{cc.attrs.bean.validate}"
-                                   valueChangeListener="#{cc.attrs.bean.valueChange}"
-                                   bean="#{cc.attrs.bean}"/>
+        <ez:nesting id="n">
+        <h:form id="form">
+            <h:outputText id="out" value="#{cc.attrs.bean.display(cc.attrs.arg1)}" />
+        </h:form>
+        </ez:nesting>
     </composite:implementation>
 </body>
 </html>
