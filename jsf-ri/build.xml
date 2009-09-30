@@ -105,8 +105,8 @@
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.classes.dir}/com/sun/faces/xhtml"/>
         <mkdir dir="${build.dir}/javadocs"/>
-        <mkdir dir="${build.dir}/pdldocs/jsp"/>
-        <mkdir dir="${build.dir}/pdldocs/facelets"/>
+        <mkdir dir="${build.dir}/vdldocs/jsp"/>
+        <mkdir dir="${build.dir}/vdldocs/facelets"/>
         <mkdir dir="${build.dir}/lib"/>
         <antcall target="delete.and.remkdir.build.generate.dir" />
     </target>
@@ -399,12 +399,12 @@
 
         <mkdir dir="${dist.dir}"/>
 
-        <antcall target="pdldocs"/>
+        <antcall target="vdldocs"/>
 
         <!-- Create the binary distribution -->
         <zip destfile="${dist.dir}/jsf-ri-${impl.version}.zip">
             <zipfileset dir="${build.dir}"
-                        includes="lib/**,pdldocs/**"
+                        includes="lib/**,vdldocs/**"
                         prefix="jsf-ri-${impl.version}"/>
         </zip>
 
@@ -428,7 +428,7 @@
 
     </target>
 
-    <target name="pdldocs">
+    <target name="vdldocs">
 
       <antcall target="jsp.tlddocs" />
       <antcall target="facelets.tlddocs" />
@@ -437,12 +437,12 @@
 
     <target name="jsp.tlddocs">
         <java fork="true" jar="${tlddoc.jar}">
-            <arg line="-d ${build.dir}/pdldocs/jsp"/>
+            <arg line="-d ${build.dir}/vdldocs/jsp"/>
             <arg line="-windowtitle 'JSF ${spec.version} View Declaration Language: JSP Variant'"/>
             <arg value="${build.generate.tld.dir}/html_basic.tld"/>
             <arg value="${conf.share.dir}/jsf_core.tld"/>
         </java>
-        <copy todir="${build.dir}/pdldocs/jsp">
+        <copy todir="${build.dir}/vdldocs/jsp">
            <fileset dir="${basedir}/../jsf-api/doc/">
              <include name="changed*.png" />
            </fileset>
@@ -473,7 +473,7 @@
             </assertions>
         </generateFaceletsTld>
         <java fork="true" jar="${tlddoc.jar}">
-            <arg line="-d ${build.dir}/pdldocs/facelets"/>
+            <arg line="-d ${build.dir}/vdldocs/facelets"/>
             <arg line="-windowtitle 'JSF ${spec.version} View Declaration Language: Facelets Variant'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
             <arg value="${conf.share.dir}/facelets_jsf_core.tld"/>
@@ -483,7 +483,7 @@
             <arg value="${conf.share.dir}/jstl-core.tld"/>
             <arg value="${conf.share.dir}/jstl-fn.tld"/>
         </java>
-        <copy todir="${build.dir}/pdldocs/facelets">
+        <copy todir="${build.dir}/vdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
              <include name="changed*.png" />
            </fileset>
