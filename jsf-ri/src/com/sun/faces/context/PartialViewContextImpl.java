@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -79,7 +80,7 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 
     // BE SURE TO ADD NEW IVARS TO THE RELEASE METHOD
     private PartialResponseWriter partialResponseWriter;
-    private Collection<String> executeIds;
+    private List<String> executeIds;
     private Collection<String> renderIds;
     private Boolean ajaxRequest;
     private Boolean partialRequest;
@@ -191,6 +192,17 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
             return executeIds;
         }
         executeIds = populatePhaseClientIds(PARTIAL_EXECUTE_PARAM_NAME);
+
+        // include the view parameter facet ID if there are other execute IDs
+        // to process
+        if (!executeIds.isEmpty()) {
+            UIViewRoot root = ctx.getViewRoot();
+            if (root.getFacetCount() > 0) {
+                if (root.getFacet(UIViewRoot.METADATA_FACET_NAME) != null) {
+                    executeIds.add(0, UIViewRoot.METADATA_FACET_NAME);   
+                }
+            }
+        }
         return executeIds;
 
     }
@@ -323,11 +335,10 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 
 
 
-    private Collection<String> populatePhaseClientIds(String parameterName) {
+    private List<String> populatePhaseClientIds(String parameterName) {
 
         Map<String,String> requestParamMap =
-              FacesContext.getCurrentInstance().
-              getExternalContext().getRequestParameterMap();
+              ctx.getExternalContext().getRequestParameterMap();
 
         String param = requestParamMap.get(parameterName);
         if (param == null) {
