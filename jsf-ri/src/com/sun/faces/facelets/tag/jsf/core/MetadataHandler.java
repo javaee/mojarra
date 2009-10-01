@@ -37,14 +37,18 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>
@@ -54,6 +58,8 @@ import java.io.IOException;
  * </p>
  */
 public class MetadataHandler extends TagHandlerImpl {
+
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
     /**
      * <p>The name of the attribute whose presence hints to the next handler that
@@ -76,22 +82,37 @@ public class MetadataHandler extends TagHandlerImpl {
           throws IOException {
 
         Util.notNull("parent", parent);
-        UIComponent facetComponent =
-              parent.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
+        UIViewRoot root;
+        if (parent instanceof UIViewRoot) {
+            root = (UIViewRoot) parent;
+        } else {
+            root = ctx.getFacesContext().getViewRoot();
+        }
+        if (root == null) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "jsf.metadata.uiviewroot.unavailable");
+            }
+            return;
+        }
+
+        UIComponent facetComponent = null;
+        if (root.getFacetCount() > 0) {
+              facetComponent = root.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
+        }
         if (facetComponent == null) {
-            parent.getAttributes().put(FacetHandler.KEY,
+            root.getAttributes().put(FacetHandler.KEY,
                                        UIViewRoot.METADATA_FACET_NAME);
             try {
-                this.nextHandler.apply(ctx, parent);
+                this.nextHandler.apply(ctx, root);
             } finally {
-                parent.getAttributes().remove(FacetHandler.KEY);
+                root.getAttributes().remove(FacetHandler.KEY);
             }
-            facetComponent = parent.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
+            facetComponent = root.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
             if (!(facetComponent instanceof UIPanel)) {
                 UIComponent panelGroup = ctx.getFacesContext().getApplication()
                       .createComponent(UIPanel.COMPONENT_TYPE);
                 panelGroup.getChildren().add(facetComponent);
-                parent.getFacets()
+                root.getFacets()
                       .put(UIViewRoot.METADATA_FACET_NAME, panelGroup);
                 facetComponent = panelGroup;
 
