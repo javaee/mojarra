@@ -462,10 +462,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         } else { // (non-IE)
 
             /**
-             * <p>Returns a human readable description of the parsing error. Usefull
+             * <p>Returns a human readable description of the parsing error. Useful
              * for debugging. Tip: append the returned error string in a &lt;pre&gt;
              * element if you want to render it.</p>
-             * <p>Many thanks to Christian Stocker for the initial patch.</p>
              * @param  oDoc The target DOM document
              * @returns {String} The parsing error description of the target Document in
              *          human readable form (preformated text)
@@ -529,20 +528,82 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             } catch(e) {
             }
         }
+        // Setup Node type constants for those browsers that don't have them (IE)
+        var Node = {ELEMENT_NODE: 1, ATTRIBUTE_NODE: 2, TEXT_NODE: 3, CDATA_SECTION_NODE: 4,
+            ENTITY_REFERENCE_NODE: 5,  ENTITY_NODE: 6, PROCESSING_INSTRUCTION_NODE: 7,
+            COMMENT_NODE: 8, DOCUMENT_NODE: 9, DOCUMENT_TYPE_NODE: 10,
+            DOCUMENT_FRAGMENT_NODE: 11, NOTATION_NODE: 12};
 
+        // PENDING - add support for removing handlers added via DOM 2 methods
         /**
-         * <p>Deletes all child nodes of the given node</p>
-         * @param oNode the Node to empty
-         * @ignore
-         * Note:  This code originally from Sarissa:  http://dev.abiss.gr/sarissa
+         * Delete all events attached to a node
+         * @param node
          */
-        var clearChildNodes = function(oNode) {
-            // need to check for firstChild due to opera 8 bug with hasChildNodes
-            while (oNode.firstChild) {
-                oNode.removeChild(oNode.firstChild);
+        var clearEvents = function clearEvents(node) {
+            if (!node) {
+                return;
+            }
+
+            // don't do anything for text and comment nodes - unnecessary
+            if (node.nodeType == Node.TEXT_NODE || node.nodeType == Node.COMMENT_NODE) {
+                return;
+            }
+
+            var events = ['abort', 'blur', 'change', 'error', 'focus', 'load', 'reset', 'resize', 'scroll', 'select', 'submit', 'unload',
+            'keydown', 'keypress', 'keyup', 'click', 'mousedown', 'mousemove', 'mouseout', 'mouseover', 'mouseup', 'dblclick' ];
+            try {
+                for (e in events) {
+                    if (events.hasOwnProperty(e)) {
+                        node[e] = null;
+                    }
+                }
+            } catch (ex) {
+                // it's OK if it fails, at least we tried
             }
         };
 
+        /**
+         * Deletes node and all of it's children, making sure to clear all open events as well.
+         * @param node
+         */
+        var deleteNode = function deleteNode(node) {
+            if (!node) {
+                return;
+            }
+            deleteChildren(node);
+            clearEvents(node);
+            if (typeof node.outerHTML !== 'undefined') {
+                node.outerHTML = ''; //prevent leak in IE
+            } else {
+                if (node.parentNode) { //if the node has a parent
+                    node.parentNode.removeChild(node); //remove the node from the DOM tree
+                }
+            }
+            delete node; //just to be sure
+        };
+
+        /**
+         * Deletes all children of a node, making sure to clear all open events as well.
+         * @param node
+         */
+        var deleteChildren = function deleteChildren(node) {
+            if (!node) {
+                return;
+            }
+            for (var x = node.childNodes.length - 1; x >= 0; x--) //delete all of node's children
+            {
+                var childNode = node.childNodes[x];
+                if (childNode.hasChildNodes()) //if the child node has children then delete them first
+                    deleteChildren(childNode);
+                clearEvents(childNode); //remove listeners
+                if (typeof childNode.outerHTML !== 'undefined') {
+                    childNode.outerHTML = ''; //prevent leak in IE
+                } else {
+                    node.removeChild(childNode); //remove the child from the DOM tree
+                }
+                delete childNode; //just to be sure
+            }
+        };
 
         /**
          * <p> Copies the childNodes of nodeFrom to nodeTo</p>
@@ -554,15 +615,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * It has been modified to fit into the overall codebase
          */
         var copyChildNodes = function(nodeFrom, nodeTo) {
-            var Node = {ELEMENT_NODE: 1, ATTRIBUTE_NODE: 2, TEXT_NODE: 3, CDATA_SECTION_NODE: 4,
-                ENTITY_REFERENCE_NODE: 5,  ENTITY_NODE: 6, PROCESSING_INSTRUCTION_NODE: 7,
-                COMMENT_NODE: 8, DOCUMENT_NODE: 9, DOCUMENT_TYPE_NODE: 10,
-                DOCUMENT_FRAGMENT_NODE: 11, NOTATION_NODE: 12};
+
             if ((!nodeFrom) || (!nodeTo)) {
                 throw "Both source and destination nodes must be provided";
             }
 
-            clearChildNodes(nodeTo);
+            deleteChildren(nodeTo);
             var nodes = nodeFrom.childNodes;
             // if within the same doc, just move, else copy and delete
             if (nodeFrom.ownerDocument == nodeTo.ownerDocument) {
@@ -668,7 +726,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             copyChildNodes(newElement, origElement);
             // sadly, we have to reparse all over again
             // to reregister the event handlers and styles
-            // RELEASE_PENDING do some performance tests on large pages
+            // PENDING do some performance tests on large pages
             origElement.innerHTML = origElement.innerHTML;
 
             try {
@@ -679,7 +737,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     throw new Error("Error updating attributes");
                 }
             }
-            clearChildNodes(newElement);
+            deleteNode(newElement);
 
         };
 
@@ -723,7 +781,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var doUpdate = function doUpdate(element, context) {
-            var id, content, markup, str, state;
+            var id, content, markup, state;
             var stateForm;
             var scripts = []; // temp holding value for array of script nodes
 
@@ -781,9 +839,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 content = element.childNodes[j];
                 markup += content.nodeValue;
             }
-
-            // Strip out scripts
-            //str = markup.replace(new RegExp('(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)', 'img'), '');
 
             var src = markup;
 
@@ -898,8 +953,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var doDelete = function doDelete(element) {
             var id = element.getAttribute('id');
             var target = $(id);
-            var parent = target.parentNode;
-            parent.removeChild(target);
+            deleteNode(target);
         };
 
         /**
