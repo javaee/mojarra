@@ -64,6 +64,7 @@ public class RecordingResponseWriter extends ResponseWriter {
         WRITE_COMMENT,
         WRITE_TEXT,
         WRITE_TEXT_ARR,
+        WRITE_STR,
         WRITE
     }
 
@@ -142,6 +143,10 @@ public class RecordingResponseWriter extends ResponseWriter {
         record.add(new Command(CommandType.WRITE, text, off, len));
     }
 
+    public void write(String text) {
+        record.add(new Command(CommandType.WRITE_STR, text));
+    }
+
     public void close() {
         throw new UnsupportedOperationException();
     }
@@ -186,6 +191,9 @@ public class RecordingResponseWriter extends ResponseWriter {
                     break;
                 case WRITE_TEXT_ARR:
                     writer.writeText((char[]) command.getOne(), (Integer) command.getTwo(), (Integer) command.getThree());
+                    break;
+                case WRITE_STR:
+                    writer.write((String) command.getOne());
                     break;
                 case WRITE:
                     writer.write((char[]) command.getOne(), (Integer) command.getTwo(), (Integer) command.getThree());
