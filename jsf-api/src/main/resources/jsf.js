@@ -1322,7 +1322,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (description) {
                 data.description = description;
             } else if (status == "httpError") {
-                data.description = "There was an error communicating with the server, status: " + data.responseCode;
+                if (data.responseCode === 0) {
+                    data.description = "The Http Transport returned a 0 status code.  This is usually the result of mixing ajax and full requests.  This is usually undesired, for both performance and data integrity reasons.";
+                } else {
+                    data.description = "There was an error communicating with the server, status: " + data.responseCode;
+                }
             } else if (status == "serverError") {
                 data.description = serverErrorMessage;
             } else if (status == "emptyResponse") {
