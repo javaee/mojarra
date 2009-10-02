@@ -40,10 +40,10 @@ import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
+import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
@@ -61,12 +61,6 @@ public class MetadataHandler extends TagHandlerImpl {
 
     private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
-    /**
-     * <p>The name of the attribute whose presence hints to the next handler that
-     * the facet contains multiple children. The handler then knows to
-     * implicitly wrap the children in a UIPanel.</p>
-     */
-    public static final String FACET_IS_COMPOSITE = "facelets.FACET_IS_COMPOSITE";
 
     // ------------------------------------------------------------ Constructors
 
@@ -108,16 +102,13 @@ public class MetadataHandler extends TagHandlerImpl {
                 root.getAttributes().remove(FacetHandler.KEY);
             }
             facetComponent = root.getFacets().get(UIViewRoot.METADATA_FACET_NAME);
-            if (!(facetComponent instanceof UIPanel)) {
-                UIComponent panelGroup = ctx.getFacesContext().getApplication()
-                      .createComponent(UIPanel.COMPONENT_TYPE);
+            if (facetComponent != null && !(facetComponent instanceof UIPanel)) {
+                Application app = ctx.getFacesContext().getApplication();
+                UIComponent panelGroup = app.createComponent(UIPanel.COMPONENT_TYPE);
                 panelGroup.getChildren().add(facetComponent);
-                root.getFacets()
-                      .put(UIViewRoot.METADATA_FACET_NAME, panelGroup);
+                root.getFacets().put(UIViewRoot.METADATA_FACET_NAME, panelGroup);
                 facetComponent = panelGroup;
-
                 facetComponent.setId(UIViewRoot.METADATA_FACET_NAME);
-
             }
         }
     }
