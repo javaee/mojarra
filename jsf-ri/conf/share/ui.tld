@@ -717,7 +717,7 @@ means that you can pass objects to either an included file or a template.
 </div>]]>
             </description>
             <name>
-				name
+				value
             </name>
             <required>
             </required>
