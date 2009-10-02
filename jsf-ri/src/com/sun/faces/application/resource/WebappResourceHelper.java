@@ -45,6 +45,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
@@ -198,14 +199,16 @@ public class WebappResourceHelper extends ResourceHelper {
                                          resourceName,
                                          null,
                                          compressable,
-                                         resourceSupportsEL(resourceName, ctx));
+                                         resourceSupportsEL(resourceName, ctx),
+                                         ctx.isProjectStage(ProjectStage.Development));
             } else {
                 value = new ResourceInfo(resourceName,
                                          null,
                                          localePrefix,
                                          this,
                                          compressable,
-                                         resourceSupportsEL(resourceName, ctx));
+                                         resourceSupportsEL(resourceName, ctx),
+                                         ctx.isProjectStage(ProjectStage.Development));
             }
         } else {
             // ok, subdirectories exist, so find the latest 'version' directory
@@ -223,14 +226,16 @@ public class WebappResourceHelper extends ResourceHelper {
                                          resourceName,
                                          version,
                                          compressable,
-                                         resourceSupportsEL(resourceName, ctx));
+                                         resourceSupportsEL(resourceName, ctx),
+                                         ctx.isProjectStage(ProjectStage.Development));
             } else {
                 value = new ResourceInfo(resourceName,
                                          version,
                                          localePrefix,
                                          this,
                                          compressable,
-                                         resourceSupportsEL(resourceName, ctx));
+                                         resourceSupportsEL(resourceName, ctx),
+                                         ctx.isProjectStage(ProjectStage.Development));
             }
         }
 

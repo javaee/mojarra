@@ -1032,15 +1032,6 @@ public class RenderKitUtils {
                                                    String name,
                                                    String library) {
 
-        //  Necessary to deal with jsf.js compression
-        if ("javax.faces".equals(library) && "jsf.js".equals(name)) {
-            if (ctx.isProjectStage(ProjectStage.Development)) {
-                name= "jsf-uncompressed.js";
-            } else {
-                name = "jsf-compressed.js";
-            }
-        }
-
         UIViewRoot viewRoot = ctx.getViewRoot();
         ListIterator iter = (viewRoot.getComponentResources(ctx, "head")).listIterator();
         while (iter.hasNext()) {

@@ -58,6 +58,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.zip.GZIPOutputStream;
 
+import javax.faces.application.ProjectStage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
@@ -558,14 +559,16 @@ public abstract class ResourceHelper {
                                    resource.getName(),
                                    resource.getVersion(),
                                    false,
-                                   resource.supportsEL());
+                                   resource.supportsEL(),
+                                   FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Development));
         } else {
             ret = new ResourceInfo(resource.getName(),
                                    resource.getVersion(),
                                    resource.getLocalePrefix(),
                                    this,
                                    false,
-                                   resource.supportsEL());
+                                   resource.supportsEL(),
+                                   FacesContext.getCurrentInstance().isProjectStage(ProjectStage.Development));
         }
         return ret;
 

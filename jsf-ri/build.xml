@@ -316,8 +316,7 @@
         </concat>
 
         <java jar="${yuicompressor.jar}" fork="true"
-            args="-o ${build.classes.dir}/META-INF/resources/javax.faces/jsf-compressed.js ${build.classes.dir}/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
-
+            args="-o ${build.classes.dir}/META-INF/resources/javax.faces/jsf.js ${build.classes.dir}/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
         <!--
             RELEASE_PENDING (rlubke,driscoll)
             For now these are copied to the root of the jsf-impl.jar, but

@@ -39,6 +39,7 @@ package com.sun.faces.application.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
@@ -195,14 +196,16 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      resourceName,
                                      null,
                                      compressable,
-                                     resourceSupportsEL(resourceName, ctx));
+                                     resourceSupportsEL(resourceName, ctx),
+                                     ctx.isProjectStage(ProjectStage.Development));
         } else {
             value = new ResourceInfo(resourceName,
                                      null,
                                      localePrefix,
                                      this,
                                      compressable,
-                                     resourceSupportsEL(resourceName, ctx));
+                                     resourceSupportsEL(resourceName, ctx),
+                                     ctx.isProjectStage(ProjectStage.Development));
         }
         
         if (value.isCompressable()) {

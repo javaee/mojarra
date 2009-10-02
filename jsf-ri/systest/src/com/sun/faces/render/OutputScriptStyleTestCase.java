@@ -214,7 +214,7 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
 
         assertTrue(text.matches(
                 "(?s).*"+
-                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/jsf-uncompressed.js\\?ln=javax.faces\">.*" +
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/jsf.js\\?ln=javax.faces\">.*" +
                 "</script>.*"
                 ));
 

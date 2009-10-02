@@ -40,6 +40,7 @@ import java.io.File;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
@@ -64,7 +65,7 @@ public class ResourceInfo {
     private LibraryInfo library;
     private String path;
     private String compressedPath;
-    private boolean compressable;
+    private boolean compressible;
     private boolean supportsEL;
 
 
@@ -75,24 +76,26 @@ public class ResourceInfo {
      * @param library the library containing this resource
      * @param name the resource name
      * @param version the version of this resource (if any)
-     * @param compressable if this resource should be compressed
+     * @param compressible if this resource should be compressed
      * @param supportsEL <code>true</code> if this resource may contain
      *   EL expressions
+     * @param isDevStage true if this context is development stage
      */
     public ResourceInfo(LibraryInfo library,
                         String name,
                         VersionInfo version,
-                        boolean compressable,
-                        boolean supportsEL) {
+                        boolean compressible,
+                        boolean supportsEL,
+                        boolean isDevStage) {
         this.name = name;
         this.version = version;
         this.helper = library.getHelper();
         this.library = library;
         this.libraryName = library.getName();
         this.localePrefix = library.getLocalePrefix();
-        this.compressable = compressable;
+        this.compressible = compressible;
         this.supportsEL = supportsEL;
-        initPath();
+        initPath(isDevStage);
     }
 
     /**
@@ -101,7 +104,7 @@ public class ResourceInfo {
      * @param version the version of the resource
      * @param localePrefix the locale prefix for this resource (if any)
      * @param helper helper the helper class for this resource
-     * @param compressable if this resource should be compressed
+     * @param compressible if this resource should be compressed
      * @param supportsEL <code>true</code> if this resource may contain
      *   EL expressions
      */
@@ -109,15 +112,16 @@ public class ResourceInfo {
                  VersionInfo version,
                  String localePrefix,
                  ResourceHelper helper,
-                 boolean compressable,
-                 boolean supportsEL) {
+                 boolean compressible,
+                 boolean supportsEL,
+                 boolean isDevStage) {
         this.name = name;
         this.version = version;
         this.localePrefix = localePrefix;
         this.helper = helper;
-        this.compressable = compressable;
+        this.compressible = compressible;
         this.supportsEL = supportsEL;
-        initPath();
+        initPath(isDevStage);
     }
 
     @Override
@@ -211,7 +215,7 @@ public class ResourceInfo {
 
     /**
      * @return the path to which the compressed bits for this resource
-     *  reside.  If this resource isn't compressable and this method is called,
+     *  reside.  If this resource isn't compressible and this method is called,
      *  it will return <code>null</code>
      */
     public String getCompressedPath() {
@@ -223,7 +227,7 @@ public class ResourceInfo {
      *  otherwise <code>false</code>
      */
     public boolean isCompressable() {
-        return compressable;
+        return compressible;
     }
 
     /**
@@ -243,7 +247,7 @@ public class ResourceInfo {
                ", libraryVersion='" + ((library != null) ? library.getVersion() : "NONE") + '\'' +
                ", localePrefix='" + ((localePrefix != null) ? localePrefix : "NONE") + '\'' +
                ", path='" + path + '\'' +
-               ", compressable='" + compressable + '\'' +
+               ", compressible='" + compressible + '\'' +
                ", compressedPath=" + compressedPath +
                '}';
     }
@@ -256,7 +260,7 @@ public class ResourceInfo {
      * setup the compressedPath ivar so that the path refers to the
      * directory refereneced by the context attribute <code>javax.servlet.context.tempdir</code>.  
      */
-    private void initPath() {
+    private void initPath(boolean isDevStage) {
 
         StringBuilder sb = new StringBuilder(32);
         if (library != null) {
@@ -267,7 +271,12 @@ public class ResourceInfo {
         if (library == null && localePrefix != null) {
             sb.append('/').append(localePrefix);
         }
-        sb.append('/').append(name);
+        // Specialcasing for handling jsf.js in uncompressed state
+        if (isDevStage && "javax.faces".equals(libraryName) && "jsf.js".equals(name)) {
+            sb.append('/').append("jsf-uncompressed.js");
+        } else {
+            sb.append('/').append(name);
+        }
         if (version != null) {
             sb.append('/').append(version.getVersion());
             String extension = version.getExtension();
@@ -277,7 +286,7 @@ public class ResourceInfo {
         }
         path = sb.toString();
 
-        if (compressable && !supportsEL) { // compression for static resources
+        if (compressible && !supportsEL) { // compression for static resources
             FacesContext ctx = FacesContext.getCurrentInstance();
             File servletTmpDir = (File) ctx.getExternalContext()
                   .getApplicationMap().get("javax.servlet.context.tempdir");
@@ -290,7 +299,7 @@ public class ResourceInfo {
                                              : servletTmpDir.toString()),
                                             path});
                 }
-                compressable = false;
+                compressible = false;
             } else {
                 String tPath = ((path.charAt(0) == '/') ? path : '/' + path);
                 File newDir = new File(servletTmpDir, COMPRESSED_CONTENT_DIRECTORY
@@ -301,7 +310,7 @@ public class ResourceInfo {
                         if (newDir.mkdirs()) {
                             compressedPath = newDir.getCanonicalPath();
                         } else {
-                            compressable = false;
+                            compressible = false;
                             if (LOGGER.isLoggable(Level.WARNING)) {
                                 LOGGER.log(Level.WARNING,
                                            "jsf.application.resource.unable_to_create_compression_directory",
@@ -317,7 +326,7 @@ public class ResourceInfo {
 	                               e.toString(),
 	                               e);
                 	}
-                    compressable = false;
+                    compressible = false;
                 }
             }
         }
