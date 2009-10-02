@@ -349,10 +349,8 @@
     <target name="ri.vdldocs">
 
         <echo>Build the vdldocs</echo>
-<!--
         <ant inheritAll="false" dir="${impl.dir}"
              antfile="build.xml" target="vdldocs"/>
--->
         <echo>Copy the Javadocs to the dist</echo>
         <copy todir="${dist.home}/vdldocs">
             <fileset dir="${impl.dir}/build/vdldocs"/>
