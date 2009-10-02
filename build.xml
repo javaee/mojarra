@@ -156,7 +156,7 @@
                                   **/build/lib/**,
                                   **/build/generate/facesdoc/**,
                                   **/build/generate/last-generation,
-                                  **/build/pdldocs/**,
+                                  **/build/vdldocs/**,
                                   **/build/generate/last-taglib-generation,
                                   **/build/generate/conf/**,
                                   **/build/TAG*txt,
@@ -271,7 +271,7 @@
         <unzip dest="${spec.snapshot.dir}"
                src="${demo.dir}/dist/docs/renderkitdocs-${impl.version}.zip" />
         <unzip dest="${spec.snapshot.dir}"
-               src="${demo.dir}/dist/docs/pdldocs-${impl.version}.zip" />
+               src="${demo.dir}/dist/docs/vdldocs-${impl.version}.zip" />
 
         <zip destfile="${dist.dir}/jsf-spec-${spec.version}-${build.number}.zip">
             <zipfileset dir="${spec.snapshot.dir}"

@@ -299,7 +299,7 @@
         </zip>
         <antcall target="api.javadocs"/>
         <antcall target="api.jsdocs"/>
-        <antcall target="ri.pdldocs"/>
+        <antcall target="ri.vdldocs"/>
         <!--
            rlubke: commented out for now since release notes are 
                    maintained live at https://javaserverfaces.dev.java.net/nonav/rlnotes/<version>
@@ -307,7 +307,7 @@
         <antcall target="copydocs"/>
         -->
         <delete dir="${dist.home}/renderkitdocs"/>
-        <delete dir="${dist.home}/pdldocs"/>
+        <delete dir="${dist.home}/vdldocs"/>
         <delete dir="${dist.home}/javadocs"/>
     </target>
 
@@ -346,17 +346,19 @@
 
     </target>
 
-    <target name="ri.pdldocs">
+    <target name="ri.vdldocs">
 
-        <echo>Build the Pdldocs</echo>
+        <echo>Build the vdldocs</echo>
+<!--
         <ant inheritAll="false" dir="${impl.dir}"
-             antfile="build.xml" target="pdldocs"/>
+             antfile="build.xml" target="vdldocs"/>
+-->
         <echo>Copy the Javadocs to the dist</echo>
-        <copy todir="${dist.home}/pdldocs">
-            <fileset dir="${impl.dir}/build/pdldocs"/>
+        <copy todir="${dist.home}/vdldocs">
+            <fileset dir="${impl.dir}/build/vdldocs"/>
         </copy>
-        <zip zipfile="${dist.home}/docs/pdldocs-${impl.version}.zip">
-           <fileset dir="${dist.home}" includes="pdldocs/**"/>
+        <zip zipfile="${dist.home}/docs/vdldocs-${impl.version}.zip">
+           <fileset dir="${dist.home}" includes="vdldocs/**"/>
         </zip>
 
     </target>
