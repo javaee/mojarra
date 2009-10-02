@@ -45,13 +45,16 @@ import java.util.logging.Level;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.context.*;
+import javax.faces.context.ExceptionHandler;
+import javax.faces.context.ExceptionHandlerWrapper;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.PartialResponseWriter;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.PhaseId;
-import javax.el.ELException;
 
 import com.sun.faces.util.FacesLogger;
 
@@ -189,8 +192,11 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
              writer.startDocument();
              writer.startError(t.getClass().toString());
              if (t.getCause() != null) {
-                 writer.write(t.getCause().getMessage());
+                 String msg = t.getCause().getMessage();
+                 writer.write(((msg != null) ? msg : ""));
              } else {
+                 String msg = t.getMessage();
+                 writer.write(((msg != null) ? msg : ""));
                  writer.write(t.getMessage());
              }
              writer.endError();
