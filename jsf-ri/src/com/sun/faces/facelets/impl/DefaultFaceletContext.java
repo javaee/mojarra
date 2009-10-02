@@ -134,7 +134,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.FaceletContext#getFacesContext()
+     * @see javax.faces.view.facelets.FaceletContext#getFacesContext()
      */
     public FacesContext getFacesContext() {
         return this.faces;
@@ -143,7 +143,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.FaceletContext#getExpressionFactory()
+     * @see javax.faces.view.facelets.FaceletContext#getExpressionFactory()
      */
     public ExpressionFactory getExpressionFactory() {
         return this.facelet.getExpressionFactory();
@@ -152,7 +152,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.FaceletContext#setVariableMapper(javax.el.VariableMapper)
+     * @see javax.faces.view.facelets.FaceletContext#setVariableMapper(javax.el.VariableMapper)
      */
     public void setVariableMapper(VariableMapper varMapper) {
         // Assert.param("varMapper", varMapper);
@@ -162,7 +162,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.FaceletContext#setFunctionMapper(javax.el.FunctionMapper)
+     * @see javax.faces.view.facelets.FaceletContext#setFunctionMapper(javax.el.FunctionMapper)
      */
     public void setFunctionMapper(FunctionMapper fnMapper) {
         // Assert.param("fnMapper", fnMapper);
@@ -172,7 +172,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.FaceletContext#includeFacelet(javax.faces.component.UIComponent,
+     * @see javax.faces.view.facelets.FaceletContext#includeFacelet(javax.faces.component.UIComponent,
      *      java.lang.String)
      */
     public void includeFacelet(UIComponent parent, String relativePath)
@@ -219,7 +219,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.FaceletContext#generateUniqueId(java.lang.String)
+     * @see javax.faces.view.facelets.FaceletContext#generateUniqueId(java.lang.String)
      */
     public String generateUniqueId(String base) {
 
@@ -266,7 +266,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.FaceletContext#getAttribute(java.lang.String)
+     * @see javax.faces.view.facelets.FaceletContext#getAttribute(java.lang.String)
      */
     public Object getAttribute(String name) {
         if (this.varMapper != null) {
@@ -281,7 +281,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.FaceletContext#setAttribute(java.lang.String,
+     * @see javax.faces.view.facelets.FaceletContext#setAttribute(java.lang.String,
      *      java.lang.Object)
      */
     public void setAttribute(String name, Object value) {
@@ -299,7 +299,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
     /*
      * (non-Javadoc)
      * 
-     * @see com.sun.facelets.FaceletContext#includeFacelet(javax.faces.component.UIComponent,
+     * @see javax.faces.view.facelets.FaceletContext#includeFacelet(javax.faces.component.UIComponent,
      *      java.net.URL)
      */
     public void includeFacelet(UIComponent parent, URL absolutePath)
