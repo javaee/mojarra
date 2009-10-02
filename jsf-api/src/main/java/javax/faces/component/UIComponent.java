@@ -1622,6 +1622,7 @@ private void doFind(FacesContext context, String clientId) {
     private UIComponent previouslyPushed = null;
     private UIComponent previouslyPushedCompositeComponent = null;
     private boolean pushed;
+    private int depth;
 
     /**
      * <p class="changed_added_2_0">Push the current
@@ -1662,20 +1663,29 @@ private void doFind(FacesContext context, String clientId) {
             throw new NullPointerException();
         }
 
-        Map<Object,Object> contextMap = context.getAttributes();
         if (null == component) {
             component = this;
         }
-        if (contextMap != null) {
-            pushed = true;
-            previouslyPushed = (UIComponent) contextMap.put(CURRENT_COMPONENT, component);
-            // If this is a composite component...
-            if (UIComponent.isCompositeComponent(component)) {
-                // make it so #{cc} resolves to this composite 
-                // component, preserving the previous value if present
-                previouslyPushedCompositeComponent = 
-                        (UIComponent) contextMap.put(CURRENT_COMPOSITE_COMPONENT, component);
-            }
+
+        Map<Object,Object> contextMap = context.getAttributes();
+
+        if (contextMap.get(CURRENT_COMPONENT) == component) {
+            depth++;
+            return;
+        }
+        if (contextMap.get(CURRENT_COMPOSITE_COMPONENT) == component) {
+            depth++;
+            return;
+        }
+
+        pushed = true;
+        previouslyPushed = (UIComponent) contextMap.put(CURRENT_COMPONENT, component);
+        // If this is a composite component...
+        if (UIComponent.isCompositeComponent(component)) {
+            // make it so #{cc} resolves to this composite
+            // component, preserving the previous value if present
+            previouslyPushedCompositeComponent =
+                    (UIComponent) contextMap.put(CURRENT_COMPOSITE_COMPONENT, component);
         }
 
     }
@@ -1701,6 +1711,11 @@ private void doFind(FacesContext context, String clientId) {
             throw new NullPointerException();
         }
 
+        if (depth > 0) {
+            depth--;
+            return;
+        }
+        
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
 
@@ -1716,7 +1731,7 @@ private void doFind(FacesContext context, String clientId) {
             }
 
             if (c != null && UIComponent.isCompositeComponent(c)) {
-                if (null != previouslyPushedCompositeComponent) {
+                if (previouslyPushedCompositeComponent != null) {
                     contextMap.put(CURRENT_COMPOSITE_COMPONENT,
                                    previouslyPushedCompositeComponent);
                 } else {
