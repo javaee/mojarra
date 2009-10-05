@@ -103,7 +103,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                    navigator.userAgent.toLowerCase().indexOf("msie") > -1 &&
                    navigator.userAgent.toLowerCase().indexOf("opera") == -1;
             return isIECache;
-        }
+        };
         var isIECache;
 
         /**
@@ -115,7 +115,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var isAutoExecCache;
         var isAutoExec = function isAutoExec() {
             try {
-                if (typeof isAutoExecCache !== "undefined") return isAutoExecCache;
+                if (typeof isAutoExecCache !== "undefined") {
+                    return isAutoExecCache;
+                }
                 var autoExecTestString = "<script>var mojarra = mojarra || {};mojarra.autoExecTest = true;</script>";
                 var tempElement = document.createElement('span');
                 tempElement.innerHTML = autoExecTestString;
@@ -442,7 +444,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              */
             getParseErrorText = function (oDoc) {
                 var parseErrorText = PARSED_OK;
-                if (oDoc && oDoc.parseError && oDoc.parseError.errorCode && oDoc.parseError.errorCode != 0) {
+                if (oDoc && oDoc.parseError && oDoc.parseError.errorCode && oDoc.parseError.errorCode !== 0) {
                     parseErrorText = "XML Parsing Error: " + oDoc.parseError.reason +
                                      "\nLocation: " + oDoc.parseError.url +
                                      "\nLine Number " + oDoc.parseError.line + ", Column " +
@@ -481,7 +483,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 } else if (oDoc.getElementsByTagName("parsererror").length > 0) {
                     var parsererror = oDoc.getElementsByTagName("parsererror")[0];
                     parseErrorText = getText(parsererror, true) + "\n";
-                } else if (oDoc.parseError && oDoc.parseError.errorCode != 0) {
+                } else if (oDoc.parseError && oDoc.parseError.errorCode !== 0) {
                     parseErrorText = PARSED_UNKNOWN_ERROR;
                 }
                 return parseErrorText;
