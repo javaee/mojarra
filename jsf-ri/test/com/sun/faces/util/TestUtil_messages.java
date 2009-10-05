@@ -203,7 +203,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.INVALID_RESOURCE_FORMAT_ERROR, "1"},
         {MessageUtils.INVALID_RESOURCE_FORMAT_NO_LIBRARY_NAME_ERROR, "1"},
         {MessageUtils.INVALID_RESOURCE_FORMAT_COLON_ERROR, "1"},
-        {MessageUtils.ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR, "0"}
+        {MessageUtils.ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR, "0"},
+        {MessageUtils.PARTIAL_STATE_ERROR_RESTORING_ID, "2"},
     };
 
 // Attribute Instance Variables

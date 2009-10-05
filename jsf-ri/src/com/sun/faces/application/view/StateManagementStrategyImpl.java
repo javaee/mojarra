@@ -49,6 +49,7 @@ import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
 import java.util.ArrayList;
@@ -223,10 +224,20 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
                 public VisitResult visit(VisitContext context, UIComponent target) {
                     VisitResult result = VisitResult.ACCEPT;
-                    Object stateObj = state.get(target.getClientId(context.getFacesContext()));
+                    String cid = target.getClientId(context.getFacesContext());
+                    Object stateObj = state.get(cid);
                     if (stateObj != null && !target.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
-                        target.restoreState(context.getFacesContext(),
-                                stateObj);
+                        try {
+                            target.restoreState(context.getFacesContext(),
+                                                stateObj);
+                        } catch (Exception e) {
+                            String msg =
+                                  MessageUtils.getExceptionMessageString(
+                                        MessageUtils.PARTIAL_STATE_ERROR_RESTORING_ID,
+                                        cid,
+                                        e.toString());
+                            throw new FacesException(msg);
+                        }
                         app.publishEvent(context.getFacesContext(),
                                 PostRestoreStateEvent.class,
                                 target);

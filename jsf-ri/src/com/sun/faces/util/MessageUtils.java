@@ -320,6 +320,8 @@ public class MessageUtils {
           "com.sun.faces.RESOURCE_INVALID_FORMAT_ERROR";
     public static final String ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR =
           "com.sun.faces.ARGUMENTS_NOT_LEGAL_WITH_CC_ATTRS_EXPR";
+    public static final String PARTIAL_STATE_ERROR_RESTORING_ID =
+          "com.sun.faces.partial.statesaving.ERROR_RESTORING_STATE_FOR_COMPONENT";
    
     
     public static final String JS_RESOURCE_WRITING_ERROR_ID =
