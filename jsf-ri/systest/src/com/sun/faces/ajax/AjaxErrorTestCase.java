@@ -116,8 +116,8 @@ public class AjaxErrorTestCase extends AbstractTestCase {
         button.click();
 
         assertEquals(1, collectedAlerts.size());
-        String serverError = "serverError: class javax.faces.el.MethodNotFoundException /ajax/ajaxError.xhtml @51,76 action=&quot;#{evalBean.error}&quot;: Method not found:";
-        assertEquals(serverError.substring(0,142), collectedAlerts.get(0).substring(0,142));
+        String serverError = "serverError: class javax.faces.el.MethodNotFoundException /ajax/ajaxError.xhtml @51,76 action=\"#{evalBean.error}\": Method not found:";
+        assertEquals(serverError.substring(0,130), collectedAlerts.get(0).substring(0,130));
 
         page = getPage("/faces/ajax/ajaxError3.xhtml");
         button = (HtmlSubmitInput) getInputContainingGivenId(page, "form:error");

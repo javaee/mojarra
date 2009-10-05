@@ -422,9 +422,6 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
         }
         if (responseWriter instanceof PartialResponseWriter)  {
             return (PartialResponseWriter) responseWriter;
-        } else if (responseWriter instanceof HtmlResponseWriter) {
-            ((HtmlResponseWriter)responseWriter).setPartial(true);
-            return new PartialResponseWriter(responseWriter);
         } else {
             return new PartialResponseWriter(responseWriter);
         }

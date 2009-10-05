@@ -663,26 +663,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     }
 
-
-    protected int getOptionNumber(List<SelectItem> selectItems) {
-
-        int itemCount = 0;
-        if (!selectItems.isEmpty()) {
-            for (Iterator items = selectItems.iterator(); items.hasNext();) {
-                itemCount++;
-                SelectItem item = (SelectItem) items.next();
-                if (item instanceof SelectItemGroup) {
-                    int optionsLength =
-                          ((SelectItemGroup) item).getSelectItems().length;
-                    itemCount += optionsLength;
-                }
-            }
-        }
-        return itemCount;
-
-    }
-
-
     protected Object[] getSubmittedSelectedValues(UIComponent component) {
 
         if (component instanceof UISelectMany) {
@@ -857,8 +837,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         // render the options to a buffer now so that we can determine
         // the size
-        RecordingResponseWriter recordwriter = new RecordingResponseWriter();
-        context.setResponseWriter(recordwriter);
+        FastStringWriter bufferedWriter = new FastStringWriter(128);
+        context.setResponseWriter(writer.cloneWithWriter(bufferedWriter));
         int count = renderOptions(context, component, items);
         context.setResponseWriter(writer);
         // If "size" is *not* set explicitly, we have to default it correctly
@@ -879,7 +859,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         RenderKitUtils.renderOnchange(context, component, false);
 
         // Now, write the buffered option content
-        recordwriter.replay(writer);
+        writer.write(bufferedWriter.toString());
         
         writer.endElement("select");
 

@@ -117,10 +117,10 @@ public class HtmlResponseWriter extends ResponseWriter {
     // 'script' or 'style' element
     private boolean scriptOrStyleSrc;
 
-    // flag to indicate that we're writing inside a partial reponse
-    private boolean isPartial = false;
+    // flag to indicate if this is a partial response
+    private boolean isPartial;
 
-    // flag to indicate if the content type is Xhtml
+    // flag to indicate if the content type is XHTML
     private boolean isXhtml;
 
     // HtmlResponseWriter to use when buffering is required
@@ -218,7 +218,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                               String contentType,
                               String encoding)
     throws FacesException {
-        this(writer, contentType, encoding, null, null, null);
+        this(writer, contentType, encoding, null, null, null, false);
     }
 
     /**
@@ -242,7 +242,8 @@ public class HtmlResponseWriter extends ResponseWriter {
                               String encoding,
                               Boolean isScriptHidingEnabled,
                               Boolean isScriptInAttributeValueEnabled,
-                              WebConfiguration.DisableUnicodeEscaping disableUnicodeEscaping)
+                              WebConfiguration.DisableUnicodeEscaping disableUnicodeEscaping,
+                              boolean isPartial)
     throws FacesException {
 
         this.writer = writer;
@@ -282,6 +283,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         // and store them for later use
+        this.isPartial = isPartial;
         this.isScriptHidingEnabled = isScriptHidingEnabled;
         this.isScriptInAttributeValueEnabled = isScriptInAttributeValueEnabled;
         this.disableUnicodeEscaping = disableUnicodeEscaping;
@@ -392,7 +394,8 @@ public class HtmlResponseWriter extends ResponseWriter {
                                           getCharacterEncoding(),
                                           isScriptHidingEnabled,
                                           isScriptInAttributeValueEnabled,
-                                          disableUnicodeEscaping);
+                                          disableUnicodeEscaping,
+                                          isPartial);
         } catch (FacesException e) {
             // This should never happen
             throw new IllegalStateException();
@@ -650,83 +653,32 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     @Override
     public void write(char[] cbuf) throws IOException {
-
         closeStartIfNecessary();
-
-        if (writingCdata) {
-            writeEscaped(cbuf, 0, cbuf.length);
-        } else {
-            writer.write(cbuf);
-        }
-
+        writer.write(cbuf);
     }
 
     @Override
     public void write(int c) throws IOException {
-
         closeStartIfNecessary();
-
-        if (writingCdata) {
-            if (c == CLOSEBRACKET) {
-                writer.write(ESCAPEDSINGLEBRACKET);
-            } else if (c == LT) {
-                writer.write(ESCAPEDLT);
-            } else {
-                writer.write(c);
-            }
-        } else {  // not in cdata, just passthru
-            writer.write(c);
-        }
-
+        writer.write(c);
     }
 
     @Override
     public void write(String str) throws IOException {
-
         closeStartIfNecessary();
-
-        if (str == null) {  // if null, passthru for error generation
-            writer.write(str);
-            return;
-        }
-
-        if (writingCdata) {
-            write(str.toCharArray());
-        } else {  // not in cdata, just passthru
-            writer.write(str);
-        }
+        writer.write(str);
     }
 
-
+    @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-
         closeStartIfNecessary();
-
-        if (off < 0 || len < 0 || off + len > cbuf.length ) {
-            throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > cbuf.length");
-        }
-
-        if (writingCdata) {
-            writeEscaped(cbuf, off, len);
-        } else {
-            writer.write(cbuf, off, len);
-        }
+        writer.write(cbuf, off, len);
     }
 
     @Override
     public void write(String str, int off, int len) throws IOException {
-
         closeStartIfNecessary();
-        
-        if (off < 0 || len < 0 || off + len > str.length() ) {
-            throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > str.length()");
-        }
-
-        if (writingCdata) {
-            write(str.substring(off, off+len).toCharArray());
-        } else {
-            writer.write(str, off, len);
-        }
+        writer.write(str, off, len);
     }
 
 
@@ -854,7 +806,15 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void writeText(char text) throws IOException {
 
         closeStartIfNecessary();
-        if (dontEscape) {
+        if (isPartial) {
+            charHolder[0] = text;
+            HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, charHolder);
+            return;
+        }
+        if (writingCdata) {
+            charHolder[0] = text;
+            writeEscaped(charHolder, 0, 1);
+        } else if (dontEscape) {
             writer.write(text);
         } else {
             charHolder[0] = text;
@@ -888,7 +848,14 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "text"));
         }
         closeStartIfNecessary();
-        if (dontEscape) {
+
+        if (isPartial) {
+            HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text);
+            return;
+        }
+        if (writingCdata) {
+            writeEscaped(text, 0, text.length);
+        } else if (dontEscape) {
             writer.write(text);
         } else {
             HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text);
@@ -920,6 +887,16 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         closeStartIfNecessary();
         String textStr = text.toString();
+        if (isPartial) {
+            ensureTextBufferCapacity(textStr);
+            HtmlUtils.writeText(writer,
+                                escapeUnicode,
+                                escapeIso,
+                                buffer,
+                                textStr,
+                                textBuffer);
+            return;
+        }
         if (writingCdata) {
             int textLen = textStr.length();
             if (textLen > cdataTextBufferSize) {
@@ -977,6 +954,10 @@ public class HtmlResponseWriter extends ResponseWriter {
             throw new IndexOutOfBoundsException();
         }
         closeStartIfNecessary();
+        if (isPartial) {
+            HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text, off, len);
+            return;
+        }
         if (writingCdata) {
             writeEscaped(text, off, len);
         } else  if (dontEscape) {
@@ -1052,15 +1033,6 @@ public class HtmlResponseWriter extends ResponseWriter {
 
         attributesBuffer.write('"');
 
-    }
-
-    /**
-     * Set a flag to indicate that this stream is being used by a partial response.
-     * See writeText for it's impact.
-     * @param isPartial  Is this a partial response?
-     */
-    public void setPartial(boolean isPartial) {
-        this.isPartial = isPartial;
     }
 
     // --------------------------------------------------------- Private Methods
@@ -1173,28 +1145,6 @@ private void writeEscaped(char cbuf[], int offset, int length) throws IOExceptio
    if (offset < 0 || length < 0 || offset + length > cbuf.length ) {
         throw new IndexOutOfBoundsException("off < 0 || len < 0 || off + len > cbuf.length");
    }
-
-    if (isPartial) {
-        // PENDING - it's not hard to imagine how this could break
-        // but there aren't any other options with the current API
-        // These if statements check for XML and DOCTYPE declarations,
-        // and pass them through.
-        // This is going to only get fixed when we disambiguate CDATA in a partial
-        // from regular CDATA.
-        if (cbuf[0] == '<') {
-            if (cbuf[1] == '?' && cbuf[2] == 'x' && cbuf[3] == 'm' && cbuf[4] == 'l') {
-                writer.write(cbuf, offset, length);
-                return;
-            }
-            if (cbuf[1] == '!' && cbuf[2] == 'D' && cbuf[3] == 'O' && cbuf[4] == 'C') {
-                writer.write(cbuf, offset, length);
-                return;
-            }
-        }
-        HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, cbuf, offset, length);
-        return;
-    }
-
 
     // Single char case
     if (length == 1) {
