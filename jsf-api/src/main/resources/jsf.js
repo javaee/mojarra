@@ -846,29 +846,50 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             // If our special render all markup is present..
             if (id === "javax.faces.ViewRoot" || id === "javax.faces.ViewBody") {
-                var bodyStartEx = new RegExp("< *body.*>", "gi");
-                var docBody = document.getElementsByTagName("body")[0];
-                if (bodyStartEx.exec(src) !== null) { // replace body tag
+                var bodyStartEx = new RegExp("< *body[^>]*>", "gi");
+                var bodyEndEx = new RegExp("< */ *body[^>]*>", "gi");
+                var newsrc;
 
-                    if (isIE()) {
-                        // Get scripts from text
-                        scripts = stripScriptsIE(src);
-                        // Remove scripts from text
-                        src = src.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm, "");
-                        elementReplace(getBodyElement(src), docBody);
-                    } else {
-                        // Get the body element out of the source text
-                        var newBody = getBodyElement(src);
-                        // strip scripts out, if necessary
-                        // Note that unlike other places, we run stripscripts regardless of autoexec
-                        // Since the copy code doesn't load the scripts - since they're first created
-                        // outside the current document
-                        scripts = stripScripts(newBody);
-                        // replace current body with new body
-                        elementReplace(newBody, docBody);
+                var docBody = document.getElementsByTagName("body")[0];
+                var bodyStart = bodyStartEx.exec(src);
+
+                if (bodyStart !== null) { // replace body tag
+                    // First, try with XML manipulation
+                    try {
+                        if (isIE()) {
+                            // Get scripts from text
+                            scripts = stripScriptsIE(src);
+                            // Remove scripts from text
+                            newsrc = src.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm, "");
+                            elementReplace(getBodyElement(newsrc), docBody);
+                        } else {
+                            // Get the body element out of the source text
+                            var newBody = getBodyElement(src);
+                            // strip scripts out, if necessary
+                            // Note that unlike other places, we run stripscripts regardless of autoexec
+                            // Since the copy code doesn't load the scripts - since they're first created
+                            // outside the current document
+                            scripts = stripScripts(newBody);
+                            // replace current body with new body
+                            elementReplace(newBody, docBody);
+                        }
+                        // Run scripts, if necessary
+                        runScripts(scripts);
+                    } catch (e) {
+                        // OK, replacing the body didn't work with XML - fall back to quirks mode insert
+                        var srcBody, bodyEnd;
+                        // if src contains </body>
+                        bodyEnd = bodyEndEx.exec(src);
+                        if (bodyEnd !== null) {
+                            srcBody = src.substring(bodyStartEx.lastIndex,
+                                    bodyEnd.index);
+                        } else { // can't find the </body> tag, punt
+                            srcBody = src.substring(bodyStartEx.lastIndex);
+                        }
+                        // replace body contents with innerHTML - note, script handling happens within function
+                        elementReplaceStr(docBody, "body", srcBody);
+
                     }
-                    // Run scripts, if necessary
-                    runScripts(scripts);
 
                 } else {  // replace body contents with innerHTML - note, script handling happens within function
                     elementReplaceStr(docBody, "body", src);
