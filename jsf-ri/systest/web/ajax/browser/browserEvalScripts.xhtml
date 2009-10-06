@@ -40,7 +40,8 @@
         };
     </script>
     <div id="updated"></div>
-    <cc:evalTest id="eval"/>
+    <cc:evalTestFile id="evalFile"/>
+    <cc:evalTestInline id="evalInline"/>
     <h:form>
         <h:commandButton id="doEval" value="doEval" action="#{evalScriptBean.doEval}">
             <f:ajax execute="@this" render="@none"/>
@@ -52,8 +53,13 @@
         </h:commandButton>
         Works in all browsers
         <br/>
+        <h:commandButton id="doInlineCC" value="doInlineCC">
+            <f:ajax execute="@none" render=":evalInline"/>
+        </h:commandButton>
+        Works in all browsers?
+        <br/>
         <h:commandButton id="doFile" value="doFile" action="#{evalScriptBean.doInline}">
-            <f:ajax execute="@none" render=":eval" onevent="evalFileEvent"/>
+            <f:ajax execute="@none" render=":evalFile" onevent="evalFileEvent"/>
         </h:commandButton>
         Works in all browsers
         <br/>

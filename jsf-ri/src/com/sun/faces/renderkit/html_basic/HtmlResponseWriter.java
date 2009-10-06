@@ -97,7 +97,9 @@ public class HtmlResponseWriter extends ResponseWriter {
     private boolean escapeIso;
 
     // True when we shouldn't be escaping output (basically,
-    // inside of <script> and <style> elements).
+    // inside of <script> and <style> elements).   Note
+    // that this will *not* be set for CDATA blocks - that's
+    // instead the writingCdata flag
     //
     private boolean dontEscape;
 
@@ -430,11 +432,9 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
 
-        if (!writingCdata) {
-            // always turn escaping back on once an element ends unless we're
-            // still writing cdata content
-            dontEscape = false;
-        }
+        // always turn escaping back on once an element ends
+        dontEscape = false;
+
         isXhtml = getContentType().equals(
             RIConstants.XHTML_CONTENT_TYPE);
 
@@ -608,7 +608,6 @@ public class HtmlResponseWriter extends ResponseWriter {
             // keep escaping disabled
             isCdata = false;
             writingCdata = true;
-            dontEscape = true;
         }
 
         writer.write('<');
@@ -632,7 +631,6 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         closeStartIfNecessary();        
         writingCdata = true;
-        dontEscape = true;
         writer.write("<![CDATA[");
         closeStart = false;
     }
@@ -648,7 +646,6 @@ public class HtmlResponseWriter extends ResponseWriter {
         closeStartIfNecessary();
         writer.write("]]>");
         writingCdata = false;
-        dontEscape = false;
     }
 
     @Override
@@ -806,19 +803,15 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void writeText(char text) throws IOException {
 
         closeStartIfNecessary();
-        if (isPartial) {
+        if (dontEscape) {
+            writer.write(text);
+        } else if (isPartial || !writingCdata) {
             charHolder[0] = text;
             HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, charHolder);
-            return;
-        }
-        if (writingCdata) {
+        } else {  // if writingCdata
+            assert writingCdata;
             charHolder[0] = text;
             writeEscaped(charHolder, 0, 1);
-        } else if (dontEscape) {
-            writer.write(text);
-        } else {
-            charHolder[0] = text;
-            HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, charHolder);
         }
 
     }
@@ -849,16 +842,13 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         closeStartIfNecessary();
 
-        if (isPartial) {
-            HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text);
-            return;
-        }
-        if (writingCdata) {
-            writeEscaped(text, 0, text.length);
-        } else if (dontEscape) {
+        if (dontEscape) {
             writer.write(text);
-        } else {
+        } else if (isPartial || !writingCdata) {
             HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text);
+        } else { // if writingCdata
+            assert writingCdata;
+            writeEscaped(text, 0, text.length);
         }
 
     }
@@ -887,7 +877,10 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         closeStartIfNecessary();
         String textStr = text.toString();
-        if (isPartial) {
+
+        if (dontEscape) {
+            writer.write(textStr);
+        } else if (isPartial || !writingCdata) {
             ensureTextBufferCapacity(textStr);
             HtmlUtils.writeText(writer,
                                 escapeUnicode,
@@ -895,9 +888,8 @@ public class HtmlResponseWriter extends ResponseWriter {
                                 buffer,
                                 textStr,
                                 textBuffer);
-            return;
-        }
-        if (writingCdata) {
+        } else { // if writingCdata
+            assert writingCdata;
             int textLen = textStr.length();
             if (textLen > cdataTextBufferSize) {
                 writeEscaped(textStr.toCharArray(), 0, textLen);
@@ -910,16 +902,6 @@ public class HtmlResponseWriter extends ResponseWriter {
                 }
                 writeEscaped(cdataTextBuffer, 0, textLen);
             }
-        } else if (dontEscape) {
-            writer.write(textStr);
-        } else {
-            ensureTextBufferCapacity(textStr);
-            HtmlUtils.writeText(writer,
-                                escapeUnicode,
-                                escapeIso,
-                                buffer,
-                                textStr,
-                                textBuffer);
         }
     }
 
@@ -954,16 +936,17 @@ public class HtmlResponseWriter extends ResponseWriter {
             throw new IndexOutOfBoundsException();
         }
         closeStartIfNecessary();
-        if (isPartial) {
-            HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text, off, len);
-            return;
-        }
-        if (writingCdata) {
-            writeEscaped(text, off, len);
-        } else  if (dontEscape) {
+
+        // optimize away zero length write, called by Facelets to close tags
+        if (len == 0) return;
+
+        if (dontEscape) {
             writer.write(text, off, len);
-        } else {
+        } else if (isPartial || !writingCdata) {
             HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text, off, len);
+        } else { // if (writingCdata)
+            assert writingCdata;
+            writeEscaped(text, off, len);
         }
 
     }
