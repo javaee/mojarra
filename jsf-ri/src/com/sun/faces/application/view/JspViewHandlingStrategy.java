@@ -131,6 +131,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
                 if (associate != null) {
                     associate.responseRendered();
                 }
+                context.responseComplete();
                 return;
             }
         } catch (IOException e) {
@@ -154,7 +155,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
         // suppress rendering if "rendered" property on the component is
         // false
-        if (!view.isRendered()) {
+        if (!view.isRendered() || context.getResponseComplete()) {
             return;
         }
 
