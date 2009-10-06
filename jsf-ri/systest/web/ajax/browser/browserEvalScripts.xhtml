@@ -46,7 +46,7 @@
         <h:commandButton id="doEval" value="doEval" action="#{evalScriptBean.doEval}">
             <f:ajax execute="@this" render="@none"/>
         </h:commandButton>
-        Works in all browsers
+        Works in all browsers except K
         <br/>
         <h:commandButton id="doInline" value="doInline" action="#{evalScriptBean.doInline}">
             <f:ajax execute="@this" render="@none"/>
@@ -56,7 +56,7 @@
         <h:commandButton id="doInlineCC" value="doInlineCC">
             <f:ajax execute="@none" render=":evalInline"/>
         </h:commandButton>
-        Works in all browsers?
+        Works in all browsers
         <br/>
         <h:commandButton id="doFile" value="doFile" action="#{evalScriptBean.doInline}">
             <f:ajax execute="@none" render=":evalFile" onevent="evalFileEvent"/>
