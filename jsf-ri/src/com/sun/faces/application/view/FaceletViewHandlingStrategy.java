@@ -537,11 +537,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // the case when the attrName is an action, and even then, it'll be a
             // ValueExpression in all cases except when it's a literal string.
             if (null == attrValue) {
-                attrValue = metadata.getDefault();
+                Map<String, Object> attrs = topLevelComponent.getAttributes();
+                attrValue = (attrs.containsKey(attrName)) ?
+                    attrs.get(attrName) : metadata.getDefault();
                 if (attrValue == null) {
                     if (metadata.isRequired(context)) {
-                        Object location = topLevelComponent.getAttributes()
-                              .get(UIComponent.VIEW_LOCATION_KEY);
+                        Object location = attrs.get(UIComponent.VIEW_LOCATION_KEY);
                         if (location == null) {
                             location = "";
                         }
@@ -1080,7 +1081,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
                 while (idx < descriptors.length) {
                     PropertyDescriptor pd = descriptors[idx];
-                    if (pd.getValue("type") != null || pd.getValue("method-signature") == null) {
+                    if (shouldSkip(pd)) {
                         // this is a ValueExpression-enabled attribute and
                         // should be ignored.
                         idx++;
@@ -1110,6 +1111,19 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
             throw new UnsupportedOperationException();
 
+        }
+
+        private boolean shouldSkip(PropertyDescriptor pd) {
+            boolean result = true;
+            String name = pd.getName();
+            boolean isSpecialAttributeName = name.equals("action") ||
+                            name.equals("actionListener") || name.equals("validator")
+                            || name.equals("valueChangeListener");
+            result = (!isSpecialAttributeName &&
+                     (pd.getValue("type") != null ||
+                      pd.getValue("method-signature") == null));
+
+            return result;
         }
 
     } // END MethodMetadataIterator
