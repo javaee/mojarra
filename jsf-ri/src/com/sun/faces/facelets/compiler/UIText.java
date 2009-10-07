@@ -78,13 +78,16 @@ public final class UIText extends UILeaf {
     }
 
     public void encodeBegin(FacesContext context) throws IOException {
-        ResponseWriter out = context.getResponseWriter();
-        try {
-            txt.write(out, context.getELContext());
-        } catch (ELException e) {
-            throw new ELException(this.alias + ": " + e.getMessage(), e.getCause());
-        } catch (Exception e) {
-            throw new ELException(this.alias + ": " + e.getMessage(), e);
+        if (this.isRendered()) {
+            ResponseWriter out = context.getResponseWriter();
+            try {
+                txt.write(out, context.getELContext());
+            } catch (ELException e) {
+                throw new ELException(this.alias + ": " + e.getMessage(),
+                                      e.getCause());
+            } catch (Exception e) {
+                throw new ELException(this.alias + ": " + e.getMessage(), e);
+            }
         }
     }
 

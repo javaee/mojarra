@@ -64,8 +64,10 @@ public final class UILiteralText extends UILeaf {
     }
 
     public void encodeBegin(FacesContext faces) throws IOException {
-        ResponseWriter writer = faces.getResponseWriter();
-        writer.write(this.text);
+        if (this.isRendered()) {
+            ResponseWriter writer = faces.getResponseWriter();
+            writer.write(this.text);
+        }
     }
     public String toString() {
         return this.text;
