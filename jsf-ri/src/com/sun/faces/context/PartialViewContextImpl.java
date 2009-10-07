@@ -69,7 +69,6 @@ import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.OnOffResponseWrapper;
 import com.sun.faces.util.Util;
-import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 
  public class PartialViewContextImpl extends PartialViewContext {
 
@@ -310,7 +309,7 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
     public PartialResponseWriter getPartialResponseWriter() {
         assertNotReleased();
         if (partialResponseWriter == null) {
-            partialResponseWriter = createPartialResponseWriter();
+            partialResponseWriter = new DelayedInitPartialResponseWriter(this);
         }
         return partialResponseWriter;
     }
@@ -444,7 +443,9 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
         }
     }
 
+
     // ----------------------------------------------------------- Inner Classes
+
 
     private static class PhaseAwareVisitCallback implements VisitCallback {
 
@@ -511,4 +512,40 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
         }
     }
 
-} // end of class PartialViewContextImpl
+
+     /**
+      * Delays the actual construction of the PartialResponseWriter <em>until</em>
+      * content is going to actually be written.
+      */
+    private static final class DelayedInitPartialResponseWriter extends PartialResponseWriter {
+
+        private ResponseWriter writer;
+        private PartialViewContextImpl ctx;
+
+        // -------------------------------------------------------- Constructors
+
+
+        public DelayedInitPartialResponseWriter(PartialViewContextImpl ctx) {
+
+            super(null);
+            this.ctx = ctx;
+
+        }
+
+
+        // ---------------------------------- Methods from PartialResponseWriter
+
+
+        @Override
+        public ResponseWriter getWrapped() {
+
+            if (writer == null) {
+                writer = ctx.createPartialResponseWriter();
+            }
+            return writer;
+
+        }
+         
+    } // END DelayedInitPartialResponseWriter
+
+} 

@@ -108,6 +108,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void startDocument() throws IOException {
+        ResponseWriter writer = getWrapped();
         writer.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
         writer.startElement("partial-response", null);
     }
@@ -120,6 +121,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      */
     public void endDocument() throws IOException {
         endChangesIfNecessary();
+        ResponseWriter writer = getWrapped();
         writer.endElement("partial-response");
     }
 
@@ -135,6 +137,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
             throws IOException {
         startChangesIfNecessary();
         inInsertBefore = true;
+        ResponseWriter writer = getWrapped();
         writer.startElement("insert", null);
         writer.startElement("before", null);
         writer.writeAttribute("id", targetId, null);
@@ -153,6 +156,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
             throws IOException {
         startChangesIfNecessary();
         inInsertAfter = true;
+        ResponseWriter writer = getWrapped();
         writer.startElement("insert", null);
         writer.startElement("after", null);
         writer.writeAttribute("id", targetId, null);
@@ -166,6 +170,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endInsert() throws IOException {
+        ResponseWriter writer = getWrapped();
         writer.endCDATA();
         if (inInsertBefore) {
             writer.endElement("before");
@@ -186,6 +191,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      */
     public void startUpdate(String targetId) throws IOException {
         startChangesIfNecessary();
+        ResponseWriter writer = getWrapped();
         writer.startElement("update", null);
         writer.writeAttribute("id", targetId, null);
         writer.startCDATA();
@@ -198,6 +204,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endUpdate() throws IOException {
+        ResponseWriter writer = getWrapped();
         writer.endCDATA();
         writer.endElement("update");
     }
@@ -213,6 +220,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
     public void updateAttributes(String targetId, Map<String, String> attributes)
             throws IOException {
         startChangesIfNecessary();
+        ResponseWriter writer = getWrapped();
         writer.startElement("attributes", null);
         writer.writeAttribute("id", targetId, null);
         for (Map.Entry<String, String> entry : attributes.entrySet()) {
@@ -233,6 +241,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      */
     public void delete(String targetId) throws IOException {
         startChangesIfNecessary();
+        ResponseWriter writer = getWrapped();
         writer.startElement("delete", null);
         writer.writeAttribute("id", targetId, null);
         writer.endElement("delete");
@@ -247,6 +256,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      */
     public void redirect(String url) throws IOException {
         endChangesIfNecessary();
+        ResponseWriter writer = getWrapped();
         writer.startElement("redirect", null);
         writer.writeAttribute("url", url, null);
         writer.endElement("redirect");
@@ -260,6 +270,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      */
     public void startEval() throws IOException {
         startChangesIfNecessary();
+        ResponseWriter writer = getWrapped();
         writer.startElement("eval", null);
         writer.startCDATA();
     }
@@ -271,6 +282,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endEval() throws IOException {
+        ResponseWriter writer = getWrapped();
         writer.endCDATA();
         writer.endElement("eval");
     }
@@ -284,6 +296,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      */
     public void startExtension(Map<String, String> attributes) throws IOException {
         endChangesIfNecessary();
+        ResponseWriter writer = getWrapped();
         writer.startElement("extension", null);
         if (attributes != null && !attributes.isEmpty()) {
             for (Map.Entry<String, String> entry : attributes.entrySet()) {
@@ -299,6 +312,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endExtension() throws IOException {
+        ResponseWriter writer = getWrapped();
         writer.endElement("extension");
     }
 
@@ -311,6 +325,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      */
     public void startError(String errorName) throws IOException {
         endChangesIfNecessary();
+        ResponseWriter writer = getWrapped();
         writer.startElement("error", null);
         writer.startElement("error-name", null);
         writer.write(errorName);
@@ -326,6 +341,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void endError() throws IOException {
+        ResponseWriter writer = getWrapped();
         writer.endCDATA();
         writer.endElement("error-message");
         writer.endElement("error");
@@ -333,6 +349,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
 
     private void startChangesIfNecessary() throws IOException {
         if (!inChanges) {
+            ResponseWriter writer = getWrapped();
             writer.startElement("changes", null);
             inChanges = true;
         }
@@ -340,6 +357,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
 
     private void endChangesIfNecessary() throws IOException {
         if (inChanges) {
+            ResponseWriter writer = getWrapped();
             writer.endElement("changes");
             inChanges = false;
         }
