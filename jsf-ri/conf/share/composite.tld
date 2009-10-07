@@ -687,7 +687,7 @@ correspond to the id of an inner component.</p>
                 targets
             </name>
             <required>
-                true
+                false
             </required>
             <deferred-value>
                 <type>
