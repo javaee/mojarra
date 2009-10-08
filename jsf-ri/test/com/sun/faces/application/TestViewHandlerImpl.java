@@ -72,6 +72,10 @@ import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
 
+import com.sun.faces.application.view.FaceletViewHandlingStrategy;
+import com.sun.faces.cactus.TestingUtil;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.TestUtil;
 import org.apache.cactus.WebRequest;
 
 import com.sun.faces.cactus.JspFacesTestCase;
@@ -290,6 +294,104 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         assertEquals("Expected: " + expected + ", recieved: " + path, expected, path);
 
 
+    }
+
+
+    public void testFullAndPartialStateConfiguration() throws Exception {
+
+        WebConfiguration webConfig =
+              WebConfiguration.getInstance();
+        webConfig.overrideContextInitParameter(WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving, true);
+        FaceletViewHandlingStrategy strat = new FaceletViewHandlingStrategy();
+        TestingUtil.invokePrivateMethod("updateStateSavingType",
+                                        new Class[] { FacesContext.class, String.class },
+                                        new Object[] { getFacesContext(), "/index.xhtml"},
+                                        FaceletViewHandlingStrategy.class,
+                                        strat);
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhmtl"));
+        getFacesContext().getAttributes().remove("partialStateSaving");
+
+        TestingUtil.invokePrivateMethod("updateStateSavingType",
+                                        new Class[] { FacesContext.class, String.class },
+                                        new Object[] { getFacesContext(), "/index2.xhtml"},
+                                        FaceletViewHandlingStrategy.class,
+                                        strat);
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index2.xhtml"));
+        getFacesContext().getAttributes().remove("partialStateSaving");
+
+        // ---------------------------------------------
+
+        webConfig.overrideContextInitParameter(WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving, false);
+        strat = new FaceletViewHandlingStrategy();
+
+        TestingUtil.invokePrivateMethod("updateStateSavingType",
+                                        new Class[] { FacesContext.class, String.class },
+                                        new Object[] { getFacesContext(), "/index.xhtml"},
+                                        FaceletViewHandlingStrategy.class,
+                                        strat);
+        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhmtl"));
+        getFacesContext().getAttributes().remove("partialStateSaving");
+
+        TestingUtil.invokePrivateMethod("updateStateSavingType",
+                                        new Class[] { FacesContext.class, String.class },
+                                        new Object[] { getFacesContext(), "/index2.xhtml"},
+                                        FaceletViewHandlingStrategy.class,
+                                        strat);
+        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index2.xhtml"));
+        getFacesContext().getAttributes().remove("partialStateSaving");
+
+        // ---------------------------------------------
+
+        webConfig.overrideContextInitParameter(WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving, true);
+        webConfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.FullStateSavingViewIds, "/index.xhtml");
+        strat = new FaceletViewHandlingStrategy();
+
+        TestingUtil.invokePrivateMethod("updateStateSavingType",
+                                        new Class[] { FacesContext.class, String.class },
+                                        new Object[] { getFacesContext(), "/index.xhtml"},
+                                        FaceletViewHandlingStrategy.class,
+                                        strat);
+        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhtml"));
+        getFacesContext().getAttributes().remove("partialStateSaving");
+
+        TestingUtil.invokePrivateMethod("updateStateSavingType",
+                                        new Class[] { FacesContext.class, String.class },
+                                        new Object[] { getFacesContext(), "/index2.xhtml"},
+                                        FaceletViewHandlingStrategy.class,
+                                        strat);
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index2.xhtml"));
+        getFacesContext().getAttributes().remove("partialStateSaving");
+
+        // ---------------------------------------------
+
+        webConfig.overrideContextInitParameter(WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving, true);
+        webConfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.FullStateSavingViewIds, "/index.xhtml,/index2.xhtml");
+        strat = new FaceletViewHandlingStrategy();
+        
+        TestingUtil.invokePrivateMethod("updateStateSavingType",
+                                        new Class[] { FacesContext.class, String.class },
+                                        new Object[] { getFacesContext(), "/index.xhtml"},
+                                        FaceletViewHandlingStrategy.class,
+                                        strat);
+        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index.xhtml"));
+        getFacesContext().getAttributes().remove("partialStateSaving");
+
+        TestingUtil.invokePrivateMethod("updateStateSavingType",
+                                        new Class[] { FacesContext.class, String.class },
+                                        new Object[] { getFacesContext(), "/index2.xhtml"},
+                                        FaceletViewHandlingStrategy.class,
+                                        strat);
+        assertNull(strat.getStateManagementStrategy(getFacesContext(), "/index2.xhtml"));
+        getFacesContext().getAttributes().remove("partialStateSaving");
+
+        TestingUtil.invokePrivateMethod("updateStateSavingType",
+                                        new Class[] { FacesContext.class, String.class },
+                                        new Object[] { getFacesContext(), "/index3.xhtml"},
+                                        FaceletViewHandlingStrategy.class,
+                                        strat);
+        assertNotNull(strat.getStateManagementStrategy(getFacesContext(), "/index3.xhtml"));
+        getFacesContext().getAttributes().remove("partialStateSaving");
+        
     }
 
 

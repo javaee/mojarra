@@ -161,7 +161,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
 
         // 'null' return here means we're defaulting to the 1.2 style state saving.
-        return (context.getAttributes().containsKey("partialStateSaving") ? stateManagementStrategy : null);
+        Boolean usePartial = (Boolean) context.getAttributes().get("partialStateSaving");
+        return (Boolean.TRUE.equals(usePartial) ? stateManagementStrategy : null);
 
     }
     

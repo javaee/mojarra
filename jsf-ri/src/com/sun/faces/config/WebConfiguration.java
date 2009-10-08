@@ -225,7 +225,7 @@ public class WebConfiguration {
 
     }
     
-    public String [] getOptionValue(WebContextInitParameter param, String sep) {
+    public String[] getOptionValue(WebContextInitParameter param, String sep) {
         String [] result;
         
         assert(null != cachedListParams);
@@ -316,6 +316,7 @@ public class WebConfiguration {
         }
         value = value.trim();
         String oldVal = contextParameters.put(param, value);
+        cachedListParams.remove(param);
         if (oldVal != null) {
             if (LOGGER.isLoggable(Level.FINE) && !(oldVal.equals(value))) {
                 LOGGER.log(Level.FINE,
