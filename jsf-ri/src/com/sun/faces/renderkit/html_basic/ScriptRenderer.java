@@ -113,7 +113,7 @@ public class ScriptRenderer extends ScriptStyleBaseRenderer {
             }
         }
 
-        writer.writeAttribute("src", resourceSrc, "src");
+        writer.writeURIAttribute("src", resourceSrc, "src");
         this.endElement(writer);
         super.encodeEnd(context, component);
     }
