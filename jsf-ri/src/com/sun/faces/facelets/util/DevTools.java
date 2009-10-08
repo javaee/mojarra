@@ -67,6 +67,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * <p>
@@ -198,6 +199,11 @@ public final class DevTools {
         }
         writeVariables(writer, ctx.getRequestMap(), "Request Attributes");
         Flash flash = ctx.getFlash();
+        try {
+            flash = ctx.getFlash();
+        } catch (UnsupportedOperationException uoe) {
+            // ignore
+        }
         if (flash != null) {
             writeVariables(writer, flash, "Flash Attributes");
         } else {

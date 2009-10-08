@@ -41,6 +41,8 @@
 package com.sun.faces.lifecycle;
 
 import java.util.ListIterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -52,6 +54,7 @@ import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.lifecycle.Lifecycle;
 
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
 import com.sun.faces.util.RequestStateManager;
 
@@ -65,6 +68,7 @@ import com.sun.faces.util.RequestStateManager;
 
 public abstract class Phase {
 
+    private static final Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
     // ---------------------------------------------------------- Public Methods
 
@@ -169,8 +173,14 @@ public abstract class Phase {
                                     ListIterator<PhaseListener> listenersIterator,
                                     PhaseEvent event) {
 
-        Flash flash = context.getExternalContext().getFlash();
-        flash.doPostPhaseActions(context);
+        try {
+            Flash flash = context.getExternalContext().getFlash();
+            flash.doPostPhaseActions(context);
+        } catch (UnsupportedOperationException uoe) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                 LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+            }    
+        }
         while (listenersIterator.hasPrevious()) {
             PhaseListener listener = listenersIterator.previous();
             if (this.getId().equals(listener.getPhaseId()) ||
@@ -200,8 +210,14 @@ public abstract class Phase {
                                       ListIterator<PhaseListener> listenersIterator,
                                       PhaseEvent event) {
 
-         Flash flash = context.getExternalContext().getFlash();
-         flash.doPrePhaseActions(context);
+         try {
+            Flash flash = context.getExternalContext().getFlash();
+            flash.doPrePhaseActions(context);
+         } catch (UnsupportedOperationException uoe) {
+             if (LOGGER.isLoggable(Level.FINE)) {
+                 LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+             }
+         }
          RequestStateManager.clearAttributesForPhase(context,
                                                      context.getCurrentPhaseId());
          while (listenersIterator.hasNext()) {

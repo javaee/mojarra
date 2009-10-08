@@ -365,12 +365,24 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             //  Don't call startDoc and endDoc on a partial response
             if (ctx.getPartialViewContext().isAjaxRequest()) {
                 viewToRender.encodeAll(ctx);
-                ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);                
+                try {
+                    ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
+                } catch (UnsupportedOperationException uoe) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+                    }
+                }
             } else {
                 // render the view to the response
                 writer.startDocument();
                 viewToRender.encodeAll(ctx);
-                ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
+                try {
+                    ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
+                } catch (UnsupportedOperationException uoe) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+                    }
+                }
                 writer.endDocument();
             }
             // finish writing

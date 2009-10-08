@@ -191,12 +191,24 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         //  Don't call startDoc and endDoc on a partial response
         if (context.getPartialViewContext().isAjaxRequest()) {
             doRenderView(context, view);
-            extContext.getFlash().doPostPhaseActions(context);
+            try {
+                extContext.getFlash().doPostPhaseActions(context);
+            } catch (UnsupportedOperationException uoe) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+                }
+            }
         } else {
             // render the view to the response
             newWriter.startDocument();
             doRenderView(context, view);
-            extContext.getFlash().doPostPhaseActions(context);
+            try {
+                extContext.getFlash().doPostPhaseActions(context);
+            } catch (UnsupportedOperationException uoe) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("ExternalContext.getFlash() throw UnsupportedOperationException -> Flash unavailable");
+                }
+            }
             newWriter.endDocument();
         }
 
