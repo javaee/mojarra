@@ -38,6 +38,7 @@ package com.sun.faces.application.resource;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.faces.context.ExternalContext;
 
@@ -369,6 +370,39 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue(resource.isCompressable());
         assertTrue(resource.supportsEL());
         assertTrue(resource.getCompressedPath() == null);
+
+    }
+
+
+    public void testELEvalDisabledIfNoExpressionEvaluated() throws Exception {
+
+        ResourceManager manager = new ResourceManager(null);
+        ResourceInfo resource = manager.findResource(null, "simple.css", "text/css", getFacesContext());
+        assertNotNull(resource);
+        assertTrue(resource.supportsEL());
+        ResourceImpl resImpl = new ResourceImpl(resource, "text/css", 0, 0);
+        InputStream in = resImpl.getInputStream();
+        for (int i = in.read(); i != -1; i = in.read()) { }
+        try {
+            in.close();
+        } catch (Exception ioe) {
+            fail(ioe.toString());
+        }
+        assertTrue(!resource.supportsEL());
+
+        resource = manager.findResource(null, "simple-with-el.css", "text/css", getFacesContext());
+
+        assertNotNull(resource);
+        assertTrue(resource.supportsEL());
+        resImpl = new ResourceImpl(resource, "text/css", 0, 0);
+        in = resImpl.getInputStream();
+        for (int i = in.read(); i != -1; i = in.read()) { }
+        try {
+            in.close();
+        } catch (Exception ioe) {
+            fail(ioe.toString());
+        }
+        assertTrue(resource.supportsEL());
 
     }
 

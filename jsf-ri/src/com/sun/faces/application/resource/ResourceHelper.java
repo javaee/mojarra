@@ -118,9 +118,6 @@ public abstract class ResourceHelper {
 
     private static final String[] EL_CONTENT_TYPES = {
           "text/css",
-          "text/javascript",
-          "application/x-javascript",
-          "application/javascript"
     };
 
     static {
@@ -615,6 +612,7 @@ public abstract class ResourceHelper {
         private InputStream inner;
         private ResourceInfo info;
         private FacesContext ctx;
+        private boolean expressionEvaluated;
 
         // ---------------------------------------------------- Constructors
 
@@ -756,8 +754,9 @@ public abstract class ResourceHelper {
                 }
             }
             ELContext elContext = ctx.getELContext();
-            ValueExpression ve = ctx.getApplication().getExpressionFactory()
-                  .
+            expressionEvaluated = true;
+            ValueExpression ve =
+                  ctx.getApplication().getExpressionFactory().
                         createValueExpression(elContext, "#{" + expressionBody +
                                                          "}", String.class);
             Object value = ve.getValue(elContext);
@@ -769,6 +768,17 @@ public abstract class ResourceHelper {
         }
 
 
+        @Override
+        public void close() throws IOException {
+
+            if (!expressionEvaluated) {
+                info.disableEL();
+            }
+            super.close();
+
+        }
+
+        
         private boolean isPropertyValid(String property) {
             int idx = property.indexOf(':');
             return (property.indexOf(':', idx + 1) == -1);

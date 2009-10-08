@@ -238,6 +238,13 @@ public class ResourceInfo {
         return supportsEL;
     }
 
+    /**
+     * Disables EL evaluation for this resource. 
+     */
+    public void disableEL() {
+        this.supportsEL = false;
+    }
+
     @Override
     public String toString() {
         return "ResourceInfo{" +
