@@ -72,7 +72,7 @@
 	<TD>
 
 	      
-<script type="text/javascript" src="/test/faces/javax.faces.resource/jsf.js?ln=javax.faces"></script>
+<script type="text/javascript" src="/test/faces/javax.faces.resource/jsf.js?ln=javax.faces&amp;stage=UnitTest"></script>
 <a id="basicForm:link" href="#" onclick="mojarra.jsfcljs(document.getElementById('basicForm'),{'basicForm:link':'basicForm:link'},'');return false" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
 
 	</TD>

@@ -44,7 +44,7 @@
 <a id="linkImage2" name="linkImage2" href="hrefValue;jsessionid=78a3afe94a84b6391596868b3797"><img src="resduke.gif;jsessionid=78a3afe94a84b6391596868b3797" /></a>
 <a id="paramLink" name="paramLink" href="hrefValue;jsessionid=78a3afe94a84b6391596868b3797?parameter1=param_value1&amp;parameter2=param_value2"><img src="resduke.gif;jsessionid=78a3afe94a84b6391596868b3797" /></a>
 
-<script type="text/javascript" src="/test/JspRedirector/javax.faces.resource/jsf.js?ln=javax.faces"></script>
+<script type="text/javascript" src="/test/JspRedirector/javax.faces.resource/jsf.js?ln=javax.faces&amp;stage=UnitTest"></script>
 <a id="j_id2:labelLink1" href="#" onclick="mojarra.jsfcljs(document.getElementById('j_id2'),{'j_id2:labelLink1':'j_id2:labelLink1'},'');return false">PASSED</a>
 <a id="j_id2:labelLink2" href="#" onclick="mojarra.jsfcljs(document.getElementById('j_id2'),{'j_id2:labelLink2':'j_id2:labelLink2'},'');return false">model label</a>
 <a id="j_id2:labelLink3" href="#" onclick="mojarra.jsfcljs(document.getElementById('j_id2'),{'j_id2:labelLink3':'j_id2:labelLink3'},'');return false">RES-BUNDLE PASSED</a>

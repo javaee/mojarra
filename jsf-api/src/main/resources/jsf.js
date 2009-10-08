@@ -2044,7 +2044,36 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * @function jsf.getProjectStage
      */
     jsf.getProjectStage = function() {
-        return "#{facesContext.application.projectStage}";
+        // First, return cached value if available
+        if (typeof mojarra !== 'undefined' && typeof mojarra.projectStageCache !== 'undefined') {
+            return mojarra.projectStageCache;
+        }
+        var scripts = document.getElementsByTagName("script"); // nodelist of scripts
+        var script; // jsf.js script
+        var s = 0; // incremental variable for for loop
+        var stage; // temp value for stage
+        var match; // temp value for match
+        while (s < scripts.length) {
+            if (typeof scripts[s].src === 'string' && scripts[s].src.match('\/javax\.faces\.resource\/jsf\.js\?.*ln=javax\.faces')) {
+                script = scripts[s].src;
+                break;
+            }
+            s++;
+        }
+        if (typeof script == "string") {
+            match = script.match("stage=(.*)");
+            if (match) {
+                stage = match[1];
+            }
+        }
+        if (typeof stage === 'undefined' || !stage) {
+            stage = "Production";
+        }
+
+        mojarra = mojarra || {};
+        mojarra.projectStageCache = stage;
+
+        return mojarra.projectStageCache;
     };
 
 

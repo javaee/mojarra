@@ -276,11 +276,31 @@ public class ResourceImpl extends Resource implements Externalizable {
         }
         if (version.length() > 0) {
             uri += ((queryStarted) ? "&v=" : "?v=") + version;
+            queryStarted = true;
         }
         String localePrefix = resourceInfo.getLocalePrefix();
         if (localePrefix != null) {
             uri += ((queryStarted) ? "&loc=" : "?loc=") + localePrefix;
+            queryStarted = true;
         }
+        if ("jsf.js".equals(getResourceName()) && "javax.faces".equals(getLibraryName())) {
+            ProjectStage stage = context.getApplication().getProjectStage();
+            String stageStr = stage.toString();
+            switch (stage) {
+                case Development:
+                    uri += ((queryStarted) ? "&stage=Development" : "?stage=Development" );
+                    break;
+                case SystemTest:
+                    uri += ((queryStarted) ? "&stage=SystemTest" : "?stage=SystemTest" );
+                    break;
+                case UnitTest:
+                    uri += ((queryStarted) ? "&stage=UnitTest" : "?stage=UnitTest" );
+                    break;
+                default:
+                    assert(stage.equals(ProjectStage.Production));
+            }
+        }
+
         uri = context.getApplication().getViewHandler()
               .getResourceURL(context,
                               uri);
