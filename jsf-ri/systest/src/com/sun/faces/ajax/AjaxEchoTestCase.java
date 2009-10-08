@@ -36,10 +36,8 @@
 
 package com.sun.faces.ajax;
 
+import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.htmlunit.AbstractTestCase;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -273,5 +271,25 @@ public class AjaxEchoTestCase  extends AbstractTestCase {
         // First we'll check the first page was output correctly
         checkTrue("stage","Development");
     }
+
+    public void testTextArea() throws Exception {
+        getPage("/faces/ajax/ajaxEchoArea.xhtml");
+
+        // First we'll check the first page was output correctly
+        checkTrue("form1:out1","");
+        checkTrue("form1:in1","");
+
+        HtmlTextArea in1 = (HtmlTextArea) lastpage.getHtmlElementById("form1:in1");
+
+        in1.type("test value");
+
+        // Submit the ajax request
+        HtmlButtonInput button1 = (HtmlButtonInput) lastpage.getHtmlElementById("form1:button1");
+        lastpage = (HtmlPage) button1.click();
+
+        // Check that the ajax request succeeds
+        checkTrue("form1:out1","test value");
+    }
+
 
 }

@@ -104,6 +104,9 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
+        RenderKitUtils.renderOnchange(context, component, false);
+        
+
         // render default text specified
         if (currentValue != null) {
             writer.writeText(currentValue, component, "value");
