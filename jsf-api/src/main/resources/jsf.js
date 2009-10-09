@@ -125,6 +125,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var tempNode = body.appendChild(tempElement);
                 if (mojarra && mojarra.autoExecTest) {
                     isAutoExecCache = true;
+                    delete mojarra.autoExecTest;
                 } else {
                     isAutoExecCache = false;
                 }
@@ -243,53 +244,18 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         };
 
         /**
-         * Strip all script tags out of the supplied element, return them as an array for later processing
-         * @param element element to scan for tags
-         * @returns {array} of script text
-         * @ignore
-         */
-        var stripScripts = function stripScripts(element) {
-            var pattern = /^\s*(<!--)*\s*(\/\/)*\s*(<!\[CDATA\[)*/;
-            // get the script nodes, add them into an array, and remove them from node
-            var scriptNodes = element.getElementsByTagName('script');
-            var scripts = [];
-            var nidx = 0;
-            while (nidx <= scriptNodes.length -1) {
-                // push into script array
-                var node = scriptNodes[nidx++];
-                if (!!node && node.src) {
-                    // if it's a remote script, load it first
-                    var src = loadScript(node.src);
-                    if (!!src) {
-                        scripts.push(src);
-                    }
-                } else if (!!node && !!node.textContent) {
-                    var script = node.textContent;
-                    script.replace(pattern,"");
-                    scripts.push(script);
-                }
-
-                // then remove it
-                if (!!node) {
-                    node.parentNode.removeChild(node);
-                }
-            }
-            return scripts;
-        };
-
-        /**
          * Get all scripts from supplied string, return them as an array for later processing.
          * @param str
          * @returns {array} of script text
          * @ignore
          */
-        var stripScriptsIE = function stripScriptsIE(str) {
+        var stripScripts = function stripScripts(str) {
             // Regex to find all scripts in a string
             var findscripts = /<script[^>]*>([\S\s]*?)<\/script>/igm;
             // Regex to find one script, to isolate it's content [2] and attributes [1]
             var findscript = /<script([^>]*)>([\S\s]*?)<\/script>/im;
             // Regex to remove leading cruft
-            var stripStart = /^\s*(<!--)*\s*(\/\/)*\s*(<!\[CDATA\[)*/;
+            var stripStart = /^\s*(<!--)*\s*(\/\/)*\s*(\/\*)*\s*(<!\[CDATA\[)*/;
             // Regex to find src attribute
             var findsrc = /src="([\S]*?)"/im;
             var initialnodes = [];
@@ -384,17 +350,14 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 throw new Error("Attempted to replace a head element - this is not allowed.");
             } else {
                 var scripts = [];
-                if (isIE()) {
+                if (isAutoExec()) {
+                    temp.innerHTML = src;
+                } else {
                     // Get scripts from text
-                    scripts = stripScriptsIE(src);
+                    scripts = stripScripts(src);
                     // Remove scripts from text
                     src = src.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
                     temp.innerHTML = src;
-                } else {
-                    temp.innerHTML = src;
-                    if (!isAutoExec()) {
-                        scripts = stripScripts(temp);
-                    }
                 }
             }
 
@@ -856,24 +819,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 if (bodyStart !== null) { // replace body tag
                     // First, try with XML manipulation
                     try {
-                        if (isIE()) {
-                            // Get scripts from text
-                            scripts = stripScriptsIE(src);
-                            // Remove scripts from text
-                            newsrc = src.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm, "");
-                            elementReplace(getBodyElement(newsrc), docBody);
-                        } else {
-                            // Get the body element out of the source text
-                            var newBody = getBodyElement(src);
-                            // strip scripts out, if necessary
-                            // Note that unlike other places, we run stripscripts regardless of autoexec
-                            // Since the copy code doesn't load the scripts - since they're first created
-                            // outside the current document
-                            scripts = stripScripts(newBody);
-                            // replace current body with new body
-                            elementReplace(newBody, docBody);
-                        }
-                        // Run scripts, if necessary
+                        // Get scripts from text
+                        scripts = stripScripts(src);
+                        // Remove scripts from text
+                        newsrc = src.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm, "");
+                        elementReplace(getBodyElement(newsrc), docBody);
                         runScripts(scripts);
                     } catch (e) {
                         // OK, replacing the body didn't work with XML - fall back to quirks mode insert
@@ -916,19 +866,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
                 if (isInTable) {
 
-                    if (isIE()) {
+                    if (isAutoExec()) {
+                        // Create html
+                        parserElement.innerHTML = '<table>' + html + '</table>';
+                    } else {
                         // Get the scripts from the text
-                        scripts = stripScriptsIE(html);
+                        scripts = stripScripts(html);
                         // Remove scripts from text
                         html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
                         parserElement.innerHTML = '<table>' + html + '</table>';
-                    } else {
-                        // Create html
-                        parserElement.innerHTML = '<table>' + html + '</table>';
-                        // then extract scripts from it
-                        if (!isAutoExec()) {
-                            scripts = stripScripts(parserElement);
-                        }
                     }
                     var newElement = parserElement.firstChild;
                     //some browsers will also create intermediary elements such as table>tbody>tr>td
@@ -948,19 +894,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                     cloneAttributes(d, newElement);
                 } else if (html.length > 0) {
-                    if (isIE()) {
+                    if (isAutoExec()) {
+                        // Create html
+                        parserElement.innerHTML = html;
+                    } else {
                         // Get the scripts from the text
-                        scripts = stripScriptsIE(html);
+                        scripts = stripScripts(html);
                         // Remove scripts from text
                         html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
                         parserElement.innerHTML = html;
-                    } else {
-                        // Create html
-                        parserElement.innerHTML = html;
-                        // then extract scripts from it
-                        if (!isAutoExec()) {
-                            scripts = stripScripts(parserElement);
-                        }
                     }
                     parent.replaceChild(parserElement.firstChild, d);
                     runScripts(scripts);
@@ -991,19 +933,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var tempElement = document.createElement('span');
             var html = element.firstChild.firstChild.nodeValue;
 
-            if (isIE()) {
+            if (isAutoExec()) {
+                // Create html
+                tempElement.innerHTML = html;
+            } else {
                 // Get the scripts from the text
-                scripts = stripScriptsIE(html);
+                scripts = stripScripts(html);
                 // Remove scripts from text
                 html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
                 tempElement.innerHTML = html;
-            } else {
-                // Create html
-                tempElement.innerHTML = html;
-                // then extract scripts from it
-                if (!isAutoExec()) {
-                    scripts = stripScripts(tempElement);
-                }
             }
             if (element.firstChild.nodeName === 'after') {
                 // Get the next in the list, to insert before

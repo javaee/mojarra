@@ -52,11 +52,17 @@
 <composite:implementation>
     <div id="#{cc.clientId}">
     <script type="text/javascript">
+        // <![CDATA[
         if (typeof inlineccmarker !== "undefined") {
-            var target = document.getElementById('target');
-            target.innerHTML = "PASSED";
+            // include extraneous amp char, to regression test some browsers
+            var ampValue = "&";
+            if (ampValue === "&") {
+                var target = document.getElementById('target');
+                target.innerHTML = "PASSED";
+            }
         }
         inlineccmarker = true;
+        //]]>
     </script>
     </div>
 </composite:implementation>
