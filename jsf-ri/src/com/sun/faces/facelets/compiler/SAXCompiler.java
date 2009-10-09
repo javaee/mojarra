@@ -60,7 +60,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.faces.view.Location;
 import javax.faces.view.facelets.*;
-import javax.faces.context.FacesContext;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
