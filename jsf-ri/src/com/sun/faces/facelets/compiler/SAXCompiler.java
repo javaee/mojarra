@@ -227,6 +227,11 @@ public final class SAXCompiler extends Compiler {
         }
 
         public void startEntity(String name) throws SAXException {
+            if (XhtmlEntities.entities.contains(name)) {
+                this.unit.writeInstruction("&");
+                this.unit.writeInstruction(name);
+                this.unit.writeInstruction(";");
+            }
         }
 
         public void startPrefixMapping(String prefix, String uri)
@@ -303,6 +308,7 @@ public final class SAXCompiler extends Compiler {
         @Override
         public void startEntity(String name) throws SAXException {
             // no-op
+            System.out.println(name);
         }
 
         @Override
