@@ -40,6 +40,7 @@ import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.component.validator.ComponentValidators;
 import com.sun.faces.component.CompositeComponentStackManager;
 import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
+import com.sun.faces.facelets.impl.IdMapper;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.util.FacesLogger;
@@ -169,14 +170,16 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
                 if (root != null) {
                     String uid;
+                    IdMapper mapper = IdMapper.getMapper(ctx.getFacesContext());
+                    String mid = ((mapper != null) ? mapper.getAliasedId(id) : id);
                     UIComponent ancestorNamingContainer = parent
                           .getNamingContainer();
                     if (null != ancestorNamingContainer &&
                         ancestorNamingContainer instanceof UniqueIdVendor) {
                         uid = ((UniqueIdVendor) ancestorNamingContainer)
-                              .createUniqueId(ctx.getFacesContext(), id);
+                              .createUniqueId(ctx.getFacesContext(), mid);
                     } else {
-                        uid = root.createUniqueId(ctx.getFacesContext(), id);
+                        uid = root.createUniqueId(ctx.getFacesContext(), mid);
                     }
                     c.setId(uid);
                 }
@@ -370,7 +373,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      * @param ctx
      * @return
      */
-    private final String getFacetName(FaceletContext ctx, UIComponent parent) {
+    private String getFacetName(FaceletContext ctx, UIComponent parent) {
         return (String) parent.getAttributes().get(FacetHandler.KEY);
     }
 

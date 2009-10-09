@@ -54,6 +54,7 @@ package com.sun.faces.facelets.impl;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.compiler.Compiler;
+import com.sun.faces.util.Cache;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
@@ -98,13 +99,24 @@ public class DefaultFaceletFactory extends FaceletFactory {
 
     private final long refreshPeriod;
 
+    Cache<String,IdMapper> idMappers;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
     public DefaultFaceletFactory(Compiler compiler, ResourceResolver resolver)
-          throws IOException {
+    throws IOException {
+
         this(compiler, resolver, -1);
+
     }
 
-    public DefaultFaceletFactory(Compiler compiler, ResourceResolver resolver,
+
+    public DefaultFaceletFactory(Compiler compiler,
+                                 ResourceResolver resolver,
                                  long refreshPeriod) {
+
         Util.notNull("compiler", compiler);
         Util.notNull("resolver", resolver);
         this.compiler = compiler;
@@ -113,12 +125,14 @@ public class DefaultFaceletFactory extends FaceletFactory {
         this.relativeLocations = new HashMap<String, URL>();
         this.resolver = resolver;
         this.baseUrl = resolver.resolveUrl("/");
+        this.idMappers = new Cache<String,IdMapper>(new IdMapperFactory());
         // this.location = url;
         this.refreshPeriod = (refreshPeriod >= 0) ? refreshPeriod * 1000 : -1;
         if (log.isLoggable(Level.FINE)) {
-	        log.fine("Using ResourceResolver: " + resolver);
-	        log.fine("Using Refresh Period: " + this.refreshPeriod);
+            log.fine("Using ResourceResolver: " + resolver);
+            log.fine("Using Refresh Period: " + this.refreshPeriod);
         }
+        
     }
 
 
@@ -351,16 +365,26 @@ public class DefaultFaceletFactory extends FaceletFactory {
 
     }
 
-    /**
-     * Compiler this factory uses
-     *
-     * @return final Compiler instance
-     */
-	public Compiler getCompiler() {
-		return this.compiler;
-	}
 
-	public long getRefreshPeriod() {
-		return refreshPeriod;
-	}
+    public long getRefreshPeriod() {
+        return refreshPeriod;
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    private static final class IdMapperFactory implements Cache.Factory<String,IdMapper> {
+
+
+        // ------------------------------------------ Methods from Cache.Factory
+
+
+        public IdMapper newInstance(String arg) throws InterruptedException {
+
+            return new IdMapper();
+
+        }
+
+    }
 }

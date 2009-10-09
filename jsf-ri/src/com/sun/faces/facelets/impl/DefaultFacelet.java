@@ -99,50 +99,70 @@ final class DefaultFacelet extends Facelet {
 
     private final long refreshPeriod;
 
-    private final Map relativePaths;
+    private final Map<String,URL> relativePaths;
 
     private final FaceletHandler root;
 
     private final URL src;
 
+    private IdMapper mapper;
 
-    public DefaultFacelet(DefaultFaceletFactory factory, ExpressionFactory el,
-            URL src, String alias, FaceletHandler root) {
+    public DefaultFacelet(DefaultFaceletFactory factory,
+                          ExpressionFactory el,
+                          URL src,
+                          String alias,
+                          FaceletHandler root) {
+
         this.factory = factory;
         this.elFactory = el;
         this.src = src;
         this.root = root;
         this.alias = alias;
+        this.mapper = factory.idMappers.get(alias);
         this.createTime = System.currentTimeMillis();
         this.refreshPeriod = this.factory.getRefreshPeriod();
-        this.relativePaths = new WeakHashMap();
+        this.relativePaths = new WeakHashMap<String,URL>();
+
+
     }
 
     /**
      * @see com.sun.faces.facelets.Facelet#apply(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
      */
     public void apply(FacesContext facesContext, UIComponent parent)
-    throws IOException {
-        DefaultFaceletContext ctx = new DefaultFaceletContext(facesContext,
-                this);
+        throws IOException {
+
+        IdMapper idMapper = IdMapper.getMapper(facesContext);
+        boolean mapperSet = false;
+        if (idMapper == null) {
+            IdMapper.setMapper(facesContext, this.mapper);
+            mapperSet = true;
+        }
+        
+        DefaultFaceletContext ctx = new DefaultFaceletContext(facesContext, this);
         this.refresh(parent);
         ComponentSupport.markForDeletion(parent);
         this.root.apply(ctx, parent);
         ComponentSupport.finalizeForDeletion(parent);
         this.markApplied(parent);
+
+        if (mapperSet) {
+            IdMapper.setMapper(facesContext, null);
+        }
+
+
     }
 
-    private final void refresh(UIComponent c) {
+    private void refresh(UIComponent c) {
         if (this.refreshPeriod > 0) {
 
             // finally remove any children marked as deleted
             int sz = c.getChildCount();
             if (sz > 0) {
-                UIComponent cc = null;
                 List cl = c.getChildren();
                 ApplyToken token;
                 while (--sz >= 0) {
-                    cc = (UIComponent) cl.get(sz);
+                    UIComponent cc = (UIComponent) cl.get(sz);
                     if (!cc.isTransient()) {
                         token = (ApplyToken) cc.getAttributes().get(APPLIED_KEY);
                         if (token != null && token.time < this.createTime
@@ -188,18 +208,16 @@ final class DefaultFacelet extends Facelet {
         }
     }
 
-    private final void markApplied(UIComponent parent) {
+    private void markApplied(UIComponent parent) {
         if (this.refreshPeriod > 0) {
             Iterator itr = parent.getFacetsAndChildren();
-            UIComponent c;
-            Map attr;
-            ApplyToken token = new ApplyToken(this.alias, System
-                    .currentTimeMillis()
-                    + this.refreshPeriod);
+            ApplyToken token =
+                  new ApplyToken(this.alias,
+                                 System.currentTimeMillis() + this.refreshPeriod);
             while (itr.hasNext()) {
-                c = (UIComponent) itr.next();
+                UIComponent c = (UIComponent) itr.next();
                 if (!c.isTransient()) {
-                    attr = c.getAttributes();
+                    Map<String,Object> attr = c.getAttributes();
                     if (!attr.containsKey(APPLIED_KEY)) {
                         attr.put(APPLIED_KEY, token);
                     }
@@ -246,7 +264,7 @@ final class DefaultFacelet extends Facelet {
      *             if there is a problem creating the URL for the path specified
      */
     private URL getRelativePath(String path) throws IOException {
-        URL url = (URL) this.relativePaths.get(path);
+        URL url = this.relativePaths.get(path);
         if (url == null) {
             url = this.factory.resolveURL(this.src, path);
             this.relativePaths.put(path, url);
@@ -347,8 +365,8 @@ final class DefaultFacelet extends Facelet {
 
         public long time;
 
-        public ApplyToken() {
-        }
+        @SuppressWarnings({"UnusedDeclaration"})
+        public ApplyToken() { } // For Serialization
 
         public ApplyToken(String alias, long time) {
             this.alias = alias;
