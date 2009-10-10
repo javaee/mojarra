@@ -38,6 +38,7 @@ package com.sun.faces.application.annotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +46,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 import javax.faces.bean.*;
 import javax.faces.context.FacesContext;
@@ -145,7 +147,11 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
         boolean eager = metadata.eager();
         
         Map<String,Field> annotatedFields = new LinkedHashMap<String,Field>();
+        //Map<String, Method> annotatedMethods = new LinkedHashMap<String,Method>();
         collectAnnotatedFields(annotatedClass, annotatedFields);
+        //collectAnnotatedMethods(annotatedClass,
+        //                        annotatedMethods,
+        //                        annotatedFields.keySet());
 
         List<ManagedBeanInfo.ManagedProperty> properties = null;
 
@@ -163,6 +169,29 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                 properties.add(propertyInfo);
             }
         }
+        /*
+        if (!annotatedMethods.isEmpty()) {
+            if (properties == null) {
+                properties = new ArrayList<ManagedBeanInfo.ManagedProperty>(annotatedMethods.size());
+                for (Map.Entry<String,Method> entry : annotatedMethods.entrySet()) {
+                    Method m = entry.getValue();
+                    ManagedProperty property = m.getAnnotation(ManagedProperty.class);
+                    String alias = property.name();
+                    if (alias != null && alias.length() == 0) {
+                        alias = null;
+                    }
+                    ManagedBeanInfo.ManagedProperty propertyInfo =
+                          new ManagedBeanInfo.ManagedProperty(alias,
+                                                              entry.getKey(),
+                                                              m.getParameterTypes()[0].getName(),
+                                                              property.value(),
+                                                              null,
+                                                              null);
+                    properties.add(propertyInfo);
+                }
+            }
+        }
+        */
 
         return new ManagedBeanInfo(name,
                                    annotatedClass.getName(),
@@ -173,6 +202,38 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                                    properties,
                                    null);
 
+    }
+
+
+    private void collectAnnotatedMethods(Class<?> baseClass,
+                                         Map<String,Method> annotatedMethods,
+                                         Set<String> annotatedFields) {
+
+        Method[] methods = baseClass.getDeclaredMethods();
+        for (Method method : methods) {
+            ManagedProperty property = method.getAnnotation(ManagedProperty.class);
+            if (property != null) {
+
+                if (!method.getName().startsWith("set")
+                    || method.getParameterTypes().length != 1) {
+                    continue;
+                }
+                StringBuilder sb =
+                      new StringBuilder(method.getName().substring(3));
+                char c = sb.charAt(0);
+                sb.deleteCharAt(0);
+                sb.insert(0, Character.toLowerCase(c));
+                String propName = sb.toString();
+
+                if (!annotatedFields.contains(propName) && !annotatedMethods.containsKey(propName)) {
+                    annotatedMethods.put(propName, method);
+                }
+            }
+        }
+        Class<?> superClass = baseClass.getSuperclass();
+        if (!Object.class.equals(superClass)) {
+            collectAnnotatedMethods(superClass, annotatedMethods, annotatedFields);
+        }
     }
 
 

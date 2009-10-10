@@ -235,6 +235,7 @@ public class ManagedBeanInfo {
 
     public static class ManagedProperty {
 
+        private String propertyAlias;
         private String propertyName;
         private String propertyClass;
         private String propertyValue;
@@ -253,6 +254,22 @@ public class ManagedBeanInfo {
             this.mapEntry = mapEntry;
             this.listEntry = listEntry;
 
+        }
+
+        public ManagedProperty(String propertyAlias,
+                               String propertyName,
+                               String propertyClass,
+                               String propertyValue,
+                               ManagedBeanInfo.MapEntry mapEntry,
+                               ManagedBeanInfo.ListEntry listEntry) {
+
+            this(propertyName, propertyClass, propertyValue, mapEntry, listEntry);
+            this.propertyAlias = propertyAlias;
+
+        }
+
+        public String getPropertyAlias() {
+            return propertyAlias;
         }
 
         public String getPropertyName() {
