@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2009 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -67,7 +67,22 @@ import java.util.logging.Level;
 import java.net.MalformedURLException;
 
 /**
+ * Adds mappings <em>/faces</em>, <em>*.jsf</em>, and <em>*.faces</em> for the
+ * FacesServlet (if it hasn't already been mapped) if the following conditions
+ * are met:
  *
+ * <ul>
+ *    <li>
+ *       The <code>Set</code> of classes passed to this initializer is not
+ *       empty, or
+ *    <li>
+ *       Context init parameters are present and start with javax.faces. or
+ *       com.sun.faces., or
+ *    </li>
+ *    <li>
+ *       /WEB-INF/faces-config.xml exists.
+ *    </li>
+ * </ul>
  */
 @SuppressWarnings({"UnusedDeclaration"})
 @HandlesTypes({
