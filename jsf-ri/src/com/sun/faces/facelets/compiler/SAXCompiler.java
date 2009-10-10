@@ -308,7 +308,6 @@ public final class SAXCompiler extends Compiler {
         @Override
         public void startEntity(String name) throws SAXException {
             // no-op
-            System.out.println(name);
         }
 
         @Override
