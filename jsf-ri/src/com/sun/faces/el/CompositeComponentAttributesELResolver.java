@@ -311,7 +311,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
 
 
         public ValueExpression getExpression(String name) {
-            Object ve = attributesMap.get(name);
+            Object ve = cc.getValueExpression(name);
             return ((ve instanceof ValueExpression) ? (ValueExpression) ve : null);
         }
 
