@@ -71,7 +71,7 @@ public class ConverterTagHandlerDelegateImpl extends TagHandlerDelegate implemen
         }
         if (parent instanceof ValueHolder) {
             owner.applyAttachedObject(ctx.getFacesContext(), parent);
-        } else if (parent.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+        } else if (UIComponent.isCompositeComponent(parent)) {
             if (null == owner.getFor()) {
                 // PENDING(): I18N
                 throw new TagException(owner.getTag(),
