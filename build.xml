@@ -166,10 +166,18 @@
                                   **/dependencies/**,
                                   **/test-sqe/**,
                                   **/contrib/**,
-                                  **/repo/**"
-                        prefix="mojarra-${impl.version}-sources"/>
+                                  **/repo/**,
+                                  **/updatecenter2/**,
+                                  **/changebundle.txt,
+                                  **/newfiles.zip
+                                  **/HUDSON_INFORMATION.txt,
+                                  **/INTEGRATING_WITH_V3.txt,
+                                  **/PROMOTING_A_BUILD.txt,
+                                  **/TESTING_A_BUILD.txt,
+                                  **/docs/**"
+                        prefix="mojarra-${impl.version}-source"/>
              <zipfileset dir="${basedir}"
-                        includes="${basedir}/build.xml" prefix="mojarra-${impl.version}-sources"/>
+                        includes="${basedir}/build.xml" prefix="mojarra-${impl.version}-source"/>
 
         </zip>
         
