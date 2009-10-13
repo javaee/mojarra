@@ -200,7 +200,7 @@
         <xsd:sequence>
             <xsd:group ref="javaee:descriptionGroup"/>
             <xsd:element name="name"
-                         type="javaee:java-identifierType"/>
+                         type="javaee:xsdNMTOKENType"/>
             <xsd:element name="required"
                          type="javaee:generic-booleanType"
                          minOccurs="0">
@@ -217,26 +217,32 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:choice>
-                <xsd:sequence>
-                    <xsd:sequence minOccurs="0">
-                        <xsd:element name="type"
-                                     type="javaee:fully-qualified-classType"
-                                     minOccurs="0">
-                            <xsd:annotation>
-                                <xsd:documentation>
+                <xsd:element name="type"
+                             type="javaee:fully-qualified-classType"
+                             minOccurs="0">
+                    <xsd:annotation>
+                        <xsd:documentation>
 
-                                    Defines the Java type of the attributes
-                                    value.  If this element is omitted, the
-                                    expected type is assumed to be
-                                    "java.lang.Object".
+                            Defines the Java type of the attributes
+                            value. If this element is omitted, the
+                            expected type is assumed to be
+                            "java.lang.Object".
 
-                                </xsd:documentation>
-                            </xsd:annotation>
-                        </xsd:element>
-                    </xsd:sequence>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="method-signature"
+                             type="javaee:string"
+                             minOccurs="0">
+                    <xsd:annotation>
+                        <xsd:documentation>
 
-                </xsd:sequence>
+                            Defines the method signature for a MethodExpression-
+                            enabled attribute.
 
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
             </xsd:choice>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
