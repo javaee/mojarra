@@ -416,7 +416,7 @@ public class CompositeComponentStackManager {
         public UIComponent getParentCompositeComponent(FacesContext ctx,
                                                        UIComponent forComponent) {
 
-            return UIComponent.getCurrentCompositeComponent(ctx);
+            return getCompositeParent(forComponent);
 
         }
 
