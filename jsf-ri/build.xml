@@ -332,7 +332,11 @@
 
         <copy file="conf/share/javax.servlet.ServletContainerInitializer"
               toDir="${build.classes.dir}/META-INF/services" />
-        
+        <copy toDir="${build.classes.dir}/META-INF/taglib">
+            <fileset dir="${conf.share.dir}">
+                <include name="*.taglib.xml" /> 
+            </fileset>
+        </copy>
         <copy file="${build.generate.tld.dir}/html_basic.tld"
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="conf/xslt/jsf1_0-1_1toSchema.xsl"

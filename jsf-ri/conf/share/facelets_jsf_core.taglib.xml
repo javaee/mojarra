@@ -1,0 +1,2022 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+ Copyright 2009 Sun Microsystems, Inc. All rights reserved.
+
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+
+ Contributor(s):
+
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibary_2_0.xsd"
+                version="2.0">
+    <description>
+        The core JavaServer Faces custom actions that are independent of
+        any particular RenderKit.
+    </description>
+    <namespace>http://java.sun.com/jsf/core</namespace>
+    <tag>
+        <description>
+
+            &lt;p&gt;Register an ActionListener instance on the
+            UIComponent associated with the closest parent UIComponent
+            custom action.&lt;/p&gt;
+        </description>
+        <tag-name>actionListener</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.ActionListenerHandler</handler-class>
+        <attribute>
+            <description>
+                Fully qualified Java class name of an ActionListener to be
+                created and registered.
+            </description>
+            <name>type</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Value binding expression that evaluates to an object that
+                implements javax.faces.event.ActionListener.
+            </description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.event.ActionListener</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Add an attribute to the UIComponent associated with the closest
+            parent UIComponent custom action.
+        </description>
+        <tag-name>attribute</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.AttributeHandler</handler-class>
+        <attribute>
+            <description>
+                The name of the component attribute to be set.
+            </description>
+            <name>name</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                The value of the component attribute to be set.
+            </description>
+            <name>value</name>
+            <type>java.lang.Object</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Register a DateTimeConverter instance on the UIComponent associated
+            with the closest parent UIComponent custom action.
+        </description>
+        <tag-name>convertDateTime</tag-name>
+        <converter>
+            <converter-id>javax.faces.DateTime</converter-id>
+            <handler-class>com.sun.faces.facelets.tag.jsf.core.ConvertDateTimeHandler</handler-class>
+        </converter>
+        <attribute>
+            <description>
+                Predefined formatting style which determines how the date
+                component of a date string is to be formatted and parsed.
+                Applied only if type is "date" or "both". Valid values
+                are "default", "short", "medium", "long", and "full".
+                Default value is "default".
+            </description>
+            <name>dateStyle</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Locale whose predefined styles for dates and times are used
+                during formatting or parsing. If not specified, the Locale
+                returned by FacesContext.getViewRoot().getLocale() will be used.
+                Value must be either a VB expression that evaluates to a
+                java.util.Locale instance, or a String that is valid to pass as
+                the first argument to the constructor java.util.Locale(String
+                language, String country). The empty string is passed as the
+                second argument.
+            </description>
+            <name>locale</name>
+            <required>false</required>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+                Custom formatting pattern which determines how the
+                date/time string should be formatted and parsed.
+            </description>
+            <name>pattern</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Predefined formatting style which determines how the
+                time component of a date string is to be formatted and
+                parsed. Applied only if type is "time" or "both".
+                Valid values are "default", "short", "medium", "long",
+                and "full". Default value is "default".
+            </description>
+            <name>timeStyle</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Time zone in which to interpret any time information in the date
+                String. Value must be either a VB expression that evaluates to
+                a java.util.TimeZone instance, or a String that is a timezone ID
+                as described in the javadocs for
+                java.util.TimeZone.getTimeZone().
+            </description>
+            <name>timeZone</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+                Specifies what contents the string value will be
+                formatted to include, or parsed expecting. Valid
+                values are "date", "time", and "both". Default
+                value is "date".
+            </description>
+            <name>type</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                javax.faces.convert.DateTimeConverter.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.convert.DateTimeConverter</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Register a NumberConverter instance on the UIComponent associated
+            with the closest parent UIComponent custom action.
+        </description>
+        <tag-name>convertNumber</tag-name>
+         <converter>
+            <converter-id>javax.faces.Number</converter-id>
+            <handler-class>com.sun.faces.facelets.tag.jsf.core.ConvertNumberHandler</handler-class>
+        </converter>
+        <attribute>
+            <description>
+                ISO 4217 currency code, applied only when
+                formatting currencies.
+            </description>
+            <name>currencyCode</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Currency symbol, applied only when formatting
+                currencies.
+            </description>
+            <name>currencySymbol</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag specifying whether formatted output will
+                contain grouping separators. Expressions must
+                evaluate to a boolean. Default value
+                is true.
+            </description>
+            <name>groupingUsed</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag specifying whether only the integer part
+                of the value will be formatted and parsed.
+                Expressions must evaluate to a boolean.
+                Default value is false.
+            </description>
+            <name>integerOnly</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>&lt;p&gt;
+
+                &lt;span class="changed_modified_2_0"&gt;Locale&lt;/span&gt;
+                whose
+                predefined styles for numbers are used during formatting
+                and parsing. If not specified, the Locale returned by
+                FacesContext.getViewRoot().getLocale() will be used.
+                Expressions must evaluate to a java.util.Locale &lt;span
+                class="changed_modified_2_0"&gt;or a String that is valid to
+                pass as the first argument to the constructor
+                java.util.Locale(String language, String country). The
+                empty string is passed as the second argument.&lt;/span&gt;
+
+                &lt;/p&gt;</description>
+            <name>locale</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+                Maximum number of digits that will be formatted
+                in the fractional portion of the output. Expressions
+                must evaluate to an int.
+            </description>
+            <name>maxFractionDigits</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description>
+                Maximum number of digits that will be formatted
+                in the integer portion of the output. Expressions
+                must evaluate to an int.
+            </description>
+            <name>maxIntegerDigits</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description>
+                Minimum number of digits that will be formatted
+                in the fractional portion of the output. Expressions
+                must evaluate to an int.
+            </description>
+            <name>minFractionDigits</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description>
+                Minimum number of digits that will be formatted
+                in the integer portion of the output. Expressions
+                must evaluate to an int.
+            </description>
+            <name>minIntegerDigits</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description>
+                Custom formatting pattern which determins how the
+                number string should be formatted and parsed.
+            </description>
+            <name>pattern</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Specifies how the number string will be formatted
+                and parsed. Valid values are "number", "currency",
+                and "percent". Default value is "number".
+            </description>
+            <name>type</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                javax.faces.convert.NumberConverter.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.convert.NumberConverter</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Register a named Converter instance on the UIComponent
+            associated with the closest parent UIComponent custom action.
+        </description>
+        <tag-name>converter</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.ConvertDelegateHandler</handler-class>
+        <attribute>
+            <description>
+                Converter identifier of the Converter instance to be
+                created and registered.
+            </description>
+            <name>converterId</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an object that
+                implements javax.faces.convert.Converter.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.convert.Converter</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+
+            &lt;p class="changed_added_2_0"&gt;Register an AjaxBehavior instance
+            on one or more
+            UIComponents implementing the ClientBehaviorHolder interface. This
+            tag
+            may be nested witin a single component (enabling Ajax for a single
+            component),
+            or it may be "wrapped" around multiple components (enabling Ajax for
+            many components).&lt;/p&gt;
+
+        </description>
+        <tag-name>ajax</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.AjaxHandler</handler-class>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;A value of "true" indicates
+                the
+                AjaxBehavior should not be rendered. A value of "false"
+                indicates
+                the AjaxBehavior should be rendered. "false" is the default.&lt;/p&gt;
+
+            </description>
+            <name>disabled</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;A String identifying the type
+                of event
+                the Ajax action will apply to. If specified, it must be one of
+                the
+                events supported by the component the Ajax behavior is being
+                applied to.
+                For HTML components this would be the set of supported DOM
+                events for the
+                component, plus "action" for Faces ActionSource components and
+                "valueChange"
+                for Faces EditableValueHolder components. If not specified, the
+                default
+                event is determined for the component. The DOM event name is the
+                actual DOM
+                event name (for example: "click") as opposed to (for example:
+                "onclick").&lt;/p&gt;
+
+            </description>
+            <name>event</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;Evaluates to Collection&lt;String&gt;.
+                Identifiers of
+                components that will participate in the "execute" portion of the
+                Request
+                Processing Lifecycle. If a literal is specified the identifiers
+                must be space
+                delimited. Any of the keywords "@this", "@form", "@all", "@none"
+                may be specified
+                in the identifier list.&lt;/p&gt;
+
+            </description>
+            <name>execute</name>
+            <required>false</required>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;If "true" behavior events
+                generated from this behavior
+                are broadcast during Apply Request Values phase. Otherwise, the
+                events will be
+                broadcast during Invoke Aplications phase&lt;/p&gt;
+
+            </description>
+            <name>immediate</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;Method expression referencing
+                a method
+                that will be called when an AjaxBehaviorEvent has been
+                broadcast for the listener.&lt;/p&gt;
+
+            </description>
+            <name>listener</name>
+            <required>false</required>
+            <method-signature>public void
+                processAjaxBehavior(javax.faces.event.AjaxBehaviorEvent event)
+                throws javax.faces.event.AbortProcessingException
+            </method-signature>
+        </attribute>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;The name of the JavaScript
+                function that will handle UI events.&lt;/p&gt;
+
+            </description>
+            <name>onevent</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;The name of the JavaScript
+                function that will handle errors.&lt;/p&gt;
+
+            </description>
+            <name>oneerror</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;Evaluates to Collection&lt;String&gt;.
+                Identifiers of
+                components that will participate in the "render" portion of the
+                Request
+                Processing Lifecycle. If a literal is specified the identifiers
+                must be space
+                delimited. Any of the keywords "@this", "@form", "@all", "@none"
+                may be specified
+                in the identifier list.&lt;/p&gt;
+
+            </description>
+            <name>render</name>
+            <required>false</required>
+            <type>java.lang.Object</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+
+            &lt;p class="changed_added_2_0"&gt;Allow JSF page authors to
+            install &lt;code&gt;ComponentSystemEventListener&lt;/code&gt;
+            instances
+            on a component in a page.&lt;/p&gt;
+
+            &lt;div class="changed_added_2_0"&gt;
+
+            &lt;p&gt;&lt;/p&gt;
+
+            &lt;/div&gt;
+
+        </description>
+        <tag-name>event</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.EventHandler</handler-class>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;Name of the event for which
+                to install a listener. The following table lists the
+                valid values for this attribute, and the corresponding
+                event type for which the listener action is
+                registered.&lt;/p&gt;
+
+                &lt;table border="1"&gt;
+                &lt;tr&gt;
+
+                &lt;th&gt;value for "&lt;code&gt;name&lt;/code&gt;" tag
+                attribute&lt;/th&gt;
+
+                &lt;th&gt;Type of event sent to listener method
+                &lt;/th&gt;
+
+                &lt;/tr&gt;
+
+                &lt;tr&gt;
+
+                &lt;td&gt;preRenderComponent
+                &lt;/td&gt;
+
+                &lt;td&gt;javax.faces.event.PreRenderComponentEvent
+                &lt;/td&gt;
+
+                &lt;/tr&gt;
+
+                &lt;tr&gt;
+
+                &lt;td&gt;PostAddToView
+                &lt;/td&gt;
+
+                &lt;td&gt;javax.faces.event.PostAddToViewEvent
+                &lt;/td&gt;
+
+                &lt;/tr&gt;
+
+                &lt;tr&gt;
+
+                &lt;td&gt;preValidate
+                &lt;/td&gt;
+
+                &lt;td&gt;javax.faces.event.PreValidateEvent
+                &lt;/td&gt;
+
+                &lt;/tr&gt;
+
+                &lt;tr&gt;
+
+                &lt;td&gt;postValidate
+                &lt;/td&gt;
+
+                &lt;td&gt;javax.faces.event.PostValidateEvent
+                &lt;/td&gt;
+
+                &lt;/tr&gt;
+
+                &lt;/table&gt;
+
+                &lt;div class="changed_added_2_0"&gt;
+
+                &lt;p&gt;In addition to these values, the fully qualified class
+                name of any
+                java class that extends
+                &lt;code&gt;javax.faces.event.ComponentSystemEvent&lt;/code&gt;
+                may be used as the
+                value of the "type" attribute.&lt;/p&gt;
+
+                &lt;p&gt;Also, the &lt;code&gt;@javax.faces.event.NamedEvent&lt;/code&gt;
+                annotation may
+                be attached to any java class that extends
+                &lt;code&gt;javax.faces.event.ComponentSystemEvent&lt;/code&gt;.
+                This enables that
+                event to be referenced from this attribute, as descibed in the
+                javadocs
+                for &lt;code&gt;@NamedEvent&lt;/code&gt;.&lt;/p&gt;
+
+                &lt;/div&gt;
+
+
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Method expression pointing to a method expression of
+                that will be called when the listener's processEvent
+                method would have been called.
+            </description>
+            <name>listener</name>
+            <required>true</required>
+            <method-signature>public void
+                listener(javax.faces.event.ComponentSystemEvent event) throws
+                javax.faces.event.AbortProcessingException
+            </method-signature>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+
+            &lt;p&gt;Register a named facet on the UIComponent associated with
+            the closest parent UIComponent custom action.&lt;/p&gt;
+
+
+        </description>
+        <tag-name>facet</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.FacetHandler</handler-class>
+        <attribute>
+            <description>
+                Name of the facet to be created.
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+
+            &lt;p class="changed_added_2_0"&gt;Declare the metadata facet for
+            this view. This must be a child of the
+            &lt;code&gt;&amp;lt;f:view&amp;gt;&lt;/code&gt;. This tag must
+            reside within the
+            top level XHTML file for the given viewId, not in a
+            template. The implementation must insure that the direct
+            child of the facet is a &lt;code&gt;UIPanel&lt;/code&gt;, even if
+            there
+            is only one child of the facet. The implementation must set
+            the id of the &lt;code&gt;UIPanel&lt;/code&gt; to be the value of
+            the
+            &lt;code&gt;UIViewRoot.METADATA_FACET_NAME&lt;/code&gt; symbolic
+            constant.&lt;/p&gt;
+
+            &lt;div class="changed_added_2_0"&gt;
+
+            &lt;p&gt;The implementation must allow templating for this element
+            according
+            to the following pattern.&lt;/p&gt;
+
+            &lt;p&gt;viewId XHTML page, page01.xhtml&lt;/p&gt;
+
+            &lt;/div&gt;
+
+            &lt;div class="html4strict" style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li
+            class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;ui:composition
+            template=&lt;span class="st0"&gt;&amp;quot;template.xhtml&amp;quot;&lt;/span&gt;&lt;span
+            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+            &lt;span class="sc2"&gt;&amp;lt;ui:define &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
+            class="st0"&gt;&amp;quot;metadata&amp;quot;&lt;/span&gt;&lt;span
+            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &lt;span class="sc2"&gt;&amp;lt;f:metadata&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; &lt;span class="sc2"&gt;&amp;lt;f:viewParam
+            &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;id&amp;quot;&lt;/span&gt;/&lt;span
+            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/f:metadata&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+            &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/ui:define&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &lt;span class="sc2"&gt;&amp;lt;ui:define &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
+            class="st0"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span
+            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;&lt;/span&gt;The
+            big news stories of the day&lt;span class="sc2"&gt;&lt;span
+            class="kw2"&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/ui:define&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc2"&gt;&lt;span
+            class="kw2"&gt;&amp;lt;&lt;/span&gt;/ui:composition&amp;gt;&lt;/span&gt;
+            &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+
+            &lt;div class="changed_added_2_0"&gt;
+            &lt;p&gt;Note line 4. The page author must ensure that the
+            &lt;code&gt;&amp;lt;f:metadata&amp;gt;&lt;/code&gt; element does not
+            appear on a template or
+            included page. It must reside on the root page that corresponds to
+            the
+            viewId.&lt;/p&gt;
+
+            &lt;p&gt;The template page, template.xhtml&lt;/p&gt;
+
+            &lt;/div&gt;
+
+
+            &lt;div class="html4strict" style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li
+            class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
+            class="kw2"&gt;&amp;lt;html&lt;/span&gt; xmlns=&lt;span class="st0"&gt;&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; xmlns:ui=&lt;span class="st0"&gt;&amp;quot;http://java.sun.com/jsf/facelets&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; xmlns:f=&lt;span class="st0"&gt;&amp;quot;http://java.sun.com/jsf/core&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; xml:&lt;span class="kw3"&gt;lang&lt;/span&gt;=&lt;span
+            class="st0"&gt;&amp;quot;en&amp;quot;&lt;/span&gt; &lt;span
+            class="kw3"&gt;lang&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;en&amp;quot;&lt;/span&gt;&lt;span
+            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc2"&gt;&lt;span
+            class="kw2"&gt;&amp;lt;body&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;f:view&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+            &lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; &lt;span class="sc2"&gt;&amp;lt;ui:insert &lt;span
+            class="kw3"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;metadata&amp;quot;&lt;/span&gt;/&lt;span
+            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;div&lt;/span&gt;
+            &lt;span class="kw3"&gt;id&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;container&amp;quot;&lt;/span&gt;&lt;span
+            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+            &amp;nbsp; &amp;nbsp; &lt;span class="sc2"&gt;&amp;lt;ui:insert &lt;span
+            class="kw3"&gt;name&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;/&lt;span
+            class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+            &lt;span class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc2"&gt;&lt;span
+            class="kw2"&gt;&amp;lt;&lt;/span&gt;/f:view&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
+            class="kw2"&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+            &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span class="sc2"&gt;&lt;span
+            class="kw2"&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;&lt;/span&gt; &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+
+            &lt;p&gt;The page author is not &lt;em&gt;required&lt;/em&gt; to use
+            templating, but if
+            they do, it must be done as shown above, (or with
+            &lt;code&gt;&amp;lt;ui:include&amp;gt;&lt;/code&gt; in a similar
+            manner).&lt;/p&gt;
+
+            &lt;/div&gt;
+
+
+        </description>
+        <tag-name>metadata</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.MetadataHandler</handler-class>
+    </tag>
+    <tag>
+        <description>
+            Load a resource bundle localized for the Locale of the current
+            view, and expose it as a java.util.Map in the request attributes
+            of the current request under the key specified by the value of the
+            "var" attribute of this tag. The Map must behave such that if a
+            get() call is made for a key that does not exist in the Map, the
+            literal string ???KEY??? is returned from the Map, where KEY is
+            the key being looked up in the Map, instead of a
+            MissingResourceException being thrown. If the ResourceBundle does
+            not exist, a JspException must be thrown.
+        </description>
+        <tag-name>loadBundle</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.LoadBundleHandler</handler-class>
+        <attribute>
+            <description>
+                Base name of the resource bundle
+                to be loaded.
+            </description>
+            <name>basename</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Name of a request scope attribute under which
+                the resource bundle will be exposed as a Map.
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Add a child UIParameter component to the UIComponent
+            associated with the closest parent UIComponent custom
+            action.
+        </description>
+        <tag-name>param</tag-name>
+        <component>
+            <component-type>javax.faces.Parameter</component-type>
+            <renderer-type/>
+        </component>
+        <attribute>
+            <description>
+                ValueExpression to a backing bean
+                property bound to the component instance for
+                the UIComponent created by this custom action.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        <attribute>
+            <description>
+                Component identifier of the UIParameter component
+                to be created.
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Name of the parameter to be created.
+            </description>
+            <name>name</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Value of the parameter to be set.
+            </description>
+            <name>value</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                RELEASE_PENDING
+                - Also update spec for bookmarkable URL (don't forget the two
+                sources for include-view-params).
+                - convey precendence feature using non-normative language
+                vs algorithmic
+                Flag enabling or disabling the inclusion of the parameter
+            </description>
+            <name>disable</name>
+            <type>boolean</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+
+            &lt;p class="changed_added_2_0"&gt;Used inside of the metada facet
+            of a view, this tag causes a &lt;a target="_"
+            href="../../../javadocs/javax/faces/component/UIViewParameter.html"&gt;UIViewParameter&lt;/a&gt;
+            to be attached as metadata for the current view. Because
+            &lt;code&gt;UIViewParameter&lt;/code&gt; extends &lt;code&gt;UIInput&lt;/code&gt;
+            all of the attributes and nested child content for any
+            &lt;code&gt;UIInput&lt;/code&gt; tags are valid on this tag as well.&lt;/p&gt;
+
+        </description>
+        <tag-name>viewParam</tag-name>
+        <component>
+            <component-type>javax.faces.Parameter</component-type>
+            <renderer-type/>
+        </component>
+        <attribute>
+            <description>
+                Converter instance registered with this component.
+            </description>
+            <name>converter</name>
+            <required>false</required>
+            <type>javax.faces.convert.Converter</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression enabled attribute that, if present, will be
+                used as the text of the converter message, replacing any message
+                that comes from the converter.
+            </description>
+            <name>converterMessage</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                The component identifier for this component. This value must be
+                unique within the closest parent component that is a naming
+                container.
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag indicating that the user is required to provide a submitted
+                value for this input component.
+            </description>
+            <name>required</name>
+            <required>false</required>
+            <type>boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression enabled attribute that, if present, will be
+                used as the text of the validation message for the "required"
+                facility, if the "required" facility is used.
+            </description>
+            <name>requiredMessage</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                MethodExpression representing a validator method that will be
+                called
+                during Process Validations to perform correctness checks on the
+                value of this component. The expression must evaluate to a
+                public
+                method that takes FacesContext, UIComponent, and Object
+                parameters,
+                with a return type of void.
+            </description>
+            <name>validator</name>
+            <required>false</required>
+            <method-signature>void validate(javax.faces.context.FacesContext,
+                javax.faces.component.UIComponent, java.lang.Object)
+            </method-signature>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression enabled attribute that, if present, will be
+                used as the text of the validator message, replacing any
+                message that comes from the validator.
+            </description>
+            <name>validatorMessage</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                The current value of this component.
+            </description>
+            <name>value</name>
+            <required>false</required>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+                &lt;p&gt;
+
+                MethodExpression representing a value change listener method
+                that will be notified when a new value has been set for this
+                input component. The expression must evaluate to a public
+                method that takes a &lt;code&gt;ValueChangeEvent&lt;/code&gt;
+                parameter,
+                with a return type of void, &lt;span class="changed_added_2_0"&gt;or
+                to a public method that takes no arguments with a return type
+                of void. In the latter case, the method has no way of easily
+                knowing what the new value is, but this can be useful in cases
+                where a notification is needed that "this value
+                changed".&lt;/span&gt;
+
+                &lt;/p&gt;
+            </description>
+            <name>valueChangeListener</name>
+            <required>false</required>
+            <method-signature>void
+                valueChange(javax.faces.event.ValueChangeEvent)
+            </method-signature>
+        </attribute>
+        <attribute>
+            <description>
+                The maximum number of characters that may
+                be entered in this field.
+            </description>
+            <name>maxlength</name>
+            <required>false</required>
+            <type>int</type>
+        </attribute>
+        <attribute>
+            <description>
+                The ValueExpression linking this component to a property in a
+                backing bean
+            </description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Register a PhaseListener instance on the UIViewRoot in which
+            this tag is nested.
+        </description>
+        <tag-name>phaseListener</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.PhaseListenerHandler</handler-class>
+        <attribute>
+            <description>
+                Fully qualified Java class name of an PhaseListener to be
+                created and registered.
+            </description>
+            <name>type</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Value binding expression that evaluates to an object that
+                implements javax.faces.event.PhaseListener.
+            </description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.event.PhaseListener</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Add a child UISelectItem component to the UIComponent
+            associated with the closest parent UIComponent custom
+            action.
+        </description>
+        <tag-name>selectItem</tag-name>
+        <component>
+            <component-type>javax.faces.SelectItem</component-type>
+            <renderer-type/>
+        </component>
+        <attribute>
+            <description>
+                Value binding expression to a backing bean
+                property bound to the component instance for
+                the UIComponent created by this custom action.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        <attribute>
+            <description>
+                Component identifier of the UISelectItem
+                component to be created.
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Description of this option, for use in
+                development tools.
+            </description>
+            <name>itemDescription</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag indicating whether the option created
+                by this component is disabled. Expressions
+                must evaluate to a boolean. Default value
+                is false.
+            </description>
+            <name>itemDisabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Label to be displayed to the user
+                for this option.
+            </description>
+            <name>itemLabel</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag indicating that characters that are sensitive in
+                the value of the &lt;code&gt;itemLabel&lt;/code&gt;
+                attribute must be escaped. This flag is set to "true" by
+                default.
+            </description>
+            <name>escape</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Value to be returned to the server if this
+                option is selected by the user.
+            </description>
+            <name>itemValue</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Value binding expression pointing at a
+                SelectItem instance containing the
+                information for this option.
+            </description>
+            <name>value</name>
+            <type>javax.faces.model.SelectItem</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag indicating whether the option created by this
+                component represents the special "no selection"
+                option. Expressions must evaluate to a boolean.
+                Default value is false.
+            </description>
+            <name>noSelectionOption</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            &lt;p&gt;&lt;span class="changed_modified_2_0"&gt;Add&lt;/span&gt; a
+            child UISelectItems component to the UIComponent associated
+            with the closed parent UIComponent custom action.&lt;/p&gt;
+
+            &lt;p class="changed_modified_2_0"&gt;When iterating over the
+            select items, &lt;code&gt;toString()&lt;/code&gt; mest be called on
+            the
+            string rendered attribute values.&lt;/p&gt;
+
+            &lt;p class="changed_added_2_0"&gt;Version 2 of the specification
+            introduces
+            several new attributes, described below. These are: var, itemValue,
+            itemLabel, itemDescription, itemDisabled, and itemLabelEscaped.&lt;/p&gt;
+
+
+        </description>
+        <tag-name>selectItems</tag-name>
+        <component>
+            <component-type>javax.faces.SelectItems</component-type>
+            <renderer-type/>
+        </component>
+        <attribute>
+            <description>
+                Value binding expression to a backing bean
+                property bound to the component instance for
+                the UIComponent created by this custom action.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        <attribute>
+            <description>
+                Component identifier of the UISelectItems
+                component to be created.
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+
+
+                &lt;p&gt;Value expression pointing at &lt;span
+                class="changed_modified_2_0"&gt;any &lt;code&gt;Collection&lt;/code&gt;
+                or array.&lt;/span&gt; The member elements may be instances of
+                &lt;code&gt;SelectItem&lt;/code&gt; &lt;span
+                class="changed_added_2_0"&gt;or any Java Object. In the
+                case where the member elements are plain Java Objects,
+                several additional attributes must be used by the page
+                author to correctly identify the data to the enclosing
+                &lt;code&gt;UISelectOne&lt;/code&gt; or &lt;code&gt;UISelectMany&lt;/code&gt;
+                component, as shown in the following example.&lt;/span&gt;
+
+                &lt;div class="syntax"&gt;&lt;div class="html4strict"
+                style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
+                class="de1"&gt;&lt;span class="sc2"&gt;&amp;lt;h:selectOneListbox
+                &lt;span class="kw3"&gt;size&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;1&amp;quot;&lt;/span&gt;
+                &lt;span class="kw3"&gt;id&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;escape02&amp;quot;&lt;/span&gt;
+                &lt;span class="kw3"&gt;value&lt;/span&gt;=&lt;span class="st0"&gt;&amp;quot;#{select05NoSelection.initialCollectionValues}&amp;quot;&lt;/span&gt;&lt;span
+                class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+                &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
+                class="sc2"&gt;&amp;lt;f:selectItems &lt;span class="kw3"&gt;value&lt;/span&gt;=&lt;span
+                class="st0"&gt;&amp;quot;#{select05NoSelection.hobbitList}&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+                &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
+                &amp;nbsp;var=&lt;span class="st0"&gt;&amp;quot;n&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+                &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
+                &amp;nbsp;itemValue=&lt;span class="st0"&gt;&amp;quot;#{n}&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+                &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
+                &amp;nbsp;itemLabel=&lt;span class="st0"&gt;&amp;quot;#{n.bio}&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+                &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
+                &amp;nbsp;itemDescription=&lt;span class="st0"&gt;&amp;quot;#{n.description}&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+                &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
+                &amp;nbsp;itemDisabled=&lt;span class="st0"&gt;&amp;quot;#{n.disabled}&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+                &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &amp;nbsp;
+                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
+                &amp;nbsp;itemLabelEscaped=&lt;span class="st0"&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+                &lt;li class="li1"&gt;&lt;div class="de1"&gt;&amp;nbsp; &amp;nbsp;
+                &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;
+                &amp;nbsp;noSelectionValue=&lt;span class="st0"&gt;&amp;quot;#{select05NoSelection.hobbitList[0]}&amp;quot;&lt;/span&gt;/&lt;span
+                class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
+                &lt;li class="li2"&gt;&lt;div class="de2"&gt;&lt;span
+                class="sc2"&gt;&lt;span class="kw2"&gt;&amp;lt;&lt;/span&gt;/h:selectOneListbox&amp;gt;&lt;/span&gt;
+                &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
+
+                &lt;p class="changed_added_2_0"&gt;In the preceding example, the
+                &lt;code&gt;value&lt;/code&gt; attribute on line 1 points to a
+                &lt;code&gt;Collection&amp;lt;HobbitBean&amp;gt;&lt;/code&gt;.
+                &lt;code&gt;HobbitBean&lt;/code&gt; is
+                just a regular Java Object (POJO) that conforms to JavaBeans
+                naming
+                conventions for its properties. The &lt;code&gt;value&lt;/code&gt;
+                attribute on
+                line 2 points to a &lt;code&gt;List&amp;lt;HobbitBean&amp;gt;&lt;/code&gt;,
+                though it could
+                just as well point to a &lt;code&gt;Collection&lt;/code&gt;,
+                array, or
+                &lt;code&gt;javax.faces.model.DataModel&lt;/code&gt;. The
+                attributes on lines 3
+                through 9, inclusive, leverage the fact that the value is a
+                collection
+                of POJOs.
+                &lt;/p&gt;
+
+
+                &lt;/p&gt;
+
+
+            </description>
+            <name>value</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+
+
+                &lt;p class="changed_added_2_0"&gt;Expose the value from the
+                &lt;code&gt;value&lt;/code&gt; attribute under this request
+                scoped key so that it
+                may be referred to in EL for the value of other attributes.&lt;/p&gt;
+
+
+            </description>
+            <name>var</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;evaluates to a
+                &lt;code&gt;Collection&lt;/code&gt;, array, or &lt;code&gt;Map&lt;/code&gt;
+                from which the items
+                to be shown will be rendered.&lt;/p&gt;
+
+            </description>
+            <name>itemValue</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;evaluates to a String that
+                will
+                serve as the label to be shown for the item.&lt;/p&gt;
+
+            </description>
+            <name>itemLabel</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+
+
+                &lt;p class="changed_added_2_0"&gt;evaluates to a String that
+                will
+                serve as the description to be shown for the item.&lt;/p&gt;
+
+            </description>
+            <name>itemDescription</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;evaluates to a boolean that
+                will
+                determine if the item value is selectable or not.&lt;/p&gt;
+
+            </description>
+            <name>itemDisabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;evaluates to a boolean that
+                will
+                determine if the rendered markup for the item receives normal
+                JSF HTML escaping or not.&lt;/p&gt;
+
+            </description>
+            <name>itemLabelEscaped</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;Is either an EL expression
+                pointing to the element in the value collection whose value
+                should be
+                marked as a &amp;#8220;no selection&amp;#8221; item, or a
+                literal string that
+                exactly matches the value of the item in the collection that
+                must be
+                marked as the &amp;#8220;no selection&amp;#8221; item. If the
+                user selects such
+                an item &lt;strong&gt;and&lt;/strong&gt; the field is marked as
+                required, then it
+                will not pass validation.&lt;/p&gt;
+
+            </description>
+            <name>itemLabelEscaped</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            &lt;p&gt;Register an ActionListener instance on the UIComponent
+            associated with the closest parent UIComponent custom action.
+            This actionListener will cause the value given by the "value"
+            attribute to be set into the ValueExpression given by the "target"
+            attribute.&lt;/p&gt;
+
+            &lt;p&gt;The implementation of this tag creates a special
+            &lt;code&gt;ActionListener&lt;/code&gt; instance and registers it on
+            the
+            &lt;code&gt;ActionSource&lt;/code&gt; associated with our most
+            immediate surrounding
+            instance of a tag whose implementation class is a subclass of
+            &lt;code&gt;UIComponentTag&lt;/code&gt;. This tag creates no output
+            to the page
+            currently being created.&lt;/p&gt;
+
+            &lt;p&gt;The &lt;code&gt;ActionListener&lt;/code&gt; instance
+            created and installed by
+            this tag has the following behavior and contract.&lt;/p&gt;
+
+            &lt;ul&gt;
+
+            &lt;li&gt;Only create and register the &lt;code&gt;ActionListener&lt;/code&gt;
+            instance
+            the first time the component for this tag is created&lt;/li&gt;
+
+            &lt;li&gt;The "target" and "value" tag attributes are
+            ValueExpression
+            instances and are stored unevaluated as instance variables of the
+            listener.&lt;/li&gt;
+
+            &lt;li&gt;When the listener executes, perform the following:
+            &lt;ul&gt;
+            Call getValue() on the "value" ValueExpression.
+            &lt;/ul&gt;
+            &lt;ul&gt;
+            If value of the "value" expression is null, call setValue() on
+            the "target" ValueExpression with the null value.
+            &lt;/ul&gt;
+            &lt;ul&gt;
+            If the value of the "value" expression is not null, call getType()
+            on the "value" and "target" ValueExpressions to determine their
+            property types.
+            &lt;/ul&gt;
+            &lt;ul&gt;
+            Coerce the value of the "value" expression to the "target"
+            expression value type following the Expression Language coercion
+            rules. Call setValue() on the "target" ValueExpression with the
+            resulting value.
+            &lt;/ul&gt;
+            &lt;ul&gt;
+            If either coercion or the execution of setValue() fails throw an
+            AbortProcessingException.
+            &lt;/ul&gt;
+            &lt;/li&gt;
+
+            &lt;/ul&gt;
+        </description>
+        <tag-name>setPropertyActionListener</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.SetPropertyActionListenerHandler</handler-class>
+        <attribute>
+            <description>
+                ValueExpression to be stored as the value of the target
+                attribute.
+            </description>
+            <name>value</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                ValueExpression that is the destination of the value
+                attribute.
+            </description>
+            <name>target</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Container action for all JavaServer Faces core and
+            custom component actions used on a nested page via
+            "jsp:include" or any custom action that dynamically
+            includes another page from the same web application,
+            such as JSTL's "c:import".
+        </description>
+        <tag-name>subview</tag-name>
+        <component>
+            <component-type>javax.faces.NamingContainer</component-type>
+            <renderer-type/>
+        </component>
+        <attribute>
+            <description>
+                Value binding expression to a backing bean
+                property bound to the component instance for
+                the UIComponent created by this custom action.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        <attribute>
+            <description>
+                Component identifier of the UINamingContainer
+                component to be created.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag indicating whether this component (and its
+                children) should be rendered. Expressions must
+                evaluate to a boolean.
+            </description>
+            <name>rendered</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Register a DoubleRangeValidator instance on the
+            UIComponent associated with the closest parent
+            UIComponent custom action.
+        </description>
+        <tag-name>validateDoubleRange</tag-name>
+        <validator>
+            <validator-id>javax.faces.DoubleRange</validator-id>
+            <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
+        </validator>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.&lt;/p&gt;
+
+
+            </description>
+            <name>disabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Maximum value allowed for this component.
+            </description>
+            <name>maximum</name>
+            <type>java.lang.Double</type>
+        </attribute>
+        <attribute>
+            <description>
+                Minimum value allowed for this component.
+            </description>
+            <name>minimum</name>
+            <type>java.lang.Double</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                DoubleRangeValidator.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.validator.DoubleRangeValidator</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Register a LengthValidator instance on the
+            UIComponent associated with the closest parent
+            UIComponent custom action.
+        </description>
+        <tag-name>validateLength</tag-name>
+        <validator>
+            <validator-id>javax.faces.Length</validator-id>
+            <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
+        </validator>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.&lt;/p&gt;
+
+
+            </description>
+            <name>disabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Maximum length allowed for this component.
+            </description>
+            <name>maximum</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description>
+                Minimum length allowed for this component.
+            </description>
+            <name>minimum</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                LenghtValidator.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.validator.LengthValidator</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Register a LongRangeValidator instance on the
+            UIComponent associated with the closest parent
+            UIComponent custom action.
+        </description>
+        <tag-name>validateLongRange</tag-name>
+        <validator>
+            <validator-id>javax.faces.LongRange</validator-id>
+            <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
+        </validator>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.&lt;/p&gt;
+
+
+            </description>
+            <name>disabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Maximum value allowed for this component.
+            </description>
+            <name>maximum</name>
+            <type>java.lang.Long</type>
+        </attribute>
+        <attribute>
+            <description>
+                Minimum value allowed for this component.
+            </description>
+            <name>minimum</name>
+            <type>java.lang.Long</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                LongRangeValidator.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.validator.LongRangeValidator</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>&lt;p&gt;
+
+            &lt;span class="changed_added_2_0"&gt;
+            A validator that delegates the validation of the local value
+            to the Bean Validation API. The validationGroups attribute
+            serves as a filter that instructs the Bean Validation API which
+            contraints to enforce. If there are any constraint violations
+            reported by Bean Validation, the value is considered invalid.
+
+            &lt;/p&gt;
+        </description>
+        <tag-name>validateBean</tag-name>
+        <validator>
+            <validator-id>javax.faces.Bean</validator-id>
+            <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
+        </validator>
+        <attribute>
+            <description>
+                A comma-separated list of validation groups. A validation group
+                is a fully-qualified class name.
+            </description>
+            <name>validationGroups</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.&lt;/p&gt;
+
+
+            </description>
+            <name>disabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                BeanValidator.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.validator.BeanValidator</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>&lt;p&gt;
+
+            &lt;span class="changed_added_2_0"&gt;
+            A validator that uses the pattern attribute to validate the
+            wrapping component. The entire pattern is matched against
+            the String value of the component. If it matches, it's
+            valid.
+
+            &lt;/p&gt;
+        </description>
+        <tag-name>validateRegex</tag-name>
+        <validator>
+            <validator-id>javax.faces.RegularExpression</validator-id>
+            <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
+        </validator>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.&lt;/p&gt;
+
+
+            </description>
+            <name>disabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                A regular expression pattern. Remember that, like in
+                all Java strings, backslash must be escaped with another
+                backslash.
+            </description>
+            <name>pattern</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                RegexpValidator.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.validator.RegexValidator</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+
+            &lt;p class="changed_added_2_0"&gt;A validator that enforces
+            the presence of a value. It has the same affect as setting the
+            required attribute on a UIInput to true.&lt;/p&gt;
+
+        </description>
+        <tag-name>validateRequired</tag-name>
+        <validator>
+            <validator-id>javax.faces.Required</validator-id>
+            <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
+        </validator>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.&lt;/p&gt;
+
+
+            </description>
+            <name>disabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                RequiredValidator.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.validator.RequiredValidator</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+
+            &lt;p&gt;&lt;span class="changed_modified_2_0"&gt;Register&lt;/span&gt;
+            a named
+            Validator instance on the UIComponent associated with the
+            closest parent UIComponent custom action.&lt;/p&gt;
+
+            &lt;div class="changed_added_2_0"&gt;
+
+            &lt;p&gt;Usage outside of an &lt;code&gt;EditableValueHolder&lt;/code&gt;
+            parent&lt;/p&gt;
+
+            &lt;p&gt;If this element is nested within a
+            &lt;code&gt;UIComponent&lt;/code&gt; tag that has other
+            &lt;code&gt;UIComponent&lt;/code&gt; children, the validator will be
+            automatically added to all the child components as well as
+            this one. The implementation must ensure this occurs even if
+            the parent of this element is not an instance of
+            &lt;code&gt;EditableValueHolder&lt;/code&gt;.&lt;/p&gt;
+
+            &lt;/div&gt;
+
+        </description>
+        <tag-name>validator</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.ValidateDelegateHandler</handler-class>
+        <attribute>
+            <description>
+                &lt;p class="changed_added_2_0"&gt;A boolean value
+                enabling page level determination of whether or not this
+                validator is enabled on the enclosing component.&lt;/p&gt;
+
+
+            </description>
+            <name>disabled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Validator identifier of the Validator
+                to be created and registered.
+            </description>
+            <name>validatorId</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an object that implements
+                the javax.faces.validator.Validator interface.
+            </description>
+            <name>binding</name>
+            <type>javax.faces.validator.Validator</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Register a ValueChangeListener instance on the UIComponent
+            associated with the closest parent UIComponent custom
+            action.
+        </description>
+        <tag-name>valueChangeListener</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.jsf.core.ValueChangeListenerHandler</handler-class>
+        <attribute>
+            <description>
+                Fully qualified Java class name of a
+                ValueChangeListener to be created and registered.
+            </description>
+            <name>type</name>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+                Value binding expression that evaluates to an object that
+                implements javax.faces.event.ValueChangeListener.
+            </description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.event.ValueChangeListener</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                &lt;p class="changed_added_2_0"&gt;If present, this attribute
+                refers
+                to the value of one of the exposed attached objects within the
+                composite component inside of which this tag is nested.&lt;/p&gt;
+
+            </description>
+            <name>for</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Create and register a child UIOutput component
+            associated with the closest parent UIComponent
+            custom action, which renders nested body content.
+        </description>
+        <tag-name>verbatim</tag-name>
+        <component>
+            <component-type>javax.faces.Output</component-type>
+            <renderer-type>javax.faces.Text</renderer-type>
+        </component>
+        <attribute>
+            <description>
+                Flag indicating that generated markup must
+                be escaped in a manner that is appropriate
+                for the markup language to be rendered.
+                Expressions must evaluate to a boolean.
+                Default value is false.
+            </description>
+            <name>escape</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>
+                Flag indicating whether or not this component should be rendered
+                (during Render Response Phase), or processed on any subsequent
+                form submit. The default value for this property is true.
+            </description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+    <tag>
+        <description>
+            Container for all JavaServer Faces core and custom
+            component actions used on a page.
+        </description>
+        <tag-name>view</tag-name>
+        <component>
+            <component-type>javax.faces.ViewRoot</component-type>
+            <renderer-type/>
+        </component>
+        <attribute>
+            <description>
+                Locale to use for localizing this page. Expressions
+                must evaluate to a java.util.Locale or to a String
+                that is converted to a Locale.
+            </description>
+            <name>locale</name>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <description>
+                Identifier for the RenderKit to use for
+                rendering this page.
+            </description>
+            <name>renderKitId</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
+
+                MethodBinding pointing to a method that takes a
+                javax.faces.event.PhaseEvent and returns void. This method
+                will be called before every phase except for restore view.
+            </description>
+            <name>beforePhase</name>
+            <required>false</required>
+            <method-signature>void beforePhase(javax.faces.event.PhaseEvent)
+            </method-signature>
+        </attribute>
+        <attribute>
+            <description>
+
+                MethodBinding pointing to a method that takes a
+                javax.faces.event.PhaseEvent and returns void. This method
+                will be called after every phase except for restore view.
+            </description>
+            <name>afterPhase</name>
+            <required>false</required>
+            <method-signature>void afterPhase(javax.faces.event.PhaseEvent)
+            </method-signature>
+        </attribute>
+    </tag>
+</facelet-taglib>
