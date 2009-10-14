@@ -110,7 +110,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Determine if loading scripts into the page executes the script.
          * This is instead of doing a complicated browser detection algorithm.  Some do, some don't.
          * @returns {boolean} does including a script in the dom execute it?
-         *
+         * @ignore
          */
         var isAutoExecCache;
         var isAutoExec = function isAutoExec() {
@@ -229,6 +229,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         /**
          * Evaluate JavaScript code in a global context.
          * @param src JavaScript code to evaluate
+         * @ignore
          */
         var globalEval = function globalEval(src) {
             if (window.execScript) {
@@ -503,6 +504,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         /**
          * Delete all events attached to a node
          * @param node
+         * @ignore
          */
         var clearEvents = function clearEvents(node) {
             if (!node) {
@@ -530,6 +532,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         /**
          * Deletes node and all of it's children, making sure to clear all open events as well.
          * @param node
+         * @ignore
          */
         var deleteNode = function deleteNode(node) {
             if (!node) {
@@ -550,6 +553,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         /**
          * Deletes all children of a node, making sure to clear all open events as well.
          * @param node
+         * @ignore
          */
         var deleteChildren = function deleteChildren(node) {
             if (!node) {
@@ -612,6 +616,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * copy all attributes from one element to another - except id
          * @param target element to copy attributes to
          * @param source element to copy attributes from
+         * @ignore
          */
         var cloneAttributes = function cloneAttributes(target, source) {
 
