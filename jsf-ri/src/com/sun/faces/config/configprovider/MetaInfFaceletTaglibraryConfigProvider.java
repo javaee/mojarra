@@ -42,14 +42,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
 
 import com.sun.faces.facelets.util.Classpath;
-import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.spi.ConfigurationResourceProvider;
 
@@ -59,11 +57,14 @@ import com.sun.faces.spi.ConfigurationResourceProvider;
 public class MetaInfFaceletTaglibraryConfigProvider implements
       ConfigurationResourceProvider {
 
-    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
     private static final String SUFFIX = ".taglib.xml";
     private static final String WEB_INF_CLASSES =
           "/WEB-INF/classes/META-INF";
 
+    /**
+     * Array of taglib.xml files included with Facelets 1.1.x.  If they are
+     * on the classpath, we don't want to process them.
+     */
     private static final String[] FACELET_CONFIG_FILES = {
         "META-INF/jsf-core.taglib.xml",
         "META-INF/jsf-html.taglib.xml",
