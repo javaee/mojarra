@@ -40,35 +40,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:ez="http://java.sun.com/jsf/composite/navbutton">
-<head>
-    <title>Should Be Ignored</title>
-</head>
-<body>
-<ui:composition template="/WEB-INF/demotemplate.xhtml">
-    <ui:param name="title" value="Basic Composite Component - Navigation"/>
-    <ui:define name="content">
-        <h2>${title}</h2>
-
-        <h:form>
-            <div id="cc" class="grayBox" style="border: 1px solid #090;">
-                <!-- begin composite component usage -->
-                <h1> Page 2</h1>
-
-                <h:commandButton id="nav2" action="#{navigation.goNav1}" value="nav1" type="submit"/>
-
-                <!-- end composite component usage -->
-            </div>
-            <p>
-                <h:commandButton value="reload"/>
-                <h:commandButton id="submit" action="index" value="Go Home"
-                                 type="submit"/>
-            </p>
+      xmlns:ez="http://java.sun.com/jsf/composite/spinnerStyled">
+<h:head>
+    <title>Styled Spinner Example</title>
+</h:head>
+<h:body><h1>Styled Spinner Example</h1>
+        <h:form id="form1" prependId="false">
+            <ez:spinner value="#{number.number}" increment="10"/><br/>
+            <h:outputText value="Last number submitted: #{number.number}" /><br/>
+            <h:commandButton value="reload" type="submit"/><br/>
             <h:messages/>
         </h:form>
-    </ui:define>
-</ui:composition>
-
-</body>
+    <p>
+    <h:outputLink value="http://weblogs.java.net/blog/2008/11/09/jsf-20-adding-styles-spinner-component">
+        Blog discussing this example</h:outputLink>
+    </p>
+    
+</h:body>
 </html>

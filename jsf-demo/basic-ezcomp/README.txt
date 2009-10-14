@@ -11,5 +11,5 @@ inout - a simple component that accepts input
 contract - using a bean as an attribute value
 spinner - basic spinner component
 spinnerStyled - adding styling to the spinner component
-spinnerFinal - making the spinner work if you use multiple times in a page
+spinnerFinal - making the spinner work if you use it multiple times in a page
 nav - component that navigates to a new page
