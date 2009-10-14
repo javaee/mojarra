@@ -48,7 +48,7 @@
 <body>
 
 <ui:composition template="/WEB-INF/demotemplate.xhtml">
-    <ui:param name="title" value="Basic Composite Component - Output"/>
+    <ui:param name="title" value="Basic Composite Component - Contract"/>
     <ui:define name="content">
 
         <h2>${title}</h2>
@@ -58,7 +58,7 @@
             <div id="cc" class="grayBox" style="border: 1px solid #090;">
                 <!-- begin composite component usage -->
 
-                <ez:double controller="#{multinumber}"/>
+                <ez:double contract="#{multinumber}"/>
 
                 <!-- end composite component usage -->
             </div>

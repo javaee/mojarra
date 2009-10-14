@@ -51,18 +51,18 @@
 <body>
 
 <cc:interface name="double"
-                     displayName="Very Basic Output Component"
-                     shortDescription="A basic example of the composite component feature">
-   <cc:attribute name="controller" required="true">
+                     displayName="Contract Component"
+                     shortDescription="A basic example of using a bean's contract">
+   <cc:attribute name="contract" required="true">
         <cc:attribute name="number1" required="true"/>
         <cc:attribute name="number2" required="true"/>
    </cc:attribute>
 </cc:interface>
 
 <cc:implementation>
-    <h:inputText value="#{cc.attrs.controller.number1}"/>
+    <h:inputText value="#{cc.attrs.contract.number1}"/>
     <br/>
-    <h:inputText value="#{cc.attrs.controller.number2}"/>
+    <h:inputText value="#{cc.attrs.contract.number2}"/>
     <br/>
 </cc:implementation>
 

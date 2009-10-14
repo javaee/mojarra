@@ -78,16 +78,16 @@
     <!-- =================================================================== -->
 
     <demo>
-        <name>Simple Controller Usage</name>
+        <name>Simple Contract Usage</name>
         <page>controller.jsf</page>
         <sources>
             <source>
                 <label>Using Page</label>
-                <path>/controller.xhtml</path>
+                <path>/contract.xhtml</path>
             </source>
             <source>
                 <label>Composite Component</label>
-                <path>/resources/simplecontroller/double.xhtml</path>
+                <path>/resources/simplecontract/double.xhtml</path>
             </source>
             <source>
                 <label>Managed Bean</label>
