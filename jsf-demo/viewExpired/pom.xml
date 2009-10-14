@@ -31,109 +31,111 @@ provided above. However, if you add GPL Version 2 code and therefore,
 elected the GPL Version 2 license, then the option applies only if the
 new code is made subject to such option by the copyright holder.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.sun.faces</groupId>
-	<artifactId>viewExpired</artifactId>
-	<packaging>war</packaging>
-	<name>${project.artifactId}</name>
-	<url>https://mojarra.dev.java.net/</url>
-	<description>Example App</description>
-	<version>1.0</version>
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<build>
-		<defaultGoal>install</defaultGoal>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<finalName>jsf2-${project.artifactId}</finalName>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>RELEASE</version>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.sun.faces</groupId>
+    <artifactId>viewExpired</artifactId>
+    <packaging>war</packaging>
+    <name>${project.artifactId}</name>
+    <url>https://mojarra.dev.java.net/</url>
+    <description>Example App</description>
+    <version>1.0</version>
 
-	<repositories>
-		<repository>
-			<snapshots />
-			<id>ibiblio.mirrors</id>
-			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-		</repository>
-		<repository>
-			<snapshots />
-			<id>codehaus</id>
-			<name>codehaus</name>
-			<url>http://repository.codehaus.org</url>
-		</repository>
-		<repository>
-			<id>jboss</id>
-			<url>http://repository.jboss.org/maven2</url>
-		</repository>
-		<repository>
-			<snapshots />
-			<id>java.net.m2</id>
-			<name>java.net m2 repo</name>
-			<url>http://download.java.net/maven/2</url>
-		</repository>
-	</repositories>
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <finalName>jsf2-${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>RELEASE</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-	<dependencies>
-	
-		<dependency>
-			<groupId>javax.faces</groupId>
-			<artifactId>jsf-api</artifactId>
-			<version>2.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
+    <repositories>
+        <repository>
+            <snapshots/>
+            <id>ibiblio.mirrors</id>
+            <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+        </repository>
+        <repository>
+            <snapshots/>
+            <id>codehaus</id>
+            <name>codehaus</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <id>jboss</id>
+            <url>http://repository.jboss.org/maven2</url>
+        </repository>
+        <repository>
+            <snapshots/>
+            <id>java.net.m2</id>
+            <name>java.net m2 repo</name>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+    </repositories>
 
-		<dependency>
-			<groupId>javax.el</groupId>
-			<artifactId>el-api</artifactId>
-			<version>1.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>persistence-api</artifactId>
-			<version>1.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>javax.transaction</groupId>
-			<artifactId>jta</artifactId>
-			<version>1.1</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>bean-validator</artifactId>
-			<version>3.0-JBoss-4.0.0.Beta1-b01</version>
-			<scope>provided</scope>
-		</dependency>
+    <dependencies>
 
         <dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.1</version>
-			<scope>test</scope>
-		</dependency>
-        
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>bean-validator</artifactId>
+            <version>3.0-JBoss-4.0.0.Beta1-b01</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.1</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>jsr250-api</artifactId>
@@ -154,10 +156,10 @@ new code is made subject to such option by the copyright holder.
             <version>2.4</version>
             <scope>test</scope>
             <exclusions>
-              <exclusion>
-                <groupId>javax.xml</groupId>
-                <artifactId>jsr173</artifactId>
-              </exclusion>
+                <exclusion>
+                    <groupId>javax.xml</groupId>
+                    <artifactId>jsr173</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -189,42 +191,42 @@ new code is made subject to such option by the copyright holder.
             <scope>test</scope>
         </dependency>
 
-	</dependencies>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<reportSets>
-					<reportSet />
-				</reportSets>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
+    </dependencies>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <reportSets>
+                    <reportSet/>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
     <profiles>
-      <profile>
-	<id>default</id>
-        <!-- Tests are disabled by default.  See the test profile -->
-	<activation>
-	  <activeByDefault>true</activeByDefault>
-	</activation>
-	<properties>
-	  <maven.test.skip>true</maven.test.skip>
-	</properties>
-      </profile>
-      <profile>
-	<id>test</id>
-        <!-- To activate this profile, and allow tests to run, do this:
-             mvn -o -Ptest test -->
-      </profile>
+        <profile>
+            <id>default</id>
+            <!-- Tests are disabled by default.  See the test profile -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <!-- To activate this profile, and allow tests to run, do this:
+        mvn -o -Ptest test -->
+        </profile>
 
     </profiles>
     <properties>
