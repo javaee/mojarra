@@ -76,9 +76,6 @@ import java.net.MalformedURLException;
  *    <li>
  *       The <code>Set</code> of classes passed to this initializer is not
  *       empty, or
- *    <li>
- *       Context init parameters are present and start with javax.faces. or
- *       com.sun.faces., or
  *    </li>
  *    <li>
  *       /WEB-INF/faces-config.xml exists.
