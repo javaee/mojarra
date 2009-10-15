@@ -700,7 +700,7 @@
     <facet type="web" name="head-body">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/head-body/src/main/webapp/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/head-body/src/main/webapp/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/head-body/src/main/webapp" relative="/" />
@@ -2601,7 +2601,7 @@
     <facet type="web" name="stock">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/stock/src/main/webapp/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/stock/src/main/webapp/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/stock/src/main/webapp" relative="/" />
@@ -3824,7 +3824,7 @@
       <sourceFolder url="file://$MODULE_DIR$/sandbox/ezcomp02/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/guessNumber/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/guessNumber2.0/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/head-body/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/head-body/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/helloDuke/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ifnavigation/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/j2meDemo/midlet" isTestSource="false" />
@@ -3833,9 +3833,9 @@
       <sourceFolder url="file://$MODULE_DIR$/archive/mojarra_ext/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/nonjsp/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/renderkits/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/scrumtoys2009/eclipseProject/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/scrumtoys2009/eclipseProject/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/standard/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/stock/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/stock/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/mappingDemo/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/tests" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/webtier-sample/src/java" isTestSource="false" />
