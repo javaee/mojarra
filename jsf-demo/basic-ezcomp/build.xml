@@ -83,7 +83,7 @@
             </classpath>
         </jsf.javac>
         <copy todir="${build}/${example}/WEB-INF">
-            <fileset dir="web/WEB-INF">
+            <fileset dir="src/main/webapp/WEB-INF">
                 <include name="*.xml"/>
                 <include name="*.xhtml"/>
             </fileset>
@@ -93,7 +93,7 @@
         </copy>
 
         <copy todir="${build}/${example}/">
-            <fileset dir="web">
+            <fileset dir="src/main/webapp">
                 <include name="*.html"/>
                 <include name="*.xhtml"/>
                 <include name="*.gif"/>
@@ -103,7 +103,7 @@
             </fileset>
         </copy>
         <copy todir="${build}/${example}/resources">
-            <fileset dir="web/resources"/>
+            <fileset dir="src/main/webapp/resources"/>
         </copy>
         
         <jsf.war basedir="${build}"
