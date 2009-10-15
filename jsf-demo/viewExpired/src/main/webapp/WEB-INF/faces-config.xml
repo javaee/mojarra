@@ -48,6 +48,5 @@
     <view-handler>com.sun.faces.NullRestoreViewViewHandler</view-handler>
   </application>
 
-
 </faces-config>
 
