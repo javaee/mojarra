@@ -34,7 +34,7 @@
  holder.
 -->
 
-<project name="helloFacelet" default="build" basedir=".">
+<project name="helloworld" default="build" basedir=".">
    
 
     <property file="${user.home}/build.properties"/> 
@@ -42,8 +42,8 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     
     <!-- Configure the context path for this application -->
-    <property name="context.path" value="/helloFacelet"/>
-    <property name="example" value="helloFacelet"/>
+    <property name="context.path" value="/helloworld"/>
+    <property name="example" value="helloworld"/>
     <property name="build" value="${basedir}/build"/>
     <property name="lib" value="${basedir}/lib"/>
 
@@ -87,13 +87,13 @@
             </classpath>
         </jsf.javac>
         <copy todir="${build}/${example}/WEB-INF">
-            <fileset dir="web/WEB-INF">
+            <fileset dir="src/main/webapp/WEB-INF">
                 <include name="*.xml"/>
             </fileset>
         </copy>
 
         <copy todir="${build}/${example}/">
-            <fileset dir="web">
+            <fileset dir="src/main/webapp">
                 <include name="*.html"/>
                 <include name="*.gif"/>
                 <include name="*.jpg"/>
@@ -103,7 +103,7 @@
             </fileset>
         </copy>
         <copy todir="${build}/${example}/WEB-INF/classes/facelet-guessNumber">
-            <fileset dir="web">
+            <fileset dir="src/main/webapp">
                 <include name="*properties"/>
             </fileset>
         </copy>

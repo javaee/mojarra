@@ -1,6 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
-
 <!--
+
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
  Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
@@ -34,36 +33,22 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
+
 -->
-
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-              version="2.0">   
-
-    <!-- our NumberBean we created before -->
-    <managed-bean>
-        <managed-bean-name>HelloBean</managed-bean-name>
-        <managed-bean-class>helloFacelet.HelloBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-
-    <!-- going from guess.xhtml to response.xhtml -->
-    <navigation-rule>
-        <from-view-id>/hello.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/response.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-
-    <!-- going from response.xhtml to guess.xhtml -->
-    <navigation-rule>
-        <from-view-id>/response.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>success</from-outcome>
-            <to-view-id>/hello.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-
-</faces-config>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html">
+    <f:view contentType="text/html"/>
+    <h:head>
+        <title>Hello World!</title>
+    </h:head>
+    <h:body bgcolor="white">
+        <h2>My name is Duke.  What is yours?</h2>
+        <h:form id="helloForm" >
+            <h:graphicImage id="waveImg" url="/wave.med.gif" />
+            <h:inputText id="username" value="#{helloBean.name}"/>
+            <h:commandButton id="submit" action="response" value="Submit"/>
+        </h:form>
+    </h:body>
+</html>

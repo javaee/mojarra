@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -35,19 +36,31 @@
  holder.
 
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html">
-    
-    <body bgcolor="white">
-        <h2>My name is Duke.  What is yours?</h2>
-        <h:form id="helloForm" >
-            <h:graphicImage id="waveImg" url="/wave.med.gif" />
-            <h:inputText id="username"
-                    value="#{HelloBean.name}"/>
-            <h:commandButton id="submit" action="success" value="Submit" 
-                        type="submit" />
-        </h:form>
-    </body>
-</html>
+<!DOCTYPE web-app PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+    <display-name>Facelets Tutorial</display-name>
+    <description>Number Guess Game</description>
+    <!-- Change to "Production" when you are ready to deploy -->
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <!-- Faces Servlet -->
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- Faces Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+    <!-- welcome file mapping -->
+    <welcome-file-list>
+        <welcome-file>faces/hello.xhtml</welcome-file>
+    </welcome-file-list>
+</web-app>
