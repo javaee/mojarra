@@ -350,7 +350,7 @@
     <facet type="web" name="ajax-request">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ajax-request/src/main/webapp/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/ajax-request/src/main/webapp/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/ajax-request/src/main/webapp" relative="/" />
@@ -527,7 +527,7 @@
     <facet type="web" name="ezcomp02">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ezcomp02/src/main/webapp/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/ezcomp02/src/main/webapp/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/ezcomp02/src/main/webapp" relative="/" />
@@ -2100,7 +2100,7 @@
     <facet type="web" name="ajax-queue">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ajax-queue/src/main/webapp/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/ajax-queue/src/main/webapp/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/ajax-queue/src/main/webapp" relative="/" />
@@ -2792,7 +2792,7 @@
     <facet type="web" name="ezcomp03">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ezcomp03/src/main/webapp/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/sandbox/ezcomp03/src/main/webapp/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/ezcomp03/src/main/webapp" relative="/" />
@@ -3831,15 +3831,15 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/OpenAjaxBridge/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ajax-queue/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ajax-request/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ajax-tag/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/OpenAjaxBridge/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ajax-queue/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ajax-request/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ajax-tag/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/carstore/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/characterCombat/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/components/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ezcomp00/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ezcomp02/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ezcomp00/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/ezcomp02/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/guessNumber/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/guessNumber2.0/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/head-body/src/main/java" isTestSource="false" />
@@ -3848,7 +3848,7 @@
       <sourceFolder url="file://$MODULE_DIR$/ifnavigation/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/j2meDemo/midlet" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/j2meDemo/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/jsf-forum/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sandbox/jsf-forum/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/mojarra_ext/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/nonjsp/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/renderkits/src/java" isTestSource="false" />
