@@ -92,7 +92,7 @@ public class ValidatorTagHandlerDelegateImpl extends TagHandlerDelegate implemen
         Util.notNull("type", type);
         MetaRuleset m = new MetaRulesetImpl(owner.getTag(), type);
         
-        return m.ignore("binding").ignore("disabled");
+        return m.ignore("binding").ignore("disabled").ignore("for");
 
     }
     

@@ -164,7 +164,7 @@ class BehaviorTagHandlerDelegateImpl extends TagHandlerDelegate implements Attac
         Util.notNull("type", type);
         MetaRuleset m = new MetaRulesetImpl(owner.getTag(), type);
         m = m.ignore("event");
-        return m.ignore("binding");
+        return m.ignore("binding").ignore("for");
     }
     
     public String getFor() {
