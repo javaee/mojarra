@@ -236,6 +236,11 @@
           </module>
         </modules>
       </facet-type>
+      <facet-type id="jpa">
+        <modules>
+          <module name="demo" />
+        </modules>
+      </facet-type>
     </autodetection-disabled>
   </component>
   <component name="GlobalLibrariesConfigurable.UI">
