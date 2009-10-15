@@ -46,7 +46,7 @@
     <h:body bgcolor="white">
         <h2>My name is Duke.  What is yours?</h2>
         <h:form id="helloForm" >
-            <h:graphicImage id="waveImg" url="/wave.med.gif" />
+            <h:graphicImage id="waveImg" url="#{resource['wave.med.gif']}" />
             <h:inputText id="username" value="#{helloBean.name}"/>
             <h:commandButton id="submit" action="response" value="Submit"/>
         </h:form>

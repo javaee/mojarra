@@ -42,7 +42,7 @@
 <body>
 
     <h:form id="responseform">
-    <h:graphicImage id="waveImg" url="/wave.med.gif" />
+    <h:graphicImage id="waveImg" url="#{resource['wave.med.gif']}" />
     <h2>Hi, #{helloBean.name}</h2>
       <h:commandButton id="back" value="Back" action="hello" />
     </h:form>
