@@ -91,20 +91,20 @@
         <delete dir="${basedir}/test/build"/>
 
         <ant target="clean" dir="custom-bean-scope"/>
-        <ant target="clean" dir="guessNumber"/>
+        <ant target="clean" dir="archive/guessNumber"/>
         <ant target="clean" dir="tree-visit"/>
         <ant target="clean" dir="guessNumber2.0"/>
         <ant target="clean" dir="basic-ezcomp"/>
         <ant target="clean" dir="basic-ajax"/>
         <ant target="clean" dir="sandbox/ajax-request"/>
         <ant target="clean" dir="sandbox/ajax-queue"/>
-        <ant target="clean" dir="helloDuke"/>
-        <ant target="clean" dir="components"/>
-        <ant target="clean" dir="carstore"/>       
+        <ant target="clean" dir="archive/helloDuke"/>
+        <ant target="clean" dir="archive/components"/>
+        <ant target="clean" dir="archive/carstore"/>
         <ant target="clean" dir="mojarra_ext"/>       
-        <ant target="clean" dir="renderkits"/>
+        <ant target="clean" dir="archive/renderkits"/>
         <ant target="clean" dir="standard"/>
-        <ant target="clean" dir="webtier-sample"/>
+        <ant target="clean" dir="archive/webtier-sample"/>
         <ant target="clean" dir="test/mappingDemo"/>
 
     </target>
@@ -429,13 +429,13 @@
 
     <target name="main" depends="update,prepare.build">
         <ant dir="${basedir}/custom-bean-scope" inheritAll="false" />
-        <ant dir="${basedir}/components" inheritAll="false" />
-        <ant dir="${basedir}/carstore" inheritAll="false" />
+        <ant dir="archive/components" inheritAll="false" />
+        <ant dir="archive/carstore" inheritAll="false" />
         <ant dir="${basedir}/tree-visit" inheritAll="false" />
         <ant dir="${basedir}/viewExpired" inheritAll="false" />
         <ant dir="${basedir}/mojarra_ext" inheritAll="false" />
-        <ant dir="${basedir}/helloDuke" inheritAll="false" />
-        <ant dir="${basedir}/guessNumber" inheritAll="false" />
+        <ant dir="archive/helloDuke" inheritAll="false" />
+        <ant dir="archive/guessNumber" inheritAll="false" />
         <ant dir="${basedir}/guessNumber2.0" inheritAll="false" />
         <ant dir="${basedir}/ifnavigation" inheritAll="false" />
         <ant dir="${basedir}/basic-ezcomp" inheritAll="false" />
@@ -448,8 +448,8 @@
          -->
         <ant dir="${basedir}/standard" inheritAll="false" />
         <ant dir="${basedir}/test/mappingDemo" inheritAll="false" />
-        <ant dir="${basedir}/renderkits" inheritAll="false"/>
-        <ant dir="${basedir}/webtier-sample" inheritAll="false"/>
+        <ant dir="archive/renderkits" inheritAll="false"/>
+        <ant dir="archive/webtier-sample" inheritAll="false"/>
     </target>
 
 </project>

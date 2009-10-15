@@ -91,7 +91,7 @@
         <path refid="htmlunit.runtime.classpath"/>
         <pathelement location="${build}/classes"/>
         <!-- Include this to have access to the ResourceBundles for carstore -->
-        <pathelement location="${basedir}/carstore/src"/>
+        <pathelement location="archive/carstore/src"/>
     </path>
 
     <target name="init" depends="check.changes">
@@ -184,7 +184,7 @@
         -->
 
         <copy todir="${build}/classes">
-            <fileset dir="${basedir}/carstore/src/java">
+            <fileset dir="archive/carstore/src/java">
                 <include name="**/*.properties"/>
             </fileset>
         </copy>
