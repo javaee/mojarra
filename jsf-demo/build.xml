@@ -309,6 +309,56 @@
         <delete dir="${dist.home}/renderkitdocs"/>
         <delete dir="${dist.home}/vdldocs"/>
         <delete dir="${dist.home}/javadocs"/>
+        <delete dir="${dist.home}/managed-bean-javadocs" />
+        <delete dir="${dist.home}/jsdocs" />
+        <unzip src="${dist.home}/docs/javadocs-${impl.version}.zip" dest="${dist.home}/docs" />
+        <unzip src="${dist.home}/docs/jsdocs-${impl.version}.zip" dest="${dist.home}/docs" />
+        <unzip src="${dist.home}/docs/renderkitdocs-${impl.version}.zip" dest="${dist.home}/docs" />
+        <unzip src="${dist.home}/docs/vdldocs-${impl.version}.zip" dest="${dist.home}/docs" />
+        <delete file="${dist.home}/docs/javadocs-${impl.version}.zip" />
+        <delete file="${dist.home}/docs/jsdocs-${impl.version}.zip" />
+        <delete file="${dist.home}/docs/renderkitdocs-${impl.version}.zip" />
+        <delete file="${dist.home}/docs/vdldocs-${impl.version}.zip" />
+        <echoxml file="${dist.home}/docs/doclist.html">
+            <html>
+            <head>
+               <title>Mojarra ${impl.version} Documentation</title>
+            </head>
+                <body>
+                <div align="center">
+                <a href="javadocs/index.html" target="loc">JSF 2.0 API Documentation</a><span> | </span>
+                <a href="managed-bean-javadocs/index.html" target="loc">JSF 2.0 Managed Bean Documentation</a><span> | </span>
+                <a href="vdldocs/facelets/index.html" target="loc">Facelets Tag Documentation</a><span> | </span>
+                <a href="vdldocs/jsp/index.html" target="loc">JSP Tag Documentation</a><span> | </span>
+                <a href="renderkitdocs/index.html" target="loc">Renderkit Documentation</a><span> | </span>
+                <a href="jsdocs/index.html" target="loc">Javascript Documentation</a>
+                </div>
+                </body>
+            </html>
+        </echoxml>
+        <echoxml file="${dist.home}/docs/index.html">
+            <html>
+            <head>
+               <title>Mojarra ${impl.version} Documentation</title>
+            </head>
+            <frameset cols="100%">
+              <frameset rows="10%, 90%">
+                  <frame src="doclist.html" />
+                  <frame name="loc" />
+              </frameset>
+
+            </frameset>
+            </html>
+        </echoxml>
+        <zip basedir="${dist.home}/docs" destfile="${dist.home}/mojarra-${impl.version}-documentation.zip" />
+        <delete dir="${dist.home}/docs/renderkitdocs"/>
+        <delete dir="${dist.home}/docs/vdldocs"/>
+        <delete dir="${dist.home}/docs/javadocs"/>
+        <delete dir="${dist.home}/docs/managed-bean-javadocs" />
+        <delete dir="${dist.home}/docs/jsdocs" />
+        <delete file="${dist.home}/docs/index.html" />
+        <delete file="${dist.home}/docs/doclist.html" />
+        <move file="${dist.home}/mojarra-${impl.version}-documentation.zip" todir="${dist.home}/docs" />
     </target>
 
     <target name="api.javadocs">
@@ -341,7 +391,7 @@
                     <arg value="${basedir}/../jsf-api/src/main/resources/jsf.js"/>
         </java>
         <zip zipfile="${dist.home}/docs/jsdocs-${impl.version}.zip">
-                   <fileset dir="${dist.home}" includes="jsdocs/**"/>
+            <fileset dir="${dist.home}" includes="jsdocs/**"/>
         </zip>
 
     </target>
