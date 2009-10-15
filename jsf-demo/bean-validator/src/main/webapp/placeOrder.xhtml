@@ -1,3 +1,4 @@
+<!--
  # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  # 
  # Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
@@ -32,5 +33,24 @@
  # only if the new code is made subject to such option by the copyright
  # holder.
 
-javax.faces.validator.BeanValidator.MESSAGE={1}: {0}
-javax.faces.validator.BeanValidator.MESSAGE_detail={0}
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <f:view>
+    <body>
+        <h1>Place Order Form</h1>
+        <p>The address information is now required. Otherwise, where are we going to ship this order?</p>
+        <h:messages style="color: red;"/>
+        <h:form>
+            <f:validateBean validationGroups="beanvalidation.groups.Personal , beanvalidation.groups.Order">
+            <ui:include src="/WEB-INF/fragments/form.xhtml"/>
+            </f:validateBean>
+        </h:form>
+        <p><h:outputLink value="home.xhtml">Back to home</h:outputLink></p>
+    </body>
+    </f:view>
+</html>

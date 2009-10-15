@@ -44,39 +44,10 @@
     <description>
         JavaServer Faces "Bean Validation" Sample Application
     </description>
-    <context-param>
-        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
-        <param-value>false</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>server</param-value>
-    </context-param>
+
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
-        <param-value>2</param-value>
-    </context-param>
-    <context-param>
-        <param-name>facelets.DEVELOPMENT</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-        <param-value>.xhtml</param-value>
-    </context-param>
-    <context-param>
-        <description>
-            Set this flag to true if you want the JavaServer Faces
-            Reference Implementation to validate the XML in your
-            faces-config.xml resources against the DTD.  Default
-            value is false.
-        </description>
-        <param-name>com.sun.faces.validateXml</param-name>
-        <param-value>true</param-value>
     </context-param>
 
     <!-- Faces Servlet -->
@@ -89,6 +60,11 @@
     <!-- Faces Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>*.jsf</url-pattern>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>home.xhtml</welcome-file>
+    </welcome-file-list>
+    
 </web-app>

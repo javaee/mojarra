@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE sun-web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Application Server 9.0 Servlet 2.5//EN" "http://www.sun.com/software/appserver/dtds/sun-web-app_2_5-0.dtd">
 <!--
  # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  # 
@@ -36,12 +34,33 @@
  # holder.
 
 -->
-<sun-web-app error-url="">
-  <context-root>/beanvalidation</context-root>
-  <class-loader delegate="true"/>
-  <jsp-config>
-    <property name="keepgenerated" value="true">
-      <description>Keep a copy of the generated servlet class' java code.</description>
-    </property>
-  </jsp-config>
-</sun-web-app>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <f:view>
+    <body>
+        <h1>Validate Credit Card</h1>
+        <p>Enter a credit card number and see if it passes the LUHN check. Spaces and hyphens are accepted.</p>
+        <h:messages style="color: red;" globalOnly="true"/>
+        <h:form id="creditCardForm">
+            <h:panelGrid columns="3">
+                Credit card number
+                <h:inputText id="creditCard" value="#{user.creditCard}">
+                    <f:validateBean validationGroups="beanvalidation.groups.Order"/>
+                </h:inputText>
+                <h:messages for="creditCard" style="color: red;" showDetail="true" showSummary="false"/>
+                Zip code
+                <h:inputText id="zipCode" value="#{user.zipCode}">
+                    <f:validateBean validationGroups="beanvalidation.groups.Order"/>
+                </h:inputText>
+                <h:messages for="zipCode" style="color: red;" showDetail="true" showSummary="false"/>
+            </h:panelGrid>
+            <h:commandButton action="success" value="Check"/>
+        </h:form>
+        <p><h:outputLink value="home.xhtml">Back to home</h:outputLink></p>
+    </body>
+    </f:view>
+</html>

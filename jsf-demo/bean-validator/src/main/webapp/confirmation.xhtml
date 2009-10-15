@@ -1,3 +1,4 @@
+<!--
  # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  # 
  # Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
@@ -32,13 +33,17 @@
  # only if the new code is made subject to such option by the copyright
  # holder.
 
-validator.notNull=may not be null
-validator.size=size must be between {min} and {max}
-validator.length=length must be between {min} and {max}
-validator.notEmpty=mai de ne pas \u00EAtre vide
-validator.pattern=must match "{regex}"
-validator.min=must be greater than or equal to {value}
-validator.max=must be less than or equal to {value}
-validator.email=must be a valid e-mail address
-validator.creditCard=must be a valid credit card number
-validator.numbers=must only contain numbers
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <f:view>
+    <body>
+        <h1>Validation Passed!</h1>
+        <p><h:outputLink value="home.xhtml">Back to home</h:outputLink></p>
+    </body>
+    </f:view>
+</html>
