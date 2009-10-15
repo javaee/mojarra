@@ -108,7 +108,7 @@ new code is made subject to such option by the copyright holder.
         </dependency>
 
         <!--
-          Uncomment these two dependencies instead of the one above to use
+          Uncomment these two dependencies and comment out the one above to use
           a simple servlet container instead of a Java EE Application Server
         <dependency>
             <groupId>com.sun.faces</groupId>
