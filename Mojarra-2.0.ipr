@@ -169,16 +169,7 @@
     <autodetection-disabled>
       <facet-type id="web">
         <modules>
-          <module name="demo">
-            <files>
-              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-component/build/ajax-component/WEB-INF/web.xml" />
-              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-component/web/WEB-INF/web.xml" />
-              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-queue/target/ajax-queue/WEB-INF/web.xml" />
-              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-request/target/ajax-request/WEB-INF/web.xml" />
-              <file url="file://$PROJECT_DIR$/jsf-demo/basic-ezcomp/build/basic-ezcomp/WEB-INF/web.xml" />
-              <file url="file://$PROJECT_DIR$/jsf-demo/ezcomp02/target/jsf-ezcomp02/WEB-INF/web.xml" />
-            </files>
-          </module>
+          <module name="demo" />
           <module name="impl">
             <files>
               <file url="file://$PROJECT_DIR$/jsf-ri/build/target/test/WEB-INF/web.xml" />
