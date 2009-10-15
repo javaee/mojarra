@@ -177,7 +177,7 @@
     <facet type="web" name="j2meDemo">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/j2meDemo/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/j2meDemo/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/j2meDemo/web" relative="/" />
@@ -877,7 +877,7 @@
     <facet type="web" name="nonjsp">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/nonjsp/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/nonjsp/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/nonjsp/web" relative="/" />
@@ -1227,7 +1227,7 @@
     <facet type="web" name="guessNumber">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/guessNumber/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/guessNumber/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/guessNumber/web" relative="/" />
@@ -1404,7 +1404,7 @@
     <facet type="web" name="helloDuke">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/helloDuke/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/helloDuke/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/helloDuke/web" relative="/" />
@@ -2965,7 +2965,7 @@
     <facet type="web" name="renderkits">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/renderkits/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/renderkits/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/renderkits/web" relative="/" />
@@ -3138,7 +3138,7 @@
     <facet type="web" name="components">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/components/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/components/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/components/web" relative="/" />
@@ -3484,7 +3484,7 @@
     <facet type="web" name="webtier-sample">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/webtier-sample/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/webtier-sample/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/webtier-sample/web" relative="/" />
@@ -3657,7 +3657,7 @@
     <facet type="web" name="mojarra_ext">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/mojarra_ext/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/mojarra_ext/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/mojarra_ext/web" relative="/" />
@@ -3837,27 +3837,27 @@
       <sourceFolder url="file://$MODULE_DIR$/sandbox/ajax-tag/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/carstore/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/characterCombat/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/components/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/components/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/sandbox/ezcomp00/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/sandbox/ezcomp02/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/guessNumber/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/guessNumber/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/guessNumber2.0/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/head-body/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/helloDuke/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/helloDuke/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/helloFacelet/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ifnavigation/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/j2meDemo/midlet" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/j2meDemo/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/j2meDemo/midlet" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/j2meDemo/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/sandbox/jsf-forum/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/mojarra_ext/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/nonjsp/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/renderkits/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/mojarra_ext/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/nonjsp/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/renderkits/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/scrumtoys2009/eclipseProject/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/standard/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/stock/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/mappingDemo/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/tests" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/webtier-sample/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/webtier-sample/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/basic-ajax/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/viewExpired/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/basic-ezcomp/src/main/java" isTestSource="false" />

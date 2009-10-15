@@ -101,7 +101,7 @@
         <ant target="clean" dir="archive/helloDuke"/>
         <ant target="clean" dir="archive/components"/>
         <ant target="clean" dir="archive/carstore"/>
-        <ant target="clean" dir="mojarra_ext"/>       
+        <ant target="clean" dir="archive/mojarra_ext"/>
         <ant target="clean" dir="archive/renderkits"/>
         <ant target="clean" dir="standard"/>
         <ant target="clean" dir="archive/webtier-sample"/>
@@ -433,7 +433,7 @@
         <ant dir="archive/carstore" inheritAll="false" />
         <ant dir="${basedir}/tree-visit" inheritAll="false" />
         <ant dir="${basedir}/viewExpired" inheritAll="false" />
-        <ant dir="${basedir}/mojarra_ext" inheritAll="false" />
+        <ant dir="archive/mojarra_ext" inheritAll="false" />
         <ant dir="archive/helloDuke" inheritAll="false" />
         <ant dir="archive/guessNumber" inheritAll="false" />
         <ant dir="${basedir}/guessNumber2.0" inheritAll="false" />
