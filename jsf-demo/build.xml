@@ -103,7 +103,7 @@
         <ant target="clean" dir="archive/carstore"/>
         <ant target="clean" dir="archive/mojarra_ext"/>
         <ant target="clean" dir="archive/renderkits"/>
-        <ant target="clean" dir="standard"/>
+        <ant target="clean" dir="archive/standard"/>
         <ant target="clean" dir="archive/webtier-sample"/>
         <ant target="clean" dir="test/mappingDemo"/>
 
@@ -446,7 +446,7 @@
         <ant dir="${basedir}/ezcomp00" inheritAll="false" />
         <ant dir="${basedir}/ezcomp01" inheritAll="false" />
          -->
-        <ant dir="${basedir}/standard" inheritAll="false" />
+        <ant dir="archive/standard" inheritAll="false" />
         <ant dir="${basedir}/test/mappingDemo" inheritAll="false" />
         <ant dir="archive/renderkits" inheritAll="false"/>
         <ant dir="archive/webtier-sample" inheritAll="false"/>

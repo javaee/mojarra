@@ -3311,7 +3311,7 @@
     <facet type="web" name="standard">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/standard/web/WEB-INF/web.xml" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/archive/standard/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/standard/web" relative="/" />
@@ -3853,7 +3853,7 @@
       <sourceFolder url="file://$MODULE_DIR$/archive/nonjsp/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/renderkits/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/scrumtoys2009/eclipseProject/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/standard/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/archive/standard/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/stock/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/mappingDemo/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/tests" isTestSource="false" />
