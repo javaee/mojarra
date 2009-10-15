@@ -61,6 +61,7 @@
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.6.4"/>
     <property name="el.version" value="1.0"/>
+    <property name="validation.version" value="1.0.0.GA" />
     <property name="bean-validator.version" value="3.0-JBoss-4.0.0.Beta3"/>
     <property name="maven.repository.importer.version" value="1.2"/>
     <property name="yuicompressor.version" value="2.4.2"/>
@@ -109,7 +110,7 @@
     <property name="sun-commons-logging.jar" value="${dependency.jar.dir}/com-sun-commons-logging-api.jar"/>
     <property name="portlet.jar" value="${dependency.jar.dir}/portlet-api-${portlet.api.version}.jar"/>
     <property name="groovy.jar" value="${dependency.jar.dir}/groovy-all-${groovy.version}.jar"/>
-    <property name="validation-api.jar" value="${dependency.jar.dir}/validation-api-1.0.CR2.jar"/>
+    <property name="validation-api.jar" value="${dependency.jar.dir}/validation-api-1.0.0.GA.jar"/>
     <property name="glassfish.download.url" value="http://download.java.net/javaee5/v2ur1/promoted/"/>
     <property name="glassfish.installer.jar" value="glassfish-installer-v2ur1-b09d-"/>
 
@@ -358,7 +359,7 @@
                 <available file="${validation-api.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven2}/org/glassfish/bean-validator/${bean-validator.version}/bean-validator-${bean-validator.version}.jar"
+                <get src="${redhat.maven2}/javax/validation/validation-api/${validation.version}/validation-api-${validation.version}.jar"
                      dest="${validation-api.jar}"
                      usetimestamp="true"/>
             </then>
