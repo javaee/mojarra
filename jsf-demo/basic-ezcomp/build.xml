@@ -46,15 +46,11 @@
     <property name="example" value="basic-ezcomp"/>
     <property name="build" value="${basedir}/build"/>
 
-    <!-- Location dependent jars -->
-    <property name="jsf-demo.lib" value="../lib"/>
-
 
     <path id="classpath">
         <pathelement location="${jsf-api.jar}"/>
         <pathelement location="${jsf-impl.jar}"/>
         <pathelement location="${build}/WEB-INF/classes"/>
-        <pathelement location="archive/lib/ui.jar"/>
         <path refid="compile.classpath"/>
     </path>
 
