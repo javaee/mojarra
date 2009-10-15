@@ -182,15 +182,17 @@
          <copy todir="${dist.home}/samples/guessNumber2.0" includeEmptyDirs="false">
             <fileset dir="${basedir}/guessNumber2.0" excludes="build.xml"/>
          </copy>
+         <copy todir="${dist.home}/samples/custom-bean-scope" includeEmptyDirs="false">
+            <fileset dir="${basedir}/custom-bean-scope" excludes="build.xml"/>
+         </copy>
+<!--
          <copy todir="${dist.home}/samples/ajax-request" includeEmptyDirs="false">
             <fileset dir="sandbox/ajax-request" excludes="build.xml"/>
          </copy>
          <copy todir="${dist.home}/samples/ajax-queue" includeEmptyDirs="false">
             <fileset dir="sandbox/ajax-queue" excludes="build.xml"/>
          </copy>
-         <copy todir="${dist.home}/samples/custom-bean-scope" includeEmptyDirs="false">
-            <fileset dir="${basedir}/custom-bean-scope" excludes="build.xml"/>
-         </copy>
+-->
         <!--
          <copy todir="${dist.home}/samples/ezcomp00" includeEmptyDirs="false">
             <fileset dir="${basedir}/ezcomp00" excludes="build.xml"/>
