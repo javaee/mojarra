@@ -37,6 +37,7 @@
 package com.sun.faces.config;
 
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.RIConstants;
 
@@ -153,19 +154,6 @@ public class FacesInitializer implements ServletContainerInitializer {
 
         if (classes != null && !classes.isEmpty()) {
             return true;
-        }
-
-        // failing that, check to see if any javax.faces or com.sun.faces
-        // context init parameters have been defined
-        for (Enumeration<String> parameters = context.getInitParameterNames();
-             parameters.hasMoreElements(); ) {
-
-            String paramName = parameters.nextElement().trim();
-
-            if (paramName.startsWith("javax.faces.")
-                  || paramName.startsWith("com.sun.faces.")) {
-                return true;
-            }
         }
 
         // no JSF specific parameters found, check for a WEB-INF/faces-config.xml
