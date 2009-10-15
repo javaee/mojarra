@@ -285,7 +285,7 @@ public class ApplicationImpl extends Application {
             event = invokeComponentListenersFor(systemEventClass, source);
 
             // Look for and invoke any 'view' listeners 
-            event = invokeViewListenersFor(systemEventClass, event, source);
+            event = invokeViewListenersFor(context, systemEventClass, event, source);
 
             // look for and invoke any listeners stored on the application
             // using source type.
@@ -1906,11 +1906,11 @@ public class ApplicationImpl extends Application {
 
     }
 
-    private SystemEvent invokeViewListenersFor(Class<? extends SystemEvent> systemEventClass,
+    private SystemEvent invokeViewListenersFor(FacesContext ctx,
+                                               Class<? extends SystemEvent> systemEventClass,
                                                SystemEvent event,
                                                Object source) {
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
         UIViewRoot root = ctx.getViewRoot();
         if (root != null) {
             EventInfo rootEventInfo =
