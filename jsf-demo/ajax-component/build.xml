@@ -53,7 +53,7 @@
         <pathelement location="${jsf-api.jar}"/>
         <pathelement location="${jsf-impl.jar}"/>       
         <pathelement location="${build}/WEB-INF/classes"/>
-        <pathelement location="${jsf-demo.lib}/ui.jar"/>
+        <pathelement location="archive/lib/ui.jar"/>
         <path refid="compile.classpath"/>
     </path>
     

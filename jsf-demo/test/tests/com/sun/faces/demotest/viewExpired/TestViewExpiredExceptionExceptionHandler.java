@@ -37,7 +37,6 @@
 package com.sun.faces.demotest.viewExpired;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.demotest.HtmlUnitTestCase;
 
@@ -48,11 +47,11 @@ public class TestViewExpiredExceptionExceptionHandler extends HtmlUnitTestCase {
     public void testExceptionHandler() throws Exception {
         HtmlPage page = (HtmlPage) getInitialPage();
 
-	HtmlSubmitInput button = 
-	    (HtmlSubmitInput) page.getElementById("button");
-	page = button.click();
-	String text = page.asText();
-	assertTrue(text.contains("You were on page /main.xhtml"));
+        HtmlSubmitInput button =
+                (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        String text = page.asText();
+        assertTrue(text.contains("You were on page /main.xhtml"));
 
     }
 

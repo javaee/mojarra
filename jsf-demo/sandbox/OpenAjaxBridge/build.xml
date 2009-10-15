@@ -38,7 +38,7 @@
    
 
     <property file="${user.home}/build.properties"/> 
-    <property file="../../build.properties"/>
+    <property file="../../../build.properties"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     
     <!-- Configure the context path for this application -->

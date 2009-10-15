@@ -34,7 +34,7 @@
  holder.
 -->
 
-<project name="JSF Demo unit tests" default="build" basedir=".">
+<project name="JSF Demo unit tests" default="main" basedir=".">
 
     <!-- Test Properties -->
     <property file="${user.home}/build.properties"/>
@@ -47,7 +47,7 @@
     <property name="components.context.path" value="/jsf-components"/>
     <property name="cardemo.context.path" value="/jsf-cardemo"/>
     <property name="tree-visit.context.path" value="/tree-visit"/>
-    <property name="viewExpired.context.path" value="/jsf2-viewExpired"/>
+    <property name="viewExpired.context.path" value="/viewExpired"/>
     <property name="mojarra_ext.context.path" value="/mojarra_ext"/>
     <property name="mapping-extension.context.path"
               value="/jsf-mappingDemo-extension"/>
@@ -65,9 +65,9 @@
     <property name="guessNumber.war"
               value="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
     <property name="cardemo.war"
-              value="${basedir}/carstore/build/jsf-cardemo.war"/>
+              value="${basedir}/archive/carstore/build/jsf-cardemo.war"/>
     <property name="mojarra_ext.war"
-              value="${basedir}/mojarra_ext/build/mojarra_ext.war"/>
+              value="${basedir}/archive/mojarra_ext/build/mojarra_ext.war"/>
     <property name="mapping-extension.war"
               value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>
     <property name="mapping-prefix.war"
@@ -137,7 +137,7 @@
     </macrodef>
 
 
-    <target name="build" unless="skip.build"
+    <target name="build.test" unless="skip.build"
             description="Compile Java files." depends="prepare">
         <touch file="${build}/last-build"/>
         <jsf.javac srcdir="test"
@@ -149,11 +149,8 @@
     </target>
 
 
-    <!-- ============== UNIT TESTS =============== -->
-    <!-- Global test target to run all unit tests -->
 
-
-    <target name="test" depends="build"
+    <target name="test" depends="build,build.test"
             description="Runs all of available demo unit tests">
         <delete dir="${test.results.dir}"/>
         <mkdir dir="${test.results.dir}"/>
@@ -214,6 +211,26 @@
                    tests="customscope"
                    context-path="${customscope.context.path}"/>
 
+    </target>
+
+    <target name="clean">
+        <ant target="clean" dir="custom-bean-scope"/>
+        <ant target="clean" dir="archive/guessNumber"/>
+        <ant target="clean" dir="tree-visit"/>
+        <ant target="clean" dir="guessNumber2.0"/>
+        <ant target="clean" dir="archive/carstore"/>
+        <ant target="clean" dir="archive/mojarra_ext"/>
+    </target>
+
+    <target name="build">
+        <ant dir="${basedir}/custom-bean-scope" inheritAll="false" />
+        <ant dir="${basedir}/tree-visit" inheritAll="false" />
+        <ant dir="${basedir}/viewExpired" inheritAll="false" />
+        <ant dir="${basedir}/archive/carstore" inheritAll="false" />
+        <ant dir="${basedir}/archive/mojarra_ext" inheritAll="false" />        
+    </target>
+
+    <target name="main" depends="build,test,clean">
     </target>
 
 </project>

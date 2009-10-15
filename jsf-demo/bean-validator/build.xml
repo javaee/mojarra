@@ -46,10 +46,6 @@
     <property name="example" value="beanvalidation"/>
     <property name="build" value="${basedir}/build"/>   
 
-    <!-- Location dependent jars -->
-    <property name="jsf-demo.lib" value="../lib"/>
-
-
     <path id="classpath">       
         <pathelement location="${jsf-api.jar}"/>
         <pathelement location="${jsf-impl.jar}"/>
