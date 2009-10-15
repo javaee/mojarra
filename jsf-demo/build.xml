@@ -126,6 +126,7 @@
         <echo>Build the demos from the jsf-demo repository</echo>
         <echo>copy the sample war files to the zip area</echo>
 
+<!--  No longer copying sample wars  RELEASE_PENDING delete this whole section
         <copy todir="${dist.home}/samples"
               file="${basedir}/basic-ezcomp/build/basic-ezcomp.war"/>
         <copy todir="${dist.home}/samples"
@@ -140,7 +141,7 @@
               file="${basedir}/ifnavigation/build/ifnavigation.war"/>
          <copy todir="${dist.home}/samples"
               file="${basedir}/custom-bean-scope/build/custom-bean-scope.war"/>
-
+-->
         <!-- RELEASE_PENDING need to clean up this build -->
 
         <!-- Temporarily remove these examples
@@ -429,27 +430,37 @@
 
     <target name="main" depends="update,prepare.build">
         <ant dir="${basedir}/custom-bean-scope" inheritAll="false" />
+<!--
         <ant dir="archive/components" inheritAll="false" />
         <ant dir="archive/carstore" inheritAll="false" />
+-->
         <ant dir="${basedir}/tree-visit" inheritAll="false" />
         <ant dir="${basedir}/viewExpired" inheritAll="false" />
+<!--
         <ant dir="archive/mojarra_ext" inheritAll="false" />
         <ant dir="archive/helloDuke" inheritAll="false" />
         <ant dir="archive/guessNumber" inheritAll="false" />
+-->
         <ant dir="${basedir}/guessNumber2.0" inheritAll="false" />
         <ant dir="${basedir}/ifnavigation" inheritAll="false" />
+<!--
         <ant dir="${basedir}/basic-ezcomp" inheritAll="false" />
-        <ant dir="${basedir}/basic-ajax" inheritAll="false" />        
+        <ant dir="${basedir}/basic-ajax" inheritAll="false" />
+-->
+<!--
         <ant dir="sandbox/ajax-request" inheritAll="false" />
         <ant dir="sandbox/ajax-queue" inheritAll="false" />
+-->
         <!--
         <ant dir="${basedir}/ezcomp00" inheritAll="false" />
         <ant dir="${basedir}/ezcomp01" inheritAll="false" />
          -->
-        <ant dir="archive/standard" inheritAll="false" />
+<!--
         <ant dir="${basedir}/test/mappingDemo" inheritAll="false" />
+        <ant dir="archive/standard" inheritAll="false" />
         <ant dir="archive/renderkits" inheritAll="false"/>
         <ant dir="archive/webtier-sample" inheritAll="false"/>
+-->
     </target>
 
 </project>
