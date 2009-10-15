@@ -3836,7 +3836,6 @@
       <sourceFolder url="file://$MODULE_DIR$/ajax-queue/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ajax-request/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ajax-tag/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/basic-ezcomp/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/carstore/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/characterCombat/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/components/src/java" isTestSource="false" />
@@ -3862,6 +3861,7 @@
       <sourceFolder url="file://$MODULE_DIR$/webtier-sample/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/basic-ajax/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/viewExpired/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/basic-ezcomp/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/ajax-component/build" />
       <excludeFolder url="file://$MODULE_DIR$/ifnavigation/build" />
       <excludeFolder url="file://$MODULE_DIR$/test/build" />
