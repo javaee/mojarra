@@ -79,6 +79,7 @@ public class ClientSideValidatorHandler extends ValidatorHandler {
     
     
     public static class PreRenderListener implements ComponentSystemEventListener, Serializable {
+        private static final long serialVersionUID = 0L;
         public void processEvent(ComponentSystemEvent event)
                 throws AbortProcessingException {
             UIComponent c = (UIComponent) event.getSource();

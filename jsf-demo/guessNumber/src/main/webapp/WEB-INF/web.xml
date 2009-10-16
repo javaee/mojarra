@@ -65,17 +65,6 @@
            <param-value>/WEB-INF/guessnumber.taglib.xml</param-value>
     </context-param>
 
-    <context-param>
-        <description>
-            Set this flag to true if you want the JavaServer Faces
-            Reference Implementation to validate the XML in your
-            faces-config.xml resources against the DTD. Default
-            value is false.
-        </description>
-        <param-name>com.sun.faces.validateXml</param-name>
-        <param-value>true</param-value>
-    </context-param>
-
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -102,7 +91,7 @@
     </env-entry>
 
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>guess/greeting.xhtml</welcome-file>
     </welcome-file-list>
 
 </web-app>

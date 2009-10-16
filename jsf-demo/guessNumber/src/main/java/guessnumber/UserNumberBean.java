@@ -53,6 +53,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
+@SuppressWarnings("unused")
 public class UserNumberBean implements Serializable {
 
     private static final long serialVersionUID = 7288057381787349138L;
@@ -112,7 +113,6 @@ public class UserNumberBean implements Serializable {
     public Integer getMaximum() {
         return maximum;
     }
-
 
     public String getResponse() {
 

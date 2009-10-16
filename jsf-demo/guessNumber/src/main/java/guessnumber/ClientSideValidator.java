@@ -62,6 +62,7 @@ import javax.faces.validator.FacesValidator;
  */
 @FacesValidator(value="ClientSideValidator")
 @ResourceDependency(name="js/validator.js")
+@SuppressWarnings("unused")
 public class ClientSideValidator implements Validator,
                                             Serializable {
 
