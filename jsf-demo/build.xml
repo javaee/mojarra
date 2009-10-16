@@ -201,15 +201,54 @@
             <html>
             <head>
                <title>Mojarra ${impl.version} Documentation</title>
+                <style>
+                    .navbar {
+                    display: block;
+                    background: #507c9a;
+                    padding: 9px 7px 5px 7px;
+                    }
+                    .navbar UL {
+                    display: inline;
+                    margin-left: 0px;
+                    padding-left: 0px;
+                    }
+                    .navbar UL LI {
+                    display: inline;
+                    margin-left: 0px;
+                    border-left: 1px solid #FFF;
+                    padding-left: 5px;
+                    }
+                    .navbar UL LI.first {
+                    border-left: none;
+                    }
+                    .navbar A {
+                    font-weight:normal;
+                    color:#CCDAE3;
+                    text-decoration: none;
+                    }
+                    .navbar A:hover {
+                    text-decoration: underline;
+                    }
+                    .navbar A:visited {
+                    font-weight:normal;
+                    color:#FFF;
+                    }
+                    .navbar UL LI A SPAN.active {
+                    font-weight: bold;
+                    color:#FFF;
+                    }
+                </style>
             </head>
                 <body>
-                <div align="center">
-                <a href="javadocs/index.html" target="loc">JSF 2.0 API Documentation</a><span> | </span>
-                <a href="managed-bean-javadocs/index.html" target="loc">JSF 2.0 Managed Bean Documentation</a><span> | </span>
-                <a href="vdldocs/facelets/index.html" target="loc">Facelets Tag Documentation</a><span> | </span>
-                <a href="vdldocs/jsp/index.html" target="loc">JSP Tag Documentation</a><span> | </span>
-                <a href="renderkitdocs/index.html" target="loc">Renderkit Documentation</a><span> | </span>
-                <a href="jsdocs/index.html" target="loc">Javascript Documentation</a>
+                <div class="navbar" align="center">
+                    <ul>
+                        <li class="first"><a href="javadocs/index.html" target="loc">JSF 2.0 API Documentation</a></li>
+                        <li><a href="managed-bean-javadocs/index.html" target="loc">JSF 2.0 Managed Bean Documentation</a></li>
+                        <li><a href="vdldocs/facelets/index.html" target="loc">Facelets Tag Documentation</a></li>
+                        <li><a href="vdldocs/jsp/index.html" target="loc">JSP Tag Documentation</a></li>
+                        <li><a href="renderkitdocs/index.html" target="loc">Renderkit Documentation</a></li>
+                        <li><a href="jsdocs/index.html" target="loc">Javascript Documentation</a></li>
+                    </ul>
                 </div>
                 </body>
             </html>
@@ -220,7 +259,7 @@
                <title>Mojarra ${impl.version} Documentation</title>
             </head>
             <frameset cols="100%">
-              <frameset rows="10%, 90%">
+              <frameset rows="8%, 92%">
                   <frame src="doclist.html" />
                   <frame name="loc" />
               </frameset>
@@ -228,7 +267,7 @@
             </frameset>
             </html>
         </echoxml>
-        <zip basedir="${dist.home}/docs" destfile="${dist.home}/mojarra-${impl.version}-documentation.zip" />
+        <zip basedir="${dist.home}/docs" excludes="*.zip" destfile="${dist.home}/mojarra-${impl.version}-documentation.zip" />
         <delete dir="${dist.home}/docs/renderkitdocs"/>
         <delete dir="${dist.home}/docs/vdldocs"/>
         <delete dir="${dist.home}/docs/javadocs"/>
