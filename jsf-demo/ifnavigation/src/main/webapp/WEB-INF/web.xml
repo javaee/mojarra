@@ -52,10 +52,6 @@
         <param-value>Development</param-value>
     </context-param>
     <context-param>
-        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-        <param-value>.xhtml</param-value>
-    </context-param>
-    <context-param>
         <description>
             Set this flag to true if you want the JavaServer Faces
             Reference Implementation to validate the XML in your
