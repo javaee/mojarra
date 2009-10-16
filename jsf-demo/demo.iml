@@ -3825,7 +3825,6 @@
       <sourceFolder url="file://$MODULE_DIR$/archive/guessNumber/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/sandbox/head-body/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/helloDuke/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ifnavigation/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/j2meDemo/midlet" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/archive/j2meDemo/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/sandbox/jsf-forum/src/java" isTestSource="false" />
@@ -3845,6 +3844,7 @@
       <sourceFolder url="file://$MODULE_DIR$/helloworld/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/guessNumber/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/guessNumber/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ifnavigation/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/ifnavigation/build" />
       <excludeFolder url="file://$MODULE_DIR$/test/build" />
     </content>
