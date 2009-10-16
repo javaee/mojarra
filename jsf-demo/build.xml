@@ -67,28 +67,10 @@
     <target name="clean">
 
         <delete file="mojarra-${impl.version}.zip"/>
+        <delete file="glassfish-jsf-${impl.version}.jar"/>
         <delete dir="${dist.home}"/>
         <delete dir="${basedir}/test/build"/>
         <ant target="clean" antfile="build-tests.xml"/>
-
-<!--  RELEASE_PENDING change cleanup code to allow for maven
-        <ant target="clean" dir="custom-bean-scope"/>
-        <ant target="clean" dir="archive/guessNumber"/>
-        <ant target="clean" dir="tree-visit"/>
-        <ant target="clean" dir="guessNumber2.0"/>
-        <ant target="clean" dir="basic-ezcomp"/>
-        <ant target="clean" dir="basic-ajax"/>
-        <ant target="clean" dir="sandbox/ajax-request"/>
-        <ant target="clean" dir="sandbox/ajax-queue"/>
-        <ant target="clean" dir="archive/helloDuke"/>
-        <ant target="clean" dir="archive/components"/>
-        <ant target="clean" dir="archive/carstore"/>
-        <ant target="clean" dir="archive/mojarra_ext"/>
-        <ant target="clean" dir="archive/renderkits"/>
-        <ant target="clean" dir="archive/standard"/>
-        <ant target="clean" dir="archive/webtier-sample"/>
-        <ant target="clean" dir="test/mappingDemo"/>
--->
     </target>
 
 
@@ -330,39 +312,6 @@
 
 
     <target name="main" depends="prepare.build">
-        <!--  RELEASE_PENDING  clean this up to do tests.  -->
-        <ant dir="${basedir}/custom-bean-scope" inheritAll="false" />
-<!--
-        <ant dir="archive/components" inheritAll="false" />
-        <ant dir="archive/carstore" inheritAll="false" />
--->
-        <ant dir="${basedir}/tree-visit" inheritAll="false" />
-        <ant dir="${basedir}/viewExpired" inheritAll="false" />
-<!--
-        <ant dir="archive/mojarra_ext" inheritAll="false" />
-        <ant dir="archive/helloDuke" inheritAll="false" />
-        <ant dir="archive/guessNumber" inheritAll="false" />
--->
-        <ant dir="${basedir}/guessNumber2.0" inheritAll="false" />
-        <ant dir="${basedir}/ifnavigation" inheritAll="false" />
-<!--
-        <ant dir="${basedir}/basic-ezcomp" inheritAll="false" />
-        <ant dir="${basedir}/basic-ajax" inheritAll="false" />
--->
-<!--
-        <ant dir="sandbox/ajax-request" inheritAll="false" />
-        <ant dir="sandbox/ajax-queue" inheritAll="false" />
--->
-        <!--
-        <ant dir="${basedir}/ezcomp00" inheritAll="false" />
-        <ant dir="${basedir}/ezcomp01" inheritAll="false" />
-         -->
-<!--
-        <ant dir="${basedir}/test/mappingDemo" inheritAll="false" />
-        <ant dir="archive/standard" inheritAll="false" />
-        <ant dir="archive/renderkits" inheritAll="false"/>
-        <ant dir="archive/webtier-sample" inheritAll="false"/>
--->
     </target>
 
 </project>
