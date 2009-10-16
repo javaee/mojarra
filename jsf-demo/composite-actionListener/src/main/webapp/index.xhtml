@@ -40,8 +40,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:ez="http://java.sun.com/jsf/composite/ezcomp"
-      xmlns:ct="http://domain.com/path">
+      xmlns:ez="http://java.sun.com/jsf/composite/ezcomp">
+<f:view contentType="text/html"/>
 <h:head>
 <title>Sample from webtier forum 20081125</title>
 <style type="text/css">
@@ -52,17 +52,15 @@
 
 <h:body>
 
-  <ui:debug hotkey="p" rendered="true"/>
-
 <h:form>
 
   <div id="cc" class="grayBox" style="border: 1px solid #090;">
 
-    <ez:loginPanel id="loginPanelInConsumingPage" model="#{bean}">
-      <f:actionListener for="loginEvent" binding="#{bean.loginEventListener}"/>
-    </ez:loginPanel>
+    <ez:actionButton id="loginPanelInConsumingPage" model="#{bean}">
+      <f:actionListener for="abutton" binding="#{actionBean.listener}"/>
+    </ez:actionButton>
 
-   <p>actionCalled: <h:outputText value="#{actionCalled}" /></p>
+   <p>actionCalled: #{actionCalled}</p>
 
   </div>
 
