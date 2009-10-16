@@ -3844,6 +3844,7 @@
       <sourceFolder url="file://$MODULE_DIR$/ajax-component/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/helloworld/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/guessNumber/src/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/guessNumber/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/ifnavigation/build" />
       <excludeFolder url="file://$MODULE_DIR$/test/build" />
     </content>
