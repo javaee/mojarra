@@ -216,7 +216,7 @@
     <target name="clean">
         <ant target="clean" dir="custom-bean-scope" inheritAll="false"/>
         <ant target="clean" dir="archive/guessNumber" inheritAll="false"/>
-        <ant target="clean" dir="tree-visit" inheritAll="false"/>
+        <ant target="clean" dir="sandbox/tree-visit" inheritAll="false"/>
         <ant target="clean" dir="viewExpired" inheritAll="false"/>
         <ant target="clean" dir="archive/carstore" inheritAll="false"/>
         <ant target="clean" dir="archive/mojarra_ext" inheritAll="false"/>
@@ -224,7 +224,7 @@
 
     <target name="build">
         <ant dir="${basedir}/custom-bean-scope" inheritAll="false" />
-        <ant dir="${basedir}/tree-visit" inheritAll="false" />
+        <ant dir="sandbox/tree-visit" inheritAll="false" />
         <ant dir="${basedir}/viewExpired" inheritAll="false" />
         <ant dir="${basedir}/archive/carstore" inheritAll="false" />
         <ant dir="${basedir}/archive/mojarra_ext" inheritAll="false" />        

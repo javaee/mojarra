@@ -116,9 +116,6 @@
         <copy todir="${dist.home}/samples/helloworld" includeEmptyDirs="false">
            <fileset dir="${basedir}/helloworld" excludes="build.xml"/>
         </copy>
-        <copy todir="${dist.home}/samples/tree-visit" includeEmptyDirs="false">
-           <fileset dir="${basedir}/tree-visit" excludes="build.xml"/>
-        </copy>
         <copy todir="${dist.home}/samples/viewExpired" includeEmptyDirs="false">
            <fileset dir="${basedir}/viewExpired" excludes="build.xml"/>
         </copy>
