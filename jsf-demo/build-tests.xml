@@ -73,7 +73,7 @@
     <property name="mapping-prefix.war"
               value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>
     <property name="tree-visit.war"
-              value="${basedir}/tree-visit/build/tree-visit.war"/>
+              value="${basedir}/sandbox/tree-visit/build/tree-visit.war"/>
     <property name="viewExpired.war"
               value="${basedir}/viewExpired/build/viewExpired.war"/>
     <property name="test.results.dir" value="${basedir}/testresults"/>
@@ -223,11 +223,11 @@
     </target>
 
     <target name="build">
-        <ant dir="${basedir}/custom-bean-scope" inheritAll="false" />
+        <ant dir="custom-bean-scope" inheritAll="false" />
         <ant dir="sandbox/tree-visit" inheritAll="false" />
-        <ant dir="${basedir}/viewExpired" inheritAll="false" />
-        <ant dir="${basedir}/archive/carstore" inheritAll="false" />
-        <ant dir="${basedir}/archive/mojarra_ext" inheritAll="false" />        
+        <ant dir="viewExpired" inheritAll="false" />
+        <ant dir="archive/carstore" inheritAll="false" />
+        <ant dir="archive/mojarra_ext" inheritAll="false" />        
     </target>
 
     <target name="main" depends="build,test,clean">
