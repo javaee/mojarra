@@ -107,9 +107,6 @@
         <copy todir="${dist.home}/samples/bean-validator" includeEmptyDirs="false">
            <fileset dir="${basedir}/bean-validator" excludes="build.xml"/>
         </copy>
-        <copy todir="${dist.home}/samples/composite-actionListener" includeEmptyDirs="false">
-           <fileset dir="${basedir}/composite-actionListener" excludes="build.xml"/>
-        </copy>
         <copy todir="${dist.home}/samples/custom-tag" includeEmptyDirs="false">
            <fileset dir="${basedir}/custom-tag" excludes="build.xml"/>
         </copy>

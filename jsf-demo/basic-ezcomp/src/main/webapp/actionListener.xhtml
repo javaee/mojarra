@@ -1,5 +1,3 @@
-<?xml version='1.0' encoding='UTF-8'?>
-
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -37,53 +35,37 @@
  holder.
 
 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ez="http://java.sun.com/jsf/composite/action">
+<f:view contentType="text/html"/>
+<h:head>
+<title>Sample from webtier forum 20081125</title>
+<style type="text/css">
+.grayBox { padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9;  }
+</style>
 
-<web-app version="2.5"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+</h:head>
 
-    <display-name>CompRes Blank Facelets App</display-name>
-    <description>CompRes Blank Facelets App</description>
+<h:body>
 
-    <context-param>
-        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>server</param-value>
-    </context-param>
+<h:form>
 
-    <context-param>
-        <param-name>com.sun.faces.enableGroovyScripting</param-name>
-        <param-value>true</param-value>
-    </context-param>
+  <div id="cc" class="grayBox" style="border: 1px solid #090;">
 
-    <context-param>
-        <param-name>facelets.DEVELOPMENT</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
-    </context-param>
+    <ez:actionButton id="loginPanelInConsumingPage" model="#{bean}">
+      <f:actionListener for="abutton" binding="#{actionBean.listener}"/>
+    </ez:actionButton>
 
-    <context-param>
-        <param-name>com.sun.faces.validateXml</param-name>
-        <param-value>true</param-value>
-    </context-param>
+   <p>actionCalled: #{actionCalled}</p>
 
-    <!-- Faces Servlet -->
-  <servlet>
-    <servlet-name>Faces Servlet</servlet-name>
-    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
+  </div>
 
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-        <url-pattern>*.jsf</url-pattern>
-    </servlet-mapping>
-    <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
-    </welcome-file-list>
+</h:form>
 
-</web-app>
+</h:body>
+
+</html>

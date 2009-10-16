@@ -195,4 +195,25 @@
     </sources>
 </demo>
 
+    <!-- =================================================================== -->
+
+<demo>
+    <name>Action Listener</name>
+    <page>actionListener.jsf</page>
+    <sources>
+        <source>
+            <label>Initial Using Page</label>
+            <path>/actionListener.xhtml</path>
+        </source>
+        <source>
+            <label>Composite Component</label>
+            <path>/resources/action/actionButton.xhtml</path>
+        </source>
+        <source>
+            <label>Action Listener</label>
+            <path>/WEB-INF/classes/ezcomp/ActionCaller.java</path>
+        </source>
+    </sources>
+</demo>
+
 </demo-info>

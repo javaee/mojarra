@@ -4,7 +4,7 @@
     <facet type="web" name="replace-variableresolver">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/web" relative="/" />
@@ -73,7 +73,7 @@
     <facet type="web" name="view-expired">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/view-expired/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/view-expired/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/view-expired/web" relative="/" />
@@ -142,7 +142,7 @@
     <facet type="web" name="command-link-redirect">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/command-link-redirect/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/command-link-redirect/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-redirect/web" relative="/" />
@@ -211,7 +211,7 @@
     <facet type="web" name="command-link-back-button">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/web" relative="/" />
@@ -280,7 +280,7 @@
     <facet type="web" name="resource-locale-prefix">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/web" relative="/" />
@@ -349,7 +349,7 @@
     <facet type="web" name="never-unwrap-exceptions">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/web" relative="/" />
@@ -418,7 +418,7 @@
     <facet type="web" name="jar-ordering">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/web" relative="/" />
@@ -487,7 +487,7 @@
     <facet type="web" name="replace-statemanager">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/web" relative="/" />
@@ -556,7 +556,7 @@
     <facet type="web" name="wcag-datatable">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/web" relative="/" />
@@ -625,7 +625,7 @@
     <facet type="web" name="string-converter">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/string-converter/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/string-converter/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/string-converter/web" relative="/" />
@@ -694,7 +694,7 @@
     <facet type="web" name="replace-application">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-application/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-application/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/replace-application/web" relative="/" />
@@ -763,7 +763,7 @@
     <facet type="web" name="converter-property-editor">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/web" relative="/" />
@@ -832,7 +832,7 @@
     <facet type="web" name="replace-lifecycle">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/web" relative="/" />
@@ -901,7 +901,7 @@
     <facet type="web" name="write-attribute-script-disabled">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/web" relative="/" />
@@ -970,7 +970,7 @@
     <facet type="web" name="el-performance">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/el-performance/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/el-performance/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/el-performance/web" relative="/" />
@@ -1039,7 +1039,7 @@
     <facet type="web" name="write-attribute-script-enabled">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/web" relative="/" />
@@ -1108,7 +1108,7 @@
     <facet type="web" name="empty-string-as-null">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/web" relative="/" />
@@ -1177,7 +1177,7 @@
     <facet type="web" name="late-bindings">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/web" relative="/" />
@@ -1246,7 +1246,7 @@
     <facet type="web" name="invalid-mapping">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/web" relative="/" />
@@ -1315,7 +1315,7 @@
     <facet type="web" name="disable-unicode-escaping">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/web" relative="/" />
@@ -1384,7 +1384,7 @@
     <facet type="web" name="core-tags">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/core-tags/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/core-tags/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/core-tags/web" relative="/" />
@@ -1453,7 +1453,7 @@
     <facet type="web" name="nested-loadbundles">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/web" relative="/" />
@@ -1522,7 +1522,7 @@
     <facet type="web" name="nested-datatables">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/web" relative="/" />
@@ -1591,7 +1591,7 @@
     <facet type="web" name="property-resolver-jsp">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/web" relative="/" />
@@ -1660,7 +1660,7 @@
     <facet type="web" name="cactus-test">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/conf/test/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/conf/test/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/conf/test" relative="/WEB-INF" />
@@ -1729,7 +1729,7 @@
     <facet type="web" name="systest">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest/web" relative="/" />
@@ -1798,7 +1798,7 @@
     <facet type="web" name="Web">
       <configuration>
         <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/document-ordering/web/WEB-INF/web.xml" optional="false" version="2.5" />
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/document-ordering/web/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
           <root url="file://$MODULE_DIR$/systest-per-webapp/document-ordering/web" relative="/" />

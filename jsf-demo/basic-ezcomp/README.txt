@@ -13,3 +13,4 @@ spinner - basic spinner component
 spinnerStyled - adding styling to the spinner component
 spinnerFinal - making the spinner work if you use it multiple times in a page
 nav - component that navigates to a new page
+actionListener - component that takes an f:actionListener child
