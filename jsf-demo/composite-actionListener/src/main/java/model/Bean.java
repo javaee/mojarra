@@ -1,37 +1,37 @@
+package model;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.event.ActionListener;
-import javax.faces.event.ActionEvent;
-import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
 
-@ManagedBean(name="bean")
+@ManagedBean(name = "bean")
 @RequestScoped
 public class Bean implements ActionListener {
 
     public ActionListener getLoginEventListener() {
-	ActionListener result = new Bean();
-	return result;
+        return new Bean();
     }
 
     public void processAction(ActionEvent e) {
-	FacesContext context = FacesContext.getCurrentInstance();
-	context.getExternalContext().getRequestMap().put("actionCalled",
-							 Boolean.TRUE.toString());
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getRequestMap().put("actionCalled",
+                Boolean.TRUE.toString());
     }
 
     private boolean isTransient;
 
     public boolean isTransient() {
-	return isTransient;
+        return isTransient;
     }
 
     public void setTransient(boolean isTransient) {
-	this.isTransient = isTransient;
+        this.isTransient = isTransient;
     }
 
     public Object saveState(FacesContext context) {
-	return null;
+        return null;
     }
 
     public void restoreState(FacesContext context, Object stateObj) {

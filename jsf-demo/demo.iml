@@ -3845,6 +3845,7 @@
       <sourceFolder url="file://$MODULE_DIR$/guessNumber/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ifnavigation/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/bean-validator/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/composite-actionListener/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/test/build" />
     </content>
     <orderEntry type="library" name="GROOVY" level="application" />

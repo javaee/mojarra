@@ -39,30 +39,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces</groupId>
-  <artifactId>jsf-composite-actionListener</artifactId>
+  <artifactId>composite-actionListener</artifactId>
   <packaging>war</packaging>
-  <name>jsf-composite-actionListener</name>
+  <name>composite-actionListener</name>
   <url>https://mojarra.dev.java.net/</url>
   <description>Composite-ActionListener sample app</description>
   <version>0.1</version>
 
-  <build>
-    <defaultGoal>install</defaultGoal>
-    <sourceDirectory>src/main/java</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <targetPath>resources</targetPath>
-        <includes>
-            <include>*.taglib.xml</include>
-            <include>faces-config.xml</include>
-            <include>*.js</include>
-        </includes>
-     </resource>
-   </resources>
-    <finalName>jsf-composite-actionListener</finalName>
-    <plugins>
+    <build>
+        <defaultGoal>package</defaultGoal>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>RELEASE</version>
                 <configuration>
@@ -71,45 +61,54 @@
                 </configuration>
             </plugin>
         </plugins>
-  </build>
+    </build>
 
 
-  <repositories>
-    <repository>
-      <snapshots />
-      <id>codecaus</id>
-      <name>codehaus</name>
-      <url>http://repository.codehaus.org</url>
-    </repository>
-    <repository>
-      <snapshots />
-      <id>java.net</id>
-      <name>Java.net Maven 1.x Repository for external projects</name>
-      <url>https://maven-repository.dev.java.net/nonav/repository</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
-      <snapshots />
-      <id>java.net.shared</id>
-      <name>Java.net Maven 1.x Repository for glassfish dependencies</name>
-      <url>http://download.java.net/javaee5/external/shared</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
-      <snapshots />
-      <id>ibiblio</id>
-      <url>http://www.ibiblio.org/maven2/</url>
-    </repository>
-  </repositories>
+    <repositories>
+        <repository>
+            <snapshots/>
+            <id>ibiblio.mirrors</id>
+            <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+        </repository>
+        <repository>
+            <snapshots/>
+            <id>codehaus</id>
+            <name>codehaus</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <snapshots/>
+            <id>java.net.m2</id>
+            <name>java.net m2 repo</name>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+    </repositories>
 
-  <dependencies>   
-    <dependency>
-      <groupId>com.sun.faces</groupId>
-      <artifactId>jsf-api</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--
+          Uncomment these two dependencies and comment out the one above to use
+          a simple servlet container instead of a Java EE Application Server
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.faces</groupId>
+            <artifactId>jsf-impl</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        -->
+
+    </dependencies>
+
   <reporting>
     <plugins>
       <plugin>
