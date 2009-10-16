@@ -214,12 +214,12 @@
     </target>
 
     <target name="clean">
-        <ant target="clean" dir="custom-bean-scope"/>
-        <ant target="clean" dir="archive/guessNumber"/>
-        <ant target="clean" dir="tree-visit"/>
-        <ant target="clean" dir="guessNumber2.0"/>
-        <ant target="clean" dir="archive/carstore"/>
-        <ant target="clean" dir="archive/mojarra_ext"/>
+        <ant target="clean" dir="custom-bean-scope" inheritAll="false"/>
+        <ant target="clean" dir="archive/guessNumber" inheritAll="false"/>
+        <ant target="clean" dir="tree-visit" inheritAll="false"/>
+        <ant target="clean" dir="guessNumber2.0" inheritAll="false"/>
+        <ant target="clean" dir="archive/carstore" inheritAll="false"/>
+        <ant target="clean" dir="archive/mojarra_ext" inheritAll="false"/>
     </target>
 
     <target name="build">
