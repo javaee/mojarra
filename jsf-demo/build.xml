@@ -99,7 +99,7 @@
            <fileset dir="${basedir}/ajax-component" excludes="build.xml"/>
         </copy>
          <copy todir="${dist.home}/samples/guessNumber2.0" includeEmptyDirs="false">
-            <fileset dir="${basedir}/guessNumber2.0" excludes="build.xml"/>
+            <fileset dir="${basedir}/guessNumber" excludes="build.xml"/>
          </copy>
          <copy todir="${dist.home}/samples/custom-bean-scope" includeEmptyDirs="false">
             <fileset dir="${basedir}/custom-bean-scope" excludes="build.xml"/>
