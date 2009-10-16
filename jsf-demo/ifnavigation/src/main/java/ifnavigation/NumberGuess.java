@@ -36,12 +36,19 @@
 
 package ifnavigation;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 import java.io.Serializable;
 
+@ManagedBean
+@SessionScoped
+@SuppressWarnings("unused")
 public class NumberGuess implements Serializable {
+
+    private static final long serialVersionUID = 0L;
 
     private boolean started = false;
 
@@ -63,12 +70,12 @@ public class NumberGuess implements Serializable {
     }
 
     public void begin() {
-        randomNumber = new Random().nextInt(100) + 1;
+        randomNumber = new Random().nextInt(10) + 1;
         currentGuess = null;
         guessAttempts = 0;
         maxGuesses = 5;
         started = true;
-        upperBound = 100;
+        upperBound = 10;
         lowerBound = 1;
         updatePossibleGuesses();
     }
@@ -86,7 +93,7 @@ public class NumberGuess implements Serializable {
     }
 
     public boolean isCorrect() {
-        return currentGuess != null ? randomNumber == currentGuess : false;
+        return currentGuess != null && randomNumber == currentGuess;
     }   
 
     public Integer getCurrentGuess() {
