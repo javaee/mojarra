@@ -1534,7 +1534,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * in the Chapter 13 "Sending Events" section of the spec prose document <a
              *  href="../../javadocs/overview-summary.html#prose_document">linked in the
              *  overview summary</a></li>
-             * <li>Set the request header with the name: <code>Faces-Request and the
+             * <li>Set the request header with the name: <code>Faces-Request</code> and the
              * value: <code>partial/ajax</code>.</li>
              * <li>Determine the <code>posting URL</code> as follows: If the hidden field
              * <code>javax.faces.encodedURL</code> is present in the submitting form, use its
