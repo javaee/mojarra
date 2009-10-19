@@ -71,7 +71,7 @@ if (!jsfdemo.poll.init) {
                     window.clearInterval(token);
                 }
             }
-        }
+        };
 
         token = window.setInterval(poll, increment);
 
