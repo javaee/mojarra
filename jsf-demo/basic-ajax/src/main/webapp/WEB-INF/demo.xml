@@ -146,5 +146,24 @@
             </source>
         </sources>
     </demo>
+    <!-- =================================================================== -->
 
+    <demo>
+        <name>Aggregation Demo</name>
+        <page>aggregate.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/aggregate.xhtml</path>
+            </source>
+            <source>
+                <label>Backing Javascript</label>
+                <path>/resources/javascript/aggregate.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/basicajax/Echo.java</path>
+            </source>
+        </sources>
+    </demo>
 </demo-info>
