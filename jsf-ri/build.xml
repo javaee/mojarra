@@ -332,7 +332,7 @@
 
         <copy file="conf/share/javax.servlet.ServletContainerInitializer"
               toDir="${build.classes.dir}/META-INF/services" />
-        <copy toDir="${build.classes.dir}/META-INF/taglib">
+        <copy toDir="${build.classes.dir}/com/sun/faces/metadata/taglib">
             <fileset dir="${conf.share.dir}">
                 <include name="*.taglib.xml" /> 
             </fileset>
