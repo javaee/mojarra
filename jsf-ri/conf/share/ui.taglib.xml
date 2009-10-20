@@ -1020,6 +1020,5 @@
 
         </description>
         <tag-name>remove</tag-name>
-        <handler-class></handler-class>
     </tag>
 </facelet-taglib>

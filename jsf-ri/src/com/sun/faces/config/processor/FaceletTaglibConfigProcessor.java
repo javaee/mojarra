@@ -410,6 +410,9 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                                      String name) {
 
         String className = getNodeText(handlerClass);
+        if (className == null) {
+            throw new ConfigurationException("The tag named "+name+" from namespace "+taglibrary.getNamespace()+" has a null handler-class defined");
+        }
         try {
             Class<?> clazz;
             try {
