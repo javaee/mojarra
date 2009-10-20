@@ -820,7 +820,7 @@
                 action described in &lt;a target="_"
                 href="../../../javadocs/javax/faces/application/ViewHandler.html#retargetMethodExpressions(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)"&gt;ViewHandler.retargetMethodExpressions()&lt;/a&gt;
                 must be taken to handle the attribute. In these cases, the
-                &lt;code&gt;method-sigature&lt;/code&gt; attribute, if present,
+                &lt;code&gt;method-signature&lt;/code&gt; attribute, if present,
                 must be ignored as
                 its value is derived as described in
                 &lt;code&gt;retargetMethodExpressions()&lt;/code&gt;.&lt;/div&gt;
