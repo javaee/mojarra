@@ -1020,5 +1020,7 @@
 
         </description>
         <tag-name>remove</tag-name>
+        <handler-class>com.sun.faces.facelets.tag.ui.SchemaCompliantRemoveHandler</handler-class>
+
     </tag>
 </facelet-taglib>
