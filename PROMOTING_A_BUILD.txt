@@ -17,7 +17,7 @@ If doing a new maven release, be sure to update the pom.xml files in each demo d
 
 Tag build.
 Currently, we're using a tag format of
-2_0_0_BXX - where "XX" is a monotonically increasing number, incremented with every build.
+2.0.1-bXX - where "XX" is a monotonically increasing number, incremented with every build.
 sample tagging command:
 svn copy https://mojarra.dev.java.net/svn/mojarra/trunk \
          https://mojarra.dev.java.net/svn/mojarra/tags/2.0.1-b01 \
