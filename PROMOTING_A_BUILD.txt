@@ -13,24 +13,41 @@ mvn -Dglassfish.home=$GLASSFISH test
 
 Engineering updates updatecenter2/conf/jsf_proto.py to correct version #.
 
+If doing a new maven version, be sure to update the pom.xml files in each demo directory.
+
 Tag build.
 Currently, we're using a tag format of
 2_0_0_BXX - where "XX" is a monotonically increasing number, incremented with every build.
+sample tagging command:
+svn copy https://mojarra.dev.java.net/svn/mojarra/trunk \
+         https://mojarra.dev.java.net/svn/mojarra/tags/2.0.1-b01 \
+         -m "Tag 2.0.1 Build 01"
 
-RE (Terena) promotes build, pushes to http:eflat.sfbay:40000
-Change variables found in common.xml (build.type, etc) via -D as part of build
+RE (Terena) promotes the build, with maven.deploy.promoted (JSF 2.0 only)
+RE changes variables found in common.xml (build.type, etc) via -D as part of build
     build.type will be set to a value such as BETA, RC, FCS, etc.
-    build.number will be a monotonically increasing integer, incremented for each build.
-See instructions in updatecenter2/README for the push to eflat.
-    You'll need to set the IPS package number in updatecenter/conf/jsf_proto.conf to match
-    the build number, with the final number segment being numeric only with no leading zeros.
+    build.number will be a monotonically increasing integer, incremented for each build (i.e., b01, b02)
+After the push to maven, check (it can take a while to show up, up to 30 minutes)
+http://download.java.net/maven/2/com/sun/faces/jsf-impl/
+http://download.java.net/maven/2/com/sun/faces/jsf-api/
+
+
+After testing, engineering integrates to v3, see integration instructions.
+The integration pushes build to repine.
+
+
+
+(NOTE: THIS IS OUT OF DATE) RE (Terena) promotes build, pushes to http:eflat.sfbay:40000  (JSF 1.2 only)
 
 QE runs qualification tests, against eflat (JSF2.0)
-    and epine (current GFv3), comfirms they pass.
+    and repine (current GFv3), comfirms they pass.
 
 QE gives go-ahead.
 
-RE (Terena) pushes eflat and epine to external sites.
+RE (Terena) pushes eflat and repine to external sites.
+
+RE (Terena) will also build with maven.deploy.promoted for a promoted build (ex: 2.0.1-b01),
+or maven.deploy.release for a released build (ex: 2.0.1)
 
 
 RELEASING TO JAVA.NET
