@@ -44,7 +44,7 @@ pkg = {
                       },
     "attributes"    : { 
                         "pkg.summary" : "JSF 2.0.1- Project Mojarra 2.0.1 Patch Release",
-                        "pkg.description" : "Updated Mojarra 2.0.0 implementation.  \
+                        "pkg.description" : "Updated Mojarra 2.0 implementation.  \
 Current version supports JSF 2.0.  This version replaces the default version \
 of Mojarra that ships with Glassfish.",
                         "info.classification" : "Application Servers"
