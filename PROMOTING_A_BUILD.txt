@@ -11,7 +11,7 @@ cd v3/tests/quicklook
 mvn -Dglassfish.home=$GLASSFISH test
 (where $GLASSFISH is a recent v3 build with the new jsf jars added in)
 
-Engineering updates updatecenter2/conf/jsf_proto.py to correct version #.
+Engineering updates updatecenter2/conf/jsf_proto.py to correct version #. (ex: 2.0.1-0,1)
 
 If doing a new maven release, be sure to update the pom.xml files in each demo directory.
 
