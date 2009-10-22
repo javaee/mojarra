@@ -1296,7 +1296,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             } else if (status == "serverError") {
                 data.description = serverErrorMessage;
             } else if (status == "emptyResponse") {
-                data.description = "An emply response was received from the server.  Check server error logs.";
+                data.description = "An empty response was received from the server.  Check server error logs.";
             } else if (status == "malformedXML") {
                 if (getParseErrorText(data.responseXML) !== PARSED_OK) {
                     data.description = getParseErrorText(data.responseXML);
