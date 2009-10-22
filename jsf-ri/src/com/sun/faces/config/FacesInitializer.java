@@ -62,7 +62,6 @@ import javax.servlet.ServletRegistration;
 import javax.servlet.annotation.HandlesTypes;
 import java.util.Set;
 import java.util.Map;
-import java.util.Enumeration;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.net.MalformedURLException;
