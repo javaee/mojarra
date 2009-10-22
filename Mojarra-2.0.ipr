@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project relativePaths="true" version="4">
+<project version="4">
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
     <buildFile url="file://$PROJECT_DIR$/build.xml">
@@ -35,6 +35,498 @@
       <properties />
     </buildFile>
   </component>
+  <component name="ArtifactManager">
+    <artifact type="exploded-war" name="impl:el-performance exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/el-performance" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/el-performance" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:helloworld exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/helloworld" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/helloworld" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:cactus-test exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/cactus-test" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/cactus-test" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:templateDemo exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/templateDemo" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/templateDemo" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:view-expired exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/view-expired" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/view-expired" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:replace-variableresolver exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/replace-variableresolver" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/replace-variableresolver" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:guessNumber exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/guessNumber" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/guessNumber" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:guessNumber2.0 exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/guessNumber2.0" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/guessNumber2.0" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:command-link-back-button exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/command-link-back-button" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/command-link-back-button" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:characterCombat exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/characterCombat" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/characterCombat" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:wcag-datatable exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/wcag-datatable" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/wcag-datatable" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:string-converter exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/string-converter" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/string-converter" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:property-resolver-jsp exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/property-resolver-jsp" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/property-resolver-jsp" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:ezcomp00 exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/ezcomp00" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/ezcomp00" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:ezcomp02 exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/ezcomp02" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/ezcomp02" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:stock exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/stock" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/stock" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:late-bindings exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/late-bindings" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/late-bindings" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:ezcomp01 exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/ezcomp01" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/ezcomp01" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:ezcomp03 exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/ezcomp03" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/ezcomp03" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:ajax-request exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/ajax-request" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/ajax-request" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:nested-loadbundles exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/nested-loadbundles" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/nested-loadbundles" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:components exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/components" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/components" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:webtier-sample exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/webtier-sample" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/webtier-sample" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:Web exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/Web" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/Web" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:mojarra_ext exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/mojarra_ext" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/mojarra_ext" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:never-unwrap-exceptions exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/never-unwrap-exceptions" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/never-unwrap-exceptions" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:standard exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/standard" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/standard" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:converter-property-editor exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/converter-property-editor" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/converter-property-editor" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:carstore exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/carstore" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/carstore" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:replace-statemanager exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/replace-statemanager" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/replace-statemanager" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:replace-lifecycle exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/replace-lifecycle" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/replace-lifecycle" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:systest exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/systest" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/systest" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:command-link-redirect exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/command-link-redirect" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/command-link-redirect" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:write-attribute-script-enabled exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/write-attribute-script-enabled" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/write-attribute-script-enabled" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:invalid-mapping exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/invalid-mapping" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/invalid-mapping" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:jar-ordering exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/jar-ordering" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/jar-ordering" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:helloDuke exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/helloDuke" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/helloDuke" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:empty-string-as-null exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/empty-string-as-null" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/empty-string-as-null" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:j2meDemo exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/j2meDemo" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/j2meDemo" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:ajax-queue exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/ajax-queue" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/ajax-queue" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:nested-datatables exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/nested-datatables" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/nested-datatables" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:disable-unicode-escaping exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/disable-unicode-escaping" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/disable-unicode-escaping" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:head-body exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/head-body" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/head-body" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:core-tags exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/core-tags" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/core-tags" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:renderkits exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/renderkits" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/renderkits" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="demo:nonjsp exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="demo/web/nonjsp" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="demo/web/nonjsp" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:replace-application exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/replace-application" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/replace-application" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:write-attribute-script-disabled exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/write-attribute-script-disabled" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/write-attribute-script-disabled" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+    <artifact type="exploded-war" name="impl:resource-locale-prefix exploded">
+      <root id="root">
+        <element id="javaee-facet-resources" facet="impl/web/resource-locale-prefix" />
+        <element id="directory" name="WEB-INF">
+          <element id="directory" name="classes">
+            <element id="javaee-facet-classes" facet="impl/web/resource-locale-prefix" />
+          </element>
+        </element>
+      </root>
+    </artifact>
+  </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
   </component>
@@ -57,10 +549,6 @@
     <option name="PROJECT_PROFILE" />
     <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
   </component>
-  <component name="CodeStyleSettingsManager">
-    <option name="PER_PROJECT_SETTINGS" />
-    <option name="USE_PER_PROJECT_SETTINGS" value="false" />
-  </component>
   <component name="CompilerConfiguration">
     <option name="DEFAULT_COMPILER" value="Javac" />
     <option name="DEPLOY_AFTER_MAKE" value="0" />
@@ -79,6 +567,7 @@
       <entry name="?*.dtd" />
       <entry name="?*.tld" />
     </wildcardResourcePatterns>
+    <annotationProcessing enabled="false" useClasspath="true" />
   </component>
   <component name="CopyrightManager" default="">
     <module2copyright />
@@ -170,11 +659,7 @@
       <facet-type id="web">
         <modules>
           <module name="demo" />
-          <module name="impl">
-            <files>
-              <file url="file://$PROJECT_DIR$/jsf-ri/build/target/test/WEB-INF/web.xml" />
-            </files>
-          </module>
+          <module name="impl" />
         </modules>
       </facet-type>
       <facet-type id="jsf">
@@ -261,9 +746,6 @@
   </component>
   <component name="IdProvider" IDEtalkID="4342FAA4DD1D2DF02C7B099BD6601547" />
   <component name="InspectionProjectProfileManager">
-    <option name="PROJECT_PROFILE" value="Project Default" />
-    <option name="USE_PROJECT_PROFILE" value="true" />
-    <version value="1.0" />
     <profiles>
       <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
@@ -318,9 +800,6 @@
         <inspection_tool class="ReadResolveAndWriteReplaceProtected" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="SerialPersistentFieldsWithWrongSignature" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="SerialVersionUIDNotStaticFinal" enabled="true" level="WARNING" enabled_by_default="true" />
-        <inspection_tool class="SerializableHasSerialVersionUIDField" enabled="true" level="WARNING" enabled_by_default="true">
-          <option name="superClassString" value="java.awt.Component" />
-        </inspection_tool>
         <inspection_tool class="SerializableInnerClassHasSerialVersionUIDField" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="superClassString" value="java.awt.Component" />
         </inspection_tool>
@@ -337,7 +816,9 @@
         <inspection_tool class="UnusedMessageFormatParameter" enabled="false" level="WARNING" enabled_by_default="false" />
       </profile>
     </profiles>
-    <list size="0" />
+    <option name="PROJECT_PROFILE" value="Project Default" />
+    <option name="USE_PROJECT_PROFILE" value="true" />
+    <version value="1.0" />
   </component>
   <component name="JavacSettings">
     <option name="DEBUGGING_INFO" value="true" />
@@ -523,7 +1004,11 @@
     <option name="projectName" value="Mojarra-2.0" />
   </component>
   <component name="ProjectDictionaryState">
-    <dictionary name="netdance" />
+    <dictionary name="netdance">
+      <words>
+        <w>clickable</w>
+      </words>
+    </dictionary>
   </component>
   <component name="ProjectKey">
     <option name="state" value="https://mojarra.dev.java.net/svn/mojarra/trunk/Mojarra-2.0.ipr" />
@@ -701,26 +1186,6 @@
     <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
     <myIsUseDefaultProxy>true</myIsUseDefaultProxy>
   </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <are-packages-shown value="false" />
-      <are-modules-shown value="false" />
-      <flatten-packages value="false" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <are-modules-shown value="false" />
-      <flatten-packages value="false" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="default-changelist">
-      <are-packages-shown value="false" />
-      <are-modules-shown value="false" />
-      <flatten-packages value="false" />
-      <is-autoscroll-to-source value="false" />
-    </todo-panel>
-  </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
   </component>
@@ -781,13 +1246,13 @@
         <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-collections.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-beanutils.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/jsr250-api-1.0.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/servlet-api-2.5.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/junit-3.8.1.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-logging-api.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-digester.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/groovy-all-1.5.5.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/htmlunit-2.4/lib/htmlunit-core-js-2.4.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/htmlunit-2.4/lib/htmlunit-2.4.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/javax.servlet.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
