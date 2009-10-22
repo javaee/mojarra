@@ -38,36 +38,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="view-expired">
@@ -107,36 +77,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="command-link-redirect">
@@ -176,36 +116,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="command-link-back-button">
@@ -245,36 +155,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="resource-locale-prefix">
@@ -314,36 +194,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="never-unwrap-exceptions">
@@ -383,36 +233,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="jar-ordering">
@@ -452,36 +272,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="replace-statemanager">
@@ -521,36 +311,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="wcag-datatable">
@@ -590,36 +350,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="string-converter">
@@ -659,36 +389,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="replace-application">
@@ -728,36 +428,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="converter-property-editor">
@@ -797,36 +467,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="replace-lifecycle">
@@ -866,36 +506,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="write-attribute-script-disabled">
@@ -935,36 +545,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="el-performance">
@@ -1004,36 +584,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="write-attribute-script-enabled">
@@ -1073,36 +623,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="empty-string-as-null">
@@ -1142,36 +662,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="late-bindings">
@@ -1211,36 +701,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="invalid-mapping">
@@ -1280,36 +740,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="disable-unicode-escaping">
@@ -1349,36 +779,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="core-tags">
@@ -1418,36 +818,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="nested-loadbundles">
@@ -1487,36 +857,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="nested-datatables">
@@ -1556,36 +896,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="property-resolver-jsp">
@@ -1625,36 +935,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="cactus-test">
@@ -1694,36 +974,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="systest">
@@ -1763,36 +1013,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="api">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="module" name="tools">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-          <containerElement type="library" name="mojarra-build" level="project">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-          </containerElement>
-          <containerElement type="library" level="module">
-            <attribute name="method" value="0" />
-            <attribute name="URI" value="&lt;N/A&gt;" />
-            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="Web">
@@ -1832,19 +1052,6 @@
           <root url="file://$MODULE_DIR$/systest/src" />
           <root url="file://$MODULE_DIR$/test" />
         </sourceRoots>
-        <building>
-          <setting name="EXPLODED_URL" value="file://" />
-          <setting name="EXPLODED_ENABLED" value="false" />
-          <setting name="JAR_URL" value="file://" />
-          <setting name="JAR_ENABLED" value="false" />
-          <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
-        </building>
-        <packaging>
-          <containerElement type="module" name="impl">
-            <attribute name="method" value="1" />
-            <attribute name="URI" value="/WEB-INF/classes" />
-          </containerElement>
-        </packaging>
       </configuration>
     </facet>
   </component>
