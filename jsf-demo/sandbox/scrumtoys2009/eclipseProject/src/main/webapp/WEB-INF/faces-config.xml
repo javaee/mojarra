@@ -46,6 +46,10 @@
             <var>i18n</var>
         </resource-bundle>
         <message-bundle>i18n</message-bundle>
+        <locale-config>
+          <default-locale>en_US</default-locale>
+          <supported-locale>pt_BR</supported-locale>
+        </locale-config>
 
         <el-resolver>jsf2.demo.scrum.web.scope.TaskScopeResolver</el-resolver>
     </application>
@@ -81,7 +85,7 @@
         <description>
             dashboard navigation rules
         </description>
-        <from-view-id>dashboard/show.xhtml</from-view-id>
+        <from-view-id>/dashboard/show.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>showSprints</from-outcome>
             <to-view-id>/sprint/show.xhtml</to-view-id>
@@ -110,7 +114,7 @@
         <description>
             sprint navigation rules
         </description>
-        <from-view-id>sprint/show.xhtml</from-view-id>
+        <from-view-id>/sprint/show.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>showStories</from-outcome>
             <to-view-id>/story/show.xhtml</to-view-id>
@@ -125,7 +129,7 @@
         <description>
             story navigation rules
         </description>
-        <from-view-id>story/show.xhtml</from-view-id>
+        <from-view-id>/story/show.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>showTasks</from-outcome>
             <to-view-id>/task/show.xhtml</to-view-id>
@@ -140,7 +144,7 @@
         <description>
             task navigation rules
         </description>
-        <from-view-id>task/show.xhtml</from-view-id>
+        <from-view-id>/task/show.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>showStories</from-outcome>
             <to-view-id>/story/show.xhtml</to-view-id>
