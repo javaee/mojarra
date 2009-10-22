@@ -33,7 +33,7 @@ http://download.java.net/maven/2/com/sun/faces/jsf-impl/
 http://download.java.net/maven/2/com/sun/faces/jsf-api/
 
 
-After testing, engineering integrates to v3, see integration instructions.
+After testing, engineering integrates to v3 (including UC), see integration instructions.
 The integration pushes the new build bits to repine.
 
 QE runs qualification tests against repine (current GFv3), comfirms they pass.
@@ -55,7 +55,9 @@ NOTE: we currently don't push every promoted build to java.net.  These instructi
    directory.  These bundles are what will be made available to the public.
    (You can download them by ftp from rindge.sfbay.sun.com, cd to the provided directory
    (currently /net/jws-sparc.sfbay/bld1/BUILD_AREA/jsf2.0/bundles/latest), and then
-   mget *)
+   mget * - it's also possible to get these bundles via http, by visiting a site such as:
+   http://javaweb.sfbay/java/re/jsf/2.0.1/promoted/FCS/b02/archive/bundles/ )
+
  - Prepare release notes:
     + check out the website:  cvs -d :pserver:<j.net uid>@cvs.dev.java.net:/cvs co -P -d jsf-web javaserverfaces
     + if releasing a new patch release:
