@@ -1147,6 +1147,18 @@ they do, it must be done as shown above, (or with
         </attribute>
         <attribute>
             <description>
+                Name of the parameter to be created.
+            </description>
+            <name>name</name>
+            <required>
+                true
+            </required>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
                 <![CDATA[<p>
                 
                 MethodExpression representing a value change listener method
