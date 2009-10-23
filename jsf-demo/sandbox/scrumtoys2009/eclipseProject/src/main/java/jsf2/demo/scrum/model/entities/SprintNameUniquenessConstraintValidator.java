@@ -54,10 +54,9 @@ public class SprintNameUniquenessConstraintValidator implements ConstraintValida
                 checkUniqueSprintNameApplicationValidatorMethod(value);
         if (null != message) {
             result = false;
-	    ConstraintValidatorContext.ErrorBuilder builder = 
-		ctx.buildErrorWithMessageTemplate(message);
-	    builder.addError();
-            ctx.disableDefaultError();
+	    ConstraintValidatorContext.ConstraintViolationBuilder builder =
+		ctx.buildConstraintViolationWithTemplate(message);
+	    builder.addConstraintViolation();
         }
 
         
