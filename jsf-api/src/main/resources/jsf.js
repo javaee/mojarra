@@ -2146,7 +2146,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * <code>jsf.specversion</code>
      * This number is implementation dependent.</p>
      */
-    jsf.implversion = 2;
+    jsf.implversion = 3;
 
 
 } //end if version detection block
