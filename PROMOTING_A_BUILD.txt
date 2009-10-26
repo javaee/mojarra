@@ -98,4 +98,3 @@ NOTE: we currently don't push every promoted build to java.net.  These instructi
      display the source, binary, and release notes).
    - Add a new announcement using the project's news facility.  Use existing
      announcements as a template.
-   - Push the bits to maven (INSTRUCTIONS IN PROGRESS)
