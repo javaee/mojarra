@@ -674,14 +674,17 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
     /**
      * <p class="changed_modified_2_0">Set the parent
      * <code>UIComponent</code> of this <code>UIComponent</code>.  <span
-     * class="changed_added_2_0">This method will cause an {@link
-     * javax.faces.event.PostAddToViewEvent} to be published and if
-     * <code>parent.isInView()</code> returns <code>true</code> an
-     * {@link javax.faces.event.PostAddToViewEvent} will be published as
-     * well.  <strong>This method must never be called by developers; a
-     * {@link UIComponent}'s internal implementation will call it as
-     * components are added to or removed from a parent's child
-     * <code>List</code> or facet <code>Map</code></strong></span>.</p>
+     * class="changed_added_2_0">If <code>parent.isInView()</code>
+     * returns <code>true</code>, calling this method will first cause a
+     * {@link javax.faces.event.PreRemoveFromViewEvent} to be published,
+     * for this node, and then the children of this node.  Then, once
+     * the re-parenting has occurred, a {@link
+     * javax.faces.event.PostAddToViewEvent} will be published as well,
+     * first for this node, and then for the node's children.
+     * <strong>This method must never be called by developers; a {@link
+     * UIComponent}'s internal implementation will call it as components
+     * are added to or removed from a parent's child <code>List</code>
+     * or facet <code>Map</code></strong></span>.</p>
      *
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
