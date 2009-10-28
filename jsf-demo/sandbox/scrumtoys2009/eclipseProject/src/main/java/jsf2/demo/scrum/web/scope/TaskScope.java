@@ -45,7 +45,6 @@ import javax.faces.event.ScopeContext;
 
 /**
  * Actually, custom scope is a Map where the instances of managed bean are store.
- * @author eder
  */
 public class TaskScope extends ConcurrentHashMap<String,Object> {
 
