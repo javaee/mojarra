@@ -886,6 +886,15 @@
         </component>
         <attribute>
             <description>
+                Name of the parameter to be created.
+            </description>
+            <name>name</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
                 Converter instance registered with this component.
             </description>
             <name>converter</name>

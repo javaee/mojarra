@@ -903,7 +903,7 @@
 
             </description>
             <name>offset</name>
-            <required>true</required>
+            <required>false</required>
             <type>int</type>
         </attribute>
         <attribute>
@@ -921,7 +921,7 @@
 
             </description>
             <name>size</name>
-            <required>true</required>
+            <required>false</required>
             <type>int</type>
         </attribute>
         <attribute>
@@ -933,7 +933,7 @@
 
             </description>
             <name>step</name>
-            <required>true</required>
+            <required>false</required>
             <type>int</type>
         </attribute>
         <attribute>
@@ -999,7 +999,7 @@
 
             </description>
             <name>varStatus</name>
-            <required>true</required>
+            <required>false</required>
             <type>java.lang.Object</type>
         </attribute>
     </tag>

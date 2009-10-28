@@ -805,7 +805,7 @@ collection.</p>
             </description>
             <name>offset</name>
             <required>
-				true
+				false
             </required>
             <deferred-value>
                 <type>
@@ -830,7 +830,7 @@ If this value is less than the actual size of the collection, a
             </description>
             <name>size</name>
             <required>
-				true
+				false
             </required>
             <deferred-value>
                 <type>
@@ -849,7 +849,7 @@ If this value is less than the actual size of the collection, a
             </description>
             <name>step</name>
             <required>
-				true
+				false
             </required>
             <deferred-value>
                 <type>
@@ -936,7 +936,7 @@ collection is null, this tag does nothing.</p>
             </description>
             <name>varStatus</name>
             <required>
-				true
+				false
             </required>
             <deferred-value>
                 <type>
