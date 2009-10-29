@@ -665,7 +665,11 @@ public abstract class Application {
      */
     public void addBehavior(String behaviorId, 
         String behaviorClass) {
-        
+
+        if (defaultApplication != null) {
+            defaultApplication.addBehavior(behaviorId, behaviorClass);
+        }
+
     }
     
     /**
@@ -684,7 +688,12 @@ public abstract class Application {
      */
     public Behavior createBehavior(String behaviorId)
     	throws FacesException {
+
+        if (defaultApplication != null) {
+            return defaultApplication.createBehavior(behaviorId);
+        }
         return null;
+
     }
 
     /**
@@ -692,7 +701,12 @@ public abstract class Application {
      * behavior ids for this <code>Application</code>.</p>
      */
     public Iterator<String> getBehaviorIds() {
+
+        if (defaultApplication != null) {
+            return defaultApplication.getBehaviorIds();
+        }
         return Collections.EMPTY_LIST.iterator();
+        
     }
 
     /**
