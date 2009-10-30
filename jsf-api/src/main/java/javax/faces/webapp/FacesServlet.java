@@ -281,6 +281,8 @@ public final class FacesServlet implements Servlet {
                         ServletResponse response)
         throws IOException, ServletException {
 
+        requestStart(((HttpServletRequest) request).getRequestURI()); // V3 Probe hook
+
         // If prefix mapped, then ensure requests for /WEB-INF are
         // not processed.
         String pathInfo = ((HttpServletRequest) request).getPathInfo();
@@ -328,6 +330,24 @@ public final class FacesServlet implements Servlet {
             // Release the FacesContext instance for this request
             context.release();
         }
+
+        requestEnd(); // V3 Probe hook
     }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * DO NOT REMOVE. Necessary for V3 probe monitoring.
+     */
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void requestStart(String requestUri) { }
+
+
+    /**
+     * DO NOT REMOVE. Necessary for V3 probe monitoring.
+     */
+    private void requestEnd() { }
 
 }
