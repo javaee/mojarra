@@ -554,7 +554,7 @@ public class ExternalContextImpl extends ExternalContext {
         FacesContext ctx = FacesContext.getCurrentInstance();
         getELFlash().doLastPhaseActions(ctx, true);
 
-        if (ctx.getPartialViewContext().isAjaxRequest()) {
+        if (ctx.getPartialViewContext().isPartialRequest()) {
             PartialResponseWriter pwriter;
             ResponseWriter writer = ctx.getResponseWriter();
             if (writer instanceof PartialResponseWriter) {
