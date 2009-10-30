@@ -227,11 +227,6 @@ public final class SAXCompiler extends Compiler {
         }
 
         public void startEntity(String name) throws SAXException {
-            if (XhtmlEntities.entities.contains(name)) {
-                this.unit.writeInstruction("&");
-                this.unit.writeInstruction(name);
-                this.unit.writeInstruction(";");
-            }
         }
 
         public void startPrefixMapping(String prefix, String uri)
@@ -409,7 +404,7 @@ public final class SAXCompiler extends Compiler {
 
     }
 
-    protected static final String writeXmlDecl(InputStream is, CompilationManager mngr)
+    protected static String writeXmlDecl(InputStream is, CompilationManager mngr)
             throws IOException {
         is.mark(128);
         String encoding = "UTF-8";
@@ -431,7 +426,7 @@ public final class SAXCompiler extends Compiler {
         return encoding;
     }
 
-    private final SAXParser createSAXParser(CompilationHandler handler)
+    private SAXParser createSAXParser(CompilationHandler handler)
             throws SAXException, ParserConfigurationException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
