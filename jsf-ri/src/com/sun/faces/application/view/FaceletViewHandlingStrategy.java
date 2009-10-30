@@ -364,7 +364,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             ctx.setResponseWriter(writer);
 
             //  Don't call startDoc and endDoc on a partial response
-            if (ctx.getPartialViewContext().isAjaxRequest()) {
+            if (ctx.getPartialViewContext().isPartialRequest()) {
                 viewToRender.encodeAll(ctx);
                 try {
                     ctx.getExternalContext().getFlash().doPostPhaseActions(ctx);
@@ -1127,7 +1127,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         private boolean shouldSkip(PropertyDescriptor pd) {
-            boolean result = true;
+            boolean result;
             String name = pd.getName();
             boolean isSpecialAttributeName = name.equals("action") ||
                             name.equals("actionListener") || name.equals("validator")

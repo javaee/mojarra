@@ -294,7 +294,7 @@ public class RenderKitImpl extends RenderKit {
         WebConfiguration.DisableUnicodeEscaping escaping =
               WebConfiguration.DisableUnicodeEscaping.getByValue(
                     webConfig.getOptionValue(DisableUnicodeEscaping));
-        boolean isPartial = context.getPartialViewContext().isAjaxRequest();
+        boolean isPartial = context.getPartialViewContext().isPartialRequest();
         return new HtmlResponseWriter(writer,
                                       contentType,
                                       characterEncoding,

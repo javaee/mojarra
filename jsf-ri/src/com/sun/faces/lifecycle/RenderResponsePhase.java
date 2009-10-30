@@ -90,7 +90,7 @@ public class RenderResponsePhase extends Phase {
         // For requests intended to produce a partial response, we need prohibit
         // writing any content outside of the view itself (f:view).
         PartialViewContext partialViewContext = facesContext.getPartialViewContext();
-        if (partialViewContext.isAjaxRequest()) {
+        if (partialViewContext.isPartialRequest()) {
             OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(facesContext);
             onOffResponse.setEnabled(false); 
         }

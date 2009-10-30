@@ -36,7 +36,6 @@
 
 package com.sun.faces.context;
 
-import java.util.Map;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;
 import javax.faces.context.FacesContext;

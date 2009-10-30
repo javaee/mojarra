@@ -189,7 +189,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         context.setResponseWriter(newWriter);
 
         //  Don't call startDoc and endDoc on a partial response
-        if (context.getPartialViewContext().isAjaxRequest()) {
+        if (context.getPartialViewContext().isPartialRequest()) {
             doRenderView(context, view);
             try {
                 extContext.getFlash().doPostPhaseActions(context);
