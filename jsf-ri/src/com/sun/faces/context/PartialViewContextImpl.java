@@ -226,8 +226,9 @@ import com.sun.faces.util.Util;
      */
     @Override
     public void processPartial(PhaseId phaseId) {
-        Collection <String> executeIds = getExecuteIds();
-        Collection <String> renderIds = getRenderIds();
+        PartialViewContext pvc = ctx.getPartialViewContext();
+        Collection <String> executeIds = pvc.getExecuteIds();
+        Collection <String> renderIds = pvc.getRenderIds();
         UIViewRoot viewRoot = ctx.getViewRoot();
 
         if (phaseId == PhaseId.APPLY_REQUEST_VALUES ||
@@ -254,7 +255,7 @@ import com.sun.faces.util.Util;
             // partial response writer.
             //
             if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-                PartialResponseWriter writer = getPartialResponseWriter();
+                PartialResponseWriter writer = pvc.getPartialResponseWriter();
                 ctx.setResponseWriter(writer);
             }
 
@@ -266,7 +267,7 @@ import com.sun.faces.util.Util;
                 //
                 OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(ctx);
                 onOffResponse.setEnabled(true);
-                PartialResponseWriter writer = getPartialResponseWriter();
+                PartialResponseWriter writer = pvc.getPartialResponseWriter();
                 ResponseWriter orig = ctx.getResponseWriter();
                 ctx.getAttributes().put(ORIGINAL_WRITER, orig);
                 ctx.setResponseWriter(writer);
@@ -374,7 +375,8 @@ import com.sun.faces.util.Util;
         // with the special id of VIEW_ROOT_ID.  This is how the client
         // JavaScript knows how to replace the entire document with
         // this response.
-        PartialResponseWriter writer = getPartialResponseWriter();
+        PartialViewContext pvc = context.getPartialViewContext();
+        PartialResponseWriter writer = pvc.getPartialResponseWriter();
         writer.startUpdate(PartialResponseWriter.RENDER_ALL_MARKER);
 
         Iterator<UIComponent> itr = viewRoot.getFacetsAndChildren();
@@ -389,7 +391,8 @@ import com.sun.faces.util.Util;
     private void renderState(FacesContext context) throws IOException {
 
         // Get the view state and write it to the response..
-        PartialResponseWriter writer = getPartialResponseWriter();
+        PartialViewContext pvc = context.getPartialViewContext();
+        PartialResponseWriter writer = pvc.getPartialResponseWriter();
         writer.startUpdate(PartialResponseWriter.VIEW_STATE_MARKER);
         String state = context.getApplication().getStateManager().getViewState(context);
         writer.write(state);
