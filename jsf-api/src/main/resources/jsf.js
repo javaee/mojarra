@@ -519,7 +519,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var events = ['abort', 'blur', 'change', 'error', 'focus', 'load', 'reset', 'resize', 'scroll', 'select', 'submit', 'unload',
             'keydown', 'keypress', 'keyup', 'click', 'mousedown', 'mousemove', 'mouseout', 'mouseover', 'mouseup', 'dblclick' ];
             try {
-                for (e in events) {
+                for (var e in events) {
                     if (events.hasOwnProperty(e)) {
                         node[e] = null;
                     }
@@ -1255,8 +1255,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         }
                         content = req.queryString;
                     }
+                    // note that async == false is not a supported feature.  We may change it in ways
+                    // that break existing programs at any time, with no warning.
+                    if(!req.async) {
+                        req.xmlReq.onreadystatechange = null; // no need for readystate change listening
+                    }
                     sendEvent(req.xmlReq, req.context, "begin");
                     req.xmlReq.send(content);
+                    if(!req.async){
+                        req.onComplete();
+                }
                 }
             };
 
