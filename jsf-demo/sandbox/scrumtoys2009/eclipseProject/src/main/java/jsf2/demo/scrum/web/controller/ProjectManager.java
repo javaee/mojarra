@@ -79,6 +79,16 @@ public class ProjectManager extends AbstractManager implements Serializable {
 
     @PreDestroy
     public void destroy() {
+	projects = null;
+	if (null != projectItems) {
+	    projectItems.clear();
+	    projectItems = null;
+	}
+	if (null != projectList) {
+	    projectList.clear();
+	    projectList = null;
+	}
+	currentProject = null;
     }
 
     public void init() {

@@ -40,6 +40,7 @@ import jsf2.demo.scrum.model.entities.Story;
 import jsf2.demo.scrum.model.entities.Task;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -236,6 +237,13 @@ public class TaskManager extends AbstractManager implements Serializable {
     @PreDestroy
     public void destroy() {
         getLogger(getClass()).log(Level.INFO, "destroy intance of taskManager in taskScope");
+	currentTask = null;
+	tasks = null;
+	if (null != taskList) {
+	    taskList.clear();
+	    taskList = null;
+	}
+	storyManager = null;
     }
 
 }

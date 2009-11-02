@@ -36,6 +36,7 @@
 
 package jsf2.demo.scrum.web.controller;
 
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 
 import javax.faces.bean.ManagedBean;
@@ -44,6 +45,7 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ArrayList;
+import javax.annotation.PreDestroy;
 
 
 /**
@@ -52,7 +54,7 @@ import java.util.ArrayList;
  */
 @ManagedBean(name="skinValuesManager", eager=true)
 @ApplicationScoped
-public class SkinValuesManager {
+public class SkinValuesManager implements Serializable {
 
     private Map<String, String> values;
 
@@ -65,6 +67,14 @@ public class SkinValuesManager {
         values.put("orange", "appOrangeSkin.css");
         values.put("red", "appRedSkin.css");
         values.put(defaultSkin, "appBlueSkin.css");
+    }
+
+    @PreDestroy
+    public void destroy() {
+      if (null != values) {
+          values.clear();
+          values = null;
+      }
     }
     
     protected String getSkinCss(String skin) {

@@ -40,6 +40,7 @@ import jsf2.demo.scrum.model.entities.Sprint;
 import jsf2.demo.scrum.model.entities.Story;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -73,6 +74,17 @@ public class StoryManager extends AbstractManager implements Serializable {
     @PostConstruct
     public void construct() {
         init();
+    }
+
+    @PreDestroy
+    public void destroy() {
+	sprintManager = null;
+	currentStory = null;
+	stories = null;
+	if (null != storyList) {
+	    storyList.clear();
+	    storyList = null;
+	}
     }
 
     public void init() {

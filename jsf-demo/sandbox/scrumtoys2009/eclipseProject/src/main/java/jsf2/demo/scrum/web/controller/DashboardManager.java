@@ -40,6 +40,7 @@ import jsf2.demo.scrum.model.entities.Sprint;
 import jsf2.demo.scrum.model.entities.Story;
 import jsf2.demo.scrum.model.entities.Task;
 
+import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -68,7 +69,13 @@ public class DashboardManager extends AbstractManager implements Serializable {
     private ListDataModel<Task> workingTasks;
     private ListDataModel<Task> doneTasks;
 
-    
+    @PreDestroy
+    public void destroy() {
+	toDoTasks = null;
+	workingTasks = null;
+	doneTasks = null;
+    }
+
     public Sprint getSprint() {
         return getSprintManager().getCurrentSprint();
     }
