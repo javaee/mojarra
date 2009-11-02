@@ -37,7 +37,6 @@
 package com.sun.faces.config;
 
 
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.RIConstants;
 
