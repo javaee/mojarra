@@ -50,7 +50,10 @@
         <param-name>com.sun.faces.enabledLoadBundle11Compatibility</param-name>
         <param-value>true</param-value>
     </context-param>
-    
+    <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>client</param-value>

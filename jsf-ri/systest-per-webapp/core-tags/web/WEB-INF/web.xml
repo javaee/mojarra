@@ -51,7 +51,10 @@
       <param-name>com.sun.faces.validateXml</param-name>
       <param-value>true</param-value>
     </context-param>
-    
+    <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <context-param>
         <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
         <param-value>true</param-value>

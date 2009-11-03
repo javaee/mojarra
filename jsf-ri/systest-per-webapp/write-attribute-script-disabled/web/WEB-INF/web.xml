@@ -43,7 +43,10 @@
   </description>
   <display-name>Write Attribute Script Disabled</display-name>
   <!-- Validate the Application Configuration Resources -->
-
+  <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
   <context-param>
     <param-name>com.sun.faces.enableScriptsInAttributeValues</param-name>
     <param-value>false</param-value>

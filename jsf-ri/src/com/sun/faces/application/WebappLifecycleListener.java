@@ -351,13 +351,6 @@ public class WebappLifecycleListener implements ViewMapListener {
                                  servletContext.getAttribute(beanName), 
                                  ELUtils.Scope.APPLICATION);
         }
-        // HACK - we'll improve this when the event system is in place
-        if (applicationAssociate != null) {
-            ResourceCache cache = applicationAssociate.getResourceCache();
-            if (cache != null) {
-                cache.shutdown();
-            }
-        }
         this.applicationAssociate = null;
 
     }

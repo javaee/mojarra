@@ -42,7 +42,10 @@
        Webapp to test that script content may not be written as an attribute, by default.
   </description>
   <display-name>Write Attribute Script Disabled</display-name>
-
+  <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
   <!-- Faces Servlet -->
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>

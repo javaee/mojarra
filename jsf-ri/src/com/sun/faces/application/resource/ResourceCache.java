@@ -36,20 +36,6 @@
 
 package com.sun.faces.application.resource;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,11 +43,9 @@ import javax.servlet.ServletContext;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MultiKeyConcurrentHashMap;
-import com.sun.faces.util.MojarraThreadFactory;
 
 /**
  * <p>
@@ -84,47 +68,17 @@ public class ResourceCache {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
-    /**
-     * Thread pool size for the case where JSF is installed as a server-wide
-     * library.
-     */
-    private static final int SHARED_THREAD_COUNT = 5;
-
-    /**
-     * Thread pool size for the case where JSF is installed as a library of
-     * a web-application.
-     */
-    private static final int NON_SHARED_THREAD_COUNT = 1;
-
-    /**
-     * Shared {@link ScheduledThreadPoolExecutor} service.
-     */
-    private static ScheduledThreadPoolExecutor service;
 
     /**
      * The <code>ResourceInfo<code> cache.
      */
-    private MultiKeyConcurrentHashMap<String,ResourceInfo> resourceCache;
+    private MultiKeyConcurrentHashMap<String,ResourceInfoCheckPeriodProxy> resourceCache;
+
 
     /**
-     * Monitors that detect resource modifications.
+     * Resource check period in minutes.
      */
-    private List<ResourceMonitor> monitors;
-
-    /**
-     * The MonitorTask for this instance.
-     */
-    private ScheduledFuture monitorTask;
-
-    /**
-     * ServletContext name.
-     */
-    private String contextName;
-
-    /**
-     * Has this cache been shutdown.
-     */
-    private boolean shutdown;
+    private long checkPeriod;
 
 
     // ------------------------------------------------------------ Constructors
@@ -138,20 +92,13 @@ public class ResourceCache {
         WebConfiguration config = WebConfiguration.getInstance();
         assert (config != null);
         ServletContext sc = config.getServletContext();
-        contextName = getServletContextIdentifier(sc);
-        shutdown = false;
-        long checkPeriod = getCheckPeriod(config);
-        resourceCache = new MultiKeyConcurrentHashMap<String,ResourceInfo>(30);
+        long period = getCheckPeriod(config);
+        checkPeriod = ((period != -1) ? period * 1000L * 60L : -1);
+        resourceCache = new MultiKeyConcurrentHashMap<String,ResourceInfoCheckPeriodProxy>(30);
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
                        "ResourceCache constructed for {0}.  Check period is {1} minutes.",
-                       new Object[] { contextName, checkPeriod });
-        }
-        // if the threading option is enabled, and ProjectStage is Production,
-        // then resources will be static and new versions will not be picked up.
-        if (config.isOptionEnabled(EnableThreading) && checkPeriod >= 1) {
-            initExecutor((checkPeriod * 1000L * 60L));
-            initMonitors(sc);
+                       new Object[] { getServletContextIdentifier(sc), checkPeriod });
         }
 
     }
@@ -170,24 +117,19 @@ public class ResourceCache {
      */
     public ResourceInfo add(ResourceInfo info) {
 
-        if (shutdown) {
-            throw new IllegalStateException("ResourceCache has been terminated");
-        }
-
         Util.notNull("info", info);
-
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
                        "Caching ResourceInfo: {0}",
                        info.toString());
         }
-        return resourceCache.putIfAbsent(info.name,
-                                         info.libraryName,
-                                         info.localePrefix,
-                                         info);
-
-
+        ResourceInfoCheckPeriodProxy proxy =
+              resourceCache.putIfAbsent(info.name,
+                                        info.libraryName,
+                                        info.localePrefix,
+                                        new ResourceInfoCheckPeriodProxy(info, checkPeriod));
+        return ((proxy != null) ? proxy.getResourceInfo() : null);
 
     }
 
@@ -201,13 +143,16 @@ public class ResourceCache {
      */
     public ResourceInfo get(String name, String libraryName, String localePrefix) {
 
-        if (shutdown) {
-            throw new IllegalStateException("ResourceCache has been terminated");
-        }
-
         Util.notNull("name", name);
 
-        return ((resourceCache != null) ? resourceCache.get(name, libraryName, localePrefix) : null);
+        ResourceInfoCheckPeriodProxy proxy =
+              resourceCache.get(name, libraryName, localePrefix);
+        if (proxy != null && proxy.needsRefreshed()) {
+            resourceCache.remove(name, libraryName, localePrefix);
+            return null;
+        } else {
+            return ((proxy != null) ? proxy.getResourceInfo() : null);
+        }
 
     }
 
@@ -217,46 +162,9 @@ public class ResourceCache {
      */
     public void clear() {
 
-        if (shutdown) {
-            throw new IllegalStateException("ResourceCache has been terminated");
-        }
-
-
         resourceCache.clear();
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Cache Cleared");
-        }
-
-
-    }
-
-
-    /**
-     * Clears the cache and cancels the MonitorTask associated with this
-     * ResourcecCache.  This method must be called before the application
-     * is undeployed to ensure the task is cancelled and ultimately purged().
-     */
-    public void shutdown() {
-
-        if (shutdown) {
-            return;
-        }
-        shutdown = true;
-
-        resourceCache.clear();
-        resourceCache = null;
-
-        if (service != null) {
-            if (monitorTask != null) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "[{0}] Cancelling ResourceCache update task...",
-                               contextName);
-                }
-                monitorTask.cancel(true);
-                monitorTask = null;
-            }
-            service.purge();
         }
 
     }
@@ -265,59 +173,14 @@ public class ResourceCache {
     // --------------------------------------------------------- Private Methods
 
 
-    private synchronized void initExecutor(long period) {
-
-        if (service == null) {
-            int poolSize = getThreadPoolSize();
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "Created new static ScheduledExecutorService with a pool size of {0}",
-                           poolSize);                
-            }
-            service = new ScheduledThreadPoolExecutor(poolSize, new MojarraThreadFactory("ResourceCache"));
-        }
-        monitorTask = service.scheduleWithFixedDelay(new MonitorTask(contextName),
-                                       period,
-                                       period,
-                                       TimeUnit.MILLISECONDS);
-
-    }
-
-
-    private int getThreadPoolSize() {
-
-        ClassLoader thisClassLoader = ResourceCache.class.getClassLoader();
-        boolean shared = thisClassLoader.equals(Thread.currentThread().getContextClassLoader());
-        int tc;
-        if (shared) {
-            tc = Runtime.getRuntime().availableProcessors();
-            if (tc > SHARED_THREAD_COUNT) {
-                tc = SHARED_THREAD_COUNT;
-            }
-        } else {
-            tc = NON_SHARED_THREAD_COUNT;
-        }
-        return tc;
-        
-    }
-
-
     private Long getCheckPeriod(WebConfiguration webConfig) {
 
         String val = webConfig.getOptionValue(WebContextInitParameter.ResourceUpdateCheckPeriod);
         try {
-            return Long.parseLong(val);
+            return (Long.parseLong(val));
         } catch (NumberFormatException nfe) {
             return Long.parseLong(WebContextInitParameter.ResourceUpdateCheckPeriod.getDefaultValue());
         }
-
-    }
-
-
-    private void initMonitors(ServletContext sc) {
-
-        monitors = new ArrayList<ResourceMonitor>();
-        monitors.add(new WebappResourceMonitor(sc, "/resources/"));
 
     }
 
@@ -333,184 +196,46 @@ public class ResourceCache {
     }
 
 
-    // ----------------------------------------------------------- Inner Classes
+    // ---------------------------------------------------------- Nested Classes
 
 
-    /**
-     * {@link Runnable} to check for updates from the existing
-     * #monitors.  If any modifications are detected, clear
-     * #resourceCache and return.
-     */
-    private final class MonitorTask implements Runnable {
+    private static final class ResourceInfoCheckPeriodProxy {
 
-        private final String contextPath;
-
-        public MonitorTask(String contextPath) {
-
-            this.contextPath = contextPath;
-
-        }
-
-
-        // ----------------------------------------------- Methods from Runnable
-
-
-        public void run() {
-
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "[{0}] Starting modification search",
-                           contextPath);
-            }
-            for (ResourceMonitor monitor : monitors) {
-                if (monitor.hasBeenModified()) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   "[{0}] Modifications found, clearing cache",
-                                   contextPath);
-                    }
-                    resourceCache.clear();
-                    return;
-                }
-            }
-
-        }
-
-    }  // END MonitorTask
-
-    ////////////////////////////////////////////////////////////////////////////
-
-    private interface ResourceMonitor {
-
-        /**
-         * @return <cod>true</code> if the resource being monitored has been
-         *  modified, otherwise return <code>false</code>
-         */
-        public boolean hasBeenModified();
-
-    } // END ResourceMonitor
-
-    ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * <p>
-     * This {@link com.sun.faces.application.resource.ResourceCache.ResourceMonitor}
-     * tracks any changes made to a filesystem within a webapplication.  The term <code>filesystem</code>
-     * encompasses the root directory and subdirectories and content stored within.
-     * </p>
-     *
-     * <p>
-     * IMPLEMENTATION NOTE:  Since this will typically be called from outside
-     *  the request processing lifecycle, we have no access to the {@link javax.faces.context.FacesContext},
-     *  so we cache a reference to the ServletContext to leverage {@link ServletContext#getResourcePaths(String)}
-     *  for modification detection.  This should be an acceptable practice within
-     *  Portlet environments.
-     * </p>
-     */
-    private static class WebappResourceMonitor implements ResourceMonitor {
-
-        private Map<String,Set<String>> layout;
-        private ServletContext sc;
-        private String startPath;
-        private String contextPath;
+        private ResourceInfo resourceInfo;
+        private Long checkTime;
 
 
         // -------------------------------------------------------- Constructors
 
 
-        /**
-         * Construct a new WebappResourceMonitor for a <code> the specified
-         * <code>filesystem</code>.
-         * @param sc the {@link ServletContext} for this application
-         * @param startPath the root directory of the <code>filesystem</code>
-         *  being monitored
-         *
-         * @throws IllegalArgumentException if <code>startPath</code> doesn't
-         *  start and end with <code>/</code>
-         */
-        public WebappResourceMonitor(ServletContext sc, String startPath) {
+        public ResourceInfoCheckPeriodProxy(ResourceInfo resourceInfo,
+                                            long checkPeriod) {
 
-            if (startPath.charAt(0) != '/'
-                  && startPath.charAt(startPath.length() - 1) != '/') {
-                throw new IllegalArgumentException("startPath must start and end with '/'");
-            }
-            this.startPath = startPath;
-            this.sc = sc;
-            contextPath = getServletContextIdentifier(sc);
-            layout = new HashMap<String,Set<String>>();
-            createSnapshot(layout);
-
-        }
-
-
-        // -------------------------------------------------Methods from Monitor
-
-
-        /**
-         * @see com.sun.faces.application.resource.ResourceCache.ResourceMonitor#hasBeenModified()
-         */
-        public boolean hasBeenModified() {
-
-            Map<String, Set<String>> temp = new HashMap<String, Set<String>>();
-            createSnapshot(temp);
-            boolean modified = !layout.equals(temp);
-            if (modified) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "[{0}] Change detected in webapp filesystem",
-                               new Object[] { contextPath, startPath });
-                }
-                layout = temp;
-            }
-            return modified;
-
-        }
-
-
-        // ------------------------------------------------------ Public Methods
-
-
-        @Override
-        public String toString() {
-
-            return "[WebappResourceMonitor] Monitoring->"
-                   + contextPath
-                   + ':'
-                   + startPath;
-
-        }
-
-
-        // ----------------------------------------------------- Private Methods
-
-
-        private void createSnapshot(Map<String,Set<String>> target) {
-
-            createSnapshot(target, startPath);
-
-        }
-
-
-        @SuppressWarnings({"unchecked"})
-        private void createSnapshot(Map<String, Set<String>> target,
-                                    String startPath) {
-
-            Set<String> paths = sc.getResourcePaths(startPath);
-            if (paths == null) {
-                return;
-            }
-            target.put(startPath, paths);
-            for (String path : paths) {
-                if (path.charAt(path.length() - 1) == '/') {
-                    createSnapshot(target, path);
+            this.resourceInfo = resourceInfo;
+            if (checkPeriod != -1L) {
+                if (!(resourceInfo.getHelper() instanceof ClasspathResourceHelper)) {
+                    checkTime = System.currentTimeMillis() + checkPeriod;
                 }
             }
 
         }
 
-    } // END WebappResourceMonitor
 
-    ////////////////////////////////////////////////////////////////////////////
+        private boolean needsRefreshed() {
+
+            return (checkTime != null
+                       && (checkTime < System.currentTimeMillis()));
+
+        }
+
+
+        private ResourceInfo getResourceInfo() {
+
+            return resourceInfo;
+
+        }
+
+    } // END ResourceInfoCheckPeriodProxy
 
 
 } // END ResourceCache

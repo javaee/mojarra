@@ -51,7 +51,10 @@
         <param-name>javax.faces.CONFIG_FILES</param-name>
         <param-value></param-value>
     </context-param>
-
+    <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

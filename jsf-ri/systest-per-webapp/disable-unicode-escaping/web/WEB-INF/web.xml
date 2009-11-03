@@ -50,7 +50,10 @@
         <param-name>com.sun.faces.disableUnicodeEscaping</param-name>
         <param-value>true</param-value>
     </context-param>
-
+    <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <filter>
         <filter-name>CharsetEncodingSetter</filter-name>
         <filter-class>com.sun.faces.systest.UnicodeBeanFilter</filter-class>

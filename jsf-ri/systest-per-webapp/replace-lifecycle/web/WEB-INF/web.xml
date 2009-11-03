@@ -56,7 +56,10 @@
     <param-name>javax.faces.LIFECYCLE_ID</param-name>
     <param-value>com.sun.faces.systest.NewLifecycle</param-value>
   </context-param>
-   
+   <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
   <!-- Faces Servlet -->
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>

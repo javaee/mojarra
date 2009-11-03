@@ -45,7 +45,10 @@
         Validate custom PropertyResolvers don't break JSP property resolution
     </description>
     <display-name>JSF Systests</display-name>
-
+    <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

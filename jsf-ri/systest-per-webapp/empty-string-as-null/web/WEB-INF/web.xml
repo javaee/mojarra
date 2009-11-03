@@ -47,7 +47,10 @@
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>true</param-value>
     </context-param>
-
+  <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
   <!-- Faces Servlet -->
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>

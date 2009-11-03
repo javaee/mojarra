@@ -34,7 +34,10 @@ $Id: web.xml,v 1.2 2005/12/23 19:17:05 edburns Exp $ -->
     <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
     <param-value>server</param-value>
   </context-param>
-
+  <context-param>
+        <param-name>com.sun.faces.enableThreading</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
   <!-- Faces Servlet -->
   <servlet>
