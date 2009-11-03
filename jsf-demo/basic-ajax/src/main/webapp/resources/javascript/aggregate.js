@@ -36,11 +36,11 @@
 
 var increment = 1000; //  1 sec timeout, only to show results.  Should be more like 50ms
 var token;
-function aggregate(target, element, event) {
+function aggregate(target, element) {
     window.clearTimeout(token);
     addStatusMessage("cleared request, requeued");
     var send = function send() {
-        jsf.ajax.request(element, event, {render: target});
+        jsf.ajax.request(element, null, {render: target});
     };
     token = window.setTimeout(send, increment);
 }
