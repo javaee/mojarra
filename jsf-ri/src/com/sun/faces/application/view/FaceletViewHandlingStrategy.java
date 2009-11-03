@@ -70,6 +70,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.render.RenderKit;
 import javax.faces.view.StateManagementStrategy;
 import javax.faces.view.ViewMetadata;
@@ -714,6 +715,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         // populate UIViewRoot
         f.apply(ctx, view);
         doPostBuildActions(view);
+        ctx.getApplication().publishEvent(ctx,
+                                          PostAddToViewEvent.class,
+                                          view);
         Util.setViewPopulated(ctx, view);
 
     }

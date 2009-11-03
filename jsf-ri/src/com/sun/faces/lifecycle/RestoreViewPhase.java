@@ -255,9 +255,6 @@ public class RestoreViewPhase extends Phase {
             }
             facesContext.setViewRoot(viewRoot);
             assert(null != viewRoot);
-            facesContext.getApplication().publishEvent(facesContext,
-                                                       PostAddToViewEvent.class,
-                                                       viewRoot);
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {

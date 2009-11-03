@@ -430,7 +430,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     private void handleAddEvent(PostAddToViewEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         UIComponent added = event.getComponent();
-        if (added.isTransient()) {
+        if (added.isTransient() || added instanceof UIViewRoot) {
             return;
         }
         Map<String,ComponentStruct> idsToAdd = getClientIdsToAdd(context, true);

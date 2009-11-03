@@ -44,6 +44,7 @@ import java.net.MalformedURLException;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.view.ViewMetadata;
 import javax.faces.application.Resource;
 import javax.faces.component.UIViewRoot;
@@ -142,6 +143,9 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
             LOGGER.log(Level.FINE, "Completed building view for : \n" +
                                    view.getViewId());
         }
+        context.getApplication().publishEvent(context,
+                                              PostAddToViewEvent.class,
+                                              view);
         Util.setViewPopulated(context, view);
 
     }
