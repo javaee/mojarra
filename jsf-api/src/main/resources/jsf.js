@@ -909,7 +909,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
                         parserElement.innerHTML = html;
                     }
-                    //d.outerHTML = ''; // prevent IE leak
                     parent.replaceChild(parserElement.firstChild, d);
                     runScripts(scripts);
                 }
@@ -1085,7 +1084,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     }
                 }
                 // return the removed element
-                return element;
+                try {
+                    return element;
+                } finally {
+                    element = null; // IE 6 leak prevention
+                }
             };
 
             /** Returns the oldest element in this Queue. If this Queue is empty then
@@ -1102,7 +1105,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     element = queue[queueSpace];
                 }
                 // return the oldest element
-                return element;
+                try {
+                    return element;
+                } finally {
+                    element = null; //IE 6 leak prevention
+                }
             };
         }();
 
@@ -1116,7 +1123,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var req = {};                  // Request Object
             req.url = null;                // Request URL
             req.context = {};              // Context of request and response
-            req.context.source = null;     // Source of this request
+            req.context.sourceid = null;   // Source of this request
             req.context.onerror = null;    // Error handler for request
             req.context.onevent = null;    // Event handler for request
             req.context.formid = null;     // Form that's the context for this request
@@ -1289,7 +1296,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var data = {};  // data payload for function
             data.type = "error";
             data.status = status;
-            data.source = context.source;
+            data.source = document.getElementById(context.sourceid);
             data.responseCode = request.status;
             data.responseXML = request.responseXML;
             data.responseText = request.responseText;
@@ -1351,7 +1358,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var data = {};
             data.type = "event";
             data.status = status;
-            data.source = context.source;
+            data.source = document.getElementById(context.sourceid);
             if (status !== 'begin') {
                 data.responseCode = request.status;
                 data.responseXML = request.responseXML;
@@ -1610,7 +1617,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              */
             request: function request(source, event, options) {
 
-                var element;
+                var element, form;   //  Element variables
                 var all, none;
 
                 if (typeof source === 'undefined' || source === null) {
@@ -1745,10 +1752,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 ajaxEngine.queryString = viewState;
                 ajaxEngine.context.onevent = onevent;
                 ajaxEngine.context.onerror = onerror;
-                ajaxEngine.context.source = element;
+                ajaxEngine.context.sourceid = element.id;
                 ajaxEngine.context.formid = form.id;
                 ajaxEngine.context.render = args["javax.faces.partial.render"];
                 ajaxEngine.sendRequest();
+
+                // null out element variables to protect against IE memory leak
+                element = null;
+                form = null;
+
             },
             /**
              * <p>Receive an Ajax response from the server.
