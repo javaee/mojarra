@@ -909,6 +909,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
                         parserElement.innerHTML = html;
                     }
+                    //d.outerHTML = ''; // prevent IE leak
                     parent.replaceChild(parserElement.firstChild, d);
                     runScripts(scripts);
                 }
@@ -1669,7 +1670,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 args["javax.faces.source"] = element.id;
 
-                if (event) {
+                if (event && !!event.type) {
                     args["javax.faces.partial.event"] = event.type;
                 }
 
