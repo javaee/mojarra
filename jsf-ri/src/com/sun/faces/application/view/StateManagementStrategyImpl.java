@@ -236,7 +236,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                                         MessageUtils.PARTIAL_STATE_ERROR_RESTORING_ID,
                                         cid,
                                         e.toString());
-                            throw new FacesException(msg);
+                            throw new FacesException(msg, e);
                         }
                         app.publishEvent(context.getFacesContext(),
                                 PostRestoreStateEvent.class,
