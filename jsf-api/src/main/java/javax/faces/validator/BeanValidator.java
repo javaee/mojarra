@@ -250,6 +250,12 @@ public class BeanValidator implements Validator, PartialStateHolder {
                          UIComponent component,
                          Object value) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (component == null) {
+            throw new NullPointerException();
+        }
         ValueExpression valueExpression = component.getValueExpression("value");
         if (valueExpression == null) {
             return;
