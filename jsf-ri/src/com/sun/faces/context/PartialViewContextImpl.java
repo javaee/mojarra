@@ -379,10 +379,10 @@ import com.sun.faces.util.Util;
         PartialResponseWriter writer = pvc.getPartialResponseWriter();
         writer.startUpdate(PartialResponseWriter.RENDER_ALL_MARKER);
 
-        Iterator<UIComponent> itr = viewRoot.getFacetsAndChildren();
-        while (itr.hasNext()) {
-            UIComponent kid = itr.next();
-            kid.encodeAll(context);
+        if (viewRoot.getChildCount() > 0) {
+            for (UIComponent uiComponent : viewRoot.getChildren()) {
+                uiComponent.encodeAll(context);
+            }
         }
 
         writer.endUpdate();
