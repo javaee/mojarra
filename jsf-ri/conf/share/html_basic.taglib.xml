@@ -46,6 +46,414 @@
     </description>
   <namespace>http://java.sun.com/jsf/html</namespace>
   <tag>
+      <description>
+          <![CDATA[
+
+          <p>Render the markup for a <code>&lt;head&gt;</code> element.</p>
+
+          <p>Decode Behavior</p>
+
+          <ul>
+
+          <p>No action is required during decode for this renderer.</p>
+
+          </ul>
+
+          <p>Encode Behavior</p>
+
+          <ul>
+
+          <p>Render the starting <code>&lt;head&gt;</code> element tag.  Any attributes declared on the element must be passed through
+          unmodified to the rendered output.
+          Just before rendering the
+          closing <code>&lt;/head&gt;</code> element tag, render any resources that have been targeted
+          for this "head" element:
+          <ul>
+          <li>Obtain a <code>UIViewRoot</code> instance.</li>
+          <li>Obtain a <code>List</code> of component resources targeted for
+          this "head" element with a call to <code>UIViewRoot.getComponentResources()</code>
+          with the <code>String "head"</code> as the argument.</li>
+          <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
+          and call <code>encodeAll</code> on each <code>UIComponent</code> instance.
+
+          <p>Any attributes declared on the element must be passed through
+          unmodified to the rendered output.</p>
+
+          </ul>
+          Render the ending <code>&lt;/head&gt;</code> element tag.</p>
+
+           ]]>
+      </description>
+      <tag-name>
+          head
+      </tag-name>
+      <component>
+          <component-type>javax.faces.Output</component-type>
+          <renderer-type>javax.faces.Head</renderer-type>
+      </component>
+      <attribute>
+          <description>
+              <![CDATA[Direction indication for text that does not inherit directionality.
+              Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).]]>
+          </description>
+          <name>
+              dir
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Code describing the language used in the generated markup
+              for this component.]]>
+          </description>
+          <name>
+              lang
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              The ValueExpression linking this component to a property in a
+              backing bean
+          </description>
+          <name>
+              binding
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              javax.faces.component.UIComponent
+          </type>
+      </attribute>
+  </tag>
+  <tag>
+      <description>
+          <![CDATA[
+
+          <p>Render the markup for a <code>&lt;body&gt;</code> element.</p>
+
+          <p>Decode Behavior</p>
+
+          <ul>
+
+          <p>No action is required during decode for this renderer.</p>
+
+          </ul>
+
+          <p>Encode Behavior</p>
+
+          <ul>
+
+          <p>Render the starting <code>&lt;body&gt;</code> element tag. Just before rendering the
+          closing <code>&lt;/body&gt;</code> element tag, render any resources that have been targeted
+          for this "body" element:
+          <ul>
+          <li>Obtain a <code>UIViewRoot</code> instance.</li>
+
+          <li>Obtain a <code>List</code> of component resources targeted for
+          this "body" element with a call to
+          <code>UIViewRoot.getComponentResources()</code> with the
+          <code>String "body"</code> as the argument.  Render the ending
+          <code>&lt;/body&gt;</code> element tag.</li>
+
+          <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
+          and call <code>encodeAll</code> on each <code>UIComponent</code> instance.
+          </ul>
+
+          <p>Any attributes declared on the element must be passed through
+          unmodified to the rendered output.</p>
+
+          ]]>
+      </description>
+      <tag-name>
+          body
+      </tag-name>
+      <component>
+          <component-type>javax.faces.Output</component-type>
+          <renderer-type>javax.faces.Body</renderer-type>
+      </component>
+      <attribute>
+          <description>
+              <![CDATA[Direction indication for text that does not inherit directionality.
+              Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).]]>
+          </description>
+          <name>
+              dir
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Code describing the language used in the generated markup
+              for this component.]]>
+          </description>
+          <name>
+              lang
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a pointer button is
+              clicked over this element.]]>
+          </description>
+          <name>
+              onclick
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a pointer button is
+              double clicked over this element.]]>
+          </description>
+          <name>
+              ondblclick
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a key is
+              pressed down over this element.]]>
+          </description>
+          <name>
+              onkeydown
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a key is
+              pressed and released over this element.]]>
+          </description>
+          <name>
+              onkeypress
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a key is
+              released over this element.]]>
+          </description>
+          <name>
+              onkeyup
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when the user agent finishes loading
+              a window or all frames within a frameset.]]>
+          </description>
+          <name>
+              onload
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a pointer button is
+              pressed down over this element.]]>
+          </description>
+          <name>
+              onmousedown
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a pointer button is
+              moved within this element.]]>
+          </description>
+          <name>
+              onmousemove
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a pointer button is
+              moved away from this element.]]>
+          </description>
+          <name>
+              onmouseout
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a pointer button is
+              moved onto this element.]]>
+          </description>
+          <name>
+              onmouseover
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when a pointer button is
+              released over this element.]]>
+          </description>
+          <name>
+              onmouseup
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Javascript code executed when the user agent removes
+              a document from a window or frame.]]>
+          </description>
+          <name>
+              onunload
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+             java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[CSS style(s) to be applied when this component is rendered.]]>
+          </description>
+          <name>
+              style
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Space-separated list of CSS style class(es) to be applied when
+              this element is rendered.  This value must be passed through
+              as the "class" attribute on generated markup.]]>
+          </description>
+          <name>
+              styleClass
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              <![CDATA[Advisory title information about markup elements generated
+              for this component.]]>
+          </description>
+          <name>
+              title
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              java.lang.String
+          </type>
+      </attribute>
+      <attribute>
+          <description>
+              The ValueExpression linking this component to a property in a backing bean
+          </description>
+          <name>
+              binding
+          </name>
+          <required>
+              false
+          </required>
+          <type>
+              javax.faces.component.UIComponent
+          </type>
+        </attribute>
+    </tag>
+  <tag>
     <description>
             &lt;p&gt;&lt;span
             class="changed_modified_2_0"&gt;Renders an HTML "input"
