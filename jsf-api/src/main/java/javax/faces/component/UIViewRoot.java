@@ -61,6 +61,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ListIterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.visit.VisitCallback;
@@ -1570,7 +1571,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         }
         List<SystemEventListener> listeners = viewListeners.get(systemEvent);
         if (listeners == null) {
-            listeners = new ArrayList<SystemEventListener>(2);
+            listeners = new CopyOnWriteArrayList<SystemEventListener>();
             viewListeners.put(systemEvent, listeners);
         }
         listeners.add(listener);

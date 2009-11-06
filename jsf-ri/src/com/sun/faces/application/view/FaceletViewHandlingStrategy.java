@@ -717,6 +717,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         doPostBuildActions(view);
         ctx.getApplication().publishEvent(ctx,
                                           PostAddToViewEvent.class,
+                                          UIViewRoot.class,
                                           view);
         Util.setViewPopulated(ctx, view);
 

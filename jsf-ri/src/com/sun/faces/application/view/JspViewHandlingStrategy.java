@@ -145,6 +145,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         }
         context.getApplication().publishEvent(context,
                                               PostAddToViewEvent.class,
+                                              UIViewRoot.class,
                                               view);
         Util.setViewPopulated(context, view);
 
