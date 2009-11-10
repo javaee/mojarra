@@ -148,6 +148,7 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
                         outcomes[threadNum] = new Boolean(result);
                     }
                     catch (Throwable e) {
+                        e.printStackTrace();
                         outcomes[threadNum] = new Boolean(false);
                     }
                 }
