@@ -42,7 +42,15 @@ package com.sun.faces.config;
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.WebappLifecycleListener;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.*;
+
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableGroovyScripting;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableHtmlTagLibraryValidator;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableThreading;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ForceLoadFacesConfigFiles;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.VerifyFacesConfigObjects;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
+
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.el.ELContextListenerImpl;
@@ -102,6 +110,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -212,7 +221,7 @@ public class ConfigureListener implements ServletRequestListener,
             }
             initScripting();
             configManager.initialize(context);
-            if (webConfig.isOptionEnabled(EnableThreading)) {
+            if (shouldInitConfigMonitoring()) {
                 initConfigMonitoring(context);
             }
 
@@ -428,6 +437,17 @@ public class ConfigureListener implements ServletRequestListener,
 
     // --------------------------------------------------------- Private Methods
 
+    private boolean shouldInitConfigMonitoring() {
+
+        boolean development = isDevModeEnabled();
+        boolean threadingOptionSpecified = webConfig.isSet(EnableThreading);
+        if (development && !threadingOptionSpecified) {
+            return true;
+        }
+        boolean threadingOption = webConfig.isOptionEnabled(EnableThreading);
+        return (development && threadingOptionSpecified && threadingOption);
+
+    }
 
     private void initConfigMonitoring(ServletContext context) {
 
@@ -458,7 +478,7 @@ public class ConfigureListener implements ServletRequestListener,
     private boolean isDevModeEnabled() {
 
         // interrogate the init parameter directly vs looking up the application
-        return "Development".equals(webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage));
+        return "Development".equals(webConfig.getOptionValue(JavaxFacesProjectStage));
 
     }
 
@@ -938,7 +958,21 @@ public class ConfigureListener implements ServletRequestListener,
                 if (monitors == null) {
                     monitors = new ArrayList<Monitor>(urls.size());
                 }
-                monitors.add(new Monitor(url));
+                try {
+                    Monitor m = new Monitor(url);
+                    monitors.add(m);
+                } catch (IOException ioe) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.severe("Unable to setup resource monitor for "
+                                      + url.toExternalForm()
+                                      + ".  Resource will not be monitored for changes.");
+                    }
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   ioe.toString(),
+                                   ioe);
+                    }
+                }
             }
 
         }
@@ -953,11 +987,26 @@ public class ConfigureListener implements ServletRequestListener,
 
             assert (monitors != null);
             boolean reloaded = false;
-            for (Monitor m : monitors) {
-                if (m.hasBeenModified()) {
-                    if (!reloaded) {
-                        reloaded = true;
+            for (Iterator<Monitor> i = monitors.iterator(); i.hasNext(); ) {
+                Monitor m = i.next();
+                try {
+                    if (m.hasBeenModified()) {
+                        if (!reloaded) {
+                            reloaded = true;
+                        }
                     }
+                } catch (IOException ioe) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.severe("Unable to access url "
+                                      + m.url.toExternalForm()
+                                      + ".  Monitoring for this resource will no longer occur.");
+                    }
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   ioe.toString(),
+                                   ioe);
+                    }
+                    i.remove();
                 }
             }
             if (reloaded) {
@@ -978,7 +1027,7 @@ public class ConfigureListener implements ServletRequestListener,
             // ---------------------------------------------------- Constructors
 
 
-            Monitor(URL url) {
+            Monitor(URL url) throws IOException {
 
                 this.url = url;
                 this.timestamp = getLastModified();
@@ -994,7 +1043,7 @@ public class ConfigureListener implements ServletRequestListener,
             // ----------------------------------------- Package Private Methods
 
 
-            boolean hasBeenModified() {
+            boolean hasBeenModified() throws IOException {
                 long temp = getLastModified();
                 if (timestamp < temp) {
                     timestamp = temp;
@@ -1013,7 +1062,7 @@ public class ConfigureListener implements ServletRequestListener,
             // ------------------------------------------------- Private Methods
 
 
-            private long getLastModified() {
+            private long getLastModified() throws IOException {
 
                 InputStream in = null;
                 try {
@@ -1021,13 +1070,6 @@ public class ConfigureListener implements ServletRequestListener,
                     conn.connect();
                     in = conn.getInputStream();
                     return conn.getLastModified();
-                } catch (IOException ioe) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                "Unable to check JAR timestamp.",
-                                ioe);
-                    }
-                    return this.timestamp;
                 } finally {
                     if (in != null) {
                         try {
