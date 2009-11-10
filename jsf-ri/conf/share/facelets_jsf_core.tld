@@ -1131,7 +1131,12 @@ they do, it must be done as shown above, (or with
         </attribute>
         <attribute>
             <description>
-                <![CDATA[The current value of this component.]]>
+                A ValueExpression to which the value of the request parameter, as
+                determined by the name attribute, is bound. The resolved value of this
+                expression is used when encoding the view parameter into a bookmarkable link or
+                redirect URL with view parameter encoding enabled. If this attribute is omitted,
+                the value of the request parameter will instead be the local value of the
+                UIViewParameter.
             </description>
             <name>
                 value
@@ -1147,7 +1152,9 @@ they do, it must be done as shown above, (or with
         </attribute>
         <attribute>
             <description>
-                Name of the parameter to be created.
+                The name of the request parameter from which the value for this component
+                is retrieved on an initial request or to override the stored value on a
+                 postback.
             </description>
             <name>name</name>
             <required>
