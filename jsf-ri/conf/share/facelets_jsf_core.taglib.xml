@@ -2005,6 +2005,24 @@
         </attribute>
         <attribute>
             <description>
+                Specifies the content-type of the response.
+            </description>
+            <name>contentType</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                Specifies the character encoding that should be used for the
+                response.
+            </description>
+            <name>encoding</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>
 
                 MethodBinding pointing to a method that takes a
                 javax.faces.event.PhaseEvent and returns void. This method
