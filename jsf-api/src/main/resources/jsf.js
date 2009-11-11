@@ -272,7 +272,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 if ( !!src && src[1]) {
                     // if this is a file, load it
                     var url = src[1];
-                    script = loadScript(url);
+                    // if this is another copy of jsf.js, don't load it
+                    // it's never necessary, and can make debugging difficult
+                    if (/\/javax.faces.resource\/jsf.js\?ln=javax\.faces/.test(url)) {
+                        script = false;
+                    } else {
+                        script = loadScript(url);
+                    }
                 } else if (!!scriptStr && scriptStr[2]){
                     // else get content of tag, without leading CDATA and such
                     script = scriptStr[2].replace(stripStart,"");
@@ -764,8 +770,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // but only for the form that submitted the request.
 
                 stateForm = document.getElementById(context.formid);
-                if (!stateForm) {
-                    // if the form went away for some reason, we're going to just return silently.
+                if (!stateForm || !stateForm.elements) {
+                    // if the form went away for some reason, or it lacks elements 
+                    // we're going to just return silently.
                     return;
                 }
                 var field = stateForm.elements["javax.faces.ViewState"];
