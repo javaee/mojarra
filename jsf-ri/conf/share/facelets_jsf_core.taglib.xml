@@ -545,7 +545,7 @@
                 &lt;table border="1"&gt;
                 &lt;tr&gt;
 
-                &lt;th&gt;value for "&lt;code&gt;name&lt;/code&gt;" tag
+                &lt;th&gt;value for "&lt;code&gt;type&lt;/code&gt;" tag
                 attribute&lt;/th&gt;
 
                 &lt;th&gt;Type of event sent to listener method
@@ -617,13 +617,13 @@
 
 
             </description>
-            <name>name</name>
+            <name>type</name>
             <required>true</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description>
-                Method expression pointing to a method expression of
+                MethodExpression pointing to a method expression of
                 that will be called when the listener's processEvent
                 method would have been called.
             </description>

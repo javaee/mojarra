@@ -757,7 +757,7 @@ for <code>@NamedEvent</code>.</p>
 
 
             ]]></description>
-            <name>name</name>
+            <name>type</name>
             <required>true</required>
             <rtexprvalue>false</rtexprvalue>
             <deferred-value>
