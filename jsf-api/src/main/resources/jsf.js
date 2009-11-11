@@ -619,6 +619,21 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
         /**
+         * Replace one node with another.  Necessary for handling IE memory leak.
+         * @param node
+         * @param newNode
+         */
+        var replaceNode = function(newNode, node) {
+               if(isIE()){
+                    node.parentNode.insertBefore(newNode, node);
+                    deleteNode(node);
+               } else {
+                    node.parentNode.replaceChild(newNode, node);
+               }
+        };
+
+
+        /**
          * copy all attributes from one element to another - except id
          * @param target element to copy attributes to
          * @param source element to copy attributes from
@@ -916,7 +931,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
                         parserElement.innerHTML = html;
                     }
-                    parent.replaceChild(parserElement.firstChild, d);
+                    replaceNode(parserElement.firstChild, d);
+                    deleteNode(parserElement);
                     runScripts(scripts);
                 }
             }
@@ -1667,7 +1683,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     throw new Error("jsf.ajax.request: Added an onevent callback that was not a function");
                 }
 
-                var form = getForm(element);
+                form = getForm(element);
                 if (!form) {
                     throw new Error("jsf.ajax.request: Method must be called within a form");
                 }
