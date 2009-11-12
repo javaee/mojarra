@@ -931,7 +931,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
                         parserElement.innerHTML = html;
                     }
-                    replaceNode(parserElement.firstChild, d);
+                    parent.replaceChild(parserElement.firstChild, d);
                     deleteNode(parserElement);
                     runScripts(scripts);
                 }
