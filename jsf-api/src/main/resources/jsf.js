@@ -544,14 +544,30 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (!node) {
                 return;
             }
-            //deleteChildren(node);
-            //clearEvents(node);
-            if (typeof node.outerHTML !== 'undefined') {
-                node.outerHTML = ''; //prevent leak in IE
-            } else {
-                if (node.parentNode) { //if the node has a parent
-                    node.parentNode.removeChild(node); //remove the node from the DOM tree
+            var tag = node.nodeName.toLowerCase();
+            //  delete all children, unless it's a table - in that case ,
+            // try something different
+            if (tag !== 'table') {
+                deleteChildren(node);
+                //clearEvents(node);
+                if (typeof node.outerHTML !== 'undefined') {
+                    node.outerHTML = ''; //prevent leak in IE
+                } else {
+                    if (node.parentNode) { //if the node has a parent
+                        node.parentNode.removeChild(node); //remove the node from the DOM tree
+                    }
                 }
+            } else {
+                // special case for table
+                var temp = document.createElement('div');
+                try {
+                    temp.appendChild(node.parentNode.removeChild(node));
+                    temp.innerHTML = ""; // Prevent leak in IE
+                } catch (e) {
+                    // at least we tried
+                }
+                deleteNode(temp);
+                delete temp;
             }
             delete node; //just to be sure
         };
@@ -569,13 +585,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             {
                 var childNode = node.childNodes[x];
                 if (childNode.hasChildNodes()) //if the child node has children then delete them first
-                    deleteChildren(childNode);
-                    //clearEvents(childNode); //remove listeners
-                if (typeof childNode.outerHTML !== 'undefined') {
-                    childNode.outerHTML = ''; //prevent leak in IE
-                } else {
-                    node.removeChild(childNode); //remove the child from the DOM tree
-                }
+                    // Don't delete children if IE and table
+                    var tag = childNode.nodeName.toLowerCase();
+                    if (tag !== "table") {
+                        deleteChildren(childNode);
+                        //clearEvents(childNode); //remove listeners
+                    }
+                deleteNode(childNode);
                 delete childNode; //just to be sure
             }
         };
