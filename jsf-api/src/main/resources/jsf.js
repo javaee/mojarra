@@ -129,7 +129,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 } else {
                     isAutoExecCache = false;
                 }
-                body.removeChild(tempNode);
+                deleteNode(tempNode);
                 return isAutoExecCache;
             } catch (ex) {
                 // OK, that didn't work, we'll have to make an assumption
@@ -368,7 +368,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
             }
 
-            parent.replaceChild(temp, element);
+            replaceNode(temp, element);            
             runScripts(scripts);
 
         };
@@ -381,7 +381,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Note:  This code originally from Sarissa: http://dev.abiss.gr/sarissa
          * It has been modified to fit into the overall codebase
          */
-        var getText = function(oNode, deep) {
+        var getText = function getText(oNode, deep) {
             var Node = {ELEMENT_NODE: 1, ATTRIBUTE_NODE: 2, TEXT_NODE: 3, CDATA_SECTION_NODE: 4,
                 ENTITY_REFERENCE_NODE: 5,  ENTITY_NODE: 6, PROCESSING_INSTRUCTION_NODE: 7,
                 COMMENT_NODE: 8, DOCUMENT_NODE: 9, DOCUMENT_TYPE_NODE: 10,
@@ -536,7 +536,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         };
 
         /**
-         * Deletes node and all of it's children, making sure to clear all open events as well.
+         * Deletes node
          * @param node
          * @ignore
          */
@@ -544,8 +544,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (!node) {
                 return;
             }
-            deleteChildren(node);
-            clearEvents(node);
+            //deleteChildren(node);
+            //clearEvents(node);
             if (typeof node.outerHTML !== 'undefined') {
                 node.outerHTML = ''; //prevent leak in IE
             } else {
@@ -570,7 +570,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var childNode = node.childNodes[x];
                 if (childNode.hasChildNodes()) //if the child node has children then delete them first
                     deleteChildren(childNode);
-                clearEvents(childNode); //remove listeners
+                    //clearEvents(childNode); //remove listeners
                 if (typeof childNode.outerHTML !== 'undefined') {
                     childNode.outerHTML = ''; //prevent leak in IE
                 } else {
@@ -910,7 +910,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     }
                     parent.replaceChild(newElement, d);
                     runScripts(scripts);
-
                 } else if (d.nodeName.toLowerCase() === 'input') {
                     // special case handling for 'input' elements
                     // in order to not lose focus when updating,
@@ -920,6 +919,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     newElement = parserElement.firstChild;
 
                     cloneAttributes(d, newElement);
+                    deleteNode(parserElement);
                 } else if (html.length > 0) {
                     if (isAutoExec()) {
                         // Create html
@@ -931,7 +931,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         html = html.replace(/<script[^>]*>([\S\s]*?)<\/script>/igm,"");
                         parserElement.innerHTML = html;
                     }
-                    parent.replaceChild(parserElement.firstChild, d);
+                    replaceNode(parserElement.firstChild, d);
                     deleteNode(parserElement);
                     runScripts(scripts);
                 }
@@ -979,6 +979,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 parent.insertBefore(tempElement.firstChild, target);
             }
             runScripts(scripts);
+            deleteNode(tempElement);
         };
 
         /**
