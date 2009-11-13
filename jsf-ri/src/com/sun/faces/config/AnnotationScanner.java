@@ -792,21 +792,24 @@ public class AnnotationScanner extends AnnotationProvider {
 
             for (int i = 1; i < constantPoolSize; i++) {
                 if (!refill(buffer, in, 1)) {
-                    return false;
+                    return true;
                 }
                 final byte type = buffer.get();
                 switch (type) {
                     case ASCIZ:
                     case UNICODE:
                         if (!refill(buffer, in, 2)) {
-                            return false;
+                            return true;
                         }
                         final short length = buffer.getShort();
                         if (length < 0 || length > Short.MAX_VALUE) {
                             return true;
                         }
+                        if (length > buffer.capacity()) {
+                            return true;
+                        }
                         if (!refill(buffer, in, length)) {
-                            return false;
+                            return true;
                         }
                         buffer.get(bytes, 0, length);
                         /* to speed up the process, I am comparing the first few
@@ -830,7 +833,7 @@ public class AnnotationScanner extends AnnotationProvider {
                     case CLASS:
                     case STRING:
                         if (!refill(buffer, in, 2)) {
-                            return false;
+                            return true;
                         }
                         buffer.getShort();
                         break;
@@ -840,14 +843,14 @@ public class AnnotationScanner extends AnnotationProvider {
                     case INTEGER:
                     case FLOAT:
                         if (!refill(buffer, in, 4)) {
-                            return false;
+                            return true;
                         }
                         buffer.position(buffer.position() + 4);
                         break;
                     case LONG:
                     case DOUBLE:
                         if (!refill(buffer, in, 8)) {
-                            return false;
+                            return true;
                         }
                         buffer.position(buffer.position() + 8);
                         // for long, and double, they use 2 constantPool
@@ -855,7 +858,7 @@ public class AnnotationScanner extends AnnotationProvider {
                         break;
                     case NAMEANDTYPE:
                         if (!refill(buffer, in, 4)) {
-                            return false;
+                            return true;
                         }
                         buffer.getShort();
                         buffer.getShort();
