@@ -550,7 +550,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (tag !== 'table') {
                 deleteChildren(node);
                 //clearEvents(node);
-                if (typeof node.outerHTML !== 'undefined') {
+                if (isIE()) {
                     node.outerHTML = ''; //prevent leak in IE
                 } else {
                     if (node.parentNode) { //if the node has a parent
