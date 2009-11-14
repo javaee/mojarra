@@ -544,36 +544,44 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (!node) {
                 return;
             }
-            var tag = node.nodeName.toLowerCase();
-            //  delete all children, unless it's a table - in that case ,
-            // try something different
-            if (tag !== 'table') {
-                deleteChildren(node);
-                //clearEvents(node);
-                if (isIE()) {
-                    node.outerHTML = ''; //prevent leak in IE
-                } else {
-                    if (node.parentNode) { //if the node has a parent
-                        node.parentNode.removeChild(node); //remove the node from the DOM tree
-                    }
+            if (!isIE()) {
+                // nothing special required
+                if (!node.parentNode) {
+                    // if there's no parent, there's nothing to do
+                    return;
                 }
-            } else {
-                // special case for table
-                var temp = document.createElement('div');
-                try {
-                    temp.appendChild(node.parentNode.removeChild(node));
-                    temp.innerHTML = ""; // Prevent leak in IE
-                } catch (e) {
-                    // at least we tried
-                }
-                deleteNode(temp);
-                delete temp;
+                node.parentNode.removeChild(node);
+                return;
             }
-            delete node; //just to be sure
+            // The rest of this code is specialcasing for IE
+            if (node.nodeName.toLowerCase() === "body") {
+                // special case for removing body under IE.
+                deleteChildren(node);
+                try {
+                    node.outerHTML = '';
+                } catch (ex) {
+                    // fails under some circumstances, but not in RI
+                    // supplied responses.  If we've gotten here, it's
+                    // fairly safe to leave a lingering body tag rather than
+                    // fail outright
+                }
+                return;
+            }
+            var temp = node.ownerDocument.createElement('div');
+            var parent = node.parentNode;
+            temp.appendChild(parent.removeChild(node));
+            // Now clean up the temporary element
+            try {
+                temp.outerHTML = ''; //prevent leak in IE
+            } catch (ex) {
+                // at least we tried.  Fails in some circumstances,
+                // but not in RI supplied responses.  Better to leave a lingering
+                // temporary div than to fail outright.
+            }
         };
 
         /**
-         * Deletes all children of a node, making sure to clear all open events as well.
+         * Deletes all children of a node
          * @param node
          * @ignore
          */
@@ -581,18 +589,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             if (!node) {
                 return;
             }
-            for (var x = node.childNodes.length - 1; x >= 0; x--) //delete all of node's children
-            {
+            for (var x = node.childNodes.length - 1; x >= 0; x--) { //delete all of node's children
                 var childNode = node.childNodes[x];
-                if (childNode.hasChildNodes()) //if the child node has children then delete them first
-                    // Don't delete children if IE and table
-                    var tag = childNode.nodeName.toLowerCase();
-                    if (tag !== "table") {
-                        deleteChildren(childNode);
-                        //clearEvents(childNode); //remove listeners
-                    }
                 deleteNode(childNode);
-                delete childNode; //just to be sure
             }
         };
 
@@ -605,7 +604,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Note:  This code originally from Sarissa:  http://dev.abiss.gr/sarissa
          * It has been modified to fit into the overall codebase
          */
-        var copyChildNodes = function(nodeFrom, nodeTo) {
+        var copyChildNodes = function copyChildNodes(nodeFrom, nodeTo) {
 
             if ((!nodeFrom) || (!nodeTo)) {
                 throw "Both source and destination nodes must be provided";
@@ -639,7 +638,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @param node
          * @param newNode
          */
-        var replaceNode = function(newNode, node) {
+        var replaceNode = function replaceNode(newNode, node) {
                if(isIE()){
                     node.parentNode.insertBefore(newNode, node);
                     deleteNode(node);
