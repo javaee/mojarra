@@ -90,31 +90,31 @@
     <target name="copyDemoSource" depends="copyJars">
         <echo>copy the necessary samples</echo>
          <copy todir="${dist.home}/samples/basic-ezcomp" includeEmptyDirs="false">
-            <fileset dir="${basedir}/basic-ezcomp" excludes="build.xml"/>
+            <fileset dir="${basedir}/basic-ezcomp" excludes="build.xml,build/**"/>
          </copy>
          <copy todir="${dist.home}/samples/basic-ajax" includeEmptyDirs="false">
-            <fileset dir="${basedir}/basic-ajax" excludes="build.xml"/>
+            <fileset dir="${basedir}/basic-ajax" excludes="build.xml,build/**"/>
          </copy>
         <copy todir="${dist.home}/samples/ajax-component" includeEmptyDirs="false">
-           <fileset dir="${basedir}/ajax-component" excludes="build.xml"/>
+           <fileset dir="${basedir}/ajax-component" excludes="build.xml,build/**"/>
         </copy>
          <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
-            <fileset dir="${basedir}/guessNumber" excludes="build.xml"/>
+            <fileset dir="${basedir}/guessNumber" excludes="build.xml,build/**"/>
          </copy>
          <copy todir="${dist.home}/samples/custom-bean-scope" includeEmptyDirs="false">
-            <fileset dir="${basedir}/custom-bean-scope" excludes="build.xml"/>
+            <fileset dir="${basedir}/custom-bean-scope" excludes="build.xml,build/**"/>
          </copy>
         <copy todir="${dist.home}/samples/bean-validator" includeEmptyDirs="false">
-           <fileset dir="${basedir}/bean-validator" excludes="build.xml"/>
+           <fileset dir="${basedir}/bean-validator" excludes="build.xml,build/**"/>
         </copy>
         <copy todir="${dist.home}/samples/custom-tag" includeEmptyDirs="false">
-           <fileset dir="${basedir}/custom-tag" excludes="build.xml"/>
+           <fileset dir="${basedir}/custom-tag" excludes="build.xml,build/**"/>
         </copy>
         <copy todir="${dist.home}/samples/helloworld" includeEmptyDirs="false">
-           <fileset dir="${basedir}/helloworld" excludes="build.xml"/>
+           <fileset dir="${basedir}/helloworld" excludes="build.xml,build/**"/>
         </copy>
         <copy todir="${dist.home}/samples/viewExpired" includeEmptyDirs="false">
-           <fileset dir="${basedir}/viewExpired" excludes="build.xml"/>
+           <fileset dir="${basedir}/viewExpired" excludes="build.xml,build/**"/>
         </copy>
     </target>
 
