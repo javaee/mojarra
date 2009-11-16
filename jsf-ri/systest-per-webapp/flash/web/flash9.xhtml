@@ -31,15 +31,20 @@
 
 <body>
 
-            <h3>flash8</h3>
+            <h3>flash9</h3>
 
-<p>Value is <h:outputText value="#{flash.selectedEventId}" />.</p>
+<h:form prependId="false">
 
-<h:link id="link" outcome="flash8" value="stay on flash8" />
+  valueA: <h:inputText value="#{flash.valueA}" /> <br />
+  valueB: <h:inputText value="#{flash.valueB}" /> <br />
+  valueC: <h:inputText value="#{flash.valueC}" /> <br />
 
-<h:form>
-<h:commandButton value="go to flash9" action="flash9" />
+  <h:commandButton id="nokeep" value="visit with no keep" action="flash10?faces-redirect=true" />
+  <h:commandButton id="keep" value="visit with keep" action="flash11?faces-redirect=true" />
+
 </h:form>
+
+
 
 		<ui:debug/>
 
