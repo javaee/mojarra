@@ -236,6 +236,74 @@ public class FlashTestCase extends AbstractTestCase {
         // it went away because there was no keep
         assertTrue(page.asText().contains("Value is ."));
 
+        page = getPage("/faces/flash9.xhtml"); // http://localhost:8080/jsf-flash/flash9.jsf
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueA");
+        text.setValueAttribute("a value");
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueB");
+        text.setValueAttribute("b value");
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueC");
+        text.setValueAttribute("c value");
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("keep");
+        page = (HtmlPage) button.click();  // http://localhost:8080/jsf-flash/flash11.jsf
+
+        pageText = page.asText();
+
+        assertTrue(pageText.contains("valueA: a value"));
+        assertTrue(pageText.contains("valueB: b value"));
+        assertTrue(pageText.contains("valueC: c value"));
+
+        link = (HtmlAnchor) page.getElementById("flash9"); // http://localhost:8080/jsf-flash/flash9.jsf
+        page = link.click();
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueA");
+        assertEquals(text.getValueAttribute(), "a value");
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueB");
+        assertEquals(text.getValueAttribute(), "b value");
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueC");
+        assertEquals(text.getValueAttribute(), "c value");
+
+        page = getPage("/faces/flash9.xhtml"); // http://localhost:8080/jsf-flash/flash9.jsf
+        text = (HtmlTextInput) page.getHtmlElementById("valueA");
+        assertEquals(text.getValueAttribute(), "");
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueB");
+        assertEquals(text.getValueAttribute(), "");
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueC");
+        assertEquals(text.getValueAttribute(), "");
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueA");
+        text.setValueAttribute("A value");
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueB");
+        text.setValueAttribute("B value");
+
+        text = (HtmlTextInput) page.getHtmlElementById("valueC");
+        text.setValueAttribute("C value");
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("nokeep");
+        page = (HtmlPage) button.click();  // http://localhost:8080/jsf-flash/flash10.jsf
+
+        pageText = page.asText();
+
+        assertTrue(pageText.contains("valueA: A value"));
+        assertTrue(pageText.contains("valueB: B value"));
+        assertTrue(pageText.contains("valueC: C value"));
+
+        button = (HtmlSubmitInput) page.getHtmlElementById("reload");
+        page = (HtmlPage) button.click();  // http://localhost:8080/jsf-flash/flash10.jsf
+
+        pageText = page.asText();
+
+        assertTrue(!pageText.contains("valueA: A value"));
+        assertTrue(!pageText.contains("valueB: B value"));
+        assertTrue(!pageText.contains("valueC: C value"));
 
 
     }
