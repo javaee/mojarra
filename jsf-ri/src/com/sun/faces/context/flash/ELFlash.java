@@ -342,11 +342,12 @@ public class ELFlash extends Flash {
             } else if (key.equals("redirect")) {
                 result = this.isRedirect();
             } else {
-                Map<Object, Object> contextMap = FacesContext.getCurrentInstance().getAttributes();
-                Boolean keepFlagIsTrue;
-                if (null != (keepFlagIsTrue = (Boolean) contextMap.get(CONSTANTS.KeepFlagAttributeName)) &&
-                    (boolean) keepFlagIsTrue) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                if (isKeepFlagSet(context)) {
+                    result = getPhaseMapForReading().get(key);
                     keep(key.toString());
+                    clearKeepFlag(context);
+                    return result;
                 }
 
             }
@@ -638,6 +639,17 @@ public class ELFlash extends Flash {
     void setKeepFlag(FacesContext context) {
         context.getAttributes().put(CONSTANTS.KeepFlagAttributeName, Boolean.TRUE);
     }
+
+    void clearKeepFlag(FacesContext context) {
+        context.getAttributes().remove(CONSTANTS.KeepFlagAttributeName);
+    }
+
+    boolean isKeepFlagSet(FacesContext context) {
+        return Boolean.TRUE ==
+                context.getAttributes().get(CONSTANTS.KeepFlagAttributeName);
+    }
+
+
 
     private long getNewSequenceNumber() {
         long result = sequenceNumber.incrementAndGet();

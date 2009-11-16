@@ -35,12 +35,13 @@
 
 <h:form prependId="false">
 
-  valueA: <h:inputText value="#{flash.valueA}" /> <br />
-  valueB: <h:inputText value="#{flash.valueB}" /> <br />
-  valueC: <h:inputText value="#{flash.valueC}" /> <br />
+  valueA: <h:inputText id="valueA" value="#{flash.valueA}" /> <br />
+  valueB: <h:inputText id="valueB" value="#{flash.valueB}" /> <br />
+  valueC: <h:inputText id="valueC" value="#{flash.valueC}" /> <br />
 
   <h:commandButton id="nokeep" value="visit with no keep" action="flash10?faces-redirect=true" />
   <h:commandButton id="keep" value="visit with keep" action="flash11?faces-redirect=true" />
+  <h:commandButton id="reload" value="reload" />
 
 </h:form>
 
