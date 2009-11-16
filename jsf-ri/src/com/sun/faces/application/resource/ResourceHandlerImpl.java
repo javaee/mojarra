@@ -257,7 +257,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
                         return;
                     }
                     resourceChannel =
-                          Channels.newChannel(resource.getInputStream());
+                          Channels.newChannel(in);
                     out = Channels.newChannel(extContext.getResponseOutputStream());
                     extContext.setResponseBufferSize(buf.capacity());
                     String contentType = resource.getContentType();

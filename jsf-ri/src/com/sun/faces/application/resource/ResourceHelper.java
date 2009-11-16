@@ -774,6 +774,7 @@ public abstract class ResourceHelper {
             if (!expressionEvaluated) {
                 info.disableEL();
             }
+            inner.close();
             super.close();
 
         }
