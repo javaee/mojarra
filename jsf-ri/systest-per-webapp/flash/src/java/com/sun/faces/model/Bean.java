@@ -81,4 +81,9 @@ public class Bean {
         this.selectedEventId = selectedEventId;
     }
 
+    public String start() {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("wizardId", 4711);
+        return "flash12?faces-redirect=true";
+    }
+
 }

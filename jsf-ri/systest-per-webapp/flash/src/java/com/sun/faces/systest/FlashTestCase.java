@@ -305,6 +305,18 @@ public class FlashTestCase extends AbstractTestCase {
         assertTrue(!pageText.contains("valueB: B value"));
         assertTrue(!pageText.contains("valueC: C value"));
 
+        // content from Sebastian Hennebrueder
+        page = getPage("/faces/flash12.xhtml");
+        button = (HtmlSubmitInput) page.getHtmlElementById("start");
+        page = (HtmlPage) button.click();  // http://localhost:8080/jsf-flash/flash10.jsf
+
+        pageText = page.asText();
+        assertTrue(pageText.contains("4711"));
+
+        page = (HtmlPage) page.refresh();
+
+        pageText = page.asText();
+        assertTrue(!pageText.contains("4711"));
 
     }
 
