@@ -52,6 +52,11 @@
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
 
     <repositories>
+         <repository>
+            <snapshots/>
+            <id>ibiblio</id>
+            <url>http://www.ibiblio.org/maven2/</url>
+        </repository>
         <repository>
             <id>maven2-repository.dev.java.net</id>
             <name>Java.net Repository for Maven</name>
@@ -79,11 +84,7 @@
             <url>http://download.java.net/javaee5/external/shared</url>
             <layout>legacy</layout>
         </repository>
-        <repository>
-            <snapshots/>
-            <id>ibiblio</id>
-            <url>http://www.ibiblio.org/maven2/</url>
-        </repository>
+
     </repositories>
 
     <distributionManagement>
