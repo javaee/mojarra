@@ -168,7 +168,7 @@
                 <exclude name="**/*.jpg"/>
             </fileset>
         </copy>
-
+        <copy todir="${build.classes.dir}/META-INF" file="${resources.dir}/gfprobe-provider.xml"/>
         <copy todir="${build.lib.dir}">
             <fileset dir="${doc.dir}">
                 <include name="*.dtd"/>
@@ -592,7 +592,7 @@ javax.faces.level=ALL
     -->
     <target name="jars" depends="build">
 
-         <copy file="${basedir}/mojarra-jsf-api.bnd" tofile="tmp.bnd"/>
+        <copy file="${basedir}/mojarra-jsf-api.bnd" tofile="tmp.bnd"/>
         <replace file="tmp.bnd"
                  token="@spec.version@"
                  value="${spec.version}"/>
@@ -621,8 +621,7 @@ javax.faces.level=ALL
         <jsf.osgi.jar jarfile="${build.lib.dir}/${name}.jar"
                             basedir="${build.classes.dir}"
                             extension-name="javax.faces"
-                            bndfile="tmp.bnd"
-                            includes="**/*.class,**/*.properties"/>
+                            bndfile="tmp.bnd"/>
         <delete file="tmp.bnd"/>
 
     </target>
