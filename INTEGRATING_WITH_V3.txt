@@ -35,3 +35,21 @@ Putback changes to v3.
 
 Notify QE.
 
+
+Update source build:
+
+checkout https://glassfish-svn.dev.java.net/source/browse/glassfish-svn/trunk/external/source-build/
+
+edit build.properties
+Change the lines that contain mojarra, for example:
+
+mojarra.svn.url="https://mojarra.dev.java.net/svn/mojarra/tags/2.0.2-b06"
+mojarra.version="b06"
+
+test with:
+
+ant -Dexternal.dir=/tmp -Dmaven.repo.local=/tmp/maven -f mojarra.xml
+
+ensure that the correct files are pushed to the maven repo.
+
+commit changes
