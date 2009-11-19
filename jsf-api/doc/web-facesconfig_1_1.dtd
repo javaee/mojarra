@@ -44,8 +44,6 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
 
-    $Id: web-facesconfig_1_1.dtd,v 1.6 2007/06/19 18:17:20 rogerk Exp $
-
 -->
 
 
