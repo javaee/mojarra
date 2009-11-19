@@ -41,7 +41,6 @@ Implementation-Version: @impl.version@
 Implementation-Vendor: Sun Microsystems, Inc.
 Implementation-Vendor-Id: com.sun
 Extension-Name: @extension.name@
-Probe-Provider-Xml-File-Names: com/sun/faces/gfprobe-provider.xml
 
 # BND/OSGI Properties
 Export-Package: com.sun.faces.*;version=2.0

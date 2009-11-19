@@ -168,7 +168,7 @@
                 <exclude name="**/*.jpg"/>
             </fileset>
         </copy>
-        <copy todir="${build.classes.dir}/META-INF" file="${resources.dir}/gfprobe-provider.xml"/>
+        <copy todir="${build.classes.dir}/META-INF" file="src/main/resources/mojarra-jsf-api-probe-provider.xml"/>
         <copy todir="${build.lib.dir}">
             <fileset dir="${doc.dir}">
                 <include name="*.dtd"/>
