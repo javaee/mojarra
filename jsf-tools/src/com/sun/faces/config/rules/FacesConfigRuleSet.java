@@ -45,8 +45,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.util.ToolsUtil;
-import com.sun.org.apache.commons.digester.Digester;
-import com.sun.org.apache.commons.digester.RuleSetBase;
+import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.RuleSetBase;
 
 
 /**
