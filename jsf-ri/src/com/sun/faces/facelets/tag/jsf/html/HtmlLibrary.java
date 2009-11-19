@@ -135,10 +135,9 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
         this.addHtmlComponent("panelGroup", "javax.faces.HtmlPanelGroup",
                 "javax.faces.Group");
 
-        this
-                .addHtmlComponent("selectBooleanCheckbox",
-                        "javax.faces.HtmlSelectBooleanCheckbox",
-                        "javax.faces.Checkbox");
+        this.addHtmlComponent("selectBooleanCheckbox",
+                              "javax.faces.HtmlSelectBooleanCheckbox",
+                              "javax.faces.Checkbox");
 
         this.addHtmlComponent("selectManyCheckbox",
                 "javax.faces.HtmlSelectManyCheckbox", "javax.faces.Checkbox");
