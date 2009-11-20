@@ -141,9 +141,16 @@
 
     <target name="update" description="Download project dependencies">
 
-        <mkdir dir="${dependency.base.dir}/downloads"/>
-        <mkdir dir="${dependency.jar.dir}"/>
-      
+        <if>
+            <not>
+                <isset property="build.source"/>
+            </not>
+            <then>
+                <mkdir dir="${dependency.base.dir}/downloads"/>
+                <mkdir dir="${dependency.jar.dir}"/>
+            </then>
+        </if>
+
         <!-- setup the proxy if necessary -->
         <if>
             <and>
@@ -158,9 +165,14 @@
 
         <!-- JUNIT -->
         <if>
+            <and>
             <not>
                 <available file="${junit.jar}" property="ignored"/>
             </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
             <then>
                 <get src="${java.net.maven2}/junit/junit/${junit.version}/junit-${junit.version}.jar"
                      dest="${junit.jar}"
@@ -174,9 +186,14 @@
         add a bunch more deps.  Maybe another day... :)
         -->
         <if>
-            <not>
-                <available file="${htmlunit.home}" property="ignored"/>
-            </not>
+            <and>
+                <not>
+                    <available file="${htmlunit.home}" property="ignored"/>
+                </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
             <then>
                 <get src="http://downloads.sourceforge.net/htmlunit/htmlunit-${htmlunit.version}.zip"
                      dest="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
@@ -189,9 +206,19 @@
 
         <!-- YUI Compressor -->
         <if>
-            <not>
-                <available file="${yuicompressor.home}" property="ignored"/>
-            </not>
+            <and>
+                <not>
+                    <available file="${yuicompressor.home}" property="ignored"/>
+                </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+                <!--
+                <not>
+                    <isset property="maven.repo.local"/>
+                </not>
+                -->
+            </and>
             <then>
                 <get src="http://www.julienlecomte.net/yuicompressor/yuicompressor-${yuicompressor.version}.zip"
                      dest="${dependency.base.dir}/downloads/yuicompressor-${yuicompressor.version}.zip"
@@ -207,9 +234,14 @@
         <!-- CACTUS -->
         <!-- Is this not in a maven repo somewhere? -->
         <if>
-            <not>
-                <available file="${cactus.home}" property="ignored"/>
-            </not>
+            <and>
+                <not>
+                    <available file="${cactus.home}" property="ignored"/>
+                </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
             <then>
                 <get src="http://archive.apache.org/dist/jakarta/cactus/binaries/jakarta-cactus-${cactus.version}.zip"
                      dest="${dependency.base.dir}/downloads/jakarta-cactus-${cactus.version}.zip"
@@ -222,9 +254,14 @@
 
         <!-- TAGLIBDOC -->
         <if>
+            <and>
             <not>
                 <available file="${tlddoc.jar}" property="ignored"/>
             </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
             <then>
                 <get src="${maven2.mirror}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
                      dest="${tlddoc.jar}"
@@ -235,9 +272,14 @@
 
         <!-- JSDOC -->
         <if>
-            <not>
-                <available file="${jsdoc.home}" property="ignored"/>
-            </not>
+            <and>
+                <not>
+                    <available file="${jsdoc.home}" property="ignored"/>
+                </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
             <then>
                 <get src="http://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-${jsdoc.version}.zip"
                      dest="${dependency.base.dir}/downloads/jsdoc_toolkit-${jsdoc.version}.zip"
@@ -251,9 +293,14 @@
 
         <!-- MAVEN REPOSITORY IMPORTER -->
         <if>
-            <not>
-                <available file="${maven.repository.importer.jar}" property="ignored"/>
-            </not>
+            <and>
+                <not>
+                    <available file="${maven.repository.importer.jar}" property="ignored"/>
+                </not>
+                <not>
+                    <isset property="build.source"/>
+                </not>
+            </and>
             <then>
                 <get src="${java.net.maven}/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
                      dest="${maven.repository.importer.jar}"
@@ -546,6 +593,12 @@
             description="Downloads containers necessary for building implementation specific additions"
             depends="detect.os">
 
+
+        <if>
+            <not>
+                <isset property="build.source"/>
+            </not>
+        <then>
         <if>
             <not>
                 <available file="${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar" property="ignored"/>
@@ -612,6 +665,8 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                         src="${dependency.base.dir}/jetty-${jetty.version}.zip"
                         dest="${dependency.base.dir}"/>
             </then>
+        </if>
+        </then>
         </if>
     </target>
 
