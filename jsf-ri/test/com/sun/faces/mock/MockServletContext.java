@@ -398,4 +398,8 @@ public class MockServletContext implements ServletContext {
     public ClassLoader getClassLoader() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    public void declareRoles(String... strings) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
