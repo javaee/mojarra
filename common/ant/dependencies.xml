@@ -385,6 +385,8 @@
         -->
         <!-- buid commons from source -->
 
+        <!--  comment out source build download of sun commons
+
         <echo>starting commons and build.source ${build.source}</echo>
         <if>
             <equals arg1="${build.source}" arg2="true"/>
@@ -458,6 +460,7 @@
 
             </then>
             <else>
+            -->
 
                 <!-- BEANUTILS -->
                 <!--
@@ -512,8 +515,10 @@
                     </then>
                 </if>
                 -->
+        <!-- comment out source build of sun commons
             </else>
         </if>
+        -->
     </target>
 
 
