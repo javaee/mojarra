@@ -315,7 +315,7 @@
             </filelist>
         </concat>
 
-        <java jar="${yuicompressor.jar}" fork="true"
+        <java jar="${yuicompressor.jar}" fork="true" failonerror="true"
             args="-o ${build.classes.dir}/META-INF/resources/javax.faces/jsf.js ${build.classes.dir}/META-INF/resources/javax.faces/jsf-uncompressed.js"/>
         <!--
             RELEASE_PENDING (rlubke,driscoll)
