@@ -53,6 +53,41 @@
       
     </xsd:documentation>
   </xsd:annotation>
+
+<xsd:annotation>
+        <xsd:documentation>
+
+            <![CDATA[
+
+            The XML Schema for the Tag Libraries in the JavaServer Faces
+            Standard Facelets View Declaration Language (Facelets VDL)
+            (Version 2.0).
+
+            JSF 2.0 Facelet Tag Libraries that wish to conform to this
+            schema must declare it in the following manner.
+
+            <facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibary_2_0.xsd"
+              version="2.0">
+
+            ...
+
+            </facelet-taglib>
+
+            The instance documents may indicate the published
+            version of the schema using xsi:schemaLocation attribute
+            for javaee namespace with the following location:
+
+            http://java.sun.com/xml/ns/javaee/web-facelettaglibary_2_0.xsd
+
+            ]]>
+
+        </xsd:documentation>
+    </xsd:annotation>
+
+
+
     <xsd:element name="facelet-taglib" type="javaee:facelet-taglibType">
         <xsd:unique name="facelet-taglib-tagname-uniqueness">
             <xsd:annotation>
