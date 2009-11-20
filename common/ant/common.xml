@@ -109,36 +109,6 @@
     <!-- Debug args (OVERRIDE IN BUILD.PROPERTIES) -->
     <property name="debug.jvm.args" value=""/>
 
-    <!-- BEGIN DEPDENCY MANAGEMENT -->
-
-    <artifact:remoteRepository id="jboss.repo" url="http://repository.jboss.com/maven2/" />
-    <artifact:remoteRepository id="j.n.repo" url="http://download.java.net/maven/2/" />
-
-    <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
-        <dependency groupId="javax.el" artifactId="el-api" version="1.0" scope="provided"/>
-        <dependency groupId="javax.servlet" artifactId="servlet-api" version="2.5" scope="provided" />
-
-        <dependency groupId="javax.servlet.jsp" artifactId="jsp-api" version="2.1" scope="provided" />
-        <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided" />
-        <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided" />
-        <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.4" scope="provided" />
-        <dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided" />
-        <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided" />
-        <dependency groupId="javax" artifactId="javaee-api" version="6.0-SNAPSHOT" scope="provided" />
-        <remoteRepository refid="jboss.repo" />
-        <remoteRepository refid="j.n.repo" />
-    </artifact:dependencies>
-
-    <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
-        <dependency groupId="commons-collections" artifactId="commons-collections" version="2.1" />
-        <dependency groupId="commons-digester" artifactId="commons-digester" version="1.5" />
-        <dependency groupId="commons-beanutils" artifactId="commons-beanutils" version="1.6.1" />
-        <dependency groupId="commons-logging" artifactId="commons-logging" version="1.0.4" />
-    </artifact:dependencies>
-
-    <!-- END DEPEDNENCY MANAGEMENT -->
-
-
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
         <pathelement location="${junit.jar}"/>
