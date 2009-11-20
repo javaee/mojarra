@@ -138,6 +138,14 @@
         <dependency groupId="commons-logging" artifactId="commons-logging" version="1.0.4"/>
     </artifact:dependencies>
 
+    <artifact:dependencies filesetId="servlet25test.filepath" pathId="servlet25test.path">
+        <dependency groupId="javax.el" artifactId="el-api" version="1.0" scope="provided"/>
+        <dependency groupId="javax.servlet" artifactId="servlet-api" version="2.5"/>
+        <dependency groupId="javax.servlet.jsp" artifactId="jsp-api" version="2.1" scope="provided"/>
+        <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided"/>
+        <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
+    </artifact:dependencies>
+
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
         <pathelement location="${junit.jar}"/>
@@ -168,6 +176,7 @@
 
     <path id="cactus.runtime.classpath">
         <path refid="junit.classpath"/>
+        <fileset refid="servlet25test.filepath" />
         <fileset dir="${cactus.home}/lib" includes="*.jar"  excludes="cactus-1.*.jar"/>
         <fileset dir="${jsf.build.home}/lib" includes="cactus-*.jar"/>
     </path>
