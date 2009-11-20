@@ -36,7 +36,7 @@
  holder.
 -->
 
-<project name="JSF Dependencies" basedir=".">
+<project name="JSF Dependencies" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
     <!-- 
         Current Dependencies
@@ -138,10 +138,32 @@
 
     <property name="external.dir" value="${dependency.base.dir}/source"/>
 
+    <property name="maven.tasks.install.version" value="2.0.10"/>
+    <property name="maven.tasks.home" value="${user.home}/.ant"/>
+    <property name="maven.tasks.jar.dir" value="${maven.tasks.home}/lib"/>
+    <property name="maven.tasks.jar.file" value="${maven.tasks.jar.dir}/maven-ant-tasks.jar"/>
+
+    <target name="download-maven-tasks" unless="offline">
+        <mkdir dir="${maven.tasks.jar.dir}"/>
+        <get src="http://repo2.maven.org/maven2/org/apache/maven/maven-ant-tasks/${maven.tasks.install.version}/maven-ant-tasks-${maven.tasks.install.version}.jar"
+             dest="${maven.tasks.jar.file}" usetimestamp="true"/>
+    </target>
+
+    <target name="init-maven-tasks" depends="download-maven-tasks">
+        <path id="maven.tasks.lib.path">
+            <fileset dir="${maven.tasks.jar.dir}" includes="maven-ant-tasks.jar"/>
+        </path>
+        <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+                   uri="antlib:org.apache.maven.artifact.ant"
+                   classpathref="maven.tasks.lib.path" />
+
+    </target>
+
     <target name="update" description="Download project dependencies">
+        <antcall target="init-maven-tasks" />
         <mkdir dir="${dependency.base.dir}/downloads"/>
         <mkdir dir="${dependency.jar.dir}"/>
-
+      
         <!-- setup the proxy if necessary -->
         <if>
             <and>
@@ -261,6 +283,7 @@
         </if>
 
         <!-- SERVLET API -->
+        <!--
         <if>
             <not>
                 <available file="${servlet.jar}" property="ignored"/>
@@ -272,8 +295,10 @@
 
             </then>
         </if>
+        -->
 
         <!-- JSP API -->
+        <!--
         <if>
             <not>
                 <available file="${jsp.jar}" property="ignored"/>
@@ -285,8 +310,9 @@
 
             </then>
         </if>
-
+        -->
         <!-- EL API and IMPL -->
+        <!--
         <if>
             <not>
                 <available file="${el-api.jar}" property="ignored"/>
@@ -309,8 +335,9 @@
 
             </then>
         </if>
-
+        -->
         <!-- JSTL API -->
+        <!--
         <if>
             <not>
                 <available file="${jstl.jar}" property="ignored"/>
@@ -322,8 +349,9 @@
 
             </then>
         </if>
-
+       -->
         <!-- ANNOTATION API -->
+        <!--
         <if>
             <not>
                 <available file="${annotation.jar}" property="ignored"/>
@@ -335,8 +363,9 @@
 
             </then>
         </if>
-
+        -->
         <!-- Portlet -->
+        <!--
         <if>
             <not>
                 <available file="${portlet.jar}" property="ignored"/>
@@ -347,8 +376,9 @@
                      usetimestamp="true"/>
             </then>
         </if>
-
+        -->
         <!-- Groovy -->
+        <!--
         <if>
             <not>
                 <available file="${groovy.jar}" property="ignored"/>
@@ -359,8 +389,9 @@
                      usetimestamp="true"/>
             </then>
         </if>
-
+        -->
         <!-- JSR 303 -->
+        <!--
         <if>
             <not>
                 <available file="${validation-api.jar}" property="ignored"/>
@@ -371,7 +402,7 @@
                      usetimestamp="true"/>
             </then>
         </if>
-
+        -->
         <!-- buid commons from source -->
 
         <echo>starting commons and build.source ${build.source}</echo>
@@ -449,6 +480,7 @@
             <else>
 
                 <!-- BEANUTILS -->
+                <!--
                 <if>
                     <not>
                         <available file="${commons-beanutils.jar}" property="ignored"/>
@@ -460,8 +492,9 @@
                              usetimestamp="true"/>
                     </then>
                 </if>
-
+                -->
                 <!-- DIGESTER -->
+                <!--
                 <if>
                     <not>
                         <available file="${commons-digester.jar}" property="ignored"/>
@@ -472,8 +505,9 @@
                              usetimestamp="true"/>
                     </then>
                 </if>
-
+                -->
                 <!-- COLLECTIONS -->
+                <!--
                 <if>
                     <not>
                         <available file="${commons-collections.jar}" property="ignored"/>
@@ -484,8 +518,9 @@
                              usetimestamp="true"/>
                     </then>
                 </if>
-
+                -->
                 <!-- LOGGING_API -->
+                <!--
                 <if>
                     <not>
                         <available file="${commons-logging.jar}" property="ignored"/>
@@ -496,6 +531,7 @@
                              usetimestamp="true"/>
                     </then>
                 </if>
+                -->
             </else>
         </if>
     </target>
