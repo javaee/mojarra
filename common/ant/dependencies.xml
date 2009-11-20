@@ -213,11 +213,6 @@
                 <not>
                     <isset property="build.source"/>
                 </not>
-                <!--
-                <not>
-                    <isset property="maven.repo.local"/>
-                </not>
-                -->
             </and>
             <then>
                 <get src="http://www.julienlecomte.net/yuicompressor/yuicompressor-${yuicompressor.version}.zip"
