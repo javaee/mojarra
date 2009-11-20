@@ -114,7 +114,7 @@
     <!-- Debug args (OVERRIDE IN BUILD.PROPERTIES) -->
     <property name="debug.jvm.args" value=""/>
 
-    <!--<artifact:remoteRepository id="jboss.repo" url="http://repository.jboss.com/maven2/"/>-->
+    <artifact:remoteRepository id="jboss.repo" url="http://repository.jboss.com/maven2/"/>
     <artifact:remoteRepository id="j.n.repo" url="http://download.java.net/maven/2/"/>
 
     <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
@@ -127,7 +127,7 @@
         <!--<dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>-->
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <dependency groupId="javax" artifactId="javaee-api" version="6.0-SNAPSHOT" scope="provided"/>
-        <!--<remoteRepository refid="jboss.repo"/>-->
+        <remoteRepository refid="jboss.repo"/>
         <remoteRepository refid="j.n.repo"/>
     </artifact:dependencies>
     
