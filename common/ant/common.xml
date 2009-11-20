@@ -148,6 +148,8 @@
     
     <artifact:remoteRepository id="jboss.repo" url="http://repository.jboss.com/maven2/"/>
     <artifact:remoteRepository id="j.n.repo" url="http://download.java.net/maven/2/"/>
+    <artifact:remoteRepository id="gf.repo" url="http://download.java.net/maven/glassfish/"/>
+
     <artifact:remoteRepository id="codehaus.repo" url="http://repository.codehaus.org/"/>
     <artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>
 
@@ -156,7 +158,8 @@
         <dependency groupId="javax.el" artifactId="el-api" version="1.0" scope="provided"/>
         <!--<dependency groupId="javax.servlet" artifactId="servlet-api" version="2.5" scope="provided"/>-->
         <dependency groupId="javax.servlet.jsp" artifactId="jsp-api" version="2.1" scope="provided"/>
-        <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided"/>
+        <!-- <dependency groupId="org.glassfish.web" artifactId="jstl-impl" version="1.2" scope="provided"/> -->
+        <!-- <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided"/> -->
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.4" scope="provided"/>
         <!--<dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>-->
@@ -165,6 +168,7 @@
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
         <remoteRepository refid="jboss.repo"/>
+        <remoteRepository refid="gf.repo"/>
         <remoteRepository refid="codehaus.repo"/>
     </artifact:dependencies>
     
@@ -181,9 +185,10 @@
         <dependency groupId="javax.el" artifactId="el-api" version="1.0" scope="provided"/>
         <dependency groupId="javax.servlet" artifactId="servlet-api" version="2.5"/>
         <dependency groupId="javax.servlet.jsp" artifactId="jsp-api" version="2.1" scope="provided"/>
-        <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided"/>
+        <dependency groupId="javax.servlet.jsp.jstl" artifactId="jstl-api" version="1.2" scope="provided"/>
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
+        <remoteRepository refid="gf.repo"/>
         <remoteRepository refid="ibiblio.repo"/>
     </artifact:dependencies>
 
