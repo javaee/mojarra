@@ -167,7 +167,7 @@
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
-        <dependency groupId="commons-collections" artifactId="commons-collections" version="2.1"/>
+        <dependency groupId="commons-collections" artifactId="commons-collections" version="2.1.1"/>
         <dependency groupId="commons-digester" artifactId="commons-digester" version="1.5"/>
         <dependency groupId="commons-beanutils" artifactId="commons-beanutils" version="1.6.1"/>
         <dependency groupId="commons-logging" artifactId="commons-logging" version="1.0.4"/>
