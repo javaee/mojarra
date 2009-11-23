@@ -46,6 +46,7 @@
     <property file="build.properties"/>
     <property environment="myenv"/>
     <import file="${jsf.build.home}/common/ant/source-build-setup.xml"/>
+    <import file="${jsf.build.home}/common/ant/maven.xml"/>
     <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
 
 
@@ -82,6 +83,13 @@
             </filelist>
         </subant>
     </target>
+
+    <target name="mvn.deploy.promoted.local" depends="main">
+        <mvn.deploy.promoted.local type="api"/>
+        <mvn.deploy.promoted.local type="impl"/>
+    </target>
+
+
 </project>
 
 
