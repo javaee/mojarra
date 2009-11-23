@@ -153,17 +153,20 @@
     <artifact:remoteRepository id="codehaus.repo" url="http://repository.codehaus.org/"/>
     <artifact:remoteRepository id="ibiblio.repo" url="http://mirrors.ibiblio.org/pub/mirrors/maven2/"/>
 
-    
     <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
         <dependency groupId="javax.el" artifactId="el-api" version="1.0" scope="provided"/>
+        <!--<dependency groupId="javax.servlet" artifactId="servlet-api" version="2.5" scope="provided"/>-->
         <dependency groupId="javax.servlet.jsp" artifactId="jsp-api" version="2.1" scope="provided"/>
+        <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.4" scope="provided"/>
+        <!--<dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>-->
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <dependency groupId="javax" artifactId="javaee-api" version="6.0-SNAPSHOT" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
         <remoteRepository refid="gf.repo"/>
         <remoteRepository refid="gf.nexus.repo"/>
+        <remoteRepository refid="jboss.repo"/>  <!-- needed for validation-api -->
     </artifact:dependencies>
     
     <artifact:dependencies filesetId="commons.filepath" pathId="commons.path">
