@@ -155,7 +155,7 @@
 
     <artifact:dependencies filesetId="compile.filepath" pathId="compile.path">
         <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.4" scope="provided"/>
-        <dependency groupId="javax.el" artifactId="el-api" version="1.0" scope="provided"/>
+        <dependency groupId="org.glassfish.web" artifactId="el-impl" version="2.2" scope="provided"/>
         <dependency groupId="javax" artifactId="javaee-api" version="6.0-SNAPSHOT" scope="provided"/>
         <localRepository refid="local.repository"/>
         <remoteRepository refid="j.n.repo"/>
