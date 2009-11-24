@@ -48,6 +48,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.SystemEvent;
+import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
@@ -69,12 +70,14 @@ public class EventHandler extends TagHandler {
     }
 
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
-        Class<? extends SystemEvent> eventClass = getEventClass(ctx);
-        if (eventClass != null) {
-            parent.subscribeToEvent(eventClass,
-                    new DeclarativeSystemEventListener(
-                        listener.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class }),
-                        listener.getMethodExpression(ctx, Object.class, new Class[] { })));
+        if (ComponentHandler.isNew(parent)) {
+            Class<? extends SystemEvent> eventClass = getEventClass(ctx);
+            if (eventClass != null) {
+                parent.subscribeToEvent(eventClass,
+                        new DeclarativeSystemEventListener(
+                            listener.getMethodExpression(ctx, Object.class, new Class[] { ComponentSystemEvent.class }),
+                            listener.getMethodExpression(ctx, Object.class, new Class[] { })));
+            }
         }
     }
 
