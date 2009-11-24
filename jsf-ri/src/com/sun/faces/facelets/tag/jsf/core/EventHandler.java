@@ -43,11 +43,13 @@ import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
@@ -55,6 +57,7 @@ import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagHandler;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * This is the TagHandler for the f:event tag.
@@ -117,5 +120,39 @@ class DeclarativeSystemEventListener implements ComponentSystemEventListener, Se
             // Attempt to call public void method(ComponentSystemEvent event)
             oneArgListener.invoke(elContext, new Object[]{event});
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        DeclarativeSystemEventListener that = (DeclarativeSystemEventListener) o;
+
+        if (noArgListener != null
+            ? !noArgListener.equals(that.noArgListener)
+            : that.noArgListener != null) {
+            return false;
+        }
+        if (oneArgListener != null
+            ? !oneArgListener.equals(that.oneArgListener)
+            : that.oneArgListener != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = oneArgListener != null ? oneArgListener.hashCode() : 0;
+        result = 31 * result + (noArgListener != null
+                                ? noArgListener.hashCode()
+                                : 0);
+        return result;
     }
 }

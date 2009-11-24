@@ -133,18 +133,36 @@ public final class TagValueExpression extends ValueExpression implements
         }
     }
 
-    @SuppressWarnings({"EqualsWhichDoesntCheckParameterClass"})
     @Override
-    public boolean equals(Object obj) {
-        return this.orig.equals(obj);
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        TagValueExpression that = (TagValueExpression) o;
+
+        if (attr != null ? !attr.equals(that.attr) : that.attr != null) {
+            return false;
+        }
+        if (orig != null ? !orig.equals(that.orig) : that.orig != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = orig != null ? orig.hashCode() : 0;
+        result = 31 * result + (attr != null ? attr.hashCode() : 0);
+        return result;
     }
 
     public String getExpressionString() {
         return this.orig.getExpressionString();
-    }
-
-    public int hashCode() {
-        return this.orig.hashCode();
     }
 
     public boolean isLiteralText() {
