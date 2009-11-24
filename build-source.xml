@@ -52,43 +52,33 @@
 
     <property name="LICENSEFILE"
               value="${basedir}/legal/jsf-cddl/LICENSE.txt"/>
-    
-    <macrodef name="call.modules">
-        <attribute name="target"/>
-        <sequential>
-            <subant target="@{target}" inheritAll="false">
-                <filelist dir="${api.dir}">
-                    <file name="build.xml"/>
-                </filelist>    
-                <filelist dir="${impl.dir}">
-                    <file name="build.xml"/>
-                </filelist>
-            </subant>
-        </sequential>
-    </macrodef>
 
     <target name="clean"
-            description="Clean build and distribution directories">       
-        <call.modules target="clean"/>
+            description="Clean build and distribution directories">
+        <echo>Cleaning up build area</echo>
+        <subant target="clean" inheritAll="false">
+             <property name="build.source" value="true"/>
+             <filelist dir="${api.dir}">
+                 <file name="build-source.xml"/>
+             </filelist>
+             <filelist dir="${impl.dir}">
+                 <file name="build-source.xml"/>
+             </filelist>
+         </subant>
     </target>
 
-    <target name="main" depends="clean" description="Build Mojarra, including some dependencies">
+    <target name="main" description="Build Mojarra, including some dependencies">
+        <echo>Building JSF from source</echo>
        <subant target="main" inheritAll="false">
             <property name="build.source" value="true"/>
             <filelist dir="${api.dir}">
-                <file name="build.xml"/>
+                <file name="build-source.xml"/>
             </filelist>
             <filelist dir="${impl.dir}">
-                <file name="build.xml"/>
+                <file name="build-source.xml"/>
             </filelist>
         </subant>
     </target>
-
-    <target name="mvn.deploy.promoted.local" depends="main">
-        <mvn.deploy.promoted.local type="api"/>
-        <mvn.deploy.promoted.local type="impl"/>
-    </target>
-
 
 </project>
 
