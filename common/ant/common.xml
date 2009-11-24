@@ -143,7 +143,6 @@
     <condition property="maven.repo.local" value="${maven.repo.local}" else="${user.home}/.m2/repository">
         <isset property="maven.repo.local"/>
     </condition>
-    <echo>maven.repo.local=${maven.repo.local}</echo>
     <artifact:localRepository id="local.repository" path="${maven.repo.local}"/>
     
     <artifact:remoteRepository id="jboss.repo" url="http://repository.jboss.com/maven2/"/>
