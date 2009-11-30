@@ -52,6 +52,7 @@ import org.w3c.dom.Document;
 import javax.faces.application.Application;
 import javax.faces.validator.Validator;
 import javax.faces.validator.FacesValidator;
+import javax.servlet.ServletContext;
 import javax.xml.xpath.XPathExpressionException;
 import java.text.MessageFormat;
 import java.util.Iterator;
@@ -90,9 +91,9 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         // process annotated Validators first as Validators configured
@@ -116,7 +117,7 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
         }
         processDefaultValidatorIds();
 
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

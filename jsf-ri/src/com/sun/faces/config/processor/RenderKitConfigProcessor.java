@@ -65,6 +65,7 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.text.MessageFormat;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 /**
  * <p>
@@ -130,9 +131,9 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         Map<String,Map<Document,List<Node>>> renderers =
@@ -192,7 +193,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 addClientBehaviorRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
             }
         }
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

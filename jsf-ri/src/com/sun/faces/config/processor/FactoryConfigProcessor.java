@@ -52,6 +52,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Document;
 
 import javax.faces.FactoryFinder;
+import javax.servlet.ServletContext;
 
 import java.text.MessageFormat;
 import java.util.logging.Level;
@@ -162,9 +163,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         // track how many FacesContextFactory instances are being added
@@ -219,7 +220,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         verifyFactoriesExist();
 
         // invoke the next config processor
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

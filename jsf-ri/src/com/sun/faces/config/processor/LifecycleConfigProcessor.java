@@ -51,6 +51,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.servlet.ServletContext;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -81,9 +82,9 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         LifecycleFactory factory = (LifecycleFactory)
@@ -112,7 +113,7 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                 }
             }            
         }
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

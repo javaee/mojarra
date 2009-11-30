@@ -69,6 +69,7 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
 import javax.el.ELResolver;
+import javax.servlet.ServletContext;
 
 import java.lang.reflect.Constructor;
 import java.lang.annotation.Annotation;
@@ -104,13 +105,13 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
     
 
     /**
-     * @see ConfigProcessor#invokeNext(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#invokeNext(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void invokeNext(DocumentInfo[] documentInfos)
+    public void invokeNext(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         if (nextProcessor != null) {
-            nextProcessor.process(documentInfos);
+            nextProcessor.process(sc, documentInfos);
         }
         
     }

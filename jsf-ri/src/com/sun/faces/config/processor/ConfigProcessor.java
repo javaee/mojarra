@@ -42,6 +42,8 @@ package com.sun.faces.config.processor;
 
 import com.sun.faces.config.DocumentInfo;
 
+import javax.servlet.ServletContext;
+
 /**
  * <p>
  *  This interface provides a CoR structure for procesing JSF configuration
@@ -53,7 +55,7 @@ public interface ConfigProcessor {
     /**
      * <p>
      *   Set the next <code>ConfigProcessor</code> to be invoked once
-     *   {@link ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])}
+     *   {@link ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])}
      *   has completed.
      * </p>
      *
@@ -67,10 +69,10 @@ public interface ConfigProcessor {
      *  Process the array of <code>Document</code>s.
      * </p>
      *
-     * @param documentInfos
-     * @throws Exception if an error occurs during processing
+     * @param sc the <code>ServletContext</code> for the application being configured
+     * @param documentInfos  @throws Exception if an error occurs during processing
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception;
 
 
@@ -79,10 +81,10 @@ public interface ConfigProcessor {
      *  Invoke the <code>ConfigProcess</code> specified by
      *  a call to {@link ConfigProcessor#setNext(ConfigProcessor)}, if any.
      * </p>
-     * @param documentInfos
-     * @throws Exception if an error occurs invoking the next processor
+     * @param sc the <code>ServletContext</code> for the application being configured
+     * @param documentInfos  @throws Exception if an error occurs invoking the next processor
      */
-    public void invokeNext(DocumentInfo[] documentInfos)
+    public void invokeNext(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception;
 
 }

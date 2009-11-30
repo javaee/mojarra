@@ -53,6 +53,7 @@ import org.w3c.dom.Document;
 import javax.faces.application.Application;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.servlet.ServletContext;
 
 import java.text.MessageFormat;
 import java.util.logging.Level;
@@ -97,9 +98,9 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         // process annotated converters first as converters configured
@@ -122,7 +123,7 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
                 addConverters(nodes, namespace);
             }
         }
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

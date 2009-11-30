@@ -65,6 +65,7 @@ import javax.faces.event.ActionListener;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.NamedEvent;
+import javax.servlet.ServletContext;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationResourceBundle;
@@ -243,9 +244,9 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         Application app = getApplication();
@@ -333,7 +334,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         processAnnotations(NamedEvent.class);
 
         // continue processing...
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

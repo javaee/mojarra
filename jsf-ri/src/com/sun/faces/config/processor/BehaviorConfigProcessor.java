@@ -51,6 +51,7 @@ import org.w3c.dom.Document;
 import javax.faces.application.Application;
 import javax.faces.component.behavior.Behavior;
 import javax.faces.component.behavior.FacesBehavior;
+import javax.servlet.ServletContext;
 import javax.xml.xpath.XPathExpressionException;
 import java.text.MessageFormat;
 import java.util.logging.Level;
@@ -86,9 +87,9 @@ public class BehaviorConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         // process annotated Behaviors first as Behaviors configured
@@ -111,7 +112,7 @@ public class BehaviorConfigProcessor extends AbstractConfigProcessor {
                 addBehaviors(behaviors, namespace);
             }
         }
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

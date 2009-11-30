@@ -46,7 +46,6 @@ import com.sun.faces.cactus.FileOutputResponseWriter;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.TextRenderer;
-import com.sun.faces.renderkit.html_basic.HtmlBasicInputRenderer;
 import com.sun.faces.renderkit.html_basic.HiddenRenderer;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.ConfigManager;
@@ -54,17 +53,9 @@ import com.sun.faces.config.DbfFactory;
 import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.config.processor.ConfigProcessor;
 import com.sun.faces.config.processor.FactoryConfigProcessor;
-import com.sun.faces.config.processor.LifecycleConfigProcessor;
 import com.sun.faces.config.processor.ApplicationConfigProcessor;
-import com.sun.faces.config.processor.ComponentConfigProcessor;
-import com.sun.faces.config.processor.ConverterConfigProcessor;
-import com.sun.faces.config.processor.ValidatorConfigProcessor;
-import com.sun.faces.config.processor.ManagedBeanConfigProcessor;
 import com.sun.faces.config.processor.RenderKitConfigProcessor;
-import com.sun.faces.config.processor.NavigationConfigProcessor;
-import com.sun.faces.config.processor.BehaviorConfigProcessor;
 import com.sun.faces.util.Util;
-import org.apache.cactus.ServletTestCase;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.ResponseStream;
@@ -73,8 +64,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
-import javax.faces.render.ClientBehaviorRenderer;
-import javax.faces.render.ResponseStateManager;
 import javax.faces.render.RenderKitWrapper;
 
 import javax.servlet.ServletResponse;
@@ -85,8 +74,6 @@ import javax.xml.parsers.DocumentBuilder;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.Writer;
-import java.io.OutputStream;
 import java.util.Iterator;
 import java.net.URL;
 
@@ -506,7 +493,7 @@ public class TestRenderKit extends ServletFacesTestCase {
             }
         }
 
-        configProcessors[0].process(new DocumentInfo[] {
+        configProcessors[0].process(servletContext, new DocumentInfo[] {
                                            new DocumentInfo(defaultDoc, runtime),
                                            new DocumentInfo(renderKitDoc, renderkit) });
 

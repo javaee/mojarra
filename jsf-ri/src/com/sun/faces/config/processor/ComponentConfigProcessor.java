@@ -51,6 +51,7 @@ import org.w3c.dom.Document;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.FacesComponent;
+import javax.servlet.ServletContext;
 import javax.xml.xpath.XPathExpressionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,10 +88,10 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])  @param sc
      * @param documentInfos
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         // process annotated components first as components configured
@@ -113,7 +114,7 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
                 addComponents(components, namespace);
             }
         }
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

@@ -63,6 +63,7 @@ import java.lang.reflect.Method;
 
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
+import javax.servlet.ServletContext;
 
 /**
  * <p>
@@ -232,9 +233,9 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         ApplicationAssociate associate =
@@ -263,7 +264,7 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
             }
         }
 
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

@@ -62,6 +62,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.bean.ManagedBean;
+import javax.servlet.ServletContext;
 
 /**
  * <p>
@@ -233,9 +234,9 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         // process annotated managed beans first as managed beans configured
@@ -243,7 +244,7 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
         processAnnotations(ManagedBean.class);
         
         BeanManager beanManager =
-              ApplicationAssociate.getCurrentInstance().getBeanManager();
+              ApplicationAssociate.getInstance(sc).getBeanManager();
         for (int i = 0; i < documentInfos.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -266,7 +267,7 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             }
         }
         beanManager.preProcessesBeans();
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 

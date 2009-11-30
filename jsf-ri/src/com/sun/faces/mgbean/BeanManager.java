@@ -294,8 +294,8 @@ public class BeanManager implements SystemEventListener {
             LOGGER.log(Level.WARNING,
                        "jsf.managed.bean.duplicate",
                        new Object[] { beanName,
-                                      managedBeans.get(beanName).getBeanClass().getName(),
-                                      builder.getBeanClass().getName() });
+                                      managedBeans.get(beanName).beanInfo.getClassName(),
+                                      builder.beanInfo.getClassName() });
         }
         managedBeans.put(beanName, builder);
 

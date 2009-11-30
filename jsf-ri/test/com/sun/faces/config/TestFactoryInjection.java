@@ -135,7 +135,8 @@ public class TestFactoryInjection extends ServletFacesTestCase {
 
         // invoke the FactoryConfigProcessor
         FactoryConfigProcessor fcp = new FactoryConfigProcessor(false);
-        fcp.process(new DocumentInfo[] { new DocumentInfo(d, null) });
+        fcp.process((ServletContext) getFacesContext().getExternalContext().getContext(),
+                    new DocumentInfo[] { new DocumentInfo(d, null) });
 
         // now get an Application instance from the Factory and ensure
         // no injection occured.
@@ -161,7 +162,8 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         // process the document.  This should cause the the InjectionApplicationFactory
         // to be put into play since there is more than one ApplicationFactory
         // being configured
-        fcp.process(new DocumentInfo[] { new DocumentInfo(d, null) });
+        fcp.process((ServletContext) getFacesContext().getExternalContext().getContext(),
+                    new DocumentInfo[] { new DocumentInfo(d, null) });
 
         // get the ApplicationFactory instance.  The top-level factory should
         // be the InjectionApplicationFactory.
@@ -230,7 +232,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
 
         // invoke the FactoryConfigProcessor
         FactoryConfigProcessor fcp = new FactoryConfigProcessor(false);
-        fcp.process(new DocumentInfo[]{new DocumentInfo(d, null)});
+        fcp.process(sc, new DocumentInfo[]{new DocumentInfo(d, null)});
 
         // now get an FacesContext instance from the Factory and ensure
         // no injection occured.
@@ -257,7 +259,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         // process the document.  This should cause the the InjectionFacesContextFactory
         // to be put into play since there is more than one FacesContextFactory
         // being configured
-        fcp.process(new DocumentInfo[]{new DocumentInfo(d, null)});
+        fcp.process(sc, new DocumentInfo[]{new DocumentInfo(d, null)});
 
         // get the FacesContextFactory instance.  The top-level factory should
         // be the InjectionFacesContextFactory.
@@ -321,7 +323,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
 
         // invoke the FactoryConfigProcessor
         FactoryConfigProcessor fcp = new FactoryConfigProcessor(false);
-        fcp.process(new DocumentInfo[]{new DocumentInfo(d, null)});
+        fcp.process(sc, new DocumentInfo[]{new DocumentInfo(d, null)});
 
         // now get an ExternalContext instance from the Factory and ensure
         // no injection occured.
@@ -347,7 +349,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         // process the document.  This should cause the the InjectionExternalFactory
         // to be put into play since there is more than one ExternalContextFactory
         // being configured
-        fcp.process(new DocumentInfo[]{new DocumentInfo(d, null)});
+        fcp.process(sc, new DocumentInfo[]{new DocumentInfo(d, null)});
 
         // get the ExternalContextFactory instance.  The top-level factory should
         // be the InjectionExternalContextFactory.

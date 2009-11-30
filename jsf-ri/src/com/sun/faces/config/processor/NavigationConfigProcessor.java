@@ -50,6 +50,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.servlet.ServletContext;
 import javax.xml.xpath.XPathExpressionException;
 import java.util.*;
 import java.util.logging.Level;
@@ -140,9 +141,9 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
 
 
     /**
-     * @see ConfigProcessor#process(com.sun.faces.config.DocumentInfo[])
+     * @see ConfigProcessor#process(javax.servlet.ServletContext,com.sun.faces.config.DocumentInfo[])
      */
-    public void process(DocumentInfo[] documentInfos)
+    public void process(ServletContext sc, DocumentInfo[] documentInfos)
     throws Exception {
 
         NavigationHandler handler = getApplication().getNavigationHandler();
@@ -159,11 +160,11 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
             NodeList navigationRules = document.getDocumentElement()
                     .getElementsByTagNameNS(namespace, NAVIGATION_RULE);
             if (navigationRules != null && navigationRules.getLength() > 0) {
-                addNavigationRules(navigationRules, handler);
+                addNavigationRules(navigationRules, handler, sc);
             }
 
         }
-        invokeNext(documentInfos);
+        invokeNext(sc, documentInfos);
 
     }
 
@@ -172,7 +173,8 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
 
 
     private void addNavigationRules(NodeList navigationRules,
-                                    NavigationHandler navHandler)
+                                    NavigationHandler navHandler,
+                                    ServletContext sc)
     throws XPathExpressionException {
 
             for (int i = 0, size = navigationRules.getLength(); i < size; i++) {
@@ -216,7 +218,8 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                     }
                     addNavigationCasesForRule(fromViewId,
                                               navigationCases,
-                                              navHandler);
+                                              navHandler,
+                                              sc);
                 }
             }
     }
@@ -224,11 +227,12 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
 
     private void addNavigationCasesForRule(String fromViewId,
                                            List<Node> navigationCases,
-                                           NavigationHandler navHandler) {
+                                           NavigationHandler navHandler,
+                                           ServletContext sc) {
 
         if (navigationCases != null && !navigationCases.isEmpty()) {
             ApplicationAssociate associate =
-                 ApplicationAssociate.getCurrentInstance();
+                 ApplicationAssociate.getInstance(sc);
 
             for (Node navigationCase : navigationCases) {
                 if (navigationCase.getNodeType() != Node.ELEMENT_NODE) {

@@ -332,10 +332,10 @@ public class ConfigManager {
                 }
 
                 // process the ordered documents
-                FACES_CONFIG_PROCESSOR_CHAIN.process(facesDocuments);
+                FACES_CONFIG_PROCESSOR_CHAIN.process(sc, facesDocuments);
                 if (!isFaceletsDisabled) {
                     FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN.process(
-                          getConfigDocuments(sc,
+                          sc, getConfigDocuments(sc,
                                              getFaceletConfigResourceProviders(),
                                              executor,
                                              validating));
