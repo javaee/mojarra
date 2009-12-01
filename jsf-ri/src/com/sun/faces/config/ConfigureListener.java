@@ -289,6 +289,9 @@ public class ConfigureListener implements ServletRequestListener,
             webAppListener.contextDestroyed(sce);
             webAppListener = null;
         }
+        if (webResourcePool != null) {
+            webResourcePool.shutdownNow();
+        }
         ServletContext context = sce.getServletContext();
         if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
             return;
@@ -314,9 +317,6 @@ public class ConfigureListener implements ServletRequestListener,
                     PreDestroyApplicationEvent.class,
                     Application.class,
                     app);
-            if (webResourcePool != null) {
-                webResourcePool.shutdownNow();
-            }
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
