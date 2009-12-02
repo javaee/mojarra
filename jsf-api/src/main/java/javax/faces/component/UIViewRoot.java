@@ -966,7 +966,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         initState();
         notifyBefore(context, PhaseId.RENDER_RESPONSE);
 
-        if (!skipPhase) {
+        if (!context.getResponseComplete()) {
             super.encodeBegin(context);
         }
     }
