@@ -165,12 +165,7 @@ public class UIOutput extends UIComponentBase
 
     public Object getValue() {
 
-        FacesContext ctx = getFacesContext();
-        if (ctx != null && ctx.isValidationFailed()) {
-            return getStateHelper().get(PropertyKeys.value);
-        } else {
-            return getStateHelper().eval(PropertyKeys.value);
-        }
+        return getStateHelper().eval(PropertyKeys.value);
 
     }
 
