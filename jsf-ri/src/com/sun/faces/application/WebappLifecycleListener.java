@@ -43,9 +43,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.faces.component.UIComponent;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesEvent;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextEvent;
@@ -62,12 +60,8 @@ import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.FacesLogger;
 import java.util.Map;
-import com.sun.faces.application.resource.ResourceCache;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 import javax.faces.event.SystemEvent;
-import javax.faces.event.PostConstructViewMapEvent;
-import javax.faces.event.PostConstructViewMapEvent;
 import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ViewMapListener;
 
@@ -357,7 +351,7 @@ public class WebappLifecycleListener implements ViewMapListener {
 
 
     public List<HttpSession> getActiveSessions() {
-        return activeSessions;
+        return new ArrayList<HttpSession>(activeSessions);
     }
 
 
