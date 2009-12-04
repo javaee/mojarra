@@ -63,8 +63,6 @@ public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
 
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
 
-    protected boolean responseBufferSizeSet;
-    protected int responseBufferSize;
     protected ApplicationAssociate associate;
     protected WebConfiguration webConfig;
 
@@ -77,16 +75,6 @@ public abstract class ViewHandlingStrategy extends ViewDeclarationLanguage {
         FacesContext ctx = FacesContext.getCurrentInstance();
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         associate = ApplicationAssociate.getInstance(ctx.getExternalContext());
-         try {
-            responseBufferSizeSet = webConfig
-                  .isSet(WebConfiguration.WebContextInitParameter.ResponseBufferSize);
-            responseBufferSize = Integer
-                  .parseInt(webConfig.getOptionValue(
-                        WebConfiguration.WebContextInitParameter.ResponseBufferSize));
-        } catch (NumberFormatException nfe) {
-            responseBufferSize = Integer
-                  .parseInt(WebConfiguration.WebContextInitParameter.ResponseBufferSize.getDefaultValue());
-        }
 
     }
 

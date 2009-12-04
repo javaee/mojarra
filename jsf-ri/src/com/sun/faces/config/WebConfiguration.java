@@ -732,9 +732,7 @@ public class WebConfiguration {
         ),
         FaceletsBufferSize(
               "javax.faces.FACELETS_BUFFER_SIZE",
-              "1024",
-              true,
-              ResponseBufferSize
+              "1024"
         ),
         FaceletsBufferSizeDeprecated(
               "facelets.BUFFER_SIZE",

@@ -41,6 +41,8 @@ import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResponseBufferSize;
+
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
@@ -137,6 +139,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     private boolean partialStateSaving;
     private Set<String> fullStateViewIds;
     private boolean groovyAvailable;
+    private int responseBufferSize;
+    private boolean responseBufferSizeSet;
 
     private Cache<Resource, BeanInfo> metadataCache;
 
@@ -758,8 +762,13 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
         });
 
-
-
+        try {
+            responseBufferSizeSet = webConfig.isSet(ResponseBufferSize);
+            responseBufferSize =
+                  Integer.parseInt(webConfig.getOptionValue(ResponseBufferSize));
+        } catch (NumberFormatException nfe) {
+            responseBufferSize = Integer.parseInt(ResponseBufferSize.getDefaultValue());
+        }
 
 
         if (LOGGER.isLoggable(Level.FINE)) {

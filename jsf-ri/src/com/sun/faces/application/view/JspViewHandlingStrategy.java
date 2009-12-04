@@ -58,6 +58,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
 import com.sun.faces.application.ViewHandlerResponseWrapper;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.RequestStateManager;
@@ -65,12 +66,32 @@ import com.sun.faces.util.Util;
 
 import javax.faces.view.StateManagementStrategy;
 
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResponseBufferSize;
+
 /**
  * This {@link ViewHandlingStrategy} handles JSP-based views.
  */
 public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+    private int responseBufferSize;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public JspViewHandlingStrategy() {
+
+        try {
+            responseBufferSize =
+                  Integer.parseInt(webConfig.getOptionValue(ResponseBufferSize));
+        } catch (NumberFormatException nfe) {
+            responseBufferSize = Integer
+                  .parseInt(ResponseBufferSize.getDefaultValue());
+        }
+
+    }
+
 
 
     // ------------------------------------ Methods from ViewDeclarationLanguage
