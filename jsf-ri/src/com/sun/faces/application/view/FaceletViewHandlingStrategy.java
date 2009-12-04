@@ -41,7 +41,7 @@ import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResponseBufferSize;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsBufferSize;
 
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
@@ -763,11 +763,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         });
 
         try {
-            responseBufferSizeSet = webConfig.isSet(ResponseBufferSize);
+            responseBufferSizeSet = webConfig.isSet(FaceletsBufferSize);
             responseBufferSize =
-                  Integer.parseInt(webConfig.getOptionValue(ResponseBufferSize));
+                  Integer.parseInt(webConfig.getOptionValue(FaceletsBufferSize));
         } catch (NumberFormatException nfe) {
-            responseBufferSize = Integer.parseInt(ResponseBufferSize.getDefaultValue());
+            responseBufferSize = Integer.parseInt(FaceletsBufferSize.getDefaultValue());
         }
 
 
