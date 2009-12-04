@@ -41,7 +41,6 @@ import com.sun.faces.renderkit.Attribute;
 import com.sun.faces.renderkit.AttributeManager;
 
 import java.io.IOException;
-import java.util.ListIterator;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -74,6 +73,7 @@ public class HeadRenderer extends Renderer {
                                                 writer,
                                                 component,
                                                 HEAD_ATTRIBUTES);
+        encodeHeadResources(context);
     }
 
     @Override
@@ -86,13 +86,21 @@ public class HeadRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
         ResponseWriter writer = context.getResponseWriter();
+        writer.endElement("head");
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void encodeHeadResources(FacesContext context)
+    throws IOException {
+
         UIViewRoot viewRoot = context.getViewRoot();
-        ListIterator iter = (viewRoot.getComponentResources(context, "head")).listIterator();
-        while (iter.hasNext()) {
-            UIComponent resource = (UIComponent)iter.next();
+        for (UIComponent resource : viewRoot.getComponentResources(context, "head")) {
             resource.encodeAll(context);
         }
-        writer.endElement("head");
+
     }
     
 }
