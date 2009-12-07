@@ -3239,7 +3239,7 @@ the literal string "<code>head</code>" as the last argument.</p>
 
 <p>Render the starting <code>&lt;head&gt;</code> element tag.  Any attributes declared on the element must be passed through
 unmodified to the rendered output.  
-Just before rendering the
+At some point before rendering the
       closing <code>&lt;/head&gt;</code> element tag, render any resources that have been targeted
       for this "head" element:
       <ul>
@@ -3254,7 +3254,18 @@ Just before rendering the
 unmodified to the rendered output.</p>
 
       </ul>
-      Render the ending <code>&lt;/head&gt;</code> element tag.</p>
+
+      <p>Note that due to the cascading nature of CSS files, the order
+      in which these files have been added to the view must be preserved
+      when rendering the references to the files within the
+      <code>&lt;head&gt;</code> element.  Also, the end result of the
+      rendered <code>&lt;head&gt;</code> section must be that any CSS
+      files referenced due to previous calls to
+      <code>addComponentResource()</code> do not adversely interfere
+      with any CSS files manually placed in this section by the page
+      author.</p>
+
+      <p>Render the ending <code>&lt;/head&gt;</code> element tag.</p>
 
 </div>]]></description>
             <component-family>javax.faces.Output</component-family>
