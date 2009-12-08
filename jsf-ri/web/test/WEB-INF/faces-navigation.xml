@@ -186,6 +186,16 @@
             <to-view-id>/page2.xhtml</to-view-id>
             <redirect />
         </navigation-case>
+        <navigation-case>
+            <from-outcome>redirectOutcome3</from-outcome>
+            <to-view-id>/page2.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>param</name>
+                    <value>#{navbean.increment}</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
     </navigation-rule>
 
 
@@ -296,6 +306,12 @@
       <value>Hello</value>
     </managed-property>
 
+  </managed-bean>
+
+    <managed-bean>
+     <managed-bean-name>navbean</managed-bean-name>
+      <managed-bean-class>com.sun.faces.application.NavBean</managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
 

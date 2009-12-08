@@ -400,7 +400,15 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         assertFalse(c5.isRedirect());
         assertFalse(c5.isIncludeViewParams());
 
-
+        // ensure redirect parameter el evaluation is performed more than once
+        NavigationCase ncase = cnh.getNavigationCase(getFacesContext(),
+                                                     null,
+                                                     "redirectOutcome3");
+        String url = getFacesContext().getExternalContext().encodeRedirectURL("/path.xhtml", ncase.getParameters());
+        System.out.println("URL: " + url);
+        assertTrue(url.contains("param=1"));
+        url = getFacesContext().getExternalContext().encodeRedirectURL("/path.xhtml", ncase.getParameters());
+        assertTrue(url.contains("param=2"));
         
     }
 

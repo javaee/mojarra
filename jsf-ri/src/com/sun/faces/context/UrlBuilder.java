@@ -122,8 +122,8 @@ class UrlBuilder {
                     throw new IllegalArgumentException("Parameter name cannot be empty");
                 }
                 List<String> values = entry.getValue();
-                evaluateExpressions(values);
-                addValuesToParameter(entry.getKey().trim(), values, true);
+                List<String> retValues = evaluateExpressions(values);
+                addValuesToParameter(entry.getKey().trim(), retValues, true);
             }
         }
 
@@ -306,21 +306,24 @@ class UrlBuilder {
     // --------------------------------------------------------- Private Methods
 
 
-    private void evaluateExpressions(List<String> values) {
+    private List<String> evaluateExpressions(List<String> values) {
         if (!values.isEmpty()) {
-            for (int i = 0, len = values.size(); i < len; i++) {
-                String value = values.get(i);
-                if (value != null) {
-                    value = value.trim();
+            List<String> ret = new ArrayList<String>(values.size());
+            for (String val : values) {
+                if (val != null) {
+                    String value = val.trim();
                     if (ELUtils.isExpression(value)) {
                         value = app.evaluateExpressionGet(ctx,
                                                           value,
                                                           String.class);
                     }
-                    values.set(i, value);
+                    ret.add(value);
                 }
             }
+            
+            return ret;
         }
+        return values;
     }
 
 
