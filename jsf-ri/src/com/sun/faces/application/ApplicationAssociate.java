@@ -313,6 +313,16 @@ public class ApplicationAssociate {
         applicationMap.remove(ASSOCIATE_KEY);
     }
 
+    public static void clearInstance(ServletContext sc) {
+        ApplicationAssociate me = (ApplicationAssociate) sc.getAttribute(ASSOCIATE_KEY);
+        if (null != me) {
+            if (null != me.resourceBundles) {
+                me.resourceBundles.clear();
+            }
+        }
+        sc.removeAttribute(ASSOCIATE_KEY);    
+    }
+
 
     public BeanManager getBeanManager() {
         return beanManager;

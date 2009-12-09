@@ -286,29 +286,31 @@ public class ConfigureListener implements ServletRequestListener,
 
     public void contextDestroyed(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
-        InitFacesContext initContext = new InitFacesContext(context);
-
-        if (webAppListener != null) {
-            webAppListener.contextDestroyed(sce);
-            webAppListener = null;
-        }
-        if (webResourcePool != null) {
-            webResourcePool.shutdownNow();
-        }
-        if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
-            return;
-        }
-        GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
-        if (helper != null) {
-            helper.setClassLoader();
-        }
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE,
-                    "ConfigureListener.contextDestroyed({0})",
-                    context.getServletContextName());
-        }
-
+        InitFacesContext initContext = null;
         try {
+            initContext = new InitFacesContext(context);
+
+            if (webAppListener != null) {
+                webAppListener.contextDestroyed(sce);
+                webAppListener = null;
+            }
+            if (webResourcePool != null) {
+                webResourcePool.shutdownNow();
+            }
+            if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
+                return;
+            }
+            GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
+            if (helper != null) {
+                helper.setClassLoader();
+            }
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                           "ConfigureListener.contextDestroyed({0})",
+                           context.getServletContextName());
+            }
+
+
             ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
             elctx.putContext(FacesContext.class, initContext);
             initContext.setELContext(elctx);
@@ -324,12 +326,13 @@ public class ConfigureListener implements ServletRequestListener,
                         e);
             }
         } finally {
-            ApplicationAssociate
-                    .clearInstance(initContext.getExternalContext());
+            ApplicationAssociate.clearInstance(context);
             ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destory(context);
-            initContext.release();
+            if (initContext != null) {
+                initContext.release();
+            }
             ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
             WebConfiguration.clear(context);
         }
