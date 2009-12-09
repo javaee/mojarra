@@ -37,10 +37,14 @@
 package jsf2.demo.scrum.web.controller;
 
 import java.io.Serializable;
+import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -53,10 +57,25 @@ public class SkinManager extends AbstractManager implements Serializable {
     private String selectedSkin;
     @ManagedProperty(value="#{skinValuesManager}")
     private SkinValuesManager skinValuesManager;
+    private static final long serialVersionUID = 2936693632616580209L;
 
     @PostConstruct
     public void construct() {
         selectedSkin = skinValuesManager.getDefaultSkinCss();
+    }
+
+    @PreDestroy
+    public void destroy() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            ExternalContext extContext = context.getExternalContext();
+            if (null != extContext) {
+                Map sessionMap = extContext.getSessionMap();
+                if (null != sessionMap) {
+                    sessionMap.remove("skinManager");
+                }
+            }
+        }
     }
 
     public String getSelectedSkin() {

@@ -52,11 +52,11 @@ public class SprintNameUniquenessConstraintValidator implements ConstraintValida
         boolean result = true;
         String message = sprintManager.
                 checkUniqueSprintNameApplicationValidatorMethod(value);
-        if (null != message) {
+        if (message != null) {
             result = false;
-	    ConstraintValidatorContext.ConstraintViolationBuilder builder =
-		ctx.buildConstraintViolationWithTemplate(message);
-	    builder.addConstraintViolation();
+        ConstraintValidatorContext.ConstraintViolationBuilder builder =
+        ctx.buildConstraintViolationWithTemplate(message);
+        builder.addConstraintViolation();
         }
 
         

@@ -144,7 +144,7 @@ public class Story extends AbstractEntity implements Serializable {
     }
 
     public List<Task> getTasks() {
-        return (tasks != null) ? Collections.unmodifiableList(tasks) : Collections.EMPTY_LIST;
+        return (tasks != null) ? Collections.unmodifiableList(tasks) : Collections.<Task>emptyList();
     }
 
     public List<Task> getDoneTasks() {
@@ -184,11 +184,7 @@ public class Story extends AbstractEntity implements Serializable {
     }
 
     public boolean removeTask(Task task) {
-        if (tasks != null && !tasks.isEmpty()) {
-            return tasks.remove(task);
-        } else {
-            return false;
-        }
+        return (tasks != null && !tasks.isEmpty() && tasks.remove(task));
     }
 
     @Override
@@ -203,10 +199,8 @@ public class Story extends AbstractEntity implements Serializable {
         if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
             return false;
         }
-        if (this.sprint != other.sprint && (this.sprint == null || !this.sprint.equals(other.sprint))) {
-            return false;
-        }
-        return true;
+        return !(this.sprint != other.sprint
+                 && (this.sprint == null || !this.sprint.equals(other.sprint)));
     }
 
     @Override

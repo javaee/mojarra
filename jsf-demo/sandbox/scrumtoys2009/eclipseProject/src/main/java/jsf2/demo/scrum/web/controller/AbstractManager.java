@@ -46,7 +46,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.UserTransaction;

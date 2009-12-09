@@ -49,7 +49,8 @@ import javax.faces.event.ScopeContext;
 public class TaskScope extends ConcurrentHashMap<String,Object> {
 
     private Application application;
-    
+    private static final long serialVersionUID = -7242422398841995164L;
+
 
     public TaskScope(Application application) {
         this.application = application;   

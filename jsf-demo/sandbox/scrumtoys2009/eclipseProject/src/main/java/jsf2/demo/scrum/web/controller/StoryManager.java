@@ -56,8 +56,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.ExternalContext;
 
 
 @ManagedBean(name = "storyManager")
@@ -78,13 +80,24 @@ public class StoryManager extends AbstractManager implements Serializable {
 
     @PreDestroy
     public void destroy() {
-	sprintManager = null;
-	currentStory = null;
-	stories = null;
-	if (null != storyList) {
-	    storyList.clear();
-	    storyList = null;
-	}
+        sprintManager = null;
+        currentStory = null;
+        stories = null;
+        if (null != storyList) {
+            storyList.clear();
+            storyList = null;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            ExternalContext extContext = context.getExternalContext();
+            if (null != extContext) {
+                Map sessionMap = extContext.getSessionMap();
+                if (null != sessionMap) {
+                    sessionMap.remove("storyManager");
+                }
+            }
+        }
+
     }
 
     public void init() {
@@ -215,7 +228,7 @@ public class StoryManager extends AbstractManager implements Serializable {
 
     public DataModel<Story> getStories() {
         if (sprintManager.getCurrentSprint() != null) {
-            this.stories = new ListDataModel(sprintManager.getCurrentSprint().getStories());
+            this.stories = new ListDataModel<Story>(sprintManager.getCurrentSprint().getStories());
             return stories;
         } else {
             return new ListDataModel<Story>();

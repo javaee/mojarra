@@ -47,13 +47,13 @@
         <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable" id="pgFormTask">
             <h:outputLabel value="#{i18n['task.form.label.name']}:" for="itTaskName" id="olName"/>
             <h:inputText id="itTaskName" value="#{taskManager.currentTask.name}" required="true"
-                         requiredMessage="#{i18n['task.form.label.name.required']}" maxLenght="30" size="30"
+                         requiredMessage="#{i18n['task.form.label.name.required']}" maxlength="30" size="30"
                          validator="#{taskManager.checkUniqueTaskName}" />
             <h:message for="itTaskName" styleClass="errorMessage" id="emName"/>
 
             <h:outputLabel value="#{i18n['task.form.label.startDate']}:" for="itTaskName"/>
             <h:panelGroup>
-                <h:inputText id="itStartedDate" value="#{taskManager.currentTask.startDate}"  maxLenght="10" size="10" >
+                <h:inputText id="itStartedDate" value="#{taskManager.currentTask.startDate}"  maxlength="10" size="10" >
                     <f:convertDateTime pattern="#{i18n['task.form.label.startDate.pattern']}" />
                 </h:inputText>
                 <h:outputText value="(#{i18n['task.form.label.startDate.pattern']})" styleClass="inputPattern" />
@@ -62,7 +62,7 @@
 
             <h:outputLabel value="#{i18n['task.form.label.endDate']}:" for="itTaskName"/>
             <h:panelGroup>
-                <h:inputText id="itEndDate" value="#{taskManager.currentTask.endDate}" maxLenght="10" size="10" >
+                <h:inputText id="itEndDate" value="#{taskManager.currentTask.endDate}" maxlength="10" size="10" >
                     <f:convertDateTime pattern="#{i18n['task.form.label.endDate.pattern']}" />
                 </h:inputText>
                 <h:outputText value="(#{i18n['task.form.label.endDate.pattern']})" styleClass="inputPattern" />

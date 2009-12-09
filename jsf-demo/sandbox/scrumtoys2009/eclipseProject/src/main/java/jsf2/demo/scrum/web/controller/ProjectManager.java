@@ -54,8 +54,10 @@ import javax.persistence.Query;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.ExternalContext;
 
 /**
  * @author Dr. Spock (spock at dev.java.net)
@@ -79,22 +81,33 @@ public class ProjectManager extends AbstractManager implements Serializable {
 
     @PreDestroy
     public void destroy() {
-	projects = null;
-	if (null != projectItems) {
-	    projectItems.clear();
-	    projectItems = null;
-	}
-	if (null != projectList) {
-	    projectList.clear();
-	    projectList = null;
-	}
-	currentProject = null;
+        projects = null;
+        if (projectItems != null) {
+            projectItems.clear();
+            projectItems = null;
+        }
+        if (projectList != null) {
+            projectList.clear();
+            projectList = null;
+        }
+        currentProject = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            ExternalContext extContext = context.getExternalContext();
+            if (null != extContext) {
+                Map sessionMap = extContext.getSessionMap();
+                if (null != sessionMap) {
+                    sessionMap.remove("projectManager");
+                }
+            }
+        }
     }
 
     public void init() {
         try {
             setProjectList(doInTransaction(new PersistenceAction<List<Project>>() {
 
+                @SuppressWarnings({"unchecked"}) 
                 public List<Project> execute(EntityManager em) {
                     Query query = em.createNamedQuery("project.getAll");
                     return (List<Project>) query.getResultList();

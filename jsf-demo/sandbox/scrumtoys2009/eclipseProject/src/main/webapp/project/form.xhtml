@@ -47,7 +47,7 @@
         <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage">
             <h:outputLabel value="#{i18n['project.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{projectManager.currentProject.name}" required="true" 
-                requiredMessage="#{i18n['project.form.label.name.required']}" maxLenght="40" size="40"
+                requiredMessage="#{i18n['project.form.label.name.required']}" size="40"
                 validator="#{projectManager.checkUniqueProjectName}" />
             <h:message for="itName" styleClass="errorMessage" />
 

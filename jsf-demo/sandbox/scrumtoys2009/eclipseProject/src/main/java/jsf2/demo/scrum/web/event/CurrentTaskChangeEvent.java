@@ -43,6 +43,7 @@ import javax.faces.event.SystemEvent;
  * @author Dr. Spock (spock at dev.java.net)
  */
 public class CurrentTaskChangeEvent extends SystemEvent {
+    private static final long serialVersionUID = 5152005639803302363L;
 
     public CurrentTaskChangeEvent(Object source) {
         super(source);

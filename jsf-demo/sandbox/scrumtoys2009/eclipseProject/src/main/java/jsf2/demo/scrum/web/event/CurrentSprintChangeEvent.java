@@ -43,6 +43,7 @@ import javax.faces.event.SystemEvent;
  * @author Dr. Spock (spock at dev.java.net)
  */
 public class CurrentSprintChangeEvent extends SystemEvent {
+    private static final long serialVersionUID = -4000646623469835514L;
 
     public CurrentSprintChangeEvent(Object source) {
         super(source);

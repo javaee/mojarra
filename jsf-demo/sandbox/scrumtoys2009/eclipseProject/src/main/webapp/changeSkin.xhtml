@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="template.xhtml">
+
+        <ui:define name="pageTitle">
+            <h:outputText value="#{i18n['menuitem.label.sprints']}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+            <h:form id="changeSkin">
+                
+                <h:panelGrid styleClass="whiteboard" headerClass="tableHeader" footerClass="tableFooter">
+
+                    <f:facet name="header">
+                        <h:outputText value="Select application skin color"></h:outputText>
+                    </f:facet>
+                    <h:panelGrid columns="4" styleClass="tableBody" columnClasses="postItYellow, postItOrange, postItRed, postItBlue">
+                        <h:commandLink action="#{skinManager.yellowSkin}"><h:outputText value="Yellow"></h:outputText></h:commandLink>
+                        <h:commandLink action="#{skinManager.orangeSkin}"><h:outputText value="Orange"></h:outputText></h:commandLink>
+                        <h:commandLink action="#{skinManager.redSkin}"><h:outputText value="Red"></h:outputText></h:commandLink>
+                        <h:commandLink action="#{skinManager.blueSkin}"><h:outputText value="Blue"></h:outputText></h:commandLink>
+
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <h:outputText value=" "></h:outputText>
+                    </f:facet>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

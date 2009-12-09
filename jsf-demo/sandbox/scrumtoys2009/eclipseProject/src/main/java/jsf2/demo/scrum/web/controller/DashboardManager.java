@@ -49,6 +49,9 @@ import javax.faces.model.ListDataModel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 
 
 @ManagedBean(name = "dashboardManager")
@@ -71,9 +74,19 @@ public class DashboardManager extends AbstractManager implements Serializable {
 
     @PreDestroy
     public void destroy() {
-	toDoTasks = null;
-	workingTasks = null;
-	doneTasks = null;
+        toDoTasks = null;
+        workingTasks = null;
+        doneTasks = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            UIViewRoot root = context.getViewRoot();
+            if (null != root) {
+                Map viewMap = root.getViewMap();
+                if (null != viewMap) {
+                    viewMap.remove("dashboardManager");
+                }
+            }
+        }
     }
 
     public Sprint getSprint() {
@@ -93,39 +106,39 @@ public class DashboardManager extends AbstractManager implements Serializable {
         storyManager.setStories(stories);
     }
 
-    public ListDataModel getToDoTasks() {
-        List toDoTasksList = new ArrayList();
+    public ListDataModel<Task> getToDoTasks() {
+        List<Task> toDoTasksList = new ArrayList<Task>();
         if (sprintManager.getCurrentSprint() == null) {
-            return new ListDataModel(toDoTasksList);
+            return new ListDataModel<Task>(toDoTasksList);
         }
         for (Story story : storyManager.getStoryList()) {
             toDoTasksList.addAll(story.getTodoTasks());
         }
-        toDoTasks = new ListDataModel(toDoTasksList);
+        toDoTasks = new ListDataModel<Task>(toDoTasksList);
         return toDoTasks;
     }
 
-    public ListDataModel getWorkingTasks() {
-        List workingTasksList = new ArrayList();
+    public ListDataModel<Task> getWorkingTasks() {
+        List<Task> workingTasksList = new ArrayList<Task>();
         if (sprintManager.getCurrentSprint() == null) {
-            return new ListDataModel(workingTasksList);
+            return new ListDataModel<Task>(workingTasksList);
         }
         for (Story story : storyManager.getStoryList()) {
             workingTasksList.addAll(story.getWorkingTasks());
         }
-        workingTasks = new ListDataModel(workingTasksList);
+        workingTasks = new ListDataModel<Task>(workingTasksList);
         return workingTasks;
     }
 
-    public ListDataModel getDoneTasks() {
-        List doneTasksList = new ArrayList();
+    public ListDataModel<Task> getDoneTasks() {
+        List<Task> doneTasksList = new ArrayList<Task>();
         if (sprintManager.getCurrentSprint() == null) {
-            return new ListDataModel(doneTasksList);
+            return new ListDataModel<Task>(doneTasksList);
         }
         for (Story story : storyManager.getStoryList()) {
             doneTasksList.addAll(story.getDoneTasks());
         }
-        doneTasks = new ListDataModel(doneTasksList);
+        doneTasks = new ListDataModel<Task>(doneTasksList);
         return doneTasks;
     }
 

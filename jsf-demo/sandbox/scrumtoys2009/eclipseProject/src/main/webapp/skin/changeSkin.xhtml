@@ -56,13 +56,13 @@
         <ui:define name="content">
             <h:form id="frmListStories">
                 <h:panelGrid columns="#{skinValuesManager.size + 1}" width="990" >
-                    <h:outputLabel value=""></h:outputLabel>
+                    <h:outputLabel value=""/>
                     <ui:repeat value="#{skinValuesManager.names}" var="name">
                         <td>
                         <scrum:postitLink color="#{name}" url="changeSkin"
                             paramName="skin" paramValue="#{name}">
-                            <ui:param name="postitLabel" value=""></ui:param>
-                            <ui:param name="postitText" value="#{name}"></ui:param>
+                            <ui:param name="postitLabel" value=""/>
+                            <ui:param name="postitText" value="#{name}"/>
                         </scrum:postitLink>
                         </td>
                     </ui:repeat>

@@ -43,6 +43,7 @@ import javax.faces.event.SystemEvent;
  * @author Dr. Spock (spock at dev.java.net)
  */
 public class CurrentProjectChangeEvent extends SystemEvent {
+    private static final long serialVersionUID = -5633456683147546243L;
 
     public CurrentProjectChangeEvent(Object source) {
         super(source);

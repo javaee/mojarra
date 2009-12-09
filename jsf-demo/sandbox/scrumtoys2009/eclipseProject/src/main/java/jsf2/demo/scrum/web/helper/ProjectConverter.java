@@ -55,7 +55,7 @@ public class ProjectConverter implements Converter {
     private static Map<Long, Project> cache = new HashMap<Long, Project>();
 
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        if (value == null && value.equals("0")) {
+        if (value == null || value.equals("0")) {
             return null;
         }
         try {

@@ -55,7 +55,8 @@ public class SkinUrlManager extends AbstractManager implements Serializable {
     private SkinManager skinManager;
     @ManagedProperty(value="#{skinValuesManager}")
     private SkinValuesManager skinValuesManager;
-    
+    private static final long serialVersionUID = 7770408832569218016L;
+
     public String getSkin() {
         return skin;
     }
@@ -65,7 +66,7 @@ public class SkinUrlManager extends AbstractManager implements Serializable {
     }
 
     public void update() {
-        if (skin == null ||"".equals(skin))
+        if (skin == null || "".equals(skin))
             return;
         String skinCss = skinValuesManager.getSkinCss(skin.toLowerCase());
         skinManager.setSelectedSkin(skinCss);

@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <ui:composition>
+
+        <table width="990" class="menuTable" cellpadding="0" cellspacing="0" >
+            <tr>
+                <td>
+                    <h:graphicImage  value="/resources/images/duque_Top_990x150.png"></h:graphicImage><br/>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+
+
+                    <table class="menuTable" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                <h:outputLink styleClass="menuhandler" value="#{i18n['menuitem.path.home']}" onmouseover="menuHighlight(1)">
+                                    <h:outputText value="HOME"/>
+                                </h:outputLink>
+                            </td> <td>
+                                <h:outputLink styleClass="menuhandler" value="#{i18n['menuitem.path.dashboard']}" onmouseover="menuHighlight(2)">
+                                    <h:outputText value="#{i18n['menuitem.label.dashboard']}" />
+                                </h:outputLink>
+                            </td>
+                            <td>
+                                <h:outputLink  styleClass="menuhandler" value="#{i18n['menuitem.path.allInOne']}" onmouseover="menuHighlight(3)">
+                                    <h:outputText value="#{i18n['menuitem.label.allInOne']}" />
+                                </h:outputLink>
+
+                            </td>
+                            <td>
+                                <h:outputLink styleClass="menuhandler"  value="#{i18n['menuitem.path.burndown']}" onmouseover="menuHighlight(4)">
+                                    <h:outputText value="#{i18n['menuitem.label.burndown']}" />
+                                </h:outputLink>
+
+                            </td>
+                            <td>
+                                <h:outputLink  styleClass="menuhandler"  value="#{i18n['menuitem.path.sprints']}" onmouseover="menuHighlight(5)">
+                                    <h:outputText value="#{i18n['menuitem.label.sprints']}" />
+                                </h:outputLink>
+                            </td>
+                            <td>
+                                <h:outputLink  styleClass="menuhandler"  value="#{i18n['menuitem.path.sprints']}" onmouseover="menuHighlight(6)">
+                                    <h:outputText value="JSF 2.0" />
+                                </h:outputLink>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="menu" id="menu1"></div>
+                            </td>
+
+                            <td>
+                                <div class="menu" id="menu2">
+                                    <ul>
+                                        <li><a href="#">Help</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="menu" id="menu3">
+                                    <ul>
+                                        <li><a href="#">Demo1</a></li>
+                                        <li><a href="#">Demo2</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="menu" id="menu4"></div>
+                            </td>
+                            <td>
+                                <div class="menu" id="menu5">
+                                    <ul>
+                                        <li> <h:outputLink  value="#{i18n['menuitem.path.newsprint']}">
+                                                <h:outputText value="#{i18n['menuitem.label.newsprint']}" />
+                                            </h:outputLink>
+                                        </li>
+                                        <li> <h:outputLink  value="#{i18n['menuitem.path.sprintslist']}" >
+                                                <h:outputText value="#{i18n['menuitem.label.sprintslist']}" />
+                                            </h:outputLink>
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="menu" id="menu6" >
+                                    <ul>
+                                        <li><a href="http://www.jcp.org/en/jsr/detail?id=314#">JSR 314</a></li>
+                                        <li><a href="http://weblogs.java.net/blog/edburns/archive/2007/01/jsf_irc_channel.html#">IRC</a></li>
+                                        <li><a href="http://java.sun.com/javaee/javaserverfaces/#">Documentation</a></li>
+                                        <li><a href="#">Blogs</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </ui:composition>
+</html>

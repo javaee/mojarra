@@ -56,8 +56,10 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.ExternalContext;
 
 /**
  * @author Dr. Spock (spock at dev.java.net)
@@ -81,13 +83,24 @@ public class SprintManager extends AbstractManager implements Serializable {
 
     @PreDestroy
     public void destroy() {
-	sprints = null;
-	if (null != sprintList) {
-	    sprintList.clear();
-	    sprintList = null;
-	}
-	projectManager = null;
-	currentProject = null;
+        sprints = null;
+        if (null != sprintList) {
+            sprintList.clear();
+            sprintList = null;
+        }
+        projectManager = null;
+        currentProject = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            ExternalContext extContext = context.getExternalContext();
+            if (null != extContext) {
+                Map sessionMap = extContext.getSessionMap();
+                if (null != sessionMap) {
+                    sessionMap.remove("sprintManager");
+                }
+            }
+        }
+
     }
 
     public void init() {
@@ -202,7 +215,7 @@ public class SprintManager extends AbstractManager implements Serializable {
     public String checkUniqueSprintNameApplicationValidatorMethod(String newValue) {
         String message = null;
 
-        final String newName = (String) newValue;
+        final String newName = newValue;
         try {
             Long count = doInTransaction(new PersistenceAction<Long>() {
 
@@ -249,7 +262,7 @@ public class SprintManager extends AbstractManager implements Serializable {
     }
 
     public DataModel<Sprint> getSprints() {
-        this.sprints = new ListDataModel(projectManager.getCurrentProject().getSprints());
+        this.sprints = new ListDataModel<Sprint>(projectManager.getCurrentProject().getSprints());
         return this.sprints;
     }
 

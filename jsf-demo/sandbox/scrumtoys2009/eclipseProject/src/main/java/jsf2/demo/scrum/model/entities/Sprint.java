@@ -147,7 +147,7 @@ public class Sprint extends AbstractEntity implements Serializable {
     }
 
     public List<Story> getStories() {
-        return (stories != null) ? Collections.unmodifiableList(stories) : Collections.EMPTY_LIST;
+        return (stories != null) ? Collections.unmodifiableList(stories) : Collections.<Story>emptyList();
     }
 
     public boolean addStory(Story story) {
@@ -163,11 +163,9 @@ public class Sprint extends AbstractEntity implements Serializable {
     }
 
     public boolean removeStory(Story story) {
-        if (stories != null && !stories.isEmpty()) {
-            return stories.remove(story);
-        } else {
-            return false;
-        }
+        return (stories != null
+                 && !stories.isEmpty()
+                 && stories.remove(story));
     }
 
     public Project getProject() {
@@ -190,10 +188,8 @@ public class Sprint extends AbstractEntity implements Serializable {
         if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
             return false;
         }
-        if (this.project != other.project && (this.project == null || !this.project.equals(other.project))) {
-            return false;
-        }
-        return true;
+        return !(this.project != other.project
+                   && (this.project == null || !this.project.equals(other.project)));
     }
 
     @Override

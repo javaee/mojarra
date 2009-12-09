@@ -45,14 +45,14 @@
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
-            <h:outputText value="#{i18n['sprint.create.title']}"></h:outputText>
+            <h:outputText value="#{i18n['sprint.create.title']}"/>
         </ui:define>
         <ui:define name="navigationBar">
-            <h:commandLink   immediate="true" action="/project/show" value="#{i18n['sprint.form.label.projects']}"></h:commandLink>
-            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
-            <h:commandLink   immediate="true" action="/project/edit"  value="#{sprintManager.project.name}"></h:commandLink>
-            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
-            <h:outputText value="#{i18n['sprint.create.form.title']}" styleClass="tituloForm"></h:outputText>
+            <h:commandLink   immediate="true" action="/project/show" value="#{i18n['sprint.form.label.projects']}"/>
+            <h:outputText value="#{i18n['navigation.separtor']}"/>
+            <h:commandLink   immediate="true" action="/project/edit"  value="#{sprintManager.project.name}"/>
+            <h:outputText value="#{i18n['navigation.separtor']}"/>
+            <h:outputText value="#{i18n['sprint.create.form.title']}" styleClass="tituloForm"/>
         </ui:define>
         <ui:define name="content">
             <h:form styleClass="scrumForm" id="createSprintForm">

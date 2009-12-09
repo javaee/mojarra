@@ -47,7 +47,7 @@
         <h:panelGrid columns="3" columnClasses="formLabel, formInput, formErrorMessage" styleClass="postItFormTable">           
             <h:outputLabel value="#{i18n['sprint.form.label.name']}:" for="itName"/>
             <h:inputText id="itName" value="#{sprintManager.currentSprint.name}" required="true"
-                requiredMessage="#{i18n['sprint.form.label.name.required']}" maxLength="30" size="30" />
+                requiredMessage="#{i18n['sprint.form.label.name.required']}" size="30" />
             <h:message for="itName" styleClass="errorMessage" />
 
             <h:outputLabel value="#{i18n['sprint.form.label.goals']}:" for="itGoals"  />
@@ -55,7 +55,7 @@
             <h:message for="itGoals" styleClass="errorMessage"/>
 
             <h:outputLabel value="#{i18n['sprint.form.label.iterationScope']}:" for="itIterationScope"  />
-            <h:inputText id="itIterationScope" value="#{sprintManager.currentSprint.iterationScope}" required="true" cols="50" rows="4" requiredMessage="#{i18n['sprint.form.label.iterationScope.required']}" />
+            <h:inputText id="itIterationScope" value="#{sprintManager.currentSprint.iterationScope}" required="true" size="50" requiredMessage="#{i18n['sprint.form.label.iterationScope.required']}" />
             <h:message for="itIterationScope" styleClass="errorMessage"/>
 
             <h:outputLabel value="#{i18n['sprint.form.label.startDate']}:" for="itStartedDate"  />

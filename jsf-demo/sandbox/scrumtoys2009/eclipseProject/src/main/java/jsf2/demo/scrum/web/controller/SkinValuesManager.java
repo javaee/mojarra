@@ -46,6 +46,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ArrayList;
 import javax.annotation.PreDestroy;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -59,7 +61,8 @@ public class SkinValuesManager implements Serializable {
     private Map<String, String> values;
 
     private String defaultSkin = "blue";
-    
+    private static final long serialVersionUID = 2238251086172648511L;
+
     @PostConstruct
     public void construct() {
         values = new LinkedHashMap<String, String>();
@@ -71,10 +74,20 @@ public class SkinValuesManager implements Serializable {
 
     @PreDestroy
     public void destroy() {
-      if (null != values) {
-          values.clear();
-          values = null;
-      }
+        if (null != values) {
+            values.clear();
+            values = null;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            ExternalContext extContext = context.getExternalContext();
+            if (null != extContext) {
+                Map sessionMap = extContext.getSessionMap();
+                if (null != sessionMap) {
+                    sessionMap.remove("skinValuesManager");
+                }
+            }
+        }
     }
     
     protected String getSkinCss(String skin) {

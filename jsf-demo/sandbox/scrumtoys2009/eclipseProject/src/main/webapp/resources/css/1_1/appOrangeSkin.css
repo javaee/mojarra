@@ -44,7 +44,7 @@ input, select,textarea {
   background-color:white;
   border-style:ridge;
   /*lightgray*/
-  border:1px solid lightgray;
+  border:1px solid #d3d3d3;
   padding:4px;
   margin:4px;
   margin-bottom:4px;

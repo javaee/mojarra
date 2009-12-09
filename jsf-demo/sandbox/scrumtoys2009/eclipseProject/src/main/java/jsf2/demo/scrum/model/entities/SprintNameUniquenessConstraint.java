@@ -50,9 +50,9 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SprintNameUniquenessConstraint {
     
-	String message() default "{sprint.form.label.name.unique}";
+    String message() default "{sprint.form.label.name.unique}";
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
     

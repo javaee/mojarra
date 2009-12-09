@@ -1,22 +1,32 @@
-This demo requires the Java EE APIs.
+IMPORTANT DEPLOYMENT INFORMATION
+================================
 
-* See if it's possible remove all <navigation-rule> instances
+If you are building and deploying this sample from the command line, it
+is absolutely vital that you run the command 
 
-* How does the error page work?
+./asadmin start-database
 
-* Define how this should run on non EE6 containers.  What about BV?
+from the glassfish bin directory *before* deploying this application.
 
-* Log4j and JSTL ended up in WEB-INF/lib
+If you are building and deploying the sample from NetBeans, and are
+using the NetBeans Glassfish V3 integration module to start the
+container fromthe "Servers" tab, then the database is automatically
+started when you start the container.
 
-* Non-existent documentation
+Note to sample developers
+=========================
 
-* JavaDocs, remove @author javadocs.
+The actual source code for this sample is maintained in subversion 
+under the repository
+ <https://mojarra.dev.java.net/svn/mojarra/branches/scrumtoys-glassfishv3-20090506>.
 
-* Remove README in WEB-INF
+The source code checked in here under CVS is arrived at by checking
+out the above repo and running 
 
-* Document how it runs on Tomcat with OpenEJB
+ant -f blueprints-deploy-sample.xml -Dblueprint.sample=<sample_dir>
 
-* eclipseProject directory?
+where <sample_dir> is the local workarea to which the sample should be copied,
+blueprints fashion.
 
-* scrumtoys-uml what is it?  Increases confusion.
-
+The above SVN url also resolves to a Maven project, which you can use if
+you so desire.

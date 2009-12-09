@@ -97,13 +97,13 @@ public class Task extends AbstractEntity implements Serializable {
 
     protected void changeTaskStatus(Date startDate, Date endDate) {
         if (endDate != null) {
-            this.setStatus(status.DONE);
+            this.setStatus(TaskStatus.DONE);
         }
         if (endDate == null && this.startDate != null) {
-            this.setStatus(status.WORKING);
+            this.setStatus(TaskStatus.WORKING);
         }
         if (endDate == null && this.startDate == null) {
-            this.setStatus(status.TODO);
+            this.setStatus(TaskStatus.TODO);
         }
     }
 
@@ -156,10 +156,8 @@ public class Task extends AbstractEntity implements Serializable {
         if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
             return false;
         }
-        if (this.story != other.story && (this.story == null || !this.story.equals(other.story))) {
-            return false;
-        }
-        return true;
+        return !(this.story != other.story
+                 && (this.story == null || !this.story.equals(other.story)));
     }
 
     @Override

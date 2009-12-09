@@ -45,15 +45,15 @@
 
     <ui:composition template="/template.xhtml">
         <ui:define name="pageTitle">
-            <h:outputText value="#{i18n['sprint.show.title']}"></h:outputText>
+            <h:outputText value="#{i18n['sprint.show.title']}"/>
         </ui:define>
 
         <ui:define name="navigationBar">
-            <h:commandLink action="/project/show" value="#{i18n['sprint.form.label.projects']}"></h:commandLink>
-            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
-            <h:commandLink action="/project/edit"  value="#{sprintManager.project.name}"></h:commandLink>
-            <h:outputText value="#{i18n['navigation.separtor']}"></h:outputText>
-            <h:outputText value="#{i18n['sprints.table.title']}" styleClass="tituloForm"></h:outputText>
+            <h:commandLink action="/project/show" value="#{i18n['sprint.form.label.projects']}"/>
+            <h:outputText value="#{i18n['navigation.separtor']}"/>
+            <h:commandLink action="/project/edit"  value="#{sprintManager.project.name}"/>
+            <h:outputText value="#{i18n['navigation.separtor']}"/>
+            <h:outputText value="#{i18n['sprints.table.title']}" styleClass="tituloForm"/>
         </ui:define>
         <ui:define name="content">
             <h:form id="frmListSprints">
