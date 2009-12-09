@@ -266,15 +266,15 @@ public class ELFlash extends Flash {
      */
     
     public static ELFlash getFlash(ExternalContext extContext, boolean create) {
-        Map<String, Object> appMap = extContext.getApplicationMap();
+        Map<String, Object> sessionMap = extContext.getSessionMap();
         ELFlash flash = (ELFlash) 
-            appMap.get(FLASH_ATTRIBUTE_NAME);
+            sessionMap.get(FLASH_ATTRIBUTE_NAME);
         if (null == flash && create) {
             synchronized (extContext.getContext()) {
                 if (null == (flash = (ELFlash)
-                    appMap.get(FLASH_ATTRIBUTE_NAME))) {
+                    sessionMap.get(FLASH_ATTRIBUTE_NAME))) {
                     flash = new ELFlash();
-                    appMap.put(FLASH_ATTRIBUTE_NAME, flash);
+                    sessionMap.put(FLASH_ATTRIBUTE_NAME, flash);
                 }
             }
         }
@@ -711,6 +711,11 @@ public class ELFlash extends Flash {
 
     private Map<String, Object> getPhaseMapForWriting() {
         FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> sessionMap = context.getExternalContext().getSessionMap();
+        // This call to sessionMap.put() is necessary to explicitly cause
+        // cluster session replication.
+        sessionMap.put(FLASH_ATTRIBUTE_NAME, this);
+
         Map<String, Object> result = null;
         PhaseId currentPhase = context.getCurrentPhaseId();
         Map<Object, Object> contextMap = context.getAttributes();
