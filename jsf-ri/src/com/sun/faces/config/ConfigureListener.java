@@ -285,6 +285,9 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     public void contextDestroyed(ServletContextEvent sce) {
+        ServletContext context = sce.getServletContext();
+        InitFacesContext initContext = new InitFacesContext(context);
+
         if (webAppListener != null) {
             webAppListener.contextDestroyed(sce);
             webAppListener = null;
@@ -292,7 +295,6 @@ public class ConfigureListener implements ServletRequestListener,
         if (webResourcePool != null) {
             webResourcePool.shutdownNow();
         }
-        ServletContext context = sce.getServletContext();
         if (!ConfigManager.getInstance().hasBeenInitialized(context)) {
             return;
         }
@@ -305,8 +307,6 @@ public class ConfigureListener implements ServletRequestListener,
                     "ConfigureListener.contextDestroyed({0})",
                     context.getServletContextName());
         }
-
-        InitFacesContext initContext = new InitFacesContext(context);
 
         try {
             ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
