@@ -214,6 +214,7 @@
    </target>
 
    <target name="copy.spec.pdf" if="spec-eg-dir-available">
+       <echo message="Copying PDF spec for build: ${build.number} from ${javaserverfaces-spec-eg.dir} to ${spec.snapshot.dir}" />
 
        <copy todir="${spec.snapshot.dir}" flatten="true">
 
@@ -231,16 +232,16 @@
 
      <delete dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot" />
      <mkdir dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot" />
-     <unzip src="${dist.dir}/jsf-spec-${spec.version}-${build.number}.zip"
+     <unzip src="${dist.dir}/jsf-spec-${spec.snapshot.version}-${build.number}.zip"
             dest="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot"
             overwrite="true"/>
      <move todir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot">
-       <fileset dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot/jsf-spec-${spec.version}-${build.number}">
+       <fileset dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot/jsf-spec-${spec.snapshot.version}-${build.number}">
          <include name="**/*.*" />
          <include name="**/*" />
        </fileset>
      </move>
-     <delete dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot/jsf-spec-${spec.version}-${build.number}" />
+     <delete dir="${javaserverfaces-spec-eg.dir}/javadocs/spec-snapshot/jsf-spec-${spec.snapshot.version}-${build.number}" />
 
    </target>
 
@@ -252,36 +253,13 @@
 
        <antcall target="copy.spec.pdf" />
 
-       <filter token="build.number" value="${build.number}" />
-       <filter token="spec.version" value="${spec.version}" />
-       <filter token="build.type" value="${build.type}" />
+       <echo message="Unzipping ${demo.dir}/dist/docs/mojarra-${impl.version}-documentation.zip to ${spec.snapshot.dir}" />
+       <unzip src="${demo.dir}/dist/docs/mojarra-${impl.version}-documentation.zip"
+              dest="${spec.snapshot.dir}" overwrite="true"/>
 
-       <copy filtering="true"
-             file="${basedir}/docs/build.javadocs.dist-index.html"
-             tofile="${spec.snapshot.dir}/index.html">
-       </copy>
-
-
-        <!-- Create the jsdocs distribution -->
-        <java fork="true" jar="${jsdoc.home}/jsdoc-toolkit/jsrun.jar">
-                    <arg line="${jsdoc.home}/jsdoc-toolkit/app/run.js"/>
-                    <arg line="-a"/>
-                    <arg line="-d=${spec.snapshot.dir}/jsdocs"/>
-                    <arg line="-t=${jsdoc.home}/jsdoc-toolkit/templates/jsdoc"/>
-                    <arg value="${basedir}/jsf-api/src/main/resources/jsf.js"/>
-        </java>
-
-        <!-- Create the javadocs distribution -->
-        <unzip dest="${spec.snapshot.dir}"
-               src="${demo.dir}/dist/docs/javadocs-${impl.version}.zip" />
-        <unzip dest="${spec.snapshot.dir}"
-               src="${demo.dir}/dist/docs/renderkitdocs-${impl.version}.zip" />
-        <unzip dest="${spec.snapshot.dir}"
-               src="${demo.dir}/dist/docs/vdldocs-${impl.version}.zip" />
-
-        <zip destfile="${dist.dir}/jsf-spec-${spec.version}-${build.number}.zip">
+       <zip destfile="${dist.dir}/jsf-spec-${spec.snapshot.version}-${build.number}.zip">
             <zipfileset dir="${spec.snapshot.dir}"
-                        prefix="jsf-spec-${spec.version}-${build.number}"/>
+                        prefix="jsf-spec-${spec.snapshot.version}-${build.number}"/>
         </zip>
 
        <antcall target="deploy.spec.locally" />
