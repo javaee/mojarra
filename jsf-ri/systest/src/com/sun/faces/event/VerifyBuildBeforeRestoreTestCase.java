@@ -85,13 +85,16 @@ public class VerifyBuildBeforeRestoreTestCase extends AbstractTestCase {
 
     public void testVerifyBuildBeforeRestore() throws Exception {
 
-        HtmlPage page = getPage("/faces/regression/verifyBuildBeforeRestore.xhtml");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
+        if (Boolean.TRUE.equals(Boolean.valueOf(System.getProperty("partial.state.saving")))) {
+            HtmlPage page = getPage("/faces/regression/verifyBuildBeforeRestore.xhtml");
+            HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("submit");
 
-        page = button.click();
-        String text = page.asText();
-        assertTrue(text.contains("Message: javax.faces.event.PostAddToViewEvent javax.faces.event.PostRestoreStateEvent"));
-        page = getPage("/faces/regression/uninstallListeners.xhtml");
+            page = button.click();
+            String text = page.asText();
+            assertTrue(text.contains("Message: javax.faces.event.PostAddToViewEvent javax.faces.event.PostRestoreStateEvent"));
+            page = getPage("/faces/regression/uninstallListeners.xhtml");
+        }
+
     }
 
     

@@ -87,6 +87,12 @@
     
     
     <target name="build.war" depends="compile">
+
+        <echo message="Building jsf-systest.war with partial state saving: ${partial.state.saving}" />
+        <copy file="${web.dir}/WEB-INF/web.xml.template" tofile="${web.dir}/WEB-INF/web.xml" />
+        <replace token="{partial-state-saving}"
+                 file="${web.dir}/WEB-INF/web.xml"
+                 value="${partial.state.saving}" />
         <jsf.war basedir="${build.dir}"
                  archive-name="jsf-systest"
                  webxml="${web.dir}/WEB-INF/web.xml">
@@ -103,6 +109,7 @@
         <mkdir dir="${build.dir}/target/jsf-systest" />
         <unjar src="${build.dir}/jsf-systest.war" overwrite="true"
                dest="${build.dir}/target/jsf-systest" />
+        <delete file="${web.dir}/WEB-INF/web.xml" />
 
     </target>
 
@@ -139,12 +146,36 @@
     <!-- ********** Test Execution Targets ************************************ -->
 
 
-    <target name="test" depends="init,build.war"
+    <target name="test" depends="init"
             description="Execute all tests against installed /jsf-systest application">
-       
+
+        <antcall target="build.war">
+            <param name="partial.state.saving" value="true" />
+        </antcall>
+        <echo>
+
+**** RUNNING JSF-SYSTEST USING PARTIAL STATE SAVING ****
+
+        </echo>
         <antcall target="undeploy"/>
         <antcall target="deploy"/>
-        <ant antfile="build-tests.xml" target="test"/>
+        <ant antfile="build-tests.xml" target="test">
+            <property name="partial.state.saving" value="true" />
+        </ant>
+        <antcall target="undeploy"/>
+
+        <antcall target="build.war">
+            <param name="partial.state.saving" value="false" />
+        </antcall>
+        <echo>
+
+**** RUNNING JSF-SYSTEST USING FULL STATE SAVING ****
+
+        </echo>
+        <antcall target="deploy"/>
+        <ant antfile="build-tests.xml" target="test">
+            <property name="partial.state.saving" value="false" />
+        </ant>
         <antcall target="undeploy"/>
         
     </target>  

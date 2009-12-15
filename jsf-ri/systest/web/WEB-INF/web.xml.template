@@ -68,6 +68,10 @@
         <param-value>server</param-value>
     </context-param>
     <context-param>
+        <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+        <param-value>{partial-state-saving}</param-value>
+    </context-param>
+    <context-param>
         <param-name>com.sun.faces.enableJSStyleHiding</param-name>
         <param-value>true</param-value>
     </context-param>

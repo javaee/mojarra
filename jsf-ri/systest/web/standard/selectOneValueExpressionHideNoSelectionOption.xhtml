@@ -47,7 +47,9 @@
     <title>hideNoSelection with Value Expression</title>
 </head>
 <body>
-<c:set target="#{requestScope}" property="selectedHobbit" value="Frodo"/>
+<c:if test="#{empty requestScope.selectedHobbit}">
+  <c:set target="#{requestScope}" property="selectedHobbit" value="Frodo"/>
+</c:if>
 <h:form id="f">
 
     <p>
