@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.component;
 
-import com.sun.faces.facelets.tag.jstl.core.IterationStatus;
+import com.sun.faces.facelets.tag.IterationStatus;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;

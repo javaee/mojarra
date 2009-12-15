@@ -49,16 +49,15 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jstl.core;
+package com.sun.faces.facelets.tag;
 
-import javax.servlet.jsp.jstl.core.LoopTagStatus;
 import java.io.Serializable;
 
 /**
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class IterationStatus implements Serializable, LoopTagStatus {
+public class IterationStatus implements Serializable {
 
     /**
      * 

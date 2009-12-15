@@ -198,7 +198,7 @@ public final class ForEachHandler extends TagHandlerImpl {
 
                         // set the varStatus
                         if (vs != null) {
-                            IterationStatus itrS = new IterationStatus(first, !itr.hasNext(),i, sO, eO, mO, value, count);
+                            JstlIterationStatus itrS = new JstlIterationStatus(first, !itr.hasNext(),i, sO, eO, mO, value, count);
                             if (t || srcVE == null) {
                                 ctx.setAttribute(vs, itrS);
                             } else {
