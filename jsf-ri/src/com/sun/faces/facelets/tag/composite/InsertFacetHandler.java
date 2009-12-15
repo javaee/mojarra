@@ -178,7 +178,12 @@ public class InsertFacetHandler extends TagHandlerImpl {
             if (facet != null) {
                 component.getFacets().put(facetName, facet);
             } else {
-                if (req) {
+                // In the case of full state saving, the compositeParent won't
+                // have the facet to be relocated as its own - it will have already
+                // been made a facet of the target component, so we need
+                // to only throw the Exception if required, and the target component
+                // doesn't have the facet defined
+                if (req && component.getFacets().get(facetName) == null) {
                     throwRequiredException(ctx, facetName, compositeParent);
                 }
             }
