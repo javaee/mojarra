@@ -835,6 +835,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             }
             if (caught != null) {
                 assert(message != null);
+                // PENDING(edburns): verify this is in the spec.
                 @SuppressWarnings({"ThrowableInstanceNeverThrown"})
                 UpdateModelException toQueue =
                       new UpdateModelException(message, caught);
