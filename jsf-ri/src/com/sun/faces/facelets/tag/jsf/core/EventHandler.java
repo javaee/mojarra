@@ -43,13 +43,11 @@ import javax.el.MethodExpression;
 import javax.el.MethodNotFoundException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
 import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
@@ -57,7 +55,8 @@ import javax.faces.view.facelets.TagConfig;
 import javax.faces.view.facelets.TagHandler;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
+import javax.faces.component.UIViewRoot;
+import javax.faces.event.PreRenderViewEvent;
 
 /**
  * This is the TagHandler for the f:event tag.
@@ -75,6 +74,13 @@ public class EventHandler extends TagHandler {
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
         if (ComponentHandler.isNew(parent)) {
             Class<? extends SystemEvent> eventClass = getEventClass(ctx);
+            UIViewRoot viewRoot = ctx.getFacesContext().getViewRoot();
+            // ensure that f:event can be used anywhere on the page for preRenderView,
+            // not just as a direct child of the viewRoot
+            if (null != viewRoot && PreRenderViewEvent.class == eventClass &&
+                parent != viewRoot) {
+                parent = viewRoot;
+            }
             if (eventClass != null) {
                 parent.subscribeToEvent(eventClass,
                         new DeclarativeSystemEventListener(
