@@ -263,6 +263,7 @@
         <attribute name="test-results-dir"/>
         <attribute name="assert.classes" default=""/>
         <attribute name="logging.config.file" default=""/>
+        <attribute name="explodedWarDir" default=""/>
         <element name="tests" optional="true"/>
         <element name="custom-sysproperties" optional="true"/>
         <element name="suite" optional="true"/>
@@ -279,6 +280,7 @@
                 <sysproperty key="host" value="${container.host}"/>
                 <sysproperty key="port" value="${container.port}"/>
                 <sysproperty key="context.path" value="@{context-path}"/>
+                <sysproperty key="explodedWarDir" value="@{explodedWarDir}"/>
                 <sysproperty key="java.util.logging.config.file" 
                              value="@{logging.config.file}"/>
                 <custom-sysproperties/>
