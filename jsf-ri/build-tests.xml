@@ -261,7 +261,7 @@
 
     <target name="deploy"
             description="Deploy the Cactus test application">
-        <deploy.artifact artifact="${basedir}/build/test.war"
+        <deploydir.artifact explodedWarDir="${basedir}/build/target/test"
                          appName="test"/>
     </target>
 
@@ -276,7 +276,8 @@
     -->
     <target name="run.cactus.test">
         <jsf.junit classpath-refid="test.runtime.classpath"
-                   test-results-dir="${impl.test.results.dir}">
+                   test-results-dir="${impl.test.results.dir}"
+                   explodedWarDir="${basedir}/build/target/test">
             <custom-sysproperties>
                 <sysproperty key="cactus.contextURL"
                              value="http://${container.host}:${container.port}/test"/>
@@ -451,14 +452,15 @@
 
     <target name="run.cactus.test.single">
         <jsf.junit classpath-refid="test.runtime.classpath"
-                   test-results-dir="${impl.test.results.dir}">
+                   test-results-dir="${impl.test.results.dir}"
+                   explodedWarDir="${basedir}/build/target/test">
             <custom-sysproperties>
                 <sysproperty key="cactus.contextURL"
                              value="http://${container.host}:${container.port}/test"/>
             </custom-sysproperties>
             <suite>
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.application.TestApplicationImpl"/>
+                    name="com.sun.faces.application.resource.TestResourceHandlerImpl"/>
             </suite>
 
         </jsf.junit>       
@@ -511,7 +513,9 @@
 
     <target name="passthru">
 
+      <antcall target="deploy"/>
       <antcall target="run.cactus.test.single" />
+      <antcall target="undeploy"/>
        
     </target>
 

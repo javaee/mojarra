@@ -55,7 +55,10 @@ import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.resource.ResourceManager;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import org.apache.cactus.WebRequest;
 import org.apache.cactus.WebResponse;
 
@@ -63,6 +66,13 @@ import org.apache.cactus.WebResponse;
  * Tests com.sun.faces.application.resource.ResourceHandlerImpl
  */
 public class TestResourceHandlerImpl extends ServletFacesTestCase {
+
+    /* HTTP Date format required by the HTTP/1.1 RFC */
+    private static final String RFC1123_DATE_PATTERN =
+          "EEE, dd MMM yyyy HH:mm:ss zzz";
+
+    private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+
 
      public TestResourceHandlerImpl() {
         super("TestResourceHandlerImpl");
@@ -453,8 +463,20 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     //
     public void beginHandleResourceRequest3(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        long 
+                curTime = System.currentTimeMillis(),
+                threeHoursAgo = curTime - 10800000L;
+        facesService.setModificationTime("resources/duke-nv.gif", 
+                threeHoursAgo);
+        facesService.setModificationTime("resources/nvLibrary/duke-nv.gif",
+                threeHoursAgo);
+        SimpleDateFormat format =
+                new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
+        format.setTimeZone(GMT);
+        Date headerValue = new Date(curTime);
+        
         req.addParameter("ln", "nvLibrary");
-        req.addHeader("If-Modified-Since", "Sat, 29 Oct 1994 19:43:31 GMT");
+        req.addHeader("If-Modified-Since", format.format(headerValue));
     }
 
 

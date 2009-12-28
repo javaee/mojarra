@@ -43,6 +43,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectInput;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,12 +51,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.Collections;
+import java.util.logging.Logger;
 
 import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.util.FacesLogger;
+import java.util.logging.Level;
 
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.ProjectStage;
@@ -68,6 +72,9 @@ import javax.faces.application.ProjectStage;
  * for resources.
  */
 public class ResourceImpl extends Resource implements Externalizable {
+
+    // Log instance for this class
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     /* HTTP Date format required by the HTTP/1.1 RFC */
     private static final String RFC1123_DATE_PATTERN =
@@ -315,11 +322,46 @@ public class ResourceImpl extends Resource implements Externalizable {
      */
     public boolean userAgentNeedsUpdate(FacesContext context) {
 
+        // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+        // 14.25 If-Modified-Since
+
+        // if the requested variant has not been modified since the time
+        // specified in this field, an entity will not be returned from the
+        // server; instead, a 304 (not modified) response will be returned
+        // without any message-body.
+
+        // A date which is later than the server's current time is
+        // invalid.
+
         Map<String,String> requestHeaders =
               context.getExternalContext().getRequestHeaderMap();
-        return ((!requestHeaders.containsKey("If-Modified-Since"))
-                || (resourceInfo.getHelper()
-                      .getLastModified(resourceInfo, context) > initialTime));
+        boolean result = true;
+
+        if (requestHeaders.containsKey("If-Modified-Since")) {
+            SimpleDateFormat format =
+                  new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
+            Date ifModifiedSinceDate = null;
+            try {
+                ifModifiedSinceDate = format.parse(requestHeaders.
+                        get("If-Modified-Since"));
+                long lastModifiedOfResource = resourceInfo.getHelper()
+                        .getLastModified(resourceInfo, context);
+                long lastModifiedHeader = ifModifiedSinceDate.getTime();
+                result = lastModifiedOfResource > lastModifiedHeader;
+            } catch (ParseException ex) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                            "jsf.application.resource.invalid_if_modified_since_header",
+                            new Object[]{requestHeaders.
+                        get("If-Modified-Since")});
+                    if (ex != null) {
+                        LOGGER.log(Level.WARNING, "", ex);
+                    }
+                }
+            }
+
+        }
+        return result;
 
     }
 
