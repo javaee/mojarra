@@ -8,11 +8,6 @@
             <properties/>
             <folders>
                 <source-folder>
-                    <label>src</label>
-                    <type>java</type>
-                    <location>src</location>
-                </source-folder>
-                <source-folder>
                     <label>web</label>
                     <type>doc_root</type>
                     <location>web</location>
@@ -21,6 +16,11 @@
                     <label>WEB-INF</label>
                     <type>web_inf</type>
                     <location>web/WEB-INF</location>
+                </source-folder>
+                <source-folder>
+                    <label>src</label>
+                    <type>java</type>
+                    <location>src</location>
                 </source-folder>
             </folders>
             <ide-actions>
@@ -76,7 +76,7 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1">
             <compilation-unit>
                 <package-root>src</package-root>
-                <classpath mode="compile">../build/classes:../../jsf-api/build/classes:../../dependencies/junit3.8.1/junit.jar:../../dependencies/htmlunit-2.4/lib/htmlunit-2.4.jar</classpath>
+                <classpath mode="compile">../build/classes:../../jsf-api/build/classes:../../dependencies/junit3.8.1/junit.jar:../../dependencies/htmlunit-2.4/lib/htmlunit-2.4.jar:../../lib/jsf-extensions-test-time.jar:../../dependencies/jars/servlet-api-2.5.jar:../../dependencies/jars/el-api-2.1.2-b05.jar:../../dependencies/jars/jsp-api-2.1.jar:/Users/edburns/Downloads/mvnrepo/org/apache/ant/ant/1.7.1/ant-1.7.1.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>
@@ -93,7 +93,6 @@
             <web-module>
                 <doc-root>web</doc-root>
                 <classpath/>
-                <context-path/>
                 <j2ee-spec-level>1.5</j2ee-spec-level>
             </web-module>
         </web-data>
