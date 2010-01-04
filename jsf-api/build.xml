@@ -254,7 +254,7 @@
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
-            <sysproperty key="tools.src.dir" value="${tools.dir}/src"/>
+            <sysproperty key="tools.src.dir" value="${tools.dir}/src/main/java"/>
             <assertions>
                 <enable/>
             </assertions>
@@ -268,7 +268,7 @@
 	</path>
 
         <mkdir dir="${tools.dir}/build/classes"/>
-        <jsf.javac srcdir="${tools.dir}/src"
+        <jsf.javac srcdir="${tools.dir}/src/main/java"
                    destdir="${tools.dir}/build/classes">
             <classpath>
                 <path refid="compile.classpath"/>
@@ -277,7 +277,7 @@
             </classpath>
         </jsf.javac>
         <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${tools.dir}/src"
+            <fileset dir="${tools.dir}/src/main/java"
                      includes="**/*.properties"/>
         </copy>
         <copy todir="${tools.dir}/build/classes">
@@ -290,7 +290,7 @@
                      includes="*.dtd,*.xsd"/>
         </copy>
         <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${tools.dir}/src"
+            <fileset dir="${tools.dir}/src/main/java"
                      includes="**/*.html,**/*.top,**/*.bottom,**/*.css"/>            
         </copy>
     </target>
@@ -574,7 +574,7 @@ javax.faces.level=ALL
 
         <mkdir dir="${tools.dir}/build/classes"/>
         <antcall target="tools.javac"/>
-        <javac srcdir="${tools.dir}/src"
+        <javac srcdir="${tools.dir}/src/main/java"
                destdir="${tools.dir}/build/classes">
             <classpath>
                 <path refid="compile.classpath"/>

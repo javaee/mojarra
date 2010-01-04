@@ -391,7 +391,7 @@
 
         <sequential>
             <mkdir dir="${tools.dir}/build/classes"/>
-            <jsf.javac srcdir="${tools.dir}/src"
+            <jsf.javac srcdir="${tools.dir}/src/main/java"
                    destdir="${tools.dir}/build/classes">
                 <classpath>
                     <path refid="compile.classpath"/>  

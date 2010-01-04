@@ -193,7 +193,7 @@
         </copy>
 
         <mkdir dir="${tools.dir}/build/classes"/>
-        <jsf.javac srcdir="${tools.dir}/src"
+        <jsf.javac srcdir="${tools.dir}/src/main/java"
                destdir="${tools.dir}/build/classes">
             <classpath>
                 <path refid="impl.compile.classpath"/>
@@ -201,7 +201,7 @@
             </classpath>
         </jsf.javac>
         <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${tools.dir}/src"
+            <fileset dir="${tools.dir}/src/main/java"
                      includes="**/*.properties"/>
         </copy>
         <copy todir="${tools.dir}/build/classes">
@@ -257,7 +257,7 @@
         <copy todir="${build.generate.dir}">
 
 
-            <fileset dir="${tools.dir}/src">
+            <fileset dir="${tools.dir}/src/main/java">
                 <include name="com/sun/faces/config/DigesterFactory.java"/>
                 <include name="com/sun/faces/config/beans/*.java"/>
                 <include name="com/sun/faces/config/rules/*.java"/>
@@ -288,7 +288,7 @@
 
         <copy todir="${build.classes.dir}">
             <fileset dir="${source.dir}" includes="**/*.properties,**/*.js,**/*.xsd"/>
-            <!--<fileset dir="${tools.dir}/src" includes="**/*.properties"/>-->
+            <!--<fileset dir="${tools.dir}/src/main/java" includes="**/*.properties"/>-->
         </copy>
 
         <!-- Massage the version number into LogStrings.properties -->
