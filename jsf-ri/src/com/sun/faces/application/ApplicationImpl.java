@@ -106,6 +106,7 @@ import com.sun.faces.util.Util;
 
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
+import java.beans.PropertyDescriptor;
 import java.util.LinkedHashSet;
 
 import javax.faces.event.ExceptionQueuedEvent;
@@ -1004,14 +1005,36 @@ public class ApplicationImpl extends Application {
         assert (null != result);
 
         result.setRendererType("javax.faces.Composite");
-        result.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
+        Map<String, Object> attrs = result.getAttributes();
+        attrs.put(Resource.COMPONENT_RESOURCE_KEY,
                 componentResource);
-        result.getAttributes().put(UIComponent.BEANINFO_KEY, 
+        attrs.put(UIComponent.BEANINFO_KEY,
                 componentMetadata);
 
         associate.getAnnotationManager().applyComponentAnnotations(context, result);
+        pushDeclaredDefaultValuesToAttributesMap(context, componentMetadata, attrs);
+
 
         return result;
+    }
+
+    private void pushDeclaredDefaultValuesToAttributesMap(FacesContext context,
+            BeanInfo componentMetadata, Map<String, Object> attrs) {
+        PropertyDescriptor[] declaredAttributes = componentMetadata.getPropertyDescriptors();
+        Object defaultValue;
+        String key;
+        for (PropertyDescriptor cur : declaredAttributes) {
+            defaultValue = cur.getValue("default");
+            if (null != defaultValue) {
+                key = cur.getName();
+                if (defaultValue instanceof ValueExpression) {
+                    if (((ValueExpression)defaultValue).isLiteralText()) {
+                        defaultValue = ((ValueExpression)defaultValue).getValue(context.getELContext());
+                    }
+                }
+                attrs.put(key, defaultValue);
+            }
+        }
     }
     
 

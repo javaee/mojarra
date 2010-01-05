@@ -976,6 +976,10 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         assertTrue(page.asText().contains("value=\"#{cc.attrs.bean(cc.attrs.arg1)}\" Illegal attempt to pass arguments to a composite component lookup expression"));
     }
 
+    public void testProgrammaticDefaultAttributeValueAccess() throws Exception {
+        HtmlPage page = getPage("/faces/composite/programmaticDefaultAttributeValueAccess.xhtml");
+        assertTrue(page.asText().contains("attr1 value is attr1Value. attr2 value is attr2Value."));
+    }
     
     // --------------------------------------------------------- Private Methods
 
