@@ -1018,6 +1018,14 @@ public class ApplicationImpl extends Application {
         return result;
     }
 
+
+    /*
+     * This method makes it so that any cc:attribute elements that have
+     * a "default" attribute value have those values pushed into the
+     * composite component attribute map so that programmatic access 
+     * (as opposed to EL access) will find the attribute values.
+     *
+     */
     private void pushDeclaredDefaultValuesToAttributesMap(FacesContext context,
             BeanInfo componentMetadata, Map<String, Object> attrs) {
         PropertyDescriptor[] declaredAttributes = componentMetadata.getPropertyDescriptors();
