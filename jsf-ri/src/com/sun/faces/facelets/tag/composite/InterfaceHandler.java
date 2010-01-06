@@ -53,6 +53,8 @@ package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 
 import javax.faces.application.Resource;
 import javax.faces.application.ProjectStage;
@@ -64,12 +66,19 @@ import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+import javax.el.ValueExpression;
+import javax.faces.view.facelets.TagException;
 
 public class InterfaceHandler extends TagHandlerImpl {
+
+    private final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
     private static final String[] ATTRIBUTES_DEV = {
           "displayName",
@@ -102,6 +111,116 @@ public class InterfaceHandler extends TagHandlerImpl {
         if (FaceletViewHandlingStrategy.isBuildingMetadata(context)) {
             imbueComponentWithMetadata(ctx, parent);
             this.nextHandler.apply(ctx, parent);
+        } else {
+            if (ProjectStage.Development == context.getApplication().getProjectStage()) {
+                validateComponent(context, parent);
+            }
+        }
+    }
+    
+    private void validateComponent(FacesContext context, UIComponent ccParent) throws TagException {
+        UIComponent cc = ccParent.getParent();
+        if (null == cc) {
+            String clientId = ccParent.getClientId(context);
+
+            throw new TagException(tag, MessageUtils.getExceptionMessageString(
+                    MessageUtils.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID,
+                    clientId + ".getParent()"));
+        }
+        Map<String, Object> attrs = cc.getAttributes();
+        BeanInfo componentMetadata = (BeanInfo) attrs.get(UIComponent.BEANINFO_KEY);
+
+        if (null == componentMetadata) {
+            String clientId = ccParent.getClientId(context);
+
+            throw new TagException(tag, MessageUtils.getExceptionMessageString(
+                    MessageUtils.MISSING_COMPONENT_METADATA, clientId));
+        }
+
+        PropertyDescriptor[] declaredAttributes = componentMetadata.getPropertyDescriptors();
+        String key;
+        Object requiredValue;
+        boolean found = false, required = false;
+        StringBuffer buf = null;
+        String attrMessage = "", facetMessage = "";
+
+        // Traverse the attributes of this component
+        for (PropertyDescriptor cur : declaredAttributes) {
+            required = false;
+            requiredValue = cur.getValue("required");
+            if (null != requiredValue) {
+                if (requiredValue instanceof ValueExpression) {
+                    requiredValue = ((ValueExpression) requiredValue).getValue(context.getELContext());
+                    required = Boolean.parseBoolean(requiredValue.toString());
+                }
+            }
+            if (required) {
+                key = cur.getName();
+                found = false;
+                // Is the attribute a method expression?
+                if (null != cur.getValue("method-signature") && null == cur.getValue("type")) {
+                    // Yes, look for it as an EL expression.
+                    found = (null != cc.getValueExpression(key));
+                } else {
+                    // No, look for it as an actual attribute
+                    found = attrs.containsKey(key);
+                    // Special case: nested composite components
+                    if (!found) {
+                        Object obj = context.getApplication().evaluateExpressionGet(context,
+                                "#{cc.attrs." + key + "}", Object.class);
+                        found = null != obj;
+                    }
+                }
+                if (!found) {
+                    if (null == buf) {
+                        buf = new StringBuffer();
+                        buf.append(key);
+                    } else {
+                        buf.append(", " + key);
+                    }
+                }
+            }
+        }
+        if (null != buf) {
+            attrMessage = MessageUtils.getExceptionMessageString(MessageUtils.MISSING_COMPONENT_ATTRIBUTE_VALUE,
+                    buf.toString());
+        }
+
+        buf = null;
+
+        // Traverse the declared facets
+        Map<String, PropertyDescriptor> declaredFacets =
+                (Map<String, PropertyDescriptor>) componentMetadata.getBeanDescriptor().getValue(UIComponent.FACETS_KEY);
+        if (null != declaredFacets) {
+            for (PropertyDescriptor cur : declaredFacets.values()) {
+                required = false;
+                requiredValue = cur.getValue("required");
+                if (null != requiredValue) {
+                    if (requiredValue instanceof ValueExpression) {
+                        requiredValue = ((ValueExpression) requiredValue).getValue(context.getELContext());
+                        required = Boolean.parseBoolean(requiredValue.toString());
+                    }
+                }
+                if (required) {
+                    key = cur.getName();
+                    if (!cc.getFacets().containsKey(key)) {
+                        if (null == buf) {
+                            buf = new StringBuffer();
+                            buf.append(key);
+                        } else {
+                            buf.append(", " + key);
+                        }
+                    }
+                }
+            }
+        }
+        if (null != buf) {
+            facetMessage = MessageUtils.getExceptionMessageString(MessageUtils.MISSING_COMPONENT_FACET,
+                    buf.toString());
+        }
+
+        if (0 < attrMessage.length() || 0 < facetMessage.length()) {
+            throw new TagException(this.tag, attrMessage + " " + facetMessage);
         }
     }
     

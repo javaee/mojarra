@@ -980,7 +980,22 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         HtmlPage page = getPage("/faces/composite/programmaticDefaultAttributeValueAccess.xhtml");
         assertTrue(page.asText().contains("attr1 value is attr1Value. attr2 value is attr2Value."));
     }
+
+    public void testMissingRequiredAttribute() throws Exception {
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/requiredAttribute.xhtml");
+        String text = page.asText();
+        System.out.println(text);
+        assertTrue(text.contains("The following attribute(s) are required, but no values have been supplied for them: table."));
+    }
     
+    public void testMissingRequiredFacet() throws Exception {
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/composite/requiredFacet.xhtml");
+        String text = page.asText();
+        assertTrue(text.contains("The following facets(s) are required, but no facets have been supplied for them: table."));
+    }
+
     // --------------------------------------------------------- Private Methods
 
 

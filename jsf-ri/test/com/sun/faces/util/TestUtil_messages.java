@@ -205,6 +205,9 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.INVALID_RESOURCE_FORMAT_COLON_ERROR, "1"},
         {MessageUtils.ARGUMENTS_NOT_LEGAL_CC_ATTRS_EXPR, "0"},
         {MessageUtils.PARTIAL_STATE_ERROR_RESTORING_ID, "2"},
+        {MessageUtils.MISSING_COMPONENT_ATTRIBUTE_VALUE, "1"},
+        {MessageUtils.MISSING_COMPONENT_FACET, "1"},
+        {MessageUtils.MISSING_COMPONENT_METADATA, "1" }
     };
 
 // Attribute Instance Variables

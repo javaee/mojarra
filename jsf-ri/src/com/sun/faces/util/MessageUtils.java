@@ -326,6 +326,12 @@ public class MessageUtils {
     
     public static final String JS_RESOURCE_WRITING_ERROR_ID =
         "com.sun.faces.JS_RESOURCE_WRITING_ERROR";
+    public static final String MISSING_COMPONENT_ATTRIBUTE_VALUE =
+            "com.sun.faces.MISSING_COMPONENT_ATTRIBUTE_VALUE";
+    public static final String MISSING_COMPONENT_FACET =
+            "com.sun.faces.MISSING_COMPONENT_FACET";
+    public static final String MISSING_COMPONENT_METADATA =
+            "com.sun.faces.MISSING_COMPONENT_METADATA";
 
 
     // ------------------------------------------------------------ Constructors

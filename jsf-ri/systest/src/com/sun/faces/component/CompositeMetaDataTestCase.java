@@ -38,7 +38,6 @@ package com.sun.faces.component;
 
 import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -80,9 +79,11 @@ public class CompositeMetaDataTestCase extends AbstractTestCase {
      */
     public void testPrefixMappedFaceletPage() throws Exception {
 
-        HtmlPage page = getPage("/faces/resources/composite/jsr276Correct01.xhtml");
+        HtmlPage page = getPage("/faces/composite/jsr276-using.xhtml");
         String text = page.asText();
         assertTrue(-1 != text.indexOf("composite component with correctly specified jsr276 metadata"));
+        assertTrue(-1 == text.indexOf("prefix fmd"));
+        assertTrue(-1 != text.indexOf("prefix metaData"));
     }
 
     public void testExtensionMappedFaceletPage() throws Exception {
@@ -91,9 +92,17 @@ public class CompositeMetaDataTestCase extends AbstractTestCase {
         String text = page.asText();
         assertTrue(-1 != text.indexOf("composite component with correctly specified jsr276 metadata"));
         assertTrue(-1 != text.indexOf("composite component with incorrectly specified jsr276 metadata"));
-        assertTrue(-1 == text.indexOf("prefix fmd"));
-        assertTrue(-1 != text.indexOf("prefix metaData"));
     }
+
+   public void testDirectlyAccessedCompositeComponent() throws Exception {
+
+       HtmlPage page = null;
+       client.setThrowExceptionOnFailingStatusCode(false);
+       page = getPage("/faces/resources/composite/jsr276Correct01.xhtml");
+       String text = page.asText();
+       assertTrue(text.contains("Component Not Found for identifier"));
+    }
+
     
 
 } // end of class PathTestCase
