@@ -46,10 +46,27 @@
 
         <cc:attribute name="attr1" default="attr1Value" />
         <cc:attribute name="attr2" default="attr2Value" />
+        <cc:attribute name="attr3" method-signature="java.text.Format f()" default="#{compositeBean.format}" />
+        <cc:attribute name="action" method-signature="java.lang.String f()"
+                      default="#{compositeBean.action}" />
+        <cc:attribute name="actionListener" method-signature="void f(javax.faces.event.ActionEvent)"
+                      default="#{compositeBean.actionListener}" />
+        <cc:attribute name="validator" method-signature="void validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)"
+                      default="#{compositeBean.validate}"/>
+        <cc:attribute name="valueChangeListener" method-signature="void valueChange(javax.faces.event.ValueChangeEvent)"
+                      default="#{compositeBean.valueChange}"/>
+
 
     </cc:interface>
 
-    <cc:implementation/>
+    <cc:implementation>
+        
+        <h:commandButton id="action" value="action button"/>
+        <h:commandButton id="actionListener" value="actionListener button"/>
+        <h:inputText id="validator" />
+        <h:inputText id="valueChangeListener" />
+
+    </cc:implementation>
 
 </html>
 

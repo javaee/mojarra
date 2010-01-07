@@ -1040,7 +1040,11 @@ public class ApplicationImpl extends Application {
                         defaultValue = ((ValueExpression)defaultValue).getValue(context.getELContext());
                     }
                 }
-                attrs.put(key, defaultValue);
+                // ensure this attribute is not a method-signature.  method-signature
+                // declared default values are handled in retargetMethodExpressions.
+                if (null == cur.getValue("method-signature") || null != cur.getValue("type")) {
+                    attrs.put(key, defaultValue);
+                }
             }
         }
     }

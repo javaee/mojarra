@@ -52,6 +52,7 @@ public class JavaBackedComponentDefaultAttrValues extends UINamingContainer {
 
     @Override
     public void encodeAll(FacesContext context) throws IOException {
+        super.encodeAll(context);
         ResponseWriter responseWriter = context.getResponseWriter();
         Map<String, Object> attrs = this.getAttributes();
         String clientId = this.getClientId(context);
@@ -59,8 +60,12 @@ public class JavaBackedComponentDefaultAttrValues extends UINamingContainer {
         responseWriter.writeAttribute("id", clientId, "clientId");
         responseWriter.writeText("attr1 value is " + attrs.get("attr1").toString() + ". ", "attr1");
         responseWriter.writeText("attr2 value is " + attrs.get("attr2").toString() + ". ", "attr2");
+        responseWriter.writeText("attr3 value is " + attrs.get("attr3").toString() + ". ", "attr3");
+        responseWriter.writeText("action value is " + attrs.get("action").toString() + ". ", "action");
+        responseWriter.writeText("actionListener value is " + attrs.get("action").toString() + ". ", "action");
+        responseWriter.writeText("validator value is " + attrs.get("validator").toString() + ". ", "validator");
+        responseWriter.writeText("valueChangeListener value is " + attrs.get("valueChangeListener").toString() + ". ", "valueChangeListener");
         responseWriter.endElement("p");
-
     }
 
 

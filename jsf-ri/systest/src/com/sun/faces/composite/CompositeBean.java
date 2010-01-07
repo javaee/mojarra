@@ -36,6 +36,8 @@
 
 package com.sun.faces.composite;
 
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -199,6 +201,11 @@ public class CompositeBean {
                                         "ValueChange invoked: " + c.getClientId(ctx),
                                         "ValueChange invoked: " + c.getClientId(ctx)));
 
+    }
+
+    public Format getFormat() {
+        Format result = new DecimalFormat();
+        return result;
     }
 
 

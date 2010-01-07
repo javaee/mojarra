@@ -978,7 +978,13 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     public void testProgrammaticDefaultAttributeValueAccess() throws Exception {
         HtmlPage page = getPage("/faces/composite/programmaticDefaultAttributeValueAccess.xhtml");
-        assertTrue(page.asText().contains("attr1 value is attr1Value. attr2 value is attr2Value."));
+        String pageText = page.asText();
+        assertTrue(pageText.contains("attr1 value is attr1Value. attr2 value is attr2Value."));
+        assertTrue(pageText.contains("attr3 value is"));
+        assertTrue(pageText.contains("action value is"));
+        assertTrue(pageText.contains("actionListener value is"));
+        assertTrue(pageText.contains("validator value is"));
+        assertTrue(pageText.contains("valueChangeListener value is"));
     }
 
     public void testMissingRequiredAttribute() throws Exception {
