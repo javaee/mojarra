@@ -327,24 +327,31 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
 
     public void testValidators() throws Exception {
+        try {
+            getPage("/faces/setApplicationMapProperty.xhtml?name=javax.faces.VALIDATE_EMPTY_FIELDS&value=true");
 
-        HtmlPage page = getPage("/faces/composite/validator.xhtml");
-        HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
-        assertNotNull(submit);
-        page = submit.click();
+            HtmlPage page = getPage("/faces/composite/validator.xhtml");
+            HtmlSubmitInput submit = (HtmlSubmitInput) getInputContainingGivenId(page, "form:submit");
+            assertNotNull(submit);
+            page = submit.click();
 
-        final String[] inputIds = {
-              "form:c0:input",
-              "form:c1:nesting:aw1:input",
-              "form:c2:nesting:aw2:input",
-              "form:c3:nesting:aw3:nesting:aw1:input",
-              "form:c4:nesting:aw4:nesting:aw1:input"
-        };
+            final String[] inputIds = {
+                "form:c0:input",
+                "form:c1:nesting:aw1:input",
+                "form:c2:nesting:aw2:input",
+                "form:c3:nesting:aw3:nesting:aw1:input",
+                "form:c4:nesting:aw4:nesting:aw1:input"
+            };
 
-        String pageText = page.asText();
-        for (String inputId : inputIds) {
-            String message = "validator invoked: " + inputId;
-            assertTrue(pageText.contains(message));
+            String pageText = page.asText();
+            for (String inputId : inputIds) {
+                String message = "validator invoked: " + inputId;
+                assertTrue(pageText.contains(message));
+            }
+        }
+        finally {
+            getPage("/faces/clearApplicationMapProperty.xhtml?name=javax.faces.VALIDATE_EMPTY_FIELDS");
+
         }
 
     }
@@ -929,52 +936,6 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     }
 
-
-    /**
-     * Added for issue 1318.
-     */
-    public void testIssue1318() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/issue1318.xhtml");
-        HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "form:arg:n1:n2:command");
-        assertNotNull(button);
-        page = button.click();
-        String message = "Action invoked: form:arg:n1:n2:command, arg1: Hello, arg2: World!";
-        assertTrue(page.asText().contains(message));
-        
-    }
-
-
-    public void testCompositeComponentActionWithArgs() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/compActionWithArgs.xhtml");
-        HtmlSubmitInput button = (HtmlSubmitInput) getInputContainingGivenId(page, "n:form:command");
-        assertNotNull(button);
-        page = button.click();
-        String message = "Custom action invoked: c:n:form:command, arg1: arg1, arg2: arg2";
-        assertTrue(page.asText().contains(message));
-
-    }
-
-
-    public void testCompositeComponentAttributeWithArgs() throws Exception {
-
-        HtmlPage page = getPage("/faces/composite/compAttributeWithArgs.xhtml");
-        String message = "arg: arg1";
-        assertTrue(page.asText().contains(message));
-        
-    }
-
-
-    public void testInvalidArgsToCCExpression() throws Exception {
-
-        client.setThrowExceptionOnFailingStatusCode(false);
-        HtmlPage page = getPage("/faces/composite/invalidMeArgs.xhtml");
-        assertTrue(page.asText().contains("value=\"#{cc.attrs.custom(cc.attrs.arg1)}\" Illegal attempt to pass arguments to a composite component lookup expression"));
-
-        page = getPage("/faces/composite/invalidVeArgs.xhtml");
-        assertTrue(page.asText().contains("value=\"#{cc.attrs.bean(cc.attrs.arg1)}\" Illegal attempt to pass arguments to a composite component lookup expression"));
-    }
 
     public void testProgrammaticDefaultAttributeValueAccess() throws Exception {
         HtmlPage page = getPage("/faces/composite/programmaticDefaultAttributeValueAccess.xhtml");

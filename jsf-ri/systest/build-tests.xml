@@ -944,6 +944,21 @@
             </tests>
         </jsf.junit>  
 
+        <if>
+            <equals arg1="${container.name}" arg2="glassfishV3"/>
+            <then>
+		<jsf.junit context-path="${context.path}"
+			   classpath-refid="html.classpath"
+			   test-results-dir="${impl.test.results.dir}">
+		    <tests>
+			<fileset dir="${basedir}/build/classes"
+				 includes="com/sun/faces/composite/*TestCaseWithEE6Dependencies.class"/>
+		    </tests>
+		</jsf.junit>  
+            </then>
+        </if>
+
+
     </target>
 
 
