@@ -80,7 +80,7 @@
         </sequential>
     </macrodef>
 
-    <macrodef name="deploy.artifact">
+    <macrodef name="deploydir.artifact">
         <attribute name="explodedWarDir"
                    description="The exploded war directory to deploy"/>
         <attribute name="appName"
