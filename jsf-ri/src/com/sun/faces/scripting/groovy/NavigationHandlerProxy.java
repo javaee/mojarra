@@ -34,86 +34,56 @@
  * holder.
  */
 
-package com.sun.faces.scripting;
+package com.sun.faces.scripting.groovy;
 
-import java.io.IOException;
-
-import javax.faces.component.UIComponent;
+import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.ConverterException;
-import javax.faces.render.Renderer;
 import javax.faces.FacesException;
 
 /**
- * Proxy instance for a groovy-based Renderers.  This allows the Renderer
- * to remain registered with the renderkit while picking up changes at runtime
+ * Proxy instance for a groovy-based NavigationHandlers.  This allows the NavigationHandler
+ * to remain registered with the Application while picking up changes at runtime
  * from the associated groovy script.
  */
-public class RendererProxy extends Renderer {
+public class NavigationHandlerProxy extends NavigationHandler {
+
 
     private String scriptName;
-
+    private NavigationHandler nvDelegate;
 
     // ------------------------------------------------------------ Constructors
 
 
-    public RendererProxy(String scriptName) {
+    public NavigationHandlerProxy(String scriptName,
+                                  NavigationHandler nvDelegate) {
+
         this.scriptName = scriptName;
+        this.nvDelegate = nvDelegate;
+
     }
 
 
-    // --------------------------------------------------- Methods from Renderer
+    // ------------------------------------------ Methods from NavigationHandler
 
 
-    @Override
-    public void decode(FacesContext context, UIComponent component) {
-        getGroovyDelegate().decode(context, component);
-    }
+    public void handleNavigation(FacesContext context,
+                                 String fromAction,
+                                 String outcome) {
 
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component)
-    throws IOException {
-        getGroovyDelegate().encodeBegin(context, component);
-    }
+        getGroovyDelegate().handleNavigation(context, fromAction, outcome);
 
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component)
-    throws IOException {
-        getGroovyDelegate().encodeChildren(context, component);
-    }
-
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component)
-    throws IOException {
-        getGroovyDelegate().encodeEnd(context, component);
-    }
-
-    @Override
-    public String convertClientId(FacesContext context, String clientId) {
-        return getGroovyDelegate().convertClientId(context, clientId);
-    }
-
-    @Override
-    public boolean getRendersChildren() {
-        return getGroovyDelegate().getRendersChildren();
-    }
-
-    @Override
-    public Object getConvertedValue(FacesContext context,
-                                    UIComponent component,
-                                    Object submittedValue)
-    throws ConverterException {
-        return getGroovyDelegate().getConvertedValue(context, component, submittedValue);
     }
 
 
     // --------------------------------------------------------- Private Methods
 
 
-    private Renderer getGroovyDelegate() {
+    private NavigationHandler getGroovyDelegate() {
 
         try {
-            return ((Renderer) GroovyHelper.newInstance(scriptName));
+            return ((NavigationHandler) GroovyHelper.newInstance(scriptName,
+                                                                 NavigationHandler.class,
+                                                                 nvDelegate));
         } catch (Exception e) {
             throw new FacesException(e);
         }

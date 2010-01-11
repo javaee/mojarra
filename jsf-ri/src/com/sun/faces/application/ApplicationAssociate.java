@@ -41,7 +41,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.scripting.GroovyHelper;
+import com.sun.faces.scripting.groovy.GroovyHelper;
 import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.application.annotation.AnnotationManager;

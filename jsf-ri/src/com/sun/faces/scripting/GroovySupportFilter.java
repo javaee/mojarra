@@ -36,6 +36,7 @@
 
 package com.sun.faces.scripting;
 
+import com.sun.faces.scripting.groovy.GroovyHelper;
 import java.io.IOException;
 
 import javax.servlet.Filter;

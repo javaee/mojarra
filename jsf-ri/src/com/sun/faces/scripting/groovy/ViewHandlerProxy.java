@@ -34,7 +34,7 @@
  * holder.
  */
 
-package com.sun.faces.scripting;
+package com.sun.faces.scripting.groovy;
 
 import java.io.IOException;
 import java.util.List;

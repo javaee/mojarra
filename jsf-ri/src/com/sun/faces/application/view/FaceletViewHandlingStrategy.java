@@ -50,7 +50,7 @@ import com.sun.faces.facelets.el.ContextualCompositeMethodExpression;
 import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import com.sun.faces.facelets.tag.ui.UIDebug;
-import com.sun.faces.scripting.GroovyHelper;
+import com.sun.faces.scripting.groovy.GroovyHelper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -34,46 +34,59 @@
  * holder.
  */
 
-package com.sun.faces.scripting;
+package com.sun.faces.scripting.groovy;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
+import javax.faces.FacesException;
 
 /**
- * This class exists to avoid having to have Groovy available at runtime.
+ * Proxy instance for a groovy-based PhaseListeners.  This allows the PhaseListener
+ * to remain registered with the Lifecycle while picking up changes at runtime
+ * from the associated groovy script.
  */
-public class GroovyHelperFactory {
+public class PhaseListenerProxy implements PhaseListener {
 
-    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-    private static final String GROOVY_HELPER_IMPL =
-          "com.sun.faces.scripting.GroovyHelperImpl";
+    private String scriptName;
 
-    public static GroovyHelper createHelper() {
+    // ------------------------------------------------------------ Constructors
+
+
+    public PhaseListenerProxy(String scriptName) {
+        this.scriptName = scriptName;
+    }
+
+    // ---------------------------------------------- Methods from PhaseListener
+
+
+
+    public void afterPhase(PhaseEvent event) {
+        getGroovyDelegate().afterPhase(event);
+    }
+
+
+    public void beforePhase(PhaseEvent event) {
+        getGroovyDelegate().beforePhase(event);
+    }
+
+
+    public PhaseId getPhaseId() {
+        return getGroovyDelegate().getPhaseId();
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private PhaseListener getGroovyDelegate() {
+
         try {
-            if (Util.loadClass("groovy.util.GroovyScriptEngine", GroovyHelperFactory.class) != null) {
-                try {
-                    Class<?> c =
-                          Util.loadClass(GROOVY_HELPER_IMPL, GroovyHelperFactory.class);
-                    return (GroovyHelper) c.newInstance();
-                } catch (UnsupportedOperationException ignored) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine("Groovy runtime available, but WEB-INF/groovy directory not present."
-                                    + "  Groovy support will not be enabled.");
-                    }
-                } catch (Exception e) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                   "Groovy support not available",
-                                   e);
-                    }
-                }
-            }
-        } catch (ClassNotFoundException ignored) {
+            return ((PhaseListener) GroovyHelper.newInstance(scriptName));
+        } catch (Exception e) {
+            throw new FacesException(e);
         }
-        return null;
+
     }
 
 }

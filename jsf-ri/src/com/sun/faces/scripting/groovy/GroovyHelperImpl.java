@@ -34,7 +34,7 @@
  * holder.
  */
 
-package com.sun.faces.scripting;
+package com.sun.faces.scripting.groovy;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -42,15 +42,13 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import groovy.util.GroovyScriptEngine;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -84,6 +82,9 @@ class GroovyHelperImpl extends GroovyHelper {
         if (0 < combinedRoots.length) {
             GroovyScriptEngine engine =
                     new GroovyScriptEngine(combinedRoots, curLoader);
+//            Class<?> c = Util.loadClass("groovy.util.GroovyScriptEngine", GroovyHelperFactory.class);
+//            Constructor<?> ctor = c.getConstructor(URL[].class, ClassLoader.class);
+//            GroovyScriptEngine engine = (GroovyScriptEngine)ctor.newInstance(combinedRoots, curLoader);
             loader = new MojarraGroovyClassLoader(engine);
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,

@@ -50,12 +50,12 @@ import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
-import com.sun.faces.scripting.RendererProxy;
-import com.sun.faces.scripting.NavigationHandlerProxy;
-import com.sun.faces.scripting.ELResolverProxy;
-import com.sun.faces.scripting.PhaseListenerProxy;
-import com.sun.faces.scripting.ViewHandlerProxy;
-import com.sun.faces.scripting.ActionListenerProxy;
+import com.sun.faces.scripting.groovy.RendererProxy;
+import com.sun.faces.scripting.groovy.NavigationHandlerProxy;
+import com.sun.faces.scripting.groovy.ELResolverProxy;
+import com.sun.faces.scripting.groovy.PhaseListenerProxy;
+import com.sun.faces.scripting.groovy.ViewHandlerProxy;
+import com.sun.faces.scripting.groovy.ActionListenerProxy;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 

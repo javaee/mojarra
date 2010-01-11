@@ -110,7 +110,7 @@ public class ResourceImpl extends Resource implements Externalizable {
 
 
     /**
-     * Necessary for serailization.
+     * Necessary for serialization.
      */
     public ResourceImpl() { }
 

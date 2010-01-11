@@ -34,8 +34,9 @@
  * holder.
  */
 
-package com.sun.faces.scripting;
+package com.sun.faces.scripting.groovy;
 
+import com.sun.faces.scripting.groovy.GroovyHelperImpl;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;

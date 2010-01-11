@@ -34,63 +34,89 @@
  * holder.
  */
 
+package com.sun.faces.scripting.groovy;
 
-package com.sun.faces.scripting;
+import java.io.IOException;
 
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.ConverterException;
+import javax.faces.render.Renderer;
 import javax.faces.FacesException;
 
 /**
- * Proxy instance for a groovy-based ActionListener.  This allows the ActionListener
- * to remain registered with the Application while picking up changes at runtime
+ * Proxy instance for a groovy-based Renderers.  This allows the Renderer
+ * to remain registered with the renderkit while picking up changes at runtime
  * from the associated groovy script.
  */
-public class ActionListenerProxy implements ActionListener {
+public class RendererProxy extends Renderer {
 
     private String scriptName;
-    private ActionListener alDelegate;
 
 
     // ------------------------------------------------------------ Constructors
 
 
-    public ActionListenerProxy(String scriptName,
-                               ActionListener alDelegate) {
-
+    public RendererProxy(String scriptName) {
         this.scriptName = scriptName;
-        this.alDelegate = alDelegate;
-
     }
 
 
-    // --------------------------------------------- Methods from ActionListener
+    // --------------------------------------------------- Methods from Renderer
 
 
-    public void processAction(ActionEvent event)
-    throws AbortProcessingException {
+    @Override
+    public void decode(FacesContext context, UIComponent component) {
+        getGroovyDelegate().decode(context, component);
+    }
 
-        getGroovyDelegate().processAction(event);
-        
+    @Override
+    public void encodeBegin(FacesContext context, UIComponent component)
+    throws IOException {
+        getGroovyDelegate().encodeBegin(context, component);
+    }
+
+    @Override
+    public void encodeChildren(FacesContext context, UIComponent component)
+    throws IOException {
+        getGroovyDelegate().encodeChildren(context, component);
+    }
+
+    @Override
+    public void encodeEnd(FacesContext context, UIComponent component)
+    throws IOException {
+        getGroovyDelegate().encodeEnd(context, component);
+    }
+
+    @Override
+    public String convertClientId(FacesContext context, String clientId) {
+        return getGroovyDelegate().convertClientId(context, clientId);
+    }
+
+    @Override
+    public boolean getRendersChildren() {
+        return getGroovyDelegate().getRendersChildren();
+    }
+
+    @Override
+    public Object getConvertedValue(FacesContext context,
+                                    UIComponent component,
+                                    Object submittedValue)
+    throws ConverterException {
+        return getGroovyDelegate().getConvertedValue(context, component, submittedValue);
     }
 
 
     // --------------------------------------------------------- Private Methods
 
 
-    private ActionListener getGroovyDelegate() {
+    private Renderer getGroovyDelegate() {
 
         try {
-            return ((ActionListener) GroovyHelper.newInstance(scriptName,
-                                                              ActionListener.class,
-                                                              alDelegate));
+            return ((Renderer) GroovyHelper.newInstance(scriptName));
         } catch (Exception e) {
             throw new FacesException(e);
         }
 
     }
-
-
-
 }

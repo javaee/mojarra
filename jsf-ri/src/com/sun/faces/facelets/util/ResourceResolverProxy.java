@@ -36,7 +36,7 @@
 
 package com.sun.faces.facelets.util;
 
-import com.sun.faces.scripting.GroovyHelper;
+import com.sun.faces.scripting.groovy.GroovyHelper;
 
 import javax.faces.FacesException;
 import javax.faces.view.facelets.ResourceResolver;

@@ -34,7 +34,7 @@
  * holder.
  */
 
-package com.sun.faces.scripting;
+package com.sun.faces.scripting.groovy;
 
 import com.sun.faces.util.Util;
 

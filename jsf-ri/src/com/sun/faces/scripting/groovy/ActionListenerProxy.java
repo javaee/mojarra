@@ -34,59 +34,63 @@
  * holder.
  */
 
-package com.sun.faces.scripting;
 
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.event.PhaseListener;
+package com.sun.faces.scripting.groovy;
+
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
 import javax.faces.FacesException;
 
 /**
- * Proxy instance for a groovy-based PhaseListeners.  This allows the PhaseListener
- * to remain registered with the Lifecycle while picking up changes at runtime
+ * Proxy instance for a groovy-based ActionListener.  This allows the ActionListener
+ * to remain registered with the Application while picking up changes at runtime
  * from the associated groovy script.
  */
-public class PhaseListenerProxy implements PhaseListener {
+public class ActionListenerProxy implements ActionListener {
 
     private String scriptName;
+    private ActionListener alDelegate;
+
 
     // ------------------------------------------------------------ Constructors
 
 
-    public PhaseListenerProxy(String scriptName) {
+    public ActionListenerProxy(String scriptName,
+                               ActionListener alDelegate) {
+
         this.scriptName = scriptName;
-    }
+        this.alDelegate = alDelegate;
 
-    // ---------------------------------------------- Methods from PhaseListener
-
-
-
-    public void afterPhase(PhaseEvent event) {
-        getGroovyDelegate().afterPhase(event);
     }
 
 
-    public void beforePhase(PhaseEvent event) {
-        getGroovyDelegate().beforePhase(event);
-    }
+    // --------------------------------------------- Methods from ActionListener
 
 
-    public PhaseId getPhaseId() {
-        return getGroovyDelegate().getPhaseId();
+    public void processAction(ActionEvent event)
+    throws AbortProcessingException {
+
+        getGroovyDelegate().processAction(event);
+        
     }
 
 
     // --------------------------------------------------------- Private Methods
 
 
-    private PhaseListener getGroovyDelegate() {
+    private ActionListener getGroovyDelegate() {
 
         try {
-            return ((PhaseListener) GroovyHelper.newInstance(scriptName));
+            return ((ActionListener) GroovyHelper.newInstance(scriptName,
+                                                              ActionListener.class,
+                                                              alDelegate));
         } catch (Exception e) {
             throw new FacesException(e);
         }
 
     }
+
+
 
 }
