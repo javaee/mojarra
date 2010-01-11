@@ -21,7 +21,7 @@
  own identifying information: Portions Copyright [yyyy] 
  [name of copyright owner]
 
-$Id: web.xml,v 1.2 2005/12/23 19:17:05 edburns Exp $ -->
+-->
 
 <web-app version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee"
