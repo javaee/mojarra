@@ -56,10 +56,8 @@
  
  [Name of File] [ver.__] [Date]
  
- Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+ Copyright 2005-2010 Sun Microsystems Inc. All Rights Reserved
 -->
-
-<%-- $Id: repeater.jsp,v 1.14 2007/04/27 22:00:26 ofung Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>

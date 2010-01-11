@@ -1,8 +1,4 @@
 /*
- * $Id: FacetTag.java,v 1.18 2007/04/27 22:00:11 ofung Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
