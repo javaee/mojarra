@@ -33,8 +33,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  *
+ *
  * This file incorporates work covered by the following copyright and
  * permission notice:
+ *
+ * Copyright 2005-2007 The Apache Software Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +51,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 
 package com.sun.faces.facelets.tag.jstl.fn;
 

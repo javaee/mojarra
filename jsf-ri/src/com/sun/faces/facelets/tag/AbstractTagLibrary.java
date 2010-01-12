@@ -69,7 +69,6 @@ import java.util.Map;
  * Base class for defining TagLibraries in Java
  * 
  * @author Jacob Hookom
- * @version $Id$
  */
 public abstract class AbstractTagLibrary implements TagLibrary {
 
