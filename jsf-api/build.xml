@@ -843,6 +843,10 @@ javax.faces.level=ALL
         <mvn.deploy.release.local type="api"/>
     </target>
 
+    <target name="mvn.deploy.api.release.local">
+        <mvn.deploy.release.local groupId="javax.faces" version="${spec.version}" type="api"/>
+    </target>
+
 
     <!--
        USE THE FOLLOWING TARGETS TO PUSH VARIOUS BUILD TYPES TO THE
@@ -860,6 +864,10 @@ javax.faces.level=ALL
 
     <target name="mvn.deploy.release">
         <mvn.deploy.release type="api"/>
+    </target>
+
+    <target name="mvn.deploy.api.release">
+        <mvn.deploy.release groupId="javax.faces" version="${spec.version}" type="api"/>
     </target>
 
 </project>

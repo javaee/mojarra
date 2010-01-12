@@ -80,15 +80,19 @@
 
     <macrodef name="mvn.deploy.release.local">
         <attribute name="type"/>
+        <attribute name="groupId" default="com.sun.faces"/>
+        <attribute name="version" default="${impl.version.number}"/>
         <sequential>
-            <do.mvn type="@{type}" goal="install" version="${impl.version.number}"/>
+            <do.mvn type="@{type}" groupId="@{groupId}" goal="install" version="@{version}"/>
         </sequential>
     </macrodef>
 
     <macrodef name="mvn.deploy.release">
         <attribute name="type"/>
+        <attribute name="groupId" default="com.sun.faces"/>
+        <attribute name="version" default="${impl.version.number}"/>
         <sequential>
-            <do.mvn type="@{type}" goal="deploy" version="${impl.version.number}"/>
+            <do.mvn type="@{type}" groupId="@{groupId}" goal="deploy" version="@{version}"/>
         </sequential>
     </macrodef>
 
@@ -98,11 +102,15 @@
         <attribute name="template.file"/>
         <attribute name="output.file"/>
         <attribute name="version"/>
+        <attribute name="groupId"/>
         <sequential>
             <copy file="@{template.file}" tofile="@{output.file}"/>
             <replace file="@{output.file}"
                      token="@version@"
                      value="@{version}"/>
+            <replace file="@{output.file}"
+                     token="@groupId@"
+                     value="@{groupId}"/>
         </sequential>
     </macrodef>
 
@@ -110,6 +118,7 @@
         <attribute name="type"/>
         <attribute name="version"/>
         <attribute name="goal"/>
+        <attribute name="groupId" default="com.sun.faces"/>
         <sequential>
             <if>
                 <equals arg1="@{type}" arg2="api"/>
@@ -117,7 +126,8 @@
                     <create.pom
                           template.file="${current.dir}/template/jsf-api-pom-template.xml"
                           output.file="${mvn.api.dir}/jsf-api-pom.xml"
-                          version="@{version}"/>
+                          version="@{version}"
+                          groupId="@{groupId}"/>
                     <mkdir dir="${mvn.api.dir}/target/classes"/>
                     <mkdir dir="${mvn.api.dir}/src/main/java"/>
                     <copy overwrite="true" 
