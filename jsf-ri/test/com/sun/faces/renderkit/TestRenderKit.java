@@ -1,11 +1,7 @@
 /*
- * $Id: TestRenderKit.java,v 1.26 2007/08/08 16:38:46 youngm Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -85,7 +81,6 @@ import org.w3c.dom.Document;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.26 2007/08/08 16:38:46 youngm Exp $
  */
 
 public class TestRenderKit extends ServletFacesTestCase {

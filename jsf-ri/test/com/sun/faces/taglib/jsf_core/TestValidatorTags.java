@@ -1,11 +1,7 @@
 /*
- * $Id: TestValidatorTags.java,v 1.36 2008/01/28 20:55:38 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -63,7 +59,6 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.36 2008/01/28 20:55:38 rlubke Exp $
  */
 
 public class TestValidatorTags extends JspFacesTestCase {

@@ -1,11 +1,7 @@
 /*
- * $Id: ViewTag.java,v 1.54 2008/03/10 22:30:38 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -80,7 +76,6 @@ import com.sun.faces.RIConstants;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.54 2008/03/10 22:30:38 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
