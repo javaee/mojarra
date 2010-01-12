@@ -1,9 +1,4 @@
 /*
- * ConverterPropertyEditor.java
- *
- * Created on August 10, 2006, 12:39 PM
- */
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
