@@ -1,16 +1,8 @@
 /*
-
- * $Id: NewApplication.java,v 1.8 2007/11/05 21:11:46 rlubke Exp $
-
- */
-
-
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -18,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -27,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -43,79 +35,58 @@
  */
 
 
-
-
-
-
-
 package com.sun.faces.systest;
 
 
-
-import java.util.Iterator;
-
-import java.util.Collection;
-
-import java.util.Locale;
-
-import java.util.ResourceBundle;
-
-
-
+import javax.el.ELContextListener;
+import javax.el.ELException;
+import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
-
-import javax.faces.application.*;
-
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationWrapper;
+import javax.faces.application.NavigationHandler;
+import javax.faces.application.ProjectStage;
+import javax.faces.application.ResourceHandler;
+import javax.faces.application.StateManager;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
-
 import javax.faces.context.FacesContext;
-
 import javax.faces.convert.Converter;
-
 import javax.faces.el.MethodBinding;
-
 import javax.faces.el.PropertyResolver;
-
 import javax.faces.el.ReferenceSyntaxException;
-
 import javax.faces.el.ValueBinding;
-
 import javax.faces.el.VariableResolver;
-
 import javax.faces.event.ActionListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
-
 import javax.faces.validator.Validator;
-
-import javax.el.ELContextListener;
-import javax.el.ExpressionFactory;
-import javax.el.ELException;
-import javax.el.ELResolver;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class NewApplication extends ApplicationWrapper {
 
-    
 
     private Application oldApp = null;
 
     public Application getWrapped() {
-	return oldApp;
+        return oldApp;
     }
-
 
 
     public NewApplication(Application oldApp) {
 
-	this.oldApp = oldApp;
+        this.oldApp = oldApp;
 
     }
 
 
-
     public ActionListener getActionListener() {
 
-	return oldApp.getActionListener();
+        return oldApp.getActionListener();
 
     }
 
@@ -160,128 +131,98 @@ public class NewApplication extends ApplicationWrapper {
     }
 
 
-
     public void setActionListener(ActionListener listener) {
 
-	oldApp.setActionListener(listener);
+        oldApp.setActionListener(listener);
 
     }
-
-
-
 
 
     public Locale getDefaultLocale() {
 
-	return oldApp.getDefaultLocale();
+        return oldApp.getDefaultLocale();
 
     }
-
-
-
 
 
     public void setDefaultLocale(Locale locale) {
 
-	oldApp.setDefaultLocale(locale);
+        oldApp.setDefaultLocale(locale);
 
     }
-
-
-
 
 
     public String getDefaultRenderKitId() {
 
-	return oldApp.getDefaultRenderKitId();
+        return oldApp.getDefaultRenderKitId();
 
     }
-
-
-
 
 
     public void setDefaultRenderKitId(String renderKitId) {
 
-	oldApp.setDefaultRenderKitId(renderKitId);
+        oldApp.setDefaultRenderKitId(renderKitId);
 
     }
-
-	
-
-
-
 
 
     public String getMessageBundle() {
 
-	return oldApp.getMessageBundle();
+        return oldApp.getMessageBundle();
 
     }
-
-
-
 
 
     public void setMessageBundle(String bundle) {
 
-	oldApp.setMessageBundle(bundle);
+        oldApp.setMessageBundle(bundle);
 
     }
-
-
-
 
 
     public NavigationHandler getNavigationHandler() {
 
-	return oldApp.getNavigationHandler();
+        return oldApp.getNavigationHandler();
 
     }
-
-
-
 
 
     public void setNavigationHandler(NavigationHandler handler) {
 
-	oldApp.setNavigationHandler(handler);
+        oldApp.setNavigationHandler(handler);
 
     }
 
-  
-   public void setResourceHandler(ResourceHandler rh) {
-       oldApp.setResourceHandler(rh);
-   }
+
+    public void setResourceHandler(ResourceHandler rh) {
+        oldApp.setResourceHandler(rh);
+    }
 
 
-   public ResourceHandler getResourceHandler() {
-      return oldApp.getResourceHandler();
-   }
+    public ResourceHandler getResourceHandler() {
+        return oldApp.getResourceHandler();
+    }
 
 
     public PropertyResolver getPropertyResolver() {
 
-	return oldApp.getPropertyResolver();
+        return oldApp.getPropertyResolver();
 
     }
-
-
-
 
 
     public void setPropertyResolver(PropertyResolver resolver) {
 
-	oldApp.setPropertyResolver(resolver);
+        oldApp.setPropertyResolver(resolver);
 
     }
-    
+
     public ELResolver getELResolver() {
 
-	return oldApp.getELResolver();
+        return oldApp.getELResolver();
 
     }
-    
+
     public ExpressionFactory getExpressionFactory() {
         return oldApp.getExpressionFactory();
     }
@@ -289,80 +230,65 @@ public class NewApplication extends ApplicationWrapper {
     public void addELContextListener(ELContextListener listener) {
         oldApp.addELContextListener(listener);
     }
-    
+
     public void removeELContextListener(ELContextListener listener) {
         oldApp.removeELContextListener(listener);
     }
-    
+
     public void addELResolver(ELResolver resolver) {
         oldApp.addELResolver(resolver);
     }
-    
-    public ELContextListener [] getELContextListeners() {
+
+    public ELContextListener[] getELContextListeners() {
         return oldApp.getELContextListeners();
     }
-    
+
     public Object evaluateExpressionGet(FacesContext context,
-						 String expression, 
-						 Class expectedType) throws ELException {
+                                        String expression,
+                                        Class expectedType) throws ELException {
         return oldApp.evaluateExpressionGet(context, expression, expectedType);
     }
 
     public VariableResolver getVariableResolver() {
 
-	return oldApp.getVariableResolver();
+        return oldApp.getVariableResolver();
 
     }
 
 
     public void setVariableResolver(VariableResolver resolver) {
 
-	oldApp.setVariableResolver(resolver);
+        oldApp.setVariableResolver(resolver);
 
     }
-
-
-
 
 
     public ViewHandler getViewHandler() {
 
-	return oldApp.getViewHandler();
+        return oldApp.getViewHandler();
 
     }
-
-
-
 
 
     public void setViewHandler(ViewHandler handler) {
 
-	oldApp.setViewHandler(handler);
+        oldApp.setViewHandler(handler);
 
     }
-
-
-
-
-
 
 
     public StateManager getStateManager() {
 
-	return oldApp.getStateManager();
+        return oldApp.getStateManager();
 
     }
-
-
-
 
 
     public void setStateManager(StateManager manager) {
 
-	oldApp.setStateManager(manager);
+        oldApp.setStateManager(manager);
 
     }
-
 
 
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
@@ -372,209 +298,152 @@ public class NewApplication extends ApplicationWrapper {
     }
 
 
-
-
-
     // ------------------------------------------------------- Object Factories
-
-
-
 
 
     public void addComponent(String componentType,
 
-			     String componentClass) {
+                             String componentClass) {
 
-	oldApp.addComponent(componentType, componentClass);
+        oldApp.addComponent(componentType, componentClass);
 
     }
-
-
-
 
 
     public UIComponent createComponent(String componentType)
 
-        throws FacesException {
+          throws FacesException {
 
-	return oldApp.createComponent(componentType);
+        return oldApp.createComponent(componentType);
 
     }
-
-
-
 
 
     public UIComponent createComponent(ValueBinding componentBinding,
 
-                                                FacesContext context,
+                                       FacesContext context,
 
-                                                String componentType)
+                                       String componentType)
 
-	throws FacesException {
+          throws FacesException {
 
-	return oldApp.createComponent(componentBinding, context, 
+        return oldApp.createComponent(componentBinding, context,
 
-				      componentType);
+                                      componentType);
 
     }
-
-
-
 
 
     public Iterator getComponentTypes() {
 
-	return oldApp.getComponentTypes();
+        return oldApp.getComponentTypes();
 
     }
 
 
+    public void addConverter(String converterId,
 
+                             String converterClass) {
 
-
-    public void addConverter(String converterId, 
-
-			     String converterClass) {
-
-	oldApp.addConverter(converterId, converterClass);
+        oldApp.addConverter(converterId, converterClass);
 
     }
-
-
-
 
 
     public void addConverter(Class targetClass,
 
-			     String converterClass) {
+                             String converterClass) {
 
-	oldApp.addConverter(targetClass, converterClass);
+        oldApp.addConverter(targetClass, converterClass);
 
     }
-
-
-
 
 
     public Converter createConverter(String converterId) {
 
-	return oldApp.createConverter(converterId);
+        return oldApp.createConverter(converterId);
 
     }
-
-
-
 
 
     public Converter createConverter(Class targetClass) {
 
-	return oldApp.createConverter(targetClass);
+        return oldApp.createConverter(targetClass);
 
     }
-
-
-
 
 
     public Iterator getConverterIds() {
 
-	return oldApp.getConverterIds();
+        return oldApp.getConverterIds();
 
     }
 
-
-
-    
 
     public Iterator getConverterTypes() {
 
-	return oldApp.getConverterTypes();
+        return oldApp.getConverterTypes();
 
     }
-
-
-
 
 
     public MethodBinding createMethodBinding(String ref,
 
-                                                      Class params[])
+                                             Class params[])
 
-        throws ReferenceSyntaxException {
+          throws ReferenceSyntaxException {
 
-	return oldApp.createMethodBinding(ref, params);
+        return oldApp.createMethodBinding(ref, params);
 
     }
-
-
-
 
 
     public Iterator getSupportedLocales() {
 
-	return oldApp.getSupportedLocales();
+        return oldApp.getSupportedLocales();
 
     }
-
-
-
 
 
     public void setSupportedLocales(Collection locales) {
 
-	oldApp.setSupportedLocales(locales);
+        oldApp.setSupportedLocales(locales);
 
     }
 
 
+    public void addValidator(String validatorId,
 
+                             String validatorClass) {
 
-
-    public void addValidator(String validatorId, 
-
-			     String validatorClass) {
-
-	oldApp.addValidator(validatorId, validatorClass);
+        oldApp.addValidator(validatorId, validatorClass);
 
     }
-
-
-
 
 
     public Validator createValidator(String validatorId)
 
-        throws FacesException {
+          throws FacesException {
 
-	return oldApp.createValidator(validatorId);
+        return oldApp.createValidator(validatorId);
 
     }
-
-
-
 
 
     public Iterator getValidatorIds() {
 
-	return oldApp.getValidatorIds();
+        return oldApp.getValidatorIds();
 
     }
-
-
-
 
 
     public ValueBinding createValueBinding(String ref)
 
-        throws ReferenceSyntaxException {
+          throws ReferenceSyntaxException {
 
-	return oldApp.createValueBinding(ref);
+        return oldApp.createValueBinding(ref);
 
     }
-
-
-
 
 
 }
