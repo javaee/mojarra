@@ -56,11 +56,10 @@
  
  [Name of File] [ver.__] [Date]
  
- Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+ Copyright 2005-2010 Sun Microsystems Inc. All Rights Reserved
 -->
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- $Id: index.jsp,v 1.10 2007/04/27 22:00:44 ofung Exp $ -->
 <html>
   <head>
     <title>JavaServer Faces 1.0 Standard RenderKit Demo</title>

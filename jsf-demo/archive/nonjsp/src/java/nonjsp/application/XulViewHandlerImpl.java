@@ -1,11 +1,7 @@
-/* 
- * $Id: XulViewHandlerImpl.java,v 1.6 2007/04/27 22:00:35 ofung Exp $ 
- */
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -75,7 +71,6 @@ import nonjsp.util.RIConstants;
 /**
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.6 2007/04/27 22:00:35 ofung Exp $ *
  * @see javax.faces.application.ViewHandler
  */
 public class XulViewHandlerImpl extends ViewHandler {

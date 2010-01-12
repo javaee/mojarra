@@ -56,14 +56,12 @@
  
  [Name of File] [ver.__] [Date]
  
- Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+ Copyright 2005-2010 Sun Microsystems Inc. All Rights Reserved
 -->
 
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-
-<%-- $Id: UIPanel.jsp,v 1.9 2007/04/27 22:00:43 ofung Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <f:view>  

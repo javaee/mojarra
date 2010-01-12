@@ -20,7 +20,7 @@
 # 
 # [Name of File] [ver.__] [Date]
 # 
-# Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+# Copyright 2005-2010 Sun Microsystems Inc. All Rights Reserved
 #
 
 # -----------------------------------------------------------------------------
@@ -38,7 +38,6 @@
 #
 # Do display current property setting run the ant command: "ant props"
 #
-# $Id: build.properties.sample,v 1.2 2005/08/22 22:09:14 ofung Exp $
 # -----------------------------------------------------------------------------
 
 # ----- Default Paths for Dependent Packages -----

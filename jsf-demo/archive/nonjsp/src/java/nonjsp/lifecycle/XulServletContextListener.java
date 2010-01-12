@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -54,7 +54,6 @@ import nonjsp.application.XulViewHandlerImpl;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XulServletContextListener.java,v 1.4 2007/04/27 22:00:36 ofung Exp $
  */
 
 public class XulServletContextListener implements ServletContextListener {

@@ -1,11 +1,7 @@
 /*
- * $Id: XmlDialectProvider.java,v 1.4 2007/04/27 22:00:35 ofung Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -49,7 +45,6 @@ import org.apache.commons.digester.RuleSetBase;
  * logic required for creating a tree of UIComponent instances from an
  * Xml file. <P>
  *
- * @version $Id: XmlDialectProvider.java,v 1.4 2007/04/27 22:00:35 ofung Exp $
  */
 public interface XmlDialectProvider {
 
