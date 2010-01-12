@@ -1,11 +1,7 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.57 2008/03/03 05:34:43 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -79,7 +75,6 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.57 2008/03/03 05:34:43 rlubke Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase {
