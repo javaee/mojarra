@@ -1,11 +1,7 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.33 2007/07/19 15:01:56 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -58,7 +54,6 @@ import java.util.logging.Logger;
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.33 2007/07/19 15:01:56 rlubke Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 

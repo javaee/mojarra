@@ -1,11 +1,7 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.27 2007/12/17 21:46:09 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -65,7 +61,6 @@ import javax.faces.event.PreRenderViewEvent;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.27 2007/12/17 21:46:09 rlubke Exp $
  */
 
 public class RenderResponsePhase extends Phase {
