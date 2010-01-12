@@ -1,11 +1,7 @@
 /*
- * $Id: ImageRenderer.java,v 1.56 2008/02/14 00:32:12 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -58,7 +54,6 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.56 2008/02/14 00:32:12 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {

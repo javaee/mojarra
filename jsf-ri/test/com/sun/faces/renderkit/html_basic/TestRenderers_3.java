@@ -35,8 +35,6 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.42 2007/04/27 22:02:09 ofung Exp $
- *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
  * divested of its trade secrets, irrespective of what has been
@@ -79,8 +77,6 @@ import java.util.Locale;
  * Test encode and decode methods in Renderer classes.
  * <p/>
  * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: TestRenderers_3.java,v 1.42 2007/04/27 22:02:09 ofung Exp $
  */
 
 public class TestRenderers_3 extends JspFacesTestCase {

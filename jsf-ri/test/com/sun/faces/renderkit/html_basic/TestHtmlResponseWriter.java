@@ -1,11 +1,7 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.31 2008/03/20 19:33:58 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -59,8 +55,6 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <B>TestHtmlResponseWriter.java</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: TestHtmlResponseWriter.java,v 1.31 2008/03/20 19:33:58 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase

@@ -1,11 +1,7 @@
 /*
- * $Id: GroupRenderer.java,v 1.35 2007/08/30 19:29:12 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -51,7 +47,6 @@ import javax.faces.context.ResponseWriter;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method.
  *
- * @version $Id: GroupRenderer.java,v 1.35 2007/08/30 19:29:12 rlubke Exp $
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
