@@ -22,11 +22,10 @@
  
  [Name of File] [ver.__] [Date]
  
- Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+ Copyright 2005-2010 Sun Microsystems Inc. All Rights Reserved
 -->
 
 <!-- Content Stylesheet for Outstanding Issues Detail List -->
-<!-- $Id: ri-issues-detail.xsl,v 1.5 2005/08/22 22:10:05 ofung Exp $ -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">

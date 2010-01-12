@@ -1,8 +1,3 @@
-
-/*
- * $Id: ELFlash.java,v 1.6 2005/12/16 21:32:36 edburns Exp $
- */
-
 /*
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -25,7 +20,7 @@
  *
  * [Name of File] [ver.__] [Date]
  *
- * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+ * Copyright 2005-2010 Sun Microsystems Inc. All Rights Reserved
  */
 
 package com.sun.faces.model;

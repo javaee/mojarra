@@ -1,8 +1,7 @@
-/* Copyright 2005 Sun Microsystems, Inc.  All rights reserved.  You may
+/* Copyright 2005-2010 Sun Microsystems, Inc.  All rights reserved.  You may
  * not modify, use, reproduce, or distribute this software except in
  * compliance with the terms of the License at:
- * http://developer.sun.com/berkeley_license.html $Id:
- * ResultSetBean.java,v 1.1 2005/12/16 21:32:41 edburns Exp $ 
+ * http://developer.sun.com/berkeley_license.html
  */
 
 package com.sun.faces.run_time_test.model;

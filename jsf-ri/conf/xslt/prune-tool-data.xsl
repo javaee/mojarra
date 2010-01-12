@@ -1,10 +1,6 @@
 <?xml version="1.0"?>
 
 <!--
-   $Id: prune-tool-data.xsl,v 1.4 2005/08/22 22:10:05 ofung Exp $
--->
-
-<!--
  The contents of this file are subject to the terms
  of the Common Development and Distribution License
  (the License). You may not use this file except in
@@ -26,7 +22,7 @@
  
  [Name of File] [ver.__] [Date]
  
- Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+ Copyright 2005-2010 Sun Microsystems Inc. All Rights Reserved
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
