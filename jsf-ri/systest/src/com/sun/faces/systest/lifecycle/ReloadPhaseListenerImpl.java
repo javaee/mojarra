@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -49,7 +49,6 @@ import javax.faces.event.PhaseListener;
  * This listener is used to determine whether a client refresh with no
  * request parameters or save state has occurred.
  *
- * @version $Id: ReloadPhaseListenerImpl.java,v 1.9 2007/04/27 22:01:13 ofung Exp $
  */
 public class ReloadPhaseListenerImpl implements PhaseListener {
 

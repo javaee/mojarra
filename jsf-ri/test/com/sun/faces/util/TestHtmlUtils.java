@@ -1,11 +1,7 @@
 /*
- * $Id: TestHtmlUtils.java,v 1.5 2008/01/07 22:07:26 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -49,8 +45,6 @@ import junit.framework.TestCase;
 
 /**
  * <B>TestHtmlUtils</B> is a class ...
- *
- * @version $Id: TestHtmlUtils.java,v 1.5 2008/01/07 22:07:26 rlubke Exp $
  */
 public class TestHtmlUtils extends TestCase {
 
