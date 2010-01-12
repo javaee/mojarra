@@ -1,11 +1,7 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.38 2008/01/22 21:53:51 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -102,8 +98,6 @@ import com.sun.faces.cactus.TestingUtil;
  * <B>TestApplicationImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: TestApplicationImpl.java,v 1.38 2008/01/22 21:53:51 rlubke Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {

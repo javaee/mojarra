@@ -1,11 +1,7 @@
 /*
- * $Id: TestConverters.java,v 1.46 2007/12/04 23:26:06 rlubke Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -77,8 +73,6 @@ import org.apache.cactus.server.AbstractServletContextWrapper;
  * Test encode and decode methods in Renderer classes.
  * <p/>
  * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: TestConverters.java,v 1.46 2007/12/04 23:26:06 rlubke Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {

@@ -1,11 +1,7 @@
 /*
- * $Id: TestTreeVisit.java,v 1.16 2007/04/27 22:02:10 ofung Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -61,12 +57,6 @@ import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 
-
-
-
-/**
- * @version $Id: TestTreeVisit.java,v 1.16 2007/04/27 22:02:10 ofung Exp $
- */
 
 public class TestTreeWithUIDataVisit extends ServletFacesTestCase {
 
