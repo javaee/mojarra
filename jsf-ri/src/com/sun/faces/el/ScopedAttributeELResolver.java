@@ -1,5 +1,3 @@
-package com.sun.faces.el;
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -36,6 +34,7 @@ package com.sun.faces.el;
  * holder.
  */
 
+package com.sun.faces.el;
 
 import java.util.ArrayList;
 import java.util.Iterator;
