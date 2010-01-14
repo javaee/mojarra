@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,6 +43,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.util.Set;
 
 /**
  * Base class for interfacing with Groovy.
@@ -77,6 +78,11 @@ public abstract class GroovyHelper {
 
     }
     public abstract Class<?> loadScript(String name);
+
+    /**
+     * This method should return all of the Groovy scripts available
+     */
+    public abstract Set<String> getScripts();
 
     public static Object newInstance(String name, Class<?> type, Object root)
     throws Exception {

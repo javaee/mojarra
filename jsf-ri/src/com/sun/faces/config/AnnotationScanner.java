@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,6 +36,7 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.scripting.groovy.GroovyHelper;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
@@ -72,6 +73,7 @@ import javax.servlet.ServletContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.spi.AnnotationProvider;
+import javax.faces.context.FacesContext;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
 
 /**
@@ -213,6 +215,7 @@ public class AnnotationScanner extends AnnotationProvider {
 
         processWebInfClasses(sc, classList);
         processClasspath(urls, classList);
+        processGroovyScripts(classList);
 
         Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses = null;
         if (classList.size() > 0) {
@@ -261,6 +264,12 @@ public class AnnotationScanner extends AnnotationProvider {
 
     // --------------------------------------------------------- Private Methods
 
+    private void processGroovyScripts(Set<String> classList) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if ((fc != null) && GroovyHelper.isGroovyAvailable(fc)) {
+            classList.addAll(GroovyHelper.getCurrentInstance(fc).getScripts());
+        }
+    }
 
     /**
      * Scans for annotations on classes within JAR files on the classpath.

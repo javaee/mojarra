@@ -239,11 +239,9 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                         Class<?>[] interfaces = clazz.getInterfaces();
                         if (interfaces != null) {
                             for (Class<?> c : interfaces) {
-                                if ("groovy.lang.GroovyObject"
-                                      .equals(c.getName())) {
+                                if ("groovy.lang.GroovyObject".equals(c.getName())) {
                                     // all groovy classes will implement this interface
-                                    returnObject =
-                                          createScriptProxy(rootType, className, root);
+                                    returnObject = createScriptProxy(rootType, className, root);
                                     break;
                                 }
                             }
