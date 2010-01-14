@@ -805,9 +805,9 @@ public class ELFlash extends Flash {
         // Step 2, go through the FacesMessages that do not have a client
         // id associated with them.
         messageIter = context.getMessages(null);
+        // Make sure to overwrite the previous facesMessages list
+        facesMessages = new ArrayList<FacesMessage>();
         while (messageIter.hasNext()) {
-            // Make sure to overwrite the previous facesMessages list
-            facesMessages = new ArrayList<FacesMessage>();
             facesMessages.add(messageIter.next());
         }
         if (null != facesMessages) {
