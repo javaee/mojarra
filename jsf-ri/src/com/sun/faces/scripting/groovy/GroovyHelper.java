@@ -79,11 +79,6 @@ public abstract class GroovyHelper {
     }
     public abstract Class<?> loadScript(String name);
 
-    /**
-     * This method should return all of the Groovy scripts available
-     */
-    public abstract Set<String> getScripts();
-
     public static Object newInstance(String name, Class<?> type, Object root)
     throws Exception {
         Class<?> delegate = Util.loadClass(name, GroovyHelper.class);

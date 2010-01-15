@@ -174,7 +174,8 @@
                 test.path,
                 test.valueBindingGet,
                 test.misc,
-                test.regressions"
+                test.regressions,
+                test.groovy"
             />
 
     <target name="test.init">
@@ -273,6 +274,17 @@
             </tests>
         </jsf.junit>  
 
+    </target>
+
+    <target name="test.groovy">
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/groovy/*TestCase.class"/> 
+            </tests>
+        </jsf.junit>
     </target>
 
     <target name="test.annotations">

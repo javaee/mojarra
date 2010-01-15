@@ -733,7 +733,7 @@ public class ConfigManager {
 
         private ServletContext sc;
         private Set<URL> urls;
-
+        AnnotationProvider provider;
 
         // -------------------------------------------------------- Constructors
 
@@ -742,6 +742,7 @@ public class ConfigManager {
 
             this.sc = sc;
             this.urls = urls;
+            provider = AnnotationProviderFactory.createAnnotationProvider(sc);
 
         }
 
@@ -757,7 +758,6 @@ public class ConfigManager {
             }
 
             //AnnotationScanner scanner = new AnnotationScanner(sc);
-            AnnotationProvider provider = AnnotationProviderFactory.createAnnotationProvider(sc);
             Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses =
                   provider.getAnnotatedClasses(urls);
 

@@ -62,41 +62,16 @@ class GroovyHelperImpl extends GroovyHelper {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     private static final String SCRIPT_PATH = "/WEB-INF/groovy/";
-    private static final String SUFFIX = ".groovy";
 
     private MojarraGroovyClassLoader loader;
-
-    // Borrowed from AnnotationScanner.  Perhaps this should be made public somewhere
-    public static final Set<String> FACES_ANNOTATIONS;
-
-    static {
-        HashSet<String> annotations = new HashSet<String>(15, 1.0f);
-        Collections.addAll(annotations,
-                "javax.faces.component.FacesComponent",
-                "javax.faces.component.*",
-                "javax.faces.convert.FacesConverter",
-                "javax.faces.convert.*",
-                "javax.faces.validator.FacesValidator",
-                "javax.faces.validator.*",
-                "javax.faces.render.FacesRenderer",
-                "javax.faces.render.*",
-                "javax.faces.bean.ManagedBean",
-                "javax.faces.bean.*",
-                "javax.faces.event.NamedEvent",
-                "javax.faces.event.*",
-                "javax.faces.component.behavior.FacesBehavior",
-                "javax.faces.component.behavior.*",
-                "javax.faces.render.FacesBehaviorRenderer");
-        FACES_ANNOTATIONS = Collections.unmodifiableSet(annotations);
-    }
 
     // ------------------------------------------------------------ Constructors
 
 
     GroovyHelperImpl() throws Exception {
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        ExternalContext extContext = ctx.getExternalContext();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext extContext = facesContext.getExternalContext();
         ClassLoader curLoader = Thread.currentThread().getContextClassLoader();
 
         URL combinedRoots[] = getResourceRoots(extContext, curLoader);
@@ -116,36 +91,6 @@ class GroovyHelperImpl extends GroovyHelper {
                     this);
         }
 
-    }
-
-    @Override
-    public Set<String> getScripts() {
-        Set<String> scripts = new HashSet<String>();
-
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        processWebInfGroovy(externalContext, externalContext.getResourcePaths(SCRIPT_PATH), scripts);
-
-        return scripts;
-    }
-
-    private void processWebInfGroovy(ExternalContext ec, Set<String> paths, Set<String> classList) {
-        if (paths != null && !paths.isEmpty()) {
-            for (String pathElement : paths) {
-                if (pathElement.endsWith("/")) {
-                    processWebInfGroovy(ec, ec.getResourcePaths(pathElement), classList);
-                } else {
-                    if (pathElement.endsWith(SUFFIX)) {
-                        String cname = convertToClassName(SCRIPT_PATH, pathElement);
-                        if (containsAnnotation(ec, pathElement)) {
-                            if (LOGGER.isLoggable(Level.FINE)) {
-                                LOGGER.log(Level.FINE, "[WEB-INF/groovy] Found annotated Class: {0}", cname);
-                            }
-                            classList.add(cname);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private URL[] getResourceRoots(ExternalContext extContext,
@@ -240,64 +185,6 @@ class GroovyHelperImpl extends GroovyHelper {
         if (loader != null) {
             Thread.currentThread().setContextClassLoader(loader);
         }
-    }
-
-    private boolean containsAnnotation(ExternalContext ec, String pathElement) {
-        boolean containsAnnotation = false;
-        BufferedReader in = null;
-        try {
-            URL url = ec.getResource(pathElement);
-            in = new BufferedReader(new InputStreamReader(url.openStream()));
-            String line = in.readLine();
-            while ((line != null) && (!containsAnnotation)) {
-                line = line.trim();
-                if (line.length() != 0) {
-                    for (String pattern : FACES_ANNOTATIONS) {
-                        if (line.indexOf(pattern) > -1) {
-                            containsAnnotation = true;
-                            break;
-                        }
-                    }
-                }
-
-                line = in.readLine();
-            }
-        } catch (Exception ioe) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, null, ioe);
-            }
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (Exception ignore) {
-                    //
-                }
-            }
-        }
-        return containsAnnotation;
-    }
-
-    /**
-     * Utility method for converting paths to fully qualified class names.
-     *
-     * @param prefix    the prefix that should be stripped from the class name
-     *                  before converting it
-     * @param pathEntry a path to a class file
-     * @return a fully qualified class name using dot notation
-     */
-    private String convertToClassName(String prefix, String pathEntry) {
-        String className = pathEntry;
-
-        if (prefix != null) {
-            // remove the prefix
-            className = className.substring(prefix.length());
-        }
-        // remove the .class suffix
-        className = className.substring(0, (className.length() - 7));
-
-        return className.replace('/', '.');
-
     }
 
     // ----------------------------------------------------------- Inner Classes

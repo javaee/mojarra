@@ -36,44 +36,39 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.scripting.ScriptManager;
 import com.sun.faces.scripting.groovy.GroovyHelper;
-import java.io.IOException;
-import java.net.JarURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.ByteBuffer;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.lang.annotation.Annotation;
+import com.sun.faces.scripting.groovy.GroovyScriptManager;
+import com.sun.faces.spi.AnnotationProvider;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
+import javax.faces.bean.ManagedBean;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.behavior.FacesBehavior;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.NamedEvent;
-import javax.faces.bean.ManagedBean;
 import javax.faces.render.FacesBehaviorRenderer;
 import javax.faces.render.FacesRenderer;
 import javax.faces.validator.FacesValidator;
 import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.net.JarURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-import com.sun.faces.spi.AnnotationProvider;
-import javax.faces.context.FacesContext;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.AnnotationScanPackages;
 
 /**
@@ -134,7 +129,7 @@ public class AnnotationScanner extends AnnotationProvider {
     private ClassFile classFileScanner;
     private String[] webInfClassesPackages;
     private Map<String,String[]> classpathPackages;
-
+    private List<ScriptManager> scriptManagers = new ArrayList<ScriptManager>();
 
     // ------------------------------------------------------------ Constructors
 
@@ -146,9 +141,14 @@ public class AnnotationScanner extends AnnotationProvider {
      *  scanned
      */
     public AnnotationScanner(ServletContext sc) {
-
         super(sc);
+
         classFileScanner = new ClassFile();
+        
+        if (GroovyHelper.isGroovyAvailable(FacesContext.getCurrentInstance())) {
+            scriptManagers.add(new GroovyScriptManager(sc));
+        }
+
         WebConfiguration webConfig = WebConfiguration.getInstance(sc);
         if (webConfig.isSet(AnnotationScanPackages)) {
             classpathPackages = new HashMap<String,String[]>(4);
@@ -215,7 +215,7 @@ public class AnnotationScanner extends AnnotationProvider {
 
         processWebInfClasses(sc, classList);
         processClasspath(urls, classList);
-        processGroovyScripts(classList);
+        processScripts(classList);
 
         Map<Class<? extends Annotation>,Set<Class<?>>> annotatedClasses = null;
         if (classList.size() > 0) {
@@ -264,10 +264,9 @@ public class AnnotationScanner extends AnnotationProvider {
 
     // --------------------------------------------------------- Private Methods
 
-    private void processGroovyScripts(Set<String> classList) {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        if ((fc != null) && GroovyHelper.isGroovyAvailable(fc)) {
-            classList.addAll(GroovyHelper.getCurrentInstance(fc).getScripts());
+    private void processScripts(Set<String> classList) {
+        for (ScriptManager sm : scriptManagers) {
+            classList.addAll(sm.getScripts());
         }
     }
 
