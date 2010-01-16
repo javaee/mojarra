@@ -174,9 +174,11 @@
                 test.path,
                 test.valueBindingGet,
                 test.misc,
-                test.regressions,
-                test.groovy"
+                test.regressions"
             />
+            <!--
+                test.groovy"
+            -->
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
