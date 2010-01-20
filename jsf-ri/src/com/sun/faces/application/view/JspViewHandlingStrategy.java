@@ -372,15 +372,21 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         ViewHandlerResponseWrapper wrapped = getWrapper(extContext);
         extContext.setResponse(wrapped);
 
-        // build the view by executing the page
-        extContext.dispatch(requestURI);
+        try
+        {
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("After dispacthMessage to viewId " + requestURI);
+          // build the view by executing the page
+          extContext.dispatch(requestURI);
+
+          if (LOGGER.isLoggable(Level.FINE)) {
+              LOGGER.fine("After dispacthMessage to viewId " + requestURI);
+          }
         }
-
-        // replace the original response
-        extContext.setResponse(originalResponse);
+        finally
+        {
+          // replace the original response
+          extContext.setResponse(originalResponse);
+        }
 
         // Follow the JSTL 1.2 spec, section 7.4,
         // on handling status codes on a forward
