@@ -68,8 +68,8 @@ import javax.faces.validator.Validator;
  * <p class="changed_added_2_0">Provides a simple implementation of
  * {@link Application} that can be subclassed by developers wishing
  * to provide specialized behavior to an existing {@link
- * ResourceHandler} instance.  The default implementation of all methods
- * is to call through to the wrapped {@link ResourceHandler}.</p>
+ * Application} instance.  The default implementation of all methods
+ * is to call through to the wrapped {@link Application}.</p>
  *
  * <div class="changed_added_2_0">
  *
