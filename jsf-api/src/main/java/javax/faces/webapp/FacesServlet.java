@@ -322,10 +322,6 @@ public final class FacesServlet implements Servlet {
                 }
             }
         }
-        finally {
-            // Release the FacesContext instance for this request
-            context.release();
-        }
 
         requestEnd(); // V3 Probe hook
     }

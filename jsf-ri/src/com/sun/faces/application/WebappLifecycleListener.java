@@ -61,6 +61,9 @@ import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.FacesLogger;
 import java.util.Map;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.ViewMapListener;
@@ -100,16 +103,30 @@ public class WebappLifecycleListener implements ViewMapListener {
      *
      * @param event the notification event
      */
-    public void requestDestroyed(ServletRequestEvent event) {       
-        ServletRequest request = event.getServletRequest();
-        for (Enumeration e = request.getAttributeNames(); e.hasMoreElements(); ) {
-            String beanName = (String)e.nextElement();
-            handleAttributeEvent(beanName, 
-                                 request.getAttribute(beanName), 
-                                 ELUtils.Scope.REQUEST);
+    public void requestDestroyed(ServletRequestEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            ServletRequest request = event.getServletRequest();
+            for (Enumeration e = request.getAttributeNames(); e.hasMoreElements();) {
+                String beanName = (String) e.nextElement();
+                handleAttributeEvent(beanName,
+                        request.getAttribute(beanName),
+                        ELUtils.Scope.REQUEST);
+            }
+            syncSessionScopedBeans(request);
+        } catch (Throwable t) {
+            ExceptionQueuedEventContext eventContext =
+                    new ExceptionQueuedEventContext(context, t);
+            context.getApplication().publishEvent(context,
+                    ExceptionQueuedEvent.class, eventContext);
+            context.getExceptionHandler().handle();
         }
-        syncSessionScopedBeans(request);
-        ApplicationAssociate.setCurrentInstance(null);
+        finally {
+            if (null != context) {
+                context.release();
+            }
+            ApplicationAssociate.setCurrentInstance(null);
+        }
     }
 
     /**
