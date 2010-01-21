@@ -132,6 +132,10 @@ public final class Classpath {
             File[] fc = file.listFiles();
             String path;
             URL src;
+            // protect against Windows JDK bugs for listFiles -
+            // if it's null (even though it shouldn't be) return false
+            if (fc == null) return false;
+
             for (int i = 0; i < fc.length; i++) {
                 path = fc[i].getAbsolutePath();
                 if (fc[i].isDirectory()) {
