@@ -62,7 +62,6 @@ import java.util.logging.Logger;
 
 import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.OnOffResponseWrapper;
 import com.sun.faces.util.Util;
 
  public class PartialViewContextImpl extends PartialViewContext {
@@ -260,8 +259,6 @@ import com.sun.faces.util.Util;
                 //
                 // We re-enable response writing.
                 //
-                OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(ctx);
-                onOffResponse.setEnabled(true);
                 PartialResponseWriter writer = pvc.getPartialResponseWriter();
                 ResponseWriter orig = ctx.getResponseWriter();
                 ctx.getAttributes().put(ORIGINAL_WRITER, orig);

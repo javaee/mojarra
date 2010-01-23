@@ -51,7 +51,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.OnOffResponseWrapper;
 import com.sun.faces.util.DebugUtil;
 
 import javax.faces.event.PreRenderViewEvent;
@@ -85,10 +84,6 @@ public class RenderResponsePhase extends Phase {
         // For requests intended to produce a partial response, we need prohibit
         // writing any content outside of the view itself (f:view).
         PartialViewContext partialViewContext = facesContext.getPartialViewContext();
-        if (partialViewContext.isPartialRequest()) {
-            OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(facesContext);
-            onOffResponse.setEnabled(false); 
-        }
         
         try {
 
