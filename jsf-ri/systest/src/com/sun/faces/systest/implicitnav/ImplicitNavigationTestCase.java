@@ -84,8 +84,8 @@ public class ImplicitNavigationTestCase extends AbstractTestCase {
 
            // Assert that the navCase getters work correctly
            String text = page.asText();
-           assertTrue(-1 != text.indexOf("Action URL to this page: http://localhost:8080/jsf-systest/faces/implicitnav/page01.xhtml"));
-           assertTrue(-1 != text.indexOf("Resource URL to this page: http://localhost:8080/jsf-systest/implicitnav/page01.xhtml"));
+           assertTrue(-1 != text.indexOf("/jsf-systest/faces/implicitnav/page01.xhtml"));
+           assertTrue(-1 != text.indexOf("/jsf-systest/implicitnav/page01.xhtml"));
            // Make sure we're on the expected page
            assertTrue(-1 != text.indexOf("[page01]"));
 
