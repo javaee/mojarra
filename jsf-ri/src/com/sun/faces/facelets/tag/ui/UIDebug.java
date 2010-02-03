@@ -108,7 +108,6 @@ public final class UIDebug extends UIComponentBase {
         String actionId = faces.getApplication().getViewHandler().getActionURL(faces, faces.getViewRoot().getViewId());
         
         StringBuffer sb = new StringBuffer(512);
-        sb.append("<script language=\"javascript\" type=\"text/javascript\">\n");
         sb.append("//<![CDATA[\n");
         sb.append("function faceletsDebug(URL) { day = new Date(); id = day.getTime(); eval(\"page\" + id + \" = window.open(URL, '\" + id + \"', 'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=800,height=600,left = 240,top = 212');\"); };");
         sb.append("var faceletsOrigKeyup = document.onkeyup; document.onkeyup = function(e) { if (window.event) e = window.event; if (String.fromCharCode(e.keyCode) == '" + this.getHotkey() + "' & e.shiftKey & e.ctrlKey) faceletsDebug('");
@@ -119,10 +118,14 @@ public final class UIDebug extends UIComponentBase {
         sb.append(writeDebugOutput(faces));
         sb.append("'); else if (faceletsOrigKeyup) faceletsOrigKeyup(e); };\n");
         sb.append("//]]>\n");
-        sb.append("</script>\n");
-        
+
         ResponseWriter writer = faces.getResponseWriter();
-        writer.write(sb.toString());
+        writer.startElement("script", this);
+        writer.writeAttribute("language", "javascript", "language");
+        writer.writeAttribute("type", "text/javascript", "type");
+        writer.writeText(sb.toString(), this, null);
+        writer.endElement("script");
+        
     }
     
     private static String writeDebugOutput(FacesContext faces) throws IOException {
