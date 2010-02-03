@@ -1335,10 +1335,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var data = {};  // data payload for function
             data.type = "error";
             data.status = status;
-            data.source = document.getElementById(context.sourceid);
+            data.source = context.sourceid;
             data.responseCode = request.status;
             data.responseXML = request.responseXML;
             data.responseText = request.responseText;
+
+            // ensure data source is the dom element and not the ID
+            // per 14.4.1 of the 2.0 specification.
+            if (typeof data.source === 'string') {
+                data.source = document.getElementById(data.source);
+            }
 
             if (description) {
                 data.description = description;
@@ -1397,7 +1403,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var data = {};
             data.type = "event";
             data.status = status;
-            data.source = document.getElementById(context.sourceid);
+            data.source = context.sourceid;
+            // ensure data source is the dom element and not the ID
+            // per 14.4.1 of the 2.0 specification.
+            if (typeof data.source === 'string') {
+                data.source = document.getElementById(data.source);
+            }
             if (status !== 'begin') {
                 data.responseCode = request.status;
                 data.responseXML = request.responseXML;
@@ -1952,6 +1963,14 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             response: function response(request, context) {
                 if (!request) {
                     throw new Error("jsf.ajax.response: Request parameter is unset");
+                }
+
+                // ensure context source is the dom element and not the ID
+                // per 14.4.1 of the 2.0 specification.  We're doing it here
+                // *before* any errors or events are propagated becasue the
+                // DOM element may be removed after the update has been processed.
+                if (typeof context.sourceid === 'string') {
+                    context.sourceid = document.getElementById(context.sourceid);
                 }
 
                 var xml = request.responseXML;
