@@ -142,9 +142,9 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
                                                                 ctx,
                                                                 c);
                 if (ccp == null) {
-                    m.getParentCompositeComponent(Evaluation,
-                                                  ctx,
-                                                  c);
+                    ccp = m.getParentCompositeComponent(Evaluation,
+                                                        ctx,
+                                                        c);
                 }
                 return ccp;
             }
