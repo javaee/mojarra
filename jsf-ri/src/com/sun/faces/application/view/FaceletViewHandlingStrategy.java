@@ -361,7 +361,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 origWriter = createResponseWriter(ctx);
             }
 
-            stateWriter = new WriteBehindStateWriter(origWriter,
+            ExternalContext extContext = ctx.getExternalContext();
+            Writer outputWriter = extContext.getResponseOutputWriter();
+            stateWriter = new WriteBehindStateWriter(outputWriter,
                                                      ctx,
                                                      responseBufferSize);
 
