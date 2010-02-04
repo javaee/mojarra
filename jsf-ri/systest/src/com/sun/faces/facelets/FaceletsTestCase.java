@@ -302,5 +302,15 @@ public class FaceletsTestCase extends AbstractTestCase {
 
     }
 
+    public void testWhen() throws Exception {
+        HtmlPage page = getPage("/faces/facelets/when.xhtml");
+        String text = page.asText();
+        assertTrue(text.contains("size = 1"));
+        assertTrue(text.contains("isEmpty = false"));
+        assertTrue(text.contains("there is some!!!"));
+        assertTrue(text.contains("there is some (really)!!!"));
+
+    }
+
 
 }

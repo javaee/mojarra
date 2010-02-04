@@ -85,6 +85,8 @@ public enum Color { Red, Blue, Green, Orange }
     private Random random;
     private ArrayList newList1= new ArrayList();
     private ArrayList newList2= new ArrayList();
+    private ArrayList oneElementList;
+
     ServletContext servletContext = null;
     
     public Suit returnSpades() {
@@ -100,6 +102,8 @@ public enum Color { Red, Blue, Green, Orange }
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = (null != context) ? context.getExternalContext() : null;
         servletContext = (null != extContext) ? (ServletContext) extContext.getContext() : null;
+        oneElementList = new ArrayList<String>(1);
+        oneElementList.add("hello");
     }
 
 
@@ -326,6 +330,14 @@ public enum Color { Red, Blue, Green, Orange }
 
     public void setMultiSelection(String [] newMultiSelection) {
     multiSelection = newMultiSelection;
+    }
+
+    public ArrayList getOneElementList() {
+        return oneElementList;
+    }
+
+    public void setOneElementList(ArrayList oneElementList) {
+        this.oneElementList = oneElementList;
     }
 
     public void valueChanged(ValueChangeEvent event)
