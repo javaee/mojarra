@@ -63,12 +63,13 @@ public class FacesCompositeELResolver extends CompositeELResolver {
         throws ELException {
         
         context.setPropertyResolved(false);
-        if (!facesContextPresent(context)) {
+        FacesContext ctx = getFacesContext(context);
+        if (ctx == null) {
             return null;
         }
-        setChainType();
+        setChainType(ctx);
         Object result = super.getValue(context, base, property);
-        clearChainType();
+        clearChainType(ctx);
         
         return result;
     }
@@ -77,12 +78,13 @@ public class FacesCompositeELResolver extends CompositeELResolver {
         throws ELException {
 
         context.setPropertyResolved(false);
-        if (!facesContextPresent(context)) {
+        FacesContext ctx = getFacesContext(context);
+        if (ctx == null) {
             return null;
         }
-        setChainType();
+        setChainType(ctx);
         Class<?> result = super.getType(context, base, property);
-        clearChainType();
+        clearChainType(ctx);
 
         return result;
     }
@@ -91,32 +93,35 @@ public class FacesCompositeELResolver extends CompositeELResolver {
     public void setValue(ELContext context, Object base, Object property,
         Object val) throws ELException {
         context.setPropertyResolved(false);
-        if (!facesContextPresent(context)) {
+        FacesContext ctx = getFacesContext(context);
+        if (ctx == null) {
             return;
         }
-        setChainType();
+        setChainType(ctx);
         super.setValue(context, base, property, val);
-        clearChainType();
+        clearChainType(ctx);
     }
 
     
     public boolean isReadOnly(ELContext context, Object base, Object property) 
         throws ELException {
         context.setPropertyResolved(false);
-        if (!facesContextPresent(context)) {
+        FacesContext ctx = getFacesContext(context);
+        if (ctx == null) {
             return false;
         }
-        setChainType();
+        setChainType(ctx);
         boolean result = super.isReadOnly(context, base, property);
-        clearChainType();
+        clearChainType(ctx);
         return result;
     }
 
     
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-        setChainType();
+        FacesContext ctx = getFacesContext(context);
+        setChainType(ctx);
         Iterator<FeatureDescriptor> result = super.getFeatureDescriptors(context, base);
-        clearChainType();
+        clearChainType(ctx);
         return result;
     }
     
@@ -153,8 +158,8 @@ public class FacesCompositeELResolver extends CompositeELResolver {
      * the current expression is.</p>
      */
 
-    private void setChainType() {
-        RequestStateManager.set(FacesContext.getCurrentInstance(),
+    private void setChainType(FacesContext ctx) {
+        RequestStateManager.set(ctx,
                                 RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME,
                                 chainType);
     }
@@ -164,21 +169,20 @@ public class FacesCompositeELResolver extends CompositeELResolver {
      * chain the current expression is.</p>
      */
     
-    private void clearChainType() {
-        RequestStateManager.remove(FacesContext.getCurrentInstance(),
-                                   RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME);
+    private void clearChainType(FacesContext ctx) {
+        RequestStateManager.remove(ctx, RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME);
     }
 
+
     /**
-     * @param elContext current ELContext
-     * @return <code>true</code> if the FacesContext is present
+     * @param elContext context for the current expression evaluation
+     * @return the <code>FacesContext</code> associated with this expression
+     *  evaluation
      */
-    private boolean facesContextPresent(ELContext elContext) {
-        FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
-        if (ctx == null) {
-            ctx = FacesContext.getCurrentInstance();
-        }
-        return (ctx != null);
+    private FacesContext getFacesContext(ELContext elContext) {
+
+        return (FacesContext) elContext.getContext(FacesContext.class);
+
     }
 
 }
