@@ -345,7 +345,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var elementReplaceStr = function elementReplaceStr(element, tempTagName, src) {
-            var parent = element.parentNode;
+
             var temp = document.createElement(tempTagName);
             if (element.id) {
                 temp.id = element.id;
@@ -1184,6 +1184,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 return null;
             }
 
+            function noop() {}
+            
             // Set up request/response state callbacks
             /**
              * @ignore
@@ -1191,6 +1193,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             req.xmlReq.onreadystatechange = function() {
                 if (req.xmlReq.readyState === 4) {
                     req.onComplete();
+                    // next two lines prevent closure/ciruclar reference leaks
+                    // of XHR instances in IE
+                    req.xmlReq.onreadystatechange = noop;
+                    req.xmlReq = null;
                 }
             };
 
