@@ -952,7 +952,7 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         client.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/composite/requiredAttribute.xhtml");
         String text = page.asText();
-        System.out.println(text);
+        assertTrue(text.contains("<ez:required01>"));
         assertTrue(text.contains("The following attribute(s) are required, but no values have been supplied for them: table."));
     }
     

@@ -122,6 +122,8 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     
     @Override
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException {
+        FacesContext context = ctx.getFacesContext();
+
         // make sure our parent is not null
         if (parent == null) {
             throw new TagException(owner.getTag(), "Parent UIComponent was null");
@@ -170,7 +172,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                 UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
                 if (root != null) {
                     String uid;
-                    IdMapper mapper = IdMapper.getMapper(ctx.getFacesContext());
+                    IdMapper mapper = IdMapper.getMapper(context);
                     String mid = ((mapper != null) ? mapper.getAliasedId(id) : id);
                     UIComponent ancestorNamingContainer = parent
                           .getNamingContainer();
@@ -179,7 +181,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
                         uid = ((UniqueIdVendor) ancestorNamingContainer)
                               .createUniqueId(ctx.getFacesContext(), mid);
                     } else {
-                        uid = root.createUniqueId(ctx.getFacesContext(), mid);
+                        uid = root.createUniqueId(context, mid);
                     }
                     c.setId(uid);
                 }
@@ -193,13 +195,17 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
             // hook method
             owner.onComponentCreated(ctx, c, parent);
         }
-        c.pushComponentToEL(ctx.getFacesContext(), c);
+        c.pushComponentToEL(context, c);
         boolean compcompPushed = false;
         CompositeComponentStackManager ccStackManager =
-              CompositeComponentStackManager.getManager(ctx.getFacesContext());
+              CompositeComponentStackManager.getManager(context);
         if (UIComponent.isCompositeComponent(c)) {
             compcompPushed = ccStackManager.push(c, TreeCreation);
         }
+        if (ProjectStage.Development == context.getApplication().getProjectStage()) {
+            ComponentSupport.setTagForComponent(context, c, this.owner.getTag());
+        }
+
         // first allow c to get populated
         owner.applyNextHandler(ctx, c);
 

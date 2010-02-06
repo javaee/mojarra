@@ -57,6 +57,7 @@ package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 
@@ -78,6 +79,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.el.ValueExpression;
+import javax.faces.view.facelets.Tag;
 import javax.faces.view.facelets.TagException;
 
 public class InterfaceHandler extends TagHandlerImpl {
@@ -131,13 +133,14 @@ public class InterfaceHandler extends TagHandlerImpl {
                     MessageUtils.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID,
                     clientId + ".getParent()"));
         }
+        Tag usingPageTag = ComponentSupport.getTagForComponent(context, cc);
         Map<String, Object> attrs = cc.getAttributes();
         BeanInfo componentMetadata = (BeanInfo) attrs.get(UIComponent.BEANINFO_KEY);
 
         if (null == componentMetadata) {
             String clientId = ccParent.getClientId(context);
 
-            throw new TagException(tag, MessageUtils.getExceptionMessageString(
+            throw new TagException(usingPageTag, MessageUtils.getExceptionMessageString(
                     MessageUtils.MISSING_COMPONENT_METADATA, clientId));
         }
 
@@ -224,7 +227,7 @@ public class InterfaceHandler extends TagHandlerImpl {
         }
 
         if (0 < attrMessage.length() || 0 < facetMessage.length()) {
-            throw new TagException(this.tag, attrMessage + " " + facetMessage);
+            throw new TagException(usingPageTag, attrMessage + " " + facetMessage);
         }
     }
     

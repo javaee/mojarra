@@ -66,9 +66,12 @@ import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagAttributeException;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import javax.faces.view.facelets.Tag;
 
 /**
  * 
@@ -80,6 +83,12 @@ public final class ComponentSupport {
     private final static String MARK_DELETED = "com.sun.faces.facelets.MARK_DELETED";
     public final static String MARK_CREATED = "com.sun.faces.facelets.MARK_ID";
     private final static String IMPLICIT_PANEL = "com.sun.faces.facelets.IMPLICIT_PANEL";
+
+    /**
+     * Key to a FacesContext scoped Map where the keys are UIComponent instances and the
+     * values are Tag instances.
+     */
+    public static final String COMPONENT_TO_TAG_MAP_NAME = "com.sun.faces.facelets.COMPONENT_TO_LOCATION_MAP";
     
     /**
      * Used in conjunction with markForDeletion where any UIComponent marked
@@ -116,6 +125,31 @@ public final class ComponentSupport {
                 }
             }
         }
+    }
+
+    public static final Tag setTagForComponent(FacesContext context, UIComponent c, Tag t) {
+        Map<Object, Object> contextMap = context.getAttributes();
+        Map<Integer, Tag> componentToTagMap;
+        componentToTagMap = (Map<Integer, Tag>)
+                contextMap.get(COMPONENT_TO_TAG_MAP_NAME);
+        if (null == componentToTagMap) {
+            componentToTagMap = new HashMap<Integer, Tag>();
+            contextMap.put(COMPONENT_TO_TAG_MAP_NAME, componentToTagMap);
+        }
+        return componentToTagMap.put((Integer) System.identityHashCode(c), t);
+    }
+
+    public static final Tag getTagForComponent(FacesContext context, UIComponent c) {
+        Tag result = null;
+        Map<Object, Object> contextMap = context.getAttributes();
+        Map<Integer, Tag> componentToTagMap;
+        componentToTagMap = (Map<Integer, Tag>)
+                contextMap.get(COMPONENT_TO_TAG_MAP_NAME);
+        if (null != componentToTagMap) {
+            result = componentToTagMap.get((Integer) System.identityHashCode(c));
+        }
+
+        return result;
     }
     
 
