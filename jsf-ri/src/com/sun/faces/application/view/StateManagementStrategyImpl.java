@@ -37,6 +37,7 @@
 package com.sun.faces.application.view;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -137,32 +138,41 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                                viewRoot,
                                new HashSet<String>(viewRoot.getChildCount() << 1));
         final Map<String,Object> stateMap = new HashMap<String,Object>();
-        
-        VisitContext visitContext = VisitContext.createVisitContext(context);
-        final FacesContext finalContext = context;
-        viewRoot.visitTree(visitContext, new VisitCallback() {
 
-            public VisitResult visit(VisitContext context, UIComponent target) {
-                VisitResult result = VisitResult.ACCEPT;
-                Object stateObj;
-                if (!target.isTransient()) {
-                    if (target.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
-                        stateObj = new StateHolderSaver(finalContext, target);
-                    } else {
-                        stateObj = target.saveState(context.getFacesContext());
-                    }
-                    if (null != stateObj) {
-                        stateMap.put(target.getClientId(context.getFacesContext()),
-                                                        stateObj);
-                    }
-                } else {
-                    return result;
-                }
-                
-                return result;
-            }
-            
-        });
+// -----------------------------------------------------------------------------
+//        COMMENTED OUT DUE TO ISSUE 1310 UNTIL NEW VISIT HINTS CAN BE
+//        ADDED TO THE API
+// -----------------------------------------------------------------------------
+//        VisitContext visitContext = VisitContext.createVisitContext(context);
+//        final FacesContext finalContext = context;
+//        viewRoot.visitTree(visitContext, new VisitCallback() {
+//
+//            public VisitResult visit(VisitContext context, UIComponent target) {
+//                VisitResult result = VisitResult.ACCEPT;
+//                Object stateObj;
+//                if (!target.isTransient()) {
+//                    if (target.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
+//                        stateObj = new StateHolderSaver(finalContext, target);
+//                    } else {
+//                        stateObj = target.saveState(context.getFacesContext());
+//                    }
+//                    if (null != stateObj) {
+//                        stateMap.put(target.getClientId(context.getFacesContext()),
+//                                                        stateObj);
+//                    }
+//                } else {
+//                    return result;
+//                }
+//
+//                return result;
+//            }
+//
+//        });
+// -----------------------------------------------------------------------------
+
+        // ADDED FOR ISSUE 1310 - REMOVE ONCE NEW VISIT HINTS ARE ADDED TO THE
+        // API
+        saveComponentState(viewRoot, context, stateMap);
         
         // handle dynamic adds/removes
         List<String> removeList = getClientIdsToRemove(context);
@@ -336,6 +346,38 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
     // --------------------------------------------------------- Private Methods
 
+
+    /**
+     * Temporary method added for issue 1310 to perform state saving as it
+     * was done in 1.2 as calling VisitTree in its current incarnation may
+     * have unintended side effects.
+     *
+     * @param c the component to process
+     * @param ctx the <code>FacesContext</code> for the current request
+     * @param stateMap a <code>Map</code> to push saved state keyed by
+     *  client ID
+     */
+    private void saveComponentState(UIComponent c,
+                                    FacesContext ctx,
+                                    Map<String, Object> stateMap) {
+
+        if (!c.isTransient()) {
+            Object stateObj;
+            if (c.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
+                stateObj = new StateHolderSaver(ctx, c);
+            } else {
+                stateObj = c.saveState(ctx);
+            }
+            if (null != stateObj) {
+                stateMap.put(c.getClientId(ctx), stateObj);
+            }
+        }
+        for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext();) {
+            saveComponentState(i.next(), ctx, stateMap);
+        }
+
+    }
+    
 
     private List<String> getClientIdsToRemove(FacesContext context) {
         return this.getClientIdsToRemove(context, false);

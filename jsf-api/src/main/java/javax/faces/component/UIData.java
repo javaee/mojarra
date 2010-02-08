@@ -1178,13 +1178,20 @@ public class UIData extends UIComponentBase
         if (!isVisitable(context))
             return false;
 
+        FacesContext facesContext = context.getFacesContext();
+        // NOTE: that the visitRows local will be obsolete once the
+        //       appropriate visit hints have been added to the API
+        boolean visitRows = requiresRowIteration(facesContext);
+
         // Clear out the row index is one is set so that
         // we start from a clean slate.
-        int oldRowIndex = getRowIndex();
-        setRowIndex(-1);
+        int oldRowIndex = -1;
+        if (visitRows) {
+            oldRowIndex = getRowIndex();
+            setRowIndex(-1);
+        }
 
         // Push ourselves to EL
-        FacesContext facesContext = context.getFacesContext();
         pushComponentToEL(facesContext, null);
 
         try {
@@ -1198,25 +1205,35 @@ public class UIData extends UIComponentBase
                 return true;
 
             // Visit children, short-circuiting as necessary
-            if ((result == VisitResult.ACCEPT) && doVisitChildren(context)) {
+            // NOTE: that the visitRows parameter will be obsolete once the
+            //       appropriate visit hints have been added to the API
+            if ((result == VisitResult.ACCEPT) && doVisitChildren(context, visitRows)) {
 
                 // First visit facets
-                if (visitFacets(context, callback))
+                // NOTE: that the visitRows parameter will be obsolete once the
+                //       appropriate visit hints have been added to the API
+                if (visitFacets(context, callback, visitRows))
                     return true;
 
                 // Next column facets
-                if (visitColumnFacets(context, callback))
+                // NOTE: that the visitRows parameter will be obsolete once the
+                //       appropriate visit hints have been added to the API
+                if (visitColumnFacets(context, callback, visitRows))
                     return true;
 
                 // And finally, visit rows
-                if (visitColumnsAndRows(context, callback))
+                // NOTE: that the visitRows parameter will be obsolete once the
+                //       appropriate visit hints have been added to the API
+                if (visitColumnsAndRows(context, callback, visitRows))
                     return true;
             }
         }
         finally {
             // Clean up - pop EL and restore old row index
             popComponentFromEL(facesContext);
-            setRowIndex(oldRowIndex);
+            if (visitRows) {
+                setRowIndex(oldRowIndex);
+            }
         }
 
         // Return false to allow the visit to continue
@@ -1288,6 +1305,26 @@ public class UIData extends UIComponentBase
     }
 
     // ---------------------------------------------------- Private Methods
+
+
+    /**
+     * Called by {@link UIData#visitTree} to determine whether or not the
+     * <code>visitTree</code> implementation should visit the rows of UIData
+     * or by manipulating the row index before visiting the components themselves.
+     *
+     * Once we have the appropriate Visit hints for state saving, this method
+     * will become obsolete.
+     *
+     * @param ctx the <code>FacesContext</code> for the current request
+     *
+     * @return true if row index manipulation is required by the visit to this
+     *  UIData instance
+     */
+    private boolean requiresRowIteration(FacesContext ctx) {
+
+        return (!PhaseId.RESTORE_VIEW.equals(ctx.getCurrentPhaseId()));
+
+    }
 
 
     // Perform pre-decode initialization work.  Note that this
@@ -1446,12 +1483,14 @@ public class UIData extends UIComponentBase
 
     // Tests whether we need to visit our children as part of
     // a tree visit
-    private boolean doVisitChildren(VisitContext context) {
+    private boolean doVisitChildren(VisitContext context, boolean visitRows) {
 
         // Just need to check whether there are any ids under this
         // subtree.  Make sure row index is cleared out since 
         // getSubtreeIdsToVisit() needs our row-less client id.
-        setRowIndex(-1);
+        if (visitRows) {
+            setRowIndex(-1);
+        }
         Collection<String> idsToVisit = context.getSubtreeIdsToVisit(this);
         assert(idsToVisit != null);
 
@@ -1480,10 +1519,14 @@ public class UIData extends UIComponentBase
         }
     }
 
-    // Visit each facet of this component exactly once
-    private boolean visitFacets(VisitContext context, VisitCallback callback) {
+    // Visit each facet of this component exactly once.
+    private boolean visitFacets(VisitContext context,
+                                VisitCallback callback,
+                                boolean visitRows) {
 
-        setRowIndex(-1);
+        if (visitRows) {
+            setRowIndex(-1);
+        }
         if (getFacetCount() > 0) {
             for (UIComponent facet : getFacets().values()) {
                 if (facet.visitTree(context, callback))
@@ -1496,8 +1539,11 @@ public class UIData extends UIComponentBase
 
     // Visit each facet of our child UIColumn components exactly once
     private boolean visitColumnFacets(VisitContext context, 
-                                      VisitCallback callback) {
-        setRowIndex(-1);
+                                      VisitCallback callback,
+                                      boolean visitRows) {
+        if (visitRows) {
+            setRowIndex(-1);
+        }
         if (getChildCount() > 0) {
             for (UIComponent column : getChildren()) {
                 if (column.getFacetCount() > 0) {
@@ -1513,7 +1559,9 @@ public class UIData extends UIComponentBase
     }
 
     // Visit each column and row
-    private boolean visitColumnsAndRows(VisitContext context,  VisitCallback callback) {
+    private boolean visitColumnsAndRows(VisitContext context,
+                                        VisitCallback callback,
+                                        boolean visitRows) {
 
 
         // first, visit all columns
@@ -1530,20 +1578,25 @@ public class UIData extends UIComponentBase
 
         // Iterate over our UIColumn children, once per row
         int processed = 0;
-        int rowIndex = getFirst() - 1;
-        int rows = getRows();
+        int rowIndex = 0;
+        int rows = 0;
+        if (visitRows) {
+            rowIndex = getFirst() - 1;
+            rows = getRows();
+        }
 
         while (true) {
 
             // Have we processed the requested number of rows?
-            if ((rows > 0) && (++processed > rows)) {
-                break;
-            }
-
-            // Expose the current row in the specified request attribute
-            setRowIndex(++rowIndex);
-            if (!isRowAvailable()) {
-                break; // Scrolled past the last row
+            if (visitRows) {
+                if ((rows > 0) && (++processed > rows)) {
+                    break;
+                }
+                // Expose the current row in the specified request attribute
+                setRowIndex(++rowIndex);
+                if (!isRowAvailable()) {
+                    break; // Scrolled past the last row
+                }
             }
 
             // Visit as required on the *children* of the UIColumn
@@ -1561,6 +1614,10 @@ public class UIData extends UIComponentBase
                         }
                     }
                 }
+            }
+
+            if (!visitRows) {
+                break;
             }
 
         }
