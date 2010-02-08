@@ -102,7 +102,7 @@
         <attribute name="template.file"/>
         <attribute name="output.file"/>
         <attribute name="version"/>
-        <attribute name="groupId"/>
+        <attribute name="groupId" default="com.sun.faces"/>
         <sequential>
             <copy file="@{template.file}" tofile="@{output.file}"/>
             <replace file="@{output.file}"
