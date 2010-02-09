@@ -972,12 +972,16 @@ public class ApplicationImpl extends Application {
                 if (clazz == null) {
                     clazz = Util.loadClass(className, this);
                 }
-                if (!associate.isDevModeEnabled()) {
-                    componentMap.put(className, clazz);
+                if (clazz != ComponentResourceClassNotFound.class) {
+                    if (!associate.isDevModeEnabled()) {
+                        componentMap.put(className, clazz);
+                    }
+                    result = (UIComponent) clazz.newInstance();
                 }
-                result = (UIComponent) clazz.newInstance();
             } catch (ClassNotFoundException ex) {
-                // take no action, this is not an error.
+                if (!associate.isDevModeEnabled()) {
+                    componentMap.put(className, ComponentResourceClassNotFound.class);
+                }
             } catch (InstantiationException ie) {
                 throw new FacesException(ie);
             } catch (IllegalAccessException iae) {
@@ -2296,5 +2300,8 @@ public class ApplicationImpl extends Application {
         }
 
     } // END SourceInfo
+
+
+    private static final class ComponentResourceClassNotFound { }
 
 }
