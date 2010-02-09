@@ -521,8 +521,8 @@ public class UISelectMany extends UIInput {
             return (Object[]) primitiveArray;
         }
 
-        if (primitiveArray instanceof List) {
-            return ((List) primitiveArray).toArray();
+        if (primitiveArray instanceof Collection) {
+            return ((Collection) primitiveArray).toArray();
         }
           
         Class clazz = primitiveArray.getClass();
