@@ -382,13 +382,15 @@ import com.sun.faces.util.Util;
 
     private void renderState(FacesContext context) throws IOException {
 
-        // Get the view state and write it to the response..
-        PartialViewContext pvc = context.getPartialViewContext();
-        PartialResponseWriter writer = pvc.getPartialResponseWriter();
-        writer.startUpdate(PartialResponseWriter.VIEW_STATE_MARKER);
-        String state = context.getApplication().getStateManager().getViewState(context);
-        writer.write(state);
-        writer.endUpdate();
+        if (!context.getViewRoot().isTransient()) {
+            // Get the view state and write it to the response..
+            PartialViewContext pvc = context.getPartialViewContext();
+            PartialResponseWriter writer = pvc.getPartialResponseWriter();
+            writer.startUpdate(PartialResponseWriter.VIEW_STATE_MARKER);
+            String state = context.getApplication().getStateManager().getViewState(context);
+            writer.write(state);
+            writer.endUpdate();
+        }
 
     }
 

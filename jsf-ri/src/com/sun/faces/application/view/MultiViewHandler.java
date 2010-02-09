@@ -235,7 +235,8 @@ public class MultiViewHandler extends ViewHandler {
     public void writeState(FacesContext context) throws IOException {
 
         Util.notNull("context", context);
-        if (!context.getPartialViewContext().isPartialRequest()) {
+        if (!context.getPartialViewContext().isPartialRequest()
+              && !context.getViewRoot().isTransient()) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Begin writing marker for viewId " +
                             context.getViewRoot().getViewId());
