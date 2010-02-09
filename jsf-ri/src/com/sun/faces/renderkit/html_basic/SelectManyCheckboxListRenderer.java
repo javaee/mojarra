@@ -192,6 +192,28 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
+    /**
+     * We override isBehaviorSource since the ID of the activated check box
+     * will have been augmented with the option number.
+     *
+     * @see HtmlBasicRenderer#isBehaviorSource(FacesContext, String, String)
+     */
+    @Override
+    protected boolean isBehaviorSource(FacesContext ctx,
+                                       String behaviorSourceId,
+                                       String componentClientId) {
+
+        if (behaviorSourceId == null) {
+            return false;
+        }
+        char sepChar = UINamingContainer.getSeparatorChar(ctx);
+        String actualBehaviorId =
+              behaviorSourceId.substring(0, behaviorSourceId.lastIndexOf(sepChar));
+        return (actualBehaviorId.equals(componentClientId));
+
+    }
+
+
     protected void renderBeginText(UIComponent component, int border,
                                    boolean alignVertical, FacesContext context,
                                    boolean outerTable)

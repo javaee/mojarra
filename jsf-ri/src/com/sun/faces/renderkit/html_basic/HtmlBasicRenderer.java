@@ -204,9 +204,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
             List<ClientBehavior> behaviorsForEvent = behaviors.get(behaviorEvent);
 
             if (behaviors.size() > 0) {
-                String behaviorSource = params.get("javax.faces.source");
+               String behaviorSource = params.get("javax.faces.source");
                String clientId = component.getClientId();
-               if (null != behaviorSource && behaviorSource.equals(clientId)) {
+               if (isBehaviorSource(context, behaviorSource, clientId)) {
                    for (ClientBehavior behavior: behaviorsForEvent) {
                        behavior.decode(context, component);
                    }
@@ -218,6 +218,23 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         return null;
     }
+
+
+    /**
+     * @param ctx the <code>FacesContext</code> for the current request
+     * @param behaviorSourceId the ID of the behavior source
+     * @param componentClientId the client ID of the component being decoded
+     * @return <code>true</code> if the behavior source is for the component
+     *  being decoded, otherwise <code>false</code>
+     */
+    protected boolean isBehaviorSource(FacesContext ctx,
+                                       String behaviorSourceId,
+                                       String componentClientId) {
+
+        return (behaviorSourceId != null && behaviorSourceId.equals(componentClientId));
+
+    }
+
 
     /**
      * <p>Conditionally augment an id-reference value.</p>
