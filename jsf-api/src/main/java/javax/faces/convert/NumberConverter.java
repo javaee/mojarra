@@ -37,10 +37,12 @@
 package javax.faces.convert;
 
 
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.PartialStateHolder;
 import javax.faces.context.FacesContext;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -570,6 +572,16 @@ public class NumberConverter implements Converter, PartialStateHolder {
             // See:  http://bugs.sun.com/view_bug.do?bug_id=4510618
             if (parser instanceof DecimalFormat) {
                 DecimalFormat dParser = (DecimalFormat) parser;
+
+                // Take a small hit in performance to avoid a loss in
+                // precision due to DecimalFormat.parse() returning Double
+                ValueExpression ve = component.getValueExpression("value");
+                if (ve != null) {
+                    Class<?> expectedType = ve.getType(context.getELContext());
+                    if (expectedType.isAssignableFrom(BigDecimal.class)) {
+                        dParser.setParseBigDecimal(true);
+                    }
+                }
                 DecimalFormatSymbols symbols =
                       dParser.getDecimalFormatSymbols();
                 if (symbols.getGroupingSeparator() == '\u00a0') {
