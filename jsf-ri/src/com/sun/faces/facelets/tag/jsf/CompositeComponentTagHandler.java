@@ -356,9 +356,11 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
 
     private void markInitialState(UIComponent c) {
-        c.markInitialState();
-        for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext(); ) {
-            markInitialState(i.next());
+        if (!c.initialStateMarked()) {
+            c.markInitialState();
+            for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext(); ) {
+                markInitialState(i.next());
+            }
         }
     }
 
