@@ -37,7 +37,6 @@
 package com.sun.faces.config;
 
 
-import com.sun.faces.util.FacesLogger;
 import com.sun.faces.RIConstants;
 
 import javax.faces.application.ResourceDependencies;
@@ -99,7 +98,8 @@ import java.net.MalformedURLException;
 })
 public class FacesInitializer implements ServletContainerInitializer {
 
-    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
+    // NOTE: Loggins should not be used with this class.
+
     private static final String FACES_SERVLET_CLASS = FacesServlet.class.getName();
 
     // -------------------------------- Methods from ServletContainerInitializer
@@ -117,10 +117,6 @@ public class FacesInitializer implements ServletContainerInitializer {
                     // not going to add additional mappings;
                     return;
                 }
-            }
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "Registering FacesServlet with mappings '/faces/*', '*.jsf', and '*.faces'.");
             }
             ServletRegistration reg =
                   servletContext.addServlet("FacesServlet",
@@ -155,9 +151,7 @@ public class FacesInitializer implements ServletContainerInitializer {
         try {
             return (context.getResource("/WEB-INF/faces-config.xml") != null);
         } catch (MalformedURLException mue) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, mue.toString(), mue);
-            }
+
         }
         
         return false;
