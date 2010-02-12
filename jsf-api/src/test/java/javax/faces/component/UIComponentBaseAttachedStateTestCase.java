@@ -37,7 +37,6 @@
 package javax.faces.component;
 
 import com.sun.faces.mock.MockFacesContext;
-import java.util.HashMap;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -46,7 +45,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.FacesListener;
 import javax.faces.event.ValueChangeListener;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -100,20 +98,6 @@ public class UIComponentBaseAttachedStateTestCase extends TestCase {
         attachedObjects.add(toAdd);
         Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects);
         returnedAttachedObjects = (Stack<ValueChangeListener>)
-                UIComponentBase.restoreAttachedState(facesContext, result);
-    }
-
-    public void testAttachedObjectsMap() throws Exception {
-        Map<String, ValueChangeListener> returnedAttachedObjects = null,
-                attachedObjects = new HashMap<String, ValueChangeListener>();
-        ValueChangeListener toAdd = new TestValueChangeListener();
-        attachedObjects.put("one",toAdd);
-        toAdd = new TestValueChangeListener();
-        attachedObjects.put("two", toAdd);
-        toAdd = new TestValueChangeListener();
-        attachedObjects.put("three", toAdd);
-        Object result = UIComponentBase.saveAttachedState(facesContext, attachedObjects);
-        returnedAttachedObjects = (Map<String, ValueChangeListener>)
                 UIComponentBase.restoreAttachedState(facesContext, result);
     }
 
