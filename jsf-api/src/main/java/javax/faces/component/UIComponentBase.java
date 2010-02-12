@@ -67,6 +67,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -1511,8 +1512,21 @@ public abstract class UIComponentBase extends UIComponent {
             return null;
         }
         Object result;
+        Class mapOrCollectionClass = attachedObject.getClass();
+        boolean newWillSucceed = true;
+        // first, test for newability of the class.
+        try {
+            int modifiers = mapOrCollectionClass.getModifiers();
+            newWillSucceed = Modifier.isPublic(modifiers);
+            if (newWillSucceed) {
+                newWillSucceed = null != mapOrCollectionClass.getConstructor();
+            }
+        } catch (Exception e) {
+            newWillSucceed = false;
+        }
 
-        if (attachedObject instanceof Collection) {
+
+        if (newWillSucceed && attachedObject instanceof Collection) {
             Collection attachedCollection = (Collection) attachedObject;
             List<StateHolderSaver> resultList = null;
             for (Object item : attachedCollection) {
@@ -1522,10 +1536,31 @@ public abstract class UIComponentBase extends UIComponent {
                     }
                     if (resultList == null) {
                         resultList = new ArrayList<StateHolderSaver>(attachedCollection.size() + 1);
-                        resultList.add(new StateHolderSaver(context, attachedCollection.getClass()));
+                        resultList.add(new StateHolderSaver(context, mapOrCollectionClass));
                     }
                     resultList.add(new StateHolderSaver(context, item));
                 }
+            }
+            result = resultList;
+        } else if (newWillSucceed && attachedObject instanceof Map) {
+            Map<Object, Object> attachedMap = (Map<Object, Object>) attachedObject;
+            List<StateHolderSaver> resultList = null;
+            Object key, value;
+            for (Map.Entry<Object, Object> entry : attachedMap.entrySet()) {
+                key = entry.getKey();
+                if (key instanceof StateHolder && ((StateHolder)key).isTransient()) {
+                    continue;
+                }
+                value = entry.getValue();
+                if (value instanceof StateHolder && ((StateHolder)value).isTransient()) {
+                    continue;
+                }
+                if (resultList == null) {
+                    resultList = new ArrayList<StateHolderSaver>(attachedMap.size()*2 + 1);
+                    resultList.add(new StateHolderSaver(context, mapOrCollectionClass));
+                }
+                resultList.add(new StateHolderSaver(context, key));
+                resultList.add(new StateHolderSaver(context, value));
             }
             result = resultList;
         } else {
@@ -1565,29 +1600,54 @@ public abstract class UIComponentBase extends UIComponent {
 
         if (stateObj instanceof List) {
             List<StateHolderSaver> stateList = (List<StateHolderSaver>) stateObj;
-            Collection<Object> retCollection = null;
             StateHolderSaver collectionSaver = stateList.get(0);
-            Class collectionClass = (Class) collectionSaver.restore(context);
-            try {
-                retCollection = (Collection<Object>) collectionClass.newInstance();
-            }
-            catch (Exception e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, e.toString(), e);
-                }
-                throw new IllegalStateException("Unknown object type");
-            }
-            for (int i = 1, len = stateList.size(); i < len; i++) {
+            Class mapOrCollection = (Class) collectionSaver.restore(context);
+            if (Collection.class.isAssignableFrom(mapOrCollection)) {
+                Collection<Object> retCollection = null;
                 try {
-                    retCollection.add(stateList.get(i).restore(context));
-                } catch (ClassCastException cce) {
+                    retCollection = (Collection<Object>) mapOrCollection.newInstance();
+                } catch (Exception e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE, cce.toString(), cce);
+                        LOGGER.log(Level.SEVERE, e.toString(), e);
                     }
                     throw new IllegalStateException("Unknown object type");
                 }
+                for (int i = 1, len = stateList.size(); i < len; i++) {
+                    try {
+                        retCollection.add(stateList.get(i).restore(context));
+                    } catch (ClassCastException cce) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE, cce.toString(), cce);
+                        }
+                        throw new IllegalStateException("Unknown object type");
+                    }
+                }
+                result = retCollection;
+            } else {
+                // If we were doing assertions: assert(mapOrList.isAssignableFrom(Map.class));
+                Map<Object, Object> retMap = null;
+                try {
+                    retMap = (Map<Object,Object>) mapOrCollection.newInstance();
+                } catch (Exception e) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, e.toString(), e);
+                    }
+                    throw new IllegalStateException("Unknown object type");
+                }
+                for (int i = 1, len = stateList.size(); i < len; i+=2) {
+                    try {
+                        retMap.put(stateList.get(i).restore(context),
+                                   stateList.get(i+1).restore(context));
+                    } catch (ClassCastException cce) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE, cce.toString(), cce);
+                        }
+                        throw new IllegalStateException("Unknown object type");
+                    }
+                }
+                result = retMap;
+
             }
-            result = retCollection;
         } else if (stateObj instanceof StateHolderSaver) {
             StateHolderSaver saver = (StateHolderSaver) stateObj;
             result = saver.restore(context);

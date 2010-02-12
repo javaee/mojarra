@@ -42,21 +42,18 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
 import java.io.IOException;
+import java.util.Map;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIInput;
 import javax.faces.event.PhaseId;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.PostConstructViewMapEvent;
 import javax.faces.event.PreDestroyViewMapEvent;
-import javax.faces.event.PostAddToViewEvent;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -906,6 +903,17 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         assertTrue(listener.getPassedEvent() instanceof PreDestroyViewMapEvent);
         assertTrue(listener.wasProcessEventInvoked());
 
+    }
+
+    public void testViewMapSaveRestore() throws Exception {
+        UIViewRoot root = new UIViewRoot();
+        Map<String, Object> viewMap = root.getViewMap();
+        viewMap.put("one", "one");
+        Object saved = root.saveState(facesContext);
+        root = new UIViewRoot();
+        root.restoreState(facesContext, saved);
+        viewMap = root.getViewMap();
+        assertEquals("one", viewMap.get("one"));
     }
     
 
