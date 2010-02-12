@@ -526,6 +526,9 @@ import com.sun.faces.util.Util;
 
             super(null);
             this.ctx = ctx;
+            ExternalContext extCtx = ctx.ctx.getExternalContext();
+            extCtx.setResponseContentType("text/xml");
+            extCtx.setResponseCharacterEncoding(extCtx.getRequestCharacterEncoding());
 
         }
 

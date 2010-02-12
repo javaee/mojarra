@@ -362,10 +362,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
             ExternalContext extContext = ctx.getExternalContext();
-            extContext.setResponseContentType(origWriter.getContentType());
-            extContext.setResponseCharacterEncoding(origWriter.getCharacterEncoding());
-
-
             Writer outputWriter = extContext.getResponseOutputWriter();
             stateWriter = new WriteBehindStateWriter(outputWriter,
                                                      ctx,
@@ -860,6 +856,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         contentType = getResponseContentType(context, writer.getContentType());
         encoding = getResponseEncoding(context, writer.getCharacterEncoding());
+
+        // apply them to the response
+        extContext.setResponseContentType(contentType);
+        extContext.setResponseCharacterEncoding(encoding);
 
         // Now, clone with the real writer
         writer = writer.cloneWithWriter(extContext.getResponseOutputWriter());
