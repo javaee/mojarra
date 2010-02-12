@@ -1218,13 +1218,13 @@ public class UIData extends UIComponentBase
                 // Next column facets
                 // NOTE: that the visitRows parameter will be obsolete once the
                 //       appropriate visit hints have been added to the API
-                if (visitColumnFacets(context, callback, visitRows))
+                if (visitColumnsAndColumnFacets(context, callback, visitRows))
                     return true;
 
                 // And finally, visit rows
                 // NOTE: that the visitRows parameter will be obsolete once the
                 //       appropriate visit hints have been added to the API
-                if (visitColumnsAndRows(context, callback, visitRows))
+                if (visitRows(context, callback, visitRows))
                     return true;
             }
         }
@@ -1537,19 +1537,23 @@ public class UIData extends UIComponentBase
         return false;
     }
 
-    // Visit each facet of our child UIColumn components exactly once
-    private boolean visitColumnFacets(VisitContext context, 
-                                      VisitCallback callback,
-                                      boolean visitRows) {
+    // Visit each UIColumn and any facets it may have defined exactly once
+    private boolean visitColumnsAndColumnFacets(VisitContext context,
+                                                VisitCallback callback,
+                                                boolean visitRows) {
         if (visitRows) {
             setRowIndex(-1);
         }
         if (getChildCount() > 0) {
             for (UIComponent column : getChildren()) {
-                if (column.getFacetCount() > 0) {
-                    for (UIComponent columnFacet : column.getFacets().values()) {
-                        if (columnFacet.visitTree(context, callback))
-                            return true;
+                if (column instanceof UIColumn) {
+                    context.invokeVisitCallback(column, callback); // visit the column directly
+                    if (column.getFacetCount() > 0) {
+                        for (UIComponent columnFacet : column.getFacets().values()) {
+                            if (columnFacet.visitTree(context, callback)) {
+                                return true;
+                            }
+                        }
                     }
                 }
             }
@@ -1559,22 +1563,9 @@ public class UIData extends UIComponentBase
     }
 
     // Visit each column and row
-    private boolean visitColumnsAndRows(VisitContext context,
-                                        VisitCallback callback,
-                                        boolean visitRows) {
-
-
-        // first, visit all columns
-        if (getChildCount() > 0) {
-            for (UIComponent kid : getChildren()) {
-                if (!(kid instanceof UIColumn)) {
-                    continue;
-                }
-                if (kid.visitTree(context, callback)) {
-                    return true;
-                }
-            }
-        }
+    private boolean visitRows(VisitContext context,
+                              VisitCallback callback,
+                              boolean visitRows) {
 
         // Iterate over our UIColumn children, once per row
         int processed = 0;

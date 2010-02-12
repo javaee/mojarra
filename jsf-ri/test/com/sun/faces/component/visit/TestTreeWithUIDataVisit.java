@@ -43,8 +43,13 @@ import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.logging.Logger;
+import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIData;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlColumn;
 import javax.faces.component.html.HtmlCommandButton;
@@ -54,10 +59,14 @@ import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+import javax.faces.model.ArrayDataModel;
+import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import javax.faces.model.ScalarDataModel;
 
 
 public class TestTreeWithUIDataVisit extends ServletFacesTestCase {
@@ -191,9 +200,66 @@ public class TestTreeWithUIDataVisit extends ServletFacesTestCase {
                         return VisitResult.ACCEPT;
                     }
                 });
-        System.out.println(builder);
+
         String result = builder.toString().trim();
         assertEquals(result, "form:panel0:data:3:output0 form:panel1:data:0:output0");
+
+    }
+
+
+    /**
+     * Added for issue https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=1483
+     */
+    public void testFacetVisits() throws Exception {
+
+        UIData data = new UIData();
+        DataModel m = new ArrayDataModel<String>(new String[] {"a", "b"});
+        data.setValue(m);
+        data.setId("table");
+        UIOutput tableFacet = new UIOutput();
+        tableFacet.setId("tableFacet");
+        data.getFacets().put("header", tableFacet);
+        UIColumn c1 = new UIColumn();
+        c1.setId("column1");
+        UIOutput column1Facet = new UIOutput();
+        column1Facet.setId("column1Facet");
+        c1.getFacets().put("header", column1Facet);
+        UIOutput column1Data = new UIOutput();
+        column1Data.setId("column1Data");
+        c1.getChildren().add(column1Data);
+        data.getChildren().add(c1);
+
+        getFacesContext().setCurrentPhaseId(PhaseId.RENDER_RESPONSE);
+        
+        final List<String> visitedIds = new ArrayList<String>();
+        data.visitTree(VisitContext.createVisitContext(getFacesContext(),
+                                                       null,
+                                                       null),
+                       new VisitCallback() {
+                           public VisitResult visit(VisitContext context,
+                                                    UIComponent target) {
+                               visitedIds
+                                     .add(target.getClientId(context.getFacesContext()));
+                               return VisitResult.ACCEPT;
+                           }
+                       });
+        
+        String[] expectedIds = { "table",
+                                 "table:tableFacet",
+                                 "table:column1Facet",
+                                 "table:column1",
+                                 "table:0:column1Data",
+                                 "table:1:column1Data" };
+
+        Logger.getAnonymousLogger("** IDs: " + visitedIds);
+
+        assertEquals("Expected number of vists: " + expectedIds.length + ", actual number of visits: " + visitedIds.size(),
+                     expectedIds.length,
+                     visitedIds.size());
+
+        for (String id : expectedIds) {
+            assertTrue("ID: " + id + " not visited.", visitedIds.contains(id));
+        }
 
     }
 
