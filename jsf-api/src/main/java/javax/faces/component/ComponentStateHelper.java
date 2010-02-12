@@ -359,6 +359,7 @@ class ComponentStateHelper implements StateHelper {
             savedState[i * 2] = entry.getKey();
             if (value instanceof Collection
                   || value instanceof StateHolder
+                  || value instanceof Map
                   || !(value instanceof Serializable)) {
                 value = saveAttachedState(context,value);
             }
