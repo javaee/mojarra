@@ -50,6 +50,8 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
+import javax.el.MethodExpression;
+import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
@@ -104,6 +106,8 @@ public class RestoreViewPhase extends Phase {
         Util.getViewHandler(context).initView(context);
         super.doPhase(context, lifecycle, listeners);
 
+        // Notify View Root after phase listener (if registered)
+        notifyAfter(context, lifecycle);
     }
 
     /**
@@ -259,6 +263,31 @@ public class RestoreViewPhase extends Phase {
     }
 
     // --------------------------------------------------------- Private Methods
+
+    /**
+     * Notify afterPhase listener that is registered on the View Root.
+     * @param context the FacesContext for the current request
+     * @param lifecycle lifecycle instance
+     */
+    private void notifyAfter(FacesContext context, Lifecycle lifecycle) {
+        UIViewRoot viewRoot = context.getViewRoot();
+        MethodExpression afterPhase = viewRoot.getAfterPhaseListener();
+        if (null != afterPhase) {
+            try {
+                PhaseEvent event = new PhaseEvent(context, PhaseId.RESTORE_VIEW, lifecycle);
+                afterPhase.invoke(context.getELContext(), new Object[]{event});
+            }
+            catch (Exception e) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               "severe.component.unable_to_process_expression",
+                               new Object[] { afterPhase.getExpressionString(),
+                               ("afterPhase")});
+                }
+                return;
+            }
+        }
+    }
 
 
     /**
