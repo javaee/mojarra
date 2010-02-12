@@ -251,7 +251,7 @@ public class TestTreeWithUIDataVisit extends ServletFacesTestCase {
                                  "table:0:column1Data",
                                  "table:1:column1Data" };
 
-        Logger.getAnonymousLogger("** IDs: " + visitedIds);
+        Logger.getAnonymousLogger().info("** Visited IDs: " + visitedIds);
 
         assertEquals("Expected number of vists: " + expectedIds.length + ", actual number of visits: " + visitedIds.size(),
                      expectedIds.length,
