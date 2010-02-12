@@ -97,6 +97,8 @@ public class WebConfiguration {
 
     private ServletContext servletContext;
 
+    private ArrayList<DeferredLoggingAction> deferredLoggingActions;
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -331,6 +333,17 @@ public class WebConfiguration {
     }
 
 
+    public void doLoggingActions() {
+
+        if (deferredLoggingActions != null) {
+            for (DeferredLoggingAction loggingAction : deferredLoggingActions) {
+                loggingAction.log();
+            }
+        }
+
+    }
+
+
     // ------------------------------------------------- Package Private Methods
 
 
@@ -391,18 +404,24 @@ public class WebConfiguration {
                 BooleanWebContextInitParameter alternate = param.getAlternate();
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     if (alternate != null) {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.config.webconfig.param.deprecated",
-                                   new Object[]{
-                                         contextName,
-                                         param.getQualifiedName(),
-                                         alternate.getQualifiedName()});
+                        queueLoggingAction(new DeferredBooleanParameterLoggingAction(
+                              param,
+                              Level.WARNING,
+                              "jsf.config.webconfig.param.deprecated",
+                              new Object[]{
+                                    contextName,
+                                    param.getQualifiedName(),
+                                    alternate.getQualifiedName()}));
+
                     } else {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.config.webconfig.param.deprecated.no_replacement",
-                                   new Object[]{
-                                         contextName,
-                                         param.getQualifiedName()});
+                        queueLoggingAction(new DeferredBooleanParameterLoggingAction(
+                              param,
+                              Level.WARNING,
+                              "jsf.config.webconfig.param.deprecated.no_replacement",
+                              new Object[]{
+                                    contextName,
+                                    param.getQualifiedName()}));
+
                     }
                 }
 
@@ -414,12 +433,15 @@ public class WebConfiguration {
                     }
 
                     if (LOGGER.isLoggable(Level.INFO) && alternate != null) {
-                        LOGGER.log(Level.INFO,
-                                   ((value)
-                                    ? "jsf.config.webconfig.configinfo.reset.enabled"
-                                    : "jsf.config.webconfig.configinfo.reset.disabled"),
-                                   new Object[]{contextName,
-                                                alternate.getQualifiedName()});
+                        queueLoggingAction(new DeferredBooleanParameterLoggingAction(
+                              param,
+                              Level.INFO,
+                              ((value)
+                               ? "jsf.config.webconfig.configinfo.reset.enabled"
+                               : "jsf.config.webconfig.configinfo.reset.disabled"),
+                              new Object[]{
+                                    contextName,
+                                    alternate.getQualifiedName()}));
                     }
 
                     booleanContextParameters.put(alternate, value);
@@ -440,8 +462,7 @@ public class WebConfiguration {
 
                 // first param processed should be
                 // com.sun.faces.displayConfiguration
-                if (BooleanWebContextInitParameter.DisplayConfiguration
-                      .equals(param) && value) {
+                if (BooleanWebContextInitParameter.DisplayConfiguration.equals(param) && value) {
                     loggingLevel = Level.INFO;
                 }
 
@@ -505,31 +526,38 @@ public class WebConfiguration {
 
             if (value != null && value.length() > 0 && param.isDeprecated()) {
                 WebContextInitParameter alternate = param.getAlternate();
-                 if (LOGGER.isLoggable(Level.WARNING)) {
-                    if (alternate != null) {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.config.webconfig.param.deprecated",
-                                   new Object[]{
-                                         contextName,
-                                         param.getQualifiedName(),
-                                         alternate.getQualifiedName()});
-                    } else {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.config.webconfig.param.deprecated.no_replacement",
-                                   new Object[]{
-                                         contextName,
-                                         param.getQualifiedName()});
+                DeprecationLoggingStrategy strategy = param.getDeprecationLoggingStrategy();
+                if (strategy == null || strategy.shouldBeLogged(this)) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        if (alternate != null) {
+                            queueLoggingAction(new DeferredParameterLoggingAction(param, Level.WARNING,
+                                       "jsf.config.webconfig.param.deprecated",
+                                       new Object[]{
+                                             contextName,
+                                             param.getQualifiedName(),
+                                             alternate.getQualifiedName()}));
+
+                        } else {
+                            queueLoggingAction(new DeferredParameterLoggingAction(
+                                  param,
+                                  Level.WARNING,
+                                  "jsf.config.webconfig.param.deprecated.no_replacement",
+                                  new Object[]{
+                                        contextName,
+                                        param.getQualifiedName()}));
+                        }
                     }
                 }
 
                 if (alternate != null) {
-                    if (LOGGER.isLoggable(Level.INFO)) {
-                        LOGGER.log(Level.INFO,
-                                   "jsf.config.webconfig.configinfo.reset",
-                                   new Object[]{contextName,
-                                                alternate.getQualifiedName(),
-                                                value});
-                    }
+                    queueLoggingAction(
+                          new DeferredParameterLoggingAction(param,
+                                                             Level.INFO,
+                                                             "jsf.config.webconfig.configinfo.reset",
+                                                             new Object[]{
+                                                                    contextName,
+                                                                    alternate.getQualifiedName(),
+                                                                    value}));
 
                     contextParameters.put(alternate, value);
                 }
@@ -642,6 +670,16 @@ public class WebConfiguration {
     }
 
 
+    private void queueLoggingAction(DeferredLoggingAction loggingAction) {
+
+        if (deferredLoggingActions == null) {
+            deferredLoggingActions = new ArrayList<DeferredLoggingAction>();
+        }
+        deferredLoggingActions.add(loggingAction);
+
+    }
+
+
     // ------------------------------------------------------------------- Enums
 
 
@@ -738,7 +776,8 @@ public class WebConfiguration {
               "facelets.BUFFER_SIZE",
               "1024",
               true,
-              FaceletsBufferSize
+              FaceletsBufferSize,
+              new FaceletsConfigParamLoggingStrategy()
         ),
         ClientStateWriteBufferSize(
               "com.sun.faces.clientStateWriteBufferSize",
@@ -780,7 +819,8 @@ public class WebConfiguration {
               "facelets.REFRESH_PERIOD",
               "2",
               true,
-              FaceletsDefaultRefreshPeriod
+              FaceletsDefaultRefreshPeriod,
+              new FaceletsConfigParamLoggingStrategy()
         ),
         FaceletsResourceResolver(
               ResourceResolver.FACELETS_RESOURCE_RESOLVER_PARAM_NAME,
@@ -790,7 +830,8 @@ public class WebConfiguration {
               "facelets.RESOURCE_RESOLVER",
               "",
               true,
-              FaceletsResourceResolver
+              FaceletsResourceResolver,
+              new FaceletsConfigParamLoggingStrategy()
         ),
          FaceletsViewMappings(
               ViewHandler.FACELETS_VIEW_MAPPINGS_PARAM_NAME,
@@ -800,7 +841,8 @@ public class WebConfiguration {
               "facelets.VIEW_MAPPINGS",
               "",
               true,
-              FaceletsViewMappings
+              FaceletsViewMappings,
+              new FaceletsConfigParamLoggingStrategy()
         ),
         FaceletsLibraries(
               "javax.faces.FACELETS_LIBRARIES",
@@ -810,7 +852,8 @@ public class WebConfiguration {
               "facelets.LIBRARIES",
               "",
               true,
-              FaceletsLibraries
+              FaceletsLibraries,
+              new FaceletsConfigParamLoggingStrategy()
         ),
         FaceletsDecorators(
               "javax.faces.FACELETS_DECORATORS",
@@ -820,7 +863,8 @@ public class WebConfiguration {
               "facelets.DECORATORS",
               "",
               true,
-              FaceletsDecorators
+              FaceletsDecorators,
+              new FaceletsConfigParamLoggingStrategy()
         ),
         DuplicateJARPattern(
             "com.sun.faces.duplicateJARPattern",
@@ -849,6 +893,7 @@ public class WebConfiguration {
         private String qualifiedName;
         private WebContextInitParameter alternate;
         private boolean deprecated;
+        private DeprecationLoggingStrategy loggingStrategy;
 
 
     // ---------------------------------------------------------- Public Methods
@@ -866,6 +911,14 @@ public class WebConfiguration {
             return qualifiedName;
 
         }
+
+
+        DeprecationLoggingStrategy getDeprecationLoggingStrategy() {
+
+            return loggingStrategy;
+
+        }
+
         
     // ------------------------------------------------- Package Private Methods
 
@@ -887,6 +940,18 @@ public class WebConfiguration {
             this.defaultValue = defaultValue;
             this.deprecated = deprecated;
             this.alternate = alternate;
+
+        }
+
+
+        WebContextInitParameter(String qualifiedName,
+                                String defaultValue,
+                                boolean deprecated,
+                                WebContextInitParameter alternate,
+                                DeprecationLoggingStrategy loggingStrategy) {
+
+            this(qualifiedName, defaultValue, deprecated, alternate);
+            this.loggingStrategy = loggingStrategy;
 
         }
 
@@ -1045,7 +1110,9 @@ public class WebConfiguration {
               "facelets.SKIP_COMMENTS",
               false,
               true, 
-              FaceletsSkipComments),
+              FaceletsSkipComments,
+              new FaceletsConfigParamLoggingStrategy()
+        ),
         PartialStateSaving(
               StateManager.PARTIAL_STATE_SAVING_PARAM_NAME,
               true
@@ -1072,6 +1139,7 @@ public class WebConfiguration {
         private String qualifiedName;
         private boolean defaultValue;
         private boolean deprecated;
+        private DeprecationLoggingStrategy loggingStrategy;
 
 
     // ---------------------------------------------------------- Public Methods
@@ -1087,6 +1155,13 @@ public class WebConfiguration {
         public String getQualifiedName() {
 
             return qualifiedName;
+
+        }
+
+
+        DeprecationLoggingStrategy getDeprecationLoggingStrategy() {
+
+            return loggingStrategy;
 
         }
 
@@ -1111,6 +1186,18 @@ public class WebConfiguration {
             this.defaultValue = defaultValue;
             this.deprecated = deprecated;
             this.alternate = alternate;
+
+        }
+
+
+        BooleanWebContextInitParameter(String qualifiedName,
+                                      boolean defaultValue,
+                                      boolean deprecated,
+                                      BooleanWebContextInitParameter alternate,
+                                      DeprecationLoggingStrategy loggingStrategy) {
+
+            this(qualifiedName, defaultValue, deprecated, alternate);
+            this.loggingStrategy = loggingStrategy;
 
         }
 
@@ -1198,5 +1285,96 @@ public class WebConfiguration {
             return null;
         }
     }
+
+
+    // ----------------------------------------------------------- Inner Classes
+
+
+    private interface DeprecationLoggingStrategy {
+
+        boolean shouldBeLogged(WebConfiguration configuration);
+
+    }
+
+
+    private static class FaceletsConfigParamLoggingStrategy implements DeprecationLoggingStrategy {
+
+        public boolean shouldBeLogged(WebConfiguration configuration) {
+            return !configuration.isOptionEnabled(BooleanWebContextInitParameter.DisableFaceletJSFViewHandler);
+        }
+
+    } // END FaceletsConfigParamLoggingStrategy
+
+
+    private interface DeferredLoggingAction {
+
+        void log();
+
+    } // END DeferredLogginAction
+
+
+    private class DeferredParameterLoggingAction implements DeferredLoggingAction {
+
+        private WebContextInitParameter parameter;
+        private Level loggingLevel;
+        private String logKey;
+        private Object[] params;
+
+
+        DeferredParameterLoggingAction(WebContextInitParameter parameter,
+                                       Level loggingLevel,
+                                       String logKey,
+                                       Object[] params) {
+
+            this.parameter = parameter;
+            this.loggingLevel = loggingLevel;
+            this.logKey = logKey;
+            this.params = params;
+
+        }
+
+        public void log() {
+
+            if (WebConfiguration.LOGGER.isLoggable(loggingLevel)) {
+                DeprecationLoggingStrategy strategy = parameter.getDeprecationLoggingStrategy();
+                if (strategy != null && strategy.shouldBeLogged(WebConfiguration.this)) {
+                    WebConfiguration.LOGGER.log(loggingLevel, logKey, params);
+                }
+            }
+
+        }
+
+    } // END DeferredParameterLogginAction
+
+
+    private class DeferredBooleanParameterLoggingAction implements DeferredLoggingAction {
+
+        private BooleanWebContextInitParameter parameter;
+        private Level loggingLevel;
+        private String logKey;
+        private Object[] params;
+
+        DeferredBooleanParameterLoggingAction(BooleanWebContextInitParameter parameter,
+                                              Level loggingLevel,
+                                              String logKey,
+                                              Object[] params) {
+            this.parameter = parameter;
+            this.loggingLevel = loggingLevel;
+            this.logKey = logKey;
+            this.params = params;
+        }
+
+        public void log() {
+
+            if (WebConfiguration.LOGGER.isLoggable(loggingLevel)) {
+                DeprecationLoggingStrategy strategy = parameter.getDeprecationLoggingStrategy();
+                if (strategy != null && strategy.shouldBeLogged(WebConfiguration.this)) {
+                    WebConfiguration.LOGGER.log(loggingLevel, logKey, params);
+                }
+            }
+
+        }
+
+    } // END DeferredBooleanParameterLoggingAction
 
 } // END WebConfiguration

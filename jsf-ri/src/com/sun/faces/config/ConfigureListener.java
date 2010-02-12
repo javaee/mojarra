@@ -264,6 +264,7 @@ public class ConfigureListener implements ServletRequestListener,
                     UIViewRoot.class,
                     webAppListener);
 
+            webConfig.doLoggingActions();
 
         } finally {
             Verifier.setCurrentInstance(null);
