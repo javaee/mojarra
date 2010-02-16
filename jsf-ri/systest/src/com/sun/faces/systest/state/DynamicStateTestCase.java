@@ -166,7 +166,7 @@ public class DynamicStateTestCase extends AbstractTestCase {
 
         // any exception thrown here will fail the test
         client.setThrowExceptionOnFailingStatusCode(true);
-        HtmlPage page = getPage("/faces/state/dynamicAdditionTransientSubTree.xhtml");
+        getPage("/faces/state/dynamicAdditionTransientSubTree.xhtml");
 
     }
 
