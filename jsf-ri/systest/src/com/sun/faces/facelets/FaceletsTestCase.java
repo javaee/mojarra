@@ -313,4 +313,14 @@ public class FaceletsTestCase extends AbstractTestCase {
     }
 
 
+    /**
+     * Added for issue 1552.
+     */
+    public void testModeratelyComplexTemplating() throws Exception {
+        HtmlPage page = getPage("/faces/facelets/templateDecoration2.xhtml");
+        String text = page.asText();
+        assertTrue(text.contains("Inserted from client1 Default"));
+    }
+
+
 }

@@ -76,6 +76,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -330,9 +331,10 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
 
     public void popClient(TemplateClient client) {
         if (!this.clients.isEmpty()) {
-            for (TemplateManager c : clients) {
-                if (c.managesClient(client)) {
-                    clients.remove(client);
+            Iterator itr = this.clients.iterator();
+            while (itr.hasNext()) {
+                if (itr.next().equals(client)) {
+                    itr.remove();
                     return;
                 }
             }
@@ -356,7 +358,7 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
         for (int i = 0, size = this.clients.size(); i < size && !found; i++) {
             client = this.clients.get(i);
             //noinspection EqualsBetweenInconvertibleTypes
-            if (client.managesFacelet(this.facelet))
+            if (client.equals(this.facelet))
                 continue;            
             found = client.apply(this, parent, name);            
         }
@@ -394,21 +396,13 @@ final class DefaultFaceletContext extends FaceletContextImplBase {
             }
         }
 
-        public boolean managesClient(TemplateClient client) {
-            return (client == this.target);
-        }
-
-
-        public boolean managesFacelet(DefaultFacelet facelet) {
-            return (this.owner == facelet);
-        }
-
-        //@Override
-       // public boolean equals(Object o) {
+        
+        @Override
+        public boolean equals(Object o) {
             // System.out.println(this.owner.getAlias() + " == " +
             // ((DefaultFacelet) o).getAlias());
-        //    return this.owner == o || this.target == o;
-        //}
+            return this.owner == o || this.target == o;
+        }
 
         public boolean isRoot() {
             return this.root;
