@@ -669,12 +669,12 @@ page</a> for a usage example.</p>
 <p>The name of the attribute as it must appear on the <em>composite
 component tag</em> in the <em>using page</em>.  If the value of the
 <em>name</em> attribute is equal to (without the quotes)
-&#8220;action&#8221;, &#8221;actionListener&#8221;,
+&#8220;action&#8221;, &#8220;actionListener&#8221;,
 &#8220;validator&#8221;, or &#8220;valueChangeListener&#8221;, the
 action described in <a target="_"
 href="../../../javadocs/javax/faces/application/ViewHandler.html#retargetMethodExpressions(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)">ViewHandler.retargetMethodExpressions()</a>
 must be taken to handle the attribute.  In these cases, the
-<code>method-sigature</code> attribute, if present, must be ignored as
+<code>method-signature</code> attribute, if present, must be ignored as
 its value is derived as described in
 <code>retargetMethodExpressions()</code>.</div>]]>
 
@@ -781,7 +781,7 @@ correspond to the id of an inner component.</p>
                 <![CDATA[
 <div class="changed_added_2_0">
 <p>True if the page author must supply a value
-                for this attribute.</p></div>]]>
+                for this attribute.  The default value is false.</p></div>]]>
 
             </description>
             <name>
