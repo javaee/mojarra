@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -371,10 +371,11 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             if (null != stateObj) {
                 stateMap.put(c.getClientId(ctx), stateObj);
             }
+            for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext();) {
+                saveComponentState(i.next(), ctx, stateMap);
+            }
         }
-        for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext();) {
-            saveComponentState(i.next(), ctx, stateMap);
-        }
+
 
     }
     
@@ -469,15 +470,33 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     }
 
 
-    private void handleAddEvent(PostAddToViewEvent event) {
-        FacesContext context = FacesContext.getCurrentInstance();
+    private void handleAddEvent(FacesContext context, PostAddToViewEvent event) {
+        
+        // if the root is transient, then no action is ever needed here
+        if (context.getViewRoot().isTransient()) {
+            return;
+        }
+
         UIComponent added = event.getComponent();
         if (added.isTransient() || added instanceof UIViewRoot) {
             return;
         }
+
+        // this component, while not transient may be a child or facet
+        // of component that is.  We'll have to search the parent hierarchy
+        // to the root to confirm.
+        UIComponent parent = added.getParent();
+        while (parent != null) {
+            if (parent.isTransient()) {
+                return;
+            }
+            parent = parent.getParent();
+        }
+
+        parent = added.getParent();
         Map<String,ComponentStruct> idsToAdd = getClientIdsToAdd(context, true);
         ComponentStruct toAdd = new ComponentStruct();
-        UIComponent parent = added.getParent();
+
         toAdd.clientId = added.getClientId(context);
         toAdd.parentClientId = parent.getClientId(context);
         // this needs work
@@ -539,7 +558,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     owner.handleRemoveEvent(context, (PreRemoveFromViewEvent) event);
                 }
             } else {
-                owner.handleAddEvent((PostAddToViewEvent) event);
+                owner.handleAddEvent(context, (PostAddToViewEvent) event);
             }
         }
 

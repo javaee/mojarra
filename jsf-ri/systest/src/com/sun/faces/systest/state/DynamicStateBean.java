@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -36,11 +36,16 @@
 
 package com.sun.faces.systest.state;
 
+import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponentBase;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.html.HtmlCommandButton;
+import javax.faces.component.html.HtmlOutputText;
+import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -92,6 +97,33 @@ public class DynamicStateBean {
             form.getChildren().add(button);
         }
     }
+
+
+    public void transientRoot(ActionEvent ae) {
+       
+        UIComponent button = ae.getComponent();
+        UIComponent addto = button.findComponent("addto");
+
+        HtmlPanelGroup transientRoot = new HtmlPanelGroup();
+        transientRoot.setTransient(true);
+        transientRoot.setId("troot");
+        StateComponent text = new StateComponent();
+        text.setValue("transient parent");
+        text.setId("text");
+        HtmlPanelGroup group = new HtmlPanelGroup();
+        group.setId("group");
+        StateComponent text2 = new StateComponent();
+        text2.setValue(" test");
+        text2.setId("text2");
+        group.getChildren().add(text2);
+        transientRoot.getChildren().add(text);
+        transientRoot.getChildren().add(group);
+        addto.getChildren().add(transientRoot);
+
+    }
+
+
+    
     
     private UIComponent findButton(FacesContext context) {
         char sep = UINamingContainer.getSeparatorChar(context);
@@ -106,6 +138,18 @@ public class DynamicStateBean {
         UIComponent result = null;
                 result = context.getViewRoot().findComponent(sep + "form");
         return result;
+    }
+
+
+    public static class StateComponent extends HtmlOutputText {
+
+
+        @Override public Object saveState(FacesContext context) {
+
+            throw new FacesException("saveState(FacesContext) was incorrectly called for component with client ID: "
+                                     + this.getClientId(context));
+        }
+
     }
     
 }
