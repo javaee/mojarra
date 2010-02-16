@@ -115,7 +115,7 @@ public interface StateHolder {
      * or must not participate in state saving or restoring.</p>
      * 
      * @param newTransientValue boolean pass <code>true</code> if this Object 
-     *  will participate in state saving or restoring, otherwise 
+     *  will not participate in state saving or restoring, otherwise
      *  pass <code>false</code>.
      */ 
     public void setTransient(boolean newTransientValue);
