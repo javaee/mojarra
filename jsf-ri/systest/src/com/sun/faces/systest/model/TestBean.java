@@ -914,4 +914,8 @@ public enum Color { Red, Blue, Green, Orange }
         this.color = color;
     }
 
+    public String emptyStringAction() {
+        return null;
+    }
+
 }

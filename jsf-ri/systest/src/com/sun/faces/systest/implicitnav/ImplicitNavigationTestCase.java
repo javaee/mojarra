@@ -210,4 +210,13 @@ public class ImplicitNavigationTestCase extends AbstractTestCase {
 
        }
 
+       public void testImplicitNavEmptyString() throws Exception {
+           HtmlPage page = getPage("/faces/implicitnav/implicitNavEmptyString.xhtml");
+           HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+           page = button.click();
+           assertTrue(page.asText().contains("Implicit Navigation with empty string action"));
+
+
+       }
+
 }
