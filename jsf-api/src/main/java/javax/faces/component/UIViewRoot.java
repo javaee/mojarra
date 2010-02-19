@@ -545,6 +545,7 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * </code> using <code>javax.faces.Panel</code> as the argument</li> 
      * <ul>
      * <li>Set the <code>id</code> of the facet to be <code>target</code></li>
+     * <li>Set the <code>transient</code> property of the facet to <code>true</code>
      * <li>Add the facet to the facets <code>Map</code> using <code>target</code> as the key</li>
      * </ul>
      * <li>return the children of the facet</li>
@@ -1735,11 +1736,9 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
         String location = getIdentifier(target);
         UIComponent facet = getFacet(location);
         if (facet == null && create) {
-            // Using an implementation specific component type to prevent
-            // component resources being rendered at the incorrect time if
-            // a caller calls UIViewRoot.encodeAll().
             facet = context.getApplication().createComponent("javax.faces.ComponentResourceContainer");
             facet.setId(location);
+            facet.setTransient(true);
             getFacets().put(location, facet);
         }
 
