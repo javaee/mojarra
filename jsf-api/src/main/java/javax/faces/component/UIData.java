@@ -1108,15 +1108,24 @@ public class UIData extends UIComponentBase
      * 	  <code>UIComponent</code> in the returned <code>Map</code>,
      * 	  call {@link UIComponent#visitTree}.</p></li>
 
-     * 	  <li><p>If this component has children, for each child
-     * 	  <code>UIComponent</code> retured from calling {@link
-     * 	  #getChildren} on this instance, if the child has facets, call
-     * 	  {@link UIComponent#getFacets} on the child instance and invoke
-     * 	  the <code>values()</code> method.  For each
-     * 	  <code>UIComponent</code> in the returned <code>Map</code>,
-     * 	  call {@link UIComponent#visitTree}.</p></li>
+     * 	  <li><p>If this component has children, for each 
+     * 	  <code>UIColumn</code> child:</p>
+     * 
+     *    <p>Call {@link VisitContext#invokeVisitCallback} on that 
+          <code>UIColumn</code> instance.
+     *    If such a call returns <code>true</code>, terminate visiting and 
+          return <code>true</code> from this method.</p>
+     * 
+     *    <p>If the child <code>UIColumn</code> has facets, call
+     *    {@link UIComponent#visitTree} on each one.</p>
+     *
+     *    <p>Take no action on non-<code>UIColumn</code> children.</p></li>
+     *
+     *    <li><p>For each child component of this <code>UIData</code> that is
+     *    also an instance of {@link UIColumn}, 
+     *    </p>
 
-     * 	  <li><p>Iterate over the columns and rows.</p>
+     * 	  <li><p>Iterate over the rows.</p>
 
      * <ul>
 
@@ -1133,13 +1142,9 @@ public class UIData extends UIComponentBase
 
      * <p>If {@link #isRowAvailable} returns <code>false</code>, take no
      * further action and return <code>false</code>.</p>
-
-     * <p>For each child component of this <code>UIData</code> that is
-     * also an instance of {@link UIColumn}, call {@link
-     * UIComponent#visitTree} on the child.  If such a call returns
-     * <code>true</code>, terminate iteration and return
-     * <code>true</code>.  Take no action on non <code>UIColumn</code>
-     * children.</p>
+     *
+     * <p>Call {@link UIComponent#visitTree} on each of the children of this
+     * <code>UIColumn</code> instance.</p>
 
      *     </li>
 
