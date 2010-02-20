@@ -63,7 +63,8 @@ public interface ValueHolder {
 
     /**
      * <p>Gets the value of this {@link UIComponent}.  If validation
-     * failed, as indicated by {@link FacesContext#isValidationFailed}
+     * failed, as indicated by 
+     * {@link javax.faces.context.FacesContext#isValidationFailed}
      * returning <code>true</code>, always return the local value.
      * Otherwise, first, consult the local value property of this
      * component.  If non-<code>null</code> return it.  If
