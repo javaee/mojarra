@@ -1595,6 +1595,7 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#setMessageBundle(String)
      */
     public synchronized void setMessageBundle(String messageBundle) {
+        Util.notNull("messageBundle", messageBundle);
 
         this.messageBundle = messageBundle;
 
