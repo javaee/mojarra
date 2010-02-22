@@ -112,6 +112,7 @@ public class ResourceImpl extends Resource implements Externalizable {
     /**
      * Necessary for serialization.
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     public ResourceImpl() { }
 
 
@@ -135,31 +136,27 @@ public class ResourceImpl extends Resource implements Externalizable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        if (this == obj) {
+    public boolean equals(Object o) {
+
+        if (this == o) {
             return true;
         }
-        final ResourceImpl other = (ResourceImpl) obj;
-        if (null != this.resourceInfo && null != other.resourceInfo) {
-            return this.resourceInfo.equals(other.resourceInfo);
+        if (o == null || getClass() != o.getClass()) {
+            return false;
         }
-        return true;
+
+        ResourceImpl resource = (ResourceImpl) o;
+
+        return resourceInfo.equals(resource.resourceInfo);
+
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 41 * hash + (this.resourceInfo != null ? this.resourceInfo.hashCode() : 0);
-        return hash;
-    }
 
-    
+        return resourceInfo.hashCode();
+
+    }
 
 
     // --------------------------------------------------- Methods from Resource
@@ -292,7 +289,6 @@ public class ResourceImpl extends Resource implements Externalizable {
         }
         if ("jsf.js".equals(getResourceName()) && "javax.faces".equals(getLibraryName())) {
             ProjectStage stage = context.getApplication().getProjectStage();
-            String stageStr = stage.toString();
             switch (stage) {
                 case Development:
                     uri += ((queryStarted) ? "&stage=Development" : "?stage=Development" );
@@ -340,7 +336,7 @@ public class ResourceImpl extends Resource implements Externalizable {
         if (requestHeaders.containsKey("If-Modified-Since")) {
             SimpleDateFormat format =
                   new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
-            Date ifModifiedSinceDate = null;
+            Date ifModifiedSinceDate;
             try {
                 ifModifiedSinceDate = format.parse(requestHeaders.
                         get("If-Modified-Since"));

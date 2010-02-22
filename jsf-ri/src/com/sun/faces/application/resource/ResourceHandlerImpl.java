@@ -347,6 +347,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * is newer than the timestamp of the ResourceHandler creation time.
      * @return the time when the ResourceHandler was instantiated (in milliseconds)
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     long getCreationTime() {
 
         return creationTime;
@@ -359,6 +360,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * not be invoked during normal runtime.
      * @param creationTime the time in milliseconds
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     void setCreationTime(long creationTime) {
 
         this.creationTime = creationTime;
@@ -371,6 +373,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * looking up the WebConfiguration per-instance.
      * @return the {@link WebConfiguration} for this application
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     WebConfiguration getWebConfig() {
 
         return webconfig;
