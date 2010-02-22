@@ -797,7 +797,7 @@ public class WebConfiguration {
         ),
         DefaultResourceMaxAge(
               "com.sun.faces.defaultResourceMaxAge",
-              "604800000"
+              "604800000" // 7 days
         ),
         ResourceUpdateCheckPeriod(
               "com.sun.faces.resourceUpdateCheckPeriod",
