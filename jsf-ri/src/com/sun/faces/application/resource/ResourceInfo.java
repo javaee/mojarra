@@ -40,7 +40,6 @@ import java.io.File;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
