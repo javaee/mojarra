@@ -347,9 +347,10 @@ public class ResourceImpl extends Resource implements Externalizable {
             } catch (ParseException ex) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING,
-                            "jsf.application.resource.invalid_if_modified_since_header",
-                            new Object[]{requestHeaders.
-                        get("If-Modified-Since")});
+                               "jsf.application.resource.invalid_if_modified_since_header",
+                               new Object[]{
+                                     requestHeaders.get("If-Modified-Since")
+                               });
                     if (ex != null) {
                         LOGGER.log(Level.WARNING, "", ex);
                     }
