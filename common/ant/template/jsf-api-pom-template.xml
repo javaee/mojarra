@@ -52,7 +52,7 @@
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
 
     <repositories>
-         <repository>
+        <repository>
             <snapshots/>
             <id>ibiblio</id>
             <url>http://www.ibiblio.org/maven2/</url>
@@ -98,30 +98,30 @@
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
-           <plugin>
-             <groupId>org.apache.maven.plugins</groupId>
-             <artifactId>maven-compiler-plugin</artifactId>
-             <configuration>
-               <source>1.5</source>
-               <target>1.5</target>
-               <excludes>
-                 <exclude>**/*.*</exclude>
-               </excludes>
-             </configuration>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <excludes>
+                        <exclude>**/*.*</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
             <plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-source-plugin</artifactId>
-	      <version>2.1</version>
-	      <executions>
-		<execution>
-		  <id>attach-sources</id>
-		  <phase>verify</phase>
-		  <goals>
-		    <goal>jar-no-fork</goal>
-		  </goals>
-		</execution>
-	      </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
