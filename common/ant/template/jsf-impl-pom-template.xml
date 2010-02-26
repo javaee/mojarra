@@ -41,10 +41,69 @@
     <groupId>com.sun.faces</groupId>
     <artifactId>jsf-impl</artifactId>
     <version>@version@</version>
-    <description>
+    <packaging>jar</packaging>
+    <name>
         Sun's implementation of the JSF 2.0 specification.
+    </name>
+    <description>
+        This is the master POM file for Sun's Implementation of the JSF 2.0 Specification.
     </description>
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
+    <licenses>
+        <license>
+            <name>
+                COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) plus GPL
+            </name>
+            <url>https://glassfish.dev.java.net/public/CDDL+GPL.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://mojarra.dev.java.net/svn/mojarra</url>
+        <connection>scm:svn:https://mojarra.dev.java.net/svn/mojarra</connection>
+    </scm>
+    <developers>
+        <developer>
+            <id>edburns</id>
+            <name>Ed Burns</name>
+            <email>ed.burns@sun.com</email>
+            <organization>Sun Microsystems, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>rlubke</id>
+            <name>Ryan Lubke</name>
+            <email>Ryan.Lubke@sun.com</email>
+            <organization>Sun Microsystems, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-9</timezone>
+        </developer>
+        <developer>
+            <id>rogerk</id>
+            <name>Roger Kitain</name>
+            <email>Roger.Kitain@sun.com</email>
+            <organization>Sun Microsystems, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>driscoll</id>
+            <name>Jim Driscoll</name>
+            <email>jim.dirscoll@sun.com</email>
+            <organization>Sun Microsystems, Inc.</organization>
+            <roles>
+                <role>project-owner</role>
+            </roles>
+            <timezone>-9</timezone>
+        </developer>
+    </developers>
     <distributionManagement>
         <repository>
             <uniqueVersion>false</uniqueVersion>
@@ -115,48 +174,6 @@
             </archive>
         </mailingList>
     </mailingLists>
-    <developers>
-        <developer>
-            <id>edburns</id>
-            <name>Ed Burns</name>
-            <email>ed.burns@sun.com</email>
-            <organization>Sun Microsystems, Inc.</organization>
-            <roles>
-                <role>project-owner</role>
-            </roles>
-            <timezone>-6</timezone>
-        </developer>
-        <developer>
-            <id>rlubke</id>
-            <name>Ryan Lubke</name>
-            <email>Ryan.Lubke@sun.com</email>
-            <organization>Sun Microsystems, Inc.</organization>
-            <roles>
-                <role>project-owner</role>
-            </roles>
-            <timezone>-9</timezone>
-        </developer>
-        <developer>
-            <id>rogerk</id>
-            <name>Roger Kitain</name>
-            <email>Roger.Kitain@sun.com</email>
-            <organization>Sun Microsystems, Inc.</organization>
-            <roles>
-                <role>project-owner</role>
-            </roles>
-            <timezone>-6</timezone>
-        </developer>
-        <developer>
-            <id>driscoll</id>
-            <name>Jim Driscoll</name>
-            <email>jim.dirscoll@sun.com</email>
-            <organization>Sun Microsystems, Inc.</organization>
-            <roles>
-                <role>project-owner</role>
-            </roles>
-            <timezone>-9</timezone>
-        </developer>
-    </developers>
     <contributors>
         <contributor>
             <name>Craig McClanahan</name>
@@ -192,15 +209,6 @@
             <name>Jason Lee</name>
         </contributor>
     </contributors>
-    <licenses>
-        <license>
-            <name>
-                COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) plus GPL
-            </name>
-            <url>https://glassfish.dev.java.net/public/CDDL+GPL.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
     <organization>
         <name>Sun Microsystems, Inc</name>
         <url>http://www.sun.com/</url>
