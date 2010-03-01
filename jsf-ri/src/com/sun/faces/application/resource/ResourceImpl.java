@@ -54,6 +54,7 @@ import java.util.Collections;
 import java.util.logging.Logger;
 
 import javax.faces.application.Resource;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
@@ -63,6 +64,7 @@ import java.util.logging.Level;
 
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.ProjectStage;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Default implementation of {@link javax.faces.application.Resource}.
@@ -79,6 +81,8 @@ public class ResourceImpl extends Resource implements Externalizable {
     /* HTTP Date format required by the HTTP/1.1 RFC */
     private static final String RFC1123_DATE_PATTERN =
           "EEE, dd MMM yyyy HH:mm:ss zzz";
+
+    private static final String IF_MODIFIED_SINCE = "If-Modified-Since";
 
     private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
@@ -331,39 +335,60 @@ public class ResourceImpl extends Resource implements Externalizable {
 
         Map<String,String> requestHeaders =
               context.getExternalContext().getRequestHeaderMap();
-        boolean result = true;
 
-        if (requestHeaders.containsKey("If-Modified-Since")) {
+        if (requestHeaders.containsKey(IF_MODIFIED_SINCE)) {
+            long lastModifiedOfResource = resourceInfo.getHelper().getLastModified(resourceInfo, context);
+            long lastModifiedHeader = getIfModifiedHeader(context.getExternalContext());
+            return lastModifiedOfResource > lastModifiedHeader;
+        }
+        return true;
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    /*
+     * This method should only be called if the 'If-Modified-Since' header
+     * is present in the request header map.
+     */
+    private long getIfModifiedHeader(ExternalContext extcontext) {
+
+        Object request = extcontext.getRequest();
+        if (request instanceof HttpServletRequest) {
+            // try to use the container where we can.  V3 for instance
+            // has a FastHttpDateFormat format/parse implementation
+            // which is more than likely more performant than SimpleDateFormat
+            // (otherwise, why would it be there?).
+            return ((HttpServletRequest) request).getDateHeader(IF_MODIFIED_SINCE);
+        } else {
             SimpleDateFormat format =
                   new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
-            Date ifModifiedSinceDate;
             try {
-                ifModifiedSinceDate = format.parse(requestHeaders.
-                        get("If-Modified-Since"));
-                long lastModifiedOfResource = resourceInfo.getHelper()
-                        .getLastModified(resourceInfo, context);
-                long lastModifiedHeader = ifModifiedSinceDate.getTime();
-                result = lastModifiedOfResource > lastModifiedHeader;
+                Date ifModifiedSinceDate = format.parse(extcontext.getRequestHeaderMap().get(IF_MODIFIED_SINCE));
+                return ifModifiedSinceDate.getTime();
             } catch (ParseException ex) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING,
                                "jsf.application.resource.invalid_if_modified_since_header",
                                new Object[]{
-                                     requestHeaders.get("If-Modified-Since")
+                                     extcontext.getRequestHeaderMap().get(IF_MODIFIED_SINCE)
                                });
                     if (ex != null) {
                         LOGGER.log(Level.WARNING, "", ex);
                     }
                 }
+                return -1;
             }
-
         }
-        return result;
 
     }
 
 
     // --------------------------------------------- Methods from Externalizable
+
+
     public void writeExternal(ObjectOutput out) throws IOException {
 
         out.writeObject(getResourceName());
