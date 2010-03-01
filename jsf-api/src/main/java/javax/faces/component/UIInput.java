@@ -37,6 +37,7 @@
 package javax.faces.component;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import java.util.Map;
@@ -54,6 +55,8 @@ import javax.faces.el.MethodBinding;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.PhaseId;
+import javax.faces.event.PostValidateEvent;
+import javax.faces.event.PreValidateEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
@@ -682,10 +685,19 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             return;
         }
 
-        super.processValidators(context);
+        pushComponentToEL(context, this);
+
         if (!isImmediate()) {
+            Application application = context.getApplication();
+            application.publishEvent(context, PreValidateEvent.class, this);
             executeValidate(context);
+            application.publishEvent(context, PostValidateEvent.class, this);
         }
+        for (Iterator<UIComponent> i = getFacetsAndChildren(); i.hasNext(); ) {
+            i.next().processValidators(context);
+        }
+
+        popComponentFromEL(context);
     }
 
     /**

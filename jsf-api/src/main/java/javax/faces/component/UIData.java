@@ -975,9 +975,11 @@ public class UIData extends UIComponentBase
             return;
         }
 
+        pushComponentToEL(context, this);
         preDecode(context);
         iterate(context, PhaseId.APPLY_REQUEST_VALUES);
         decode(context);
+        popComponentFromEL(context);
 
     }
 
@@ -1014,11 +1016,13 @@ public class UIData extends UIComponentBase
         if (!isRendered()) {
             return;
         }
+        pushComponentToEL(context, this);
         Application app = context.getApplication();
         app.publishEvent(context, PreValidateEvent.class, this);
         preValidate(context);
         iterate(context, PhaseId.PROCESS_VALIDATIONS);
         app.publishEvent(context, PostValidateEvent.class, this);
+        popComponentFromEL(context);
 
     }
 
@@ -1063,8 +1067,10 @@ public class UIData extends UIComponentBase
             return;
         }
 
+        pushComponentToEL(context, this);
         preUpdate(context);
         iterate(context, PhaseId.UPDATE_MODEL_VALUES);
+        popComponentFromEL(context);
         // This is not a EditableValueHolder, so no further processing is required
 
     }

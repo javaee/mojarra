@@ -230,6 +230,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         if (!isSubmitted()) {
             return;
         }
+        pushComponentToEL(context, this);
         Application app = context.getApplication();
         app.publishEvent(context, PreValidateEvent.class, this);
         // Process all the facets and children of this component
@@ -239,6 +240,7 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
             kid.processValidators(context);
         }
         app.publishEvent(context, PostValidateEvent.class, this);
+        popComponentFromEL(context);
 
     }
 

@@ -44,6 +44,7 @@ import junit.framework.TestSuite;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
@@ -51,6 +52,8 @@ import javax.faces.event.PostValidateEvent;
 import javax.faces.event.PreValidateEvent;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -215,7 +218,7 @@ public class UIComponentTestCase extends TestCase {
 
     // ------------------------------------------------- Individual Test Methods
 
-    public void testRenderEvents() {
+    public void testValidationEvents() {
         Listener prelistener = new Listener();
         Listener postlistener = new Listener();
         List<String> ldata = new ArrayList<String>();
@@ -248,12 +251,17 @@ public class UIComponentTestCase extends TestCase {
         in.setId("in");
         in.subscribeToEvent(PreValidateEvent.class, prelistener);
         in.subscribeToEvent(PostValidateEvent.class, postlistener);
+        in.addValidator(new ValidationSignal());
         c.getChildren().add(in);
         data.getChildren().add(c);
         f.getChildren().add(data);
+        data.setRowIndex(0);
+        UIComponent col = data.getChildren().get(0);
+        ((UIInput) col.getChildren().get(0)).setSubmittedValue("hello");
+        data.setRowIndex(-1);
         root.processValidators(facesContext);
         assertEquals("root/out/form/data/in/", "root/out/form/data/in/", prelistener.getResults());
-        assertEquals("out/in/data/form/root/", "out/in/data/form/root/", postlistener.getResults());
+        assertEquals("out/*/in/data/form/root/", "out/*/in/data/form/root/", postlistener.getResults());
 
     }
 
@@ -2103,11 +2111,28 @@ public class UIComponentTestCase extends TestCase {
 
         public void processEvent(ComponentSystemEvent event)
               throws AbortProcessingException {
-            sb.append(((UIComponent) event.getSource()).getId()).append('/');
+            UIComponent source = ((UIComponent) event.getSource());
+            Boolean validatorCalled = (Boolean) source.getAttributes().remove("vCalled");
+            if (validatorCalled != null) {
+                sb.append("*/");
+            }
+            sb.append(source.getId()).append('/');
         }
 
         public String getResults() {
             return sb.toString();
+        }
+    }
+
+
+    public static class ValidationSignal implements Validator {
+
+        public void validate(FacesContext context,
+                             UIComponent component,
+                             Object value) throws ValidatorException {
+
+            component.getAttributes().put("vCalled", Boolean.TRUE);
+
         }
     }
 
