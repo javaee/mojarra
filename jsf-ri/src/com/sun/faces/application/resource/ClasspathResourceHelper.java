@@ -132,13 +132,14 @@ public class ClasspathResourceHelper extends ResourceHelper {
         ClassLoader loader = Util.getCurrentLoader(this);
         String basePath;
         if (localePrefix == null) {
-            basePath = getBaseResourcePath() + '/' + libraryName;
+            basePath = getBaseResourcePath() + '/' + libraryName + '/';
         } else {
             basePath = getBaseResourcePath()
                        + '/'
                        + localePrefix
                        + '/'
-                       + libraryName;
+                       + libraryName
+                       + '/';
         }
 
         URL basePathURL = loader.getResource(basePath);
