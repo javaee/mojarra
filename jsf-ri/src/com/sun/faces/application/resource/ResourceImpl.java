@@ -337,7 +337,7 @@ public class ResourceImpl extends Resource implements Externalizable {
               context.getExternalContext().getRequestHeaderMap();
 
         if (requestHeaders.containsKey(IF_MODIFIED_SINCE)) {
-            long lastModifiedOfResource = resourceInfo.getHelper().getLastModified(resourceInfo, context);
+            long lastModifiedOfResource = resourceInfo.getLastModified(context);
             long lastModifiedHeader = getIfModifiedHeader(context.getExternalContext());
             return lastModifiedOfResource > lastModifiedHeader;
         }

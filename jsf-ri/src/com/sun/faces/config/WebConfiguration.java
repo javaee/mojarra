@@ -1132,6 +1132,10 @@ public class WebConfiguration {
         AllowTextChildren(
             "com.sun.faces.allowTextChildren",
             false
+        ),
+        CacheResourceModificationTimestamp(
+              "com.sun.faces.cacheResourceModificationTimestamp",
+              false
         );
 
         private BooleanWebContextInitParameter alternate;

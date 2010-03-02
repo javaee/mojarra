@@ -75,12 +75,12 @@ public class ResourceManager {
     /**
      * {@link ResourceHelper} used for looking up webapp-based resources.
      */
-    private ResourceHelper webappHelper = WebappResourceHelper.getInstance();
+    private ResourceHelper webappHelper = new WebappResourceHelper();
 
     /**
      * {@link ResourceHelper} used for looking up classpath-based resources.
      */
-    private ResourceHelper classpathHelper = ClasspathResourceHelper.getInstance();
+    private ResourceHelper classpathHelper = new ClasspathResourceHelper();
 
     /**
      * Cache for storing {@link ResourceInfo} instances to reduce the cost

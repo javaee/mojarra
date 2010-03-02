@@ -227,7 +227,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
                 viC = new VersionInfo("1.0", null);
         this.verifyEqualsContractPositive(viA, viB, viC);
 
-        ResourceHelper helper = ClasspathResourceHelper.getInstance();
+        ResourceHelper helper = new ClasspathResourceHelper();
         FacesContext context = this.getFacesContext();
 
         LibraryInfo

@@ -42,7 +42,10 @@ import java.net.URL;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
+
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
 
 /**
  * <p>
@@ -54,23 +57,18 @@ import com.sun.faces.util.Util;
  */
 public class ClasspathResourceHelper extends ResourceHelper {
 
-    private static final ClasspathResourceHelper INSTANCE = new ClasspathResourceHelper();
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";
+    private boolean cacheTimestamp;
 
 
     // ------------------------------------------------------------ Constructors
 
 
-    protected ClasspathResourceHelper() { }
+    public ClasspathResourceHelper() {
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public static ClasspathResourceHelper getInstance() {
-
-        return INSTANCE;
+        WebConfiguration webconfig = WebConfiguration.getInstance();
+        cacheTimestamp = webconfig.isOptionEnabled(CacheResourceModificationTimestamp);
 
     }
 
@@ -198,7 +196,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      null,
                                      compressable,
                                      resourceSupportsEL(resourceName, ctx),
-                                     ctx.isProjectStage(ProjectStage.Development));
+                                     ctx.isProjectStage(ProjectStage.Development),
+                                     cacheTimestamp);
         } else {
             value = new ResourceInfo(resourceName,
                                      null,
@@ -206,7 +205,8 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                      this,
                                      compressable,
                                      resourceSupportsEL(resourceName, ctx),
-                                     ctx.isProjectStage(ProjectStage.Development));
+                                     ctx.isProjectStage(ProjectStage.Development),
+                                     cacheTimestamp);
         }
         
         if (value.isCompressable()) {

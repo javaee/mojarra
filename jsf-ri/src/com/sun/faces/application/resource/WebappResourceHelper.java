@@ -48,7 +48,10 @@ import javax.faces.FacesException;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
+
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.CacheResourceModificationTimestamp;
 
 /**
  * <p>
@@ -61,24 +64,20 @@ import com.sun.faces.util.FacesLogger;
  */
 public class WebappResourceHelper extends ResourceHelper {
 
-    private static final WebappResourceHelper INSTANCE = new WebappResourceHelper();
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
     private static final String BASE_RESOURCE_PATH = "/resources";
+
+    private boolean cacheTimestamp;
 
 
     // ------------------------------------------------------------ Constructors
 
 
-    protected WebappResourceHelper() { }
+    public WebappResourceHelper() {
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public static WebappResourceHelper getInstance() {
-
-        return INSTANCE;
+        WebConfiguration webconfig = WebConfiguration.getInstance();
+        cacheTimestamp = webconfig.isOptionEnabled(CacheResourceModificationTimestamp);
 
     }
 
@@ -200,7 +199,8 @@ public class WebappResourceHelper extends ResourceHelper {
                                          null,
                                          compressable,
                                          resourceSupportsEL(resourceName, ctx),
-                                         ctx.isProjectStage(ProjectStage.Development));
+                                         ctx.isProjectStage(ProjectStage.Development),
+                                         cacheTimestamp);
             } else {
                 value = new ResourceInfo(resourceName,
                                          null,
@@ -208,7 +208,8 @@ public class WebappResourceHelper extends ResourceHelper {
                                          this,
                                          compressable,
                                          resourceSupportsEL(resourceName, ctx),
-                                         ctx.isProjectStage(ProjectStage.Development));
+                                         ctx.isProjectStage(ProjectStage.Development),
+                                         cacheTimestamp);
             }
         } else {
             // ok, subdirectories exist, so find the latest 'version' directory
@@ -227,7 +228,8 @@ public class WebappResourceHelper extends ResourceHelper {
                                          version,
                                          compressable,
                                          resourceSupportsEL(resourceName, ctx),
-                                         ctx.isProjectStage(ProjectStage.Development));
+                                         ctx.isProjectStage(ProjectStage.Development),
+                                         cacheTimestamp);
             } else {
                 value = new ResourceInfo(resourceName,
                                          version,
@@ -235,7 +237,8 @@ public class WebappResourceHelper extends ResourceHelper {
                                          this,
                                          compressable,
                                          resourceSupportsEL(resourceName, ctx),
-                                         ctx.isProjectStage(ProjectStage.Development));
+                                         ctx.isProjectStage(ProjectStage.Development),
+                                         cacheTimestamp);
             }
         }
 

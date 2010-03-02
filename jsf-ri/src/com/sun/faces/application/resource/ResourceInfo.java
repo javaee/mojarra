@@ -59,13 +59,17 @@ public class ResourceInfo {
     String name;
     String libraryName;
     String localePrefix;
-    private VersionInfo version;
-    private ResourceHelper helper;
-    private LibraryInfo library;
-    private String path;
-    private String compressedPath;
-    private boolean compressible;
-    private boolean supportsEL;
+    boolean cacheTimestamp;
+    boolean isDevStage;
+
+    VersionInfo version;
+    ResourceHelper helper;
+    LibraryInfo library;
+    String path;
+    String compressedPath;
+    boolean compressible;
+    boolean supportsEL;
+    private volatile long lastModified = Long.MIN_VALUE;
 
 
     /**
@@ -79,13 +83,17 @@ public class ResourceInfo {
      * @param supportsEL <code>true</code> if this resource may contain
      *   EL expressions
      * @param isDevStage true if this context is development stage
+     * @param cacheTimestamp <code>true</code> if the modification time of the
+     *  resource should be cached.  The value of this parameter will be ignored
+     *  when {@link #isDevStage} is <code>true</code>
      */
     public ResourceInfo(LibraryInfo library,
                         String name,
                         VersionInfo version,
                         boolean compressible,
                         boolean supportsEL,
-                        boolean isDevStage) {
+                        boolean isDevStage,
+                        boolean cacheTimestamp) {
         this.name = name;
         this.version = version;
         this.helper = library.getHelper();
@@ -94,6 +102,8 @@ public class ResourceInfo {
         this.localePrefix = library.getLocalePrefix();
         this.compressible = compressible;
         this.supportsEL = supportsEL;
+        this.isDevStage = isDevStage;
+        this.cacheTimestamp = (!isDevStage && cacheTimestamp);
         initPath(isDevStage);
     }
 
@@ -106,6 +116,10 @@ public class ResourceInfo {
      * @param compressible if this resource should be compressed
      * @param supportsEL <code>true</code> if this resource may contain
      *   EL expressions
+     * @param isDevStage true if this context is development stage
+     * @param cacheTimestamp <code>true</code> if the modification time of the
+     *  resource should be cached.  The value of this parameter will be ignored
+     *  when {@link #isDevStage} is <code>true</code>
      */
     ResourceInfo(String name,
                  VersionInfo version,
@@ -113,15 +127,22 @@ public class ResourceInfo {
                  ResourceHelper helper,
                  boolean compressible,
                  boolean supportsEL,
-                 boolean isDevStage) {
+                 boolean isDevStage,
+                 boolean cacheTimestamp) {
         this.name = name;
         this.version = version;
         this.localePrefix = localePrefix;
         this.helper = helper;
         this.compressible = compressible;
         this.supportsEL = supportsEL;
+        this.isDevStage = isDevStage;
+        this.cacheTimestamp = (!isDevStage && cacheTimestamp);
         initPath(isDevStage);
     }
+
+
+    // ---------------------------------------------------------- Public Methods
+
 
     @Override
     public boolean equals(Object obj) {
@@ -242,6 +263,35 @@ public class ResourceInfo {
      */
     public void disableEL() {
         this.supportsEL = false;
+    }
+
+    /**
+     * Returns the time this resource was last modified.
+     * If {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#CacheResourceModificationTimestamp}
+     * is true, the value will be cached for the lifetime if this <code>ResourceInfo</code>
+     * instance.
+     *
+     * @param ctx the {@link FacesContext} for the current request
+     *
+     * @return the time this resource was last modified (number of milliseconds
+     *  since January 1, 1970 GMT).
+     *
+     */
+    public long getLastModified(FacesContext ctx) {
+
+        if (cacheTimestamp) {
+            if (lastModified == Long.MIN_VALUE) {
+                synchronized (this) {
+                    if (lastModified == Long.MIN_VALUE) {
+                        lastModified = helper.getLastModified(this, ctx);
+                    }
+                }
+            }
+            return lastModified;
+        } else {
+            return helper.getLastModified(this, ctx);
+        }
+        
     }
 
     @Override
