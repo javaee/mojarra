@@ -182,6 +182,9 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
     // --------------------------------------------------------- Private Methods
 
      private void handlePartialResponseError(FacesContext context, Throwable t) {
+         if (context.getResponseComplete()) {
+             return; // don't write anything if the response is complete
+         }
          try {
 
              ExternalContext extContext = context.getExternalContext();
