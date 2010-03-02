@@ -41,7 +41,6 @@ import com.sun.faces.config.DocumentInfo;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.application.InjectionApplicationFactory;
 import com.sun.faces.context.InjectionFacesContextFactory;
-import com.sun.faces.context.InjectionExternalContextFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -168,10 +167,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         // for this application
         AtomicInteger facesContextFactoryCount = new AtomicInteger(0);
 
-        // track how many ExternalContextFactory instances are being added
-        // for this application
-        AtomicInteger externalContextFactoryCount = new AtomicInteger(0);
-
         // track how many ApplicationFactory instances are being added
         // for this application
         AtomicInteger applicationFactoryCount = new AtomicInteger(0);
@@ -194,7 +189,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 processFactories(factories,
                                  namespace,
                                  facesContextFactoryCount,
-                                 externalContextFactoryCount,
                                  applicationFactoryCount);
             }
         }
@@ -209,8 +203,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         // is called, we can't make any changes to the Factory delegation
         // chain.
         wrapFactories(applicationFactoryCount.get(),
-                      facesContextFactoryCount.get(),
-                      externalContextFactoryCount.get());
+                      facesContextFactoryCount.get());
         
         // validate that we actually have factories at this point.
         verifyFactoriesExist();
@@ -226,7 +219,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private void processFactories(NodeList factories,
                                   String namespace,
                                   AtomicInteger fcCount,
-                                  AtomicInteger extCount,
                                   AtomicInteger appCount) {
 
         for (int i = 0, size = factories.getLength(); i < size; i++) {
@@ -262,7 +254,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                     setFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
                                getNodeText(n));
                 } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
-                    extCount.incrementAndGet();
                     setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
                                getNodeText(n));
                 } else if (PARTIAL_VIEW_CONTEXT_FACTORY.equals(n.getLocalName())) {
@@ -308,16 +299,13 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void wrapFactories(int appCount, int fcCount, int extCount) {
+    private void wrapFactories(int appCount, int fcCount) {
 
         if (appCount > 1) {
             addInjectionApplicationFactory();
         }
         if (fcCount > 1) {
             addInjectionFacesContextFactory();
-        }
-        if (extCount > 1) {
-            addInjectionExternalContextFactory();
         }
 
     }
@@ -350,18 +338,5 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-
-    /**
-     * Add the InjectionExternalContextFactory as the top-level ExternalContextFactory
-     * so that the default instances, provided by {@link com.sun.faces.context.ExternalContextFactoryImpl}
-     * can be injected into the actual top-level ExternalContext instance (that which
-     * is returned by the InjectionExternalContextFactory's delegate).
-     */
-    private void addInjectionExternalContextFactory() {
-
-        FactoryFinder.setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,
-                                 InjectionExternalContextFactory.class.getName());
-
-    }
 
 }

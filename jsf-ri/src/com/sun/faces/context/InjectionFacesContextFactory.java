@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,15 +41,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.MessageFormat;
 
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.FacesException;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import javax.faces.FacesWrapper;
+import javax.servlet.ServletRequest;
 
 /**
  * This {@link FacesContextFactory} is responsible for injecting the
@@ -63,6 +64,8 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
     private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
     private FacesContextFactory delegate;
     private Field defaultFacesContext;
+    private Field defaultExternalContext;
+
 
     
     // ------------------------------------------------------------ Constructors
@@ -84,6 +87,19 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
                 LOGGER.log(Level.SEVERE, e.toString(), e);
             }
             defaultFacesContext = null;
+        }
+        try {
+            defaultExternalContext = ExternalContext.class.getDeclaredField("defaultExternalContext");
+            defaultExternalContext.setAccessible(true);
+        } catch (NoSuchFieldException nsfe) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Unable to find private field named 'defaultExternalContext' in javax.faces.context.ExternalContext.");
+            }
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+            }
+            defaultExternalContext = null;
         }
 
     }
@@ -109,7 +125,7 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
                           delegate.getClass().getName());
             throw new IllegalStateException(message);
         }
-        injectDefaults(ctx);
+        injectDefaults(ctx, request);
         return ctx;
 
     }
@@ -129,7 +145,7 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
     // --------------------------------------------------------- Private Methods
 
 
-    private void injectDefaults(FacesContext target) {
+    private void injectDefaults(FacesContext target, Object request) {
 
         if (defaultFacesContext != null) {
             FacesContext defaultFC =
@@ -137,6 +153,25 @@ public class InjectionFacesContextFactory extends FacesContextFactory implements
             if (defaultFC != null) {
                 try {
                     defaultFacesContext.set(target, defaultFC);
+                } catch (IllegalAccessException e) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, e.toString(), e);
+                    }
+                }
+            }
+        }
+        if (defaultExternalContext != null) {
+            ExternalContext defaultExtContext = null;
+            if (request instanceof ServletRequest) {
+                ServletRequest reqObj = (ServletRequest) request;
+                defaultExtContext = (ExternalContext) reqObj.getAttribute(ExternalContextFactoryImpl.DEFAULT_EXTERNAL_CONTEXT_KEY);
+                if (defaultExtContext != null) {
+                    reqObj.removeAttribute(ExternalContextFactoryImpl.DEFAULT_EXTERNAL_CONTEXT_KEY);
+                }
+            }
+            if (defaultExtContext != null) {
+                try {
+                    defaultExternalContext.set(target.getExternalContext(), defaultExtContext);
                 } catch (IllegalAccessException e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE, e.toString(), e);

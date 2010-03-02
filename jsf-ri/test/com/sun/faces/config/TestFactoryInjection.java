@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -90,7 +90,6 @@ import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.context.ExceptionHandlerFactoryImpl;
 import com.sun.faces.context.ExternalContextFactoryImpl;
 import com.sun.faces.context.InjectionFacesContextFactory;
-import com.sun.faces.context.InjectionExternalContextFactory;
 import com.sun.faces.context.ExternalContextImpl;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.renderkit.RenderKitFactoryImpl;
@@ -243,7 +242,9 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         FacesContext fc = fcFactory.getFacesContext(sc, request, response, new LifecycleImpl());
         // reflect the 'defaultFacesContext' field to ensure it's null
         Field field = FacesContext.class.getDeclaredField("defaultFacesContext");
+        Field extField = ExternalContext.class.getDeclaredField("defaultExternalContext");
         field.setAccessible(true);
+        extField.setAccessible(true);
         assertNull(field.get(fc));
 
         // reset for the injection portion of the test
@@ -273,14 +274,20 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         FacesContextFactory wrapped2 = wrapped1.getWrapped();
         assertEquals(FacesContextFactoryImpl.class, wrapped2.getClass());
 
-        // no ensure that the top level facescontext instance's defaultFacesContext
-        // instance was injected with the default FacesContext instance.
+        // now ensure that the top level facescontext instance's defaultFacesContext
+        // field was injected with the default FacesContext implementation.
+        // Also ensure that the top level ExternalContext instance's defaultExternalContext
+        // field was injected with the default ExternalContext implementation.
         fc = fcFactory.getFacesContext(sc, request, response, new LifecycleImpl());
 
         assertNotNull(fc);
         FacesContext fieldResult = (FacesContext) field.get(fc);
         assertNotNull(fieldResult);
         assertEquals(FacesContextImpl.class, fieldResult.getClass());
+
+        ExternalContext extFieldResult = (ExternalContext) extField.get(fc.getExternalContext());
+        assertNotNull(extFieldResult);
+        assertEquals(ExternalContextImpl.class, extFieldResult.getClass());
 
         // basic facescontext doesn't implement getAttributes(), so without
         // injection, this method would throw an UnsupportedOperationException,
@@ -289,96 +296,6 @@ public class TestFactoryInjection extends ServletFacesTestCase {
             fc.getAttributes();
         } catch (UnsupportedOperationException uso) {
             fail("FacesContext.getAttributes() threw an Exception; injection failed");
-        }
-
-    }
-
-
-    public void testFactoryFinderExternalContextInjection() throws Exception {
-
-        ExternalContext extContext = getFacesContext().getExternalContext();
-        ServletContext sc = (ServletContext) extContext.getContext();
-        Document d = newFacesConfigDocument();
-        Node facesConfig = d.getFirstChild();
-        Element factory = createElement(d, "factory");
-        facesConfig.appendChild(factory);
-        Element application = createElement(d, "application-factory");
-        factory.appendChild(application);
-        application
-              .setTextContent("com.sun.faces.application.ApplicationFactoryImpl");
-        Element exceptionHandler = createElement(d, "exception-handler-factory");
-        factory.appendChild(exceptionHandler);
-        exceptionHandler.setTextContent(ExceptionHandlerFactoryImpl.class.getName());
-        Element externalContextFactory = createElement(d, "external-context-factory");
-        factory.appendChild(externalContextFactory);
-        externalContextFactory.setTextContent(ExternalContextFactoryImpl.class.getName());
-        Element renderKitFactory = createElement(d, "render-kit-factory");
-        factory.appendChild(renderKitFactory);
-        renderKitFactory.setTextContent(RenderKitFactoryImpl.class.getName());
-
-
-        // clear the factories
-        FactoryFinder.releaseFactories();
-        ApplicationAssociate.clearInstance(extContext);
-
-        // invoke the FactoryConfigProcessor
-        FactoryConfigProcessor fcp = new FactoryConfigProcessor(false);
-        fcp.process(sc, new DocumentInfo[]{new DocumentInfo(d, null)});
-
-        // now get an ExternalContext instance from the Factory and ensure
-        // no injection occured.
-        ExternalContextFactory extFactory = (ExternalContextFactory)
-              FactoryFinder.getFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY);
-        assertNotNull(extFactory);
-        assertNull(extFactory.getWrapped());
-        ExternalContext ec = extFactory.getExternalContext(sc, request, response);
-        // reflect the 'defaultExternalContext' field to ensure it's null
-        Field field = ExternalContext.class.getDeclaredField("defaultExternalContext");
-        field.setAccessible(true);
-        assertNull(field.get(ec));
-
-        // reset for the injection portion of the test
-        FactoryFinder.releaseFactories();
-        ApplicationAssociate.clearInstance(extContext);
-
-        // add another factory to our document
-        Element externalContext2 = createElement(d, "external-context-factory");
-        factory.appendChild(externalContext2);
-        externalContext2.setTextContent(BasicExternalContextFactory.class.getName());
-
-        // process the document.  This should cause the the InjectionExternalFactory
-        // to be put into play since there is more than one ExternalContextFactory
-        // being configured
-        fcp.process(sc, new DocumentInfo[]{new DocumentInfo(d, null)});
-
-        // get the ExternalContextFactory instance.  The top-level factory should
-        // be the InjectionExternalContextFactory.
-        extFactory = (ExternalContextFactory)
-              FactoryFinder.getFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY);
-        assertNotNull(extFactory);
-        assertEquals(InjectionExternalContextFactory.class, extFactory.getClass());
-        ExternalContextFactory wrapped1 = extFactory.getWrapped();
-        assertNotNull(wrapped1);
-        assertEquals(BasicExternalContextFactory.class, wrapped1.getClass());
-        ExternalContextFactory wrapped2 = wrapped1.getWrapped();
-        assertEquals(ExternalContextFactoryImpl.class, wrapped2.getClass());
-
-        // no ensure that the top level ExternalContext instance's defaultExternalContext
-        // instance was injected with the default ExternalContext instance.
-        ec = extFactory.getExternalContext(sc, request, response);
-
-        assertNotNull(ec);
-        ExternalContext fieldResult = (ExternalContext) field.get(ec);
-        assertNotNull(fieldResult);
-        assertEquals(ExternalContextImpl.class, fieldResult.getClass());
-
-        // basic externalcontext doesn't implement setResponseHeader(), so without
-        // injection, this method would throw an UnsupportedOperationException,
-        // however, if we got this far, no exception should be thrown.
-        try {
-            ec.setResponseHeader("name", "value");
-        } catch (UnsupportedOperationException uso) {
-            fail("ExternalContext.setResponseHeader() threw an Exception; injection failed");
         }
 
     }
@@ -667,7 +584,7 @@ public class TestFactoryInjection extends ServletFacesTestCase {
         }
 
         public ExternalContext getExternalContext() {
-            return null;
+            return delegate.getExternalContext();
         }
 
         public FacesMessage.Severity getMaximumSeverity() {
