@@ -1091,8 +1091,7 @@ public class UIData extends UIComponentBase
      * <p>If the {@link UIComponent#isVisitable} method of this instance
      * returns <code>false</code>, take no action and return.</p>
 
-     * <p>Otherwise, save aside the result of a call to {@link
-     * #getRowIndex}.  Call {@link UIComponent#pushComponentToEL} and
+     * <p>Call {@link UIComponent#pushComponentToEL} and
      * invoke the visit callback on this <code>UIData</code> instance as
      * described in {@link UIComponent#visitTree}.  Let the result of
      * the invoctaion be <em>visitResult</em>.  If <em>visitResult</em>
@@ -1127,11 +1126,14 @@ public class UIData extends UIComponentBase
      *
      *    <p>Take no action on non-<code>UIColumn</code> children.</p></li>
      *
-     *    <li><p>For each child component of this <code>UIData</code> that is
+     *    <li><p>Save aside the result of a call to {@link
+     *    #getRowIndex}.</p>
+
+     *    <p>For each child component of this <code>UIData</code> that is
      *    also an instance of {@link UIColumn}, 
      *    </p>
 
-     * 	  <li><p>Iterate over the rows.</p>
+     * 	  <p>Iterate over the rows.</p>
 
      * <ul>
 
