@@ -2194,12 +2194,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * @param event The DOM event that triggered this Ajax request.  The
      * <code>event</code> argument is optional.
      *
+     * @returns <code>false</code> if any scripts in the chain return <code>false</code>,
+     *  otherwise returns <code>true</code>
+     * 
      * @function jsf.util.chain
      */
     jsf.util.chain = function(source, event) {
 
         if (arguments.length < 3) {
-            return;
+            return true;
         }
 
         // RELEASE_PENDING rogerk - shouldn't this be getElementById instead of null
@@ -2212,9 +2215,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var returnValue = f.call(thisArg, event);
 
             if (returnValue === false) {
-                break;
+                return false;
             }
         }
+        return true;
+        
     };
 
     /**
