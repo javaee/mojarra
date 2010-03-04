@@ -570,12 +570,17 @@ public class UIRepeat extends UINamingContainer {
         // First check to see whether we are visitable.  If not
         // short-circuit out of this subtree, though allow the
         // visit to proceed through to other subtrees.
-        if (!isVisitable(context))
+        if (!isVisitable(context)) {
             return false;
+        }
 
         FacesContext facesContext = context.getFacesContext();
-        int oldRowIndex = getDataModel().getRowIndex();
-        setIndex(facesContext, -1);
+        boolean visitRows = requiresRowIteration(facesContext);
+        int oldRowIndex = -1;
+        if (visitRows) {
+            oldRowIndex = getDataModel().getRowIndex();
+            setIndex(facesContext, -1);
+        }
 
         // Push ourselves to EL
         pushComponentToEL(facesContext, null);
@@ -587,25 +592,44 @@ public class UIRepeat extends UINamingContainer {
             VisitResult result = context.invokeVisitCallback(this, callback);
 
             // If the visit is complete, short-circuit out and end the visit
-            if (result == VisitResult.COMPLETE)
+            if (result == VisitResult.COMPLETE) {
                 return true;
+            }
 
             // Visit children, short-circuiting as necessary
             if ((result == VisitResult.ACCEPT) && doVisitChildren(context)) {
 
                 // And finally, visit rows
-                if (visitChildren(context, callback))
-                    return true;
+                if (!visitRows) {
+                    // visit rows without model access
+                    for (UIComponent kid : getChildren()) {
+                        if (kid.visitTree(context, callback)) {
+                            return true;
+                        }
+                    }
+                } else {
+                    if (visitChildren(context, callback)) {
+                        return true;
+                    }
+                }
             }
         }
         finally {
             // Clean up - pop EL and restore old row index
             popComponentFromEL(facesContext);
-            setIndex(facesContext, oldRowIndex);
+            if (visitRows) {
+                setIndex(facesContext, oldRowIndex);
+            }
         }
 
         // Return false to allow the visit to continue
         return false;
+    }
+
+    private boolean requiresRowIteration(FacesContext ctx) {
+
+        return (!PhaseId.RESTORE_VIEW.equals(ctx.getCurrentPhaseId()));
+
     }
 
     // Tests whether we need to visit our children as part of
@@ -645,7 +669,7 @@ public class UIRepeat extends UINamingContainer {
     }
 
 
-    private boolean visitChildren(VisitContext context,  VisitCallback callback) {
+    private boolean visitChildren(VisitContext context, VisitCallback callback) {
 
         Integer begin = this.getBegin();
         Integer end = this.getEnd();

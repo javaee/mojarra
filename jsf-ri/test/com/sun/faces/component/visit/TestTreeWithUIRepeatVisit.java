@@ -56,6 +56,7 @@ import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
 import javax.faces.model.ListDataModel;
 
 public class TestTreeWithUIRepeatVisit extends ServletFacesTestCase {
@@ -170,6 +171,11 @@ public class TestTreeWithUIRepeatVisit extends ServletFacesTestCase {
         buildTree();
         UIViewRoot root = getFacesContext().getViewRoot();
         final StringBuilder builder = new StringBuilder();
+
+        // At the point of this visit call the current Phase is RESTORE_VIEW.
+        // This will cause the test to fail due to the changes for issue 1310.
+        // So we need to switch to a different phase
+        getFacesContext().setCurrentPhaseId(PhaseId.RENDER_RESPONSE);
 
         HashSet ids = new HashSet();
         ids.add("form:panel0:data:3:output0");

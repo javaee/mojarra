@@ -1560,7 +1560,10 @@ public class UIData extends UIComponentBase
         if (getChildCount() > 0) {
             for (UIComponent column : getChildren()) {
                 if (column instanceof UIColumn) {
-                    context.invokeVisitCallback(column, callback); // visit the column directly
+                    VisitResult result = context.invokeVisitCallback(column, callback); // visit the column directly
+                    if (result == VisitResult.COMPLETE) {
+                        return true;
+                    }
                     if (column.getFacetCount() > 0) {
                         for (UIComponent columnFacet : column.getFacets().values()) {
                             if (columnFacet.visitTree(context, callback)) {
