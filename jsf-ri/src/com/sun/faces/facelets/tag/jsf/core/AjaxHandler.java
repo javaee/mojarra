@@ -55,7 +55,6 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
@@ -67,7 +66,6 @@ import javax.el.MethodNotFoundException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
@@ -85,7 +83,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.TreeSet;
 
 
@@ -243,6 +240,11 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
         // Composite component case
         if (UIComponent.isCompositeComponent(parent)) {
             // Check composite component event name:
+            boolean tagApplied = false;
+            if (parent instanceof ClientBehaviorHolder) {
+                applyAttachedObject(ctx, parent, eventName);  // error here will propagate up
+                tagApplied = true;
+            }
             BeanInfo componentBeanInfo = (BeanInfo) parent.getAttributes().get(
                   UIComponent.BEANINFO_KEY);
             if (null == componentBeanInfo) {
@@ -259,7 +261,7 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
             List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
                   componentDescriptor
                         .getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
-            if (null == targetList) {
+            if (null == targetList && !tagApplied) {
                 throw new TagException(
                       tag,
                       "Error: enclosing composite component does not support behavior events");
@@ -279,10 +281,12 @@ public final class AjaxHandler extends TagHandlerImpl implements BehaviorHolderA
                 CompositeComponentTagHandler.getAttachedObjectHandlers(parent)
                       .add(this);
             } else {
-                throw new TagException(
-                      tag,
-                      "Error: enclosing composite component does not support event "
-                      + eventName);
+                if (!tagApplied) {
+                    throw new TagException(
+                            tag,
+                            "Error: enclosing composite component does not support event "
+                            + eventName);
+                }
             }
         } else if (parent instanceof ClientBehaviorHolder) {
             applyAttachedObject(ctx, parent, eventName);
