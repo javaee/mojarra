@@ -323,4 +323,80 @@ public class FaceletsTestCase extends AbstractTestCase {
     }
 
 
+    /**
+     * Added for issue 1313
+     */
+    public void testIssue1313() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/issue1313.xhtml");
+        List<HtmlDivision> divs = new ArrayList<HtmlDivision>();
+
+        getAllElementsOfGivenClass(page, divs, HtmlDivision.class);
+        validateToggleState1(divs);
+        HtmlSubmitInput input = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:nonajax");
+        assertNotNull(input);
+        page = input.click();
+        divs.clear();
+        getAllElementsOfGivenClass(page, divs, HtmlDivision.class);
+        validateToggleState2(divs);
+        input = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:ajax");
+        assertNotNull(input);
+        page = input.click();
+        divs.clear();
+        getAllElementsOfGivenClass(page, divs, HtmlDivision.class);
+        validateToggleState1(divs);
+        input = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:nonajax");
+        assertNotNull(input);
+        page = input.click();
+        divs.clear();
+        getAllElementsOfGivenClass(page, divs, HtmlDivision.class);
+        validateToggleState2(divs);
+        input = (HtmlSubmitInput)
+              getInputContainingGivenId(page, "form:ajax");
+        assertNotNull(input);
+        page = input.click();
+        divs.clear();
+        getAllElementsOfGivenClass(page, divs, HtmlDivision.class);
+        validateToggleState1(divs);
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void validateToggleState1(List<HtmlDivision> divs) {
+        assertTrue(divs.size() == 2);
+        HtmlDivision div1 = divs.get(0);
+        assertEquals("frag1", "frag1", div1.getId());
+        assertEquals("frag1", "frag1", div1.asText().trim());
+        HtmlDivision div2 = divs.get(1);
+        assertEquals("otherwise", "otherwise", div2.getId());
+        assertEquals("C:OTHERWISE TOGGLE STATE FALSE C:OTHERWISE",
+                     "C:OTHERWISE TOGGLE STATE FALSE C:OTHERWISE",
+                     div2.asText().trim());
+    }
+
+
+    private void validateToggleState2(List<HtmlDivision> divs) {
+        assertTrue(divs.size() == 3);
+        HtmlDivision div1 = divs.get(0);
+        assertEquals("frag2", "frag2", div1.getId());
+        assertEquals("frag2", "frag2", div1.asText().trim());
+        HtmlDivision div2 = divs.get(1);
+        assertEquals("if", "if", div2.getId());
+        assertEquals("C:IF TOGGLE STATE TRUE C:IF",
+                     "C:IF TOGGLE STATE TRUE C:IF",
+                     div2.asText().trim());
+        HtmlDivision div3 = divs.get(2);
+        assertEquals("when", "when", div3.getId());
+        assertEquals("C:WHEN TOGGLE STATE TRUE C:WHEN",
+                     "C:WHEN TOGGLE STATE TRUE C:WHEN",
+                     div3.asText().trim());
+    }
+
+
 }

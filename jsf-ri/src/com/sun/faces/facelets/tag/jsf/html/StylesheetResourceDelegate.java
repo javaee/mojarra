@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -34,42 +34,38 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package com.sun.faces.facelets.tag.jsf.html;
 
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceHandler;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceHandler;
+import javax.faces.view.facelets.ComponentHandler;
+import javax.faces.view.facelets.FaceletContext;
 
-import javax.faces.view.facelets.*;
+/**
+ * <code>ComponentResourceDelegate</code> for stylesheet references.
+ */
+public class StylesheetResourceDelegate extends ComponentResourceDelegate {
 
-public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
 
-    @Override
-    public TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner) {
-        if (owner instanceof StylesheetResourceHandler) {
-            return new StylesheetResourceDelegate(owner);
-        } else if (owner instanceof ScriptResourceHandler) {
-            return new ScriptResourceDelegate(owner);
-        } else {
-            return new ComponentTagHandlerDelegateImpl(owner);
-        }
+    // ------------------------------------------------------------ Constructors
+
+
+    public StylesheetResourceDelegate(ComponentHandler owner) {
+        super(owner);
     }
 
-    @Override
-    public TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner) {
-        return new ValidatorTagHandlerDelegateImpl(owner);
+
+    // ----------------------------------- Methods from ComponentResourceDelegate
+
+
+    /**
+     * @param ctx the <code>FacesContext</code> for the current request
+     * @return <code>head</code> as external stylesheet references
+     *  are only valid in the head of a document, this method returns
+     *  <code>head</code>
+     */
+    @Override protected String getLocationTarget(FaceletContext ctx) {
+
+        return "head";
+
     }
 
-    @Override
-    public TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner) {
-        return new ConverterTagHandlerDelegateImpl(owner);
-    }
-
-    @Override
-    public TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner) {
-        return new BehaviorTagHandlerDelegateImpl(owner);
-    }
-    
-    
 }

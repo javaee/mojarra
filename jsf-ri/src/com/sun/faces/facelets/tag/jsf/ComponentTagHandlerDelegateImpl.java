@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -133,75 +133,25 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         String id = ctx.generateUniqueId(owner.getTagId());
 
         // grab our component
-        UIComponent c = ComponentSupport.findChildByTagId(parent, id);
+        UIComponent c = findChild(ctx, parent, id);
         boolean componentFound = false;
         if (c != null) {
-            componentFound = true;
-            // mark all children for cleaning
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(owner.getTag()
-                        + " Component["+id+"] Found, marking children for cleanup");
-            }
-            ComponentSupport.markForDeletion(c);
+           componentFound = true;
+           doExistingComponentActions(id, c);
         } else {
             c = this.createComponent(ctx);
-            if (log.isLoggable(Level.FINE)) {
-                log.fine(owner.getTag() + " Component["+id+"] Created: "
-                        + c.getClass().getName());
-            }
-            // If this is NOT a composite component...
-            if (null == createCompositeComponentDelegate) {
-                // set the attributes and properties into the UIComponent instance.
-                owner.setAttributes(ctx, c);
-            }
-            // otherwise, allow the composite component code to do it.
             
-            // mark it owned by a facelet instance
-            c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
-
-            if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
-                // inject the location into the component
-                c.getAttributes().put(UIComponent.VIEW_LOCATION_KEY,
-                                      owner.getTag().getLocation());
-            }
-            
-            // assign our unique id
-            if (this.id != null) {
-                c.setId(this.id.getValue(ctx));
-            } else {
-                UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
-                if (root != null) {
-                    String uid;
-                    IdMapper mapper = IdMapper.getMapper(context);
-                    String mid = ((mapper != null) ? mapper.getAliasedId(id) : id);
-                    UIComponent ancestorNamingContainer = parent
-                          .getNamingContainer();
-                    if (null != ancestorNamingContainer &&
-                        ancestorNamingContainer instanceof UniqueIdVendor) {
-                        uid = ((UniqueIdVendor) ancestorNamingContainer)
-                              .createUniqueId(ctx.getFacesContext(), mid);
-                    } else {
-                        uid = root.createUniqueId(context, mid);
-                    }
-                    c.setId(uid);
-                }
-
-            }
-            
-            if (this.rendererType != null) {
-                c.setRendererType(this.rendererType);
-            }
+            doNewComponentActions(ctx, id, c);
+            assignUniqueId(ctx, parent, id, c);
 
             // hook method
             owner.onComponentCreated(ctx, c, parent);
         }
-        c.pushComponentToEL(context, c);
-        boolean compcompPushed = false;
-        CompositeComponentStackManager ccStackManager =
+
+       CompositeComponentStackManager ccStackManager =
               CompositeComponentStackManager.getManager(context);
-        if (UIComponent.isCompositeComponent(c)) {
-            compcompPushed = ccStackManager.push(c, TreeCreation);
-        }
+        boolean compcompPushed = pushComponentToEL(ctx, c, ccStackManager);
+
         if (ProjectStage.Development == context.getApplication().getProjectStage()) {
             ComponentSupport.setTagForComponent(context, c, this.owner.getTag());
         }
@@ -211,23 +161,16 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         // finish cleaning up orphaned children
         if (componentFound) {
-            ComponentSupport.finalizeForDeletion(c);
-            
-            if (getFacetName(ctx, parent) == null) {
-                parent.getChildren().remove(c);
-            }
+           doOrphanedChildCleanup(ctx, parent, c);
         }
 
-        this.privateOnComponentPopulated(ctx, c, parent);
+        this.privateOnComponentPopulated(ctx, c);
         owner.onComponentPopulated(ctx, c, parent);
         // add to the tree afterwards
         // this allows children to determine if it's
         // been part of the tree or not yet
-        ComponentSupport.addComponent(ctx, parent, c);
-        c.popComponentFromEL(ctx.getFacesContext());
-        if (compcompPushed) {
-            ccStackManager.pop(TreeCreation);
-        }
+        addComponentToView(ctx, parent, c, componentFound);
+        popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
 
         if (shouldMarkInitialState(ctx.getFacesContext())) {
             c.markInitialState();
@@ -270,6 +213,175 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         
         return m;
     }
+
+
+        // ------------------------------------------------------- Protected Methods
+
+
+    protected void addComponentToView(FaceletContext ctx,
+                                      UIComponent parent,
+                                      UIComponent c,
+                                      boolean componentFound) {
+
+        FacesContext context = ctx.getFacesContext();
+        boolean suppressEvents = ComponentSupport.suppressViewModificationEvents(context);
+        boolean compcomp = UIComponent.isCompositeComponent(c);
+
+        if (suppressEvents && componentFound && !compcomp) {
+            context.setProcessingEvents(false);
+        }
+
+        ComponentSupport.addComponent(ctx, parent, c);
+
+        if (suppressEvents && componentFound && !compcomp) {
+            context.setProcessingEvents(true);
+        }
+
+    }
+
+
+    protected boolean pushComponentToEL(FaceletContext ctx,
+                                        UIComponent c,
+                                        CompositeComponentStackManager ccStackManager) {
+
+        c.pushComponentToEL(ctx.getFacesContext(), c);
+        boolean compcompPushed = false;
+
+        if (UIComponent.isCompositeComponent(c)) {
+            compcompPushed = ccStackManager.push(c, TreeCreation);
+        }
+        return compcompPushed;
+
+    }
+
+
+    protected void popComponentFromEL(FaceletContext ctx,
+                                      UIComponent c,
+                                      CompositeComponentStackManager ccStackManager,
+                                      boolean compCompPushed) {
+
+        c.popComponentFromEL(ctx.getFacesContext());
+        if (compCompPushed) {
+            ccStackManager.pop(TreeCreation);
+        }
+
+    }
+
+
+    protected void doOrphanedChildCleanup(FaceletContext ctx,
+                                          UIComponent parent,
+                                          UIComponent c) {
+
+        ComponentSupport.finalizeForDeletion(c);
+        if (getFacetName(parent) == null) {
+            FacesContext context = ctx.getFacesContext();
+            boolean suppressEvents =
+                  ComponentSupport.suppressViewModificationEvents(context);
+
+            if (suppressEvents) {
+                // if the component has already been found, it will be removed
+                // and added back to the view.  We don't want to publish events
+                // for this case.
+                context.setProcessingEvents(false);
+            }
+            // suppress the remove event for this case since it will be re-added
+            parent.getChildren().remove(c);
+            if (suppressEvents) {
+                // re-enable event processing
+                context.setProcessingEvents(true);
+            }
+        }
+
+    }
+
+
+    protected void assignUniqueId(FaceletContext ctx,
+                                  UIComponent parent,
+                                  String id,
+                                  UIComponent c) {
+
+        if (this.id != null) {
+            c.setId(this.id.getValue(ctx));
+        } else {
+            UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
+            if (root != null) {
+                String uid;
+                IdMapper mapper = IdMapper.getMapper(ctx.getFacesContext());
+                String mid = ((mapper != null) ? mapper.getAliasedId(id) : id);
+                UIComponent ancestorNamingContainer = parent
+                      .getNamingContainer();
+                if (null != ancestorNamingContainer &&
+                    ancestorNamingContainer instanceof UniqueIdVendor) {
+                    uid = ((UniqueIdVendor) ancestorNamingContainer)
+                          .createUniqueId(ctx.getFacesContext(), mid);
+                } else {
+                    uid = root.createUniqueId(ctx.getFacesContext(), mid);
+                }
+                c.setId(uid);
+            }
+
+        }
+
+        if (this.rendererType != null) {
+            c.setRendererType(this.rendererType);
+        }
+
+    }
+
+
+    protected void doNewComponentActions(FaceletContext ctx,
+                                         String id,
+                                         UIComponent c) {
+
+        if (log.isLoggable(Level.FINE)) {
+            log.fine(owner.getTag() + " Component["+id+"] Created: "
+                    + c.getClass().getName());
+        }
+        // If this is NOT a composite component...
+        if (null == createCompositeComponentDelegate) {
+            // set the attributes and properties into the UIComponent instance.
+            owner.setAttributes(ctx, c);
+        }
+        // otherwise, allow the composite component code to do it.
+
+        // mark it owned by a facelet instance
+        c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
+
+        if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
+            // inject the location into the component
+            c.getAttributes().put(UIComponent.VIEW_LOCATION_KEY,
+                                  owner.getTag().getLocation());
+        }
+
+    }
+
+
+    protected void doExistingComponentActions(String id, UIComponent c) {
+
+        // mark all children for cleaning
+        if (log.isLoggable(Level.FINE)) {
+            log.fine(owner.getTag()
+                     + " Component["
+                     + id
+                     + "] Found, marking children for cleanup");
+        }
+        ComponentSupport.markForDeletion(c);
+
+    }
+
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    protected UIComponent findChild(FaceletContext ctx,
+                                    UIComponent parent,
+                                    String tagId) {
+
+        return ComponentSupport.findChildByTagId(parent, tagId);
+
+    }
+
+
+    // ------------------------------------------------- Package Private Methods
+
     
     void setCreateCompositeComponentDelegate(CreateComponentDelegate createComponentDelegate) {
         this.createCompositeComponentDelegate = createComponentDelegate;
@@ -340,7 +452,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
      * processing we need to perform is applying wrapping AjaxBehaviors,
      * if any exist.
      */
-    private void privateOnComponentPopulated(FaceletContext ctx, UIComponent c, UIComponent parent) {
+    private void privateOnComponentPopulated(FaceletContext ctx, UIComponent c) {
 
         if (c instanceof ClientBehaviorHolder) {
             FacesContext context = ctx.getFacesContext();
@@ -375,11 +487,9 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
     }
 
     /**
-     * Return the Facet name we are scoped in, otherwise null
-     * @param ctx
-     * @return
+     * @return the Facet name we are scoped in, otherwise null
      */
-    private String getFacetName(FaceletContext ctx, UIComponent parent) {
+    private String getFacetName(UIComponent parent) {
         return (String) parent.getAttributes().get(FacetHandler.KEY);
     }
 

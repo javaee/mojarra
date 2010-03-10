@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -34,42 +34,54 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package com.sun.faces.util;
 
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceHandler;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceHandler;
+import javax.faces.component.StateHolder;
+import javax.faces.context.FacesContext;
 
-import javax.faces.view.facelets.*;
+/**
+ * Utility class to enable partial state saving of components that have been
+ * dynamically added to the view.
+ */
+public class ComponentStruct implements StateHolder {
 
-public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
+    public String parentClientId;
+    public String clientId;
+    public int indexOfChildInParent = -1;
+    public String facetName;
 
-    @Override
-    public TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner) {
-        if (owner instanceof StylesheetResourceHandler) {
-            return new StylesheetResourceDelegate(owner);
-        } else if (owner instanceof ScriptResourceHandler) {
-            return new ScriptResourceDelegate(owner);
-        } else {
-            return new ComponentTagHandlerDelegateImpl(owner);
+    public boolean isTransient() {
+        return false;
+    }
+
+    public void restoreState(FacesContext ctx, Object state) {
+        if (ctx == null) {
+            throw new NullPointerException();
         }
+        if (state == null) {
+            return;
+        }
+        Object s[] = (Object[]) state;
+        this.parentClientId = s[0].toString();
+        this.clientId = s[1].toString();
+        this.indexOfChildInParent = (Integer) s[2];
+        this.facetName = (String) s[3];
     }
 
-    @Override
-    public TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner) {
-        return new ValidatorTagHandlerDelegateImpl(owner);
+    public Object saveState(FacesContext ctx) {
+        if (ctx == null) {
+            throw new NullPointerException();
+        }
+        Object state[] = new Object[4];
+        state[0] = this.parentClientId;
+        state[1] = this.clientId;
+        state[2] = this.indexOfChildInParent;
+        state[3] = this.facetName;
+        return state;
     }
 
-    @Override
-    public TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner) {
-        return new ConverterTagHandlerDelegateImpl(owner);
+    public void setTransient(boolean trans) {
     }
 
-    @Override
-    public TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner) {
-        return new BehaviorTagHandlerDelegateImpl(owner);
-    }
-    
-    
-}
+
+} // END ComponentStruct

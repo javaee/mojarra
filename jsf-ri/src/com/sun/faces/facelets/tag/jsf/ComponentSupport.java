@@ -54,6 +54,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 
 import javax.faces.FacesException;
@@ -97,7 +98,7 @@ public final class ComponentSupport {
      * @param c
      *            UIComponent to finalize
      */
-    public static final void finalizeForDeletion(UIComponent c) {
+    public static void finalizeForDeletion(UIComponent c) {
         // remove any existing marks of deletion
         c.getAttributes().remove(MARK_DELETED);
 
@@ -127,7 +128,7 @@ public final class ComponentSupport {
         }
     }
 
-    public static final Tag setTagForComponent(FacesContext context, UIComponent c, Tag t) {
+    public static Tag setTagForComponent(FacesContext context, UIComponent c, Tag t) {
         Map<Object, Object> contextMap = context.getAttributes();
         Map<Integer, Tag> componentToTagMap;
         componentToTagMap = (Map<Integer, Tag>)
@@ -139,7 +140,7 @@ public final class ComponentSupport {
         return componentToTagMap.put((Integer) System.identityHashCode(c), t);
     }
 
-    public static final Tag getTagForComponent(FacesContext context, UIComponent c) {
+    public static Tag getTagForComponent(FacesContext context, UIComponent c) {
         Tag result = null;
         Map<Object, Object> contextMap = context.getAttributes();
         Map<Integer, Tag> componentToTagMap;
@@ -162,7 +163,7 @@ public final class ComponentSupport {
      *            to match to
      * @return UIComponent found or null
      */
-    public static final UIComponent findChild(UIComponent parent, String id) {
+    public static UIComponent findChild(UIComponent parent, String id) {
         int sz = parent.getChildCount();
         if (sz > 0) {
             UIComponent c = null;
@@ -183,7 +184,7 @@ public final class ComponentSupport {
      * @param id
      * @return
      */
-    public static final UIComponent findChildByTagId(UIComponent parent, String id) {
+    public static UIComponent findChildByTagId(UIComponent parent, String id) {
         Iterator itr = parent.getFacetsAndChildren();
         UIComponent c = null;
         String cid = null;
@@ -230,7 +231,7 @@ public final class ComponentSupport {
      * @throws TagAttributeException
      *             if the Locale cannot be determined
      */
-    public static final Locale getLocale(FaceletContext ctx, TagAttribute attr)
+    public static Locale getLocale(FaceletContext ctx, TagAttribute attr)
             throws TagAttributeException {
         Object obj = attr.getObject(ctx);
         if (obj instanceof Locale) {
@@ -267,7 +268,7 @@ public final class ComponentSupport {
      *            UIComponent to search from
      * @return UIViewRoot instance for this evaluation
      */
-    public static final UIViewRoot getViewRoot(FaceletContext ctx,
+    public static UIViewRoot getViewRoot(FaceletContext ctx,
             UIComponent parent) {
         UIComponent c = parent;
         do {
@@ -287,7 +288,7 @@ public final class ComponentSupport {
      * @param c
      *            UIComponent to mark
      */
-    public static final void markForDeletion(UIComponent c) {
+    public static void markForDeletion(UIComponent c) {
         // flag this component as deleted
         c.getAttributes().put(MARK_DELETED, Boolean.TRUE);
 
@@ -317,7 +318,7 @@ public final class ComponentSupport {
         }
     }
     
-    public final static void encodeRecursive(FacesContext context,
+    public static void encodeRecursive(FacesContext context,
             UIComponent viewToRender) throws IOException, FacesException {
         if (viewToRender.isRendered()) {
             viewToRender.encodeBegin(context);
@@ -376,7 +377,7 @@ public final class ComponentSupport {
      * in a panel group, if it's not already, then add the child to the panel group. If the facet
      * does not yet exist, make the child the facet.</p>
      */
-    public final static void addComponent(FaceletContext ctx, UIComponent parent, UIComponent child) {
+    public static void addComponent(FaceletContext ctx, UIComponent parent, UIComponent child) {
  
         String facetName = getFacetName(parent);
         if (facetName == null) {
@@ -407,8 +408,25 @@ public final class ComponentSupport {
         
     }
 
-    public final static String getFacetName(UIComponent parent) {
+    public static String getFacetName(UIComponent parent) {
         return (String) parent.getAttributes().get(FacetHandler.KEY);
+    }
+
+    public static boolean suppressViewModificationEvents(FacesContext ctx) {
+
+        // NO UIViewRoot means this was called during restore view -
+        // no need to suppress events at that time
+        UIViewRoot root = ctx.getViewRoot();
+        if (root != null) {
+            String viewId = root.getViewId();
+            if (viewId != null) {
+                StateContext stateCtx = StateContext.getStateContext(ctx);
+                return stateCtx
+                      .partialStateSaving(viewId);
+            }
+        }
+        return false;
+
     }
 
 

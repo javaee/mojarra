@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -34,42 +34,58 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package com.sun.faces.application;
 
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceHandler;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceHandler;
+import com.sun.faces.config.WebConfiguration;
 
-import javax.faces.view.facelets.*;
+import javax.faces.context.FacesContext;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
 
-    @Override
-    public TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner) {
-        if (owner instanceof StylesheetResourceHandler) {
-            return new StylesheetResourceDelegate(owner);
-        } else if (owner instanceof ScriptResourceHandler) {
-            return new ScriptResourceDelegate(owner);
-        } else {
-            return new ComponentTagHandlerDelegateImpl(owner);
+/**
+ * This class maintains per-application information pertaining
+ * to partail or full state saving as a whole or partial state saving
+ * with some views using full state saving.
+ */
+public class ApplicationStateInfo {
+
+    private boolean partialStateSaving;
+    private Set<String> fullStateViewIds;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public ApplicationStateInfo() {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        partialStateSaving = config.isOptionEnabled(PartialStateSaving);
+
+        if (partialStateSaving) {
+            String[] viewIds = config.getOptionValue(FullStateSavingViewIds, ",");
+            fullStateViewIds = new HashSet<String>(viewIds.length, 1.0f);
+            fullStateViewIds.addAll(Arrays.asList(viewIds));
         }
+        
     }
 
-    @Override
-    public TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner) {
-        return new ValidatorTagHandlerDelegateImpl(owner);
+
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * @param viewId the view ID to check
+     * @return <code>true</code> if partial state saving should be used for the
+     *  specified view ID, otherwise <code>false</code>
+     */
+    public boolean usePartialStateSaving(String viewId) {
+
+        return (partialStateSaving && !fullStateViewIds.contains(viewId));
+
     }
 
-    @Override
-    public TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner) {
-        return new ConverterTagHandlerDelegateImpl(owner);
-    }
-
-    @Override
-    public TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner) {
-        return new BehaviorTagHandlerDelegateImpl(owner);
-    }
-    
-    
 }

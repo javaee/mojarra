@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,12 +37,10 @@
 package com.sun.faces.application.view;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
-import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsViewMappings;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FaceletsBufferSize;
 
+import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
@@ -84,11 +82,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -132,12 +127,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public static final String IS_BUILDING_METADATA =
           FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
-    private StateManagementStrategyImpl stateManagementStrategy;
+    private volatile StateManagementStrategyImpl stateManagementStrategy;
     private MethodRetargetHandlerManager retargetHandlerManager =
           new MethodRetargetHandlerManager();
 
-    private boolean partialStateSaving;
-    private Set<String> fullStateViewIds;
+
     private boolean groovyAvailable;
     private int responseBufferSize;
     private boolean responseBufferSizeSet;
@@ -165,9 +159,18 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
 
-        // 'null' return here means we're defaulting to the 1.2 style state saving.
-        Boolean usePartial = (Boolean) context.getAttributes().get("partialStateSaving");
-        return (Boolean.TRUE.equals(usePartial) ? stateManagementStrategy : null);
+        StateContext stateCtx = StateContext.getStateContext(context);
+        if (stateCtx.partialStateSaving(viewId)) {
+            if (stateManagementStrategy == null) {
+                synchronized (this) {
+                    if (stateManagementStrategy == null) {
+                        stateManagementStrategy = new StateManagementStrategyImpl();
+                    }
+                }
+            }
+            return stateManagementStrategy;
+        }
+        return null; // a null return means use full state saving
 
     }
     
@@ -428,7 +431,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public UIViewRoot restoreView(FacesContext ctx,
                                   String viewId) {
 
-        updateStateSavingType(ctx, viewId);
         if (UIDebug.debugRequest(ctx)) {
             ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
         }
@@ -700,9 +702,19 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     throws IOException {
 
         if (Util.isViewPopulated(ctx, view)) {
+            Facelet f = faceletFactory.getFacelet(view.getViewId());
+            StateContext stateCtx = StateContext.getStateContext(ctx);
+            // Disable events from being intercepted by the StateContext by
+            // virute of re-applying the handlers. 
+            try {
+                stateCtx.setTrackViewModifications(false);
+                f.apply(ctx, view);
+            } finally {
+                stateCtx.setTrackViewModifications(true);
+            }
             return;
         }
-        updateStateSavingType(ctx, view.getViewId());
+
         view.setViewId(view.getViewId());
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -720,7 +732,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         // populate UIViewRoot
         f.apply(ctx, view);
-        doPostBuildActions(view);
+        doPostBuildActions(ctx, view);
         ctx.getApplication().publishEvent(ctx,
                                           PostAddToViewEvent.class,
                                           UIViewRoot.class,
@@ -743,18 +755,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         this.initializeMappings();
-        WebConfiguration config = WebConfiguration.getInstance();
-        partialStateSaving = config.isOptionEnabled(PartialStateSaving);
-        
-        if (partialStateSaving) {
-            String[] viewIds = config.getOptionValue(FullStateSavingViewIds, ",");
-            fullStateViewIds = new HashSet<String>(viewIds.length, 1.0f);
-            fullStateViewIds.addAll(Arrays.asList(viewIds));
-            this.stateManagementStrategy = new StateManagementStrategyImpl(this);
-        }
 
         groovyAvailable = GroovyHelper.isGroovyAvailable(FacesContext.getCurrentInstance());
-
 
         metadataCache = new Cache<Resource, BeanInfo>(new Factory<Resource, BeanInfo>() {
 
@@ -1026,25 +1028,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
-    private void updateStateSavingType(FacesContext ctx, String viewId) {
 
-        if (!ctx.getAttributes().containsKey("partialStateSaving")) {
-            ctx.getAttributes().put("partialStateSaving",
-                                    usePartialSaving(viewId));
-        }
-
-    }
-
-
-    private boolean usePartialSaving(String viewId) {
-        return (partialStateSaving && !fullStateViewIds.contains(viewId));
-    }
-
-
-    private void doPostBuildActions(UIViewRoot root) {
-        if (usePartialSaving(root.getViewId())) {
+    private void doPostBuildActions(FacesContext ctx, UIViewRoot root) {
+        StateContext stateCtx = StateContext.getStateContext(ctx);
+        if (stateCtx.partialStateSaving(root.getViewId())) {
             root.markInitialState();
-            stateManagementStrategy.notifyTrackChanges(root);    
+            stateCtx.startTrackViewModifications();
         }
     }
 

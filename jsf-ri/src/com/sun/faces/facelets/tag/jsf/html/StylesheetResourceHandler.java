@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -34,42 +34,24 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package com.sun.faces.facelets.tag.jsf.html;
 
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceHandler;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceHandler;
+import javax.faces.view.facelets.ComponentConfig;
+import javax.faces.view.facelets.ComponentHandler;
 
-import javax.faces.view.facelets.*;
+/**
+ * <code>ComponentHandler</code> for <code>h:outputStylesheet</code> references.
+ */
+public class StylesheetResourceHandler extends ComponentHandler {
 
-public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
 
-    @Override
-    public TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner) {
-        if (owner instanceof StylesheetResourceHandler) {
-            return new StylesheetResourceDelegate(owner);
-        } else if (owner instanceof ScriptResourceHandler) {
-            return new ScriptResourceDelegate(owner);
-        } else {
-            return new ComponentTagHandlerDelegateImpl(owner);
-        }
+    // ------------------------------------------------------------ Constructors
+
+
+    public StylesheetResourceHandler(ComponentConfig config) {
+
+        super(config);
+
     }
 
-    @Override
-    public TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner) {
-        return new ValidatorTagHandlerDelegateImpl(owner);
-    }
-
-    @Override
-    public TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner) {
-        return new ConverterTagHandlerDelegateImpl(owner);
-    }
-
-    @Override
-    public TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner) {
-        return new BehaviorTagHandlerDelegateImpl(owner);
-    }
-    
-    
 }

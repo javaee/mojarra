@@ -42,13 +42,16 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 
+import com.sun.faces.context.StateContext;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.ComponentStruct;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -56,22 +59,17 @@ import com.sun.faces.util.Util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.LinkedHashMap;
 import java.io.IOException;
 import javax.faces.application.StateManager;
 import javax.faces.component.ContextCallback;
-import javax.faces.component.StateHolder;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.PostAddToViewEvent;
-import javax.faces.event.PreRemoveFromViewEvent;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
 import javax.faces.view.StateManagementStrategy;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.event.PostRestoreStateEvent;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguageFactory;
 
 /**
  * <p>
@@ -89,16 +87,12 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION_VIEW.getLogger();
 
-    private final FaceletViewHandlingStrategy pdl;
+    private final ViewDeclarationLanguageFactory vdlFactory;
 
-    private static final String CLIENTIDS_TO_REMOVE_NAME = 
+    private static final String CLIENTIDS_TO_REMOVE_NAME =
             "com.sun.faces.application.view.CLIENTIDS_TO_REMOVE";
-    private static final String CLIENTIDS_TO_ADD_NAME = 
+    private static final String CLIENTIDS_TO_ADD_NAME =
             "com.sun.faces.application.view.CLIENTIDS_TO_ADD";
-    private static final String IGNORE_REMOVE_EVENT_NAME = 
-            "com.sun.faces.application.view.IGNORE_REMOVE_EVENT";
-    private static final String DYNAMIC_COMPONENT =
-            "com.sun.faces.application.view.DYNAMIC_COMPONENT";
 
 
     // ------------------------------------------------------------ Constructors
@@ -107,8 +101,11 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
     /**
      * Create a new <code>StateManagerImpl</code> instance.
      */
-    public StateManagementStrategyImpl(FaceletViewHandlingStrategy pdl) {
-        this.pdl = pdl;
+    public StateManagementStrategyImpl() {
+
+        vdlFactory = (ViewDeclarationLanguageFactory)
+              FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
+
     }
 
     
@@ -170,16 +167,18 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 //        });
 // -----------------------------------------------------------------------------
 
+        StateContext stateContext = StateContext.getStateContext(context);
+
         // ADDED FOR ISSUE 1310 - REMOVE ONCE NEW VISIT HINTS ARE ADDED TO THE
         // API
-        saveComponentState(viewRoot, context, stateMap);
-        
+        saveComponentState(viewRoot, context, stateContext, stateMap);
+
         // handle dynamic adds/removes
-        List<String> removeList = getClientIdsToRemove(context);
+        List<String> removeList = stateContext.getDynamicRemoves();
         if (null != removeList && !removeList.isEmpty()) {
             stateMap.put(CLIENTIDS_TO_REMOVE_NAME, removeList);
         }
-        Map<String,ComponentStruct> addList = getClientIdsToAdd(context);
+        Map<String, ComponentStruct> addList = stateContext.getDynamicAdds();
         if (null != addList && !addList.isEmpty()) {
             List<Object> savedAddList = new ArrayList<Object>(addList.size());
             for (ComponentStruct s : addList.values()) {
@@ -203,14 +202,15 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
         ResponseStateManager rsm =
               RenderKitUtils.getResponseStateManager(context, renderKitId);
-        
+        boolean processingEvents = context.isProcessingEvents();
         // Build the tree to initial state
         UIViewRoot viewRoot;
         try {
-            viewRoot = pdl.getViewMetadata(context, viewId).createMetadataView(context);
+            ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewId);
+            viewRoot = vdl.getViewMetadata(context, viewId).createMetadataView(context);
             context.setViewRoot(viewRoot);
             context.setProcessingEvents(true);
-            pdl.buildView(context, viewRoot);
+            vdl.buildView(context, viewRoot);
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         }
@@ -220,6 +220,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         }
         //noinspection unchecked
         final Map<String, Object> state = (Map<String,Object>) rawState[1];
+        final StateContext stateContext = StateContext.getStateContext(context);
 
         if (null != state) {
             final Application app = context.getApplication();
@@ -236,7 +237,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     VisitResult result = VisitResult.ACCEPT;
                     String cid = target.getClientId(context.getFacesContext());
                     Object stateObj = state.get(cid);
-                    if (stateObj != null && !target.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
+                    if (stateObj != null && !stateContext.componentAddedDynamically(target)) {
                         try {
                             target.restoreState(context.getFacesContext(),
                                                 stateObj);
@@ -259,12 +260,14 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             });
             
             // Handle dynamic add/removes
-            
             //noinspection unchecked
             List<String> removeList = (List<String>) state.get(CLIENTIDS_TO_REMOVE_NAME);
             if (null != removeList && !removeList.isEmpty()) {
                 for (String cur : removeList) {
-                    setIgnoreRemoveEvent(context, true);
+                    boolean trackMods = stateContext.trackViewModifications();
+                    if (trackMods) {
+                        stateContext.setTrackViewModifications(false);
+                    }
                     viewRoot.invokeOnComponent(context, cur, new ContextCallback() {
 
                         public void invokeContextCallback(FacesContext context, UIComponent target) {
@@ -275,11 +278,14 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                         }
                         
                     });
-                    setIgnoreRemoveEvent(context, false);
+                    if (trackMods) {
+                        stateContext.setTrackViewModifications(true);
+                    }
                 }
             }
+
             Object restoredAddList[] = (Object []) state.get(CLIENTIDS_TO_ADD_NAME);
-            if (null != restoredAddList && 0 < restoredAddList.length) {  
+            if (restoredAddList != null && restoredAddList.length > 0) {
                 // Restore the list of added components
                 List<ComponentStruct> addList = new ArrayList<ComponentStruct>(restoredAddList.length);
                 for (Object aRestoredAddList : restoredAddList) {
@@ -326,22 +332,12 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         } else {
             viewRoot = null;
         }
-        context.setProcessingEvents(false);
+        context.setProcessingEvents(processingEvents);
         return viewRoot;
 
     }
 
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    public void notifyTrackChanges(UIViewRoot root) {
-
-        SystemEventListener listener = new AddRemoveListener(this);
-        root.subscribeToViewEvent(PostAddToViewEvent.class, listener);
-        root.subscribeToViewEvent(PreRemoveFromViewEvent.class, listener);
-
-    }
 
 
     // --------------------------------------------------------- Private Methods
@@ -359,11 +355,12 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
      */
     private void saveComponentState(UIComponent c,
                                     FacesContext ctx,
+                                    StateContext stateContext,
                                     Map<String, Object> stateMap) {
 
         if (!c.isTransient()) {
             Object stateObj;
-            if (c.getAttributes().containsKey(DYNAMIC_COMPONENT)) {
+            if (stateContext.componentAddedDynamically(c)) {
                 stateObj = new StateHolderSaver(ctx, c);
             } else {
                 stateObj = c.saveState(ctx);
@@ -372,200 +369,11 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 stateMap.put(c.getClientId(ctx), stateObj);
             }
             for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext();) {
-                saveComponentState(i.next(), ctx, stateMap);
+                saveComponentState(i.next(), ctx, stateContext, stateMap);
             }
         }
 
 
     }
-    
 
-    private List<String> getClientIdsToRemove(FacesContext context) {
-        return this.getClientIdsToRemove(context, false);
-    }
-
-
-    private List<String> getClientIdsToRemove(FacesContext context, boolean create) {
-        List<String> result;
-        //noinspection unchecked
-        if ((null == (result = (List<String>) context.getAttributes().get(CLIENTIDS_TO_REMOVE_NAME))) && create) {
-            result = new ArrayList<String>();
-            context.getAttributes().put(CLIENTIDS_TO_REMOVE_NAME, result);
-        }
-        return result;
-    }
-
-
-    private static class ComponentStruct implements StateHolder {
-        String parentClientId;
-        String clientId;
-        int indexOfChildInParent = -1;
-        String facetName;
-
-        public boolean isTransient() {
-            return false;
-        }
-
-        public void restoreState(FacesContext ctx, Object state) {
-            if (ctx == null) {
-                throw new NullPointerException();
-            }
-            if (state == null) {
-                return;
-            }
-            Object s[] = (Object []) state;
-            this.parentClientId = s[0].toString();
-            this.clientId = s[1].toString();
-            this.indexOfChildInParent = (Integer) s[2];
-            this.facetName = (String) s[3];
-        }
-
-        public Object saveState(FacesContext ctx) {
-            if (ctx == null) {
-                throw new NullPointerException();
-            }
-            Object state[] = new Object[4];
-            state[0] = this.parentClientId;
-            state[1] = this.clientId;
-            state[2] = this.indexOfChildInParent;
-            state[3] = this.facetName;
-            return state;
-        }
-
-        public void setTransient(boolean arg0) {
-        }
-
-
-    }
-
-
-    private Map<String,ComponentStruct> getClientIdsToAdd(FacesContext context) {
-        return this.getClientIdsToAdd(context, false);
-    }
-
-
-    private Map<String,ComponentStruct> getClientIdsToAdd(FacesContext context, boolean create) {
-        Map<String,ComponentStruct> result;
-        //noinspection unchecked
-        if ((null == (result = (Map<String,ComponentStruct>) context.getAttributes().get(CLIENTIDS_TO_ADD_NAME))) && create) {
-            result = new LinkedHashMap<String,ComponentStruct>();
-            context.getAttributes().put(CLIENTIDS_TO_ADD_NAME, result);
-        }
-        return result;
-    }
-
-
-    private void handleRemoveEvent(FacesContext context, PreRemoveFromViewEvent event) {
-        UIComponent removed = event.getComponent();
-        if (removed.isTransient()) {
-            return;
-        }
-        List<String> idsToRemove = getClientIdsToRemove(context, true);
-        Map<String,ComponentStruct> toAdd = getClientIdsToAdd(context, false);
-        String clientId = event.getComponent().getClientId(context);
-        if (toAdd != null && toAdd.containsKey(clientId)) {
-            toAdd.remove(clientId);
-        }
-        idsToRemove.add(clientId);
-    }
-
-
-    private void handleAddEvent(FacesContext context, PostAddToViewEvent event) {
-        
-        // if the root is transient, then no action is ever needed here
-        if (context.getViewRoot().isTransient()) {
-            return;
-        }
-
-        UIComponent added = event.getComponent();
-        if (added.isTransient() || added instanceof UIViewRoot) {
-            return;
-        }
-
-        // this component, while not transient may be a child or facet
-        // of component that is.  We'll have to search the parent hierarchy
-        // to the root to confirm.
-        UIComponent parent = added.getParent();
-        while (parent != null) {
-            if (parent.isTransient()) {
-                return;
-            }
-            parent = parent.getParent();
-        }
-
-        parent = added.getParent();
-        Map<String,ComponentStruct> idsToAdd = getClientIdsToAdd(context, true);
-        ComponentStruct toAdd = new ComponentStruct();
-
-        toAdd.clientId = added.getClientId(context);
-        toAdd.parentClientId = parent.getClientId(context);
-        // this needs work
-        int idx = parent.getChildren().indexOf(added);
-        if (idx == -1) {
-            // this must be a facet
-            for (Map.Entry<String,UIComponent> facet : parent.getFacets().entrySet()) {
-                if (facet.getValue() == added) {
-                    toAdd.facetName = facet.getKey();
-                    break;
-                }
-            }
-        } else {
-            toAdd.indexOfChildInParent = parent.getChildren().indexOf(added);
-        }
-        List<String> toRemove = getClientIdsToRemove(context, false);
-        if (toRemove != null && toRemove.contains(toAdd.clientId)) {
-            toRemove.remove(toAdd.clientId);
-        }
-        added.getAttributes().put(DYNAMIC_COMPONENT, Boolean.TRUE);
-        idsToAdd.put(toAdd.clientId, toAdd);
-
-    }
-
-
-    private boolean isIgnoreRemoveEvent(FacesContext context) {
-
-        return context.getAttributes().containsKey(IGNORE_REMOVE_EVENT_NAME);
-
-    }
-
-
-    private void setIgnoreRemoveEvent(FacesContext context, boolean ignoreRemoveEvent) {
-
-        if (!ignoreRemoveEvent) {
-            context.getAttributes().remove(IGNORE_REMOVE_EVENT_NAME);
-        } else {
-            context.getAttributes().put(IGNORE_REMOVE_EVENT_NAME, Boolean.TRUE);
-        }
-    }
-
-
-    // ---------------------------------------------------------- Nested Classes
-
-
-     public static class AddRemoveListener implements SystemEventListener {
-
-        private StateManagementStrategyImpl owner;
-
-        public AddRemoveListener(StateManagementStrategyImpl owner) {
-            this.owner = owner;
-        }
-
-        public void processEvent(SystemEvent event)
-              throws AbortProcessingException {
-            FacesContext context = FacesContext.getCurrentInstance();
-            if (event instanceof PreRemoveFromViewEvent) {
-                if (!owner.isIgnoreRemoveEvent(context)) {
-                    owner.handleRemoveEvent(context, (PreRemoveFromViewEvent) event);
-                }
-            } else {
-                owner.handleAddEvent(context, (PostAddToViewEvent) event);
-            }
-        }
-
-        public boolean isListenerForSource(Object source) {
-            return (source instanceof UIComponent);
-        }
-
-    }
-
-} 
+}

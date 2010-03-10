@@ -37,6 +37,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationStateInfo;
 import com.sun.faces.scripting.groovy.GroovyHelper;
 import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.application.resource.ResourceManager;
@@ -165,6 +166,7 @@ public class ApplicationAssociate {
     private Compiler compiler;
     private FaceletFactory faceletFactory;
     private ResourceManager resourceManager;
+    private ApplicationStateInfo applicationStateInfo;
 
     private PropertyEditorHelper propertyEditorHelper;
 
@@ -217,6 +219,7 @@ public class ApplicationAssociate {
 
         resourceManager = new ResourceManager(resourceCache);
         namedEventManager = new NamedEventManager();
+        applicationStateInfo = new ApplicationStateInfo();
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
@@ -262,6 +265,10 @@ public class ApplicationAssociate {
 
         return associate;
 
+    }
+
+    public ApplicationStateInfo getApplicationStateInfo() {
+        return applicationStateInfo;
     }
 
 

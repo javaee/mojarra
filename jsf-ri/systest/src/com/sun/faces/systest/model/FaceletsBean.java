@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -34,42 +34,29 @@
  * holder.
  */
 
-package com.sun.faces.facelets.tag.jsf;
+package com.sun.faces.systest.model;
 
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.ScriptResourceHandler;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceDelegate;
-import com.sun.faces.facelets.tag.jsf.html.StylesheetResourceHandler;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
-import javax.faces.view.facelets.*;
+@ManagedBean
+@SessionScoped
+public class FaceletsBean {
 
-public class TagHandlerDelegateFactoryImpl extends TagHandlerDelegateFactory {
+    boolean toggleState;
 
-    @Override
-    public TagHandlerDelegate createComponentHandlerDelegate(ComponentHandler owner) {
-        if (owner instanceof StylesheetResourceHandler) {
-            return new StylesheetResourceDelegate(owner);
-        } else if (owner instanceof ScriptResourceHandler) {
-            return new ScriptResourceDelegate(owner);
-        } else {
-            return new ComponentTagHandlerDelegateImpl(owner);
-        }
+
+    public String getFragment() {
+        return (toggleState ? "frag2" : "frag1");
     }
 
-    @Override
-    public TagHandlerDelegate createValidatorHandlerDelegate(ValidatorHandler owner) {
-        return new ValidatorTagHandlerDelegateImpl(owner);
+    public boolean getToggleState() {
+        return toggleState;
     }
 
-    @Override
-    public TagHandlerDelegate createConverterHandlerDelegate(ConverterHandler owner) {
-        return new ConverterTagHandlerDelegateImpl(owner);
+    public String action() {
+        toggleState = !toggleState;
+        return null; // stay with the same UIViewRoot instance on post-back
     }
 
-    @Override
-    public TagHandlerDelegate createBehaviorHandlerDelegate(BehaviorHandler owner) {
-        return new BehaviorTagHandlerDelegateImpl(owner);
-    }
-    
-    
 }

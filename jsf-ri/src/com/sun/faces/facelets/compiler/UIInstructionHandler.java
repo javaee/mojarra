@@ -62,6 +62,7 @@ import com.sun.faces.facelets.util.FastWriter;
 import javax.el.ELException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UniqueIdVendor;
+import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.FaceletContext;
 import java.io.IOException;
 import java.io.Writer;
@@ -115,8 +116,10 @@ final class UIInstructionHandler extends AbstractUIHandler {
             // grab our component
             UIComponent c = ComponentSupport.findChildByTagId(parent, id);
             boolean componentFound = false;
+            boolean suppressEvents = false;
             if (c != null) {
                 componentFound = true;
+                suppressEvents = ComponentSupport.suppressViewModificationEvents(ctx.getFacesContext());
                 // mark all children for cleaning 
                 ComponentSupport.markForDeletion(c);
             } else {
@@ -152,11 +155,26 @@ final class UIInstructionHandler extends AbstractUIHandler {
                 c.getAttributes().put(ComponentSupport.MARK_CREATED, id);
             }
             // finish cleaning up orphaned children
+            FacesContext context = ctx.getFacesContext();
             if (componentFound) {
-                ComponentSupport.finalizeForDeletion(c);               
+                ComponentSupport.finalizeForDeletion(c);
+                if (suppressEvents) {
+                    context.setProcessingEvents(false);
+                }
                 parent.getChildren().remove(c);
+                if (suppressEvents) {
+                    context.setProcessingEvents(true);
+                }
+            }
+
+            // add the component
+            if (componentFound && suppressEvents) {
+                context.setProcessingEvents(false);
             }
             this.addComponent(ctx, parent, c);
+            if (componentFound && suppressEvents) {
+                context.setProcessingEvents(true);
+            }
         }
     }
 
