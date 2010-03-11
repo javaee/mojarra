@@ -296,7 +296,7 @@ public class ApplicationImpl extends Application {
             invokeListenersFor(systemEventClass, event, source, null, false);
         } catch (AbortProcessingException ape) {
             context.getApplication().publishEvent(context,
-                                                  SystemEvent.class,
+                                                  ExceptionQueuedEvent.class,
                                                   new ExceptionQueuedEventContext(context, ape));
         }
 
