@@ -918,13 +918,13 @@
                          includes="com/sun/faces/systest/ComponentMiscTestCase.class"/>
             </tests>
         </jsf.junit>
-
+        
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/component/*TestCase.class"
+                         includes="com/sun/faces/component/*TestCase.class,com/sun/faces/event/DynamicAddTestCase.class"
                          excludes="com/sun/faces/component/GetClientIdELTestCase.class"
                          />
 <!-- 139-StateSaving edburns remove excludes -->

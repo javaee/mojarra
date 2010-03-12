@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-        
 <!--
+
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
 
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -34,42 +33,33 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
--->    
 
-<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
-              version="2.0">
-    <namespace>http://mojarra.dev.java.net/source1</namespace>
-    <tag>
-        <tag-name>hello</tag-name>
-        <source>tags/source.xhtml</source>
-    </tag>
-    <tag>
-        <tag-name>naming</tag-name>
-        <component>
-            <component-type>javax.faces.NamingContainer</component-type>
-        </component>
-    </tag>
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:dy="http://mojarra.dev.java.net/source1">
+  <h:head>
+    <title>1402</title>
+  </h:head>
 
-    <tag>
-        <tag-name>bootstrapComponent</tag-name>
-        <component>
-            <component-type>systest.BootstrapComponent</component-type>
-        </component>
-    </tag>
+  <h:body>
 
-    <tag>
-        <tag-name>timeWastingTag</tag-name>
-        <handler-class>com.sun.faces.composite.TimeWastingTagHandler</handler-class>
-    </tag>
-
-    <tag>
-        <tag-name>dynamicAdd</tag-name>
-        <component>
-            <component-type>dynamicAdd</component-type>
-        </component>
-    </tag>
+<p>Test for <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=1402">1402</a>.</p>
 
 
-</facelet-taglib>
+<f:view>
+
+    <ui:debug />
+    
+    <h:form id="form" prependId="false">
+
+        <dy:dynamicAdd id="dynamic1" />
+
+    </h:form>
+</f:view>
+
+  </h:body>
+</html>

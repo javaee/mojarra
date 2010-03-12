@@ -198,6 +198,8 @@ public class ApplicationImpl extends Application {
     private boolean registerPropertyEditors;
     private TimeZone systemTimeZone;
 
+    private final String IS_PROCESSING_LISTENERS_KEY = "com.sun.faces.application.ApplicationImpl.IS_PROCESSING_LISTENERS";
+
     /**
      * Constructor
      */
@@ -1946,6 +1948,14 @@ public class ApplicationImpl extends Application {
                                                Class<? extends SystemEvent> systemEventClass,
                                                SystemEvent event,
                                                Object source) {
+        SystemEvent result = event;
+
+        Map<Object, Object> ctxMap = ctx.getAttributes();
+        if (ctxMap.containsKey(IS_PROCESSING_LISTENERS_KEY)) {
+            return result;
+        }
+        ctxMap.put(IS_PROCESSING_LISTENERS_KEY, Boolean.TRUE);
+
 
         UIViewRoot root = ctx.getViewRoot();
         if (root != null) {
@@ -1953,12 +1963,13 @@ public class ApplicationImpl extends Application {
                   systemEventHelper.getEventInfo(systemEventClass,
                                                  UIViewRoot.class);
             // process view listeners
-            return processListeners(root.getViewListenersForEventClass(systemEventClass),
-                                                                       event,
-                                                                       source,
-                                                                       rootEventInfo);
+            result = processListenersAccountingForAdds(root.getViewListenersForEventClass(systemEventClass),
+                                                       event,
+                                                       source,
+                                                       rootEventInfo);
         }
-        return event;
+        ctxMap.remove(IS_PROCESSING_LISTENERS_KEY);
+        return result;
 
     }
 
@@ -2034,6 +2045,99 @@ public class ApplicationImpl extends Application {
 
         return event;
 
+    }
+
+    private SystemEvent processListenersAccountingForAdds(List<SystemEventListener> listeners,
+                                         SystemEvent event,
+                                         Object source,
+                                         EventInfo eventInfo) {
+
+          if (listeners != null && !listeners.isEmpty()) {
+
+              // copy listeners
+              // go thru copy completely
+              // compare copy to original
+              // if original differs from copy, make a new copy.
+              // The new copy consists of the original list - processed
+
+              SystemEventListener listenersCopy[] =
+                      new SystemEventListener[listeners.size()];
+              int i = 0;
+              for (i = 0; i < listenersCopy.length; i++) {
+                  listenersCopy[i] = listeners.get(i);
+              }
+
+              Map<SystemEventListener, Boolean> processedListeners =
+                      new HashMap<SystemEventListener, Boolean>(listeners.size());
+              boolean processedSomeEvents = false,
+                      originalDiffersFromCopy = false;
+
+              do {
+                  i = 0;
+                  originalDiffersFromCopy = false;
+                  if (0 < listenersCopy.length) {
+                      for (i = 0; i < listenersCopy.length; i++) {
+                          SystemEventListener curListener = listenersCopy[i];
+                          if (curListener != null && curListener.isListenerForSource(source)) {
+                              if (event == null) {
+                                  event = eventInfo.createSystemEvent(source);
+                              }
+                              assert (event != null);
+                              if (!processedListeners.containsKey(curListener)
+                                       && event.isAppropriateListener(curListener)) {
+                                  processedSomeEvents = true;
+                                  event.processListener(curListener);
+                                  processedListeners.put(curListener, Boolean.TRUE);
+                              }
+                          }
+                      }
+                      if (originalDiffersFromCopy(listeners, listenersCopy)) {
+                          originalDiffersFromCopy = true;
+                          listenersCopy = copyListWithExclusions(listeners, processedListeners);
+                      }
+                  }
+              } while (originalDiffersFromCopy && processedSomeEvents);
+        }
+
+        return event;
+
+    }
+
+    private boolean originalDiffersFromCopy(Collection<SystemEventListener> original,
+            SystemEventListener copy[]) {
+        boolean foundDifference = false;
+        int i = 0, originalLen = original.size(), copyLen = copy.length;
+
+        if (originalLen == copyLen) {
+            SystemEventListener originalItem, copyItem;
+            Iterator<SystemEventListener> iter = original.iterator();
+            while (iter.hasNext() && !foundDifference) {
+                originalItem = iter.next();
+                copyItem = copy[i++];
+                foundDifference = originalItem != copyItem;
+            }
+        } else {
+            foundDifference = true;
+        }
+
+        return foundDifference;
+    }
+
+    private SystemEventListener [] copyListWithExclusions(Collection<SystemEventListener> original,
+            Map<SystemEventListener, Boolean> excludes) {
+        SystemEventListener [] result = null,
+                temp = new SystemEventListener[original.size()];
+        int i = 0;
+        for (SystemEventListener cur : original) {
+            if (!excludes.containsKey(cur)) {
+                temp[i++] = cur;
+            }
+        }
+        result = new SystemEventListener[i];
+        System.arraycopy(temp, 0, result, 0, i);
+        temp = null;
+
+        return result;
     }
     
 	private boolean needsProcessing(FacesContext context, Class<? extends SystemEvent> systemEventClass) {
