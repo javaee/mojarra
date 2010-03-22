@@ -40,7 +40,6 @@ import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.net.MalformedURLException;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -328,25 +327,6 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         String requestURI = viewToExecute.getViewId();
-
-        try {
-            if (extContext.getResource(requestURI) == null) {
-                if (!extContext.isResponseCommitted()) {
-                    extContext.responseSendError(404, requestURI + " not found");
-                }
-                return true;
-            }
-        } catch (MalformedURLException mue) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                           mue.toString(),
-                           mue);
-            }
-            if (!extContext.isResponseCommitted()) {
-                extContext.responseSendError(404, requestURI + " not found");
-            }
-            return true;
-        }
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("About to execute view " + requestURI);

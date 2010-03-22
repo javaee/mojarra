@@ -70,6 +70,7 @@ public class MultiViewHandler extends ViewHandler {
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
 
     private String[] configuredExtensions;
+    private boolean extensionsSet;
     
     private ViewDeclarationLanguageFactory vdlFactory;
 
@@ -80,9 +81,9 @@ public class MultiViewHandler extends ViewHandler {
     public MultiViewHandler() {
 
         WebConfiguration config = WebConfiguration.getInstance();
-        String defaultSuffixConfig =
-              config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix);
-        configuredExtensions = Util.split(defaultSuffixConfig, " ");
+              
+        configuredExtensions = config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix, " ");
+        extensionsSet = config.isSet(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         vdlFactory = (ViewDeclarationLanguageFactory)
                 FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
 
@@ -438,27 +439,22 @@ public class MultiViewHandler extends ViewHandler {
 
         // if the viewId doesn't already use the above suffix,
         // replace or append.
-        StringBuilder buffer = new StringBuilder(viewId);
+        int extIdx = viewId.lastIndexOf('.');
+        int length = viewId.length();
+        StringBuilder buffer = new StringBuilder(length);
+
         for (String ext : configuredExtensions) {
             if (viewId.endsWith(ext)) {
                 return viewId;
             }
-            int extIdx = viewId.lastIndexOf('.');
-            if (extIdx != -1) {
-                buffer.replace(extIdx, viewId.length(), ext);
-            } else {
-                // no extension in the provided viewId, append the suffix
-                buffer.append(ext);
-            }
+
+            appendOrReplaceExtension(viewId, ext, length, extIdx, buffer);
+
             String convertedViewId = buffer.toString();
             try {
                 if (context.getExternalContext().getResource(convertedViewId) != null) {
                     // RELEASE_PENDING (rlubke,driscoll) cache the lookup
                     return convertedViewId;
-                } else {
-                    // reset the buffer to check for the next extension
-                    buffer.setLength(0);
-                    buffer.append(viewId);
                 }
             } catch (MalformedURLException e) {
                 if (logger.isLoggable(Level.SEVERE)) {
@@ -470,10 +466,8 @@ public class MultiViewHandler extends ViewHandler {
         }
 
         // unable to find any resource match that the default ViewHandler
-        // can deal with.  Return the viewId as it was passed.  There is
-        // probably another ViewHandler in the stack that will handle this.
-        return viewId;
-
+        // can deal with.  Fall back to legacy (JSF 1.2) id conversion.
+        return legacyConvertViewId(viewId, length, extIdx, buffer);
     }
 
 
@@ -700,5 +694,49 @@ public class MultiViewHandler extends ViewHandler {
         return null;
 
     }
-    
+
+    // Utility method used by viewId conversion.  Appends the extension
+    // if no extension is present.  Otherwise, replaces the extension.
+    private void appendOrReplaceExtension(String viewId,
+                                          String ext,
+                                          int    length,
+                                          int    extIdx,
+                                          StringBuilder buffer) {
+
+        buffer.setLength(0);
+        buffer.append(viewId);
+
+        if (extIdx != -1) {
+            buffer.replace(extIdx, length, ext);
+        } else {
+            // no extension in the provided viewId, append the suffix
+            buffer.append(ext);
+        }
+    }
+
+    private String legacyConvertViewId(String viewId,
+                                       int length,
+                                       int extIdx,
+                                       StringBuilder buffer) {
+
+        // In 1.2, the viewId was converted by replacing the extension
+        // with the single extension specified by javax.faces.DEFAULT_SUFFIX,
+        // which defaulted to ".jsp".  In 2.0, javax.faces.DEFAULT_SUFFIX
+        // may specify multiple extensions.  If javax.faces.DEFAULT_SUFFIX is
+        // explicitly set, we honor it and pick off the first specified
+        // extension.  If javax.faces.DEFAULT_SUFFIX is not explicitly set,
+        // we honor the default 1.2 behavior and use ".jsp" as the suffix.
+
+        String ext = (extensionsSet && 
+                       !(configuredExtensions.length == 0)) ?
+                          configuredExtensions[0] : ".jsp";
+
+        if (viewId.endsWith(ext)) {
+            return viewId;
+        }
+
+        appendOrReplaceExtension(viewId, ext, length, extIdx, buffer);
+
+        return buffer.toString();
+    }    
 }

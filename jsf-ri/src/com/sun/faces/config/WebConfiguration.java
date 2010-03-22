@@ -39,8 +39,10 @@ package com.sun.faces.config;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -93,7 +95,7 @@ public class WebConfiguration {
 
     private Map<WebContextInitParameter, String []> cachedListParams;
 
-    private List<String> setParams = new ArrayList<String>();
+    private Set<String> setParams = new HashSet<String>();
 
     private ServletContext servletContext;
 
@@ -493,7 +495,8 @@ public class WebConfiguration {
         for (Enumeration e = servletContext.getInitParameterNames();
               e.hasMoreElements(); ) {
             String name = e.nextElement().toString();
-            if (name.startsWith("com.sun.faces")) {
+            if (name.startsWith("com.sun.faces") ||
+                  name.startsWith("javax.faces")) {
                 setParams.add(name);
             }
         }
