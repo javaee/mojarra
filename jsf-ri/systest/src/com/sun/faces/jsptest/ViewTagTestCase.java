@@ -109,7 +109,7 @@ public class ViewTagTestCase extends AbstractTestCase {
 
         // press the button
         page = (HtmlPage) submit.click();
-        assertTrue(-1 != page.asText().indexOf("Erreur"));
+        assertTrue(-1 != page.asText().indexOf("erreur"));
 
     }
 
