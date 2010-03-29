@@ -888,6 +888,10 @@ public class WebConfiguration {
         FaceletFactory(
               "com.sun.faces.faceletFactory",
               ""
+        ),
+        FaceletCache(
+            "com.sun.faces.faceletCache",
+            ""
         );
 
 

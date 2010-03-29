@@ -56,14 +56,13 @@
 package com.sun.faces.facelets.impl;
 
 import com.sun.faces.facelets.Facelet;
+import com.sun.faces.facelets.FaceletCache;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.util.Cache;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
-import javax.el.ELException;
-import javax.faces.FacesException;
 import javax.faces.view.facelets.FaceletException;
 import javax.faces.view.facelets.FaceletHandler;
 import javax.faces.view.facelets.ResourceResolver;
@@ -72,11 +71,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
+
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
 
 /**
  * Default FaceletFactory implementation.
@@ -91,19 +92,18 @@ public class DefaultFaceletFactory extends FaceletFactory {
 
     private final Compiler compiler;
 
-    private Map<String, DefaultFacelet> facelets;
-
-    private Map<String, DefaultFacelet> metadataFacelets;
-
     private Map<String, URL> relativeLocations;
 
     private final ResourceResolver resolver;
 
     private final URL baseUrl;
-
+    
     private final long refreshPeriod;
 
+    private final FaceletCache<DefaultFacelet> cache;
+
     Cache<String,IdMapper> idMappers;
+    
 
 
     // ------------------------------------------------------------ Constructors
@@ -112,7 +112,7 @@ public class DefaultFaceletFactory extends FaceletFactory {
     public DefaultFaceletFactory(Compiler compiler, ResourceResolver resolver)
     throws IOException {
 
-        this(compiler, resolver, -1);
+        this(compiler, resolver, -1, null);
 
     }
 
@@ -120,23 +120,53 @@ public class DefaultFaceletFactory extends FaceletFactory {
     public DefaultFaceletFactory(Compiler compiler,
                                  ResourceResolver resolver,
                                  long refreshPeriod) {
+        this(compiler, resolver, refreshPeriod, null);
+    }
+
+    public DefaultFaceletFactory(Compiler compiler,
+                                 ResourceResolver resolver,
+                                 long refreshPeriod,
+                                 FaceletCache cache) {
 
         Util.notNull("compiler", compiler);
         Util.notNull("resolver", resolver);
         this.compiler = compiler;
-        this.facelets = new HashMap<String, DefaultFacelet>();
-        this.metadataFacelets = new HashMap<String, DefaultFacelet>();
-        this.relativeLocations = new HashMap<String, URL>();
+        this.relativeLocations = new ConcurrentHashMap<String, URL>();
         this.resolver = resolver;
         this.baseUrl = resolver.resolveUrl("/");
         this.idMappers = new Cache<String,IdMapper>(new IdMapperFactory());
         // this.location = url;
-        this.refreshPeriod = (refreshPeriod >= 0) ? refreshPeriod * 1000 : -1;
+        refreshPeriod = (refreshPeriod >= 0) ? refreshPeriod * 1000 : -1;
+        this.refreshPeriod = refreshPeriod;
         if (log.isLoggable(Level.FINE)) {
             log.fine("Using ResourceResolver: " + resolver);
-            log.fine("Using Refresh Period: " + this.refreshPeriod);
+            log.fine("Using Refresh Period: " + refreshPeriod);
+        }
+        if (cache == null) {
+            cache = new DefaultFaceletCache(refreshPeriod);
         }
         
+        // We can cast to the FaceletCache<DefaultFacelet> here because we know
+        // that the Generics information is only used at compile time, and all cache
+        // implementations will be using instance factories provided by us and returning DefaultFacelet
+        this.cache = (FaceletCache<DefaultFacelet>)cache;
+        
+        // Create instance factories for the  cache, so that the cache can
+        // create Facelets and Metadata Facelets
+        FaceletCache.InstanceFactory<DefaultFacelet> faceletFactory = 
+            new FaceletCache.InstanceFactory<DefaultFacelet>() {
+                public DefaultFacelet newInstance(final URL key) throws IOException {
+                    return createFacelet(key);
+                }
+            };
+        FaceletCache.InstanceFactory<DefaultFacelet> metadataFaceletFactory = 
+            new FaceletCache.InstanceFactory<DefaultFacelet>() {
+                public DefaultFacelet newInstance(final URL key) throws IOException {
+                    return createMetadataFacelet(key);
+                }
+            };
+        
+        this.cache.init(faceletFactory, metadataFaceletFactory);
     }
 
 
@@ -212,87 +242,18 @@ public class DefaultFaceletFactory extends FaceletFactory {
      * @throws ELException
      */
     public Facelet getFacelet(URL url) throws IOException {
-        Util.notNull("url", url);
-        String key = url.toString();
-        DefaultFacelet f = this.facelets.get(key);
-        if (f == null || this.needsToBeRefreshed(f)) {
-            f = this.createFacelet(url);
-            if (this.refreshPeriod != 0) {
-                Map<String, DefaultFacelet> newLoc = new HashMap<String, DefaultFacelet>(this.facelets);
-                newLoc.put(key, f);
-                this.facelets = newLoc;
-            }
-        }
-        return f;
+        return this.cache.getFacelet(url);
     }
 
     public Facelet getMetadataFacelet(URL url) throws IOException {
-
-        Util.notNull("url", url);
-        String key = url.toString();
-        DefaultFacelet f = this.metadataFacelets.get(key);
-        if (f == null || this.needsToBeRefreshed(f)) {
-            f = this.createMetadataFacelet(url);
-            if (this.refreshPeriod != 0) {
-                Map<String, DefaultFacelet> newLoc = new HashMap<String, DefaultFacelet>(this.metadataFacelets);
-                newLoc.put(key, f);
-                this.metadataFacelets = newLoc;
-            }
-        }
-        return f;
+        return this.cache.getMetadataFacelet(url);
     }
 
     public boolean needsToBeRefreshed(URL url) {
-        boolean result = false;
-
-        Util.notNull("url", url);
-        String key = url.toString();
-        DefaultFacelet f = this.facelets.get(key);
-        result = (f == null || this.needsToBeRefreshed(f));
-
-        return result;
+        return !this.cache.isFaceletCached(url);
     }
 
-    /**
-     * Template method for determining if the Facelet needs to be refreshed.
-     *
-     * @param facelet Facelet that could have expired
-     *
-     * @return true if it needs to be refreshed
-     */
-    protected boolean needsToBeRefreshed(DefaultFacelet facelet) {
-        // if set to 0, constantly reload-- nocache
-        if (this.refreshPeriod == 0) {
-            return true;
-        }
-        // if set to -1, never reload
-        if (this.refreshPeriod == -1) {
-            return false;
-        }
-        long ttl = facelet.getCreateTime() + this.refreshPeriod;
-        URL url = facelet.getSource();
-        InputStream is = null;
-        if (System.currentTimeMillis() > ttl) {
-            try {
-                URLConnection conn = url.openConnection();
-                is = conn.getInputStream();
-                long atl = conn.getLastModified();
-                return atl > ttl;
-            } catch (Exception e) {
-                throw new FaceletException("Error Checking Last Modified for "
-                                           + facelet.getAlias(), e);
-            } finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (Exception e) {
-                        // do nothing
-                    }
-                }
-            }
-        }
-        return false;
-    }
+    
 
     private URL resolveURL(String uri) throws IOException {
 
@@ -300,9 +261,7 @@ public class DefaultFaceletFactory extends FaceletFactory {
         if (url == null) {
             url = this.resolveURL(this.baseUrl, uri);
             if (url != null) {
-                Map<String, URL> newLoc = new HashMap<String, URL>(this.relativeLocations);
-                newLoc.put(uri, url);
-                this.relativeLocations = newLoc;
+                this.relativeLocations.put(uri, url);
             } else {
                 throw new IOException("'" + uri + "' not found.");
             }
@@ -371,7 +330,7 @@ public class DefaultFaceletFactory extends FaceletFactory {
 
 
     public long getRefreshPeriod() {
-        return refreshPeriod;
+        return this.refreshPeriod;
     }
 
 
@@ -390,5 +349,6 @@ public class DefaultFaceletFactory extends FaceletFactory {
 
         }
 
-    }
+    }    
+    
 }

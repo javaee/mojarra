@@ -43,6 +43,7 @@ import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.facelets.FaceletCache;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
 import com.sun.faces.facelets.FaceletFactory;
@@ -597,9 +598,27 @@ public class ApplicationAssociate {
                                                     ResourceResolver.class,
                                                     resolver);
         }
+        
+        FaceletCache cache = null;
+        String faceletCacheName = webConfig.getOptionValue(FaceletCache);
+        if (faceletCacheName != null && faceletCacheName.length() > 0) {
+            try
+            {
+                cache = (FaceletCache)ReflectionUtil.forName(faceletCacheName)
+                                          .newInstance();
+            }
+            catch(Exception e)
+            {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               "Error Loading Facelet cache: " + faceletCacheName,
+                               e);
+                }
+            }
+        }
 
         // Resource.getResourceUrl(ctx,"/")
-        FaceletFactory factory = new DefaultFaceletFactory(c, resolver, period);
+        FaceletFactory factory = new DefaultFaceletFactory(c, resolver, period, cache);
 
         // Check to see if a custom Factory has been defined
         String factoryClass = webConfig.getOptionValue(FaceletFactory);
