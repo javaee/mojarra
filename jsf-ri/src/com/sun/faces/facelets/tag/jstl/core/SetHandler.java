@@ -97,15 +97,6 @@ public class SetHandler extends TagHandlerImpl {
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException {
 
-        // don't execute this particular handler during RESTORE_VIEW as
-        // we'll need to maintain fidelity with how this tag behaved in 1.2.
-        // A good reason as to why is the Flash.  The Flash is sensitive to
-        // what points in the lifecycle it's invoked.  If we applied this tag
-        // at different times in the lifecycle, you'd get different behavior
-        // depending on the state saving type
-        if (PhaseId.RESTORE_VIEW.equals(ctx.getFacesContext().getCurrentPhaseId())) {
-            return;
-        }
         StringBuilder bodyValue = new StringBuilder();
 
         Iterator iter = TagHandlerImpl.findNextByType(this.nextHandler,

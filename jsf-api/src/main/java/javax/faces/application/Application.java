@@ -987,7 +987,7 @@ public abstract class Application {
 	  uses JavaBeans as the API to the component metadata.</p></li>
 
 	  <li><p>Determine if the component author declared a
-	  <code>component-type</code> for this component instance by
+	  <code>componentType</code> for this component instance by
 	  obtaining the <code>BeanDescriptor</code> from the component
 	  metadata and calling its <code>getValue()</code> method,
 	  passing {@link UIComponent#COMPOSITE_COMPONENT_TYPE_KEY} as

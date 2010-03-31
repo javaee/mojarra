@@ -53,9 +53,8 @@ import java.util.Map;
  *
  * <p><b>Implementation Requirements</b></p>
  *
- * <p>The flash is an application scoped object that must be thread
- * safe, and provide a programming model that lets each session treat
- * the flash as if it was a session scoped object.</p>
+ * <p>The flash is a <span class="changed_modified_2_0_a">session</span>
+ * scoped object that must be thread safe.</p>
 
  * <p>The implementation requirements will be described in terms of the
  * runtime traversing the JSF lifecycle.  The flash exposes a

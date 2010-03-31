@@ -1501,6 +1501,12 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * called, passing {@link PreDestroyViewMapEvent}<code>.class</code>
      * as the first argument and this <code>UIViewRoot</code> instance
      * as the second argument.</p>
+
+     * <p class="changed_modified_2_0_rev_a">Depending upon application
+     * configuration, objects stored in the view map may need to be
+     * <code>Serializable</code>.  In general, it is a good idea to
+     * ensure that any objects stored in the view map are
+     * <code>Serializable</code>.</p>
      * 
      * <p>See {@link FacesContext#setViewRoot} for the specification of when the
      * <code>clear()</code> method must be called.</p>
