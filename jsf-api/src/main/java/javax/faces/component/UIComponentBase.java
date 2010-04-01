@@ -1366,7 +1366,7 @@ public abstract class UIComponentBase extends UIComponent {
             }
             Object savedHelper = null;
             if (stateHelper != null) {
-                savedHelper = stateHelper.saveState(getFacesContext());
+                savedHelper = stateHelper.saveState(context);
             }
             if (savedFacesListeners == null
                   && savedSysEventListeners == null
@@ -1401,7 +1401,7 @@ public abstract class UIComponentBase extends UIComponent {
                 values[3] = saveBindingsState(context);
             }
             if (stateHelper != null) {
-                values[4] = stateHelper.saveState(getFacesContext());
+                values[4] = stateHelper.saveState(context);
             }
             values[5] = id;
 
@@ -1442,7 +1442,7 @@ public abstract class UIComponentBase extends UIComponent {
             bindings = restoreBindingsState(context, values[3]);
         }
         if(values[4] != null) {
-            getStateHelper().restoreState(getFacesContext(), values[4]);
+            getStateHelper().restoreState(context, values[4]);
         }
         if (values.length == 6) {
             // this means we've saved full state and need to do a little more
