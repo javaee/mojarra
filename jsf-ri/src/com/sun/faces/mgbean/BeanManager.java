@@ -226,13 +226,15 @@ public class BeanManager implements SystemEventListener {
     }
 
 
-    public boolean isBeanInScope(String name, FacesContext context) {
-
-        String scope = this.getBuilder(name).getScope();
-        return ScopeManager.isInScope(name, scope, context);
+    public boolean isBeanInScope(String name, BeanBuilder builder, FacesContext context) {
+        return ScopeManager.isInScope(name, builder.getScope(), context);
 
     }
 
+
+    public Object getBeanFromScope(String name, BeanBuilder builder, FacesContext context) {
+        return ScopeManager.getFromScope(name, builder.getScope(), context);
+    }
 
     public Object getBeanFromScope(String name, FacesContext context) {
 
@@ -246,11 +248,11 @@ public class BeanManager implements SystemEventListener {
 
     // ------------------------------------------------------- Lifecycle Methods
 
-
     public Object create(String name, FacesContext facesContext) {
-
-        BeanBuilder builder = managedBeans.get(name);
-
+        return create(name, managedBeans.get(name), facesContext);
+    }
+    
+    public Object create(String name, BeanBuilder builder, FacesContext facesContext) {
         if (builder != null) {
             if (lazyBeanValidation && !builder.isBaked()) {
                 preProcessBean(name, builder);
@@ -267,6 +269,8 @@ public class BeanManager implements SystemEventListener {
         return null;
 
     }
+
+
 
     public void destroy(String beanName, Object bean) {
 

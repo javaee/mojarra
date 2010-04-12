@@ -70,24 +70,8 @@ public class ManagedBeanELResolver extends ELResolver {
             throw new PropertyNotFoundException(message);
         }
 
-        Object result = null;
-        FacesContext facesContext = (FacesContext)
-              context.getContext(FacesContext.class);
-        BeanManager manager = getBeanManager();
-        if (manager != null) {
-            String beanName = property.toString();
-            if (manager.isManaged(beanName)
-                && !manager.isBeanInScope(beanName, facesContext)) {
-
-                // no bean found in scope.  create a new instance
-                result = manager.create(beanName, facesContext);
-                context.setPropertyResolved(result != null);
-            }
-        }
-      
-        return result;
+        return resolveBean(context, property);
     }
-
 
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
@@ -112,19 +96,7 @@ public class ManagedBeanELResolver extends ELResolver {
         }
 
         if (base == null) {
-            FacesContext facesContext = (FacesContext)
-                  context.getContext(FacesContext.class);
-            BeanManager manager = getBeanManager();
-            if (manager != null) {
-                String beanName = property.toString();
-                if (manager.isManaged(beanName)
-                    && !manager.isBeanInScope(beanName, facesContext)) {
-
-                    // no bean found in scope.  create a new instance
-                    Object bean = manager.create(beanName, facesContext);
-                    context.setPropertyResolved(bean != null);
-                }
-            }
+            resolveBean(context, property);
         }
 
     }
@@ -203,6 +175,26 @@ public class ManagedBeanELResolver extends ELResolver {
         ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
         return ((associate != null) ? associate.getBeanManager() : null);
 
+    }
+
+    private Object resolveBean(ELContext context, Object property) {
+        Object result = null;
+        BeanManager manager = getBeanManager();
+        if (manager != null) {
+            String beanName = property.toString();
+            BeanBuilder builder = manager.getBuilder(beanName);
+            if (builder != null) {
+                FacesContext facesContext = (FacesContext)
+                    context.getContext(FacesContext.class);
+                result = manager.getBeanFromScope(beanName, builder, facesContext);
+                if (result == null) {
+                    result = manager.create(beanName, builder, facesContext);
+                }
+                context.setPropertyResolved(result != null);
+            }
+        }
+    
+        return result;
     }
 
 }
