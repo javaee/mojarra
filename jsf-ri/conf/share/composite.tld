@@ -944,7 +944,7 @@ manually.</p>
 whose expected type is given by the value of this attribute.  If not
 specified, and no "method-signature" attribute is present,
 <code>java.lang.Object</code> is assumed.  This attribute is mutually
-exclusive with the "type" attribute. If both attributes are present, the
+exclusive with the "method-signature" attribute. If both attributes are present, the
 "method-signature" attribute is ignored. </p> </div>]]>
 
             </description>

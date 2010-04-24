@@ -93,6 +93,7 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
      * <code>ExceptionQueuedEventContext</code> that indicates the argument
      * <code>Throwable</code> just occurred.</p>
      *
+     * @param context {@link FacesContext} for the current request
      * @param thrown the <code>Throwable</code> that is the context for
      * this <code>ExceptionQueuedEventContext</code> instance.
      */
@@ -109,9 +110,12 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
      * <code>Throwable</code> just occurred, relevant to the argument
      * <code>component</code>.
      *
-     * @param context
-     * @param thrown
-     * @param component
+     * @param context {@link FacesContext} for the current request
+     * @param thrown the <code>Throwable</code> that is the context for
+     * this <code>ExceptionQueuedEventContext</code> instance.
+     * @param component the {@link UIComponent} instance to which this
+     * <code>ExceptionQueuedEventContext</code> pertains
+
      */
     public ExceptionQueuedEventContext(FacesContext context,
                                  Throwable thrown,
@@ -128,6 +132,8 @@ public class ExceptionQueuedEventContext implements SystemEventListenerHolder {
      * <code>component</code>, during the lifecycle phase
      * <code>phaseId</code>.</p>
      *
+     * @param context {@link FacesContext} for the current request
+
      * @param thrown the <code>Throwable</code> that is the context for
      * this <code>ExceptionQueuedEventContext</code> instance.
      *

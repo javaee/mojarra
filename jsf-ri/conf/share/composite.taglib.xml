@@ -1040,7 +1040,7 @@
                 specified, and no "method-signature" attribute is present,
                 &lt;code&gt;java.lang.Object&lt;/code&gt; is assumed. This
                 attribute is mutually
-                exclusive with the "type" attribute. If both attributes are
+                exclusive with the "method-signature" attribute. If both attributes are
                 present, the
                 "method-signature" attribute is ignored. &lt;/p&gt; &lt;/div&gt;
 

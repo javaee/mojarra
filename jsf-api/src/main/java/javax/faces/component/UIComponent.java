@@ -2202,6 +2202,9 @@ private void doFind(FacesContext context, String clientId) {
      * <li>Call the <code>processValidators()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
+     * <li>After returning from calling
+     * <code>getFacetsAndChildren()</code> call {@link
+     * UIComponent#popComponentFromEL}.</li>
      * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing

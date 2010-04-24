@@ -3219,7 +3219,7 @@
             &lt;p&gt;Handling the Value&lt;/p&gt;
             &lt;ul&gt;
             &lt;p&gt;If the "name" attribute is present, execute algorithm &lt;a
-            href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonGetResource"&gt;Common
+            href="../../../renderkitdocs/HTML_BASIC/javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonGetResource"&gt;Common
             Algorithm for Obtaining A Resource to Render&lt;/a&gt; to obtain a
             &lt;code&gt;Resource&lt;/code&gt; instance. Call
             &lt;code&gt;Resource.getRequestPath()&lt;/code&gt; and output the
