@@ -48,7 +48,7 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
     <property name="dist.dir" value="${basedir}/dist"/>
-    <property name="javaserverfaces-spec-eg.dir" value="${basedir}/../javaserverfaces-spec-eg"/>
+    <property name="javaserverfaces-spec-eg.dir" value="${basedir}/../javaserverfaces-spec-eg-HEAD"/>
 
 
     <property name="LICENSEFILE"
@@ -251,6 +251,10 @@
 
    </target>
 
+   <target name="test.spec-eg-dir-available">
+       <available type="dir" file="${javaserverfaces-spec-eg.dir}"
+                  property="spec-eg-dir-available" />
+   </target>
 
    <target name="build.spec.snapshot" depends="dist">
 
