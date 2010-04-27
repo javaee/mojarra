@@ -384,14 +384,20 @@
     <tag>
         <description>
 
-            &lt;p class="changed_added_2_0"&gt;Register an AjaxBehavior instance
-            on one or more
-            UIComponents implementing the ClientBehaviorHolder interface. This
-            tag
-            may be nested witin a single component (enabling Ajax for a single
-            component),
-            or it may be "wrapped" around multiple components (enabling Ajax for
-            many components).&lt;/p&gt;
+        &lt;p class="changed_added_2_0"&gt;Register an AjaxBehavior instance
+        on one or more UIComponents implementing the
+        ClientBehaviorHolder interface.  This tag may be nested witin a
+        single component (enabling Ajax for a single component), or it
+        may be "wrapped" around multiple components (enabling Ajax for
+        many components).&lt;/p&gt;
+
+        &lt;p class="changed_added_2_0"&gt;The String value for identifiers
+        specified for execute and render may be specified as a search
+        expression as outlined in the JavaDocs for
+        &lt;code&gt;UIComponent.findComponent()&lt;/code&gt;. The implementation
+        must resolve these identifiers as specified for
+        &lt;code&gt;UIComponent.findComponent()&lt;/code&gt;.  
+        &lt;/p&gt;
 
         </description>
         <tag-name>ajax</tag-name>

@@ -525,10 +525,40 @@
     <tag>
         <description><![CDATA[
 
-        <p class="changed_added_2_0">Register an AjaxBehavior instance on one or more
-        UIComponents implementing the ClientBehaviorHolder interface.  This tag
-        may be nested witin a single component (enabling Ajax for a single component),
-        or it may be "wrapped" around multiple components (enabling Ajax for many components).</p>
+        <p class="changed_added_2_0">Register an AjaxBehavior instance
+        on one or more UIComponents implementing the
+        ClientBehaviorHolder interface.  This tag may be nested witin a
+        single component (enabling Ajax for a single component), or it
+        may be "wrapped" around multiple components (enabling Ajax for
+        many components).</p>
+
+        <p class="changed_added_2_0">The String value for identifiers
+        specified for execute and render may be specified as a search
+        expression as outlined in the JavaDocs for
+        <code>UIComponent.findComponent()</code>. The implementation
+        must resolve these identifiers as specified for
+        <code>UIComponent.findComponent()</code>.  For example, consider
+        the following Facelets code.</p>
+
+<div class="xml" style="font-family:monospace;"><ol><li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;h:form</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;form_1&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;h:panelGrid</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;panel_1&quot;</span> <span style="color: #000066;">rows</span>=<span style="color: #ff0000;">&quot;2&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">&lt;!-- content irrelevant --&gt;</span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/h:panelGrid<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/h:form<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp;</div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;h:form</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;form_2&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;h:commandButton</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;button&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;f:ajax</span> <span style="color: #000066;">render</span>=<span style="color: #ff0000;">&quot;:form1:panel_1 panel_2&quot;</span> <span style="color: #000000; font-weight: bold;">/&gt;</span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/h:commandButton<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;h:panelGrid</span> <span style="color: #000066;">id</span>=<span style="color: #ff0000;">&quot;panel_2&quot;</span><span style="color: #000000; font-weight: bold;">&gt;</span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; &nbsp; <span style="color: #808080; font-style: italic;">&lt;!-- content irrelevant --&gt;</span></div></li> 
+<li style="background: #fcfcfc;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">&nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/h:panelGrid<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+<li style="background: #f0f0f0;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/h:form<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></li> 
+</ol></div>
+
+        <p class="changed_added_2_0">When the button is pressed,
+        panel_1, in form_1 will be re-rendered, along with panel_2 in
+        form_2.</p>
 
         ]]></description>
         <name>ajax</name>
