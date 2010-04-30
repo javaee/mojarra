@@ -54,6 +54,8 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
@@ -65,6 +67,7 @@ import javax.faces.view.facelets.FaceletContext;
 import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagConfig;
 import java.io.IOException;
+import javax.faces.context.FacesContext;
 
 /**
  * Container for all JavaServer Faces core and custom component actions used on
@@ -144,7 +147,8 @@ public final class ViewHandler extends TagHandlerImpl {
                         .getMethodExpression(ctx, null, LISTENER_SIG);
                 root.setAfterPhaseListener(m);
             }
-            if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))) {
+            FacesContext context = ctx.getFacesContext();
+            if (StateContext.getStateContext(context).partialStateSaving((String)context.getAttributes().get(RIConstants.VIEWID_KEY_NAME))) {
                 root.markInitialState();
             }
         }

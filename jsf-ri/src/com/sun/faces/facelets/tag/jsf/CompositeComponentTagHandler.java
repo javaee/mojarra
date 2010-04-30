@@ -54,6 +54,8 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.util.ReflectionUtil;
@@ -198,7 +200,7 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
             // RELEASE_PENDING This is *ugly*.  See my comments in
             // ComponentTagHandlerDelegateImpl at the end of the apply()
             // method
-            if (Boolean.TRUE.equals(ctx.getFacesContext().getAttributes().get("partialStateSaving"))) {
+            if (StateContext.getStateContext(context).partialStateSaving((String)context.getAttributes().get(RIConstants.VIEWID_KEY_NAME))) {
                 markInitialState(c);
             }
 

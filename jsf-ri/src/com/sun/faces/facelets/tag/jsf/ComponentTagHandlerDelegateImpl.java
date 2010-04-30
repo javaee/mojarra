@@ -36,10 +36,12 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.component.validator.ComponentValidators;
 import com.sun.faces.component.CompositeComponentStackManager;
 import static com.sun.faces.component.CompositeComponentStackManager.StackType.TreeCreation;
+import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.impl.IdMapper;
 import com.sun.faces.facelets.tag.MetaRulesetImpl;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
@@ -402,7 +404,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // has a composite component parent under the assumption that
         // the CompositeComponentTagHandler will take care of it.
 
-        return (Boolean.TRUE.equals(ctx.getAttributes().get("partialStateSaving"))
+        return (StateContext.getStateContext(ctx).partialStateSaving((String)ctx.getAttributes().get(RIConstants.VIEWID_KEY_NAME))
                  && UIComponent.getCurrentCompositeComponent(ctx) == null);
 
     }

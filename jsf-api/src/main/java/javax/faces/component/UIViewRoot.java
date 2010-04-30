@@ -321,6 +321,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * @param viewId The new view identifier
      */
     public void setViewId(String viewId) {
+        getFacesContext().getAttributes().put("com.sun.faces.viewId", viewId);
+
 
         getStateHelper().put(PropertyKeys.viewId, viewId);
 
