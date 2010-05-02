@@ -40,8 +40,11 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p>This component is responsible for displaying messages for a specific
- * {@link UIComponent}, identified by a <code>clientId</code>.  The component
+ * <p><span class="changed_modified_2_0_rev_a">This</span> component is
+ * responsible for displaying messages for a specific {@link
+ * UIComponent}, identified by a <code>clientId</code> <span
+ * class="changed_modified_2_0_rev_a"> or component id relative to the
+ * closest ancestor <code>NamingContainer</code></span>.  The component
  * obtains the messages from the {@link FacesContext}.</p>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
@@ -118,8 +121,13 @@ public class UIMessage extends UIComponentBase {
 
 
     /**
-     * <p>Return the client identifier of the component for which
-     * this component represents associated message(s) (if any).</p>
+     * <p><span class="changed_modified_2_0_rev_a">Return the Identifier
+     * of the component for which to render error messages. If this
+     * component is within the same NamingContainer as the target
+     * component, this must be the component identifier. Otherwise, it
+     * must be an absolute component identifier (starting with ":"). See
+     * the {@link UIComponent#findComponent} for more
+     * information.</span></p>
      */
     public String getFor() {
 
@@ -129,9 +137,10 @@ public class UIMessage extends UIComponentBase {
 
 
     /**
-     * <p>Set the client identifier of the component for which this
-     * component represents associated message(s) (if any).  This
-     * property must be set before the message is displayed.</p>
+     * <p>Set <span class="changed_modified_2_0_rev_a">the
+     * identifier</span> of the component for which this component
+     * represents associated message(s) (if any).  This property must be
+     * set before the message is displayed.</p>
      *
      * @param newFor The new client id
      */

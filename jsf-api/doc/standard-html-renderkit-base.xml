@@ -1281,12 +1281,14 @@
       class="changed_added_2_0">Note that calling
       <code>getResourceURL()</code> will prefix the context-root of the
       current application if the value of the "src" attribute starts
-      with "/".</span>  When handling the "image" attribute, the value must not
-      be escaped.  For example, <code>&</code> must not be turned into
-      <code>&amp;amp;</code>.  If the "styleClass" attribute is
-      specified, render its value as the value of the "class" attribute.
-      If the user has specified an "onclick" attribute, append that
-      JavaScript to any existing JavaScript before rendering.</p>
+      with "/".</span> When handling the "image" attribute, the value
+      must not be escaped.  For example, <code>&</code> must not be
+      turned into <code>&amp;amp;</code>.  If the "styleClass" attribute
+      is specified, render its value as the value of the "class"
+      attribute.  If the user has specified an "onclick" attribute,
+      append that JavaScript to any existing JavaScript <span
+      class="changed_modified_2_0_rev_a">already being output by the
+      implementation before rendering.</span></p>
 
       <p class="changed_added_2_0">If the component being rendered by
       this renderer has any <code>UIParameter</code> children, each one
@@ -1404,10 +1406,14 @@
       as described above, CLIENT_ID is the clientId of the UICommand
       component, PARAM*_NAME and PARAM*_VALUE are the names and values,
       respectively, of any nested UIParameter children.  The name and
-      the value must be URLEncoded.  If an "onclick" attribute was 
-      specified by the user, render this JavaScript in a function,
-      and render the user's JavaScript in a function.  Render both functions
-      in a choice function as follows:</p>
+      the value must be URLEncoded.  <span
+      class="changed_modified_2_0_rev_a">Note that the required url
+      encoding is handled by
+      <code>ResponseWrter.writeAttribute()</code>.</span> If an
+      "onclick" attribute was specified by the user, render this
+      JavaScript in a function, and render the user's JavaScript in a
+      function.  Render both functions in a choice function as
+      follows:</p>
 
       <p><code>var a=function(){#USER_FUNCTION#};
       var b=function(){#JSF_FUNCTION#};
@@ -2115,26 +2121,32 @@
 
         <renderer>
 
-            <description><![CDATA[Render an HTML "a" anchor element.  The value of the
-      component is rendered as the value of the "href" attribute.  Any
-      child UIParameter components are appended to the String to be
-      output as the value of the "href" attribute as query parameters
-      before rendering.  The entire "href" string must be passed through
-      a call to the <code>encodeResourceURL()</code> method of the
-      <code>ExternalContext</code>.  The name of the UIParameter goes on
-      the left hand side, and the value of the UIParameter on the right
-      hand side.  The name and the value must be URLEncoded.  Each
-      UIParameter instance is separeted by an ampersand, as dictated in
-      the URL spec.  If the "styleClass" attribute is specified, render
-      its value as the value of the "class" attribute.  If the "id" attribute
-      is specified, follow the same steps as mentioned in the 
-      "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
-      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.
-      If the "disabled" attribute is specified, do not render the HTML "a"
-      anchor element or the "href" element.  Instead, render a "span" element. 
-      If the "styleClass" attribute is specified, render its value as the value 
-      of the "class" attribute on the "span".  Render any pass-through attributes
-      on the "span".]]>
+            <description><![CDATA[Render an HTML "a" anchor element.
+            The value of the component is rendered as the value of the
+            "href" attribute.  Any child UIParameter components are
+            appended to the String to be output as the value of the
+            "href" attribute as query parameters before rendering.  The
+            entire "href" string must be passed through a call to the
+            <code>encodeResourceURL()</code> method of the
+            <code>ExternalContext</code>.  The name of the UIParameter
+            goes on the left hand side, and the value of the UIParameter
+            on the right hand side.  The name and the value must be
+            URLEncoded.  <span class="changed_modified_2_0_rev_a">Note
+            that the required url encoding is handled by
+            <code>ResponseWrter.writeAttribute()</code>.</span> Each
+            UIParameter instance is separeted by an ampersand, as
+            dictated in the URL spec.  If the "styleClass" attribute is
+            specified, render its value as the value of the "class"
+            attribute.  If the "id" attribute is specified, follow the
+            same steps as mentioned in the "<a
+            href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
+            Notes on Encoding</a>" regarding the "id" attribute for
+            UIInput components.  If the "disabled" attribute is
+            specified, do not render the HTML "a" anchor element or the
+            "href" element.  Instead, render a "span" element.  If the
+            "styleClass" attribute is specified, render its value as the
+            value of the "class" attribute on the "span".  Render any
+            pass-through attributes on the "span".]]>
             </description>
             <component-family>javax.faces.Output</component-family>
             <renderer-type>javax.faces.Link</renderer-type>
@@ -2156,30 +2168,40 @@
         </renderer>
 
         <renderer>
-            <description><![CDATA[<div class="changed_added_2_0">Render an HTML "a" anchor element.  The value of the
-      component is rendered as the anchor text and the outcome of the component is used
-      to determine the target URL rendered in the "href" attribute.  Any
-      child <code>UIParameter</code> components are appended to the String to be
-      output as the value of the "href" attribute as query parameters
-      before rendering.  The entire "href" string must be passed through
-      a call to the <code>encodeResourceURL()</code> method of the
-      <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on
-      the left hand side, and the value of the <code>UIParameter</code> on the right
-      hand side.  The name and the value must be URLEncoded.  Each
-      <code>UIParameter</code> instance is separated by an ampersand, as dictated in
-      the URL spec.  If the "fragment" attribute is specified, the value will be
-      included at the end of the resulting URL preceded by a hash mark.
-      If the "styleClass" attribute is specified, render
-      its value as the value of the "class" attribute.  If the "id" attribute
-      is specified, follow the same steps as mentioned in the 
-      "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
-      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.
-      If the "disabled" attribute is specified, do not render the HTML "a"
-      anchor element or the "href" element.  Instead, render a "span" element. 
-      If the "styleClass" attribute is specified, render its value as the value 
-      of the "class" attribute on the "span".  Render any pass-through attributes
-      on the "span".</div>]]>
+
+            <description><![CDATA[<div class="changed_added_2_0">Render
+            an HTML "a" anchor element.  The value of the component is
+            rendered as the anchor text and the outcome of the component
+            is used to determine the target URL rendered in the "href"
+            attribute.  Any child <code>UIParameter</code> components
+            are appended to the String to be output as the value of the
+            "href" attribute as query parameters before rendering.  The
+            entire "href" string must be passed through a call to the
+            <code>encodeResourceURL()</code> method of the
+            <code>ExternalContext</code>.  The name of the
+            <code>UIParameter</code> goes on the left hand side, and the
+            value of the <code>UIParameter</code> on the right hand
+            side.  The name and the value must be URLEncoded.  <span
+            class="changed_modified_2_0_rev_a">Note that the required
+            url encoding is handled by
+            <code>ResponseWrter.writeAttribute()</code>.</span>  Each
+            <code>UIParameter</code> instance is separated by an
+            ampersand, as dictated in the URL spec.  If the "fragment"
+            attribute is specified, the value will be included at the
+            end of the resulting URL preceded by a hash mark.  If the
+            "styleClass" attribute is specified, render its value as the
+            value of the "class" attribute.  If the "id" attribute is
+            specified, follow the same steps as mentioned in the "<a
+            href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
+            Notes on Encoding</a>" regarding the "id" attribute for
+            UIInput components.  If the "disabled" attribute is
+            specified, do not render the HTML "a" anchor element or the
+            "href" element.  Instead, render a "span" element.  If the
+            "styleClass" attribute is specified, render its value as the
+            value of the "class" attribute on the "span".  Render any
+            pass-through attributes on the "span".</div>]]>
             </description>
+
             <component-family>javax.faces.OutcomeTarget</component-family>
             <renderer-type>javax.faces.Link</renderer-type>
             <renderer-class>

@@ -57,7 +57,11 @@ public interface EditableValueHolder extends ValueHolder {
      * <p>Return the submittedValue value of this component.  This
      * method should only be used by the <code>encodeBegin()</code>
      * and/or <code>encodeEnd()</code> methods of this component, or its
-     * corresponding {@link Renderer}.</p>
+     * corresponding {@link Renderer}.  <span
+     * class="changed_modified_2_0_rev_a">The action taken based on
+     * whether the value is <code>null</code>, empty, or
+     * non-<code>null</code> is determined based on the value of the
+     * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>context-param.</span></p>
      */
     public Object getSubmittedValue();
 
@@ -70,10 +74,14 @@ public interface EditableValueHolder extends ValueHolder {
 
 
     /**
-     * <p>Set the submittedValue value of this component.
-     * This method should only be used by the <code>decode()</code> and
-     * <code>validate()</code> method of this component, or
-     *  its corresponding {@link Renderer}.</p>
+     * <p>Set the submittedValue value of this component.  This method
+     * should only be used by the <code>decode()</code> and
+     * <code>validate()</code> method of this component, or its
+     * corresponding {@link Renderer}.  <span
+     * class="changed_modified_2_0_rev_a">The action taken based on
+     * whether the value is <code>null</code>, empty, or
+     * non-<code>null</code> is determined based on the value of the
+     * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>context-param.</span></p>
 
      * @param submittedValue The new submitted value
      */
