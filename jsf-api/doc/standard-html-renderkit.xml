@@ -10636,19 +10636,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Client identifier of the component for which to display messages.
-        </description>
-      <display-name>Associated Client Id</display-name>
-      <icon/>
-      <property-name>for</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <required>true</required>
-        <value-expression-enabled>true</value-expression-enabled>
-      </property-extension>
-    </property>
-    <property>
-      <description>
           CSS style(s) to apply to any message
           with a severity class of "ERROR".
         </description>
@@ -11005,19 +10992,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
 
 
-    <property>
-      <description>
-          Client identifier of the component for which to display messages.
-        </description>
-      <display-name>Associated Client Id</display-name>
-      <icon/>
-      <property-name>for</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <required>true</required>
-        <value-expression-enabled>true</value-expression-enabled>
-      </property-extension>
-    </property>
     <property>
       <description>
           CSS style class to apply to any message
@@ -24229,19 +24203,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </attribute>
       <attribute>
         <description>
-          Client identifier of the component for which to display messages.
-        </description>
-        <display-name>Associated Client Id</display-name>
-        <icon/>
-        <attribute-name>for</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <required>true</required>
-          <value-expression-enabled>true</value-expression-enabled>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
           CSS style(s) to apply to any message
           with a severity class of "ERROR".
         </description>
@@ -24429,19 +24390,6 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </attribute>
 
 
-      <attribute>
-        <description>
-          Client identifier of the component for which to display messages.
-        </description>
-        <display-name>Associated Client Id</display-name>
-        <icon/>
-        <attribute-name>for</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <required>true</required>
-          <value-expression-enabled>true</value-expression-enabled>
-        </attribute-extension>
-      </attribute>
       <attribute>
         <description>
           CSS style class to apply to any message
