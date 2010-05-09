@@ -25526,7 +25526,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[<div class="changed_added_2_0">Render
+      <description><![CDATA[<div class="changed_added_2_0"><p>Render
             an HTML "a" anchor element.  The value of the component is
             rendered as the anchor text and the outcome of the component
             is used to determine the target URL rendered in the "href"
@@ -25556,7 +25556,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
             "href" element.  Instead, render a "span" element.  If the
             "styleClass" attribute is specified, render its value as the
             value of the "class" attribute on the "span".  Render any
-            pass-through attributes on the "span".</div>]]></description>
+            pass-through attributes on the "span".</p></div>]]></description>
       <component-family>javax.faces.OutcomeTarget</component-family>
       <renderer-type>javax.faces.Link</renderer-type>
       <renderer-class>
@@ -26121,29 +26121,40 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[<div class="changed_added_2_0">Render an HTML "input" element of type "button".
-      The value of the component is rendered as the button text and the outcome of the
-      component is used to determine the target URL which is activated by onclick.  If
-      "image" attribute is specified, render it as the value of the "src" attribute after
-      passing it to the <code>getResourceURL()</code> method of the <code>ViewHandler</code>
-      for this application, and passing the result through the <code>encodeResourceURL()</code>
-      method of the <code>ExternalContext</code>. Any child <code>UIParameter</code> components
-      are appended to the String to be used as the target URL as query parameters before rendering.
-      The entire target URL string must be passed through a call to the <code>encodeResourceURL()</code>
-      method of the <code>ExternalContext</code>.  The name of the <code>UIParameter</code> goes on the 
-      left hand side, and the value of the <code>UIParameter</code> on the right hand side.  The name 
-      and the value must be URLEncoded.  Each <code>UIParameter</code> instance is separeted by an 
-      ampersand, as dictated in the URL spec.  The final encoded result will be written out to the
-      onclick attribute of the button as "window.location.href = '<encoded HREF value>'".
-      If the developer has specified a custom onlclick the window.location.href name/value
-      pair will be appended at the end of the developer specified script.
-      If the "fragment" attribute is specified, the value will be included at the end
-      of the resulting URL preceded by a hash mark.  If the "styleClass" attribute is specified,
-      render its value as the value of the "class" attribute.  If the "id" attribute is specified,
-      follow the same steps as mentioned in the "<a href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
-      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.  If the
-      "disabled" attribute is specified, do not render the "onclick" element and assign the
-      "disabled" attribute a value of true.</div>]]></description>
+      <description><![CDATA[<div
+      class="changed_added_2_0"><p>Render an HTML "input" element of
+      type "button".  The value of the component is rendered as the
+      button text and the outcome of the component is used to determine
+      the target URL which is activated by onclick.  If "image"
+      attribute is specified, render it as the value of the "src"
+      attribute after passing it to the <code>getResourceURL()</code>
+      method of the <code>ViewHandler</code> for this application, and
+      passing the result through the <code>encodeResourceURL()</code>
+      method of the <code>ExternalContext</code>. Any child
+      <code>UIParameter</code> components are appended to the String to
+      be used as the target URL as query parameters before rendering.
+      The entire target URL string must be passed through a call to the
+      <code>encodeResourceURL()</code> method of the
+      <code>ExternalContext</code>.  The name of the
+      <code>UIParameter</code> goes on the left hand side, and the value
+      of the <code>UIParameter</code> on the right hand side.  The name
+      and the value must be URLEncoded.  Each <code>UIParameter</code>
+      instance is separeted by an ampersand, as dictated in the URL
+      spec.  The final encoded result will be written out to the onclick
+      attribute of the button as "window.location.href = '<encoded HREF
+      value>'".  If the developer has specified a custom onlclick the
+      window.location.href name/value pair will be appended at the end
+      of the developer specified script.  If the "fragment" attribute is
+      specified, the value will be included at the end of the resulting
+      URL preceded by a hash mark.  If the "styleClass" attribute is
+      specified, render its value as the value of the "class" attribute.
+      If the "id" attribute is specified, follow the same steps as
+      mentioned in the "<a
+      href="../../../renderkitdocs/HTML_BASIC/renderkit-summary.html#general_encoding">General
+      Notes on Encoding</a>" regarding the "id" attribute for UIInput
+      components.  If the "disabled" attribute is specified, do not
+      render the "onclick" element and assign the "disabled" attribute a
+      value of true.</p></div>]]></description>
       <component-family>javax.faces.OutcomeTarget</component-family>
       <renderer-type>javax.faces.Button</renderer-type>
       <renderer-class>
@@ -30641,7 +30652,15 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
       </attribute>
 
       <attribute>
-        <description><![CDATA[<div class="changed_added_2_0"><p>The <em>target</em> area for which this resource will be rendered.  For example, <em>target="head"</em> would cause the resource to be rendered within the <em>head</em> element.</p></div>]]></description>
+        <description><![CDATA[<div class="changed_added_2_0"><p>The
+                    <em>target</em> area for which this resource will be
+                    rendered.  For example, <em>target="head"</em> would
+                    cause the resource to be rendered within the
+                    <em>head</em> element.  <span
+                    class="changed_modified_2_0_rev_a">If no value is
+                    specififed, the script element is rendered at the
+                    same point in the view where the tag is
+                    located.</span></p></div>]]></description>
         <display-name>Target</display-name>
         <icon/>
         <attribute-name>target</attribute-name>

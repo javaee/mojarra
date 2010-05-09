@@ -1993,10 +1993,13 @@
         <xsd:annotation>
             <xsd:documentation>
 
-                    The "view-param" element, only valid within
-                    a "redirect" element, contains child "name"
-                    and "value" elements that must be included in the
-                    redirect url when the redirect is performed.
+                    This element was introduced due to a specification
+                    error, and is now deprecated.  The correct name for
+                    this element is "redirect-param" and its meaning is
+                    documented therein.  The "view-param" element is
+                    maintained to preserve backwards compatibility.
+                    Implementations must treat this element the same as
+                    "redirect-param".
 
             </xsd:documentation>
         </xsd:annotation>

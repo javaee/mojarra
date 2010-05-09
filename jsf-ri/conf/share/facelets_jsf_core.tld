@@ -721,7 +721,7 @@
 <table border="1">
 <tr>
 
-<th>value for "<code>name</code>" tag attribute</th>
+<th>value for "<code>type</code>" tag attribute</th>
 
 <th>Type of event sent to listener method
 </th>

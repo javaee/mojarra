@@ -39,7 +39,16 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
                 version="2.0">
-    <description>JSTL 1.2 core library</description>
+  <description>
+<![CDATA[&lt;p&gt;JSTL 1.2 core library&lt;/p&gt;
+
+&lt;p&gt;The pre JSF 2.0 version of Facelets incorrectly declared the taglib
+uri to be &lt;code&gt;http://java.sun.com/jstl/core&lt;/code&gt;.  For backwards
+compatibility implementations must correctly handle inclusions with the
+incorrect uri, and the correct uri, declared here.&lt;/p&gt;
+]]>
+</description>
+
     <namespace>http://java.sun.com/jsp/jstl/core</namespace>
     <tag>
         <description>
