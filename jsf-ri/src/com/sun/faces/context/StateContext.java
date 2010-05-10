@@ -48,6 +48,8 @@ import javax.faces.event.PostAddToViewEvent;
 import javax.faces.event.PreRemoveFromViewEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,6 +73,7 @@ public class StateContext {
     private AddRemoveListener modListener;
     private ApplicationStateInfo stateInfo;
     private FacesContext ctx;
+    private WeakReference<UIViewRoot> viewRootRef = new WeakReference<UIViewRoot>(null);
 
 
     // ------------------------------------------------------------ Constructors
@@ -111,6 +114,23 @@ public class StateContext {
      *  specified view ID, otherwise <code>false</code>
      */
     public boolean partialStateSaving(String viewId) {
+        // track UIViewRoot changes
+        UIViewRoot root = ctx.getViewRoot();
+        UIViewRoot refRoot = viewRootRef.get();
+        if (root != refRoot) {
+          // set weak reference to current viewRoot
+          this.viewRootRef = new WeakReference<UIViewRoot>(root);
+
+          // On first call in restore phase, viewRoot is null, so we treat the first 
+          // change to not null not as a changing viewRoot.
+          if (refRoot != null) {
+            // view root changed in request processing - force usage of a 
+            // new AddRemoveListener instance for the new viewId ...
+            modListener = null;
+            // ... and also force check for partial state saving for the new viewId
+            partialLocked = false;
+          }
+        }
 
         if (!partialLocked) {
             partial = stateInfo.usePartialStateSaving(viewId);

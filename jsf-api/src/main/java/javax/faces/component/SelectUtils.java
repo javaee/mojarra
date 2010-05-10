@@ -66,7 +66,7 @@ class SelectUtils {
      * available options, performing a recursive search if if a {@link
      * javax.faces.model.SelectItemGroup} instance is detected.</p>
      *
-     * @param ctx          (@link FacesContext} for the current request
+     * @param ctx          {@link FacesContext} for the current request
      * @param value        {@link UIComponent} value to be tested
      * @param items        Iterator over the {@link javax.faces.model.SelectItem}s
      *                     to be checked

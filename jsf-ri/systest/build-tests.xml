@@ -1339,6 +1339,20 @@
 
     </target>
 
+    <target name="passthru">
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/event/DynamicAddTestCase.class"
+                         />
+<!-- 139-StateSaving edburns remove excludes -->
+            </tests>
+        </jsf.junit>
+    </target>
+
+
     <target name="scratch">
       <antcall target="test.methodRef" />
     </target>

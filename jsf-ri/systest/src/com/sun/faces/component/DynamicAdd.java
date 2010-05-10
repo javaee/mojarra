@@ -41,6 +41,7 @@ import java.util.Map;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.AbortProcessingException;
@@ -50,6 +51,16 @@ import javax.faces.event.SystemEventListener;
 
 @FacesComponent(value="dynamicAdd")
 public class DynamicAdd extends UINamingContainer implements SystemEventListener {
+  
+  private boolean facetRequired = true;
+
+    public boolean isFacetRequired() {
+        return facetRequired;
+    }
+
+    public void setFacetRequired(boolean facetRequired) {
+        this.facetRequired = facetRequired;
+    }
 
     public DynamicAdd() {
         FacesContext ctx = FacesContext.getCurrentInstance();
@@ -82,11 +93,16 @@ public class DynamicAdd extends UINamingContainer implements SystemEventListener
 
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
+      // conditionally create dynamic component facets
+      if (facetRequired && null == getFacet("dynamicAddFacet")) {
+        getFacets().put("dynamicAddFacet", new HtmlPanelGroup());
+      }
         Map<Object, Object> contextMap = context.getAttributes();
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("ul", this);
         writer.startElement("p", this);
         writer.write("Dynamic Component " + this.getId());
+        
     }
 
     @Override
@@ -96,6 +112,17 @@ public class DynamicAdd extends UINamingContainer implements SystemEventListener
         writer.endElement("p");
         writer.endElement("ul");
 
+    }
+
+    @Override
+    public void processDecodes(FacesContext context) {
+      // conditionally recreate the dynamic component facet before process decode
+      if (facetRequired && null == getFacet("dynamicAddFacet")) {
+        getFacets().put("dynamicAddFacet", new HtmlPanelGroup());
+      }
+      
+      // TODO Auto-generated method stub
+      super.processDecodes(context);
     }
 
 

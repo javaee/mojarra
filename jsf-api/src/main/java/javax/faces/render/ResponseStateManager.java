@@ -105,7 +105,7 @@ public abstract class ResponseStateManager {
      * <p>If the state saving method for this application is {@link
      * javax.faces.application.StateManager#STATE_SAVING_METHOD_SERVER},
      * and the current request is an <code>Ajax</code> request
-     * (@link javax.faces.context.PartialViewContext.isAjaxRequest} returns
+     * {@link javax.faces.context.PartialViewContext.isAjaxRequest} returns
      * <code>true</code>), use the current view state identifier if it is
      * available (do not generate a new identifier).</p>
      * 
