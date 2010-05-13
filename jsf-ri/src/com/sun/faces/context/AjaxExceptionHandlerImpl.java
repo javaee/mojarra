@@ -200,7 +200,6 @@ public class AjaxExceptionHandlerImpl extends ExceptionHandlerWrapper {
              } else {
                  String msg = t.getMessage();
                  writer.write(((msg != null) ? msg : ""));
-                 writer.write(t.getMessage());
              }
              writer.endError();
              writer.endDocument();
