@@ -891,6 +891,16 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
      * <li> Convert the submitted value into a "local value" of the
      * appropriate data type by calling {@link #getConvertedValue}.</li>
+     * <li><span class="changed_added_2_0_rev_a">If conversion fails:
+     * <ul>
+     * <li>Enqueue an appropriate error message by calling the
+     * <code>addMessage()</code> method on the
+     * <code>FacesContext</code>.</li>
+     * <li>Set the <code>valid</code> property
+     * on this component to <code>false</code> </li>
+     * </ul></span>
+     * </li>
+
      * <p/>
      * <li>Validate the property by calling {@link #validateValue}.</li>
      * <p/>
@@ -989,14 +999,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * </ul>
      * <li>If a {@link Converter} instance was located, call its
      * <code>getAsObject()</code> method to perform the conversion.
-     * If conversion fails:
-     * <ul>
-     * <li>Enqueue an appropriate error message by calling the
-     * <code>addMessage()</code> method on the
-     * <code>FacesContext</code>.</li>
-     * <li>Set the <code>valid</code> property
-     * on this component to <code>false</code> </li>
-     * </ul></li>
+     * <span class="changed_modified_2_0_rev_a">If conversion fails, the
+     * <code>Converter</code> will have thrown
+     * a <code>ConverterException</code> which is declared as a checked exception
+     * on this method, and thus must be handled by the caller.</span></li>
      * <li>Otherwise, use the submitted value without any conversion</li>
      * </ul>
      * </li>
