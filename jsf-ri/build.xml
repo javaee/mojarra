@@ -68,7 +68,8 @@
     <property name="dist.dir" value="${basedir}/dist"/>
 
     <!-- The base directory for component sources -->
-    <property name="source.dir" value="${basedir}/src"/>
+    <property name="source.dir" value="${basedir}/src/main/java"/>
+    <property name="resource.dir" value="${basedir}/src/main/resources"/>
 
     <!-- The base directory for component tests -->
     <property name="test.dir" value="${basedir}/test"/>
@@ -205,7 +206,7 @@
                      includes="**/*.properties"/>
         </copy>
         <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${impl.dir}/src"
+            <fileset dir="${impl.dir}/src/main/resources"
                      includes="**/LogStrings.properties"/>
         </copy>
         <copy todir="${tools.dir}/build/classes/com/sun/faces"
@@ -287,7 +288,7 @@
         </jsf.javac>
 
         <copy todir="${build.classes.dir}">
-            <fileset dir="${source.dir}" includes="**/*.properties,**/*.js,**/*.xsd"/>
+            <fileset dir="${resource.dir}" includes="**/*.properties,**/*.js,**/*.xsd"/>
             <!--<fileset dir="${tools.dir}/src/main/java" includes="**/*.properties"/>-->
         </copy>
 
@@ -388,6 +389,9 @@
             <zipfileset dir="${source.dir}"
                         excludes="**/CVS/**"
                         prefix="jsf-ri-src-${impl.version}/src"/>
+            <zipfileset dir="${resource.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-src-${impl.version}/resources"/>
             <zipfileset dir="${test.dir}"
                         excludes="**/CVS/**"
                         prefix="jsf-ri-src-${impl.version}/test"/>

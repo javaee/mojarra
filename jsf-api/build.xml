@@ -280,8 +280,8 @@
             <fileset dir="${tools.dir}/src/main/resources"
                      includes="**/*.properties"/>
         </copy>
-        <copy todir="${tools.dir}/build/classes">
-            <fileset dir="${impl.dir}/src"
+        <copy todir="${tools.dir}/build/classes" >
+            <fileset dir="${impl.dir}/src/main/resources"
                      includes="**/LogStrings.properties"/>
         </copy>
         <copy todir="${tools.dir}/build/classes/com/sun/faces"
@@ -556,7 +556,7 @@ javax.faces.level=ALL
 
     <target name="create.standard.xml" depends="attributes">
         <copy
-              file="${basedir}/../jsf-ri/src/com/sun/faces/standard-html-renderkit-impl.xml"
+              file="${basedir}/../jsf-ri/src/main/resources/com/sun/faces/standard-html-renderkit-impl.xml"
               todir="${basedir}/doc"/>
         <exec executable="xmllint" dir="${basedir}/doc" failonerror="true">
             <arg

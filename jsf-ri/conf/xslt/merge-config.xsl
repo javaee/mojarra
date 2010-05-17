@@ -33,7 +33,7 @@
     <xsl:strip-space elements="*"/>
     <xsl:namespace-alias stylesheet-prefix="jsf" result-prefix="#default"/>
 
-    <xsl:variable name="source" select="document('../../src/com/sun/faces/jsf-ri-config.xml')"/>
+    <xsl:variable name="source" select="document('../../resources/jsf-ri-config.xml')"/>
 
     <xsl:template match="jsf:faces-config">
 
