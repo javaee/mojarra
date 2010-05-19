@@ -797,9 +797,16 @@ for <code>@NamedEvent</code>.</p>
 
         <attribute>
             <description>
-                Method expression pointing to a method expression of
-                that will be called when the listener's processEvent
-                method would have been called.
+
+              <p class="changed_modified_2_0_rev_a">The expression must
+              evaluate to a public method that takes a
+              <code>ComponentSystemEvent</code> parameter, with a return
+              type of void, or to a public method that takes no
+              arguments with a return type of void. In the latter case,
+              the method has no way of easily knowing where the event
+              came from, but this can be useful in cases where a
+              notification is needed that "an event happened".</p>
+
             </description>
             <name>listener</name>
             <required>true</required>
