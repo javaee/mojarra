@@ -164,6 +164,7 @@
             </compilation-unit>
             <compilation-unit>
                 <package-root>jsf-ri/src/main/java</package-root>
+                <classpath mode="compile">jsf-api/build/classes:jsf-ri/build/classes:dependencies/glassfish/lib/javaee.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
             <compilation-unit>

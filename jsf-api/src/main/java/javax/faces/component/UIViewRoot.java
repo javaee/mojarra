@@ -543,8 +543,15 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
      * <ul>
      * <li>Locate the facet for the <code>component</code> by calling <code>getFacet()</code> using
      * <code>target</code> as the argument.</li>
-     * <li>If the facet is not found, create the facet by calling <code>context.getApplication().createComponent()
-     * </code> using <code>javax.faces.Panel</code> as the argument</li> 
+
+     * <li>If the facet is not found, create the facet by calling
+     * <code>context.getApplication().createComponent().</code> <span
+     * class="changed_modified_2_0_rev_a">The argument to this method
+     * must refer to a component that extends {@link UIPanel} and
+     * overrides the <code>encodeAll()</code> method to take no action.
+     * This is necessary to prevent component resources from being
+     * inadvertently rendered.</span></li>
+
      * <ul>
      * <li>Set the <code>id</code> of the facet to be <code>target</code></li>
      * <li>Add the facet to the facets <code>Map</code> using <code>target</code> as the key</li>
