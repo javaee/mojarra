@@ -1356,9 +1356,11 @@ private void doFind(FacesContext context, String clientId) {
      * {@link javax.faces.event.BehaviorEvent} and the current 
      * <code>component</code> is the source of the <code>event</code>
      * call {@link javax.faces.event.BehaviorEvent#getBehavior} to get the
-     * {@link javax.faces.component.behavior.Behavior} for the event.  If the
-     * behavior implements {@link javax.faces.component.behavior.ClientBehavior},
-     * call {@link javax.faces.component.behavior.ClientBehavior#broadcast(javax.faces.event.BehaviorEvent)}}.</p>
+     * {@link javax.faces.component.behavior.Behavior} for the event. 
+
+     * <span class="changed_modified_2_0_rev_a">Call {@link
+     * javax.faces.component.behavior.Behavior#broadcast(javax.faces.event.BehaviorEvent)}
+     * on the <code>Behavior</code> instance</span>.</p>
      *
      * @param event The {@link FacesEvent} to be broadcast
      *
