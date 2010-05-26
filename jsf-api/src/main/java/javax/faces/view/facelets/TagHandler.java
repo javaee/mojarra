@@ -68,9 +68,25 @@ package javax.faces.view.facelets;
  */
 public abstract class TagHandler implements FaceletHandler {
 
+    /**
+     * <p class="changed_added_2_0">See {@link TagConfig#getTagId}.</p>
+     */
+
     protected final String tagId;
 
+    /**
+     * <p class="changed_added_2_0">A reference to the <code>Tag</code>
+     * instance corresponding to this <code>TagHandler</code>
+     * instance.</p>
+     */
+
     protected final Tag tag;
+
+    /**
+     * <p class="changed_added_2_0">A reference to the
+     * <code>FaceletHandler</code> that represents the first nested
+     * child of this <code>TagHandler</code> instance.</p>
+     */
 
     protected final FaceletHandler nextHandler;
 

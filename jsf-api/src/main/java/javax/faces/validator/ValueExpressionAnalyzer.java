@@ -39,7 +39,12 @@ package javax.faces.validator;
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
 import java.util.Locale;
-import javax.el.*;
+import javax.el.ELContext;
+import javax.el.ELException;
+import javax.el.ELResolver;
+import javax.el.FunctionMapper;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
 import javax.faces.el.CompositeComponentExpressionHolder;
 
 /**

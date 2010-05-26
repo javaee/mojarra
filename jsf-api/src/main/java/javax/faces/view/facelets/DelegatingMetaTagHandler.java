@@ -114,6 +114,17 @@ public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
         getTagHandlerDelegate().apply(ctx, parent);
     }
     
+    /**
+     * <p class="changed_added_2_0">Invoke the <code>apply()</code>
+     * method on this instance's {@link TagHandler#nextHandler}.</p>
+     *
+     * @param ctx the <code>FaceletContext</code> for this view execution
+     *
+     * @param c the <code>UIComponent</code> of the
+     * component represented by this element instance.
+     * @since 2.0
+     */
+
     public void applyNextHandler(FaceletContext ctx, UIComponent c) 
             throws IOException, FacesException, ELException {
         // first allow c to get populated
