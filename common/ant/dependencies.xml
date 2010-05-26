@@ -61,6 +61,7 @@
     <property name="taglibdoc.version" value="1.3"/>
     <property name="jsdoc.version" value="2.0.2"/>
     <property name="servlet.api.version" value="2.5"/>
+    <property name="newer.servlet.api.version" value="3.0"/>
     <property name="jsp.api.version" value="2.1"/>
     <property name="jstl.api.version" value="1.2"/>
     <property name="annotation.api.version" value="1.0"/>
@@ -93,6 +94,7 @@
     <property name="maven.repository.importer.home"
               value="${dependency.base.dir}/maven-repository-importer-${maven.repository.importer.version}"/>
     <property name="servlet.home" value="${dependency.base.dir}/servlet-${servlet.api.version}"/>
+    <property name="newer.servlet.home" value="${dependency.base.dir}/servlet-${newer.servlet.api.version}"/>
     <property name="jsp.home" value="${dependency.base.dir}/jsp-${jsp.api.version}"/>
     <property name="jstl.home" value="${dependency.base.dir}/jstl-${jstl.api.version}"/>
     <property name="annotation.home" value="${dependency.base.dir}/annotation-${annotation.api.version}"/>

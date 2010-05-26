@@ -13,49 +13,19 @@
                 <source-folder>
                     <label>Mojarra</label>
                     <location>.</location>
-                    <encoding>UTF-8</encoding>
+                    <encoding>MacRoman</encoding>
                 </source-folder>
                 <source-folder>
                     <label>jsf-api/src/main/java</label>
                     <type>java</type>
                     <location>jsf-api/src/main/java</location>
-                    <excludes>**/ConfigFileTestCase.java</excludes>
-                    <encoding>UTF-8</encoding>
+                    <encoding>MacRoman</encoding>
                 </source-folder>
                 <source-folder>
                     <label>jsf-ri/src/main/java</label>
                     <type>java</type>
                     <location>jsf-ri/src/main/java</location>
-                    <excludes>**/ConfigFileTestCase.java</excludes>
-                    <encoding>UTF-8</encoding>
-                </source-folder>
-                <source-folder>
-                    <label>jsf-ri/test</label>
-                    <type>java</type>
-                    <location>jsf-ri/test</location>
-                    <excludes>**/ConfigFileTestCase.java</excludes>
-                    <encoding>UTF-8</encoding>
-                </source-folder>
-                <source-folder>
-                    <label>jsf-ri\build\generate</label>
-                    <type>java</type>
-                    <location>jsf-ri/build/generate</location>
-                    <excludes>**/ConfigFileTestCase.java</excludes>
-                    <encoding>UTF-8</encoding>
-                </source-folder>
-                <source-folder>
-                    <label>jsf-api\build\generate</label>
-                    <type>java</type>
-                    <location>jsf-api/build/generate</location>
-                    <excludes>**/ConfigFileTestCase.java</excludes>
-                    <encoding>UTF-8</encoding>
-                </source-folder>
-                <source-folder>
-                    <label>jsf-api/src/test/java</label>
-                    <type>java</type>
-                    <location>jsf-api/src/test/java</location>
-                    <excludes>**/ConfigFileTestCase.java</excludes>
-                    <encoding>UTF-8</encoding>
+                    <encoding>MacRoman</encoding>
                 </source-folder>
             </folders>
             <ide-actions>
@@ -76,52 +46,15 @@
                     <target>main</target>
                 </action>
             </ide-actions>
-            <export>
-                <type>folder</type>
-                <location>jsf-ri/systest/build/classes</location>
-                <build-target>main</build-target>
-            </export>
-            <export>
-                <type>folder</type>
-                <location>jsf-ri/systest/build/classes</location>
-                <build-target>main</build-target>
-            </export>
-            <export>
-                <type>folder</type>
-                <location>jsf-ri/systest/build/classes</location>
-                <build-target>main</build-target>
-            </export>
             <view>
                 <items>
                     <source-folder style="packages">
                         <label>jsf-api/src/main/java</label>
                         <location>jsf-api/src/main/java</location>
-                        <excludes>**/ConfigFileTestCase.java</excludes>
                     </source-folder>
                     <source-folder style="packages">
                         <label>jsf-ri/src/main/java</label>
                         <location>jsf-ri/src/main/java</location>
-                        <excludes>**/ConfigFileTestCase.java</excludes>
-                    </source-folder>
-                    <source-folder style="packages">
-                        <label>jsf-ri/test</label>
-                        <location>jsf-ri/test</location>
-                        <excludes>**/ConfigFileTestCase.java</excludes>
-                    </source-folder>
-                    <source-folder style="packages">
-                        <label>jsf-ri\build\generate</label>
-                        <location>jsf-ri/build/generate</location>
-                        <excludes>**/ConfigFileTestCase.java</excludes>
-                    </source-folder>
-                    <source-folder style="packages">
-                        <label>jsf-api\build\generate</label>
-                        <location>jsf-api/build/generate</location>
-                        <excludes>**/ConfigFileTestCase.java</excludes>
-                    </source-folder>
-                    <source-folder style="packages">
-                        <label>jsf-api/src/test/java</label>
-                        <location>jsf-api/src/test/java</location>
-                        <excludes>**/ConfigFileTestCase.java</excludes>
                     </source-folder>
                     <source-file>
                         <location>build.xml</location>
@@ -140,35 +73,8 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/2">
             <compilation-unit>
                 <package-root>jsf-api/src/main/java</package-root>
-                <classpath mode="compile">jsf-api/build/classes:jsf-ri/build/classes:jsf-ri/systest/build/classes:lib/javax.servlet.jar:dependencies/glassfish/lib/javaee.jar:lib/jsf-extensions-test-time.jar:dependencies/glassfish/lib/appserv-rt.jar:dependencies/htmlunit-2.4/lib/commons-httpclient-3.1.jar:dependencies/htmlunit-2.4/lib/htmlunit-2.4.jar:dependencies/jars/com-sun-commons-beanutils.jar:dependencies/jars/com-sun-commons-collections.jar:dependencies/jars/com-sun-commons-digester-1.5.jar:dependencies/jars/com-sun-commons-digester.jar:dependencies/jars/com-sun-commons-logging-1.0.4.jar:dependencies/jars/com-sun-commons-logging-api.jar:dependencies/jars/commons-codec-1.3.jar:dependencies/jars/commons-collections-3.2.jar:dependencies/jars/commons-io-1.3.1.jar:dependencies/jars/commons-lang-2.3.jar:dependencies/jars/commons-logging-1.1.jar:dependencies/jars/cssparser-0.9.4.jar:dependencies/jars/ivy-2.0.0-beta1.jar:dependencies/jars/jaxen-1.1.1.jar:dependencies/jars/js-1.6R7.jar:dependencies/jars/jsp-api-2.1.jar:dependencies/jars/jsr250-api-1.0.jar:dependencies/jars/jstl-1.2.jar:dependencies/jars/junit-3.8.1.jar:dependencies/jars/maven-repository-importer-1.2.jar:dependencies/jars/nekohtml-0.9.5.jar:dependencies/jars/portlet-api-1.0.jar:dependencies/jars/servlet-api-2.5.jar:dependencies/jars/tlddoc-1.3.jar:dependencies/jars/xercesImpl-2.6.2.jar:dependencies/jars/xmlParserAPIs-2.6.2.jar:dependencies/jars/com-sun-commons-beanutils-1.6.1.jar:dependencies/apache-tomcat-6.0.13/lib/catalina.jar:dependencies/jars/com-sun-commons-collections-2.1.jar:dependencies/jetty-6.1.4rc0/lib/annotations/jetty-annotations-6.1.4rc0.jar:dependencies/jetty-6.1.4rc0/lib/plus/jetty-plus-6.1.4rc0.jar:dependencies/glassfish/lib/ant/lib/ant.jar:lib/cactus-1.7.1-javaee5.jar:dependencies/jars/groovy-all-1.5.5.jar:dependencies/jars/bean-validator.jar</classpath>
-                <built-to>jsf-ri/systest/build/classes</built-to>
-                <source-level>1.5</source-level>
-            </compilation-unit>
-            <compilation-unit>
-                <package-root>jsf-api/build/generate</package-root>
-                <classpath mode="compile">jsf-api/build/classes:jsf-ri/systest/build/classes:lib/javax.servlet.jar:dependencies/glassfish/lib/javaee.jar:lib/jsf-extensions-test-time.jar:dependencies/glassfish/lib/appserv-rt.jar:dependencies/htmlunit-2.4/lib/commons-httpclient-3.1.jar:dependencies/htmlunit-2.4/lib/htmlunit-2.4.jar:dependencies/jars/com-sun-commons-beanutils.jar:dependencies/jars/com-sun-commons-collections.jar:dependencies/jars/com-sun-commons-digester-1.5.jar:dependencies/jars/com-sun-commons-digester.jar:dependencies/jars/com-sun-commons-logging-1.0.4.jar:dependencies/jars/com-sun-commons-logging-api.jar:dependencies/jars/commons-codec-1.3.jar:dependencies/jars/commons-collections-3.2.jar:dependencies/jars/commons-io-1.3.1.jar:dependencies/jars/commons-lang-2.3.jar:dependencies/jars/commons-logging-1.1.jar:dependencies/jars/cssparser-0.9.4.jar:dependencies/jars/ivy-2.0.0-beta1.jar:dependencies/jars/jaxen-1.1.1.jar:dependencies/jars/js-1.6R7.jar:dependencies/jars/jsp-api-2.1.jar:dependencies/jars/jsr250-api-1.0.jar:dependencies/jars/jstl-1.2.jar:dependencies/jars/junit-3.8.1.jar:dependencies/jars/maven-repository-importer-1.2.jar:dependencies/jars/nekohtml-0.9.5.jar:dependencies/jars/portlet-api-1.0.jar:dependencies/jars/servlet-api-2.5.jar:dependencies/jars/tlddoc-1.3.jar:dependencies/jars/xercesImpl-2.6.2.jar:dependencies/jars/xmlParserAPIs-2.6.2.jar:dependencies/jars/com-sun-commons-beanutils-1.6.1.jar:dependencies/apache-tomcat-6.0.13/lib/catalina.jar:dependencies/jars/com-sun-commons-collections-2.1.jar:dependencies/jetty-6.1.4rc0/lib/annotations/jetty-annotations-6.1.4rc0.jar:dependencies/jetty-6.1.4rc0/lib/plus/jetty-plus-6.1.4rc0.jar:dependencies/glassfish/lib/ant/lib/ant.jar:lib/cactus-1.7.1-javaee5.jar:dependencies/jars/groovy-all-1.5.5.jar:dependencies/jars/bean-validator.jar</classpath>
-                <built-to>jsf-ri/systest/build/classes</built-to>
-                <source-level>1.5</source-level>
-            </compilation-unit>
-            <compilation-unit>
-                <package-root>jsf-ri/build/generate</package-root>
-                <classpath mode="compile">jsf-ri/build/classes:jsf-api/build/classes:jsf-ri/systest/build/classes:lib/javax.servlet.jar:dependencies/glassfish/lib/javaee.jar:lib/jsf-extensions-test-time.jar:dependencies/glassfish/lib/appserv-rt.jar:dependencies/htmlunit-2.4/lib/commons-httpclient-3.1.jar:dependencies/htmlunit-2.4/lib/htmlunit-2.4.jar:dependencies/jars/com-sun-commons-beanutils.jar:dependencies/jars/com-sun-commons-collections.jar:dependencies/jars/com-sun-commons-digester-1.5.jar:dependencies/jars/com-sun-commons-digester.jar:dependencies/jars/com-sun-commons-logging-1.0.4.jar:dependencies/jars/com-sun-commons-logging-api.jar:dependencies/jars/commons-codec-1.3.jar:dependencies/jars/commons-collections-3.2.jar:dependencies/jars/commons-io-1.3.1.jar:dependencies/jars/commons-lang-2.3.jar:dependencies/jars/commons-logging-1.1.jar:dependencies/jars/cssparser-0.9.4.jar:dependencies/jars/ivy-2.0.0-beta1.jar:dependencies/jars/jaxen-1.1.1.jar:dependencies/jars/js-1.6R7.jar:dependencies/jars/jsp-api-2.1.jar:dependencies/jars/jsr250-api-1.0.jar:dependencies/jars/jstl-1.2.jar:dependencies/jars/junit-3.8.1.jar:dependencies/jars/maven-repository-importer-1.2.jar:dependencies/jars/nekohtml-0.9.5.jar:dependencies/jars/portlet-api-1.0.jar:dependencies/jars/servlet-api-2.5.jar:dependencies/jars/tlddoc-1.3.jar:dependencies/jars/xercesImpl-2.6.2.jar:dependencies/jars/xmlParserAPIs-2.6.2.jar:dependencies/jars/com-sun-commons-beanutils-1.6.1.jar:dependencies/apache-tomcat-6.0.13/lib/catalina.jar:dependencies/jars/com-sun-commons-collections-2.1.jar:dependencies/jetty-6.1.4rc0/lib/annotations/jetty-annotations-6.1.4rc0.jar:dependencies/jetty-6.1.4rc0/lib/plus/jetty-plus-6.1.4rc0.jar:dependencies/glassfish/lib/ant/lib/ant.jar:lib/cactus-1.7.1-javaee5.jar:dependencies/jars/groovy-all-1.5.5.jar:dependencies/jars/bean-validator.jar</classpath>
-                <built-to>jsf-ri/systest/build/classes</built-to>
-                <source-level>1.5</source-level>
-            </compilation-unit>
-            <compilation-unit>
-                <package-root>jsf-api/src/test/java</package-root>
-                <unit-tests/>
-                <classpath mode="compile">dependencies/jars/jstl-1.2.jar:jsf-api/build/classes:dependencies/jars/servlet-api-2.5.jar:lib/jsf-extensions-test-time.jar:jsf-api/build/test:dependencies/jars/junit-3.8.1.jar:dependencies/jars/el-api-2.1.2-b05.jar:dependencies/jars/jsp-api-2.1.jar:jsf-ri/build/classes</classpath>
-                <source-level>1.5</source-level>
-            </compilation-unit>
-            <compilation-unit>
                 <package-root>jsf-ri/src/main/java</package-root>
-                <classpath mode="compile">jsf-api/build/classes:jsf-ri/build/classes:dependencies/glassfish/lib/javaee.jar</classpath>
-                <source-level>1.5</source-level>
-            </compilation-unit>
-            <compilation-unit>
-                <package-root>jsf-ri/test</package-root>
+                <classpath mode="compile">dependencies/jars/el-api-1.0.jar:dependencies/jars/jsp-api-2.1.jar:dependencies/jars/jstl-1.2.jar:dependencies/jars/validation-api-1.0.0.GA.jar:dependencies/jars/servlet-api-3.0.20100224.jar:dependencies/jars/groovy-all-1.6.4.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>
