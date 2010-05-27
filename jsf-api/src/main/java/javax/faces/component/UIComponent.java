@@ -676,11 +676,35 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      * for this node, and then the children of this node.  Then, once
      * the re-parenting has occurred, a {@link
      * javax.faces.event.PostAddToViewEvent} will be published as well,
-     * first for this node, and then for the node's children.
-     * <strong>This method must never be called by developers; a {@link
-     * UIComponent}'s internal implementation will call it as components
-     * are added to or removed from a parent's child <code>List</code>
-     * or facet <code>Map</code></strong></span>.</p>
+     * first for this node, and then for the node's children, <span
+     * class="changed_modified_2_0_rev_a">but only if any of the
+     * following conditions are true.</span></p>
+
+     * <div class="changed_modified_2_0_rev_a">
+
+     *     <ul>
+
+     *       <li><p>{@link
+     *       javax.faces.context.FacesContext#getCurrentPhaseId} returns
+     *       {@link javax.faces.event.PhaseId#RESTORE_VIEW} and partial
+     *       state saving is enabled.</p></li>
+
+     *       <li><p>{@link javax.faces.context.FacesContext#isPostback}
+     *       returns <code>false</code> and {@link
+     *       javax.faces.context.FacesContext#getCurrentPhaseId} returns
+     *       something other than {@link
+     *       javax.faces.event.PhaseId#RESTORE_VIEW}</p></li>
+
+     *    </ul>
+
+     * </div>
+
+
+     * <p class="changed_modified_2_0"> <strong>This method must never
+     * be called by developers; a {@link UIComponent}'s internal
+     * implementation will call it as components are added to or removed
+     * from a parent's child <code>List</code> or facet
+     * <code>Map</code></strong></span>.</p>
      *
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
@@ -1046,20 +1070,28 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      * existing child component is removed, the <code>parent</code>
      * property of the child must be set to <code>null</code>.</li>
 
-     * <li class="changed_added_2_0"><p>After the child component has
-     *     been added to the view, if the following condition is
-     *     <strong>not</strong> met:</p>
+     * <li class="changed_modified_2_1"><p>After the child component has
+     *     been added to the view, {@link
+     *     javax.faces.application.Application#publishEvent} must be
+     *     called, passing {@link
+     *     javax.faces.event.PostAddToViewEvent}<code>.class</code> as
+     *     the first argument and the newly added component as the
+     *     second argument if any the following cases are true.</p>
      *
-     *     <ul><p>{@link javax.faces.context.FacesContext#isPostback}
-     *     returns <code>true</code> and {@link
-     *     javax.faces.context.FacesContext#getCurrentPhaseId} returns {@link
-     *     javax.faces.event.PhaseId#RESTORE_VIEW}</p></ul>
+     *     <ul>
 
-     *     <p>{@link javax.faces.application.Application#publishEvent}
-     *     must be called, passing {@link
-     *     javax.faces.event.PostAddToViewEvent}<code>.class</code>
-     *     as the first argument and the newly added component as the
-     *     second argument.</p>
+     *       <li><p>{@link
+     *       javax.faces.context.FacesContext#getCurrentPhaseId} returns
+     *       {@link javax.faces.event.PhaseId#RESTORE_VIEW} and partial
+     *       state saving is enabled.</p></li>
+
+     *       <li><p>{@link javax.faces.context.FacesContext#isPostback}
+     *       returns <code>false</code> and {@link
+     *       javax.faces.context.FacesContext#getCurrentPhaseId} returns
+     *       something other than {@link
+     *       javax.faces.event.PhaseId#RESTORE_VIEW}</p></li>
+
+     *    </ul>
 
      * </li>
 
