@@ -2121,9 +2121,13 @@
 
         <renderer>
 
-            <description><![CDATA[Render an HTML "a" anchor element.
-            The value of the component is rendered as the value of the
-            "href" attribute.  Any child UIParameter components are
+            <description><![CDATA[
+
+            <p>Render an HTML "a" anchor element.  The value of the
+            component is rendered as the value of the "href" attribute.
+            Any child UIParameter components <span
+            class="changed_modified_2_0_rev_a">whose
+            <code>disable</code> property is <code>false</code></span> are
             appended to the String to be output as the value of the
             "href" attribute as query parameters before rendering.  The
             entire "href" string must be passed through a call to the
@@ -2146,7 +2150,9 @@
             "href" element.  Instead, render a "span" element.  If the
             "styleClass" attribute is specified, render its value as the
             value of the "class" attribute on the "span".  Render any
-            pass-through attributes on the "span".]]>
+            pass-through attributes on the "span".
+
+            </p>]]>
             </description>
             <component-family>javax.faces.Output</component-family>
             <renderer-type>javax.faces.Link</renderer-type>
@@ -2169,11 +2175,14 @@
 
         <renderer>
 
-            <description><![CDATA[<div class="changed_added_2_0"><p>Render
-            an HTML "a" anchor element.  The value of the component is
-            rendered as the anchor text and the outcome of the component
-            is used to determine the target URL rendered in the "href"
-            attribute.  Any child <code>UIParameter</code> components
+            <description><![CDATA[<div
+            class="changed_added_2_0"><p>Render an HTML "a" anchor
+            element.  The value of the component is rendered as the
+            anchor text and the outcome of the component is used to
+            determine the target URL rendered in the "href" attribute.
+            Any child <code>UIParameter</code> components <span
+            class="changed_modified_2_0_rev_a">whose
+            <code>disable</code> property is <code>false</code></span>
             are appended to the String to be output as the value of the
             "href" attribute as query parameters before rendering.  The
             entire "href" string must be passed through a call to the
@@ -2184,7 +2193,7 @@
             side.  The name and the value must be URLEncoded.  <span
             class="changed_modified_2_0_rev_a">Note that the required
             url encoding is handled by
-            <code>ResponseWrter.writeAttribute()</code>.</span>  Each
+            <code>ResponseWrter.writeAttribute()</code>.</span> Each
             <code>UIParameter</code> instance is separated by an
             ampersand, as dictated in the URL spec.  If the "fragment"
             attribute is specified, the value will be included at the

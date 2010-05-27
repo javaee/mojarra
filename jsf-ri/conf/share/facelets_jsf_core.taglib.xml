@@ -869,13 +869,21 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <description>
-                RELEASE_PENDING
-                - Also update spec for bookmarkable URL (don't forget the two
-                sources for include-view-params).
-                - convey precendence feature using non-normative language
-                vs algorithmic
-                Flag enabling or disabling the inclusion of the parameter
+            <description><![CDATA[
+
+                &lt;p&gt;Flag enabling or disabling the inclusion of the
+                parameter.  &lt;span
+                class="changed_modified_2_0_rev_a"&gt;This flag is
+                consulted by renderers that consider the
+                &lt;code&gt;UIParameter&lt;/code&gt; component associated with this
+                &lt;code&gt;&lt;f:param&gt;&lt;/code&gt; during their rendering.
+                Such renderers include &lt;code&gt;javax.faces.Output
+                javax.faces.Link&lt;/code&gt; and
+                &lt;code&gt;javax.faces.OutcomeTarget
+                javax.faces.Link&lt;/code&gt;.&lt;/span&gt;&lt;/p&gt;
+
+
+            ]]>
             </description>
             <name>disable</name>
             <type>boolean</type>

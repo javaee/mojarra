@@ -1011,14 +1011,21 @@ they do, it must be done as shown above, (or with
         </attribute>
 
         <attribute>
-            <description>
-                RELEASE_PENDING
-                - Also update spec for bookmarkable URL (don't forget the two
-                  sources for include-view-params).
-                - convey precendence feature using non-normative language
-                  vs algorithmic
-                Flag enabling or disabling the inclusion of the parameter
-            </description>
+            <description><![CDATA[
+
+                <p>Flag enabling or disabling the inclusion of the
+                parameter.  <span
+                class="changed_modified_2_0_rev_a">This flag is
+                consulted by renderers that consider the
+                <code>UIParameter</code> component associated with this
+                <code>&lt;f:param&gt;</code> during their rendering.
+                Such renderers include <code>javax.faces.Output
+                javax.faces.Link</code> and
+                <code>javax.faces.OutcomeTarget
+                javax.faces.Link</code>.</span></p>
+
+
+            ]]></description>
             <name>disable</name>
             <deferred-value>
                 <type>boolean</type>

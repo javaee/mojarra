@@ -37,12 +37,6 @@
 package javax.faces.component;
 
 
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-
-
 
 /**
  * <p><strong>UIParameter</strong> is a {@link UIComponent} that represents
@@ -164,6 +158,7 @@ public class UIParameter extends UIComponentBase {
      * directive for this component. This directive determines whether the
      * parameter value should be disabled by assigning it a null value.
      * If true, the <code>value</code> set on this component is ignored.</p>
+     * @since 2.0
      */
     public boolean isDisable() {
 
@@ -174,6 +169,7 @@ public class UIParameter extends UIComponentBase {
     /**
      * <p>Sets the <code>disable</code> property of the <code>UIParameter</code>.</p>
      * @param disable
+     * @since 2.0
      */
     public void setDisable(boolean disable) {
 
