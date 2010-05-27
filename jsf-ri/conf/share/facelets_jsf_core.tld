@@ -740,7 +740,7 @@
 
 <tr>
 
-<td>PostAddToView
+<td>postAddToView
 </td>
 
 <td>javax.faces.event.PostAddToViewEvent

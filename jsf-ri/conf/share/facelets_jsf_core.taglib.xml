@@ -571,7 +571,7 @@
 
                 &lt;tr&gt;
 
-                &lt;td&gt;PostAddToView
+                &lt;td&gt;postAddToView
                 &lt;/td&gt;
 
                 &lt;td&gt;javax.faces.event.PostAddToViewEvent
