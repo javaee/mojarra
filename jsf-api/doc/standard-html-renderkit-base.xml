@@ -2461,7 +2461,7 @@
       <ul>
 
       <p>See the <a
-      href="SelectManyListbox.html">"Decode
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
       Behavior for UISelectMany Components"</a> section.</p>
 
       </ul>
@@ -2502,7 +2502,7 @@
       attribute to any existing "class" attribute value on the label
       element.  Otherwise, render the value of the "unselectedClass"
       attribute as the value of the "class" attribute on the label
-      element.</span>  Close out the starting "label" element and render
+      element.</span> Close out the starting "label" element and render
       the label value from SelectItem.getLabel().  Close out the "label"
       element.  As an exception to the general rules about how to handle
       the "id" attribute, render it as an attribute on the outer "table"
@@ -2514,11 +2514,14 @@
       Expression Language coercion rules, before comparing the values.
       If the value of the enclosing UISelectMany matches the current
       value, render "checked" as the value of the "checked" attribute.
-      See the <a
-      href="SelectManyListbox.html">"Rendering
-      the option elements" </a> specification for
-      <code>ListboxRenderer</code> for more detail on how to render the
-      "option" elements in this renderer.</p>
+      See the <a href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering the option
+      elements" </a> specification for <code>ListboxRenderer</code> for
+      more detail on how to render the "option" elements in this
+      renderer.  <span class="changed_modified_2_0_rev_a">Note that this
+      renderer does not support <code>SelectItemGroup</code> elements,
+      so the text that describes the rendering of
+      <code>SelectItemGroup</code> does not apply to this
+      renderer.</span></p>
 
       </ul>]]>
 
@@ -2721,7 +2724,7 @@
       <ul>
 
       <p>See the <a
-      href="SelectManyListbox.html">"Decode
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
       Behavior for UISelectMany Components"</a> section.</p>
 
       </ul>
@@ -2737,7 +2740,7 @@
       to be rendered is a UISelectMany, render "multiple" as the value of
       the "multiple" attribute.  Render "1" as the value of the "size"
       attribute.  See the <a
-      href="SelectManyListbox.html">"Rendering the option
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering the option
       elements" </a> specification for <code>ListboxRenderer</code> for
       more detail on how to render the "option" elements in this
       renderer.</p>
@@ -2773,7 +2776,7 @@
       <ul>
 
       <p>See the <a
-      href="SelectManyListbox.html">"Decode
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
       Behavior for UISelectOne Components"</a> section.</p>
 
       </ul>
@@ -2789,7 +2792,7 @@
       the "multiple" attribute.  If the "size" attribute is specified,
       render its value as the value of the "size" attribute.  Otherwise
       use the number of items as the value of the "size" attribute.  See
-      the <a href="SelectManyListbox.html">"Rendering the option
+      the <a href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering the option
       elements" </a> specification for <code>ListboxRenderer</code> for
       more detail on how to render the "option" elements in this
       renderer.</p>
@@ -2824,7 +2827,7 @@
       <ul>
 
       <p>See the <a
-      href="SelectManyListbox.html">"Decode
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
       Behavior for UISelectOne Components"</a> section.</p>
 
       </ul>
@@ -2840,7 +2843,7 @@
       to be rendered is a UISelectMany, render "true" as the value of
       the "multiple" attribute.  Use the number of items as the value of
       the "size" attribute.  See the <a
-      href="SelectManyListbox.html">"Rendering
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering
       the option elements" </a> specification for
       <code>ListboxRenderer</code> for more detail on how to render the
       "option" elements in this renderer.</p>
@@ -2878,7 +2881,7 @@
       <ul>
 
       <p>See the <a
-      href="SelectManyListbox.html">"Decode
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Decode
       Behavior for UISelectOne Components"</a> section.</p>
 
       </ul>
@@ -2920,10 +2923,13 @@
       child is equal to the value of the parent UISelectOne, render an
       appropriate HTML boolean value indicating "checked" for the
       enclosing "input".  See the <a
-      href="SelectManyListbox.html">"Rendering
-      the option elements" </a> specification for
-      <code>ListboxRenderer</code> for more detail on how to render the
-      "option" elements in this renderer.</p>
+      href="javax.faces.SelectManyjavax.faces.Listbox.html">"Rendering the option elements" </a>
+      specification for <code>ListboxRenderer</code> for more detail on
+      how to render the "option" elements in this renderer.  <span
+      class="changed_modified_2_0_rev_a">Note that this renderer does
+      not support <code>SelectItemGroup</code> elements, so the text
+      that describes the rendering of <code>SelectItemGroup</code> does
+      not apply to this renderer.</span></p>
 
       </ul>]]>
 
