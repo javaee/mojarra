@@ -78,7 +78,11 @@ import javax.faces.context.FacesContext;
  * segments, specified as follows.</p>
 
  * <p><code>[localePrefix/][libraryName/][libraryVersion/]resourceName[/resourceVersion]</code></p>
- *
+
+ * <p class="changed_modified_2_0_rev_a">None of the segments in the
+ * resourceIdentifier may be relative paths, such as
+ * &#8216;../otherLibraryName&#8217;.</p>
+
  * <p>Note that <em>resourceName</em> is the only required segment.</p>
  *
  * </ul>
@@ -220,7 +224,9 @@ public abstract class ResourceHandler {
      * @param resourceName the name of the resource.
      *
      * @param libraryName the name of the library in which this resource
-     * resides, may be <code>null</code>.
+     * resides, may be <code>null</code>. <span
+     * class="changed_modified_2_0_rev_a">May not include relative
+     * paths, such as "../".</span>
      *
      * @throws <code>NullPointerException</code> if
      * <code>resourceName</code> is <code>null</code>
@@ -253,7 +259,9 @@ public abstract class ResourceHandler {
      * @param resourceName the name of the resource.
      *
      * @param libraryName the name of the library in which this resource
-     * resides, may be <code>null</code>.
+     * resides, may be <code>null</code>.  <span
+     * class="changed_modified_2_0_rev_a">May not include relative
+     * paths, such as "../".</span>
      *
      * @param contentType the mime content that this
      * <code>Resource</code> instance will return from {@link
