@@ -861,35 +861,12 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     @Override
     public void processRestoreState(FacesContext context, Object state) {
 
-        try {
-            // hack to work around older state managers that may not set the
-            // view root early enough
-            if (context.getViewRoot() == null) {
-                context.setViewRoot(this);
-            }
-            super.processRestoreState(context, state);
-        } finally {
-            final PostRestoreStateEvent event = new PostRestoreStateEvent(this);
-            try {
-                this.visitTree(VisitContext.createVisitContext(context), 
-                        new VisitCallback() {
-
-                    public VisitResult visit(VisitContext context, UIComponent target) {
-                        event.setComponent(target);
-                        target.processEvent(event);
-                        //noinspection ReturnInsideFinallyBlock
-                        return VisitResult.ACCEPT;
-                    }
-                });
-            } catch (AbortProcessingException e) {
-                context.getApplication().publishEvent(context,
-                                                      ExceptionQueuedEvent.class,
-                                                      new ExceptionQueuedEventContext(context,
-                                                                                e,
-                                                                                null,
-                                                                                PhaseId.RESTORE_VIEW));
-            }
+        // hack to work around older state managers that may not set the
+        // view root early enough
+        if (context.getViewRoot() == null) {
+            context.setViewRoot(this);
         }
+        super.processRestoreState(context, state);
 
     }
     

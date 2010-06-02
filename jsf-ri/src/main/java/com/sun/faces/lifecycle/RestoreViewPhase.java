@@ -155,6 +155,28 @@ public class RestoreViewPhase extends Phase {
                 facesContext.getApplication().publishEvent(facesContext,
                                                            ExceptionQueuedEvent.class,
                                                            new ExceptionQueuedEventContext(facesContext, e));
+            } finally {
+                final PostRestoreStateEvent postRestoreStateEvent = new PostRestoreStateEvent(root);
+                try {
+                    root.visitTree(VisitContext.createVisitContext(facesContext),
+                            new VisitCallback() {
+
+                                public VisitResult visit(VisitContext context, UIComponent target) {
+                                    postRestoreStateEvent.setComponent(target);
+                                    target.processEvent(postRestoreStateEvent);
+                                    //noinspection ReturnInsideFinallyBlock
+                                    return VisitResult.ACCEPT;
+                                }
+                            });
+                } catch (AbortProcessingException e) {
+                    facesContext.getApplication().publishEvent(facesContext,
+                            ExceptionQueuedEvent.class,
+                            new ExceptionQueuedEventContext(facesContext,
+                            e,
+                            null,
+                            PhaseId.RESTORE_VIEW));
+                }
+
             }
 
 
