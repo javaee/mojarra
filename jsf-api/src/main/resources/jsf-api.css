@@ -2,25 +2,45 @@
 
 /* put a red "change" bar in the left margin			*/
 /*
-   .changed_added_2_0 { cursor: url(changed_added_2_0_cursor.png), pointer;
+   .changed_added_2_0 { cursor: url(changed_added_2_0_cursor.png), auto;
                  background: url(changed_added_2_0.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:green }
 
-   .changed_modified_2_0 { cursor: url(changed_modified_2_0_cursor.png), pointer;
+   .changed_modified_2_0 { cursor: url(changed_modified_2_0_cursor.png), auto;
                  background: url(changed_modified_2_0.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:orange }
 
-   .changed_deleted_2_0 { cursor: url(changed_deleted_2_0_cursor.png), pointer;
+   .changed_deleted_2_0 { cursor: url(changed_deleted_2_0_cursor.png), auto;
                  background: url(changed_deleted_2_0.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:red;
                  text-decoration: line-through; }
 */
+
+   .changed_added_2_0_rev_a { cursor: url(changed_added_2_0_rev_a_cursor.cur), auto;
+                 background: url(changed_added_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+   .changed_modified_2_0_rev_a { cursor: url(changed_modified_2_0_rev_a_cursor.cur), auto;
+                 background: url(changed_modified_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+   .changed_deleted_2_0_rev_a { cursor: url(changed_deleted_2_0_rev_a_cursor.cur), auto;
+                 background: url(changed_deleted_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:red;
+                 text-decoration: line-through; }
+
 
 .javadocSection { font-size: large; }
 

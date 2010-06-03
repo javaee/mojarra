@@ -138,47 +138,7 @@ public class RestoreViewPhase extends Phase {
                  facesContext.getExternalContext().getRequestLocale());
 
             // do per-component actions
-            UIViewRoot root = facesContext.getViewRoot();
-            final PostRestoreStateEvent event = new PostRestoreStateEvent(root);
-            try {
-                root.visitTree(VisitContext.createVisitContext(facesContext),
-                        new VisitCallback() {
-
-                    public VisitResult visit(VisitContext context, UIComponent target) {
-                        event.setComponent(target);
-                        target.processEvent(event);
-                        return VisitResult.ACCEPT;
-                    }
-
-                });
-            } catch (AbortProcessingException e) {
-                facesContext.getApplication().publishEvent(facesContext,
-                                                           ExceptionQueuedEvent.class,
-                                                           new ExceptionQueuedEventContext(facesContext, e));
-            } finally {
-                final PostRestoreStateEvent postRestoreStateEvent = new PostRestoreStateEvent(root);
-                try {
-                    root.visitTree(VisitContext.createVisitContext(facesContext),
-                            new VisitCallback() {
-
-                                public VisitResult visit(VisitContext context, UIComponent target) {
-                                    postRestoreStateEvent.setComponent(target);
-                                    target.processEvent(postRestoreStateEvent);
-                                    //noinspection ReturnInsideFinallyBlock
-                                    return VisitResult.ACCEPT;
-                                }
-                            });
-                } catch (AbortProcessingException e) {
-                    facesContext.getApplication().publishEvent(facesContext,
-                            ExceptionQueuedEvent.class,
-                            new ExceptionQueuedEventContext(facesContext,
-                            e,
-                            null,
-                            PhaseId.RESTORE_VIEW));
-                }
-
-            }
-
+            deliverPostRestoreStateEvent(facesContext);
 
             if (!facesContext.isPostback()) {
                 facesContext.renderResponse();
@@ -186,101 +146,132 @@ public class RestoreViewPhase extends Phase {
             return;
         }
 
-        // Reconstitute or create the request tree
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
-        String viewId = (String)
+        try {
+
+            // Reconstitute or create the request tree
+            Map requestMap = facesContext.getExternalContext().getRequestMap();
+            String viewId = (String)
               requestMap.get("javax.servlet.include.path_info");
-        if (viewId == null) {
-            viewId = facesContext.getExternalContext().getRequestPathInfo();
-        }
+            if (viewId == null) {
+                viewId = facesContext.getExternalContext().getRequestPathInfo();
+            }
 
-        // It could be that this request was mapped using
-        // a prefix mapping in which case there would be no
-        // path_info.  Query the servlet path.
-        if (viewId == null) {
-            viewId = (String)
+            // It could be that this request was mapped using
+            // a prefix mapping in which case there would be no
+            // path_info.  Query the servlet path.
+            if (viewId == null) {
+                viewId = (String)
                   requestMap.get("javax.servlet.include.servlet_path");
-        }
+            }
 
-        if (viewId == null) {
-            viewId = facesContext.getExternalContext().getRequestServletPath();
-        }
+            if (viewId == null) {
+                viewId = facesContext.getExternalContext().getRequestServletPath();
+            }
 
-        if (viewId == null) {
-            throw new FacesException(MessageUtils.getExceptionMessageString(
+            if (viewId == null) {
+                throw new FacesException(MessageUtils.getExceptionMessageString(
                   MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
-        }
+            }
 
-        ViewHandler viewHandler = Util.getViewHandler(facesContext);
+            ViewHandler viewHandler = Util.getViewHandler(facesContext);
 
-        boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
-        if (isPostBack) {
-            facesContext.setProcessingEvents(false);
+            boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
+            if (isPostBack) {
+                facesContext.setProcessingEvents(false);
             // try to restore the view
-            viewRoot = viewHandler.restoreView(facesContext, viewId);
-            if (viewRoot == null) {
-                if (is11CompatEnabled(facesContext)) {
-                    // 1.1 -> create a new view and flag that the response should
-                    //        be immediately rendered
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine("Postback: recreating a view for " + viewId);
-                    }
-                    viewRoot = viewHandler.createView(facesContext, viewId);
-                    facesContext.renderResponse();
+                viewRoot = viewHandler.restoreView(facesContext, viewId);
+                if (viewRoot == null) {
+                    if (is11CompatEnabled(facesContext)) {
+                        // 1.1 -> create a new view and flag that the response should
+                        //        be immediately rendered
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.fine("Postback: recreating a view for " + viewId);
+                        }
+                        viewRoot = viewHandler.createView(facesContext, viewId);
+                        facesContext.renderResponse();
 
-                } else {
-                    Object[] params = {viewId};
-                    throw new ViewExpiredException(
-                          MessageUtils.getExceptionMessageString(
+                    } else {
+                        Object[] params = {viewId};
+                        throw new ViewExpiredException(
+                                MessageUtils.getExceptionMessageString(
                                 MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID,
                                 params),
-                          viewId);
-                }
-            }
-
-            facesContext.setViewRoot(viewRoot);
-            facesContext.setProcessingEvents(true);
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Postback: restored view for " + viewId);
-            }
-        } else {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("New request: creating a view for " + viewId);
-            }
-
-            ViewDeclarationLanguage vdl = facesContext.getApplication().getViewHandler().getViewDeclarationLanguage(facesContext, viewId);
-            facesContext.getAttributes().put(RIConstants.VIEWID_KEY_NAME, viewId);
-
-            if (vdl != null) {
-                // If we have one, get the ViewMetadata...
-                ViewMetadata metadata = vdl.getViewMetadata(facesContext, viewId);
-
-                if (metadata != null) { // perhaps it's not supported
-                    // and use it to create the ViewRoot.  This will have, at most
-                    // the UIViewRoot and its metadata facet.
-                    viewRoot = metadata.createMetadataView(facesContext);
-
-                    // Only skip to render response if there are no view parameters
-                    Collection<UIViewParameter> params =
-                          ViewMetadata.getViewParameters(viewRoot);
-                    if (params.isEmpty()) {
-                        facesContext.renderResponse();
+                                viewId);
                     }
                 }
-            } else {
-                facesContext.renderResponse();
-            }
 
-            if (null == viewRoot) {
-                viewRoot = (Util.getViewHandler(facesContext)).
-                   createView(facesContext, viewId);
+                facesContext.setViewRoot(viewRoot);
+                facesContext.setProcessingEvents(true);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Postback: restored view for " + viewId);
+                }
+            } else {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("New request: creating a view for " + viewId);
+                }
+
+                ViewDeclarationLanguage vdl = facesContext.getApplication().getViewHandler().getViewDeclarationLanguage(facesContext, viewId);
+                facesContext.getAttributes().put(RIConstants.VIEWID_KEY_NAME, viewId);
+
+                if (vdl != null) {
+                    // If we have one, get the ViewMetadata...
+                    ViewMetadata metadata = vdl.getViewMetadata(facesContext, viewId);
+
+                    if (metadata != null) { // perhaps it's not supported
+                        // and use it to create the ViewRoot.  This will have, at most
+                        // the UIViewRoot and its metadata facet.
+                        viewRoot = metadata.createMetadataView(facesContext);
+
+                        // Only skip to render response if there are no view parameters
+                        Collection<UIViewParameter> params =
+                                ViewMetadata.getViewParameters(viewRoot);
+                        if (params.isEmpty()) {
+                            facesContext.renderResponse();
+                        }
+                    }
+                } else {
+                    facesContext.renderResponse();
+                }
+
+                if (null == viewRoot) {
+                    viewRoot = (Util.getViewHandler(facesContext)).
+                        createView(facesContext, viewId);
+                }
+                facesContext.setViewRoot(viewRoot);
+                assert (null != viewRoot);
             }
-            facesContext.setViewRoot(viewRoot);
-            assert(null != viewRoot);
+        }
+        finally {
+            deliverPostRestoreStateEvent(facesContext);
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting RestoreViewPhase");
+        }
+
+    }
+
+    private void deliverPostRestoreStateEvent(FacesContext facesContext) throws FacesException {
+        UIViewRoot root = facesContext.getViewRoot();
+        final PostRestoreStateEvent postRestoreStateEvent = new PostRestoreStateEvent(root);
+        try {
+            root.visitTree(VisitContext.createVisitContext(facesContext),
+                    new VisitCallback() {
+
+                        public VisitResult visit(VisitContext context, UIComponent target) {
+                            postRestoreStateEvent.setComponent(target);
+                            target.processEvent(postRestoreStateEvent);
+                            //noinspection ReturnInsideFinallyBlock
+                            return VisitResult.ACCEPT;
+                        }
+                    });
+        } catch (AbortProcessingException e) {
+            facesContext.getApplication().publishEvent(facesContext,
+                    ExceptionQueuedEvent.class,
+                    new ExceptionQueuedEventContext(facesContext,
+                    e,
+                    null,
+                    PhaseId.RESTORE_VIEW));
         }
 
     }

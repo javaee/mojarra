@@ -695,12 +695,14 @@ javax.faces.level=ALL
         <copy todir="${build.javadocs.dir}/">
            <fileset dir="${doc.dir}">
              <include name="changed*.png" />
+             <include name="changed*.cur" />
            </fileset>
         </copy>
 
         <copy todir="${build.managed-bean-javadocs.dir}/">
            <fileset dir="${doc.dir}">
              <include name="changed*.png" />
+             <include name="changed*.cur" />
            </fileset>
         </copy>
 

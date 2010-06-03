@@ -68,10 +68,11 @@ import javax.faces.view.ViewMetadata;
 
 
 /**
- * <p><strong class="changed_modified_2_0">UIViewRoot</strong> is the
+ * <p><strong class="changed_modified_2_0"><span
+ * class="changed_modified_2_0_rev_a">UIViewRoot</span></strong> is the
  * UIComponent that represents the root of the UIComponent tree.  This
- * component renders markup as the response to Ajax requests.  It also 
- * serves as the root of the component tree, and as a place to hang 
+ * component renders markup as the response to Ajax requests.  It also
+ * serves as the root of the component tree, and as a place to hang
  * per-view {@link PhaseListener}s.</p>
  *
  * <p>For each of the following lifecycle phase methods:</p>
@@ -842,18 +843,14 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
 
     /**
-     * <p class="changed_added_2_0">The default implementation must call
-     * {@link UIComponentBase#processRestoreState} from within a
+     * <p class="changed_added_2_0"><span
+     * class="changed_deleted_2_0_rev_a">The</span> default
+     * implementation must call {@link
+     * UIComponentBase#processRestoreState} from within a
      * <code>try</code> block.  The <code>try</code> block must have a
      * <code>finally</code> block that ensures that no {@link
-     * FacesEvent}s remain in the event queue, and that the
-     * <code>this.{@link UIComponent#visitTree} is called, passing a
-     * {@link ContextCallback} that takes the following action: call the
-     * {@link UIComponent#processEvent} method of the current
-     * component. The argument <code>event</code> must be an instance of
-     * {@link javax.faces.event.PostRestoreStateEvent} whose
-     * <code>component</code> property is the current component in the
-     * traversal.</code></p>
+     * FacesEvent}s remain in the event queue. <a
+     * class="changed_deleted_2_0_rev_a" title="text removed in 2.0 Rev a: and that the this.visitTree is called, passing a ContextCallback that takes the following action: call the processEvent method of the current component. The argument event must be an instance of PostRestoreStateEvent whose component property is the current component in the traversal.">&nbsp;&nbsp;&nbsp;</a> </p>
      * @param context the <code>FacesContext</code> for this requets
      * @param state the opaque state object obtained from the {@link
      * javax.faces.application.StateManager}
