@@ -63,7 +63,8 @@ public enum FacesLogger {
     RENDERKIT("renderkit"),
     TAGLIB("taglib"),
     TIMING("timing"),
-    UTIL("util");
+    UTIL("util"),
+    FLASH("flash");
 
     private static final String LOGGER_RESOURCES
          = "com.sun.faces.LogStrings";

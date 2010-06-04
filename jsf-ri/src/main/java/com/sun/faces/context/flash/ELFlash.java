@@ -55,11 +55,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.event.PhaseId;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -132,7 +134,7 @@ public class ELFlash extends Flash {
 
     // <editor-fold defaultstate="collapsed" desc="class vars">
 
-    private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
+    private static final Logger LOGGER = FacesLogger.FLASH.getLogger();
 
     /**
      * <p>These constants are referenced from other source files in this
@@ -206,7 +208,7 @@ public class ELFlash extends Flash {
          * This key is used in the contextMap to prevent setting the cookie
          * twice.
          */
-        DidWriteCookieAttributeName;
+        DidWriteCookieAttributeName,
 
     }
 
@@ -296,7 +298,7 @@ public class ELFlash extends Flash {
         boolean result = false;
         Map<String, Object> phaseMap;
 
-        if (null != (phaseMap = getPhaseMapForReading())) {
+        if (null != (phaseMap = loggingGetPhaseMapForReading(false))) {
             Object value = phaseMap.get(CONSTANTS.KeepAllMessagesAttributeName.toString());
             result = (null != value) ? (Boolean) value : false;
         }
@@ -307,7 +309,7 @@ public class ELFlash extends Flash {
     
     public void setKeepMessages(boolean newValue) {
 
-        getPhaseMapForWriting().put(CONSTANTS.KeepAllMessagesAttributeName.toString(),
+        loggingGetPhaseMapForWriting(false).put(CONSTANTS.KeepAllMessagesAttributeName.toString(),
                 Boolean.valueOf(newValue));
 
     }
@@ -364,6 +366,10 @@ public class ELFlash extends Flash {
             result = getPhaseMapForReading().get(key);
         }
 
+        if (LOGGER.isLoggable(Level.FINEST)) {
+            LOGGER.log(Level.FINEST, "get({0}) = {1}", new Object [] { key, result});
+        }
+
         return result;
     }
 
@@ -381,6 +387,9 @@ public class ELFlash extends Flash {
             }
         }
         result = (null == b) ? getPhaseMapForWriting().put(key, value) : b;
+        if (LOGGER.isLoggable(Level.FINEST)) {
+            LOGGER.log(Level.FINEST, "put({0},{1})", new Object [] { key, value});
+        }
 
         return result;
     }
@@ -618,6 +627,9 @@ public class ELFlash extends Flash {
                 flashManager.expirePrevious();
             }
         }
+        if (LOGGER.isLoggable(Level.FINEST)) {
+            LOGGER.log(Level.FINEST, "---------------------------------------");
+        }
 
 
         setCookie(context, flashManager, flashManager.encode());
@@ -705,6 +717,58 @@ public class ELFlash extends Flash {
         return result;
     }
 
+    private static String getLogPrefix(FacesContext context) {
+        StringBuilder result = new StringBuilder();
+        ExternalContext extContext = context.getExternalContext();
+        Object request = extContext.getRequest();
+        if (request instanceof HttpServletRequest) {
+            result.append(((HttpServletRequest)request).getMethod()).append(" ");
+        }
+        UIViewRoot root = context.getViewRoot();
+        if (null != root) {
+            String viewId = root.getViewId();
+            if (null != viewId) {
+                result.append(viewId).append(" ");
+            }
+        }
+
+        return result.toString();
+    }
+
+    private Map<String, Object> loggingGetPhaseMapForWriting(boolean loggingEnabled) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> result = null;
+        PhaseId currentPhase = context.getCurrentPhaseId();
+        Map<Object, Object> contextMap = context.getAttributes();
+
+        PreviousNextFlashInfoManager flashManager;
+        if (null != (flashManager = getCurrentFlashManager(contextMap, true))) {
+            FlashInfo flashInfo;
+            boolean isDebugLog = loggingEnabled && LOGGER.isLoggable(Level.FINEST);
+
+            if (currentPhase.getOrdinal() < PhaseId.RENDER_RESPONSE.getOrdinal()) {
+                flashInfo = flashManager.getPreviousRequestFlashInfo();
+                if (isDebugLog) {
+                    LOGGER.log(Level.FINEST, "{0}previous[{1}]",
+                            new Object[]{getLogPrefix(context),
+                                flashInfo.getSequenceNumber()});
+                }
+            } else {
+                flashInfo = flashManager.getNextRequestFlashInfo(this, true);
+                if (isDebugLog) {
+                    LOGGER.log(Level.FINEST, "{0}next[{1}]",
+                            new Object[]{getLogPrefix(context),
+                                flashInfo.getSequenceNumber()});
+                }
+                maybeWriteCookie(context, flashManager);
+            }
+            result = flashInfo.getFlashMap();
+        }
+
+        return result;
+
+    }
+
     /**
      * <p>If the current phase is earlier than RENDER_RESPONSE, return
      * the map for the "previous" request.  Otherwise, return the map
@@ -716,22 +780,29 @@ public class ELFlash extends Flash {
      */
 
     private Map<String, Object> getPhaseMapForWriting() {
+        return loggingGetPhaseMapForWriting(true);
+    }
+
+
+    private Map<String, Object> loggingGetPhaseMapForReading(boolean loggingEnabled) {
         FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, Object> result = null;
-        PhaseId currentPhase = context.getCurrentPhaseId();
+        Map<String, Object> result = Collections.emptyMap();
         Map<Object, Object> contextMap = context.getAttributes();
 
         PreviousNextFlashInfoManager flashManager;
-        if (null != (flashManager = getCurrentFlashManager(contextMap, true))) {
+        if (null != (flashManager = getCurrentFlashManager(contextMap, false))) {
             FlashInfo flashInfo;
 
-            if (currentPhase.getOrdinal() < PhaseId.RENDER_RESPONSE.getOrdinal()) {
-                flashInfo = flashManager.getPreviousRequestFlashInfo();
-            } else {
-                flashInfo = flashManager.getNextRequestFlashInfo(this, true);
-                maybeWriteCookie(context, flashManager);
+            if (null != (flashInfo = flashManager.getPreviousRequestFlashInfo())) {
+                boolean isDebugLog = loggingEnabled && LOGGER.isLoggable(Level.FINEST);
+                if (isDebugLog) {
+                    LOGGER.log(Level.FINEST, "{0}previous[{1}]",
+                            new Object[]{getLogPrefix(context),
+                                flashInfo.getSequenceNumber()});
+                }
+
+                result = flashInfo.getFlashMap();
             }
-            result = flashInfo.getFlashMap();
         }
 
         return result;
@@ -749,20 +820,7 @@ public class ELFlash extends Flash {
      */
 
     private Map<String, Object> getPhaseMapForReading() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, Object> result = Collections.emptyMap();
-        Map<Object, Object> contextMap = context.getAttributes();
-
-        PreviousNextFlashInfoManager flashManager;
-        if (null != (flashManager = getCurrentFlashManager(contextMap, false))) {
-            FlashInfo flashInfo;
-
-            if (null != (flashInfo = flashManager.getPreviousRequestFlashInfo())) {
-                result = flashInfo.getFlashMap();
-            }
-        }
-
-        return result;
+        return loggingGetPhaseMapForReading(true);
     }
 
     void saveAllMessages(FacesContext context) {
@@ -1073,6 +1131,12 @@ public class ELFlash extends Flash {
                 Map<String, Object> flashMap;
                 // clear the old map
                 if (null != (flashMap = previousRequestFlashInfo.getFlashMap())) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST, "{0} expire previous[{1}]",
+                                new Object[]{getLogPrefix(FacesContext.getCurrentInstance()),
+                                    previousRequestFlashInfo.getSequenceNumber()});
+
+                    }
                     flashMap.clear();
                 }
                 // remove it from the flash
@@ -1083,6 +1147,12 @@ public class ELFlash extends Flash {
 
         void expireNext_MovePreviousToNext() {
             if (null != nextRequestFlashInfo) {
+                if (LOGGER.isLoggable(Level.FINEST)) {
+                    LOGGER.log(Level.FINEST, "{0} expire next[{1}], move previous to next",
+                            new Object[]{getLogPrefix(FacesContext.getCurrentInstance()),
+                                nextRequestFlashInfo.getSequenceNumber()});
+
+                }
                 // clear the old map
                 nextRequestFlashInfo.getFlashMap().clear();
                 // remove it from the flash
