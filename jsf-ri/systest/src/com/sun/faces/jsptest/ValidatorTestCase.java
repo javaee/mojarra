@@ -95,14 +95,14 @@ public class ValidatorTestCase extends AbstractTestCase {
                 HtmlSubmitInput.class);
         HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
         page = (HtmlPage) button.click();
-        assertTrue(-1 != page.asText().indexOf("text1 was validated"));
-        assertTrue(-1 != page.asText().indexOf("text2 was validated"));
-        assertTrue(-1 != page.asText().indexOf("text3 was validated"));
-        assertTrue(-1 != page.asText().indexOf("text4 was validated"));
+	String text = page.asText();
+        assertTrue(text.contains("text1 was validated"));
+        assertTrue(text.contains("text2 was validated"));
+        assertTrue(text.contains("text3 was validated"));
+        assertTrue(text.contains("text4 was validated"));
         String str = "allowable maximum of " + '"' + "2" + '"';
-        assertTrue(-1 != page.asText().indexOf(str));
-        assertTrue(-1 != page.asText().indexOf("allowable maximum of '5'"));
-        assertTrue(-1 != page.asText().indexOf("allowable maximum of '4'"));
+        assertTrue(text.contains(str));
+        assertTrue(text.contains("allowable maximum of '5'"));
 
     }
 
@@ -121,12 +121,13 @@ public class ValidatorTestCase extends AbstractTestCase {
                 HtmlSubmitInput.class);
         HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
         page = (HtmlPage) button.click();
-        assertTrue(-1 != page.asText().indexOf("j_idj_id17:dr1: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
-        assertTrue(-1 != page.asText().indexOf("DoubleRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
-        assertTrue(-1 != page.asText().indexOf("j_idj_id17:l1: Validation Error: Value is less than allowable minimum of '2'"));
-        assertTrue(-1 != page.asText().indexOf("Length2: Validation Error: Value is less than allowable minimum of '2'"));
-        assertTrue(-1 != page.asText().indexOf("j_idj_id17:lr1: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
-        assertTrue(-1 != page.asText().indexOf("LongRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+        String text = page.asXml();
+        assertTrue(text.contains("Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+        assertTrue(text.contains("DoubleRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+        assertTrue(text.contains("Validation Error: Length is less than allowable minimum of '2'"));
+        assertTrue(text.contains("Length2: Validation Error: Length is less than allowable minimum of '2'"));
+        assertTrue(text.contains("Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+        assertTrue(text.contains("LongRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
     }
 
     public void testRequiredValidatorMessage() throws Exception {
@@ -139,12 +140,13 @@ public class ValidatorTestCase extends AbstractTestCase {
         ((HtmlTextInput) list.get(5)).setValueAttribute("20");
         list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class);
         page = (HtmlPage) ((HtmlSubmitInput) list.get(0)).click();
-        assertTrue(-1 != page.asText().indexOf("Literal Message"));
-        assertTrue(-1 != page.asText().indexOf("New String Value"));
-        assertTrue(-1 != page.asText().indexOf("Converter Literal"));
-        assertTrue(-1 != page.asText().indexOf("Converter Message Expression"));
-        assertTrue(-1 != page.asText().indexOf("Validator Literal"));
-        assertTrue(-1 != page.asText().indexOf("Validator Message Expression"));
+        String text = page.asText();
+        assertTrue(text.contains("Literal Message"));
+        assertTrue(text.contains("New String Value"));
+        assertTrue(text.contains("Converter Literal"));
+        assertTrue(text.contains("Converter Message Expression"));
+        assertTrue(text.contains("Validator Literal"));
+        assertTrue(text.contains("Validator Message Expression"));
     }
 
 }

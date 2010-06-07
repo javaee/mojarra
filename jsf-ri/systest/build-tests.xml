@@ -171,6 +171,7 @@
                 test.subview,
                 test.methodRef,
                 test.jsp,  
+                test.jsf2jsp,
                 test.path,
                 test.valueBindingGet,
                 test.misc,
@@ -401,6 +402,19 @@
         </jsf.junit>       
     </target>
 
+    <target name="test.jsf2jsp" 
+            description="Issue 636 test JSF2 features with JSP">
+
+            <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/jsf2jsp/Jsf2JspTestCase.class"
+                         />
+            </tests>
+        </jsf.junit>
+    </target>
 
     <target name="test.path"
             description="Test Path Handling">
@@ -1345,7 +1359,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/event/DynamicAddTestCase.class"
+                         includes="com/sun/faces/jsf2jsp/Jsf2JspTestCase.class"
                          />
 <!-- 139-StateSaving edburns remove excludes -->
             </tests>
