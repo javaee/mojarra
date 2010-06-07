@@ -670,12 +670,22 @@
 
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/TestHtmlBasicValidatorFail.jsp"
+              status="500"/>
+
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/TestHtmlBasicValidatorSucceed.jsp"
               status="200"/>
 
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/TestCoreValidatorFail.jsp"
+              status="500"/>
+
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/TestCoreValidatorFail.jsp"
               status="500"/>
 
         <jsf.tester

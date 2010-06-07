@@ -55,6 +55,7 @@ import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
 import java.beans.FeatureDescriptor;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -62,6 +63,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.servlet.ServletContext;
 
 /**
  * <B>Util</B> is a class ...
@@ -84,19 +86,98 @@ public class Util {
     /**
      * Flag that enables/disables the core TLV.
      */
-    private static boolean coreTLVEnabled = true;
+    private static final String coreTLVEnabled = RIConstants.FACES_PREFIX + "coreTLVEnabled";
 
     /**
      * Flag that enables/disables the html TLV.
      */
-    private static boolean htmlTLVEnabled = true;
+    private static final String htmlTLVEnabled = RIConstants.FACES_PREFIX + "htmlTLVEnabled";
     
-    private static final Map<String,Pattern> patternCache = 
-          new LRUMap<String,Pattern>(15);
+    /**
+     * RegEx patterns
+     */
+    private static final String patternCacheKey = RIConstants.FACES_PREFIX + "patternCache";
 
 
     private Util() {
         throw new IllegalStateException();
+    }
+
+    /**
+     * <p>The <code>ThreadLocal</code> when invoking methods on this class
+     * from outside the scope of the FacesContext, this threadLocal is used
+     * to serve as the ApplicationMap.</p>
+     */
+    private static ThreadLocal<Map<String, Object>> nonFacesContextApplicationMap;
+
+
+    private static void setNonFacesContextApplicationMap(Map<String, Object> instance) {
+        lazilyInitializeNonFacesContextApplicationMap();
+        if (null == instance) {
+            nonFacesContextApplicationMap.remove();
+        } else {
+            nonFacesContextApplicationMap.set(instance);
+        }
+    }
+
+    private static void lazilyInitializeNonFacesContextApplicationMap() {
+        if (null == nonFacesContextApplicationMap) {
+            nonFacesContextApplicationMap = new ThreadLocal<Map<String, Object>>() {
+                @Override
+                protected Map<String, Object> initialValue() {
+                    return (null);
+                }
+            };
+        }
+    }
+
+    private static Map<String, Object> getNonFacesContextApplicationMap() {
+        lazilyInitializeNonFacesContextApplicationMap();
+        return nonFacesContextApplicationMap.get();
+    }
+
+    private static Map<String, Object> getApplicationMap() {
+        Map<String, Object> result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            ExternalContext externalContext = context.getExternalContext();
+            if (null != externalContext) {
+                result = externalContext.getApplicationMap();
+            }
+        }
+        // This will be true if FacesServlet.service is not on the callstack
+        if (null == result) {
+            result = getNonFacesContextApplicationMap();
+            if (null == result) {
+                result = new HashMap<String, Object>();
+                setNonFacesContextApplicationMap(result);
+            }
+        }
+
+        return result;
+    }
+
+    private static Map<String,Pattern> getPatternCache() {
+        Map<String, Object> appMap = getApplicationMap();
+        Map<String,Pattern> result = 
+                (Map<String,Pattern>) appMap.get(patternCacheKey);
+        if (null == result) {
+            result = new LRUMap<String,Pattern>(15);
+            appMap.put(patternCacheKey, result);
+        }
+        
+        return result;
+    }
+
+    private static Map<String,Pattern> getPatternCache(ServletContext sc) {
+        Map<String,Pattern> result =
+                (Map<String,Pattern>) sc.getAttribute(patternCacheKey);
+        if (null == result) {
+            result = new LRUMap<String,Pattern>(15);
+            sc.setAttribute(patternCacheKey, result);
+        }
+
+        return result;
     }
 
     /**
@@ -157,19 +238,27 @@ public class Util {
 
 
     public static void setCoreTLVActive(boolean active) {
-        coreTLVEnabled = active;
+        Map<String, Object> appMap = getApplicationMap();
+        appMap.put(coreTLVEnabled, (Boolean) active);
     }
 
     public static boolean isCoreTLVActive() {
-        return coreTLVEnabled;
+        Boolean result = true;
+        Map<String, Object> appMap = getApplicationMap();
+        return (null == (result = (Boolean) appMap.get(coreTLVEnabled)) ? true
+                : result.booleanValue());
     }
 
     public static void setHtmlTLVActive(boolean active) {
-        htmlTLVEnabled = active;
+        Map<String, Object> appMap = getApplicationMap();
+        appMap.put(htmlTLVEnabled, (Boolean) active);
     }
 
     public static boolean isHtmlTLVActive() {
-        return htmlTLVEnabled;
+        Boolean result = true;
+        Map<String, Object> appMap = getApplicationMap();
+        return (null == (result = (Boolean) appMap.get(htmlTLVEnabled)) ? true
+                : result.booleanValue());
     }
 
 
@@ -518,6 +607,18 @@ public class Util {
      * @return the result of <code>Pattern.spit(String, int)</code>
      */
     public synchronized static String[] split(String toSplit, String regex) {
+        Map<String, Pattern> patternCache = getPatternCache();
+        Pattern pattern = patternCache.get(regex);
+        if (pattern == null) {
+            pattern = Pattern.compile(regex);
+            patternCache.put(regex, pattern);
+        }
+        return  pattern.split(toSplit, 0);
+    }
+
+     public synchronized static String[] split(ServletContext sc,
+             String toSplit, String regex) {
+        Map<String, Pattern> patternCache = getPatternCache(sc);
         Pattern pattern = patternCache.get(regex);
         if (pattern == null) {
             pattern = Pattern.compile(regex);

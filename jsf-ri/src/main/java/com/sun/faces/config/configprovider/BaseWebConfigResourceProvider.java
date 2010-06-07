@@ -74,7 +74,7 @@ public abstract class BaseWebConfigResourceProvider implements
         String paths = webConfig.getOptionValue(getParameter());
         Set<URL> urls = new LinkedHashSet<URL>(6);
         if (paths != null) {
-            for (String token : Util.split(paths.trim(), getSeparatorRegex())) {
+            for (String token : Util.split(context, paths.trim(), getSeparatorRegex())) {
                 String path = token.trim();
                 if (!isExcluded(path) && path.length() != 0) {
                     URL u = getContextURLForPath(context, path);
