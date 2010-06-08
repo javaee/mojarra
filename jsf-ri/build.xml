@@ -81,6 +81,10 @@
     <property name="dependency.base.dir" value="${jsf.build.home}/dependencies"/>
     <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
     <property name="yuicompressor.jar" value="${dependency.jar.dir}/yuicompressor.jar"/>
+    <property name="build.javadocs.dir" value="${build.dir}/javadocs"/>
+    <property name="javadoc.private" value="true"/>
+    <property name="javadoc.protected" value="false"/>
+    <property name="DocName" value="Mojarra Implementation Javadoc"/>
 
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
@@ -105,7 +109,7 @@
         <mkdir dir="${build.generate.tld.dir}"/>
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.classes.dir}/com/sun/faces/xhtml"/>
-        <mkdir dir="${build.dir}/javadocs"/>
+        <mkdir dir="${build.javadocs.dir}"/>
         <mkdir dir="${build.dir}/vdldocs/jsp"/>
         <mkdir dir="${build.dir}/vdldocs/facelets"/>
         <mkdir dir="${build.dir}/lib"/>
@@ -723,6 +727,39 @@
 
     </target>
 
+    <target name="javadoc_check">
+        <uptodate property="javadoc.notrequired"
+                  targetfile="${build.javadocs.dir}/packages.html">
+            <srcfiles dir="${source.dir}" includes="**/*.java"/>
+            <srcfiles dir="${build.generate.dir}" includes="**/*.java"/>
+        </uptodate>
+    </target>
+
+    <target name="javadocs"
+            depends="prepare,javadoc_check,generate,generate.javadocs"
+            unless="javadoc.notrequired"
+            description="Create the JavaDoc API documentation">
+
+    </target>
+
+
+    <target name="generate.javadocs">
+        <javadoc packagenames="javax.*"
+                 destdir="${build.javadocs.dir}"
+                 private="${javadoc.private}"
+                 link="http://java.sun.com/javase/6/docs/api/"
+                 protected="${javadoc.protected}"
+                 windowtitle="${DocName} (${spec.version})"
+                 source="1.5"
+                 doctitle="${DocName} (${spec.version})"
+                 bottom="Copyright &#169; 2002-2010 Sun Microsystems, Inc. All Rights Reserved.">
+            <fileset dir="${source.dir}">
+                <include name="com/sun/faces/spi/**/*.java"/>
+            </fileset>
+            <classpath refid="impl.compile.classpath"/>
+        </javadoc>
+
+    </target>
 
     
 </project>
