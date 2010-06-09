@@ -249,9 +249,6 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                                         e.toString());
                             throw new FacesException(msg, e);
                         }
-                        app.publishEvent(context.getFacesContext(),
-                                PostRestoreStateEvent.class,
-                                target);
                     }
 
                     return result;
