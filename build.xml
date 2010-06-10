@@ -99,6 +99,10 @@
         <call.modules target="main"/>
     </target>
 
+    <target name="impl" description="Just build jsf-ri">
+      <ant dir="jsf-ri" target="main" />
+    </target>
+
     <target name="main.from.source" description="Build Mojarra, including some dependencies">
        <subant target="main" inheritAll="false">
             <property name="build.source" value="true"/>

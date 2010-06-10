@@ -638,6 +638,8 @@
             </replacevalue>
         </replace>
         <delete file="${basedir}/merged.xml"/>
+        <copy file="${basedir}/resources/empty-faces-config.xml"
+              todir="${build.dir}/classes/com/sun/faces" />
     </target>
 
 

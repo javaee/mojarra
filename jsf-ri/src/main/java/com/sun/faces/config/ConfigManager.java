@@ -108,6 +108,7 @@ import java.util.logging.Logger;
 import java.lang.annotation.Annotation;
 
 import org.w3c.dom.*;
+import org.xml.sax.SAXParseException;
 
 /**
  * <p>
@@ -783,6 +784,8 @@ public class ConfigManager {
     private static class ParseTask implements Callable<DocumentInfo> {
         private static final String JAVAEE_SCHEMA_DEFAULT_NS =
             "http://java.sun.com/xml/ns/javaee";
+        private static final String EMPTY_FACES_CONFIG =
+                "com/sun/faces/empty-faces-config.xml";
         private URL documentURL;
         private DocumentBuilderFactory factory;
         private boolean validating;
@@ -855,7 +858,23 @@ public class ConfigManager {
             DocumentBuilder db = getNonValidatingBuilder();
             InputSource is = new InputSource(getInputStream(documentURL));
                 is.setSystemId(documentURL.toExternalForm());
-            Document doc = db.parse(is);
+            Document doc = null;
+
+            try {
+                doc = db.parse(is);
+            } catch (SAXParseException spe) {
+                // [mojarra-1693]
+                // Test if this is a zero length or whitespace only faces-config.xml file.
+                // If so, just make an empty Document
+                InputStream stream = is.getByteStream();
+                if (0 == stream.available() &&
+                        documentURL.toExternalForm().endsWith("faces-config.xml")) {
+                    ClassLoader loader = this.getClass().getClassLoader();
+                    is = new InputSource(getInputStream(loader.getResource(EMPTY_FACES_CONFIG)));
+                    doc = db.parse(is);
+                } 
+
+            }
             String documentNS = doc.getDocumentElement().getNamespaceURI();
             if (validating && documentNS != null) {
                 DOMSource domSource
