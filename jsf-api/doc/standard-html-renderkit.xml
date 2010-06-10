@@ -21571,10 +21571,35 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
       <ul>
 
-      <p>Follow the same process as for the header, except replace
-      "header" with "footer", "th" with "td", "thead" with "tfoot", and
-      "headerClass" with "footerClass".  Do not render any "scope"
-      attribute for the footer.</p>
+      <div class="changed_modified_2_0_rev_a">
+      <p>If the <code>UIData</code> component has a "footer" facet, or
+      any of the child <code>UIColumn</code> components has a "footer"
+      facet, render a "tfoot" element.  If the <code>UIData</code>
+      component has "footer" facets, encode the contents inside of a "tr"
+      element. </p>
+
+      <p>If any of the child <code>UIColumn</code> components has a
+      "footer" facet render a "td" element.  For each 
+      <code>UIColumn</code> that actually has a "footer" facet, render
+      it inside of a "td" element.  Columns that don't have a "footer"
+      facet cause an empty "td" element to be rendered.  Output the
+      value of the "footerClass" attribute of the <code>UIColumn</code>
+      component, if present, as the value of the "class" attribute on
+      the "td".  If the "footerClass" attribute of the <code>UIColumn</code>
+      component is not present, output the value of the "footerClass"
+      attribute of the <code>UIData</code> component, if present, as
+      the value of the "class" attribute on the "td".</p>
+
+      <p>If the <code>UIData</code> component has a "footer" facet,
+      encode its contents inside of "tr" and "td" elements, respectively.
+      Output the value of the "footerClass" attribute of the 
+      <code>UIData</code> component, if present, as the value of the 
+      "class" attribute on the "td".  Output the number of child 
+      <code>UIColumn</code> components of the <code>UIData</code> 
+      component as the value of the "colspan" attribute on the "td". </p>
+
+      <p>Close out the "tfoot" element.</p>
+      </div>
 
       </ul>
 
