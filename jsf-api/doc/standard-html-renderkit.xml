@@ -36,7 +36,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd" version="2.0">
-  <!-- Generic User Interface Components -->
+<!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -373,7 +373,7 @@
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -1326,7 +1326,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -2775,7 +2775,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -3451,7 +3451,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4171,7 +4171,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4532,7 +4532,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4758,7 +4758,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-  <!-- Concrete HTML Components -->
+<!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -5129,7 +5129,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -5768,7 +5768,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8123,7 +8123,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8478,7 +8478,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -9240,7 +9240,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -9986,7 +9986,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15186,7 +15186,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15894,7 +15894,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -16670,7 +16670,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -17408,7 +17408,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -18136,7 +18136,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -18861,7 +18861,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -19576,7 +19576,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -20010,7 +20010,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-  <!--
+<!--
          the following components are here merely for AttributeManager
          generation.
     -->
@@ -20297,7 +20297,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Body</renderer-type>
     </component-extension>
   </component>
-  <!-- Standard HTML Renderkit -->
+<!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -27549,8 +27549,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       "disabled" as the value of the "disabled" attribute.  Close out
       the "input" element.  Render a "label" element.  Render the "for"
       attribute of the "label" element whose value is the corresponding
-      "input" element's "id" value.  Render any "style" as the "class"
-      attribute on the "label" element.  <span
+      "input" element's "id" value.  
+      <span
       class="changed_added_2_0">If the current checkbox would be
       rendered as being checked, and there is a "selectedClass"
       attribute, append a space, followed by the value of the
@@ -27563,10 +27563,21 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       attribute to any existing "class" attribute value on the label
       element.  Otherwise, render the value of the "unselectedClass"
       attribute as the value of the "class" attribute on the label
-      element.</span> Close out the starting "label" element and render
-      the label value from SelectItem.getLabel().  Close out the "label"
-      element.  As an exception to the general rules about how to handle
-      the "id" attribute, render it as an attribute on the outer "table"
+      element.</span>  <span class="changed_modified_2_0_rev_a">If the 
+      current checkbox would be rendered as being disabled, and there is a 
+      "disabledClass" attribute, append a space, followed by the value 
+      of the "disabledClass" attribute to any existing "class" attribute 
+      value on the label element.  Otherwise, render the value of the 
+      "disabledClass" attribute as the value of the "class" attribute on 
+      the label element.  If the current checkbox would be rendered as 
+      being enabled, and there is an "enabledClass" attribute, append a 
+      space, followed by the value of the "enabledClass" attribute to any 
+      existing "class" attribute value on the label element.  Otherwise, 
+      render the value of the "enabledClass" attribute as the value of 
+      the "class" attribute on the label element.</span> Close out the starting 
+      "label" element and render the label value from SelectItem.getLabel().  
+      Close out the "label" element.  As an exception to the general rules about 
+      how to handle the "id" attribute, render it as an attribute on the outer "table"
       element, the value of which is the <code>clientId</code> of the
       component per the rules at the beginning of this specification.
       The value of the current SelectItem is rendered as the value of
