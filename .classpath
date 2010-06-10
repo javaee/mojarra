@@ -2,13 +2,13 @@
 <classpath>
 	<classpathentry kind="lib" path="dependencies/glassfish/lib/appserv-rt.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry excluding="**/.svn" kind="src" path="jsf-ri/src"/>
+	<classpathentry excluding="**/.svn" kind="src" 
 	<classpathentry excluding="**/.svn" kind="src" path="jsf-api/src/test/java"/>
 	<classpathentry excluding="**/.svn" kind="src" path="jsf-api/src/main/java"/>
 	<classpathentry kind="src" path="jsf-ri/systest/src"/>
 	<classpathentry kind="src" path="jsf-ri/build/generate"/>
 	<classpathentry kind="src" path="jsf-ri/test"/>
-	<classpathentry kind="src" path="jsf-tools/src"/>
+        <classpathentry kind="src" path="jsf-tools/src/main/java"/>
 	<classpathentry kind="lib" path="common/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="dependencies/jakarta-cactus-13-1.7.2/lib/aspectjrt-1.2.1.jar"/>
 	<classpathentry kind="lib" path="dependencies/jakarta-cactus-13-1.7.2/lib/cactus-1.7.2.jar"/>
@@ -41,5 +41,6 @@
 	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
 	<classpathentry kind="lib" path="dependencies/glassfish/lib/javaee.jar"/>
 	<classpathentry kind="lib" path="dependencies/glassfish/lib/ant/lib/ant.jar"/>
+	<classpathentry kind="lib" path="dependencies/jars/commons-digester-1.7.jar"/>
 	<classpathentry kind="output" path="trash/build"/>
 </classpath>
