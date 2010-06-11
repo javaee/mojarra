@@ -73,8 +73,7 @@ goto :END
 :CHANGES
 echo Modifications found.  Generating change bundle...
 
-echo -- ADD DESCRIPTION HERE -- > %CB%
-echo -- https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=XXXX -- > %CB%
+echo -- ADD DESCRIPTION HERE https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=XXXX -- > %CB%
 echo. >> %CB%
 echo. >> %CB%
 
