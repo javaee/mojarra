@@ -208,7 +208,7 @@
         &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
         class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
         class="st0"&gt;&amp;quot;allEvents&amp;quot;&lt;/span&gt; targets=&lt;span
-        class="st0"&gt;&amp;quot;loginEvent,cancelEvent&amp;quot;&lt;/span&gt; /&lt;span
+        class="st0"&gt;&amp;quot;loginEvent cancelEvent&amp;quot;&lt;/span&gt; /&lt;span
         class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
         &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
         class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:interface&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
@@ -1567,7 +1567,7 @@
             &lt;li class="li2"&gt;&lt;div class="de2"&gt;&amp;nbsp; &lt;span
             class="sc2"&gt;&amp;lt;composite:actionSource &lt;span class="kw3"&gt;name&lt;/span&gt;=&lt;span
             class="st0"&gt;&amp;quot;allEvents&amp;quot;&lt;/span&gt; targets=&lt;span
-            class="st0"&gt;&amp;quot;loginEvent,cancelEvent&amp;quot;&lt;/span&gt;
+            class="st0"&gt;&amp;quot;loginEvent cancelEvent&amp;quot;&lt;/span&gt;
             /&lt;span class="kw2"&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;
             &lt;li class="li1"&gt;&lt;div class="de1"&gt;&lt;span class="sc2"&gt;&lt;span
             class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:interface&amp;gt;&lt;/span&gt;

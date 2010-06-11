@@ -146,7 +146,7 @@ would make that file accessible like this.</p>
 <li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;<a href="editableValueHolder.html">composite:editableValueHolder</a> <span class="kw3">name</span>=<span class="st0">&quot;username&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;loginEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;allEvents&quot;</span> targets=<span class="st0">&quot;loginEvent,cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;allEvents&quot;</span> targets=<span class="st0">&quot;loginEvent cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
 <li class="li2"><div class="de2"><span class="sc2">&lt;<a href="implementation.html">composite:implementation</a> <span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp;</div></li>
@@ -1469,7 +1469,7 @@ refer to the <em>attached objects</em> declared on lines 2, 3 and 4 below.</p>
 <div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;composite:interface <span class="kw3">name</span>=<span class="st0">&quot;loginPanel&quot;</span><span class="kw2">&gt;</span></span></div></li>
 <li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;loginEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;allEvents&quot;</span> targets=<span class="st0">&quot;loginEvent,cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;allEvents&quot;</span> targets=<span class="st0">&quot;loginEvent cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span> </div></li></ol></div></div>
 
 <p>Most of the concepts from example content from <a
