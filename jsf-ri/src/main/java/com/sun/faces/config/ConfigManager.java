@@ -867,8 +867,12 @@ public class ConfigManager {
                 // Test if this is a zero length or whitespace only faces-config.xml file.
                 // If so, just make an empty Document
                 InputStream stream = is.getByteStream();
-                if (0 == stream.available() &&
-                        documentURL.toExternalForm().endsWith("faces-config.xml")) {
+                stream.close();
+
+                is = new InputSource(getInputStream(documentURL));
+                stream = is.getByteStream();
+                if (streamIsZeroLengthOrEmpty(stream) &&
+                    documentURL.toExternalForm().endsWith("faces-config.xml")) {
                     ClassLoader loader = this.getClass().getClassLoader();
                     is = new InputSource(getInputStream(loader.getResource(EMPTY_FACES_CONFIG)));
                     doc = db.parse(is);
@@ -955,6 +959,23 @@ public class ConfigManager {
             }
             return returnDoc;
 
+        }
+
+        private boolean streamIsZeroLengthOrEmpty(InputStream is) throws IOException {
+            boolean isZeroLengthOrEmpty = (0 == is.available());
+            final int size = 1024;
+            byte[] b = new byte[size];
+            String s;
+            while (!isZeroLengthOrEmpty && -1 != is.read(b, 0, size)) {
+                s = (new String(b)).trim();
+                isZeroLengthOrEmpty = 0 == s.length();
+                b[0] = 0;
+                for (int i = 1; i < size; i += i) {
+                    System.arraycopy(b, 0, b, i, ((size - i) < i) ? (size - i) : i);
+                }
+            }
+
+            return isZeroLengthOrEmpty;
         }
 
 
