@@ -68,6 +68,8 @@ public interface EditableValueHolder extends ValueHolder {
     /**
      * <p class="changed_added_2_0">Convenience method to reset this
      * component's value to the un-initialized state.</p>
+     *
+     * @since 2.0
      */
 
     public void resetValue();
