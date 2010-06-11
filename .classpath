@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="lib" path="dependencies/glassfish/lib/appserv-rt.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry excluding="**/.svn" kind="src" 
+	<classpathentry excluding="**/.svn" kind="src" path="jsf-ri/src/main/java" />
 	<classpathentry excluding="**/.svn" kind="src" path="jsf-api/src/test/java"/>
 	<classpathentry excluding="**/.svn" kind="src" path="jsf-api/src/main/java"/>
 	<classpathentry kind="src" path="jsf-ri/systest/src"/>
