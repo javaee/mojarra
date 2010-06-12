@@ -391,11 +391,11 @@
         may be "wrapped" around multiple components (enabling Ajax for
         many components).&lt;/p&gt;
 
-        &lt;p class="changed_added_2_0"&gt;The String value for identifiers
+        &lt;p class="changed_added_2_0"&gt;The String value for ids
         specified for execute and render may be specified as a search
         expression as outlined in the JavaDocs for
         &lt;code&gt;UIComponent.findComponent()&lt;/code&gt;. The implementation
-        must resolve these identifiers as specified for
+        must resolve these ids as specified for
         &lt;code&gt;UIComponent.findComponent()&lt;/code&gt;.  
         &lt;/p&gt;
 
@@ -441,20 +441,23 @@
         </attribute>
         <attribute>
             <description>
-                &lt;p class="changed_added_2_0"&gt;Evaluates to Collection&lt;String&gt;.
-                Identifiers of
-                components that will participate in the "execute" portion of the
-                Request
-                Processing Lifecycle. If a literal is specified the identifiers
-                must be space
-                delimited. Any of the keywords "@this", "@form", "@all", "@none"
-                may be specified
-                in the identifier list.  If not specified, the default value of "@this" is assumed.&lt;/p&gt;
+                &lt;p class="changed_added_2_0"&gt;Evaluates to
+                Collection&lt;String&gt;.  This is a space separated
+                list of client ids of components that will participate
+                in the "execute" portion of the Request Processing
+                Lifecycle. If a literal is specified the identifiers
+                must be space delimited. Any of the keywords "@this",
+                "@form", "@all", "@none" may be specified in the
+                identifier list.  If not specified, the default value of
+                "@this" is assumed.  <span
+                class="changed_modified_2_0_rev_a">For example,
+                <code>@this clientIdOne
+                clientIdTwo</code>.</span>&lt;/p&gt;
 
             </description>
             <name>execute</name>
             <required>false</required>
-            <type>java.lang.Object</type>
+            <type>java.util.Collection</type>
         </attribute>
         <attribute>
             <description>
@@ -500,26 +503,29 @@
                 function that will handle errors.&lt;/p&gt;
 
             </description>
-            <name>oneerror</name>
+            <name>onerror</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
         <attribute>
             <description>
-                &lt;p class="changed_added_2_0"&gt;Evaluates to Collection&lt;String&gt;.
-                Identifiers of
-                components that will participate in the "render" portion of the
-                Request
-                Processing Lifecycle. If a literal is specified the identifiers
-                must be space
-                delimited. Any of the keywords "@this", "@form", "@all", "@none"
-                may be specified
-                in the identifier list. If not specified, the default value of "@none" is assumed.&lt;/p&gt;
+                &lt;p class="changed_added_2_0"&gt;Evaluates to
+                Collection&lt;String&gt;.  This is a space separated
+                list of client ids of components that will participate
+                in the "render" portion of the Request Processing
+                Lifecycle. If a literal is specified the identifiers
+                must be space delimited. Any of the keywords "@this",
+                "@form", "@all", "@none" may be specified in the
+                identifier list. If not specified, the default value of
+                "@none" is assumed.  <span
+                class="changed_modified_2_0_rev_a">For example,
+                <code>@this clientIdOne
+                clientIdTwo</code>.</span>&lt;/p&gt;
 
             </description>
             <name>render</name>
             <required>false</required>
-            <type>java.lang.Object</type>
+            <type>java.util.Collection</type>
         </attribute>
     </tag>
     <tag>
@@ -671,19 +677,19 @@
     <tag>
         <description>
 
-            &lt;p class="changed_added_2_0"&gt;Declare the metadata facet for
-            this view. This must be a child of the
-            &lt;code&gt;&amp;lt;f:view&amp;gt;&lt;/code&gt;. This tag must
-            reside within the
-            top level XHTML file for the given viewId, not in a
-            template. The implementation must insure that the direct
-            child of the facet is a &lt;code&gt;UIPanel&lt;/code&gt;, even if
-            there
+            &lt;p class="changed_added_2_0"&gt;Declare the metadata
+            facet for this view. This must be a child of the
+            &lt;code&gt;&amp;lt;f:view&amp;gt;&lt;/code&gt;. This tag
+            must reside within the top level XHTML file for the given
+            viewId<span class="changed_modified_2_0_rev_a">, or in a
+            template client, but</span> not in a template. The
+            implementation must insure that the direct child of the
+            facet is a &lt;code&gt;UIPanel&lt;/code&gt;, even if there
             is only one child of the facet. The implementation must set
-            the id of the &lt;code&gt;UIPanel&lt;/code&gt; to be the value of
-            the
-            &lt;code&gt;UIViewRoot.METADATA_FACET_NAME&lt;/code&gt; symbolic
-            constant.&lt;/p&gt;
+            the id of the &lt;code&gt;UIPanel&lt;/code&gt; to be the
+            value of the
+            &lt;code&gt;UIViewRoot.METADATA_FACET_NAME&lt;/code&gt;
+            symbolic constant.&lt;/p&gt;
 
             &lt;div class="changed_added_2_0"&gt;
 
@@ -691,7 +697,7 @@
             according
             to the following pattern.&lt;/p&gt;
 
-            &lt;p&gt;viewId XHTML page, page01.xhtml&lt;/p&gt;
+            &lt;p&gt;template client XHTML view, view01.xhtml&lt;/p&gt;
 
             &lt;/div&gt;
 
@@ -1049,10 +1055,11 @@
         <attribute>
             <description>
 
-                &lt;p class="changed_added_2_0"&gt;If present, this attribute
-                refers
-                to the value of one of the exposed attached objects within the
-                composite component inside of which this tag is nested.&lt;/p&gt;
+                &lt;p class="changed_added_2_0"&gt;<span
+                class="changed_deleted_2_0_rev_a">If present, this
+                attribute refers to the value of one of the exposed
+                attached objects within the composite component inside
+                of which this tag is nested.</span>&lt;/p&gt;
 
             </description>
             <name>for</name>
@@ -1186,7 +1193,7 @@
             with the closed parent UIComponent custom action.&lt;/p&gt;
 
             &lt;p class="changed_modified_2_0"&gt;When iterating over the
-            select items, &lt;code&gt;toString()&lt;/code&gt; mest be called on
+            select items, &lt;code&gt;toString()&lt;/code&gt; must be called on
             the
             string rendered attribute values.&lt;/p&gt;
 
@@ -1800,7 +1807,7 @@
         <attribute>
             <description>
                 A ValueExpression that evaluates to an instance of
-                RegexpValidator.
+                RegexValidator.
             </description>
             <name>binding</name>
             <type>javax.faces.validator.RegexValidator</type>
