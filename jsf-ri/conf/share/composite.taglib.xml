@@ -94,7 +94,7 @@
         &lt;p&gt;This declares that any Facelets2 file in the resource
         library called &lt;code&gt;ezcomp&lt;/code&gt; can be used as a regular
         JSF UI
-        component in a page with the above namespace declaration by using the
+        component in a view with the above namespace declaration by using the
         "&lt;code&gt;ez&lt;/code&gt;" prefix. For example, placing a file called
         &lt;code&gt;foo.xhtml&lt;/code&gt; in a resource library called &lt;code&gt;ezcomp&lt;/code&gt;
         would make that file accessible like this.&lt;/p&gt;
@@ -105,7 +105,7 @@
 
 
         &lt;p&gt;The implementation must also support declaring the
-        namespace of the tag library in a JSF PDL tag library descriptor.
+        namespace of the tag library in a JSF VDL tag library descriptor.
         This descriptor file is optional and is useful for component vendors
         that do not want to use the default XML namespace. This version of
         the proposal currently uses the facelet taglib descriptor syntax. For
@@ -121,7 +121,7 @@
         &lt;/code&gt;&lt;/pre&gt;
 
         &lt;p&gt;Components from that taglibrary may be used in a using page by
-        declaring them in the XML namespace for that page:&lt;/p&gt;
+        declaring them in the XML namespace for that view:&lt;/p&gt;
 
         &lt;pre&gt;&lt;code&gt;
         &amp;lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -306,10 +306,10 @@
         class="kw2"&gt;&amp;lt;&lt;/span&gt;/composite:implementation&amp;gt;&lt;/span&gt;
         &lt;/div&gt;&lt;/li&gt;&lt;/ol&gt;&lt;/div&gt;&lt;/div&gt;
 
-        &lt;p&gt;The values for attributes in a composite component PDL file can
+        &lt;p&gt;The values for attributes in a composite component VDL file can
         be
         fully localized by putting them inside a ResourceBundle in the same
-        directory as the PDL page and accessing them with the per-component
+        directory as the VDL view and accessing them with the per-component
         resource bundle syntax. Consider the file &lt;code&gt;foo.xhtml&lt;/code&gt;,
         in
         the resource library &lt;code&gt;ezcomp&lt;/code&gt;. The
@@ -456,16 +456,16 @@
 
             &lt;p&gt;If the &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt;
             section
-            is not present in a &lt;em&gt;PDL page&lt;/em&gt;, the contract will
+            is not present in a &lt;em&gt;VDL view&lt;/em&gt;, the contract will
             be
             inferred as described in the specification. There must be
-            zero or one of these elements in a composite component PDL
+            zero or one of these elements in a composite component VDL
             file. If a &lt;code&gt;&amp;lt;composite:interface&amp;gt;&lt;/code&gt;
             element
             does appear, there must be an accompanying
             &lt;code&gt;&amp;lt;composite:implementation&amp;gt;&lt;/code&gt;
             element in the
-            same PDL file. &lt;/p&gt;
+            same VDL file. &lt;/p&gt;
 
             &lt;p&gt;&lt;b&gt;Nesting of composite components&lt;/b&gt;&lt;/p&gt;
 
@@ -1170,7 +1170,7 @@
             section. The facet with
             the name equal to the value of the name attribute, given by the page
             author in the using page, will be rendered at this point in the
-            composite component PDL page. &lt;/p&gt;
+            composite component VDL view. &lt;/p&gt;
 
 
             &lt;p&gt;The implementation of this tag handler must insert a
@@ -1322,7 +1322,7 @@
             in the
             using page. Assuming the same &lt;em&gt;using page&lt;/em&gt;
             excerpt as
-            above, the revised &lt;em&gt;PDL page&lt;/em&gt; is:&lt;/p&gt;
+            above, the revised &lt;em&gt;VDL view&lt;/em&gt; is:&lt;/p&gt;
 
             &lt;div class="syntax"&gt;&lt;div class="html4strict"
             style="font-family: monospace;"&gt;&lt;ol&gt;&lt;li class="li1"&gt;&lt;div
