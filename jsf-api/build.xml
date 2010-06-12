@@ -240,6 +240,7 @@
         <copy todir="${build.generate.dir}/facesdoc/">
            <fileset dir="${doc.dir}">
              <include name="changed*.png" />
+             <include name="changed*.cur" />
            </fileset>
         </copy>
         

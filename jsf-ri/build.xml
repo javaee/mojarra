@@ -456,6 +456,7 @@
         <copy todir="${build.dir}/vdldocs/jsp">
            <fileset dir="${basedir}/../jsf-api/doc/">
              <include name="changed*.png" />
+             <include name="changed*.cur" />
            </fileset>
         </copy>
 
@@ -497,6 +498,7 @@
         <copy todir="${build.dir}/vdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
              <include name="changed*.png" />
+             <include name="changed*.cur" />
            </fileset>
         </copy>
         <copy failonerror="false" overwrite="true" todir="${build.dir}/vdldocs/facelets/h">
