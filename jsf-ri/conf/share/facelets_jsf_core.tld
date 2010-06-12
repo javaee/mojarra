@@ -1416,7 +1416,7 @@ they do, it must be done as shown above, (or with
                 attribute must be escaped. This flag is set to "true" by
                 default.
             </description>
-            <name>escape</name>
+            <name>escapeItem</name>
             <deferred-value>
                 <type>java.lang.String</type>
             </deferred-value>
