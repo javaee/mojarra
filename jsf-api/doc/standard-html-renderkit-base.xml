@@ -3031,7 +3031,7 @@
       <renderer>
             <description><![CDATA[<div class="changed_added_2_0">
 
-<p>Renders a facet at this particular point in the composite component PDL page.</p>
+<p>Renders a facet at this particular point in the composite component VDL page.</p>
 
       <p>Decode Behavior</p>
 
@@ -3077,9 +3077,10 @@ Otherwise, get the facet whose name is "facetName".  If found call
         <renderer>
             <description><![CDATA[<div class="changed_added_2_0">
 
-<p>Render the markup for a <code>&lt;script&gt;</code> element that
-renders the script <code>Resource</code> specified by the optional
-<code>name</code> attribute and <code>library</code> attributes.</p>
+<p><span class="changed_modified_2_0_rev_a">Render</span> the markup for
+a <code>&lt;script&gt;</code> element that renders the script
+<code>Resource</code> specified by the optional <code>name</code>
+attribute and <code>library</code> attributes.</p>
 
 <p>The implementation of this renderer must have a <a target="_"
 href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
@@ -3230,7 +3231,10 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
                     class="changed_modified_2_0_rev_a">If no value is
                     specififed, the script element is rendered at the
                     same point in the view where the tag is
-                    located.</span></p></div>]]>
+                    located.</span> <span
+                    class="changed_modified_2_0_rev_a">Currently
+                    supported values for this attribute are "head",
+                    "body", and "form".</span></p></div>]]>
 
                 </description>
                 <display-name>Target</display-name>
