@@ -967,7 +967,7 @@
             with the closed parent UIComponent custom action.</p>
 
             <p class="changed_modified_2_0">When iterating over the
-            select items, <code>toString()</code> mest be called on the
+            select items, <code>toString()</code> must be called on the
             string rendered attribute values.</p>
 
 <p class="changed_added_2_0">Version 2 of the specification introduces
