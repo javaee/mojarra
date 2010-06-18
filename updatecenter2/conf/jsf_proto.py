@@ -37,13 +37,13 @@
 #
 pkg = {
     "name"          : "glassfish-jsf",
-    "version"       : "2.0.2,0-1",
+    "version"       : "2.0.3,0-2",
     "depends"       : {
                        "pkg:/glassfish-jsf@2.0" : {"type" : "incorporate"},
                        "pkg:/glassfish-common" : { "type" : "require" }
                       },
     "attributes"    : { 
-                        "pkg.summary" : "JSF 2.0.1- Project Mojarra 2.0.1 Patch Release",
+                        "pkg.summary" : "JSF 2.0.3- Project Mojarra 2.0.3 Patch Release",
                         "pkg.description" : "Updated Mojarra 2.0 implementation.  \
 Current version supports JSF 2.0.  This version replaces the default version \
 of Mojarra that ships with Glassfish.",
