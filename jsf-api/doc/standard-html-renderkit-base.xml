@@ -3031,7 +3031,8 @@
       <renderer>
             <description><![CDATA[<div class="changed_added_2_0">
 
-<p>Renders a facet at this particular point in the composite component VDL page.</p>
+<p><span class="changed_modified_2_0_rev_a">Renders</span> a facet at
+this particular point in the composite component VDL page.</p>
 
       <p>Decode Behavior</p>
 
@@ -3050,7 +3051,7 @@ passed to the <code>encodeChildern()</code> method of this renderer will
 be the component with <code>component-family</code>
 <code>javax.faces.Output</code> and <code>renderer-type</code> equal to
 the one for this renderer.  The implementation of
-<code>encodeBegin()</code>, must obtain the component attribute value
+<code><span class="changed_modified_2_0_rev_a">encodeChildren()</span></code>, must obtain the component attribute value
 under the key given by the value of the symbolic constant
 <code>UIComponent.FACETS_KEY</code> from the attributes map of the
 argument component.  If not found, throw <code>IOException</code>.  This

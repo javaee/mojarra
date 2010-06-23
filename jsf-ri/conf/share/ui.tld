@@ -1016,28 +1016,6 @@ is contained in a <code>ui:remove</code> tag.</p>
         <body-content>
             JSP
         </body-content>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-
-
-</div>]]>
-
-            </description>
-            <name>
-            </name>
-            <required>
-	
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-
   </tag>
 
 </taglib>

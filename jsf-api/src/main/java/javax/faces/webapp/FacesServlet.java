@@ -261,8 +261,10 @@ public final class FacesServlet implements Servlet {
      * the cause, as the first argument, and the cause itself as the
      * second argument.</p>
 
-     * In a finally block, {@link
-     * javax.faces.context.FacesContext#release} must be called.
+     * <p class="changed_modified_2_0_rev_a">The implementation must
+     * make it so {@link javax.faces.context.FacesContext#release} is
+     * called within a finally block as late as possible in the
+     * processing for the JSF related portion of this request.</p>
 
      * </div>
      *
