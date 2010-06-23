@@ -676,6 +676,7 @@ javax.faces.level=ALL
         <uptodate property="javadoc.notrequired"
                   targetfile="${build.javadocs.dir}/packages.html">
             <srcfiles dir="${src.dir}" includes="**/*.java"/>
+            <srcfiles dir="${resources.dir}" includes="**/*.html"/>
             <srcfiles dir="${build.generate.dir}" includes="**/*.java"/>
         </uptodate>
     </target>
