@@ -1753,11 +1753,13 @@ will not pass validation.</p> ]]>
 
     <tag>
         <description>
-            Container action for all JavaServer Faces core and
-            custom component actions used on a nested page via
-            "jsp:include" or any custom action that dynamically
-            includes another page from the same web application,
-            such as JSTL's "c:import".
+
+            <![CDATA[<p class="changed_deleted_2_0_rev_a">Container
+            action for all JavaServer Faces core and custom component
+            actions used on a nested page via "jsp:include" or any
+            custom action that dynamically includes another page from
+            the same web application, such as JSTL's "c:import".</p>]]>
+
         </description>
         <name>subview</name>
         <tag-class>com.sun.faces.taglib.jsf_core.SubviewTag</tag-class>
@@ -2340,9 +2342,13 @@ will not pass validation.</p> ]]>
 
     <tag>
         <description>
-            Create and register a child UIOutput component
-            associated with the closest parent UIComponent
-            custom action, which renders nested body content.
+
+            <![CDATA[<p class="changed_deleted_2_0_rev_a">The use of
+            this element has been deprecated in Facelets for JSF 2.0 and
+            beyond. Create and register a child UIOutput component
+            associated with the closest parent UIComponent custom
+            action, which renders nested body content.</p>]]>
+
         </description>
         <name>verbatim</name>
         <tag-class>com.sun.faces.taglib.jsf_core.VerbatimTag</tag-class>
