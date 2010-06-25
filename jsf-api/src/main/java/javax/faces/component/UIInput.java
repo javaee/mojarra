@@ -907,11 +907,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <li>If the <code>valid</code> property of this component is still
      * <code>true</code>, retrieve the previous value of the component
      * (with <code>getValue()</code>), store the new local value using
-     * <code>setValue()</code>, and reset the submitted value to
-     * null.  If the local value is different from
-     * the previous value of this component, fire a
-     * {@link ValueChangeEvent} to be broadcast to all interested
+     * <code>setValue()</code>, and reset the submitted value to null.
+     * If the local value is different from the previous value of this
+     * component, <span class="changed_modified_2_1">as determined by a
+     * call to {@link #compareValues}</span>, fire a {@link
+     * ValueChangeEvent} to be broadcast to all interested
      * listeners.</li>
+
      * </ul>
      * <p/>
      * <p>Application components implementing {@link UIInput} that wish to
@@ -1177,22 +1179,44 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     /**
-     * <p>Return <code>true</code> if the new value is different from the
-     * previous value.</p>
+     * <p>Return <code>true</code> if the new value is different from
+     * the previous value.  First compare the two values by passing
+     * <em>value</em> to the <code>equals</code> method on argument
+     * <em>previous</em>.  If that method returns <code>true</code>,
+     * return <code>true</code>.  If that method returns
+     * <code>false</code>, and both arguments implement
+     * <code>java.lang.Comparable</code>, compare the two values by
+     * passing <em>value</em> to the <code>compareTo</code> method on
+     * argument <em>previous</em>.  Return <code>true</code> if this
+     * method returns <code>0</code>, <code>false</code> otherwise.</p>
      *
      * @param previous old value of this component (if any)
      * @param value    new value of this component (if any)
      */
     protected boolean compareValues(Object previous, Object value) {
+        boolean result = true;
 
         if (previous == null) {
-            return (value != null);
+            result = (value != null);
         } else if (value == null) {
-            return (true);
+            result = true;
         } else {
-            return (!(previous.equals(value)));
+	    boolean previousEqualsValue = previous.equals(value);
+	    if (!previousEqualsValue && 
+		previous instanceof Comparable &&
+		value instanceof Comparable) {
+                try {
+                    result = !(0 == ((Comparable) previous).
+                                      compareTo((Comparable) value));
+                } catch (ClassCastException cce) {
+                    // Comparable throws CCE if the types prevent a comparison
+                    result = true;
+                }
+	    } else {
+		result = !previousEqualsValue;
+	    }
         }
-
+        return result;
     }
 
 
