@@ -43,10 +43,10 @@
     <version>@version@</version>
     <packaging>jar</packaging>
     <name>
-        Sun's implementation of the JSF 2.0 specification API.
+        Sun's implementation of the JSF 2.1 specification API.
     </name>
     <description>
-        This is the master POM file for Sun's Implementation of the JSF 2.0 Specification.
+        This is the master POM file for Sun's Implementation of the JSF 2.1 Specification.
     </description>
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
     <licenses>
@@ -206,7 +206,7 @@
     </issueManagement>
     <mailingLists>
         <mailingList>
-            <name>JSF 2.0 Specification Comments</name>
+            <name>JSF 2.1 Specification Comments</name>
             <post>jsr-314-comments@jcp.org</post>
         </mailingList>
         <mailingList>

@@ -41,11 +41,11 @@
 
     <groupId>com.sun.faces</groupId>
     <artifactId>jsf-api</artifactId>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Sun's implementation of the JSF 2.0 specification API.</name>
-    <description>This is the master POM file for Sun's Implementation of the JSF 2.0 Specification.</description>
+    <name>Sun's implementation of the JSF 2.1 specification API.</name>
+    <description>This is the master POM file for Sun's Implementation of the JSF 2.1 Specification.</description>
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
 
     <licenses>
@@ -243,7 +243,7 @@
 
     <mailingLists>
         <mailingList>
-            <name>JSF 2.0 Specification Comments</name>
+            <name>JSF 2.1 Specification Comments</name>
             <post>jsr-314-comments@jcp.org</post>
         </mailingList>
         <mailingList>
