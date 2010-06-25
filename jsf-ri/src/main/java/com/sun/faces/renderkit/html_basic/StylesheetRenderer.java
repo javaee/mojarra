@@ -77,6 +77,8 @@ public class StylesheetRenderer extends ScriptStyleBaseRenderer {
         String name = (String) attributes.get("name");
         String library = (String) attributes.get("library");
         String key = name + library;
+
+        String media = (String) attributes.get("media");
         
         if (null == name) {
             return;
@@ -100,6 +102,9 @@ public class StylesheetRenderer extends ScriptStyleBaseRenderer {
                                   ? resource.getRequestPath()
                                   : "RES_NOT_FOUND"),
                               "href");
+        if (media != null) {
+            writer.writeAttribute("media", media, "media");
+        }
         writer.endElement("link");
         super.encodeEnd(context, component);
     }

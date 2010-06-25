@@ -30734,9 +30734,10 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
     <renderer>
       <description><![CDATA[<div class="changed_added_2_0">
 
-<p>Render the markup for a <code>&lt;link&gt;</code> element that
-renders the style <code>Resource</code> specified by the optional
-<code>name</code> and <code>library</code> attributes.</p>
+<p><span class="changed_modified_2_1">Render</span> the markup for a
+<code>&lt;link&gt;</code> element that renders the style
+<code>Resource</code> specified by the optional <code>name</code> and
+<code>library</code> attributes.</p>
 
       <p>Decode Behavior</p>
 
@@ -30765,7 +30766,10 @@ calling <code>resource.getRequestPath()</code> as the value of the
 <code>resource.getContentType()</code> as the value of the "type"
 attribute, the literal string "stylesheet" as the value of the "rel"
 attribute, and the literal string "screen" as the value of the "media"
-attribute.</p>
+<span class="changed_modified_2_1">attribute, and the value of the
+"media" attribute set to the value of the "media" attribute of this
+tag.</span></p>
+
 
 <p>The implementation of this renderer must have a <a target="_"
 href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
@@ -30813,6 +30817,22 @@ the literal string "<code>head</code>" as the last argument.</p>
         </attribute-extension>
       </attribute>
 
+      <attribute>
+        <description><![CDATA[<div class="changed_added_2_1"><p>The
+                    <em>media</em> type for this stylesheet.  For
+                    example, <em>media="screen"</em> would cause the
+                    resource to be rendered with the <em>media</em>
+                    attribute of the <em>link</em> set to
+                    <em>screen</em>.</p></div>]]></description>
+        <display-name>Media</display-name>
+        <icon/>
+        <attribute-name>media</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <required>false</required>
+          <tag-attribute>true</tag-attribute>
+        </attribute-extension>
+      </attribute>
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
         <renders-children>true</renders-children>

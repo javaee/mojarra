@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -214,9 +214,19 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
 
         assertTrue(text.matches(
                 "(?s).*"+
-                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/jsf.js\\?ln=javax.faces&amp;stage=Development\">.*" +
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/jsf.*js\\?ln=javax.faces&amp;stage=Development\">.*" +
                 "</script>.*"
                 ));
 
+    }
+
+    public void testSheetMedia() throws Exception {
+        lastpage = getPage("/faces/render/outputSheetMedia.xhtml");
+        String text = lastpage.asXml();
+        assertTrue(text.matches(
+                "(?s).*<head>.*"+
+                "<link.* type=\"text/css\".* rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case9.css\".* media=\"print\"\\s*/>.*" + 
+                "</head>.*"
+                ));
     }
 }
