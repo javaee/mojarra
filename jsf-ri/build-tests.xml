@@ -171,15 +171,13 @@
               token="@serialVersionUID@"
               value="7410146713650507654L"/>
         <jsf.javac srcdir="${src.test.dir}"
-                   destdir="${out.test.dir}/classes"
-                   excludes="**/ConfigFileTestCase.java">
+                   destdir="${out.test.dir}/classes">
             <classpath>
                 <path refid="test.compile.classpath"/>
             </classpath>
         </jsf.javac>
         <jsf.javac srcdir="${out.test.dir}/classes"
-                   destdir="${out.test.dir}/classes"
-                   excludes="**/ConfigFileTestCase.java">
+                   destdir="${out.test.dir}/classes">
             <classpath>
                 <path refid="test.compile.classpath"/>
             </classpath>    
@@ -326,10 +324,8 @@
                       name="com.sun.faces.application.TestStateManagerImpl"/>
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.TestViewHandlerImpl"/>
-                <!--
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.config.ConfigFileTestCase"/>
-                -->
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.component.visit.TestTreeWithUIRepeatVisit"/>
                 <test todir="${impl.test.results.dir}"
@@ -462,7 +458,7 @@
             </custom-sysproperties>
             <suite>
                 <test todir="${impl.test.results.dir}"
-                    name="com.sun.faces.application.resource.TestResourceHandlerImpl"/>
+                    name="com.sun.faces.config.ConfigFileTestCase"/>
             </suite>
 
         </jsf.junit>       
@@ -499,8 +495,7 @@
                              com/sun/faces/config/TestRenderer.java,
                              com/sun/faces/config/TestValidator.java,
                              com/sun/faces/mock/*.java"
-                   excludes="com/sun/faces/config/ConfigFileTestCase.java,
-                             com/sun/faces/config/ConfigureListenerTestCase.java">
+                   excludes="com/sun/faces/config/ConfigureListenerTestCase.java">
 
             <classpath>
                 <path refid="test.compile.classpath"/>

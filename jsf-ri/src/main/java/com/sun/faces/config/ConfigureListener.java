@@ -502,15 +502,18 @@ public class ConfigureListener implements ServletRequestListener,
         }
         // tear down the application
         try {
-            List<HttpSession> sessions = webAppListener.getActiveSessions();
-            if (sessions != null) {
-                for (HttpSession session : sessions) {
-                    if (LOGGER.isLoggable(Level.INFO)) {
-                        LOGGER.log(Level.INFO,
-                                "Invalidating Session {0}",
-                                session.getId());
+            // this will only be true in the automated test usage scenario
+            if (null != webAppListener) {
+                List<HttpSession> sessions = webAppListener.getActiveSessions();
+                if (sessions != null) {
+                    for (HttpSession session : sessions) {
+                        if (LOGGER.isLoggable(Level.INFO)) {
+                            LOGGER.log(Level.INFO,
+                                    "Invalidating Session {0}",
+                                    session.getId());
+                        }
+                        session.invalidate();
                     }
-                    session.invalidate();
                 }
             }
             ApplicationAssociate associate = ApplicationAssociate.getInstance(sc);
