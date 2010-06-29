@@ -130,5 +130,34 @@
     </map-entries>
   </managed-bean>
 
+<managed-bean>
+    <managed-bean-name>headAndFoot</managed-bean-name>
+    <managed-bean-class>java.util.TreeMap</managed-bean-class>
+    <managed-bean-scope>none</managed-bean-scope>
+    <map-entries>
+        <value-class>java.util.TreeMap</value-class>
+        <map-entry>
+            <key>banners</key>
+            <value>#{banners}</value>
+        </map-entry>
+    </map-entries>
+</managed-bean>
+
+<managed-bean>
+    <managed-bean-name>banners</managed-bean-name>
+    <managed-bean-class>java.util.TreeMap</managed-bean-class>
+    <managed-bean-scope>none</managed-bean-scope>
+    <map-entries>
+        <map-entry>
+            <key>headerUrl</key>
+            <value>http://foo.utah.edu</value>
+        </map-entry>
+        <map-entry>
+            <key>urlName</key>
+            <value>Request For Change</value>
+        </map-entry>
+    </map-entries>
+</managed-bean>
+
 
 </faces-config>

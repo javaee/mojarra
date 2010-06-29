@@ -48,6 +48,8 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 
 import java.util.*;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 import javax.faces.el.ValueBinding;
 
 
@@ -177,6 +179,25 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                    map.get("two") instanceof Map);
         assertNull("map.get(three) not null", map.get("three"));
 
+    }
+
+    public void testMap1701() throws Exception {
+        loadFromInitParam("/WEB-INF/config-lists-and-maps.xml");
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        ExpressionFactory ef = application.getExpressionFactory();
+        ValueExpression ve = ef.createValueExpression(getFacesContext().getELContext(),
+                "#{headAndFoot}", Map.class);
+        Map headAndFoot = (Map) ve.getValue(getFacesContext().getELContext());
+        assertNotNull(headAndFoot);
+        Map banners = (Map) headAndFoot.get("banners");
+        Object result = banners.get("headerUrl");
+        assertNotNull(result);
+        assertEquals("http://foo.utah.edu", result);
+        result = banners.get("urlName");
+        assertNotNull(result);
+        assertEquals("Request For Change", result);
 
     }
  
