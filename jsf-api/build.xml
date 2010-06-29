@@ -874,36 +874,4 @@ javax.faces.level=ALL
         <mvn.deploy.release groupId="javax.faces" version="${spec.version}" type="api"/>
     </target>
 
-    <target name="apply.netbeans.186761.hack">
-
-      <copy todir="${src.dir}">
-
-        <fileset dir="${build.generate.dir}">
-          <include name="**/*.java" />
-        </fileset>
-
-      </copy>
-
-    </target>
-
-    <target name="remove.netbeans.186761.hack">
-
-      <delete failonerror="false">
-
-        <fileset dir="${src.dir}">
-          <include name="**/TypedCollections.java" />
-          <include name="**/MessageFactory.java" />
-          <include name="**/MethodBindingMethodExpressionAdapter.java" />
-          <include name="**/ValueBindingValueExpressionAdapter.java" />
-          <include name="**/MethodExpressionMethodBindingAdapter.java" />
-          <include name="**/ValueExpressionValueBindingAdapter.java" />
-          <include name="**/StateHolderSaver.java" />
-          <include name="javax/faces/component/html/*.java" />
-        </fileset>
-
-      </delete>
-
-    </target>
-
-
 </project>

@@ -16,6 +16,18 @@
                     <encoding>MacRoman</encoding>
                 </source-folder>
                 <source-folder>
+                    <label>jsf-ri/build/generate</label>
+                    <type>java</type>
+                    <location>jsf-ri/build/generate</location>
+                    <encoding>MacRoman</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-api/build/generate</label>
+                    <type>java</type>
+                    <location>jsf-api/build/generate</location>
+                    <encoding>MacRoman</encoding>
+                </source-folder>
+                <source-folder>
                     <label>jsf-api/src/main/java</label>
                     <type>java</type>
                     <location>jsf-api/src/main/java</location>
@@ -55,6 +67,14 @@
             <view>
                 <items>
                     <source-folder style="packages">
+                        <label>jsf-ri/build/generate</label>
+                        <location>jsf-ri/build/generate</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>jsf-api/build/generate</label>
+                        <location>jsf-api/build/generate</location>
+                    </source-folder>
+                    <source-folder style="packages">
                         <label>jsf-api/src/main/java</label>
                         <location>jsf-api/src/main/java</location>
                     </source-folder>
@@ -85,6 +105,8 @@
                 <package-root>jsf-api/src/main/java</package-root>
                 <package-root>jsf-ri/src/main/java</package-root>
                 <package-root>jsf-ri/test</package-root>
+                <package-root>jsf-api/build/generate</package-root>
+                <package-root>jsf-ri/build/generate</package-root>
                 <classpath mode="compile">dependencies/jars/el-api-1.0.jar:dependencies/jars/jsp-api-2.1.jar:dependencies/jars/jstl-1.2.jar:dependencies/jars/validation-api-1.0.0.GA.jar:dependencies/jars/servlet-api-3.0.20100224.jar:dependencies/jars/groovy-all-1.6.4.jar:dependencies/jars/junit-3.8.1.jar:lib/cactus-1.7.1-javaee5.jar:lib/jsf-extensions-test-time.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
