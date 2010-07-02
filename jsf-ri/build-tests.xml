@@ -353,6 +353,8 @@
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.context.TestFacesContextImpl"/>
                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.context.TestStateContext"/>
+                <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.convert.TestConverters"/>
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.el.TestResourceELResolver"/>
