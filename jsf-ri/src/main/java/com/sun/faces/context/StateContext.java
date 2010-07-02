@@ -222,7 +222,6 @@ public class StateContext {
 
     public static class AddRemoveListener implements SystemEventListener {
 
-        private FacesContext ctx;
         private StateContext stateCtx;
         private LinkedHashMap<String, ComponentStruct> dynamicAdds;
         private List<String> dynamicRemoves;
@@ -232,7 +231,6 @@ public class StateContext {
 
 
         public AddRemoveListener(FacesContext ctx) {
-            this.ctx = ctx;
             stateCtx = StateContext.getStateContext(ctx);
         }
 
@@ -242,7 +240,7 @@ public class StateContext {
 
         public void processEvent(SystemEvent event)
               throws AbortProcessingException {
-
+            FacesContext ctx = FacesContext.getCurrentInstance();
             if (event instanceof PreRemoveFromViewEvent) {
                 if (stateCtx.trackViewModifications()) {
                     handleRemoveEvent(ctx, (PreRemoveFromViewEvent) event);
