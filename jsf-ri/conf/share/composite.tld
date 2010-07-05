@@ -217,6 +217,8 @@ shortDescription=A really nifty login panel.
 <p>The normal localization rules for <code>ResourceBundle</code> would
 apply.</p>
 
+<p>Refer to the <code>composite</code> tag for the details of defining the <code>interface</code> and <code>implementation</code> for composite components.</p>
+
 </div>
 
 
