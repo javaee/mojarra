@@ -1781,6 +1781,20 @@
             <xi:include href="graphic-image-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
 
+            <attribute>
+                <description><![CDATA[<div class="changed_added_2_0"><p>The 
+                <em>resourceName</em> for this resource.</p></div>]]>
+                </description>
+                <display-name>Resource Name</display-name>
+                <icon/>
+                <attribute-name>name</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <required>false</required>
+                    <tag-attribute>true</tag-attribute>
+                </attribute-extension>
+            </attribute>
+
             <renderer-extension>
                 <renders-children>true</renders-children>
             </renderer-extension>
@@ -3280,6 +3294,21 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
             </renderer-class>
             <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
             <attribute>
+                <description><![CDATA[<div class="changed_added_2_0"><p>The
+                <em>resourceName</em> for this resource.</p></div><div class="changed_modified_2_0_rev_a">
+                <p>This attribute is required</p></div>]]>
+                </description>
+                <display-name>Resource Name</display-name>
+                <icon/>
+                <attribute-name>name</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <required>true</required>
+                    <tag-attribute>true</tag-attribute>
+                </attribute-extension>
+            </attribute>
+
+            <attribute>
                 <description>
 
                     <![CDATA[<div class="changed_added_2_0"><p>The
@@ -3375,6 +3404,21 @@ the literal string "<code>head</code>" as the last argument.</p>
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-stylesheet-renderer-class/text())"/>
             </renderer-class>
             <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <attribute>
+                <description><![CDATA[<div class="changed_added_2_0"><p>The
+                <em>resourceName</em> for this resource.</p></div><div class="changed_modified_2_0_rev_a">
+                <p>This attribute is required</p></div>]]>
+                </description>
+                <display-name>Resource Name</display-name>
+                <icon/>
+                <attribute-name>name</attribute-name>
+                <attribute-class>java.lang.String</attribute-class>
+                <attribute-extension>
+                    <required>true</required>
+                    <tag-attribute>true</tag-attribute>
+                </attribute-extension>
+            </attribute>
+
             <attribute>
                 <description>
 

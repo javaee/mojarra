@@ -6500,13 +6500,14 @@
         </attribute>
         <attribute>
             <description>
-                <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>]]>
+                <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>
+                <div class="changed_modified_2_0_rev_a"><p>This attribute is required.</p></div>]]>
             </description>
             <name>
                 name
             </name>
             <required>
-                false
+                true 
             </required>
             <type>
                 java.lang.String
@@ -6680,13 +6681,14 @@
         </attribute>
         <attribute>
             <description>
-                <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>]]>
+                <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>
+                <div class="changed_modified_2_0_rev_a"><p>This attribute is required.</p></div>]]>
             </description>
             <name>
                 name
             </name>
             <required>
-                false
+                true 
             </required>
             <type>
                 java.lang.String
