@@ -803,10 +803,11 @@
     <component>
 
         <description>
-            <![CDATA[<p>Represents an HTML <code>input</code> element
-      of type <code>checkbox</code>.  The checkbox will
-      be rendered as checked, or not, based on the value
-      of the <code>value</code> property.</p>]]>
+            <![CDATA[<p><span
+            class="changed_modified_2_0_rev_a">Represents</span> an HTML
+            <code>input</code> element of type <code>checkbox</code>.
+            The checkbox will be rendered as checked, or not, based on
+            the value of the <code>value</code> property.</p>]]>
         </description>
         <display-name>Checkbox</display-name>
         <component-type>javax.faces.HtmlSelectBooleanCheckbox</component-type>
@@ -830,9 +831,11 @@
     <component>
 
         <description>
-            <![CDATA[<p>Represents a multiple-selection component that is rendered
-      as a set of HTML <code>input</code> elements of type
-      <code>checkbox</code>.</p>]]>
+            <![CDATA[<p><span
+            class="changed_modified_2_0_rev_a">Represents</span> a
+            multiple-selection component that is rendered as a set of
+            HTML <code>input</code> elements of type
+            <code>checkbox</code>.</p>]]>
         </description>
         <display-name>Multi-Select Checkbox</display-name>
         <component-type>javax.faces.HtmlSelectManyCheckbox</component-type>
@@ -961,9 +964,11 @@
     <component>
 
         <description>
-            <![CDATA[<p>Represents a single-selection component that is rendered
-      as a set of HTML <code>input</code> elements of type
-      <code>radio</code>.</p>]]>
+            <![CDATA[<p><span
+            class="changed_modified_2_0_rev_a">Represents</span> a
+            single-selection component that is rendered as a set of HTML
+            <code>input</code> elements of type
+            <code>radio</code>.</p>]]>
         </description>
         <display-name>Radio</display-name>
         <component-type>javax.faces.HtmlSelectOneRadio</component-type>
@@ -2583,8 +2588,8 @@
 
         <renderer>
 
-            <description><![CDATA[<p><span
-            class="changed_modified_2_0">Render</span> an HTML option
+            <description><![CDATA[<p><span class="changed_modified_2_0
+            changed_modified_2_0_rev_a">Render</span> an HTML option
             list.</p>
 
       <p>Decode Behavior</p>
@@ -2668,7 +2673,7 @@
       not be rendered.</span> If the current child is a
       <code>UISelectItem</code> create a <code>SelectItem</code>instance
       from its <code>itemValue, itemLabel</code>, <code
-      class="changed_added_2_0">itemEscaped</code>, and
+      class="changed_added_2_0_rev_a">itemEscaped</code>, and
       <code>itemDescription</code> properties, add it to the list.  If
       the current child is a <code>UISelectItems</code> instance, call
       its <code>getValue()</code> method.  If the result is a
@@ -2681,26 +2686,27 @@
       label, the value as the value, and <code>null</code> as the
       description.</p>
 
-      <p>Iterate over the list of <code>SelectItem</code> beans.  If the
-      current element is a <code>SelectItemGroup</code>, render an
-      "optgroup" element with a "label" attribute, the value of which is
-      the "label" property from the current element, then call
-      <code>getSelectItems()</code> and render each element as below.
-      If the current element is not a <code>SelectItemGroup</code>,
-      render an "option" element.  Follow the conversion rules in the
-      spec to obtain a renderable <code>String</code> from the "value"
-      property of the current element, render that as the value of the
-      "value" atribute.  Now it is time to see if the current element is
-      the selected value.  Call its <code>getSubmittedValue()</code>
-      method, casting the result to an <code>Object []</code>, otherwise
-      the component must be a <code>UISelectOne</code> instance, call
-      its <code>getSubmittedValue()</code> method and create an
-      <code>Object []</code> around the result.  Determine the type of
-      the resultant array, if the resultant array is non-null, otherwise
-      the type is <code>String</code>.  Coerce the current item value to
-      this type following the Expression Language coercion rules.  If
-      the resultant array is non-null, we look in the array for a value
-      that, when we pass the renderable value to its
+      <p><span class="changed_modified_2_0_rev_a">Iterate over the list
+      of <code>SelectItem</code> beans.  If the current element is a
+      <code>SelectItemGroup</code>, render an "optgroup" element with a
+      "label" attribute, the value of which is the "label" property from
+      the current element, then call <code>getSelectItems()</code> and
+      render each element as below.  If the current element is not a
+      <code>SelectItemGroup</code>, render an "option" element.  Follow
+      the conversion rules in the spec to obtain a renderable
+      <code>String</code> from the "value" property of the current
+      element, render that as the value of the "value" atribute.  Now it
+      is time to see if the current element is the selected value.  Call
+      its <code>getSubmittedValue()</code> method, casting the result to
+      an <code>Object []</code>, otherwise the component must be a
+      <code>UISelectOne</code> instance, call its
+      <code>getSubmittedValue()</code> method and create an <code>Object
+      []</code> around the result.  Determine the type of the resultant
+      array, if the resultant array is non-null, otherwise the type is
+      <code>String</code>.  Coerce the current item value to this type
+      following the Expression Language coercion rules.  If the
+      resultant array is non-null, we look in the array for a
+      value</span> that, when we pass the renderable value to its
       <code>equals()</code> method, it returns <code>true</code>,
       meaning the current element is selected.  If the resultant array
       is <code>null</code>, if the component is a
@@ -2718,12 +2724,12 @@
       HTML boolean property "selected".  If the current
       SelectItem.isDisabled() returns true, render "disabled" as the
       value of the "disabled" attribute.  <span
-      class="changed_added_2_0">If the value of the <code>escape</code>
-      property is true, use the <code>writeText()</code> method of
-      <code>ResponseWriter</code> to write out the value of the
-      <code>label</code> property.  Otherwise, use the
-      <code>write()</code> method of the <code>ResponseWriter</code> to
-      do so.</span></p>
+      class="changed_added_2_0_rev_a">If the value of the
+      <code>escape</code> property is true, use the
+      <code>writeText()</code> method of <code>ResponseWriter</code> to
+      write out the value of the <code>label</code> property.
+      Otherwise, use the <code>write()</code> method of the
+      <code>ResponseWriter</code> to do so.</span></p>
 
       </ul>
 
@@ -3257,9 +3263,10 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
         <renderer>
             <description><![CDATA[<div class="changed_added_2_0">
 
-<p>Render the markup for a <code>&lt;link&gt;</code> element that
-renders the style <code>Resource</code> specified by the optional
-<code>name</code> and <code>library</code> attributes.</p>
+<p><span class="changed_modified_2_0_rev_a">Render</span> the markup for
+a <code>&lt;link&gt;</code> element that renders the style
+<code>Resource</code> specified by the optional <code>name</code> and
+<code>library</code> attributes.</p>
 
       <p>Decode Behavior</p>
 
@@ -3322,7 +3329,8 @@ the literal string "<code>head</code>" as the last argument.</p>
         <renderer>
             <description><![CDATA[<div class="changed_added_2_0">
 
-<p>Render the markup for a <code>&lt;head&gt;</code> element.</p>
+<p><span class="changed_modified_2_0_rev_a">Render</span> the markup for
+a <code>&lt;head&gt;</code> element.</p>
 
       <p>Decode Behavior</p>
 
@@ -3336,11 +3344,12 @@ the literal string "<code>head</code>" as the last argument.</p>
 
       <ul>
 
-<p>Render the starting <code>&lt;head&gt;</code> element tag.  Any attributes declared on the element must be passed through
-unmodified to the rendered output.  
-At some point before rendering the
-      closing <code>&lt;/head&gt;</code> element tag, render any resources that have been targeted
-      for this "head" element:
+<p>Render the starting <code>&lt;head&gt;</code> element tag.  Any
+attributes declared on the element must be passed through unmodified to
+the rendered output.  <span class="changed_modified_2_0_rev_a">At some
+point before rendering the closing <code>&lt;/head&gt;</code> element
+tag</span>, render any resources that have been targeted for this "head"
+element:
       <ul>
       <li>Obtain a <code>UIViewRoot</code> instance.</li>
       <li>Obtain a <code>List</code> of component resources targeted for
@@ -3354,6 +3363,8 @@ unmodified to the rendered output.</p>
 
       </ul>
 
+<div class="changed_modified_2_0_rev_a">
+
       <p>Note that due to the cascading nature of CSS files, the order
       in which these files have been added to the view must be preserved
       when rendering the references to the files within the
@@ -3365,6 +3376,8 @@ unmodified to the rendered output.</p>
       author.</p>
 
       <p>Render the ending <code>&lt;/head&gt;</code> element tag.</p>
+
+</div>
 
 </div>]]></description>
             <component-family>javax.faces.Output</component-family>

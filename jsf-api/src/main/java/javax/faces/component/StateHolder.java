@@ -115,12 +115,14 @@ public interface StateHolder {
     public boolean isTransient();
 
     /**
-     * <p>Denotes whether or not the Object implementing this interface must
-     * or must not participate in state saving or restoring.</p>
+     * <p><span class="changed_modified_2_0_rev_a">Denotes</span>
+     * whether or not the Object implementing this interface must or
+     * must not participate in state saving or restoring.</p>
      * 
-     * @param newTransientValue boolean pass <code>true</code> if this Object 
-     *  will not participate in state saving or restoring, otherwise
-     *  pass <code>false</code>.
+     * @param newTransientValue boolean pass <code>true</code> if this
+     * Object <span class="changed_modified_2_0_rev_a">will not
+     * participate</span> in state saving or restoring, otherwise pass
+     * <code>false</code>.
      */ 
     public void setTransient(boolean newTransientValue);
 

@@ -164,9 +164,10 @@ public abstract class ViewDeclarationLanguage {
 
 
     /**
-     * <p class="changed_added_2_0">Assuming the component metadata for
-     * argument <code>topLevelComponent</code> has been made available
-     * by an earlier call to {@link
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_0_rev_a">Assuming</span> the component
+     * metadata for argument <code>topLevelComponent</code> has been
+     * made available by an earlier call to {@link
      * ViewDeclarationLanguage#getComponentMetadata}, leverage the
      * component metadata for the purpose of re-targeting attached
      * objects from the top level composite component to the individual
@@ -231,14 +232,15 @@ public abstract class ViewDeclarationLanguage {
      *<li><p>If <em>curHandler</em> is an instance of {@link
      *EditableValueHolderAttachedObjectHandler} and <em>curTarget</em>
      *is an instance of {@link EditableValueHolderAttachedObjectTarget},
-     *and <em>curTarget.getName()</em> is equal to
-     *<em>curTargetName</em>, consider it a match.</p></li>
-     *
-     *<li><p>If <em>curHandler</em> is an instance of {@link
-     *ValueHolderAttachedObjectHandler} and <em>curTarget</em> is an
-     *instance of {@link ValueHolderAttachedObjectTarget}, and
+     *<span class="changed_modified_2_0_rev_a">and
      *<em>curTarget.getName()</em> is equal to <em>curTargetName</em>,
-     *consider it a match.</p></li>
+     *consider it a match.</span></p></li>
+     *
+     *<li class="changed_modified_2_0_rev_a"><p>If <em>curHandler</em>
+     *is an instance of {@link ValueHolderAttachedObjectHandler} and
+     *<em>curTarget</em> is an instance of {@link
+     *ValueHolderAttachedObjectTarget}, and <em>curTarget.getName()</em>
+     *is equal to <em>curTargetName</em>, consider it a match.</p></li>
 
      *<li><p>If <em>curHandler</em> is an instance of {@link
      *BehaviorHolderAttachedObjectHandler} and <em>curTarget</em> is an
@@ -263,9 +265,10 @@ public abstract class ViewDeclarationLanguage {
      *</li>
      *</ul>
 
-     * <p>The implementation must support retargeting attached objects
-     * from the top level compsite component to targets that are
-     * composite and non-composite components.</p>
+     * <p class="changed_modified_2_0_rev_a">The implementation must
+     * support retargeting attached objects from the top level compsite
+     * component to targets that are composite and non-composite
+     * components.</p>
      *
      * <p>An implementation is provided that will throw
      * <code>UnsupportedOperationException</code>.  A Faces implementation

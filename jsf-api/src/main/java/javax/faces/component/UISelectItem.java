@@ -42,18 +42,19 @@ import javax.faces.model.SelectItem;
 
 
 /**
- * <p><strong class="changed_modified_2_0">UISelectItem</strong> is a
- * component that may be nested inside a {@link UISelectMany} or {@link
- * UISelectOne} component, and causes the addition of a {@link
- * SelectItem} instance to the list of available options for the parent
- * component.  The contents of the {@link SelectItem} can be specified
- * in one of the following ways:</p> <ul> <li>The <code>value</code>
- * attribute's value is an instance of {@link SelectItem}.</li> <li>The
- * associated {@link javax.el.ValueExpression} points at a model data
- * item of type {@link SelectItem}.</li> <li>A new {@link SelectItem}
- * instance is synthesized from the values of the
- * <code>itemDescription</code>, <code>itemDisabled</code>,
- * <code>itemLabel</code>, <code>itemEscaped</code>, and
+ * <p><strong class="changed_modified_2_0
+ * changed_modified_2_0_rev_a">UISelectItem</strong> is a component that
+ * may be nested inside a {@link UISelectMany} or {@link UISelectOne}
+ * component, and causes the addition of a {@link SelectItem} instance
+ * to the list of available options for the parent component.  The
+ * contents of the {@link SelectItem} can be specified in one of the
+ * following ways:</p> <ul> <li>The <code>value</code> attribute's value
+ * is an instance of {@link SelectItem}.</li> <li>The associated {@link
+ * javax.el.ValueExpression} points at a model data item of type {@link
+ * SelectItem}.</li> <li>A new {@link SelectItem} instance is
+ * synthesized from the values of the <code>itemDescription</code>,
+ * <code>itemDisabled</code>, <code>itemLabel</code>, <code
+ * class="changed_modified_2_0_rev_a">itemEscaped</code>, and
  * <code>itemValue</code> attributes.</li> </ul>
  */
 

@@ -346,13 +346,16 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     /**
-     * <p><span class="changed_modified_2_0">Allow</span> an arbitrary
-     * method to be called for the "beforePhase" event as the UIViewRoot
-     * runs through its lifecycle.  This method will be called for all
-     * phases except {@link PhaseId#RESTORE_VIEW}.  Unlike a true
-     * {@link PhaseListener}, this approach doesn't allow for only
-     * receiving {@link PhaseEvent}s for a given phase.</p> <p/> <p>The
-     * method must conform to the signature of {@link
+     * <p><span class="changed_modified_2_0
+     * changed_modified_2_0_rev_a">Allow</span> an arbitrary method to
+     * be called for the "beforePhase" event as the UIViewRoot runs
+     * through its lifecycle.  This method will be called for all phases
+     * <span class="changed_modified_2_0_rev_a">except {@link
+     * PhaseId#RESTORE_VIEW}.  Unlike a true {@link PhaseListener}, this
+     * approach doesn't allow for only receiving {@link PhaseEvent}s for
+     * a given phase.</span></p>
+
+     * <p>The method must conform to the signature of {@link
      * PhaseListener#beforePhase}.</p>
      *
      * @param newBeforePhase the {@link MethodExpression} that will be
@@ -532,7 +535,8 @@ public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
     }
 
     /**
-     * <p class="changed_added_2_0">Return an unmodifiable
+     * <p class="changed_added_2_0"><span
+     * class="changed_deleted_2_0_rev_a">Return</span> an unmodifiable
      * <code>List</code> of {@link UIComponent}s for the provided
      * <code>target</code> agrument.  Each <code>component</code> in the
      * <code>List</code> is assumed to represent a resource

@@ -502,9 +502,10 @@ public abstract class Application {
     public abstract void setVariableResolver(VariableResolver resolver);
 
     /**
-     * <p>Cause an the argument <code>resolver</code> to be added to the
-     * resolver chain as specified in section JSF.5.5.1 of the JavaServer
-     * Faces Specification.</p>
+     * <p><span class="changed_modified_2_0_rev_a">Cause</span> an the
+     * argument <code>resolver</code> to be added to the resolver chain
+     * as specified in section JSF.5.5.1 of the JavaServer Faces
+     * Specification.</p>
      *
      * <p>It is not possible to remove an <code>ELResolver</code>
      * registered with this method, once it has been registered.</p>
@@ -525,9 +526,10 @@ public abstract class Application {
      * for the sole purpose of not breaking existing applications that extend
      * {@link Application}.</p>
 
-     * @throws IllegalStateException if called after the first
+     * @throws IllegalStateException <span
+     * class="changed_modified_2_0_rev_a">if called after the first
      * request to the {@link javax.faces.webapp.FacesServlet} has been
-     * serviced.
+     * serviced.</span>
 
      * @since 1.2
      */
@@ -960,10 +962,11 @@ public abstract class Application {
 
 
     /**
-     * <p class="changed_added_2_0">Instantiate and return a new {@link
-     * UIComponent} instance from the argument {@link Resource}.  An
-     * algorithm semantically equivalent to the following must be
-     * followed to instantiate the <code>UIComponent</code> to
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_0_rev_a">Instantiate</span> and return
+     * a new {@link UIComponent} instance from the argument {@link
+     * Resource}.  An algorithm semantically equivalent to the following
+     * must be followed to instantiate the <code>UIComponent</code> to
      * return.</p>
      *
      * <div class="changed_added_2_0">
@@ -987,11 +990,13 @@ public abstract class Application {
 	  uses JavaBeans as the API to the component metadata.</p></li>
 
 	  <li><p>Determine if the component author declared a
-	  <code>componentType</code> for this component instance by
-	  obtaining the <code>BeanDescriptor</code> from the component
-	  metadata and calling its <code>getValue()</code> method,
-	  passing {@link UIComponent#COMPOSITE_COMPONENT_TYPE_KEY} as
-	  the argument.  If non-<code>null</code>, the result must be a
+	  <code><span
+	  class="changed_modified_2_0_rev_a">componentType</span></code>
+	  for this component instance by obtaining the
+	  <code>BeanDescriptor</code> from the component metadata and
+	  calling its <code>getValue()</code> method, passing {@link
+	  UIComponent#COMPOSITE_COMPONENT_TYPE_KEY} as the argument.  If
+	  non-<code>null</code>, the result must be a
 	  <code>ValueExpression</code> whose value is the
 	  <code>component-type</code> of the <code>UIComponent</code> to
 	  be created for this <code>Resource</code> component.  Call

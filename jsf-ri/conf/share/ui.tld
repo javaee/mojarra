@@ -776,15 +776,14 @@ that the whole template client will be inserted.
 
                 <![CDATA[
 <div class="changed_added_2_0">
-The name of the parameter.
+<span class="changed_modified_2_0_rev_a">The</span> name of the parameter.
 </div>]]>
 
             </description>
             <name>
 				name
             </name>
-            <required>
-            </required>
+            <required>true </required>
             <deferred-value>
                 <type>
                     java.lang.String
@@ -797,15 +796,15 @@ The name of the parameter.
 
                 <![CDATA[
 <div class="changed_added_2_0">
-The value of the parameter. Notice that this attribute's value can be an EL expression, which
-means that you can pass objects to either an included file or a template.
-</div>]]>
+<span class="changed_modified_2_0_rev_a">The</span> value of the
+parameter. Notice that this attribute's value can be an EL expression,
+which means that you can pass objects to either an included file or a
+template.  </div>]]>
             </description>
             <name>
 				value
             </name>
-            <required>
-            </required>
+            <required>true</required>
             <deferred-value>
                 <type>
                     java.lang.String

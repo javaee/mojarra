@@ -43,10 +43,10 @@ import javax.faces.component.UISelectOne;
 
 
 /**
- * <p><strong class="changed_modified_2_0">SelectItem</strong> represents a
- * single <em>item</em> in the list of supported <em>items</em>
- * associated with a {@link UISelectMany} or {@link UISelectOne}
- * component.</p>
+ * <p><strong class="changed_modified_2_0
+ * changed_modified_2_0_rev_a">SelectItem</strong> represents a single
+ * <em>item</em> in the list of supported <em>items</em> associated with
+ * a {@link UISelectMany} or {@link UISelectOne} component.</p>
  */
 
 public class SelectItem implements Serializable {
@@ -301,7 +301,7 @@ public class SelectItem implements Serializable {
     private boolean escape;
 
     /**
-     * <p class="changed_added_2_0">If and only if this returns
+     * <p class="changed_added_2_0_rev_a">If and only if this returns
      * <code>true</code>, the code that renders this select item must
      * escape the label using escaping syntax appropriate to the content
      * type being rendered.  </p>
@@ -313,7 +313,7 @@ public class SelectItem implements Serializable {
     }
 
     /**
-     * <p class="changed_added_2_0">Set the value of the escape
+     * <p class="changed_added_2_0_rev_a">Set the value of the escape
      * property.  See {@link #isEscape}.</p>
      *
      * @since 2.0

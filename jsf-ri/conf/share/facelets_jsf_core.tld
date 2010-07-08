@@ -601,15 +601,16 @@
      </attribute>
 
      <attribute>
-         <description><![CDATA[ <p class="changed_added_2_0">Evaluates
-         to Collection&lt;String&gt;. This is a space separated list of
+         <description><![CDATA[ <p class="changed_added_2_0"><span
+         class="changed_modified_2_0_rev_a">Evaluates</span> to
+         Collection&lt;String&gt;. This is a space separated list of
          client ids of components that will participate in the "execute"
          portion of the Request Processing Lifecycle.  If a literal is
-         specified the ids must be space delimited.  Any of the
-         keywords "@this", "@form", "@all", "@none" may be specified in
-         the id list. If not specified, the default value of
-         "@this" is assumed.  <span
-         class="changed_modified_2_0_rev_a">For example, <code>@this clientIdOne clientIdTwo</code>.</span></p>
+         specified the ids must be space delimited.  Any of the keywords
+         "@this", "@form", "@all", "@none" may be specified in the id
+         list. <span class="changed_modified_2_0_rev_a">If not
+         specified, the default value of "@this" is assumed.  For
+         example, <code>@this clientIdOne clientIdTwo</code>.</span></p>
 
          ]]></description>
          <name>execute</name>
@@ -678,14 +679,15 @@
     </attribute>
 
      <attribute>
-         <description><![CDATA[ <p class="changed_added_2_0">Evaluates
-         to Collection<String>. The clientIds of components that will
+         <description><![CDATA[ <p class="changed_added_2_0"><span
+         class="changed_modified_2_0_rev_a">Evaluates</span> to
+         Collection&lt;String&gt;. The clientIds of components that will
          participate in the "render" portion of the Request Processing
          Lifecycle.  If a literal is specified the identifiers must be
          space delimited.  Any of the keywords "@this", "@form", "@all",
-         "@none" may be specified in the identifier list.  If not
-         specified, the default value of "@none" is assumed.  <span
-         class="changed_modified_2_0_rev_a">For example, <code>@this
+         "@none" may be specified in the identifier list. <span
+         class="changed_modified_2_0_rev_a">If not specified, the
+         default value of "@none" is assumed.  For example, <code>@this
          clientIdOne clientIdTwo</code>.</span></p>
 
          ]]></description>
@@ -1131,9 +1133,11 @@ they do, it must be done as shown above, (or with
         </attribute>
         <attribute>
             <description>
-                <![CDATA[A ValueExpression enabled attribute that, if present, will be
-                used as the text of the validation message for the "required"
-                facility, if the "required" facility is used.]]>
+                <![CDATA[<p class="changed_modified_2_0_rev_a">A
+                ValueExpression enabled attribute that, if present, will
+                be used as the text of the validation message for the
+                "required" facility, if the "required" facility is
+                used.</p>]]>
             </description>
             <name>
                 requiredMessage
@@ -1208,9 +1212,10 @@ they do, it must be done as shown above, (or with
         </attribute>
         <attribute>
             <description>
-                The name of the request parameter from which the value for this component
-                is retrieved on an initial request or to override the stored value on a
-                 postback.
+                <![CDATA[<p class="changed_modified_2_0_rev_a">The name
+                of the request parameter from which the value for this
+                component is retrieved on an initial request or to
+                override the stored value on a postback.</p>]]>
             </description>
             <name>name</name>
             <required>
@@ -1462,9 +1467,10 @@ they do, it must be done as shown above, (or with
 
     <tag>
         <description>
-            <![CDATA[<p><span class="changed_modified_2_0">Add</span> a
-            child UISelectItems component to the UIComponent associated
-            with the closed parent UIComponent custom action.</p>
+            <![CDATA[<p><span class="changed_modified_2_0
+            changed_modified_2_0_rev_a">Add</span> a child UISelectItems
+            component to the UIComponent associated with the closed
+            parent UIComponent custom action.</p>
 
             <p class="changed_modified_2_0">When iterating over the
             select items, <code>toString()</code> must be called on the
@@ -1638,7 +1644,8 @@ determine if the rendered markup for the item receives normal JSF HTML escaping 
         <attribute>
             <description>
 
-<![CDATA[ <p class="changed_added_2_0">Is either an EL expression
+<![CDATA[ <p class="changed_added_2_0"><span
+class="changed_modified_2_0_rev_a">Is</span> either an EL expression
 pointing to the element in the value collection whose value should be
 marked as a &#8220;no selection&#8221; item, or a literal string that
 exactly matches the value of the item in the collection that must be
@@ -2392,8 +2399,10 @@ will not pass validation.</p> ]]>
 
     <tag>
         <description>
-            Container for all JavaServer Faces core and custom
-            component actions used on a page.
+            <![CDATA[<p><span
+            class="changed_modified_2_0_rev_a">Container</span> for all
+            JavaServer Faces core and custom component actions used on a
+            page.</p>]]>
         </description>
         <name>view</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ViewTag</tag-class>
@@ -2426,7 +2435,8 @@ will not pass validation.</p> ]]>
 
     <attribute>
         <description>
-            Specifies the content-type of the response.
+            <![CDATA[<p class="changed_modified_2_0_rev_a">Specifies the
+            content-type of the response.</p>]]>
         </description>
         <name>contentType</name>
         <required>false</required>
@@ -2437,7 +2447,9 @@ will not pass validation.</p> ]]>
 
     <attribute>
         <description>
-            Specifies the character encoding that should be used for the response.
+            <![CDATA[<p class="changed_modified_2_0_rev_a">Specifies the
+            character encoding that should be used for the
+            response.</p>]]>
         </description>
         <name>encoding</name>
         <required>false</required>

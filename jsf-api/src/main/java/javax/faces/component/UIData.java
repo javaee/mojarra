@@ -1083,8 +1083,10 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * <p class="changed_added_2_0">Override the behavior in {@link
-     * UIComponent#visitTree} to handle iteration correctly.</p>
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_0_rev_a">Override</span> the behavior
+     * in {@link UIComponent#visitTree} to handle iteration
+     * correctly.</p>
      *
      * <div class="changed_added_2_0">
 
@@ -1113,7 +1115,11 @@ public class UIData extends UIComponentBase
      * 	  <code>UIComponent</code> in the returned <code>Map</code>,
      * 	  call {@link UIComponent#visitTree}.</p></li>
 
-     * 	  <li><p>If this component has children, for each 
+     * 	  <li>
+
+     * <div class="changed_modified_2_0_rev_a">
+
+     *  <p>If this component has children, for each 
      * 	  <code>UIColumn</code> child:</p>
      * 
      *    <p>Call {@link VisitContext#invokeVisitCallback} on that 
@@ -1124,9 +1130,16 @@ public class UIData extends UIComponentBase
      *    <p>If the child <code>UIColumn</code> has facets, call
      *    {@link UIComponent#visitTree} on each one.</p>
      *
-     *    <p>Take no action on non-<code>UIColumn</code> children.</p></li>
+     *    <p>Take no action on non-<code>UIColumn</code> children.</p>
      *
-     *    <li><p>Save aside the result of a call to {@link
+     * </div>
+     * </li>
+     *
+     *    <li>
+
+     * <div class="changed_modified_2_0_rev_a">
+     *
+     * <p>Save aside the result of a call to {@link
      *    #getRowIndex}.</p>
 
      *    <p>For each child component of this <code>UIData</code> that is
@@ -1134,6 +1147,8 @@ public class UIData extends UIComponentBase
      *    </p>
 
      * 	  <p>Iterate over the rows.</p>
+
+     * </div>
 
      * <ul>
 
@@ -1151,7 +1166,8 @@ public class UIData extends UIComponentBase
      * <p>If {@link #isRowAvailable} returns <code>false</code>, take no
      * further action and return <code>false</code>.</p>
      *
-     * <p>Call {@link UIComponent#visitTree} on each of the children of this
+     * <p class="changed_modified_2_0_rev_a">>Call {@link
+     * UIComponent#visitTree} on each of the children of this
      * <code>UIColumn</code> instance.</p>
 
      *     </li>
