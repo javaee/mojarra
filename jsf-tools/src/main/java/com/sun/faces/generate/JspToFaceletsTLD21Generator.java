@@ -54,7 +54,7 @@ import com.sun.faces.config.beans.RendererBean;
 public class JspToFaceletsTLD21Generator extends JspTLDGenerator {
 
     private static final String JSP_VERSION = "2.1";
-    private static final String JSF_TLIB_VERSION = "1.2";
+    private static final String JSF_TLIB_VERSION = "2.1";
 
     /**
      * <p>Schema related attributes.</p>
