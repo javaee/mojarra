@@ -668,17 +668,20 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 
 
     /**
-     * <p class="changed_modified_2_0">Set the parent
+     * <p class="changed_modified_2_0"><span
+     * class="changed_modified_2_0_rev_a">Set</span> the parent
      * <code>UIComponent</code> of this <code>UIComponent</code>.  <span
-     * class="changed_added_2_0">If <code>parent.isInView()</code>
-     * returns <code>true</code>, calling this method will first cause a
-     * {@link javax.faces.event.PreRemoveFromViewEvent} to be published,
-     * for this node, and then the children of this node.  Then, once
-     * the re-parenting has occurred, a {@link
+     * class="changed_added_2_0"><span
+     * class="changed_modified_2_0_rev_a">If
+     * <code>parent.isInView()</code> returns <code>true</code>, calling
+     * this method will first cause a {@link
+     * javax.faces.event.PreRemoveFromViewEvent} to be published, for
+     * this node, and then the children of this node.  Then, once the
+     * re-parenting has occurred, a {@link
      * javax.faces.event.PostAddToViewEvent} will be published as well,
      * first for this node, and then for the node's children, <span
      * class="changed_modified_2_0_rev_a">but only if any of the
-     * following conditions are true.</span></p>
+     * following conditions are true.</span></span></p>
 
      * <div class="changed_modified_2_0_rev_a">
 
@@ -2223,11 +2226,12 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p><span class="changed_modified_2_0">Perform</span> the
-     * component tree processing required by the <em>Process
-     * Validations</em> phase of the request processing lifecycle for
-     * all facets of this component, all children of this component, and
-     * this component itself, as follows.</p>
+     * <p><span class="changed_modified_2_0"><span
+     * class="changed_modified_2_0_rev_a">Perform</span></span> the component
+     * tree processing required by the <em>Process Validations</em>
+     * phase of the request processing lifecycle for all facets of this
+     * component, all children of this component, and this component
+     * itself, as follows.</p>
 
      * <ul>
      * <li>If the <code>rendered</code> property of this {@link UIComponent}
@@ -2236,10 +2240,10 @@ private void doFind(FacesContext context, String clientId) {
      * <li>Call the <code>processValidators()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>After returning from calling
-     * <code>getFacetsAndChildren()</code> call {@link
-     * UIComponent#popComponentFromEL}.</li>
-     * </ul>
+
+     * <li><span class="changed_modified_2_0_rev_a">After returning from
+     * calling <code>getFacetsAndChildren()</code> call {@link
+     * UIComponent#popComponentFromEL}.</span></li> </ul>
      *
      * @param context {@link FacesContext} for the request we are processing
      *

@@ -962,7 +962,8 @@ manually.</p>
 whose expected type is given by the value of this attribute.  If not
 specified, and no "method-signature" attribute is present,
 <code>java.lang.Object</code> is assumed.  This attribute is mutually
-exclusive with the "method-signature" attribute. If both attributes are present, the
+<span class="changed_modified_2_0_rev_a">exclusive with the
+"method-signature" attribute. If both attributes are present, the</span>
 "method-signature" attribute is ignored. </p> </div>]]>
 
             </description>
