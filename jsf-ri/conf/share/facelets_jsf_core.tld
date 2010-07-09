@@ -731,7 +731,9 @@
 <table border="1">
 <tr>
 
-<th>value for "<code>type</code>" tag attribute</th>
+<th>value for "<code><span
+class="changed_modified_2_0_rev_a">type</span></code>" tag
+attribute</th>
 
 <th>Type of event sent to listener method
 </th>
@@ -750,7 +752,7 @@
 
 <tr>
 
-<td>postAddToView
+<td><span class="changed_modified_2_0_rev_a">postAddToView</span>
 </td>
 
 <td>javax.faces.event.PostAddToViewEvent

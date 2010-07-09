@@ -115,7 +115,7 @@ public abstract class DelegatingMetaTagHandler extends MetaTagHandler {
     }
     
     /**
-     * <p class="changed_added_2_0">Invoke the <code>apply()</code>
+     * <p class="changed_added_2_0_rev_a">Invoke the <code>apply()</code>
      * method on this instance's {@link TagHandler#nextHandler}.</p>
      *
      * @param ctx the <code>FaceletContext</code> for this view execution
