@@ -42,11 +42,11 @@
   <description>
 <![CDATA[<p>JSTL 1.2 core library</p>
 
-<p>The pre JSF 2.0 version of Facelets incorrectly declared the taglib
-uri to be <code>http://java.sun.com/jstl/core</code>.  For backwards
-compatibility implementations must correctly handle inclusions with the
-incorrect uri, and the correct uri, declared here.</p>
-]]>
+<p class="changed_modified_2_0_rev_a">The pre JSF 2.0 version of
+Facelets incorrectly declared the taglib uri to be
+<code>http://java.sun.com/jstl/core</code>.  For backwards compatibility
+implementations must correctly handle inclusions with the incorrect uri,
+and the correct uri, declared here.</p> ]]>
 </description>
 
   <display-name>JSTL core</display-name>
