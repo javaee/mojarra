@@ -165,11 +165,11 @@ public abstract class ResourceHandler {
           "javax.faces.RESOURCE_EXCLUDES";
 
     /**
-     * <p class="changed_added_2_0">The default value for the {@link
+     * <p class="changed_added_2_0 changed_modified_2_1">The default value for the {@link
      * #RESOURCE_EXCLUDES_PARAM_NAME} init param.</p>
      */
     public static final String RESOURCE_EXCLUDES_DEFAULT_VALUE =
-          ".class .jsp .jspx .properties .xhtml";
+          ".class .jsp .jspx .properties .xhtml .groovy";
 
 
 
