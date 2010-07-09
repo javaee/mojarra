@@ -145,6 +145,7 @@ public class RestoreViewPhase extends Phase {
             }
             return;
         }
+        FacesException thrownException = null;
 
         try {
 
@@ -240,9 +241,14 @@ public class RestoreViewPhase extends Phase {
                 facesContext.setViewRoot(viewRoot);
                 assert (null != viewRoot);
             }
-        }
-        finally {
-            deliverPostRestoreStateEvent(facesContext);
+        } catch (FacesException fe) {
+            thrownException = fe;
+        } finally {
+            if (null == thrownException) {
+                deliverPostRestoreStateEvent(facesContext);
+            } else {
+                throw thrownException;
+            }
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {

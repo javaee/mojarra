@@ -47,6 +47,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
+import javax.faces.view.facelets.FaceletException;
 
 
 /**
