@@ -84,7 +84,6 @@ body { background-color: #FFFFFF }
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:red }
-*/
 
    .changed_added_2_0_rev_a { cursor: url(changed_added_2_0_rev_a_cursor.cur), auto;
                  background: url(changed_added_2_0_rev_a.png); 
@@ -104,6 +103,28 @@ body { background-color: #FFFFFF }
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:red;
                  text-decoration: line-through; }
+
+*/
+
+   .changed_added_2_1 { cursor: url(changed_added_2_1_cursor.cur), auto;
+                 background: url(changed_added_2_1.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+   .changed_modified_2_1 { cursor: url(changed_modified_2_1_cursor.cur), auto;
+                 background: url(changed_modified_2_1.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+   .changed_deleted_2_1 { cursor: url(changed_deleted_2_1_cursor.cur), auto;
+                 background: url(changed_deleted_2_1.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:red;
+                 text-decoration: line-through; }
+
 
 
 

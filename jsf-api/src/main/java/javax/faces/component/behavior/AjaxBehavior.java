@@ -67,7 +67,7 @@ import javax.faces.event.AjaxBehaviorListener;
  * rendered.</p> 
 
  * <p class="changed_modified_2_0_rev_a">If the component is an instance
- * of {@lkink javax.faces.component.EditableValueHolder}, Where at all
+ * of {@link javax.faces.component.EditableValueHolder}, Where at all
  * possible, the component must have the UI register the ajax event when
  * the initial value is changed, not when focus is lost on the
  * component.</p>
