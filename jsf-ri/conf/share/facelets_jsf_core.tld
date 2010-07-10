@@ -146,383 +146,6 @@
 
 
     <tag>
-        <description>
-            Add an attribute to the UIComponent associated with the closest
-            parent UIComponent custom action.
-        </description>
-        <name>attribute</name>
-        <tag-class>com.sun.faces.taglib.jsf_core.AttributeTag</tag-class>
-        <body-content>empty</body-content>
-
-        <attribute>
-            <description>
-                The name of the component attribute to be set.
-            </description>
-            <name>name</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                The value of the component attribute to be set.
-            </description>
-            <name>value</name>
-                <deferred-value>
-                    <type>java.lang.Object</type>
-                </deferred-value>
-        </attribute>
-    </tag>
-
-
-    <tag>
-        <description>
-            Register a DateTimeConverter instance on the UIComponent associated
-            with the closest parent UIComponent custom action.
-        </description>
-        <name>convertDateTime</name>
-        <tag-class>com.sun.faces.taglib.jsf_core.ConvertDateTimeTag</tag-class>
-        <body-content>empty</body-content>
-
-        <attribute>
-            <description>
-                Predefined formatting style which determines how the date
-                component of a date string is to be formatted and parsed.
-                Applied only if type is "date" or "both".  Valid values
-                are "default", "short", "medium", "long", and "full".
-                Default value is "default".
-            </description>
-            <name>dateStyle</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Locale whose predefined styles for dates and times are used
-                during formatting or parsing.  If not specified, the Locale
-                returned by FacesContext.getViewRoot().getLocale() will be used.
-                Value must be either a VB expression that evaluates to a
-                java.util.Locale instance, or a String that is valid to pass as
-                the first argument to the constructor java.util.Locale(String
-                language, String country).  The empty string is passed as the
-                second argument.
-            </description>
-            <name>locale</name>
-            <required>false</required>
-            <deferred-value>
-                <type>java.lang.Object</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Custom formatting pattern which determines how the
-                date/time string should be formatted and parsed.
-            </description>
-            <name>pattern</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Predefined formatting style which determines how the
-                time component of a date string is to be formatted and
-                parsed.  Applied only if type is "time" or "both".
-                Valid values are "default", "short", "medium", "long",
-                and "full".  Default value is "default".
-            </description>
-            <name>timeStyle</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Time zone in which to interpret any time information in the date
-                String.  Value must be either a VB expression that evaluates to
-                a java.util.TimeZone instance, or a String that is a timezone ID
-                as described in the javadocs for
-                java.util.TimeZone.getTimeZone().
-            </description>
-            <name>timeZone</name>
-            <deferred-value>
-                <type>java.lang.Object</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Specifies what contents the string value will be
-                formatted to include, or parsed expecting.  Valid
-                values are "date", "time", and "both".  Default
-                value is "date".
-            </description>
-            <name>type</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                A ValueExpression that evaluates to an instance of
-                javax.faces.convert.DateTimeConverter.
-            </description>
-            <name>binding</name>
-            <deferred-value>
-                <type>javax.faces.convert.DateTimeConverter</type>
-            </deferred-value>
-        </attribute>
-
-    <attribute>
-      <description><![CDATA[
-
-        <p class="changed_added_2_0">If present, this attribute refers
-        to the value of one of the exposed attached objects within the
-        composite component inside of which this tag is nested.</p>
-
-      ]]></description>
-      <name>for</name>
-      <required>false</required>
-      <deferred-value>
-          <type>java.lang.String</type>
-      </deferred-value>         
-
-    </attribute>
-    </tag>
-
-    <tag>
-        <description>
-            Register a NumberConverter instance on the UIComponent associated
-            with the closest parent UIComponent custom action.
-        </description>
-        <name>convertNumber</name>
-        <tag-class>com.sun.faces.taglib.jsf_core.ConvertNumberTag</tag-class>
-        <body-content>empty</body-content>
-
-        <attribute>
-            <description>
-                ISO 4217 currency code, applied only when
-                formatting currencies.
-            </description>
-            <name>currencyCode</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Currency symbol, applied only when formatting
-                currencies.
-            </description>
-            <name>currencySymbol</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Flag specifying whether formatted output will
-                contain grouping separators.  Expressions must
-                evaluate to a boolean.  Default value
-                is true.
-            </description>
-            <name>groupingUsed</name>
-            <deferred-value>
-                <type>java.lang.Boolean</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Flag specifying whether only the integer part
-                of the value will be formatted and parsed.
-                Expressions must evaluate to a boolean.
-                Default value is false.
-            </description>
-            <name>integerOnly</name>
-            <deferred-value>
-                <type>java.lang.Boolean</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description><![CDATA[<p>
-
-                <span class="changed_modified_2_0">Locale</span> whose
-                predefined styles for numbers are used during formatting
-                and parsing.  If not specified, the Locale returned by
-                FacesContext.getViewRoot().getLocale() will be used.
-                Expressions must evaluate to a java.util.Locale <span
-                class="changed_modified_2_0">or a String that is valid to
-                pass as the first argument to the constructor
-                java.util.Locale(String language, String country). The
-                empty string is passed as the second argument.</span>
-
-            </p>]]></description>
-            <name>locale</name>
-            <deferred-value>
-                <type>java.lang.Object</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Maximum number of digits that will be formatted
-                in the fractional portion of the output.  Expressions
-                must evaluate to an int.
-            </description>
-            <name>maxFractionDigits</name>
-            <deferred-value>
-                <type>java.lang.Integer</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Maximum number of digits that will be formatted
-                in the integer portion of the output.  Expressions
-                must evaluate to an int.
-            </description>
-            <name>maxIntegerDigits</name>
-            <deferred-value>
-                <type>java.lang.Integer</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Minimum number of digits that will be formatted
-                in the fractional portion of the output.  Expressions
-                must evaluate to an int.
-            </description>
-            <name>minFractionDigits</name>
-            <deferred-value>
-                <type>java.lang.Integer</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Minimum number of digits that will be formatted
-                in the integer portion of the output.  Expressions
-                must evaluate to an int.
-            </description>
-            <name>minIntegerDigits</name>
-            <deferred-value>
-                <type>java.lang.Integer</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Custom formatting pattern which determins how the
-                number string should be formatted and parsed.
-            </description>
-            <name>pattern</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Specifies how the number string will be formatted
-                and parsed.  Valid values are "number", "currency",
-                and "percent".  Default value is "number".
-            </description>
-            <name>type</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                A ValueExpression that evaluates to an instance of
-                javax.faces.convert.NumberConverter.
-            </description>
-            <name>binding</name>
-            <deferred-value>
-                <type>javax.faces.convert.NumberConverter</type>
-            </deferred-value>
-        </attribute>
-
-    <attribute>
-      <description><![CDATA[
-
-        <p class="changed_added_2_0">If present, this attribute refers
-        to the value of one of the exposed attached objects within the
-        composite component inside of which this tag is nested.</p>
-
-      ]]></description>
-      <name>for</name>
-      <required>false</required>
-      <deferred-value>
-          <type>java.lang.String</type>
-      </deferred-value>         
-
-    </attribute>
-
-    </tag>
-
-    <tag>
-        <description>
-            Register a named Converter instance on the UIComponent
-            associated with the closest parent UIComponent custom action.
-        </description>
-        <name>converter</name>
-        <tag-class>com.sun.faces.taglib.jsf_core.ConverterTag</tag-class>
-        <body-content>empty</body-content>
-
-        <attribute>
-            <description>
-                Converter identifier of the Converter instance to be
-                created and registered.
-            </description>
-            <name>converterId</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                A ValueExpression that evaluates to an object that
-                implements javax.faces.convert.Converter.
-            </description>
-            <name>binding</name>
-            <deferred-value>
-                <type>javax.faces.convert.Converter</type>
-            </deferred-value>
-        </attribute>
-
-    <attribute>
-      <description><![CDATA[
-
-        <p class="changed_added_2_0">If present, this attribute refers
-        to the value of one of the exposed attached objects within the
-        composite component inside of which this tag is nested.</p>
-
-      ]]></description>
-      <name>for</name>
-      <required>false</required>
-      <deferred-value>
-          <type>java.lang.String</type>
-      </deferred-value>         
-
-    </attribute>
-    </tag>
-
-    <tag>
         <description><![CDATA[
 
         <p class="changed_added_2_0"><span
@@ -701,6 +324,390 @@
 
     </tag>
 
+
+    <tag>
+        <description>
+            Add an attribute to the UIComponent associated with the closest
+            parent UIComponent custom action.
+        </description>
+        <name>attribute</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.AttributeTag</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                The name of the component attribute to be set.
+            </description>
+            <name>name</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                The value of the component attribute to be set.
+            </description>
+            <name>value</name>
+                <deferred-value>
+                    <type>java.lang.Object</type>
+                </deferred-value>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            Register a named Converter instance on the UIComponent
+            associated with the closest parent UIComponent custom action.
+        </description>
+        <name>converter</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ConverterTag</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Converter identifier of the Converter instance to be
+                created and registered.
+            </description>
+            <name>converterId</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an object that
+                implements javax.faces.convert.Converter.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.convert.Converter</type>
+            </deferred-value>
+        </attribute>
+
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
+    </tag>
+
+
+    <tag>
+        <description>
+            Register a DateTimeConverter instance on the UIComponent associated
+            with the closest parent UIComponent custom action.
+        </description>
+        <name>convertDateTime</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ConvertDateTimeTag</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Predefined formatting style which determines how the date
+                component of a date string is to be formatted and parsed.
+                Applied only if type is "date" or "both".  Valid values
+                are "default", "short", "medium", "long", and "full".
+                Default value is "default".
+            </description>
+            <name>dateStyle</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Locale whose predefined styles for dates and times are used
+                during formatting or parsing.  If not specified, the Locale
+                returned by FacesContext.getViewRoot().getLocale() will be used.
+                Value must be either a VB expression that evaluates to a
+                java.util.Locale instance, or a String that is valid to pass as
+                the first argument to the constructor java.util.Locale(String
+                language, String country).  The empty string is passed as the
+                second argument.
+            </description>
+            <name>locale</name>
+            <required>false</required>
+            <deferred-value>
+                <type>java.lang.Object</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Custom formatting pattern which determines how the
+                date/time string should be formatted and parsed.
+            </description>
+            <name>pattern</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Predefined formatting style which determines how the
+                time component of a date string is to be formatted and
+                parsed.  Applied only if type is "time" or "both".
+                Valid values are "default", "short", "medium", "long",
+                and "full".  Default value is "default".
+            </description>
+            <name>timeStyle</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Time zone in which to interpret any time information in the date
+                String.  Value must be either a VB expression that evaluates to
+                a java.util.TimeZone instance, or a String that is a timezone ID
+                as described in the javadocs for
+                java.util.TimeZone.getTimeZone().
+            </description>
+            <name>timeZone</name>
+            <deferred-value>
+                <type>java.lang.Object</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Specifies what contents the string value will be
+                formatted to include, or parsed expecting.  Valid
+                values are "date", "time", and "both".  Default
+                value is "date".
+            </description>
+            <name>type</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                javax.faces.convert.DateTimeConverter.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.convert.DateTimeConverter</type>
+            </deferred-value>
+        </attribute>
+
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
+    </tag>
+
+
+
+    <tag>
+        <description>
+            Register a NumberConverter instance on the UIComponent associated
+            with the closest parent UIComponent custom action.
+        </description>
+        <name>convertNumber</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ConvertNumberTag</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                ISO 4217 currency code, applied only when
+                formatting currencies.
+            </description>
+            <name>currencyCode</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Currency symbol, applied only when formatting
+                currencies.
+            </description>
+            <name>currencySymbol</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Flag specifying whether formatted output will
+                contain grouping separators.  Expressions must
+                evaluate to a boolean.  Default value
+                is true.
+            </description>
+            <name>groupingUsed</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Flag specifying whether only the integer part
+                of the value will be formatted and parsed.
+                Expressions must evaluate to a boolean.
+                Default value is false.
+            </description>
+            <name>integerOnly</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[<p>
+
+                <span class="changed_modified_2_0">Locale</span> whose
+                predefined styles for numbers are used during formatting
+                and parsing.  If not specified, the Locale returned by
+                FacesContext.getViewRoot().getLocale() will be used.
+                Expressions must evaluate to a java.util.Locale <span
+                class="changed_modified_2_0">or a String that is valid to
+                pass as the first argument to the constructor
+                java.util.Locale(String language, String country). The
+                empty string is passed as the second argument.</span>
+
+            </p>]]></description>
+            <name>locale</name>
+            <deferred-value>
+                <type>java.lang.Object</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Maximum number of digits that will be formatted
+                in the fractional portion of the output.  Expressions
+                must evaluate to an int.
+            </description>
+            <name>maxFractionDigits</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Maximum number of digits that will be formatted
+                in the integer portion of the output.  Expressions
+                must evaluate to an int.
+            </description>
+            <name>maxIntegerDigits</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Minimum number of digits that will be formatted
+                in the fractional portion of the output.  Expressions
+                must evaluate to an int.
+            </description>
+            <name>minFractionDigits</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Minimum number of digits that will be formatted
+                in the integer portion of the output.  Expressions
+                must evaluate to an int.
+            </description>
+            <name>minIntegerDigits</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Custom formatting pattern which determins how the
+                number string should be formatted and parsed.
+            </description>
+            <name>pattern</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Specifies how the number string will be formatted
+                and parsed.  Valid values are "number", "currency",
+                and "percent".  Default value is "number".
+            </description>
+            <name>type</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                javax.faces.convert.NumberConverter.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.convert.NumberConverter</type>
+            </deferred-value>
+        </attribute>
+
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0">If present, this attribute refers
+        to the value of one of the exposed attached objects within the
+        composite component inside of which this tag is nested.</p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
+    </attribute>
+
+    </tag>
+
+
+
+
+
     <tag>
         <description><![CDATA[
 
@@ -857,6 +864,48 @@ for <code>@NamedEvent</code>.</p>
     </tag>
 
     <tag>
+        <description>
+            Load a resource bundle localized for the Locale of the current
+            view, and expose it as a java.util.Map in the request attributes
+            of the current request under the key specified by the value of the
+            "var" attribute of this tag.  The Map must behave such that if a
+            get() call is made for a key that does not exist in the Map, the
+            literal string ???KEY??? is returned from the Map, where KEY is
+            the key being looked up in the Map, instead of a
+            MissingResourceException being thrown.  If the ResourceBundle does
+            not exist, a JspException must be thrown.
+        </description>
+        <name>loadBundle</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.LoadBundleTag</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Base name of the resource bundle
+                to be loaded.
+            </description>
+            <name>basename</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Name of a request scope attribute under which
+                the resource bundle will be exposed as a Map.
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+    </tag>
+
+
+
+
+
+    <tag>
         <description><![CDATA[
 
             <p class="changed_added_2_0"><span
@@ -936,44 +985,6 @@ they do, it must be done as shown above, (or with
     </tag>
 
 
-    <tag>
-        <description>
-            Load a resource bundle localized for the Locale of the current
-            view, and expose it as a java.util.Map in the request attributes
-            of the current request under the key specified by the value of the
-            "var" attribute of this tag.  The Map must behave such that if a
-            get() call is made for a key that does not exist in the Map, the
-            literal string ???KEY??? is returned from the Map, where KEY is
-            the key being looked up in the Map, instead of a
-            MissingResourceException being thrown.  If the ResourceBundle does
-            not exist, a JspException must be thrown.
-        </description>
-        <name>loadBundle</name>
-        <tag-class>com.sun.faces.taglib.jsf_core.LoadBundleTag</tag-class>
-        <body-content>empty</body-content>
-
-        <attribute>
-            <description>
-                Base name of the resource bundle
-                to be loaded.
-            </description>
-            <name>basename</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                Name of a request scope attribute under which
-                the resource bundle will be exposed as a Map.
-            </description>
-            <name>var</name>
-            <required>true</required>
-            <rtexprvalue>false</rtexprvalue>
-        </attribute>
-    </tag>
-
 
     <tag>
         <description><![CDATA[ <p><span
@@ -1049,268 +1060,7 @@ they do, it must be done as shown above, (or with
 
     </tag>
 
-    <tag>
-        <description><![CDATA[
 
-            <p class="changed_added_2_0"><span
-            class="changed_modified_2_0_rev_a">Used</span> inside of the
-            metada facet of a view, this tag causes a <a target="_"
-            href="../../../javadocs/javax/faces/component/UIViewParameter.html">UIViewParameter</a>
-            to be attached as metadata for the current view.  Because
-            <code>UIViewParameter</code> extends <code>UIInput</code>
-            all of the attributes and nested child content for any
-            <code>UIInput</code> tags are valid on this tag as well.</p>
-
-        ]]></description>
-        <name>viewParam</name>
-        <tag-class>com.sun.faces.taglib.jsf_core.ParameterTag</tag-class>
-        <body-content>JSP</body-content>
-
-        <attribute>
-            <description>
-                <![CDATA[Converter instance registered with this component.]]>
-            </description>
-            <name>
-                converter
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    javax.faces.convert.Converter
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[A ValueExpression enabled attribute that, if present, will be
-                used as the text of the converter message, replacing any message
-                that comes from the converter.]]>
-            </description>
-            <name>
-                converterMessage
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[The component identifier for this component.  This value must be
-                unique within the closest parent component that is a naming
-                container.]]>
-            </description>
-            <name>
-                id
-            </name>
-            <required>
-                false
-            </required>
-            <rtexprvalue>
-                true
-            </rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[Flag indicating that the user is required to provide a submitted
-                value for this input component.]]>
-            </description>
-            <name>
-                required
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    boolean
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[<p class="changed_modified_2_0_rev_a">A
-                ValueExpression enabled attribute that, if present, will
-                be used as the text of the validation message for the
-                "required" facility, if the "required" facility is
-                used.</p>]]>
-            </description>
-            <name>
-                requiredMessage
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[MethodExpression representing a validator method that will be called
-                during Process Validations to perform correctness checks on the
-                value of this component.  The expression must evaluate to a public
-                method that takes FacesContext, UIComponent, and Object parameters,
-                with a return type of void.]]>
-            </description>
-            <name>
-                validator
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-method>
-                <method-signature>
-                    void validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)
-                </method-signature>
-            </deferred-method>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[A ValueExpression enabled attribute that, if present, will be
-                used as the text of the validator message, replacing any
-                message that comes from the validator.]]>
-            </description>
-            <name>
-                validatorMessage
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-                A ValueExpression to which the value of the request parameter, as
-                determined by the name attribute, is bound. The resolved value of this
-                expression is used when encoding the view parameter into a bookmarkable link or
-                redirect URL with view parameter encoding enabled. If this attribute is omitted,
-                the value of the request parameter will instead be the local value of the
-                UIViewParameter.
-            </description>
-            <name>
-                value
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.Object
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[<p class="changed_modified_2_0_rev_a">The name
-                of the request parameter from which the value for this
-                component is retrieved on an initial request or to
-                override the stored value on a postback.</p>]]>
-            </description>
-            <name>name</name>
-            <required>
-                true
-            </required>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-                <![CDATA[<p>
-                
-                MethodExpression representing a value change listener method
-                that will be notified when a new value has been set for this
-                input component.  The expression must evaluate to a public
-                method that takes a <code>ValueChangeEvent</code> parameter,
-                with a return type of void, <span class="changed_added_2_0">or
-                to a public method that takes no arguments with a return type
-                of void.  In the latter case, the method has no way of easily
-                knowing what the new value is, but this can be useful in cases
-                where a notification is needed that "this value
-                changed".</span>
-                
-                </p>]]>
-            </description>
-            <name>
-                valueChangeListener
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-method>
-                <method-signature>
-                    void valueChange(javax.faces.event.ValueChangeEvent)
-                </method-signature>
-            </deferred-method>
-        </attribute>
-
-        <attribute>
-            <description>
-                <![CDATA[The maximum number of characters that may
-                be entered in this field.]]>
-            </description>
-            <name>
-                maxlength
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    int
-                </type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-                The ValueExpression linking this component to a property in a backing bean
-            </description>
-            <name>
-                binding
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    javax.faces.component.UIComponent
-                </type>
-            </deferred-value>
-        </attribute>
-
-    <attribute>
-      <description><![CDATA[
-
-        <p class="changed_added_2_0"><span
-        class="changed_deleted_2_0_rev_a">If present, this attribute
-        refers to the value of one of the exposed attached objects
-        within the composite component inside of which this tag is
-        nested.</span></p>
-
-      ]]></description>
-      <name>for</name>
-      <required>false</required>
-      <deferred-value>
-          <type>java.lang.String</type>
-      </deferred-value>         
-
-    </attribute>
-
-    </tag>
 
   <tag>
 
@@ -2486,6 +2236,269 @@ will not pass validation.</p> ]]>
       <deferred-method>
            <method-signature>void afterPhase(javax.faces.event.PhaseEvent)</method-signature>
       </deferred-method>
+    </attribute>
+
+    </tag>
+
+    <tag>
+        <description><![CDATA[
+
+            <p class="changed_added_2_0"><span
+            class="changed_modified_2_0_rev_a">Used</span> inside of the
+            metada facet of a view, this tag causes a <a target="_"
+            href="../../../javadocs/javax/faces/component/UIViewParameter.html">UIViewParameter</a>
+            to be attached as metadata for the current view.  Because
+            <code>UIViewParameter</code> extends <code>UIInput</code>
+            all of the attributes and nested child content for any
+            <code>UIInput</code> tags are valid on this tag as well.</p>
+
+        ]]></description>
+        <name>viewParam</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ParameterTag</tag-class>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description>
+                <![CDATA[Converter instance registered with this component.]]>
+            </description>
+            <name>
+                converter
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    javax.faces.convert.Converter
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be
+                used as the text of the converter message, replacing any message
+                that comes from the converter.]]>
+            </description>
+            <name>
+                converterMessage
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming
+                container.]]>
+            </description>
+            <name>
+                id
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>
+                true
+            </rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Flag indicating that the user is required to provide a submitted
+                value for this input component.]]>
+            </description>
+            <name>
+                required
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p class="changed_modified_2_0_rev_a">A
+                ValueExpression enabled attribute that, if present, will
+                be used as the text of the validation message for the
+                "required" facility, if the "required" facility is
+                used.</p>]]>
+            </description>
+            <name>
+                requiredMessage
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[MethodExpression representing a validator method that will be called
+                during Process Validations to perform correctness checks on the
+                value of this component.  The expression must evaluate to a public
+                method that takes FacesContext, UIComponent, and Object parameters,
+                with a return type of void.]]>
+            </description>
+            <name>
+                validator
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-method>
+                <method-signature>
+                    void validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)
+                </method-signature>
+            </deferred-method>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be
+                used as the text of the validator message, replacing any
+                message that comes from the validator.]]>
+            </description>
+            <name>
+                validatorMessage
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression to which the value of the request parameter, as
+                determined by the name attribute, is bound. The resolved value of this
+                expression is used when encoding the view parameter into a bookmarkable link or
+                redirect URL with view parameter encoding enabled. If this attribute is omitted,
+                the value of the request parameter will instead be the local value of the
+                UIViewParameter.
+            </description>
+            <name>
+                value
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.Object
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p class="changed_modified_2_0_rev_a">The name
+                of the request parameter from which the value for this
+                component is retrieved on an initial request or to
+                override the stored value on a postback.</p>]]>
+            </description>
+            <name>name</name>
+            <required>
+                true
+            </required>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[<p>
+                
+                MethodExpression representing a value change listener method
+                that will be notified when a new value has been set for this
+                input component.  The expression must evaluate to a public
+                method that takes a <code>ValueChangeEvent</code> parameter,
+                with a return type of void, <span class="changed_added_2_0">or
+                to a public method that takes no arguments with a return type
+                of void.  In the latter case, the method has no way of easily
+                knowing what the new value is, but this can be useful in cases
+                where a notification is needed that "this value
+                changed".</span>
+                
+                </p>]]>
+            </description>
+            <name>
+                valueChangeListener
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-method>
+                <method-signature>
+                    void valueChange(javax.faces.event.ValueChangeEvent)
+                </method-signature>
+            </deferred-method>
+        </attribute>
+
+        <attribute>
+            <description>
+                <![CDATA[The maximum number of characters that may
+                be entered in this field.]]>
+            </description>
+            <name>
+                maxlength
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                The ValueExpression linking this component to a property in a backing bean
+            </description>
+            <name>
+                binding
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    javax.faces.component.UIComponent
+                </type>
+            </deferred-value>
+        </attribute>
+
+    <attribute>
+      <description><![CDATA[
+
+        <p class="changed_added_2_0"><span
+        class="changed_deleted_2_0_rev_a">If present, this attribute
+        refers to the value of one of the exposed attached objects
+        within the composite component inside of which this tag is
+        nested.</span></p>
+
+      ]]></description>
+      <name>for</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>         
+
     </attribute>
 
     </tag>
