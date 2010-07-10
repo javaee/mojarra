@@ -43,9 +43,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 /**
- * <p><strong>LengthValidator</strong> is a {@link Validator} that checks
- * the number of characters in the String representation of the value of the
- * associated component.  The following algorithm is implemented:</p>
+ * <p><strong
+ * class="changed_modified_2_0_rev_a">LengthValidator</strong> is a
+ * {@link Validator} that checks the number of characters in the String
+ * representation of the value of the associated component.  The
+ * following algorithm is implemented:</p>
+
  * <ul>
  * <li>Convert the passed value to a String, if necessary, by calling its
  * <code>toString()</code> method.</li>

@@ -3,7 +3,7 @@
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
- Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -488,12 +488,12 @@
             <arg line="-d ${build.dir}/vdldocs/facelets"/>
             <arg line="-windowtitle 'JSF ${spec.version} View Declaration Language: Facelets Variant'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
+            <arg value="${conf.share.dir}/composite.tld"/>
             <arg value="${conf.share.dir}/facelets_jsf_core.tld"/>
             <arg value="${build.generate.tld.dir}/facelets_html_basic.tld"/>
-            <arg value="${conf.share.dir}/composite.tld"/>
-            <arg value="${conf.share.dir}/ui.tld"/>
             <arg value="${conf.share.dir}/jstl-core.tld"/>
             <arg value="${conf.share.dir}/jstl-fn.tld"/>
+            <arg value="${conf.share.dir}/ui.tld"/>
         </java>
         <copy todir="${build.dir}/vdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
@@ -756,7 +756,7 @@
                  windowtitle="${DocName} (${spec.version})"
                  source="1.5"
                  doctitle="${DocName} (${spec.version})"
-                 bottom="Copyright &#169; 2002-2010 Sun Microsystems, Inc. All Rights Reserved.">
+                 bottom="Copyright &#169; 2002-2010 Oracle America, Inc. All Rights Reserved.">
             <fileset dir="${source.dir}">
                 <include name="com/sun/faces/spi/**/*.java"/>
             </fileset>

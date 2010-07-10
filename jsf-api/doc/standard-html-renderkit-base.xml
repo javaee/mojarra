@@ -1240,8 +1240,8 @@
 
         <renderer>
 
-            <description><![CDATA[<p><span
-            class="changed_modified_2_0">Renders an HTML "input"
+            <description><![CDATA[<p><span class="changed_modified_2_0
+            changed_modified_2_0_rev_a">Renders</span> an HTML "input"
             element.</p>
 
       <p>Decode Behavior</p>
@@ -1335,8 +1335,8 @@
 
         <renderer>
 
-            <description><![CDATA[<p><span
-            class="changed_modified_2_0">Render</span> an HTML "a" anchor
+            <description><![CDATA[<p><span class="changed_modified_2_0
+            changed_modified_2_0_rev_a">Render</span> an HTML "a" anchor
             element that acts like a form submit button when
             clicked.</p>
 
@@ -1484,18 +1484,20 @@
 
             <description>
                 <![CDATA[
-      <p>Renders an HTML "table" element compliant with the HTML 401
-      specification.  Render the "caption" facet, if present, inside a
-      "caption" element immediately below the "table" element.  If the
-      "captionClass" attribute is specified, render its value as the
-      value of the "class" attribute on the "caption" element.  If the
-      "captionStyle" attribute is specified, render its value as the
-      value of the "style" attribute on the "caption" element.</p>
-      <p>Please consult the javadoc for <code>UIData</code> to
-      supplement this specification.  If the "styleClass" attribute is
-      specified, render its value as the value of the "class" attribute
-      on the "table" element.  Any pass-through attributes are also
-      rendered on the "table" element.  </p>
+
+      <p><span class="changed_modified_2_0_rev_a">Renders</span> an HTML
+      "table" element compliant with the HTML 401 specification.  Render
+      the "caption" facet, if present, inside a "caption" element
+      immediately below the "table" element.  If the "captionClass"
+      attribute is specified, render its value as the value of the
+      "class" attribute on the "caption" element.  If the "captionStyle"
+      attribute is specified, render its value as the value of the
+      "style" attribute on the "caption" element.</p> <p>Please consult
+      the javadoc for <code>UIData</code> to supplement this
+      specification.  If the "styleClass" attribute is specified, render
+      its value as the value of the "class" attribute on the "table"
+      element.  Any pass-through attributes are also rendered on the
+      "table" element.  </p>
 
      <p>Column Groups</p>
 
@@ -2153,12 +2155,13 @@
 
             <description><![CDATA[
 
-            <p>Render an HTML "a" anchor element.  The value of the
-            component is rendered as the value of the "href" attribute.
-            Any child UIParameter components <span
+            <p><span class="changed_modified_2_0_rev_a">Render</span> an
+            HTML "a" anchor element.  The value of the component is
+            rendered as the value of the "href" attribute.  Any child
+            UIParameter components <span
             class="changed_modified_2_0_rev_a">whose
-            <code>disable</code> property is <code>false</code></span> are
-            appended to the String to be output as the value of the
+            <code>disable</code> property is <code>false</code></span>
+            are appended to the String to be output as the value of the
             "href" attribute as query parameters before rendering.  The
             entire "href" string must be passed through a call to the
             <code>encodeResourceURL()</code> method of the
@@ -2205,10 +2208,12 @@
 
         <renderer>
 
-            <description><![CDATA[<div
-            class="changed_added_2_0"><p>Render an HTML "a" anchor
-            element.  The value of the component is rendered as the
-            anchor text and the outcome of the component is used to
+            <description><![CDATA[
+
+            <div class="changed_added_2_0"><p><span
+            class="changed_modified_2_0_rev_a">Render</span> an HTML "a"
+            anchor element.  The value of the component is rendered as
+            the anchor text and the outcome of the component is used to
             determine the target URL rendered in the "href" attribute.
             Any child <code>UIParameter</code> components <span
             class="changed_modified_2_0_rev_a">whose
@@ -2482,8 +2487,8 @@
 
         <renderer>
 
-            <description><![CDATA[<p><span
-            class="changed_modified_2_0">Render</span> an HTML checkbox
+            <description><![CDATA[<p><span class="changed_modified_2_0
+            changed_modified_2_0_rev_a">Render</span> an HTML checkbox
             list.</p>
 
       <p><a name="decode">Decode Behavior</a></p>
@@ -2915,7 +2920,7 @@
         <renderer>
 
             <description><![CDATA[<p><span
-            class="changed_modified_2_0">Render</span> a set of html
+            class="changed_modified_2_0 changed_modified_2_0_rev_a">Render</span> a set of html
             "input" elements of type "radio".</p>
 
       <p><a name="decode">Decode Behavior</a></p>
@@ -3082,20 +3087,23 @@ Otherwise, get the facet whose name is "facetName".  If found call
         </renderer>
 
         <renderer>
-            <description><![CDATA[<div class="changed_added_2_0">
+            <description><![CDATA[ 
 
-<p><span class="changed_modified_2_0_rev_a">Render</span> the markup for
-a <code>&lt;script&gt;</code> element that renders the script
-<code>Resource</code> specified by the optional <code>name</code>
-attribute and <code>library</code> attributes.</p>
+            <p class="changed_modified_2_0"><span
+            class="changed_modified_2_0_rev_a">Render</span> the markup
+            for a <code>&lt;script&gt;</code> element that renders the
+            script <code>Resource</code> specified by the optional
+            <code>name</code> attribute and <code>library</code>
+            attributes.</p>
 
-<p>The implementation of this renderer must have a <a target="_"
+<p class="changed_modified_2_0">The implementation of this renderer must
+have a <a target="_"
 href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
 annotation attached to it, at the class level, declaring <a target="_"
 href="../../javadocs/javax/faces/event/PostAddToViewEvent.html"><code>PostAddToViewEvent.class</code></a>
-as the value of the <code>systemEventClass</code> attribute.  The presence of
-this annotation on a renderer implies the renderer implements <a
-target="_"
+as the value of the <code>systemEventClass</code> attribute.  The
+presence of this annotation on a renderer implies the renderer
+implements <a target="_"
 href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,
 which this renderer must do.  The implementation of
 <code>processEvent()</code> must extract the <code>UIComponent</code>
@@ -3105,17 +3113,17 @@ and only if such a key is present, the implementation of
 <code>processEvent()</code> must pass the component to <a target="_"
 href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)"><code>UIViewRoot.addComponentResource()</code></a>.</p>
 
-      <p>Decode Behavior</p>
+      <p class="changed_modified_2_0">Decode Behavior</p>
 
-      <ul>
+      <ul class="changed_modified_2_0">
 
 <p>No action is required during decode for this renderer.</p>
 
 </ul>
 
-      <p>Encode Behavior</p>
+      <p class="changed_modified_2_0">Encode Behavior</p>
 
-      <ul>
+      <ul class="changed_modified_2_0">
 
         <p><a name="ResourceCommonGetResource">Common Algorithm for Obtaining A Resource to Render</a></p>
 
@@ -3212,15 +3220,10 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
         <code>resource.getContentType()</code> as the value of the "type"
         attribute.</p>
 
-</p>
-
-
-
        </ul>
 
 
-
-</div>]]></description>
+]]></description>
             <component-family>javax.faces.Output</component-family>
             <renderer-type>javax.faces.resource.Script</renderer-type>
             <renderer-class>
@@ -3261,24 +3264,25 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
         </renderer>
 
         <renderer>
-            <description><![CDATA[<div class="changed_added_2_0">
+            <description><![CDATA[
 
-<p><span class="changed_modified_2_0_rev_a">Render</span> the markup for
-a <code>&lt;link&gt;</code> element that renders the style
+<p><span class="changed_modified_2_0
+changed_modified_2_0_rev_a">Render</span> the markup for a
+<code>&lt;link&gt;</code> element that renders the style
 <code>Resource</code> specified by the optional <code>name</code> and
 <code>library</code> attributes.</p>
 
-      <p>Decode Behavior</p>
+      <p class="changed_modified_2_0">Decode Behavior</p>
 
-      <ul>
+      <ul class="changed_modified_2_0">
 
 <p>No action is required during decode for this renderer.</p>
 
 </ul>
 
-      <p>Encode Behavior</p>
+      <p class="changed_modified_2_0">Encode Behavior</p>
 
-      <ul>
+      <ul class="changed_modified_2_0">
 
        <p>Use the algorithm <em>Common Encode Behavior</em> for
        <code>encodeBegin()</code>, <code>encodeChildren()</code> and
@@ -3313,7 +3317,9 @@ the literal string "<code>head</code>" as the last argument.</p>
 <p>The stylsheet renderer must ensure that any stylesheets are included in the &lt;head&gt; of the document. 
 </p>
 
-</div>]]></description>
+</ul>
+
+]]></description>
             <component-family>javax.faces.Output</component-family>
             <renderer-type>javax.faces.resource.Stylesheet</renderer-type>
             <renderer-class>

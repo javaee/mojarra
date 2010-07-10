@@ -44,8 +44,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.StateHolder;
 
 /**
- * <p><strong><span
- * class="changed_modified_2_0">MethodExpressionValueChangeListener</span></strong>
+ * <p><strong><span class="changed_modified_2_0
+ * changed_modified_2_0_rev_a">MethodExpressionValueChangeListener</span></strong>
  * is a {@link ValueChangeListener} that wraps a {@link
  * MethodExpression}. When it receives a {@link ValueChangeEvent}, it
  * executes a method on an object identified by the {@link

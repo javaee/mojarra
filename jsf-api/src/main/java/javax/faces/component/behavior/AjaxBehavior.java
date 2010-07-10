@@ -57,14 +57,14 @@ import javax.faces.event.AjaxBehaviorListener;
 
 
 /**
- * <p class="changed_added_2_0">An instance of this class is added
- * as a {@link ClientBehavior} to a component using the 
- * {@link javax.faces.component.behavior.ClientBehaviorHolder#addClientBehavior} 
- * contract that components implement.  The presence of this 
- * {@link ClientBehavior} will cause the rendering of JavaScript that 
- * produces an <code>Ajax</code> request using the 
- * specification public JavaScript API when the component is 
- * rendered.</p> 
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_0_rev_a">An</span> instance of this class
+ * is added as a {@link ClientBehavior} to a component using the {@link
+ * javax.faces.component.behavior.ClientBehaviorHolder#addClientBehavior}
+ * contract that components implement.  The presence of this {@link
+ * ClientBehavior} will cause the rendering of JavaScript that produces
+ * an <code>Ajax</code> request using the specification public
+ * JavaScript API when the component is rendered.</p>
 
  * <p class="changed_modified_2_0_rev_a">If the component is an instance
  * of {@lkink javax.faces.component.EditableValueHolder}, Where at all

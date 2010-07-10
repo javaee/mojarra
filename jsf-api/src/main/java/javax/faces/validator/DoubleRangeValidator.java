@@ -43,9 +43,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
 /**
- * <p><strong>DoubleRangeValidator</strong> is a {@link Validator} that checks
- * the value of the corresponding component against specified minimum and
- * maximum values.  The following algorithm is implemented:</p>
+ * <p><strong
+ * class="changed_modified_2_0_rev_a">DoubleRangeValidator</strong> is a
+ * {@link Validator} that checks the value of the corresponding
+ * component against specified minimum and maximum values.  The
+ * following algorithm is implemented:</p>
+
  * <ul>
  * <li>If the passed value is <code>null</code>, exit immediately.</li>
  * <li>If the current component value is not a floating point type, or

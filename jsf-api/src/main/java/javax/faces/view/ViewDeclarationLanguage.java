@@ -45,9 +45,10 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0">The contract that a view declaration
- * language must implement to interact with the JSF runtime.  An
- * implementation of this class must be thread-safe.</p>
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_0_rev_a">The</span> contract that a view
+ * declaration language must implement to interact with the JSF runtime.
+ * An implementation of this class must be thread-safe.</p>
  *
  * <div class="changed_added_2_0">
  * 

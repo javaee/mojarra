@@ -65,15 +65,16 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 /**
- * <p><span class="changed_modified_2_0"><strong>UIInput</strong></span>
- * is a {@link UIComponent} that represents a component that both
- * displays output to the user (like {@link UIOutput} components do) and
+ * <p><span class="changed_modified_2_0
+ * changed_modified_2_0_rev_a"><strong>UIInput</strong></span> is a
+ * {@link UIComponent} that represents a component that both displays
+ * output to the user (like {@link UIOutput} components do) and
  * processes request parameters on the subsequent request that need to
  * be decoded.  There are no restrictions on the data type of the local
  * value, or the object referenced by the value binding expression (if
  * any); however, individual {@link javax.faces.render.Renderer}s will
  * generally impose restrictions on the type of data they know how to
- * display.</p> 
+ * display.</p>
  *
  * <p>During the <em>Apply Request Values</em> phase
  * of the request processing lifecycle, the decoded value of this

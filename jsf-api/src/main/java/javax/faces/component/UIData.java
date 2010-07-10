@@ -73,21 +73,20 @@ import java.util.Iterator;
 
 // ------------------------------------------------------------- Private Classes
 // Private class to represent saved state information
+
 /**
- * <p><strong>UIData</strong> is a {@link UIComponent} that supports data
- * binding to a collection of data objects represented by a {@link DataModel}
- * instance, which is the current value of this component itself (typically
- * established via a {@link ValueExpression}). During iterative processing over
- * the rows of data in the data model, the object for the current row is exposed
- * as a request attribute under the key specified by the <code>var</code>
- * property.</p>
- * <p/>
- * <p>Only children of type {@link UIColumn} should be processed by renderers
- * associated with this component.</p>
- * <p/>
- * <p>By default, the <code>rendererType</code> property is set to
- * <code>javax.faces.Table</code>.  This value can be changed by calling the
- * <code>setRendererType()</code> method.</p>
+ * <p><strong class="changed_modified_2_0_rev_a">UIData</strong> is a
+ * {@link UIComponent} that supports data binding to a collection of
+ * data objects represented by a {@link DataModel} instance, which is
+ * the current value of this component itself (typically established via
+ * a {@link ValueExpression}). During iterative processing over the rows
+ * of data in the data model, the object for the current row is exposed
+ * as a request attribute under the key specified by the
+ * <code>var</code> property.</p> <p/> <p>Only children of type {@link
+ * UIColumn} should be processed by renderers associated with this
+ * component.</p> <p/> <p>By default, the <code>rendererType</code>
+ * property is set to <code>javax.faces.Table</code>.  This value can be
+ * changed by calling the <code>setRendererType()</code> method.</p>
  */
 
 public class UIData extends UIComponentBase

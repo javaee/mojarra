@@ -68,13 +68,14 @@ import javax.faces.view.ViewDeclarationLanguage;
 
 
 /**
- * <p><strong class="changed_modified_2_0">Application</strong>
- * represents a per-web-application singleton object where applications
- * based on JavaServer Faces (or implementations wishing to provide
- * extended functionality) can register application-wide singletons that
- * provide functionality required by JavaServer Faces.  Default
- * implementations of each object are provided for cases where the
- * application does not choose to customize the behavior.</p>
+ * <p><strong class="changed_modified_2_0
+ * changed_modified_2_0_rev_a">Application</strong> represents a
+ * per-web-application singleton object where applications based on
+ * JavaServer Faces (or implementations wishing to provide extended
+ * functionality) can register application-wide singletons that provide
+ * functionality required by JavaServer Faces.  Default implementations
+ * of each object are provided for cases where the application does not
+ * choose to customize the behavior.</p>
  *
  * <p>The instance of {@link Application} is created by calling the
  * <code>getApplication()</code> method of {@link ApplicationFactory}.

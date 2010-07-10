@@ -56,7 +56,8 @@ package javax.faces.view.facelets;
 
 
 /**
- * <p class="changed_added_2_0">Foundation class for
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_0_rev_a">Foundation</span> class for
  * <code>FaceletHandler</code>s associated with a markup element in a
  * Facelet document.  This class introduces the concept of <a
  * href="TagAttribute.html">XML attributes</a> to Facelets.  See the <a

@@ -42,11 +42,13 @@ import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0">Provides a simple implementation of
- * {@link ResourceHandler} that can be subclassed by developers wishing
- * to provide specialized behavior to an existing {@link
- * ResourceHandler} instance.  The default implementation of all methods
- * is to call through to the wrapped {@link ResourceHandler}.</p>
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_0_rev_a">Provides</span> a simple
+ * implementation of {@link ResourceHandler} that can be subclassed by
+ * developers wishing to provide specialized behavior to an existing
+ * {@link ResourceHandler} instance.  The default implementation of all
+ * methods is to call through to the wrapped {@link
+ * ResourceHandler}.</p>
  *
  * <div class="changed_added_2_0">
  *
