@@ -499,7 +499,7 @@ public class RenderKitSpecificationGenerator implements Generator {
             }
             sb.append("<hr>\n");
             sb.append(
-                "Copyright (c) 2003-2004 Sun Microsystems, Inc. All Rights Reserved.\n");
+                "Copyright (c) 2003-2010 Oracle America, Inc. All Rights Reserved.\n");
             sb.append("</body>\n");
             sb.append("</html>\n");
             writeStringToFile(sb.toString(),

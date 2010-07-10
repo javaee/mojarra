@@ -54,8 +54,9 @@ import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
 /**
- * <p class="changed_added_2_0">A Validator that delegates validation
- * of the bean property to the Bean Validation API.</p>
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_0_rev_a">A Validator</span> that delegates
+ * validation of the bean property to the Bean Validation API.</p>
  * @since 2.0
  */
 public class BeanValidator implements Validator, PartialStateHolder {

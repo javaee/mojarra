@@ -45,9 +45,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * <p><strong>MethodExpressionValidator</strong> is a {@link Validator} that
- * wraps a {@link MethodExpression}, and it performs validation by executing
- * a method on an object identified by the {@link MethodExpression}.</p>
+ * <p><strong
+ * class="changed_modified_2_0_rev_a">MethodExpressionValidator</strong>
+ * is a {@link Validator} that wraps a {@link MethodExpression}, and it
+ * performs validation by executing a method on an object identified by
+ * the {@link MethodExpression}.</p>
  */
 
 public class MethodExpressionValidator implements Validator, StateHolder {

@@ -60,10 +60,10 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * <p><strong class="changed_modified_2_0">FacesServlet</strong> is a
- * servlet that manages the request processing lifecycle for web
- * applications that are utilizing JavaServer Faces to construct the
- * user interface.</p>
+ * <p><strong class="changed_modified_2_0
+ * changed_modified_2_0_rev_a">FacesServlet</strong> is a servlet that
+ * manages the request processing lifecycle for web applications that
+ * are utilizing JavaServer Faces to construct the user interface.</p>
  */
 
 public final class FacesServlet implements Servlet {

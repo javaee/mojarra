@@ -43,10 +43,11 @@ import javax.faces.convert.Converter;
 
 
 /**
- * <p><strong>UIOutput</strong> is a {@link UIComponent} that has a
- * value, optionally retrieved from a model tier bean via a value
- * expression, that is displayed to the user.  The user cannot directly
- * modify the rendered value; it is for display purposes only.</p>
+ * <p><strong class="changed_modified_2_0_rev_a">UIOutput</strong> is a
+ * {@link UIComponent} that has a value, optionally retrieved from a
+ * model tier bean via a value expression, that is displayed to the
+ * user.  The user cannot directly modify the rendered value; it is for
+ * display purposes only.</p>
  *
  * <p>During the <em>Render Response</em> phase of the request processing
  * lifecycle, the current value of this component must be

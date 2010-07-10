@@ -87,7 +87,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * <p><strong class="changed_modified_2_0">UIComponentBase</strong> is a
+ * <p><strong class="changed_modified_2_0 changed_modified_2_0_rev_a">UIComponentBase</strong> is a
  * convenience base class that implements the default concrete behavior
  * of all methods defined by {@link UIComponent}.</p>
  * <p/>

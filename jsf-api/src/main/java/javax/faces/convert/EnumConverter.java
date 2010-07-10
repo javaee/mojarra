@@ -43,8 +43,9 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><span class="changed_modified_2_0">{@link Converter}</span> implementation for <code>java.lang.Enum</code>
- * (and enum primitive) values.</p>
+ * <p><span class="changed_modified_2_0
+ * changed_modified_2_0_rev_a">{@link Converter}</span> implementation
+ * for <code>java.lang.Enum</code> (and enum primitive) values.</p>
  *
  * @since 1.2
  */

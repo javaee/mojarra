@@ -45,10 +45,11 @@ import javax.faces.render.Renderer;
 
 
 /**
- * <p><strong class="changed_modified_2_0">EditableValueHolder</strong>
- * is an extension of ValueHolder that describes additional features
- * supported by editable components, including {@link ValueChangeEvent}s
- * and {@link Validator}s.
+ * <p><strong class="changed_modified_2_0
+ * changed_modified_2_0_rev_a">EditableValueHolder</strong> is an
+ * extension of ValueHolder that describes additional features supported
+ * by editable components, including {@link ValueChangeEvent}s and
+ * {@link Validator}s.
  */
 
 public interface EditableValueHolder extends ValueHolder {

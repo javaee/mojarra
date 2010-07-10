@@ -437,6 +437,44 @@ table.diff tr.hideold
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:red }
 
+
+/*
+ *
+ * Ensure the lefthand nav pane links have the right attribution
+ *
+ */
+
+a[href^="composite"] { cursor: url(changed_modified_2_0_rev_a_cursor.cur), pointer;
+                 background: url(changed_modified_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+a[href^="c/"] { cursor: url(changed_modified_2_0_rev_a_cursor.cur), pointer;
+                 background: url(changed_modified_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+a[href^="f/"] { cursor: url(changed_modified_2_0_rev_a_cursor.cur), pointer;
+                 background: url(changed_modified_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+a[href^="h/"] { cursor: url(changed_modified_2_0_rev_a_cursor.cur), pointer;
+                 background: url(changed_modified_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+a[href^="ui/"] { cursor: url(changed_modified_2_0_rev_a_cursor.cur), pointer;
+                 background: url(changed_modified_2_0_rev_a.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:orange }
+
+
    .changed_added_2_0_rev_a { cursor: url(changed_added_2_0_rev_a_cursor.cur), pointer;
                  background: url(changed_added_2_0_rev_a.png); 
                  padding-left:0.2em; border-left:solid;

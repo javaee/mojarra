@@ -46,9 +46,11 @@ import java.util.regex.PatternSyntaxException;
 import javax.faces.component.PartialStateHolder;
 
 /**
- * <p class="changed_added_2_0">A Validator that checks against a
- * Regular Expression (which is the pattern property).  The pattern must
- * resolve to a String that follows the java.util.regex standards.</p>
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_0_rev_a">A Validator</span> that checks
+ * against a Regular Expression (which is the pattern property).  The
+ * pattern must resolve to a String that follows the java.util.regex
+ * standards.</p>
  * @since 2.0
  */
 public class RegexValidator implements Validator, PartialStateHolder {

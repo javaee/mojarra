@@ -51,9 +51,9 @@ import java.util.Locale;
 
 
 /**
- * <p>{@link Converter} implementation for <code>java.lang.Number</code>
- * values.</p>
- * <p/>
+ * <p><span class="changed_modified_2_0_rev_a">{@link Converter}</span>
+ * implementation for <code>java.lang.Number</code> values.</p>
+ *
  * <p>The <code>getAsObject()</code> method parses a String into an
  * <code>java.lang.Double</code> or <code>java.lang.Long</code>, according
  * to the following algorithm:</p>

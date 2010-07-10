@@ -49,8 +49,8 @@ import java.io.PrintWriter;
 import javax.el.MethodNotFoundException;
 
 /**
- * <p><strong><span
- * class="changed_modified_2_0">MethodExpressionActionListener</span></strong>
+ * <p><strong><span class="changed_modified_2_0
+ * changed_modified_2_0_rev_a">MethodExpressionActionListener</span></strong>
  * is an {@link ActionListener} that wraps a {@link
  * MethodExpression}. When it receives a {@link ActionEvent}, it
  * executes a method on an object identified by the {@link

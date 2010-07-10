@@ -49,9 +49,9 @@ import java.util.TimeZone;
 
 
 /**
- * <p>{@link Converter} implementation for <code>java.util.Date</code>
- * values.</p>
- * <p/>
+ * <p><span class="changed_modified_2_0_rev_a">{@link Converter}</span>
+ * implementation for <code>java.util.Date</code> values.</p>
+ *
  * <p>The <code>getAsObject()</code> method parses a String into a
  * <code>java.util.Date</code>, according to the following algorithm:</p>
  * <ul>

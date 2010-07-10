@@ -208,18 +208,19 @@
         <description>
 
             <![CDATA[
-<div class="changed_added_2_0">
-  <p>
-	This tag is the same as the <code>ui:composition</code>, except for two things:
-    JSF creates a component and adds it directly to the tree, and there's no associated
-    template.
+
+  <p><span class="changed_modified_2_0_rev_a
+  changed_added_2_0">This</span> <span
+  class="changed_added_2_0">tag is the same as the
+  <code>ui:composition</code>, except for two things: JSF creates a
+  component and adds it directly to the tree, and there's no associated
+  template.</span>
   </p>
 
-  <p>
-	Use this tag to create a component and specify a filename for the
-	component as either the source of a <code>ui:include</code>, or the source of a Facelets tag.
+  <p class="changed_added_2_0">Use this tag to create a component and
+  specify a filename for the component as either the source of a
+  <code>ui:include</code>, or the source of a Facelets tag.
   </p>
-</div>
 ]]>
         </description>
         <name>
@@ -758,11 +759,14 @@ that the whole template client will be inserted.
         <description>
 
             <![CDATA[
-<div class="changed_added_2_0">
-<p>Use this tag to pass parameters to an included file (using <code>ui:include</code>), or a template
-(linked to either a composition or decorator). Embed <code>ui:param</code> tags in either <code>ui:include</code>,
-<code>ui:composition</code>, or <code>ui:decorate</code> to pass the parameters.
-</div>
+
+<p><span class="changed_modified_2_0_rev_a changed_added_2_0">Use</span>
+<span class="changed_added_2_0">this tag to pass parameters to an
+included file (using <code>ui:include</code>), or a template (linked to
+either a composition or decorator). Embed <code>ui:param</code> tags in
+either <code>ui:include</code>, <code>ui:composition</code>, or
+<code>ui:decorate</code> to pass the parameters.</span></p>
+
 ]]>
         </description>
         <name>
