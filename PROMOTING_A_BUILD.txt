@@ -9,7 +9,13 @@ Engineering verifies QL passes
 checkout v3 workspace.
 cd v3/tests/quicklook
 mvn -Dglassfish.home=$GLASSFISH test
-(where $GLASSFISH is a recent v3 build with the new jsf jars added in)
+
+Do this first with a pristine Glassfish build, without the new jsf jars
+added in.  If the quicklook tests pass, you may proceed.  If not, you
+need to get this resolved before proceeding.
+
+Once you have a successful quicklook test, add in the new jsf jars, and
+re-run with the new jars in place.
 
 Engineering updates updatecenter2/conf/jsf_proto.py to correct version #. (ex: 2.0.1-0,1)
 
