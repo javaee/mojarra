@@ -54,7 +54,7 @@ import javax.faces.event.PhaseId;
 
 
 /**
- * <p><strong class="changed_modified_2_0">FacesContext</strong>
+ * <p><strong class="changed_modified_2_0 changed_modified_2_1">FacesContext</strong>
  * contains all of the per-request state information related to the
  * processing of a single JavaServer Faces request, and the rendering of
  * the corresponding response.  It is passed to, and potentially
