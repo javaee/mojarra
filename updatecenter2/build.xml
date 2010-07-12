@@ -15,9 +15,9 @@
             tofile="dist/glassfish/modules/jsf-api.jar"/>
       <copy file="lib/jsf-impl.jar" 
             tofile="dist/glassfish/modules/web/jsf-impl.jar"/>
-      <mkdir dir="dist/jsf2.0"/>
-      <copy file="conf/LICENSE" todir="dist/jsf2.0"/>
-      <copy file="conf/README" todir="dist/jsf2.0"/>
+      <mkdir dir="dist/jsf2.1"/>
+      <copy file="conf/LICENSE" todir="dist/jsf2.1"/>
+      <copy file="conf/README" todir="dist/jsf2.1"/>
     </target>
 
     <target name="repo" depends="dist">
