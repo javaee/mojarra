@@ -216,7 +216,7 @@ public class ELUtils {
      * @param composite a <code>CompositeELResolver</code>
      * @param associate our ApplicationAssociate
      */
-    public static void buildFacesResolver(CompositeELResolver composite,
+    public static void buildFacesResolver(FacesCompositeELResolver composite,
                                           ApplicationAssociate associate) {
 
         if (associate == null) {
@@ -235,9 +235,10 @@ public class ELUtils {
         composite.add(FLASH_RESOLVER);
         composite.add(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
         addELResolvers(composite, associate.getELResolversFromFacesConfig());
-        addVariableResolvers(composite, associate);
+        addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.Faces,
+                associate);
         addPropertyResolvers(composite, associate);
-        addELResolvers(composite, associate.getApplicationELResolvers());
+        composite.add(associate.getApplicationELResolvers());
         composite.add(MANAGED_BEAN_RESOLVER);
         composite.add(RESOURCE_RESOLVER);
         composite.add(BUNDLE_RESOLVER);
@@ -256,7 +257,7 @@ public class ELUtils {
      * @param composite a <code>CompositeELResolver</code>
      * @param associate our ApplicationAssociate
      */
-    public static void buildJSPResolver(CompositeELResolver composite,
+    public static void buildJSPResolver(FacesCompositeELResolver composite,
                                         ApplicationAssociate associate) {
 
         if (associate == null) {
@@ -277,9 +278,10 @@ public class ELUtils {
         composite.add(RESOURCE_RESOLVER);
         composite.add(FACES_BUNDLE_RESOLVER);
         addELResolvers(composite, associate.getELResolversFromFacesConfig());
-        addVariableResolvers(composite, associate);
+        addVariableResolvers(composite, FacesCompositeELResolver.ELResolverChainType.JSP,
+	                associate);
         addPropertyResolvers(composite, associate);
-        addELResolvers(composite, associate.getApplicationELResolvers());
+        composite.add(associate.getApplicationELResolvers());
 
     }
 
@@ -594,12 +596,19 @@ public class ELUtils {
      * @param associate our ApplicationAssociate
      */
     @SuppressWarnings("deprecation")
-    private static void addVariableResolvers(CompositeELResolver target,
+    private static void addVariableResolvers(FacesCompositeELResolver target,
+                                             FacesCompositeELResolver.ELResolverChainType chainType,
                                              ApplicationAssociate associate) {
 
-        VariableResolver vr = getDelegateVR(associate, false);
+        VariableResolver vr = getDelegateVR(associate, true);
         if (vr != null) {
-            target.add(new VariableResolverChainWrapper(vr));
+            VariableResolverChainWrapper vrChainWrapper = new VariableResolverChainWrapper(vr);
+            target.addRootELResolver(vrChainWrapper);
+            if (chainType == FacesCompositeELResolver.ELResolverChainType.JSP) {
+                associate.setLegacyVRChainHeadWrapperForJsp(vrChainWrapper);
+            } else {
+                associate.setLegacyVRChainHeadWrapperForFaces(vrChainWrapper);
+            }
         }
 
     }

@@ -53,137 +53,25 @@ import javax.faces.context.FacesContext;
  * Maintains an ordered composite list of child <code>ELResolver for JSF</code>.
  *
  */
-public class FacesCompositeELResolver extends CompositeELResolver {
-    
-    public void add(ELResolver elResolver) {                                                                             
-        super.add(elResolver);
-    }
+public abstract class FacesCompositeELResolver extends CompositeELResolver
+{
+  /**
+   * <p><b>JSP</b> indicates this CompositeELResolver instance is the
+   * JSP chain, specified in section 5.6.1 of the spec.</p>
+   *
+   * <p><b>Faces</b> indicates this CompositeELResolver instance is the
+   * JSF chain, specified in section 5.6.2 of the spec.</p>
+   */
 
-    public Object getValue(ELContext context, Object base, Object property) 
-        throws ELException {
-        
-        context.setPropertyResolved(false);
-        FacesContext ctx = getFacesContext(context);
-        if (ctx == null) {
-            return null;
-        }
-        setChainType(ctx);
-        Object result = super.getValue(context, base, property);
-        clearChainType(ctx);
-        
-        return result;
-    }
+  public enum ELResolverChainType {
+      JSP,
+      Faces
+  }
 
-    public Class<?> getType(ELContext context, Object base, Object property) 
-        throws ELException {
+  public abstract ELResolverChainType getChainType();
 
-        context.setPropertyResolved(false);
-        FacesContext ctx = getFacesContext(context);
-        if (ctx == null) {
-            return null;
-        }
-        setChainType(ctx);
-        Class<?> result = super.getType(context, base, property);
-        clearChainType(ctx);
+  public abstract void addRootELResolver(ELResolver elResolver);
 
-        return result;
-    }
-
-    
-    public void setValue(ELContext context, Object base, Object property,
-        Object val) throws ELException {
-        context.setPropertyResolved(false);
-        FacesContext ctx = getFacesContext(context);
-        if (ctx == null) {
-            return;
-        }
-        setChainType(ctx);
-        super.setValue(context, base, property, val);
-        clearChainType(ctx);
-    }
-
-    
-    public boolean isReadOnly(ELContext context, Object base, Object property) 
-        throws ELException {
-        context.setPropertyResolved(false);
-        FacesContext ctx = getFacesContext(context);
-        if (ctx == null) {
-            return false;
-        }
-        setChainType(ctx);
-        boolean result = super.isReadOnly(context, base, property);
-        clearChainType(ctx);
-        return result;
-    }
-
-    
-    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-        FacesContext ctx = getFacesContext(context);
-        setChainType(ctx);
-        Iterator<FeatureDescriptor> result = super.getFeatureDescriptors(context, base);
-        clearChainType(ctx);
-        return result;
-    }
-    
-    public Class<?> getCommonPropertyType(ELContext context, Object base) {
-        return null;
-    }
-
-    /**
-     * <p><b>JSP</b> indicates this CompositeELResolver instance is the
-     * JSP chain, specified in section 5.6.1 of the spec.</p>
-     *
-     * <p><b>Faces</b> indicates this CompositeELResolver instance is the
-     * JSF chain, specified in section 5.6.2 of the spec.</p>
-     */
-
-    public enum ELResolverChainType {
-        JSP,
-        Faces
-    }
-
-    private ELResolverChainType chainType;
-
-    /**
-     * <p>Guarantee that this instance knows of what chain it is a
-     * member.</p>
-     * @param chainType the {@link ELResolverChainType} 
-     */
-    public FacesCompositeELResolver(ELResolverChainType chainType) {
-        this.chainType = chainType;
-    }
-
-    /**
-     * <p>Set a request scoped attribute indicating what kind of chain
-     * the current expression is.</p>
-     */
-
-    private void setChainType(FacesContext ctx) {
-        RequestStateManager.set(ctx,
-                                RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME,
-                                chainType);
-    }
-
-    /**
-     * <p>Clear the request scoped attribute indicating what kind of
-     * chain the current expression is.</p>
-     */
-    
-    private void clearChainType(FacesContext ctx) {
-        RequestStateManager.remove(ctx, RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME);
-    }
-
-
-    /**
-     * @param elContext context for the current expression evaluation
-     * @return the <code>FacesContext</code> associated with this expression
-     *  evaluation
-     */
-    private FacesContext getFacesContext(ELContext elContext) {
-
-        return (FacesContext) elContext.getContext(FacesContext.class);
-
-    }
-
+  public abstract void addPropertyELResolver(ELResolver elResolver);
 }
 

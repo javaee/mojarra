@@ -214,8 +214,10 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
+        Map<String, Object> stateMap = RequestStateManager.getStateMap(context);
         ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper)
-              RequestStateManager.remove(context, RequestStateManager.AFTER_VIEW_CONTENT);
+                stateMap.remove(RequestStateManager.AFTER_VIEW_CONTENT);
+
         if (null != wrapper) {
             wrapper.flushToWriter(response.getWriter(),
                     response.getCharacterEncoding());
@@ -432,8 +434,10 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         ExternalContext extContext = context.getExternalContext();
+        Map<String, Object> stateMap = RequestStateManager.getStateMap(context);
 
-        if ("/*".equals(RequestStateManager.get(context, RequestStateManager.INVOCATION_PATH))) {
+
+        if ("/*".equals(stateMap.get(RequestStateManager.INVOCATION_PATH))) {
             throw new FacesException(MessageUtils.getExceptionMessageString(
                   MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
         }
@@ -486,8 +490,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // Put the AFTER_VIEW_CONTENT into request scope
         // temporarily
-        RequestStateManager.set(context,
-                                RequestStateManager.AFTER_VIEW_CONTENT,
+        stateMap.put(RequestStateManager.AFTER_VIEW_CONTENT,
                                 wrapped);
 
         return false;

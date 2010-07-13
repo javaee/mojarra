@@ -86,7 +86,7 @@ public class ChainAwareVariableResolver extends VariableResolver {
     public Object resolveVariable(FacesContext context, String name)
             throws EvaluationException {
         Object result = null;
-        ELResolverChainType type = null;
+        ELResolverChainType type = ELResolverChainType.Faces;
         Object valueObject = RequestStateManager.get(context,
                                                      RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME);
         if (null != valueObject && 

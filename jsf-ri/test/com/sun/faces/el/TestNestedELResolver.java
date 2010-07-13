@@ -125,8 +125,9 @@ public class TestNestedELResolver extends TestCase {
               .setELResolversFromFacesConfig(Collections.<ELResolver>singletonList(
                     new NestedELResolver(PREFIX)));
         associate.setLegacyVariableResolver(new ChainAwareVariableResolver());
-        FacesCompositeELResolver facesCompositeELResolver = new FacesCompositeELResolver(
-              FacesCompositeELResolver.ELResolverChainType.Faces);
+        FacesCompositeELResolver facesCompositeELResolver = 
+      new DemuxCompositeELResolver(
+           FacesCompositeELResolver.ELResolverChainType.Faces);
         ELUtils.buildFacesResolver(facesCompositeELResolver, associate);
         ELContext elContext = mockFacesContext.getELContext();
         setELResolverOnElContext(facesCompositeELResolver, elContext);

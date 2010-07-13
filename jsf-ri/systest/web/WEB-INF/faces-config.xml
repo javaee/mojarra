@@ -51,11 +51,13 @@
     <resource-bundle>      
       <base-name>com.sun.faces.systest.resources.ResourceBundle01</base-name>
       <var>resourceBundle01</var>
+      <display-name>resourceBundle01 displayName</display-name>
     </resource-bundle>
     <resource-bundle>      
       <base-name>com.sun.faces.systest.resources.ResourceBundle03</base-name>
         <var>resourceBundle03</var>
-    </resource-bundle>     
+        <display-name>resourceBundle03 displayName</display-name>
+    </resource-bundle>
   </application>
   <factory>
     <application-factory>com.sun.faces.systest.lifecycle.ApplicationFactoryWrapper</application-factory>

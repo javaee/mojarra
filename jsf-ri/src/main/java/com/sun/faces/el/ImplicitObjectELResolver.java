@@ -39,7 +39,6 @@ package com.sun.faces.el;
 
 import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -56,17 +55,29 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.component.CompositeComponentStackManager;
+import java.util.HashMap;
 
 public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
-    static String[] IMPLICIT_OBJECTS = new String[] {
+    protected static final Map<String, Integer> IMPLICIT_OBJECTS;
+
+    static
+    {
+        String[] implictNames = new String[]{
         "application", "applicationScope", "cc", "component", "cookie", "facesContext",
         "header", "headerValues", "initParam", "param", "paramValues",
         "request", "requestScope", "resource", "session", "sessionScope", 
         "view", "viewScope" };
-    static {
-        Arrays.sort(IMPLICIT_OBJECTS);
-    }
+        int nameCount = implictNames.length;
+
+        Map<String, Integer> implicitObjects = new HashMap<String, Integer>((int) (nameCount * 1.5f));
+
+        for (int nameIndex = 0; nameIndex < nameCount; nameIndex++) {
+            implicitObjects.put(implictNames[nameIndex], nameIndex);
+        }
+
+        IMPLICIT_OBJECTS = implicitObjects;
+  }
 
     public ImplicitObjectELResolver() {
     }
@@ -84,14 +95,14 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
             throw new PropertyNotFoundException(message);
         }
 
-        FacesContext facesContext =
-            (FacesContext) context.getContext(FacesContext.class);
-        ExternalContext extCtx = facesContext.getExternalContext();
-        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index < 0) {
+        Integer index = IMPLICIT_OBJECTS.get(property.toString());
+
+        if (index == null) {
             return null;
         } else {
-            switch (index) {
+            FacesContext facesContext = (FacesContext) context.getContext(FacesContext.class);
+            ExternalContext extCtx = facesContext.getExternalContext();
+	            switch (index) {
                 case APPLICATION:
                     context.setPropertyResolved(true);
                     return extCtx.getContext();
@@ -182,9 +193,9 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
             throw new PropertyNotFoundException(message);
         }
 
-        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index >= 0) {
-            throw new PropertyNotWritableException((String)property);
+        Integer index = IMPLICIT_OBJECTS.get(property.toString());
+        if (index != null) {
+            throw new PropertyNotWritableException((String) property);
         }
     }
 
@@ -199,8 +210,9 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
             throw new PropertyNotFoundException(message);
         }
 
-        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index >= 0) {
+        Integer index = IMPLICIT_OBJECTS.get(property.toString());
+
+        if (index != null) {
             context.setPropertyResolved(true);
             return true;
         }
@@ -218,8 +230,9 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
             throw new PropertyNotFoundException(message);
         }
 
-        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index >= 0) {
+        Integer index = IMPLICIT_OBJECTS.get(property.toString());
+
+        if (index != null) {
             context.setPropertyResolved(true);
         }
         return null;

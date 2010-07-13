@@ -60,10 +60,19 @@ public class VariableResolverChainWrapper extends ELResolver {
         this.legacyVR = variableResolver;
     }
 
+    public void setWrapped(VariableResolver newVR) {
+        this.legacyVR = newVR;
+    }
+
     @Override
     @SuppressWarnings("deprecation")
     public Object getValue(ELContext context, Object base, Object property)
         throws ELException {
+
+        // Don't call into the chain unless it's been decorated.
+        if (legacyVR instanceof ChainAwareVariableResolver) {
+            return null;
+        }
 
         if (base != null) {
             return null;
@@ -79,12 +88,12 @@ public class VariableResolverChainWrapper extends ELResolver {
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
         String propString = property.toString();
+        Map<String,Object> stateMap = RequestStateManager.getStateMap(facesContext);
         try {
         // If we are already in the midst of an expression evaluation
         // that touched this resolver...
             //noinspection unchecked
-            List<String> varNames = (List<String>) RequestStateManager.get(facesContext,
-                                                                           RequestStateManager.REENTRANT_GUARD);
+            List<String> varNames = (List<String>) stateMap.get(RequestStateManager.REENTRANT_GUARD);
             if (varNames != null
                  && !varNames.isEmpty()
                  && varNames.contains(propString)) {
@@ -95,9 +104,7 @@ public class VariableResolverChainWrapper extends ELResolver {
             // Make sure subsequent calls don't take action.
             if (varNames == null) {
                 varNames = new ArrayList<String>();
-                RequestStateManager.set(facesContext,
-                                        RequestStateManager.REENTRANT_GUARD,
-                                        varNames);
+                stateMap.put(RequestStateManager.REENTRANT_GUARD, varNames);
             }
             varNames.add(propString);
             
@@ -109,8 +116,7 @@ public class VariableResolverChainWrapper extends ELResolver {
         } finally {
             // Make sure to remove the guard after the call returns
             //noinspection unchecked
-            List<String> varNames = (List<String>) RequestStateManager.get(facesContext,
-                                                                           RequestStateManager.REENTRANT_GUARD);
+            List<String> varNames = (List<String>) stateMap.get(RequestStateManager.REENTRANT_GUARD);
             if (varNames != null && !varNames.isEmpty()) {
                 varNames.remove(propString);
             }
@@ -125,6 +131,11 @@ public class VariableResolverChainWrapper extends ELResolver {
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
 
+        // Don't call into the chain unless it's been decorated.
+        if (legacyVR instanceof ChainAwareVariableResolver) {
+            return null;
+        }
+
         Object result = getValue(context, base, property);
         context.setPropertyResolved(result != null);
         if (result != null) {
@@ -136,14 +147,25 @@ public class VariableResolverChainWrapper extends ELResolver {
     @Override
     public void  setValue(ELContext context, Object base, Object property,
                           Object val) throws ELException {
-    if (null == base && null == property) {
-        throw new PropertyNotFoundException();
-    }
+        // Don't call into the chain unless it's been decorated.
+        if (legacyVR instanceof ChainAwareVariableResolver) {
+            return;
+        }
+
+        if (null == base && null == property) {
+            throw new PropertyNotFoundException();
+        }
     }
 
     @Override
     public boolean isReadOnly(ELContext context, Object base, Object property)
         throws ELException {
+
+        // Don't call into the chain unless it's been decorated.
+        if (legacyVR instanceof ChainAwareVariableResolver) {
+            return false;
+        }
+
         if (null == base && null == property) {
         throw new PropertyNotFoundException();
     }
@@ -158,6 +180,12 @@ public class VariableResolverChainWrapper extends ELResolver {
 
     @Override
     public Class<?> getCommonPropertyType(ELContext context, Object base) {
+
+        // Don't call into the chain unless it's been decorated.
+        if (legacyVR instanceof ChainAwareVariableResolver) {
+            return null;
+        }
+        
         if ( base == null ) {
             return String.class;
         }

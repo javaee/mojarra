@@ -460,7 +460,7 @@
             </custom-sysproperties>
             <suite>
                 <test todir="${impl.test.results.dir}"
-                    name="com.sun.faces.config.ConfigFileTestCase"/>
+                    name="com.sun.faces.application.TestApplicationImpl_Config"/>
             </suite>
 
         </jsf.junit>       
@@ -512,9 +512,9 @@
 
     <target name="passthru">
 
-      <antcall target="deploy"/>
+      <antcall target="deploy"/> 
       <antcall target="run.cactus.test.single" />
-      <antcall target="undeploy"/>
+     <antcall target="undeploy"/> 
        
     </target>
 

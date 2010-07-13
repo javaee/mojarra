@@ -49,6 +49,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.JavaxFacesProjectStage;
 
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.el.ChainTypeCompositeELResolver;
 import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.el.ELUtils;
@@ -195,6 +196,7 @@ public class ConfigureListener implements ServletRequestListener,
         webAppListener.contextInitialized(sce);
         InitFacesContext initContext = new InitFacesContext(context);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
+        Throwable caughtThrowable = null;
 
         try {
 
@@ -266,6 +268,12 @@ public class ConfigureListener implements ServletRequestListener,
 
             webConfig.doLoggingActions();
 
+        } catch (Throwable t) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Critical error during deployment: ", t);
+            }
+            caughtThrowable = t;
+
         } finally {
             Verifier.setCurrentInstance(null);
             initContext.release();
@@ -277,6 +285,9 @@ public class ConfigureListener implements ServletRequestListener,
                 timer.stopTiming();
                 timer.logResult("Initialization of context " +
                         getServletContextIdentifier(context));
+            }
+            if (null != caughtThrowable) {
+                throw new RuntimeException(caughtThrowable);
             }
         }
     }
@@ -656,8 +667,8 @@ public class ConfigureListener implements ServletRequestListener,
 
             // register an empty resolver for now. It will be populated after the 
             // first request is serviced.
-            CompositeELResolver compositeELResolverForJsp =
-                    new FacesCompositeELResolver(FacesCompositeELResolver.ELResolverChainType.JSP);
+            FacesCompositeELResolver compositeELResolverForJsp =
+                    new ChainTypeCompositeELResolver(FacesCompositeELResolver.ELResolverChainType.JSP);
             ApplicationAssociate associate =
                     ApplicationAssociate.getInstance(context);
             if (associate != null) {

@@ -54,6 +54,7 @@ import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.RIConstants;
+import java.util.Map;
 
 public class SubviewTag extends UIComponentELTag {
 
@@ -207,12 +208,14 @@ public class SubviewTag extends UIComponentELTag {
     static Stack<UIComponentClassicTagBase> getViewTagStack() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
+        Map<String,Object> stateMap = RequestStateManager.getStateMap(ctx);
+
         //noinspection unchecked
         Stack<UIComponentClassicTagBase> result = (Stack<UIComponentClassicTagBase>)
-              RequestStateManager.get(ctx, RequestStateManager.VIEWTAG_STACK_ATTR_NAME);
+              stateMap.get(RequestStateManager.VIEWTAG_STACK_ATTR_NAME);
         if (result == null) {
             result = new Stack<UIComponentClassicTagBase>();
-            RequestStateManager.set(ctx, RequestStateManager.VIEWTAG_STACK_ATTR_NAME, result);
+            stateMap.put(RequestStateManager.VIEWTAG_STACK_ATTR_NAME, result);
         }
         
         return result;

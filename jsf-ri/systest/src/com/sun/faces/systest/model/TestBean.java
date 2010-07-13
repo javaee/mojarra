@@ -36,19 +36,22 @@
 
 package com.sun.faces.systest.model;
 
+import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
+import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.el.ELContext;
+import javax.el.ELResolver;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UINamingContainer;
@@ -883,6 +886,47 @@ public enum Color { Red, Blue, Green, Orange }
      */
     public Suit getReferencedSuit() {
         return this.referencedSuit;
+    }
+
+    // taken from TCK facesResourceBundleResolverGetTypeTest
+    public String getResourceBundleType() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ELContext elContext = context.getELContext();
+        ELResolver elResolver = elContext.getELResolver();
+        Class type = elResolver.getType(elContext, null, "resourceBundle03");
+
+        return type.toString();
+    }
+
+    // taken from TCK facesResourceBundleResolverFeatureDescriptorTest
+    public String getFeatureDescriptorCorrectness() {
+        StringBuilder builder = new StringBuilder();
+
+        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+        ELResolver resolver = elContext.getELResolver();
+        boolean fd_Found = false;
+
+        // Setup golden FeatureDescriptor.
+        FeatureDescriptor controlDesc = new FeatureDescriptor();
+        controlDesc.setValue("resolvable", Boolean.TRUE);
+        controlDesc.setValue("type", ResourceBundle.class);
+        controlDesc.setName("resourceBundle03");
+        controlDesc.setDisplayName("simple");
+        controlDesc.setExpert(false);
+        controlDesc.setHidden(false);
+        controlDesc.setPreferred(true);
+        controlDesc.setShortDescription("");
+
+        builder.append("<h1>getFeatureDescriptors output</h1>\n");
+        for (Iterator i = resolver.getFeatureDescriptors(elContext, null);
+                i.hasNext();) {
+            FeatureDescriptor test = (FeatureDescriptor) i.next();
+            builder.append("<p>Name: ").append(test.getName()).
+                    append(" displayName: ").append(test.getDisplayName()).
+                    append("</p>\n");
+        }
+
+        return builder.toString();
     }
 
     /**

@@ -70,6 +70,11 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.*;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation;
+import com.sun.faces.el.DemuxCompositeELResolver;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.VariableResolverChainWrapper;
+import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -142,6 +147,10 @@ public class ApplicationAssociate {
     @SuppressWarnings("deprecation")
     private VariableResolver legacyVRChainHead = null;
 
+    private VariableResolverChainWrapper legacyVRChainHeadWrapperForJsp = null;
+
+    private VariableResolverChainWrapper legacyVRChainHeadWrapperForFaces = null;
+
     @SuppressWarnings("deprecation")
     private PropertyResolver legacyPRChainHead = null;
     private ExpressionFactory expressionFactory = null;
@@ -151,7 +160,7 @@ public class ApplicationAssociate {
 
     @SuppressWarnings("deprecation")
     private VariableResolver legacyVariableResolver = null;
-    private CompositeELResolver facesELResolverForJsp = null;
+    private FacesCompositeELResolver facesELResolverForJsp = null;
 
     private InjectionProvider injectionProvider;
     private ResourceCache resourceCache;
@@ -336,6 +345,29 @@ public class ApplicationAssociate {
         return groovyHelper;
     }
 
+    public void initializeELResolverChains() {
+        // 1. initialize the chains with default values
+        if (null == app.compositeELResolver) {
+            app.compositeELResolver =
+                    new DemuxCompositeELResolver(
+                    FacesCompositeELResolver.ELResolverChainType.Faces);
+            ELUtils.buildFacesResolver(app.compositeELResolver, this);
+            ELResolverInitPhaseListener.populateFacesELResolverForJsp(app,
+                    this);
+        }
+    }
+
+    public void installProgrammaticallyAddedResolvers() {
+        // Ensure custom resolvers are inserted at the correct place.
+        VariableResolver vr = this.getLegacyVariableResolver();
+        if (null != vr) {
+            assert(null != this.getLegacyVRChainHeadWrapperForJsp());
+            this.getLegacyVRChainHeadWrapperForJsp().setWrapped(vr);
+            assert(null != this.getLegacyVRChainHeadWrapperForFaces());
+            this.getLegacyVRChainHeadWrapperForFaces().setWrapped(vr);
+        }
+    }
+
     public boolean isDevModeEnabled() {
         return devModeEnabled;
     }
@@ -366,6 +398,22 @@ public class ApplicationAssociate {
         return legacyVRChainHead;
     }
 
+    public VariableResolverChainWrapper getLegacyVRChainHeadWrapperForJsp() {
+        return legacyVRChainHeadWrapperForJsp;
+    }
+
+    public void setLegacyVRChainHeadWrapperForJsp(VariableResolverChainWrapper legacyVRChainHeadWrapper) {
+        this.legacyVRChainHeadWrapperForJsp = legacyVRChainHeadWrapper;
+    }
+
+    public VariableResolverChainWrapper getLegacyVRChainHeadWrapperForFaces() {
+        return legacyVRChainHeadWrapperForFaces;
+    }
+
+    public void setLegacyVRChainHeadWrapperForFaces(VariableResolverChainWrapper legacyVRChainHeadWrapperForFaces) {
+        this.legacyVRChainHeadWrapperForFaces = legacyVRChainHeadWrapperForFaces;
+    }
+
     /**
      * This method is called by <code>ConfigureListener</code> and will
      * contain any <code>PropertyResolvers</code> defined within
@@ -383,11 +431,11 @@ public class ApplicationAssociate {
         return legacyPRChainHead;
     }
 
-    public CompositeELResolver getFacesELResolverForJsp() {
+    public FacesCompositeELResolver getFacesELResolverForJsp() {
         return facesELResolverForJsp;
     }
 
-    public void setFacesELResolverForJsp(CompositeELResolver celr) {
+    public void setFacesELResolverForJsp(FacesCompositeELResolver celr) {
         facesELResolverForJsp = celr;
     }
 
@@ -407,7 +455,7 @@ public class ApplicationAssociate {
         return this.expressionFactory;
     }
 
-    public List<ELResolver> getApplicationELResolvers() {
+    public CompositeELResolver getApplicationELResolvers() {
         return app.getApplicationELResolvers();
     }
 

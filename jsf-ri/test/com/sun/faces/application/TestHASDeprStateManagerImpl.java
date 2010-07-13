@@ -37,31 +37,17 @@
 package com.sun.faces.application;
 
 import org.apache.cactus.WebRequest;
-import org.apache.cactus.server.ServletConfigWrapper;
-import com.sun.faces.RIConstants;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
-import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.StateManager.SerializedView;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIGraphic;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIForm;
-import javax.faces.component.UIPanel;
-import javax.faces.context.FacesContext;
-import javax.faces.render.RenderKitFactory;
-import javax.servlet.http.HttpSession;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -123,7 +109,8 @@ public class TestHASDeprStateManagerImpl extends ServletFacesTestCase {
     }
 
     public void testRender() {
-        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), TEST_URI);
+        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        newView.setViewId(TEST_URI);
         newView.setLocale(Locale.US);
         getFacesContext().setViewRoot(newView);
                                                                                                                       

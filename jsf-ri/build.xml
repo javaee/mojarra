@@ -291,7 +291,9 @@
             </classpath>
         </jsf.javac>
 
-        <copy todir="${build.classes.dir}">
+        <echo message="copying properties files" />
+
+        <copy todir="${build.classes.dir}" overwrite="true">
             <fileset dir="${resource.dir}" includes="**/*.properties,**/*.js,**/*.xsd"/>
             <!--<fileset dir="${tools.dir}/src/main/java" includes="**/*.properties"/>-->
         </copy>

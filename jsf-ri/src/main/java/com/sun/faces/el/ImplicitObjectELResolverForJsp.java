@@ -38,7 +38,6 @@ package com.sun.faces.el;
 
 import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.el.ELContext;
@@ -69,14 +68,17 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             throw new PropertyNotFoundException(message);
         }
 
-        FacesContext facesContext =
-            (FacesContext)context.getContext(FacesContext.class);
-
-        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index < 0) {
-            return null;
+        Integer index = IMPLICIT_OBJECTS.get(property.toString());
+        
+        if (index == null)
+        {
+          return null;
         }
-        switch (index) {
+ 
+        FacesContext facesContext =
+          (FacesContext)context.getContext(FacesContext.class);
+       
+        switch (index.intValue()) {
             case FACES_CONTEXT:
                 context.setPropertyResolved(true);
                 return facesContext;
@@ -106,8 +108,9 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             throw new PropertyNotFoundException(message);
         }
 
-        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index < 0) {
+        Integer index = IMPLICIT_OBJECTS.get(property.toString());
+        
+        if (index == null) {
             return null;
         }
         switch (index) {
@@ -131,8 +134,8 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             throw new PropertyNotFoundException(message);
         }
 
-        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index < 0) {
+        Integer index = IMPLICIT_OBJECTS.get(property.toString());
+        if (index == null) {
             return;
         }
         switch (index) {
@@ -158,8 +161,8 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         }
         // return value will be ignored unless context.propertyResolved is
         // set to true.
-        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index < 0) {
+        Integer index = IMPLICIT_OBJECTS.get(property.toString());
+        if (index == null) {
             return false;
         }
         switch (index) {

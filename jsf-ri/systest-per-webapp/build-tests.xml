@@ -68,6 +68,9 @@
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
+                   replace-variableresolver-programmatically,
+                   add-elresolver-and-replace-variableresolver-programmatically,
+                   replace-variableresolver-and-add-elresolver-programmatically,
                    converter-property-editor,
                    disable-unicode-escaping,
                    late-bindings,
@@ -120,9 +123,15 @@
               value="com/sun/faces/systest/ReplaceLifecycleTestCase.class"/>
     <property name="string-converter"
               value="com/sun/faces/systest/StringConverterTestCase.class"/>
-    <property name="replace-variableresolver"
+    <property name="replace-variableresolver" 
               value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
-    <property name="converter-property-editor"
+    <property name="replace-variableresolver-programmatically" 
+              value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
+    <property name="add-elresolver-and-replace-variableresolver-programmatically" 
+              value="com/sun/faces/systest/AddELResolverAndReplaceVariableresolverProgrammaticallyTestCase.class"/>
+    <property name="replace-variableresolver-and-add-elresolver-programmatically" 
+              value="com/sun/faces/systest/ReplaceVariableResolverAndAddELResolverProgrammaticallyTestCase.class"/>
+    <property name="converter-property-editor" 
               value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
     <property name="late-bindings"
               value="com/sun/faces/systest/LateBindingTestCase.class"/>
@@ -130,6 +139,8 @@
               value="com/sun/faces/systest/PropertyResolverJspTestCase.class"/>
     <property name="never-unwrap-exceptions"
               value="com/sun/faces/systest/NeverUnwrapExceptionsTestCase.class"/>
+    <property name="write-attribute-script-enabled"
+              value="com/sun/faces/systest/WriteAttributeScriptEnabledTestCase.class"/>
     <property name="write-attribute-script-disabled"
               value="com/sun/faces/systest/WriteAttributeScriptDisabledTestCase.class"/>
     <property name="write-attribute-script-enabled"

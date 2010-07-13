@@ -371,14 +371,14 @@ public class LoadBundleTag extends TagSupport {
     
     static List<UIComponent> getPreViewLoadBundleComponentList() {
         FacesContext ctx = FacesContext.getCurrentInstance();
+        Map<String,Object> stateMap = RequestStateManager.getStateMap(ctx);
+
         //noinspection unchecked
         List<UIComponent> result = (List<UIComponent>)
-              RequestStateManager.get(ctx, PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME);
+              stateMap.get(PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME);
         if (result == null) {
             result = new ArrayList<UIComponent>();
-            RequestStateManager.set(ctx,
-                                    PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME,
-                                    result);
+            stateMap.put(PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME, result);
         }
         
         return result;

@@ -73,7 +73,7 @@ public class ScopedAttributeELResolver extends ELResolver {
             throw new PropertyNotFoundException(message);
         }
         context.setPropertyResolved(true);
-        String attribute = (String) property;
+        String attribute = property.toString();
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
         ExternalContext ec = facesContext.getExternalContext();

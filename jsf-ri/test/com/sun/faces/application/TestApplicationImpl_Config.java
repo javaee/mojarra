@@ -598,7 +598,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
         boolean exceptionThrown = false;
         try {
             loadFromInitParam("/locale-config2.xml");
-        } catch (FacesException e) {
+        } catch (Throwable e) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);

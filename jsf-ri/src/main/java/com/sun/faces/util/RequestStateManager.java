@@ -170,6 +170,14 @@ public class RequestStateManager {
           PROCESSED_RESOURCE_DEPENDENCIES
     };
 
+    /**
+     * <p>The key under with the Map containing the implementation specific
+     * attributes will be stored within the request.<p>
+     */
+    private static final String KEY =
+          RequestStateManager.class.getName();
+
+
     private static final Map<PhaseId,String[]> PHASE_ATTRIBUTES =
         new HashMap<PhaseId,String[]>(2, 1.0f);
 
@@ -276,5 +284,25 @@ public class RequestStateManager {
               .containsKey(key);
 
     }
+
+    /**
+     * @param ctx the <code>FacesContext</code> for the current request
+     * @return the Map from the request containing the implementation specific
+     *  attributes needed for processing
+     */
+    public static Map<String,Object> getStateMap(FacesContext ctx) {
+
+        assert (ctx != null); // all callers guard against a null context
+        Map<Object,Object> contextMap = ctx.getAttributes();
+        //noinspection unchecked
+        Map<String,Object> reqState = (Map<String,Object>) contextMap.get(KEY);
+        if (reqState == null) {
+            reqState = new HashMap<String,Object>();
+            contextMap.put(KEY, reqState);
+        }
+        return reqState;
+
+    }
+
 
 }

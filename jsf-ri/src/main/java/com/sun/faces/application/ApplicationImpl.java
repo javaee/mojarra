@@ -165,7 +165,7 @@ public class ApplicationImpl extends Application {
     private volatile ActionListener actionListener = null;
     private volatile NavigationHandler navigationHandler = null;
     private volatile PropertyResolverImpl propertyResolver = null;
-    private volatile VariableResolverImpl variableResolver = null;
+    volatile VariableResolverImpl variableResolver = null;
     private volatile ViewHandler viewHandler = null;
     private volatile ResourceHandler resourceHandler;
     private volatile StateManager stateManager = null;
@@ -190,8 +190,8 @@ public class ApplicationImpl extends Application {
     private volatile String messageBundle = null;
 
     private List<ELContextListener> elContextListeners = null;
-    private ArrayList<ELResolver> elResolvers = null;
-    private CompositeELResolver compositeELResolver = null;
+    CompositeELResolver elResolvers = null;
+    FacesCompositeELResolver compositeELResolver = null;
     private final SystemEventHelper systemEventHelper = new SystemEventHelper();
     private final ComponentSystemEventHelper compSysEventHelper = new ComponentSystemEventHelper();
     private boolean passDefaultTimeZone;
@@ -215,6 +215,7 @@ public class ApplicationImpl extends Application {
         elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
+        elResolvers = new CompositeELResolver();
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         ctx.getExternalContext().getApplicationMap().put(this.getClass().getName(),
@@ -456,10 +457,7 @@ public class ApplicationImpl extends Application {
     public ELResolver getELResolver() {
 
         if (compositeELResolver == null) {
-            compositeELResolver =
-                 new FacesCompositeELResolver(
-                      FacesCompositeELResolver.ELResolverChainType.Faces);
-            ELUtils.buildFacesResolver(compositeELResolver, associate);
+            performOneTimeELInitialization();
         }
 
         return compositeELResolver;
@@ -479,13 +477,7 @@ public class ApplicationImpl extends Application {
                         MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ELResolver"));
         }
 
-        if (resolver != null) {
-            if (elResolvers == null) {
-                //noinspection CollectionWithoutInitialCapacity
-                elResolvers = new ArrayList<ELResolver>();
-            }
-            elResolvers.add(resolver);
-        }
+        elResolvers.add(resolver);
 
     }
 
@@ -537,7 +529,7 @@ public class ApplicationImpl extends Application {
 
     }
 
-    public List<ELResolver> getApplicationELResolvers() {
+    public CompositeELResolver getApplicationELResolvers() {
         return elResolvers;
     }
 
@@ -687,6 +679,9 @@ public class ApplicationImpl extends Application {
      */
     @SuppressWarnings("deprecation")
     public PropertyResolver getPropertyResolver() {
+        if (compositeELResolver == null) {
+            performOneTimeELInitialization();
+        }
         return propertyResolver;
     }
 
@@ -708,23 +703,27 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
      */
     @SuppressWarnings("deprecation")
-    public void setPropertyResolver(PropertyResolver propertyResolver) {
-
-        Util.notNull("propertyResolver", propertyResolver);
-
+    public void setPropertyResolver(PropertyResolver resolver) {
+        // Throw Illegal State Exception if  a PropertyResolver is set after 
+        // a request has been processed.
         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
-                  MessageUtils.getExceptionMessageString(
+                    MessageUtils.getExceptionMessageString(
                         MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "PropertyResolver"));
         }
+        if (resolver == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
+            throw new NullPointerException(message);
+        }
 
-        this.propertyResolver.setDelegate(ELUtils.getDelegatePR(associate, true));
-        associate.setLegacyPropertyResolver(propertyResolver);
+        propertyResolver.setDelegate(ELUtils.getDelegatePR(associate, true));
+        associate.setLegacyPropertyResolver(resolver);
         propertyResolver = new PropertyResolverImpl();
 
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", propertyResolver.getClass().getName()));
+            LOGGER.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
         }
     }
 
@@ -790,6 +789,10 @@ public class ApplicationImpl extends Application {
      */
     @SuppressWarnings("deprecation")
     public VariableResolver getVariableResolver() {       
+        if (compositeELResolver == null) {
+            performOneTimeELInitialization();
+        }
+
         return variableResolver;
     }
 
@@ -798,25 +801,22 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#setVariableResolver(javax.faces.el.VariableResolver)
      */
     @SuppressWarnings("deprecation")
-    public void setVariableResolver(VariableResolver variableResolver) {
-
-        Util.notNull("variableResolver", variableResolver);
+    public void setVariableResolver(VariableResolver resolver) {
+        Util.notNull("variableResolver", resolver);
 
         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
-                  MessageUtils.getExceptionMessageString(
+                    MessageUtils.getExceptionMessageString(
                         MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "VariableResolver"));
         }
 
-        this.variableResolver.setDelegate(ELUtils.getDelegateVR(associate, true));
-        associate.setLegacyVariableResolver(variableResolver);
-        variableResolver = new VariableResolverImpl();
+        variableResolver.setDelegate(ELUtils.getDelegateVR(associate, true));
+        associate.setLegacyVariableResolver(resolver);
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine(MessageFormat.format("set VariableResolver Instance to ''{0}''",
                                              variableResolver.getClass().getName()));
         }
-
     }
 
     /**
@@ -1256,6 +1256,15 @@ public class ApplicationImpl extends Application {
         		LOGGER.warning(MessageFormat.format("definePropertyEditorClassFor({0}) returned null.", targetClass.getName()));
         	}
         }
+    }
+
+    private void performOneTimeELInitialization() {
+        if (null != compositeELResolver) {
+            throw new IllegalStateException("Class invariant invalidated: " +
+                    "The Application instance's ELResolver is not null " +
+                    "and it should be.");
+        }
+        associate.initializeELResolverChains();
     }
 
 

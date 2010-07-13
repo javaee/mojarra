@@ -94,4 +94,8 @@ public class VariableResolverImpl extends VariableResolver {
         this.delegate = delegate;
 
     }
+
+    public VariableResolver getDelegate() {
+        return this.delegate;
+    }
 }

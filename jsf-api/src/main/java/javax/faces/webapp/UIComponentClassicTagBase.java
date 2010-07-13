@@ -159,15 +159,6 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             "javax.faces.webapp.COMPONENT_TAG_STACK";
 
     /**
-     * <p>A request scoped map that takes the place of calls to the request
-     * map directly.</p>
-     * <p>IMPORTANT.  This map is accessed via literal string in
-     * ViewTag.doEndTag().</p>
-     */
-    private static final String CONTEXT_MAP_ATTR =
-            "com.sun.faces.CONTEXT_MAP";
-
-    /**
      * <p>The {@link UIComponent} attribute under which we will store a
      * <code>List</code> of the component identifiers of child components
      * created on the previous generation of this page (if any).</p>
@@ -330,11 +321,6 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * The next child index to get in getChild()
      */
     private int _nextChildIndex = 0;
-
-    /**
-     * private context Map For Lookups
-     */
-    Map<String, Object> contextMap = null;
 
     Map<String, Map<String, UIComponentTagBase>> namingContainerChildIds = null;
 
@@ -679,7 +665,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
         // Step 2 -- Identify the component that is, or will be, our parent
         UIComponentClassicTagBase parentTag =
-                _getParentUIComponentClassicTagBase(contextMap);
+                _getParentUIComponentClassicTagBase(context.getAttributes());
         UIComponent parentComponent;
         if (parentTag != null) {
             parentComponent = parentTag.getComponentInstance();
@@ -776,10 +762,10 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     private static UIComponentClassicTagBase _getParentUIComponentClassicTagBase(
             FacesContext facesContext)
     {
-        return _getParentUIComponentClassicTagBase(_getContextMap(facesContext));
+        return _getParentUIComponentClassicTagBase(facesContext.getAttributes());
     }
 
-    private static UIComponentClassicTagBase _getParentUIComponentClassicTagBase(Map<String, Object> cMap) {
+    private static UIComponentClassicTagBase _getParentUIComponentClassicTagBase(Map<Object, Object> cMap) {
         List list = null;
 
         if (cMap != null) {
@@ -849,8 +835,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * stack, deleting the stack if this was the last entry.</p>
      */
     private void popUIComponentClassicTagBase() {
-        assert(null != contextMap);
-        List list = (List) contextMap.get(COMPONENT_TAG_STACK_ATTR);
+        List list = (List) context.getAttributes().get(COMPONENT_TAG_STACK_ATTR);
 
         // if an exception occurred in a nested  tag,
         //there could be a few tags left in the stack.
@@ -860,7 +845,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             uic = (UIComponentClassicTagBase) list.get(idx);
             list.remove(idx);
             if (idx < 1) {
-                contextMap.remove(COMPONENT_TAG_STACK_ATTR);
+                context.getAttributes().remove(COMPONENT_TAG_STACK_ATTR);
                 list = null;
             }
         }
@@ -873,13 +858,12 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     private void pushUIComponentClassicTagBase() {
 
-        assert (null != contextMap);
         List<UIComponentClassicTagBase> list = TypedCollections.dynamicallyCastList((List)
-                contextMap.get(COMPONENT_TAG_STACK_ATTR), UIComponentClassicTagBase.class);
+                context.getAttributes().get(COMPONENT_TAG_STACK_ATTR), UIComponentClassicTagBase.class);
         if (list == null) {
             //noinspection CollectionWithoutInitialCapacity
             list = new ArrayList<UIComponentClassicTagBase>();
-            contextMap.put(COMPONENT_TAG_STACK_ATTR, list);
+            context.getAttributes().put(COMPONENT_TAG_STACK_ATTR, list);
         }
         list.add(this);
 
@@ -1287,10 +1271,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             throw new JspException("Can't find FacesContext");
         }
 
-        getContextMap(context);
-        assert(null != contextMap);
-
-        List list = (List) contextMap.get(COMPONENT_TAG_STACK_ATTR);
+        List list = (List) context.getAttributes().get(COMPONENT_TAG_STACK_ATTR);
         if (list != null) {
             parentTag = ((UIComponentClassicTagBase) list.get(list.size() - 1));
         } else {
@@ -1415,36 +1396,6 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
     }
 
-    private Map<String, Object> getContextMap(FacesContext context) {
-        if (null == contextMap) {
-            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-
-            contextMap = (Map<String, Object>) requestMap.get(CONTEXT_MAP_ATTR);
-            if (null == contextMap) {
-                contextMap = new HashMap<String, Object>(5);
-                requestMap.put(CONTEXT_MAP_ATTR, contextMap);
-            }
-        }
-
-        return contextMap;
-    }
-
-    private static Map<String, Object> _getContextMap(FacesContext context) {
-        Map<String, Object> rMap = context.getExternalContext().getRequestMap();
-        return (Map<String,Object>) rMap.get(CONTEXT_MAP_ATTR);
-
-    }
-
-    private void releaseContextMap(FacesContext context) {
-        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-
-        if (null != contextMap) {
-            contextMap.clear();
-        }
-        requestMap.remove(CONTEXT_MAP_ATTR);
-    }
-
-
     /**
      *
      * <p>Perform any processing necessary to handle the content
@@ -1504,7 +1455,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         {
             UIComponent verbatim;
             UIComponentClassicTagBase parentTag = _getParentUIComponentClassicTagBase(
-                    contextMap);
+                    context.getAttributes());
 
             if (null != (verbatim = this.createVerbatimComponentFromBodyContent())) {
                 component.getChildren().add(verbatim);
@@ -1620,7 +1571,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     public int doAfterBody() throws JspException {
 
         UIComponent verbatim;
-        UIComponentClassicTagBase parentTag = _getParentUIComponentClassicTagBase(contextMap);
+        UIComponentClassicTagBase parentTag = _getParentUIComponentClassicTagBase(context.getAttributes());
 
         // if we are the root tag, or if we are inside of a
         // rendersChildren==true component
@@ -1764,14 +1715,13 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * @return String <code>id</code> with a counter appended to it.
      */
     private String generateIncrementedId (String componentId) {
-        assert (null != contextMap);
-        Integer serialNum = (Integer) contextMap.get(componentId);
+        Integer serialNum = (Integer) context.getAttributes().get(componentId);
         if (null == serialNum) {
             serialNum = 1;
         } else {
             serialNum = serialNum.intValue() + 1;
         }
-        contextMap.put(componentId, serialNum);
+        context.getAttributes().put(componentId, serialNum);
         componentId = componentId + UNIQUE_ID_PREFIX + serialNum.intValue();
         return componentId;
     }
@@ -1898,11 +1848,13 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                 pageContext.getAttribute(JAVAX_FACES_PAGECONTEXT_MARKER,
                         PageContext.PAGE_SCOPE);
         if (pcId == null) {
-            getContextMap(getFacesContext());
-            AtomicInteger aInt = (AtomicInteger) contextMap.get(JAVAX_FACES_PAGECONTEXT_COUNTER);
+            if (null == context) {
+                context = FacesContext.getCurrentInstance();
+            }
+            AtomicInteger aInt = (AtomicInteger) context.getAttributes().get(JAVAX_FACES_PAGECONTEXT_COUNTER);
             if (aInt == null) {
                 aInt = new AtomicInteger();
-                contextMap.put(JAVAX_FACES_PAGECONTEXT_COUNTER, aInt);
+                context.getAttributes().put(JAVAX_FACES_PAGECONTEXT_COUNTER, aInt);
             }
 
             pcId = aInt.incrementAndGet();

@@ -40,7 +40,8 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.el.ELUtils;
 
-import javax.el.CompositeELResolver;
+import com.sun.faces.el.FacesCompositeELResolver;
+
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -51,6 +52,7 @@ import javax.faces.lifecycle.LifecycleFactory;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.Application;
 
 /**
  * <p>This class is used to register the JSF <code>ELResolver</code>
@@ -72,7 +74,6 @@ public class ELResolverInitPhaseListener implements PhaseListener {
     private boolean postInitCompleted;
 
     private boolean preInitCompleted;
-
 
     // ---------------------------------------------- Methods From PhaseListener
 
@@ -116,8 +117,12 @@ public class ELResolverInitPhaseListener implements PhaseListener {
     public synchronized void beforePhase(PhaseEvent event) {
 
         if (!preInitCompleted) {
-            
-            populateFacesELResolverForJsp(event.getFacesContext());
+            ApplicationAssociate associate =
+                 ApplicationAssociate.getInstance(
+                      FacesContext.getCurrentInstance().getExternalContext());
+            associate.setRequestServiced();
+            associate.initializeELResolverChains();
+            associate.installProgrammaticallyAddedResolvers();
             preInitCompleted = true;
 
         }
@@ -157,7 +162,13 @@ public class ELResolverInitPhaseListener implements PhaseListener {
 
         ApplicationAssociate appAssociate =
               ApplicationAssociate.getInstance(context.getExternalContext());
-        CompositeELResolver compositeELResolverForJsp =
+        populateFacesELResolverForJsp(context.getApplication(), appAssociate);
+
+    }
+
+    public static void populateFacesELResolverForJsp(Application app,
+            ApplicationAssociate appAssociate) {
+        FacesCompositeELResolver compositeELResolverForJsp =
               appAssociate.getFacesELResolverForJsp();
         if (compositeELResolverForJsp == null) {
             if (LOGGER.isLoggable(Level.INFO)) {
@@ -170,15 +181,26 @@ public class ELResolverInitPhaseListener implements PhaseListener {
 
         ELUtils.buildJSPResolver(compositeELResolverForJsp, appAssociate);
 
-        // somewhat of a hack, but since we're here, trigger the creation
-        // of the FacesResolvers as well by calling Application.getELResolver()
-        // to avoid a sync block on that method.
-        context.getApplication().getELResolver();
-
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
                        "jsf.lifecycle.initphaselistener.resolvers_registered",
                        new Object[] { appAssociate.getContextName() });
+        }
+
+    }
+
+    public static void removeELResolverInitPhaseListener() {
+        LifecycleFactory factory = (LifecycleFactory)
+                FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        // remove ourselves from the list of listeners maintained by
+        // the lifecycle instances
+        for (Iterator<String> i = factory.getLifecycleIds(); i.hasNext();) {
+            Lifecycle lifecycle = factory.getLifecycle(i.next());
+            for (PhaseListener cur : lifecycle.getPhaseListeners()) {
+                if (cur instanceof ELResolverInitPhaseListener) {
+                    lifecycle.removePhaseListener(cur);
+                }
+            }
         }
 
     }
