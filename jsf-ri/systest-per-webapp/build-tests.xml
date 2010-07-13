@@ -53,7 +53,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build.xml. -->
     <property name="applications"
-              value="annotation-restrictions,
+              value="no-web-xml,
+                   annotation-restrictions,
                    clientside-statesaving,
                    absolute-ordering,
                    document-ordering,
@@ -91,6 +92,8 @@
     -->
 
     <!-- Property definitions to map the application to a JUnit test case -->
+    <property  name="no-web-xml"
+               value="com/sun/faces/systest/NoWebXMLTestCase.class" />
     <property  name="annotation-restrictions"
                value="com/sun/faces/systest/AnnotationProcessingTestCase.class" />
     <property name="absolute-ordering"
