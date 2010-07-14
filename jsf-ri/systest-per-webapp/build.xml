@@ -64,13 +64,14 @@
     </path>
 
     <property name="applications-for-v3-only"
-              value="disable-bean-validator" />
+              value="disable-bean-validator,
+                     no-web-xml" />
 
     <!-- Property containing all of the currenly running systests.  
          This property list *must* match the one defined in the
          systest-per-webapp build-tests.xml. -->
     <property name="applications"
-              value="no-web-xml,
+              value="
                    annotation-restrictions,
                    clientside-statesaving,
                    absolute-ordering,
