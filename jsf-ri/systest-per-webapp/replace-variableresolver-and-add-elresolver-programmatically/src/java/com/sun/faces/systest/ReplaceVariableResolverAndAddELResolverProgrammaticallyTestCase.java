@@ -130,7 +130,7 @@ public class ReplaceVariableResolverAndAddELResolverProgrammaticallyTestCase ext
 
         String [] orderedListOfStringsToFindInPage = {
             "FacesELResolverForFaces",
-            "el.ImplicitObjectELResolver.getValue(ImplicitObjectELResolver.java)",
+//            "el.ImplicitObjectELResolver.getValue(ImplicitObjectELResolver.java)",
             "el.VariableResolverChainWrapper.getValue(VariableResolverChainWrapper.java)",
             "systest.NewVariableResolver.resolveVariable(NewVariableResolver.java)",
             "systest.NewELResolver.getValue(NewELResolver.java)",
