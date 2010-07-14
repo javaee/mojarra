@@ -60,10 +60,34 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * <p><strong class="changed_modified_2_0
- * changed_modified_2_0_rev_a">FacesServlet</strong> is a servlet that
- * manages the request processing lifecycle for web applications that
- * are utilizing JavaServer Faces to construct the user interface.</p>
+ * <p><strong class="changed_modified_2_0 changed_modified_2_0_rev_a
+ * changed_modified_2_1">FacesServlet</strong> is a servlet that manages
+ * the request processing lifecycle for web applications that are
+ * utilizing JavaServer Faces to construct the user interface.</p>
+ *
+ * <div class="changed_added_2_1">
+ *
+ * <p>The runtime must support the following additional behavior when
+ * running in a Servlet 3.0 (and beyond) container.  The runtime must
+ * provide an implementation of {@link
+ * javax.servlet.ServletContainerInitializer} whose
+ * <code>onStartup()</code> method takes following actions.</p>
+
+ * <p>Adds mappings <em>/faces</em>, <em>*.jsf</em>, and
+ * <em>*.faces</em> for the <code>FacesServlet</code> (if it hasn't
+ * already been mapped) if the following conditions are met:</p>
+ *
+ * <ul>
+ *    <li>
+ *       The <code>Set</code> of classes passed to this initializer is not
+ *       empty, or
+ *    </li>
+ *    <li>
+ *       /WEB-INF/faces-config.xml exists.
+ *    </li>
+ * </ul>
+
+ * </div>
  */
 
 public final class FacesServlet implements Servlet {
