@@ -1779,6 +1779,10 @@ private void doFind(FacesContext context, String clientId) {
 
     }
 
+    // It is safe to cache this because components never go from being
+    // composite to non-composite.
+    private transient Boolean isCompositeComponent = null;
+
 
     /**
      * <p class="changed_added_2_0">Return <code>true</code> if
@@ -1795,7 +1799,15 @@ private void doFind(FacesContext context, String clientId) {
         if (component == null) {
             throw new NullPointerException();
         }
-        return (component.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY));
+        boolean result = false;
+        if (null != component.isCompositeComponent) {
+            result = component.isCompositeComponent.booleanValue();
+        } else {
+            result = component.isCompositeComponent =
+                    (component.getAttributes().containsKey(
+                               Resource.COMPONENT_RESOURCE_KEY));
+        }
+        return result;
 
     }
 
@@ -2219,6 +2231,7 @@ private void doFind(FacesContext context, String clientId) {
                 valueExpression.setValue(FacesContext.getCurrentInstance().getELContext(), 
                         this);
             }
+            isCompositeComponent = null;
 
         }
     }

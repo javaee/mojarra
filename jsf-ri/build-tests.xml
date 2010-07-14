@@ -518,6 +518,9 @@
         <fileset dir="${impl.test.results.dir}">
           <include name="TEST-*.xml" />
         </fileset>
+        <fileset dir="${api.test.results.dir}">
+          <include name="TEST-*.xml" />
+        </fileset>
         <report format="frames" todir="${test.report.dir}/html" />
       </junitreport>
    </target>

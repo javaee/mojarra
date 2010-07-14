@@ -962,4 +962,13 @@ public enum Color { Red, Blue, Green, Orange }
         return null;
     }
 
+    public String getIsCompositeComponentValue() {
+        String result = null;
+
+        UIComponent currentComposite = UIComponent.getCurrentCompositeComponent(FacesContext.getCurrentInstance());
+        result = "" + UIComponent.isCompositeComponent(currentComposite);
+
+        return result;
+    }
+
 }

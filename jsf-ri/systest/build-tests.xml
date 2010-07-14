@@ -969,6 +969,11 @@
     <target name="test.composite"
             description="Test composite components">
 
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/composite/isCompositeComponentUsing.xhtml"
+              golden="${golden.path}/composite/isCompositeComponentUsing.txt"/>
+
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -976,7 +981,7 @@
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/composite/*TestCase.class"/>
             </tests>
-        </jsf.junit>  
+        </jsf.junit>
 
         <if>
             <equals arg1="${container.name}" arg2="glassfishV3"/>
@@ -1364,16 +1369,11 @@
     </target>
 
     <target name="passthru">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/jsf2jsp/Jsf2JspTestCase.class"
-                         />
-<!-- 139-StateSaving edburns remove excludes -->
-            </tests>
-        </jsf.junit>
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/composite/isCompositeComponentUsing.xhtml"
+              golden="${golden.path}/composite/isCompositeComponentUsing.txt"/>
+
     </target>
 
 
