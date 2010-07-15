@@ -139,6 +139,13 @@
         </trycatch>
     </target>
 
+    <target name="test.with.container.refresh.and.generate.reports"
+            depends="test.with.container.refresh,generate.reports" />
+
+    <target name="generate.reports">
+      <ant dir="jsf-ri" antfile="build.xml" target="generate.reports"/>
+    </target>
+
     <target name="build.and.debug" depends="clean, main"
             description="Clean, build, and deploy, restarting in debug mode">
         <trycatch>

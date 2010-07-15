@@ -129,7 +129,13 @@ public class SessionMap extends BaseContextMap<Object> {
         	}
         }
         //noinspection NonSerializableObjectBoundToHttpSession
-        session.setAttribute(key, value);
+        boolean doSet = true;
+        if (null != value && null != result) {
+            doSet = ! result.equals(value);
+        }
+        if (doSet) {
+            session.setAttribute(key, value);
+        }
         return (result);
     }
 
