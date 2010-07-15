@@ -132,6 +132,10 @@ public class PartialVisitContext extends VisitContext {
         return clientIds;
     }
 
+    public Collection<String> getUnvisitedClientIds() {
+        return unvisitedClientIds;
+    }
+
     /**
      * @see VisitContext#getSubtreeIdsToVisit VisitContext.getSubtreeIdsToVisit()
      */

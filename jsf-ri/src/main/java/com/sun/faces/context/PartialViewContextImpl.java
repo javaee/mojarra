@@ -62,6 +62,7 @@ import java.util.logging.Logger;
 
 import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
  public class PartialViewContextImpl extends PartialViewContext {
@@ -359,6 +360,17 @@ import com.sun.faces.util.Util;
         PhaseAwareVisitCallback visitCallback =
             new PhaseAwareVisitCallback(ctx, phaseId);
         component.visitTree(visitContext, visitCallback);
+        if (LOGGER.isLoggable(Level.FINER) && !visitContext.getUnvisitedClientIds().isEmpty()) {
+            Collection<String> unvisitedClientIds = visitContext.getUnvisitedClientIds();
+            String message;
+            StringBuilder builder = new StringBuilder();
+            for (String cur : unvisitedClientIds) {
+                builder.append(cur).append(" ");
+            }
+            LOGGER.log(Level.FINER,
+                    "jsf.context.partial_visit_context_unvisited_children",
+                    new Object[]{builder.toString()});
+        }
     }
 
     private void renderAll(FacesContext context, UIViewRoot viewRoot) throws IOException {
