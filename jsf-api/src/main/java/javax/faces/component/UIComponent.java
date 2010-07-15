@@ -39,6 +39,7 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -1655,11 +1656,73 @@ private void doFind(FacesContext context, String clientId) {
 
     }
 
+    /**
+     * Temporary stack for JDK 1.5.  Replace with an ArrayDeque when we can have a dependency on JDK 1.6
+     */
+    private static class ComponentStack
+    {
+      public ComponentStack()
+      {
+        _components = new UIComponent[20];
+        _topIndex = 0;
+        
+        // if we have no context, the current element is null
+        _components[0] = null;
+      }
+      
+      public UIComponent pop()
+      {
+          UIComponent top = peek();
+          if (0 < _topIndex) {
+              _topIndex--;
+          }
 
-    private UIComponent previouslyPushed = null;
-    private UIComponent previouslyPushedCompositeComponent = null;
-    private boolean pushed;
-    private int depth;
+          return top;
+      }
+      
+      public void push(UIComponent component)
+      {
+        _topIndex++;
+        int newIndex = _topIndex;
+        int currSize = _components.length;
+        
+        if (newIndex == currSize)
+        {
+          UIComponent[] newArray = new UIComponent[currSize * 2];
+          System.arraycopy(_components, 0, newArray, 0, currSize);
+          
+          _components = newArray;
+        }
+        
+        _components[newIndex] = component;
+      }
+      
+      public UIComponent peek()
+      {
+        return _components[_topIndex];
+      }
+      
+      private UIComponent[] _components;
+      private int _topIndex;
+    }
+    
+    private static ComponentStack _getComponentELStack(String keyName, Map<Object, Object> contextAttributes)
+    {
+      ComponentStack elStack = (ComponentStack)contextAttributes.get(keyName);
+      
+      if (elStack == null)
+      {
+        elStack = new ComponentStack();
+        contextAttributes.put(keyName, elStack);
+      }
+      
+      return elStack;
+    }
+    
+    //private UIComponent previouslyPushed = null;
+    //private UIComponent previouslyPushedCompositeComponent = null;
+    //private boolean pushed;
+    //private int depth;
 
     /**
      * <p class="changed_added_2_0">Push the current
@@ -1704,29 +1767,40 @@ private void doFind(FacesContext context, String clientId) {
             component = this;
         }
 
-        Map<Object,Object> contextMap = context.getAttributes();
+        Map<Object, Object> contextAttributes = context.getAttributes();
+        ComponentStack componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
+                                                               contextAttributes);
+        componentELStack.push(component);
+        component._isPushedAsCurrentRefCount++;
+        
+        // we only do this because of the spec
+        contextAttributes.put(UIComponent.CURRENT_COMPONENT, component);
+        
+        // if the pushed component is a composite component, we need to update that
+        // stack as well
+        if (UIComponent.isCompositeComponent(component))
+        {
+          _getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY,
+                               contextAttributes).push(component);
 
-        if (contextMap.get(CURRENT_COMPONENT) == component) {
-            depth++;
-            return;
+          // we only do this because of the spec
+          contextAttributes.put(UIComponent.CURRENT_COMPOSITE_COMPONENT, component);
         }
-        if (contextMap.get(CURRENT_COMPOSITE_COMPONENT) == component) {
-            depth++;
-            return;
-        }
-
-        pushed = true;
-        previouslyPushed = (UIComponent) contextMap.put(CURRENT_COMPONENT, component);
-        // If this is a composite component...
-        if (UIComponent.isCompositeComponent(component)) {
-            // make it so #{cc} resolves to this composite
-            // component, preserving the previous value if present
-            previouslyPushedCompositeComponent =
-                    (UIComponent) contextMap.put(CURRENT_COMPOSITE_COMPONENT, component);
-        }
-
     }
 
+  // track whether we have been pushed as current in order to handle mismatched pushes and
+  // pops of EL context stack.  We use a counter to handle cases where the same component
+  // is pushed on multiple times
+  private int _isPushedAsCurrentRefCount = 0;
+  
+  // key used to look up current component stack if FacesContext attributes
+  private static final String _CURRENT_COMPONENT_STACK_KEY = 
+                                                    "javax.faces.component.CURRENT_COMPONENT_STACK";
+  
+  // key used to look up current composite component stack if FacesContext attributes
+  private static final String _CURRENT_COMPOSITE_COMPONENT_STACK_KEY = 
+                                          "javax.faces.component.CURRENT_COMPOSITE_COMPONENT_STACK";
+  
 
     /**
      * <p class="changed_added_2_0">Pop the current
@@ -1742,41 +1816,55 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @since 2.0
      */
-    public final void popComponentFromEL(FacesContext context) {
+    public final void popComponentFromEL(FacesContext context)
+    {
+      if (context == null)
+      {
+        throw new NullPointerException();
+      }
 
-        if (context == null) {
-            throw new NullPointerException();
-        }
+      // detect cases where the stack has become unbalanced.  Due to how UIComponentBase
+      // implemented pushing and pooping of components from the ELContext, components that
+      // overrode just one of encodeBegin or encodeEnd, or only called super in one case
+      // will become unbalanced.  Detect and correct for those cases here.
+ 
+      // detect case where push was never called.  In that case, pop should be a no-op
+      if (_isPushedAsCurrentRefCount < 1)
+        return;
+           
+      Map<Object, Object> contextAttributes = context.getAttributes();
+      
+      ComponentStack componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
+                                                             contextAttributes);
+      
+      // check for the other unbalanced case, a component was pushed but never popped.  Keep
+      // popping those components until we get to our component
+      for (UIComponent topComponent = componentELStack.peek();
+           topComponent != this;
+           topComponent = componentELStack.peek())
+      {
+        topComponent.popComponentFromEL(context);
+      }
+      
+      // pop ourselves off of the stack
+      componentELStack.pop();
+      _isPushedAsCurrentRefCount--;
+            
+      // update the current component with the new top of stack.  We only do this because of the spec
+      contextAttributes.put(UIComponent.CURRENT_COMPONENT, componentELStack.peek());
+      
+      // if we're a composite component, we also have to pop ourselves off of the
+      // composite stack
+      if (UIComponent.isCompositeComponent(this))
+      {
+        ComponentStack compositeELStack=_getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY,
+                                                             contextAttributes);
+        compositeELStack.pop();        
 
-        if (depth > 0) {
-            depth--;
-            return;
-        }
-        
-        Map<Object,Object> contextMap = context.getAttributes();
-        if (contextMap != null) {
-
-            if (!pushed) {
-                return;
-            }
-            UIComponent c;
-            pushed = false;
-            if (previouslyPushed != null) {
-                c = (UIComponent) contextMap.put(CURRENT_COMPONENT, previouslyPushed);
-            } else {
-                c = (UIComponent) contextMap.remove(CURRENT_COMPONENT);
-            }
-
-            if (c != null && UIComponent.isCompositeComponent(c)) {
-                if (previouslyPushedCompositeComponent != null) {
-                    contextMap.put(CURRENT_COMPOSITE_COMPONENT,
-                                   previouslyPushedCompositeComponent);
-                } else {
-                    contextMap.remove(CURRENT_COMPOSITE_COMPONENT);
-                }
-            }
-        }
-
+        // update the current composite component with the new top of stack.
+        // We only do this because of the spec
+        contextAttributes.put(UIComponent.CURRENT_COMPOSITE_COMPONENT, compositeELStack.peek());
+      }
     }
 
     // It is safe to cache this because components never go from being
@@ -1869,12 +1957,7 @@ private void doFind(FacesContext context, String clientId) {
      * @since 2.0
      */
     public static UIComponent getCurrentComponent(FacesContext context) {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Map<Object, Object> contextMap = context.getAttributes();
-        return (UIComponent) contextMap.get(CURRENT_COMPONENT);
-
+      return (UIComponent)context.getAttributes().get(UIComponent.CURRENT_COMPONENT);
     }
 
 
@@ -1892,13 +1975,7 @@ private void doFind(FacesContext context, String clientId) {
      * @since 2.0
      */
     public static UIComponent getCurrentCompositeComponent(FacesContext context) {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        Map<Object, Object> contextMap = context.getAttributes();
-        return (UIComponent) contextMap.get(CURRENT_COMPOSITE_COMPONENT);
-
+      return (UIComponent)context.getAttributes().get(UIComponent.CURRENT_COMPOSITE_COMPONENT);
     }
     
     // -------------------------------------------------- Event Listener Methods
