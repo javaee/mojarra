@@ -72,16 +72,14 @@ public class StateContext {
     private boolean trackMods = true;
     private AddRemoveListener modListener;
     private ApplicationStateInfo stateInfo;
-    private FacesContext ctx;
     private WeakReference<UIViewRoot> viewRootRef = new WeakReference<UIViewRoot>(null);
 
 
     // ------------------------------------------------------------ Constructors
 
 
-    private StateContext(FacesContext ctx, ApplicationStateInfo stateInfo) {
+    private StateContext(ApplicationStateInfo stateInfo) {
 
-        this.ctx = ctx;
         this.stateInfo = stateInfo;
 
     }
@@ -100,7 +98,7 @@ public class StateContext {
         if (stateCtx == null) {
             ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
             ApplicationStateInfo info = associate.getApplicationStateInfo();
-            stateCtx = new StateContext(ctx, info);
+            stateCtx = new StateContext(info);
             ctx.getAttributes().put(KEY, stateCtx);
         }
         return stateCtx;
@@ -115,6 +113,7 @@ public class StateContext {
      */
     public boolean partialStateSaving(String viewId) {
         // track UIViewRoot changes
+        FacesContext ctx = FacesContext.getCurrentInstance();
         UIViewRoot root = ctx.getViewRoot();
         UIViewRoot refRoot = viewRootRef.get();
         if (root != refRoot) {
@@ -159,6 +158,7 @@ public class StateContext {
     public void startTrackViewModifications() {
 
         if (modListener == null) {
+            FacesContext ctx = FacesContext.getCurrentInstance();
             modListener = new AddRemoveListener(ctx);
             UIViewRoot root = ctx.getViewRoot();
             root.subscribeToViewEvent(PostAddToViewEvent.class, modListener);
