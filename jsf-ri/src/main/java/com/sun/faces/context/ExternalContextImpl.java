@@ -867,6 +867,17 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
     /**
+     * @see javax.faces.context.ExternalContext#setSessionMaxInactiveInterval(int)
+     */
+    @Override
+    public void setSessionMaxInactiveInterval(int interval) {
+
+        HttpSession session = ((HttpServletRequest) request).getSession();
+	session.setMaxInactiveInterval(interval);
+
+    }
+
+    /**
      * @see javax.faces.context.ExternalContext#getResponseBufferSize()
      * @return
      */
@@ -876,6 +887,19 @@ public class ExternalContextImpl extends ExternalContext {
         return response.getBufferSize();
 
     }
+
+    /**
+     * @see javax.faces.context.ExternalContext#getSessionMaxInactiveInterval()
+     * @return
+     */
+    @Override
+    public int getSessionMaxInactiveInterval() {
+
+        HttpSession session = ((HttpServletRequest) request).getSession();
+	return session.getMaxInactiveInterval();
+
+    }
+
 
     @Override
     public String encodeBookmarkableURL(String baseUrl,
