@@ -539,21 +539,6 @@ public abstract class FacesContext {
      */
     public abstract void addMessage(String clientId, FacesMessage message);
 
-    /**
-     * <p class="changed_added_2_1"> 
-     * Return a flag indicating if the resources associated with this 
-     * <code>FacesContext</code> instance have been released.</p>
-     * @return <code>true</code> if the resources have been released.
-     *
-     * @since 2.1
-     */  
-    public boolean isReleased() {
-        if (defaultFacesContext != null) {
-            return defaultFacesContext.isReleased();
-        }
-
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * <p><span class="changed_modified_2_0">Release</span> any

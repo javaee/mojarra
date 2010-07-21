@@ -1689,8 +1689,7 @@ public abstract class Application {
      * @param source The source for the event of type
      * <code>systemEventClass</code>.
      *
-     * @throws NullPointerException if any arguments except for
-     * <code>sourceBaseType</code> are <code>null</code>
+     * @throws NullPointerException if any arguments are <code>null</code>
      *
      * @since 2.0
      */

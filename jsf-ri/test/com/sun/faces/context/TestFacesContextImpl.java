@@ -590,12 +590,6 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         assertTrue(null != fc.getApplication());
     }
 
-    public void testIsReleased() {
-        FacesContext context = getFacesContext();
-        assertTrue(!context.isReleased());
-        context.release();
-        assertTrue(context.isReleased());
-    }
 
     public void testRelease() {
         System.out.println("Testing release method");

@@ -1173,7 +1173,7 @@ they do, it must be done as shown above, (or with
                 attribute must be escaped. This flag is set to "true" by
                 default.
             </description>
-            <name>escapeItem</name>
+            <name>escape</name>
             <deferred-value>
                 <type>java.lang.String</type>
             </deferred-value>
@@ -1512,13 +1512,11 @@ will not pass validation.</p> ]]>
 
     <tag>
         <description>
-
-            <![CDATA[<p class="changed_deleted_2_0_rev_a">Container
-            action for all JavaServer Faces core and custom component
-            actions used on a nested page via "jsp:include" or any
-            custom action that dynamically includes another page from
-            the same web application, such as JSTL's "c:import".</p>]]>
-
+            Container action for all JavaServer Faces core and
+            custom component actions used on a nested page via
+            "jsp:include" or any custom action that dynamically
+            includes another page from the same web application,
+            such as JSTL's "c:import".
         </description>
         <name>subview</name>
         <tag-class>com.sun.faces.taglib.jsf_core.SubviewTag</tag-class>
@@ -2101,13 +2099,9 @@ will not pass validation.</p> ]]>
 
     <tag>
         <description>
-
-            <![CDATA[<p class="changed_deleted_2_0_rev_a">The use of
-            this element has been deprecated in Facelets for JSF 2.0 and
-            beyond. Create and register a child UIOutput component
-            associated with the closest parent UIComponent custom
-            action, which renders nested body content.</p>]]>
-
+            Create and register a child UIOutput component
+            associated with the closest parent UIComponent
+            custom action, which renders nested body content.
         </description>
         <name>verbatim</name>
         <tag-class>com.sun.faces.taglib.jsf_core.VerbatimTag</tag-class>

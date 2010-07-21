@@ -1842,11 +1842,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * href="../../javadocs/overview-summary.html#prose_document">linked in the
              * overview summary</a>.</p>
              * <p><i>Update Element Processing</i></p>
-             * The <code>update</code> element is used to update a single DOM element.  The
-             * "id" attribute of the <code>update</code> element refers to the DOM element that
-             * will be updated.  The contents of the <code>CDATA</code> section is the data that 
-             * will be used when updating the contents of the DOM element as specified by the
-             * <code>&lt;update&gt;</code> element identifier.
              * <li>If an <code>update</code> element is found in the response
              * with the identifier <code>javax.faces.ViewRoot</code>:
              * <pre><code>&lt;update id="javax.faces.ViewRoot"&gt;

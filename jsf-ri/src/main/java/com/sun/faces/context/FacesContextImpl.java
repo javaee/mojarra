@@ -214,13 +214,6 @@ public class FacesContextImpl extends FacesContext {
 
     }
 
-    /**
-     * @see javax.faces.context.FacesContext#isReleased()
-     */
-    @Override
-    public boolean isReleased() {
-        return released;
-    }
 
     /**
      * @see javax.faces.context.FacesContext#getAttributes()

@@ -279,32 +279,6 @@
             </deferred-value>
         </attribute>
 
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0_rev_a">
-  <p>
-        Controls whether the component is rendered. Valid values for this attribute are either the strings "true" or "false" or an EL expression that evaluates to either "true" or "false".<p>If this attribute's value is "false" or the value is an EL expression that evaluates to "false", the component is not rendered in the page.</p>
-  </p>
-
-</div>]]>
-
-            </description>
-            <name>
-              rendered
-            </name>
-            <required>
-                                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-
-
   </tag>
 
     <tag>
@@ -627,31 +601,6 @@ Binds the component to a backing bean property, as specified in the JSF specific
             </name>
             <required>
 	          false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0_rev_a">
-  <p>
-        Controls whether the fragment is rendered. Valid values for this attribute are either the strings "true" or "false" or an EL expression that evaluates to either "true" or "false".<p>If this attribute's value is "false" or the value is an EL expression that evaluates to "false", the fragment is not rendered in the page.</p>
-  </p>
-
-</div>]]>
-
-            </description>
-            <name>
-              rendered
-            </name>
-            <required>
-                                false
             </required>
             <deferred-value>
                 <type>
@@ -1019,6 +968,28 @@ is contained in a <code>ui:remove</code> tag.</p>
         <body-content>
             JSP
         </body-content>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+
+
+</div>]]>
+
+            </description>
+            <name>
+            </name>
+            <required>
+	
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+
   </tag>
 
 </taglib>

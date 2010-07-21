@@ -55,6 +55,20 @@
 <root>
     <attribute>
         <description>
+            <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>]]>
+        </description>
+        <display-name>Resource Name</display-name>
+        <icon></icon>
+        <attribute-name>name</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+            <required>false</required>
+            <tag-attribute>true</tag-attribute>
+        </attribute-extension>
+
+    </attribute>
+    <attribute>
+        <description>
             <![CDATA[<div class="changed_added_2_0"><p>The <em>libraryName</em> for this resource.</p></div>]]>
         </description>
         <display-name>Library Name</display-name>

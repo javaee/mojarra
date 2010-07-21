@@ -145,7 +145,7 @@
                     <xsd:element name="namespace" type="javaee:string"/>
                     <xsd:element minOccurs="0" maxOccurs="1"
                                  name="composite-library-name"
-                                 type="javaee:string"/>
+                                 type="javaee:fully-qualified-classType"/>
                     <xsd:choice minOccurs="0" maxOccurs="unbounded">
                         <xsd:element name="tag"
                                      type="javaee:facelet-taglib-tagType"/>
