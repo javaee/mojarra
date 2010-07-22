@@ -60,6 +60,7 @@ http.proxy.port=
 #  For Glassfish V1/V2, use:      glassfish
 #  For GlassFish V3 Prelude, use: glassfishV3prelude
 #  For GlassFish V3, use:         glassfishV3
+#  For GlassFish V3.1, use:       glassfishV3.1
 # --------------------------------------------------
 container.name=glassfish
 
