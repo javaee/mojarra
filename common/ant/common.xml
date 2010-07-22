@@ -93,9 +93,9 @@
     <property name="standard.renderkit.xml" value="${api.dir}/doc/standard-html-renderkit.xml"/>
 
     <!-- Version -->
-    <property name="spec.version" value="2.0"/>
-    <property name="spec.snapshot.version" value="2.0-SNAPSHOT"/>
-    <property name="patch.version" value="4"/>
+    <property name="spec.version" value="2.1"/>
+    <property name="spec.snapshot.version" value="2.1-SNAPSHOT"/>
+    <property name="patch.version" value="0"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="SNAPSHOT"/>
@@ -160,6 +160,7 @@
         <dependency groupId="javax.annotation" artifactId="jsr250-api" version="1.0" scope="provided"/>
         <dependency groupId="org.codehaus.groovy" artifactId="groovy-all" version="1.6.4" scope="provided"/>
         <dependency groupId="javax.validation" artifactId="validation-api" version="1.0.0.GA" scope="provided"/>
+        <dependency groupId="javax.inject" artifactId="javax.inject" version="1.0-PFD-1" scope="provided"/>
         <dependency groupId="jstl" artifactId="jstl" version="1.2" scope="provided" />
         <dependency groupId="com.sun.el" artifactId="el-ri" version="1.0" scope="provided"/>
         <localRepository refid="local.repository"/>
