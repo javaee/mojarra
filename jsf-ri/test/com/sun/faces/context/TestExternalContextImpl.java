@@ -253,6 +253,11 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         }
     }
 
+    public void testIsSecure() {
+        ExternalContext ctx = getFacesContext().getExternalContext();
+        assertTrue(ctx.isSecure() == request.isSecure());    
+    }
+
     public void testRequestScheme() {
         ExternalContext ctx = getFacesContext().getExternalContext();
         assertTrue(ctx.getRequestScheme().equals(request.getScheme()));

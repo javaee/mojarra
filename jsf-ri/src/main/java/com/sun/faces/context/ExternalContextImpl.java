@@ -900,6 +900,14 @@ public class ExternalContextImpl extends ExternalContext {
 
     }
 
+    /**
+     * @see javax.faces.context.ExternalContext#isSecure()
+     * @return boolean
+     */
+    @Override
+    public boolean isSecure() {
+        return ((HttpServletRequest) request).isSecure();
+    }
 
     @Override
     public String encodeBookmarkableURL(String baseUrl,

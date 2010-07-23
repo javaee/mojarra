@@ -1904,4 +1904,28 @@ public abstract class ExternalContext {
         throw new UnsupportedOperationException();
     }
 
+     /**
+     * <p class="changed_added_2_1">Returns a boolean indicating whether this request
+     * was made using a secure channel, such as HTTPS.
+     *
+     *
+     * <p><em>Servlet:</em> This must return the result of calling
+     * <code>isSecure</code> on the underlying
+     * <code>javax.servlet.http.HttpServletRequest</code> instance.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     * @since 2.1
+     */
+    public boolean isSecure() {
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.isSecure();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
 }
