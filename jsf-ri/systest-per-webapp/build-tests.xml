@@ -113,6 +113,8 @@
               value="com/sun/faces/systest/DisableBeanValidatorTestCase.class"/>
     <property  name="no-web-xml"
                value="com/sun/faces/systest/NoWebXMLTestCase.class" />
+    <property  name="injection"
+               value="com/sun/faces/systest/InjectionTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:
@@ -132,26 +134,12 @@
 
         <for list="${applications}" param="app" trim="true">
             <sequential>
-	      <if>
-                <and>
-                  <contains string="${applications-for-v3-only}"
-                            substring="@{app}" />
-                  <not>
-                    <equals arg1="${container.name}" arg2="glassfishV3" />
-                  </not>
-                </and>
-                <then>
-                  <echo message="Skipping @{app}.  That one runs on v3 only, and our current container is ${container.name}" />
-                </then>
-		<else>
-		  <propertycopy name="test.name"
-				from="@{app}"
-				override="true"/>
-		  <test-webapp app-name="@{app}"
-			       app-base-dir="${basedir}/@{app}"
-			       test-case="${test.name}"/>
-		</else>
-	      </if>
+              <propertycopy name="test.name"
+                            from="@{app}"
+                            override="true"/>
+              <test-webapp app-name="@{app}"
+                           app-base-dir="${basedir}/@{app}"
+                           test-case="${test.name}"/>
             </sequential>
         </for>
 

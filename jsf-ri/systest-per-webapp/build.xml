@@ -63,14 +63,19 @@
         <path refid="htmlunit.compile.classpath"/>
     </path>
 
-    <property name="applications-for-v3-only"
+    <property name="applications-for-V3-only"
               value="disable-bean-validator,
                      no-web-xml" />
 
-    <!-- Property containing all of the currenly running systests.  
-         This property list *must* match the one defined in the
-         systest-per-webapp build-tests.xml. -->
-    <property name="applications"
+    <property name="applications-for-V3.1-only"
+              value="disable-bean-validator,
+                     no-web-xml" />
+
+<!-- PENDING(rogerk): I enabled the injection test but it failed.  Just add it to the
+                      applications-for-V3.1-only property above and it will
+                      get picked up --> 
+
+    <property name="container-agnostic-applications"
               value="
                    annotation-restrictions,
                    clientside-statesaving,
@@ -99,9 +104,7 @@
                    write-attribute-script-enabled,
                    wcag-datatable,
                    flash,
-                   jsp-flash,
-                   disable-bean-validator,
-                   no-web-xml"/>
+                   jsp-flash"/>
     <!-- 
 
        EXCLUDED APPLICATIONS:
@@ -131,48 +134,34 @@
         <attribute name="base-app-dir"/>
         <attribute name="appname"/>
         <sequential>
-            <if>
-              <and>
-                <contains string="${applications-for-v3-only}"
-                          substring="@{appname}" />
-                <not>
-                  <equals arg1="${container.name}" arg2="glassfishV3" />
-                </not>
-              </and>
-              <then>
-                <echo message="Skipping @{appname}.  That one runs on v3 only, and our current container is ${container.name}" />
-              </then>
-              <else>
-                <mkdir dir="@{base-app-dir}/build/classes"/>
-                <jsf.javac srcdir="@{base-app-dir}/src/java"
-                           destdir="@{base-app-dir}/build/classes">
-                    <classpath>
-                        <path refid="test.compile.classpath"/>
-                    </classpath>
-                </jsf.javac>
-                  <jsf.war archive-name="jsf-@{appname}"
-                           basedir="@{base-app-dir}/build"
-                           webxml="@{base-app-dir}/web/WEB-INF/web.xml">
-                      <archive-elements>
-                          <zipfileset dir="@{base-app-dir}/web"
-                                      includes="**/*"/>
-                          <zipfileset dir="@{base-app-dir}/build/classes"
-                                      prefix="WEB-INF/classes"
-                                      excludes="**/*TestCase.class"/>
-                          <zipfileset dir="@{base-app-dir}/src/java"
-                                      includes="**/*.properties,**/*.xml"
-                                      prefix="WEB-INF/classes"/>
-                          <zipfileset dir="${basedir}/build/classes"
-                                      prefix="WEB-INF/classes"
-                                      includes="com/sun/faces/systest/model/*.class"
-                                      excludes="**/*TestCase*"/>
-                      </archive-elements>
-                  </jsf.war>
-                <mkdir dir="@{base-app-dir}/build/jsf-@{appname}" />
-                <unwar src="@{base-app-dir}/build/jsf-@{appname}.war"
-                       dest="@{base-app-dir}/build/jsf-@{appname}" />
-              </else>
-            </if>
+          <mkdir dir="@{base-app-dir}/build/classes"/>
+          <jsf.javac srcdir="@{base-app-dir}/src/java"
+                     destdir="@{base-app-dir}/build/classes">
+              <classpath>
+                  <path refid="test.compile.classpath"/>
+              </classpath>
+          </jsf.javac>
+            <jsf.war archive-name="jsf-@{appname}"
+                     basedir="@{base-app-dir}/build"
+                     webxml="@{base-app-dir}/web/WEB-INF/web.xml">
+                <archive-elements>
+                    <zipfileset dir="@{base-app-dir}/web"
+                                includes="**/*"/>
+                    <zipfileset dir="@{base-app-dir}/build/classes"
+                                prefix="WEB-INF/classes"
+                                excludes="**/*TestCase.class"/>
+                    <zipfileset dir="@{base-app-dir}/src/java"
+                                includes="**/*.properties,**/*.xml"
+                                prefix="WEB-INF/classes"/>
+                    <zipfileset dir="${basedir}/build/classes"
+                                prefix="WEB-INF/classes"
+                                includes="com/sun/faces/systest/model/*.class"
+                                excludes="**/*TestCase*"/>
+                </archive-elements>
+            </jsf.war>
+          <mkdir dir="@{base-app-dir}/build/jsf-@{appname}" />
+          <unwar src="@{base-app-dir}/build/jsf-@{appname}.war"
+                 dest="@{base-app-dir}/build/jsf-@{appname}" />
         </sequential>
     </macrodef>
 
@@ -180,23 +169,9 @@
         <attribute name="base-app-dir"/>
         <attribute name="appname"/>
         <sequential>
-          <if>
-            <and>
-              <contains string="${applications-for-v3-only}"
-                        substring="@{appname}" />
-              <not>
-                <equals arg1="${container.name}" arg2="glassfishV3" />
-              </not>
-            </and>
-            <then>
-              <echo message="Skipping @{appname}.  That one runs on v3 only, and our current container is ${container.name}" />
-            </then>
-            <else>
-              <deploy.artifact
-                    artifact="@{base-app-dir}/build/jsf-@{appname}.war"
-                    appName="jsf-@{appname}"/>
-            </else>
-          </if>
+          <deploy.artifact
+                artifact="@{base-app-dir}/build/jsf-@{appname}.war"
+                appName="jsf-@{appname}"/>
         </sequential>
     </macrodef>
 
@@ -218,7 +193,44 @@
         </jsf.javac>
     </target>
 
-    <target name="install" depends="compile.base.sources">
+    <target name="define.applications" depends="discover.container.version,define.V2.applications,define.V3.applications,define.V3.1.applications" />
+
+    <target name="discover.container.version" 
+            depends="query.is.V2,query.is.V3,query.is.V3.1"/>
+
+    <target name="query.is.V2">
+        <condition property="container.is.V2">
+          <equals arg1="glassfish" arg2="${container.name}" />
+        </condition>
+    </target>
+
+    <target name="query.is.V3">
+        <condition property="container.is.V3">
+          <equals arg1="glassfishV3" arg2="${container.name}" />
+        </condition>
+    </target>
+
+    <target name="query.is.V3.1">
+        <condition property="container.is.V3.1">
+          <equals arg1="glassfishV3.1" arg2="${container.name}" />
+        </condition>
+    </target>
+
+    <target name="define.V2.applications" if="container.is.V2">
+       <property name="applications" value="${container-agnostic-applications}" />
+    </target>
+
+    <target name="define.V3.applications" if="container.is.V3">
+       <property name="applications" 
+                 value="${container-agnostic-applications},${applications-for-V3-only}" />
+    </target>
+
+    <target name="define.V3.1.applications" if="container.is.V3.1">
+       <property name="applications" 
+                 value="${container-agnostic-applications},${applications-for-V3.1-only}" />
+    </target>
+
+    <target name="install" depends="compile.base.sources,define.applications">
         
         <for list="${applications}" param="app" trim="true">
             <sequential>
@@ -232,15 +244,7 @@
 
     </target>
 
-    <target name="undeploy">
-        <for list="${applications}" param="app" trim="true">
-            <sequential>
-                <undeploy.app appname="@{app}"/>
-            </sequential>
-        </for>
-    </target>
-
-    <target name="build" depends="compile.base.sources">
+    <target name="build" depends="define.applications,compile.base.sources">
         
         <for list="${applications}" param="app" trim="true">
             <sequential>
@@ -251,31 +255,17 @@
 
     </target>
 
-    <target name="remove">
+    <target name="remove" depends="define.applications">
         
         <for list="${applications}" param="app" trim="true">
             <sequential>
-              <if>
-                <and>
-                  <contains string="${applications-for-v3-only}"
-                            substring="@{app}" />
-                  <not>
-                    <equals arg1="${container.name}" arg2="glassfishV3" />
-                  </not>
-                </and>
-                <then>
-                  <echo message="Skipping @{app}.  That one runs on v3 only, and our current container is ${container.name}" />
-                </then>
-                <else>
-                  <undeploy.app appname="@{app}"/>              
-                </else>
-              </if>
+              <undeploy.app appname="@{app}"/>              
             </sequential>
         </for>
         
     </target>
 
-    <target name="clean"
+    <target name="clean" depends="define.applications"
             description="Clean build and distribution directories">
         
         <delete dir="${basedir}/build"/>
@@ -291,7 +281,7 @@
 
     <!-- ********** Test Execution Targets ************************************ -->
 
-    <target name="test.no.install" 
+    <target name="test.no.install" depends="define.applications"
             description="Execute all tests against installed /jsf-* applications">
 
         <ant antfile="build-tests.xml" target="test">
@@ -306,9 +296,6 @@
 
         <ant antfile="build-tests.xml" target="test">
           <property name="applications" value="${applications}" />
-          <property name="applications-for-v3-only" 
-                    value="${applications-for-v3-only}" />
-          <property name="container.name" value="${container.name}" />
         </ant>
 
     </target>    
