@@ -49,51 +49,8 @@
     <property file="../../build.properties"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
-    <!-- Property containing all of the currenly running systests.
-         This property list *must* match the one defined in the
-         systest-per-webapp build.xml. -->
-    <property name="applications"
-              value="no-web-xml,
-                   annotation-restrictions,
-                   clientside-statesaving,
-                   absolute-ordering,
-                   document-ordering,
-                   empty-string-as-null,
-                   resource-locale-prefix,
-                   nested-loadbundles,
-                   replace-application,
-                   invalid-mapping,
-                   replace-statemanager,
-                   nested-datatables,
-                   jar-ordering,
-                   replace-lifecycle,
-                   string-converter,
-                   replace-variableresolver,
-                   replace-variableresolver-programmatically,
-                   add-elresolver-and-replace-variableresolver-programmatically,
-                   replace-variableresolver-and-add-elresolver-programmatically,
-                   converter-property-editor,
-                   disable-unicode-escaping,
-                   late-bindings,
-                   property-resolver-jsp,
-                   never-unwrap-exceptions,
-                   write-attribute-script-disabled,
-                   write-attribute-script-enabled,
-                   wcag-datatable,
-                   flash,
-                   jsp-flash,
-                   disable-bean-validator"/>
-    <!--
-       EXCLUDED APPLICATIONS:
-          view-expired
-          core-tags
-          el-performance
-          command-link-redirect
-    -->
 
     <!-- Property definitions to map the application to a JUnit test case -->
-    <property  name="no-web-xml"
-               value="com/sun/faces/systest/NoWebXMLTestCase.class" />
     <property  name="annotation-restrictions"
                value="com/sun/faces/systest/AnnotationProcessingTestCase.class" />
     <property name="absolute-ordering"
@@ -154,6 +111,8 @@
               value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
     <property name="disable-bean-validator"
               value="com/sun/faces/systest/DisableBeanValidatorTestCase.class"/>
+    <property  name="no-web-xml"
+               value="com/sun/faces/systest/NoWebXMLTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:
