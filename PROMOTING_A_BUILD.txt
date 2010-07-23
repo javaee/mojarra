@@ -21,6 +21,9 @@ Engineering updates updatecenter2/conf/jsf_proto.py to correct version #. (ex: 2
 
 If doing a new maven release, be sure to update the pom.xml files in each demo directory.
 
+MAKE SURE TO BUILD WITH the minimum required Java SE version.  For JSF
+2.0 and 2.1 this is Java SE 5.
+
 Tag build.
 Currently, we're using a tag format of
 2.0.1-bXX - where "XX" is a monotonically increasing number, incremented with every build.
