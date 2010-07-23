@@ -100,7 +100,8 @@
                    wcag-datatable,
                    flash,
                    jsp-flash,
-                   disable-bean-validator"/>
+                   disable-bean-validator,
+                   no-web-xml"/>
     <!-- 
 
        EXCLUDED APPLICATIONS:
