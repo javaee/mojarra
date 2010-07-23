@@ -163,7 +163,8 @@
                                       prefix="WEB-INF/classes"/>
                           <zipfileset dir="${basedir}/build/classes"
                                       prefix="WEB-INF/classes"
-                                      excludes="**/*TestCase.class"/>
+                                      includes="com/sun/faces/systest/model/*.class"
+                                      excludes="**/*TestCase*"/>
                       </archive-elements>
                   </jsf.war>
                 <mkdir dir="@{base-app-dir}/build/jsf-@{appname}" />
@@ -228,6 +229,14 @@
             </sequential>
         </for>
 
+    </target>
+
+    <target name="undeploy">
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+                <undeploy.app appname="@{app}"/>
+            </sequential>
+        </for>
     </target>
 
     <target name="build" depends="compile.base.sources">
