@@ -69,6 +69,7 @@
 
     <property name="applications-for-V3.1-only"
               value="disable-bean-validator,
+                     injection,
                      no-web-xml" />
 
 <!-- PENDING(rogerk): I enabled the injection test but it failed.  Just add it to the
