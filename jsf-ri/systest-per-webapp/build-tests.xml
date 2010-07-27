@@ -115,6 +115,8 @@
                value="com/sun/faces/systest/NoWebXMLTestCase.class" />
     <property  name="injection"
                value="com/sun/faces/systest/InjectionTestCase.class" />
+    <property  name="suppress-xml-decl"
+               value="com/sun/faces/systest/SuppressXmlDeclTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:

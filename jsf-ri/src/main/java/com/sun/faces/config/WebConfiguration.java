@@ -1143,6 +1143,10 @@ public class WebConfiguration {
         CacheResourceModificationTimestamp(
               "com.sun.faces.cacheResourceModificationTimestamp",
               false
+        ),
+        SuppressXmlDeclaration(
+              "javax.faces.FACELETS_SUPPRESS_XML_DECLARATION",
+              false
         );
 
         private BooleanWebContextInitParameter alternate;

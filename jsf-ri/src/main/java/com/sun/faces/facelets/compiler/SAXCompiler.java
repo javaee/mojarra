@@ -55,6 +55,7 @@
 package com.sun.faces.facelets.compiler;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.tag.TagAttributeImpl;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
 import org.xml.sax.*;
@@ -417,9 +418,12 @@ public final class SAXCompiler extends Compiler {
                 String r = new String(b);
                 Matcher m = XmlDeclaration.matcher(r);
                 if (m.find()) {
-                    mngr.writeInstruction(m.group(0) + "\n");
-                    if (m.group(3) != null) {
-                        encoding = m.group(3);
+                    WebConfiguration config = WebConfiguration.getInstance();
+                    if (!config.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.SuppressXmlDeclaration)) {
+                        mngr.writeInstruction(m.group(0) + "\n");
+                        if (m.group(3) != null) {
+                            encoding = m.group(3);
+                        }
                     }
                 }
             }

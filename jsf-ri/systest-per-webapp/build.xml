@@ -105,7 +105,8 @@
                    write-attribute-script-enabled,
                    wcag-datatable,
                    flash,
-                   jsp-flash"/>
+                   jsp-flash,
+                   suppress-xml-decl"/>
     <!-- 
 
        EXCLUDED APPLICATIONS:
