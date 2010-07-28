@@ -107,7 +107,8 @@
                    flash,
                    jsp-flash,
                    suppress-xml-decl"/>
-    <!-- 
+    <!-- add groovy to the property applications to enable it-->
+    <!--
 
        EXCLUDED APPLICATIONS:
           view-expired

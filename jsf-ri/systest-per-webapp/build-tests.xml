@@ -117,6 +117,8 @@
                value="com/sun/faces/systest/InjectionTestCase.class" />
     <property  name="suppress-xml-decl"
                value="com/sun/faces/systest/SuppressXmlDeclTestCase.class" />
+    <property  name="groovy"
+               value="com/sun/faces/systest/GroovyTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:
