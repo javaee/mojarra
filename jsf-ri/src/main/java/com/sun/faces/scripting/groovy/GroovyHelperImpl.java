@@ -53,6 +53,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletContext;
 
 /**
  * Helper class to interface with the Groovy runtime.
@@ -69,7 +70,6 @@ class GroovyHelperImpl extends GroovyHelper {
 
 
     GroovyHelperImpl() throws Exception {
-
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext extContext = facesContext.getExternalContext();
         ClassLoader curLoader = Thread.currentThread().getContextClassLoader();
@@ -89,6 +89,7 @@ class GroovyHelperImpl extends GroovyHelper {
             }
             extContext.getApplicationMap().put("com.sun.faces.groovyhelper",
                     this);
+            ((ServletContext)(extContext.getContext())).setAttribute("com.sun.faces.groovyhelper", this);
         }
 
     }
@@ -209,7 +210,7 @@ class GroovyHelperImpl extends GroovyHelper {
             }
             Class<?> c;
             try {
-                c = gse.getGroovyClassLoader().getParent().loadClass(name);
+                c = gse.getGroovyClassLoader().loadClass(name);
             } catch (ClassNotFoundException cnfe) {
                 try {
                     c = gse.loadScriptByName(name);
