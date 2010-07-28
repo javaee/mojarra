@@ -36,7 +36,10 @@
 
 package com.sun.faces.component.visit;
 
+import com.sun.faces.TestFormVisit;
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.context.PartialViewContextImpl;
+
 import com.sun.faces.util.Util;
 import java.util.HashSet;
 import javax.faces.component.UIComponent;
@@ -49,6 +52,10 @@ import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
+import javax.faces.event.PhaseId;
+
+import org.apache.cactus.WebRequest;
 
 
 public class TestTreeVisit extends ServletFacesTestCase {
@@ -174,6 +181,31 @@ public class TestTreeVisit extends ServletFacesTestCase {
         assertEquals(result, "form:panel0");
 
     }
+    public void beginPartialTraversal(WebRequest req) {
+        req.addParameter(PartialViewContext.PARTIAL_EXECUTE_PARAM_NAME, "form");
+    }
+
+    public void testPartialTraversal() throws Exception {
+        FacesContext context = getFacesContext();
+        UIViewRoot root = Util.getViewHandler(context).createView(context, null);
+        root.setId("root");
+        context.setViewRoot(root);
+        TestFormVisit form  = new TestFormVisit();
+        form.setId("form");
+        root.getChildren().add(form);
+
+        PartialViewContextImpl pvContext = new PartialViewContextImpl(context);
+        pvContext.processPartial(PhaseId.APPLY_REQUEST_VALUES);
+        if (context.getAttributes().get("VisitHint.EXECUTE_LIFECYCLE") != null) {
+            System.out.println("YESSSSSS");
+        } else {
+            System.out.println("NOOOOOOOO");
+        }
+        assertNotNull(context.getAttributes().remove("VisitHint.EXECUTE_LIFECYCLE"));
+    }
+
+
+
 
 
     // PENDING make sure UIData and UIRepeat are tested.

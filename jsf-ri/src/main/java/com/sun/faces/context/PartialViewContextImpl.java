@@ -354,7 +354,7 @@ import com.sun.faces.util.Util;
         // VisitCallback that will be invoked for each component that
         // is visited.  Note that we use the SKIP_UNRENDERED hint as we
         // only want to visit the rendered subtree.
-        EnumSet<VisitHint> hints = EnumSet.of(VisitHint.SKIP_UNRENDERED);
+        EnumSet<VisitHint> hints = EnumSet.of(VisitHint.SKIP_UNRENDERED, VisitHint.EXECUTE_LIFECYCLE);
         PartialVisitContext visitContext =
             new PartialVisitContext(context, phaseClientIds, hints);
         PhaseAwareVisitCallback visitCallback =
