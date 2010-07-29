@@ -365,8 +365,44 @@ public class FaceletsTestCase extends AbstractTestCase {
     }
 
 
+    /**
+     * Added for issue 1527
+     */
+    public void testForEach() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/forEach.xhtml");
+        boolean uniqueIds = true;
+        List<HtmlTextInput> input = new ArrayList<HtmlTextInput>();
+        getAllElementsOfGivenClass(page, input, HtmlTextInput.class);
+        String[] names = new String[input.size()];
+        String[] temp = new String[input.size()];
+        int i=0;
+        int j=0;
+        for (HtmlTextInput inputText : input) {
+            names[i++] = inputText.getNameAttribute();
+        }
+        for (i=0; i < names.length; i++) {
+            if (isUnique(names[i], temp)) {
+                temp[j++] = names[i];
+            } else {
+                uniqueIds = false;
+                break;
+            }
+        }
+        assertTrue(uniqueIds);
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
+    private boolean isUnique(String s, String[] array) {
+        for (int i=0; i < array.length; i++) {
+            if (array[i] != null && s.equals(array[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private void validateToggleState1(List<HtmlDivision> divs) {
         assertTrue(divs.size() == 2);
