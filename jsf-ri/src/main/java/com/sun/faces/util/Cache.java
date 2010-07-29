@@ -37,15 +37,10 @@
 package com.sun.faces.util;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.FacesException;
 
     /**
      * A concurrent caching mechanism.
@@ -66,9 +61,9 @@ public class Cache<K, V> {
     } // END Factory
 
 
-        private ConcurrentMap<K,Future<V>> cache =
-              new ConcurrentHashMap<K,Future<V>>();
-        private Factory<K,V> factory;
+        private final ConcurrentMap<K,V> cache =
+              new ConcurrentHashMap<K,V>();
+        private final Factory<K,V> factory;
 
 
         // -------------------------------------------------------- Constructors
@@ -100,78 +95,34 @@ public class Cache<K, V> {
          * @return the value for the specified key, if any
          */
         public V get(final K key) {
-
-            while (true) {
-                Future<V> f = cache.get(key);
-                if (f == null) {
-                    Callable<V> callable = new Callable<V>() {
-                        public V call() throws Exception {
-                            return factory.newInstance(key);
-                        }
-                    };
-                    FutureTask<V> ft = new FutureTask<V>(callable);
-                    // here is the real beauty of the concurrent utilities.
-                    // 1.  putIfAbsent() is atomic
-                    // 2.  putIfAbsent() will return the value already associated
-                    //     with the specified key
-                    // So, if multiple threads make it to this point
-                    // they will all be calling f.get() on the same
-                    // FutureTask instance, so this guarantees that the instances
-                    // that the invoked Callable will return will be created once
-                    f = cache.putIfAbsent(key, ft);
-                    if (f == null) {
-                        f = ft;
-                        ft.run();
-                    }
-                }
-                try {
-                    return f.get();
-                } catch (CancellationException ce) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST,
-                                   ce.toString(),
-                                   ce);
-                    }
-                    cache.remove(key);
-                } catch (InterruptedException ie) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST,
-                                   ie.toString(),
-                                   ie);
-                    }
-                    cache.remove(key);
-                } catch (ExecutionException ee) {
-                    throw new FacesException(ee);
-                }
+          V result = cache.get(key);
+          
+          if (result == null)
+          {
+            try
+            {
+              result = factory.newInstance(key);
             }
-
+            catch (InterruptedException ie)
+            {
+              // will never happen. Just for testing
+              throw new RuntimeException(ie);
+            }
+            
+            // put could be used instead if it didn't matter whether we replaced
+            // an existing entry
+            V oldResult = cache.putIfAbsent(key, result);
+            
+            if (oldResult != null)
+              result = oldResult;
+          }
+          
+          return result;
         }
 
         public V remove(final K key) {
-            Future<V> t = cache.remove(key);
-            V result = null;
+          return cache.remove(key);
 
-            if (null != t) {
-                try {
-                    result = t.get();
-                } catch (CancellationException ce) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST,
-                                ce.toString(),
-                                ce);
-                    }
-                } catch (InterruptedException ie) {
-                    if (LOGGER.isLoggable(Level.FINEST)) {
-                        LOGGER.log(Level.FINEST,
-                                ie.toString(),
-                                ie);
-                    }
-                } catch (ExecutionException ee) {
-                    throw new FacesException(ee);
-                }
-            }
-
-            return result;
     }
 
     } // END Cache
