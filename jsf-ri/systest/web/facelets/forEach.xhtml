@@ -49,5 +49,15 @@
    <c:forEach items="${fn:split('1,2,3', ',')}" var="item" varStatus="vs">
         #{item}
     </c:forEach>
+
+   <c:forEach var="item" items="#{repeatBean.flavorsList}">
+       <h:inputText value="#{item}" /> 
+   </c:forEach>
+
+   <c:forEach var="item" items="#{repeatBean.flavorsList}">
+       <h:inputText id="text1" value="#{item}" /> 
+   </c:forEach>
+
+
 </body>
 </html>

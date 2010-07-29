@@ -56,6 +56,7 @@
 package com.sun.faces.facelets.tag.jstl.core;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 import javax.el.ValueExpression;
 import javax.el.VariableMapper;
@@ -183,8 +184,10 @@ public final class ForEachHandler extends TagHandlerImpl {
                 int mi = 0;
                 Object value = null;
                 int count = 0;
+                boolean oldUniqueIds = ComponentSupport.getNeedUniqueIds(ctx);
                 try {
                     boolean first = true;
+                    boolean setUnique = false;
                     while (i <= e && itr.hasNext()) {
                         count++;
                         value = itr.next();
@@ -210,6 +213,11 @@ public final class ForEachHandler extends TagHandlerImpl {
                             }
                         }
 
+                        if (!first && !setUnique) {
+                            ComponentSupport.setNeedUniqueIds(ctx, true);
+                            setUnique = true;
+                        }
+
                         // execute body
                         this.nextHandler.apply(ctx, parent);
 
@@ -231,6 +239,7 @@ public final class ForEachHandler extends TagHandlerImpl {
                     if (vs != null) {
                         vars.setVariable(vs, vsO);
                     }
+                    ComponentSupport.setNeedUniqueIds(ctx, oldUniqueIds);
                 }
             }
         }
