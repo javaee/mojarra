@@ -39,6 +39,7 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.RIConstants;
+
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +58,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 
+import com.sun.faces.component.visit.VisitUtils;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
@@ -261,7 +263,11 @@ public class RestoreViewPhase extends Phase {
         UIViewRoot root = facesContext.getViewRoot();
         final PostRestoreStateEvent postRestoreStateEvent = new PostRestoreStateEvent(root);
         try {
-            root.visitTree(VisitContext.createVisitContext(facesContext),
+            // PENDING: Use of VisitUtils and FacesContext Attribute For Visit Hints
+            //    until new Visit Hints defined in spec.
+            //    See: https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=545 
+            // root.visitTree(VisitContext.createVisitContext(facesContext),
+            VisitUtils.doFullNonIteratingVisit(facesContext,
                     new VisitCallback() {
 
                         public VisitResult visit(VisitContext context, UIComponent target) {

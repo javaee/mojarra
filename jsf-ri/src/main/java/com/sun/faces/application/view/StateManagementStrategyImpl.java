@@ -49,6 +49,7 @@ import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 
+import com.sun.faces.component.visit.VisitUtils;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.ComponentStruct;
@@ -169,9 +170,19 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 
         StateContext stateContext = StateContext.getStateContext(context);
 
+        // PENDING: Use of VisitUtils and FacesContext Attribute For Visit Hints
+        //    until new Visit Hints defined in spec.
+        //    See: https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=545
+        VisitUtils.startStateSaveRestore(context);
+
         // ADDED FOR ISSUE 1310 - REMOVE ONCE NEW VISIT HINTS ARE ADDED TO THE
         // API
         saveComponentState(viewRoot, context, stateContext, stateMap);
+
+        // PENDING: Use of VisitUtils and FacesContext Attribute For Visit Hints
+        //    until new Visit Hints defined in spec.
+        //    See: https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=545
+        VisitUtils.endStateSaveRestore(context);
 
         // handle dynamic adds/removes
         List<String> removeList = stateContext.getDynamicRemoves();
@@ -230,8 +241,14 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             // of the TreeNode instances.  This is a problem
             // for servers that persist session data since
             // UIComponent instances are not serializable.
-            VisitContext visitContext = VisitContext.createVisitContext(context);
-            viewRoot.visitTree(visitContext, new VisitCallback() {
+
+            // PENDING: Use of VisitUtils and FacesContext Attribute For Visit Hints
+            //    until new Visit Hints defined in spec.
+            //    See: https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=545
+            // VisitContext visitContext = VisitContext.createVisitContext(context);
+            // viewRoot.visitTree(visitContext, new VisitCallback() {
+            VisitUtils.startStateSaveRestore(context);
+            VisitUtils.doFullNonIteratingVisit(context, new VisitCallback() {
 
                 public VisitResult visit(VisitContext context, UIComponent target) {
                     VisitResult result = VisitResult.ACCEPT;
@@ -255,6 +272,7 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 }
 
             });
+            VisitUtils.endStateSaveRestore(context);
             
             // Handle dynamic add/removes
             //noinspection unchecked

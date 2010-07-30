@@ -44,8 +44,11 @@ import com.sun.faces.facelets.component.UIRepeat;
 import com.sun.faces.util.Util;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlColumn;
 import javax.faces.component.html.HtmlCommandButton;
@@ -57,6 +60,8 @@ import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+import javax.faces.model.ArrayDataModel;
+import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 
 public class TestTreeWithUIRepeatVisit extends ServletFacesTestCase {
@@ -194,6 +199,56 @@ public class TestTreeWithUIRepeatVisit extends ServletFacesTestCase {
         assertEquals(result, "form:panel0:data:3:output0 form:panel1:data:0:output0");
 
     }
+
+    // PENDING: This test should be removed or reworked once
+    //  https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=545
+    //  is finalized.
+    public void testFullNonIteratingVisit() throws Exception {
+        UIRepeat data = new UIRepeat();        
+        DataModel m = new ArrayDataModel<String>(new String[] {"a", "b"});
+        data.setValue(m);
+        data.setId("table");
+        UIColumn c1 = new UIColumn();
+        c1.setId("column1");
+        UIOutput column1Facet = new UIOutput();
+        column1Facet.setId("column1Facet");
+        c1.getFacets().put("header", column1Facet);
+        UIOutput column1Data = new UIOutput();
+        column1Data.setId("column1Data");
+        c1.getChildren().add(column1Data);
+        data.getChildren().add(c1);
+
+        final List<String> visitedIds = new ArrayList<String>();
+        getFacesContext().getAttributes().put("javax.faces.visit.SKIP_ITERATION", true);
+        data.visitTree(VisitContext.createVisitContext(getFacesContext(),
+                                                       null,
+                                                       null),
+                       new VisitCallback() {
+                           public VisitResult visit(VisitContext context,
+                                                    UIComponent target) {
+                               visitedIds
+                                     .add(target.getClientId(context.getFacesContext()));
+                               return VisitResult.ACCEPT;
+                           }
+                       });
+
+        String[] expectedIds = { "table",
+                                 "table:column1",
+                                 "table:column1Facet",
+                                 "table:column1Data" };
+
+        assertEquals("Expected number of vists: " + expectedIds.length + ", actual number of visits: " + visitedIds.size(),
+                     expectedIds.length,
+                     visitedIds.size());
+
+        for (String id : expectedIds) {
+            assertTrue("ID: " + id + " not visited.", visitedIds.contains(id));
+        }
+
+
+    }
+
+
 
 
     // PENDING make sure UIData and UIRepeat are tested.

@@ -1350,7 +1350,10 @@ public class UIData extends UIComponentBase
      */
     private boolean requiresRowIteration(FacesContext ctx) {
 
-        return (!PhaseId.RESTORE_VIEW.equals(ctx.getCurrentPhaseId()));
+        // PENDING: Visit Hints as FacesContext Attribute until add new hints to spec.
+        //    See: https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=545
+        Object skipHint = ctx.getAttributes().get("javax.faces.visit.SKIP_ITERATION");
+        return !Boolean.TRUE.equals(skipHint);
 
     }
 

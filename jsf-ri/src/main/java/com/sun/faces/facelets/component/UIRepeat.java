@@ -54,6 +54,7 @@
 
 package com.sun.faces.facelets.component;
 
+import com.sun.faces.component.visit.VisitUtils;
 import com.sun.faces.facelets.tag.IterationStatus;
 
 import javax.el.ValueExpression;
@@ -628,7 +629,7 @@ public class UIRepeat extends UINamingContainer {
 
     private boolean requiresRowIteration(FacesContext ctx) {
 
-        return (!PhaseId.RESTORE_VIEW.equals(ctx.getCurrentPhaseId()));
+        return !VisitUtils.isSkippingIteration(ctx);
 
     }
 
