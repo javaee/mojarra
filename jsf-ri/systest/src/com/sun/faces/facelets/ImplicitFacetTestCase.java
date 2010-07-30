@@ -36,14 +36,9 @@
 
 package com.sun.faces.facelets;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -116,5 +111,19 @@ public class ImplicitFacetTestCase extends AbstractTestCase {
 
 
     }
+
+    /*
+     * Added for issue 1726.
+     */
+    public void testPostBack() throws Exception {
+
+        HtmlPage page = getPage("/faces/facelets/issue1726.xhtml") ;
+        
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        String text = page.asText();
+        assert(!text.contains("javax.faces.component.UIPanel"));
+    }
+
 
 }

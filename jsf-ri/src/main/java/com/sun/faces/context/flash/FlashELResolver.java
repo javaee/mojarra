@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.faces.context.Flash;
+
 /**
  * <p>Provide a feature semantically identical to the <a target="_"
  * href="http://api.rubyonrails.com/classes/ActionController/Flash.html">
@@ -187,65 +189,86 @@ public class FlashELResolver extends ELResolver {
      *                                   <code>null</code>.
      */
 
-    public Object getValue(ELContext elContext, Object base, Object property) {
-        Object result = null;
-        Map<String, Object> flash;
+  public Object getValue(ELContext elContext, Object base, Object property)
+  {
+    if (null == property)
+    {
+      // take no action.
+      return null;
+    }
 
-        if (null == property) {
-            // take no action.
-            return null;
-        }
+    Object result = null;
 
+    // Deal with getValue(null, "flash").
+    if (null == base)
+    {
+      // If the property is the implicit object "flash"...
+      if (property.toString().equals(FLASH_VARIABLE_NAME))
+      {
         FacesContext facesContext =
                 (FacesContext) elContext.getContext(FacesContext.class);
         ExternalContext extCtx = facesContext.getExternalContext();
+
         // try to get the flash from the session.
-        flash = ELFlash.getFlash(extCtx, false);
-
-        // Deal with getValue(null, "flash").
-        if (null == base) {
-            // If the property is the implicit object "flash"...
-            if (property.toString().equals(FLASH_VARIABLE_NAME)) {
-                elContext.setPropertyResolved(true);
-                if (null == flash) {
-                    // create a new one and store it in the session.
-                    flash = ELFlash.getFlash(extCtx, true);
-                    extCtx.getSessionMap().put(ELFlash.FLASH_ATTRIBUTE_NAME,
-                            flash);
-                }
-                result = flash;
-            }
+        Map<String, Object> flash = ELFlash.getFlash(extCtx, false);
+        
+        elContext.setPropertyResolved(true);
+        
+        if (null == flash)
+        {
+          // create a new one and store it in the session.
+          flash = ELFlash.getFlash(extCtx, true);
+          extCtx.getSessionMap().put(ELFlash.FLASH_ATTRIBUTE_NAME, flash);
         }
-        // If the base argument is the flash itself...
-        else if (base == flash) {
-            // and the property argument is "keep"...
-            if (property.toString().equals(FLASH_KEEP_VARIABLE_NAME)) {
-                elContext.setPropertyResolved(true);
-                // then this is a request to promote the value
-                // "property", which is assumed to have been previously
-                // stored in request scope via the "flash.now"
-                // expression, to flash scope.
-                result = base;
-                // Set a flag so the flash itself can look in the request
-                // and promote the value to the next request
-                ELFlash.getFlash(extCtx, true).setKeepFlag(facesContext);
-
-            }
-            // Otherwise, if base is the flash, and property is "now"...
-            else if (property.toString().equals(FLASH_NOW_VARIABLE_NAME)) {
-		// PENDING(edburns): use FacesContext.getAttributes() instead of 
-		// request scope.
-                Map<String, Object> requestMap = extCtx.getRequestMap();
-                requestMap.put(ELFlash.FLASH_NOW_REQUEST_KEY, property);
-                elContext.setPropertyResolved(true);
-                result = requestMap;
-            } else {
-                result = null;
-            }
-        }
-
-        return result;
+        
+        result = flash;
+      }
     }
+    // If the base argument is the flash itself...
+    else if (base instanceof Flash)
+    {
+      FacesContext facesContext =
+              (FacesContext) elContext.getContext(FacesContext.class);
+      ExternalContext extCtx = facesContext.getExternalContext();
+
+      // try to get the flash from the session.
+      Map<String, Object> flash = ELFlash.getFlash(extCtx, false);
+
+      if (base == flash)
+      {
+        // and the property argument is "keep"...
+        if (property.toString().equals(FLASH_KEEP_VARIABLE_NAME))
+        {
+          elContext.setPropertyResolved(true);
+          
+          // then this is a request to promote the value
+          // "property", which is assumed to have been previously
+          // stored in request scope via the "flash.now"
+          // expression, to flash scope.
+          result = base;
+          // Set a flag so the flash itself can look in the request
+          // and promote the value to the next request
+          ELFlash.getFlash(extCtx, true).setKeepFlag(facesContext);
+        }
+        // Otherwise, if base is the flash, and property is "now"...
+        else if (property.toString().equals(FLASH_NOW_VARIABLE_NAME))
+        {
+// PENDING(edburns): use FacesContext.getAttributes() instead of 
+// request scope.
+            Map<String, Object> requestMap = extCtx.getRequestMap();
+            requestMap.put(ELFlash.FLASH_NOW_REQUEST_KEY, property);
+            elContext.setPropertyResolved(true);
+            result = requestMap;
+        }
+        else
+        {
+          result = null;
+        }
+      }
+    }
+
+    return result;
+  }
 
     /**
      * <p>Return the valid <code>Class</code> for a future set

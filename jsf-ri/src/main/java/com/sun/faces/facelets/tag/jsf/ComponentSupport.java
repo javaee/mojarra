@@ -384,7 +384,7 @@ public final class ComponentSupport {
             parent.getChildren().add(child);
         } else {
             UIComponent existing = parent.getFacets().get(facetName);
-            if (existing != null) {
+            if (existing != null && existing != child) {
                 if (!(existing instanceof UIPanel)) {
                     // move existing component under a panel group
                     UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
