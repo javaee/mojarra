@@ -55,6 +55,7 @@ import java.net.URL;
  *  <li>FacesComponent</li>
  *  <li>FacesConverter</li>
  *  <li>FacesRenderer</li>
+ *  <li>FacesValidator</li>
  *  <li>ManagedBean</li>
  *  <li>NamedEvent</li>
  *  <li>FacesBehavior</li>
