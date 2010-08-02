@@ -36,6 +36,7 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationStateInfo;
 import com.sun.faces.util.ComponentStruct;
@@ -105,15 +106,14 @@ public class StateContext {
 
     }
 
-
     /**
-     * @param viewId the view ID to check
+     * @param current FacesContext.
+     * @param viewId the view ID to check or null if viewId is unknown.
      * @return <code>true</code> if partial state saving should be used for the
      *  specified view ID, otherwise <code>false</code>
      */
-    public boolean partialStateSaving(String viewId) {
+    public boolean partialStateSaving(FacesContext ctx, String viewId) {
         // track UIViewRoot changes
-        FacesContext ctx = FacesContext.getCurrentInstance();
         UIViewRoot root = ctx.getViewRoot();
         UIViewRoot refRoot = viewRootRef.get();
         if (root != refRoot) {
@@ -132,8 +132,18 @@ public class StateContext {
         }
 
         if (!partialLocked) {
-            partial = stateInfo.usePartialStateSaving(viewId);
-            partialLocked = true;
+                  if (viewId == null) {
+                          if (root != null) {
+                                  viewId = root.getViewId();
+                          } else {
+                                  // View root has not yet been initialized.  Check to see whether
+                                  // the target view id has been stashed away for us.
+                                  viewId = (String)ctx.getAttributes().get(RIConstants.VIEWID_KEY_NAME);
+                                }
+                  }
+        
+                  partial = stateInfo.usePartialStateSaving(viewId);
+                  partialLocked = true;
         }
         return partial;
 

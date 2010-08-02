@@ -36,7 +36,6 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.component.behavior.AjaxBehaviors;
 import com.sun.faces.component.validator.ComponentValidators;
 import com.sun.faces.component.CompositeComponentStackManager;
@@ -420,7 +419,7 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // has a composite component parent under the assumption that
         // the CompositeComponentTagHandler will take care of it.
 
-        return (StateContext.getStateContext(ctx).partialStateSaving((String)ctx.getAttributes().get(RIConstants.VIEWID_KEY_NAME))
+        return (StateContext.getStateContext(ctx).partialStateSaving(ctx, null)
                  && UIComponent.getCurrentCompositeComponent(ctx) == null);
 
     }

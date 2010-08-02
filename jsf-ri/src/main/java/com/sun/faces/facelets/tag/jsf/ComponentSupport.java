@@ -422,7 +422,7 @@ public final class ComponentSupport {
             if (viewId != null) {
                 StateContext stateCtx = StateContext.getStateContext(ctx);
                 return stateCtx
-                      .partialStateSaving(viewId);
+                      .partialStateSaving(ctx, viewId);
             }
         }
         return false;

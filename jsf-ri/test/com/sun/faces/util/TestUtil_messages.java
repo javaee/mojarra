@@ -82,6 +82,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
         {MessageUtils.NULL_RESPONSE_STREAM_ERROR_MESSAGE_ID, "0"},
         {MessageUtils.NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID, "0"},
+        {MessageUtils.NULL_VIEW_ID_ERROR_MESSAGE_ID, "0"},
         {MessageUtils.NULL_EVENT_ERROR_MESSAGE_ID, "0"},
         {MessageUtils.NULL_HANDLER_ERROR_MESSAGE_ID, "0"},
         {MessageUtils.NULL_CONTEXT_ERROR_MESSAGE_ID, "0"},
