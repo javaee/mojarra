@@ -36,6 +36,7 @@
 
 package com.sun.faces.application.view;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.application.ApplicationAssociate;
@@ -100,12 +101,19 @@ public class ViewMetadataImpl extends ViewMetadata {
             }
             ViewHandler vh = context.getApplication().getViewHandler();
             result = vh.createView(context, viewId);
+
+            // Stash away view id before invoking handlers so that 
+            // StateContext.partialStateSaving() can determine the current
+            // view. 
+            context.getAttributes().put(RIConstants.VIEWID_KEY_NAME, viewId);
+
             Facelet f = faceletFactory.getMetadataFacelet(result.getViewId());
 
             f.apply(context, result);
         } catch (IOException ioe) {
             throw new FacesException(ioe);
         } finally {
+            context.getAttributes().remove(RIConstants.VIEWID_KEY_NAME);
             context.setProcessingEvents(true);
         }
 

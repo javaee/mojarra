@@ -258,6 +258,8 @@ public class MessageUtils {
           "com.sun.faces.NULL_RESPONSE_VIEW_ERROR";
     public static final String NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID =
           "com.sun.faces.NULL_RESPONSE_WRITER_ERROR";
+    public static final String NULL_VIEW_ID_ERROR_MESSAGE_ID =
+          "com.sun.faces.NULL_VIEW_ID";
     public static final String OBJECT_CREATION_ERROR_ID =
           "com.sun.faces.OBJECT_CREATION_ERROR";
     public static final String OBJECT_IS_READONLY =

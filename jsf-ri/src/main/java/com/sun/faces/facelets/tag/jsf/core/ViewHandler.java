@@ -54,7 +54,6 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.context.StateContext;
 import com.sun.faces.facelets.tag.TagHandlerImpl;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
@@ -148,7 +147,15 @@ public final class ViewHandler extends TagHandlerImpl {
                 root.setAfterPhaseListener(m);
             }
             FacesContext context = ctx.getFacesContext();
-            if (StateContext.getStateContext(context).partialStateSaving((String)context.getAttributes().get(RIConstants.VIEWID_KEY_NAME))) {
+
+            String viewId = root.getViewId();
+
+            // At this point in the lifecycle we should have a non-null/empty
+            // view id.  The partial state saving check below requires this.
+            assert(null != viewId);
+            assert(0 < viewId.length());
+
+            if (StateContext.getStateContext(context).partialStateSaving(context, root.getViewId())) {
                 root.markInitialState();
             }
         }

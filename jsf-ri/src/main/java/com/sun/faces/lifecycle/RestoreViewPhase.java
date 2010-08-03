@@ -38,8 +38,6 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.RIConstants;
-
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -214,7 +212,6 @@ public class RestoreViewPhase extends Phase {
                 }
 
                 ViewDeclarationLanguage vdl = facesContext.getApplication().getViewHandler().getViewDeclarationLanguage(facesContext, viewId);
-                facesContext.getAttributes().put(RIConstants.VIEWID_KEY_NAME, viewId);
 
                 if (vdl != null) {
                     // If we have one, get the ViewMetadata...

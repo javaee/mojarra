@@ -45,6 +45,7 @@ import java.util.Set;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.PartialStateSaving;
 import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.FullStateSavingViewIds;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * This class maintains per-application information pertaining
@@ -79,10 +80,16 @@ public class ApplicationStateInfo {
 
     /**
      * @param viewId the view ID to check
+     * @throws IllegalArgumentException if viewId is null
      * @return <code>true</code> if partial state saving should be used for the
      *  specified view ID, otherwise <code>false</code>
      */
     public boolean usePartialStateSaving(String viewId) {
+
+        if (viewId == null) {
+            throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_VIEW_ID_ERROR_MESSAGE_ID));
+        }
 
         return (partialStateSaving && !fullStateViewIds.contains(viewId));
 

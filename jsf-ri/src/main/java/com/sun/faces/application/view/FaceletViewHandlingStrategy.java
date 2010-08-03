@@ -160,7 +160,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
 
         StateContext stateCtx = StateContext.getStateContext(context);
-        if (stateCtx.partialStateSaving(viewId)) {
+        if (stateCtx.partialStateSaving(context, viewId)) {
             if (stateManagementStrategy == null) {
                 synchronized (this) {
                     if (stateManagementStrategy == null) {
@@ -1031,7 +1031,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     private void doPostBuildActions(FacesContext ctx, UIViewRoot root) {
         StateContext stateCtx = StateContext.getStateContext(ctx);
-        if (stateCtx.partialStateSaving(root.getViewId())) {
+        if (stateCtx.partialStateSaving(ctx, root.getViewId())) {
             root.markInitialState();
             stateCtx.startTrackViewModifications();
         }
