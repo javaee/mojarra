@@ -41,11 +41,12 @@ import java.util.Map;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.PostAddToViewEvent;
+import javax.faces.event.PreRenderViewEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 
@@ -64,31 +65,32 @@ public class DynamicAdd extends UINamingContainer implements SystemEventListener
 
     public DynamicAdd() {
         FacesContext ctx = FacesContext.getCurrentInstance();
-        Map<Object, Object> ctxMap = ctx.getAttributes();
+        Map<String, Object> viewMap = ctx.getViewRoot().getViewMap();
         // increment the counter
-        ctxMap.put("dynamicAdd", null == ctxMap.get("dynamicAdd") ? 
-            (Integer) 1 : ((Integer)ctxMap.get("dynamicAdd")) + 1);
-        this.setId("dynamic" + ctxMap.get("dynamicAdd").toString());
+        viewMap.put("dynamicAdd", null == viewMap.get("dynamicAdd") ?
+            (Integer) 1 : ((Integer)viewMap.get("dynamicAdd")) + 1);
+        this.setId("dynamic" + viewMap.get("dynamicAdd").toString());
 
-        ctx.getViewRoot().subscribeToViewEvent(PostAddToViewEvent.class, (SystemEventListener) this);
+        ctx.getViewRoot().subscribeToViewEvent(PreRenderViewEvent.class, (SystemEventListener) this);
     }
 
     public void processEvent(SystemEvent se) throws AbortProcessingException {
         FacesContext ctx = FacesContext.getCurrentInstance();
         UIComponent source = (UIComponent) se.getSource();
         String id = source.getClientId(ctx);
-        if (source.equals(this)) {
-            Map<Object, Object> ctxMap = ctx.getAttributes();
-            Integer numAddedSoFar = (Integer) ctxMap.get("dynamicAdd");
+        if (source.equals(ctx.getViewRoot())) {
+            Map<String, Object> viewMap = ctx.getViewRoot().getViewMap();
+            Integer numAddedSoFar = (Integer) viewMap.get("dynamicAdd");
             if (numAddedSoFar < 5) {
-                UIComponent dynamic = ctx.getApplication().createComponent("dynamicAdd");
+                DynamicAdd dynamic = (DynamicAdd) ctx.getApplication().createComponent("dynamicAdd");
+                dynamic.setFacetRequired(this.isFacetRequired());
                 this.getChildren().add(dynamic);
             }
         }
     }
 
     public boolean isListenerForSource(Object o) {
-        return o instanceof DynamicAdd;
+        return o instanceof UIViewRoot;
     }
 
     @Override

@@ -36,7 +36,9 @@
 
 package com.sun.faces.util;
 
+import java.util.Map;
 import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
@@ -81,6 +83,26 @@ public class ComponentStruct implements StateHolder {
     }
 
     public void setTransient(boolean trans) {
+    }
+
+    public void absorbComponent(FacesContext context, UIComponent added) {
+        UIComponent parent = added.getParent();
+        this.clientId = added.getClientId(context);
+        this.parentClientId = parent.getClientId(context);
+        // this needs work
+        int idx = parent.getChildren().indexOf(added);
+        if (idx == -1) {
+            // this must be a facet
+            for (Map.Entry<String, UIComponent> facet : parent.getFacets().entrySet()) {
+                if (facet.getValue() == added) {
+                    this.facetName = facet.getKey();
+                    break;
+                }
+            }
+        } else {
+            this.indexOfChildInParent = parent.getChildren().indexOf(added);
+        }
+
     }
 
 

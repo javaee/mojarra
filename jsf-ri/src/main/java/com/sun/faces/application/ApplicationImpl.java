@@ -198,8 +198,6 @@ public class ApplicationImpl extends Application {
     private boolean registerPropertyEditors;
     private TimeZone systemTimeZone;
 
-    private final String IS_PROCESSING_LISTENERS_KEY = "com.sun.faces.application.ApplicationImpl.IS_PROCESSING_LISTENERS";
-
     /**
      * Constructor
      */
@@ -1959,26 +1957,77 @@ public class ApplicationImpl extends Application {
                                                Object source) {
         SystemEvent result = event;
 
-        Map<Object, Object> ctxMap = ctx.getAttributes();
-        if (ctxMap.containsKey(IS_PROCESSING_LISTENERS_KEY)) {
+        if (listenerInvocationGuard.isGuardSet(ctx, systemEventClass)) {
             return result;
         }
-        ctxMap.put(IS_PROCESSING_LISTENERS_KEY, Boolean.TRUE);
+        listenerInvocationGuard.setGuard(ctx, systemEventClass);
 
 
         UIViewRoot root = ctx.getViewRoot();
-        if (root != null) {
-            EventInfo rootEventInfo =
-                  systemEventHelper.getEventInfo(systemEventClass,
-                                                 UIViewRoot.class);
-            // process view listeners
-            result = processListenersAccountingForAdds(root.getViewListenersForEventClass(systemEventClass),
-                                                       event,
-                                                       source,
-                                                       rootEventInfo);
+        try {
+            if (root != null) {
+                EventInfo rootEventInfo =
+                        systemEventHelper.getEventInfo(systemEventClass,
+                        UIViewRoot.class);
+                // process view listeners
+                result = processListenersAccountingForAdds(root.getViewListenersForEventClass(systemEventClass),
+                        event,
+                        source,
+                        rootEventInfo);
+            }
+        } finally {
+            listenerInvocationGuard.clearGuard(ctx, systemEventClass);
         }
-        ctxMap.remove(IS_PROCESSING_LISTENERS_KEY);
         return result;
+
+    }
+
+    /*
+     * This class encapsulates the behavior to prevent infinite loops
+     * when the publishing of one event leads to the queueing of another
+     * event of the same type.  Special provision is made to allow the
+     * case where this guaring mechanims happens on a per-FacesContext,
+     * per-SystemEvent.class type basis.
+     */
+
+    private ReentrantLisneterInvocationGuard listenerInvocationGuard = new ReentrantLisneterInvocationGuard();
+
+    private class ReentrantLisneterInvocationGuard {
+
+        public boolean isGuardSet(FacesContext ctx, Class<? extends SystemEvent> systemEventClass) {
+            Boolean result = false;
+            Map<Class<? extends SystemEvent>, Boolean> data = getDataStructure(ctx);
+            result = data.get(systemEventClass);
+
+            return (null == result ? false : result);
+        }
+
+        public void setGuard(FacesContext ctx, Class<? extends SystemEvent> systemEventClass) {
+            Map<Class<? extends SystemEvent>, Boolean> data = getDataStructure(ctx);
+            data.put(systemEventClass, Boolean.TRUE);
+
+        }
+
+        public void clearGuard(FacesContext ctx, Class<? extends SystemEvent> systemEventClass) {
+            Map<Class<? extends SystemEvent>, Boolean> data = getDataStructure(ctx);
+            data.put(systemEventClass, Boolean.FALSE);
+            
+        }
+
+        private Map<Class<? extends SystemEvent>, Boolean> getDataStructure(FacesContext ctx) {
+            Map<Class<? extends SystemEvent>, Boolean> result = null;
+            Map<Object, Object> ctxMap = ctx.getAttributes();
+            final String IS_PROCESSING_LISTENERS_KEY =
+                    "com.sun.faces.application.ApplicationImpl.IS_PROCESSING_LISTENERS";
+
+            if (null == (result = (Map<Class<? extends SystemEvent>, Boolean>)
+                         ctxMap.get(IS_PROCESSING_LISTENERS_KEY))) {
+                result = new HashMap<Class<? extends SystemEvent>, Boolean>(12);
+                ctxMap.put(IS_PROCESSING_LISTENERS_KEY, result);
+            }
+
+            return result;
+        }
 
     }
 
