@@ -165,4 +165,11 @@ public class EventTestCase extends AbstractTestCase {
         assertTrue(("The no-arg event fired!").equals(s.asText()));
 
     }
+
+    public void testPostAddParentCorrect1682() throws Exception {
+        HtmlPage page = getPage("/faces/issue1682.xhtml");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("reload");
+        page = button.click();
+        assertTrue(page.asText().contains("source id: postAddTester"));
+    }
 }

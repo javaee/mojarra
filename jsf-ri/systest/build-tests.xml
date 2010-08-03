@@ -142,7 +142,7 @@
                 test.external,
                 test.el,
                 test.flash,
-                test.f.event,
+                test.event,
                 test.resourcelocation,
                 test.managed,
                 test.message,
@@ -325,7 +325,7 @@
 
 
 
-    <target name="test.f.event">
+    <target name="test.event">
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
