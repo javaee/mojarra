@@ -234,44 +234,47 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
         final StateContext stateContext = StateContext.getStateContext(context);
 
         if (null != state) {
-            final Application app = context.getApplication();
-            // We need to clone the tree, otherwise we run the risk
-            // of being left in a state where the restored
-            // UIComponent instances are in the session instead
-            // of the TreeNode instances.  This is a problem
-            // for servers that persist session data since
-            // UIComponent instances are not serializable.
+            try {
+                stateContext.setTrackViewModifications(false);
+                final Application app = context.getApplication();
+                // We need to clone the tree, otherwise we run the risk
+                // of being left in a state where the restored
+                // UIComponent instances are in the session instead
+                // of the TreeNode instances.  This is a problem
+                // for servers that persist session data since
+                // UIComponent instances are not serializable.
 
-            // PENDING: Use of VisitUtils and FacesContext Attribute For Visit Hints
-            //    until new Visit Hints defined in spec.
-            //    See: https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=545
-            // VisitContext visitContext = VisitContext.createVisitContext(context);
-            // viewRoot.visitTree(visitContext, new VisitCallback() {
-            VisitUtils.startStateSaveRestore(context);
-            VisitUtils.doFullNonIteratingVisit(context, new VisitCallback() {
+	        // PENDING: Use of VisitUtils and FacesContext Attribute For Visit Hints
+	        //    until new Visit Hints defined in spec.
+                //    See: https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=545
+                // VisitContext visitContext = VisitContext.createVisitContext(context);
+                // viewRoot.visitTree(visitContext, new VisitCallback() {
+	        VisitUtils.startStateSaveRestore(context);
+		VisitUtils.doFullNonIteratingVisit(context, new VisitCallback() {
 
-                public VisitResult visit(VisitContext context, UIComponent target) {
-                    VisitResult result = VisitResult.ACCEPT;
-                    String cid = target.getClientId(context.getFacesContext());
-                    Object stateObj = state.get(cid);
-                    if (stateObj != null && !stateContext.componentAddedDynamically(target)) {
-                        try {
-                            target.restoreState(context.getFacesContext(),
-                                                stateObj);
-                        } catch (Exception e) {
-                            String msg =
+		  public VisitResult visit(VisitContext context, UIComponent target) {
+		      VisitResult result = VisitResult.ACCEPT;
+		      String cid = target.getClientId(context.getFacesContext());
+		      Object stateObj = state.get(cid);
+		      if (stateObj != null && !stateContext.componentAddedDynamically(target)) {
+			  try {
+			      target.restoreState(context.getFacesContext(),
+						  stateObj);
+			  } catch (Exception e) {
+			      String msg =
                                   MessageUtils.getExceptionMessageString(
                                         MessageUtils.PARTIAL_STATE_ERROR_RESTORING_ID,
                                         cid,
                                         e.toString());
-                            throw new FacesException(msg, e);
+                                throw new FacesException(msg, e);
+                            }
                         }
+
+                        return result;
                     }
 
-                    return result;
-                }
+                });
 
-            });
             VisitUtils.endStateSaveRestore(context);
             
             // Handle dynamic add/removes
@@ -285,65 +288,68 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                     }
                     viewRoot.invokeOnComponent(context, cur, new ContextCallback() {
 
-                        public void invokeContextCallback(FacesContext context, UIComponent target) {
-                            UIComponent parent = target.getParent();
-                            if (null != parent) {
-                                parent.getChildren().remove(target);
-                            }
-                        }
-                        
-                    });
-                    if (trackMods) {
-                        stateContext.setTrackViewModifications(true);
-                    }
-                }
-            }
-
-            Object restoredAddList[] = (Object []) state.get(CLIENTIDS_TO_ADD_NAME);
-            if (restoredAddList != null && restoredAddList.length > 0) {
-                // Restore the list of added components
-                List<ComponentStruct> addList = new ArrayList<ComponentStruct>(restoredAddList.length);
-                for (Object aRestoredAddList : restoredAddList) {
-                    ComponentStruct cur = new ComponentStruct();
-                    cur.restoreState(context, aRestoredAddList);
-                    addList.add(cur);
-                }
-                // restore the components themselves
-                for (ComponentStruct cur : addList) {
-                    final ComponentStruct finalCur = cur;
-                    // Find the parent
-                    viewRoot.invokeOnComponent(context, finalCur.parentClientId,
-                            new ContextCallback() {
-                        public void invokeContextCallback(FacesContext context, UIComponent parent) {
-                            // Create the child
-                            StateHolderSaver saver = (StateHolderSaver) state.get(finalCur.clientId);
-                            UIComponent toAdd = (UIComponent) saver.restore(context);
-                            int idx = finalCur.indexOfChildInParent;
-                            if (idx == -1) {
-                                // add facet to the parent
-                                parent.getFacets().put(finalCur.facetName, toAdd);
-                            } else {
-                                // add the child to the parent at correct index
-                                try {
-                                    parent.getChildren().add(finalCur.indexOfChildInParent, toAdd);
-                                } catch (IndexOutOfBoundsException ioobe) {
-                                    // the indexing within the parent list is off during the restore.
-                                    // This is most likely due to a transient component added during
-                                    // RENDER_REPONSE phase.
-                                    if (LOGGER.isLoggable(Level.FINE)) {
-                                        LOGGER.log(Level.FINE,
-                                                   "Unable to insert child with client ID {0} into parent with client ID {1} into list at index {2}.",
-                                                   new Object[] { finalCur.clientId,
-                                                                  finalCur.parentClientId,
-                                                                  finalCur.indexOfChildInParent});
-                                    }
-                                    parent.getChildren().add(toAdd);
+                            public void invokeContextCallback(FacesContext context, UIComponent target) {
+                                UIComponent parent = target.getParent();
+                                if (null != parent) {
+                                    parent.getChildren().remove(target);
                                 }
                             }
+
+                        });
+                        if (trackMods) {
+                            stateContext.setTrackViewModifications(true);
                         }
-                    });
+                    }
                 }
-            }          
+
+                Object restoredAddList[] = (Object[]) state.get(CLIENTIDS_TO_ADD_NAME);
+                if (restoredAddList != null && restoredAddList.length > 0) {
+                    // Restore the list of added components
+                    List<ComponentStruct> addList = new ArrayList<ComponentStruct>(restoredAddList.length);
+                    for (Object aRestoredAddList : restoredAddList) {
+                        ComponentStruct cur = new ComponentStruct();
+                        cur.restoreState(context, aRestoredAddList);
+                        addList.add(cur);
+                    }
+                    // restore the components themselves
+                    for (ComponentStruct cur : addList) {
+                        final ComponentStruct finalCur = cur;
+                        // Find the parent
+                        viewRoot.invokeOnComponent(context, finalCur.parentClientId,
+                                new ContextCallback() {
+                                    public void invokeContextCallback(FacesContext context, UIComponent parent) {
+                                        // Create the child
+                                        StateHolderSaver saver = (StateHolderSaver) state.get(finalCur.clientId);
+                                        UIComponent toAdd = (UIComponent) saver.restore(context);
+                                        int idx = finalCur.indexOfChildInParent;
+                                        if (idx == -1) {
+                                            // add facet to the parent
+                                            parent.getFacets().put(finalCur.facetName, toAdd);
+                                        } else {
+                                            // add the child to the parent at correct index
+                                            try {
+                                                parent.getChildren().add(finalCur.indexOfChildInParent, toAdd);
+                                            } catch (IndexOutOfBoundsException ioobe) {
+                                                // the indexing within the parent list is off during the restore.
+                                                // This is most likely due to a transient component added during
+                                                // RENDER_REPONSE phase.
+                                                if (LOGGER.isLoggable(Level.FINE)) {
+                                                    LOGGER.log(Level.FINE,
+                                                            "Unable to insert child with client ID {0} into parent with client ID {1} into list at index {2}.",
+                                                            new Object[]{finalCur.clientId,
+                                                                finalCur.parentClientId,
+                                                                finalCur.indexOfChildInParent});
+                                                }
+                                                parent.getChildren().add(toAdd);
+                                            }
+                                        }
+                                    }
+                                });
+                    }
+                }
+            } finally {
+               stateContext.setTrackViewModifications(true); 
+            }
         } else {
             viewRoot = null;
         }
@@ -377,6 +383,15 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
             Object stateObj;
             if (stateContext.componentAddedDynamically(c)) {
                 stateObj = new StateHolderSaver(ctx, c);
+                // ensure it's in the addList.
+                Map<String, ComponentStruct> dynamicAdds = stateContext.getDynamicAdds();
+                assert(null != dynamicAdds);
+                String clientId = c.getClientId(ctx);
+                if (!dynamicAdds.containsKey(clientId)) {
+                    ComponentStruct toAdd = new ComponentStruct();
+                    toAdd.absorbComponent(ctx, c);
+                    dynamicAdds.put(clientId, toAdd);
+                }
             } else {
                 stateObj = c.saveState(ctx);
             }

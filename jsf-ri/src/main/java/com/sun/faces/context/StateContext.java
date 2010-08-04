@@ -211,7 +211,7 @@ public class StateContext {
      */
     public Map<String,ComponentStruct> getDynamicAdds() {
 
-        return ((modListener != null) ? modListener.dynamicAdds : null);
+        return ((modListener != null) ? modListener.getDynamicAdds() : null);
 
     }
 
@@ -244,6 +244,15 @@ public class StateContext {
             stateCtx = StateContext.getStateContext(ctx);
         }
 
+        // -------------------------------------------------------- Getters
+
+        public Map<String, ComponentStruct> getDynamicAdds() {
+            if (null == dynamicAdds) {
+                dynamicAdds = new LinkedHashMap<String, ComponentStruct>();
+            }
+
+            return dynamicAdds;
+        }
 
         // ------------------------------------ Methods From SystemEventListener
 
@@ -313,31 +322,14 @@ public class StateContext {
             }
 
             parent = added.getParent();
-            if (dynamicAdds == null) {
-                dynamicAdds = new LinkedHashMap<String, ComponentStruct>();
-            }
             ComponentStruct toAdd = new ComponentStruct();
+            toAdd.absorbComponent(context, added);
 
-            toAdd.clientId = added.getClientId(context);
-            toAdd.parentClientId = parent.getClientId(context);
-            // this needs work
-            int idx = parent.getChildren().indexOf(added);
-            if (idx == -1) {
-                // this must be a facet
-                for (Map.Entry<String, UIComponent> facet : parent.getFacets().entrySet()) {
-                    if (facet.getValue() == added) {
-                        toAdd.facetName = facet.getKey();
-                        break;
-                    }
-                }
-            } else {
-                toAdd.indexOfChildInParent = parent.getChildren().indexOf(added);
-            }
             if (dynamicRemoves != null) {
                 dynamicRemoves.remove(toAdd.clientId);
             }
             added.getAttributes().put(DYNAMIC_COMPONENT, Boolean.TRUE);
-            dynamicAdds.put(toAdd.clientId, toAdd);
+            getDynamicAdds().put(toAdd.clientId, toAdd);
 
         }
 
