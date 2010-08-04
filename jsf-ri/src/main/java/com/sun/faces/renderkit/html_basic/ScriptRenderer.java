@@ -111,6 +111,7 @@ public class ScriptRenderer extends ScriptStyleBaseRenderer {
                         ((resourceSrc.indexOf("?") > -1) ? "+" : "?") +
                         query;
             }
+            resourceSrc = context.getExternalContext().encodeResourceURL(resourceSrc);
         }
 
         writer.writeURIAttribute("src", resourceSrc, "src");

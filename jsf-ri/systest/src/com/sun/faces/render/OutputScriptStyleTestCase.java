@@ -80,7 +80,7 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
         // case 1
         assertTrue(text.matches(
                 "(?s).*<head>.*"+
-                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/case1.js\">.*" + 
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/case1.js.*\">.*" +
                 "</script>.*" + 
                 "</head>.*"
                 ));
@@ -99,7 +99,7 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
         // case 3
         assertTrue(text.matches(
                 "(?s).*<body>.*"+
-                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/case3.js\">.*" + 
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/case3.js.*\">.*" +
                 "</script>.*" + 
                 "</body>.*"
                 ));
@@ -109,7 +109,7 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
         // case 4
         assertTrue(text.matches(
                 "(?s).*<head>.*"+
-                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/case4.js\">.*" + 
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/case4.js.*\">.*" +
                 "</script>.*" + 
                 "</head>.*"
                 ));
@@ -119,7 +119,7 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
         // case 6
         assertTrue(text.matches(
                 "(?s).*<body>.*"+
-                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/case6.js\">.*" + 
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/case6.js.*\">.*" +
                 "</script>.*" + 
                 "</body>.*"
                 ));
@@ -202,19 +202,19 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
 
         assertTrue(text.matches(
                 "(?s).*"+
-                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/simple.js\\?mod=test\">.*" +
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/simple.js.*\\?mod=test\">.*" +
                 "</script>.*"
                 ));
 
         assertTrue(text.matches(
                 "(?s).*"+
-                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/simple2.js\">.*" +
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/simple2.js.*\">.*" +
                 "</script>.*"
                 ));
 
         assertTrue(text.matches(
                 "(?s).*"+
-                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/jsf.*js\\?ln=javax.faces&amp;stage=Development\">.*" +
+                "<script type=\"text/javascript\".*src=\"/jsf-systest/faces/javax.faces.resource/jsf.*js.*\\?ln=javax.faces&amp;stage=Development\">.*" +
                 "</script>.*"
                 ));
 
@@ -225,7 +225,7 @@ public class OutputScriptStyleTestCase extends AbstractTestCase {
         String text = lastpage.asXml();
         assertTrue(text.matches(
                 "(?s).*<head>.*"+
-                "<link.* type=\"text/css\".* rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case9.css\".* media=\"print\"\\s*/>.*" + 
+                "<link.* type=\"text/css\".* rel=\"stylesheet\".* href=\"/jsf-systest/faces/javax.faces.resource/case9.css.*\".* media=\"print\"\\s*/>.*" +
                 "</head>.*"
                 ));
     }

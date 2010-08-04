@@ -3181,9 +3181,10 @@ Otherwise, get the facet whose name is "facetName".  If found call
             <description><![CDATA[ 
 
             <p class="changed_modified_2_0"><span
-            class="changed_modified_2_0_rev_a">Render</span> the markup
-            for a <code>&lt;script&gt;</code> element that renders the
-            script <code>Resource</code> specified by the optional
+            class="changed_modified_2_0_rev_a
+            changed_modified_2_1">Render</span> the markup for a
+            <code>&lt;script&gt;</code> element that renders the script
+            <code>Resource</code> specified by the optional
             <code>name</code> attribute and <code>library</code>
             attributes.</p>
 
@@ -3305,11 +3306,15 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
         <p>If this is NOT the first time this <code>Resource</code> has
         been referenced on this request take no action and return.</p>
 
-        <p>Render a script element.  Use the result from calling
-        <code>resource.getRequestPath()</code> as the value of the "src"
-        attribue and the result from calling
-        <code>resource.getContentType()</code> as the value of the "type"
-        attribute.</p>
+        <p>Render a script element.  <span
+        class="changed_modified_2_1">Call
+        <code>resource.getRequestPath()</code>.  If the result contains
+        a query string, take care to handle it correctly.  Pass the
+        request path to a call to <code>encodeResourceURL()</code> on
+        the <code>ExternalContext</code>.  Use the result as the value
+        of the "src" attribute.  Use the result from calling
+        <code>resource.getContentType()</code> as the value of the
+        "type" attribute.</span></p>
 
        </ul>
 
