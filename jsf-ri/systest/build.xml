@@ -190,6 +190,12 @@
         <deploy.artifact artifact="${build.dir}/jsf-systest.war"
                 appName="jsf-systest"/>
     </target>
+
+    <target name="deploydir" 
+            description="Deploy the exploded jsf-systest application">
+        <deploydir.artifact explodedWarDir="${build.dir}/target/jsf-systest"
+                appName="jsf-systest"/>
+    </target>
     
     <target name="undeploy" 
             description="Undeploy the jsf-systest application">
