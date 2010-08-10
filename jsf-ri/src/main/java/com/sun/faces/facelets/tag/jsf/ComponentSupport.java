@@ -72,6 +72,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import javax.faces.view.facelets.Tag;
 
 /**
@@ -115,14 +117,30 @@ public final class ComponentSupport {
             }
         }
 
+        Map<String, UIComponent> facets = c.getFacets();
         // remove any facets marked as deleted
-        if (c.getFacets().size() > 0) {
-            Collection col = c.getFacets().values();
+        if (facets.size() > 0) {
+            Set<Entry<String, UIComponent>> col = facets.entrySet();
             UIComponent fc;
-            for (Iterator itr = col.iterator(); itr.hasNext();) {
-                fc = (UIComponent) itr.next();
-                if (fc.getAttributes().containsKey(MARK_DELETED)) {
+            Entry<String, UIComponent> curEntry;
+            for (Iterator<Entry<String, UIComponent>> itr = col.iterator(); itr.hasNext();) {
+                curEntry = itr.next();
+                fc = curEntry.getValue();
+                Map<String, Object> attrs = fc.getAttributes();
+                if (attrs.containsKey(MARK_DELETED)) {
                     itr.remove();
+                } else if (attrs.containsKey(IMPLICIT_PANEL) &&
+                           !curEntry.getKey().equals(UIViewRoot.METADATA_FACET_NAME)) {
+                    List<UIComponent> implicitPanelChildren = fc.getChildren();
+                    UIComponent innerChild;
+                    for (Iterator<UIComponent> innerItr = implicitPanelChildren.iterator();
+                         innerItr.hasNext();) {
+                        innerChild = innerItr.next();
+                        if (innerChild.getAttributes().containsKey(MARK_DELETED)) {
+                            innerItr.remove();
+                        }
+
+                    }
                 }
             }
         }
@@ -311,8 +329,18 @@ public final class ComponentSupport {
             UIComponent fc;
             for (Iterator itr = col.iterator(); itr.hasNext();) {
                 fc = (UIComponent) itr.next();
-                if (fc.getAttributes().containsKey(MARK_CREATED)) {
-                    fc.getAttributes().put(MARK_DELETED, Boolean.TRUE);
+                Map<String, Object> attrs = fc.getAttributes();
+                if (attrs.containsKey(MARK_CREATED)) {
+                    attrs.put(MARK_DELETED, Boolean.TRUE);
+                } else if (attrs.containsKey(IMPLICIT_PANEL)) {
+                    List<UIComponent> implicitPanelChildren = fc.getChildren();
+                    Map<String, Object> innerAttrs = null;
+                    for (UIComponent cur : implicitPanelChildren) {
+                        innerAttrs = cur.getAttributes();
+                        if (innerAttrs.containsKey(MARK_CREATED)) {
+                            innerAttrs.put(MARK_DELETED, Boolean.TRUE);
+                        }
+                    }
                 }
             }
         }
@@ -388,8 +416,10 @@ public final class ComponentSupport {
                 if (!(existing instanceof UIPanel)) {
                     // move existing component under a panel group
                     UIComponent panelGroup = ctx.getFacesContext().getApplication().createComponent(UIPanel.COMPONENT_TYPE);
-                    panelGroup.setId(getViewRoot(ctx.getFacesContext(), parent).createUniqueId());
-                    panelGroup.getAttributes().put(ComponentSupport.IMPLICIT_PANEL, true);
+                    String id = null;
+                    panelGroup.setId(id = getViewRoot(ctx.getFacesContext(), parent).createUniqueId());
+                    Map<String, Object> attrs = panelGroup.getAttributes();
+                    attrs.put(ComponentSupport.IMPLICIT_PANEL, true);
                     panelGroup.getChildren().add(existing);
                     // the panel group becomes the facet
                     parent.getFacets().put(facetName, panelGroup);
