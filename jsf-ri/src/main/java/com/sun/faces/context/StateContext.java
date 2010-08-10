@@ -66,6 +66,8 @@ public class StateContext {
     private static final String KEY = StateContext.class.getName() + "_KEY";
     private static final String DYNAMIC_COMPONENT =
             StateContext.class.getName() + "_DYNAMIC_COMPONENT";
+    private static final String HAS_ONE_OR_MORE_DYNAMIC_CHILD =
+            StateContext.class.getName() + "_HAS_ONE_OR_MORE_DYNAMIC_CHILD";
 
 
     private boolean partial;
@@ -204,6 +206,47 @@ public class StateContext {
 
     }
 
+    public int getIndexOfDynamicallyAddedChildInParent(UIComponent c) {
+        int result = -1;
+        Map<String, Object> attrs = c.getAttributes();
+        if (attrs.containsKey(DYNAMIC_COMPONENT)) {
+            result = (Integer) attrs.get(DYNAMIC_COMPONENT);
+        }
+        return result;
+    }
+
+    public boolean hasOneOrMoreDynamicChild(UIComponent parent) {
+        return parent.getAttributes().containsKey(HAS_ONE_OR_MORE_DYNAMIC_CHILD);
+    }
+
+    private int incrementDynamicChildCount(UIComponent parent) {
+        int result = 0;
+        Map<String, Object> attrs = parent.getAttributes();
+        Integer cur = (Integer) attrs.get(HAS_ONE_OR_MORE_DYNAMIC_CHILD);
+        if (null != cur) {
+            result = cur++;
+        } else {
+            result = 1;
+        }
+        attrs.put(HAS_ONE_OR_MORE_DYNAMIC_CHILD, (Integer) result);
+
+        return result;
+    }
+
+    private int decrementDynamicChildCount(UIComponent parent) {
+        int result = 0;
+        Map<String, Object> attrs = parent.getAttributes();
+        Integer cur = (Integer) attrs.get(HAS_ONE_OR_MORE_DYNAMIC_CHILD);
+        if (null != cur) {
+            result = (0 < cur) ? cur-- : 0;
+
+        }
+        if (0 == result && null != cur){
+            attrs.remove(HAS_ONE_OR_MORE_DYNAMIC_CHILD);
+        }
+
+        return result;
+    }
 
     /**
      * @return a <code>Map</code> containing information about all components
@@ -230,7 +273,7 @@ public class StateContext {
     // ---------------------------------------------------------- Nested Classes
 
 
-    public static class AddRemoveListener implements SystemEventListener {
+    public class AddRemoveListener implements SystemEventListener {
 
         private StateContext stateCtx;
         private LinkedHashMap<String, ComponentStruct> dynamicAdds;
@@ -293,6 +336,7 @@ public class StateContext {
             if (dynamicAdds != null && dynamicAdds.containsKey(clientId)) {
                 dynamicAdds.remove(clientId);
             }
+            StateContext.this.decrementDynamicChildCount(removed.getParent());
             dynamicRemoves.add(clientId);
         }
 
@@ -322,13 +366,14 @@ public class StateContext {
             }
 
             parent = added.getParent();
+            StateContext.this.incrementDynamicChildCount(parent);
             ComponentStruct toAdd = new ComponentStruct();
             toAdd.absorbComponent(context, added);
 
             if (dynamicRemoves != null) {
                 dynamicRemoves.remove(toAdd.clientId);
             }
-            added.getAttributes().put(DYNAMIC_COMPONENT, Boolean.TRUE);
+            added.getAttributes().put(DYNAMIC_COMPONENT, new Integer(toAdd.indexOfChildInParent));
             getDynamicAdds().put(toAdd.clientId, toAdd);
 
         }
