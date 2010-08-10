@@ -1033,8 +1033,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         StateContext stateCtx = StateContext.getStateContext(ctx);
         if (stateCtx.partialStateSaving(ctx, root.getViewId())) {
             root.markInitialState();
-            stateCtx.startTrackViewModifications();
         }
+        stateCtx.startTrackViewModifications();
     }
 
 

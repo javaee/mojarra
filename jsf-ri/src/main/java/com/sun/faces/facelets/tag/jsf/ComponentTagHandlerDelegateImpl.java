@@ -61,6 +61,9 @@ import javax.faces.view.facelets.TagAttribute;
 import javax.faces.view.facelets.TagException;
 import javax.faces.view.facelets.TagHandlerDelegate;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -184,12 +187,40 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         // this allows children to determine if it's
         // been part of the tree or not yet
         addComponentToView(ctx, parent, c, componentFound);
+        adjustIndexOfDynamicChildren(context, c);
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
 
         if (shouldMarkInitialState(ctx.getFacesContext())) {
             c.markInitialState();
         }
         
+    }
+
+    private void adjustIndexOfDynamicChildren(FacesContext context, 
+            UIComponent parent) {
+        StateContext stateContext = StateContext.getStateContext(context);
+        if (!stateContext.hasOneOrMoreDynamicChild(parent)) {
+            return;
+        }
+
+        List<UIComponent> children = parent.getChildren();
+        List<UIComponent> dynamicChildren = Collections.emptyList();
+
+        for (UIComponent cur : children) {
+            if (stateContext.componentAddedDynamically(cur)) {
+                if (dynamicChildren.isEmpty()) {
+                    dynamicChildren = new ArrayList<UIComponent>(children.size());
+                }
+                dynamicChildren.add(cur);
+            }
+        }
+        for (UIComponent cur : dynamicChildren) {
+            int i = stateContext.getIndexOfDynamicallyAddedChildInParent(cur);
+            if (-1 != i) {
+                children.remove(cur);
+                children.add(i, cur);
+            }
+        }
     }
 
     @Override

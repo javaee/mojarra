@@ -273,7 +273,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/viewparameters/ViewParametersTestCase.class"/>
+                         includes="com/sun/faces/systest/viewparameters/ViewParametersTestCase.class,com/sun/faces/systest/dynamic1757/*TestCase.class"/>
             </tests>
         </jsf.junit>  
 
@@ -1369,11 +1369,14 @@
     </target>
 
     <target name="passthru">
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/composite/isCompositeComponentUsing.xhtml"
-              golden="${golden.path}/composite/isCompositeComponentUsing.txt"/>
-
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/dynamic1757/*TestCase.class"/>
+            </tests>
+        </jsf.junit>  
     </target>
 
 
