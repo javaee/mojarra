@@ -37,6 +37,7 @@
 package com.sun.faces.facelets;
 
 
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
@@ -125,5 +126,29 @@ public class ImplicitFacetTestCase extends AbstractTestCase {
         assert(!text.contains("javax.faces.component.UIPanel"));
     }
 
+    public void testConditionalImplicitFacetChild1727() throws Exception {
+        HtmlPage page = getPage("/faces/facelets/issue1727-facet-conditional.xhtml");
+        HtmlCheckBoxInput checkbox = (HtmlCheckBoxInput) page.getElementById("checkbox");
+        checkbox.setChecked(false);
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        String text = page.asText();
+        assertTrue(text.matches("(?s).*|Not in if 01|\\s|Not in if 02|.*"));
+
+        checkbox = (HtmlCheckBoxInput) page.getElementById("checkbox");
+        checkbox.setChecked(true);
+        button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        text = page.asText();
+        assertTrue(text.matches("(?s).*|Not in if 01|\\s|Not in if 02|\\s|In if 01|\\s|In if 02|.*"));
+
+        checkbox = (HtmlCheckBoxInput) page.getElementById("checkbox");
+        checkbox.setChecked(false);
+        button = (HtmlSubmitInput) page.getElementById("button");
+        page = button.click();
+        text = page.asText();
+        assertTrue(text.matches("(?s).*|Not in if 01|\\s|Not in if 02|.*"));
+
+    }
 
 }
