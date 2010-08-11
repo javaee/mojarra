@@ -38,6 +38,7 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.FacesLogger;
 
 import javax.faces.component.UIComponent;
@@ -168,7 +169,19 @@ public class InsertChildrenHandler extends TagHandlerImpl {
 
             List<UIComponent> compositeChildren = compositeParent.getChildren();
             List<UIComponent> parentChildren = component.getChildren();
+
+            //store the new parent's info per child in the old parent's attr map
+            //<child id, new parent>
+            for (UIComponent c : compositeChildren) {
+                String key =  (String)c.getAttributes().get(ComponentSupport.MARK_CREATED);
+                String value = component.getId();
+                if (key != null && value != null) {
+                    compositeParent.getAttributes().put(key, value);
+                }
+            }
+
             parentChildren.addAll(getIdx(), compositeChildren);
+
             
         }
 

@@ -37,6 +37,7 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagHandlerImpl;
+import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.util.FacesLogger;
 
 import javax.faces.component.UIComponent;
@@ -177,6 +178,15 @@ public class InsertFacetHandler extends TagHandlerImpl {
             }
             if (facet != null) {
                 component.getFacets().put(facetName, facet);
+
+                String key = (String)facet.getAttributes().get(ComponentSupport.MARK_CREATED);
+               
+                String value = component.getId();
+                if (key != null && value != null) {
+                    //store the new parent's info per child in the old parent's attr map
+                    compositeParent.getAttributes().put(key, value);
+                }
+
             } else {
                 // In the case of full state saving, the compositeParent won't
                 // have the facet to be relocated as its own - it will have already
@@ -187,7 +197,7 @@ public class InsertFacetHandler extends TagHandlerImpl {
                     throwRequiredException(ctx, facetName, compositeParent);
                 }
             }
-
+         
         }
 
 

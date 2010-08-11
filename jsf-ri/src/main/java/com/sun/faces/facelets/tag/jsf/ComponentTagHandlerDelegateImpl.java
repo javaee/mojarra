@@ -138,6 +138,13 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
         // grab our component
         UIComponent c = findChild(ctx, parent, id);
+        if (null == c &&
+            context.isPostback() &&
+            UIComponent.isCompositeComponent(parent) &&
+            parent.getAttributes().get(id) != null) {
+            c = findReparentedComponent(ctx, parent, id);
+        }
+
         boolean componentFound = false;
         if (c != null) {
            componentFound = true;
@@ -427,6 +434,20 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
+    protected UIComponent findReparentedComponent(FaceletContext ctx,
+                                    UIComponent parent,
+                                    String tagId) {
+        UIComponent facet = parent.getFacets().get(UIComponent.COMPOSITE_FACET_NAME);
+        if (facet != null) {
+            UIComponent newParent = facet.findComponent(
+               (String)parent.getAttributes().get(tagId));
+            if (newParent != null)
+                return ComponentSupport.findChildByTagId(newParent, tagId);
+        }
+        return null;
+
+    }
 
     // ------------------------------------------------- Package Private Methods
 
