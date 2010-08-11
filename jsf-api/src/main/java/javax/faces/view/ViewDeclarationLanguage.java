@@ -432,10 +432,11 @@ public abstract class ViewDeclarationLanguage {
     }
 
     /**
-     * <p class="changed_added_2_0">Take any actions specific to this
-     * VDL implementation to cause the argument <code>UIViewRoot</code>
-     * which must have been created via a call to {@link #createView},
-     * to be populated with children.</p>
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_1">Take</span> any actions specific to
+     * this VDL implementation to cause the argument
+     * <code>UIViewRoot</code> which must have been created via a call
+     * to {@link #createView}, to be populated with children.</p>
 
      * <div class="changed_added_2_0">
 
@@ -461,9 +462,14 @@ public abstract class ViewDeclarationLanguage {
      *
      * </ul>
 
-     * <p>The implementation must take no action if the argument
-     * <code>root</code> already has non-metadata children.  See section
-     * JSF.7.6.2.3 for the view metadata specification.</p>
+     * <p class="changed_modified_2_1">If the <code>root</code> is
+     * already populated with children, the view must still be re-built,
+     * but care must be taken to ensure that the existing components are
+     * correctly paired up with their VDL counterparts in the VDL page.
+     * Also, any system events that would normally be generated during
+     * the adding or removing of components from the view must be
+     * temporarily disabled during the creation of the view and then
+     * re-enabled when the view has been built.</p>
 
      * </div>
 
