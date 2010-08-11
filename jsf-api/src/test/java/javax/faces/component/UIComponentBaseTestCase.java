@@ -36,6 +36,7 @@
 
 package javax.faces.component;
 
+import com.sun.faces.mock.MockExternalContext;
 import com.sun.faces.mock.MockValueBinding;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -132,9 +133,10 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
-    public void testComponentToFromEL() {
+    public void testComponentToFromELBackwardCompatible() {
 
         final String key = UIComponent.CURRENT_COMPONENT;
+        ((MockExternalContext)this.facesContext.getExternalContext()).addInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME, "true");
         TestComponent c = new TestComponent();
         facesContext.getAttributes().clear();
         assertNull(facesContext.getAttributes().get(key));
@@ -145,6 +147,18 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     }
 
+    public void testComponentToFromEL() {
+
+        final String key = UIComponent.CURRENT_COMPONENT;
+        TestComponent c = new TestComponent();
+        facesContext.getAttributes().clear();
+        assertNull(facesContext.getAttributes().get(key));
+        c.pushComponentToEL(facesContext, null);
+        assertFalse(facesContext.getAttributes().get(key) == c);
+        c.popComponentFromEL(facesContext);
+        assertNull(facesContext.getAttributes().get(key));
+
+    }
 
     public void testComponentToFromEL2() throws Exception {
 

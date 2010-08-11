@@ -81,9 +81,9 @@ import javax.faces.render.Renderer;
 
 /**
  * <p><strong class="changed_modified_2_0
- * changed_modified_2_0_rev_a">UIComponent</strong> is the base class
- * for all user interface components in JavaServer Faces.  The set of
- * {@link UIComponent} instances associated with a particular request
+ * changed_modified_2_0_rev_a changed_modified_2_1">UIComponent</strong> is
+ * the base class for all user interface components in JavaServer Faces.
+ * The set of {@link UIComponent} instances associated with a particular request
  * and response are organized into a component tree under a {@link
  * UIViewRoot} that represents the entire content of the request or
  * response.</p>
@@ -110,6 +110,21 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 
     private static Logger LOGGER = Logger.getLogger("javax.faces.component",
             "javax.faces.LogStrings");
+
+    /**
+     * <p class="changed_added_2_1">The <code>ServletContext</code> init
+     * parameter consulted by
+     * the <code>UIComponent</code> to tell whether or not the
+     * {@link #CURRENT_COMPONENT} and {@link #CURRENT_COMPOSITE_COMPONENT}
+     * attribute keys should be honored as specified.</p>
+     *
+     * <p>If this parameter is not specified, or is set to false, the contract
+     * specified by the {@link #CURRENT_COMPONENT} and
+     * {@link #CURRENT_COMPOSITE_COMPONENT} method is not honored. If this
+     * parameter is set to true, the contract is honored.</p>
+     */
+    public static final String HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME =
+            "javax.faces.HONOR_CURRENT_COMPONENT_ATTRIBUTES";
     
     /**
      * <p class="changed_added_2_0">The key to which the
@@ -1774,7 +1789,12 @@ private void doFind(FacesContext context, String clientId) {
         component._isPushedAsCurrentRefCount++;
         
         // we only do this because of the spec
-        contextAttributes.put(UIComponent.CURRENT_COMPONENT, component);
+        boolean setCurrentComponent = false;
+        String val = context.getExternalContext().getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
+        setCurrentComponent = Boolean.valueOf(val);
+        if (setCurrentComponent) {
+            contextAttributes.put(UIComponent.CURRENT_COMPONENT, component);
+        }
         
         // if the pushed component is a composite component, we need to update that
         // stack as well
@@ -1784,7 +1804,9 @@ private void doFind(FacesContext context, String clientId) {
                                contextAttributes).push(component);
 
           // we only do this because of the spec
-          contextAttributes.put(UIComponent.CURRENT_COMPOSITE_COMPONENT, component);
+          if (setCurrentComponent) {
+              contextAttributes.put(UIComponent.CURRENT_COMPOSITE_COMPONENT, component);
+          }
         }
     }
 
@@ -1849,9 +1871,16 @@ private void doFind(FacesContext context, String clientId) {
       // pop ourselves off of the stack
       componentELStack.pop();
       _isPushedAsCurrentRefCount--;
-            
+
+        boolean setCurrentComponent = false;
+        String val = context.getExternalContext().getInitParameter(UIComponent.HONOR_CURRENT_COMPONENT_ATTRIBUTES_PARAM_NAME);
+        setCurrentComponent = Boolean.valueOf(val);
+
+      
       // update the current component with the new top of stack.  We only do this because of the spec
-      contextAttributes.put(UIComponent.CURRENT_COMPONENT, componentELStack.peek());
+        if (setCurrentComponent) {
+            contextAttributes.put(UIComponent.CURRENT_COMPONENT, componentELStack.peek());
+        }
       
       // if we're a composite component, we also have to pop ourselves off of the
       // composite stack
@@ -1862,11 +1891,12 @@ private void doFind(FacesContext context, String clientId) {
         compositeELStack.pop();        
 
         // update the current composite component with the new top of stack.
-        // We only do this because of the spec
-        contextAttributes.put(UIComponent.CURRENT_COMPOSITE_COMPONENT, compositeELStack.peek());
+          // We only do this because of the spec
+        if (setCurrentComponent) {
+              contextAttributes.put(UIComponent.CURRENT_COMPOSITE_COMPONENT, compositeELStack.peek());
+        }
       }
     }
-
     // It is safe to cache this because components never go from being
     // composite to non-composite.
     private transient Boolean isCompositeComponent = null;
@@ -1957,7 +1987,11 @@ private void doFind(FacesContext context, String clientId) {
      * @since 2.0
      */
     public static UIComponent getCurrentComponent(FacesContext context) {
-      return (UIComponent)context.getAttributes().get(UIComponent.CURRENT_COMPONENT);
+        Map<Object, Object> contextAttributes = context.getAttributes();
+        ComponentStack componentELStack = _getComponentELStack(_CURRENT_COMPONENT_STACK_KEY,
+                                                               contextAttributes);
+
+      return componentELStack.peek();
     }
 
 
@@ -1975,7 +2009,11 @@ private void doFind(FacesContext context, String clientId) {
      * @since 2.0
      */
     public static UIComponent getCurrentCompositeComponent(FacesContext context) {
-      return (UIComponent)context.getAttributes().get(UIComponent.CURRENT_COMPOSITE_COMPONENT);
+      // return (UIComponent)context.getAttributes().get(UIComponent.CURRENT_COMPOSITE_COMPONENT);
+        Map<Object, Object> contextAttributes = context.getAttributes();
+        ComponentStack compositeELStack = _getComponentELStack(_CURRENT_COMPOSITE_COMPONENT_STACK_KEY,
+                                                             contextAttributes);
+        return compositeELStack.peek();
     }
     
     // -------------------------------------------------- Event Listener Methods
