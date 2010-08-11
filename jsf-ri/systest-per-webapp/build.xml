@@ -72,10 +72,6 @@
                      injection,
                      no-web-xml" />
 
-<!-- PENDING(rogerk): I enabled the injection test but it failed.  Just add it to the
-                      applications-for-V3.1-only property above and it will
-                      get picked up --> 
-
     <property name="container-agnostic-applications"
               value="
                    annotation-restrictions,
