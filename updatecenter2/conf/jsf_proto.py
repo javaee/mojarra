@@ -37,7 +37,7 @@
 #
 pkg = {
     "name"          : "glassfish-jsf",
-    "version"       : "2.1.0,0-1",
+    "version"       : "2.0.4,0-2",
     "depends"       : {
                        "pkg:/glassfish-jsf@2.1" : {"type" : "incorporate"},
                        "pkg:/glassfish-common" : { "type" : "require" }

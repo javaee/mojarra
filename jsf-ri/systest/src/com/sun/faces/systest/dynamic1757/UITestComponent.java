@@ -63,7 +63,6 @@ public class UITestComponent
 		}
 	}
 
-	@Override
 	public String getFamily()
 	{
 		return "com.sun.faces.systest.dynamic1757.UITestComponent";
@@ -74,7 +73,6 @@ public class UITestComponent
 		return ( source instanceof UIViewRoot );
 	}
 
-	@Override
 	public void processEvent( SystemEvent event )
 		throws AbortProcessingException
 	{
