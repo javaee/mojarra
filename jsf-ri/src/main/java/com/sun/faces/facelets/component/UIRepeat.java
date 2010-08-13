@@ -338,6 +338,10 @@ public class UIRepeat extends UINamingContainer {
         }
         return this.childState;
     }
+    
+    private void clearChildState() {
+    	this.childState = null;
+    }
 
     private void saveChildState(FacesContext ctx) {
         if (this.getChildCount() > 0) {
@@ -462,6 +466,11 @@ public class UIRepeat extends UINamingContainer {
 
         // clear datamodel
         this.resetDataModel();
+
+        // We must clear the child state if we just entered the Render Phase, and there are no error messages
+        if (PhaseId.RENDER_RESPONSE.equals(phase) && !hasErrorMessages(faces)) {
+        	this.clearChildState();
+        }
 
         // reset index
         this.captureOrigValue(faces);
