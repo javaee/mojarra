@@ -175,7 +175,8 @@
                 test.path,
                 test.valueBindingGet,
                 test.misc,
-                test.regressions"
+                test.regressions,
+                test.view.xml"
             />
             <!--
                 test.groovy"
@@ -190,6 +191,15 @@
         <jsf.tester request="${context.path}/faces/thispagedoesnexist.jsp"
             status="404"/>
     </target>
+
+    <target name="test.view.xml">
+        <jsf.tester
+              request="${context.path}/view.xml/index.faces"
+              golden="${golden.path}/index.view.faces.txt"
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              />
+    </target>
+
 
     <target name="test.duplicateIds"
             description="Test duplicate ID detection">
@@ -1369,14 +1379,11 @@
     </target>
 
     <target name="passthru">
-        <jsf.junit context-path="${context.path}"
-                   classpath-refid="html.classpath"
-                   test-results-dir="${impl.test.results.dir}">
-            <tests>
-                <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/dynamic1757/*TestCase.class"/>
-            </tests>
-        </jsf.junit>  
+        <jsf.tester
+              request="${context.path}/view.xml/index.faces"
+              golden="${golden.path}/index.view.faces.txt"
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              />
     </target>
 
 

@@ -1,0 +1,16 @@
+<html><head><title>Raw XML View</title></head><body>
+<form id="form" name="form" method="post" action="/jsf-systest/view.xml/index.view.faces;jsessionid=b654e77213da0839b83f80345df2" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="form" value="form" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
+<table id="grid">
+<tbody>
+<tr>
+<td><span id="text">hello</span></td>
+</tr>
+<tr>
+<td><input id="button" type="submit" name="button" value="reload" /></td>
+</tr>
+</tbody>
+</table>
+
+</form></body></html>

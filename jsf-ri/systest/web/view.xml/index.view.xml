@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-view xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesview_2_1.xsd"
+    version="2.1"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:html>
+
+        <h:head><h:title>Raw XML View</h:title></h:head>
+
+        <h:body>
+
+            <h:form prependId="false" id="form">
+
+                <h:panelGrid id="grid" column="2">
+
+                    <h:outputText id="text" value="hello"></h:outputText>
+
+                    <h:commandButton id="button" value="reload"></h:commandButton>
+
+                </h:panelGrid>
+
+            </h:form>
+
+        </h:body>
+
+    </h:html>
+
+</faces-view>
+
+

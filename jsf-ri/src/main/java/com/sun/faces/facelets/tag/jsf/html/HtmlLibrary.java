@@ -92,6 +92,9 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
         this.addHtmlComponent("head", "javax.faces.Output",
                 "javax.faces.Head");
 
+        this.addHtmlComponent("html", "javax.faces.Output",
+                "javax.faces.Html");
+
         this.addHtmlComponent("inputHidden", "javax.faces.HtmlInputHidden",
                 "javax.faces.Hidden");
 
@@ -162,6 +165,10 @@ public final class HtmlLibrary extends AbstractHtmlLibrary {
 
         this.addHtmlComponent("selectOneRadio",
                 "javax.faces.HtmlSelectOneRadio", "javax.faces.Radio");
+
+        this.addHtmlComponent("title", "javax.faces.Output",
+                "javax.faces.Title");
+
     }
 
 }
