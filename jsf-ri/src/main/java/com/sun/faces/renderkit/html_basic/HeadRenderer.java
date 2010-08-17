@@ -73,7 +73,6 @@ public class HeadRenderer extends Renderer {
                                                 writer,
                                                 component,
                                                 HEAD_ATTRIBUTES);
-        encodeHeadResources(context);
     }
 
     @Override
@@ -86,6 +85,7 @@ public class HeadRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
         ResponseWriter writer = context.getResponseWriter();
+        encodeHeadResources(context);
         writer.endElement("head");
     }
 

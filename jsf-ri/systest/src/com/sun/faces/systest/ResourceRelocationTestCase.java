@@ -95,11 +95,11 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
         int sheetPos;
 
         if (scriptfirst) {
-            scriptPos = 0;
-            sheetPos = 1;
-        } else {
-            sheetPos = 0;
             scriptPos = 1;
+            sheetPos = 2;
+        } else {
+            sheetPos = 1;
+            scriptPos = 2;
         }
 
         // for this request, the script and stylesheet will be in the head
@@ -110,7 +110,7 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
         HtmlHead head = headList.get(0);
         List<HtmlElement> headChildren = getChildren(head);
         assertTrue(headChildren.size() == 3);
-        assertTrue(headChildren.get(2) instanceof HtmlTitle);
+        assertTrue(headChildren.get(0) instanceof HtmlTitle);
         assertTrue(headChildren.get(scriptPos) instanceof HtmlScript);
         assertTrue(headChildren.get(sheetPos) instanceof HtmlLink);
         List<HtmlBody> bodyList = new ArrayList<HtmlBody>(1);
@@ -138,8 +138,8 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
         head = headList.get(0);
         headChildren = getChildren(head);
         assertTrue(headChildren.size() == 2);
-        assertTrue(headChildren.get(1) instanceof HtmlTitle);
-        assertTrue(headChildren.get(0) instanceof HtmlLink);
+        assertTrue(headChildren.get(0) instanceof HtmlTitle);
+        assertTrue(headChildren.get(1) instanceof HtmlLink);
         bodyList.clear();
         getAllElementsOfGivenClass(page, bodyList, HtmlBody.class);
         assertTrue(bodyList.size() == 1);
@@ -166,8 +166,8 @@ public class ResourceRelocationTestCase extends AbstractTestCase {
         head = headList.get(0);
         headChildren = getChildren(head);
         assertTrue(headChildren.size() == 2);
-        assertTrue(headChildren.get(1) instanceof HtmlTitle);
-        assertTrue(headChildren.get(0) instanceof HtmlLink);
+        assertTrue(headChildren.get(0) instanceof HtmlTitle);
+        assertTrue(headChildren.get(1) instanceof HtmlLink);
         bodyList.clear();
         getAllElementsOfGivenClass(page, bodyList, HtmlBody.class);
         assertTrue(bodyList.size() == 1);
