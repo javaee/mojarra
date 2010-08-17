@@ -308,6 +308,13 @@ public class MultiViewHandler extends ViewHandler {
         if (period < 0) {
             return (contextPath + viewId + mapping);
         } else if (!viewId.endsWith(mapping)) {
+
+            for (String ext : configuredExtensions) {
+                if (viewId.endsWith(ext)) {
+                    return (contextPath + viewId.substring(0, viewId.indexOf(ext)) + mapping);
+                }
+            }
+
             return (contextPath + viewId.substring(0, period) + mapping);
         } else {
             return (contextPath + viewId);

@@ -34,29 +34,55 @@
  only if the new code is made subject to such option by the copyright
  holder.
 -->
+
 <faces-view xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesview_2_1.xsd"
     version="2.1"
-    xmlns:h="http://java.sun.com/jsf/html">
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <f:metadata>
+      <f:viewParam name="param1" required="true" />
+      <f:viewParam name="param2" required="true" />
+    </f:metadata>
 
     <h:html>
 
-        <h:head><h:title>Raw XML View</h:title></h:head>
+        <h:head><h:title>Template client</h:title></h:head>
 
         <h:body>
 
-            <h:form prependId="false" id="form">
+            <!--
+            Make sure template clients declared in xml can use templates declared
+            both in xhtml and xml.
+            -->
 
-                <h:panelGrid id="grid" column="2">
+            <ui:composition template="xhtmlTemplate.xhtml">
 
-                    <h:outputText id="text" value="hello"></h:outputText>
+                <ui:define name="body">
+                
+                    <h:form prependId="false" id="form">
 
-                    <h:commandButton id="button" value="reload"></h:commandButton>
+                        <h:panelGrid id="grid" column="2">
 
-                </h:panelGrid>
+                            <h:outputText id="text" value="hello"></h:outputText>
 
-            </h:form>
+                            <h:commandButton id="button"
+                                             value="reload">
+
+      <f:param name="param1" value="#{param['param1']}" />
+      <f:param name="param2" value="#{param['param2']}" />
+                            </h:commandButton>
+
+                        </h:panelGrid>
+
+                    </h:form>
+                    
+                </ui:define>
+                
+            </ui:composition>
 
         </h:body>
 

@@ -34,33 +34,25 @@
  only if the new code is made subject to such option by the copyright
  holder.
 -->
+
 <faces-view xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesview_2_1.xsd"
     version="2.1"
-    xmlns:h="http://java.sun.com/jsf/html">
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <h:html>
+    <h:panelGrid id="gridXml" column="3">
 
-        <h:head><h:title>Raw XML View</h:title></h:head>
+        <h:outputText id="text1" value="column1"></h:outputText>
 
-        <h:body>
+        <h:outputText id="text2" value="column2"></h:outputText>
 
-            <h:form prependId="false" id="form">
+        <h:outputText id="text3" value="column3"></h:outputText>
 
-                <h:panelGrid id="grid" column="2">
+        <ui:insert name="header"></ui:insert>
 
-                    <h:outputText id="text" value="hello"></h:outputText>
-
-                    <h:commandButton id="button" value="reload"></h:commandButton>
-
-                </h:panelGrid>
-
-            </h:form>
-
-        </h:body>
-
-    </h:html>
+    </h:panelGrid>
 
 </faces-view>
 
