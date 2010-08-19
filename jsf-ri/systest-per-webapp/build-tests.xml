@@ -119,6 +119,8 @@
                value="com/sun/faces/systest/SuppressXmlDeclTestCase.class" />
     <property  name="groovy"
                value="com/sun/faces/systest/GroovyTestCase.class" />
+    <property  name="replace-vdl"
+               value="com/sun/faces/systest/replacevdl/ReplaceViewDeclarationLanguageTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:
