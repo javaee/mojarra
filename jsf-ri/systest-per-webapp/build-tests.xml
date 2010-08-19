@@ -115,6 +115,8 @@
                value="com/sun/faces/systest/NoWebXMLTestCase.class" />
     <property  name="injection"
                value="com/sun/faces/systest/InjectionTestCase.class" />
+    <property  name="replace-vdl"
+               value="com/sun/faces/systest/replacevdl/ReplaceViewDeclarationLanguageTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:

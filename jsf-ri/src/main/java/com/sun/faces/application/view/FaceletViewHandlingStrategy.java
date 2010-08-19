@@ -90,6 +90,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
+import javax.faces.FactoryFinder;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.event.MethodExpressionActionListener;
@@ -107,6 +108,8 @@ import javax.faces.view.EditableValueHolderAttachedObjectHandler;
 import javax.faces.view.EditableValueHolderAttachedObjectTarget;
 import javax.faces.view.ValueHolderAttachedObjectHandler;
 import javax.faces.view.ValueHolderAttachedObjectTarget;
+import javax.faces.view.ViewDeclarationLanguage;
+import javax.faces.view.ViewDeclarationLanguageFactory;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -114,6 +117,8 @@ import javax.faces.view.ValueHolderAttachedObjectTarget;
 public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+
+    private ViewDeclarationLanguageFactory vdlFactory;
 
     // FaceletFactory singleton for this application
     private FaceletFactory faceletFactory;
@@ -355,7 +360,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         try {
             // Only build the view if this view has not yet been built.
             if (!Util.isViewPopulated(ctx, viewToRender)) {
-                this.buildView(ctx, viewToRender);
+                ViewDeclarationLanguage vdl = vdlFactory.getViewDeclarationLanguage(viewToRender.getViewId());
+                vdl.buildView(ctx, viewToRender);
             }
 
             // setup writer and assign it to the ctx
@@ -778,6 +784,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Initialization Successful");
         }
+
+        vdlFactory = (ViewDeclarationLanguageFactory) FactoryFinder.getFactory(FactoryFinder.VIEW_DECLARATION_LANGUAGE_FACTORY);
 
     }
 

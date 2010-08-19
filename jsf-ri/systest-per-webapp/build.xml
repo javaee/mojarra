@@ -101,8 +101,11 @@
                    write-attribute-script-enabled,
                    wcag-datatable,
                    flash,
-                   jsp-flash"/>
-    <!-- 
+                   jsp-flash,
+                   suppress-xml-decl,
+                   replace-vdl"/>
+    <!-- add groovy to the property applications to enable it-->
+    <!--
 
        EXCLUDED APPLICATIONS:
           view-expired
