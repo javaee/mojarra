@@ -37,6 +37,8 @@
 package com.sun.faces.renderkit;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -206,8 +208,26 @@ public class ClientSideStateHelper extends StateHelper {
      */
     protected Object doGetState(String stateString) {
         ObjectInputStream ois = null;
+        InputStream bis = new Base64InputStream(stateString);
         try {
-            ois = initInputStream(stateString);
+            if (guard != null) {
+                byte[] bytes = stateString.getBytes();
+                int numRead = bis.read(bytes, 0, bytes.length);
+                byte[] decodedBytes = new byte[numRead];
+                bis.reset();
+                bis.read(decodedBytes, 0, decodedBytes.length);
+
+                bytes = guard.decrypt(decodedBytes);
+                if (bytes == null) return null;
+                bis = new ByteArrayInputStream(bytes);
+            }
+
+
+            if (compressViewState) {
+                bis = new GZIPInputStream(bis);
+            }
+            
+            ois = serialProvider.createObjectInputStream(bis);
 
             long stateTime = 0;
             if (stateTimeoutEnabled) {
@@ -274,29 +294,50 @@ public class ClientSideStateHelper extends StateHelper {
      */
     protected void doWriteState(Object state, Writer writer)
     throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        OutputStream base = null;
+        if (compressViewState) {
+            base = new GZIPOutputStream(baos, csBuffSize);
+        } else {
+            base = baos;
+        }
 
-        Object[] stateToWrite = (Object[]) state;
         ObjectOutputStream oos = null;
+
         try {
-
-            Base64OutputStreamWriter bos =
-                  new Base64OutputStreamWriter(csBuffSize,
-                                               writer);
-            oos = initOutputStream(bos);
-
+            oos = serialProvider
+                .createObjectOutputStream(new BufferedOutputStream(base));
+            
             if (stateTimeoutEnabled) {
                 oos.writeLong(System.currentTimeMillis());
+
             }
+
+            Object[] stateToWrite = (Object[]) state;
+
             //noinspection NonSerializableObjectPassedToObjectStream
             oos.writeObject(stateToWrite[0]);
             //noinspection NonSerializableObjectPassedToObjectStream
             oos.writeObject(stateToWrite[1]);
+
             oos.flush();
             oos.close();
+            oos = null;
 
-            // flush everything to the underlying writer
+            // get bytes for encrypting
+            byte[] bytes = baos.toByteArray();
+
+            if (guard != null) {
+                // this will MAC
+                bytes = guard.encrypt(bytes);
+            }
+
+            // Base 64 encode
+            Base64OutputStreamWriter bos =
+                new Base64OutputStreamWriter(bytes.length, writer);
+            bos.write(bytes, 0, bytes.length);
             bos.finish();
-
+            
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            "Client State: total number of characters written: {0}",
@@ -310,72 +351,8 @@ public class ClientSideStateHelper extends StateHelper {
                     // ignore
                 }
             }
-
         }
     }
-
-
-    /**
-     * @param stateString the state string from which Objects will be
-     *  deserialized from.
-     * @return an <code>ObjectInputStream</code> configured appropriately
-     *  based on the user configuration from which to read objects from.
-     * @throws IOException if any issues arrise reading the state
-     */
-    private ObjectInputStream initInputStream(String stateString)
-    throws IOException {
-
-        InputStream bis;
-        if (compressViewState) {
-            bis = new GZIPInputStream(new Base64InputStream(stateString));
-        } else {
-            bis = new Base64InputStream(stateString);
-        }
-
-        ObjectInputStream ois;
-        if (guard != null) {
-            ois = serialProvider
-                  .createObjectInputStream(new CipherInputStream(bis, guard.getDecryptionCipher()));
-        } else {
-            ois = serialProvider.createObjectInputStream(bis);
-        }
-        return ois;
-
-    }
-
-
-    /**
-     * @param bos the Base64OutputStream to ultimately write the seriazed
-     *  objects to
-     * @return an <code>ObjectOutputStream</code> configured appropriately
-     *  based on the user configuration from which to write objects to
-     * @throws IOException if any issues arrise reading the state
-     */
-    protected ObjectOutputStream initOutputStream(Base64OutputStreamWriter bos)
-    throws IOException {
-
-        OutputStream base;
-        if (compressViewState) {
-            base = new GZIPOutputStream(bos, 1024);
-        } else {
-            base = bos;
-        }
-
-        ObjectOutputStream oos;
-        if (guard != null) {
-            oos = serialProvider.createObjectOutputStream(
-                  new BufferedOutputStream(
-                        new CipherOutputStream(base, guard.getEncryptionCipher())));
-        } else {
-            oos = serialProvider
-                  .createObjectOutputStream(new BufferedOutputStream(
-                        base,
-                        1024));
-        }
-        return oos;
-
-    }
-
 
     /**
      * <p>If the {@link com.sun.faces.config.WebConfiguration.WebContextInitParameter#ClientStateTimeout} init parameter
@@ -411,7 +388,7 @@ public class ClientSideStateHelper extends StateHelper {
         String pass = webConfig.getEnvironmentEntry(
               ClientStateSavingPassword);
         if (pass != null) {
-            guard = new ByteArrayGuard(pass);
+            guard = new ByteArrayGuard();
         }
 
         stateTimeoutEnabled = webConfig.isSet(ClientStateTimeout);
