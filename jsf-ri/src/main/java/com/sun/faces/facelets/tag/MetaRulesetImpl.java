@@ -63,6 +63,7 @@ import java.beans.IntrospectionException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.ref.WeakReference;
 
 /**
  * 
@@ -72,8 +73,8 @@ import java.util.logging.Logger;
 public class MetaRulesetImpl extends MetaRuleset {
 
     private final static Logger LOGGER = FacesLogger.FACELETS_META.getLogger();
-    private final static WeakHashMap<Class, MetadataTarget> metadata =
-          new WeakHashMap<Class, MetadataTarget>();
+    private final static WeakHashMap<Class, WeakReference<MetadataTarget>> metadata =
+          new WeakHashMap<Class, WeakReference<MetadataTarget>>();
 
     private final Tag tag;
     private final Class type;
@@ -200,8 +201,8 @@ public class MetaRulesetImpl extends MetaRuleset {
 
 
     protected MetadataTarget getMetadataTarget() {
-
-        MetadataTarget meta = metadata.get(type);
+        WeakReference<MetadataTarget> metaRef = metadata.get(type);
+        MetadataTarget meta = metaRef == null ? null : metaRef.get();
         if (meta == null) {
             try {
                 meta = new MetadataTargetImpl(type);
@@ -209,7 +210,7 @@ public class MetaRulesetImpl extends MetaRuleset {
                 throw new TagException(this.tag,
                         "Error Creating TargetMetadata", e);
             }
-            metadata.put(type, meta);
+            metadata.put(type, new WeakReference<MetadataTarget>(meta));
         }
         return meta;
 
