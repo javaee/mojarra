@@ -252,6 +252,9 @@ public class AjaxBehaviorRenderer extends ClientBehaviorRenderer  {
         boolean first = true;
 
         for (String id : ids) {
+            if (id.trim().length() == 0) {
+                continue;
+            }
             if (!first) {
                 builder.append(' ');
             } else {
