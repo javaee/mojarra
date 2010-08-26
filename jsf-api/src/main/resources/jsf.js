@@ -1860,7 +1860,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              *    &lt;![CDATA[...]]&gt;
              * &lt;/update&gt;</code></pre>
              * locate and update the submitting form's <code>javax.faces.ViewState</code> value
-             * with the <code>CDATA</code> contents from the response.</li>
+             * with the <code>CDATA</code> contents from the response.  Locate and update the 
+             * <code>javax.faces.ViewState</code> value for all forms specified in the 
+             * <code>render</code> target list.</li>
              * <li>If an <code>update</code> element is found in the response with the identifier
              * <code>javax.faces.ViewHead</code>:
              * <pre><code>&lt;update id="javax.faces.ViewHead"&gt;
