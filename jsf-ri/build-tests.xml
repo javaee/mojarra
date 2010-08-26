@@ -518,6 +518,9 @@
         <fileset dir="${impl.test.results.dir}">
           <include name="TEST-*.xml" />
         </fileset>
+        <fileset dir="${impl.test.results.dir}/systest">
+          <include name="TEST-*.xml" />
+        </fileset>
         <fileset dir="${api.test.results.dir}">
           <include name="TEST-*.xml" />
         </fileset>

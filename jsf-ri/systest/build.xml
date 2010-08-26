@@ -83,6 +83,7 @@
     <target name="init"
             description="Initialize and evaluate conditionals">
         <echo message="-------- ${test.suite.name} ${impl.version} --------"/>
+        <mkdir dir="${impl.test.results.dir}/systest"/>
     </target>
     
     
@@ -163,6 +164,12 @@
             <property name="partial.state.saving" value="true" />
         </ant>
         <antcall target="undeploy"/>
+        <!--renaming the result xml files to TEST-systest-partial-true-xxx.xml
+        for e.g. TEST-systest-partial-true-com.sun.faces.systest.SuppressXmlDeclTestCase.xml-->
+
+        <antcall  target="rename.test.results">
+            <param name="partial.state.saving" value="true" />
+        </antcall>
 
         <antcall target="build.war">
             <param name="partial.state.saving" value="false" />
@@ -177,7 +184,14 @@
             <property name="partial.state.saving" value="false" />
         </ant>
         <antcall target="undeploy"/>
-        
+
+        <!--renaming the result xml files to TEST-systest-partial-false-xxx.xml
+        for e.g. TEST-systest-partial-false-com.sun.faces.systest.SuppressXmlDeclTestCase.xml-->
+
+        <antcall  target="rename.test.results">
+            <param name="partial.state.saving" value="false" />
+        </antcall>
+
     </target>  
     
     <target name="test.with.nodeploy"
@@ -210,6 +224,15 @@
 
         
     </target>  
+
+    <target name="rename.test.results">
+        <move todir="${impl.test.results.dir}/systest" includeemptydirs="false" overwrite="true">
+                <fileset dir="${impl.test.results.dir}">
+                  <exclude name="**/TEST-systest-partial-*.xml"/>
+                </fileset>
+                <mapper type="glob" from="TEST-*.xml" to="TEST-systest-partial-${partial.state.saving}-*.xml"/>
+              </move>
+    </target>
 
         
 </project>
