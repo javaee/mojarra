@@ -1145,7 +1145,7 @@ public class WebConfiguration {
               false
         ),
         SuppressXmlDeclaration(
-              "javax.faces.FACELETS_SUPPRESS_XML_DECLARATION",
+              ViewHandler.FACELETS_SUPPRESS_XML_DECLARATION,
               false
         );
 
