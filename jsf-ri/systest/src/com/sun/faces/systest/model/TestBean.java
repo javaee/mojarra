@@ -971,4 +971,8 @@ public enum Color { Red, Blue, Green, Orange }
         return result;
     }
 
+    public String getCurrentTimeMillis() {
+        return "" + System.currentTimeMillis();
+    }
+
 }

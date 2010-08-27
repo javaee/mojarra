@@ -1585,15 +1585,8 @@ public class RenderKitUtils {
 
         String script = behavior.getScript(bContext);
 
-        // TODO: The "action".equals(behaviorEventName) is a bit awkward - we
-        // should find a better solution.  The problem that we are trying
-        // to avoid is that we do not want to prevent the default behavior
-        // (ie. we do not want to return false), for handlers most handlers.
-        // However, for actions we do since the HTML content (links, buttons)
-        // has native default behavior.  We should generalize this so that
-        // we do not have to perform that explicitly check for "action".
         boolean preventDefault = ((needsSubmit || isSubmitting(behavior)) &&
-                                  ("action".equals(behaviorEventName) || "click".equals(behaviorEventName)));
+                                  (component instanceof ActionSource || component instanceof ActionSource2));
 
          if (script == null) {
              if (needsSubmit) {

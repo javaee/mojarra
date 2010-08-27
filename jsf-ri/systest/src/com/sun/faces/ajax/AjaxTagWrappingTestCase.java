@@ -133,4 +133,53 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
 
     }
 
+    public void testReturnFalseOnlyGeneratedOnAjaxInsideActionSourceComponents() throws Exception {
+        HtmlPage page = getPage("/faces/ajax/issue1760NestedAjaxCheckboxRender.xhtml");
+        
+        sampleClickSample(page, "form1CurrentTime:", "checkbox1");
+        sampleClickSample(page, "form2CurrentTime:", "checkbox2");
+        sampleClickSample(page, "form3CurrentTime:", "button1");
+        sampleClickSample(page, "form4CurrentTime:", "link1");
+
+    }
+
+    private void sampleClickSample(HtmlPage page, String timestampPrefix, String clickableElementId) throws Exception {
+        String xml = page.asXml();
+        verifyContent(xml);
+
+        String timestampBefore = sampleTimestamp(timestampPrefix, xml);
+        ClickableElement clickable = (ClickableElement) page.getElementById(clickableElementId);
+        page = clickable.click();
+
+        xml = page.asXml();
+        verifyContent(xml);
+        String timestampAfter = sampleTimestamp(timestampPrefix, xml);
+
+        assertTrue(!timestampBefore.equals(timestampAfter));
+
+    }
+
+    private String sampleTimestamp(String timestampPrefix, String xml) {
+        String result = null;
+        int prefixLen = timestampPrefix.length();
+        int i = xml.indexOf(timestampPrefix);
+        int j = xml.indexOf(".", i);
+        result = xml.substring(i+prefixLen, j);
+
+        return result;
+    }
+
+    private void verifyContent(String xml) throws Exception {
+        // Verify that return false is *not* present on ajax request for form1
+        // and form2.
+        assertTrue(xml.matches("(?s).*<form id=\"form1\".*<input id=\"checkbox1\".*onclick=\".*[^f][^a][^l][^s][^e].*</form.*"));
+        assertTrue(xml.matches("(?s).*<form id=\"form2\".*<input id=\"checkbox2\".*onclick=\".*[^f][^a][^l][^s][^e].*</form.*"));
+
+        // Verify that return false *is* present on the ajax request for form3
+        // and form4
+        assertTrue(xml.matches("(?s).*<form id=\"form3\".*<input.*type=\"submit\".*onclick=\".*return false\".*</form.*"));
+        assertTrue(xml.matches("(?s).*<form id=\"form3\".*<a.*onclick=\".*return false\".*</form.*"));
+
+    }
+
 }
