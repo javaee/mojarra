@@ -299,7 +299,7 @@ public class PartialResponseWriter extends ResponseWriterWrapper {
      * @since 2.0
      */
     public void startExtension(Map<String, String> attributes) throws IOException {
-        endChangesIfNecessary();
+        startChangesIfNecessary();
         ResponseWriter writer = getWrapped();
         writer.startElement("extension", null);
         if (attributes != null && !attributes.isEmpty()) {
