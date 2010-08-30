@@ -36,9 +36,11 @@
 
 package com.sun.faces.application.view;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,6 +66,7 @@ import javax.faces.application.StateManager;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitHint;
 import javax.faces.view.StateManagementStrategy;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -140,7 +143,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
 //        COMMENTED OUT DUE TO ISSUE 1310 UNTIL NEW VISIT HINTS CAN BE
 //        ADDED TO THE API
 // -----------------------------------------------------------------------------
-//        VisitContext visitContext = VisitContext.createVisitContext(context);
+//        Set<VisitHint> hints = EnumSet.of(VisitHint.EXECUTE_STATE_SAVING);
+//        VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
 //        final FacesContext finalContext = context;
 //        viewRoot.visitTree(visitContext, new VisitCallback() {
 //
@@ -232,7 +236,8 @@ public class StateManagementStrategyImpl extends StateManagementStrategy {
                 // of the TreeNode instances.  This is a problem
                 // for servers that persist session data since
                 // UIComponent instances are not serializable.
-                VisitContext visitContext = VisitContext.createVisitContext(context);
+                Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+                VisitContext visitContext = VisitContext.createVisitContext(context, null, hints);
                 viewRoot.visitTree(visitContext, new VisitCallback() {
 
                     public VisitResult visit(VisitContext context, UIComponent target) {

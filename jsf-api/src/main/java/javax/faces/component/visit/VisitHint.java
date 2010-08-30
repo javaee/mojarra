@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -58,11 +58,28 @@ public enum VisitHint {
    */
   SKIP_TRANSIENT,
 
+  /** 
+   * <p class="changed_added_2_1">Hint that indicates that components
+   * that normally visit children multiple times (eg. <code>UIData</code>)
+   * in an iterative fashion should instead visit each child only one time.</p>
+   * @since 2.0
+   */
+  SKIP_ITERATION,
+
   /**
    * <p class="changed_added_2_0">Hint that indicates that the visit is
    * being performed as part of lifecycle phase execution and as such
    * phase-specific actions (initialization) may be taken.</p>
    * @since 2.0
    */
-  EXECUTE_LIFECYCLE
+  EXECUTE_LIFECYCLE,
+
+  /**
+   * <p class="changed_added_2_1">Hint that indicates that the visit is
+   * being performed for state saving purposes.</p>
+   *
+   * @since 2.0
+   */
+  EXECUTE_STATE_SAVING
+
 }

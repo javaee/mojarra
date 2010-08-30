@@ -38,9 +38,11 @@
 
 package com.sun.faces.lifecycle;
 
+import java.util.EnumSet;
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewExpiredException;
@@ -48,6 +50,7 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.el.MethodExpression;
@@ -259,8 +262,9 @@ public class RestoreViewPhase extends Phase {
         UIViewRoot root = facesContext.getViewRoot();
         final PostRestoreStateEvent postRestoreStateEvent = new PostRestoreStateEvent(root);
         try {
-            root.visitTree(VisitContext.createVisitContext(facesContext),
-                    new VisitCallback() {
+            Set<VisitHint> hints = EnumSet.of(VisitHint.SKIP_ITERATION);
+            VisitContext visitContext = VisitContext.createVisitContext(facesContext, null, hints);
+            root.visitTree(visitContext, new VisitCallback() {
 
                         public VisitResult visit(VisitContext context, UIComponent target) {
                             postRestoreStateEvent.setComponent(target);

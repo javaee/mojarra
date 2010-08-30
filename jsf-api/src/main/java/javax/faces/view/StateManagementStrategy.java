@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -90,6 +90,12 @@ public abstract class StateManagementStrategy {
      * executing the above algorithm must be <code>Serializable</code>,
      * and all of the elements within the data structure must also be
      * <code>Serializable</code>.</p>
+
+     * <p class="changed_added_2_1">The 
+     * {@link javax.faces.component.visit.VisitContext} used during
+     * the state saving tree visit must specify the
+     * {@link javax.faces.component.visit.VisitHint#EXECUTE_STATE_SAVING}
+     * visit hint.</p>
 
      * </div>
 
