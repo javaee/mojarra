@@ -1031,6 +1031,8 @@ public class ApplicationImpl extends Application {
         PropertyDescriptor[] declaredAttributes = componentMetadata.getPropertyDescriptors();
         Object defaultValue;
         String key;
+        Collection<String> attributesWithDeclaredDefaultValues = null;
+
         for (PropertyDescriptor cur : declaredAttributes) {
             defaultValue = cur.getValue("default");
             if (null != defaultValue) {
@@ -1043,6 +1045,19 @@ public class ApplicationImpl extends Application {
                 // ensure this attribute is not a method-signature.  method-signature
                 // declared default values are handled in retargetMethodExpressions.
                 if (null == cur.getValue("method-signature") || null != cur.getValue("type")) {
+
+                    if (null == attributesWithDeclaredDefaultValues) {
+                        BeanDescriptor desc = componentMetadata.getBeanDescriptor();
+                        attributesWithDeclaredDefaultValues = (Collection<String>)
+                                desc.getValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES);
+                        if (null == attributesWithDeclaredDefaultValues) {
+                            attributesWithDeclaredDefaultValues = new ArrayList<String>();
+                            desc.setValue(UIComponent.ATTRS_WITH_DECLARED_DEFAULT_VALUES,
+                                    attributesWithDeclaredDefaultValues);
+                        }
+                    }
+                    attributesWithDeclaredDefaultValues.add(key);
+
                     attrs.put(key, defaultValue);
                 }
             }

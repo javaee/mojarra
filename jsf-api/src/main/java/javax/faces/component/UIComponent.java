@@ -210,6 +210,19 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      */
     public static final String COMPOSITE_FACET_NAME = "javax.faces.component.COMPOSITE_FACET_NAME";
 
+    /**
+     * <p class="changed_added_2_1">This constant enables one to quickly discover
+     * the names of the declared composite component attributes that have been
+     * given default values by the composite component author.  The information
+     * is exposed as a <code>Collection&lt;String&gt;</code> returned from the
+     * <code>getValue()</code> method on the <em>composite component
+     * BeanDescriptor</em>, when this constant is passed as the argument.</p>
+     *
+     * @since 2.1
+     */
+    public static final String ATTRS_WITH_DECLARED_DEFAULT_VALUES =
+            "javax.faces.component.ATTR_NAMES_WITH_DEFAULT_VALUES";
+
     enum PropertyKeysPrivate {
         attributesThatAreSet
     }

@@ -963,6 +963,13 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
         assertTrue(text.contains("The following facets(s) are required, but no facets have been supplied for them: table."));
     }
 
+    public void testDefaultAttributeValueELOverrides() throws Exception {
+        HtmlPage page = getPage("/faces/composite/issue-1782-using.xhtml");
+        String text = page.asText();
+        System.out.println(text);
+        assertTrue(text.matches("(?s).*collapsable\\s=\\strue.*"));
+    }
+
     // --------------------------------------------------------- Private Methods
 
 
