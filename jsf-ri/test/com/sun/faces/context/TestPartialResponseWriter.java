@@ -124,7 +124,7 @@ public class TestPartialResponseWriter extends ServletFacesTestCase // ServletTe
             pWriter.endExtension();
             pWriter.endDocument();
 
-            assertTrue(sw.toString().indexOf("</upe><extension><data></data></extension></changes></partial-response>") >= 0);
+            assertTrue(sw.toString().indexOf("</update><extension><data></data></extension></changes></partial-response>") >= 0);
         } catch (IOException e) {
             assertTrue(false);
         }
