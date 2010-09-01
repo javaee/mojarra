@@ -103,6 +103,16 @@ public final class Classpath {
         for (int i = 0, s = e.length; i < s; ++i) {
             while (e[i].hasMoreElements()) {
                 url = (URL) e[i].nextElement();
+                // Defensive programming.  Due to issue 13045 this collection
+                // can contain URLs that have their spaces incorrectly escaped
+                // by having %20 replaced with %2520.  This quick conditional 
+                // check catches this particular case and averts it.
+                String str = url.getPath();
+                if (-1 != str.indexOf("%2520")) {
+                    str = url.toExternalForm();
+                    str = str.replace("%2520", "%20");
+                    url = new URL(str);
+                }
                 conn = url.openConnection();
                 conn.setUseCaches(false);
                 conn.setDefaultUseCaches(false);
