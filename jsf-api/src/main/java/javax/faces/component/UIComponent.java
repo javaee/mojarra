@@ -2111,144 +2111,48 @@ private void doFind(FacesContext context, String clientId) {
      */
     public abstract void queueEvent(FacesEvent event);
 
+
     /**
-     * <p class="changed_added_2_0">Install the listener instance
-     * referenced by argument <code>componentListener</code> as a
-     * listener for events of type <code>eventClass</code> originating
-     * from this specific instance of <code>UIComponent</code>.  The
-     * default implementation creates an inner {@link
-     * SystemEventListener} instance that wraps argument
-     * <code>componentListener</code> as the <code>listener</code>
-     * argument.  This inner class must call through to the argument
-     * <code>componentListener</code> in its implementation of {@link
-     * SystemEventListener#processEvent} and its implementation of
-     * {@link SystemEventListener#isListenerForSource} must return
-     * true if the instance class of this <code>UIComponent</code> is
-     * assignable from the argument to
-     * <code>isListenerForSource</code>.</p>
+     * <p class="changed_modified_2_1">This implementation throws
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.  {@link UIComponentBase} provides the implementation of
+     * this method.</p>
      *
-     * @param eventClass the <code>Class</code> of event for which
-     * <code>listener</code> must be fired.
-     * @param componentListener the implementation of {@link
-     * ComponentSystemEventListener} whose {@link
-     * ComponentSystemEventListener#processEvent} method must be called
-     * when events of type <code>facesEventClass</code> are fired.
-     *
-     * @throws <code>NullPointerException</code> if any of the
-     * arguments are <code>null</code>.
-     *
-     * @since 2.0                                             
+     * @since 2.1
      */
     public void subscribeToEvent(Class<? extends SystemEvent> eventClass,
-                                 ComponentSystemEventListener componentListener) {
-
-        if (eventClass == null) {
-            throw new NullPointerException();
-        }
-        if (componentListener == null) {
-            throw new NullPointerException();
-        }
-
-        if (initialStateMarked()) {
-            initialState = false;
-        }
-        if (null == listenersByEventClass) {
-            listenersByEventClass = new HashMap<Class<? extends SystemEvent>,
-                                                List<SystemEventListener>>(3, 1.0f);
-        }
-        SystemEventListener facesLifecycleListener =
-              new ComponentSystemEventListenerAdapter(componentListener, this);
-        List<SystemEventListener> listenersForEventClass =
-              listenersByEventClass.get(eventClass);
-        if (listenersForEventClass == null) {
-            listenersForEventClass = new ArrayList<SystemEventListener>(3);
-            listenersByEventClass.put(eventClass, listenersForEventClass);
-        }
-        if (!listenersForEventClass.contains(facesLifecycleListener)) {
-            listenersForEventClass.add(facesLifecycleListener);
-        }
-
+                                          ComponentSystemEventListener componentListener) {
+        throw new UnsupportedOperationException();
     }
 
     /**
-     * <p class="changed_added_2_0">Remove the listener instance
-     *     referenced by argument <code>componentListener</code> as a
-     *     listener for events of type <code>eventClass</code>
-     *     originating from this specific instance of
-     *     <code>UIComponent</code>.  When doing the comparison to
-     *     determine if an existing listener is equal to the argument
-     *     <code>componentListener</code> (and thus must be removed),
-     *     the <code>equals()</code> method on the <em>existing
-     *     listener</em> must be invoked, passing the argument
-     *     <code>componentListener</code>, rather than the other way
-     *     around.</p>
+     * <p class="changed_modified_2_1">This implementation throws
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.  {@link UIComponentBase} provides the implementation of
+     * this method.</p>
      *
-     * @param eventClass the <code>Class</code> of event for which
-     * <code>listener</code> must be removed.
-     * @param componentListener the implementation of {@link
-     * ComponentSystemEventListener} whose {@link
-     * ComponentSystemEventListener#processEvent} method must no longer be called
-     * when events of type <code>eventClass</code> are fired.
-     *
-     * @throws <code>NullPointerException</code> if any of the
-     * arguments are <code>null</code>.
-     *
-     * @since 2.0
+     * @since 2.1
      */
     public void unsubscribeFromEvent(Class<? extends SystemEvent> eventClass,
-                                     ComponentSystemEventListener componentListener) {
-
-        if (eventClass == null) {
-            throw new NullPointerException();
-        }
-        if (componentListener == null) {
-            throw new NullPointerException();
-        }
-
-        List<SystemEventListener> listeners =
-              getListenersForEventClass(eventClass);
-        if (listeners != null && !listeners.isEmpty()) {
-            for (Iterator<SystemEventListener> i = listeners.iterator(); i.hasNext();) {
-                SystemEventListener item = i.next();
-                ComponentSystemEventListenerAdapter csla =
-                      (ComponentSystemEventListenerAdapter) item;
-                ComponentSystemEventListener l = csla.getWrapped();
-                if (l.equals(componentListener)) {
-                    i.remove();
-                    break;
-                }
-            }
-        }
-
+                                              ComponentSystemEventListener componentListener) {
+        throw new UnsupportedOperationException();
     }
-
-    Map<Class<? extends SystemEvent>, List<SystemEventListener>> listenersByEventClass;
 
     /**
-     * <p class="changed_added_2_0">Return the
-     * <code>SystemEventListener</code> instances registered on this
-     * <code>UIComponent</code> instance that are interested in events
-     * of type <code>eventClass</code>.</p>
+     * <p class="changed_modified_2_1">This implementation throws
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.  {@link UIComponentBase} provides the implementation of
+     * this method.</p>
      *
-     * @param eventClass the <code>Class</code> of event for which the
-     * listeners must be returned.
-
-     * @throws NullPointerException if argument <code>eventClass</code> is <code>null</code>.
-     *
-     * @since 2.0
+     * @since 2.1
      */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
-
-        if (eventClass == null) {
-            throw new NullPointerException();
-        }
-        List<SystemEventListener> result = null;
-        if (listenersByEventClass != null) {
-            result = listenersByEventClass.get(eventClass);
-        }
-        return result;
-
+        throw new UnsupportedOperationException();
     }
+
 
 
     /**
