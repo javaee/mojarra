@@ -128,7 +128,7 @@
                 test.ajax,
                 test.composite,
                 test.facelets,
-                test.init,
+                test.init,                
                 test.render,
                 test.html.taglib,
                 test.prefix.security,
@@ -161,6 +161,7 @@
                 test.component,
                 test.component01,
                 test.navigation,
+                test.formomitted,
                 test.implicitnav,
                 test.state,
                 test.resourceBundleELResolver,
@@ -653,6 +654,21 @@
             <tests>
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/systest/*NavigationTestCase.class"/>
+            </tests>
+        </jsf.junit>         
+        
+
+    </target>
+    
+      <target name="test.formomitted"
+            description="Test missing form">
+        
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/FormOmittedTestCase.class"/>
             </tests>
         </jsf.junit>         
         

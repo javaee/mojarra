@@ -334,7 +334,8 @@ public class MessageUtils {
             "com.sun.faces.MISSING_COMPONENT_FACET";
     public static final String MISSING_COMPONENT_METADATA =
             "com.sun.faces.MISSING_COMPONENT_METADATA";
-
+    public static final String MISSING_FORM_ERROR =
+        "com.sun.faces.MISSING_FORM_ERROR";
 
     // ------------------------------------------------------------ Constructors
 

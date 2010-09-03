@@ -203,7 +203,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.PARTIAL_STATE_ERROR_RESTORING_ID, "2"},
         {MessageUtils.MISSING_COMPONENT_ATTRIBUTE_VALUE, "1"},
         {MessageUtils.MISSING_COMPONENT_FACET, "1"},
-        {MessageUtils.MISSING_COMPONENT_METADATA, "1" }
+        {MessageUtils.MISSING_COMPONENT_METADATA, "1" },
+        {MessageUtils.MISSING_FORM_ERROR, "0"}
     };
 
 // Attribute Instance Variables
