@@ -1959,6 +1959,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <p><i>Extensions</i></p>
              * <li>The <code>&lt;extensions&gt;</code> element provides a way for framework
              * implementations to provide their own information.</li>
+             * <p><li>The implementation must check if &lt;script&gt; elements in the response can
+             * be automatically run, as some browsers support this feature and some do not.  
+             * If they can not be run, then scripts should be extracted from the response and
+             * run separately.</li></p> 
              * </ul>
              *
              * </p>
