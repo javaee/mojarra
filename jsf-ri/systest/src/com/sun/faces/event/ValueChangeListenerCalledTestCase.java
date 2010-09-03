@@ -96,7 +96,9 @@ public class ValueChangeListenerCalledTestCase extends AbstractTestCase {
         page = button.click();
         String text = page.asText();
         String currentTime = "" + System.currentTimeMillis();
-        currentTime = currentTime.substring(0, 9);
+        currentTime = currentTime.substring(0, 7);
+System.out.println("TEXT:"+text);
+System.out.println("CURRENTTIME:"+currentTime);
         assertTrue(text.contains("Aufgerufen: " + currentTime));
         assertTrue(text.contains("Hello from processValueChange: " + currentTime));
 
@@ -106,7 +108,9 @@ public class ValueChangeListenerCalledTestCase extends AbstractTestCase {
         page = anchor.click();
         text = page.asText();
         currentTime = "" + System.currentTimeMillis();
-        currentTime = currentTime.substring(0, 9);
+        currentTime = currentTime.substring(0, 7);
+System.out.println("TEXT:"+text);
+System.out.println("CURRENTTIME:"+currentTime);
         assertTrue(text.contains("Aufgerufen: " + currentTime));
         assertTrue(text.contains("Hello from processValueChange: " + currentTime));
 
