@@ -293,7 +293,14 @@ public class AnnotationScanner extends AnnotationProvider {
                     if (!us.startsWith("jar:")) {
                         sb.append("jar:");
                     }
-                    sb.append(us).append("!/");
+                    if (us.startsWith("zip:")) {
+                    	sb.append("file:").append(us.substring(4));
+                    } else if (us.startsWith("bundle:")) {
+                    	sb.append("file:").append(us.substring(7));
+                    } else {
+                    	sb.append(us);
+                    }
+                    sb.append("!/");
                     URL u = new URL(sb.toString());
                     JarFile jarFile =
                           ((JarURLConnection) u.openConnection()).getJarFile();
