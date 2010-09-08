@@ -88,11 +88,23 @@ public class TestViewTag extends JspFacesTestCase {
 
     public TestViewTag() {
         super("TestViewTag");
+	initLocalHostPath();
     }
 
 
     public TestViewTag(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 //
@@ -104,7 +116,7 @@ public class TestViewTag extends JspFacesTestCase {
 //
 
     public void beginViewTag(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+        theRequest.setURL(localHostPath, "/test", "/faces", TEST_URI, null);
     }
 
 
@@ -145,7 +157,7 @@ public class TestViewTag extends JspFacesTestCase {
 
 
     public void beginViewTagVB(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI2, null);
+        theRequest.setURL(localHostPath, "/test", "/faces", TEST_URI2, null);
     }
 
 

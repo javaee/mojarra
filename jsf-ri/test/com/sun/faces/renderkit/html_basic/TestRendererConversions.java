@@ -80,11 +80,23 @@ public class TestRendererConversions extends ServletFacesTestCase {
 
     public TestRendererConversions() {
         super("TestRendererConversions");
+	initLocalHostPath();
     }
 
 
     public TestRendererConversions(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 //
@@ -96,7 +108,7 @@ public class TestRendererConversions extends ServletFacesTestCase {
 //
 
     public void beginEmptyStrings(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.setURL(localHostPath, null, null, TEST_URI, null);
         theRequest.addParameter("number", "");
         theRequest.addParameter("date", "");
         theRequest.addParameter("text", "");
@@ -155,7 +167,7 @@ public class TestRendererConversions extends ServletFacesTestCase {
 
 
     public void beginNulls(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.setURL(localHostPath, null, null, TEST_URI, null);
     }
 
 
@@ -165,7 +177,7 @@ public class TestRendererConversions extends ServletFacesTestCase {
 
 
     public void beginBadConversion(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.setURL(localHostPath, null, null, TEST_URI, null);
     }
 
 

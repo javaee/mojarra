@@ -77,13 +77,25 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
      public TestResourceHandlerImpl() {
         super("TestResourceHandlerImpl");
+	initLocalHostPath();
     }
 
 
     public TestResourceHandlerImpl(String name) {
         super(name);
+	initLocalHostPath();
     }
 
+    private String path = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	path = "localhost:" + containerPort;
+    }
+	
 
     @Override
     public void setUp() {
@@ -177,7 +189,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
 
     public void beginIsResourceRequestPrefixMapped(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/faces/", "/javax.faces.resource/duke-nv.gif", null);
+        req.setURL(path, "/test", "/faces/", "/javax.faces.resource/duke-nv.gif", null);
     }
 
     public void testIsResourceRequestPrefixMapped() throws Exception {
@@ -189,7 +201,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
 
     public void beginIsResourceRequestExtensionMapped(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
     }
 
     public void testIsResourceRequestExtensionMapped() throws Exception {
@@ -202,7 +214,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginHandleResourceRequestExcludesPrefixMapped1(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/faces/", "/javax.faces.resource/test.jsp", null);
+        req.setURL(path, "/test", "/faces/", "/javax.faces.resource/test.jsp", null);
     }
 
     public void testHandleResourceRequestExcludesPrefixMapped1() throws Exception {
@@ -219,7 +231,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginHandleResourceRequestExcludesPrefixMapped2(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/faces/", "/javax.faces.resource/test.properties", null);
+        req.setURL(path, "/test", "/faces/", "/javax.faces.resource/test.properties", null);
     }
 
     public void testHandleResourceRequestExcludesPrefixMapped2() throws Exception {
@@ -236,7 +248,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginHandleResourceRequestExcludesPrefixMapped3(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/faces/", "/javax.faces.resource/test.xhtml", null);
+        req.setURL(path, "/test", "/faces/", "/javax.faces.resource/test.xhtml", null);
     }
 
     public void testHandleResourceRequestExcludesPrefixMapped3() throws Exception {
@@ -253,7 +265,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginHandleResourceRequestExcludesPrefixMapped4(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/faces/", "/javax.faces.resource/test.class", null);
+        req.setURL(path, "/test", "/faces/", "/javax.faces.resource/test.class", null);
     }
 
     public void testHandleResourceRequestExcludesPrefixMapped4() throws Exception {
@@ -269,7 +281,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginHandleResourceRequestExcludeExtensionMapped1(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.jsp.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.jsp.faces", null, null);
     }
 
     public void testHandleResourceRequestExcludeExtensionMapped1() throws Exception {
@@ -286,7 +298,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginHandleResourceRequestExcludeExtensionMapped2(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.properties.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.properties.faces", null, null);
     }
 
     public void testHandleResourceRequestExcludeExtensionMapped2() throws Exception {
@@ -303,7 +315,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginHandleResourceRequestExcludeExtensionMapped3(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.xhtml.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.xhtml.faces", null, null);
     }
 
     public void testHandleResourceRequestExcludeExtensionMapped3() throws Exception {
@@ -320,7 +332,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginHandleResourceRequestExcludeExtensionMapped4(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.class.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.class.faces", null, null);
     }
 
     public void testHandleResourceRequestExcludeExtensionMapped4() throws Exception {
@@ -342,7 +354,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     //  .properties to now be considered valid
     ////////////////////////////////////////////////////////////////////////////
     public void beginUserSpecifiedResourceExclude1(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
     }
 
     public void testUserSpecifiedResourceExclude1() throws Exception {
@@ -373,7 +385,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginUserSpecifiedResourceExclude2(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/com.sun.faces.application.ApplicationImpl.class.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/com.sun.faces.application.ApplicationImpl.class.faces", null, null);
     }
 
     public void testUserSpecifiedResourceExclude2() throws Exception {
@@ -399,7 +411,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
     ////////////////////////////////////////////////////////////////////////////
     public void beginUserSpecifiedResourceExclude3(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/com.sun.faces.LogStrings.properties.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/com.sun.faces.LogStrings.properties.faces", null, null);
     }
 
     public void testUserSpecifiedResourceExclude3() throws Exception {
@@ -428,7 +440,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate a resource streamed from the docroot of a webapp
     //
     public void beginHandleResourceRequest1(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
     }
 
     public void testHandleResourceRequest1() throws Exception {
@@ -455,7 +467,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate a resource streamed from a JAR
     //
     public void beginHandleResourceRequest2(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
         req.addParameter("ln", "nvLibrary-jar");
     }
 
@@ -487,7 +499,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // request header and the resource hasn't changed on the server side.
     //
     public void beginHandleResourceRequest3(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
         long 
                 curTime = System.currentTimeMillis(),
                 threeHoursAgo = curTime - 10800000L;
@@ -522,7 +534,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // is made
     //
     public void beginHandleResourceRequest4(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-v.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-v.gif.faces", null, null);
         req.addParameter("ln", "nvLibrary");
     }
 
@@ -543,7 +555,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate a 404 is returned when a request for an excluded resource is made
     //
     public void beginHandleResourceRequest5(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.class.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.class.faces", null, null);
         req.addParameter("ln", "nvLibrary");
     }
 
@@ -564,7 +576,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate a resource streamed from the docroot of a webapp is compressed
     //
     public void beginHandleResourceRequest6(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
         req.addHeader("accept-encoding", "deflate");
         req.addHeader("accept-encoding", "gzip");
     }
@@ -605,7 +617,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate a resource streamed from a JAR is compressed
     //
     public void beginHandleResourceRequest7(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
         req.addParameter("ln", "nvLibrary-jar");
         req.addHeader("accept-encoding", "gzip,deflate");
     }
@@ -646,7 +658,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // when the client doesn't send the accept-encoding request header
     //
     public void beginHandleResourceRequest8(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
     }
 
     public void testHandleResourceRequest8() throws Exception {
@@ -685,7 +697,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // when the client doesn't send the accept-encoding request header
     //
     public void beginHandleResourceRequest9(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
         req.addParameter("ln", "nvLibrary-jar");
     }
 
@@ -727,7 +739,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // is sent to the user-agent
     //
     public void beginHandleResourceRequest10(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
         req.addHeader("accept-encoding", "gzip;q=0, deflate");
     }
 
@@ -769,7 +781,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // is sent to the user-agent
     //
     public void beginHandleResourceRequest11(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
         req.addHeader("accept-encoding", "deflate");
         req.addHeader("accept-encoding", "*;q=0");
     }
@@ -811,7 +823,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // * will send compressed content
     //
     public void beginHandleResourceRequest12(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
         req.addHeader("accept-encoding", "identity;q=1.0");
         req.addHeader("accept-encoding", "*;q=0.5");
         req.addHeader("accept-encoding", "deflate;q=1.0");
@@ -853,7 +865,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // compressed content.
     //
     public void beginHandleResourceRequest13(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.setURL(path, "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
         req.addHeader("accept-encoding", "identity;q=0.5, deflate;q=1.0");
     }
 
@@ -892,7 +904,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate the fix for issue 1162.
     //
     public void beginHandleResourceRequest14(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/web.xml.faces", null, "ln=../WEB-INF");
+        req.setURL(path, "/test", "/javax.faces.resource/web.xml.faces", null, "ln=../WEB-INF");
     }
 
     public void testHandleResourceRequest14() throws Exception {
@@ -913,7 +925,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate the fix for issue 1162.
     //
     public void beginHandleResourceRequest15(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/web.xml.faces", null, "ln=nvLibrary/../../WEB-INF");
+        req.setURL(path, "/test", "/javax.faces.resource/web.xml.faces", null, "ln=nvLibrary/../../WEB-INF");
     }
 
     public void testHandleResourceRequest15() throws Exception {

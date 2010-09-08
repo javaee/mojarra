@@ -105,7 +105,12 @@ public class TestHASDeprStateManagerImpl extends ServletFacesTestCase {
     //
     
     public void beginRender(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+
+        theRequest.setURL("localhost:" + containerPort, "/test", "/faces", TEST_URI, null);
     }
 
     public void testRender() {

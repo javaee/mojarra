@@ -99,11 +99,23 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase {
 
     public TestLifecycleImpl_initial() {
         super("TestLifecycleImpl_initial");
+	initLocalHostPath();
     }
 
 
     public TestLifecycleImpl_initial(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 //
@@ -116,7 +128,7 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase {
 
 
     protected void initWebRequest(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+        theRequest.setURL(localHostPath, "/test", "/faces", TEST_URI, null);
     }
 
 

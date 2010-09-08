@@ -50,11 +50,23 @@ public class TestResourceELResolver extends ServletFacesTestCase {
 
     public TestResourceELResolver() {
         super("TestResourceELResolver");
+	initLocalHostPath();
     }
 
 
     public TestResourceELResolver(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 
@@ -74,7 +86,7 @@ public class TestResourceELResolver extends ServletFacesTestCase {
 
 
     public void beginGetValue(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/faces", "/foo.jsp", null);
+        req.setURL(localHostPath, "/test", "/faces", "/foo.jsp", null);
     }
 
     public void testGetValue() throws Exception {

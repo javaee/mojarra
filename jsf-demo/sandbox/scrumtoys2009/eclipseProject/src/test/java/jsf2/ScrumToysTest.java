@@ -45,7 +45,12 @@ public class ScrumToysTest {
     @Test
     public void homePage() throws Exception {
         final WebClient webClient = new WebClient();
-        final HtmlPage page = webClient.getPage("http://localhost:8080/scrumtoys/home.jsf");
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+
+        final HtmlPage page = webClient.getPage("http://localhost:" + containerPort + "/scrumtoys/home.jsf");
 	String titleText = page.getTitleText().trim();
         Assert.assertEquals("JSF 2.0 Demo - Scrum Whiteboard Application", titleText);
     }

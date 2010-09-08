@@ -53,7 +53,7 @@
               value="${jsf-demo.lib}/ui.jar"/>
 
     <!-- Configure properties to access the Manager application -->
-    <property name="url" value="http://localhost:8080/manager"/>
+    <property name="url" value="http://localhost:${container.port}/manager"/>
 
     <!-- Location dependent jars -->
     <property name="jsf-demo.lib" value="../lib"/>

@@ -102,11 +102,23 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
 
     public TestCoreTagsVBEnabled() {
         super("TestValidatorTags");
+	initLocalHostPath();
     }
 
 
     public TestCoreTagsVBEnabled(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 //
@@ -119,7 +131,7 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
 
 
     public void beginValidators(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+        theRequest.setURL(localHostPath, "/test", "/faces", TEST_URI, null);
         theRequest.addParameter(LONGRANGE_ID, LONGRANGE_VALUE);
         theRequest.addParameter(INTRANGE_ID, INTRANGE_VALUE);
         theRequest.addParameter(DOUBLERANGE_ID, DOUBLERANGE_VALUE);

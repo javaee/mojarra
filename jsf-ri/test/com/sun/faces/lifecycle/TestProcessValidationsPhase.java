@@ -87,11 +87,23 @@ public class TestProcessValidationsPhase extends ServletFacesTestCase {
 
     public TestProcessValidationsPhase() {
         super("TestProcessValidationsPhase");
+	initLocalHostPath();
     }
 
 
     public TestProcessValidationsPhase(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 //

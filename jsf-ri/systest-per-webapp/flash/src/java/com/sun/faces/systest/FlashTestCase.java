@@ -193,46 +193,46 @@ public class FlashTestCase extends AbstractTestCase {
         // See that it still has banzai
         assertTrue(pageText.matches("(?s)(?m).*<span.*id=\"flash4BuckarooValueId\">\\s*banzai\\s*</span>.*"));
 
-        // click the link http://localhost:8080/jsf-flash/flash5.jsf?id=1
+        // click the link http://localhost:${container.port}/jsf-flash/flash5.jsf?id=1
         HtmlAnchor link = (HtmlAnchor) page.getElementById("link");
         page = link.click();
 
         // on flash5
         link = (HtmlAnchor) page.getElementById("link");
-        page = link.click(); // clicks http://localhost:8080/jsf-flash/flash6.jsf
+        page = link.click(); // clicks http://localhost:${container.port}/jsf-flash/flash6.jsf
 
         assertTrue(page.asText().contains("Value is 1."));
 
         // click the link on the next page
-        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:8080/jsf-flash/flash7.jsf
+        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:${container.port}/jsf-flash/flash7.jsf
         page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
 
         // click the link on the same page
-        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:8080/jsf-flash/flash7.jsf
+        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:${container.port}/jsf-flash/flash7.jsf
         page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
 
         // click the link on the same page
-        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:8080/jsf-flash/flash7.jsf
+        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:${container.port}/jsf-flash/flash7.jsf
         page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
 
-        link = (HtmlAnchor) page.getElementById("link2"); // http://localhost:8080/jsf-flash/flash8.jsf
+        link = (HtmlAnchor) page.getElementById("link2"); // http://localhost:${container.port}/jsf-flash/flash8.jsf
         page = link.click();
 
         assertTrue(page.asText().contains("Value is 1."));
 
-        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:8080/jsf-flash/flash8.jsf
+        link = (HtmlAnchor) page.getElementById("link"); // http://localhost:${container.port}/jsf-flash/flash8.jsf
         page = link.click();
 
         // it went away because there was no keep
         assertTrue(page.asText().contains("Value is ."));
 
-        page = getPage("/faces/flash9.xhtml"); // http://localhost:8080/jsf-flash/flash9.jsf
+        page = getPage("/faces/flash9.xhtml"); // http://localhost:${container.port}/jsf-flash/flash9.jsf
 
         text = (HtmlTextInput) page.getHtmlElementById("valueA");
         text.setValueAttribute("a value");
@@ -244,7 +244,7 @@ public class FlashTestCase extends AbstractTestCase {
         text.setValueAttribute("c value");
 
         button = (HtmlSubmitInput) page.getHtmlElementById("keep");
-        page = (HtmlPage) button.click();  // http://localhost:8080/jsf-flash/flash11.jsf
+        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash11.jsf
 
         pageText = page.asText();
 
@@ -252,7 +252,7 @@ public class FlashTestCase extends AbstractTestCase {
         assertTrue(pageText.contains("valueB: b value"));
         assertTrue(pageText.contains("valueC: c value"));
 
-        link = (HtmlAnchor) page.getElementById("flash9"); // http://localhost:8080/jsf-flash/flash9.jsf
+        link = (HtmlAnchor) page.getElementById("flash9"); // http://localhost:${container.port}/jsf-flash/flash9.jsf
         page = link.click();
 
         text = (HtmlTextInput) page.getHtmlElementById("valueA");
@@ -264,7 +264,7 @@ public class FlashTestCase extends AbstractTestCase {
         text = (HtmlTextInput) page.getHtmlElementById("valueC");
         assertEquals(text.getValueAttribute(), "c value");
 
-        page = getPage("/faces/flash9.xhtml"); // http://localhost:8080/jsf-flash/flash9.jsf
+        page = getPage("/faces/flash9.xhtml"); // http://localhost:${container.port}/jsf-flash/flash9.jsf
         text = (HtmlTextInput) page.getHtmlElementById("valueA");
         assertEquals(text.getValueAttribute(), "");
 
@@ -284,7 +284,7 @@ public class FlashTestCase extends AbstractTestCase {
         text.setValueAttribute("C value");
 
         button = (HtmlSubmitInput) page.getHtmlElementById("nokeep");
-        page = (HtmlPage) button.click();  // http://localhost:8080/jsf-flash/flash10.jsf
+        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash10.jsf
 
         pageText = page.asText();
 
@@ -293,7 +293,7 @@ public class FlashTestCase extends AbstractTestCase {
         assertTrue(pageText.contains("valueC: C value"));
 
         button = (HtmlSubmitInput) page.getHtmlElementById("reload");
-        page = (HtmlPage) button.click();  // http://localhost:8080/jsf-flash/flash10.jsf
+        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash10.jsf
 
         pageText = page.asText();
 
@@ -304,7 +304,7 @@ public class FlashTestCase extends AbstractTestCase {
         // content from Sebastian Hennebrueder
         page = getPage("/faces/flash12.xhtml");
         button = (HtmlSubmitInput) page.getHtmlElementById("start");
-        page = (HtmlPage) button.click();  // http://localhost:8080/jsf-flash/flash10.jsf
+        page = (HtmlPage) button.click();  // http://localhost:${container.port}/jsf-flash/flash10.jsf
 
         pageText = page.asText();
         assertTrue(pageText.contains("4711"));

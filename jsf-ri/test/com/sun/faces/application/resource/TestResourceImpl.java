@@ -78,12 +78,25 @@ public class TestResourceImpl extends ServletFacesTestCase {
 
     public TestResourceImpl() {
         super("TestResourceImpl");
+	initLocalHostPath();
     }
 
 
     public TestResourceImpl(String name) {
         super(name);
+	initLocalHostPath();
     }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
+    }
+
 
 
     @Override
@@ -101,7 +114,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
     // ------------------------------------------------------------ Test Methods
 
     public void beginToURIPrefixMapping(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/faces", "/foo.jsp", null);
+        req.setURL(localHostPath, "/test", "/faces", "/foo.jsp", null);
     }
 
     public void testToURIPrefixMapping() throws Exception {
@@ -141,7 +154,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
     }
 
     public void beginToURIExtensionMapping(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/foo.faces", null, null);
+        req.setURL(localHostPath, "/test", "/foo.faces", null, null);
     }
 
     public void testToURIExtensionMapping() throws Exception {

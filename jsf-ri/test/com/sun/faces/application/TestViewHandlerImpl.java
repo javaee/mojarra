@@ -140,14 +140,25 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
     public TestViewHandlerImpl() {
         super("TestViewHandlerImpl");
+	initLocalHostPath();
     }
 
 
     public TestViewHandlerImpl(String name) {
         super(name);
+	initLocalHostPath();
     }
 
+    private String path = "localhost:8080";
 
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	path = "localhost:" + containerPort;
+    }
+	
     //
     // Class methods
     //
@@ -160,56 +171,56 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
 
     public void beginRender(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+        theRequest.setURL(path, "/test", "/faces", TEST_URI, null);
     }
 
 
     public void beginRender2(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+        theRequest.setURL(path, "/test", "/somepath/greeting.jsf",
                           null, null);
     }
 
     public void beginTransient(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+        theRequest.setURL(path, "/test", "/faces", TEST_URI, null);
 	theRequest.addParameter("javax.faces.ViewState", "j_id1:j_id2");
     }
 
     public void beginCalculateLocaleLang(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+        theRequest.setURL(path, "/test", "/somepath/greeting.jsf",
                           null, null);
         theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ,en-US");
     }
 
 
     public void beginCalculateLocaleExact(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+        theRequest.setURL(path, "/test", "/somepath/greeting.jsf",
                           null, null);
         theRequest.addHeader("Accept-Language", "tg-AF,tk-IQ,ps-PS,en-US");
     }
 
 
     public void beginCalculateLocaleLowerCase(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+        theRequest.setURL(path, "/test", "/somepath/greeting.jsf",
                           null, null);
         theRequest.addHeader("Accept-Language", "tg-af,tk-iq,ps-ps");
     }
 
 
     public void beginCalculateLocaleNoMatch(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+        theRequest.setURL(path, "/test", "/somepath/greeting.jsf",
                           null, null);
         theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ");
     }
 
 
     public void beginCalculateLocaleFindDefault(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf",
+        theRequest.setURL(path, "/test", "/somepath/greeting.jsf",
                           null, null);
         theRequest.addHeader("Accept-Language", "en,fr");
     }
 
     public void beginRestoreViewNegative(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", null, null);
+        theRequest.setURL(path, "/test", "/faces", null, null);
     }
 
     public void testGetActionURL() {

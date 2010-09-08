@@ -124,11 +124,23 @@ public class TestValidatorTags extends JspFacesTestCase {
 
     public TestValidatorTags() {
         super("TestValidatorTags");
+	initLocalHostPath();
     }
 
 
     public TestValidatorTags(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 //
@@ -141,7 +153,7 @@ public class TestValidatorTags extends JspFacesTestCase {
 
 
     public void beginValidators(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+        theRequest.setURL(localHostPath, "/test", "/faces", TEST_URI, null);
         theRequest.addParameter(OUTOFBOUNDS1_ID, OUTOFBOUNDS1_VALUE);
         theRequest.addParameter(INBOUNDS1_ID, INBOUNDS1_VALUE);
         theRequest.addParameter(OUTOFBOUNDS2_ID, OUTOFBOUNDS2_VALUE);

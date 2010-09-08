@@ -96,12 +96,26 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
 
     public TestExternalContextImpl() {
         super("TestExternalContext");
+	initLocalHostPath();
     }
 
 
     public TestExternalContextImpl(String name) {
         super(name);
+	initLocalHostPath();
     }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
+    }
+
+
 
     public void initializeSupported() {
         for (int i = 0; i < supported.length; i++) {
@@ -388,7 +402,7 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
 
 
     public void beginGetRequestPathInfo(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/foo", "/bar", null);
+        theRequest.setURL(localHostPath, "/test", "/foo", "/bar", null);
     }
 
 
@@ -433,7 +447,7 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
     */
 
     public void beginGetRequestContextPath(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/foo", "/bar", null);
+        theRequest.setURL(localHostPath, "/test", "/foo", "/bar", null);
     }
 
 

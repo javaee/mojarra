@@ -83,11 +83,23 @@ public class TestPhase extends ServletFacesTestCase {
 
     public TestPhase() {
         super("TestPhase");
+	initLocalHostPath();
     }
 
 
     public TestPhase(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 //
@@ -99,7 +111,7 @@ public class TestPhase extends ServletFacesTestCase {
 //
 
     public void beginExecute(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.setURL(localHostPath, null, null, TEST_URI, null);
         theRequest.addParameter(
             "basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
     }

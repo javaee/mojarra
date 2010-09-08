@@ -112,12 +112,25 @@ public class TestSaveStateInPage extends JspFacesTestCase {
 
     public TestSaveStateInPage() {
         super("TestRenderResponsePhase");
+	initLocalHostPath();
     }
 
 
     public TestSaveStateInPage(String name) {
         super(name);
+	initLocalHostPath();
     }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
+    }
+
 
 //
 // Class methods
@@ -129,7 +142,7 @@ public class TestSaveStateInPage extends JspFacesTestCase {
 
 
     public void beginSaveStateInPage(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.setURL(localHostPath, null, null, TEST_URI, null);
     }
 
 

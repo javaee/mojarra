@@ -93,13 +93,25 @@ public class TestRenderers_1 extends JspFacesTestCase {
 
     public TestRenderers_1() {
         super("TestRenderers_1");
+	initLocalHostPath();
     }
 
 
     public TestRenderers_1(String name) {
         super(name);
+	initLocalHostPath();
     }
    
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
+    }
+
     //
     // Class methods
     //
@@ -156,7 +168,7 @@ public class TestRenderers_1 extends JspFacesTestCase {
 
     public void beginRenderers(WebRequest theRequest) {
 
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.setURL(localHostPath, null, null, TEST_URI, null);
         // theRequest.addParameter("name", "FormRenderer");
         //theRequest.addParameter("action", "form");
         theRequest.addParameter("radioRenderer", "Two");

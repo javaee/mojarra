@@ -107,11 +107,23 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
 
     public TestRenderResponsePhase() {
         super("TestRenderResponsePhase");
+	initLocalHostPath();
     }
 
 
     public TestRenderResponsePhase(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 //
@@ -124,7 +136,7 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
 
 
     public void beginHtmlBasicRenderKit(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+        theRequest.setURL(localHostPath, "/test", "/faces", TEST_URI, null);
     }
 
 
@@ -154,7 +166,7 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
     }
 
     public void beginShortCircuitRenderResponse(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+        theRequest.setURL(localHostPath, "/test", "/faces", TEST_URI, null);
     }
 
     public void testShortCircuitRenderResponse() {

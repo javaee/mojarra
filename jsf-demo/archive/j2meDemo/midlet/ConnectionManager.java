@@ -61,8 +61,14 @@ public class ConnectionManager implements Runnable {
     private boolean busy = false; 
     private AbstractMIDlet midlet = null;
 
+
     public ConnectionManager(AbstractMIDlet midlet) {
         this.midlet = midlet;
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	urlPrefix = "http://localhost:" + containerPort + "/jsf-j2meDemo/"; 
     }
 
     public synchronized void run() { 

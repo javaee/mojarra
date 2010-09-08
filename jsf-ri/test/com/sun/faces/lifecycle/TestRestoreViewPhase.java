@@ -89,11 +89,23 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 
     public TestRestoreViewPhase() {
         super("TestRestoreViewPhase");
+	initLocalHostPath();
     }
 
 
     public TestRestoreViewPhase(String name) {
         super(name);
+	initLocalHostPath();
+    }
+
+    private String localHostPath = "localhost:8080";
+
+    private void initLocalHostPath() {
+	String containerPort = System.getProperty("container.port");
+	if (null == containerPort || 0 == containerPort.length()) {
+	    containerPort = "8080";
+	}
+	localHostPath = "localhost:" + containerPort;
     }
 
 //
@@ -105,14 +117,14 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 //
 
     public void beginReconstituteRequestSubmit(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.setURL(localHostPath, null, null, TEST_URI, null);
 	theRequest.addParameter("javax.faces.ViewState",
 				"j_id1:j_id2");
     }
 
 
     public void beginRegisterListeners(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.setURL(localHostPath, null, null, TEST_URI, null);
 	theRequest.addParameter("javax.faces.ViewState",
 				"j_id1:j_id2");
     }
@@ -260,7 +272,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
     }
 
     public void beginRestoreViewExpired(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+        theRequest.setURL(localHostPath, null, null, TEST_URI, null);
         theRequest.addParameter("javax.faces.ViewState",
                                 "j_id1:j_id2");
     }
