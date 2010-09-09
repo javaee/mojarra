@@ -210,6 +210,10 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
     }
 
+    public void setCompositeComponent(UIComponent cc) {
+        if (this.cc == null)
+            this.cc = cc;
+    }
 
     /**
      * Specialized implementation to prevent caching of the MetaRuleset when
