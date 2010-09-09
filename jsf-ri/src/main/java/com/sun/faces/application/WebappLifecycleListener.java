@@ -36,6 +36,8 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.config.InitFacesContext;
+import com.sun.faces.config.WebConfiguration;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.List;
@@ -104,7 +106,7 @@ public class WebappLifecycleListener implements ViewMapListener {
      * @param event the notification event
      */
     public void requestDestroyed(ServletRequestEvent event) {
-        FacesContext context = FacesContext.getCurrentInstance();
+
         try {
             ServletRequest request = event.getServletRequest();
             for (Enumeration e = request.getAttributeNames(); e.hasMoreElements();) {
@@ -113,8 +115,12 @@ public class WebappLifecycleListener implements ViewMapListener {
                         request.getAttribute(beanName),
                         ELUtils.Scope.REQUEST);
             }
-            syncSessionScopedBeans(request);
+            WebConfiguration config = WebConfiguration.getInstance(event.getServletContext());
+            if (config.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.EnableAgressiveSessionDirtying)) {
+                syncSessionScopedBeans(request);
+            }
         } catch (Throwable t) {
+            FacesContext context = new InitFacesContext(event.getServletContext());
             ExceptionQueuedEventContext eventContext =
                     new ExceptionQueuedEventContext(context, t);
             context.getApplication().publishEvent(context,
@@ -122,9 +128,6 @@ public class WebappLifecycleListener implements ViewMapListener {
             context.getExceptionHandler().handle();
         }
         finally {
-            if (null != context) {
-                context.release();
-            }
             ApplicationAssociate.setCurrentInstance(null);
         }
     }

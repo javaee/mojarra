@@ -66,7 +66,7 @@ import com.sun.faces.context.InitParameterMap;
  * A special, minimal implementation of FacesContext used at application initialization time.
  * The ExternalContext returned by this FacesContext only exposes the ApplicationMap.
  */
-class InitFacesContext extends FacesContext {
+public class InitFacesContext extends FacesContext {
 
     private ExternalContext ec;
     private UIViewRoot viewRoot;

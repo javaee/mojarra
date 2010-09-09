@@ -1147,7 +1147,10 @@ public class WebConfiguration {
         SuppressXmlDeclaration(
               ViewHandler.FACELETS_SUPPRESS_XML_DECLARATION,
               false
-        );
+        ),
+        EnableAgressiveSessionDirtying(
+                "com.sun.faces.enableAgressiveSessionDirtying",
+                false);
 
         private BooleanWebContextInitParameter alternate;
 
