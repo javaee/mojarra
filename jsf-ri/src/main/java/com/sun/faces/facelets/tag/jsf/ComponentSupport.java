@@ -79,6 +79,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.faces.component.ActionSource;
+import javax.faces.component.ActionSource2;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.view.facelets.Tag;
 
 /**
@@ -407,24 +410,14 @@ public final class ComponentSupport {
     /**
      * method to inspect what interfaces the component implements.
      * if one of the interfaces is ActionSource, ActionSource2 or EditableValueHolder
-     * or ClientBehaviorHolder then that component needs to be wrapped inside an HtmlForm.
+     * then that component needs to be wrapped inside a UIlForm.
      * return true if even one of the interfaces is one of the above.
-     * @param interfaces
+     * @param child
      * @return boolean
      */
 
-    private static boolean inspectInterfacesToCheckIfFormOmitted(Class[] interfaces) {
-        for (int i = 0; i < interfaces.length; i++) {
-            String name = interfaces[i].getName();
-
-            if (name.equals("javax.faces.component.ActionSource") ||
-                name.equals("javax.faces.component.ActionSource2") ||
-                name.equals("javax.faces.component.EditableValueHolder") ||
-                name.equals("javax.faces.component.behavior.ClientBehaviorHolder")) {
-                return true;
-            }
-        }
-        return false;
+    private static boolean inspectInterfacesToCheckIfFormOmitted(UIComponent child) {
+        return (child instanceof ActionSource || child instanceof ActionSource2 || child instanceof EditableValueHolder);
     }
 
     /**
@@ -458,8 +451,7 @@ public final class ComponentSupport {
         //fix for issue 1663. to be executed only if in dev mode
         if (ctx.getFacesContext().isProjectStage(ProjectStage.Development)) {
             if (!(child instanceof HtmlForm)) {
-                Class[] interfaces = child.getClass().getInterfaces();
-                if (inspectInterfacesToCheckIfFormOmitted(interfaces)) {
+                if (inspectInterfacesToCheckIfFormOmitted(child)) {
                     //child component implements ActionSource/ActionSource2
                     //or EditableValueHolder
                     //now make sure that there is a HtmlForm in the ancestry
@@ -467,6 +459,13 @@ public final class ComponentSupport {
                         //no HtmlForm in the ancestry of the child
                         String key = MessageUtils.MISSING_FORM_ERROR;
                         Object[] params = new Object[]{};
+
+                        // PENDING(sheetal): make it so the message is only queued
+                        // once per page.  Change the english message text (don't bother
+                        // changing the i18ns) to be (all on one line)
+                        // the form component needs to have a UIForm in its ancestry.
+                        // Suggestion: enclose the necessary components within
+                        // <h:form>
 
                         FacesMessage m = MessageUtils.getExceptionMessage(key, params);
                         m.setSeverity(FacesMessage.SEVERITY_WARN);
