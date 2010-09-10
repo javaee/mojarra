@@ -96,6 +96,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String TAG_HANDLER_DELEGATE_FACTORY = "tag-handler-delegate-factory";
 
     /**
+     * <code>/faces-config/factory/facelet-cache-factory</code>
+     */
+    private static final String FACELET_CACHE_FACTORY = "facelet-cache-factory";
+
+    /**
      * <code>/faces-config/factory/faces-context-factory</code>
      */
     private static final String FACES_CONTEXT_FACTORY = "faces-context-factory";
@@ -133,7 +138,8 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY,
           FactoryFinder.RENDER_KIT_FACTORY,
           FactoryFinder.VISIT_CONTEXT_FACTORY,
-          FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY
+          FactoryFinder.FACELET_CACHE_FACTORY,
+          FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
     
     };
 
@@ -252,6 +258,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                getNodeText(n));
                 } else if (TAG_HANDLER_DELEGATE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.TAG_HANDLER_DELEGATE_FACTORY,
+                               getNodeText(n));
+                } else if (FACELET_CACHE_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.FACELET_CACHE_FACTORY,
                                getNodeText(n));
                 } else if (EXTERNAL_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.EXTERNAL_CONTEXT_FACTORY,

@@ -66,7 +66,7 @@ import java.net.URLConnection;
 
 
 /**
- * <p><strong class="changed_modified_2_0">FactoryFinder</strong>
+ * <p><strong class="changed_modified_2_0 changed_modified_2_1">FactoryFinder</strong>
  * implements the standard discovery algorithm for all factory objects
  * specified in the JavaServer Faces APIs.  For a given factory class
  * name, a corresponding implementation class is searched for based on
@@ -175,6 +175,15 @@ public final class FactoryFinder {
          "javax.faces.context.FacesContextFactory";
 
     /**
+     * <p class="changed_added_2_1">The property name for the
+     * {@link javax.faces.view.facelets.FaceletCacheFactory} class name.</p>
+     *
+     * @since 2.1
+     */
+    public final static String FACELET_CACHE_FACTORY =
+         "javax.faces.view.facelets.FaceletCacheFactory";
+
+    /**
      * <p class="changed_added_2_0">The property name for the {@link
      * javax.faces.context.PartialViewContextFactory} class name.</p>
      */
@@ -225,8 +234,9 @@ public final class FactoryFinder {
     /**
      * <p>The set of JavaServer Faces factory classes for which the factory
      * discovery mechanism is supported.  The entries in this list must be 
-     * alphabetically ordered according to the entire string, not just
-     * the last part!</p>
+     * alphabetically ordered according to the entire string of the
+     * *value* of each of the literals, not just
+     * the last part of the literal!</p>
      */
     private static final String[] FACTORY_NAMES = {
          APPLICATION_FACTORY,
@@ -238,6 +248,7 @@ public final class FactoryFinder {
          VIEW_DECLARATION_LANGUAGE_FACTORY,
          PARTIAL_VIEW_CONTEXT_FACTORY,
          RENDER_KIT_FACTORY,
+         FACELET_CACHE_FACTORY,
          TAG_HANDLER_DELEGATE_FACTORY
     
     };

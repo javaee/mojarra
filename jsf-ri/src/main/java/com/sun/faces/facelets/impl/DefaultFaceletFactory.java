@@ -56,7 +56,7 @@
 package com.sun.faces.facelets.impl;
 
 import com.sun.faces.facelets.Facelet;
-import com.sun.faces.facelets.FaceletCache;
+import javax.faces.view.facelets.FaceletCache;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.util.Cache;
@@ -139,11 +139,8 @@ public class DefaultFaceletFactory extends FaceletFactory {
         refreshPeriod = (refreshPeriod >= 0) ? refreshPeriod * 1000 : -1;
         this.refreshPeriod = refreshPeriod;
         if (log.isLoggable(Level.FINE)) {
-            log.fine("Using ResourceResolver: " + resolver);
-            log.fine("Using Refresh Period: " + refreshPeriod);
-        }
-        if (cache == null) {
-            cache = new DefaultFaceletCache(refreshPeriod);
+            log.log(Level.FINE, "Using ResourceResolver: {0}", resolver);
+            log.log(Level.FINE, "Using Refresh Period: {0}", refreshPeriod);
         }
         
         // We can cast to the FaceletCache<DefaultFacelet> here because we know
@@ -153,20 +150,20 @@ public class DefaultFaceletFactory extends FaceletFactory {
         
         // Create instance factories for the  cache, so that the cache can
         // create Facelets and Metadata Facelets
-        FaceletCache.InstanceFactory<DefaultFacelet> faceletFactory = 
-            new FaceletCache.InstanceFactory<DefaultFacelet>() {
+        FaceletCache.MemberFactory<DefaultFacelet> faceletFactory =
+            new FaceletCache.MemberFactory<DefaultFacelet>() {
                 public DefaultFacelet newInstance(final URL key) throws IOException {
                     return createFacelet(key);
                 }
             };
-        FaceletCache.InstanceFactory<DefaultFacelet> metadataFaceletFactory = 
-            new FaceletCache.InstanceFactory<DefaultFacelet>() {
+        FaceletCache.MemberFactory<DefaultFacelet> metadataFaceletFactory =
+            new FaceletCache.MemberFactory<DefaultFacelet>() {
                 public DefaultFacelet newInstance(final URL key) throws IOException {
                     return createMetadataFacelet(key);
                 }
             };
         
-        this.cache.init(faceletFactory, metadataFaceletFactory);
+        this.cache.setMemberFactories(faceletFactory, metadataFaceletFactory);
     }
 
 
@@ -246,7 +243,7 @@ public class DefaultFaceletFactory extends FaceletFactory {
     }
 
     public Facelet getMetadataFacelet(URL url) throws IOException {
-        return this.cache.getMetadataFacelet(url);
+        return this.cache.getViewMetadataFacelet(url);
     }
 
     public boolean needsToBeRefreshed(URL url) {

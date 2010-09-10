@@ -37,7 +37,7 @@
 package com.sun.faces.facelets.impl;
 
 
-import com.sun.faces.facelets.FaceletCache;
+import javax.faces.view.facelets.FaceletCache;
 import com.sun.faces.util.ConcurrentCache;
 import com.sun.faces.util.ExpiringConcurrentCache;
 
@@ -77,7 +77,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
                 // if no expiry check is going to be performed
                 long lastModified = checkExpiry ? _getLastModified(key) : 0;
                 return new Record(System.currentTimeMillis(), lastModified,
-                                  getFaceletInstanceFactory().newInstance(key), refreshPeriod);
+                                  getMemberFactory().newInstance(key), refreshPeriod);
             }
         };
 
@@ -88,7 +88,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
                 // if no expiry check is going to be performed
                 long lastModified = checkExpiry ? _getLastModified(key) : 0;
                 return new Record(System.currentTimeMillis(), lastModified,
-                                  getMetadataFaceletInstanceFactory().newInstance(key), refreshPeriod);
+                                  getMetadataMemberFactory().newInstance(key), refreshPeriod);
             }
         };
 
@@ -108,6 +108,7 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
         }
     }
 
+    @Override
     public DefaultFacelet getFacelet(URL url) throws IOException {
         DefaultFacelet f = null;
         
@@ -119,12 +120,14 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
         return f;
     }
 
+    @Override
     public boolean isFaceletCached(URL url) {
         return _faceletCache.containsKey(url);
     }
 
 
-    public DefaultFacelet getMetadataFacelet(URL url) throws IOException {
+    @Override
+    public DefaultFacelet getViewMetadataFacelet(URL url) throws IOException {
         DefaultFacelet f = null;
         
         try {
@@ -135,7 +138,8 @@ final class DefaultFaceletCache extends FaceletCache<DefaultFacelet> {
         return f;
     }
 
-    public boolean isMetadataFaceletCached(URL url) {
+    @Override
+    public boolean isViewMetadataFaceletCached(URL url) {
         return _metadataFaceletCache.containsKey(url);
     }
 

@@ -40,12 +40,13 @@ import java.io.IOException;
 
 import java.net.URL;
 
-
+@Deprecated
 public abstract class FaceletCache<V> {
     
     /**
      * Factory interface for creating Facelets.
      */
+    @Deprecated
     public interface InstanceFactory<V> {
         public V newInstance(final URL key) throws IOException;
     }

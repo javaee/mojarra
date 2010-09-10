@@ -40,9 +40,9 @@
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
     metadata-complete="true"
-    version="2.0">
+    version="2.1">
 
 
   <!-- Configure Object Factories -->
@@ -78,6 +78,9 @@
     <external-context-factory>
       com.sun.faces.context.ExternalContextFactoryImpl
     </external-context-factory>
+    <facelet-cache-factory>
+      com.sun.faces.facelets.impl.FaceletCacheFactoryImpl
+    </facelet-cache-factory>
   </factory>
 
 

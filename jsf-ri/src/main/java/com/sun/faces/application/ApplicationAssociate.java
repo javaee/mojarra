@@ -42,7 +42,6 @@ import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.facelets.FaceletCache;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
 import com.sun.faces.facelets.FaceletFactory;
@@ -57,6 +56,8 @@ import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.facelets.util.FunctionLibrary;
 import com.sun.faces.facelets.util.DevTools;
 import javax.faces.view.facelets.ResourceResolver;
+import javax.faces.view.facelets.FaceletCache;
+import javax.faces.view.facelets.FaceletCacheFactory;
 import com.sun.faces.facelets.impl.DefaultResourceResolver;
 import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.mgbean.BeanManager;
@@ -73,6 +74,7 @@ import com.sun.faces.el.DemuxCompositeELResolver;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.VariableResolverChainWrapper;
+import com.sun.faces.facelets.PrivateApiFaceletCacheAdapter;
 import com.sun.faces.facelets.tag.xml.XmlLibrary;
 import com.sun.faces.lifecycle.ELResolverInitPhaseListener;
 
@@ -100,7 +102,9 @@ import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.faces.FactoryFinder;
 import javax.faces.application.NavigationCase;
+import javax.faces.view.facelets.FaceletCacheFactory;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -650,19 +654,23 @@ public class ApplicationAssociate {
         FaceletCache cache = null;
         String faceletCacheName = webConfig.getOptionValue(FaceletCache);
         if (faceletCacheName != null && faceletCacheName.length() > 0) {
-            try
-            {
-                cache = (FaceletCache)ReflectionUtil.forName(faceletCacheName)
+            try {
+                com.sun.faces.facelets.FaceletCache privateApiCache =
+                        (com.sun.faces.facelets.FaceletCache)ReflectionUtil.forName(faceletCacheName)
                                           .newInstance();
-            }
-            catch(Exception e)
-            {
+                cache = new PrivateApiFaceletCacheAdapter(privateApiCache);
+            } catch(Exception e) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
                                "Error Loading Facelet cache: " + faceletCacheName,
                                e);
                 }
             }
+        }
+        if (null == cache) {
+            FaceletCacheFactory cacheFactory = (FaceletCacheFactory)
+                    FactoryFinder.getFactory(FactoryFinder.FACELET_CACHE_FACTORY);
+            cache = cacheFactory.getFaceletCache();
         }
 
         // Resource.getResourceUrl(ctx,"/")
