@@ -74,6 +74,10 @@ container.home=
 container.host=localhost
 container.port=8080
 
+# these are the properties necessary to pass on the command line to
+# configure an alternate port set for the automated tests.
+# -Dcontainer.port=20080 -Dglassfish.domain=myDomain -Dglassfish.admin.port=20048
+
 # --------------------------------------------------
 #    Glassfish specific properties needed by
 #    ${jsf.build.home}/common/ant/glassfish/container.xml
