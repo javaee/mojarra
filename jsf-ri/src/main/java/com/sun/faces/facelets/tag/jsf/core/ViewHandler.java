@@ -155,9 +155,6 @@ public final class ViewHandler extends TagHandlerImpl {
             assert(null != viewId);
             assert(0 < viewId.length());
 
-            if (StateContext.getStateContext(context).partialStateSaving(context, root.getViewId())) {
-                root.markInitialState();
-            }
         }
 
         this.nextHandler.apply(ctx, parent);

@@ -198,14 +198,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
                     getAttachedObjectHandlers(c, false));
             vdl.retargetMethodExpressions(context, c);
 
-            // RELEASE_PENDING This is *ugly*.  See my comments in
-            // ComponentTagHandlerDelegateImpl at the end of the apply()
-            // method
-            if (StateContext.getStateContext(context).partialStateSaving(context, viewId)) {
-                markInitialState(c);
-            }
-
-
         }
 
     }
@@ -357,19 +349,6 @@ public class CompositeComponentTagHandler extends ComponentHandler implements Cr
 
     }
 
-
-
-
-
-
-    private void markInitialState(UIComponent c) {
-        if (!c.initialStateMarked()) {
-            c.markInitialState();
-            for (Iterator<UIComponent> i = c.getFacetsAndChildren(); i.hasNext(); ) {
-                markInitialState(i.next());
-            }
-        }
-    }
 
 
     // ---------------------------------------------------------- Nested Classes

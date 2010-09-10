@@ -737,12 +737,19 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         Facelet f = faceletFactory.getFacelet(view.getViewId());
 
         // populate UIViewRoot
-        f.apply(ctx, view);
-        doPostBuildActions(ctx, view);
+        try {
+            ctx.getAttributes().put(IS_BUILDING_INITIAL_STATE, Boolean.TRUE);
+            f.apply(ctx, view);
+            doPostBuildActions(ctx, view);
+        } finally {
+            ctx.getAttributes().remove(IS_BUILDING_INITIAL_STATE);
+        }
         ctx.getApplication().publishEvent(ctx,
                                           PostAddToViewEvent.class,
                                           UIViewRoot.class,
                                           view);
+        markInitialState(ctx, view);
+        
         Util.setViewPopulated(ctx, view);
 
     }
@@ -1036,14 +1043,40 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     }
 
-
+     
     private void doPostBuildActions(FacesContext ctx, UIViewRoot root) {
         StateContext stateCtx = StateContext.getStateContext(ctx);
         if (stateCtx.partialStateSaving(ctx, root.getViewId())) {
-            root.markInitialState();
+	    // lu4242            root.markInitialState();
         }
         stateCtx.startTrackViewModifications();
     }
+
+     private void markInitialState(FacesContext ctx, UIViewRoot root)
+     {
+         StateContext stateCtx = StateContext.getStateContext(ctx);
+         if (stateCtx.partialStateSaving(ctx, root.getViewId())) {
+             try {
+                 ctx.getAttributes().put(IS_BUILDING_INITIAL_STATE, Boolean.TRUE);
+                 if (!root.isTransient()) {
+                     markInitialState(root);
+                 }
+             } finally {
+                 ctx.getAttributes().remove(IS_BUILDING_INITIAL_STATE);
+             }
+         }
+     }
+     
+     private void markInitialState(final UIComponent component)
+     {
+         component.markInitialState();
+         for (Iterator<UIComponent> it = component.getFacetsAndChildren() ; it.hasNext() ; ) {
+             UIComponent child = it.next();
+             if (!child.isTransient()) {
+                 markInitialState(child);
+             }
+         }
+     }    
 
 
     private void retargetHandler(FacesContext context,

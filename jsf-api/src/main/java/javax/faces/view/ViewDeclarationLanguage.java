@@ -45,10 +45,10 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0"><span
- * class="changed_modified_2_0_rev_a">The</span> contract that a view
- * declaration language must implement to interact with the JSF runtime.
- * An implementation of this class must be thread-safe.</p>
+ * <p class="changed_added_2_0"><span class="changed_modified_2_0_rev_a
+ * changed_modified_2_1">The</span> contract that a view declaration
+ * language must implement to interact with the JSF runtime.  An
+ * implementation of this class must be thread-safe.</p>
  *
  * <div class="changed_added_2_0">
  * 
@@ -61,6 +61,20 @@ import javax.faces.context.FacesContext;
  * 
  */
 public abstract class ViewDeclarationLanguage {
+
+    /**
+     * <p class="changed_added_2_1">Marker within the
+     * <code>FacesContext</code> attributes map to indicate we are
+     * marking initial state, so the <code>markInitialState()</code>
+     * method of iterating components such as {@link
+     * javax.faces.component.UIData} could recognize this fact and save
+     * the initial state of descendents.</p>
+
+     * @since 2.1
+
+     */
+    public final static String IS_BUILDING_INITIAL_STATE =
+            ViewDeclarationLanguage.class.getName() + ".IS_BUILDING_INITIAL_STATE";
 
     /**
      * <p class="changed_added_2_0">Return a reference to the component

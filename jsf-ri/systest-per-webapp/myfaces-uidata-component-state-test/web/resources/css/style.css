@@ -1,0 +1,16 @@
+body {
+    background-color: rgb(0, 35, 75);
+    font-family: tahoma, arial, helvetica, sans-serif;
+    font-size: 12px;
+}
+
+#container {
+    margin: 10px auto;
+    width: 900px;
+    background-color: white;
+    padding: 3px;
+}
+
+h1 {
+    font-size: 20px;
+}

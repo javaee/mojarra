@@ -45,7 +45,7 @@ import java.util.*;
 import java.io.Serializable;
 
 /**A base implementation for
- * maps which implement the PartialStateHolder interface.
+ * maps which implement the PartialStateHolder and TransientStateHolder interfaces.
  *
  * This can be used as a base-class for all
  * state-holder implementations in components,
@@ -53,13 +53,14 @@ import java.io.Serializable;
  * of the StateHolder interface.
  */
 @SuppressWarnings({"unchecked"})
-class ComponentStateHelper implements StateHelper {
+class ComponentStateHelper implements StateHelper , TransientStateHelper, TransientStateHolder {
 
     private UIComponent component;
     private boolean isTransient;
     private Map<Serializable, Object> deltaMap;
     private Map<Serializable, Object> defaultMap;
-
+    private Map<Serializable, Object> transientState;
+    
     // ------------------------------------------------------------ Constructors
 
 
@@ -68,7 +69,7 @@ class ComponentStateHelper implements StateHelper {
         this.component = component;
         this.deltaMap = new HashMap<Serializable,Object>();
         this.defaultMap = new HashMap<Serializable,Object>();
-        
+        this.transientState = null;
     }
 
 
@@ -274,6 +275,16 @@ class ComponentStateHelper implements StateHelper {
         if (state == null) {
             return;
         }
+        
+        if (!component.initialStateMarked() && !defaultMap.isEmpty())
+        {
+            defaultMap.clear();
+            if(deltaMap != null && !deltaMap.isEmpty())
+            {
+                deltaMap.clear();
+            }
+        }
+        
         Object[] savedState = (Object[]) state;
         if (savedState[savedState.length - 1] != null) {
             component.initialState = (Boolean) savedState[savedState.length - 1];
@@ -429,4 +440,39 @@ class ComponentStateHelper implements StateHelper {
         return ret;
     }
 
+
+    public Object getTransient(Serializable key)
+    {
+        return (transientState == null) ? null : transientState.get(key);
+    }
+
+    public Object getTransient(Serializable key, Object defaultValue)
+    {
+        Object returnValue = (transientState == null) ? null : transientState.get(key);
+        if (returnValue != null)
+        {
+            return returnValue;
+        }
+        return defaultValue;
+    }
+
+    public Object putTransient(Serializable key, Object value)
+    {
+        if (transientState == null)
+        {
+            transientState = new HashMap<Serializable, Object>();
+        }
+        return transientState.put(key, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void restoreTransientState(FacesContext context, Object state)
+    {
+        transientState = (Map<Serializable, Object>) state;
+    }
+    
+    public Object saveTransientState(FacesContext context)
+    {
+        return transientState;
+    }
 }

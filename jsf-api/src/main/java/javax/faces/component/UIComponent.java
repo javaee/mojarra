@@ -105,7 +105,7 @@ import javax.faces.render.Renderer;
 
  */
 
-public abstract class UIComponent implements PartialStateHolder, SystemEventListenerHolder,
+public abstract class UIComponent implements PartialStateHolder, TransientStateHolder, SystemEventListenerHolder,
         ComponentSystemEventListener {
 
     private static Logger LOGGER = Logger.getLogger("javax.faces.component",
@@ -247,7 +247,7 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
      * on what has been set.
      */
     List<String> attributesThatAreSet;
-    StateHelper stateHelper = null;
+    TransientStateHelper stateHelper = null;
     UIComponent compositeParent;
 
 
@@ -533,6 +533,68 @@ public abstract class UIComponent implements PartialStateHolder, SystemEventList
 
     }
 
+    /**
+     * <p class="changed_added_2_1">Return the {@link
+     * TransientStateHelper} instance for this <code>UIComponent</code>
+     * instance.  The default implementation simply calls through to
+     * {@link #transientStateHelper(boolean)} passing <code>true</code>
+     * as the argument.</p>
+     *
+     * @since 2.1
+     */
+    
+    protected TransientStateHelper getTransientStateHelper()
+    {
+        return getTransientStateHelper(true);
+    }
+    
+    /**
+     * <p class="changed_added_2_1">Return the {@link
+     * TransientStateHelper} instance for this <code>UIComponent</code>
+     * instance.</p>
+     *
+     * @param create if <code>true</code> create, if necessary, any
+     * internal data structures.  If <code>false</code>, do not create
+     * any instances.  In this case, it is possible for this method to
+     * return <code>null</code>.
+     *
+     * @since 2.1
+     */
+    
+    protected TransientStateHelper getTransientStateHelper(boolean create) {
+        
+        if (create && stateHelper == null) {
+            stateHelper = new ComponentStateHelper(this);
+        }
+        return stateHelper;
+        
+    }
+
+    /**
+     * <p class="changed_added_2_1">For components that need to support
+     * the concept of transient state, this method will restore any
+     * state saved on a prior call to {@link #saveTransientState}.</p>
+     *
+     * @since 2.1
+     */
+    
+    public void restoreTransientState(FacesContext context, Object state)
+    {
+        getTransientStateHelper().restoreTransientState(context, state);
+    }
+
+    /**
+     * <p class="changed_added_2_1">For components that need to support
+     * the concept of transient state, this method will save any state
+     * that is known to be transient in nature.</p>
+     *
+     * @since 2.1
+     */
+    
+    public Object saveTransientState(FacesContext context)
+    {
+        return getTransientStateHelper().saveTransientState(context);
+    }
 
     private boolean isInView;
 

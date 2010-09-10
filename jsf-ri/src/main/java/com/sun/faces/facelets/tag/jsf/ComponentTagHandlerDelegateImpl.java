@@ -200,10 +200,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
         addComponentToView(ctx, parent, c, componentFound);
         adjustIndexOfDynamicChildren(context, c);
         popComponentFromEL(ctx, c, ccStackManager, compcompPushed);
-
-        if (shouldMarkInitialState(ctx.getFacesContext())) {
-            c.markInitialState();
-        }
         
     }
 
@@ -462,25 +458,6 @@ public class ComponentTagHandlerDelegateImpl extends TagHandlerDelegate {
 
 
 
-    /**
-     * @param ctx the <code>FacesContext</code> for the current request.
-     * @return <code>true</code> if <code>UIComponent.markInitialState()</code>
-     *  should be called on the component that is being processed, otherwise
-     *  return <code>false</code>
-     */
-    private boolean shouldMarkInitialState(FacesContext ctx) {
-
-        // RELEASE_PENDING - this is *ugly*.  We need to *not*
-        // call PartialStateHolder.markInitialState() if the component
-        // has a composite component parent under the assumption that
-        // the CompositeComponentTagHandler will take care of it.
-
-        return (StateContext.getStateContext(ctx).partialStateSaving(ctx, null)
-                 && UIComponent.getCurrentCompositeComponent(ctx) == null);
-
-    }
-
-    
     /**
      * If the binding attribute was specified, use that in conjuction with our
      * componentType String variable to call createComponent on the Application,

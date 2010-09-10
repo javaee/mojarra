@@ -48,11 +48,11 @@ import javax.faces.event.PreValidateEvent;
 
 
 /**
- * <p><strong>UIForm</strong> is a {@link UIComponent} that represents an
- * input form to be presented to the user, and whose child components represent
- * (among other things) the input fields to be included when the form is
- * submitted.</p>
- * <p/>
+ * <p><strong class="changed_modified_2_1">UIForm</strong> is a {@link
+ * UIComponent} that represents an input form to be presented to the
+ * user, and whose child components represent (among other things) the
+ * input fields to be included when the form is submitted.</p>
+
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>javax.faces.Form</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
@@ -89,7 +89,9 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
         /**
          * <p>Last id vended by {@link UIForm#createUniqueId(javax.faces.context.FacesContext, String)}.</p>
          */
-        lastId
+        lastId,
+        
+        submitted,
     }
 
 
@@ -125,40 +127,47 @@ public class UIForm extends UIComponentBase implements NamingContainer, UniqueId
     /**
      * <p>The form submitted flag for this {@link UIForm}.</p>
      */
-    private boolean submitted = false;
+    //private boolean submitted = false;
 
 
     /**
-     * <p>Returns the current value of the <code>submitted</code>
-     * property.  The default value is <code>false</code>.  See {@link
-     * #setSubmitted} for details.</p>
+     * <p><span class="changed_modified_2_1">Returns</span> the current value
+     * of the <code>submitted</code> property.  The default value is
+     * <code>false</code>.  See {@link #setSubmitted} for details.</p>
+
+     * <p class="changed_modified_2_1">This property must be kept as a
+     * transient property using the {@link
+     * UIComponent#getTransientStateHelper}.</p>
      */
     public boolean isSubmitted() {
 
-        return (this.submitted);
-
+        //return (this.submitted);
+        return (Boolean) getTransientStateHelper().getTransient(PropertyKeys.submitted, false);
     }
 
 
     /**
-     * <p>If <strong>this</strong> <code>UIForm</code> instance (as
-     * opposed to other forms in the page) is experiencing a submit
-     * during this request processing lifecycle, this method must be
-     * called, with <code>true</code> as the argument, during the {@link
+     * <p><span class="changed_modified_2_1">If</span>
+     * <strong>this</strong> <code>UIForm</code> instance (as opposed to
+     * other forms in the page) is experiencing a submit during this
+     * request processing lifecycle, this method must be called, with
+     * <code>true</code> as the argument, during the {@link
      * UIComponent#decode} for this <code>UIForm</code> instance.  If
      * <strong>this</strong> <code>UIForm</code> instance is
      * <strong>not</strong> experiencing a submit, this method must be
      * called, with <code>false</code> as the argument, during the
      * {@link UIComponent#decode} for this <code>UIForm</code>
-     * instance.</p>
-     * <p/>
-     * <p>The value of a <code>UIForm</code>'s submitted property must
-     * not be saved as part of its state.</p>
+     * instance.</p> <p/> <p>The value of a <code>UIForm</code>'s
+     * submitted property must not be saved as part of its state.</p>
+
+     * <p class="changed_modified_2_1">This property must be kept as a
+     * transient property using the {@link
+     * UIComponent#getTransientStateHelper}.</p>
      */
     public void setSubmitted(boolean submitted) {
 
-        this.submitted = submitted;
-
+        //this.submitted = submitted;
+        getTransientStateHelper().putTransient(PropertyKeys.submitted, submitted);
     }
 
     /**

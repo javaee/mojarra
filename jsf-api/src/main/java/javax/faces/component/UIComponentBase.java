@@ -1477,10 +1477,9 @@ public abstract class UIComponentBase extends UIComponent {
         }
     }
 
-    private Object[] values;
 
     public Object saveState(FacesContext context) {
-
+        Object[] values = null;
         if (context == null) {
             throw new NullPointerException();
         }
@@ -1548,7 +1547,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (state == null) {
             return;
         }
-        values = (Object[]) state;
+        Object[] values = (Object[]) state;
 
         if (values[0] != null) {
             if (listeners == null) {
