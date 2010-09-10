@@ -99,6 +99,7 @@ public class FormOmittedTestCase extends AbstractTestCase {
         HtmlPage page = getPage("/faces/standard/formomitted.xhtml");
 
         String pageAsText = page.asText();
-        assertTrue (pageAsText.contains("The button/link/text component needs to have a Form in its ancestry. Please add <h:form>."));
+        assertTrue (pageAsText.contains("The form component needs to have a UIForm in its ancestry. Suggestion: enclose the necessary components within <h:form>"));
+
     }
 }

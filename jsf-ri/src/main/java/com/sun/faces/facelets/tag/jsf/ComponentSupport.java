@@ -64,6 +64,9 @@ import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.UINamingContainer;
+import javax.faces.component.ActionSource;
+import javax.faces.component.ActionSource2;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
@@ -459,17 +462,20 @@ public final class ComponentSupport {
                         //no HtmlForm in the ancestry of the child
                         String key = MessageUtils.MISSING_FORM_ERROR;
                         Object[] params = new Object[]{};
-
-                        // PENDING(sheetal): make it so the message is only queued
-                        // once per page.  Change the english message text (don't bother
-                        // changing the i18ns) to be (all on one line)
-                        // the form component needs to have a UIForm in its ancestry.
-                        // Suggestion: enclose the necessary components within
-                        // <h:form>
+                        boolean missingFormReported = false;
 
                         FacesMessage m = MessageUtils.getExceptionMessage(key, params);
-                        m.setSeverity(FacesMessage.SEVERITY_WARN);
-                        ctx.getFacesContext().addMessage(null, m);
+                        List<FacesMessage> messageList = ctx.getFacesContext().getMessageList();
+                        for (FacesMessage fm : messageList) {
+                            if (fm.getDetail().equals(m.getDetail())) {
+                                missingFormReported = true;
+                                break;
+                            }
+                        }
+                        if (!missingFormReported) {
+                            m.setSeverity(FacesMessage.SEVERITY_WARN);
+                            ctx.getFacesContext().addMessage(null, m);
+                        }
                     }
                 }
             }
