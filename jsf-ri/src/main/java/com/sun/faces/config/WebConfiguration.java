@@ -1143,7 +1143,10 @@ public class WebConfiguration {
         CacheResourceModificationTimestamp(
               "com.sun.faces.cacheResourceModificationTimestamp",
               false
-        );
+        ),
+        EnableAgressiveSessionDirtying(
+                "com.sun.faces.enableAgressiveSessionDirtying",
+                false);
 
         private BooleanWebContextInitParameter alternate;
 
