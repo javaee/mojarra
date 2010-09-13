@@ -1,195 +1,221 @@
-<html>
-<head caption="Change Log">
-    <link rel="stylesheet" type="text/css" href="style/sun.css"/>
+
+<!-- saved from url=(0078)http://jcp.org/aboutJava/communityprocess/maintenance/jsr314/314ChangeLog.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>
+Change Log for JSR-000314 JavaServer Faces 2
+</title>
 </head>
-<style type="text/css">            
-    .red { color: red; }
-    .purple { color: purple; }
-    .blue { color: blue; }
-    .green { color: green; }
-    .black { color: black; }    
-    .ra { background-color: lightgray; }
-    .rb { background-color: lavender; }   
-    .ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
-    .s0 { color: rgb(0,0,128); font-weight: bold; }
-    .s1 { }
-    .s2 { color: rgb(128,128,128); font-style: italic; }
-    .s3 { color: rgb(128,128,128); font-style: italic; }
-    .s4 { color: rgb(128,128,128); font-weight: bold; font-style: italic; }
-</style>
 <body>
+<h2><center>
+Change Log for JSR-000314 JavaServer<font size="-2"><sup>TM</sup></font> Faces 2
+</center>
+</h2>
 
-<h2>Issues Resolved In This Release</h2>
-<table width="100%" style="font-size:small;border:1px solid; border-width:1px;">
-<tr style="background-color:silver">
-    <th>ID</th>
-    <th>Type</th>
-    <th>Pri</th>
-    <th>Plat</th>
-    <th>Owner</th>
-    <th>State</th>
-    <th>Resolution</th>
-    <th>Summary</th>
+<p>This page details the proposed, accepted and deferred changes to JSR
+314, documenting the changes that will go into revision 2.1, per <a
+href="http://jcp.org/en/procedures/jcp2#4.2">Section 4.2 of the JCP 2.7
+document</a>.</p>
+
+<p>Last updated: 13 September 2010</p>
+
+<p>Generated from <a href="">a java.net issuetracke query for all issues
+containing the keyword &#8220;changelog_2_1&#8221;</a>.</p>
+
+<b>PROPOSED CHANGES</b>
+
+<table border="" width="100%">
+
+<tbody><tr>
+<td>
+<h2>Target Milestone 2.1</h2>
+
+The source code repositories for the spec to which this change-log applies are:
+<p>
+   * <a href="https://mojarra.dev.java.net/svn/mojarra/trunk">svn url for generated portion of spec, and implementation</a><br>
+   * CVS info for non-generated portion of spec: cvs -d :pserver:USERNAME@cvs.dev.java.net:/cvs javaserverfaces-spec-eg
+
+</td>
 </tr>
 
-<!-- BEGIN DEFECTS (red) -->
+<tr><td>
+<table width="100%" border="1">
+        <tbody><tr>
+          <th colspan="2">Mon Sep 13 18:13:44 +0000 2010</th>
+        </tr>
+        <tr>
+          <th>
+            <a href="buglist.cgi?issue_id=153,490,545,576,607,663,696,731,733,777,786,800,808,850,857,862,863,866,868,883&amp;order=issues.issue_id">ID</a>
+          </th>
 
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=378">378</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P1
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">NPE from MethodbindingMethodExpressionAdapter.equals()
-
-    </td>
-</tr>
-    
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=375">375</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P2
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">output tags getting deleted after post-base of page with verbatim
-
-    </td>
-</tr>
-    
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=355">355</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">h:message not getting error message for component
-
-    </td>
-</tr>
-    
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=364">364</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">Incorrect parameter values submitted after non-linear navigation
-
-    </td>
+    <th><a href="buglist.cgi?resort=1&amp;issue_id=153,490,545,576,607,663,696,731,733,777,786,800,808,850,857,862,863,866,868,883&amp;order=issues.short_desc%2C%20issues.issue_id">Summary</a></th>
 </tr>
 
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=368">368</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">NPE when navigatine from PL before ViewRoot has been created
-
-    </td>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=153">153</a>
+	</td>
+	<td><span class="summary">Add property to UIData to enable transient state saving with</span>
+	</td>
 </tr>
-
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=370">370</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">Presence of multiple FacesServlet mappings in same URL will
-
-    </td>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=490">490</a>
+	</td>
+	<td><span class="summary">Enable JSF views to be written in pure XML</span>
+	</td>
 </tr>
-
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=369">369</a>
-    </td>
-    <td class="blue">ENHANCEMENT
-    </td>
-    <td class="blue">P3
-    </td>
-    <td class="blue">All
-    </td>
-
-    <td class="blue">rlubke
-    </td>
-    <td class="blue">RESOLVED
-    </td>
-    <td class="blue">FIXED
-    </td>
-    <td class="blue">Dynamically creating hidden files for action components
-
-    </td>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=545">545</a>
+	</td>
+	<td><span class="summary">New visit hints: EXECUTE_STATE_SAVING, SKIP_ITERATION</span>
+	</td>
 </tr>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=576">576</a>
+	</td>
+	<td><span class="summary">Make default resource excludes contain .groovy extension</span>
+	</td>
+</tr>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=607">607</a>
+	</td>
+	<td><span class="summary">Add method FacesContext.isReleased()</span>
+	</td>
+</tr>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=663">663</a>
+	</td>
+	<td><span class="summary">apply() needs to be called twice: restore-view, after invoke</span>
+	</td>
+</tr>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=696">696</a>
+	</td>
+	<td><span class="summary">Option to suppress xml declaration in Facelets</span>
+	</td>
+</tr>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=731">731</a>
+	</td>
+	<td><span class="summary">Clarify f:event listener method parameter requirements</span>
+	</td>
+</tr>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=733">733</a>
+	</td>
+	<td><span class="summary">Add read only boolean "secure" property on ExternalContext</span>
+	</td>
+</tr>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=777">777</a>
+	</td>
+	<td><span class="summary">Define API to allow pluggable Facelet cache management</span>
+	</td>
+</tr>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=786">786</a>
+	</td>
+	<td><span class="summary">Add sessionMaxInactiveInterval to ExternalContext</span>
+	</td>
+</tr>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=800">800</a>
+	</td>
+	<td><span class="summary">UIViewRoot.getComponentResources() generated id rules</span>
+	</td>
+</tr>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=808">808</a>
+	</td>
+	<td><span class="summary">Move SystemEventListener implementation from UIComponent dow</span>
+	</td>
+</tr>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=850">850</a>
+	</td>
+	<td><span class="summary">composite.tld: Specify deferred-method Element Within cc:aat</span>
+	</td>
+</tr>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=857">857</a>
+	</td>
+	<td><span class="summary">OutputStyleSheet Renderer: add a "media" attribute.</span>
+	</td>
+</tr>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=862">862</a>
+	</td>
+	<td><span class="summary">Remove class jsf-api/src/main/java/javax/faces/event/PostAdd</span>
+	</td>
+</tr>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=863">863</a>
+	</td>
+	<td><span class="summary">Specify use of ServletContainerInitializer.</span>
+	</td>
+</tr>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=866">866</a>
+	</td>
+	<td><span class="summary">Section 5.6.2.5 Specify special "this" resource library name</span>
+	</td>
+</tr>
+<tr class="b">
+	<td>
+ 	<a href="show_bug.cgi?id=868">868</a>
+	</td>
+	<td><span class="summary">Drop support for CURRENT_COMPONENT CURRENT_COMPOSITE_COMPONE</span>
+	</td>
+</tr>
+<tr class="a">
+	<td>
+ 	<a href="show_bug.cgi?id=883">883</a>
+	</td>
+	<td><span class="summary">Specify that ScriptRenderer calls encodeResourceURL</span>
+	</td>
+</tr>
+</tbody></table>
+</td></tr>
+
+
+</tbody></table>
+
+
+</p><p>
+
+<b>ACCEPTED CHANGES</b><table border="" width="100%">
+
+<tbody><tr><td>
+<p>
+</p><h2>Target 2.1</h2>
+</td>
+</tr>
+</tbody>
+
 
 </table>
 
 
-</body>
-</html>
+<b>DEFERRED CHANGES</b><table border="" width="100%">
+
+<tbody><tr><td><br>
+
+
+
+</td></tr></tbody></table></body></html>
