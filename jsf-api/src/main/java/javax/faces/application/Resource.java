@@ -45,12 +45,14 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0">An instance of <code>Resource</code> is a Java
- * object representation of the artifact that is served up in response
- * to a <i>resource request</i> from the client.  Instances of
- * <code>Resource</code> are normally created and initialized via calls
- * to {@link ResourceHandler#createResource}.  See the documentation for
- * {@link ResourceHandler} for more information.</p>
+ * <p class="changed_added_2_0"><span
+ * class="changed_modified_2_1">An</span> instance of
+ * <code>Resource</code> is a Java object representation of the artifact
+ * that is served up in response to a <i>resource request</i> from the
+ * client.  Instances of <code>Resource</code> are normally created and
+ * initialized via calls to {@link ResourceHandler#createResource}.  See
+ * the documentation for {@link ResourceHandler} for more
+ * information.</p>
  *
  * <div class="changed_added_2_0">
  * </div>
@@ -172,13 +174,22 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed_added_2_0">If the current request is a resource
+     * <p class="changed_added_2_0"><span
+     * class="changed_modified_2_1">If</span> the current request is a resource
      * request, (that is, {@link ResourceHandler#isResourceRequest}
      * returns <code>true</code>), return an <code>InputStream</code>
      * containing the bytes of the resource.  Otherwise, throw an
      * <code>IOException</code>.</p>
      * @return an <code>InputStream</code> containing the bytes of the
      * resource.</p>
+     *
+     * <p class="changed_modified_2_1">Any EL expressions present in the
+     * resource must be evaluated before serving the bytes of the
+     * resource.  Note that due to browser and server caching, EL
+     * expressions in a resource file will generally only be evaluated
+     * once, when the resource is first served up.  Therefore, using EL
+     * expressions that refer to per-request data is not advisable since
+     * this data can become stale.</p>
      *
      * @throws IOException if the current request is not a resource request.
      */
