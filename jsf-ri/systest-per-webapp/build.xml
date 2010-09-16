@@ -63,6 +63,9 @@
         <path refid="htmlunit.compile.classpath"/>
     </path>
 
+    <property name="deploy-exploded-applications"
+              value="groovy" />
+
     <property name="applications-for-V3-only"
               value="disable-bean-validator,
                      no-web-xml" />
@@ -104,7 +107,6 @@
                    jsp-flash,
                    suppress-xml-decl,
                    replace-vdl"/>
-    <!-- add groovy to the property applications to enable it-->
     <!--
 
        EXCLUDED APPLICATIONS:
@@ -169,9 +171,19 @@
         <attribute name="base-app-dir"/>
         <attribute name="appname"/>
         <sequential>
-          <deploy.artifact
-                artifact="@{base-app-dir}/build/jsf-@{appname}.war"
-                appName="jsf-@{appname}"/>
+          <if>
+            <contains string="${deploy-exploded-applications}" substring="@{appname}" />
+            <then>
+              <deploydir.artifact
+                    explodedWarDir="@{base-app-dir}/build/jsf-@{appname}"
+                    appName="jsf-@{appname}"/>
+            </then>
+            <else>
+              <deploy.artifact
+                    artifact="@{base-app-dir}/build/jsf-@{appname}.war"
+                    appName="jsf-@{appname}"/>
+            </else>
+          </if>
         </sequential>
     </macrodef>
 

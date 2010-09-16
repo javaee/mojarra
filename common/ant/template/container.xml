@@ -134,6 +134,18 @@
             description="Deploy the JSF Implementation artifacts to the target container.">
         <echo message="Provide 'container.deploy' implementation"/>    
     </target>
+
+    <!--
+        OPTIONAL
+          Perform whatever steps are necessary to integrate
+          any dependencies necessary for running the automated tests into the
+          target container.
+    -->
+    <target name="container.deploy.test.dependencies"
+            description="Deploy any container level dependencies to the container.">
+        <echo message="Provide 'container.deploy.test.dependencies' implementation"/>    
+    </target>    
+
     
     <!-- 
         OPTIONAL
