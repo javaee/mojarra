@@ -123,7 +123,9 @@
         <trycatch>
             <try>
                 <container.stop/>
+                <!-- PENDING(edburns): mojarra 1655
                 <antcall target="container.deploy.test.dependencies"/>
+                -->
                 <antcall target="container.deploy"/>
                 <echo message="Successfully deployed JSF implementation to container." />
                 <echo message="About to start container." />
