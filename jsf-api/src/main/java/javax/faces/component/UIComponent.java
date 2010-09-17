@@ -537,7 +537,7 @@ public abstract class UIComponent implements PartialStateHolder, TransientStateH
      * <p class="changed_added_2_1">Return the {@link
      * TransientStateHelper} instance for this <code>UIComponent</code>
      * instance.  The default implementation simply calls through to
-     * {@link #transientStateHelper(boolean)} passing <code>true</code>
+     * {@link #getTransientStateHelper(boolean)} passing <code>true</code>
      * as the argument.</p>
      *
      * @since 2.1

@@ -1310,7 +1310,7 @@ public abstract class ExternalContext {
      * the servlet container will keep this session open between client accesses.
      * After this interval, the servlet container will invalidate the session.
      * The maximum time interval can be set with the
-     * {@link #setMaxInactiveInterval} method. </p>
+     * {@link #setSessionMaxInactiveInterval} method. </p>
      *
      * <p class="changed_added_2_1">A return value of zero or less indicates
      * that the session will never timeout. </p>

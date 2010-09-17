@@ -2333,8 +2333,6 @@ this application, and passing the result through the
 
 <p>If the component is not disabled, take the following actions.</p>
 
-<div style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #ccffcc;">
-
   <p><a name="UIOutcomeTargetGetEncodedTargetUrl">Algorithm to obtain the url to which the user-agent should issue a GET request when clicked</a></p>
 
   <p>Obtain the <code>NavigationCase</code> that corresponds to the
@@ -2397,8 +2395,6 @@ this application, and passing the result through the
 	  <em>includeViewParams</em> as the last argument.</p></li>
 
   </ul>
-
-  </div>
 
   <p>The entire target URL string must be passed through a call to
   the <code>encodeResourceURL()</code> method of the

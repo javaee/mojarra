@@ -85,6 +85,19 @@
 
     <property>
         <description>
+          <![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]>
+        </description>
+        <display-name>Preserve Row Component State</display-name>
+        <icon></icon>
+        <property-name>preserveRowComponentState</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+            <tag-attribute>false</tag-attribute>
+        </property-extension>
+    </property>
+
+    <property>
+        <description>
           The number of rows of model data that are available for processing
           by this component.  If the number of rows is unknown, this property
           will be set to -1.

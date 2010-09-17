@@ -1515,7 +1515,7 @@ public class UIData extends UIComponentBase
     /**
      * <p class="changed_added_2_1">Override the base class method to
      * take special action if the method is being invoked when {@link
-     * ViewDeclarationLanguage.IS_BUILDING_INITIAL_STATE} is true
+     * ViewDeclarationLanguage#IS_BUILDING_INITIAL_STATE} is true
      * <strong>and</strong> the <code>preserveRowComponentState</code>
      * JavaBeans property for this instance is <code>true</code>.</p>
      *

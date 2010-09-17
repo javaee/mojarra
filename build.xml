@@ -272,6 +272,8 @@
 
    <target name="build.spec.snapshot" depends="dist">
 
+       <echo message="build.number: ${build.number}" />
+
        <available type="dir" file="${javaserverfaces-spec-eg.dir}"
                   property="spec-eg-dir-available" />
 

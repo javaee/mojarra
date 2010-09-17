@@ -444,12 +444,24 @@ table.diff tr.hideold
  *
  */
 
-a[href^="composite"] { cursor: url(changed_modified_2_0_rev_a_cursor.cur), pointer;
-                 background: url(changed_modified_2_0_rev_a.png); 
+a[href^="composite/tld-frame"], a[href^="f/tld-frame"], a[href^="h/tld-frame"], a[href^="c/tld-frame"], a[href^="ui/tld-frame"], a[href^="actionSource"], a[href^="editableValueHolder"], a[href^="attribute"], a[href^="facet"], a[href^="interface"], a[href^="valueHolder"], a[href^="ajax"], a[href^="event"], a[href^="metadata"], a[href^="param"], a[href^="selectItems"], a[href^="view"], a[href^="viewParam"], a[href^="commandButton"], a[href^="commandLink"], a[href^="dataTable"], a[href^="button"], a[href^="link"], a[href^="head"], a[href^="outputLink"], a[href^="outputScript"], a[href^="outputStylesheet"], a[href^="selectManyCheckbox"], a[href^="selectmanyListbox"] { cursor: url(changed_modified_2_1.cur), pointer;
+                 background: url(changed_modified_2_1.png); 
                  padding-left:0.2em; border-left:solid;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:orange }
 
+a[href^="head"], a[href^="title"] { cursor: url(changed_added_2_1_cursor.cur), pointer;
+                 background: url(changed_added_2_1.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="subview"], a[href^="verbatim"] { cursor: url(changed_deleted_2_1_cursor.cur), pointer;
+                 background: url(changed_deleted_2_1.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:red }
+/***
 a[href^="c/"] { cursor: url(changed_modified_2_0_rev_a_cursor.cur), pointer;
                  background: url(changed_modified_2_0_rev_a.png); 
                  padding-left:0.2em; border-left:solid;
@@ -474,7 +486,7 @@ a[href^="ui/"] { cursor: url(changed_modified_2_0_rev_a_cursor.cur), pointer;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:orange }
 
-
+***/
    .changed_added_2_0_rev_a { cursor: url(changed_added_2_0_rev_a_cursor.cur), pointer;
                  background: url(changed_added_2_0_rev_a.png); 
                  padding-left:0.2em; border-left:solid;

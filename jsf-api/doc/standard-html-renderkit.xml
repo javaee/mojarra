@@ -585,6 +585,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </property-extension>
     </property>
     <property>
+      <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+      <display-name>Preserve Row Component State</display-name>
+      <icon/>
+      <property-name>preserveRowComponentState</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
       <description>
           The number of rows of model data that are available for processing
           by this component.  If the number of rows is unknown, this property
@@ -6378,6 +6388,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </property-extension>
     </property>
     <property>
+      <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+      <display-name>Preserve Row Component State</display-name>
+      <icon/>
+      <property-name>preserveRowComponentState</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
       <description>
           The number of rows of model data that are available for processing
           by this component.  If the number of rows is unknown, this property
@@ -6671,6 +6691,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
 
 
+    <property>
+      <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+      <display-name>Preserve Row Component State</display-name>
+      <icon/>
+      <property-name>preserveRowComponentState</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
     <property>
       <description>
           Name or code of the background color for this table.
@@ -14465,6 +14495,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
 
     <property>
+      <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+      <display-name>Preserve Row Component State</display-name>
+      <icon/>
+      <property-name>preserveRowComponentState</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
       <description>
           Name or code of the background color for this table.
         </description>
@@ -21958,6 +21998,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
 
       <attribute>
+        <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+        <display-name>Preserve Row Component State</display-name>
+        <icon/>
+        <attribute-name>preserveRowComponentState</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <tag-attribute>false</tag-attribute>
+        </attribute-extension>
+      </attribute>
+      <attribute>
         <description>
           Name or code of the background color for this table.
         </description>
@@ -26264,8 +26314,6 @@ this application, and passing the result through the
 
 <p>If the component is not disabled, take the following actions.</p>
 
-<div style="padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #ccffcc;">
-
   <p><a name="UIOutcomeTargetGetEncodedTargetUrl">Algorithm to obtain the url to which the user-agent should issue a GET request when clicked</a></p>
 
   <p>Obtain the <code>NavigationCase</code> that corresponds to the
@@ -26328,8 +26376,6 @@ this application, and passing the result through the
 	  <em>includeViewParams</em> as the last argument.</p></li>
 
   </ul>
-
-  </div>
 
   <p>The entire target URL string must be passed through a call to
   the <code>encodeResourceURL()</code> method of the
@@ -27044,6 +27090,16 @@ this application, and passing the result through the
       </attribute>
 
 
+      <attribute>
+        <description><![CDATA[<span class="changed_added_2_1">Boolean flag directing how the per-row component state should be handled.</span>]]></description>
+        <display-name>Preserve Row Component State</display-name>
+        <icon/>
+        <attribute-name>preserveRowComponentState</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <tag-attribute>false</tag-attribute>
+        </attribute-extension>
+      </attribute>
       <attribute>
         <description>
           Name or code of the background color for this table.
