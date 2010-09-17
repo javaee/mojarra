@@ -196,6 +196,7 @@ class GroovyHelperImpl extends GroovyHelper {
 
         public MojarraGroovyClassLoader(GroovyScriptEngine gse) {
             super(new URL[0], gse.getGroovyClassLoader());
+	    gse.getGroovyClassLoader().setShouldRecompile(Boolean.TRUE);
             this.gse = gse;
         }
 
