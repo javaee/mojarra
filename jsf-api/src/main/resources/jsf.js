@@ -1615,6 +1615,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <li>Send the request as an <code>asynchronous POST</code> using the
              * <code>posting URL</code> that was determined in the previous step.</li>
              * </ul>
+             * Form serialization should occur just before the request is sent to minimize 
+             * the amount of time between the creation of the serialized form data and the 
+             * sending of the serialized form data (in the case of long requests in the queue).
              * Before the request is sent it must be put into a queue to ensure requests
              * are sent in the same order as when they were initiated.  The request callback function
              * must examine the queue and determine the next request to be sent.  The behavior of the
