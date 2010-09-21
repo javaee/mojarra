@@ -1,8 +1,11 @@
 /*
+ * $Id: ManagedBeanELResolver.java,v 1.19.4.6 2010/04/13 19:38:42 rogerk Exp $
+ */
+/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright 1997-2010 Sun Microsystems, Inc. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +13,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +22,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- *
+ * 
  * Contributor(s):
- *
+ * 
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -70,15 +73,17 @@ public class ManagedBeanELResolver extends ELResolver {
             throw new PropertyNotFoundException(message);
         }
 
-        return resolveBean(context, property);
+        return resolveBean(context, property, true);
+
     }
+
 
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
 
         if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property");
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
 
@@ -86,8 +91,11 @@ public class ManagedBeanELResolver extends ELResolver {
 
     }
 
-    public void setValue(ELContext context, Object base, Object property,
-                          Object val) throws ELException {
+    public void setValue(ELContext context,
+                         Object base,
+                         Object property,
+                         Object val)
+    throws ELException {
 
         if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
@@ -96,7 +104,12 @@ public class ManagedBeanELResolver extends ELResolver {
         }
 
         if (base == null) {
-            resolveBean(context, property);
+            // create the bean if it doesn't exist.  We won't mark the property
+            // as resolved in this case, since the spec requires us to actually
+            // wait to set the value until the ScopeAttributeELResolved so that
+            // implicit scopes with higher priority than this one have a crack
+            // at resolving the bean first
+            resolveBean(context, property, false);
         }
 
     }
@@ -177,7 +190,7 @@ public class ManagedBeanELResolver extends ELResolver {
 
     }
 
-    private Object resolveBean(ELContext context, Object property) {
+    private Object resolveBean(ELContext context, Object property, boolean markAsResolvedIfCreated) {
         Object result = null;
         BeanManager manager = getBeanManager();
         if (manager != null) {
@@ -190,11 +203,12 @@ public class ManagedBeanELResolver extends ELResolver {
                 if (result == null) {
                     result = manager.create(beanName, builder, facesContext);
                 }
-                context.setPropertyResolved(result != null);
+                context.setPropertyResolved(markAsResolvedIfCreated && (result != null));
             }
         }
-    
+
         return result;
     }
+
 
 }
