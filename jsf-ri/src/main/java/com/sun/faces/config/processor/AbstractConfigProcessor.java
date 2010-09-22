@@ -319,7 +319,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         ApplicationAssociate associate =
               ApplicationAssociate.getInstance(ctx.getExternalContext());
         AnnotationManager manager = associate.getAnnotationManager();
-        manager.applyConfigAnntations(ctx,
+        manager.applyConfigAnnotations(ctx,
                                       annotationType,
                                       ConfigManager.getAnnotatedClasses(ctx).get(annotationType));
         

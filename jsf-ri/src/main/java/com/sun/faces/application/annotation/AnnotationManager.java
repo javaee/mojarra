@@ -179,7 +179,7 @@ public class AnnotationManager {
      * @param annotatedClasses <code>Collection</code> of class names known
      *  to contain one or more Faces configuration annotations
      */
-    public void applyConfigAnntations(FacesContext ctx,
+    public void applyConfigAnnotations(FacesContext ctx,
                                       Class<? extends Annotation> annotationType,
                                       Set<? extends Class> annotatedClasses) {
 
