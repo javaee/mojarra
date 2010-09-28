@@ -251,7 +251,7 @@ public class FaceletsTestCase extends AbstractTestCase {
         int count = 0;
         for (HtmlElement element : list.getAllHtmlChildElements()) {
             count++;
-            assertEquals("form1:input: Validation Error: Length is less than allowable minimum of '5'", element.asText());
+            assertEquals("form1:input: Validation Error: Value is less than allowable minimum of '5'", element.asText());
             if (count > 1) {
                 fail("Expected a single validation failure");
             }
@@ -272,7 +272,7 @@ public class FaceletsTestCase extends AbstractTestCase {
         count = 0;
         for (HtmlElement element : list2.getAllHtmlChildElements()) {
             count++;
-            assertEquals("form2:input2: Validation Error: Length is less than allowable minimum of '5'", element.asText());
+            assertEquals("form2:input2: Validation Error: Value is less than allowable minimum of '5'", element.asText());
             if (count > 1) {
                 fail("Expected a single validation failure");
             }
