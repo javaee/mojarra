@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved. -->
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:f="http://java.sun.com/jsf/core"
+          xmlns:h="http://java.sun.com/jsf/html"
+          version="1.2">
+  <jsp:directive.page contentType="text/html;charset=utf-8"/>
+  <f:view>
+    
+      
+        <f:attribute name="mode" value="index"/>
+
+<h2>XML declaration: consumed</h2>
+
+<h2>Processing instruction: consumed</h2>
+
+<?xml-stylesheet href="funky.xsl" type="text/xml" alternate="yes"?>
+
+<h2>CDATA section: consumed</h2>
+
+<![CDATA[ <p>This is CDATA</p> ]]>
+
+<h2>Inline text escaping: not escaped</h2>
+
+
+                  <code>
+                    <br/>
+                    &amp;lt;context-param&amp;gt;
+                    <br/>
+                     
+&amp;nbsp;&amp;nbsp;&amp;lt;param-name&amp;gt;javax.faces.PARTIAL_STATE_SAVING 
+
+&amp;lt;/param-name&amp;gt;
+                    <br/>
+                     
+&amp;nbsp;&amp;nbsp;&amp;lt;param-value&amp;gt;true&amp;lt;/param-value&amp;gt 
+
+;
+                    <br/>
+                    &amp;lt;/context-param&amp;gt;
+                  </code>
+
+<h2>Comments: consumed</h2>
+
+
+<p>HTML Template Text</p>
+
+
+
+<p><h:outputText value="#{processAsJspxBean.prop}" /></p>
+
+<h:form prependId="false">
+
+<h:commandButton value="reload" />
+
+</h:form>
+
+
+<!-- comments consumed -->
+
+      
+
+
+    
+  </f:view>
+</jsp:root>

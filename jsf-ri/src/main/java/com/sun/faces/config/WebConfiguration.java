@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -59,8 +58,10 @@ import javax.servlet.ServletContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import java.util.Collections;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.faces.component.UIInput;
 import javax.faces.validator.BeanValidator;
 import javax.faces.view.facelets.ResourceResolver;
@@ -90,6 +91,9 @@ public class WebConfiguration {
     private Map<WebContextInitParameter, String> contextParameters =
           new EnumMap<WebContextInitParameter, String>(WebContextInitParameter.class);
 
+    private Map<WebContextInitParameter, Map<String, String>> facesConfigParameters =
+            new EnumMap<WebContextInitParameter, Map<String, String>>(WebContextInitParameter.class);
+
     private Map<WebEnvironmentEntry, String> envEntries =
           new EnumMap<WebEnvironmentEntry, String>(WebEnvironmentEntry.class);
 
@@ -100,6 +104,8 @@ public class WebConfiguration {
     private ServletContext servletContext;
 
     private ArrayList<DeferredLoggingAction> deferredLoggingActions;
+
+    private FaceletsConfiguration faceletsConfig;
 
 
     // ------------------------------------------------------------ Constructors
@@ -228,6 +234,39 @@ public class WebConfiguration {
         return result;
 
     }
+
+    public FaceletsConfiguration getFaceletsConfiguration() {
+
+        if (null == faceletsConfig) {
+            faceletsConfig = new FaceletsConfiguration(this);
+        }
+        return faceletsConfig;
+
+    }
+
+    public Map<String, String> getFacesConfigOptionValue(WebContextInitParameter param, boolean create) {
+        Map<String, String> result = null;
+
+        assert(null != facesConfigParameters);
+
+        result = facesConfigParameters.get(param);
+        if (null == result) {
+            if (create) {
+                result = new ConcurrentHashMap<String, String>(3);
+                facesConfigParameters.put(param, result);
+            } else {
+                result = Collections.emptyMap();
+            }
+        }
+
+        return result;
+
+    }
+
+    public Map<String, String> getFacesConfigOptionValue(WebContextInitParameter param) {
+        return getFacesConfigOptionValue(param, false);
+    }
+
     
     public String[] getOptionValue(WebContextInitParameter param, String sep) {
         String [] result;
@@ -335,7 +374,7 @@ public class WebConfiguration {
     }
 
 
-    public void doLoggingActions() {
+    public void doPostBringupActions() {
 
         if (deferredLoggingActions != null) {
             for (DeferredLoggingAction loggingAction : deferredLoggingActions) {
@@ -892,6 +931,10 @@ public class WebConfiguration {
         FaceletCache(
             "com.sun.faces.faceletCache",
             ""
+        ),
+        FaceletsProcessingFileExtensionProcessAs(
+                "",
+                ""
         );
 
 

@@ -266,7 +266,7 @@ public class ConfigureListener implements ServletRequestListener,
                     UIViewRoot.class,
                     webAppListener);
 
-            webConfig.doLoggingActions();
+            webConfig.doPostBringupActions();
 
         } catch (Throwable t) {
             if (LOGGER.isLoggable(Level.SEVERE)) {

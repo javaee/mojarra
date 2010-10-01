@@ -123,6 +123,8 @@
                value="com/sun/faces/systest/replacevdl/ReplaceViewDeclarationLanguageTestCase.class" />
     <property  name="myfaces-uidata-component-state-test"
                value="com/sun/faces/systest/myfaces_uidata_component_state_test/MyFacesUIDataTestCase.class" />
+    <property  name="process-as-jspx"
+               value="com/sun/faces/systest/ProcessAsJspxTestCase.class" />
 
     <!--
         EXCLUDED APPLICATIONS:

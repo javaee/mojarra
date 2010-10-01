@@ -55,6 +55,7 @@
 package com.sun.faces.facelets.compiler;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.FaceletsConfiguration;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.tag.TagAttributeImpl;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
@@ -71,6 +72,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,6 +98,8 @@ public final class SAXCompiler extends Compiler {
         protected Locator locator;
 
         protected final CompilationManager unit;
+
+        private boolean inSuppressedCDATA;
         
         public CompilationHandler(CompilationManager unit, String alias) {
             this.unit = unit;
@@ -105,14 +109,18 @@ public final class SAXCompiler extends Compiler {
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
             if (this.inDocument) {
-                this.unit.writeText(new String(ch, start, length));
+                if (!inSuppressedCDATA) {
+                    this.unit.writeText(new String(ch, start, length));
+                }
             }
         }
 
         public void comment(char[] ch, int start, int length)
                 throws SAXException {
             if (this.inDocument) {
-                this.unit.writeComment(new String(ch, start, length));
+                if (!unit.getWebConfiguration().getFaceletsConfiguration().isConsumeComments(alias)) {
+                    this.unit.writeComment(new String(ch, start, length));
+                }
             }
         }
 
@@ -134,7 +142,10 @@ public final class SAXCompiler extends Compiler {
 
         public void endCDATA() throws SAXException {
             if (this.inDocument) {
-                this.unit.writeInstruction("]]>");
+                if (!unit.getWebConfiguration().getFaceletsConfiguration().isConsumeCDATA(alias)) {
+                    this.unit.writeInstruction("]]>");
+                }
+                this.inSuppressedCDATA = false;
             }
         }
 
@@ -192,7 +203,12 @@ public final class SAXCompiler extends Compiler {
 
         public void startCDATA() throws SAXException {
             if (this.inDocument) {
-                this.unit.writeInstruction("<![CDATA[");
+                if (!unit.getWebConfiguration().getFaceletsConfiguration().isConsumeCDATA(alias)) {
+                    inSuppressedCDATA = false;
+                    this.unit.writeInstruction("<![CDATA[");
+                } else {
+                    inSuppressedCDATA = true;
+                }
             }
         }
 
@@ -241,10 +257,18 @@ public final class SAXCompiler extends Compiler {
         public void processingInstruction(String target, String data)
                 throws SAXException {
             if (this.inDocument) {
-                StringBuffer sb = new StringBuffer(64);
-                sb.append("<?").append(target).append(' ').append(data).append(
-                        "?>\n");
-                this.unit.writeInstruction(sb.toString());
+
+                // If there is a process-as value for the extension, only allow
+                // the PI to be written if its value is xhtml
+                boolean processAsXhtml =
+                        this.unit.getWebConfiguration().getFaceletsConfiguration().isProcessCurrentDocumentAsFaceletsXhtml(alias);
+
+                if (processAsXhtml) {
+                    StringBuffer sb = new StringBuffer(64);
+                    sb.append("<?").append(target).append(' ').append(data).append(
+                            "?>\n");
+                    this.unit.writeInstruction(sb.toString());
+                }
             }
         }
     }
@@ -418,8 +442,16 @@ public final class SAXCompiler extends Compiler {
                 String r = new String(b);
                 Matcher m = XmlDeclaration.matcher(r);
                 if (m.find()) {
-                    WebConfiguration config = WebConfiguration.getInstance();
-                    if (!config.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.SuppressXmlDeclaration)) {
+                    WebConfiguration config = mngr.getWebConfiguration();
+                    FaceletsConfiguration faceletsConfig = config.getFaceletsConfiguration();
+                    boolean suppressXmlDeclIsEnabled = config.isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.SuppressXmlDeclaration);
+                    boolean currentModeIsXhtml = faceletsConfig.isProcessCurrentDocumentAsFaceletsXhtml(mngr.getAlias());
+
+                    // We want to write the XML declaration if and only if
+                    // The SuppressXmlDeclaration context-param is NOT enabled
+                    // and the file extension for the current file has a mapping
+                    // with the value of XHTML
+                    if (!suppressXmlDeclIsEnabled && currentModeIsXhtml) {
                         mngr.writeInstruction(m.group(0) + "\n");
                         if (m.group(3) != null) {
                             encoding = m.group(3);

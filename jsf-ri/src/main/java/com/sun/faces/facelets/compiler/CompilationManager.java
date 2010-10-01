@@ -56,6 +56,7 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.tag.TagAttributesImpl;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
@@ -102,6 +103,8 @@ final class CompilationManager {
     private final String alias;
     
     private CompilationMessageHolder messageHolder = null;
+
+    private WebConfiguration config;
     
     public CompilationManager(String alias, Compiler compiler) {
         
@@ -125,6 +128,8 @@ final class CompilationManager {
         // our compilationunit stack
         this.units = new Stack<CompilationUnit>();
         this.units.push(new CompilationUnit());
+
+        config = WebConfiguration.getInstance();
         
     }
     
@@ -138,6 +143,14 @@ final class CompilationManager {
             messageHolder = new CompilationMessageHolderImpl();
         }
         return messageHolder;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public WebConfiguration getWebConfiguration() {
+        return config;
     }
     
     public void setCompilationMessageHolder(CompilationMessageHolder messageHolder) {

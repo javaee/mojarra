@@ -54,7 +54,6 @@
 
 package com.sun.faces.facelets.tag.xml;
 
-import com.sun.faces.facelets.tag.composite.*;
 import com.sun.faces.facelets.tag.AbstractTagLibrary;
 
 /**

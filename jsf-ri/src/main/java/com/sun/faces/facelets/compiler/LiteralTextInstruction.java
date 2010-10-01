@@ -55,10 +55,11 @@
 
 package com.sun.faces.facelets.compiler;
 
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
+import com.sun.faces.config.FaceletsConfiguration;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
 
 final class LiteralTextInstruction implements Instruction {
     private final String text;
@@ -68,7 +69,11 @@ final class LiteralTextInstruction implements Instruction {
     }
 
     public void write(FacesContext context) throws IOException {
-        context.getResponseWriter().writeText(this.text, null);
+        if (FaceletsConfiguration.getInstance(context).isEscapeInlineText(context)) {
+            context.getResponseWriter().writeText(this.text, null);
+        } else {
+            context.getResponseWriter().write(this.text);
+        }
     }
 
     public Instruction apply(ExpressionFactory factory, ELContext ctx) {

@@ -106,7 +106,8 @@
                    flash,
                    jsp-flash,
                    suppress-xml-decl,
-                   replace-vdl"/>
+                   replace-vdl,
+                   process-as-jspx"/>
     <!--
 
        EXCLUDED APPLICATIONS:

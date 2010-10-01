@@ -62,6 +62,7 @@ import com.sun.faces.config.processor.NavigationConfigProcessor;
 import com.sun.faces.config.processor.RenderKitConfigProcessor;
 import com.sun.faces.config.processor.ValidatorConfigProcessor;
 import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
+import com.sun.faces.config.processor.FacesConfigExtensionProcessor;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
 import org.xml.sax.InputSource;
@@ -252,6 +253,7 @@ public class ConfigManager {
              new RenderKitConfigProcessor(),
              new NavigationConfigProcessor(),
              new BehaviorConfigProcessor(),
+             new FacesConfigExtensionProcessor()
         };
         for (int i = 0; i < configProcessors.length; i++) {
             ConfigProcessor p = configProcessors[i];
