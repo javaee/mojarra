@@ -309,6 +309,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     @Override
     public ViewMetadata getViewMetadata(FacesContext context, String viewId) {
+        Util.notNull("context", context);
+        Util.notNull("viewId", viewId);
 
         return new ViewMetadataImpl(viewId);
 
@@ -319,6 +321,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      */
     public Resource getScriptComponentResource(FacesContext context,
             Resource componentResource) {
+        Util.notNull("context", context);
+        Util.notNull("componentResource", componentResource);
 
         if (!groovyAvailable) {
             return null;
@@ -436,6 +440,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public UIViewRoot restoreView(FacesContext ctx,
                                   String viewId) {
+        Util.notNull("context", ctx);
+        Util.notNull("viewId", viewId);
 
         if (UIDebug.debugRequest(ctx)) {
             ctx.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
@@ -454,6 +460,9 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public void retargetAttachedObjects(FacesContext context,
                                         UIComponent topLevelComponent,
                                         List<AttachedObjectHandler> handlers) {
+        Util.notNull("context", context);
+        Util.notNull("topLevelComponent", topLevelComponent);
+        Util.notNull("handlers", handlers);
 
         //List<AttachedObjectHandler> handlers =
         //      getAttachedObjectHandlers(topLevelComponent, false);
@@ -542,6 +551,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public void retargetMethodExpressions(FacesContext context,
                                           UIComponent topLevelComponent) {
+        Util.notNull("context", context);
+        Util.notNull("topLevelComponent", topLevelComponent);
 
         BeanInfo componentBeanInfo = (BeanInfo) 
                 topLevelComponent.getAttributes().get(UIComponent.BEANINFO_KEY);
@@ -640,6 +651,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     @Override
     public UIViewRoot createView(FacesContext ctx,
                                  String viewId) {
+        Util.notNull("context", ctx);
+        Util.notNull("viewId", viewId);
 
         if (UIDebug.debugRequest(ctx)) {
             UIViewRoot root = (UIViewRoot)
