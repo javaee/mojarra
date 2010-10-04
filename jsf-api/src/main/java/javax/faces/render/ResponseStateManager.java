@@ -49,7 +49,7 @@ import java.util.logging.Logger;
 
 
 /**
- * <p><strong class="changed_modified_2_0">ResponseStateManager</strong>
+ * <p><strong class="changed_modified_2_0 changed_modified_2_1">ResponseStateManager</strong>
  * is the helper class to {@link javax.faces.application.StateManager}
  * that knows the specific rendering technology being used to generate
  * the response.  It is a singleton abstract class, vended by the {@link
@@ -84,6 +84,16 @@ public abstract class ResponseStateManager {
      */
 
     public static final String VIEW_STATE_PARAM = "javax.faces.ViewState";
+
+    /**
+     * <p><span class="changed_added_2_1">The</span> value of this
+     * parameter must consist of a cryptographically strong random
+     * value. It is recommended that implementations make this value 
+     * difficult to predict. </p> 
+     *
+     * @since 2.1
+     */
+    public static final String VIEW_TOKEN_PARAM = "javax.faces.Token";
 
     /*       
      * <p>Take the argument <code>state</code> and write it into the

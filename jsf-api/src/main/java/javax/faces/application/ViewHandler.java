@@ -63,7 +63,7 @@ import javax.faces.view.ValueHolderAttachedObjectTarget;
 
 /**
  * <p><strong><span
- * class="changed_modified_2_0">ViewHandler</span></strong> is the
+ * class="changed_modified_2_0 changed_modified_2_1">ViewHandler</span></strong> is the
  * pluggablity mechanism for allowing implementations of or applications
  * using the JavaServer Faces specification to provide their own
  * handling of the activities in the <em>Render Response</em> and
@@ -319,6 +319,22 @@ public abstract class ViewHandler {
      * that <code>URL</code> will select the argument
      * <code>viewId</code> for traversing the JSF lifecycle.  Please see
      * section JSF.7.5.2 for the complete specification.</p>
+     *
+     * <p class="changed_added_2_1">If the configuration option
+     * <code>javax.faces.CSRF_ALGORITHM</code> is set to <code>url</code>
+     * or <code>all</code>, the returned URL must contain the
+     * parameter with a name minimally consisting of the value of the
+     * constant {@link javax.faces.render.ResponseStateManager#VIEW_TOKEN_PARAM}.
+     * If the current form is available, the name must consist of the form's fully
+     * qualified client identifier (<code>getClientId()</code>),
+     * the value returned fron {@link javax.faces.component.UINamingContainer#getSeparatorChar}
+     * and the constant {@link javax.faces.render.ResponseStateManager#VIEW_TOKEN_PARAM}.
+     * The value of this parameter, known as the "token value" must be a
+     * cryptographically produced random generated value (known as the "secret key")
+     * retrieved from the session.  If the "secret key" does not already exist in the session,
+     * create the random value and store it in the session.  Implementations may choose
+     * to produce a more complex token value by combining the random "secret key" with
+     * other values.</p>
      *
      * @param context {@link FacesContext} for this request
      * @param viewId View identifier of the desired view

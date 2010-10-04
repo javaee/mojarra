@@ -1,1 +1,2 @@
 javax.faces.ViewState
+javax.faces.Token

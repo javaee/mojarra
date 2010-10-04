@@ -127,6 +127,7 @@
             depends="test.annotations,
                 test.ajax,
                 test.composite,
+                test.csrf,
                 test.facelets,
                 test.init,                
                 test.render,
@@ -934,6 +935,19 @@
         </jsf.junit>
     </target>
 
+    <target name="test.csrf"
+            description="Test CSRF Functionality">
+
+            <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/CSRFTestCase.class"                         />
+            </tests>
+        </jsf.junit>
+    </target>
+
     <target name="test.render"
             description="Test Rendering Functionality">
 
@@ -1001,6 +1015,7 @@
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/composite/isCompositeComponentUsing.xhtml"
+              recordGolden="${local.golden.path}/composite/isCompositeComponentUsing.txt"
               golden="${golden.path}/composite/isCompositeComponentUsing.txt"/>
 
         <jsf.junit context-path="${context.path}"
@@ -1292,6 +1307,7 @@
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving08.jsp"
+            recordGolden="${local.golden.path}/interweaving08.txt"
             golden="${golden.path}/interweaving08.txt"
             joinSession="true"/>
         <jsf.tester
@@ -1309,16 +1325,19 @@
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving09.jsp"
+            recordGolden="${local.golden.path}/interweaving09.txt"
             golden="${golden.path}/interweaving09.txt"
             joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving09.jsp"
+            recordGolden="${local.golden.path}/interweaving09.txt"
             golden="${golden.path}/interweaving09.txt"
             joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving09.jsp"
+            recordGolden="${local.golden.path}/interweaving09.txt"
             golden="${golden.path}/interweaving09.txt"
             joinSession="true"/>
         
@@ -1327,16 +1346,19 @@
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving10.jsp"
+            recordGolden="${local.golden.path}/interweaving10.txt"
             golden="${golden.path}/interweaving10.txt"
             joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving10.jsp"              
+            recordGolden="${local.golden.path}/interweaving10.txt"
             golden="${golden.path}/interweaving10.txt"
             joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving10.jsp"
+            recordGolden="${local.golden.path}/interweaving10.txt"
             golden="${golden.path}/interweaving10.txt"
             joinSession="true"/>
         

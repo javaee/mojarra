@@ -1,0 +1,19 @@
+<html>
+<body>
+<!-- PENDING Don't hardcode port/server - utilize template web.xml approach -->
+<form id="form" name="form" method="post" action="http://localhost:8080/jsf-systest/faces/csrf/goodPage.xhtml">
+<!-- PENDING Only works for reshly deployed test -->
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2"/>
+
+<input type="hidden" name="form" value="form"/>
+<input type="hidden" name="amount" value="100"/>
+<input type="hidden" name="account" value="4567"/>
+<input type="hidden" name="transfer" value="Transfer"/>
+
+<input type="submit" name="order" value="Order Here"/>
+
+
+</form>
+
+</body>
+</html>

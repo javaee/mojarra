@@ -1,16 +1,15 @@
-
-
 <html>
 <head>
-
-
+    
+    
     <title>commandLink_test.jsp</title>
 </head>
 <body>
-
-
-<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp" enctype="application/x-www-form-urlencoded">
+    
+    
+<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp?form01:javax.faces.Token=a62a0078e07d0305c24412d0719a17ff" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form01" value="form01" />
+<input type="hidden" name="form01:javax.faces.Token" value="a62a0078e07d0305c24412d0719a17ff" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id5:j_id6" />
 
 <script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/jsf.js?ln=javax.faces&amp;stage=Development"></script>

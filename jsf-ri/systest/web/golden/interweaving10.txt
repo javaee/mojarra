@@ -1,15 +1,10 @@
-
-
-
-
-
-
     <html>
         <body>
             
-<form id="form" name="form" method="post" action="/jsf-systest/faces/interweaving10.jsp;jsessionid=b6e2e2b1f4635f2dd037bea45cee" enctype="application/x-www-form-urlencoded">
+<form id="form" name="form" method="post" action="/jsf-systest/faces/interweaving10.jsp?form:javax.faces.Token=21a9ca465713d765c53ee46d89ee3bd5" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form" value="form" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id33:j_id34" />
+<input type="hidden" name="form:javax.faces.Token" value="21a9ca465713d765c53ee46d89ee3bd5" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id17:j_id18" />
 <table>
 <tbody>
 <tr>

@@ -1,26 +1,27 @@
 <html>
   <head>
-      <title>interweaving11</title>
+      <title>interweaving11</title>   
   </head>
   <body>
-
-<form id="j_id_id18" name="j_id_id18" method="post" action="/jsf-systest/faces/interweaving11.jsp" enctype="application/x-www-form-urlencoded">
+    
+<form id="j_id_id18" name="j_id_id18" method="post" action="/jsf-systest/faces/interweaving11.jsp?j_id_id18:javax.faces.Token=4f9fd54bcaf92c202c6721794ffbce82" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="j_id_id18" value="j_id_id18" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id31:j_id32" />
+<input type="hidden" name="j_id_id18:javax.faces.Token" value="4f9fd54bcaf92c202c6721794ffbce82" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id23:j_id24" />
 
 <script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/jsf.js?ln=javax.faces&amp;stage=Development"></script>
 <a href="#" onclick="mojarra.jsfcljs(document.getElementById('j_id_id18'),{'j_id_id18:j_id_id22':'j_id_id18:j_id_id22','param':'value'},'');return false">one</a>
-
-
+            
+                
                 </br>
-
+            
                 <a href="#" onclick="mojarra.jsfcljs(document.getElementById('j_id_id18'),{'j_id_id18:j_id_id22j_id_1':'j_id_id18:j_id_id22j_id_1','param':'value'},'');return false">two</a>
                 </br>
-
+            
                 <a href="#" onclick="mojarra.jsfcljs(document.getElementById('j_id_id18'),{'j_id_id18:j_id_id22j_id_2':'j_id_id18:j_id_id22j_id_2','param':'value'},'');return false">three</a>
                 </br>
-
-
+            
+        
 </form>
   </body>
 </html>

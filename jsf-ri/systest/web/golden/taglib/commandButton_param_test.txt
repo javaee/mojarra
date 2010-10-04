@@ -7,8 +7,9 @@
 <body>
     
     
-<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandButton_param_test.jsp" enctype="application/x-www-form-urlencoded">
+<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandButton_param_test.jsp?form01:javax.faces.Token=a33cb07f341cee370ce89244a0504b51" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form01" value="form01" />
+<input type="hidden" name="form01:javax.faces.Token" value="a33cb07f341cee370ce89244a0504b51" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id3:j_id4" />
 
 <script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/jsf.js?ln=javax.faces&amp;stage=Development"></script>
