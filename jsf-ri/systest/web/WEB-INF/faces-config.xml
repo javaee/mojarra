@@ -102,6 +102,14 @@
   </managed-bean>
 
   <managed-bean>
+    <managed-bean-name>csrfBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.CSRFBean
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <managed-bean-name>TestValueChangeListener01</managed-bean-name>
     <managed-bean-class>
       com.sun.faces.systest.TestValueChangeListener01

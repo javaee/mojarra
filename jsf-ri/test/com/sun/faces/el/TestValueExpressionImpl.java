@@ -234,6 +234,13 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
 
     public void testELSet() throws Exception
     {
+        ValueExpression valueExpression = this.create("testBean2.one");
+        valueExpression.setValue(getFacesContext().getELContext(), "foo");
+        ExternalContext extContext = getFacesContext().getExternalContext();
+        TestBean tBean = (TestBean)extContext.getRequestMap().get("testBean2");
+        assertEquals(tBean.getOne(),"foo");
+
+/*
         TestBean testBean = new TestBean();
         InnerBean newInner, oldInner = new InnerBean();
         testBean.setInner(oldInner);
@@ -391,6 +398,7 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         assertNotNull(testBean);
         cb = testBean.getCustomerBean();
         assertEquals("bill", cb.getName());
+*/
     }
     
     public void testNullReference() throws Exception

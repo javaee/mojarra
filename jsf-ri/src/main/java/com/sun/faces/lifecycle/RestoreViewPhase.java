@@ -61,6 +61,8 @@ import javax.faces.lifecycle.Lifecycle;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.CSRFMethod;
+import com.sun.faces.renderkit.TokenHelper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -180,6 +182,12 @@ public class RestoreViewPhase extends Phase {
 
             boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
             if (isPostBack) {
+                if (isCSRFOptionEnabled(facesContext)) {
+                    String convertedViewId = viewHandler.deriveViewId(facesContext, viewId);
+                    if (!TokenHelper.verifyToken(facesContext, convertedViewId)) {
+                        throw new FacesException("Token verification failed.");
+                    }
+                }
                 facesContext.setProcessingEvents(false);
             // try to restore the view
                 viewRoot = viewHandler.restoreView(facesContext, viewId);
@@ -208,6 +216,13 @@ public class RestoreViewPhase extends Phase {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Postback: restored view for " + viewId);
                 }
+                /*
+                if (isCSRFOptionEnabled(facesContext)) {
+                    if (!TokenHelper.verifyToken(facesContext)) {
+                        throw new FacesException("Token verification failed.");
+                    }
+                }
+                */
             } else {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("New request: creating a view for " + viewId);
@@ -293,6 +308,9 @@ public class RestoreViewPhase extends Phase {
      */
     private void notifyAfter(FacesContext context, Lifecycle lifecycle) {
         UIViewRoot viewRoot = context.getViewRoot();
+        if (null == viewRoot) {
+            return;
+        }
         MethodExpression afterPhase = viewRoot.getAfterPhaseListener();
         if (null != afterPhase) {
             try {
@@ -352,6 +370,16 @@ public class RestoreViewPhase extends Phase {
         return (getWebConfig(context).isOptionEnabled(
               BooleanWebContextInitParameter.EnableRestoreView11Compatibility));
         
+    }
+
+    private boolean isCSRFOptionEnabled(FacesContext context) {
+        String CSRFOption = getWebConfig(context).getOptionValue(CSRFMethod);
+        if (!CSRFOption.equals("none")) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     // The testcase for this class is TestRestoreViewPhase.java

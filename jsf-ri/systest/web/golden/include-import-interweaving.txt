@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -12,8 +10,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     
     <body bgcolor="white">
     
-<form id="form" name="form" method="post" action="/jsf-systest/faces/include-import-interweaving.jsp;jsessionid=4bbc0a31bc8e689ae2830143bdb5" enctype="application/x-www-form-urlencoded">
+<form id="form" name="form" method="post" action="/jsf-systest/faces/include-import-interweaving.jsp?form:javax.faces.Token=a9e7eb2d0934d8cede4a7756f8be5dd4" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form" value="form" />
+<input type="hidden" name="form:javax.faces.Token" value="a9e7eb2d0934d8cede4a7756f8be5dd4" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id27:j_id28" />
 
     

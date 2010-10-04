@@ -37,9 +37,10 @@
 --><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <title>isCompositeComponent test</title></head><body>
-<form id="form" name="form" method="post" action="/jsf-systest/faces/composite/isCompositeComponentUsing.xhtml;jsessionid=2a8e3194d4a0be67a6561007d653" enctype="application/x-www-form-urlencoded">
+<form id="form" name="form" method="post" action="/jsf-systest/faces/composite/isCompositeComponentUsing.xhtml;jsessionid=4157af5b204e1b13089bee993baa?form:javax.faces.Token=0f71389cdc69f543387c0c19acbec215" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form" value="form" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" autocomplete="off" />
+<input type="hidden" name="form:javax.faces.Token" value="0f71389cdc69f543387c0c19acbec215" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
 
 
     <p>isCompositeComponent: true</p>

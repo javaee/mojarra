@@ -93,12 +93,12 @@ public class ELTestCase extends AbstractTestCase {
         s = outputs.get(1);
         assertTrue(s.getId().contains("facetOT"));
         assertTrue("facetOT".equals(s.asText()));
-        List<HtmlInput> inputs = new ArrayList<HtmlInput>(2);
+        List<HtmlInput> inputs = new ArrayList<HtmlInput>(3);
         getAllElementsOfGivenClass(page, inputs, HtmlInput.class);
-        HtmlInput i = inputs.get(2);
+        HtmlInput i = inputs.get(3);
         assertTrue(i.getId().contains("0:it"));
         assertTrue("it".equals(i.asText()));
-        i = inputs.get(3);
+        i = inputs.get(4);
         assertTrue(i.getId().contains("1:it"));
         assertTrue("it".equals(i.asText()));
 
