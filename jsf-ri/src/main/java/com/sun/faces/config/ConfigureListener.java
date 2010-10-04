@@ -328,6 +328,9 @@ public class ConfigureListener implements ServletRequestListener,
                     PreDestroyApplicationEvent.class,
                     Application.class,
                     app);
+
+            Util.setNonFacesContextApplicationMap(null);
+
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,

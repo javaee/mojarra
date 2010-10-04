@@ -110,16 +110,6 @@ public class Util {
      */
     private static ThreadLocal<Map<String, Object>> nonFacesContextApplicationMap;
 
-
-    private static void setNonFacesContextApplicationMap(Map<String, Object> instance) {
-        lazilyInitializeNonFacesContextApplicationMap();
-        if (null == instance) {
-            nonFacesContextApplicationMap.remove();
-        } else {
-            nonFacesContextApplicationMap.set(instance);
-        }
-    }
-
     private static void lazilyInitializeNonFacesContextApplicationMap() {
         if (null == nonFacesContextApplicationMap) {
             nonFacesContextApplicationMap = new ThreadLocal<Map<String, Object>>() {
@@ -821,6 +811,15 @@ public class Util {
             }
         }
 
+    }
+
+    public static void setNonFacesContextApplicationMap(Map<String, Object> instance) {
+        lazilyInitializeNonFacesContextApplicationMap();
+        if (null == instance) {
+            nonFacesContextApplicationMap.remove();
+        } else {
+            nonFacesContextApplicationMap.set(instance);
+        }
     }
 
 
