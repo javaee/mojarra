@@ -90,6 +90,11 @@ public class CompositeComponentsTestCase extends AbstractTestCase {
 
     // -------------------------------------------------------------- Test Cases
 
+    public void testIsCompositeComponent() throws Exception {
+        HtmlPage page = getPage("/faces/composite/isCompositeComponentUsing.xhtml");
+        assertTrue(page.asText().contains("isCompositeComponent: true"));
+    }
+
     /**
      * <p>
      *  Maps ActionListener to commandButton within composite/actionSource1.xhtml using

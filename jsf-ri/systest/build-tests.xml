@@ -1012,12 +1012,6 @@
     <target name="test.composite"
             description="Test composite components">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/composite/isCompositeComponentUsing.xhtml"
-              recordGolden="${local.golden.path}/composite/isCompositeComponentUsing.txt"
-              golden="${golden.path}/composite/isCompositeComponentUsing.txt"/>
-
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -1262,17 +1256,14 @@
     <target name="test.interweaving"
             description="Test interweaving">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/interweaving01.jsp"
-              recordGolden="${local.golden.path}/interweaving01.txt"
-              golden="${golden.path}/interweaving01.txt"/>
-
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/interweaving02.jsp"
-              recordGolden="${local.golden.path}/interweaving02.txt"
-              golden="${golden.path}/interweaving02.txt"/>
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/jsp/interweaving/*TestCase.class"/> 
+            </tests>
+        </jsf.junit>
 
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
@@ -1420,7 +1411,7 @@
     </target>
 
     <target name="passthru">
-      <antcall target="test.view.xml" />
+      <antcall target="test.interweaving" />
     </target>
 
 
