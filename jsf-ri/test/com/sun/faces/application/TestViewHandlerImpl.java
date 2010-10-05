@@ -456,7 +456,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         assertTrue(!(getFacesContext().getRenderResponse()) &&
                    !(getFacesContext().getResponseComplete()));
 
-// PENDING(edburns):        assertTrue(verifyExpectedOutput());
+        assertTrue(verifyExpectedOutput());
     }
 
 

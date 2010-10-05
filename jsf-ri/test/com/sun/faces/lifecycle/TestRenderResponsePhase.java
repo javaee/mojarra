@@ -166,7 +166,7 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
         assertTrue(!(getFacesContext().getRenderResponse()) &&
                 !(getFacesContext().getResponseComplete()));
 
-       // PENDING(edburns): assertTrue(verifyExpectedOutput());
+       assertTrue(verifyExpectedOutput());
     }
 
     public void beginShortCircuitRenderResponse(WebRequest theRequest) {

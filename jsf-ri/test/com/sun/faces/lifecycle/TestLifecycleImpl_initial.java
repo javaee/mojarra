@@ -164,7 +164,7 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase {
             assertTrue(e.getMessage(), false);
         }
 
-// PENDING(edburns):         assertTrue(verifyExpectedOutput());
+        assertTrue(verifyExpectedOutput());
 
     }
 

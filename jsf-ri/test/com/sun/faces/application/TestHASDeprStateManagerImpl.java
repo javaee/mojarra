@@ -137,6 +137,6 @@ public class TestHASDeprStateManagerImpl extends ServletFacesTestCase {
         assertTrue(!(getFacesContext().getRenderResponse()) &&
                    !(getFacesContext().getResponseComplete()));
                                                                                                                       
-        // PENDING(edburns): assertTrue(verifyExpectedOutput());
+        assertTrue(verifyExpectedOutput());
     }
 }
