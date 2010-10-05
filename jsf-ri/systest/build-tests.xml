@@ -850,11 +850,15 @@
     </target>
 
     <target name="test.converter05">
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/converter05.jsp"
-              recordGolden="${local.golden.path}/standard/converter05.txt"
-              golden="${golden.path}/standard/converter05.txt"/>
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/jsp/converter/*TestCase.class"/> 
+            </tests>
+        </jsf.junit>
+
     </target>
 
     <target name="test.converter06">
@@ -1217,39 +1221,14 @@
     <target name="test.subview"
             description="Test subview tag">
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/subview01.jsp"
-              recordGolden="${local.golden.path}/subview01.txt"
-              golden="${golden.path}/subview01.txt"/>
-
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/subview02.jsp"
-              recordGolden="${local.golden.path}/subview02.txt"
-              golden="${golden.path}/subview02.txt"/>
-
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/subview03.jsp"
-              recordGolden="${local.golden.path}/subview03.txt"
-              golden="${golden.path}/subview03.txt"/>
-
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/subview04.jsp"
-              recordGolden="${local.golden.path}/subview04.txt"
-              golden="${golden.path}/subview04.txt"/>
-
-        <jsf.tester
-              request="${context.path}/faces/subview05.jsp"
-              recordGolden="${local.golden.path}/subview05.txt"
-              golden="${golden.path}/subview05.txt"/>
-
-        <jsf.tester
-              request="${context.path}/faces/subview06.jsp"
-              recordGolden="${local.golden.path}/subview06.txt"
-              golden="${golden.path}/subview06.txt"/>
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/jsp/subview/*TestCase.class"/> 
+            </tests>
+        </jsf.junit>
 
     </target>
 
@@ -1265,34 +1244,6 @@
             </tests>
         </jsf.junit>
 
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/interweaving03.jsp"
-              recordGolden="${local.golden.path}/interweaving03.txt"
-              golden="${golden.path}/interweaving03.txt"/>
-
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/interweaving04.jsp"
-              recordGolden="${local.golden.path}/interweaving04.txt"
-              golden="${golden.path}/interweaving04.txt"/>
-
-        <jsf.tester
-              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
-              request="${context.path}/faces/interweaving05.jsp"
-              recordGolden="${local.golden.path}/interweaving05.txt"
-              golden="${golden.path}/interweaving05.txt"/>
-        
-        <jsf.tester
-              request="${context.path}/faces/interweaving06.jsp"  
-              recordGolden="${local.golden.path}/interweaving06.txt"
-              golden="${golden.path}/interweaving06.txt"/>
-                  
-         <jsf.tester
-              request="${context.path}/faces/interweaving07.jsp"  
-              recordGolden="${local.golden.path}/interweaving07.txt"
-              golden="${golden.path}/interweaving07.txt"/>  
-        
         <!-- Make multiple requests to the same page and ensure
              the response is 200 -->
         <jsf.tester
@@ -1411,7 +1362,7 @@
     </target>
 
     <target name="passthru">
-      <antcall target="test.interweaving" />
+      <antcall target="test.subview" />
     </target>
 
 

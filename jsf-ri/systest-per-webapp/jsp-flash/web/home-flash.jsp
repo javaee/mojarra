@@ -75,7 +75,7 @@ JavaServer Faces Extensions Flash
 
 
 
-<!-- BEGIN WRAPPER TABLE, 2 COLUMN, MAIN/RIGHT -->
+
 <table border="0" cellpadding="0" cellspacing="10" width="100%">
 <tr valign="top"><td>
 

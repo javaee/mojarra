@@ -40,10 +40,7 @@
 
 --%>
 
-<!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
+
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -66,7 +63,7 @@
     <address><a href="mailto:Ed Burns <ed.burns@sun.com>"></a></address>
 <!-- Created: Wed Oct 15 17:31:05 Eastern Daylight Time 2003 -->
 <!-- hhmts start -->
-Last modified: Sun Oct 19 10:33:56 EDT 2003
+Last modified: Tue Oct  5 01:46:05 EDT 2010
 <!-- hhmts end -->
   </body>
 </html>

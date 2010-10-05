@@ -325,12 +325,6 @@
             <!-- =========== END OF NAVBAR =========== -->
             <hr/>
             <small><i>
-            Java, JSP, and JavaServer Pages are trademarks or registered 
-            trademarks of Sun Microsystems, Inc. in the US and other countries.
-            Copyright 2002-3 Sun Microsystems, Inc.
-            4150 Network Circle
-            Santa Clara, CA 95054, U.S.A.
-            All Rights Reserved. 
             </i></small>
           </body>
         </html>
