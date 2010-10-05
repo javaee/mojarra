@@ -87,8 +87,7 @@ public class FormRenderer extends HtmlBasicRenderer {
                   BooleanWebContextInitParameter.WriteStateAtFormEnd);
 
         String CSRFOption = webConfig.getOptionValue(CSRFMethod);
-        if (CSRFOption.equals("form") || CSRFOption.equals("all") ||
-            CSRFOption == null) {
+        if (CSRFOption.equals("form") || CSRFOption.equals("all")) {
             writeTokenField = true;
         } else {
             writeTokenField = false;

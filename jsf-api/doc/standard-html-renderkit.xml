@@ -40,7 +40,6 @@
     holder.
 
 -->
-
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd" version="2.0">
 <!-- Generic User Interface Components -->
@@ -22272,7 +22271,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       cryptographically produced random generated value (known as the "secret key") retrieved from the 
       session.  If the "secret key" does not already exist in the session, create the random value and 
       store it in the session. Implementations may choose to produce a more complex token value by 
-      combining the random "secret key" with other values. </p>  Render all the necessary hidden fields 
+      combining the random "secret key" with other values. The default value for the 
+      <code>javax.faces.CSRF_ALGORITHM</code> configuration option is <code>none</code>.</p>  
+      Render all the necessary hidden fields 
       for all commandLink instances in the page just before the close of the "form" element.  
       <div class="changed_modified_2_0">
       Just before rendering the closing <code>&lt;/form&gt;</code> element tag, render 

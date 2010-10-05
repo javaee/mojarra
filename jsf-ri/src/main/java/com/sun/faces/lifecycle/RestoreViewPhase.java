@@ -378,7 +378,7 @@ public class RestoreViewPhase extends Phase {
 
     private boolean isCSRFOptionEnabled(FacesContext context) {
         String CSRFOption = getWebConfig(context).getOptionValue(CSRFMethod);
-        if (!CSRFOption.equals("none")) {
+        if (null != CSRFOption && !CSRFOption.equals("none")) {
             return true;
         } else {
             return false;

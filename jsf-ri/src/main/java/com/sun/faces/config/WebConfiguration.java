@@ -748,7 +748,7 @@ public class WebConfiguration {
         ),
         CSRFMethod(
               "javax.faces.CSRF_ALGORITHM",
-              "form"
+              "none"
         ),
         StateSavingMethod(
               "javax.faces.STATE_SAVING_METHOD",

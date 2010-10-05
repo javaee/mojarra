@@ -1744,7 +1744,9 @@
       cryptographically produced random generated value (known as the "secret key") retrieved from the 
       session.  If the "secret key" does not already exist in the session, create the random value and 
       store it in the session. Implementations may choose to produce a more complex token value by 
-      combining the random "secret key" with other values. </p>  Render all the necessary hidden fields 
+      combining the random "secret key" with other values. The default value for the 
+      <code>javax.faces.CSRF_ALGORITHM</code> configuration option is <code>none</code>.</p>  
+      Render all the necessary hidden fields 
       for all commandLink instances in the page just before the close of the "form" element.  
       <div class="changed_modified_2_0">
       Just before rendering the closing <code>&lt;/form&gt;</code> element tag, render 

@@ -324,7 +324,7 @@ public abstract class ViewHandler {
      * <code>viewId</code> for traversing the JSF lifecycle.  Please see
      * section JSF.7.5.2 for the complete specification.</p>
      *
-     * <p class="changed_added_2_1">If the configuration option
+     * <p class="changed_added_2_1">If the value of the configuration option
      * <code>javax.faces.CSRF_ALGORITHM</code> is set to <code>url</code>
      * or <code>all</code>, the returned URL must contain the
      * parameter with a name minimally consisting of the value of the
@@ -338,7 +338,8 @@ public abstract class ViewHandler {
      * retrieved from the session.  If the "secret key" does not already exist in the session,
      * create the random value and store it in the session.  Implementations may choose
      * to produce a more complex token value by combining the random "secret key" with
-     * other values.</p>
+     * other values.  The default value for the <code>javax.faces.CSRF_ALGORITHM</code>
+     * configuration option is <code>none</code>.</p>
      *
      * @param context {@link FacesContext} for this request
      * @param viewId View identifier of the desired view
