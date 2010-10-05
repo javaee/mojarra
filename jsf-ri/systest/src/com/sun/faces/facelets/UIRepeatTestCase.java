@@ -40,17 +40,17 @@
 
 package com.sun.faces.facelets;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Test cases for Facelets functionality
@@ -63,6 +63,10 @@ public class UIRepeatTestCase extends AbstractTestCase {
 
     public UIRepeatTestCase() {
         this("UIRepeatTestCase");
+
+        // this test is excluded because it won't pass in tomcat due to an issue with NumberConverter
+        addExclusion(Container.TOMCAT6, "testUIRepeatStateNotLostOnNonUIRepeatMessage");
+
     }
 
 

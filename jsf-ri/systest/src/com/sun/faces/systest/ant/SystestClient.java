@@ -98,9 +98,11 @@
 package com.sun.faces.systest.ant;
 
 
+import com.sun.faces.systest.model.ViewRootExtension;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
+import javax.faces.component.UIViewRoot;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -115,10 +117,13 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -203,6 +208,7 @@ public class SystestClient extends Task {
      */
     protected static final Logger log = Logger.getLogger("Systest");
 
+    private static final Pattern UNIQUE_ID_PATTERN = Pattern.compile(UIViewRoot.UNIQUE_ID_PREFIX + "[a-zA-Z0-9_]+");
 
     /**
      * The saved golden file we will compare to the response.  Each element
@@ -595,7 +601,7 @@ public class SystestClient extends Task {
         try {
             readIgnoreIfContains();
         } catch (IOException e) {
-            System.out.println("FAIL:  readIgnoreIfContains(" + 
+            System.out.println("FAIL:  readIgnoreIfContains(" +
 			       ignoreIfContains + ")");
             e.printStackTrace(System.out);
             if (failonerror) {
@@ -1338,6 +1344,11 @@ public class SystestClient extends Task {
             ok = false;
         }
         if (ok) {
+
+            // replace all clientIds by newly generated ones, so they are the same, no matter how they were generated
+            replaceClientIDs(saveGolden);
+            replaceClientIDs(saveResponse);
+
             for (int i = 0, size = saveGolden.size(); i < size; i++) {
                 String golden = (String) saveGolden.get(i);
                 String response = (String) saveResponse.get(i);
@@ -1375,7 +1386,7 @@ public class SystestClient extends Task {
             System.out.println((String) saveResponse.get(i));
         }
         System.out.println("================================================");
-        
+
         // write the goldenfile if the GF size from the server was 0
         // and the goldenfile doesn't already exist on the local filesystem.
         System.out.println("RECORD GOLDEN: " + recordGolden);
@@ -1423,6 +1434,29 @@ public class SystestClient extends Task {
         }
         return ("Failed Golden File Comparison");
 
+    }
+
+    /**
+     * Finds all clientIDs in a page, and replaces them with generated values. This is useful when testing the goldenfile
+     * tests agains a different container, which might generated different IDs.
+     * @param list the list of lines for the page
+     */
+    private void replaceClientIDs(List list) {
+        int counter = 0;
+        Map<String, String> matchedIds = new LinkedHashMap<String, String>();
+        for(int i = 0; i < list.size(); i++) {
+            String line = (String) list.get(i);
+            Matcher m = UNIQUE_ID_PATTERN.matcher(line);
+            while(m.find()) {
+                if(!matchedIds.containsKey(m.group())) {
+                    matchedIds.put(m.group(), UIViewRoot.UNIQUE_ID_PREFIX + "_TEST_ID_" + counter++);
+                }
+            }
+            for(String s : matchedIds.keySet()) {
+                line = line.replaceAll(s, matchedIds.get(s));
+            }
+            list.set(i, line);
+        }
     }
 
 
@@ -1553,6 +1587,4 @@ public class SystestClient extends Task {
         }
 
     }
-
-
 }

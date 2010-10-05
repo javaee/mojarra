@@ -289,6 +289,7 @@
                 <sysproperty key="explodedWarDir" value="@{explodedWarDir}"/>
                 <sysproperty key="java.util.logging.config.file" 
                              value="@{logging.config.file}"/>
+                <sysproperty key="container" value="${container.name}" />
                 <custom-sysproperties/>
                 <batchtest todir="@{test-results-dir}">
                     <tests/>

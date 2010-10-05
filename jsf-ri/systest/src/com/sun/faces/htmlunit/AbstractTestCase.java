@@ -41,21 +41,30 @@
 package com.sun.faces.htmlunit;
 
 
-import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.CookieManager;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.ProxyConfig;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequestSettings;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.net.URL;
-import java.util.Iterator;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.logging.Logger;
 
 
 /**
@@ -63,7 +72,6 @@ import java.util.ArrayList;
  */
 
 public abstract class AbstractTestCase extends TestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -75,11 +83,18 @@ public abstract class AbstractTestCase extends TestCase {
      */
     public AbstractTestCase(String name) {
         super(name);
+        this.testName = name;
     }
 
 
     // ------------------------------------------------------ Instance Variables
 
+    /**
+     * The <code>Log</code> instance for this class.
+     */
+    protected static final Logger log = Logger.getLogger(AbstractTestCase.class.getName());
+
+    protected String testName;
 
     // System property values used to configure the HTTP connection
     protected String contextPath = null;
@@ -101,6 +116,12 @@ public abstract class AbstractTestCase extends TestCase {
 
     // The last requested page
     protected HtmlPage lastpage = null;
+
+    // Possible containers - these should be the uppercase values of the possible container values in build.properties
+    protected enum Container { GLASSFISH, GLASSFISHV3PRELUDE, GLASSFISHV3, GLASSFISHV3_1, TOMCAT6 }
+
+    // Per-container exclusions
+    protected Map<Container, Vector<String>> exclusions = null;
 
 
     // ---------------------------------------------------- Overall Test Methods
@@ -144,10 +165,9 @@ public abstract class AbstractTestCase extends TestCase {
             ProxyConfig config = client.getProxyConfig();
             config.setProxyHost(proxyHost);
             config.setProxyPort(proxyPortInt);
-            
         }
-        WebResponse response = client.getWebConnection().getResponse(settings);
 
+        WebResponse response = client.getWebConnection().getResponse(settings);
     }
 
 
@@ -423,4 +443,38 @@ public abstract class AbstractTestCase extends TestCase {
         assertTrue(element+":- Expected '"+expected+"', but received '"+getText(element)+"'", check(element,expected));
     }
 
+    @Override
+    protected void runTest() throws Throwable {
+        String currentContainer = System.getProperty("container");
+        if(currentContainer == null) {
+            log.warning("Test exclusions not taken into account since no container property could be found");
+            super.runTest();
+        } else if(exclusions != null) {
+            Vector<String> excludedTests = this.exclusions.get(Container.valueOf(currentContainer.toUpperCase().replaceAll("\\.", "_")));
+            if(null != excludedTests && !excludedTests.isEmpty() && excludedTests.contains(testName)) {
+                log.info("Skipping execution of test '" + testName + "' for container " + currentContainer);
+            } else {
+                super.runTest();
+            }
+        }
+    }
+
+    /**
+     * Adds an exclusion for a particular test method in the TestCase
+     * @param container the container for which the exclusion should be applied
+     * @param testName the name of the test method to exclude
+     */
+    protected void addExclusion(Container container, String testName) {
+
+        if(exclusions == null) {
+            exclusions = new HashMap<Container, Vector<String>>();
+        }
+        
+        Vector<String> excluded = this.exclusions.get(container);
+        if(excluded == null) {
+            excluded = new Vector<String>();
+            exclusions.put(container, excluded);
+        }
+        excluded.add(testName);
+    }
 }
