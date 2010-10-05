@@ -235,7 +235,7 @@
                     <attribute name="Implementation-Version"
                                value="${impl.version}"/>
                     <attribute name="Implementation-Vendor"
-                               value="Sun Microsystems, Inc."/>
+                               value="Oracle America, Inc."/>
                     <attribute name="Implementation-Vendor-Id"
                                value="com.sun"/>
                     <attribute name="Extension-Name"

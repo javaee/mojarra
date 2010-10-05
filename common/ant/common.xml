@@ -338,7 +338,7 @@
 
     <!--
        Build a JAR file which includes a manifest including
-       information pertaining to Sun's JavaServer Faces
+       information pertaining to Oracle's JavaServer Faces
        implementation.
     -->
     <macrodef name="jsf.manifested.jar">
@@ -362,7 +362,7 @@
                     <attribute name="Implementation-Version"
                                value="${impl.version}"/>
                     <attribute name="Implementation-Vendor"
-                               value="Sun Microsystems, Inc."/>
+                               value="Oracle America, Inc."/>
                     <attribute name="Implementation-Vendor-Id"
                                value="com.sun"/>
                     <attribute name="Extension-Name"

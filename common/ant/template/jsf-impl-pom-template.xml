@@ -72,7 +72,7 @@
             <id>edburns</id>
             <name>Ed Burns</name>
             <email>ed.burns@sun.com</email>
-            <organization>Sun Microsystems, Inc.</organization>
+            <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
             </roles>
@@ -82,7 +82,7 @@
             <id>rlubke</id>
             <name>Ryan Lubke</name>
             <email>Ryan.Lubke@sun.com</email>
-            <organization>Sun Microsystems, Inc.</organization>
+            <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
             </roles>
@@ -92,7 +92,7 @@
             <id>rogerk</id>
             <name>Roger Kitain</name>
             <email>Roger.Kitain@sun.com</email>
-            <organization>Sun Microsystems, Inc.</organization>
+            <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
             </roles>
@@ -102,7 +102,7 @@
             <id>driscoll</id>
             <name>Jim Driscoll</name>
             <email>jim.dirscoll@sun.com</email>
-            <organization>Sun Microsystems, Inc.</organization>
+            <organization>Oracle America, Inc.</organization>
             <roles>
                 <role>project-owner</role>
             </roles>
@@ -215,8 +215,8 @@
         </contributor>
     </contributors>
     <organization>
-        <name>Sun Microsystems, Inc</name>
-        <url>http://www.sun.com/</url>
+        <name>Oracle America, Inc</name>
+        <url>http://www.oracle.com/</url>
     </organization>
     <dependencies>
         <dependency>
