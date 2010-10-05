@@ -48,33 +48,21 @@
 
     <display-name>web.xml included</display-name>
 
-<context-param>
-    <param-name>facelets.LIBRARIES</param-name>
-    <param-value>/WEB-INF/groovy-taglib.xml</param-value>
-</context-param>
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
 
     <context-param>
         <param-name>com.sun.faces.enableGroovyScripting</param-name>
         <param-value>true</param-value>
     </context-param>
 
-    <!-- Faces Servlet -->
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup> 1 </load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>      
-    </servlet-mapping>
-
-    <!-- Enable Groovy Support -->
     <context-param>
-        <param-name>com.sun.faces.developmentMode</param-name>
-        <param-value>true</param-value>
+        <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+        <param-value>/WEB-INF/groovy-taglib.xml</param-value>
     </context-param>
+
     <filter>
         <filter-name>GroovyFilter</filter-name>
         <filter-class>com.sun.faces.scripting.GroovySupportFilter</filter-class>
@@ -88,5 +76,25 @@
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>      
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>hello.jsf</welcome-file>
+    </welcome-file-list>
 
 </web-app>

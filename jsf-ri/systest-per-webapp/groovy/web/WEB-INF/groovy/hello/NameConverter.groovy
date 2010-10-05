@@ -7,9 +7,11 @@ import com.sun.faces.systest.Name;
 
 public class NameConverter implements Converter {
 
+       private String message = "04:48";
+
 
     public NameConverter() {
-        System.out.println("NameConverter instantiated")
+        System.out.println("NameConverter instantiated " + message);
     }
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) {

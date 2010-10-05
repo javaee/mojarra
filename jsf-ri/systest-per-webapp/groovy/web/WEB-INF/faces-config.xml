@@ -48,27 +48,27 @@
 
     <converter>
         <converter-id>nameconverter</converter-id>
-        <converter-class>hello/NameConverter</converter-class>
+        <converter-class>hello.NameConverter</converter-class>
     </converter>
 
     <validator>
       <validator-id>namevalidator</validator-id>
-        <validator-class>hello/NameValidator</validator-class>
+        <validator-class>hello.NameValidator</validator-class>
     </validator>
 
      <component>
         <component-type>agecomponent</component-type>
-        <component-class>hello/AgeComponent</component-class>
+        <component-class>hello.AgeComponent</component-class>
     </component>
 
     <component>
         <component-type>messageoutput</component-type>
-        <component-class>hello/MessageOutput</component-class>
+        <component-class>hello.MessageOutput</component-class>
     </component>
 
     <managed-bean>
         <managed-bean-name>hello</managed-bean-name>
-        <managed-bean-class>hello/HelloBean</managed-bean-class>
+        <managed-bean-class>hello.HelloBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
@@ -77,7 +77,7 @@
         <renderer>
                 <component-family>javax.faces.Output</component-family>
                 <renderer-type>messagerenderer</renderer-type>
-                <renderer-class>hello/MessageRenderer</renderer-class>
+                <renderer-class>hello.MessageRenderer</renderer-class>
         </renderer>
      </render-kit>
 

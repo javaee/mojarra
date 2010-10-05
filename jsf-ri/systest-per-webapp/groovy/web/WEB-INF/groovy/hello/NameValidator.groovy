@@ -13,7 +13,7 @@ public class NameValidator implements Validator {
 
     int age = ((Integer)value).intValue();
       if (age < 0 || age > 65)
-        throw new ValidatorException(new FacesMessage("please enter a valid age between 0 and 65."));
+        throw new ValidatorException(new FacesMessage("please enter a valid age between 0 and 65. 04:06"));
   }
 
 }

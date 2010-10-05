@@ -215,12 +215,12 @@ class GroovyHelperImpl extends GroovyHelper {
             }
             Class<?> c;
             try {
-                c = gse.getGroovyClassLoader().loadClass(name);
-            } catch (ClassNotFoundException cnfe) {
+                c = gse.loadScriptByName(name);
+            } catch (Exception e) {
                 try {
-                    c = gse.loadScriptByName(name);
-                } catch (Exception e) {
-                    throw new ClassNotFoundException(name, e);
+                    c = gse.getGroovyClassLoader().loadClass(name);
+                } catch (ClassNotFoundException cnfe) {
+                    throw new ClassNotFoundException(name, cnfe);
                 }
             }
             if (c == null) {
